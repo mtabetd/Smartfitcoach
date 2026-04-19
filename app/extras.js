@@ -1027,49 +1027,136 @@ window.FOOD_CALC = {
       .replace(/[\-]/g, ' ');
   },
 
+  // 2026-04 R3 : synonymes FR pour requêtes courantes (cacahuète/arachide/peanut, etc.)
+  _SYNONYMS: {
+    'cacahuete': 'arachide', 'cacahuetes': 'arachide', 'peanut': 'arachide',
+    'courgette': 'zucchini', 'zucchini': 'courgette',
+    'patate': 'pomme de terre', 'patates': 'pomme de terre',
+    'mais': 'mais', 'tuna': 'thon', 'shrimp': 'crevette', 'shrimps': 'crevette',
+    'beef': 'boeuf', 'pork': 'porc', 'chicken': 'poulet', 'salmon': 'saumon',
+    'cheese': 'fromage', 'milk': 'lait', 'bread': 'pain', 'rice': 'riz',
+    'pasta': 'pates', 'egg': 'oeuf', 'eggs': 'oeuf', 'apple': 'pomme',
+    'banana': 'banane', 'orange': 'orange', 'water': 'eau'
+  },
+
+  // 2026-04 R3 : Levenshtein bornée 2 — early exit pour perf
+  _lev: function(a, b, max) {
+    var la = a.length, lb = b.length;
+    if (Math.abs(la - lb) > max) return max + 1;
+    if (la === 0) return lb;
+    if (lb === 0) return la;
+    var prev = new Array(lb + 1), cur = new Array(lb + 1);
+    for (var j = 0; j <= lb; j++) prev[j] = j;
+    for (var i = 1; i <= la; i++) {
+      cur[0] = i;
+      var rowMin = i;
+      for (var jj = 1; jj <= lb; jj++) {
+        var cost = a.charCodeAt(i - 1) === b.charCodeAt(jj - 1) ? 0 : 1;
+        cur[jj] = Math.min(prev[jj] + 1, cur[jj - 1] + 1, prev[jj - 1] + cost);
+        if (cur[jj] < rowMin) rowMin = cur[jj];
+      }
+      if (rowMin > max) return max + 1; // early exit
+      var tmp = prev; prev = cur; cur = tmp;
+    }
+    return prev[lb];
+  },
+
   search: function(query) {
     if (!query || query.length < 2) return [];
     var q = this._normalize(query);
-    var terms = q.split(/\s+/).filter(function(t) { return t.length >= 2; });
+    var qCompact = q.replace(/\s+/g, ''); // 2026-04 R3 B1 : "bigmac" matche "big mac"
+    // 2026-04 R3 : tokens de longueur >=2 (alphabétique) OU >=1 (chiffre)
+    var rawTerms = q.split(/\s+/);
+    var terms = [];
+    for (var rt = 0; rt < rawTerms.length; rt++) {
+      var rTok = rawTerms[rt];
+      if (rTok.length >= 2) terms.push(rTok);
+      else if (rTok.length === 1 && /[0-9]/.test(rTok)) terms.push(rTok);
+    }
     if (!terms.length) terms = [q];
+    // 2026-04 R3 : enrichir tokens via synonymes FR (sans doublons)
+    var synTerms = terms.slice();
+    for (var s = 0; s < terms.length; s++) {
+      var syn = this._SYNONYMS[terms[s]];
+      if (syn && synTerms.indexOf(syn) === -1) synTerms.push(syn);
+    }
 
-    var full = [];     // tous les termes matchent → priorité
-    var partial = [];  // au moins un terme matche → résultats secondaires
+    var full = [];
+    var partial = [];
+    var seen = Object.create(null); // 2026-04 R3 B2 : dédup par nom normalisé
 
     for (var i = 0; i < this._DB.length; i++) {
       var item = this._DB[i];
       var name = this._normalize(item[0]);
+      if (seen[name]) continue; // skip exact duplicates
+      seen[name] = 1;
+      var nameCompact = name.replace(/\s+/g, '');
       var score = 0;
       var wordBoundaryBonus = 0;
       var startsWithBonus = 0;
-      for (var t = 0; t < terms.length; t++) {
-        var idx = name.indexOf(terms[t]);
+      var matchedOriginal = 0;
+      for (var t = 0; t < synTerms.length; t++) {
+        var term = synTerms[t];
+        var idx = name.indexOf(term);
         if (idx === -1) continue;
         score++;
-        // Bonus +2 si le terme match un mot entier (pas sous-chaîne)
-        // Exemple : "reine" matche "1 reine 2" mais pas "reinette"
+        if (t < terms.length) matchedOriginal++;
         var charBefore = idx === 0 ? ' ' : name[idx - 1];
-        var charAfter = (idx + terms[t].length >= name.length) ? ' ' : name[idx + terms[t].length];
+        var charAfter = (idx + term.length >= name.length) ? ' ' : name[idx + term.length];
         var isWordBoundaryStart = !/[a-z0-9]/i.test(charBefore);
         var isWordBoundaryEnd   = !/[a-z0-9]/i.test(charAfter);
         if (isWordBoundaryStart && isWordBoundaryEnd) wordBoundaryBonus += 2;
-        // Bonus +3 si le nom commence par ce terme
         if (idx === 0) startsWithBonus += 3;
       }
+      // 2026-04 R3 B1 : compound match (bigmac → big mac)
+      var compoundBonus = 0;
+      if (score === 0 && qCompact.length >= 4 && nameCompact.indexOf(qCompact) !== -1) {
+        score = 1;
+        compoundBonus = 1;
+      }
       if (score === 0) continue;
-      // Bonus phrase exacte
       var phraseBonus = (name.indexOf(q) !== -1) ? terms.length * 2 : 0;
-      var finalScore = score + wordBoundaryBonus + startsWithBonus + phraseBonus;
+      var finalScore = score + wordBoundaryBonus + startsWithBonus + phraseBonus + compoundBonus;
       var obj = { name: item[0], kcal: item[1], protein: item[2], carbs: item[3], fat: item[4] };
-      if (score === terms.length) {
-        full.push({ obj: obj, score: finalScore });
+      if (matchedOriginal === terms.length || (compoundBonus && terms.length === 1)) {
+        full.push({ obj: obj, score: finalScore, _alpha: name });
       } else {
-        partial.push({ obj: obj, score: finalScore });
+        partial.push({ obj: obj, score: finalScore, _alpha: name });
       }
     }
 
-    full.sort(function(a, b) { return b.score - a.score; });
-    partial.sort(function(a, b) { return b.score - a.score; });
+    // 2026-04 R3 : Levenshtein fallback si AUCUN match — résout "yaouurt" → "yaourt"
+    if (full.length === 0 && partial.length === 0 && terms.length === 1 && terms[0].length >= 4) {
+      var fuzzyTerm = terms[0];
+      var fuzzyMax = fuzzyTerm.length <= 5 ? 1 : 2;
+      var fuzzySeen = Object.create(null);
+      for (var fi = 0; fi < this._DB.length; fi++) {
+        var fItem = this._DB[fi];
+        var fName = this._normalize(fItem[0]);
+        if (fuzzySeen[fName]) continue;
+        fuzzySeen[fName] = 1;
+        var nameTokens = fName.split(/\s+/);
+        var bestDist = fuzzyMax + 1;
+        for (var nt = 0; nt < nameTokens.length; nt++) {
+          var d = this._lev(nameTokens[nt], fuzzyTerm, fuzzyMax);
+          if (d < bestDist) bestDist = d;
+        }
+        if (bestDist <= fuzzyMax) {
+          partial.push({
+            obj: { name: fItem[0], kcal: fItem[1], protein: fItem[2], carbs: fItem[3], fat: fItem[4] },
+            score: 5 - bestDist, _alpha: fName
+          });
+        }
+      }
+    }
+
+    // 2026-04 R3 : tiebreak alphabétique stable (sinon ordre d'insertion = aléatoire)
+    var byScoreThenAlpha = function(a, b) {
+      if (b.score !== a.score) return b.score - a.score;
+      return a._alpha < b._alpha ? -1 : (a._alpha > b._alpha ? 1 : 0);
+    };
+    full.sort(byScoreThenAlpha);
+    partial.sort(byScoreThenAlpha);
 
     var results = full.concat(partial).map(function(r) { return r.obj; });
     return results.slice(0, 50);
@@ -1433,12 +1520,17 @@ window.REST_TIMER = (function(){
    DAILY FOOD JOURNAL — Log meals & compare vs targets
    ═══════════════════════════════════════════════════════════════ */
 window.FOOD_JOURNAL = {
+  // Helper: date locale YYYY-MM-DD (évite le décalage UTC/local près de minuit)
+  _localDateStr: function(d) {
+    var dt = d || new Date();
+    return dt.getFullYear() + '-' + String(dt.getMonth()+1).padStart(2,'0') + '-' + String(dt.getDate()).padStart(2,'0');
+  },
   // Add a food entry
   addEntry: function(meal, name, kcal, protein, carbs, fat, quantity) {
     var user = window.AUTH ? window.AUTH.getUser() : null;
     var key = 'mtd_food_journal_' + (user ? user.id : 'anon');
     var journal = {}; try { journal = JSON.parse(localStorage.getItem(key) || '{}'); } catch(e) { journal = {}; }
-    var today = new Date().toISOString().split('T')[0];
+    var today = this._localDateStr();
     if (!journal[today]) journal[today] = [];
     journal[today].push({
       meal: meal, // 'breakfast','lunch','snack','dinner'
@@ -1454,6 +1546,8 @@ window.FOOD_JOURNAL = {
     localStorage.setItem(key, JSON.stringify(journal));
     // Mise à jour du streak sur action réelle (pas seulement à la connexion)
     if (window.GAMIFICATION) { try { window.GAMIFICATION.updateStreak(); } catch(e) {} }
+    // Streak nutrition + compteur repas (gamification)
+    if (window.GAMIFICATION && window.GAMIFICATION.incrementMealsLogged) { try { window.GAMIFICATION.incrementMealsLogged(); } catch(e) {} }
     // Sync vers Supabase
     if (window.SupaSync) SupaSync.saveFoodEntry({
       date: today,
@@ -1483,7 +1577,7 @@ window.FOOD_JOURNAL = {
     var user = window.AUTH ? window.AUTH.getUser() : null;
     var key = 'mtd_food_journal_' + (user ? user.id : 'anon');
     var journal = {}; try { journal = JSON.parse(localStorage.getItem(key) || '{}'); } catch(e) { journal = {}; }
-    var today = new Date().toISOString().split('T')[0];
+    var today = this._localDateStr();
     return journal[today] || [];
   },
 
@@ -1491,11 +1585,28 @@ window.FOOD_JOURNAL = {
     var user = window.AUTH ? window.AUTH.getUser() : null;
     var key = 'mtd_food_journal_' + (user ? user.id : 'anon');
     var journal = {}; try { journal = JSON.parse(localStorage.getItem(key) || '{}'); } catch(e) { journal = {}; }
-    var entries = journal[date || new Date().toISOString().split('T')[0]] || [];
+    var entries = journal[date || this._localDateStr()] || [];
     return entries.reduce(function(acc, e) {
       acc.kcal += (Number(e.kcal) || 0); acc.p += (Number(e.p) || 0); acc.g += (Number(e.g) || 0); acc.l += (Number(e.l) || 0);
       return acc;
     }, {kcal: 0, p: 0, g: 0, l: 0, count: entries.length});
+  },
+
+  // Purge automatique des entrées de journal > 6 mois (prévient saturation localStorage)
+  // Appelé au chargement du widget ou sur demande explicite.
+  purgeOldEntries: function() {
+    try {
+      var user = window.AUTH ? window.AUTH.getUser() : null;
+      var key = 'mtd_food_journal_' + (user ? user.id : 'anon');
+      var journal = {}; try { journal = JSON.parse(localStorage.getItem(key) || '{}'); } catch(e2) { return; }
+      var cutoff = new Date(); cutoff.setMonth(cutoff.getMonth() - 6);
+      var cutoffStr = this._localDateStr(cutoff);
+      var changed = false;
+      Object.keys(journal).forEach(function(dateKey) {
+        if (dateKey < cutoffStr) { delete journal[dateKey]; changed = true; }
+      });
+      if (changed) { try { localStorage.setItem(key, JSON.stringify(journal)); } catch(e3) {} }
+    } catch(e) {}
   },
 
   loadFromPlan: function() {
@@ -1505,7 +1616,7 @@ window.FOOD_JOURNAL = {
     var dayIdx = today === 0 ? 6 : today - 1;
     var dayPlan = S.weekPlan[dayIdx];
     if (!dayPlan) return;
-    var todayStr = new Date().toISOString().split('T')[0];
+    var todayStr = this._localDateStr();
     var user = window.AUTH ? window.AUTH.getUser() : null;
     var loadedKey = 'mtd_journal_loaded_' + (user ? user.id : 'anon');
     if (localStorage.getItem(loadedKey) === todayStr) return;

@@ -101,6 +101,12 @@ var BADGE_DEFS = [
   {id: 'first_kg_lost', name: 'Premier Kilo', desc: 'Premier kg perdu', icon: '▽', category: 'tracking'},
   {id: 'five_kg', name: '-5 kg', desc: '5 kg perdus', icon: '▽', category: 'tracking'},
 
+  // Nutrition streak
+  {id: 'nutrition_streak_7', name: 'Semaine Nutritionnelle', desc: '7 jours de repas loggés consécutifs', icon: '▲', category: 'nutrition'},
+  {id: 'nutrition_streak_14', name: 'Quinzaine Nutrition', desc: '14 jours de repas loggés consécutifs', icon: '▲', category: 'nutrition'},
+  {id: 'nutrition_streak_30', name: 'Expert Nutrition', desc: '30 jours de repas loggés consécutifs', icon: '★', category: 'nutrition'},
+  {id: 'meals_logged_50', name: 'Maître Cuisinier', desc: '50 repas enregistrés', icon: '◆', category: 'nutrition'},
+
   // Exploration
   {id: 'recipes_10', name: 'Curieux', desc: '10 recettes consultées', icon: '◆', category: 'explore'},
   {id: 'recipes_50', name: 'Gastronome', desc: '50 recettes consultées', icon: '◆', category: 'explore'},
@@ -231,6 +237,35 @@ function updateStreak() {
   if (data.current >= 90) unlockBadge('streak_90');
 }
 
+// ─── NUTRITION STREAK ───
+var NUTR_STREAK_KEY = 'mtd_nutrition_streak_';
+
+function updateNutritionStreak() {
+  var user = window.AUTH ? window.AUTH.getUser() : null;
+  if (!user) return;
+  var key = NUTR_STREAK_KEY + user.id;
+  var data = {}; try { data = JSON.parse(localStorage.getItem(key) || '{"current":0,"lastDate":null}'); } catch(e) { data = {current:0,lastDate:null}; }
+  var today = new Date();
+  var todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+  if (data.lastDate === todayStr) return;
+  var yd = new Date(); yd.setDate(yd.getDate()-1);
+  var ydStr = yd.getFullYear() + '-' + String(yd.getMonth()+1).padStart(2,'0') + '-' + String(yd.getDate()).padStart(2,'0');
+  data.current = (data.lastDate === ydStr) ? (data.current || 0) + 1 : 1;
+  data.lastDate = todayStr;
+  try { localStorage.setItem(key, JSON.stringify(data)); } catch(e) {}
+  if (data.current >= 7)  unlockBadge('nutrition_streak_7');
+  if (data.current >= 14) unlockBadge('nutrition_streak_14');
+  if (data.current >= 30) unlockBadge('nutrition_streak_30');
+}
+
+function incrementMealsLogged() {
+  var user = window.AUTH ? window.AUTH.getUser() : null;
+  if (!user) return;
+  var count = incrementCounter('meals_logged');
+  if (count >= 50) unlockBadge('meals_logged_50');
+  updateNutritionStreak();
+}
+
 // ─── BADGE SYSTEM ───
 function getUserBadges() {
   var user = window.AUTH ? window.AUTH.getUser() : null;
@@ -252,8 +287,12 @@ function unlockBadge(badgeId) {
   // Sync badge vers Supabase
   if (window.SupaSync) SupaSync.saveBadge(badgeId);
 
-  // Show toast notification
-  showToast(def.icon + ' ' + def.name + ' débloqué !');
+  // Show badge celebration toast
+  if (window.showToast) {
+    window.showToast(def.icon + ' ' + def.name + ' débloqué !', 'badge', 3500);
+  } else {
+    showToast(def.icon + ' ' + def.name + ' débloqué !');
+  }
 
   if (window.BLACKBOX) window.BLACKBOX.log('badge_unlocked', {badge: badgeId, name: def.name});
 }
@@ -514,6 +553,8 @@ window.GAMIFICATION = {
   incrementCounter: incrementCounter,
   getCounter: getCounter,
   showToast: showToast,
+  updateNutritionStreak: updateNutritionStreak,
+  incrementMealsLogged: incrementMealsLogged,
   checkMuscuBadges: checkMuscuBadges,
   checkCalisthenicsBadges: checkCalisthenicsBadges,
   checkHyroxBadges: checkHyroxBadges,

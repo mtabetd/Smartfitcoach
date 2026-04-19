@@ -743,6 +743,59 @@ window.SCANNER = {
       verdict.textContent = (fitness.fits ? '\u2713 ' : '\u26A0 ') + fitness.message;
       card.appendChild(verdict);
 
+      // 2026-04 R5 : "Ajouter au repas" — câblage scanner → journal alimentaire
+      if (window.FOOD_JOURNAL && window.FOOD_JOURNAL.addEntry) {
+        var addRow = document.createElement('div');
+        addRow.style.cssText = 'display:flex;gap:8px;align-items:center;margin-top:16px;padding-top:12px;border-top:1px solid var(--border,#D8D8D0);';
+        var qtyLabel = document.createElement('label');
+        qtyLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);';
+        qtyLabel.textContent = 'QUANTIT\u00c9';
+        addRow.appendChild(qtyLabel);
+        var qInput = document.createElement('input');
+        qInput.type = 'text';
+        qInput.inputMode = 'numeric';
+        qInput.pattern = '[0-9]*';
+        qInput.setAttribute('autocomplete', 'off');
+        qInput.setAttribute('aria-label', 'Quantit\u00e9 en grammes');
+        qInput.value = '100';
+        qInput.style.cssText = 'width:64px;padding:8px;min-height:40px;border:1px solid var(--border,#D8D8D0);border-radius:2px;background:#fff;font-family:Georgia,serif;font-size:14px;text-align:center;outline:none;';
+        addRow.appendChild(qInput);
+        var gUnit = document.createElement('span');
+        gUnit.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);';
+        gUnit.textContent = 'g';
+        addRow.appendChild(gUnit);
+        var addBtn = document.createElement('button');
+        addBtn.type = 'button';
+        // Pick meal slot according to local time
+        var hNow = new Date().getHours();
+        var mealSlot = hNow < 10 ? 'breakfast' : hNow < 14 ? 'lunch' : hNow < 17 ? 'snack' : 'dinner';
+        var mealLabels = { breakfast: 'petit-d\u00e9j', lunch: 'd\u00e9jeuner', snack: 'collation', dinner: 'd\u00eener' };
+        addBtn.textContent = 'Ajouter au ' + (mealLabels[mealSlot] || 'repas');
+        addBtn.style.cssText = 'flex:1;padding:12px;min-height:44px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:500;';
+        addBtn.addEventListener('click', function() {
+          var raw = String(qInput.value || '100').replace(',', '.');
+          var g = parseInt(raw, 10);
+          if (isNaN(g) || g < 1) g = 100;
+          if (g > 2000) g = 2000;
+          var ratio = g / 100;
+          var kc = Math.round(Number(p.kcal || 0) * ratio);
+          var pr = Math.round(Number(p.protein || 0) * ratio * 10) / 10;
+          var cb = Math.round(Number(p.carbs || 0) * ratio * 10) / 10;
+          var ft = Math.round(Number(p.fat || 0) * ratio * 10) / 10;
+          try {
+            window.FOOD_JOURNAL.addEntry(mealSlot, p.name, kc, pr, cb, ft, g + 'g', 'scanner');
+          } catch(e) {}
+          addBtn.textContent = 'Ajout\u00e9 \u2713';
+          addBtn.disabled = true;
+          addBtn.style.background = 'var(--grey,#6B6B65)';
+          if (window.showToast) {
+            try { window.showToast('Ajout\u00e9 au ' + (mealLabels[mealSlot] || 'repas') + ' : ' + p.name, 'success', 2500); } catch(_){}
+          }
+        });
+        addRow.appendChild(addBtn);
+        card.appendChild(addRow);
+      }
+
       resultContainer.appendChild(card);
     }
 

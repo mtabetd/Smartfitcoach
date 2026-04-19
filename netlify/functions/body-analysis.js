@@ -2,7 +2,7 @@
 // Analyse corporelle par vision IA — clé API côté serveur uniquement
 
 const MODEL = 'claude-sonnet-4-6';
-const MAX_TOKENS = 600; // Réduit : analyse structurée courte
+const MAX_TOKENS = 2500; // Programme 4 semaines complet (JSON ~1800-2200 tokens)
 
 // Domaines autorisés pour CORS
 var ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://smartfitcoach.netlify.app,https://smartfitcoach.fr,https://www.smartfitcoach.fr,https://smartfitcoach.fitness,https://www.smartfitcoach.fitness')
@@ -366,7 +366,8 @@ function buildSystemPrompt(ctx, exercisesDb) {
 
   var lines = [
     'Coach morpho de ' + prenom + ' sur SmartFitCoach. Analyse photos corporelles.',
-    'RÈGLES: français, termes positifs, JSON valide uniquement, exercices depuis EXERCISES_AVAILABLE seulement.',
+    'RÈGLES: français, termes positifs, JSON valide uniquement, NO markdown, NO texte hors JSON.',
+    'Exercices UNIQUEMENT depuis EXERCISES_AVAILABLE. Sois CONCIS (strings ≤60 cars).',
     'Photos illisibles → {"error":"Photos non exploitables"}',
     ''
   ];
@@ -385,8 +386,8 @@ function buildSystemPrompt(ctx, exercisesDb) {
   lines.push('EXERCISES_AVAILABLE: ' + exercisesList);
 
   lines.push('');
-  lines.push('JSON ATTENDU:');
-  lines.push('{"analyse":{"pointsForts":["..."],"axesDeveloppement":["..."],"postureNotes":"...","morphologie":"..."},"programme":{"titre":"...","disciplines":["muscu"],"objectif":"...","duree":"12 semaines","frequence":"4j/sem","semaines":[{"numero":1,"focus":"...","seances":[{"jour":"Lundi","discipline":"muscu","titre":"...","exercices":[{"nom":"NOM_EXACT","series":4,"reps":"8-10","repos":"90s","note":"..."}]}]}],"conseilsNutrition":"...","messageCoach":"..."}}');
+  lines.push('JSON ATTENDU (4 semaines max, 3 séances/sem max, 4 exercices/séance max):');
+  lines.push('{"analyse":{"pointsForts":["...","..."],"axesDeveloppement":["...","..."],"postureNotes":"...","morphologie":"..."},"programme":{"titre":"...","disciplines":["muscu"],"objectif":"...","duree":"4 semaines","frequence":"3j/sem","semaines":[{"numero":1,"focus":"...","seances":[{"jour":"Lundi","discipline":"muscu","titre":"...","exercices":[{"nom":"NOM_EXACT","series":3,"reps":"8-10","repos":"90s","note":""}]},{"jour":"Jeudi","discipline":"muscu","titre":"...","exercices":[{"nom":"NOM_EXACT","series":3,"reps":"10-12","repos":"60s","note":""}]}]},{"numero":2,"focus":"...","seances":[{"jour":"Lundi","discipline":"muscu","titre":"...","exercices":[{"nom":"NOM_EXACT","series":4,"reps":"8","repos":"90s","note":""}]}]},{"numero":3,"focus":"...","seances":[{"jour":"Lundi","discipline":"muscu","titre":"...","exercices":[{"nom":"NOM_EXACT","series":4,"reps":"6-8","repos":"120s","note":""}]}]},{"numero":4,"focus":"...","seances":[{"jour":"Lundi","discipline":"muscu","titre":"...","exercices":[{"nom":"NOM_EXACT","series":4,"reps":"8-10","repos":"90s","note":""}]}]}],"conseilsNutrition":"...","messageCoach":"..."}}');
 
   return lines.join('\n');
 }

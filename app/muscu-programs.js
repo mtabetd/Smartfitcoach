@@ -2309,6 +2309,9 @@ function buildPersonalizedMuscuPlan(S) {
   var goalKey = (S.goal !== null && S.goal !== undefined && window.GOALS && window.GOALS[S.goal])
     ? window.GOALS[S.goal].key : '';
   var sportGoals = S.sportGoals || [];
+  // Facteurs de volume globaux — appliqués à tous les muscles
+  var _isDeficit = goalKey === 'cut' || goalKey === 'shred'; // déficit calorique → préserver muscle, réduire volume
+  var _isSenior = typeof getAge === 'function' && getAge() >= 50; // 50+ → récupération ↑, volume ↓
   // ═══ FIX P0r-BIS SPRINT 2026-04-15 — différenciation PRO/EXPERT (audit Pierre) ═══
   // Avant : Pierre `sportLevel='pro'` + perf/force produisait même sortie que Karim `advanced`.
   // Détection : pro/expert + goals performance|force → nSuns 5/3/1 (si ≥4j) ou Texas Method.
@@ -2494,8 +2497,12 @@ function buildPersonalizedMuscuPlan(S) {
       if (priorityMuscles.indexOf(muscle) >= 0 && idx > 0) {
         exos = exos.slice(); // copie (pour ne pas muter getStyleProgram)
       }
-      // Ajuste volume selon phase macro × multiplier bodyZones
-      var volMod = (currentPhase.volume_modifier || 1) * muscleMult;
+      // Ajuste volume selon phase macro × bodyZones × déficit × senior
+      // Cut/shred : −15% sets (préserver muscle, respecter déficit — Helms 2014)
+      // 50+ : −20% sets (récupération allongée, risque surentraînement — ACSM 2011)
+      var volMod = (currentPhase.volume_modifier || 1) * muscleMult
+        * (_isDeficit ? 0.85 : 1)
+        * (_isSenior ? 0.80 : 1);
       exos = exos.map(function(ex) {
         var adjusted = {};
         for (var k in ex) adjusted[k] = ex[k];
@@ -2530,6 +2537,20 @@ function buildPersonalizedMuscuPlan(S) {
       });
       allExercises = allExercises.concat(exos);
     });
+
+    // Priorité muscles féminins : fessiers et jambes en tête de séance
+    // (entraîner les muscles prioritaires en premier quand l'énergie est maximale)
+    if (priorityMuscles.length > 0) {
+      allExercises.sort(function(a, b) {
+        var mA = (a.m || '').toLowerCase();
+        var mB = (b.m || '').toLowerCase();
+        var aP = priorityMuscles.some(function(pm) { return mA.indexOf(pm.toLowerCase()) >= 0; });
+        var bP = priorityMuscles.some(function(pm) { return mB.indexOf(pm.toLowerCase()) >= 0; });
+        if (aP && !bP) return -1;
+        if (!aP && bP) return 1;
+        return 0;
+      });
+    }
 
     // ═══ FIX P0 SPRINT 2026-04-15 (audit 10 profils — DANGER FŒTAL Aïcha) ═══
     // Avant : regex `couché` ne matchait PAS "Développé haltères PLAT" → exo supine

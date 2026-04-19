@@ -17,6 +17,42 @@
 function h(tag,attrs,ch){var el=document.createElement(tag);var _hasClick=false;if(attrs)for(var k in attrs){if(attrs[k]===null||attrs[k]===undefined)continue;if(k==='class')el.className=attrs[k];else if(k==='html'){var _hv=String(attrs[k]);el.innerHTML=_hv}else if(k==='disabled'){if(attrs[k]===true)el.setAttribute('disabled','');else el.removeAttribute('disabled')}else if(k.indexOf('on')===0){el.addEventListener(k.slice(2),attrs[k]);if(k==='onclick')_hasClick=true}else el.setAttribute(k,attrs[k])}/* FIX A11Y 2026-04-16: div/span avec onclick → role=button + tabindex + keydown Enter/Space */if(_hasClick&&(tag==='div'||tag==='span')&&!el.getAttribute('role')){el.setAttribute('role','button');el.setAttribute('tabindex','0');el.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click()}})}if(ch!=null){if(typeof ch==='string'||typeof ch==='number')el.textContent=ch;else if(Array.isArray(ch))for(var i=0;i<ch.length;i++){if(ch[i])el.appendChild(ch[i])}else if(ch.nodeType)el.appendChild(ch)}return el}
 function txt(s){return document.createTextNode(s)}
 
+// ─── TOAST NOTIFICATION SYSTEM 2026-04-19 ───
+// Usage: window.showToast('Message', 'success' | 'warning' | 'error', 3000ms)
+window.showToast = function(msg, type, duration) {
+  if (!msg) return;
+  type = type || 'success';
+  duration = duration || 3000;
+  var colors = { success: '#1A4A1A', warning: '#6A4A1A', error: '#5A1010' };
+  var bg = colors[type] || colors.success;
+  var existing = document.querySelectorAll('.sfc-toast');
+  // Stack offset
+  var offset = 16 + existing.length * 52;
+  var toast = document.createElement('div');
+  toast.className = 'sfc-toast';
+  toast.style.cssText = 'position:fixed;bottom:' + offset + 'px;left:50%;transform:translateX(-50%);z-index:9999;' +
+    'background:' + bg + ';color:#FAF9F6;padding:10px 20px;font-family:"Helvetica Neue",Arial,sans-serif;' +
+    'font-size:11px;letter-spacing:1px;border-radius:2px;box-shadow:0 4px 16px rgba(0,0,0,0.18);' +
+    'max-width:calc(100vw - 32px);text-align:center;pointer-events:none;' +
+    'animation:sfcToastIn .2s ease forwards;';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  // Auto-remove
+  setTimeout(function() {
+    toast.style.animation = 'sfcToastOut .2s ease forwards';
+    setTimeout(function() { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 200);
+  }, duration);
+};
+// Inject toast CSS once
+(function() {
+  if (document.getElementById('sfc-toast-style')) return;
+  var s = document.createElement('style');
+  s.id = 'sfc-toast-style';
+  s.textContent = '@keyframes sfcToastIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}' +
+    '@keyframes sfcToastOut{from{opacity:1;transform:translate(-50%,0)}to{opacity:0;transform:translate(-50%,12px)}}';
+  document.head.appendChild(s);
+})();
+
 // ═══════════════════════════════════════════════════════════════════════════
 // FIX SPRINT P2.3 — Mapping bidirectionnel CF ↔ muscu 1RM (audit symbiose).
 // Avant : crossfit1RM (back_squat, deadlift, bench_press) et muscuStrengthProfile
@@ -146,8 +182,8 @@ window.createChart = function(canvas, config) {
   var chart = new Chart(canvas.getContext('2d'), config);
   window._chartInstances.push(chart);
   // 2026-04 P0 FIX : cap absolu pour prévenir memory leak (filet de sécurité)
-  // Si la détection d'orphans échoue (edge case DOM ghosts), on force FIFO après 500 instances.
-  var _CHART_CAP = 500;
+  // Si la détection d'orphans échoue (edge case DOM ghosts), on force FIFO après 50 instances.
+  var _CHART_CAP = 50;
   while (window._chartInstances.length > _CHART_CAP) {
     var oldChart = window._chartInstances.shift();
     try { if (oldChart && oldChart.destroy) oldChart.destroy(); } catch(e) {}
@@ -4595,7 +4631,7 @@ function calcMacros(){
       } else if(actFactor>=1.375){
         ppk=isFemale?1.6:1.7;   // Léger coupe : H=1.7, F=1.6 (plancher Helms 2014 : ≥1.6g/kg en déficit)
       } else {
-        ppk=isFemale?1.6:1.6;   // Sédentaire coupe : plancher 1.6g/kg en déficit (Helms 2014, ISSN 2017)
+        ppk=isFemale?1.6:1.6;   // Sédentaire coupe : H=1.6, F=1.6 (ISSN 2017 minimum 1.6g/kg pour tous en déficit)
       }
     }
   }
@@ -4607,7 +4643,8 @@ function calcMacros(){
     var hasMuscGoal=s.sportGoals.indexOf('muscle')!==-1||s.sportGoals.indexOf('shred')!==-1;
     var hasEndurOnly=!hasMuscGoal&&(s.sportGoals.indexOf('endurance')!==-1||s.sportGoals.indexOf('weightloss')!==-1||s.sportGoals.indexOf('flexibility')!==-1||s.sportGoals.indexOf('general')!==-1);
     var isDeficit=goalKey==='shred'||goalKey==='cut';
-    if(hasEndurOnly&&!isDeficit)ppk=Math.max(1.2,ppk-0.2); // Tarnopolsky 2004 : -0.2g/kg endurance pure (sauf déficit calorique — Helms 2014)
+    if(hasEndurOnly&&!isDeficit)ppk=Math.max(1.2,ppk-0.2); // Tarnopolsky 2004 : -0.2g/kg endurance pure
+    else if(hasEndurOnly&&isDeficit)ppk=Math.min(3.5,ppk+0.2); // Helms 2014: déficit calorique → +0.2g/kg pour préserver la masse maigre
   }
   if(s.train&&Array.isArray(s.train)&&s.train.indexOf(0)!==-1)ppk+=0.1;
   if(s.medical&&s.medical.indexOf('irc')!==-1)ppk=Math.min(ppk,0.6); // KDOQI 2020: 0.55-0.60g/kg CKD 3-5 non-dialysis
@@ -4620,6 +4657,9 @@ function calcMacros(){
   var _isIrc=s.medical&&s.medical.indexOf('irc')!==-1;
   if(_isIrc){var _ircPpkCap=(s.regime===3||s.regime===2)?0.66:0.60;if(ppk>_ircPpkCap)ppk=_ircPpkCap;}
   ppk=_isIrc?Math.max(0.1,Math.min(3.5,ppk)):Math.max(0.8,Math.min(3.5,ppk));
+  // Sarcopenia prevention: +0.3g/kg for age 40-49, +0.4g/kg for age 50+ (ESPEN 2019, Bauer 2013)
+  // Skip for IRC (hard cap 0.6g/kg) and max is still 3.5g/kg
+  if(!_isIrc){var _sarcAge=(typeof getAge==='function'?getAge():null)||(s.age||0);if(_sarcAge>=50)ppk=Math.min(3.5,ppk+0.4);else if(_sarcAge>=40)ppk=Math.min(3.5,ppk+0.3);}
   var pGrams=Math.round(bw*ppk);
   // Pregnancy protein bonus: +25g/day T2+T3 (ACOG 2018, WHO)
   if(s.pregnant&&s.sex==='femme'){var triP=getPregnancyTrimester();if(triP&&triP.trimester.proteinExtra)pGrams=Math.round(pGrams+triP.trimester.proteinExtra);}
@@ -5286,7 +5326,7 @@ var SUPPLEMENTS_DB = [
   {id:'whey',name:'Whey Prot\u00e9ine',icon:'\uD83E\uDD5B',desc:'Atteindre l\'objectif prot\u00e9ique quotidien',evidence:'ISSN 2017 \u2014 Niveau A (700+ \u00e9tudes)',grade:'A',
     condition:function(s){return s.whey===1||s.whey===true;}, // Only if user explicitly wants whey
     unnecessary_if:'Inutile si vous atteignez vos prot\u00e9ines via l\'alimentation seule',
-    dosageCalc:function(s){var d=s.weight>80?35:25;return{dose:d,unit:'g/prise',timing:'Post-entra\u00eenement ou petit-d\u00e9jeuner',note:'Objectif total : '+Math.round(s.weight*1.8)+'g prot/jour (alimentation + whey)'};}},
+    dosageCalc:function(s){var w=Number(s.weight)||75;var d=w>80?35:25;return{dose:d,unit:'g/prise',timing:'Post-entra\u00eenement ou petit-d\u00e9jeuner',note:'Objectif total : '+Math.round(w*1.8)+'g prot/jour (alimentation + whey)'};}},
   {id:'creatine',name:'Cr\u00e9atine Monohydrate',icon:'\uD83D\uDC8A',desc:'Force, masse musculaire, r\u00e9cup\u00e9ration',evidence:'ISSN 2017 \u2014 Niveau A (500+ \u00e9tudes, le suppl\u00e9ment le plus \u00e9tudi\u00e9)',grade:'A',
     condition:function(s){if((s.pregnant&&s.sex==='femme')||(getAge()!==null&&getAge()<18))return false;if(s.medical&&s.medical.indexOf('irc')!==-1)return false;var goals=s.sportGoals||[];return s.activity!==null&&s.activity>=2&&(goals.indexOf('muscle')!==-1||goals.indexOf('shred')!==-1);},
     unnecessary_if:'Non n\u00e9cessaire si objectif uniquement endurance/cardio sans musculation',

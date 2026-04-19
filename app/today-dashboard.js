@@ -1480,11 +1480,13 @@ function renderCardMacros() {
 // Favoris en étoile, cumul journalier avec cibles macros.
 // ═══════════════════════════════════════════════════════════════
 var _fjState = {
-  meal: 'breakfast',      // petit-déj par défaut
+  meal: 'breakfast',
   query: '',
-  qty: 100,               // grammage par défaut
-  selectedFood: null,     // {name, kcal, protein, carbs, fat}
-  showFavs: false
+  qty: 100,
+  selectedFood: null,
+  showFavs: false,
+  showSavedMeals: false,   // Phase 3 M
+  multiSelected: {}
 };
 
 function _fjGetUid() {
@@ -1517,13 +1519,158 @@ function _fjToggleFav(food) {
   _fjSaveFavs(favs);
 }
 
+// ─── MES REPAS SAUVEGARDÉS ───
+function _fjGetSavedMeals() {
+  try {
+    var v = JSON.parse(localStorage.getItem('mtd_saved_meals_' + _fjGetUid()) || '[]');
+    return Array.isArray(v) ? v : [];
+  } catch(e) { return []; }
+}
+function _fjSaveMeal(name, entries) {
+  var meals = _fjGetSavedMeals();
+  meals.unshift({ id: Date.now(), name: name, entries: entries });
+  if (meals.length > 20) meals.length = 20;
+  try { localStorage.setItem('mtd_saved_meals_' + _fjGetUid(), JSON.stringify(meals)); } catch(e) {}
+}
+function _fjDeleteSavedMeal(id) {
+  var meals = _fjGetSavedMeals().filter(function(m) { return m.id !== id; });
+  try { localStorage.setItem('mtd_saved_meals_' + _fjGetUid(), JSON.stringify(meals)); } catch(e) {}
+}
+
+// ─── COPIER D'HIER ───
+function _fjYesterdayEntries(mealKey) {
+  try {
+    var key = 'mtd_food_journal_' + _fjGetUid();
+    var journal = JSON.parse(localStorage.getItem(key) || '{}');
+    var d = new Date(); d.setDate(d.getDate() - 1);
+    var yKey = d.toISOString().slice(0, 10);
+    var all = journal[yKey] || [];
+    return all.filter(function(e) { return e && e.meal === mealKey; });
+  } catch(e) { return []; }
+}
+
+// ─── CUSTOM FOODS — Création et injection dans FOOD_CALC._DB ───
+var _fjCustomLoaded = false;
+function _fjLoadCustomFoods() {
+  if (_fjCustomLoaded) return;
+  _fjCustomLoaded = true;
+  try {
+    var uid = _fjGetUid();
+    var stored = JSON.parse(localStorage.getItem('mtd_custom_foods_' + uid) || '[]');
+    if (!Array.isArray(stored) || !window.FOOD_CALC || !Array.isArray(window.FOOD_CALC._DB)) return;
+    stored.forEach(function(cf) {
+      if (!cf || !cf.name) return;
+      // Avoid injecting duplicates
+      for (var i = 0; i < window.FOOD_CALC._DB.length; i++) {
+        if (window.FOOD_CALC._DB[i][0] === cf.name) return;
+      }
+      window.FOOD_CALC._DB.push([cf.name, cf.kcal || 0, cf.p || 0, cf.g || 0, cf.l || 0]);
+    });
+  } catch(e) {}
+}
+
+function _fjOpenCreateFoodModal() {
+  todayModal('Créer un aliment', function(box) {
+    var fields = [
+      { id: 'cf-name', label: 'Nom', placeholder: 'ex: Mon mélange maison', inputmode: 'text' },
+      { id: 'cf-kcal', label: 'Kcal / 100g', placeholder: '0', inputmode: 'decimal' },
+      { id: 'cf-p',    label: 'Protéines / 100g (g)', placeholder: '0', inputmode: 'decimal' },
+      { id: 'cf-g',    label: 'Glucides / 100g (g)', placeholder: '0', inputmode: 'decimal' },
+      { id: 'cf-l',    label: 'Lipides / 100g (g)', placeholder: '0', inputmode: 'decimal' }
+    ];
+    var inputs = {};
+    fields.forEach(function(f) {
+      var wrap = h('div', { style: 'margin-bottom:10px;' });
+      var lbl = h('label', {
+        style: 'display:block;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:4px;'
+      }, f.label);
+      lbl.setAttribute('for', f.id);
+      var inp = h('input', {
+        id: f.id,
+        type: 'text',
+        placeholder: f.placeholder || '',
+        style: 'width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--line,#D8D8D0);border-radius:2px;'
+          + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;background:var(--ivory,#FAF9F6);min-height:44px;'
+      });
+      inp.setAttribute('inputmode', f.inputmode || 'text');
+      inputs[f.id] = inp;
+      wrap.appendChild(lbl);
+      wrap.appendChild(inp);
+      box.appendChild(wrap);
+    });
+
+    var errEl = h('div', { style: 'color:#B00020;font-size:12px;margin-bottom:8px;display:none;font-family:"Helvetica Neue",Arial,sans-serif;' });
+    box.appendChild(errEl);
+
+    var saveBtn = h('button', {
+      style: 'width:100%;padding:12px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;cursor:pointer;'
+        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;min-height:44px;margin-top:4px;'
+    }, 'Créer l\'aliment');
+
+    saveBtn.addEventListener('click', function() {
+      var name = (inputs['cf-name'].value || '').trim();
+      var kcal  = parseFloat(String(inputs['cf-kcal'].value || '0').replace(',', '.')) || 0;
+      var prot  = parseFloat(String(inputs['cf-p'].value   || '0').replace(',', '.')) || 0;
+      var carbs = parseFloat(String(inputs['cf-g'].value   || '0').replace(',', '.')) || 0;
+      var fat   = parseFloat(String(inputs['cf-l'].value   || '0').replace(',', '.')) || 0;
+
+      if (!name) {
+        errEl.textContent = 'Le nom est obligatoire.';
+        errEl.style.display = '';
+        inputs['cf-name'].focus();
+        return;
+      }
+      if (kcal < 0 || isNaN(kcal)) {
+        errEl.textContent = 'Valeur kcal invalide (doit être ≥ 0).';
+        errEl.style.display = '';
+        return;
+      }
+
+      // Persist
+      var uid = _fjGetUid();
+      var key = 'mtd_custom_foods_' + uid;
+      var stored = [];
+      try { stored = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) { stored = []; }
+      if (!Array.isArray(stored)) stored = [];
+      stored.push({ name: name, kcal: kcal, p: prot, g: carbs, l: fat });
+      localStorage.setItem(key, JSON.stringify(stored));
+
+      // Inject into FOOD_CALC immediately
+      if (window.FOOD_CALC && Array.isArray(window.FOOD_CALC._DB)) {
+        var dup = false;
+        for (var i = 0; i < window.FOOD_CALC._DB.length; i++) {
+          if (window.FOOD_CALC._DB[i][0] === name) { dup = true; break; }
+        }
+        if (!dup) window.FOOD_CALC._DB.push([name, kcal, prot, carbs, fat]);
+      }
+
+      // Close modal
+      var overlay = document.body.lastChild;
+      while (overlay && overlay.getAttribute && !overlay.getAttribute('role')) overlay = overlay.previousSibling;
+      if (overlay && overlay.getAttribute && overlay.getAttribute('role') === 'dialog') {
+        try { document.body.removeChild(overlay); } catch(e) {}
+      }
+
+      _fjState.query = name;
+      _fjState.selectedFood = null;
+      _fjRefreshResults();
+      if (window.showToast) window.showToast('\u00ab ' + name + ' \u00bb ajouté à votre base.', 'success', 2500);
+    });
+
+    box.appendChild(saveBtn);
+    setTimeout(function() { try { inputs['cf-name'].focus(); } catch(e) {} }, 80);
+  });
+}
+
 function renderFoodJournalCard() {
+  _fjLoadCustomFoods();
   var S = window.S;
   if (!S) return null;
   // Sport-only : masquer (pas de suivi nutrition)
   if (S.appMode === 'sport') return null;
 
   var c = card();
+  c.id = 'fj-card-root'; // Phase 2 K: stable anchor for targeted re-render
 
   // Titre standard Georgia 20px (cohérent avec renderCardSport / renderCardRepas)
   c.appendChild(cardTitle('Journal du jour'));
@@ -1543,9 +1690,17 @@ function renderFoodJournalCard() {
     cell.appendChild(h('div', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:4px;'
     }, lbl));
+    var valColor = 'var(--black,#0A0A09)';
+    if (tgt > 0) {
+      var ratio = val / tgt;
+      if (ratio > 1.1) valColor = '#C0392B';       // over 110%: rouge
+      else if (ratio >= 0.9) valColor = '#27AE60';  // 90–110%: vert
+      else if (ratio >= 0.6) valColor = '#E67E22';  // 60–90%: orange
+    }
+    var displayVal = tgt > 0 ? Math.round(val) + ' / ' + Math.round(tgt) : (val > 0 ? Math.round(val) : '---');
     cell.appendChild(h('div', {
-      style: 'font-family:Georgia,serif;font-size:15px;color:var(--black,#0A0A09);'
-    }, Math.round(val) + (tgt > 0 ? ' / ' + Math.round(tgt) : '') + (unit || '')));
+      style: 'font-family:Georgia,serif;font-size:15px;color:' + valColor + ';'
+    }, displayVal + (unit || '')));
     return cell;
   }
   totalsBox.appendChild(totCell('Kcal', totals.kcal, kcalTarget, ''));
@@ -1575,6 +1730,8 @@ function renderFoodJournalCard() {
     }, m.label);
     btn.addEventListener('click', function() {
       _fjState.meal = m.key;
+      _fjState.multiSelected = {};
+      _fjState.showSavedMeals = false;
       _reRenderFJCard();
     });
     tabs.appendChild(btn);
@@ -1599,15 +1756,43 @@ function renderFoodJournalCard() {
     type: 'text',
     placeholder: 'Rechercher un aliment',
     value: _fjState.query,
-    style: 'flex:1;padding:12px 14px;min-height:44px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:#fff;'
+    inputmode: 'search',
+    enterkeyhint: 'search',
+    autocomplete: 'off',
+    autocorrect: 'off',
+    autocapitalize: 'off',
+    spellcheck: 'false',
+    'aria-label': 'Rechercher un aliment',
+    style: 'flex:1;padding:12px 14px;min-height:44px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:var(--ivory,#FAF9F6);'
       + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;color:var(--black,#0A0A09);outline:none;box-sizing:border-box;'
   });
+  // 2026-04 R4-B1 : debounce 180ms pour éviter spam fetch OFF + churn DOM
+  var _fjSearchDebounce = null;
   input.addEventListener('input', function(e) {
     _fjState.query = e.target.value;
     _fjState.showFavs = false;
-    _fjRefreshResults();
+    if (_fjSearchDebounce) clearTimeout(_fjSearchDebounce);
+    _fjSearchDebounce = setTimeout(function() {
+      _fjSearchDebounce = null;
+      _fjRefreshResults();
+    }, 180);
   });
   searchRow.appendChild(input);
+
+  // Clear × button — visible only when query is non-empty
+  if (_fjState.query) {
+    var clearBtn = h('button', {
+      type: 'button',
+      'aria-label': 'Effacer la recherche',
+      style: 'display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0;background:transparent;border:1px solid var(--line,#D8D8D0);border-radius:2px;cursor:pointer;box-sizing:border-box;flex-shrink:0;font-size:16px;color:var(--grey,#6B6B65);'
+    }, '\u00d7');
+    clearBtn.addEventListener('click', function() {
+      _fjState.query = '';
+      _fjState.showFavs = false;
+      _reRenderFJCard();
+    });
+    searchRow.appendChild(clearBtn);
+  }
 
   var favBtn = h('button', {
     'aria-label': _fjState.showFavs ? 'Masquer les favoris' : 'Afficher les favoris',
@@ -1643,11 +1828,111 @@ function renderFoodJournalCard() {
     });
     searchRow.appendChild(plateScanBtn);
   }
+
+  // 2026-04 R5 : bouton scanner code-barres (était orphelin dans scanner.js)
+  if (window.SCANNER && typeof window.SCANNER.renderWidget === 'function') {
+    var barcodeBtn = h('button', {
+      type: 'button',
+      'aria-label': 'Scanner un code-barres',
+      title: 'Scanner un code-barres',
+      style: 'display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0;'
+        + 'background:transparent;border:1px solid var(--black,#0A0A09);border-radius:2px;cursor:pointer;box-sizing:border-box;flex-shrink:0;'
+    });
+    // SVG code-barres 16x16 trait 1.4
+    barcodeBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M3 3 L3 13 M5 3 L5 13 M7.5 3 L7.5 13 M10 3 L10 13 M13 3 L13 13"/></svg>';
+    barcodeBtn.addEventListener('click', function() {
+      try {
+        todayModal('Scanner un code-barres', function(box) {
+          var scanContainer = h('div', { style: 'margin-top:8px;' });
+          try { window.SCANNER.renderWidget(scanContainer); }
+          catch(e) { scanContainer.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, 'Scanner indisponible sur ce navigateur.')); }
+          box.appendChild(scanContainer);
+        });
+      } catch(e) { console.warn('[journal] barcode scan open failed:', e); }
+    });
+    searchRow.appendChild(barcodeBtn);
+  }
+
+  // Phase 2 L : bouton "Créer un aliment personnalisé"
+  var createFoodBtn = h('button', {
+    type: 'button',
+    'aria-label': 'Créer un aliment personnalisé',
+    title: 'Créer un aliment',
+    style: 'display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0;'
+      + 'background:transparent;border:1px solid var(--black,#0A0A09);border-radius:2px;cursor:pointer;box-sizing:border-box;flex-shrink:0;'
+  });
+  createFoodBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><line x1="8" y1="3" x2="8" y2="13"/><line x1="3" y1="8" x2="13" y2="8"/></svg>';
+  createFoodBtn.addEventListener('click', function() { _fjOpenCreateFoodModal(); });
+  searchRow.appendChild(createFoodBtn);
+
   c.appendChild(searchRow);
 
+  // Phase 3 M : pill "Mes Repas" sous la barre de recherche
+  var pillRow = h('div', { style: 'display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;' });
+  var pillSaved = h('button', {
+    type: 'button',
+    style: 'padding:5px 12px;min-height:32px;border-radius:14px;cursor:pointer;box-sizing:border-box;'
+      + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;'
+      + (_fjState.showSavedMeals
+        ? 'background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09);'
+        : 'background:transparent;color:var(--grey,#6B6B65);border:1px solid var(--line,#D8D8D0);')
+  }, 'Mes repas');
+  pillSaved.addEventListener('click', function() {
+    _fjState.showSavedMeals = !_fjState.showSavedMeals;
+    _fjState.showFavs = false;
+    _fjState.query = '';
+    _fjState.selectedFood = null;
+    _reRenderFJCard();
+  });
+  pillRow.appendChild(pillSaved);
+
+  // Pill "Plan du jour" — charge le plan de la semaine dans le journal d'un clic
+  (function() {
+    var S2 = window.S;
+    if (!S2 || !S2.weekPlan) return;
+    var todayIdx = (new Date().getDay() + 6) % 7;
+    var dayPlan = S2.weekPlan[todayIdx];
+    var hasPlan = dayPlan && (dayPlan.breakfast || dayPlan.lunch || dayPlan.dinner);
+    if (!hasPlan) return;
+    var pillPlan = h('button', {
+      type: 'button',
+      'aria-label': 'Charger le plan repas du jour dans le journal',
+      style: 'padding:5px 12px;min-height:32px;border-radius:14px;cursor:pointer;box-sizing:border-box;'
+        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;'
+        + 'background:transparent;color:var(--grey,#6B6B65);border:1px solid var(--line,#D8D8D0);'
+    }, '+ Plan du jour');
+    pillPlan.addEventListener('click', function() {
+      if (!window.FOOD_JOURNAL) return;
+      try {
+        var existing = window.FOOD_JOURNAL.getDayTotal ? window.FOOD_JOURNAL.getDayTotal() : null;
+        var hasEntries = existing && existing.count > 0;
+        var doLoad = function() {
+          var user = window.AUTH ? window.AUTH.getUser() : null;
+          var loadedKey = 'mtd_journal_loaded_' + (user ? user.id : 'anon');
+          localStorage.removeItem(loadedKey);
+          window.FOOD_JOURNAL.loadFromPlan();
+          if (window.showToast) window.showToast('Plan du jour chargé dans le journal', 'success', 2200);
+          _reRenderFJCard();
+        };
+        if (hasEntries && window.confirm('Des repas sont déjà dans votre journal. Voulez-vous quand même ajouter le plan du jour ?')) {
+          doLoad();
+        } else if (!hasEntries) {
+          doLoad();
+        }
+      } catch(e) {}
+    });
+    pillRow.appendChild(pillPlan);
+  })();
+
+  c.appendChild(pillRow);
+
   // ─── Résultats de recherche (liste) ───
-  var resultsBox = h('div', { id: 'fj-results', style: 'max-height:220px;overflow-y:auto;margin-bottom:12px;' });
+  var resultsBox = h('div', { id: 'fj-results', style: 'max-height:360px;overflow-y:auto;margin-bottom:12px;' });
   c.appendChild(resultsBox);
+
+  // ─── Multi-ajout CTA (Phase 2 N) ───
+  var multiCtaBox = h('div', { id: 'fj-multi-cta', style: 'display:none;' });
+  c.appendChild(multiCtaBox);
 
   // ─── Zone sélection + grammage ───
   var selBox = h('div', { id: 'fj-selected', style: 'display:none;padding:12px;background:transparent;border:1px solid var(--line,#D8D8D0);border-radius:2px;margin-bottom:12px;' });
@@ -1666,22 +1951,148 @@ function renderFoodJournalCard() {
 
 // ─── Helpers de rendu dynamique ───
 function _reRenderFJCard() {
-  // Re-render full dashboard to avoid DOM desync
+  var _sy = (typeof window !== 'undefined' && typeof window.scrollY === 'number') ? window.scrollY : 0;
+  function _restoreScroll() {
+    if (_sy <= 0) return;
+    var fn = function() { try { window.scrollTo(0, _sy); } catch(e) {} };
+    if (typeof window.requestAnimationFrame === 'function') window.requestAnimationFrame(fn);
+    else setTimeout(fn, 0);
+  }
+
+  // Phase 2 K : targeted re-render — remplace uniquement la card fj, pas toute la page
+  var existing = document.getElementById('fj-card-root');
+  if (existing && existing.parentNode) {
+    try {
+      var fresh = renderFoodJournalCard();
+      if (fresh) {
+        existing.parentNode.replaceChild(fresh, existing);
+        _restoreScroll();
+        return;
+      }
+    } catch(e) {
+      console.warn('[fj] targeted re-render failed, fallback full render', e);
+    }
+  }
+
+  // Fallback : full page render (premier rendu ou DOM inattendu)
   if (window.render) window.render();
+  _restoreScroll();
 }
 
 // OpenFoodFacts state (module-level)
 var _fjOFF = { loading: false, results: null, lastQuery: '', ctrl: null };
 
-function _fjRenderFoodRow(food, source) {
-  var row = h('div', {
-    style: 'display:flex;align-items:center;justify-content:space-between;padding:8px 4px;border-bottom:1px solid var(--line,#D8D8D0);cursor:pointer;'
+// Phase 2 N : update the multi-add CTA bar without re-rendering results
+function _fjUpdateMultiCTA() {
+  var box = document.getElementById('fj-multi-cta');
+  if (!box) return;
+  box.innerHTML = '';
+  var names = Object.keys(_fjState.multiSelected);
+  if (names.length === 0) { box.style.display = 'none'; return; }
+  box.style.display = 'block';
+
+  var MEAL_FULL = { breakfast: 'Petit-déjeuner', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
+  var ctaBtn = h('button', {
+    style: 'width:100%;padding:12px 16px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;cursor:pointer;'
+      + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;min-height:44px;margin-bottom:8px;'
+  }, 'Ajouter ' + names.length + ' aliment' + (names.length > 1 ? 's' : '') + ' · ' + (MEAL_FULL[_fjState.meal] || _fjState.meal));
+
+  ctaBtn.addEventListener('click', function() {
+    if (!window.FOOD_JOURNAL || !window.FOOD_JOURNAL.addEntry) return;
+    names.forEach(function(nm) {
+      var food = _fjState.multiSelected[nm];
+      if (!food) return;
+      var defP = (window.FOOD_PORTIONS && window.FOOD_PORTIONS.getDefaultPortion)
+        ? window.FOOD_PORTIONS.getDefaultPortion(food.name) : null;
+      var grams = defP ? defP.g : 100;
+      var fac = grams / 100;
+      var label = defP ? defP.label + ' (' + grams + 'g)' : '100g';
+      window.FOOD_JOURNAL.addEntry(
+        _fjState.meal,
+        food.name,
+        Math.round(food.kcal * fac),
+        Math.round(food.protein * fac * 10) / 10,
+        Math.round(food.carbs * fac * 10) / 10,
+        Math.round(food.fat * fac * 10) / 10,
+        label
+      );
+    });
+    var count = names.length;
+    _fjState.multiSelected = {};
+    _fjState.query = '';
+    _fjState.selectedFood = null;
+    _reRenderFJCard();
+    if (window.showToast) window.showToast(count + ' aliment' + (count > 1 ? 's ajoutés' : ' ajouté') + ' !', 'success', 2000);
   });
-  var info = h('div', { style: 'flex:1;min-width:0;' });
+
+  box.appendChild(ctaBtn);
+}
+
+function _fjRenderFoodRow(food, source) {
+  var isChecked = !!_fjState.multiSelected[food.name];
+  var row = h('div', {
+    style: 'display:flex;align-items:center;justify-content:space-between;padding:8px 4px;border-bottom:1px solid var(--line,#D8D8D0);'
+      + (isChecked ? 'background:rgba(10,10,9,0.04);' : '')
+  });
+
+  // Phase 2 N : checkbox de sélection multi-ajout
+  var chk = h('button', {
+    type: 'button',
+    'aria-label': isChecked ? 'Déselectionner ' + food.name : 'Sélectionner ' + food.name,
+    style: 'display:inline-flex;align-items:center;justify-content:center;min-width:32px;min-height:32px;width:32px;height:32px;flex-shrink:0;'
+      + 'border-radius:2px;cursor:pointer;padding:0;box-sizing:border-box;margin-right:4px;'
+      + (isChecked
+        ? 'background:var(--black,#0A0A09);border:1.5px solid var(--black,#0A0A09);'
+        : 'background:transparent;border:1.5px solid var(--line,#D8D8D0);')
+  });
+  chk.innerHTML = isChecked
+    ? '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="var(--ivory,#FAF9F6)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6 L5 9 L10 3"/></svg>'
+    : '';
+  chk.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (_fjState.multiSelected[food.name]) {
+      delete _fjState.multiSelected[food.name];
+    } else {
+      _fjState.multiSelected[food.name] = food;
+      // Fermer la sélection détaillée si on revient au mode multi
+      _fjState.selectedFood = null;
+      var selBox = document.getElementById('fj-selected');
+      if (selBox) selBox.style.display = 'none';
+    }
+    _fjUpdateMultiCTA();
+    // Mettre à jour visuellement la row sans rebuild complet
+    row.style.background = _fjState.multiSelected[food.name] ? 'rgba(10,10,9,0.04)' : '';
+    if (_fjState.multiSelected[food.name]) {
+      chk.style.background = 'var(--black,#0A0A09)';
+      chk.style.borderColor = 'var(--black,#0A0A09)';
+      chk.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="var(--ivory,#FAF9F6)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6 L5 9 L10 3"/></svg>';
+    } else {
+      chk.style.background = 'transparent';
+      chk.style.borderColor = 'var(--line,#D8D8D0)';
+      chk.innerHTML = '';
+    }
+  });
+  row.appendChild(chk);
+
+  var info = h('div', { style: 'flex:1;min-width:0;cursor:pointer;' });
   info.appendChild(h('div', {
     style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;'
   }, food.name));
-  var metaLine = Math.round(food.kcal) + ' kcal/100g \u00b7 P ' + food.protein + 'g \u00b7 G ' + food.carbs + 'g \u00b7 L ' + food.fat + 'g';
+  // 2026-04 UX : si une portion "naturelle" existe (1 burger, 1 part, 1 c. à soupe...),
+  // afficher les macros pour 1 portion plutôt que par 100g.
+  // « On mange 1 Whopper, pas 100 g de Whopper. »
+  var _defP = (window.FOOD_PORTIONS && window.FOOD_PORTIONS.getDefaultPortion)
+    ? window.FOOD_PORTIONS.getDefaultPortion(food.name) : null;
+  var metaLine;
+  if (_defP && _defP.g) {
+    var _f = _defP.g / 100;
+    metaLine = _defP.label + ' \u00b7 ' + Math.round(food.kcal * _f) + ' kcal \u00b7 P '
+      + (Math.round(food.protein * _f * 10) / 10) + 'g \u00b7 G '
+      + (Math.round(food.carbs * _f * 10) / 10) + 'g \u00b7 L '
+      + (Math.round(food.fat * _f * 10) / 10) + 'g';
+  } else {
+    metaLine = Math.round(food.kcal) + ' kcal/100g \u00b7 P ' + food.protein + 'g \u00b7 G ' + food.carbs + 'g \u00b7 L ' + food.fat + 'g';
+  }
   if (source === 'off' && food.brand) metaLine = food.brand + ' \u00b7 ' + metaLine;
   info.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:2px;'
@@ -1745,9 +2156,11 @@ function _fjFetchOFF(query) {
   _fjOFF.ctrl = ctrl;  // 2026-04 N2 : expose pour bouton Annuler manuel
 
   try {
+    // 2026-04 R5 : lc=fr + cc=fr pour prioriser noms français + produits FR
     window.fetch(
       'https://world.openfoodfacts.org/cgi/search.pl?search_terms=' + encodeURIComponent(query) +
-      '&search_simple=1&action=process&json=1&page_size=12&fields=product_name,brands,nutriments',
+      '&search_simple=1&action=process&json=1&page_size=14&lc=fr&cc=fr' +
+      '&fields=product_name,brands,nutriments',
       { signal: ctrl ? ctrl.signal : undefined }
     ).then(function(r) {
       if (timer) clearTimeout(timer);
@@ -1840,23 +2253,108 @@ function _fjAppendOFFResults() {
     loadRow.appendChild(cancelBtn);
     sec.appendChild(loadRow);
   } else if (Array.isArray(_fjOFF.results)) {
-    if (_fjOFF.results.length === 0) {
+    // 2026-04 R5 : déduplication vs résultats locaux par nom normalisé
+    var _normFn = (window.FOOD_PORTIONS && window.FOOD_PORTIONS._normalize) ? window.FOOD_PORTIONS._normalize : function(s){return String(s||'').toLowerCase();};
+    var localSet = _fjOFF.localNames || {};
+    var filtered = _fjOFF.results.filter(function(f) {
+      if (!f || !f.name) return false;
+      var n = _normFn(f.name);
+      if (!n) return true; // garde l'entrée si la normalisation échoue (défense)
+      return !localSet[n];
+    });
+    if (filtered.length === 0) {
       sec.appendChild(h('div', {
         style: 'padding:8px 4px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'
-      }, 'Aucun produit correspondant en ligne.'));
+      }, _fjOFF.results.length > 0 ? 'D\u00e9j\u00e0 dans la base SmartFitCoach.' : 'Aucun produit correspondant en ligne.'));
     } else {
-      _fjOFF.results.forEach(function(food) {
+      filtered.forEach(function(food) {
         sec.appendChild(_fjRenderFoodRow(food, 'off'));
       });
     }
   }
   box.appendChild(sec);
+  _fjUpdateMultiCTA();
+}
+
+function _fjRenderSavedMeals(box) {
+  var saved = _fjGetSavedMeals();
+  if (saved.length === 0) {
+    box.appendChild(h('div', {
+      style: 'padding:20px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.6;'
+    }, 'Aucun repas sauvegardé.\nLoggez un repas puis touchez « Sauvegarder ce repas ».'));
+    return;
+  }
+  box.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);padding:4px 4px 8px;'
+  }, 'Mes repas · ' + saved.length + ' sauvegardé' + (saved.length > 1 ? 's' : '')));
+
+  saved.forEach(function(meal) {
+    if (!meal || !meal.entries) return;
+    var totalKcal = meal.entries.reduce(function(s, e) { return s + (Number(e.kcal) || 0); }, 0);
+    var row = h('div', {
+      style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 4px;border-bottom:1px solid var(--line,#D8D8D0);'
+    });
+    var info = h('div', { style: 'flex:1;min-width:0;cursor:pointer;' });
+    info.appendChild(h('div', {
+      style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;'
+    }, meal.name));
+    info.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:2px;'
+    }, meal.entries.length + ' aliment' + (meal.entries.length > 1 ? 's' : '') + ' \u00b7 ' + Math.round(totalKcal) + ' kcal'));
+    row.appendChild(info);
+
+    // Bouton re-logger
+    var logBtn = h('button', {
+      type: 'button',
+      'aria-label': 'Re-logger ' + meal.name,
+      style: 'display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0 10px;'
+        + 'background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;cursor:pointer;flex-shrink:0;'
+        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;margin-left:6px;'
+    }, '+');
+    logBtn.addEventListener('click', function() {
+      if (!window.FOOD_JOURNAL || !window.FOOD_JOURNAL.addEntry) return;
+      meal.entries.forEach(function(e) {
+        window.FOOD_JOURNAL.addEntry(
+          _fjState.meal, e.name,
+          e.kcal || 0, e.p || 0, e.g || 0, e.l || 0,
+          e.qty || '100g'
+        );
+      });
+      _fjState.showSavedMeals = false;
+      _reRenderFJCard();
+      if (window.showToast) window.showToast('\u00ab ' + meal.name + ' \u00bb ajouté !', 'success', 2000);
+    });
+    row.appendChild(logBtn);
+
+    // Bouton supprimer
+    var delBtn = h('button', {
+      type: 'button',
+      'aria-label': 'Supprimer ' + meal.name,
+      style: 'display:inline-flex;align-items:center;justify-content:center;min-width:36px;min-height:44px;padding:0;'
+        + 'background:none;border:none;cursor:pointer;color:var(--grey,#6B6B65);flex-shrink:0;margin-left:2px;'
+    });
+    delBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M2 2 L10 10 M10 2 L2 10"/></svg>';
+    delBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (!confirm('Supprimer « ' + meal.name + ' » ?')) return;
+      _fjDeleteSavedMeal(meal.id);
+      _fjRefreshResults();
+    });
+    row.appendChild(delBtn);
+    box.appendChild(row);
+  });
 }
 
 function _fjRefreshResults() {
   var box = document.getElementById('fj-results');
   if (!box) return;
   box.innerHTML = '';
+
+  // Phase 3 M : mode "Mes Repas"
+  if (_fjState.showSavedMeals) {
+    _fjRenderSavedMeals(box);
+    return;
+  }
 
   var list = [];
   var allowOFF = false;
@@ -1872,7 +2370,15 @@ function _fjRefreshResults() {
   } else if (_fjState.query && _fjState.query.length >= 2) {
     list = (window.FOOD_CALC && window.FOOD_CALC.search) ? window.FOOD_CALC.search(_fjState.query) : [];
     if (list.length > 40) list = list.slice(0, 40);
-    allowOFF = true;
+    // 2026-04 R5 : OFF seulement >= 3 chars (évite spam fetch sur saisie courte)
+    allowOFF = (_fjState.query.length >= 3);
+    // 2026-04 R5 : mémoriser noms locaux normalisés pour déduplication OFF
+    _fjOFF.localNames = {};
+    var _normFn = (window.FOOD_PORTIONS && window.FOOD_PORTIONS._normalize) ? window.FOOD_PORTIONS._normalize : function(s){return String(s||'').toLowerCase();};
+    for (var li = 0; li < list.length; li++) {
+      var ln = _normFn(list[li].name || '');
+      if (ln) _fjOFF.localNames[ln] = 1;
+    }
   } else {
     // 2026-04 SIMPL-A : au lieu d'un écran vide "saisissez…", afficher les aliments
     // récemment loggés comme quick-add (Sarah : "pas de raccourci pour les aliments courants")
@@ -1937,6 +2443,9 @@ function _fjRefreshResults() {
   list.forEach(function(food) {
     box.appendChild(_fjRenderFoodRow(food, 'local'));
   });
+
+  // Phase 2 N : update multi-add CTA after results rendered
+  _fjUpdateMultiCTA();
 
   // Fire OFF fetch if we are searching a query (not favs)
   if (allowOFF) {
@@ -2009,7 +2518,7 @@ function _fjShowSelection() {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);min-width:48px;'
       }, 'Format'));
       var formatSelect = h('select', {
-        style: 'flex:1;padding:8px 10px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:#fff;'
+        style: 'flex:1;padding:8px 10px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:var(--ivory,#FAF9F6);'
           + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--black,#0A0A09);outline:none;'
       });
       allPortions.forEach(function(opt, i) {
@@ -2048,28 +2557,34 @@ function _fjShowSelection() {
       type: 'button', 'aria-label': 'Diminuer',
       style: 'width:44px;height:40px;border:1px solid var(--line,#D8D8D0);background:transparent;cursor:pointer;border-radius:2px;font-size:18px;line-height:1;color:var(--black,#0A0A09);font-family:Georgia,serif;'
     }, '\u2212');
+    // 2026-04 R4-M2 : type=text + inputmode=decimal pour accepter virgule FR ("2,5")
+    var countInput = h('input', {
+      type: 'text', inputmode: 'decimal',
+      pattern: '[0-9]*[.,]?[0-9]*',
+      autocomplete: 'off', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'false',
+      'aria-label': 'Nombre de portions',
+      value: String(portionCount),
+      style: 'width:64px;padding:8px 6px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:var(--ivory,#FAF9F6);'
+        + 'font-family:Georgia,serif;font-size:16px;text-align:center;outline:none;font-weight:500;'
+    });
+    // 2026-04 R4-B2 : update countInput.value au lieu de re-render → focus stepper préservé
     minusBtn.addEventListener('click', function() {
       var v = (_fjState.portionCount || 1) - 0.5;
       if (v < 0.5) v = 0.5;
       _fjState.portionCount = v;
-      _fjShowSelection();
+      countInput.value = String(v);
+      _fjUpdateMacrosLive();
     });
     countRow.appendChild(minusBtn);
-    var countInput = h('input', {
-      type: 'number', min: '0.5', max: '20', step: '0.5', value: String(portionCount),
-      inputmode: 'decimal',
-      style: 'width:64px;padding:8px 6px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:#fff;'
-        + 'font-family:Georgia,serif;font-size:16px;text-align:center;outline:none;font-weight:500;'
-    });
     countInput.addEventListener('input', function(e) {
-      var v = parseFloat(e.target.value);
+      var raw = String(e.target.value || '').replace(',', '.');
+      var v = parseFloat(raw);
       if (isNaN(v) || v < 0.5) v = 0.5;
       if (v > 20) {
         v = 20;
         if (window.showToast) window.showToast('Maximum 20 portions. Pour plus, passez en mode grammes.', 'warning', 3000);
       }
       _fjState.portionCount = v;
-      // 2026-04 FIX FOCUS : update macros live SANS re-render (garde focus + clavier)
       _fjUpdateMacrosLive();
     });
     countRow.appendChild(countInput);
@@ -2081,7 +2596,8 @@ function _fjShowSelection() {
       var v = (_fjState.portionCount || 1) + 0.5;
       if (v > 20) v = 20;
       _fjState.portionCount = v;
-      _fjShowSelection();
+      countInput.value = String(v);
+      _fjUpdateMacrosLive();
     });
     countRow.appendChild(plusBtn);
     // 2026-04 FIX FOCUS : id pour update live (sans rebuild input qui kill le focus mobile)
@@ -2111,25 +2627,30 @@ function _fjShowSelection() {
     var minusG = h('button', { type: 'button', 'aria-label': '-10g',
       style: 'width:44px;height:40px;border:1px solid var(--line,#D8D8D0);background:transparent;cursor:pointer;border-radius:2px;font-size:18px;line-height:1;color:var(--black,#0A0A09);font-family:Georgia,serif;'
     }, '\u2212');
+    qtyRow.appendChild(minusG);
+    var qtyInput = h('input', {
+      type: 'text', inputmode: 'numeric',
+      pattern: '[0-9]*',
+      autocomplete: 'off', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'false',
+      'aria-label': 'Quantit\u00e9 en grammes',
+      value: String(qty),
+      style: 'width:80px;padding:8px 6px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:var(--ivory,#FAF9F6);'
+        + 'font-family:Georgia,serif;font-size:16px;text-align:center;outline:none;font-weight:500;'
+    });
     minusG.addEventListener('click', function() {
       var v = (_fjState.qty || 100) - 10;
       if (v < 1) v = 1;
-      _fjState.qty = v; _fjState.unitMode = 'grams'; _fjShowSelection();
-    });
-    qtyRow.appendChild(minusG);
-    var qtyInput = h('input', {
-      type: 'number', min: '1', max: '2000', step: '5', value: String(qty),
-      inputmode: 'numeric',
-      style: 'width:80px;padding:8px 6px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:#fff;'
-        + 'font-family:Georgia,serif;font-size:16px;text-align:center;outline:none;font-weight:500;'
+      _fjState.qty = v; _fjState.unitMode = 'grams';
+      qtyInput.value = String(v);
+      _fjUpdateMacrosLive();
     });
     qtyInput.addEventListener('input', function(e) {
-      var v = parseInt(e.target.value, 10);
+      var raw = String(e.target.value || '').replace(',', '.');
+      var v = parseInt(raw, 10);
       if (isNaN(v) || v < 1) v = 1;
       if (v > 2000) v = 2000;
       _fjState.qty = v;
       _fjState.unitMode = 'grams';
-      // 2026-04 FIX FOCUS : update macros live sans re-render (clavier mobile reste ouvert)
       _fjUpdateMacrosLive();
     });
     qtyRow.appendChild(qtyInput);
@@ -2139,7 +2660,9 @@ function _fjShowSelection() {
     plusG.addEventListener('click', function() {
       var v = (_fjState.qty || 100) + 10;
       if (v > 2000) v = 2000;
-      _fjState.qty = v; _fjState.unitMode = 'grams'; _fjShowSelection();
+      _fjState.qty = v; _fjState.unitMode = 'grams';
+      qtyInput.value = String(v);
+      _fjUpdateMacrosLive();
     });
     qtyRow.appendChild(plusG);
     qtyRow.appendChild(h('span', {
@@ -2197,23 +2720,33 @@ function _fjShowSelection() {
   }, 'Ajouter \u00e0 ' + (MEAL_FULL[_fjState.meal] || 'ce repas'));
   addBtn.addEventListener('click', function() {
     if (window.FOOD_JOURNAL && window.FOOD_JOURNAL.addEntry) {
+      // 2026-04 R4-B2 : recompute LIVE au click (closure stale après refacto +/- sans rebuild)
+      var qtyNow = _fjState.qty;
+      if (_fjState.unitMode === 'portion' && _fjState.portion) {
+        qtyNow = Math.round(_fjState.portion.g * (_fjState.portionCount || 1));
+      }
+      var facNow = qtyNow / 100;
+      var kcalNow = Math.round(food.kcal * facNow);
+      var pNow = Math.round(food.protein * facNow * 10) / 10;
+      var gNow = Math.round(food.carbs * facNow * 10) / 10;
+      var lNow = Math.round(food.fat * facNow * 10) / 10;
       // 2026-04 : libellé lisible si on est en mode portion (ex "1 burger" au lieu de "215g")
-      var label = qty + 'g';
+      var label = qtyNow + 'g';
       if (_fjState.unitMode === 'portion' && _fjState.portion) {
         var pCount = _fjState.portionCount || 1;
         var pLab = _fjState.portion.label;
-        if (pCount === 1) label = pLab + ' (' + qty + 'g)';
+        if (pCount === 1) label = pLab + ' (' + qtyNow + 'g)';
         else {
           // Pluralisation simple
           var rest = pLab.replace(/^1\s+/, '');
           if (!/s$/i.test(rest.split(' ')[0])) rest = rest.replace(/^(\S+)/, '$1s');
-          label = pCount + ' ' + rest + ' (' + qty + 'g)';
+          label = pCount + ' ' + rest + ' (' + qtyNow + 'g)';
         }
       }
       window.FOOD_JOURNAL.addEntry(
         _fjState.meal,
         food.name,
-        kcal, p, g, l,
+        kcalNow, pNow, gNow, lNow,
         label
       );
       _fjState.selectedFood = null;
@@ -2281,6 +2814,73 @@ function _fjBuildEntriesList(container) {
     row.appendChild(del);
     container.appendChild(row);
   });
+
+  // ─── Actions contextuelles (bas de liste) ───
+  var actionsRow = h('div', { style: 'display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;' });
+
+  // Phase 3 O : Copier d'hier (si hier a des entrées pour ce repas)
+  var yesterdayItems = _fjYesterdayEntries(_fjState.meal);
+  if (yesterdayItems.length > 0) {
+    var copyBtn = h('button', {
+      type: 'button',
+      style: 'padding:6px 14px;min-height:36px;border:1px solid var(--line,#D8D8D0);border-radius:2px;cursor:pointer;background:transparent;'
+        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey,#6B6B65);'
+    }, 'Copier d\'hier (' + yesterdayItems.length + ')');
+    copyBtn.addEventListener('click', function() {
+      if (!window.FOOD_JOURNAL || !window.FOOD_JOURNAL.addEntry) return;
+      yesterdayItems.forEach(function(e) {
+        window.FOOD_JOURNAL.addEntry(
+          _fjState.meal, e.name,
+          e.kcal || 0, e.p || 0, e.g || 0, e.l || 0,
+          e.qty || '100g'
+        );
+      });
+      _reRenderFJCard();
+      if (window.showToast) window.showToast(yesterdayItems.length + ' aliment' + (yesterdayItems.length > 1 ? 's copiés' : ' copié') + ' !', 'success', 2000);
+    });
+    actionsRow.appendChild(copyBtn);
+  }
+
+  // Phase 3 M : Sauvegarder ce repas
+  var saveBtn = h('button', {
+    type: 'button',
+    style: 'padding:6px 14px;min-height:36px;border:1px solid var(--line,#D8D8D0);border-radius:2px;cursor:pointer;background:transparent;'
+      + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey,#6B6B65);'
+  }, 'Sauvegarder ce repas');
+  saveBtn.addEventListener('click', function() {
+    todayModal('Sauvegarder ce repas', function(box, overlay) {
+      var MEAL_LABELS2 = { breakfast: 'Petit-déjeuner', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
+      var defaultName = MEAL_LABELS2[_fjState.meal] || 'Mon repas';
+      box.appendChild(h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin-bottom:10px;'
+      }, mealEntries.length + ' aliment' + (mealEntries.length > 1 ? 's' : '') + ' — donnez un nom à ce repas'));
+      var inp = h('input', {
+        type: 'text',
+        placeholder: defaultName,
+        value: defaultName,
+        style: 'width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--line,#D8D8D0);border-radius:2px;'
+          + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;background:var(--ivory,#FAF9F6);min-height:44px;margin-bottom:12px;'
+      });
+      box.appendChild(inp);
+      var confirmBtn = h('button', {
+        style: 'width:100%;padding:12px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;cursor:pointer;'
+          + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;min-height:44px;'
+      }, 'Sauvegarder');
+      confirmBtn.addEventListener('click', function() {
+        var name = (inp.value || '').trim() || defaultName;
+        _fjSaveMeal(name, mealEntries.map(function(e) {
+          return { name: e.name, kcal: e.kcal, p: e.p, g: e.g, l: e.l, qty: e.qty };
+        }));
+        document.body.removeChild(overlay);
+        if (window.showToast) window.showToast('\u00ab ' + name + ' \u00bb sauvegardé !', 'success', 2000);
+      });
+      box.appendChild(confirmBtn);
+      setTimeout(function() { try { inp.select(); } catch(e2) {} }, 80);
+    });
+  });
+  actionsRow.appendChild(saveBtn);
+
+  if (actionsRow.children.length > 0) container.appendChild(actionsRow);
 }
 
 // ─── RENDER CARD 3 — Repas du jour ───
@@ -3282,12 +3882,17 @@ function openTodayWeightPrompt() {
         }
         // Persister le nouveau poids dans le profil (évite la perte de données si l'utilisateur ferme l'app)
         if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+        var _wLabel = 'Poids enregistré : ' + (window.UNITS ? window.UNITS.displayWeight(valKg) : valKg + ' kg');
         if (window.GAMIFICATION) {
           try {
-            window.GAMIFICATION.showToast('Poids enregistré : ' + (window.UNITS ? window.UNITS.displayWeight(valKg) : valKg + ' kg'));
+            window.GAMIFICATION.showToast(_wLabel);
             window.GAMIFICATION.unlockBadge('first_weigh');
             if (wh.length >= 10) window.GAMIFICATION.unlockBadge('weight_10');
-          } catch(e) {}
+          } catch(e) {
+            if (window.showToast) { try { window.showToast(_wLabel, 'success', 2500); } catch(_){} }
+          }
+        } else if (window.showToast) {
+          try { window.showToast(_wLabel, 'success', 2500); } catch(_){}
         }
         document.body.removeChild(overlay);
         if (window.APP_RENDER) window.APP_RENDER();
@@ -4694,9 +5299,10 @@ function renderCardSundayReview(S) {
   var isSunday = now.getDay() === 0;
   if (!isSunday && !S._forceWeeklyReview) return null;
 
-  // Ne pas construire le DOM si déjà dismissé aujourd'hui (optimisation)
-  try { if (localStorage.getItem('mtd_weekly_review_dismissed_' + now.toISOString().slice(0, 10)) === '1') return null; } catch(e) {}
+  // Ne pas construire le DOM si déjà dismissé aujourd'hui — clé isolée par userId (fix 2026-04-19)
   var uid = (window.AUTH && window.AUTH.getUser()) ? window.AUTH.getUser().id : 'anon';
+  var _wrDismissKey = 'mtd_weekly_review_dismissed_' + uid + '_' + now.toISOString().slice(0, 10);
+  try { if (localStorage.getItem(_wrDismissKey) === '1') return null; } catch(e) {}
 
   // Charger le log séances de la semaine
   var muscuLog = {};
@@ -4775,16 +5381,17 @@ function renderCardSundayReview(S) {
     style: 'margin-top:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);background:transparent;border:none;cursor:pointer;padding:12px 0;min-height:44px;display:block;width:100%;text-align:left;',
     onclick: function() {
       S._forceWeeklyReview = false;
-      // Stocker le dismiss dans localStorage pour ne pas réafficher aujourd'hui
-      try { localStorage.setItem('mtd_weekly_review_dismissed_' + new Date().toISOString().slice(0, 10), '1'); } catch(e) {}
+      // Stocker le dismiss dans localStorage avec userId pour isolation multi-compte (fix 2026-04-19)
+      var _dismissUid = (window.AUTH && window.AUTH.getUser()) ? window.AUTH.getUser().id : 'anon';
+      try { localStorage.setItem('mtd_weekly_review_dismissed_' + _dismissUid + '_' + new Date().toISOString().slice(0, 10), '1'); } catch(e) {}
       if (window.render) window.render();
     }
   }, 'Fermer le bilan');
   c.appendChild(dismissBtn);
 
-  // Ne pas réafficher si déjà fermé aujourd'hui
+  // Ne pas réafficher si déjà fermé aujourd'hui (isolation userId)
   try {
-    if (localStorage.getItem('mtd_weekly_review_dismissed_' + now.toISOString().slice(0, 10)) === '1') return null;
+    if (localStorage.getItem(_wrDismissKey) === '1') return null;
   } catch(e) {}
 
   return c;

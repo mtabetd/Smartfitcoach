@@ -2960,11 +2960,27 @@ if (window._verifyCriticalFunctions) {
 // Save on tab/browser close to avoid losing last unsaved state
 window.addEventListener('beforeunload', function() {
  try { if (window.AUTH && window.AUTH.isLoggedIn()) saveProfile(); } catch(e) {}
- try { if (window.AUTH && window.AUTH.isLoggedIn() && window.SupaSync) SupaSync.saveProfile(); } catch(e) {}
+ // Note: saveProfile() appelle déjà SupaSync.scheduleSave() — pas de double appel direct pour éviter race condition
 });
 // Periodic autosave every 30s as safety net (render() already saves on interaction)
 setInterval(function() {
  try { if (window.AUTH && window.AUTH.isLoggedIn()) saveProfile(); } catch(e) {}
 }, 30000);
+
+// Purge journal entries > 6 mois (prévient saturation localStorage) — une fois par session
+setTimeout(function() {
+ try { if (window.FOOD_JOURNAL && window.FOOD_JOURNAL.purgeOldEntries) window.FOOD_JOURNAL.purgeOldEntries(); } catch(e) {}
+}, 5000);
+
+// Global Escape handler — single document-level listener closes any modal (no per-render listener binding)
+document.addEventListener('keydown', function(e) {
+ if (e.key !== 'Escape') return;
+ var changed = false;
+ try {
+   if (window.S && window.S.modalRecipe) { window.S.modalRecipe = null; changed = true; }
+   if (window.S && window.S.sportModalExercise) { window.S.sportModalExercise = null; changed = true; }
+   if (changed) window.render();
+ } catch(err) {}
+});
 
 })();

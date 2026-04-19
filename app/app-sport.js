@@ -931,14 +931,14 @@ function renderSportChoice(p) {
   wrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:22px;font-weight:300;font-style:italic;line-height:1.45;margin-bottom:16px'},
     prenom ? 'Votre protocole ' + sportLabel + '\nest actif, ' + prenom + '.' : 'Votre protocole ' + sportLabel + '\nest déjà établi.'
   ));
-  wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;letter-spacing:0.5px;line-height:1.7;color:#555;max-width:300px;margin:0 auto 40px'},
+  wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;letter-spacing:0.5px;line-height:1.7;color:var(--grey,#6B6B65);max-width:300px;margin:0 auto 40px'},
     'Souhaitez-vous poursuivre votre programme en cours,\nou en définir un entièrement nouveau\u00a0?'
   ));
 
   var targetStep = _SPORT_PROGRAM_STEP[S.sportType] || 4;
 
   var btnContinue = h('button', {
-    style: 'display:block;width:100%;max-width:300px;padding:16px 24px;background:var(--black,#0A0A09);color:#fff;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;margin:0 auto 14px',
+    style: 'display:block;width:100%;max-width:300px;padding:16px 24px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;margin:0 auto 14px',
     onclick: function() { S.sStep = targetStep; window.render(); }
   }, 'Poursuivre mon protocole');
 
@@ -1288,6 +1288,99 @@ function renderObjectif(p) {
  p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Choisissez votre type de programme sportif.'));
 
+ // ─── RECOMMANDATION PROFIL ───
+ // Affiché uniquement si l'utilisateur n'a encore aucun programme sport.
+ (function() {
+  if (S.sportType || (Array.isArray(S.sportProgram) && S.sportProgram.length > 0)) return;
+  var _rGoalKey = (S.goal !== null && window.GOALS && window.GOALS[S.goal]) ? window.GOALS[S.goal].key : '';
+  var _rAge = typeof getAge === 'function' ? getAge() : (S.age || 0);
+  var _isFemale = S.sex === 'femme';
+
+  // Matrice de recommandation
+  var _rec = null;
+  if (_rAge >= 50) {
+   var _50reason = 'Recommandé pour les 50+ — préserve les articulations et améliore la qualité de vie.';
+   if (_rGoalKey === 'cut' || _rGoalKey === 'shred') _50reason = 'Après 50 ans, le yoga actif favorise la perte de masse grasse douce sans stress articulaire — priorité à la longévité.';
+   else if (_rGoalKey === 'bulk' || _rGoalKey === 'lean_bulk') _50reason = 'Après 50 ans, la mobilité est la base — le yoga prépare les articulations avant d\'ajouter de la charge.';
+   _rec = { type: 'yoga', label: 'Yoga & Mobilité', icon: '🧘',
+    sub: 'Mobilité · Souplesse · Récupération active',
+    reason: _50reason,
+    nextStep: 19 };
+  } else if (_rGoalKey === 'bulk' || _rGoalKey === 'lean_bulk') {
+   _rec = { type: 'musculation', label: 'Musculation', icon: '🏋️',
+    sub: 'Progressive overload · Force · Masse',
+    reason: 'Programme optimal pour votre objectif prise de masse — progressive overload scientifique.',
+    nextStep: 20 };
+  } else if (_rGoalKey === 'recomposition') {
+   _rec = { type: 'musculation', label: 'Musculation', icon: '🏋️',
+    sub: 'Force · Composition · Recomposition',
+    reason: 'La recomposition corporelle répond le mieux à la musculation avec surcharge progressive.',
+    nextStep: 20 };
+  } else if (_rGoalKey === 'cut' || _rGoalKey === 'shred') {
+   _rec = { type: 'crossfit', label: 'Cross Training', icon: '🔥',
+    sub: 'HIIT · Force · Cardio fusionnés',
+    reason: 'HIIT + force = combo maximal pour une sèche efficace — calories brûlées 24h.',
+    nextStep: 5 };
+  } else if (_rGoalKey === 'endurance') {
+   _rec = { type: 'running', label: 'Running', icon: '🏃',
+    sub: '5K · 10K · Semi · Marathon',
+    reason: 'Programme running progressif — du 5K au marathon avec plans scientifiques.',
+    nextStep: 7 };
+  } else if (_isFemale) {
+   _rec = { type: 'musculation', label: 'Musculation', icon: '🏋️',
+    sub: 'Force · Fessiers · Ventre plat',
+    reason: 'Spécialement adapté femme — priorité fessiers et abdominaux, sans bulk excessif.',
+    nextStep: 20 };
+  } else {
+   _rec = { type: 'musculation', label: 'Musculation', icon: '🏋️',
+    sub: 'Force · Volume · Performance',
+    reason: 'Le programme le plus complet pour transformer votre physique durablement.',
+    nextStep: 20 };
+  }
+
+  if (!_rec) return;
+
+  var recWrap = h('div', {style: 'margin-bottom:28px;'});
+  recWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px'}, 'Recommandé pour votre profil'));
+
+  var recCard = h('div', {
+   style: 'border:1px solid var(--black,#0A0A09);padding:20px 20px 18px;background:var(--ivory,#FAF9F6);cursor:pointer;position:relative;overflow:hidden;',
+   onclick: function() {
+    S.sportType = _rec.type;
+    if (!S.parqDone) { S._parqNextStep = _rec.nextStep; S.sStep = 26; }
+    else { S.sStep = _rec.nextStep; }
+    if (window.BLACKBOX) BLACKBOX.log('sport_type_recommended', {type: _rec.type});
+    window.render();
+   }
+  });
+
+  var recBadge = h('div', {style: 'position:absolute;top:0;right:0;padding:4px 12px;background:var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--ivory,#FAF9F6);line-height:18px'}, '★  Adapté à vous');
+  recCard.appendChild(recBadge);
+
+  var recTop = h('div', {style: 'display:flex;align-items:flex-start;gap:0;margin-bottom:14px;margin-top:22px'});
+  var recInfo = h('div', {style: 'flex:1'});
+  recInfo.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-style:italic;color:var(--black,#0A0A09);margin-bottom:5px;line-height:1.2'}, _rec.label));
+  recInfo.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65)'}, _rec.sub));
+  recTop.appendChild(recInfo);
+  recCard.appendChild(recTop);
+
+  recCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.6;border-top:1px solid var(--border,#D8D8D0);padding-top:14px;margin-top:2px'}, _rec.reason));
+
+  var recCta = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:16px'});
+  recCta.appendChild(h('div', {style: 'width:24px;height:1px;background:var(--black,#0A0A09)'}));
+  recCta.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09)'}, 'Commencer ce programme  →'));
+  recCard.appendChild(recCta);
+  recWrap.appendChild(recCard);
+
+  recWrap.appendChild(h('div', {style: 'display:flex;align-items:center;gap:16px;margin-top:20px;margin-bottom:4px'},[
+   h('div', {style:'flex:1;height:1px;background:var(--border,#D8D8D0)'}),
+   h('span', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);white-space:nowrap'},'ou choisir manuellement'),
+   h('div', {style:'flex:1;height:1px;background:var(--border,#D8D8D0)'})
+  ]));
+
+  p.appendChild(recWrap);
+ })();
+
  // Banner contextuel pour les utilisateurs nutrition → sport (tous sports, pas musculation seule)
  if (window.S && window.S._switchedFromNutrition) {
    var _ctxBannerObj = document.createElement('div');
@@ -1304,15 +1397,17 @@ function renderObjectif(p) {
  var typeGrid = h('div', {'class': 'card-grid-2'});
 
  // Musculation - clicking goes to PAR-Q first (if not already done), then medical questionnaire (step 20)
- typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
+ // FIX 2026-04-19 — Avertissement HTA sévère (ESC/ESH 2018): charges >80% 1RM et Valsalva contre-indiqués
+ var _htaSevere = Array.isArray(S.medical) && S.medical.indexOf('hta_severe') !== -1;
+ typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer;position:relative;', onclick: function(){
  S.sportType = 'musculation';
  if (!S.parqDone) { S._parqNextStep = 20; S.sStep = 26; } else { S.sStep = 20; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'musculation'});
  window.render();
  }}, [
- h('div', {'class': 'card-name'}, 'Musculation'),
- h('div', {'class': 'card-sub'}, 'Programme cibl\u00e9 par groupes musculaires'),
- h('div', {'class': 'card-tag'}, 'S\u00e8che \u00b7 Masse \u00b7 Force \u00b7 Endurance')
+ h('div', {'class': 'card-name'}, _htaSevere ? 'Musculation \u26a0' : 'Musculation'),
+ h('div', {'class': 'card-sub'}, _htaSevere ? 'Charges l\u00e9g\u00e8res uniquement \u2014 ESC/ESH 2018' : 'Programme cibl\u00e9 par groupes musculaires'),
+ h('div', {'class': 'card-tag'}, _htaSevere ? '\u00c9viter >80% 1RM \u00b7 Pas de Valsalva \u00b7 Consulter un m\u00e9decin' : 'S\u00e8che \u00b7 Masse \u00b7 Force \u00b7 Endurance')
  ]));
 
  // Cross Training - clicking goes through PAR-Q (if not done), then CF level (step 5)
@@ -1514,6 +1609,7 @@ function renderPARQ(p) {
  // Si déjà complété, passer directement au step suivant
  if (S.parqDone) {
   var _next = S._parqNextStep || 0;
+  delete S._parqNextStep;
   S.sStep = _next;
   if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
   setTimeout(function() { if (window.render) window.render(); }, 0);
@@ -1587,6 +1683,7 @@ function renderPARQ(p) {
    S.parqResult = 'clear';
    S._parqAnswers = {};
    var nextStep = S._parqNextStep || 0;
+   delete S._parqNextStep;
    S.sStep = nextStep;
    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
    window.render();
@@ -1606,6 +1703,7 @@ function renderPARQ(p) {
    S.parqResult = 'medical_cleared';
    S._parqAnswers = {};
    var nextStep = S._parqNextStep || 0;
+   delete S._parqNextStep;
    S.sStep = nextStep;
    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
    window.render();
@@ -1620,6 +1718,7 @@ function renderPARQ(p) {
     S.parqResult = 'user_override';
     S._parqAnswers = {};
     var nextStep = S._parqNextStep || 0;
+    delete S._parqNextStep;
     S.sStep = nextStep;
     if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
     window.render();
@@ -1643,6 +1742,14 @@ function renderMuscuMedicalQ(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
  p.appendChild(h('h1', {html: 'Bilan<br><em>médical muscu</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Avant de g\u00e9n\u00e9rer votre programme, aidez-nous \u00e0 adapter les exercices \u00e0 votre situation physique.'));
+
+ // FIX 2026-04-19 — Alerte HTA sévère (ESC/ESH 2018) : Valsalva et charges >80% 1RM contre-indiqués
+ if (Array.isArray(S.medical) && S.medical.indexOf('hta_severe') !== -1) {
+   var _htaAlert = h('div', {style: 'background:rgba(220,53,69,0.07);border:1px solid rgba(220,53,69,0.3);padding:12px 14px;margin-bottom:16px;border-radius:2px;'});
+   _htaAlert.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:700;color:#8B0000;letter-spacing:1px;margin-bottom:4px;'}, '\u26a0 HTA sévère détectée'));
+   _htaAlert.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#8B0000;line-height:1.6;'}, 'Charges limitées à 40–60% du 1RM. Éviter la manœuvre de Valsalva (apnée sous charge), les mouvements isométriques intenses et les exercices au-dessus de la tête à charge élevée. Consultez votre médecin avant de commencer. — ESC/ESH 2018'));
+   p.appendChild(_htaAlert);
+ }
 
  // Phrase de contexte si bilan nutrition déjà fait — évite le sentiment de répétition
  if (Array.isArray(window.S && window.S.medical)) {
@@ -1855,7 +1962,7 @@ function renderChargesQuestionnaire(p) {
  p.appendChild(_chargesInfoCard);
 
  // Medical/age safety warnings
- var hasDiabetes = S.medical && (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1);
+ var hasDiabetes = Array.isArray(S.medical) && (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1);
  if (hasDiabetes) {
  p.appendChild(h('div', {style: 'background:var(--orangebg,rgba(106,74,26,.06));border:1px solid var(--orange,#6A4A1A);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;line-height:1.6'}, [
  h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange,#6A4A1A);margin-bottom:6px'}, 'Diabète — Précautions sportives'),
@@ -1957,6 +2064,103 @@ function renderChargesQuestionnaire(p) {
  grid.appendChild(row);
  });
  p.appendChild(grid);
+
+ // ─── STRENGTH LEADERBOARD PERSO ───
+ (function() {
+   var _bw = S.weight || 75;
+   var _sex = S.sex === 'femme' ? 'f' : 'm';
+   // Percentile thresholds [ratio×BW] by sex for Bench/Squat/Deadlift
+   // Sources: Symmetric Strength population data (general gym population)
+   var _thresholds = {
+     bench_press: { m: [0.5, 0.75, 1.0, 1.3, 1.6], f: [0.3, 0.5, 0.65, 0.85, 1.05] },
+     squat:       { m: [0.75, 1.0, 1.25, 1.6, 2.0], f: [0.5, 0.7,  0.9,  1.1,  1.4] },
+     deadlift:    { m: [1.0,  1.25, 1.5, 1.8, 2.2], f: [0.65, 0.9, 1.1,  1.3,  1.6] }
+   };
+   var _percLabels = ['< 25%', '25%', '50%', '75%', '90%', '> 90%'];
+   var _percColors = ['#6A4A1A', '#6A4A1A', '#2980B9', '#1A4A1A', '#1A4A1A', '#1A4A1A'];
+   function getPercentile(key, val) {
+     var t = _thresholds[key] && _thresholds[key][_sex];
+     if (!t || !val || val <= 0) return null;
+     var ratio = val / _bw;
+     for (var i = t.length - 1; i >= 0; i--) {
+       if (ratio >= t[i]) return { pct: _percLabels[i + 1], color: _percColors[i + 1], ratio: Math.round(ratio * 100) / 100 };
+     }
+     return { pct: _percLabels[0], color: _percColors[0], ratio: Math.round(ratio * 100) / 100 };
+   }
+   var _powerKeys = [
+     { key: 'bench_press', name: 'Développé couché' },
+     { key: 'squat',       name: 'Squat' },
+     { key: 'deadlift',    name: 'Soulevé de terre' }
+   ];
+   var _hasAny = _powerKeys.some(function(k) { return S.muscuStrengthProfile[k.key] > 0; });
+   if (!_hasAny) return;
+   var lbWrap = h('div', { style: 'margin-bottom:16px;border:1px solid var(--border);background:var(--ivory2);' });
+   lbWrap.appendChild(h('div', { style: 'padding:10px 14px;border-bottom:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);font-weight:700;' }, 'Force relative — vs poids de corps'));
+   _powerKeys.forEach(function(kd) {
+     var w = S.muscuStrengthProfile[kd.key] || 0;
+     if (w <= 0) return;
+     var reps = S.muscuStrengthProfile[kd.key + '_reps'] || 8;
+     var est1rm = w * (1 + reps / 30); // raw Epley — même formule qu'Advanced Exercises (cohérence)
+     var info = getPercentile(kd.key, est1rm);
+     if (!info) return;
+     var row = h('div', { style: 'display:flex;align-items:center;padding:8px 14px;border-bottom:1px solid var(--border);gap:8px;' });
+     var nameD = h('div', { style: 'flex:1;font-family:Georgia,serif;font-size:12px;color:var(--black,#0A0A09);' }, kd.name);
+     row.appendChild(nameD);
+     // ratio bar
+     var barWrap = h('div', { style: 'flex:1;height:3px;background:var(--border,#D8D8D0);border-radius:2px;overflow:hidden;' });
+     var barPct = Math.min(100, Math.round((info.ratio / (_sex === 'm' ? 2.5 : 1.8)) * 100));
+     var barFill = h('div', { style: 'height:100%;width:' + barPct + '%;background:' + info.color + ';transition:width .4s;' });
+     barWrap.appendChild(barFill);
+     row.appendChild(barWrap);
+     var statD = h('div', { style: 'text-align:right;min-width:70px;flex-shrink:0;' });
+     statD.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:' + info.color + ';font-weight:600;' }, info.pct + ' pop.'));
+     statD.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-top:1px;' }, info.ratio + 'x PC'));
+     row.appendChild(statD);
+     lbWrap.appendChild(row);
+   });
+   lbWrap.appendChild(h('div', { style: 'padding:6px 14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey);font-style:italic;' }, 'PC = Poids de corps. 1RM estimé (Epley). Population générale salle de sport.'));
+   p.appendChild(lbWrap);
+ })();
+
+ // ─── EXERCICES AVANCÉS DÉBLOQUÉS ───
+ (function() {
+   var _bw = S.weight || 75;
+   var _prof = S.muscuStrengthProfile || {};
+   function _est1rm(key) {
+     var w = _prof[key] || 0;
+     if (w <= 0) return 0;
+     var r = _prof[key + '_reps'] || 8;
+     return w * (1 + r / 30);
+   }
+   var _bench1rm = _est1rm('bench_press');
+   var _squat1rm = _est1rm('squat');
+   var _dl1rm = _est1rm('deadlift');
+   var _isFemme = S.sex === 'femme';
+   var _advExercises = [
+     { name: 'Développé couché pause-reps', unlock: _bench1rm >= (_isFemme ? 0.5 : 0.8) * _bw, req: (_isFemme ? '0.5' : '0.8') + '× PC bench', desc: 'Pause 2s en bas pour éliminer l\'élan — force pure.' },
+     { name: 'Squat tempo 3-1-3', unlock: _squat1rm >= (_isFemme ? 0.7 : 1.0) * _bw, req: (_isFemme ? '0.7' : '1.0') + '× PC squat', desc: '3s descente, 1s pause, 3s montée — contrôle maximal.' },
+     { name: 'Deficit Deadlift (+5cm)', unlock: _dl1rm >= (_isFemme ? 0.9 : 1.3) * _bw, req: (_isFemme ? '0.9' : '1.3') + '× PC DL', desc: 'Amplitude accrue, travail du bas du dos et ischio-jambiers.' },
+     { name: 'Bulgarian Split Squat lesté', unlock: _squat1rm >= (_isFemme ? 0.6 : 0.9) * _bw, req: (_isFemme ? '0.6' : '0.9') + '× PC squat', desc: 'Unilatéral — équilibre et force jambe par jambe.' },
+     { name: 'Paused Squat', unlock: _squat1rm >= (_isFemme ? 0.85 : 1.25) * _bw, req: (_isFemme ? '0.85' : '1.25') + '× PC squat', desc: 'Pause 2s en bas — base profonde, quadriceps développés.' }
+   ];
+   var _unlockedList = _advExercises.filter(function(e) { return e.unlock; });
+   var _lockedList = _advExercises.filter(function(e) { return !e.unlock; });
+   if (_advExercises.length === 0 || (_bench1rm === 0 && _squat1rm === 0 && _dl1rm === 0)) return;
+   var unlockWrap = h('div', { style: 'margin-bottom:16px;border:1px solid var(--border);background:var(--ivory2);' });
+   unlockWrap.appendChild(h('div', { style: 'padding:10px 14px;border-bottom:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);font-weight:700;' }, 'Exercices avancés'));
+   _advExercises.forEach(function(ex) {
+     var row = h('div', { style: 'display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);opacity:' + (ex.unlock ? '1' : '0.4') + ';' });
+     var icon = h('div', { style: 'flex-shrink:0;width:18px;height:18px;border:' + (ex.unlock ? '1px solid #1A4A1A' : '1px solid var(--border)') + ';background:transparent;display:flex;align-items:center;justify-content:center;font-size:10px;color:' + (ex.unlock ? '#1A4A1A' : 'var(--grey)') + ';margin-top:1px;' }, ex.unlock ? '✓' : '○');
+     row.appendChild(icon);
+     var info = h('div', { style: 'flex:1;' });
+     info.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);' }, ex.name));
+     info.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);line-height:1.5;margin-top:2px;' }, ex.unlock ? ex.desc : 'Débloquez à ' + ex.req));
+     row.appendChild(info);
+     unlockWrap.appendChild(row);
+   });
+   p.appendChild(unlockWrap);
+ })();
+
  var _chargesFooter = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-bottom:16px'});
  _chargesFooter.appendChild(h('span', {}, 'Laissez vide les exercices que vous ne pratiquez pas. Indiquez la charge ET le nombre de reps pour un calcul précis du '));
  _chargesFooter.appendChild(termTooltip('1RM', 'Répétition Maximale — la charge max que vous pouvez soulever une seule fois'));
@@ -1994,6 +2198,95 @@ function renderDedicatedPrograms(p) {
 
  // ─── SUIVI 7 SEMAINES ───
  renderWeekTracker(p);
+
+ // ─── DAILY CHALLENGE STREAK ───
+ (function() {
+   var _today = new Date().toISOString().slice(0, 10);
+   var _dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+   var _challenges = [
+     { title: '20 pompes extra', desc: 'À faire après ta séance — ou séparément si pas de séance.', target: 20, unit: 'pompes' },
+     { title: '1 min de planche', desc: 'Abdominaux serrés, corps aligné — tiens bon !', target: 60, unit: 'secondes' },
+     { title: '100 sauts à la corde', desc: 'Pas de corde ? Simule le mouvement les pieds joints.', target: 100, unit: 'sauts' },
+     { title: '30 squats au poids du corps', desc: 'Descends à parallèle, genou dans l\'axe du pied.', target: 30, unit: 'squats' },
+     { title: '15 dips sur chaise', desc: 'Talons au sol, coudes près du corps — triceps !', target: 15, unit: 'reps' },
+     { title: '5 min de marche rapide', desc: '100 pas/min minimum — cardio léger actif.', target: 5, unit: 'minutes' },
+     { title: '3 séries de respirations 4-7-8', desc: 'Inspire 4s, retiens 7s, expire 8s — récupération vagale.', target: 3, unit: 'séries' }
+   ];
+   var _c = _challenges[_dayOfYear % _challenges.length];
+   // Load from localStorage if not yet in memory (step 15 may be first render before step 4)
+   if (!S.dailyChallengeHistory) {
+     var _authUser15 = (window.AUTH && window.AUTH.getUser) ? AUTH.getUser() : null;
+     var _uid15 = _authUser15 ? _authUser15.id : 'anon';
+     var _dc15 = localStorage.getItem('mtd_daily_challenge_' + _uid15);
+     if (_dc15) { try { S.dailyChallengeHistory = JSON.parse(_dc15); } catch(e) { S.dailyChallengeHistory = {}; } }
+     else { S.dailyChallengeHistory = {}; }
+   }
+   if (typeof S.dailyChallengeHistory !== 'object') S.dailyChallengeHistory = {};
+   var _doneToday = !!S.dailyChallengeHistory[_today];
+   // Compute streak
+   var _cStreak = 0;
+   var _cCur = new Date(_today);
+   while (true) {
+     var _dStr = _cCur.toISOString().slice(0, 10);
+     if (S.dailyChallengeHistory[_dStr]) { _cStreak++; _cCur.setDate(_cCur.getDate() - 1); }
+     else break;
+     if (_cStreak > 365) break;
+   }
+   var challengeCard = h('div', { style: 'margin-bottom:16px;border:1px solid ' + (_doneToday ? '#1A4A1A' : 'var(--border)') + ';background:' + (_doneToday ? 'rgba(26,74,26,0.04)' : 'var(--ivory2)') + ';padding:14px 16px;border-radius:0;' });
+   var chRow1 = h('div', { style: 'display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;' });
+   var chLeft = h('div', {});
+   chLeft.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:' + (_doneToday ? '#1A4A1A' : 'var(--grey,#6B6B65)') + ';font-weight:700;margin-bottom:3px;' }, 'Défi du jour'));
+   chLeft.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:16px;color:var(--black,#0A0A09);' }, _c.title));
+   chRow1.appendChild(chLeft);
+   if (_cStreak > 0) {
+     var streakPill = h('div', { style: 'flex-shrink:0;margin-left:10px;padding:3px 8px;background:' + (_doneToday ? '#C8A84B' : (_cStreak > 7 ? '#1A4A1A' : '#C8A84B')) + ';color:#fff;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border-radius:2px;white-space:nowrap;' }, _cStreak + ' j');
+     chRow1.appendChild(streakPill);
+   }
+   challengeCard.appendChild(chRow1);
+   challengeCard.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.5;margin-bottom:12px;' }, _c.desc));
+   if (_doneToday) {
+     challengeCard.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;color:#1A4A1A;' }, '✓ Défi accompli — à demain !'));
+   } else {
+     var doneBtn = h('button', {
+       style: 'padding:10px 18px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
+       onclick: function() {
+         var _clickToday = new Date().toISOString().slice(0, 10); // recompute at click time (midnight-safe)
+         if (!S.dailyChallengeHistory || typeof S.dailyChallengeHistory !== 'object') S.dailyChallengeHistory = {};
+         S.dailyChallengeHistory[_clickToday] = true;
+         // Prune entries > 1 year old (unbounded growth fix 2026-04-19)
+         var _dcCutoff = new Date(); _dcCutoff.setFullYear(_dcCutoff.getFullYear() - 1);
+         var _dcCutStr = _dcCutoff.toISOString().slice(0, 10);
+         Object.keys(S.dailyChallengeHistory).forEach(function(k) { if (k < _dcCutStr) delete S.dailyChallengeHistory[k]; });
+         var _dcAuthUser = (window.AUTH && window.AUTH.getUser) ? AUTH.getUser() : null;
+         var uid = _dcAuthUser ? _dcAuthUser.id : 'anon';
+         try { localStorage.setItem('mtd_daily_challenge_' + uid, JSON.stringify(S.dailyChallengeHistory)); } catch(e) {}
+         if (window.showToast) window.showToast('\u2605 D\u00e9fi du jour valid\u00e9 !', 'success', 2500);
+         // Confetti burst — simple DOM-based
+         var burst = document.createElement('div');
+         burst.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;overflow:hidden;';
+         var colors = ['#C8A84B', '#1A4A1A', '#0A0A09', '#FAF9F6', '#6A4A1A'];
+         for (var i = 0; i < 40; i++) {
+           var dot = document.createElement('div');
+           var size = 6 + Math.random() * 8;
+           dot.style.cssText = 'position:absolute;width:' + size + 'px;height:' + size + 'px;background:' + colors[i % colors.length] + ';left:' + (10 + Math.random() * 80) + '%;top:-10px;border-radius:' + (Math.random() > 0.5 ? '50%' : '2px') + ';animation:sfc-confetti-fall ' + (0.8 + Math.random() * 1.2) + 's ease-in forwards ' + (Math.random() * 0.4) + 's;';
+           burst.appendChild(dot);
+         }
+         if (!document.getElementById('sfc-confetti-style')) {
+           var st = document.createElement('style');
+           st.id = 'sfc-confetti-style';
+           st.textContent = '@keyframes sfc-confetti-fall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}';
+           document.head.appendChild(st);
+         }
+         document.body.appendChild(burst);
+         setTimeout(function() { if (burst.parentNode) burst.parentNode.removeChild(burst); }, 2500);
+         window.render();
+       }
+     }, '✓ Défi accompli');
+     challengeCard.appendChild(doneBtn);
+   }
+   p.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);font-weight:700;margin-bottom:8px;margin-top:24px;' }, 'Défi quotidien'));
+   p.appendChild(challengeCard);
+ })();
 
  // ─── BANNIÈRE : GÉNÉRER MON PROGRAMME DE MUSCULATION ───
  p.appendChild(h('div', {'class': 'section-label'}, 'Programme de musculation'));
@@ -4717,14 +5010,14 @@ function renderMusculationZones(p) {
  var pg = h('div', {'class': 'photo-grid', style: 'margin-bottom:16px'});
  if (S.photoFront) {
  var pf = h('div', {'class': 'photo-upload has-photo'});
- var img1 = h('img', {src: S.photoFront, alt: 'Face'});
+ var img1 = h('img', {src: S.photoFront, alt: 'Face', loading: 'lazy'});
  pf.appendChild(img1);
  pf.appendChild(h('div', {'class': 'photo-label'}, 'Face'));
  pg.appendChild(pf);
  }
  if (S.photoBack) {
  var pb2 = h('div', {'class': 'photo-upload has-photo'});
- var img2 = h('img', {src: S.photoBack, alt: 'Dos'});
+ var img2 = h('img', {src: S.photoBack, alt: 'Dos', loading: 'lazy'});
  pb2.appendChild(img2);
  pb2.appendChild(h('div', {'class': 'photo-label'}, 'Dos'));
  pg.appendChild(pb2);
@@ -4835,6 +5128,35 @@ function renderMusculationZones(p) {
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S._chargesFromLevel = true; S.sStep = 16; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
+// ─── MACROCYCLES (3-6 mois) ───
+// 1 macrocycle = 3 mésocycles de 7 semaines = 21 semaines (~5 mois).
+// Rotation : Hypertrophie → Force → Transition → Hypertrophie...
+var MACRO_PHASES = [
+ {id: 'hypertrophie', label: 'Hypertrophie', shortLabel: 'HYPERTROPHIE', color: '#1A4A1A',
+  mesosInPhase: 1, // tous les mésocycles i%3===1 (cycle 1,4,7...)
+  desc: 'Volume maximal — 8-12 reps, 65-75% 1RM. Priorité à l\'accumulation de masse musculaire.',
+  repsRange: '8-12', pct1rmBonus: 0, setsBonus: +1,
+  tip: 'Phase d\'accumulation : augmente le volume total (séries × reps). Charge modérée, récupération 60-90s.'},
+ {id: 'force', label: 'Force', shortLabel: 'FORCE', color: '#6A4A1A',
+  mesosInPhase: 2,
+  desc: 'Intensité maximale — 3-6 reps, 82-90% 1RM. Priorité à la densité neuromusculaire.',
+  repsRange: '3-6', pct1rmBonus: +0.12, setsBonus: 0,
+  tip: 'Phase d\'intensification : monte les charges, baisse les reps. Repos 3-5 min entre séries.'},
+ {id: 'transition', label: 'Transition', shortLabel: 'TRANSITION', color: '#5A1010',
+  mesosInPhase: 0,
+  desc: 'Consolidation & récupération — charges variées, 50-70% 1RM. Supercompensation.',
+  repsRange: 'variable', pct1rmBonus: -0.10, setsBonus: -1,
+  tip: 'Phase de transition : volume et intensité réduits pour permettre la supercompensation.'}
+];
+
+function getMacroCyclePhase(cycleNum) {
+ var c = ((cycleNum || 1) - 1) % 3;
+ if (c === 0) return MACRO_PHASES[0]; // Hypertrophie
+ if (c === 1) return MACRO_PHASES[1]; // Force
+ return MACRO_PHASES[2];             // Transition
+}
+window.getMacroCyclePhase = getMacroCyclePhase;
+
 // ─── SYSTÈME DE PHASES 7 SEMAINES ───
 var MUSCU_PHASES = [
  {weeks:[1,2], id:'adaptation', label:'Adaptation', color:'#2980B9',
@@ -4858,6 +5180,9 @@ var MUSCU_PHASES = [
 // Calcule le poids recommandé pour un exercice selon la phase courante
 function getSuggestedWeight(exerciseName, reps, phase) {
  var pct = phase ? (phase.pct1rm || 0.72) : 0.72;
+ // Macrocycle intensity modifier: Force phase = +12% 1RM, Transition = -10%
+ var _macroBonus = getMacroCyclePhase(S.muscuCycle || 1).pct1rmBonus || 0;
+ pct = Math.min(0.95, Math.max(0.40, pct + _macroBonus));
  // Priority 1: use user's actual 1RM from strength profile (Epley-calculated)
  if (S.muscuStrengthProfile && window.MUSCU_KEY_EXERCISES) {
  var nameLow = (exerciseName || '').toLowerCase();
@@ -5639,10 +5964,66 @@ function saveMuscuSessionLog() {
   // Check strength profile badges on each session save
   if (S.muscuStrengthProfile) GAMIFICATION.checkMuscuBadges(S.muscuStrengthProfile);
  }
+ // Consistency milestone detection — stored for display in session completion panel
+ try {
+   var _cs = getMuscuConsistencyStreak ? getMuscuConsistencyStreak() : null;
+   if (_cs && _cs.milestone) {
+     S._consistencyMilestone = _cs.milestone;
+     if (window.GAMIFICATION) {
+       if (_cs.milestone.xp && GAMIFICATION.unlockBadge) GAMIFICATION.unlockBadge('sessions_3');
+       if (_cs.milestone.type === 'badge' && GAMIFICATION.unlockBadge) GAMIFICATION.unlockBadge('streak_7');
+       if (_cs.milestone.type === 'unlock' && GAMIFICATION.unlockBadge) GAMIFICATION.unlockBadge('streak_14');
+     }
+   }
+   if (_cs) S._muscuStreak = _cs.streak;
+ } catch(_ec) {}
  } catch (e) {
  console.warn('[saveMuscuSessionLog] localStorage error:', e);
  }
 }
+
+// Returns { streak, totalSessions, milestone } — streak = consecutive distinct training days
+function getMuscuConsistencyStreak() {
+ // 60-second cache — function called on every program render, no need to recompute every time
+ var _now = Date.now();
+ if (S._streakCache && S._streakCacheTime && (_now - S._streakCacheTime) < 60000) return S._streakCache;
+ var log = S.muscuSessionLog || {};
+ var dates = Object.keys(log).filter(function(d) {
+   var exs = log[d];
+   if (!exs || typeof exs !== 'object') return false;
+   return Object.keys(exs).some(function(ex) {
+     var sets = exs[ex];
+     return Array.isArray(sets) && sets.some(function(s) { return s.validated; });
+   });
+ }).sort();
+ var totalSessions = dates.length;
+ if (totalSessions === 0) return { streak: 0, totalSessions: 0, milestone: null };
+ var today = new Date().toISOString().slice(0, 10);
+ var lastDate = dates[dates.length - 1];
+ var daysSinceLast = Math.round((new Date(today) - new Date(lastDate)) / 86400000);
+ // Streak resets if last session was more than 1 day ago
+ if (daysSinceLast > 1) return { streak: 0, totalSessions: totalSessions, milestone: null };
+ // Count consecutive days ending at lastDate (walk backwards through sorted dates)
+ var streak = 1;
+ var prevDay = new Date(lastDate);
+ for (var i = dates.length - 2; i >= 0; i--) {
+   prevDay.setDate(prevDay.getDate() - 1);
+   if (dates[i] === prevDay.toISOString().slice(0, 10)) {
+     streak++;
+   } else {
+     break;
+   }
+ }
+ var milestone = null;
+ if (totalSessions === 3) milestone = { type: 'xp', msg: '+50 XP — 3 séances au compteur !', xp: 50 };
+ else if (streak === 7) milestone = { type: 'badge', msg: 'Badge Semaine de Feu débloqué !', icon: 'Semaine de Feu' };
+ else if (streak === 14) milestone = { type: 'unlock', msg: '2 semaines sans pause — exercices avancés débloqués !', icon: 'Elite' };
+ var _result = { streak: streak, totalSessions: totalSessions, milestone: milestone };
+ S._streakCache = _result;
+ S._streakCacheTime = Date.now();
+ return _result;
+}
+window.getMuscuConsistencyStreak = getMuscuConsistencyStreak;
 
 function getMuscuPhase(week) {
  for (var i = 0; i < MUSCU_PHASES.length; i++) {
@@ -5654,8 +6035,14 @@ function getMuscuPhase(week) {
 function applyPhaseToExercise(ex, phase) {
  var result = JSON.parse(JSON.stringify(ex));
  var baseSets = typeof result.sets === 'number' ? result.sets : 4;
- result.sets = Math.max(2, baseSets + phase.setsOffset);
- if (typeof result.reps === 'number') result.reps = Math.max(5, result.reps + phase.repsOffset);
+ var macroBonus = getMacroCyclePhase(S.muscuCycle || 1).setsBonus || 0;
+ result.sets = Math.max(2, baseSets + phase.setsOffset + macroBonus);
+ if (typeof result.reps === 'number') {
+  // Force macrophase: reduce reps to favour intensity
+  var macroId = getMacroCyclePhase(S.muscuCycle || 1).id;
+  var macroRepsOffset = macroId === 'force' ? -3 : macroId === 'transition' ? -1 : 0;
+  result.reps = Math.max(3, result.reps + phase.repsOffset + macroRepsOffset);
+ }
  return result;
 }
 
@@ -5676,11 +6063,11 @@ function saveMuscuWeek(week) {
 function loadMuscuWeek() {
  try {
  var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
- var w = parseInt(localStorage.getItem('mtd_muscu_week_' + uid));
+ var w = parseInt(localStorage.getItem('mtd_muscu_week_' + uid), 10);
  if (!isNaN(w) && w >= 1) S.muscuWeek = w;
  var start = localStorage.getItem('mtd_muscu_start_' + uid);
  if (start) S.muscuProgramStart = start;
- var c = parseInt(localStorage.getItem('mtd_muscu_cycle_' + uid));
+ var c = parseInt(localStorage.getItem('mtd_muscu_cycle_' + uid), 10);
  if (!isNaN(c) && c >= 1) S.muscuCycle = c;
  } catch (e) {
  console.warn('[loadMuscuWeek] localStorage error:', e);
@@ -5691,6 +6078,48 @@ function renderWeekTracker(p) {
  loadMuscuWeek();
  var week = S.muscuWeek || 1;
  var phase = getMuscuPhase(week);
+ var cycleNum = S.muscuCycle || 1;
+ var macroPhase = getMacroCyclePhase(cycleNum);
+
+ // ─── MACROCYCLE BANNER ───
+ var totalMesoInMacro = 3;
+ var mesoInMacro = ((cycleNum - 1) % totalMesoInMacro) + 1;
+ var macroCycleNum = Math.ceil(cycleNum / totalMesoInMacro);
+ var macroContainer = h('div', {
+  style: 'margin-bottom:16px;padding:14px 16px 16px;border-left:2px solid ' + macroPhase.color + ';background:var(--ivory2,#F4F2EB);'
+ });
+ var macroHeader = h('div', {style: 'display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px'});
+ macroHeader.appendChild(h('div', {style: 'display:flex;flex-direction:column;gap:3px'}, [
+  h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65)'}, 'Macrocycle ' + macroCycleNum),
+  h('span', {style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;color:var(--black,#0A0A09)'}, macroPhase.label),
+ ]));
+ macroHeader.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65)'}, 'Mésocycle ' + mesoInMacro + '\u202f/\u202f' + totalMesoInMacro));
+ macroContainer.appendChild(macroHeader);
+
+ var macroBar = h('div', {style: 'display:flex;gap:3px;height:3px;margin-bottom:12px'});
+ ['Hypertrophie','Force','Transition'].forEach(function(phLabel, idx) {
+  var isActive = idx === (cycleNum - 1) % 3;
+  var isDone = idx < (cycleNum - 1) % 3;
+  var segColor = [MACRO_PHASES[0].color, MACRO_PHASES[1].color, MACRO_PHASES[2].color][idx];
+  macroBar.appendChild(h('div', {
+   title: phLabel,
+   style: 'flex:1;height:3px;border-radius:0;background:' + (isActive ? segColor : isDone ? segColor : 'var(--border,#D8D8D0)') + ';opacity:' + (isActive ? '1' : isDone ? '0.4' : '1') + ';transition:all .3s ease;'
+  }));
+ });
+ macroContainer.appendChild(macroBar);
+
+ var macroBarLabels = h('div', {style: 'display:flex;gap:3px;margin-bottom:12px'});
+ ['Hypertrophie','Force','Transition'].forEach(function(phLabel, idx) {
+  var isActive = idx === (cycleNum - 1) % 3;
+  macroBarLabels.appendChild(h('div', {style: 'flex:1;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:' + (isActive ? 'var(--black,#0A0A09)' : 'var(--grey,#6B6B65)') + ';opacity:' + (isActive ? '1' : '0.6')}, phLabel));
+ });
+ macroContainer.appendChild(macroBarLabels);
+
+ macroContainer.appendChild(h('div', {
+  style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.65;border-top:1px solid var(--border,#D8D8D0);padding-top:12px;'
+ }, macroPhase.tip));
+
+ p.appendChild(macroContainer);
 
  var container = h('div', {style: 'border:2px solid ' + phase.color + ';padding:16px;margin-bottom:20px;background:var(--ivory2)'});
 
@@ -5698,8 +6127,7 @@ function renderWeekTracker(p) {
  var top = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:12px'});
  var badge = h('div', {style: 'display:flex;align-items:center;gap:8px'});
  badge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#fff;background:' + phase.color + ';padding:3px 8px'}, phase.label));
- var cycleNum = S.muscuCycle || 1;
- badge.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:13px;color:' + phase.color}, 'Semaine ' + week + ' / 7 · Cycle ' + cycleNum));
+ badge.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:13px;color:' + phase.color}, 'Semaine ' + week + ' / 7'));
  top.appendChild(badge);
  if (S.muscuProgramStart) {
  top.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey)'}, 'Début : ' + S.muscuProgramStart));
@@ -5733,7 +6161,7 @@ function renderWeekTracker(p) {
  container.appendChild(labels);
 
  // RPE badge — T1D cap: RPE max 7 (hypoglycémie à intensité élevée — ADA 2023, ACSM 2016)
- var hasT1D = S.medical && S.medical.indexOf('diabete_t1') !== -1;
+ var hasT1D = Array.isArray(S.medical) && S.medical.indexOf('diabete_t1') !== -1;
  var displayRpe = phase.rpe;
  var displayRpeNote = phase.rpeNote;
  if (hasT1D && phase.rpe > 7) {
@@ -6057,6 +6485,12 @@ function renderMusculationProgram(p) {
  var savedProg = localStorage.getItem('mtd_muscu_progression_' + userId3);
  if (savedProg) { try { S.muscuProgressionHistory = JSON.parse(savedProg); } catch(e) {} }
  if (!S.muscuProgressionHistory || typeof S.muscuProgressionHistory !== 'object' || Array.isArray(S.muscuProgressionHistory)) S.muscuProgressionHistory = {};
+ // Load daily challenge history
+ if (!S.dailyChallengeHistory) {
+   var _dcSaved = localStorage.getItem('mtd_daily_challenge_' + userId3);
+   if (_dcSaved) { try { S.dailyChallengeHistory = JSON.parse(_dcSaved); } catch(e) { S.dailyChallengeHistory = {}; } }
+   else S.dailyChallengeHistory = {};
+ }
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
  p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
@@ -6077,6 +6511,26 @@ function renderMusculationProgram(p) {
    p.appendChild(_updateBanner);
  }
 
+ // FIX 2026-04-19 — Warning si filtrage médical strict a réduit des groupes (programme incomplet)
+ if (S._sportFilterIncomplete) {
+   var _filterWarn = h('div', {style: 'background:rgba(180,130,0,0.08);border:1px solid rgba(180,130,0,0.3);padding:10px 14px;margin-bottom:12px;border-radius:2px;display:flex;align-items:flex-start;gap:8px;'});
+   _filterWarn.appendChild(h('span', {style: 'flex-shrink:0;font-size:13px;'}, '\u26a0\ufe0f'));
+   var _fwText = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#5A3A00;line-height:1.5;'});
+   _fwText.textContent = 'Certains groupes musculaires ont été filtrés en raison de vos conditions médicales. Le programme peut être incomplet. Consultez un coach ou réduisez vos restrictions dans le questionnaire médical.';
+   _filterWarn.appendChild(_fwText);
+   p.appendChild(_filterWarn);
+ }
+
+ // FIX 2026-04-19 — Alerte persistante HTA sévère dans la vue programme (ESC/ESH 2018)
+ if (Array.isArray(S.medical) && S.medical.indexOf('hta_severe') !== -1) {
+   var _htaProgAlert = h('div', {style: 'background:rgba(220,53,69,0.07);border:1px solid rgba(220,53,69,0.3);padding:10px 14px;margin-bottom:12px;border-radius:2px;display:flex;align-items:flex-start;gap:8px;'});
+   _htaProgAlert.appendChild(h('span', {style: 'flex-shrink:0;font-size:13px;'}, '\u26a0\ufe0f'));
+   var _htaProgText = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#8B0000;line-height:1.5;'});
+   _htaProgText.textContent = 'HTA sévère : limitez les charges à 40–60% du 1RM. Évitez la manœuvre de Valsalva, les exercices isométriques intenses et les charges au-dessus de la tête. — ESC/ESH 2018';
+   _htaProgAlert.appendChild(_htaProgText);
+   p.appendChild(_htaProgAlert);
+ }
+
  // ─── SECTION : PROGRAMME DE LA SEMAINE ───
 
  // ═══ FIX UX HERMÈS 2026-04-16 — Bannières regroupées dans section collapsible ═══
@@ -6092,8 +6546,8 @@ function renderMusculationProgram(p) {
  }
  if (Array.isArray(S.medical) && S.medical.length > 0) _adaptCount++;
  if (S.pregnant && S.sex === 'femme') _adaptCount++;
- if (S.medical && (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1)) _adaptCount++;
- if (S.medical && (S.medical.indexOf('cardio') !== -1 || S.medical.indexOf('hta') !== -1 || S.medical.indexOf('hta_severe') !== -1)) _adaptCount++;
+ if (Array.isArray(S.medical) && (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1)) _adaptCount++;
+ if (Array.isArray(S.medical) && (S.medical.indexOf('cardio') !== -1 || S.medical.indexOf('hta') !== -1 || S.medical.indexOf('hta_severe') !== -1)) _adaptCount++;
  if (typeof getAge === 'function' && getAge() >= 50) _adaptCount++;
  if (S.sleep !== null && S.sleep !== undefined && S.sleep <= 1) _adaptCount++;
 
@@ -6872,6 +7326,41 @@ function renderMusculationProgram(p) {
  card.appendChild(h('div', {'class': 'exercise-sets'}, (ex.sets || '4x10') + ' \u2014 Repos ' + (ex.rest || '90s')));
  if (ex.eq) card.appendChild(h('div', {'class': 'exercise-detail'}, ex.eq));
 
+ // ─── PLATEAU DETECTOR ───
+ (function(_ph) {
+   if (!_ph || _ph.length < 3) return;
+   var _last3 = _ph.slice(-3);
+   var _allWeights = _last3.map(function(e) { return e.weight || 0; });
+   var _maxW = Math.max.apply(null, _allWeights);
+   if (_maxW <= 0) return;
+   var _isPlat = _allWeights.every(function(w) { return Math.abs(w - _maxW) < 1; });
+   var _allReps = _last3.map(function(e) { return e.reps || 0; });
+   var _repsPlat = _allReps.every(function(r) { return r === _allReps[0] && r > 0; });
+   if (!_isPlat) return;
+   var _platSuggestions = [
+     { icon: '▪', label: 'Tempo 3-1-3', desc: 'Ralentis : 3s descente, 1s pause bas, 3s montée' },
+     { icon: '▸', label: 'Prise variée', desc: 'Change la largeur ou le type de prise (pronation / supination)' },
+     { icon: '↓', label: 'Excentrique lent', desc: '4-5 secondes sur la phase de descente, même charge' },
+     { icon: '◂', label: 'Dropset', desc: 'Dernière série : -20 % de charge, continue jusqu\'à l\'échec' },
+     { icon: '‖', label: 'Pause reps', desc: '2s de pause en position basse avant de remonter' }
+   ];
+   var _tipIdx = (new Date().getDate() + ex.n.length) % _platSuggestions.length;
+   var _tip = _platSuggestions[_tipIdx];
+   var platCard = h('div', { style: 'margin-top:8px;padding:10px 12px;background:#FFF8E7;border-left:3px solid #C8A84B;border-radius:0;box-shadow:none;' });
+   var platHeader = h('div', { style: 'display:flex;align-items:center;gap:6px;margin-bottom:4px;' });
+   platHeader.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#6A4A1A;font-weight:700;' }, 'Plateau détecté'));
+   platHeader.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:#6A4A1A;' }, '— ' + _allWeights[0] + ' kg × 3 séances'));
+   platCard.appendChild(platHeader);
+   var platTip = h('div', { style: 'display:flex;align-items:flex-start;gap:8px;' });
+   platTip.appendChild(h('span', { style: 'font-size:11px;line-height:1.4;flex-shrink:0;color:#6A4A1A;' }, _tip.icon));
+   var platText = h('div', {});
+   platText.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:600;color:#0A0A09;' }, _tip.label));
+   platText.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:#6B6B65;line-height:1.45;margin-top:1px;' }, _tip.desc));
+   platTip.appendChild(platText);
+   platCard.appendChild(platTip);
+   card.appendChild(platCard);
+ })(_progHistory);
+
  // ─── EXERCISE DESCRIPTION FOR BEGINNERS ───
  // 2026-04 : refonte UX débutants — description claire + tips visibles avant la vidéo
  if ((S.sportLevel === 'beginner' || !S.sportLevel) && ex.desc) {
@@ -7075,7 +7564,7 @@ function renderMusculationProgram(p) {
  weightRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);min-width:80px'}, typeLabel));
 
  var wInput = h('input', {
- type: 'number', step: '0.5', min: '0', max: '500',
+ type: 'number', step: '0.5', min: '0', max: '500', inputmode: 'decimal',
  value: currentWeight ? String(currentWeight) : '',
  placeholder: 'kg',
  style: 'width:70px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:16px;text-align:center;background:var(--ivory)',
@@ -7269,20 +7758,22 @@ function renderMusculationProgram(p) {
 
  if (!isBodyweight) {
  var weightPlaceholder = progressiveWeight > 0 ? String(progressiveWeight) : 'kg';
+ var _wSuggested = setRow.actualWeight === null && setRow.targetWeight > 0;
  var weightInput = h('input', {
- type: 'number', min: '0', max: '500', step: '2.5',
+ type: 'number', min: '0', max: '500', step: '0.5',
  inputmode: 'decimal', autocomplete: 'off', 'aria-label': 'Charge (kg)',
  placeholder: weightPlaceholder,
- value: setRow.actualWeight !== null ? String(setRow.actualWeight) : '',
+ value: setRow.actualWeight !== null ? String(setRow.actualWeight) : (setRow.targetWeight > 0 ? String(setRow.targetWeight) : ''),
  // FIX UX 2026-04-17 : tap target 60x44 (WCAG 2.5.5) + font 16px anti-zoom iOS
- style: 'width:64px;min-height:44px;padding:10px 6px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory))',
+ // Gris = valeur suggérée (pas encore confirmée), noir = saisie utilisateur
+ style: 'width:64px;min-height:44px;padding:10px 6px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory));color:' + (_wSuggested ? 'var(--grey,#6B6B65)' : 'var(--black,#0A0A09)'),
  oninput: (function(sr, _valBtnRef){ return function(e) {
+ e.target.style.color = 'var(--black,#0A0A09)'; // confirmation utilisateur
  var v = parseFloat(e.target.value);
  sr.actualWeight = isNaN(v) ? null : v;
  saveMuscuSessionLog();
- // Réactiver le bouton validation en temps réel
  var _btn = e.target.closest('.set-row') ? e.target.closest('.set-row').querySelector('.set-validate-btn') : null;
- if (_btn) { var _ok = sr.actualReps !== null && sr.actualWeight !== null; _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
+ if (_btn) { var _ok = (sr.actualReps !== null || !!sr.targetReps) && (sr.actualWeight !== null || sr.targetWeight > 0); _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
  }; })(setRow)
  });
  inputZone.appendChild(weightInput);
@@ -7323,20 +7814,21 @@ function renderMusculationProgram(p) {
  }
  }
 
+ var _rSuggested = setRow.actualReps === null && !!setRow.targetReps;
  var repsInput = h('input', {
  type: 'number', min: '0', max: '50', step: '1',
  inputmode: 'numeric', autocomplete: 'off', 'aria-label': 'Répétitions',
  placeholder: String(setRow.targetReps),
- value: setRow.actualReps !== null ? String(setRow.actualReps) : '',
+ value: setRow.actualReps !== null ? String(setRow.actualReps) : (setRow.targetReps ? String(setRow.targetReps) : ''),
  // FIX UX 2026-04-17 : tap target 56x44 (WCAG 2.5.5) + font 16px anti-zoom iOS
- style: 'width:56px;min-height:44px;padding:10px 6px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory))',
+ style: 'width:56px;min-height:44px;padding:10px 6px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory));color:' + (_rSuggested ? 'var(--grey,#6B6B65)' : 'var(--black,#0A0A09)'),
  oninput: (function(sr, _isBw){ return function(e) {
+ e.target.style.color = 'var(--black,#0A0A09)'; // confirmation utilisateur
  var v = parseInt(e.target.value);
  sr.actualReps = isNaN(v) ? null : v;
  saveMuscuSessionLog();
- // Réactiver le bouton validation en temps réel
  var _btn = e.target.closest('.set-row') ? e.target.closest('.set-row').querySelector('.set-validate-btn') : null;
- if (_btn) { var _ok = sr.actualReps !== null && (sr.actualWeight !== null || (_isBw && !sr.weighted)); _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
+ if (_btn) { var _ok = (sr.actualReps !== null || !!sr.targetReps) && (sr.actualWeight !== null || (_isBw && !sr.weighted) || sr.targetWeight > 0); _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
  }; })(setRow, isBodyweight)
  });
  inputZone.appendChild(repsInput);
@@ -7353,7 +7845,8 @@ function renderMusculationProgram(p) {
  (function(_sr, _si, _exRef, _numSets, _isBody, _exI, _allEx) {
  var isValidated = _sr.validated === true;
  var _bwNoWeight = _isBody && !_sr.weighted;
- var hasData = _sr.actualReps !== null && (_sr.actualWeight !== null || _bwNoWeight);
+ // Bouton actif si : l'user a saisi des valeurs OU les valeurs conseillées existent (pré-rempli)
+ var hasData = (_sr.actualReps !== null || !!_sr.targetReps) && (_sr.actualWeight !== null || _bwNoWeight || _sr.targetWeight > 0);
 
  if (isValidated) {
  // Série déjà validée : afficher le checkmark + bouton annuler discret
@@ -7382,6 +7875,9 @@ function renderMusculationProgram(p) {
  disabled: !hasData,
  onclick: function(e) {
  e.stopPropagation();
+ // Si l'user n'a rien modifié, confirmer automatiquement les valeurs conseillées
+ if (_sr.actualWeight === null && !_bwNoWeight && _sr.targetWeight > 0) _sr.actualWeight = _sr.targetWeight;
+ if (_sr.actualReps === null && _sr.targetReps) _sr.actualReps = _sr.targetReps;
  // Marquer la série comme validée
  _sr.validated = true;
  saveMuscuSessionLog();
@@ -7438,7 +7934,7 @@ function renderMusculationProgram(p) {
  if (isAdvancedRIR) {
   var _rirVal = setRow.rirActual !== null && setRow.rirActual !== undefined ? String(setRow.rirActual) : '';
   var _rirInput = h('input', {
-   type: 'number', min: '0', max: '5', step: '1',
+   type: 'number', min: '0', max: '5', step: '1', inputmode: 'numeric',
    value: _rirVal,
    placeholder: '-',
    // FIX P2 batch 2 : tap target 44×44px, font 16px anti-iOS-zoom, ivory bg harmonisé
@@ -7764,8 +8260,9 @@ function renderMusculationProgram(p) {
       });
      });
     }
-    if (todayMax > histMax && histMax > 0) {
-     _prList.push({name: exName, weight: todayMax, prev: histMax});
+    if (todayMax > 0 && (todayMax > histMax || histMax === 0)) {
+     // histMax === 0 → premier record jamais enregistré → toujours afficher
+     _prList.push({name: exName, weight: todayMax, prev: histMax > 0 ? histMax : null});
     }
    });
   } catch(_ePr) { console.warn('[PR detection]', _ePr); }
@@ -7822,8 +8319,10 @@ function renderMusculationProgram(p) {
     var _prLine = document.createElement('div');
     _prLine.style.cssText = 'font-family:Georgia,serif;font-size:12px;color:#0A0A09;line-height:1.5;';
     var _prW = window.UNITS ? window.UNITS.displayWeight(pr.weight) : (pr.weight + '\u00a0kg');
-    var _prPrev = window.UNITS ? window.UNITS.displayWeight(pr.prev) : (pr.prev + '\u00a0kg');
-    _prLine.textContent = pr.name + ' \u2014 ' + _prW + ' (ancien : ' + _prPrev + ')';
+    var _prMsg = pr.prev === null
+      ? (pr.name + ' \u2014 ' + _prW + ' \u2605 1er record !')
+      : (pr.name + ' \u2014 ' + _prW + ' (ancien\u00a0: ' + (window.UNITS ? window.UNITS.displayWeight(pr.prev) : (pr.prev + '\u00a0kg')) + ')');
+    _prLine.textContent = _prMsg;
     _prBanner.appendChild(_prLine);
    });
    if (_prList.length > 3) {
@@ -7885,7 +8384,7 @@ function renderMusculationProgram(p) {
  // Durée
  var durRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin-bottom:14px'});
  durRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);flex:1'}, 'Dur\u00e9e r\u00e9elle'));
- var durInp = h('input', {type: 'number', min: '10', max: '180', value: String(realDur), style: 'width:60px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:16px;text-align:center;background:var(--ivory)', onclick: function(e) { e.stopPropagation(); }, onchange: function(e) { var v = parseInt(e.target.value); if (!isNaN(v) && v > 0) { S._sessionDuration = v; window.render(); } }});
+ var durInp = h('input', {type: 'number', min: '10', max: '180', inputmode: 'numeric', value: String(realDur), style: 'width:60px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:16px;text-align:center;background:var(--ivory)', onclick: function(e) { e.stopPropagation(); }, onchange: function(e) { var v = parseInt(e.target.value); if (!isNaN(v) && v > 0) { S._sessionDuration = v; window.render(); } }});
  durRow.appendChild(durInp);
  durRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, 'min'));
  compPanel.appendChild(durRow);
@@ -8097,13 +8596,173 @@ function renderMusculationProgram(p) {
  kcalTotal: kcalRes.total
  });
  S.sessionCompleting = false; S._sessionDuration = null;
+ S._streakCache = null; // Invalider le cache streak après une nouvelle séance
  // Mise à jour du streak sur action réelle (séance validée)
  if (window.GAMIFICATION) { try { window.GAMIFICATION.updateStreak(); } catch(e) {} }
  window.BLACKBOX && window.BLACKBOX.log('session_done', {day: S.selectedSportDay, kcal: kcalRes.total, duration: realDur});
+ if (window.showToast) { var _kcalMsg = kcalRes && kcalRes.total ? ' — ' + Math.round(kcalRes.total) + ' kcal' : ''; window.showToast('\u2713 S\u00e9ance valid\u00e9e' + _kcalMsg, 'success'); }
  window.render();
  }}, '\u2713 Valider la s\u00e9ance');
  compPanel.appendChild(saveBtn);
  compPanel.appendChild(h('div', {style: 'text-align:center;margin-top:8px'}, h('button', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);background:none;border:none;cursor:pointer', onclick: function() { S.sessionCompleting = false; S._sessionDuration = null; window.render(); }}, 'Annuler')));
+
+ // ─── CONSISTENCY STREAK BANNER ───
+ (function() {
+   var _cStr = window.getMuscuConsistencyStreak ? window.getMuscuConsistencyStreak() : null;
+   if (!_cStr || _cStr.totalSessions === 0) return;
+   var _streak = _cStr.streak;
+   var _total = _cStr.totalSessions;
+   var _ms = _cStr.milestone;
+   var streakBanner = document.createElement('div');
+   streakBanner.style.cssText = 'margin-top:12px;padding:10px 0;border-top:1px solid var(--border,#D8D8D0);border-bottom:1px solid var(--border,#D8D8D0);background:transparent;';
+   var streakRow = document.createElement('div');
+   streakRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;';
+   var streakLeft = document.createElement('div');
+   var streakLabel = document.createElement('div');
+   streakLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:2px;';
+   streakLabel.textContent = 'Régularité';
+   streakLeft.appendChild(streakLabel);
+   var streakVal = document.createElement('div');
+   streakVal.style.cssText = 'font-family:Georgia,serif;font-size:14px;color:var(--black,#0A0A09);';
+   streakVal.textContent = (_streak > 1 ? _streak + ' jours consécutifs' : _total + ' séance' + (_total > 1 ? 's' : '') + ' au total');
+   streakLeft.appendChild(streakVal);
+   streakRow.appendChild(streakLeft);
+   var nextMile = _streak < 7 ? (7 - _streak + ' j → badge') : _streak < 14 ? (14 - _streak + ' j → exercices avancés') : '';
+   if (nextMile) {
+     var streakNext = document.createElement('div');
+     streakNext.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:#6A4A1A;text-align:right;';
+     streakNext.textContent = nextMile;
+     streakRow.appendChild(streakNext);
+   }
+   streakBanner.appendChild(streakRow);
+   if (_ms) {
+     var msDiv = document.createElement('div');
+     msDiv.style.cssText = 'margin-top:6px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:400;color:#C8A84B;';
+     msDiv.textContent = _ms.msg;
+     streakBanner.appendChild(msDiv);
+   }
+   compPanel.appendChild(streakBanner);
+ })();
+
+ // ─── WORKOUT CARD SHAREABLE ───
+ (function() {
+   var _wToday = new Date().toISOString().slice(0, 10);
+   var _wLog = S.muscuSessionLog && S.muscuSessionLog[_wToday] ? S.muscuSessionLog[_wToday] : {};
+   var _wExNames = Object.keys(_wLog);
+   if (_wExNames.length === 0) return;
+   // Compute total volume
+   var _totalVol = 0, _totalSets = 0;
+   _wExNames.forEach(function(ex) {
+     var sets = _wLog[ex] || [];
+     sets.forEach(function(s) {
+       if (s.validated) {
+         _totalVol += (s.actualWeight || 0) * (s.actualReps || 0);
+         _totalSets++;
+       }
+     });
+   });
+   // PR list (already computed above in _prList, but compute locally for card scope)
+   var _cPrList = [];
+   _wExNames.forEach(function(exName) {
+     var todaySets = (_wLog[exName] || []).filter(function(s){ return s.validated; });
+     var todayMax = todaySets.reduce(function(m, s){ return Math.max(m, s.actualWeight || 0); }, 0);
+     var hist = (S.muscuProgressionHistory && S.muscuProgressionHistory[exName]) || [];
+     var prevHist = hist.filter(function(e){ return e.date < _wToday; });
+     var histMax = prevHist.reduce(function(m, e){ return Math.max(m, e.weight || 0); }, 0);
+     if (todayMax > 0 && (todayMax > histMax || histMax === 0)) _cPrList.push({ name: exName, weight: todayMax });
+   });
+
+   var cardShareWrap = h('div', { style: 'margin-top:16px;' });
+   var cardShareToggle = h('button', {
+     style: 'width:100%;padding:8px 12px;border:1px solid var(--border,#D8D8D0);background:var(--ivory,#FAF9F6);cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:left;',
+     onclick: function() {
+       S._shareCardOpen = !S._shareCardOpen;
+       window.render();
+     }
+   }, S._shareCardOpen ? 'Masquer la carte' : 'Générer ma carte de séance');
+   cardShareWrap.appendChild(cardShareToggle);
+
+   var cardEl = document.createElement('div');
+   cardEl.style.cssText = (S._shareCardOpen ? 'display:block;' : 'display:none;') + 'margin-top:8px;';
+
+   var card = document.createElement('div');
+   card.id = 'sfc-share-card-inner';
+   card.style.cssText = 'background:#0A0A09;color:#FAF9F6;padding:24px 20px;font-family:"Helvetica Neue",Arial,sans-serif;position:relative;overflow:hidden;border-radius:0;';
+
+   var cHeader = document.createElement('div');
+   cHeader.style.cssText = 'display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;';
+   var cLogo = document.createElement('div');
+   cLogo.style.cssText = 'font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(250,249,246,0.5);';
+   cLogo.textContent = 'SmartFitCoach';
+   var cDate = document.createElement('div');
+   cDate.style.cssText = 'font-size:9px;letter-spacing:1px;color:rgba(250,249,246,0.5);';
+   cDate.textContent = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+   cHeader.appendChild(cLogo);
+   cHeader.appendChild(cDate);
+   card.appendChild(cHeader);
+
+   var cTitle = document.createElement('div');
+   cTitle.style.cssText = 'font-family:Georgia,serif;font-size:22px;font-style:italic;margin-bottom:4px;';
+   cTitle.textContent = 'Séance terminée';
+   card.appendChild(cTitle);
+
+   var cPhase = document.createElement('div');
+   cPhase.style.cssText = 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(250,249,246,0.5);margin-bottom:20px;';
+   var _cMP = window.getMacroCyclePhase ? window.getMacroCyclePhase(S.muscuCycle || 1) : null;
+   cPhase.textContent = (_cMP ? _cMP.label + ' · ' : '') + ('Semaine ' + (S.muscuWeek || 1));
+   card.appendChild(cPhase);
+
+   var cStats = document.createElement('div');
+   cStats.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;';
+   function _cStatBox(label, val) {
+     var b = document.createElement('div');
+     b.style.cssText = 'text-align:center;border:1px solid rgba(250,249,246,0.12);padding:10px 6px;';
+     var v = document.createElement('div');
+     v.style.cssText = 'font-family:Georgia,serif;font-size:18px;font-weight:bold;';
+     v.textContent = val;
+     var l = document.createElement('div');
+     l.style.cssText = 'font-size:8px;letter-spacing:1px;text-transform:uppercase;color:rgba(250,249,246,0.5);margin-top:4px;';
+     l.textContent = label;
+     b.appendChild(v);
+     b.appendChild(l);
+     return b;
+   }
+   cStats.appendChild(_cStatBox('Exercices', _wExNames.length));
+   cStats.appendChild(_cStatBox('Séries', _totalSets));
+   cStats.appendChild(_cStatBox('Volume', _totalVol > 0 ? (Math.round(_totalVol / 100) / 10 + ' T') : '—'));
+   card.appendChild(cStats);
+
+   if (_cPrList.length > 0) {
+     var cPr = document.createElement('div');
+     cPr.style.cssText = 'border-top:1px solid rgba(250,249,246,0.15);padding-top:12px;margin-bottom:16px;';
+     var cPrLbl = document.createElement('div');
+     cPrLbl.style.cssText = 'font-size:8px;letter-spacing:3px;text-transform:uppercase;color:rgba(200,168,75,0.85);margin-bottom:8px;';
+     cPrLbl.textContent = 'Records battus';
+     cPr.appendChild(cPrLbl);
+     _cPrList.slice(0, 3).forEach(function(pr) {
+       var prLine = document.createElement('div');
+       prLine.style.cssText = 'font-family:Georgia,serif;font-size:12px;color:#FAF9F6;line-height:1.8;';
+       var wDisp = window.UNITS ? window.UNITS.displayWeight(pr.weight) : pr.weight + ' kg';
+       prLine.textContent = pr.name + ' — ' + wDisp;
+       cPr.appendChild(prLine);
+     });
+     card.appendChild(cPr);
+   }
+
+   var cFooter = document.createElement('div');
+   cFooter.style.cssText = 'font-size:8px;letter-spacing:2px;color:rgba(250,249,246,0.3);text-align:center;border-top:1px solid rgba(250,249,246,0.1);padding-top:10px;';
+   cFooter.textContent = 'smartfitcoach.app';
+   card.appendChild(cFooter);
+
+   cardEl.appendChild(card);
+   var hint = document.createElement('div');
+   hint.style.cssText = 'margin-top:6px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);text-align:center;font-style:italic;';
+   hint.textContent = 'Faites une capture d\'écran pour partager.';
+   cardEl.appendChild(hint);
+   cardShareWrap.appendChild(cardEl);
+   compPanel.appendChild(cardShareWrap);
+ })();
+
  p.appendChild(compPanel);
  } else {
  p.appendChild(h('button', {'class': 'regen-btn', style: 'margin-top:8px;background:var(--black);color:#fff', onclick: function() { S.sessionCompleting = S.selectedSportDay; S._sessionDuration = null; window.render(); }}, '\u2713 S\u00e9ance termin\u00e9e'));
@@ -8360,7 +9019,7 @@ function renderWeightChartSport(container) {
 
  // Weight input
  var inputRow = h('div', {style: 'display:flex;gap:8px;align-items:center;margin-top:8px'});
- var wi = h('input', {'class': 'num-input', type: 'number', step: '0.1', min: '30', max: '200', placeholder: String(S.weight || 75), style: 'font-size:16px;padding:8px;width:100px;text-align:center'});
+ var wi = h('input', {'class': 'num-input', type: 'number', step: '0.1', min: '30', max: '200', inputmode: 'decimal', placeholder: String(S.weight || 75), style: 'font-size:16px;padding:8px;width:100px;text-align:center'});
  inputRow.appendChild(wi);
  inputRow.appendChild(h('span', {'class': 'num-unit'}, window.UNITS ? window.UNITS.weightLabel() : 'kg'));
  inputRow.appendChild(h('button', {'class': 'btn-primary', style: 'width:auto;margin:0;padding:10px 20px', onclick: function(){
@@ -8393,7 +9052,22 @@ function renderWeightChartSport(container) {
  GAMIFICATION.unlockBadge('first_weigh');
  if (hist.length >= 10) GAMIFICATION.unlockBadge('weight_10');
  }
- if (window.GAMIFICATION) GAMIFICATION.showToast('Poids enregistré : ' + (window.UNITS ? window.UNITS.displayWeight(v) : v + ' kg'));
+ // Auto-PR detection: new lowest (cut/shred) or highest (bulk/lean_bulk/recompo) weight in 30 days
+ var _prWeightMsg = null;
+ var _hist30 = hist.filter(function(e){ return e && e.date && e.date >= new Date(Date.now() - 30*86400000).toISOString().slice(0,10); });
+ if (_hist30.length >= 2) {
+   var _pastValues = _hist30.slice(0, -1).map(function(e){ return parseFloat(e.weight); }).filter(function(x){ return !isNaN(x); });
+   if (_pastValues.length > 0) {
+     var _gKey = (S.goal !== null && window.GOALS && window.GOALS[S.goal]) ? window.GOALS[S.goal].key : '';
+     var _isLoss = (_gKey === 'cut' || _gKey === 'shred');
+     var _isGain = (_gKey === 'bulk' || _gKey === 'lean_bulk' || _gKey === 'recomposition');
+     var _pastMin = Math.min.apply(null, _pastValues);
+     var _pastMax = Math.max.apply(null, _pastValues);
+     if (_isLoss && v < _pastMin) _prWeightMsg = 'Nouveau record bas ce mois : ' + (window.UNITS ? window.UNITS.displayWeight(v) : v + ' kg') + ' \uD83C\uDFC6';
+     else if (_isGain && v > _pastMax) _prWeightMsg = 'Nouveau record haut ce mois : ' + (window.UNITS ? window.UNITS.displayWeight(v) : v + ' kg') + ' \uD83D\uDCAA';
+   }
+ }
+ if (window.GAMIFICATION) GAMIFICATION.showToast(_prWeightMsg || ('Poids enregistré : ' + (window.UNITS ? window.UNITS.displayWeight(v) : v + ' kg')));
  window.render();
  }
  }}, 'Enregistrer'));
@@ -8439,6 +9113,10 @@ function renderWeightChartSport(container) {
 // ─── SPORT MODAL (exercise detail) ───
 function renderSportModal(app) {
  var ov = h('div', {'class': 'modal-overlay' + (S.sportModalExercise ? ' open' : ''), role: 'dialog', 'aria-modal': 'true', onclick: function(e){ if (e.target === ov) { S.sportModalExercise = null; window.render(); } }});
+ if (S.sportModalExercise) {
+   ov.setAttribute('tabindex', '-1');
+   setTimeout(function() { if (ov) ov.focus(); }, 0);
+ }
  var sheet = h('div', {'class': 'modal-sheet'});
 
  if (S.sportModalExercise) {
