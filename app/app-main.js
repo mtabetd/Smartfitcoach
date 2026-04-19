@@ -1887,7 +1887,9 @@ function render() {
    sport: '<svg class="main-nav-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 9v6 M6 7v10 M8 12h8 M18 7v10 M21 9v6"/></svg>',
    calendar: '<svg class="main-nav-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="16" rx="1"/><path d="M8 3v4 M16 3v4 M3 10h18"/></svg>',
    // 2026-04 : onglet Progrès (analytics dashboard)
-   analytics: '<svg class="main-nav-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="3 17 9 11 13 15 21 7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><polyline points="14 7 21 7 21 14" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+   analytics: '<svg class="main-nav-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="3 17 9 11 13 15 21 7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><polyline points="14 7 21 7 21 14" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+   // Projet 2.0 Phase A : onglet Social (amis, feed privé)
+   social: '<svg class="main-nav-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>'
  };
  function _makeNavTab(key, label, isActive, logKey, targetView) {
    var attrs = {'class': 'main-nav-tab' + (isActive ? ' active' : ''), onclick: function(){ S.view = targetView; if(window.BLACKBOX)window.BLACKBOX.log(logKey); render(); }};
@@ -1909,6 +1911,8 @@ function render() {
    nav.appendChild(_makeNavTab('calendar', 'Calendrier', S.view === 'calendar', 'nav_calendar', 'calendar'));
    // 2026-04 : onglet Progrès (analytics)
    nav.appendChild(_makeNavTab('analytics', 'Progrès', S.view === 'analytics', 'nav_analytics', 'analytics'));
+   // Projet 2.0 : onglet Social (amis + feed privé)
+   nav.appendChild(_makeNavTab('social', 'Social', S.view === 'social', 'nav_social', 'social'));
  }
  wrap.appendChild(nav);
 
@@ -1941,6 +1945,8 @@ function render() {
  window.NUTRITION.render(content);
  } else if (S.view === 'analytics' && window.ANALYTICS) {
  window.ANALYTICS.render(content);
+ } else if (S.view === 'social' && window.SOCIAL) {
+ window.SOCIAL.render(content);
  } else {
  // Default + 'today' + 'dashboard' → vue Aujourd'hui
  S.view = 'today';
