@@ -1019,8 +1019,14 @@ function buildContextualHero(moment, S) {
   if (moment === 'matin') {
     // Matin : orienter petit-déj + cap énergétique
     var hier = fmtKcal(target - 380); // placeholder; à remplacer par vraie donnée J-1
-    var petitDejTarget = Math.round(target * 0.22);
-    var protTarget = Math.round((S.weight || 70) * 1.6 * 0.25);
+    // 2026-04 FIX INCOHÉRENCE : si une recette petit-déj est déjà proposée dans le weekPlan,
+    // afficher SES kcal réelles (pas un target théorique 22%) — sinon l'user voyait
+    // "Vise 503 kcal" puis on lui proposait un Bowl 572 kcal → frustration
+    var _bf = weekPlanDay && weekPlanDay.breakfast;
+    var _bfKcalReal = _bf && (typeof _bf.k === 'number' ? _bf.k : (typeof _bf.kcal === 'number' ? _bf.kcal : null));
+    var _bfProtReal = _bf && (typeof _bf.p === 'number' ? _bf.p : (typeof _bf.protein === 'number' ? _bf.protein : null));
+    var petitDejTarget = (_bfKcalReal && _bfKcalReal > 0) ? Math.round(_bfKcalReal) : Math.round(target * 0.22);
+    var protTarget = (_bfProtReal && _bfProtReal > 0) ? Math.round(_bfProtReal) : Math.round((S.weight || 70) * 1.6 * 0.25);
 
     if (isPregnant) {
       ctx.quote = 'Semaine ' + S.pregnancyWeek + '. Besoin +340 kcal/jour. Privilégie les oméga-3 au petit-déj.';
