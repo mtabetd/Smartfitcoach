@@ -891,6 +891,11 @@ function _friendRow(f, kind){
       try { await removeFriend(f._fsId); _toast('Ami retiré'); await loadFriendships(); window.render(); }
       catch(e){ _toast('Erreur', 'error'); }
     }));
+    actions.appendChild(_act('Bloquer', async function(){
+      if (!confirm('Bloquer ' + f.pseudo + ' ? Cette personne ne pourra plus vous contacter.')) return;
+      try { await blockUser(f.id); _toast('Utilisateur bloqué', 'success'); await loadFriendships(); window.render(); }
+      catch(e){ _toast('Erreur de blocage', 'error'); }
+    }));
   }
   row.appendChild(actions);
   return row;
