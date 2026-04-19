@@ -931,14 +931,14 @@ function renderSportChoice(p) {
   wrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:22px;font-weight:300;font-style:italic;line-height:1.45;margin-bottom:16px'},
     prenom ? 'Votre protocole ' + sportLabel + '\nest actif, ' + prenom + '.' : 'Votre protocole ' + sportLabel + '\nest déjà établi.'
   ));
-  wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;letter-spacing:0.5px;line-height:1.7;color:#555;max-width:300px;margin:0 auto 40px'},
+  wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;letter-spacing:0.5px;line-height:1.7;color:var(--grey,#6B6B65);max-width:300px;margin:0 auto 40px'},
     'Souhaitez-vous poursuivre votre programme en cours,\nou en définir un entièrement nouveau\u00a0?'
   ));
 
   var targetStep = _SPORT_PROGRAM_STEP[S.sportType] || 4;
 
   var btnContinue = h('button', {
-    style: 'display:block;width:100%;max-width:300px;padding:16px 24px;background:var(--black,#0A0A09);color:#fff;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;margin:0 auto 14px',
+    style: 'display:block;width:100%;max-width:300px;padding:16px 24px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;margin:0 auto 14px',
     onclick: function() { S.sStep = targetStep; window.render(); }
   }, 'Poursuivre mon protocole');
 

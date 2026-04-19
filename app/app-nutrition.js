@@ -247,19 +247,21 @@ function renderSplash(app) {
   // Use class-based selector (NOT id="splash") to avoid triggering the
   // global #splash { position:fixed; z-index:9999 } CSS rule which would
   // overlay the entire viewport including the navigation bar.
+  var _reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var _anim = function(delay, dur) { return _reduceMotion ? 'opacity:1' : 'opacity:0;animation:splashFadeUp ' + (dur||'.6s') + ' ease ' + delay + 's forwards'; };
   var sp = h('div', {'class': 'nutrition-intro', style: 'display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px 40px;text-align:center;min-height:60vh'});
-  sp.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);opacity:0;animation:splashFadeUp .5s ease .1s forwards;margin-bottom:10px'}, 'SMARTFITCOACH \u00b7 NUTRITION'));
-  sp.appendChild(h('div', {style: 'width:36px;height:1px;background:var(--black);margin:0 auto 24px;opacity:0;animation:splashFadeUp .5s ease .25s forwards'}));
+  sp.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);' + _anim(.1,'.5s') + ';margin-bottom:10px'}, 'SMARTFITCOACH \u00b7 NUTRITION'));
+  sp.appendChild(h('div', {style: 'width:36px;height:1px;background:var(--black);margin:0 auto 24px;' + _anim(.25,'.5s')}));
 
   // Strong headline
-  var headlineEl = h('div', {style: 'font-family:Georgia,serif;font-size:clamp(28px,8vw,40px);font-weight:normal;line-height:1.1;letter-spacing:-.02em;color:var(--black);opacity:0;animation:splashFadeUp .6s ease .35s forwards;margin-bottom:16px;max-width:340px'});
+  var headlineEl = h('div', {style: 'font-family:Georgia,serif;font-size:clamp(28px,8vw,40px);font-weight:normal;line-height:1.1;letter-spacing:-.02em;color:var(--black);' + _anim(.35) + ';margin-bottom:16px;max-width:340px'});
   headlineEl.innerHTML = 'Mangez mieux.<br><em>Progressez plus.</em>';
   sp.appendChild(headlineEl);
 
-  sp.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;color:var(--grey);line-height:1.65;max-width:290px;opacity:0;animation:splashFadeUp .6s ease .5s forwards;margin-bottom:36px'}, 'Votre plan nutritionnel sur mesure \u2014 calibr\u00e9 sur votre corps, vos objectifs et votre quotidien.'));
+  sp.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;color:var(--grey);line-height:1.65;max-width:290px;' + _anim(.5) + ';margin-bottom:36px'}, 'Votre plan nutritionnel sur mesure \u2014 calibr\u00e9 sur votre corps, vos objectifs et votre quotidien.'));
 
   // 3 benefit pills
-  var pillsRow = h('div', {style: 'display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:36px;opacity:0;animation:splashFadeUp .6s ease .65s forwards'});
+  var pillsRow = h('div', {style: 'display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:36px;' + _anim(.65)});
   ['Calories adapt\u00e9es', 'Recettes personnalis\u00e9es', 'Objectif atteignable'].forEach(function(label) {
     var pill = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:.04em;padding:6px 12px;border:1px solid var(--border,#D8D8D0);color:var(--grey,#6B6B65);border-radius:20px'}, label);
     pillsRow.appendChild(pill);
@@ -267,15 +269,15 @@ function renderSplash(app) {
   sp.appendChild(pillsRow);
 
   // Message d'accueil personnalisation — réassurance avant onboarding
-  var welcomeBlock = h('div', {style: 'max-width:320px;margin-bottom:32px;opacity:0;animation:splashFadeUp .6s ease .7s forwards'});
+  var welcomeBlock = h('div', {style: 'max-width:320px;margin-bottom:32px;' + _anim(.7)});
   welcomeBlock.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:17px;font-style:italic;color:var(--black);line-height:1.4;margin-bottom:10px'}, 'Votre programme commence par une conversation.'));
   welcomeBlock.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.65'}, 'Accordez-nous quelques minutes pour apprendre \u00e0 vous conna\u00eetre. Vos habitudes, vos objectifs, votre corps \u2014 chaque r\u00e9ponse nous permet de composer un programme nutritionnel et sportif qui ne ressemblera \u00e0 aucun autre. Le v\u00f4tre.'));
   sp.appendChild(welcomeBlock);
 
-  var ctaBtn = h('button', {style: 'display:block;width:100%;max-width:320px;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;min-height:56px;padding:0 24px;border:none;cursor:pointer;opacity:0;animation:splashFadeUp .6s ease .9s forwards;border-radius:2px', onclick: function() { goStep(1); }}, 'Je commence \u2192');
+  var ctaBtn = h('button', {style: 'display:block;width:100%;max-width:320px;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;min-height:56px;padding:0 24px;border:none;cursor:pointer;' + _anim(.9) + ';border-radius:2px', onclick: function() { goStep(1); }}, 'Je commence \u2192');
   sp.appendChild(ctaBtn);
 
-  sp.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:16px;opacity:0;animation:splashFadeUp .5s ease 1.1s forwards'}, '5 minutes \u00b7 Gratuit \u00b7 Vos donn\u00e9es restent sur votre appareil'));
+  sp.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:16px;' + _anim(1.1,'.5s')}, '5 minutes \u00b7 Gratuit \u00b7 Vos donn\u00e9es restent sur votre appareil'));
   // Bouton retour — évite que l'utilisateur soit piégé sur ce splash
   sp.appendChild(h('button', {style: 'display:block;margin:20px auto 0;background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;color:var(--grey);cursor:pointer;padding:8px 16px;min-height:44px;opacity:0;animation:splashFadeUp .5s ease 1.1s forwards', onclick: function() { S.view = 'today'; if (window.render) window.render(); }}, '\u2190 Retour'));
   app.appendChild(sp);
@@ -2086,6 +2088,7 @@ function renderStep7(p) {
         var _wk1 = generateWeek();
         if (Array.isArray(_wk1) && _wk1.length > 0) {
           S.weekPlan = _wk1;
+          S.weekPlanValidated = true;
           // Figer le hash au moment de la génération — évite la régénération silencieuse dans renderStep9
           var _h1 = window.getPlanHash ? window.getPlanHash() : '';
           if (_h1) S._planHash = _h1;

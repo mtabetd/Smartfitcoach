@@ -1590,7 +1590,7 @@ function _fjOpenCreateFoodModal() {
         type: 'text',
         placeholder: f.placeholder || '',
         style: 'width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--line,#D8D8D0);border-radius:2px;'
-          + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;background:#fff;min-height:44px;'
+          + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;background:var(--ivory,#FAF9F6);min-height:44px;'
       });
       inp.setAttribute('inputmode', f.inputmode || 'text');
       inputs[f.id] = inp;
@@ -1763,7 +1763,7 @@ function renderFoodJournalCard() {
     autocapitalize: 'off',
     spellcheck: 'false',
     'aria-label': 'Rechercher un aliment',
-    style: 'flex:1;padding:12px 14px;min-height:44px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:#fff;'
+    style: 'flex:1;padding:12px 14px;min-height:44px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:var(--ivory,#FAF9F6);'
       + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;color:var(--black,#0A0A09);outline:none;box-sizing:border-box;'
   });
   // 2026-04 R4-B1 : debounce 180ms pour éviter spam fetch OFF + churn DOM
@@ -2518,7 +2518,7 @@ function _fjShowSelection() {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);min-width:48px;'
       }, 'Format'));
       var formatSelect = h('select', {
-        style: 'flex:1;padding:8px 10px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:#fff;'
+        style: 'flex:1;padding:8px 10px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:var(--ivory,#FAF9F6);'
           + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--black,#0A0A09);outline:none;'
       });
       allPortions.forEach(function(opt, i) {
@@ -2564,7 +2564,7 @@ function _fjShowSelection() {
       autocomplete: 'off', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'false',
       'aria-label': 'Nombre de portions',
       value: String(portionCount),
-      style: 'width:64px;padding:8px 6px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:#fff;'
+      style: 'width:64px;padding:8px 6px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:var(--ivory,#FAF9F6);'
         + 'font-family:Georgia,serif;font-size:16px;text-align:center;outline:none;font-weight:500;'
     });
     // 2026-04 R4-B2 : update countInput.value au lieu de re-render → focus stepper préservé
@@ -2634,7 +2634,7 @@ function _fjShowSelection() {
       autocomplete: 'off', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'false',
       'aria-label': 'Quantit\u00e9 en grammes',
       value: String(qty),
-      style: 'width:80px;padding:8px 6px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:#fff;'
+      style: 'width:80px;padding:8px 6px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:var(--ivory,#FAF9F6);'
         + 'font-family:Georgia,serif;font-size:16px;text-align:center;outline:none;font-weight:500;'
     });
     minusG.addEventListener('click', function() {
@@ -2859,7 +2859,7 @@ function _fjBuildEntriesList(container) {
         placeholder: defaultName,
         value: defaultName,
         style: 'width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--line,#D8D8D0);border-radius:2px;'
-          + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;background:#fff;min-height:44px;margin-bottom:12px;'
+          + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;background:var(--ivory,#FAF9F6);min-height:44px;margin-bottom:12px;'
       });
       box.appendChild(inp);
       var confirmBtn = h('button', {

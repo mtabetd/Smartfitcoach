@@ -2960,7 +2960,7 @@ if (window._verifyCriticalFunctions) {
 // Save on tab/browser close to avoid losing last unsaved state
 window.addEventListener('beforeunload', function() {
  try { if (window.AUTH && window.AUTH.isLoggedIn()) saveProfile(); } catch(e) {}
- try { if (window.AUTH && window.AUTH.isLoggedIn() && window.SupaSync) SupaSync.saveProfile(); } catch(e) {}
+ // Note: saveProfile() appelle déjà SupaSync.scheduleSave() — pas de double appel direct pour éviter race condition
 });
 // Periodic autosave every 30s as safety net (render() already saves on interaction)
 setInterval(function() {

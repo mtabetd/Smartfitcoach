@@ -1520,12 +1520,17 @@ window.REST_TIMER = (function(){
    DAILY FOOD JOURNAL — Log meals & compare vs targets
    ═══════════════════════════════════════════════════════════════ */
 window.FOOD_JOURNAL = {
+  // Helper: date locale YYYY-MM-DD (évite le décalage UTC/local près de minuit)
+  _localDateStr: function(d) {
+    var dt = d || new Date();
+    return dt.getFullYear() + '-' + String(dt.getMonth()+1).padStart(2,'0') + '-' + String(dt.getDate()).padStart(2,'0');
+  },
   // Add a food entry
   addEntry: function(meal, name, kcal, protein, carbs, fat, quantity) {
     var user = window.AUTH ? window.AUTH.getUser() : null;
     var key = 'mtd_food_journal_' + (user ? user.id : 'anon');
     var journal = {}; try { journal = JSON.parse(localStorage.getItem(key) || '{}'); } catch(e) { journal = {}; }
-    var today = new Date().toISOString().split('T')[0];
+    var today = this._localDateStr();
     if (!journal[today]) journal[today] = [];
     journal[today].push({
       meal: meal, // 'breakfast','lunch','snack','dinner'
@@ -1572,7 +1577,7 @@ window.FOOD_JOURNAL = {
     var user = window.AUTH ? window.AUTH.getUser() : null;
     var key = 'mtd_food_journal_' + (user ? user.id : 'anon');
     var journal = {}; try { journal = JSON.parse(localStorage.getItem(key) || '{}'); } catch(e) { journal = {}; }
-    var today = new Date().toISOString().split('T')[0];
+    var today = this._localDateStr();
     return journal[today] || [];
   },
 
@@ -1580,7 +1585,7 @@ window.FOOD_JOURNAL = {
     var user = window.AUTH ? window.AUTH.getUser() : null;
     var key = 'mtd_food_journal_' + (user ? user.id : 'anon');
     var journal = {}; try { journal = JSON.parse(localStorage.getItem(key) || '{}'); } catch(e) { journal = {}; }
-    var entries = journal[date || new Date().toISOString().split('T')[0]] || [];
+    var entries = journal[date || this._localDateStr()] || [];
     return entries.reduce(function(acc, e) {
       acc.kcal += (Number(e.kcal) || 0); acc.p += (Number(e.p) || 0); acc.g += (Number(e.g) || 0); acc.l += (Number(e.l) || 0);
       return acc;
@@ -1595,7 +1600,7 @@ window.FOOD_JOURNAL = {
       var key = 'mtd_food_journal_' + (user ? user.id : 'anon');
       var journal = {}; try { journal = JSON.parse(localStorage.getItem(key) || '{}'); } catch(e2) { return; }
       var cutoff = new Date(); cutoff.setMonth(cutoff.getMonth() - 6);
-      var cutoffStr = cutoff.toISOString().slice(0, 10);
+      var cutoffStr = this._localDateStr(cutoff);
       var changed = false;
       Object.keys(journal).forEach(function(dateKey) {
         if (dateKey < cutoffStr) { delete journal[dateKey]; changed = true; }
@@ -1611,7 +1616,7 @@ window.FOOD_JOURNAL = {
     var dayIdx = today === 0 ? 6 : today - 1;
     var dayPlan = S.weekPlan[dayIdx];
     if (!dayPlan) return;
-    var todayStr = new Date().toISOString().split('T')[0];
+    var todayStr = this._localDateStr();
     var user = window.AUTH ? window.AUTH.getUser() : null;
     var loadedKey = 'mtd_journal_loaded_' + (user ? user.id : 'anon');
     if (localStorage.getItem(loadedKey) === todayStr) return;
