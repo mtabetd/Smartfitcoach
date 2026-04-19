@@ -5517,37 +5517,13 @@ function renderCardTodayForYou() {
     if (S.medical.indexOf('hta') !== -1) conditions.push('hta');
     if (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1) conditions.push('diabete');
   }
-  // FIX SPRINT P2.9 — Branches muscu : detect deload semaine, post-PR, plateau
+  // FIX SPRINT P2.9 — Branches muscu : detect deload semaine
+  // (2026-04 : branche 'muscu_pr' retirée — conseils génériques peu actionnables selon
+  //  feedback utilisateur, les pathologies médicales restent prioritaires)
   var _isMuscu = S.sportType === 'muscu' || S.sportType === 'musculation';
   if (_isMuscu) {
     // Détection deload : muscuWeek dans (4, 8, 12) → fin de mésocycle
     if (typeof S.muscuWeek === 'number' && (S.muscuWeek % 4 === 0)) conditions.push('muscu_deload');
-    // Détection post-PR : un set validé dans les 7 derniers jours avec actualWeight ≥ profile 1RM
-    try {
-      if (S.muscuSessionLog && S.muscuStrengthProfile) {
-        var now = new Date();
-        for (var d = 0; d < 7; d++) {
-          var dt = new Date(now.getFullYear(), now.getMonth(), now.getDate() - d).toISOString().slice(0, 10);
-          var dl = S.muscuSessionLog[dt];
-          if (!dl) continue;
-          var prFound = false;
-          Object.keys(dl).forEach(function(exName) {
-            (dl[exName] || []).forEach(function(set) {
-              if (set.validated && set.actualWeight) {
-                var key = exName.toLowerCase();
-                ['squat','bench','deadlift','press'].forEach(function(k) {
-                  var profileKey = k === 'squat' ? 'squat' : k === 'bench' ? 'bench_press' : k === 'deadlift' ? 'deadlift' : 'overhead_press';
-                  if (key.indexOf(k) >= 0 && S.muscuStrengthProfile[profileKey] && set.actualWeight > S.muscuStrengthProfile[profileKey]) {
-                    prFound = true;
-                  }
-                });
-              }
-            });
-          });
-          if (prFound) { conditions.push('muscu_pr'); break; }
-        }
-      }
-    } catch(_ePr) {}
   }
   if (conditions.length === 0) return null;
 
@@ -5622,17 +5598,6 @@ function renderCardTodayForYou() {
     ];
     content.ctaLabel = 'VOIR MA SÉANCE ALLÉGÉE';
     content.ctaFn = function() { S.view = 'sport'; if (window.render) window.render(); };
-  } else if (selectedCondition === 'muscu_pr') {
-    // FIX SPRINT P2.9 — Branche muscu post-PR (record battu cette semaine)
-    content.title = 'Vous avez battu un record';
-    content.body = 'Votre corps a délivré une nouvelle marche cette semaine. Pour consolider : repas riche en protéines (1.6 g/kg minimum), 8h de sommeil, récup active. Le PR n\'est tenu que si vous pouvez le refaire.';
-    content.items = [
-      { name: 'Protéines',    detail: '1.6-2.0 g/kg' },
-      { name: 'Sommeil',      detail: '8h+ pour récup' },
-      { name: 'Récup active', detail: 'Marche, mobilité' }
-    ];
-    content.ctaLabel = 'VOIR MES RECORDS';
-    content.ctaFn = function() { S._dashExtOpen = true; if (window.render) window.render(); };
   }
 
   var c = h('div', {
