@@ -2047,6 +2047,103 @@ function renderChargesQuestionnaire(p) {
  grid.appendChild(row);
  });
  p.appendChild(grid);
+
+ // ─── STRENGTH LEADERBOARD PERSO ───
+ (function() {
+   var _bw = S.weight || 75;
+   var _sex = S.sex === 'femme' ? 'f' : 'm';
+   // Percentile thresholds [ratio×BW] by sex for Bench/Squat/Deadlift
+   // Sources: Symmetric Strength population data (general gym population)
+   var _thresholds = {
+     bench_press: { m: [0.5, 0.75, 1.0, 1.3, 1.6], f: [0.3, 0.5, 0.65, 0.85, 1.05] },
+     squat:       { m: [0.75, 1.0, 1.25, 1.6, 2.0], f: [0.5, 0.7,  0.9,  1.1,  1.4] },
+     deadlift:    { m: [1.0,  1.25, 1.5, 1.8, 2.2], f: [0.65, 0.9, 1.1,  1.3,  1.6] }
+   };
+   var _percLabels = ['< 25%', '25%', '50%', '75%', '90%', '> 90%'];
+   var _percColors = ['#6A4A1A', '#6A4A1A', '#2980B9', '#1A4A1A', '#1A4A1A', '#1A4A1A'];
+   function getPercentile(key, val) {
+     var t = _thresholds[key] && _thresholds[key][_sex];
+     if (!t || !val || val <= 0) return null;
+     var ratio = val / _bw;
+     for (var i = t.length - 1; i >= 0; i--) {
+       if (ratio >= t[i]) return { pct: _percLabels[i + 1], color: _percColors[i + 1], ratio: Math.round(ratio * 100) / 100 };
+     }
+     return { pct: _percLabels[0], color: _percColors[0], ratio: Math.round(ratio * 100) / 100 };
+   }
+   var _powerKeys = [
+     { key: 'bench_press', name: 'Développé couché' },
+     { key: 'squat',       name: 'Squat' },
+     { key: 'deadlift',    name: 'Soulevé de terre' }
+   ];
+   var _hasAny = _powerKeys.some(function(k) { return S.muscuStrengthProfile[k.key] > 0; });
+   if (!_hasAny) return;
+   var lbWrap = h('div', { style: 'margin-bottom:16px;border:1px solid var(--border);background:var(--ivory2);' });
+   lbWrap.appendChild(h('div', { style: 'padding:10px 14px;border-bottom:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);font-weight:700;' }, 'Force relative — vs poids de corps'));
+   _powerKeys.forEach(function(kd) {
+     var w = S.muscuStrengthProfile[kd.key] || 0;
+     if (w <= 0) return;
+     var reps = S.muscuStrengthProfile[kd.key + '_reps'] || 8;
+     var est1rm = Math.round(w * (1 + reps / 30) / 2.5) * 2.5;
+     var info = getPercentile(kd.key, est1rm);
+     if (!info) return;
+     var row = h('div', { style: 'display:flex;align-items:center;padding:8px 14px;border-bottom:1px solid var(--border);gap:8px;' });
+     var nameD = h('div', { style: 'flex:1;font-family:Georgia,serif;font-size:12px;color:var(--black,#0A0A09);' }, kd.name);
+     row.appendChild(nameD);
+     // ratio bar
+     var barWrap = h('div', { style: 'flex:1;height:4px;background:var(--border,#D8D8D0);border-radius:2px;overflow:hidden;' });
+     var barPct = Math.min(100, Math.round((info.ratio / (_sex === 'm' ? 2.5 : 1.8)) * 100));
+     var barFill = h('div', { style: 'height:100%;width:' + barPct + '%;background:' + info.color + ';transition:width .4s;' });
+     barWrap.appendChild(barFill);
+     row.appendChild(barWrap);
+     var statD = h('div', { style: 'text-align:right;min-width:70px;flex-shrink:0;' });
+     statD.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:' + info.color + ';font-weight:600;' }, info.pct + ' pop.'));
+     statD.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-top:1px;' }, info.ratio + 'x PC'));
+     row.appendChild(statD);
+     lbWrap.appendChild(row);
+   });
+   lbWrap.appendChild(h('div', { style: 'padding:6px 14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey);font-style:italic;' }, 'PC = Poids de corps. 1RM estimé (Epley). Population générale salle de sport.'));
+   p.appendChild(lbWrap);
+ })();
+
+ // ─── EXERCICES AVANCÉS DÉBLOQUÉS ───
+ (function() {
+   var _bw = S.weight || 75;
+   var _prof = S.muscuStrengthProfile || {};
+   function _est1rm(key) {
+     var w = _prof[key] || 0;
+     if (w <= 0) return 0;
+     var r = _prof[key + '_reps'] || 8;
+     return w * (1 + r / 30);
+   }
+   var _bench1rm = _est1rm('bench_press');
+   var _squat1rm = _est1rm('squat');
+   var _dl1rm = _est1rm('deadlift');
+   var _isFemme = S.sex === 'femme';
+   var _advExercises = [
+     { name: 'Développé couché pause-reps', unlock: _bench1rm >= (_isFemme ? 0.5 : 0.8) * _bw, req: (_isFemme ? '0.5' : '0.8') + '× PC bench', desc: 'Pause 2s en bas pour éliminer l\'élan — force pure.' },
+     { name: 'Squat tempo 3-1-3', unlock: _squat1rm >= (_isFemme ? 0.7 : 1.0) * _bw, req: (_isFemme ? '0.7' : '1.0') + '× PC squat', desc: '3s descente, 1s pause, 3s montée — contrôle maximal.' },
+     { name: 'Deficit Deadlift (+5cm)', unlock: _dl1rm >= (_isFemme ? 0.9 : 1.3) * _bw, req: (_isFemme ? '0.9' : '1.3') + '× PC DL', desc: 'Amplitude accrue, travail du bas du dos et ischio-jambiers.' },
+     { name: 'Bulgarian Split Squat lesté', unlock: _squat1rm >= (_isFemme ? 0.6 : 0.9) * _bw, req: (_isFemme ? '0.6' : '0.9') + '× PC squat', desc: 'Unilatéral — équilibre et force jambe par jambe.' },
+     { name: 'Paused Squat', unlock: _squat1rm >= (_isFemme ? 0.85 : 1.25) * _bw, req: (_isFemme ? '0.85' : '1.25') + '× PC squat', desc: 'Pause 2s en bas — base profonde, quadriceps développés.' }
+   ];
+   var _unlockedList = _advExercises.filter(function(e) { return e.unlock; });
+   var _lockedList = _advExercises.filter(function(e) { return !e.unlock; });
+   if (_advExercises.length === 0 || (_bench1rm === 0 && _squat1rm === 0 && _dl1rm === 0)) return;
+   var unlockWrap = h('div', { style: 'margin-bottom:16px;border:1px solid var(--border);background:var(--ivory2);' });
+   unlockWrap.appendChild(h('div', { style: 'padding:10px 14px;border-bottom:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);font-weight:700;' }, 'Exercices avancés'));
+   _advExercises.forEach(function(ex) {
+     var row = h('div', { style: 'display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);opacity:' + (ex.unlock ? '1' : '0.45') + ';' });
+     var icon = h('div', { style: 'flex-shrink:0;width:20px;height:20px;border-radius:50%;background:' + (ex.unlock ? '#1A4A1A' : 'var(--border)') + ';display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;margin-top:1px;' }, ex.unlock ? '✓' : '○');
+     row.appendChild(icon);
+     var info = h('div', { style: 'flex:1;' });
+     info.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:12px;color:var(--black,#0A0A09);' }, ex.name));
+     info.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);line-height:1.4;margin-top:2px;' }, ex.unlock ? ex.desc : 'Débloquez à ' + ex.req));
+     row.appendChild(info);
+     unlockWrap.appendChild(row);
+   });
+   p.appendChild(unlockWrap);
+ })();
+
  var _chargesFooter = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-bottom:16px'});
  _chargesFooter.appendChild(h('span', {}, 'Laissez vide les exercices que vous ne pratiquez pas. Indiquez la charge ET le nombre de reps pour un calcul précis du '));
  _chargesFooter.appendChild(termTooltip('1RM', 'Répétition Maximale — la charge max que vous pouvez soulever une seule fois'));
@@ -2084,6 +2181,79 @@ function renderDedicatedPrograms(p) {
 
  // ─── SUIVI 7 SEMAINES ───
  renderWeekTracker(p);
+
+ // ─── DAILY CHALLENGE STREAK ───
+ (function() {
+   var _today = new Date().toISOString().slice(0, 10);
+   var _dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+   var _challenges = [
+     { title: '20 pompes extra', desc: 'À faire après ta séance — ou séparément si pas de séance.', target: 20, unit: 'pompes' },
+     { title: '1 min de planche', desc: 'Abdominaux serrés, corps aligné — tiens bon !', target: 60, unit: 'secondes' },
+     { title: '100 sauts à la corde', desc: 'Pas de corde ? Simule le mouvement les pieds joints.', target: 100, unit: 'sauts' },
+     { title: '30 squats au poids du corps', desc: 'Descends à parallèle, genou dans l\'axe du pied.', target: 30, unit: 'squats' },
+     { title: '15 dips sur chaise', desc: 'Talons au sol, coudes près du corps — triceps !', target: 15, unit: 'reps' },
+     { title: '5 min de marche rapide', desc: '100 pas/min minimum — cardio léger actif.', target: 5, unit: 'minutes' },
+     { title: '3 séries de respirations 4-7-8', desc: 'Inspire 4s, retiens 7s, expire 8s — récupération vagale.', target: 3, unit: 'séries' }
+   ];
+   var _c = _challenges[_dayOfYear % _challenges.length];
+   if (!S.dailyChallengeHistory || typeof S.dailyChallengeHistory !== 'object') S.dailyChallengeHistory = {};
+   var _doneToday = !!S.dailyChallengeHistory[_today];
+   // Compute streak
+   var _cStreak = 0;
+   var _cCur = new Date(_today);
+   while (true) {
+     var _dStr = _cCur.toISOString().slice(0, 10);
+     if (S.dailyChallengeHistory[_dStr]) { _cStreak++; _cCur.setDate(_cCur.getDate() - 1); }
+     else break;
+     if (_cStreak > 365) break;
+   }
+   var challengeCard = h('div', { style: 'margin-bottom:16px;border:1px solid ' + (_doneToday ? '#1A4A1A' : 'var(--border)') + ';background:' + (_doneToday ? 'rgba(26,74,26,0.04)' : 'var(--ivory2)') + ';padding:14px 16px;' });
+   var chRow1 = h('div', { style: 'display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;' });
+   var chLeft = h('div', {});
+   chLeft.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:' + (_doneToday ? '#1A4A1A' : 'var(--grey,#6B6B65)') + ';font-weight:700;margin-bottom:3px;' }, 'Défi du jour'));
+   chLeft.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:15px;color:var(--black,#0A0A09);' }, _c.title));
+   chRow1.appendChild(chLeft);
+   if (_cStreak > 0) {
+     var streakPill = h('div', { style: 'flex-shrink:0;margin-left:10px;padding:3px 8px;background:' + (_doneToday ? '#1A4A1A' : '#C8A84B') + ';color:#fff;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border-radius:2px;white-space:nowrap;' }, _cStreak + ' j');
+     chRow1.appendChild(streakPill);
+   }
+   challengeCard.appendChild(chRow1);
+   challengeCard.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.5;margin-bottom:12px;' }, _c.desc));
+   if (_doneToday) {
+     challengeCard.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1A4A1A;font-weight:600;' }, '✓ Défi accompli — à demain !'));
+   } else {
+     var doneBtn = h('button', {
+       style: 'padding:8px 16px;background:var(--black,#0A0A09);color:#FAF9F6;border:none;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;',
+       onclick: function() {
+         S.dailyChallengeHistory[_today] = true;
+         var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
+         try { localStorage.setItem('mtd_daily_challenge_' + uid, JSON.stringify(S.dailyChallengeHistory)); } catch(e) {}
+         // Confetti burst — simple DOM-based
+         var burst = document.createElement('div');
+         burst.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;overflow:hidden;';
+         var colors = ['#C8A84B', '#1A4A1A', '#0A0A09', '#FAF9F6', '#6A4A1A'];
+         for (var i = 0; i < 40; i++) {
+           var dot = document.createElement('div');
+           var size = 6 + Math.random() * 8;
+           dot.style.cssText = 'position:absolute;width:' + size + 'px;height:' + size + 'px;background:' + colors[i % colors.length] + ';left:' + (10 + Math.random() * 80) + '%;top:-10px;border-radius:' + (Math.random() > 0.5 ? '50%' : '2px') + ';animation:sfc-confetti-fall ' + (0.8 + Math.random() * 1.2) + 's ease-in forwards ' + (Math.random() * 0.4) + 's;';
+           burst.appendChild(dot);
+         }
+         if (!document.getElementById('sfc-confetti-style')) {
+           var st = document.createElement('style');
+           st.id = 'sfc-confetti-style';
+           st.textContent = '@keyframes sfc-confetti-fall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}';
+           document.head.appendChild(st);
+         }
+         document.body.appendChild(burst);
+         setTimeout(function() { if (burst.parentNode) burst.parentNode.removeChild(burst); }, 2500);
+         window.render();
+       }
+     }, '✓ Défi accompli');
+     challengeCard.appendChild(doneBtn);
+   }
+   p.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);font-weight:700;margin-bottom:8px;margin-top:24px;' }, 'Défi quotidien'));
+   p.appendChild(challengeCard);
+ })();
 
  // ─── BANNIÈRE : GÉNÉRER MON PROGRAMME DE MUSCULATION ───
  p.appendChild(h('div', {'class': 'section-label'}, 'Programme de musculation'));
@@ -5761,10 +5931,61 @@ function saveMuscuSessionLog() {
   // Check strength profile badges on each session save
   if (S.muscuStrengthProfile) GAMIFICATION.checkMuscuBadges(S.muscuStrengthProfile);
  }
+ // Consistency milestone detection — stored for display in session completion panel
+ try {
+   var _cs = getMuscuConsistencyStreak ? getMuscuConsistencyStreak() : null;
+   if (_cs && _cs.milestone) {
+     S._consistencyMilestone = _cs.milestone;
+     if (window.GAMIFICATION && _cs.milestone.xp) {
+       if (GAMIFICATION.addXP) GAMIFICATION.addXP(_cs.milestone.xp);
+       else if (GAMIFICATION.incrementCounter) GAMIFICATION.incrementCounter('xp', _cs.milestone.xp);
+     }
+     if (window.GAMIFICATION && _cs.milestone.type === 'badge') {
+       if (GAMIFICATION.unlockBadge) GAMIFICATION.unlockBadge('streak_7');
+     }
+   }
+   if (_cs) S._muscuStreak = _cs.streak;
+ } catch(_ec) {}
  } catch (e) {
  console.warn('[saveMuscuSessionLog] localStorage error:', e);
  }
 }
+
+// Returns { streak, totalSessions, milestone } — streak = consecutive distinct training days
+function getMuscuConsistencyStreak() {
+ var log = S.muscuSessionLog || {};
+ var dates = Object.keys(log).filter(function(d) {
+   var exs = log[d];
+   if (!exs || typeof exs !== 'object') return false;
+   return Object.keys(exs).some(function(ex) {
+     var sets = exs[ex];
+     return Array.isArray(sets) && sets.some(function(s) { return s.validated; });
+   });
+ }).sort();
+ var totalSessions = dates.length;
+ if (totalSessions === 0) return { streak: 0, totalSessions: 0, milestone: null };
+ var streak = 1;
+ var today = new Date().toISOString().slice(0, 10);
+ // Walk backwards from today
+ var cur = new Date(today);
+ for (var i = dates.length - 1; i >= 0; i--) {
+   var d = dates[i];
+   var diff = Math.round((cur - new Date(d)) / 86400000);
+   if (diff === 0) { cur.setDate(cur.getDate() - 1); continue; }
+   if (diff === 1) { streak++; cur = new Date(d); cur.setDate(cur.getDate() - 1); }
+   else break;
+ }
+ // Only count streak if last session was today or yesterday
+ var lastDate = dates[dates.length - 1];
+ var daysSinceLast = Math.round((new Date(today) - new Date(lastDate)) / 86400000);
+ if (daysSinceLast > 1) streak = 0;
+ var milestone = null;
+ if (totalSessions === 3) milestone = { type: 'xp', msg: '+50 XP — 3 séances au compteur !', xp: 50 };
+ else if (streak === 7) milestone = { type: 'badge', msg: 'Badge Semaine de Feu débloqué !', icon: 'Semaine de Feu' };
+ else if (streak === 14) milestone = { type: 'unlock', msg: '2 semaines sans pause — exercices avancés débloqués !', icon: 'Elite' };
+ return { streak: streak, totalSessions: totalSessions, milestone: milestone };
+}
+window.getMuscuConsistencyStreak = getMuscuConsistencyStreak;
 
 function getMuscuPhase(week) {
  for (var i = 0; i < MUSCU_PHASES.length; i++) {
@@ -6226,6 +6447,12 @@ function renderMusculationProgram(p) {
  var savedProg = localStorage.getItem('mtd_muscu_progression_' + userId3);
  if (savedProg) { try { S.muscuProgressionHistory = JSON.parse(savedProg); } catch(e) {} }
  if (!S.muscuProgressionHistory || typeof S.muscuProgressionHistory !== 'object' || Array.isArray(S.muscuProgressionHistory)) S.muscuProgressionHistory = {};
+ // Load daily challenge history
+ if (!S.dailyChallengeHistory) {
+   var _dcSaved = localStorage.getItem('mtd_daily_challenge_' + userId3);
+   if (_dcSaved) { try { S.dailyChallengeHistory = JSON.parse(_dcSaved); } catch(e) { S.dailyChallengeHistory = {}; } }
+   else S.dailyChallengeHistory = {};
+ }
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
  p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
@@ -7040,6 +7267,41 @@ function renderMusculationProgram(p) {
  card.appendChild(_exNameEl);
  card.appendChild(h('div', {'class': 'exercise-sets'}, (ex.sets || '4x10') + ' \u2014 Repos ' + (ex.rest || '90s')));
  if (ex.eq) card.appendChild(h('div', {'class': 'exercise-detail'}, ex.eq));
+
+ // ─── PLATEAU DETECTOR ───
+ (function(_ph) {
+   if (!_ph || _ph.length < 3) return;
+   var _last3 = _ph.slice(-3);
+   var _allWeights = _last3.map(function(e) { return e.weight || 0; });
+   var _maxW = Math.max.apply(null, _allWeights);
+   if (_maxW <= 0) return;
+   var _isPlat = _allWeights.every(function(w) { return Math.abs(w - _maxW) < 1; });
+   var _allReps = _last3.map(function(e) { return e.reps || 0; });
+   var _repsPlat = _allReps.every(function(r) { return r === _allReps[0] && r > 0; });
+   if (!_isPlat) return;
+   var _platSuggestions = [
+     { icon: '⏱', label: 'Tempo 3-1-3', desc: 'Ralentis : 3s descente, 1s pause bas, 3s montée' },
+     { icon: '✋', label: 'Prise variée', desc: 'Change la largeur ou le type de prise (pronation / supination)' },
+     { icon: '⬇', label: 'Excentrique lent', desc: '4-5 secondes sur la phase de descente, même charge' },
+     { icon: '🔻', label: 'Dropset', desc: 'Dernière série : -20 % de charge, continue jusqu\'à l\'échec' },
+     { icon: '⏸', label: 'Pause reps', desc: '2s de pause en position basse avant de remonter' }
+   ];
+   var _tipIdx = (new Date().getDate() + ex.n.length) % _platSuggestions.length;
+   var _tip = _platSuggestions[_tipIdx];
+   var platCard = h('div', { style: 'margin-top:8px;padding:10px 12px;background:#FFF8E7;border-left:3px solid #C8A84B;border-radius:0 2px 2px 0;' });
+   var platHeader = h('div', { style: 'display:flex;align-items:center;gap:6px;margin-bottom:4px;' });
+   platHeader.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#6A4A1A;font-weight:600;' }, 'Plateau détecté'));
+   platHeader.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:#6A4A1A;' }, '— ' + _allWeights[0] + ' kg × 3 séances'));
+   platCard.appendChild(platHeader);
+   var platTip = h('div', { style: 'display:flex;align-items:flex-start;gap:8px;' });
+   platTip.appendChild(h('span', { style: 'font-size:14px;line-height:1.4;flex-shrink:0;' }, _tip.icon));
+   var platText = h('div', {});
+   platText.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:600;color:#0A0A09;' }, _tip.label));
+   platText.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:#6B6B65;line-height:1.45;margin-top:1px;' }, _tip.desc));
+   platTip.appendChild(platText);
+   platCard.appendChild(platTip);
+   card.appendChild(platCard);
+ })(_progHistory);
 
  // ─── EXERCISE DESCRIPTION FOR BEGINNERS ───
  // 2026-04 : refonte UX débutants — description claire + tips visibles avant la vidéo
@@ -8283,6 +8545,165 @@ function renderMusculationProgram(p) {
  }}, '\u2713 Valider la s\u00e9ance');
  compPanel.appendChild(saveBtn);
  compPanel.appendChild(h('div', {style: 'text-align:center;margin-top:8px'}, h('button', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);background:none;border:none;cursor:pointer', onclick: function() { S.sessionCompleting = false; S._sessionDuration = null; window.render(); }}, 'Annuler')));
+
+ // ─── CONSISTENCY STREAK BANNER ───
+ (function() {
+   var _cStr = window.getMuscuConsistencyStreak ? window.getMuscuConsistencyStreak() : null;
+   if (!_cStr || _cStr.totalSessions === 0) return;
+   var _streak = _cStr.streak;
+   var _total = _cStr.totalSessions;
+   var _ms = _cStr.milestone;
+   var streakBanner = document.createElement('div');
+   streakBanner.style.cssText = 'margin-top:12px;padding:12px 14px;border:1px solid ' + (_ms ? '#C8A84B' : 'var(--border,#D8D8D0)') + ';background:' + (_ms ? '#FFF8E7' : 'var(--ivory,#FAF9F6)') + ';';
+   var streakRow = document.createElement('div');
+   streakRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;';
+   var streakLeft = document.createElement('div');
+   var streakLabel = document.createElement('div');
+   streakLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:2px;';
+   streakLabel.textContent = 'Régularité';
+   streakLeft.appendChild(streakLabel);
+   var streakVal = document.createElement('div');
+   streakVal.style.cssText = 'font-family:Georgia,serif;font-size:14px;color:var(--black,#0A0A09);';
+   streakVal.textContent = (_streak > 1 ? _streak + ' jours consécutifs' : _total + ' séance' + (_total > 1 ? 's' : '') + ' au total');
+   streakLeft.appendChild(streakVal);
+   streakRow.appendChild(streakLeft);
+   var nextMile = _streak < 7 ? (7 - _streak + ' j → badge') : _streak < 14 ? (14 - _streak + ' j → exercices avancés') : '';
+   if (nextMile) {
+     var streakNext = document.createElement('div');
+     streakNext.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:#6A4A1A;text-align:right;';
+     streakNext.textContent = nextMile;
+     streakRow.appendChild(streakNext);
+   }
+   streakBanner.appendChild(streakRow);
+   if (_ms) {
+     var msDiv = document.createElement('div');
+     msDiv.style.cssText = 'margin-top:8px;padding:8px 10px;background:#FFF8E7;border-top:1px solid #C8A84B;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:600;color:#6A4A1A;';
+     msDiv.textContent = _ms.msg;
+     streakBanner.appendChild(msDiv);
+   }
+   compPanel.appendChild(streakBanner);
+ })();
+
+ // ─── WORKOUT CARD SHAREABLE ───
+ (function() {
+   var _wToday = new Date().toISOString().slice(0, 10);
+   var _wLog = S.muscuSessionLog && S.muscuSessionLog[_wToday] ? S.muscuSessionLog[_wToday] : {};
+   var _wExNames = Object.keys(_wLog);
+   if (_wExNames.length === 0) return;
+   // Compute total volume
+   var _totalVol = 0, _totalSets = 0;
+   _wExNames.forEach(function(ex) {
+     var sets = _wLog[ex] || [];
+     sets.forEach(function(s) {
+       if (s.validated) {
+         _totalVol += (s.actualWeight || 0) * (s.actualReps || 0);
+         _totalSets++;
+       }
+     });
+   });
+   // PR list (already computed above in _prList, but compute locally for card scope)
+   var _cPrList = [];
+   _wExNames.forEach(function(exName) {
+     var todaySets = (_wLog[exName] || []).filter(function(s){ return s.validated; });
+     var todayMax = todaySets.reduce(function(m, s){ return Math.max(m, s.actualWeight || 0); }, 0);
+     var hist = (S.muscuProgressionHistory && S.muscuProgressionHistory[exName]) || [];
+     var prevHist = hist.filter(function(e){ return e.date < _wToday; });
+     var histMax = prevHist.reduce(function(m, e){ return Math.max(m, e.weight || 0); }, 0);
+     if (todayMax > 0 && (todayMax > histMax || histMax === 0)) _cPrList.push({ name: exName, weight: todayMax });
+   });
+
+   var cardShareWrap = h('div', { style: 'margin-top:16px;' });
+   var cardShareToggle = h('button', {
+     style: 'width:100%;padding:10px 14px;border:1px solid var(--border,#D8D8D0);background:var(--ivory,#FAF9F6);cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:left;',
+     onclick: function() {
+       var existing = document.getElementById('sfc-share-card');
+       if (existing) { existing.style.display = existing.style.display === 'none' ? 'block' : 'none'; }
+     }
+   }, 'Générer ma carte de séance');
+   cardShareWrap.appendChild(cardShareToggle);
+
+   var cardEl = document.createElement('div');
+   cardEl.id = 'sfc-share-card';
+   cardEl.style.cssText = 'display:none;margin-top:8px;';
+
+   var card = document.createElement('div');
+   card.id = 'sfc-share-card-inner';
+   card.style.cssText = 'background:#0A0A09;color:#FAF9F6;padding:24px 20px;font-family:"Helvetica Neue",Arial,sans-serif;position:relative;overflow:hidden;';
+
+   var cHeader = document.createElement('div');
+   cHeader.style.cssText = 'display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;';
+   var cLogo = document.createElement('div');
+   cLogo.style.cssText = 'font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(250,249,246,0.5);';
+   cLogo.textContent = 'SmartFitCoach';
+   var cDate = document.createElement('div');
+   cDate.style.cssText = 'font-size:9px;letter-spacing:1px;color:rgba(250,249,246,0.5);';
+   cDate.textContent = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+   cHeader.appendChild(cLogo);
+   cHeader.appendChild(cDate);
+   card.appendChild(cHeader);
+
+   var cTitle = document.createElement('div');
+   cTitle.style.cssText = 'font-family:Georgia,serif;font-size:22px;font-style:italic;margin-bottom:4px;';
+   cTitle.textContent = 'Séance terminée';
+   card.appendChild(cTitle);
+
+   var cPhase = document.createElement('div');
+   cPhase.style.cssText = 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(250,249,246,0.5);margin-bottom:20px;';
+   var _cMP = window.getMacroCyclePhase ? window.getMacroCyclePhase(S.muscuCycle || 1) : null;
+   cPhase.textContent = (_cMP ? _cMP.label + ' · ' : '') + ('Semaine ' + (S.muscuWeek || 1));
+   card.appendChild(cPhase);
+
+   var cStats = document.createElement('div');
+   cStats.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;';
+   function _cStatBox(label, val) {
+     var b = document.createElement('div');
+     b.style.cssText = 'text-align:center;border:1px solid rgba(250,249,246,0.15);padding:10px 6px;';
+     var v = document.createElement('div');
+     v.style.cssText = 'font-family:Georgia,serif;font-size:18px;font-weight:bold;';
+     v.textContent = val;
+     var l = document.createElement('div');
+     l.style.cssText = 'font-size:8px;letter-spacing:1px;text-transform:uppercase;color:rgba(250,249,246,0.5);margin-top:4px;';
+     l.textContent = label;
+     b.appendChild(v);
+     b.appendChild(l);
+     return b;
+   }
+   cStats.appendChild(_cStatBox('Exercices', _wExNames.length));
+   cStats.appendChild(_cStatBox('Séries', _totalSets));
+   cStats.appendChild(_cStatBox('Volume', _totalVol > 0 ? (Math.round(_totalVol / 100) / 10 + ' T') : '—'));
+   card.appendChild(cStats);
+
+   if (_cPrList.length > 0) {
+     var cPr = document.createElement('div');
+     cPr.style.cssText = 'border-top:1px solid rgba(250,249,246,0.15);padding-top:12px;margin-bottom:16px;';
+     var cPrLbl = document.createElement('div');
+     cPrLbl.style.cssText = 'font-size:8px;letter-spacing:3px;text-transform:uppercase;color:rgba(200,168,75,0.9);margin-bottom:8px;';
+     cPrLbl.textContent = 'Records battus';
+     cPr.appendChild(cPrLbl);
+     _cPrList.slice(0, 3).forEach(function(pr) {
+       var prLine = document.createElement('div');
+       prLine.style.cssText = 'font-family:Georgia,serif;font-size:12px;color:#FAF9F6;line-height:1.8;';
+       var wDisp = window.UNITS ? window.UNITS.displayWeight(pr.weight) : pr.weight + ' kg';
+       prLine.textContent = pr.name + ' — ' + wDisp;
+       cPr.appendChild(prLine);
+     });
+     card.appendChild(cPr);
+   }
+
+   var cFooter = document.createElement('div');
+   cFooter.style.cssText = 'font-size:8px;letter-spacing:1px;color:rgba(250,249,246,0.3);text-align:center;border-top:1px solid rgba(250,249,246,0.1);padding-top:10px;';
+   cFooter.textContent = 'smartfitcoach.app';
+   card.appendChild(cFooter);
+
+   cardEl.appendChild(card);
+   var hint = document.createElement('div');
+   hint.style.cssText = 'margin-top:6px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);text-align:center;font-style:italic;';
+   hint.textContent = 'Faites une capture d\'écran pour partager.';
+   cardEl.appendChild(hint);
+   cardShareWrap.appendChild(cardEl);
+   compPanel.appendChild(cardShareWrap);
+ })();
+
  p.appendChild(compPanel);
  } else {
  p.appendChild(h('button', {'class': 'regen-btn', style: 'margin-top:8px;background:var(--black);color:#fff', onclick: function() { S.sessionCompleting = S.selectedSportDay; S._sessionDuration = null; window.render(); }}, '\u2713 S\u00e9ance termin\u00e9e'));
