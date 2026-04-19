@@ -1288,6 +1288,99 @@ function renderObjectif(p) {
  p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Choisissez votre type de programme sportif.'));
 
+ // ─── RECOMMANDATION PROFIL ───
+ // Affiché uniquement si l'utilisateur n'a encore aucun programme sport.
+ (function() {
+  if (S.sportType || (Array.isArray(S.sportProgram) && S.sportProgram.length > 0)) return;
+  var _rGoalKey = (S.goal !== null && window.GOALS && window.GOALS[S.goal]) ? window.GOALS[S.goal].key : '';
+  var _rAge = typeof getAge === 'function' ? getAge() : (S.age || 0);
+  var _isFemale = S.sex === 'femme';
+
+  // Matrice de recommandation
+  var _rec = null;
+  if (_rAge >= 50) {
+   _rec = { type: 'yoga', label: 'Yoga & Mobilité', icon: '🧘',
+    sub: 'Mobilité · Souplesse · Récupération active',
+    reason: 'Recommandé pour les 50+ — préserve les articulations et améliore la qualité de vie.',
+    nextStep: 19 };
+  } else if (_rGoalKey === 'bulk' || _rGoalKey === 'lean_bulk') {
+   _rec = { type: 'musculation', label: 'Musculation', icon: '🏋️',
+    sub: 'Progressive overload · Force · Masse',
+    reason: 'Programme optimal pour votre objectif prise de masse — progressive overload scientifique.',
+    nextStep: 20 };
+  } else if (_rGoalKey === 'recomposition') {
+   _rec = { type: 'musculation', label: 'Musculation', icon: '🏋️',
+    sub: 'Force · Composition · Recomposition',
+    reason: 'La recomposition corporelle répond le mieux à la musculation avec surcharge progressive.',
+    nextStep: 20 };
+  } else if (_rGoalKey === 'cut' || _rGoalKey === 'shred') {
+   _rec = { type: 'crossfit', label: 'Cross Training', icon: '🔥',
+    sub: 'HIIT · Force · Cardio fusionnés',
+    reason: 'HIIT + force = combo maximal pour une sèche efficace — calories brûlées 24h.',
+    nextStep: 5 };
+  } else if (_rGoalKey === 'endurance') {
+   _rec = { type: 'running', label: 'Running', icon: '🏃',
+    sub: '5K · 10K · Semi · Marathon',
+    reason: 'Programme running progressif — du 5K au marathon avec plans scientifiques.',
+    nextStep: 7 };
+  } else if (_isFemale) {
+   _rec = { type: 'musculation', label: 'Musculation', icon: '🏋️',
+    sub: 'Force · Fessiers · Ventre plat',
+    reason: 'Spécialement adapté femme — priorité fessiers et abdominaux, sans bulk excessif.',
+    nextStep: 20 };
+  } else {
+   _rec = { type: 'musculation', label: 'Musculation', icon: '🏋️',
+    sub: 'Force · Volume · Performance',
+    reason: 'Le programme le plus complet pour transformer votre physique durablement.',
+    nextStep: 20 };
+  }
+
+  if (!_rec) return;
+
+  var recWrap = h('div', {style: 'margin-bottom:20px;'});
+  recWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px'}, 'Recommandé pour votre profil'));
+
+  var recCard = h('div', {
+   style: 'border:2px solid var(--black,#0A0A09);padding:18px 18px 16px;background:var(--ivory,#FAF9F6);cursor:pointer;position:relative;',
+   onclick: function() {
+    S.sportType = _rec.type;
+    if (!S.parqDone) { S._parqNextStep = _rec.nextStep; S.sStep = 26; }
+    else { S.sStep = _rec.nextStep; }
+    if (window.BLACKBOX) BLACKBOX.log('sport_type_recommended', {type: _rec.type});
+    window.render();
+   }
+  });
+
+  // Badge "⭐ Adapté à vous"
+  var recBadge = h('div', {style: 'position:absolute;top:-1px;right:-1px;padding:3px 10px;background:var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--ivory,#FAF9F6)'}, '★ Adapté à vous');
+  recCard.appendChild(recBadge);
+
+  var recTop = h('div', {style: 'display:flex;align-items:center;gap:12px;margin-bottom:8px;margin-top:8px'});
+  recTop.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:22px'}, _rec.icon));
+  var recInfo = h('div');
+  recInfo.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:17px;color:var(--black,#0A0A09);margin-bottom:2px'}, _rec.label));
+  recInfo.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--grey,#6B6B65)'}, _rec.sub));
+  recTop.appendChild(recInfo);
+  recCard.appendChild(recTop);
+
+  recCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.55;border-top:1px solid var(--border,#E8E6DF);padding-top:10px;margin-top:4px'}, _rec.reason));
+
+  var recCta = h('div', {style: 'display:flex;align-items:center;justify-content:flex-end;margin-top:12px;gap:4px'});
+  recCta.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--black,#0A0A09)'}, 'Démarrer'));
+  recCta.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;color:var(--black,#0A0A09)'}, '→'));
+  recCard.appendChild(recCta);
+  recWrap.appendChild(recCard);
+
+  // "Ou choisir manuellement" separator
+  recWrap.appendChild(h('div', {style: 'display:flex;align-items:center;gap:12px;margin-top:16px;margin-bottom:4px'},[
+   h('div', {style:'flex:1;height:1px;background:var(--border,#E8E6DF)'}),
+   h('span', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);white-space:nowrap'},'ou choisir manuellement'),
+   h('div', {style:'flex:1;height:1px;background:var(--border,#E8E6DF)'})
+  ]));
+
+  p.appendChild(recWrap);
+ })();
+
  // Banner contextuel pour les utilisateurs nutrition → sport (tous sports, pas musculation seule)
  if (window.S && window.S._switchedFromNutrition) {
    var _ctxBannerObj = document.createElement('div');
@@ -4835,6 +4928,35 @@ function renderMusculationZones(p) {
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S._chargesFromLevel = true; S.sStep = 16; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
+// ─── MACROCYCLES (3-6 mois) ───
+// 1 macrocycle = 3 mésocycles de 7 semaines = 21 semaines (~5 mois).
+// Rotation : Hypertrophie → Force → Transition → Hypertrophie...
+var MACRO_PHASES = [
+ {id: 'hypertrophie', label: 'Hypertrophie', shortLabel: 'HYPERTROPHIE', color: '#1A4A1A',
+  mesosInPhase: 1, // tous les mésocycles i%3===1 (cycle 1,4,7...)
+  desc: 'Volume maximal — 8-12 reps, 65-75% 1RM. Priorité à l\'accumulation de masse musculaire.',
+  repsRange: '8-12', pct1rmBonus: 0, setsBonus: +1,
+  tip: 'Phase d\'accumulation : augmente le volume total (séries × reps). Charge modérée, récupération 60-90s.'},
+ {id: 'force', label: 'Force', shortLabel: 'FORCE', color: '#6A4A1A',
+  mesosInPhase: 2,
+  desc: 'Intensité maximale — 3-6 reps, 82-90% 1RM. Priorité à la densité neuromusculaire.',
+  repsRange: '3-6', pct1rmBonus: +0.12, setsBonus: 0,
+  tip: 'Phase d\'intensification : monte les charges, baisse les reps. Repos 3-5 min entre séries.'},
+ {id: 'transition', label: 'Transition', shortLabel: 'TRANSITION', color: '#5A1010',
+  mesosInPhase: 0,
+  desc: 'Consolidation & récupération — charges variées, 50-70% 1RM. Supercompensation.',
+  repsRange: 'variable', pct1rmBonus: -0.10, setsBonus: -1,
+  tip: 'Phase de transition : volume et intensité réduits pour permettre la supercompensation.'}
+];
+
+function getMacroCyclePhase(cycleNum) {
+ var c = ((cycleNum || 1) - 1) % 3;
+ if (c === 0) return MACRO_PHASES[0]; // Hypertrophie
+ if (c === 1) return MACRO_PHASES[1]; // Force
+ return MACRO_PHASES[2];             // Transition
+}
+window.getMacroCyclePhase = getMacroCyclePhase;
+
 // ─── SYSTÈME DE PHASES 7 SEMAINES ───
 var MUSCU_PHASES = [
  {weeks:[1,2], id:'adaptation', label:'Adaptation', color:'#2980B9',
@@ -4858,6 +4980,9 @@ var MUSCU_PHASES = [
 // Calcule le poids recommandé pour un exercice selon la phase courante
 function getSuggestedWeight(exerciseName, reps, phase) {
  var pct = phase ? (phase.pct1rm || 0.72) : 0.72;
+ // Macrocycle intensity modifier: Force phase = +12% 1RM, Transition = -10%
+ var _macroBonus = getMacroCyclePhase(S.muscuCycle || 1).pct1rmBonus || 0;
+ pct = Math.min(0.95, Math.max(0.40, pct + _macroBonus));
  // Priority 1: use user's actual 1RM from strength profile (Epley-calculated)
  if (S.muscuStrengthProfile && window.MUSCU_KEY_EXERCISES) {
  var nameLow = (exerciseName || '').toLowerCase();
@@ -5654,8 +5779,14 @@ function getMuscuPhase(week) {
 function applyPhaseToExercise(ex, phase) {
  var result = JSON.parse(JSON.stringify(ex));
  var baseSets = typeof result.sets === 'number' ? result.sets : 4;
- result.sets = Math.max(2, baseSets + phase.setsOffset);
- if (typeof result.reps === 'number') result.reps = Math.max(5, result.reps + phase.repsOffset);
+ var macroBonus = getMacroCyclePhase(S.muscuCycle || 1).setsBonus || 0;
+ result.sets = Math.max(2, baseSets + phase.setsOffset + macroBonus);
+ if (typeof result.reps === 'number') {
+  // Force macrophase: reduce reps to favour intensity
+  var macroId = getMacroCyclePhase(S.muscuCycle || 1).id;
+  var macroRepsOffset = macroId === 'force' ? -3 : macroId === 'transition' ? -1 : 0;
+  result.reps = Math.max(3, result.reps + phase.repsOffset + macroRepsOffset);
+ }
  return result;
 }
 
@@ -5691,6 +5822,41 @@ function renderWeekTracker(p) {
  loadMuscuWeek();
  var week = S.muscuWeek || 1;
  var phase = getMuscuPhase(week);
+ var cycleNum = S.muscuCycle || 1;
+ var macroPhase = getMacroCyclePhase(cycleNum);
+
+ // ─── MACROCYCLE BANNER ───
+ var totalMesoInMacro = 3;
+ var mesoInMacro = ((cycleNum - 1) % totalMesoInMacro) + 1;
+ var macroCycleNum = Math.ceil(cycleNum / totalMesoInMacro);
+ var macroContainer = h('div', {
+  style: 'margin-bottom:12px;padding:10px 14px 12px;border-left:3px solid ' + macroPhase.color + ';background:var(--ivory2,#F4F2EB);'
+ });
+ var macroHeader = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:6px'});
+ macroHeader.appendChild(h('div', {}, [
+  h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:' + macroPhase.color + ';font-weight:600'}, 'Macrocycle ' + macroCycleNum + ' — ' + macroPhase.shortLabel),
+ ]));
+ macroHeader.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey,#6B6B65)'}, 'Mésocycle ' + mesoInMacro + '/' + totalMesoInMacro));
+ macroContainer.appendChild(macroHeader);
+
+ // 3-segment progress bar (macrophases)
+ var macroBar = h('div', {style: 'display:flex;gap:2px;height:4px;margin-bottom:6px'});
+ ['Hypertrophie','Force','Transition'].forEach(function(phLabel, idx) {
+  var isActive = idx === (cycleNum - 1) % 3;
+  var isDone = idx < (cycleNum - 1) % 3;
+  var segColor = [MACRO_PHASES[0].color, MACRO_PHASES[1].color, MACRO_PHASES[2].color][idx];
+  macroBar.appendChild(h('div', {
+   title: phLabel,
+   style: 'flex:1;height:4px;background:' + (isActive ? segColor : isDone ? segColor : 'var(--border,#D8D8D0)') + ';opacity:' + (isActive ? '1' : isDone ? '0.35' : '0.2') + ';transition:all .3s ease;'
+  }));
+ });
+ macroContainer.appendChild(macroBar);
+
+ macroContainer.appendChild(h('div', {
+  style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.5;'
+ }, macroPhase.tip));
+
+ p.appendChild(macroContainer);
 
  var container = h('div', {style: 'border:2px solid ' + phase.color + ';padding:16px;margin-bottom:20px;background:var(--ivory2)'});
 
@@ -5698,8 +5864,7 @@ function renderWeekTracker(p) {
  var top = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:12px'});
  var badge = h('div', {style: 'display:flex;align-items:center;gap:8px'});
  badge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#fff;background:' + phase.color + ';padding:3px 8px'}, phase.label));
- var cycleNum = S.muscuCycle || 1;
- badge.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:13px;color:' + phase.color}, 'Semaine ' + week + ' / 7 · Cycle ' + cycleNum));
+ badge.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:13px;color:' + phase.color}, 'Semaine ' + week + ' / 7'));
  top.appendChild(badge);
  if (S.muscuProgramStart) {
  top.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey)'}, 'Début : ' + S.muscuProgramStart));
