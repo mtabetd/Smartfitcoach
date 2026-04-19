@@ -1480,11 +1480,12 @@ function renderCardMacros() {
 // Favoris en étoile, cumul journalier avec cibles macros.
 // ═══════════════════════════════════════════════════════════════
 var _fjState = {
-  meal: 'breakfast',      // petit-déj par défaut
+  meal: 'breakfast',
   query: '',
-  qty: 100,               // grammage par défaut
-  selectedFood: null,     // {name, kcal, protein, carbs, fat}
-  showFavs: false
+  qty: 100,
+  selectedFood: null,
+  showFavs: false,
+  multiSelected: {}        // name → food obj (multi-ajout phase 2)
 };
 
 function _fjGetUid() {
@@ -1517,13 +1518,128 @@ function _fjToggleFav(food) {
   _fjSaveFavs(favs);
 }
 
+// ─── CUSTOM FOODS — Création et injection dans FOOD_CALC._DB ───
+var _fjCustomLoaded = false;
+function _fjLoadCustomFoods() {
+  if (_fjCustomLoaded) return;
+  _fjCustomLoaded = true;
+  try {
+    var uid = _fjGetUid();
+    var stored = JSON.parse(localStorage.getItem('mtd_custom_foods_' + uid) || '[]');
+    if (!Array.isArray(stored) || !window.FOOD_CALC || !Array.isArray(window.FOOD_CALC._DB)) return;
+    stored.forEach(function(cf) {
+      if (!cf || !cf.name) return;
+      // Avoid injecting duplicates
+      for (var i = 0; i < window.FOOD_CALC._DB.length; i++) {
+        if (window.FOOD_CALC._DB[i][0] === cf.name) return;
+      }
+      window.FOOD_CALC._DB.push([cf.name, cf.kcal || 0, cf.p || 0, cf.g || 0, cf.l || 0]);
+    });
+  } catch(e) {}
+}
+
+function _fjOpenCreateFoodModal() {
+  todayModal('Créer un aliment', function(box) {
+    var fields = [
+      { id: 'cf-name', label: 'Nom', placeholder: 'ex: Mon mélange maison', inputmode: 'text' },
+      { id: 'cf-kcal', label: 'Kcal / 100g', placeholder: '0', inputmode: 'decimal' },
+      { id: 'cf-p',    label: 'Protéines / 100g (g)', placeholder: '0', inputmode: 'decimal' },
+      { id: 'cf-g',    label: 'Glucides / 100g (g)', placeholder: '0', inputmode: 'decimal' },
+      { id: 'cf-l',    label: 'Lipides / 100g (g)', placeholder: '0', inputmode: 'decimal' }
+    ];
+    var inputs = {};
+    fields.forEach(function(f) {
+      var wrap = h('div', { style: 'margin-bottom:10px;' });
+      var lbl = h('label', {
+        style: 'display:block;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:4px;'
+      }, f.label);
+      lbl.setAttribute('for', f.id);
+      var inp = h('input', {
+        id: f.id,
+        type: 'text',
+        placeholder: f.placeholder || '',
+        style: 'width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--line,#D8D8D0);border-radius:2px;'
+          + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;background:#fff;min-height:44px;'
+      });
+      inp.setAttribute('inputmode', f.inputmode || 'text');
+      inputs[f.id] = inp;
+      wrap.appendChild(lbl);
+      wrap.appendChild(inp);
+      box.appendChild(wrap);
+    });
+
+    var errEl = h('div', { style: 'color:#B00020;font-size:12px;margin-bottom:8px;display:none;font-family:"Helvetica Neue",Arial,sans-serif;' });
+    box.appendChild(errEl);
+
+    var saveBtn = h('button', {
+      style: 'width:100%;padding:12px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;cursor:pointer;'
+        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;min-height:44px;margin-top:4px;'
+    }, 'Créer l\'aliment');
+
+    saveBtn.addEventListener('click', function() {
+      var name = (inputs['cf-name'].value || '').trim();
+      var kcal  = parseFloat(String(inputs['cf-kcal'].value || '0').replace(',', '.')) || 0;
+      var prot  = parseFloat(String(inputs['cf-p'].value   || '0').replace(',', '.')) || 0;
+      var carbs = parseFloat(String(inputs['cf-g'].value   || '0').replace(',', '.')) || 0;
+      var fat   = parseFloat(String(inputs['cf-l'].value   || '0').replace(',', '.')) || 0;
+
+      if (!name) {
+        errEl.textContent = 'Le nom est obligatoire.';
+        errEl.style.display = '';
+        inputs['cf-name'].focus();
+        return;
+      }
+      if (kcal < 0 || isNaN(kcal)) {
+        errEl.textContent = 'Valeur kcal invalide (doit être ≥ 0).';
+        errEl.style.display = '';
+        return;
+      }
+
+      // Persist
+      var uid = _fjGetUid();
+      var key = 'mtd_custom_foods_' + uid;
+      var stored = [];
+      try { stored = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) { stored = []; }
+      if (!Array.isArray(stored)) stored = [];
+      stored.push({ name: name, kcal: kcal, p: prot, g: carbs, l: fat });
+      localStorage.setItem(key, JSON.stringify(stored));
+
+      // Inject into FOOD_CALC immediately
+      if (window.FOOD_CALC && Array.isArray(window.FOOD_CALC._DB)) {
+        var dup = false;
+        for (var i = 0; i < window.FOOD_CALC._DB.length; i++) {
+          if (window.FOOD_CALC._DB[i][0] === name) { dup = true; break; }
+        }
+        if (!dup) window.FOOD_CALC._DB.push([name, kcal, prot, carbs, fat]);
+      }
+
+      // Close modal
+      var overlay = document.body.lastChild;
+      while (overlay && overlay.getAttribute && !overlay.getAttribute('role')) overlay = overlay.previousSibling;
+      if (overlay && overlay.getAttribute && overlay.getAttribute('role') === 'dialog') {
+        try { document.body.removeChild(overlay); } catch(e) {}
+      }
+
+      _fjState.query = name;
+      _fjState.selectedFood = null;
+      _fjRefreshResults();
+      if (window.showToast) window.showToast('\u00ab ' + name + ' \u00bb ajouté à votre base.', 'success', 2500);
+    });
+
+    box.appendChild(saveBtn);
+    setTimeout(function() { try { inputs['cf-name'].focus(); } catch(e) {} }, 80);
+  });
+}
+
 function renderFoodJournalCard() {
+  _fjLoadCustomFoods();
   var S = window.S;
   if (!S) return null;
   // Sport-only : masquer (pas de suivi nutrition)
   if (S.appMode === 'sport') return null;
 
   var c = card();
+  c.id = 'fj-card-root'; // Phase 2 K: stable anchor for targeted re-render
 
   // Titre standard Georgia 20px (cohérent avec renderCardSport / renderCardRepas)
   c.appendChild(cardTitle('Journal du jour'));
@@ -1575,6 +1691,7 @@ function renderFoodJournalCard() {
     }, m.label);
     btn.addEventListener('click', function() {
       _fjState.meal = m.key;
+      _fjState.multiSelected = {};
       _reRenderFJCard();
     });
     tabs.appendChild(btn);
@@ -1681,11 +1798,27 @@ function renderFoodJournalCard() {
     searchRow.appendChild(barcodeBtn);
   }
 
+  // Phase 2 L : bouton "Créer un aliment personnalisé"
+  var createFoodBtn = h('button', {
+    type: 'button',
+    'aria-label': 'Créer un aliment personnalisé',
+    title: 'Créer un aliment',
+    style: 'display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0;'
+      + 'background:transparent;border:1px solid var(--black,#0A0A09);border-radius:2px;cursor:pointer;box-sizing:border-box;flex-shrink:0;'
+  });
+  createFoodBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><line x1="8" y1="3" x2="8" y2="13"/><line x1="3" y1="8" x2="13" y2="8"/></svg>';
+  createFoodBtn.addEventListener('click', function() { _fjOpenCreateFoodModal(); });
+  searchRow.appendChild(createFoodBtn);
+
   c.appendChild(searchRow);
 
   // ─── Résultats de recherche (liste) ───
-  var resultsBox = h('div', { id: 'fj-results', style: 'max-height:220px;overflow-y:auto;margin-bottom:12px;' });
+  var resultsBox = h('div', { id: 'fj-results', style: 'max-height:360px;overflow-y:auto;margin-bottom:12px;' });
   c.appendChild(resultsBox);
+
+  // ─── Multi-ajout CTA (Phase 2 N) ───
+  var multiCtaBox = h('div', { id: 'fj-multi-cta', style: 'display:none;' });
+  c.appendChild(multiCtaBox);
 
   // ─── Zone sélection + grammage ───
   var selBox = h('div', { id: 'fj-selected', style: 'display:none;padding:12px;background:transparent;border:1px solid var(--line,#D8D8D0);border-radius:2px;margin-bottom:12px;' });
@@ -1704,25 +1837,130 @@ function renderFoodJournalCard() {
 
 // ─── Helpers de rendu dynamique ───
 function _reRenderFJCard() {
-  // 2026-04 R4-M5 : préserver le scroll Y avant re-render (sinon l'user retourne en haut après chaque ajout)
   var _sy = (typeof window !== 'undefined' && typeof window.scrollY === 'number') ? window.scrollY : 0;
-  if (window.render) window.render();
-  if (_sy > 0 && typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
-    // requestAnimationFrame pour laisser le DOM se stabiliser avant scroll restore
-    var _restore = function() { try { window.scrollTo(0, _sy); } catch(e) {} };
-    if (typeof window.requestAnimationFrame === 'function') window.requestAnimationFrame(_restore);
-    else setTimeout(_restore, 0);
+  function _restoreScroll() {
+    if (_sy <= 0) return;
+    var fn = function() { try { window.scrollTo(0, _sy); } catch(e) {} };
+    if (typeof window.requestAnimationFrame === 'function') window.requestAnimationFrame(fn);
+    else setTimeout(fn, 0);
   }
+
+  // Phase 2 K : targeted re-render — remplace uniquement la card fj, pas toute la page
+  var existing = document.getElementById('fj-card-root');
+  if (existing && existing.parentNode) {
+    try {
+      var fresh = renderFoodJournalCard();
+      if (fresh) {
+        existing.parentNode.replaceChild(fresh, existing);
+        _restoreScroll();
+        return;
+      }
+    } catch(e) {
+      console.warn('[fj] targeted re-render failed, fallback full render', e);
+    }
+  }
+
+  // Fallback : full page render (premier rendu ou DOM inattendu)
+  if (window.render) window.render();
+  _restoreScroll();
 }
 
 // OpenFoodFacts state (module-level)
 var _fjOFF = { loading: false, results: null, lastQuery: '', ctrl: null };
 
-function _fjRenderFoodRow(food, source) {
-  var row = h('div', {
-    style: 'display:flex;align-items:center;justify-content:space-between;padding:8px 4px;border-bottom:1px solid var(--line,#D8D8D0);cursor:pointer;'
+// Phase 2 N : update the multi-add CTA bar without re-rendering results
+function _fjUpdateMultiCTA() {
+  var box = document.getElementById('fj-multi-cta');
+  if (!box) return;
+  box.innerHTML = '';
+  var names = Object.keys(_fjState.multiSelected);
+  if (names.length === 0) { box.style.display = 'none'; return; }
+  box.style.display = 'block';
+
+  var MEAL_FULL = { breakfast: 'Petit-déjeuner', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
+  var ctaBtn = h('button', {
+    style: 'width:100%;padding:12px 16px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;cursor:pointer;'
+      + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;min-height:44px;margin-bottom:8px;'
+  }, 'Ajouter ' + names.length + ' aliment' + (names.length > 1 ? 's' : '') + ' · ' + (MEAL_FULL[_fjState.meal] || _fjState.meal));
+
+  ctaBtn.addEventListener('click', function() {
+    if (!window.FOOD_JOURNAL || !window.FOOD_JOURNAL.addEntry) return;
+    names.forEach(function(nm) {
+      var food = _fjState.multiSelected[nm];
+      if (!food) return;
+      var defP = (window.FOOD_PORTIONS && window.FOOD_PORTIONS.getDefaultPortion)
+        ? window.FOOD_PORTIONS.getDefaultPortion(food.name) : null;
+      var grams = defP ? defP.g : 100;
+      var fac = grams / 100;
+      var label = defP ? defP.label + ' (' + grams + 'g)' : '100g';
+      window.FOOD_JOURNAL.addEntry(
+        _fjState.meal,
+        food.name,
+        Math.round(food.kcal * fac),
+        Math.round(food.protein * fac * 10) / 10,
+        Math.round(food.carbs * fac * 10) / 10,
+        Math.round(food.fat * fac * 10) / 10,
+        label
+      );
+    });
+    var count = names.length;
+    _fjState.multiSelected = {};
+    _fjState.query = '';
+    _fjState.selectedFood = null;
+    _reRenderFJCard();
+    if (window.showToast) window.showToast(count + ' aliment' + (count > 1 ? 's ajoutés' : ' ajouté') + ' !', 'success', 2000);
   });
-  var info = h('div', { style: 'flex:1;min-width:0;' });
+
+  box.appendChild(ctaBtn);
+}
+
+function _fjRenderFoodRow(food, source) {
+  var isChecked = !!_fjState.multiSelected[food.name];
+  var row = h('div', {
+    style: 'display:flex;align-items:center;justify-content:space-between;padding:8px 4px;border-bottom:1px solid var(--line,#D8D8D0);'
+      + (isChecked ? 'background:rgba(10,10,9,0.04);' : '')
+  });
+
+  // Phase 2 N : checkbox de sélection multi-ajout
+  var chk = h('button', {
+    type: 'button',
+    'aria-label': isChecked ? 'Déselectionner ' + food.name : 'Sélectionner ' + food.name,
+    style: 'display:inline-flex;align-items:center;justify-content:center;min-width:32px;min-height:32px;width:32px;height:32px;flex-shrink:0;'
+      + 'border-radius:2px;cursor:pointer;padding:0;box-sizing:border-box;margin-right:4px;'
+      + (isChecked
+        ? 'background:var(--black,#0A0A09);border:1.5px solid var(--black,#0A0A09);'
+        : 'background:transparent;border:1.5px solid var(--line,#D8D8D0);')
+  });
+  chk.innerHTML = isChecked
+    ? '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="var(--ivory,#FAF9F6)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6 L5 9 L10 3"/></svg>'
+    : '';
+  chk.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (_fjState.multiSelected[food.name]) {
+      delete _fjState.multiSelected[food.name];
+    } else {
+      _fjState.multiSelected[food.name] = food;
+      // Fermer la sélection détaillée si on revient au mode multi
+      _fjState.selectedFood = null;
+      var selBox = document.getElementById('fj-selected');
+      if (selBox) selBox.style.display = 'none';
+    }
+    _fjUpdateMultiCTA();
+    // Mettre à jour visuellement la row sans rebuild complet
+    row.style.background = _fjState.multiSelected[food.name] ? 'rgba(10,10,9,0.04)' : '';
+    if (_fjState.multiSelected[food.name]) {
+      chk.style.background = 'var(--black,#0A0A09)';
+      chk.style.borderColor = 'var(--black,#0A0A09)';
+      chk.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="var(--ivory,#FAF9F6)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6 L5 9 L10 3"/></svg>';
+    } else {
+      chk.style.background = 'transparent';
+      chk.style.borderColor = 'var(--line,#D8D8D0)';
+      chk.innerHTML = '';
+    }
+  });
+  row.appendChild(chk);
+
+  var info = h('div', { style: 'flex:1;min-width:0;cursor:pointer;' });
   info.appendChild(h('div', {
     style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;'
   }, food.name));
@@ -1921,6 +2159,7 @@ function _fjAppendOFFResults() {
     }
   }
   box.appendChild(sec);
+  _fjUpdateMultiCTA();
 }
 
 function _fjRefreshResults() {
@@ -2015,6 +2254,9 @@ function _fjRefreshResults() {
   list.forEach(function(food) {
     box.appendChild(_fjRenderFoodRow(food, 'local'));
   });
+
+  // Phase 2 N : update multi-add CTA after results rendered
+  _fjUpdateMultiCTA();
 
   // Fire OFF fetch if we are searching a query (not favs)
   if (allowOFF) {
