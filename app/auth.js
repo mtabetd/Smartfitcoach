@@ -1298,6 +1298,11 @@ function _cleanupLocalData(userId) {
         localStorage.removeItem(_keysToRemove[_ri]);
       }
     }
+    // Supprimer les clés globales (sans userId) liées au profil
+    var _globalKeys = ['mtd_onboarding_done', 'mtd_login_rl'];
+    for (var _gi = 0; _gi < _globalKeys.length; _gi++) {
+      try { localStorage.removeItem(_globalKeys[_gi]); } catch(e2) {}
+    }
   } catch (e) {}
 }
 
