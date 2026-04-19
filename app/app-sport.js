@@ -1337,11 +1337,11 @@ function renderObjectif(p) {
 
   if (!_rec) return;
 
-  var recWrap = h('div', {style: 'margin-bottom:20px;'});
-  recWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px'}, 'Recommandé pour votre profil'));
+  var recWrap = h('div', {style: 'margin-bottom:28px;'});
+  recWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px'}, 'Recommandé pour votre profil'));
 
   var recCard = h('div', {
-   style: 'border:2px solid var(--black,#0A0A09);padding:18px 18px 16px;background:var(--ivory,#FAF9F6);cursor:pointer;position:relative;',
+   style: 'border:1px solid var(--black,#0A0A09);padding:20px 20px 18px;background:var(--ivory,#FAF9F6);cursor:pointer;position:relative;overflow:hidden;',
    onclick: function() {
     S.sportType = _rec.type;
     if (!S.parqDone) { S._parqNextStep = _rec.nextStep; S.sStep = 26; }
@@ -1351,31 +1351,28 @@ function renderObjectif(p) {
    }
   });
 
-  // Badge "⭐ Adapté à vous"
-  var recBadge = h('div', {style: 'position:absolute;top:-1px;right:-1px;padding:3px 10px;background:var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--ivory,#FAF9F6)'}, '★ Adapté à vous');
+  var recBadge = h('div', {style: 'position:absolute;top:0;right:0;padding:4px 12px;background:var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--ivory,#FAF9F6);line-height:18px'}, '★  Adapté à vous');
   recCard.appendChild(recBadge);
 
-  var recTop = h('div', {style: 'display:flex;align-items:center;gap:12px;margin-bottom:8px;margin-top:8px'});
-  recTop.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:22px'}, _rec.icon));
-  var recInfo = h('div');
-  recInfo.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:17px;color:var(--black,#0A0A09);margin-bottom:2px'}, _rec.label));
-  recInfo.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--grey,#6B6B65)'}, _rec.sub));
+  var recTop = h('div', {style: 'display:flex;align-items:flex-start;gap:0;margin-bottom:14px;margin-top:22px'});
+  var recInfo = h('div', {style: 'flex:1'});
+  recInfo.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-style:italic;color:var(--black,#0A0A09);margin-bottom:5px;line-height:1.2'}, _rec.label));
+  recInfo.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65)'}, _rec.sub));
   recTop.appendChild(recInfo);
   recCard.appendChild(recTop);
 
-  recCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.55;border-top:1px solid var(--border,#E8E6DF);padding-top:10px;margin-top:4px'}, _rec.reason));
+  recCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.6;border-top:1px solid var(--border,#D8D8D0);padding-top:14px;margin-top:2px'}, _rec.reason));
 
-  var recCta = h('div', {style: 'display:flex;align-items:center;justify-content:flex-end;margin-top:12px;gap:4px'});
-  recCta.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--black,#0A0A09)'}, 'Démarrer'));
-  recCta.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;color:var(--black,#0A0A09)'}, '→'));
+  var recCta = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:16px'});
+  recCta.appendChild(h('div', {style: 'width:24px;height:1px;background:var(--black,#0A0A09)'}));
+  recCta.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09)'}, 'Commencer ce programme  →'));
   recCard.appendChild(recCta);
   recWrap.appendChild(recCard);
 
-  // "Ou choisir manuellement" separator
-  recWrap.appendChild(h('div', {style: 'display:flex;align-items:center;gap:12px;margin-top:16px;margin-bottom:4px'},[
-   h('div', {style:'flex:1;height:1px;background:var(--border,#E8E6DF)'}),
+  recWrap.appendChild(h('div', {style: 'display:flex;align-items:center;gap:16px;margin-top:20px;margin-bottom:4px'},[
+   h('div', {style:'flex:1;height:1px;background:var(--border,#D8D8D0)'}),
    h('span', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);white-space:nowrap'},'ou choisir manuellement'),
-   h('div', {style:'flex:1;height:1px;background:var(--border,#E8E6DF)'})
+   h('div', {style:'flex:1;height:1px;background:var(--border,#D8D8D0)'})
   ]));
 
   p.appendChild(recWrap);
@@ -5830,30 +5827,37 @@ function renderWeekTracker(p) {
  var mesoInMacro = ((cycleNum - 1) % totalMesoInMacro) + 1;
  var macroCycleNum = Math.ceil(cycleNum / totalMesoInMacro);
  var macroContainer = h('div', {
-  style: 'margin-bottom:12px;padding:10px 14px 12px;border-left:3px solid ' + macroPhase.color + ';background:var(--ivory2,#F4F2EB);'
+  style: 'margin-bottom:16px;padding:14px 16px 16px;border-left:2px solid ' + macroPhase.color + ';background:var(--ivory2,#F4F2EB);'
  });
- var macroHeader = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:6px'});
- macroHeader.appendChild(h('div', {}, [
-  h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:' + macroPhase.color + ';font-weight:600'}, 'Macrocycle ' + macroCycleNum + ' — ' + macroPhase.shortLabel),
+ var macroHeader = h('div', {style: 'display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px'});
+ macroHeader.appendChild(h('div', {style: 'display:flex;flex-direction:column;gap:3px'}, [
+  h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65)'}, 'Macrocycle ' + macroCycleNum),
+  h('span', {style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;color:var(--black,#0A0A09)'}, macroPhase.label),
  ]));
- macroHeader.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey,#6B6B65)'}, 'Mésocycle ' + mesoInMacro + '/' + totalMesoInMacro));
+ macroHeader.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65)'}, 'Mésocycle ' + mesoInMacro + '\u202f/\u202f' + totalMesoInMacro));
  macroContainer.appendChild(macroHeader);
 
- // 3-segment progress bar (macrophases)
- var macroBar = h('div', {style: 'display:flex;gap:2px;height:4px;margin-bottom:6px'});
+ var macroBar = h('div', {style: 'display:flex;gap:3px;height:3px;margin-bottom:12px'});
  ['Hypertrophie','Force','Transition'].forEach(function(phLabel, idx) {
   var isActive = idx === (cycleNum - 1) % 3;
   var isDone = idx < (cycleNum - 1) % 3;
   var segColor = [MACRO_PHASES[0].color, MACRO_PHASES[1].color, MACRO_PHASES[2].color][idx];
   macroBar.appendChild(h('div', {
    title: phLabel,
-   style: 'flex:1;height:4px;background:' + (isActive ? segColor : isDone ? segColor : 'var(--border,#D8D8D0)') + ';opacity:' + (isActive ? '1' : isDone ? '0.35' : '0.2') + ';transition:all .3s ease;'
+   style: 'flex:1;height:3px;border-radius:0;background:' + (isActive ? segColor : isDone ? segColor : 'var(--border,#D8D8D0)') + ';opacity:' + (isActive ? '1' : isDone ? '0.4' : '1') + ';transition:all .3s ease;'
   }));
  });
  macroContainer.appendChild(macroBar);
 
+ var macroBarLabels = h('div', {style: 'display:flex;gap:3px;margin-bottom:12px'});
+ ['Hypertrophie','Force','Transition'].forEach(function(phLabel, idx) {
+  var isActive = idx === (cycleNum - 1) % 3;
+  macroBarLabels.appendChild(h('div', {style: 'flex:1;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:' + (isActive ? 'var(--black,#0A0A09)' : 'var(--grey,#6B6B65)') + ';opacity:' + (isActive ? '1' : '0.6')}, phLabel));
+ });
+ macroContainer.appendChild(macroBarLabels);
+
  macroContainer.appendChild(h('div', {
-  style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.5;'
+  style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.65;border-top:1px solid var(--border,#D8D8D0);padding-top:12px;'
  }, macroPhase.tip));
 
  p.appendChild(macroContainer);
