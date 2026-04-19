@@ -1299,9 +1299,12 @@ function renderObjectif(p) {
   // Matrice de recommandation
   var _rec = null;
   if (_rAge >= 50) {
+   var _50reason = 'Recommandé pour les 50+ — préserve les articulations et améliore la qualité de vie.';
+   if (_rGoalKey === 'cut' || _rGoalKey === 'shred') _50reason = 'Après 50 ans, le yoga actif favorise la perte de masse grasse douce sans stress articulaire — priorité à la longévité.';
+   else if (_rGoalKey === 'bulk' || _rGoalKey === 'lean_bulk') _50reason = 'Après 50 ans, la mobilité est la base — le yoga prépare les articulations avant d\'ajouter de la charge.';
    _rec = { type: 'yoga', label: 'Yoga & Mobilité', icon: '🧘',
     sub: 'Mobilité · Souplesse · Récupération active',
-    reason: 'Recommandé pour les 50+ — préserve les articulations et améliore la qualité de vie.',
+    reason: _50reason,
     nextStep: 19 };
   } else if (_rGoalKey === 'bulk' || _rGoalKey === 'lean_bulk') {
    _rec = { type: 'musculation', label: 'Musculation', icon: '🏋️',
@@ -1394,15 +1397,17 @@ function renderObjectif(p) {
  var typeGrid = h('div', {'class': 'card-grid-2'});
 
  // Musculation - clicking goes to PAR-Q first (if not already done), then medical questionnaire (step 20)
- typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
+ // FIX 2026-04-19 — Avertissement HTA sévère (ESC/ESH 2018): charges >80% 1RM et Valsalva contre-indiqués
+ var _htaSevere = Array.isArray(S.medical) && S.medical.indexOf('hta_severe') !== -1;
+ typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer;position:relative;', onclick: function(){
  S.sportType = 'musculation';
  if (!S.parqDone) { S._parqNextStep = 20; S.sStep = 26; } else { S.sStep = 20; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'musculation'});
  window.render();
  }}, [
- h('div', {'class': 'card-name'}, 'Musculation'),
- h('div', {'class': 'card-sub'}, 'Programme cibl\u00e9 par groupes musculaires'),
- h('div', {'class': 'card-tag'}, 'S\u00e8che \u00b7 Masse \u00b7 Force \u00b7 Endurance')
+ h('div', {'class': 'card-name'}, _htaSevere ? 'Musculation \u26a0' : 'Musculation'),
+ h('div', {'class': 'card-sub'}, _htaSevere ? 'Charges l\u00e9g\u00e8res uniquement \u2014 ESC/ESH 2018' : 'Programme cibl\u00e9 par groupes musculaires'),
+ h('div', {'class': 'card-tag'}, _htaSevere ? '\u00c9viter >80% 1RM \u00b7 Pas de Valsalva \u00b7 Consulter un m\u00e9decin' : 'S\u00e8che \u00b7 Masse \u00b7 Force \u00b7 Endurance')
  ]));
 
  // Cross Training - clicking goes through PAR-Q (if not done), then CF level (step 5)
@@ -1737,6 +1742,14 @@ function renderMuscuMedicalQ(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
  p.appendChild(h('h1', {html: 'Bilan<br><em>médical muscu</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Avant de g\u00e9n\u00e9rer votre programme, aidez-nous \u00e0 adapter les exercices \u00e0 votre situation physique.'));
+
+ // FIX 2026-04-19 — Alerte HTA sévère (ESC/ESH 2018) : Valsalva et charges >80% 1RM contre-indiqués
+ if (Array.isArray(S.medical) && S.medical.indexOf('hta_severe') !== -1) {
+   var _htaAlert = h('div', {style: 'background:rgba(220,53,69,0.07);border:1px solid rgba(220,53,69,0.3);padding:12px 14px;margin-bottom:16px;border-radius:2px;'});
+   _htaAlert.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:700;color:#8B0000;letter-spacing:1px;margin-bottom:4px;'}, '\u26a0 HTA sévère détectée'));
+   _htaAlert.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#8B0000;line-height:1.6;'}, 'Charges limitées à 40–60% du 1RM. Éviter la manœuvre de Valsalva (apnée sous charge), les mouvements isométriques intenses et les exercices au-dessus de la tête à charge élevée. Consultez votre médecin avant de commencer. — ESC/ESH 2018'));
+   p.appendChild(_htaAlert);
+ }
 
  // Phrase de contexte si bilan nutrition déjà fait — évite le sentiment de répétition
  if (Array.isArray(window.S && window.S.medical)) {
@@ -2087,7 +2100,7 @@ function renderChargesQuestionnaire(p) {
      var w = S.muscuStrengthProfile[kd.key] || 0;
      if (w <= 0) return;
      var reps = S.muscuStrengthProfile[kd.key + '_reps'] || 8;
-     var est1rm = Math.round(w * (1 + reps / 30) / 2.5) * 2.5;
+     var est1rm = w * (1 + reps / 30); // raw Epley — même formule qu'Advanced Exercises (cohérence)
      var info = getPercentile(kd.key, est1rm);
      if (!info) return;
      var row = h('div', { style: 'display:flex;align-items:center;padding:8px 14px;border-bottom:1px solid var(--border);gap:8px;' });
@@ -6483,6 +6496,16 @@ function renderMusculationProgram(p) {
      }
    }, 'Mettre à jour'));
    p.appendChild(_updateBanner);
+ }
+
+ // FIX 2026-04-19 — Alerte persistante HTA sévère dans la vue programme (ESC/ESH 2018)
+ if (Array.isArray(S.medical) && S.medical.indexOf('hta_severe') !== -1) {
+   var _htaProgAlert = h('div', {style: 'background:rgba(220,53,69,0.07);border:1px solid rgba(220,53,69,0.3);padding:10px 14px;margin-bottom:12px;border-radius:2px;display:flex;align-items:flex-start;gap:8px;'});
+   _htaProgAlert.appendChild(h('span', {style: 'flex-shrink:0;font-size:13px;'}, '\u26a0\ufe0f'));
+   var _htaProgText = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#8B0000;line-height:1.5;'});
+   _htaProgText.textContent = 'HTA sévère : limitez les charges à 40–60% du 1RM. Évitez la manœuvre de Valsalva, les exercices isométriques intenses et les charges au-dessus de la tête. — ESC/ESH 2018';
+   _htaProgAlert.appendChild(_htaProgText);
+   p.appendChild(_htaProgAlert);
  }
 
  // ─── SECTION : PROGRAMME DE LA SEMAINE ───
