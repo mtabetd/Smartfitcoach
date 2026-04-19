@@ -395,6 +395,10 @@ function _initAuth() {
         if (_currentSession.nom   && !window.S.nom)   window.S.nom   = _currentSession.nom;
         if (_currentSession.phone && !window.S.phone) window.S.phone = _currentSession.phone;
       }
+      // Projet 2.0 : init profil social non-bloquant sur SIGNED_IN
+      if (event === 'SIGNED_IN' && window.SOCIAL && window.SOCIAL.initProfile) {
+        window.SOCIAL.initProfile().catch(function(){});
+      }
     } else {
       _currentSession = null;
     }
@@ -578,6 +582,10 @@ window.AUTH = {
           window.SupaSync.syncOnLogin();
           window.SupaSync.startAutoSync();
         }
+        // Projet 2.0 : init profil social non-bloquant
+        if (window.SOCIAL && window.SOCIAL.initProfile) {
+          window.SOCIAL.initProfile().catch(function(){});
+        }
         return;
       }
       if (window.S.view === 'auth') {
@@ -612,6 +620,10 @@ window.AUTH = {
         if (window.SupaSync) {
           window.SupaSync.syncOnLogin();
           window.SupaSync.startAutoSync();
+        }
+        // Projet 2.0 : init profil social non-bloquant
+        if (window.SOCIAL && window.SOCIAL.initProfile) {
+          window.SOCIAL.initProfile().catch(function(){});
         }
         if (window.render) window.render();
       }
