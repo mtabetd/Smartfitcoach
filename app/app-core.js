@@ -3637,7 +3637,7 @@ window.S = {
   lang: 'fr', weightUnit: 'kg', heightUnit: 'cm',
   activity: null, train: [], sleep: null, medical: [], goal: null,
   cookLevel: 2, whey: null, wheyFlavors: [], allergies: [], intolerances: [],
-  regime: 0, halal: false, excluded: '', cuisines: [0],
+  regime: 0, allowPork: false, allowAlcohol: false, excluded: '', cuisines: [0],
   shopFreq: null, shopStores: [], shopBudget: null, shopPrefs: [],
   shopChecked: {},   // { 'nom_ingrédient': true|false } — état cases à cocher liste de courses
   saladBar: {
@@ -4982,7 +4982,10 @@ function filterRecipes(pool,type){
   // Allaitement : exclure alcool en cuisine (passe dans le lait maternel — AAP 2012)
   if(!s.pregnant&&Array.isArray(s.medical)&&s.medical.indexOf('allaitement')!==-1){r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/alcool|vin blanc|vin rouge|bière|rhum|cognac|whisky|vodka|porto|amaretto|mirin(?! halal)|sake/).test(i)});}
   // Halal : exclut porc, charcuterie porcine et alcool
-  if(s.halal)r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/porc(?!ini)|cochon|lard|bacon|jambon(?! de dinde)|saucisson|pepperoni|chorizo|pancetta|g\u00e9latine de porc|alcool|vin blanc|vin rouge|bi[e\u00e8]re|rhum|cognac|whisky|vodka|porto|amaretto|mirin(?! halal)/).test(i)});
+  // Porc exclu par défaut — inclure si allowPork = true (opt-in explicite)
+  if(!s.allowPork)r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/porc(?!ini)|cochon|lard(?!on[s]?\s+de\s+(?:dinde|volaille|poulet))|bacon|jambon(?! de dinde| de volaille)|saucisson|pepperoni|chorizo|pancetta|g\u00e9latine de porc|saucisse(?! de volaille| de poulet| de dinde| de soja)|\bandouille\b|\bboudin\b/).test(i)});
+  // Alcool en cuisine exclu par défaut — inclure si allowAlcohol = true
+  if(!s.allowAlcohol)r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/alcool|vin blanc|vin rouge|bi[e\u00e8]re|rhum|cognac|whisky|vodka|porto|amaretto|mirin(?! halal)/).test(i)});
   if(typeof s.excluded==='string'&&s.excluded&&s.excluded.trim()){var excl=s.excluded.toLowerCase().split(',').map(function(str){return str.trim()}).filter(Boolean);r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();for(var e=0;e<excl.length;e++){if(i.indexOf(excl[e])!==-1)return false}return true})}
   var _cuisines=s.cuisines||[];if(_cuisines.indexOf(0)===-1&&_cuisines.length>0){var flags=[];for(var c=0;c<_cuisines.length;c++){var co=CUISINES[_cuisines[c]];if(co&&CUISINE_FLAGS[co.name])flags.push(CUISINE_FLAGS[co.name])}if(flags.length>0){var _preCuisinePool=r.slice();r=r.filter(function(x){return flags.indexOf(x.f)!==-1});if(r.length===0)r=_preCuisinePool;}} // fallback : si aucune recette ne correspond aux cuisines choisies, on garde le pool complet
   return r;
@@ -5312,7 +5315,8 @@ window.getPlanHash = function() {
     Array.isArray(s.trainingDaysSelected) ? s.trainingDaysSelected.slice().sort().join(',') : '',
     s.weeklyCalendar ? JSON.stringify(s.weeklyCalendar) : '',
     s.pregnant ? '1' : '0',
-    s.halal ? '1' : '0',
+    s.allowPork ? '1' : '0',
+    s.allowAlcohol ? '1' : '0',
     typeof s.excluded === 'string' ? s.excluded : '',
     s.cookLevel !== undefined && s.cookLevel !== null ? String(s.cookLevel) : '',
     Array.isArray(s.cuisines) ? s.cuisines.slice().sort().join(',') : '',

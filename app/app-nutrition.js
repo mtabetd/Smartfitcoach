@@ -1990,12 +1990,18 @@ function renderStep7(p) {
   });
   p.appendChild(rg);
 
-  // Halal option
-  var halalRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin:8px 0;cursor:pointer', onclick: function() { S.halal = !S.halal; window.render(); }});
-  var halalBox = h('div', {style: 'width:18px;height:18px;border-radius:2px;border:1px solid var(--black,#0A0A09);display:flex;align-items:center;justify-content:center;background:' + (S.halal ? 'var(--black,#0A0A09)' : 'transparent') + ';flex-shrink:0'}, S.halal ? h('span', {style: 'color:var(--ivory,#FAF9F6);font-size:10px;font-family:"Helvetica Neue",Arial,sans-serif'}, '\u2713') : null);
-  halalRow.appendChild(halalBox);
-  halalRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09)'}, 'Halal \u2014 exclure porc & alcool'));
-  p.appendChild(halalRow);
+  // Inclusions alimentaires opt-in
+  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin:12px 0 8px;'}, "J\u2019inclus dans mon alimentation"));
+  var porkRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin:4px 0;cursor:pointer', onclick: function() { S.allowPork = !S.allowPork; window.render(); }});
+  var porkBox = h('div', {style: 'width:18px;height:18px;border-radius:2px;border:1px solid var(--black,#0A0A09);display:flex;align-items:center;justify-content:center;background:' + (S.allowPork ? 'var(--black,#0A0A09)' : 'transparent') + ';flex-shrink:0'}, S.allowPork ? h('span', {style: 'color:var(--ivory,#FAF9F6);font-size:10px;font-family:"Helvetica Neue",Arial,sans-serif'}, '\u2713') : null);
+  porkRow.appendChild(porkBox);
+  porkRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09)'}, 'Porc & charcuterie porcine'));
+  p.appendChild(porkRow);
+  var alcRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin:4px 0;cursor:pointer', onclick: function() { S.allowAlcohol = !S.allowAlcohol; window.render(); }});
+  var alcBox = h('div', {style: 'width:18px;height:18px;border-radius:2px;border:1px solid var(--black,#0A0A09);display:flex;align-items:center;justify-content:center;background:' + (S.allowAlcohol ? 'var(--black,#0A0A09)' : 'transparent') + ';flex-shrink:0'}, S.allowAlcohol ? h('span', {style: 'color:var(--ivory,#FAF9F6);font-size:10px;font-family:"Helvetica Neue",Arial,sans-serif'}, '\u2713') : null);
+  alcRow.appendChild(alcBox);
+  alcRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09)'}, 'Alcool en cuisine'));
+  p.appendChild(alcRow);
 
   // Salade builder toggle
   var saladRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin:8px 0;cursor:pointer', onclick: function() { S.saladBuilder = !S.saladBuilder; window.render(); }});

@@ -26,7 +26,7 @@ window.APP_RENDER = function() {
 var PROFILE_KEYS = [
  'prenom','nom','phone','sex','age','birthDate','weight','height','activity','train','sleep','medical','goal','targetWeight',
  'mealsPerDay','eatingLocation','mealPrepTime','snacking','alcoholFreq','alcoholTypes','hydration',
- 'cookLevel','whey','allergies','intolerances','regime','halal','excluded','cuisines',
+ 'cookLevel','whey','allergies','intolerances','regime','allowPork','allowAlcohol','excluded','cuisines',
  'shopFreq','shopStores','shopBudget','shopPrefs',
  'bodyZones','strongZones','weakZones',
  'pregnant','pregnancyWeek','prePregnancyWeight','dueDate',
@@ -151,7 +151,7 @@ function slimMeal(meal) {
 // Includes dietary preferences (regime, halal, allergies, etc.) since filterRecipes() depends on them
 var NUTRITION_PLAN_KEYS = [
  'goal', 'weight', 'activity', 'mealsPerDay', 'sex', 'age', 'height',
- 'regime', 'halal', 'excluded', 'cookLevel', 'wantsDessert',
+ 'regime', 'allowPork', 'allowAlcohol', 'excluded', 'cookLevel', 'wantsDessert',
  'allergies', 'intolerances', 'cuisines', 'whey', 'sportDays', 'trainTime', 'medical',
  'trainingDaysSelected',
  'pregnant', // grossesse modifie calcTarget() et filterRecipes() — plan doit être régénéré
@@ -863,7 +863,8 @@ function renderProfilePage(container) {
  sec2.appendChild(_infoRow('Activit\u00e9', _actName));
  var _regNames = ['Omnivore', 'Pesc\u00e9tarien', 'V\u00e9g\u00e9tarien', 'V\u00e9gan'];
  sec2.appendChild(_infoRow('R\u00e9gime', _regNames[S.regime] || 'Omnivore'));
- if (S.halal) sec2.appendChild(_infoRow('Halal', 'Oui'));
+ if (!S.allowPork) sec2.appendChild(_infoRow('Porc', 'Exclu'));
+ if (!S.allowAlcohol) sec2.appendChild(_infoRow('Alcool cuisine', 'Exclu'));
  if (Array.isArray(S.allergies) && S.allergies.length > 0 && S.allergies[0] !== 'Aucune') sec2.appendChild(_infoRow('Allergies', S.allergies.join(', ')));
  if (Array.isArray(S.medical) && S.medical.length > 0) {
    var _medNames = S.medical.map(function(id) { var m = (window.MEDICAL || []).find(function(x) { return x.id === id; }); return m ? m.name : id; });
@@ -1108,13 +1109,20 @@ function renderProfilePage(container) {
    });
    editForm.appendChild(_efRegWrap);
 
-   // Halal checkbox
-   var _halalRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin-bottom:18px;cursor:pointer;', onclick: function() { S.halal = !S.halal; if (window.render) window.render(); }});
-   var _halalBox = h('div', {style: 'width:18px;height:18px;border-radius:2px;border:1px solid var(--black,#0A0A09);display:flex;align-items:center;justify-content:center;background:' + (S.halal ? 'var(--black,#0A0A09)' : 'transparent') + ';flex-shrink:0;'});
-   if (S.halal) _halalBox.appendChild(h('span', {style: 'color:var(--ivory,#FAF9F6);font-size:10px;'}, '\u2713'));
-   _halalRow.appendChild(_halalBox);
-   _halalRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black);'}, 'Halal \u2014 exclure porc & alcool'));
-   editForm.appendChild(_halalRow);
+   // Inclusions alimentaires — section opt-in (porc & alcool exclus par défaut)
+   editForm.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px;margin-top:4px;'}, "J\u2019inclus dans mon alimentation"));
+   var _porkRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin-bottom:10px;cursor:pointer;', onclick: function() { S.allowPork = !S.allowPork; if (window.render) window.render(); }});
+   var _porkBox = h('div', {style: 'width:18px;height:18px;border-radius:2px;border:1px solid var(--black,#0A0A09);display:flex;align-items:center;justify-content:center;background:' + (S.allowPork ? 'var(--black,#0A0A09)' : 'transparent') + ';flex-shrink:0;'});
+   if (S.allowPork) _porkBox.appendChild(h('span', {style: 'color:var(--ivory,#FAF9F6);font-size:10px;'}, '\u2713'));
+   _porkRow.appendChild(_porkBox);
+   _porkRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black);'}, 'Porc & charcuterie porcine'));
+   editForm.appendChild(_porkRow);
+   var _alcRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin-bottom:18px;cursor:pointer;', onclick: function() { S.allowAlcohol = !S.allowAlcohol; if (window.render) window.render(); }});
+   var _alcBox = h('div', {style: 'width:18px;height:18px;border-radius:2px;border:1px solid var(--black,#0A0A09);display:flex;align-items:center;justify-content:center;background:' + (S.allowAlcohol ? 'var(--black,#0A0A09)' : 'transparent') + ';flex-shrink:0;'});
+   if (S.allowAlcohol) _alcBox.appendChild(h('span', {style: 'color:var(--ivory,#FAF9F6);font-size:10px;'}, '\u2713'));
+   _alcRow.appendChild(_alcBox);
+   _alcRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black);'}, 'Alcool en cuisine'));
+   editForm.appendChild(_alcRow);
 
    // Save button
    var _efSave = h('button', {

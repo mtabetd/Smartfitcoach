@@ -877,7 +877,7 @@ window.AUTH = {
       window.S.snacking = null; window.S.alcoholFreq = null; window.S.alcoholTypes = [];
       window.S.hydration = null; window.S.cookLevel = 2; window.S.whey = null;
       window.S.allergies = []; window.S.intolerances = []; window.S.regime = 0;
-      window.S.halal = false; window.S.excluded = ''; window.S.cuisines = [0];
+      window.S.allowPork = false; window.S.allowAlcohol = false; window.S.excluded = ''; window.S.cuisines = [0];
       window.S.weekPlan = null; window.S.selectedDay = 0;
       window.S.nStep = 0; window.S.sStep = 0;
       window.S.sportType = null; window.S.sportGoals = []; window.S.sportLevel = null;
