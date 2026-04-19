@@ -5,3 +5,6 @@ node_modules/
 # Scripts de contre-audit Playwright (temporaires, cleanup automatique)
 test-*.js
 !test/**/*.js
+
+# Local Netlify folder
+.netlify
