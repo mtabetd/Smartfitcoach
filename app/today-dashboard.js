@@ -1690,9 +1690,17 @@ function renderFoodJournalCard() {
     cell.appendChild(h('div', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:4px;'
     }, lbl));
+    var valColor = 'var(--black,#0A0A09)';
+    if (tgt > 0) {
+      var ratio = val / tgt;
+      if (ratio > 1.1) valColor = '#C0392B';       // over 110%: rouge
+      else if (ratio >= 0.9) valColor = '#27AE60';  // 90–110%: vert
+      else if (ratio >= 0.6) valColor = '#E67E22';  // 60–90%: orange
+    }
+    var displayVal = tgt > 0 ? Math.round(val) + ' / ' + Math.round(tgt) : (val > 0 ? Math.round(val) : '---');
     cell.appendChild(h('div', {
-      style: 'font-family:Georgia,serif;font-size:15px;color:var(--black,#0A0A09);'
-    }, Math.round(val) + (tgt > 0 ? ' / ' + Math.round(tgt) : '') + (unit || '')));
+      style: 'font-family:Georgia,serif;font-size:15px;color:' + valColor + ';'
+    }, displayVal + (unit || '')));
     return cell;
   }
   totalsBox.appendChild(totCell('Kcal', totals.kcal, kcalTarget, ''));
@@ -1770,6 +1778,21 @@ function renderFoodJournalCard() {
     }, 180);
   });
   searchRow.appendChild(input);
+
+  // Clear × button — visible only when query is non-empty
+  if (_fjState.query) {
+    var clearBtn = h('button', {
+      type: 'button',
+      'aria-label': 'Effacer la recherche',
+      style: 'display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0;background:transparent;border:1px solid var(--line,#D8D8D0);border-radius:2px;cursor:pointer;box-sizing:border-box;flex-shrink:0;font-size:16px;color:var(--grey,#6B6B65);'
+    }, '\u00d7');
+    clearBtn.addEventListener('click', function() {
+      _fjState.query = '';
+      _fjState.showFavs = false;
+      _reRenderFJCard();
+    });
+    searchRow.appendChild(clearBtn);
+  }
 
   var favBtn = h('button', {
     'aria-label': _fjState.showFavs ? 'Masquer les favoris' : 'Afficher les favoris',
@@ -1880,14 +1903,22 @@ function renderFoodJournalCard() {
     }, '+ Plan du jour');
     pillPlan.addEventListener('click', function() {
       if (!window.FOOD_JOURNAL) return;
-      // Force-load : reset le verrou quotidien puis charge
       try {
-        var user = window.AUTH ? window.AUTH.getUser() : null;
-        var loadedKey = 'mtd_journal_loaded_' + (user ? user.id : 'anon');
-        localStorage.removeItem(loadedKey);
-        window.FOOD_JOURNAL.loadFromPlan();
-        if (window.showToast) window.showToast('Plan du jour chargé dans le journal', 'success', 2200);
-        _reRenderFJCard();
+        var existing = window.FOOD_JOURNAL.getDayTotal ? window.FOOD_JOURNAL.getDayTotal() : null;
+        var hasEntries = existing && existing.count > 0;
+        var doLoad = function() {
+          var user = window.AUTH ? window.AUTH.getUser() : null;
+          var loadedKey = 'mtd_journal_loaded_' + (user ? user.id : 'anon');
+          localStorage.removeItem(loadedKey);
+          window.FOOD_JOURNAL.loadFromPlan();
+          if (window.showToast) window.showToast('Plan du jour chargé dans le journal', 'success', 2200);
+          _reRenderFJCard();
+        };
+        if (hasEntries && window.confirm('Des repas sont déjà dans votre journal. Voulez-vous quand même ajouter le plan du jour ?')) {
+          doLoad();
+        } else if (!hasEntries) {
+          doLoad();
+        }
       } catch(e) {}
     });
     pillRow.appendChild(pillPlan);

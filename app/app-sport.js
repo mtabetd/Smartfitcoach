@@ -4717,14 +4717,14 @@ function renderMusculationZones(p) {
  var pg = h('div', {'class': 'photo-grid', style: 'margin-bottom:16px'});
  if (S.photoFront) {
  var pf = h('div', {'class': 'photo-upload has-photo'});
- var img1 = h('img', {src: S.photoFront, alt: 'Face'});
+ var img1 = h('img', {src: S.photoFront, alt: 'Face', loading: 'lazy'});
  pf.appendChild(img1);
  pf.appendChild(h('div', {'class': 'photo-label'}, 'Face'));
  pg.appendChild(pf);
  }
  if (S.photoBack) {
  var pb2 = h('div', {'class': 'photo-upload has-photo'});
- var img2 = h('img', {src: S.photoBack, alt: 'Dos'});
+ var img2 = h('img', {src: S.photoBack, alt: 'Dos', loading: 'lazy'});
  pb2.appendChild(img2);
  pb2.appendChild(h('div', {'class': 'photo-label'}, 'Dos'));
  pg.appendChild(pb2);
@@ -7270,7 +7270,7 @@ function renderMusculationProgram(p) {
  if (!isBodyweight) {
  var weightPlaceholder = progressiveWeight > 0 ? String(progressiveWeight) : 'kg';
  var weightInput = h('input', {
- type: 'number', min: '0', max: '500', step: '2.5',
+ type: 'number', min: '0', max: '500', step: '0.5',
  inputmode: 'decimal', autocomplete: 'off', 'aria-label': 'Charge (kg)',
  placeholder: weightPlaceholder,
  value: setRow.actualWeight !== null ? String(setRow.actualWeight) : '',
@@ -8441,7 +8441,6 @@ function renderSportModal(app) {
  var ov = h('div', {'class': 'modal-overlay' + (S.sportModalExercise ? ' open' : ''), role: 'dialog', 'aria-modal': 'true', onclick: function(e){ if (e.target === ov) { S.sportModalExercise = null; window.render(); } }});
  if (S.sportModalExercise) {
    ov.setAttribute('tabindex', '-1');
-   ov.addEventListener('keydown', function(e) { if (e.key === 'Escape') { S.sportModalExercise = null; window.render(); } });
    setTimeout(function() { if (ov) ov.focus(); }, 0);
  }
  var sheet = h('div', {'class': 'modal-sheet'});

@@ -745,11 +745,11 @@ function renderStep3(p) {
   var ww = h('div', {'class': 'num-input-wrap'});
   ww.appendChild(h('input', {'class': 'num-input', type: 'number', min: String(wRange.min), max: String(wRange.max), step: String(wRange.step), value: String(wVal), inputmode: 'decimal', 'aria-label': 'Poids en ' + (window.UNITS && window.UNITS.weight === 'lbs' ? 'livres' : 'kilogrammes'), placeholder: window.UNITS && window.UNITS.weight === 'lbs' ? '165' : '75', oninput: function(e) {
     var v = parseFloat(e.target.value);
-    if (!isNaN(v)) { S.weight = window.UNITS ? window.UNITS.toKg(v) : v; S._nm = null; }
+    if (!isNaN(v)) { S.weight = window.UNITS ? window.UNITS.toKg(v) : v; S._nm = null; S.weekPlanValidated = false; }
   }, onblur: function(e) {
     var v = parseFloat(e.target.value);
-    if (isNaN(v) || v < wRange.min) { e.target.value = wRange.min; S.weight = window.UNITS ? window.UNITS.toKg(wRange.min) : wRange.min; S._nm = null; }
-    else if (v > wRange.max) { e.target.value = wRange.max; S.weight = window.UNITS ? window.UNITS.toKg(wRange.max) : wRange.max; S._nm = null; }
+    if (isNaN(v) || v < wRange.min) { e.target.value = wRange.min; S.weight = window.UNITS ? window.UNITS.toKg(wRange.min) : wRange.min; S._nm = null; S.weekPlanValidated = false; }
+    else if (v > wRange.max) { e.target.value = wRange.max; S.weight = window.UNITS ? window.UNITS.toKg(wRange.max) : wRange.max; S._nm = null; S.weekPlanValidated = false; }
     window.render();
   }}));
   ww.appendChild(h('span', {'class': 'num-unit'}, window.UNITS ? window.UNITS.weightLabel() : 'kg'));
@@ -3803,11 +3803,8 @@ function renderModal(app) {
     if (e.target === ov) { S.modalRecipe = null; window.render(); }
   }});
   if (S.modalRecipe) {
-    ov.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') { S.modalRecipe = null; window.render(); }
-    });
-    setTimeout(function() { if (ov) ov.focus(); }, 0);
     ov.setAttribute('tabindex', '-1');
+    setTimeout(function() { if (ov) ov.focus(); }, 0);
   }
   var sheet = h('div', {'class': 'modal-sheet'});
   if (S.modalRecipe) {
@@ -6456,6 +6453,17 @@ window.NUTRITION = {
     else if (S.nStep === 10) renderStep7(content);          // Préférences / régime / allergies
     else if (S.nStep === 11) renderStep8(content);          // Résultats / macros
     else if (S.nStep === 12) renderStep9(content);          // Planning semaine
+    // Logout link visible on all onboarding steps (steps 2+) — user must always be able to exit
+    if (S.nStep >= 2 && S.nStep <= 10) {
+      content.appendChild(h('button', {
+        style: 'display:block;margin:8px auto 16px;background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;color:var(--grey,#6B6B65);cursor:pointer;padding:8px;min-height:44px;text-decoration:underline;text-underline-offset:3px;',
+        onclick: function() {
+          if (window.AUTH) { AUTH.logout(); }
+          window.S.view = 'auth'; window.S.authError = ''; window.S._resetSent = false; window.S._resetEmail = ''; window.S._passwordUpdated = false; window.S.authVerifyEmail = '';
+          window.render();
+        }
+      }, window.t ? window.t('auth.logout') : 'Se d\u00e9connecter'));
+    }
     p.appendChild(content);
     renderModal(p);
   }

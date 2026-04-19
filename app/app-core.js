@@ -4595,7 +4595,7 @@ function calcMacros(){
       } else if(actFactor>=1.375){
         ppk=isFemale?1.6:1.7;   // Léger coupe : H=1.7, F=1.6 (plancher Helms 2014 : ≥1.6g/kg en déficit)
       } else {
-        ppk=isFemale?1.4:1.6;   // Sédentaire coupe : H=1.6, F=1.4 (EFSA 2012 — cohérent avec shred sédentaire)
+        ppk=isFemale?1.6:1.6;   // Sédentaire coupe : H=1.6, F=1.6 (ISSN 2017 minimum 1.6g/kg pour tous en déficit)
       }
     }
   }

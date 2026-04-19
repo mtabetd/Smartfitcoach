@@ -471,7 +471,7 @@ function buildUI() {
   panel.appendChild(messages);
   // Disclaimer médical — WCAG + ACOG compliance (absent auparavant vs body-analysis.js qui en avait un)
   var disclaimer = document.createElement('div');
-  disclaimer.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-500,#6B6B65);padding:0 20px 12px;text-align:center;line-height:1.5;';
+  disclaimer.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-500,#6B6B65);padding:0 20px 12px;text-align:center;line-height:1.5;';
   disclaimer.textContent = _t('coach.disclaimer', 'Coach IA — ne remplace pas l\'avis d\'un médecin ou professionnel de santé.');
   panel.appendChild(disclaimer);
 
