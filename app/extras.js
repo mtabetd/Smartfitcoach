@@ -1587,6 +1587,23 @@ window.FOOD_JOURNAL = {
     }, {kcal: 0, p: 0, g: 0, l: 0, count: entries.length});
   },
 
+  // Purge automatique des entrées de journal > 6 mois (prévient saturation localStorage)
+  // Appelé au chargement du widget ou sur demande explicite.
+  purgeOldEntries: function() {
+    try {
+      var user = window.AUTH ? window.AUTH.getUser() : null;
+      var key = 'mtd_food_journal_' + (user ? user.id : 'anon');
+      var journal = {}; try { journal = JSON.parse(localStorage.getItem(key) || '{}'); } catch(e2) { return; }
+      var cutoff = new Date(); cutoff.setMonth(cutoff.getMonth() - 6);
+      var cutoffStr = cutoff.toISOString().slice(0, 10);
+      var changed = false;
+      Object.keys(journal).forEach(function(dateKey) {
+        if (dateKey < cutoffStr) { delete journal[dateKey]; changed = true; }
+      });
+      if (changed) { try { localStorage.setItem(key, JSON.stringify(journal)); } catch(e3) {} }
+    } catch(e) {}
+  },
+
   loadFromPlan: function() {
     var S = window.S;
     if (!S || !S.weekPlan) return;

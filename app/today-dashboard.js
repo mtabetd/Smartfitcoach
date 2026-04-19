@@ -1862,6 +1862,37 @@ function renderFoodJournalCard() {
     _reRenderFJCard();
   });
   pillRow.appendChild(pillSaved);
+
+  // Pill "Plan du jour" — charge le plan de la semaine dans le journal d'un clic
+  (function() {
+    var S2 = window.S;
+    if (!S2 || !S2.weekPlan) return;
+    var todayIdx = (new Date().getDay() + 6) % 7;
+    var dayPlan = S2.weekPlan[todayIdx];
+    var hasPlan = dayPlan && (dayPlan.breakfast || dayPlan.lunch || dayPlan.dinner);
+    if (!hasPlan) return;
+    var pillPlan = h('button', {
+      type: 'button',
+      'aria-label': 'Charger le plan repas du jour dans le journal',
+      style: 'padding:5px 12px;min-height:32px;border-radius:14px;cursor:pointer;box-sizing:border-box;'
+        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;'
+        + 'background:transparent;color:var(--grey,#6B6B65);border:1px solid var(--line,#D8D8D0);'
+    }, '+ Plan du jour');
+    pillPlan.addEventListener('click', function() {
+      if (!window.FOOD_JOURNAL) return;
+      // Force-load : reset le verrou quotidien puis charge
+      try {
+        var user = window.AUTH ? window.AUTH.getUser() : null;
+        var loadedKey = 'mtd_journal_loaded_' + (user ? user.id : 'anon');
+        localStorage.removeItem(loadedKey);
+        window.FOOD_JOURNAL.loadFromPlan();
+        if (window.showToast) window.showToast('Plan du jour chargé dans le journal', 'success', 2200);
+        _reRenderFJCard();
+      } catch(e) {}
+    });
+    pillRow.appendChild(pillPlan);
+  })();
+
   c.appendChild(pillRow);
 
   // ─── Résultats de recherche (liste) ───

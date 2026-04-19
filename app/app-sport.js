@@ -7075,7 +7075,7 @@ function renderMusculationProgram(p) {
  weightRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);min-width:80px'}, typeLabel));
 
  var wInput = h('input', {
- type: 'number', step: '0.5', min: '0', max: '500',
+ type: 'number', step: '0.5', min: '0', max: '500', inputmode: 'decimal',
  value: currentWeight ? String(currentWeight) : '',
  placeholder: 'kg',
  style: 'width:70px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:16px;text-align:center;background:var(--ivory)',
@@ -7438,7 +7438,7 @@ function renderMusculationProgram(p) {
  if (isAdvancedRIR) {
   var _rirVal = setRow.rirActual !== null && setRow.rirActual !== undefined ? String(setRow.rirActual) : '';
   var _rirInput = h('input', {
-   type: 'number', min: '0', max: '5', step: '1',
+   type: 'number', min: '0', max: '5', step: '1', inputmode: 'numeric',
    value: _rirVal,
    placeholder: '-',
    // FIX P2 batch 2 : tap target 44×44px, font 16px anti-iOS-zoom, ivory bg harmonisé
@@ -7885,7 +7885,7 @@ function renderMusculationProgram(p) {
  // Durée
  var durRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin-bottom:14px'});
  durRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);flex:1'}, 'Dur\u00e9e r\u00e9elle'));
- var durInp = h('input', {type: 'number', min: '10', max: '180', value: String(realDur), style: 'width:60px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:16px;text-align:center;background:var(--ivory)', onclick: function(e) { e.stopPropagation(); }, onchange: function(e) { var v = parseInt(e.target.value); if (!isNaN(v) && v > 0) { S._sessionDuration = v; window.render(); } }});
+ var durInp = h('input', {type: 'number', min: '10', max: '180', inputmode: 'numeric', value: String(realDur), style: 'width:60px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:16px;text-align:center;background:var(--ivory)', onclick: function(e) { e.stopPropagation(); }, onchange: function(e) { var v = parseInt(e.target.value); if (!isNaN(v) && v > 0) { S._sessionDuration = v; window.render(); } }});
  durRow.appendChild(durInp);
  durRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, 'min'));
  compPanel.appendChild(durRow);
@@ -8360,7 +8360,7 @@ function renderWeightChartSport(container) {
 
  // Weight input
  var inputRow = h('div', {style: 'display:flex;gap:8px;align-items:center;margin-top:8px'});
- var wi = h('input', {'class': 'num-input', type: 'number', step: '0.1', min: '30', max: '200', placeholder: String(S.weight || 75), style: 'font-size:16px;padding:8px;width:100px;text-align:center'});
+ var wi = h('input', {'class': 'num-input', type: 'number', step: '0.1', min: '30', max: '200', inputmode: 'decimal', placeholder: String(S.weight || 75), style: 'font-size:16px;padding:8px;width:100px;text-align:center'});
  inputRow.appendChild(wi);
  inputRow.appendChild(h('span', {'class': 'num-unit'}, window.UNITS ? window.UNITS.weightLabel() : 'kg'));
  inputRow.appendChild(h('button', {'class': 'btn-primary', style: 'width:auto;margin:0;padding:10px 20px', onclick: function(){

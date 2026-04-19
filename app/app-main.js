@@ -2967,4 +2967,9 @@ setInterval(function() {
  try { if (window.AUTH && window.AUTH.isLoggedIn()) saveProfile(); } catch(e) {}
 }, 30000);
 
+// Purge journal entries > 6 mois (prévient saturation localStorage) — une fois par session
+setTimeout(function() {
+ try { if (window.FOOD_JOURNAL && window.FOOD_JOURNAL.purgeOldEntries) window.FOOD_JOURNAL.purgeOldEntries(); } catch(e) {}
+}, 5000);
+
 })();

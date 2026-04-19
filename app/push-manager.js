@@ -97,6 +97,12 @@
 
       // Rappel comeback si inactif 3+ jours
       this.scheduleInactivityCheck();
+
+      // "Rien loggé aujourd'hui" à 20h si journal vide
+      this.scheduleNotLoggedToday();
+
+      // Résumé hebdomadaire dimanche 19h
+      this.scheduleWeeklySummary();
     },
 
     // ── Motivation quotidienne — Lun-Ven 8h30 / Sam-Dim 10h ─────────────────
@@ -244,6 +250,74 @@
             window.SFCPushManager.showLocal('SmartFitCoach', msg, 'comeback');
           }
         }
+      } catch(e) {}
+    },
+
+    // ── "Rien loggé aujourd'hui" — à 20h si journal vide ──────────────────────
+    // Loss aversion : l'utilisateur ne veut pas perdre sa journée de suivi.
+    scheduleNotLoggedToday: function() {
+      var prefs = this.getPrefs();
+      if (!prefs.granted) return;
+      try {
+        var now = new Date();
+        var notifTime = new Date(now);
+        notifTime.setHours(20, 0, 0, 0);
+        if (notifTime <= now) return; // déjà passé aujourd'hui
+
+        // Vérifier si le journal est vide aujourd'hui
+        var user = window.AUTH ? window.AUTH.getUser() : null;
+        var today = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+        var journalKey = 'mtd_food_journal_' + (user ? user.id : 'anon');
+        var journal = {}; try { journal = JSON.parse(localStorage.getItem(journalKey) || '{}'); } catch(e2) {}
+        var todayEntries = journal[today] || [];
+        if (todayEntries.length > 0) return; // déjà loggé — pas de rappel
+
+        var prenom = (window.S && window.S.prenom) ? window.S.prenom : '';
+        var msg = prenom
+          ? prenom + ', vous n\'avez rien enregistré aujourd\'hui. Prenez 30 secondes pour compléter votre journal !'
+          : 'Vous n\'avez rien enregistré aujourd\'hui. Prenez 30 secondes pour compléter votre journal !';
+        this.scheduleAndPersist('not-logged-today', 'SmartFitCoach', msg, notifTime.getTime());
+      } catch(e) {}
+    },
+
+    // ── Résumé hebdomadaire — dimanche à 19h ──────────────────────────────────
+    // Bilan positif de la semaine : workouts, repas loggés, évolution poids.
+    scheduleWeeklySummary: function() {
+      var prefs = this.getPrefs();
+      if (!prefs.granted) return;
+      try {
+        var now = new Date();
+        var dayOfWeek = now.getDay(); // 0 = dimanche
+        if (dayOfWeek !== 0) return; // uniquement le dimanche
+        var notifTime = new Date(now);
+        notifTime.setHours(19, 0, 0, 0);
+        if (notifTime <= now) return; // déjà passé aujourd'hui
+
+        // Compiler le bilan semaine depuis le journal
+        var user = window.AUTH ? window.AUTH.getUser() : null;
+        var journalKey = 'mtd_food_journal_' + (user ? user.id : 'anon');
+        var journal = {}; try { journal = JSON.parse(localStorage.getItem(journalKey) || '{}'); } catch(e2) {}
+        var daysLogged = 0;
+        for (var i = 0; i < 7; i++) {
+          var d = new Date(now); d.setDate(d.getDate() - i);
+          var dk = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+          if (journal[dk] && journal[dk].length > 0) daysLogged++;
+        }
+
+        // Bilan poids
+        var weightMsg = '';
+        try {
+          var wh = JSON.parse(localStorage.getItem('mtd_weight_history_' + (user ? user.id : 'anon')) || '[]');
+          if (wh.length >= 2) {
+            var lastW = wh[wh.length - 1].weight;
+            var prevW = wh[Math.max(0, wh.length - 8)].weight;
+            var diff = Math.round((lastW - prevW) * 10) / 10;
+            if (Math.abs(diff) > 0) weightMsg = ' Poids : ' + (diff > 0 ? '+' : '') + diff + ' kg cette semaine.';
+          }
+        } catch(e3) {}
+
+        var msg = 'Bilan semaine : ' + daysLogged + '/7 jours de suivi nutritionnel.' + weightMsg + ' Continuez sur cette lancée !';
+        this.scheduleAndPersist('weekly-summary', 'SmartFitCoach — Bilan Semaine', msg, notifTime.getTime());
       } catch(e) {}
     },
 

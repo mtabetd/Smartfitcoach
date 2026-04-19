@@ -287,8 +287,12 @@ function unlockBadge(badgeId) {
   // Sync badge vers Supabase
   if (window.SupaSync) SupaSync.saveBadge(badgeId);
 
-  // Show toast notification
-  showToast(def.icon + ' ' + def.name + ' débloqué !');
+  // Show badge celebration toast
+  if (window.showToast) {
+    window.showToast(def.icon + ' ' + def.name + ' débloqué !', 'badge', 3500);
+  } else {
+    showToast(def.icon + ' ' + def.name + ' débloqué !');
+  }
 
   if (window.BLACKBOX) window.BLACKBOX.log('badge_unlocked', {badge: badgeId, name: def.name});
 }
