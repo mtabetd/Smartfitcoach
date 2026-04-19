@@ -1681,7 +1681,21 @@ function _fjRenderFoodRow(food, source) {
   info.appendChild(h('div', {
     style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;'
   }, food.name));
-  var metaLine = Math.round(food.kcal) + ' kcal/100g \u00b7 P ' + food.protein + 'g \u00b7 G ' + food.carbs + 'g \u00b7 L ' + food.fat + 'g';
+  // 2026-04 UX : si une portion "naturelle" existe (1 burger, 1 part, 1 c. à soupe...),
+  // afficher les macros pour 1 portion plutôt que par 100g.
+  // « On mange 1 Whopper, pas 100 g de Whopper. »
+  var _defP = (window.FOOD_PORTIONS && window.FOOD_PORTIONS.getDefaultPortion)
+    ? window.FOOD_PORTIONS.getDefaultPortion(food.name) : null;
+  var metaLine;
+  if (_defP && _defP.g) {
+    var _f = _defP.g / 100;
+    metaLine = _defP.label + ' \u00b7 ' + Math.round(food.kcal * _f) + ' kcal \u00b7 P '
+      + (Math.round(food.protein * _f * 10) / 10) + 'g \u00b7 G '
+      + (Math.round(food.carbs * _f * 10) / 10) + 'g \u00b7 L '
+      + (Math.round(food.fat * _f * 10) / 10) + 'g';
+  } else {
+    metaLine = Math.round(food.kcal) + ' kcal/100g \u00b7 P ' + food.protein + 'g \u00b7 G ' + food.carbs + 'g \u00b7 L ' + food.fat + 'g';
+  }
   if (source === 'off' && food.brand) metaLine = food.brand + ' \u00b7 ' + metaLine;
   info.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:2px;'
