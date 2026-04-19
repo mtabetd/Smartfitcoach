@@ -422,6 +422,21 @@ function _initAuth() {
         if (_currentSession.nom   && !window.S.nom)   window.S.nom   = _currentSession.nom;
         if (_currentSession.phone && !window.S.phone) window.S.phone = _currentSession.phone;
       }
+      // RGPD : vérifier côté serveur que l'utilisateur existe toujours (compte supprimé ?).
+      // getUser() hit le serveur et renvoie une erreur si le compte n'existe plus.
+      var _verifyUid = _currentSession.id;
+      client.auth.getUser().then(function(ures) {
+        if (ures && ures.error) {
+          console.warn('[AUTH] Compte inexistant côté serveur — purge locale:', ures.error.message);
+          try { client.auth.signOut(); } catch(e) {}
+          _currentSession = null;
+          clearLegacySession();
+          _cleanupLocalData(_verifyUid);
+          try { localStorage.removeItem('mtd_profile_anon'); } catch(e) {}
+          try { localStorage.removeItem('mtd_onboarding_done'); } catch(e) {}
+          if (window.render) window.render();
+        }
+      }).catch(function() {}); // réseau down = on garde la session (offline-first)
     }
     _authReadyResolved = true; // FIX V4 : restore terminé (avec ou sans session)
   }).catch(function(err) {
