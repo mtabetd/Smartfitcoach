@@ -136,7 +136,14 @@ function buildContext() {
     height: S.height || '',
     goal: S.goal || '',
     sportType: S.sportType || '',
-    sportLevel: S.sportLevel || ''
+    sportLevel: S.sportLevel || '',
+    regime: S.regime || 0,
+    allowPork: S.allowPork || false,
+    allowAlcohol: S.allowAlcohol || false,
+    allergies: S.allergies || [],
+    intolerances: S.intolerances || [],
+    medical: S.medical || [],
+    pregnant: S.pregnant || false
   };
 }
 

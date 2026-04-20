@@ -396,6 +396,7 @@ function loadProfile() {
      console.error('[loadProfile] DATA CORRUPTED — backed up to ' + _bkKey + ' — saveProfile désactivé jusqu\'au prochain reload');
    } catch(eb) { console.error('[loadProfile] backup also failed:', eb); }
    S._loadCorrupted = true;
+   setTimeout(function(){ if (window.showToast) window.showToast('Profil endommagé — rechargez la page pour restaurer vos données.', 'error', 8000); }, 800);
    return;
  }
  }
@@ -408,6 +409,7 @@ function loadProfile() {
      console.error('[loadProfile] DECODE retourné null — backup ' + _bkKey2 + ' — saveProfile désactivé');
    } catch(eb2) { console.error('[loadProfile] backup also failed:', eb2); }
    S._loadCorrupted = true;
+   setTimeout(function(){ if (window.showToast) window.showToast('Profil endommagé — rechargez la page pour restaurer vos données.', 'error', 8000); }, 800);
    return;
  }
  // Prototype pollution guard: reject any parsed object that carries dangerous keys
@@ -2866,6 +2868,7 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
  // Tout le reste → Dashboard Today (le safe default)
  else if (S.appMode) { S.view = 'today'; }
+ else { S.view = 'today'; } // Fallback absolu si appMode non défini
  // ─── AUTO-REGENERATION PLAN NUTRITION — DÉSACTIVÉE (FIX VALIDATION 2026-04) ───
  // AVANT : le plan se régénérait tout seul à chaque boot si >7j ou lundi matin
  //         → user voyait son plan changer mystérieusement.

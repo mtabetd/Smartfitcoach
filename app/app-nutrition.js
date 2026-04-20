@@ -1992,12 +1992,12 @@ function renderStep7(p) {
 
   // Inclusions alimentaires opt-in
   p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin:12px 0 8px;'}, "J\u2019inclus dans mon alimentation"));
-  var porkRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin:4px 0;cursor:pointer', onclick: function() { S.allowPork = !S.allowPork; window.render(); }});
+  var porkRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin:4px 0;cursor:pointer', onclick: function() { S.allowPork = !S.allowPork; S._nm = null; if (window.devalidateWeekPlan) window.devalidateWeekPlan('allowPork changed'); window.render(); }});
   var porkBox = h('div', {style: 'width:18px;height:18px;border-radius:2px;border:1px solid var(--black,#0A0A09);display:flex;align-items:center;justify-content:center;background:' + (S.allowPork ? 'var(--black,#0A0A09)' : 'transparent') + ';flex-shrink:0'}, S.allowPork ? h('span', {style: 'color:var(--ivory,#FAF9F6);font-size:10px;font-family:"Helvetica Neue",Arial,sans-serif'}, '\u2713') : null);
   porkRow.appendChild(porkBox);
   porkRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09)'}, 'Porc & charcuterie porcine'));
   p.appendChild(porkRow);
-  var alcRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin:4px 0;cursor:pointer', onclick: function() { S.allowAlcohol = !S.allowAlcohol; window.render(); }});
+  var alcRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin:4px 0;cursor:pointer', onclick: function() { S.allowAlcohol = !S.allowAlcohol; S._nm = null; if (window.devalidateWeekPlan) window.devalidateWeekPlan('allowAlcohol changed'); window.render(); }});
   var alcBox = h('div', {style: 'width:18px;height:18px;border-radius:2px;border:1px solid var(--black,#0A0A09);display:flex;align-items:center;justify-content:center;background:' + (S.allowAlcohol ? 'var(--black,#0A0A09)' : 'transparent') + ';flex-shrink:0'}, S.allowAlcohol ? h('span', {style: 'color:var(--ivory,#FAF9F6);font-size:10px;font-family:"Helvetica Neue",Arial,sans-serif'}, '\u2713') : null);
   alcRow.appendChild(alcBox);
   alcRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09)'}, 'Alcool en cuisine'));
@@ -3336,6 +3336,7 @@ function renderStep9(p) {
                   S.weekPlan[S.selectedDay][slotKey3] = { n: food.name, k: food.kcal, kcal: food.kcal, p: food.p, g: food.g, l: food.l, f: '\u25CE', emoji: '\u25CE', custom: true };
                   S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false;
                   try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saveProfile error:', e); }
+                  try { var _cn = (food.name||'').toLowerCase(), _cw=[]; if(!S.allowPork&&/porc|jambon|bacon|lardon(?!.*(?:dinde|volaille|poulet))|saucisson|prosciutto|pancetta|chorizo/.test(_cn))_cw.push('porc'); if(S.regime===2&&/poulet|boeuf|bœuf|veau|dinde|saumon|thon|poisson/.test(_cn))_cw.push('non végétarien'); if(S.regime===3&&/poulet|boeuf|bœuf|veau|oeuf|fromage|yaourt|lait/.test(_cn))_cw.push('non vegan'); if(_cw.length&&window.showToast)window.showToast('\u26a0\ufe0f Repas ajouté — contient : '+_cw.join(', '), 'warning', 4000); } catch(_wE){}
                   window.render();
                 }
               });
@@ -3391,6 +3392,7 @@ function renderStep9(p) {
           };
           S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false; S._foodManualData = null;
           try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saveProfile error:', e); }
+          try { var _mn = (fd.name||'').trim().toLowerCase(), _mw=[]; if(!S.allowPork&&/porc|jambon|bacon|lardon(?!.*(?:dinde|volaille|poulet))|saucisson|prosciutto|pancetta|chorizo/.test(_mn))_mw.push('porc'); if(S.regime===2&&/poulet|boeuf|bœuf|veau|dinde|saumon|thon|poisson/.test(_mn))_mw.push('non végétarien'); if(S.regime===3&&/poulet|boeuf|bœuf|veau|oeuf|fromage|yaourt|lait/.test(_mn))_mw.push('non vegan'); if(_mw.length&&window.showToast)window.showToast('\u26a0\ufe0f Repas ajouté — contient : '+_mw.join(', '), 'warning', 4000); } catch(_mwE){}
           window.render();
         }
       }, 'Confirmer');

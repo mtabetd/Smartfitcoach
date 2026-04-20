@@ -5672,6 +5672,7 @@ function renderTodayDashboard(p) {
       }
     } else if (_isoWeek && S.weekPlanValidated && !S._planHash && S.weekPlan) {
       S._planHash = window.getPlanHash ? window.getPlanHash() : '';
+      if (window.saveProfile) window.saveProfile();
     }
     var _nutNeedsValidation = S.weekPlan && Array.isArray(S.weekPlan) && S.weekPlan.length >= 7
       && (!S.weekPlanValidated || (S.weekPlanValidatedISOWeek && _isoWeek && S.weekPlanValidatedISOWeek !== _isoWeek));
