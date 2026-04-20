@@ -387,19 +387,6 @@ var EXERCISES = {
       tags: ["dos", "biceps", "unilateral"]
     },
     {
-      n: "Soulevé de terre",
-      m: "Chaîne postérieure",
-      eq: "Barre",
-      sets: "4\u00d75-8",
-      rest: "120s",
-      video: "https://www.youtube.com/results?search_query=souleve+de+terre+deadlift+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
-      warn: "Hernie discale = STOP. Dos PLAT obligatoire — la moindre flexion lombaire sous charge = risque disque",
-      desc: "Saisir la barre au sol, se relever en poussant avec les jambes et en gardant le dos droit.",
-      tips: ["Dos plat obligatoire — flexion lombaire = hernie discale", "Ne jamais arrondir le bas du dos", "Barre au contact des tibias", "Pousser avec les jambes d'abord"],
-      lv: 3,
-      tags: ["dos", "jambes", "fessiers", "force"]
-    },
-    {
       n: "Face pull",
       m: "Arriere d'épaule / Rhomboïdes",
       eq: "Poulie + corde",
@@ -931,7 +918,6 @@ var EXERCISES = {
     // ─── FIX P0 2026-04-16 — Exos épaules déplacés depuis triceps (étaient mal catégorisés) ───
     { n: "Élévations latérales câble bras croisé", m: "Deltoïde moyen", eq: "Poulie basse", sets: "3×12-15 par côté", rest: "60s", video: "https://www.youtube.com/results?search_query=cable+lateral+raise&sp=EgIYAQ%253D%253D", desc: "Poulie basse, câble passe devant le corps. Tension constante contre le deltoïde moyen.", tips: ["Bras opposé à la poulie", "Légère flexion coude", "Ne pas swinguer"], lv: 2, tags: ["epaules", "deltoide-moyen", "cable", "isolation"] },
     { n: "Oiseau poulie haute (rear delt fly)", m: "Deltoïde postérieur", eq: "Poulie haute double", sets: "3×12-15", rest: "60s", video: "https://www.youtube.com/results?search_query=reverse+pec+deck+cable&sp=EgIYAQ%253D%253D", desc: "Bras croisés en haut, écartement en tirage pour cibler l'arrière-épaule. Alternative supérieure au reverse fly.", tips: ["Coudes légèrement fléchis", "Tirer dans le plan scapulaire", "Squeeze omoplates 1s"], lv: 1, tags: ["epaules", "deltoide-posterieur", "cable"] },
-    { n: "Arnold press", m: "Deltoïdes (3 faisceaux)", eq: "Haltères + banc droit", sets: "4×10-12", rest: "75s", video: "https://www.youtube.com/results?search_query=arnold+press+dumbbell&sp=EgIYAQ%253D%253D", desc: "Développé haltères avec rotation d'avant-bras — paume face soi en bas → paumes vers extérieur en haut. Sollicite les 3 faisceaux.", tips: ["Rotation fluide pas saccadée", "Coudes ne dépassent pas arrière", "Assise dossier droit"], lv: 2, tags: ["epaules", "halteres", "compose"] },
     { n: "Face pull corde inclinaison haute", m: "Deltoïde postérieur / Trapèzes moyens", eq: "Poulie haute + corde", sets: "4×15-20", rest: "45s", video: "https://www.youtube.com/results?search_query=face+pull+high+cable&sp=EgIYAQ%253D%253D", desc: "Corde à hauteur front, tirer vers le visage avec rotation externe. Essentiel santé scapulaire.", tips: ["Coudes hauts au-dessus des mains", "Rotation externe au point final", "Squeeze 1s", "Idéal deload/échauffement"], lv: 1, tags: ["epaules", "prehab", "deltoide-posterieur", "cable"] },
     { n: "Z-press", m: "Deltoïdes / Core", eq: "Haltères ou barre + sol", sets: "3×6-10", rest: "90s", video: "https://www.youtube.com/results?search_query=z+press+seated+floor&sp=EgIYAQ%253D%253D", desc: "Développé épaules assis au sol, jambes tendues devant. Zéro triche de lombaires — gainage forcé.", tips: ["Assise bien droite", "Jambes tendues sur le sol", "Core activé", "Charges plus légères que seated press"], lv: 3, tags: ["epaules", "core", "gainage"] },
     { n: "Landmine press unilatéral", m: "Deltoïdes / Pectoraux sup", eq: "Barre landmine", sets: "3×8-10 par côté", rest: "90s", video: "https://www.youtube.com/results?search_query=landmine+press+single+arm&sp=EgIYAQ%253D%253D", desc: "Pressing diagonal d'une barre landmine — trajectoire épaule-friendly (semi-horizontal).", tips: ["Pieds décalés opposés au bras", "Trajectoire diagonale naturelle", "Bon pour épaules sensibles"], lv: 2, tags: ["epaules", "landmine", "unilateral"] }
@@ -1345,6 +1331,19 @@ var EXERCISES = {
   // ─── JAMBES ───
   legs: [
     // ─── FIX SPRINT P1.6 — Exos basiques manquants (référencés par programmes mais absents DB) ───
+    {
+      n: "Soulevé de terre",
+      m: "Chaîne postérieure",
+      eq: "Barre",
+      sets: "4\u00d75-8",
+      rest: "120s",
+      video: "https://www.youtube.com/results?search_query=souleve+de+terre+deadlift+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+      warn: "Hernie discale = STOP. Dos PLAT obligatoire — la moindre flexion lombaire sous charge = risque disque",
+      desc: "Saisir la barre au sol, se relever en poussant avec les jambes et en gardant le dos droit.",
+      tips: ["Dos plat obligatoire — flexion lombaire = hernie discale", "Ne jamais arrondir le bas du dos", "Barre au contact des tibias", "Pousser avec les jambes d'abord"],
+      lv: 3,
+      tags: ["dos", "jambes", "fessiers", "force"]
+    },
     {
       n: "Front squat",
       m: "Quadriceps / Fessiers",
@@ -2133,7 +2132,6 @@ var EXERCISES = {
         tags: ["fessiers", "moyen-fessier", "elastique", "compose"]
     },
     // ─── SPRINT P3 #6 — Enrichissement biblio (+5 fessiers) ───
-    { n: "Hip thrust unilatéral", m: "Grand fessier (unilatéral)", eq: "Banc + 1 haltère", sets: "3×10-12 par côté", rest: "60s", video: "https://www.youtube.com/results?search_query=single+leg+hip+thrust&sp=EgIYAQ%253D%253D", desc: "Hip thrust une jambe à la fois. Corrige asymétries fessiers + anti-douleur lombaire.", tips: ["Haltère sur la hanche côté travail", "Jambe libre tendue", "Pause contractée 2s"], lv: 2, tags: ["fessiers", "unilateral", "halteres"] },
     { n: "Cable kickback", m: "Grand fessier", eq: "Poulie basse + sangle cheville", sets: "3×12-15 par côté", rest: "45s", video: "https://www.youtube.com/results?search_query=cable+glute+kickback&sp=EgIYAQ%253D%253D", desc: "Extension hanche contre résistance poulie. Isolation fessiers pure.", tips: ["Buste légèrement incliné vers avant", "Extension complète hanche", "Ne pas hyper-étendre lombaires"], lv: 1, tags: ["fessiers", "cable", "isolation"] },
     { n: "Clamshell élastique", m: "Moyen fessier", eq: "Mini-bande", sets: "3×15-20 par côté", rest: "30s", video: "https://www.youtube.com/results?search_query=clamshell+exercise&sp=EgIYAQ%253D%253D", desc: "Couché sur le côté, genoux fléchis, ouvrir les genoux en gardant les pieds collés. Active le moyen fessier.", tips: ["Pieds collés tout le long", "Ne pas basculer le bassin", "Pause ouverture 1s"], lv: 1, tags: ["fessiers", "moyen-fessier", "home", "prehab"] },
     { n: "Fire hydrant", m: "Moyen fessier", eq: "Poids du corps", sets: "3×12-15 par côté", rest: "30s", video: "https://www.youtube.com/results?search_query=fire+hydrant+exercise&sp=EgIYAQ%253D%253D", desc: "Position quadrupède, lever une cuisse latéralement (comme un chien contre borne incendie). Activation moyen fessier.", tips: ["Dos neutre, pas d'arche", "Genou à 90°", "Cuisse parallèle au sol"], lv: 1, tags: ["fessiers", "moyen-fessier", "home", "poids du corps"] },
@@ -2432,8 +2430,6 @@ var EXERCISES = {
         tags: ["abdos", "grand-droit", "suspension", "leste"]
     },
     // ─── SPRINT P3 #6 — Enrichissement biblio (+6 abdos/core) ───
-    { n: "Dead bug", m: "Transverse / Stabilisation lombaire", eq: "Poids du corps", sets: "3×10 par côté", rest: "45s", video: "https://www.youtube.com/results?search_query=dead+bug+core&sp=EgIYAQ%253D%253D", desc: "Allongé dos, bras et jambes levés. Étendre simultanément bras opposé + jambe opposée sans perdre l'appui lombaire.", tips: ["Bas du dos collé au sol", "Respiration sortie contrôlée", "Lentement", "Idéal hernie discale — alternative safe"], lv: 1, tags: ["abdos", "core", "lombaires-safe", "mcgill"] },
-    { n: "Bird dog", m: "Core / Multifide / Stabilisation", eq: "Poids du corps", sets: "3×10 par côté", rest: "45s", video: "https://www.youtube.com/results?search_query=bird+dog+core+exercise&sp=EgIYAQ%253D%253D", desc: "Quadrupède, étendre bras opposé + jambe opposée simultanément. Anti-rotation + multifide.", tips: ["Dos neutre, pas d'arche", "Lent contrôle", "Pause 2s top", "Idéal lombalgies — McGill big 3"], lv: 1, tags: ["abdos", "core", "lombaires-safe", "mcgill"] },
     { n: "Pallof press", m: "Core anti-rotation / Obliques", eq: "Poulie basse ou élastique", sets: "3×10-12 par côté", rest: "45s", video: "https://www.youtube.com/results?search_query=pallof+press+cable&sp=EgIYAQ%253D%253D", desc: "Tenir une poulie à hauteur sternum, pousser devant soi sans laisser le buste tourner. Anti-rotation pure.", tips: ["Pieds largeur épaules", "Pas de rotation buste", "Pause 2s bras tendus", "Nommé d'après le kinésithérapeute John Pallof"], lv: 1, tags: ["core", "anti-rotation", "cable", "prehab-lombaire"] },
     { n: "Cable woodchopper", m: "Obliques / Core rotationnel", eq: "Poulie haute", sets: "3×10-12 par côté", rest: "60s", video: "https://www.youtube.com/results?search_query=cable+woodchopper&sp=EgIYAQ%253D%253D", desc: "Tirage diagonal haut-vers-bas en rotation du tronc. Renforce la chaîne oblique + rotation puissante.", tips: ["Pivot sur pied arrière", "Bras tendus", "Finir hanche opposée"], lv: 2, tags: ["abdos", "obliques", "rotation", "cable"] },
     { n: "Copenhagen plank", m: "Adducteurs / Obliques", eq: "Banc (hauteur mi-cuisse)", sets: "3×20-40s par côté", rest: "45s", video: "https://www.youtube.com/results?search_query=copenhagen+plank&sp=EgIYAQ%253D%253D", desc: "Planche latérale avec jambe haute posée sur un banc — isole les adducteurs + obliques profonds.", tips: ["Jambe haute genoux ou cheville sur banc", "Corps aligné", "Gaine contracté", "Prévention blessures adducteurs footballeurs"], lv: 3, tags: ["core", "adducteurs", "obliques", "prehab-sport"] },

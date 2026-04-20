@@ -802,6 +802,17 @@ function generateSportProgram() {
  }
  });
 
+ // Deduplicate exercises within the same day (same name = same exercise from two pools)
+ (function() {
+  var _seen = {};
+  dayExercises = dayExercises.filter(function(ex) {
+   var _k = (ex.n || '').toLowerCase().trim();
+   if (_seen[_k]) return false;
+   _seen[_k] = true;
+   return true;
+  });
+ })();
+
  // Pregnancy: add Kegel exercises to every day
  if (pregTri) {
  dayExercises.push({
