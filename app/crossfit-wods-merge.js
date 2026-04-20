@@ -12,10 +12,18 @@ var c1 = window.CF_WODS_CYCLE1 || [];
 var c2 = window.CF_WODS_CYCLE2 || [];
 var c3 = window.CF_WODS_CYCLE3 || [];
 var all = [];
+var _seen = {};
 var i;
-for (i = 0; i < c1.length; i++) all.push(c1[i]);
-for (i = 0; i < c2.length; i++) all.push(c2[i]);
-for (i = 0; i < c3.length; i++) all.push(c3[i]);
+function _pushUnique(wod) {
+  if (!wod) return;
+  var key = (wod.day || '') + '_' + (wod.week || '');
+  if (_seen[key]) return;
+  _seen[key] = true;
+  all.push(wod);
+}
+for (i = 0; i < c1.length; i++) _pushUnique(c1[i]);
+for (i = 0; i < c2.length; i++) _pushUnique(c2[i]);
+for (i = 0; i < c3.length; i++) _pushUnique(c3[i]);
 window.CF_WODS_FULL = all;
 if (all.length > 0) window.CF_WODS = all;
 // FIX P3 contre-audit : alias universel pour consommateurs tiers (scripts de test,

@@ -10835,7 +10835,7 @@ function renderCyclingOnboarding(p) {
  p.appendChild(h('div', {'class': 'section-label'}, 'FTP actuel en watts (optionnel — laissez vide si inconnu)'));
  var ftpWrap = h('div', {'class': 'num-input-wrap'});
  ftpWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '80', max: '500', placeholder: '—', value: S.cyclingFTP ? String(S.cyclingFTP) : '', inputmode: 'numeric', style: 'width:90px;text-align:center',
- oninput: function(e){ var v = parseInt(e.target.value); S.cyclingFTP = (!isNaN(v) && v > 0) ? v : null; },
+ oninput: function(e){ var v = parseInt(e.target.value); S.cyclingFTP = (!isNaN(v) && v >= 75 && v <= 500) ? v : null; },
  onblur: function(){ window.render(); }
  }));
  ftpWrap.appendChild(h('span', {'class': 'num-unit'}, 'watts'));

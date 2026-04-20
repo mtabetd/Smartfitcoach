@@ -68,6 +68,7 @@
   function initCalendar() {
     var S = window.S;
     if (!S) return;
+    var sportLabel = S.sportType || 'muscu';
     if (!S.weeklyCalendar || typeof S.weeklyCalendar !== 'object') {
       S.weeklyCalendar = {
         '0': 'repos', '1': 'repos', '2': 'repos', '3': 'repos',
@@ -75,15 +76,22 @@
       };
       // Pré-remplissage depuis trainingDaysSelected
       if (Array.isArray(S.trainingDaysSelected) && S.trainingDaysSelected.length > 0) {
-        var sportLabel = S.sportType || 'muscu';
         S.trainingDaysSelected.forEach(function(dayIdx) {
           if (dayIdx >= 0 && dayIdx <= 6) {
             S.weeklyCalendar[String(dayIdx)] = sportLabel;
           }
         });
-        try { console.log('[smart-calendar] Sync depuis trainingDaysSelected:', S.trainingDaysSelected); } catch(_e) {}
+      }
+    } else if (S._calendarSportType && S._calendarSportType !== sportLabel) {
+      // Sport type changed — update training day labels to new sport
+      var oldLabel = S._calendarSportType;
+      for (var dk = 0; dk < 7; dk++) {
+        if (S.weeklyCalendar[String(dk)] === oldLabel) {
+          S.weeklyCalendar[String(dk)] = sportLabel;
+        }
       }
     }
+    S._calendarSportType = sportLabel;
   }
 
   // ─── DÉTECTION DE CONFLITS MUSCULAIRES ───
