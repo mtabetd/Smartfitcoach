@@ -2943,7 +2943,6 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Rowing haltère unilatéral', m: 'Grand dorsal / Trapèzes', eq: 'Haltère + banc', sets: '4×10-12', rest: '75s' },
     { n: 'Rowing barre', m: 'Grand dorsal / Trapèzes', eq: 'Barre', sets: '4×8-12', rest: '90s' },
     { n: 'Shrugs haltères', m: 'Trapèzes supérieurs', eq: 'Haltères', sets: '4×12-15', rest: '60s' },
-    { n: 'Soulevé de terre roumain', m: 'Dorsaux / Ischios / Fessiers', eq: 'Barre', sets: '4×8-10', rest: '120s' },
     { n: 'Chest supported row', m: 'Dos', eq: 'Banc incliné + haltères', sets: '4×10-12', rest: '90s' },
     { n: 'Straight arm pulldown câble', m: 'Dos', eq: 'Câble haute poulie', sets: '3×12-15', rest: '60s' },
     { n: 'Rack pull', m: 'Dos', eq: 'Barre + rack', sets: '4×6-8', rest: '120s' },
@@ -3088,6 +3087,7 @@ function getAlternativeExercises(muscle, excludeName, maxCount) {
   var keyMap = [
     ['pectoraux', 'pectoraux'], ['poitrine', 'pectoraux'], ['chest', 'pectoraux'],
     ['dos', 'dos'], ['dorsal', 'dos'], ['dorsaux', 'dos'], ['back', 'dos'],
+    ['cha\u00eene post\u00e9rieure', 'ischios'], ['chaine posterieure', 'ischios'], ['cha\u00eene post', 'ischios'], ['chaine post', 'ischios'],
     ['épaule', 'epaules'], ['epaule', 'epaules'], ['deltoïde', 'epaules'], ['deltoid', 'epaules'], ['shoulder', 'epaules'],
     ['biceps', 'biceps'], ['brachial', 'biceps'],
     ['triceps', 'triceps'],

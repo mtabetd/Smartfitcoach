@@ -66,7 +66,8 @@ function recordMuscuWeight(exerciseName, weight, type) {
 
 function recordMuscuStrength(key, weight, reps) {
   if (!key || isNaN(weight) || weight <= 0) return;
-  var rm1 = reps && reps > 1 ? Math.round(weight * (1 + (reps || 8) / 30)) : weight;
+  var _repsCalc = Math.min(reps || 8, 10); // cap at 10 — Brzycki formula unreliable above
+  var rm1 = reps && reps > 1 ? Math.round(weight * (1 + _repsCalc / 30)) : weight;
   var history = loadHistory('muscu_strength');
   history.push({ date: todayISO(), ts: Date.now(), key: key, weight: weight, reps: reps || 1, estimated1RM: rm1 });
   saveHistory('muscu_strength', history);

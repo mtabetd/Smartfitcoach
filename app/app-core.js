@@ -4913,6 +4913,8 @@ window.calcWeightProjection=calcWeightProjection; window.alcoholWeeklyKcal=alcoh
 function getPool(t){
   return (window.RecipeEngine && typeof window.RecipeEngine.getPool === 'function') ? window.RecipeEngine.getPool(t) : [];
 }
+// Helper: builds unified searchable string from both old (x.i string) and new (x.ingredients array) formats
+function _ri(x){var ingArr=x.ingredients?x.ingredients.map(function(ig){return ig.name||'';}).join(' '):'';return((x.i||'')+' '+ingArr+' '+(x.name||x.n||'')+' '+(x.tags||[]).join(' ')).toLowerCase();}
 function filterRecipes(pool,type){
   var s=window.S;
   var r=(pool||[]).slice();
@@ -4920,7 +4922,7 @@ function filterRecipes(pool,type){
   if(!s.whey)r=r.filter(function(x){return!x.w});
   if((s.allergies||[]).length>0&&(s.allergies||[]).indexOf('Aucune')===-1){
     r=r.filter(function(x){
-      var ing=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();
+      var ing=_ri(x);
       for(var a=0;a<s.allergies.length;a++){
         var al=s.allergies[a].toLowerCase();
         if(al==='fruits \u00e0 coque'){var nc=ing.replace(/noix de coco|noix de muscade/g,'');if((/amande|noix|noisette|cajou|pistache|pecan|macadamia|pignon/).test(nc))return false;}
@@ -4939,11 +4941,11 @@ function filterRecipes(pool,type){
   }
   if((s.intolerances||[]).length>0&&(s.intolerances||[]).indexOf('Aucune')===-1){
     r=r.filter(function(x){
-      var ing=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();
+      var ing=_ri(x);
       for(var t=0;t<s.intolerances.length;t++){
         var it=s.intolerances[t].toLowerCase();
         if(it==='lactose'&&(/lait|fromage|yaourt|beurre|crème|ricotta|cottage|whey|feta|parmesan|mozzarella|skyr|emmental|gruyère|comté|camembert|mascarpone|kéfir|labneh|ghee|cheddar|gouda/).test(ing))return false;
-        if(it==='gluten'){var gi=ing.replace(/galette de riz|farine de riz|farine de sarrasin|pâte miso|sauce tamari certifiée sans gluten/g,'');if((/pain|blé|farine|pâte|avoine|seigle|couscous|semoule|orge|épeautre|epeautre|boulgour|seitan|kamut|sauce soja|tamari|tortilla|wrap|naan/).test(gi))return false;} // BUG FIX : orge, épeautre, boulgour, seitan, kamut, sauce soja/tamari (gluten caché), avoine (contamination croisée), tortilla/naan/wrap manquaient — AFDIAG / INCO 2020
+        if(it==='gluten'){var gi=ing.replace(/galette de riz|farine de riz|farine de sarrasin|pâte miso|sauce tamari certifiée sans gluten/g,'');if((/pain|blé|farine|pâte|avoine|seigle|couscous|semoule|orge|épeautre|epeautre|boulgour|seitan|kamut|sauce soja|tamari|tortilla|wrap|naan|galette|crêpe|crepe|pancake|muffin/).test(gi))return false;} // BUG FIX : orge, épeautre, boulgour, seitan, kamut, sauce soja/tamari (gluten caché), avoine (contamination croisée), tortilla/naan/wrap manquaient — AFDIAG / INCO 2020
         if(it==='fructose'&&(/miel|pomme|poire|mangue|cerise|figue|datte/).test(ing))return false;
         if(it==='histamine'&&(/thon|saumon fumé|fromage|tomate|épinard|avocat|soja/).test(ing))return false;
       }return true;
@@ -4951,25 +4953,25 @@ function filterRecipes(pool,type){
   }
   // Diabetics: soft-filter high-GI ingredients (prioritize low-GI sources — ADA 2023)
   var hasDiab=Array.isArray(s.medical)&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);
-  if(hasDiab){var highGIban=/pain blanc|baguette|croissant|brioch[eé]|corn flakes|rice krispies|galette de mais|sirop de glucose|sucre blanc|sucre\s+\d|sucre vanill|bonbon|soda|jus de fruit|dattes|confiture|miel|riz blanc gluant/;var lowGIpool=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!highGIban.test(i)});if(lowGIpool.length>=3)r=lowGIpool;} // only filter if enough recipes remain
+  if(hasDiab){var highGIban=/pain blanc|baguette|croissant|brioch[eé]|corn flakes|rice krispies|galette de mais|sirop de glucose|sucre blanc|sucre\s+\d|sucre vanill|bonbon|soda|jus de fruit|dattes|confiture|miel|riz blanc gluant/;var lowGIpool=r.filter(function(x){var i=_ri(x);return!highGIban.test(i)});if(lowGIpool.length>=3)r=lowGIpool;} // only filter if enough recipes remain
   // FIX P0 contre-audit 2026-04-15 — pescétarien (regime===1) manquait porc.
   // FIX P0r-BIS contre-audit : `steak` et `rillette` trop agressifs (bannissaient "Steak de
   // thon" / "Rillettes de sardines" qui sont OK en pescétarien). Patterns plus précis.
-  if(s.regime===1)r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak\s+(?:hach[eé]|de\s+b[oœ]uf|de\s+veau|de\s+porc)|entrecôte|filet mignon|merguez|canard|lapin|lièvre|foie\s+(?:de\s+)?(?:volaille|veau|porc|boeuf)?|rognon|porc(?!ini)|cochon|\blard\b|lardon|bacon|pancetta|chorizo|pepperoni|saucisson|saucisse|andouille|boudin|rillette\s+(?:de\s+)?(?:porc|canard|poulet|volaille)|jambon(?!\s+de\s+dinde)|charcuterie/).test(i)});
+  if(s.regime===1)r=r.filter(function(x){var i=_ri(x);return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak\s+(?:hach[eé]|de\s+b[oœ]uf|de\s+veau|de\s+porc)|entrecôte|filet mignon|merguez|canard|lapin|lièvre|foie\s+(?:de\s+)?(?:volaille|veau|porc|boeuf)?|rognon|porc(?!ini)|cochon|\blard\b|lardon|bacon|pancetta|prosciutto|chorizo|pepperoni|saucisson|saucisse|andouille|boudin|rillette\s+(?:de\s+)?(?:porc|canard|poulet|volaille)|jambon(?!\s+de\s+dinde)|charcuterie/).test(i)});
   // Végétarien : ban poissons/viandes complet (inclut les 14 espèces absentes du ban vegan — cohérence nécessaire)
   // FIX P0 contre-audit 2026-04-15 — filtre végétarien (regime===2) incomplet :
   // manquait la famille porc (même faille que veganBan). Ajout cohérent.
-  if(s.regime===2)r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|saumon|thon|crevette|cabillaud|dorade|daurade|sardine|maquereau|poisson|sole|filet de bar|branzino|moules|poulpe|canard|lapin|lièvre|merguez|gambas|lotte|morue|foie|rognon|cœur|coeur|anchois|truite|colin|\bbar\b|lieu noir|mahi.?mahi|merlu|tilapia|hareng|mulet|pageot|vivaneau|saint-pierre|lingue|grondin|rascasse|porc(?!ini)|cochon|lard|lardon|bacon|pancetta|chorizo|pepperoni|saucisson|saucisse|andouille|boudin|rillette|jambon|charcuterie/).test(i)});
+  if(s.regime===2)r=r.filter(function(x){var i=_ri(x);return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|saumon|thon|crevette|cabillaud|dorade|daurade|sardine|maquereau|poisson|sole|filet de bar|branzino|moules|poulpe|canard|lapin|lièvre|merguez|gambas|lotte|morue|foie|rognon|cœur|coeur|anchois|truite|colin|\bbar\b|lieu noir|mahi.?mahi|merlu|tilapia|hareng|mulet|pageot|vivaneau|saint-pierre|lingue|grondin|rascasse|porc(?!ini)|cochon|lard|lardon|bacon|pancetta|prosciutto|chorizo|pepperoni|saucisson|saucisse|andouille|boudin|rillette|jambon|charcuterie/).test(i)});
   // FIX P0 contre-audit 2026-04-15 — veganBan incomplet : le filtre laissait passer
   // "Tacos Al Pastor" (porc filet), "Dumplings Porc et Chou" (porc haché), Carbonara
   // (lardons fumés). Ajout complet de la famille porc : porc/cochon/lard/lardon/bacon/
   // pancetta/chorizo/pepperoni/saucisson/saucisse + lièvre + abats (rognon/foie/cœur).
   // Cohérence avec filtre halal ligne 4918 ci-dessous.
-  if(s.regime===3){var veganBan=/poulet|boeuf|bœuf|veau|dinde|agneau|canard|kefta|steak|saumon|thon|crevette|cabillaud|sardine|maquereau|dorade|daurade|sole|lotte|morue|gambas|poisson|poulpe|oeuf|œuf|fromage|ricotta|feta|parmesan|mozzarella|cottage|emmental|skyr|labneh|yaourt|miel|whey|\bbar\b|lieu noir|mahi.?mahi|merlu|tilapia|hareng|truite|anchois|colin|branzino|mulet|pageot|vivaneau|saint-pierre|lingue|grondin|rascasse|lapin|lièvre|foie|rognon|cœur|coeur|jambon|charcuterie|porc(?!ini)|cochon|lard|lardon|bacon|pancetta|chorizo|pepperoni|saucisson|saucisse|merguez|andouille|boudin|rillette|p[âa]t[ée]|terrine|gel[ae]tine(?!\s+(?:agar|v[ée]g[ée]tal))/;r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();if(veganBan.test(i))return false;if(/lait/.test(i)&&!/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz/.test(i))return false;if(/beurre/.test(i)&&!/beurre de cacahu|beurre d.amande|beurre de noisette|beurre de noix|beurre de coco/.test(i))return false;return true});} // beurre végétal (cacahuète, amande, noisette) autorisé en vegan
+  if(s.regime===3){var veganBan=/poulet|boeuf|bœuf|veau|dinde|agneau|canard|kefta|steak|saumon|thon|crevette|cabillaud|sardine|maquereau|dorade|daurade|sole|lotte|morue|gambas|poisson|poulpe|oeuf|œuf|fromage|ricotta|feta|parmesan|mozzarella|cottage|emmental|skyr|labneh|yaourt|miel|whey|\bbar\b|lieu noir|mahi.?mahi|merlu|tilapia|hareng|truite|anchois|colin|branzino|mulet|pageot|vivaneau|saint-pierre|lingue|grondin|rascasse|lapin|lièvre|foie|rognon|cœur|coeur|jambon|charcuterie|porc(?!ini)|cochon|lard|lardon|bacon|pancetta|prosciutto|chorizo|pepperoni|saucisson|saucisse|merguez|andouille|boudin|rillette|p[âa]t[ée]|terrine|gel[ae]tine(?!\s+(?:agar|v[ée]g[ée]tal))/;r=r.filter(function(x){var i=_ri(x);if(veganBan.test(i))return false;if(/lait/.test(i)&&!/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz/.test(i))return false;if(/beurre/.test(i)&&!/beurre de cacahu|beurre d.amande|beurre de noisette|beurre de noix|beurre de coco/.test(i))return false;return true});} // beurre végétal (cacahuète, amande, noisette) autorisé en vegan
   // Grossesse : exclure les aliments contre-indiqués pendant la grossesse (OMS / ANSES 2022)
   // Risques : listériose (charcuterie crue, fromage au lait cru), parasites (poisson cru, sushi)
   // L'alcool traverse le placenta — aucune dose sûre (OMS 2014, ACOG 2021)
-  if(s.pregnant&&s.sex==='femme'){r=r.filter(function(x){var i=((x.i||'')+' '+(x.n||'')+' '+(x.tags||[]).join(' ')).toLowerCase();
+  if(s.pregnant&&s.sex==='femme'){r=r.filter(function(x){var i=_ri(x);
     // Poisson cru / sushi / carpaccio / ceviche / gravlax / tartare de poisson — élargi (carpaccio.*saumon, saumon tranché fin)
     if((/sushi|sashimi|tartare de (?:saumon|thon|poisson)|gravlax|carpaccio.*(?:saumon|thon|poisson)|ceviche|poisson cru|saumon (?:cru|tranché fin)|truite fumée|saumon fumé/).test(i))return false;
     // Alcool (même en cuisine — l'alcool ne s'évapore jamais totalement)
@@ -4980,13 +4982,13 @@ function filterRecipes(pool,type){
     if((/rillettes|p[âa]t[ée] de (?:foie|campagne)|jambon cru|jambon sec|charcuterie crue|saucisson cru|chorizo cru/).test(i))return false;
     return true;});}
   // Allaitement : exclure alcool en cuisine (passe dans le lait maternel — AAP 2012)
-  if(!s.pregnant&&Array.isArray(s.medical)&&s.medical.indexOf('allaitement')!==-1){r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/alcool|vin blanc|vin rouge|bière|rhum|cognac|whisky|vodka|porto|amaretto|mirin(?! halal)|sake/).test(i)});}
+  if(!s.pregnant&&Array.isArray(s.medical)&&s.medical.indexOf('allaitement')!==-1){r=r.filter(function(x){var i=_ri(x);return!(/alcool|vin blanc|vin rouge|bière|rhum|cognac|whisky|vodka|porto|amaretto|mirin(?! halal)|sake/).test(i)});}
   // Halal : exclut porc, charcuterie porcine et alcool
   // Porc exclu par défaut — inclure si allowPork = true (opt-in explicite)
-  if(!s.allowPork)r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/porc(?!ini)|cochon|lard(?!on[s]?[-\s]+(?:de\s+)?(?:dinde|volaille|poulet))|bacon|jambon(?![-\s]+(?:de\s+)?(?:dinde|volaille|poulet))|saucisson|pepperoni|chorizo|pancetta|g\u00e9latine de porc|saucisse(?![-\s]+(?:de\s+)?(?:volaille|poulet|dinde|soja))|\bandouille\b|\bboudin\b/).test(i)});
+  if(!s.allowPork)r=r.filter(function(x){var i=_ri(x);return!(/porc(?!ini)|cochon|lard(?!on[s]?[-\s]+(?:de\s+)?(?:dinde|volaille|poulet))|bacon|jambon(?![-\s]+(?:de\s+)?(?:dinde|volaille|poulet))|saucisson|pepperoni|chorizo|pancetta|prosciutto|g\u00e9latine de porc|saucisse(?![-\s]+(?:de\s+)?(?:volaille|poulet|dinde|soja))|\bandouille\b|\bboudin\b/).test(i)});
   // Alcool en cuisine exclu par défaut — inclure si allowAlcohol = true
-  if(!s.allowAlcohol)r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/alcool|vin blanc|vin rouge|bi[e\u00e8]re|rhum|cognac|whisky|vodka|porto|amaretto|mirin(?! halal)/).test(i)});
-  if(typeof s.excluded==='string'&&s.excluded&&s.excluded.trim()){var excl=s.excluded.toLowerCase().split(',').map(function(str){return str.trim()}).filter(Boolean);r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();for(var e=0;e<excl.length;e++){if(i.indexOf(excl[e])!==-1)return false}return true})}
+  if(!s.allowAlcohol)r=r.filter(function(x){var i=_ri(x);return!(/alcool|vin blanc|vin rouge|bi[e\u00e8]re|rhum|cognac|whisky|vodka|porto|amaretto|mirin(?! halal)/).test(i)});
+  if(typeof s.excluded==='string'&&s.excluded&&s.excluded.trim()){var excl=s.excluded.toLowerCase().split(',').map(function(str){return str.trim()}).filter(Boolean);r=r.filter(function(x){var i=_ri(x);for(var e=0;e<excl.length;e++){if(i.indexOf(excl[e])!==-1)return false}return true})}
   var _cuisines=s.cuisines||[];if(_cuisines.indexOf(0)===-1&&_cuisines.length>0){var flags=[];for(var c=0;c<_cuisines.length;c++){var co=CUISINES[_cuisines[c]];if(co&&CUISINE_FLAGS[co.name])flags.push(CUISINE_FLAGS[co.name])}if(flags.length>0){var _preCuisinePool=r.slice();r=r.filter(function(x){return flags.indexOf(x.f)!==-1});if(r.length===0)r=_preCuisinePool;}} // fallback : si aucune recette ne correspond aux cuisines choisies, on garde le pool complet
   return r;
 }

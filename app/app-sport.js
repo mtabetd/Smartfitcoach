@@ -486,7 +486,7 @@ function generateSportProgram() {
          else if (_dtype === 'chest_only') _filtered = ['chest'];
          else if (_dtype === 'back_only') _filtered = ['back'];
          else if (_dtype === 'arms')      _filtered = ['biceps','triceps'];
-         else _filtered = ['chest','back','legs']; // last resort
+         else _filtered = ['chest','back','shoulders','legs','glutes','biceps','triceps','abs']; // safe fallback
        }
        // Re-sort by priority
        _filtered.sort(function(a, b) { return (categoryPriority[b] || 0) - (categoryPriority[a] || 0); });
@@ -542,7 +542,7 @@ function generateSportProgram() {
  var groupWeekOccurrence = {};
 
  // Generate exercises for each day
- var maxLv = S.sportLevel === 'beginner' ? 2 : S.sportLevel === 'intermediate' ? 3 : 4;
+ var maxLv = S.sportLevel === 'beginner' ? 2 : S.sportLevel === 'intermediate' ? 3 : 3; // lv:4 not yet in DB — cap at 3
  // During pregnancy, cap level
  if (pregTri) maxLv = Math.min(maxLv, 2);
 
@@ -801,6 +801,17 @@ function generateSportProgram() {
  }
  }
  });
+
+ // Deduplicate exercises within the same day (same name = same exercise from two pools)
+ (function() {
+  var _seen = {};
+  dayExercises = dayExercises.filter(function(ex) {
+   var _k = (ex.n || '').toLowerCase().trim();
+   if (_seen[_k]) return false;
+   _seen[_k] = true;
+   return true;
+  });
+ })();
 
  // Pregnancy: add Kegel exercises to every day
  if (pregTri) {
