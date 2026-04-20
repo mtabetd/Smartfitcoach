@@ -5662,7 +5662,7 @@ function renderTodayDashboard(p) {
     // Règle : si le plan est déjà validé ET que son hash n'a pas changé, on revalide en silence
     //         pour la nouvelle semaine. Le bandeau ne s'affiche que si quelque chose a changé.
     if (_isoWeek && S.weekPlanValidated && S.weekPlanValidatedISOWeek && S.weekPlanValidatedISOWeek !== _isoWeek) {
-      var _currentHash = (S.weekPlan && Array.isArray(S.weekPlan)) ? JSON.stringify(S.weekPlan).length : 0;
+      var _currentHash = window.getPlanHash ? window.getPlanHash() : '';
       if (S._planHash && S._planHash === _currentHash) {
         S.weekPlanValidatedISOWeek = _isoWeek;
         if (window.saveProfile) window.saveProfile();
@@ -5671,7 +5671,7 @@ function renderTodayDashboard(p) {
         S._planHash = _currentHash;
       }
     } else if (_isoWeek && S.weekPlanValidated && !S._planHash && S.weekPlan) {
-      S._planHash = JSON.stringify(S.weekPlan).length;
+      S._planHash = window.getPlanHash ? window.getPlanHash() : '';
     }
     var _nutNeedsValidation = S.weekPlan && Array.isArray(S.weekPlan) && S.weekPlan.length >= 7
       && (!S.weekPlanValidated || (S.weekPlanValidatedISOWeek && _isoWeek && S.weekPlanValidatedISOWeek !== _isoWeek));
@@ -5701,7 +5701,7 @@ function renderTodayDashboard(p) {
           try {
             S.weekPlanValidated = true;
             if (_isoWeek) S.weekPlanValidatedISOWeek = _isoWeek;
-            S._planHash = (S.weekPlan && Array.isArray(S.weekPlan)) ? JSON.stringify(S.weekPlan).length : 0;
+            S._planHash = window.getPlanHash ? window.getPlanHash() : '';
             S.sportProgramValidated = true;
             S.sportProgramValidatedAt = new Date().toISOString();
             if (window.saveProfile) window.saveProfile();
@@ -5723,7 +5723,7 @@ function renderTodayDashboard(p) {
             try {
               S.weekPlanValidated = true;
               if (_isoWeek) S.weekPlanValidatedISOWeek = _isoWeek;
-              S._planHash = (S.weekPlan && Array.isArray(S.weekPlan)) ? JSON.stringify(S.weekPlan).length : 0;
+              S._planHash = window.getPlanHash ? window.getPlanHash() : '';
               if (window.saveProfile) window.saveProfile();
               if (window.showToast) window.showToast('Plan nutrition valid\u00e9', 'success', 1800);
             } catch(_eNut) { console.warn('[nut banner validate]', _eNut); }
