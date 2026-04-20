@@ -253,7 +253,9 @@ function generateSportProgram() {
    2:['fullbody_ab'], 3:['fullbody_3','ppl_3'], 4:['upper_lower','ppl_plus1','bro_4'],
    5:['ppl_5','bro_5'], 6:['ppl_6']
  };
- if (_isIntermediatePlus && days >= 2) {
+ // FIX P0 2026-04-20: apply split validation to ALL levels, not just intermediate+.
+ // A beginner with bro_4 set (4-day split) and days=3 would silently drop the Legs day.
+ if (days >= 2) {
    var _validForDays = _VALID_SPLITS_PER_DAY[days] || [];
    if (!S._splitChoice || _validForDays.indexOf(S._splitChoice) === -1) {
      S._splitChoice = _DEFAULT_SPLITS[days] || _DEFAULT_SPLITS[Math.min(6, Math.max(2, days))] || null;
@@ -610,8 +612,8 @@ function generateSportProgram() {
  if (S.pregnant && typeof S.pregnancyWeek === 'number' && S.pregnancyWeek >= 14) {
  available = available.filter(function(ex){
    var n = String(ex.n || ex.name || '').toLowerCase();
-   // Exclure tout mouvement allongé sur le dos (DC, leg press inclinée vers le bas, etc.)
-   if (/d[eé]velopp[eé] couch[eé]|developpe couche|bench press|leg press|presse[\s-]?cuisses|crunch|sit.?up|décliné|decline|hip thrust|glute bridge sol/.test(n)) return false;
+   // Exclure décubitus dorsal (veine cave T2/T3) + impacts/sauts + excentrique max grossesse
+   if (/d[eé]velopp[eé] couch[eé]|developpe couche|bench press|leg press|presse[\s-]?cuisses|crunch|sit.?up|d[eé]clin[eé]|decline|hip thrust|glute bridge sol|box jump|nordic curl|soulev[eé] de terre|deadlift/.test(n)) return false;
    return true;
  });
  }
@@ -689,6 +691,11 @@ function generateSportProgram() {
 
  var pri = categoryPriority[group] || 1;
 
+ // FIX P0 2026-04-20: snapshot of medically-safe exercises BEFORE beginner/priority sort.
+ // Without this, the exotic-filter fallback at the next line would use pool.slice() (ALL exercises),
+ // re-introducing medically forbidden exercises that were already filtered out above.
+ var _medSafeAvailable = available.slice();
+
  // FIX BIBLE MUSCU §6.2 audit Marc (débutant) : priorité absolue aux composés
  // fondamentaux (squat/DC/DL/OHP/rowing/tractions) — jamais Svend press/Upright row/
  // Hanging knee raise lesté en #1. Bible §6.2 : masquer aussi ces exos exotiques.
@@ -699,8 +706,8 @@ function generateSportProgram() {
    available = available.filter(function(ex) {
      return !_exoticRegex.test(ex.n || ex.name || '');
    });
-   // Si le filtre a tout supprimé, on le relâche (mieux que programme vide)
-   if (available.length === 0) available = pool.slice();
+   // Fallback: use medically-safe pool (NOT pool.slice() which bypasses medical filters)
+   if (available.length === 0) available = _medSafeAvailable.slice();
    // Priorité aux fondamentaux en tête de liste
    var _fundRegex = /\b(squat|d[eé]velopp[eé] couch[eé]|bench press|soulev[eé] de terre|deadlift|d[eé]velopp[eé] militaire|overhead press|rowing barre|pendlay|tractions?|dips|curl biceps halt|curl haltères|extensions? triceps|leg press|presse \u00e0 cuisses)\b/i;
    var _fundamentals = available.filter(function(ex) { return _fundRegex.test(ex.n || ex.name || ''); });
@@ -744,6 +751,25 @@ function generateSportProgram() {
 
  // Override rest based on goals
  if (restOverride) ex.rest = restOverride;
+
+ // FIX P0 2026-04-20: adapt rep ranges based on goal (previously only rest was changed).
+ // Shred: higher reps (12-15) + short rest = metabolic stress protocol (NSCA 2016).
+ // Strength: lower reps (3-5) + long rest = neural adaptation protocol.
+ if (ex.sets && typeof ex.sets === 'string') {
+   if (hasShred) {
+     ex.sets = ex.sets.replace(/(\u00d7|x)(\d+)-(\d+)/, function(_, sep, r1, r2) {
+       return sep + Math.max(12, parseInt(r1) + 2) + '-' + Math.max(15, parseInt(r2) + 3);
+     }).replace(/(\u00d7|x)(\d+)(?![-\d])/, function(_, sep, r) {
+       return sep + Math.max(12, parseInt(r) + 3);
+     });
+   } else if (hasStrength) {
+     ex.sets = ex.sets.replace(/(\u00d7|x)(\d+)-(\d+)/, function(_, sep, r1, r2) {
+       return sep + Math.max(3, Math.min(5, parseInt(r1))) + '-' + Math.max(5, Math.min(6, parseInt(r2)));
+     }).replace(/(\u00d7|x)(\d+)(?![-\d])/, function(_, sep, r) {
+       var nr = parseInt(r); return sep + (nr > 6 ? Math.max(3, nr - 3) : r);
+     });
+   }
+ }
 
  // BUG-19: Beginners need extra rest on compound/complex exercises (lv >= 2)
  if (S.sportLevel === 'beginner' && ex.lv >= 2) {
@@ -800,6 +826,19 @@ function generateSportProgram() {
  }
  }
  }
+ });
+
+ // FIX P0 2026-04-20: sort dayExercises — compound/polyarticulaire exercises BEFORE isolation.
+ // Science rationale: CNS freshness = best compound performance (Kraemer & Ratamess, MSSE 2004).
+ // Tag "compose" = compound; tag "isolation" = isolation; no tag = neutral (keep position).
+ dayExercises.sort(function(a, b) {
+   var _score = function(ex) {
+     if (!ex.tags) return 1;
+     if (ex.tags.indexOf('compose') !== -1) return 0;
+     if (ex.tags.indexOf('isolation') !== -1) return 2;
+     return 1;
+   };
+   return _score(a) - _score(b);
  });
 
  // Deduplicate exercises within the same day (same name = same exercise from two pools)
@@ -8154,6 +8193,7 @@ function renderMusculationProgram(p) {
  }
  S.swapPanel = null;
  if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+ if (window.showToast) window.showToast('✓ ' + (newEx.n || 'Exercice') + ' ajouté au programme', 'success', 2500);
  window.render();
  },
  onmouseover: function() { this.style.background = 'var(--ivory,#FAF9F6)'; },
@@ -10795,7 +10835,7 @@ function renderCyclingOnboarding(p) {
  p.appendChild(h('div', {'class': 'section-label'}, 'FTP actuel en watts (optionnel — laissez vide si inconnu)'));
  var ftpWrap = h('div', {'class': 'num-input-wrap'});
  ftpWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '80', max: '500', placeholder: '—', value: S.cyclingFTP ? String(S.cyclingFTP) : '', inputmode: 'numeric', style: 'width:90px;text-align:center',
- oninput: function(e){ var v = parseInt(e.target.value); S.cyclingFTP = (!isNaN(v) && v > 0) ? v : null; },
+ oninput: function(e){ var v = parseInt(e.target.value); S.cyclingFTP = (!isNaN(v) && v >= 75 && v <= 500) ? v : null; },
  onblur: function(){ window.render(); }
  }));
  ftpWrap.appendChild(h('span', {'class': 'num-unit'}, 'watts'));

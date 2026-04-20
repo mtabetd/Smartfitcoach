@@ -2942,7 +2942,7 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Tirage horizontal câble', m: 'Dorsaux / Rhomboïdes', eq: 'Câble horizontal', sets: '4×10-12', rest: '90s' },
     { n: 'Rowing haltère unilatéral', m: 'Grand dorsal / Trapèzes', eq: 'Haltère + banc', sets: '4×10-12', rest: '75s' },
     { n: 'Rowing barre', m: 'Grand dorsal / Trapèzes', eq: 'Barre', sets: '4×8-12', rest: '90s' },
-    { n: 'Shrugs haltères', m: 'Trapèzes supérieurs', eq: 'Haltères', sets: '4×12-15', rest: '60s' },
+    { n: 'Pendlay row', m: 'Grand dorsal / Rhomboïdes', eq: 'Barre', sets: '4×6-8', rest: '120s' },
     { n: 'Chest supported row', m: 'Dos', eq: 'Banc incliné + haltères', sets: '4×10-12', rest: '90s' },
     { n: 'Straight arm pulldown câble', m: 'Dos', eq: 'Câble haute poulie', sets: '3×12-15', rest: '60s' },
     { n: 'Rack pull', m: 'Dos', eq: 'Barre + rack', sets: '4×6-8', rest: '120s' },
@@ -3103,6 +3103,17 @@ function getAlternativeExercises(muscle, excludeName, maxCount) {
   ];
   for (var ki = 0; ki < keyMap.length; ki++) {
     if (ml.indexOf(keyMap[ki][0]) !== -1) { dbKey = keyMap[ki][1]; break; }
+  }
+  // FIX P0 2026-04-20: handle compound muscle strings like "Pectoraux / Triceps" or "Grand dorsal / Biceps".
+  // When the full string doesn't match any keyMap entry, split on "/" or "+" and try each part.
+  if (!dbKey) {
+    var _parts = ml.split(/[\/\+]/);
+    for (var _pi = 0; _pi < _parts.length && !dbKey; _pi++) {
+      var _pt = _parts[_pi].trim();
+      for (var _ki = 0; _ki < keyMap.length; _ki++) {
+        if (_pt.indexOf(keyMap[_ki][0]) !== -1) { dbKey = keyMap[_ki][1]; break; }
+      }
+    }
   }
   var pool;
   if (ml.indexOf('bras') !== -1 && ml.indexOf('biceps') === -1 && ml.indexOf('triceps') === -1) {
