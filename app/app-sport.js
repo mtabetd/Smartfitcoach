@@ -6832,8 +6832,25 @@ function renderMusculationProgram(p) {
  p.appendChild(h('p', {'class': 'subtitle'}, S.sportDays + ' jours/semaine — ' + goalNames));
  if (window.TIPS) TIPS.renderTip(p, 'sportProgram');
 
- // ─── SUIVI 7 SEMAINES ───
- renderWeekTracker(p);
+ // ─── SUIVI 7 SEMAINES (collapsible) ───
+ (function() {
+  loadMuscuWeek();
+  var _wkNum = S.muscuWeek || 1;
+  var _wkPhase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(_wkNum) : {label: '', color: 'var(--ink-900,#0A0A09)'};
+  var _wtOpen = !!S._weekTrackerOpen;
+  var _wtBar = h('div', {
+   style: 'display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--ivory2,#F4F2EB);border:1px solid var(--border,#D8D8D0);border-left:3px solid ' + ((_wkPhase && _wkPhase.color) || 'var(--ink-900,#0A0A09)') + ';cursor:pointer;margin-bottom:' + (_wtOpen ? '0' : '12px'),
+   onclick: function(e) { e.stopPropagation(); S._weekTrackerOpen = !S._weekTrackerOpen; window.render(); }
+  });
+  _wtBar.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);font-weight:600'}, 'PROGRESSION · Sem. ' + _wkNum + '/7 · ' + ((_wkPhase && _wkPhase.label) || '')));
+  _wtBar.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65)'}, _wtOpen ? '▲' : '▼'));
+  p.appendChild(_wtBar);
+  if (_wtOpen) {
+   var _wtContent = h('div', {style: 'margin-bottom:12px'});
+   renderWeekTracker(_wtContent);
+   p.appendChild(_wtContent);
+  }
+ })();
 
  // Show zone focus with star count
  var focusZones = Object.keys(S.sportFocus || {})
