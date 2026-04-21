@@ -607,8 +607,16 @@ function generateTriathlonProgram(goal, level, weakDiscipline, opts) {
   var runPoolPeak = [runIntervals400, runIntervals800, runAllureSemi, runLong, runTempo];
 
   function pickSession(pool, w, idx) {
-    var i = (w + idx) % pool.length;
-    return pool[i](w);
+    // FIX 2026-04-21 : bounds check — si pool vide, retour safe placeholder (évite crash)
+    if (!Array.isArray(pool) || pool.length === 0) {
+      return { name: 'Séance récupération', detail: 'Repos actif 30-45 min marche/stretching', duration: '30min', zone: 'récup' };
+    }
+    var i = ((w + idx) % pool.length + pool.length) % pool.length;
+    var fn = pool[i];
+    if (typeof fn !== 'function') {
+      return { name: 'Séance récupération', detail: 'Repos actif', duration: '30min', zone: 'récup' };
+    }
+    return fn(w);
   }
 
   // ==============================

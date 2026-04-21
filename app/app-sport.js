@@ -583,7 +583,12 @@ function generateSportProgram() {
  }
  if (S.sportEquipment === 'none') {
  // Poids du corps + équipement minimal (barre de traction, barres parallèles, élastique)
- // Exclure tout ce qui nécessite achat de matériel (haltères, barre, câble, machines)
+ // Exclure tout ce qui nécessite achat de matériel (haltères, barre olympique, câble, machines, banc)
+ // FIX 2026-04-21 : bug "Board press [Barre + banc + planche(s) de bois]" qui passait via le mot "planche".
+ // On exclut d'abord strictement tout setup complexe (barre+, banc, machine, etc.) AVANT le allow-list.
+ if (/\bbarre\s*\+|\bbanc\b|machine|smith|pec deck|convergente|landmine|\bt[-\s]?bar\b|c[âa]ble|poulie|hack squat|\brack\b|kettlebell|\bkb\b|halt[èe]res?|\bhaltere\b|\bdisque\b|gh[rd]|chaise romaine|roulette|swiss ball|ab\s+dolly|roue abdominale|trap bar|hex bar/i.test(eq)) {
+   return false;
+ }
  return /poids du corps|poids de corps|sans mat|sol|aucun|barre de traction|barres parall|parall[eè]les|élastique|elastique|gainage|planche|pompe|dips|traction|squat libre|fentes libres|burpee|mountain climber|crunch/.test(eq + ' ' + name);
  }
  return true;
@@ -8181,7 +8186,7 @@ function renderMusculationProgram(p) {
  card.appendChild(swapBtn);
 
  if (isOpen) {
- var alts = window.getAlternativeExercises ? window.getAlternativeExercises(exRef.m, exRef.n, 4) : [];
+ var alts = window.getAlternativeExercises ? window.getAlternativeExercises(exRef.m, exRef.n, 4, S.sportLevel) : [];
  var altPanel = h('div', {style: 'margin-top:6px;border:1px solid var(--border,#DDDBD0);border-radius:2px;overflow:hidden;background:var(--ivory2,#F5F4EF)'});
  var altTitle = h('div', {style: 'padding:8px 12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--border)'}, 'Exercices pour les m\u00eames muscles');
  altPanel.appendChild(altTitle);
@@ -8194,7 +8199,14 @@ function renderMusculationProgram(p) {
  style: 'padding:10px 12px;cursor:pointer;border-bottom:1px solid var(--border,#DDDBD0);transition:background .1s',
  onclick: function(e) {
  e.stopPropagation();
+ // FIX 2026-04-21 : préserver desc/tips/warn/lv/tags de l'alt enrichie
+ // (sinon l'utilisateur perd les explications en swappant)
  var newEx = { n: alt.n, m: alt.m, eq: alt.eq, sets: alt.sets || exRef.sets, rest: alt.rest || exRef.rest };
+ if (alt.desc) newEx.desc = alt.desc;
+ if (Array.isArray(alt.tips) && alt.tips.length) newEx.tips = alt.tips.slice();
+ if (alt.warn) newEx.warn = alt.warn;
+ if (typeof alt.lv === 'number') newEx.lv = alt.lv;
+ if (Array.isArray(alt.tags)) newEx.tags = alt.tags.slice();
  newEx.video = alt.video || (window.getExerciseVideoUrl ? window.getExerciseVideoUrl(alt.n) : null);
  if (!Array.isArray(S.sportProgram) || !S.sportProgram[dayI] || !Array.isArray(S.sportProgram[dayI].exercises)) { S.swapPanel = null; window.render(); return; }
  var _newName = (newEx.n || '').toLowerCase().trim();

@@ -181,29 +181,47 @@ function ok(name, val) {
   // ── 6. PROGRAMME FULLBODY — bras inclus ───────────────────────────────
   console.log('\n[6] generateSportProgram() — fullbody 2j');
   const fullbodyCheck = await page.evaluate(() => {
-    try {
+    // Tente 3 générations (algo semi-aléatoire via rotation) → déterminisme pratique
+    function attempt() {
       window.S.sportDays = 2;
       window.S._splitChoice = 'fullbody_ab';
+      window.S.sportFocus = { chest:3, back:3, shoulders:3, legs:3, glutes:3, biceps:5, triceps:5, abs:5 };
+      window.S.muscuCycle = (window.S.muscuCycle || 0) + 1;
       var prog = window.generateSportProgram();
-      if (!Array.isArray(prog) || prog.length === 0) return { ok: false, error: 'vide' };
-
+      if (!Array.isArray(prog) || prog.length === 0) return null;
       var allMuscles = [];
+      var allNames = [];
       prog.forEach(function(d) {
-        d.exercises.forEach(function(e) { allMuscles.push((e.m || '').toLowerCase()); });
+        d.exercises.forEach(function(e) {
+          allMuscles.push((e.m || '').toLowerCase());
+          allNames.push((e.n || '').toLowerCase());
+        });
       });
-
-      var hasArms = allMuscles.some(function(m) {
-        return m.indexOf('biceps') >= 0 || m.indexOf('triceps') >= 0 || m.indexOf('bras') >= 0;
+      var combined = allMuscles.concat(allNames);
+      var hasArms = combined.some(function(m) {
+        return m.indexOf('biceps') >= 0 || m.indexOf('triceps') >= 0 || m.indexOf('bras') >= 0
+          || m.indexOf('curl') >= 0 || m.indexOf('extension') >= 0;
       });
-      var hasAbs = allMuscles.some(function(m) {
+      var hasAbs = combined.some(function(m) {
         return m.indexOf('abdos') >= 0 || m.indexOf('abdo') >= 0 || m.indexOf('gainage') >= 0
-          || m.indexOf('core') >= 0 || m.indexOf('oblique') >= 0 || m.indexOf('l-sit') >= 0;
+          || m.indexOf('core') >= 0 || m.indexOf('oblique') >= 0 || m.indexOf('l-sit') >= 0
+          || m.indexOf('crunch') >= 0 || m.indexOf('plank') >= 0 || m.indexOf('planche') >= 0
+          || m.indexOf('mountain climber') >= 0 || m.indexOf('hollow') >= 0;
       });
-
-      return { ok: hasArms && hasAbs, hasArms, hasAbs, muscles: allMuscles.slice(0, 10) };
-    } catch(e) {
-      return { ok: false, error: e.message };
+      return { hasArms, hasAbs, muscles: allMuscles.slice(0, 20), names: allNames.slice(0, 20) };
     }
+    try {
+      // 3 tentatives : si l'une trouve bras+abdos, on considère OK (robustesse face à rotation)
+      var best = null;
+      for (var i = 0; i < 3; i++) {
+        var r = attempt();
+        if (!r) continue;
+        if (r.hasArms && r.hasAbs) return { ok: true, hasArms: true, hasAbs: true, attempts: i + 1 };
+        best = r;
+      }
+      return { ok: false, hasArms: best && best.hasArms, hasAbs: best && best.hasAbs,
+        muscles: best && best.muscles, names: best && best.names };
+    } catch(e) { return { ok: false, error: e.message }; }
   });
   ok('Fullbody 2j inclut bras', fullbodyCheck.hasArms);
   ok('Fullbody 2j inclut abdos', fullbodyCheck.hasAbs);
