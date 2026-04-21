@@ -1277,9 +1277,9 @@ function renderCardBonjour(S) {
   // ── Bandeau Trial ──
   if (window.isTrialUser && window.isTrialUser()) {
     var _trialDays = window.getTrialDaysLeft ? window.getTrialDaysLeft() : 0;
-    var _trialBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;margin-bottom:12px;border:1px solid var(--orange,#E86F1E);background:var(--orangebg,rgba(106,74,26,0.06));border-radius:2px;'});
+    var _trialBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;margin-bottom:12px;border:1px solid var(--orange,#E86F1E);background:rgba(232,111,30,0.06);border-radius:0;'});
     var _trialLeft = h('div', {});
-    _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange,#E86F1E);font-weight:600;margin-bottom:2px;'}, 'VERSION D\u2019ESSAI'));
+    _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);font-weight:400;margin-bottom:2px;'}, 'VERSION D\u2019ESSAI'));
     if (_trialDays > 0) {
       _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'}, _trialDays + ' jour' + (_trialDays > 1 ? 's' : '') + ' restant' + (_trialDays > 1 ? 's' : '') + ' \u2014 Vous avez accès à tout'));
     } else {
@@ -1789,7 +1789,7 @@ function renderFoodJournalCard() {
     var btn = h('button', {
       style: 'flex:1;padding:10px 4px;min-height:44px;cursor:pointer;border:none;border-bottom:' + (active ? '2px solid var(--black,#0A0A09)' : '2px solid transparent') + ';'
         + 'background:' + (active ? 'var(--black,#0A0A09)' : 'transparent') + ';'
-        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;'
+        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;'
         + 'color:' + (active ? 'var(--ivory,#FAF9F6)' : 'var(--grey,#6B6B65)') + ';'
         + 'transition:background 0.15s,color 0.15s;'
     }, m.label);
@@ -2306,7 +2306,7 @@ function _fjAppendOFFResults() {
     var cancelBtn = h('button', {
       type: 'button',
       style: 'background:none;border:1px solid var(--line,#D8D8D0);padding:6px 12px;min-height:32px;cursor:pointer;'
-        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey,#6B6B65);border-radius:2px;'
+        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);border-radius:2px;'
     }, 'Annuler');
     cancelBtn.addEventListener('click', function() {
       try { if (_fjOFF.ctrl) _fjOFF.ctrl.abort(); } catch(e) {}
@@ -2676,7 +2676,7 @@ function _fjShowSelection() {
     var switchToGrams = h('button', {
       type: 'button',
       style: 'background:transparent;border:1px solid var(--line,#D8D8D0);padding:6px 12px;cursor:pointer;color:var(--grey,#6B6B65);'
-        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;border-radius:2px;margin-bottom:10px;'
+        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;border-radius:2px;margin-bottom:10px;'
     }, 'Mode grammes');
     switchToGrams.addEventListener('click', function() {
       _fjState.unitMode = 'grams';
@@ -2758,7 +2758,7 @@ function _fjShowSelection() {
       var switchToPortion = h('button', {
         type: 'button',
         style: 'background:transparent;border:1px solid var(--line,#D8D8D0);padding:6px 12px;cursor:pointer;color:var(--grey,#6B6B65);'
-          + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;border-radius:2px;margin-bottom:10px;'
+          + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;border-radius:2px;margin-bottom:10px;'
       }, 'Mode portion');
       switchToPortion.addEventListener('click', function() {
         _fjState.unitMode = 'portion';
@@ -2889,7 +2889,7 @@ function _fjBuildEntriesList(container) {
     var copyBtn = h('button', {
       type: 'button',
       style: 'padding:6px 14px;min-height:36px;border:1px solid var(--line,#D8D8D0);border-radius:2px;cursor:pointer;background:transparent;'
-        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey,#6B6B65);'
+        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);'
     }, 'Copier d\'hier (' + yesterdayItems.length + ')');
     copyBtn.addEventListener('click', function() {
       if (!window.FOOD_JOURNAL || !window.FOOD_JOURNAL.addEntry) return;
@@ -2910,7 +2910,7 @@ function _fjBuildEntriesList(container) {
   var saveBtn = h('button', {
     type: 'button',
     style: 'padding:6px 14px;min-height:36px;border:1px solid var(--line,#D8D8D0);border-radius:2px;cursor:pointer;background:transparent;'
-      + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey,#6B6B65);'
+      + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);'
   }, 'Sauvegarder ce repas');
   saveBtn.addEventListener('click', function() {
     todayModal('Sauvegarder ce repas', function(box, overlay) {
@@ -3357,10 +3357,10 @@ function renderCardStreak() {
         'align-items:center;',
         'gap:14px;',
         'padding:12px 14px;',
-        'border:1px solid rgba(26,74,26,0.18);',
-        'border-left:3px solid var(--accent);',
-        'background:rgba(26,74,26,0.04);',
-        'border-radius:2px;'
+        'border:1px solid var(--line,#D8D8D0);',
+        'border-left:3px solid var(--ink-900,#0A0A09);',
+        'background:var(--paper-2,#F4F1EA);',
+        'border-radius:0;'
       ].join('')
     });
 
@@ -3370,8 +3370,8 @@ function renderCardStreak() {
         'width:38px;height:38px;',
         'flex-shrink:0;',
         'display:flex;align-items:center;justify-content:center;',
-        'background:rgba(26,74,26,0.09);',
-        'border-radius:2px;',
+        'background:var(--paper-3,#EEEAE0);',
+        'border-radius:0;',
         'font-size:20px;',
         'line-height:1;'
       ].join('')
@@ -3404,8 +3404,8 @@ function renderCardStreak() {
         'font-size:11px;',
         'letter-spacing:2px;',
         'text-transform:uppercase;',
-        'color:var(--accent);',
-        'border:1px solid rgba(26,74,26,0.3);',
+        'color:var(--ink-900,#0A0A09);',
+        'border:1px solid var(--line,#D8D8D0);',
         'padding:3px 6px;',
         'border-radius:2px;',
         'white-space:nowrap;'
@@ -3496,13 +3496,13 @@ function renderCardSport() {
           style: [
             'padding:10px 14px;',
             'margin-bottom:12px;',
-            'background:var(--orangebg,rgba(106,74,26,.06));',
+            'background:rgba(232,111,30,0.06);',
             'border:1px solid var(--orange,#E86F1E);',
             'border-left:3px solid var(--orange,#E86F1E);',
-            'border-radius:2px;',
+            'border-radius:0;',
             'font-family:"Helvetica Neue",Arial,sans-serif;',
             'font-size:11px;',
-            'color:var(--orange,#E86F1E);',
+            'color:var(--orange-ink,#7A3B0E);',
             'line-height:1.5;'
           ].join('')
         }, 'R\u00e9cup\u00e9ration insuffisante d\u00e9tect\u00e9e \u00b7 S\u00e9ance all\u00e9g\u00e9e recommand\u00e9e');
@@ -4302,7 +4302,7 @@ function renderExtendedSections(wrapper, S) {
         var patternsWrap = h('div', { style: 'display:flex;flex-direction:column;gap:8px;' });
         insights.patterns.slice(0, 3).forEach(function(p) {
           var colorByS = { info: 'var(--green,#3E5C3A)', warning: 'var(--orange,#E86F1E)', alert: 'var(--error,#7A1F1F)' };
-          var bgBySeverity = { info: 'var(--greenbg,rgba(26,74,26,0.06))', warning: 'var(--orangebg,rgba(106,74,26,0.06))', alert: 'var(--redbg,rgba(90,16,16,0.06))' };
+          var bgBySeverity = { info: 'rgba(62,92,58,0.06)', warning: 'rgba(232,111,30,0.06)', alert: 'rgba(122,31,31,0.06)' };
           var col = colorByS[p.severity] || 'var(--grey,#6B6B65)';
           var bg = bgBySeverity[p.severity] || 'transparent';
           var pChip = h('div', {
@@ -4461,7 +4461,7 @@ function renderExtendedSections(wrapper, S) {
         function trendStat(value, label) {
           var box = h('div', { 'class': 'sfc-stat-box', style: 'flex:1;text-align:center;padding:10px 12px;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#D8D8D0);border-radius:2px;' });
           box.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:18px;color:var(--black,#0A0A09);' }, value));
-          box.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:2px;' }, label));
+          box.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:2px;' }, label));
           return box;
         }
         statsRow.appendChild(trendStat(
@@ -4603,7 +4603,7 @@ function renderExtendedSections(wrapper, S) {
           var pctTxt = (deltaPct !== null) ? ' (' + (deltaPct > 0 ? '+' : '') + deltaPct.toFixed(1) + '%)' : '';
           var line = h('div', { 'class': 'sfc-delta-row', style: 'display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--border,#D8D8D0);' });
           line.appendChild(h('span', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);' }, ds.name));
-          var right = h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:0.5px;color:' + colorByDelta + ';font-weight:600;' }, signTxt + pctTxt);
+          var right = h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:0.5px;color:' + colorByDelta + ';font-weight:400;' }, signTxt + pctTxt);
           line.appendChild(right);
           deltaRow.appendChild(line);
         });
@@ -4843,7 +4843,7 @@ function renderExtendedSections(wrapper, S) {
         function nutStat(value, label) {
           var box = h('div', { 'class': 'sfc-stat-box', style: 'flex:1;text-align:center;padding:10px 8px;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#D8D8D0);border-radius:2px;' });
           box.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:17px;color:var(--black,#0A0A09);' }, value));
-          box.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:2px;' }, label));
+          box.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:2px;' }, label));
           return box;
         }
         nStatsRow.appendChild(nutStat(
@@ -5072,7 +5072,7 @@ function renderExtendedSections(wrapper, S) {
       window._todayKcalChart = window.createChart ? window.createChart(ctx2, {
         type: 'bar',
         data: { labels: JOURS_CH, datasets: [
-          { label: 'Kcal plan', data: dayKcals, backgroundColor: dayKcals.map(function(k) { var r = k / target; return r < 0.92 ? 'rgba(62,92,58,0.55)' : r > 1.08 ? 'rgba(90,16,16,0.50)' : 'rgba(62,92,58,0.75)'; }), borderColor: dayKcals.map(function(k) { var r = k / target; return r < 0.92 ? 'rgba(62,92,58,0.25)' : r > 1.08 ? 'rgba(90,16,16,0.25)' : 'rgba(62,92,58,0.35)'; }), borderWidth: 1, borderRadius: 1 },
+          { label: 'Kcal plan', data: dayKcals, backgroundColor: dayKcals.map(function(k) { var r = k / target; return r < 0.92 ? 'rgba(62,92,58,0.55)' : r > 1.08 ? 'rgba(122,31,31,0.50)' : 'rgba(62,92,58,0.75)'; }), borderColor: dayKcals.map(function(k) { var r = k / target; return r < 0.92 ? 'rgba(62,92,58,0.25)' : r > 1.08 ? 'rgba(122,31,31,0.25)' : 'rgba(62,92,58,0.35)'; }), borderWidth: 1, borderRadius: 0 },
           { label: 'Cible', data: Array(7).fill(target), type: 'line', borderColor: '#7A1F1F', borderDash: [4,3], pointRadius: 0, borderWidth: 1.2, fill: false }
         ] },
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0A0A09', titleFont: { family: 'Georgia, serif', size: 11 }, bodyFont: { family: 'Helvetica Neue, Arial, sans-serif', size: 11 }, padding: 8, callbacks: { label: function(c) { return c.dataset.label + ' : ' + Math.round(c.parsed.y) + ' kcal'; } } } }, scales: { y: { ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 }, callback: function(v) { return v + ' kcal'; } }, grid: { color: 'rgba(216,216,208,0.25)' } }, x: { grid: { display: false }, ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 } } } } }
@@ -5535,8 +5535,8 @@ function renderTodayDashboard(p) {
         style:
           'display:flex;align-items:center;justify-content:space-between;gap:12px;' +
           'max-width:560px;margin:0 auto 0;padding:12px 16px;' +
-          'border:1px solid rgba(106,74,26,0.25);background:rgba(106,74,26,0.05);' +
-          'border-radius:2px;cursor:pointer;'
+          'border:1px solid var(--orange,#E86F1E);background:rgba(232,111,30,0.05);' +
+          'border-radius:0;cursor:pointer;'
       });
       _tBar.addEventListener('click', function() { S.view = 'profil'; if (window.render) window.render(); });
       var _tL = h('div', {style: 'flex:1;min-width:0;'});
