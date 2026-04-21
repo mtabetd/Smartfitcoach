@@ -956,6 +956,12 @@ function generateSportProgram() {
 
  // Stamp version — stocké dans S (pas sur l'array, qui perd les custom props au JSON.stringify)
  S._sportProgramVersion = SPORT_PROGRAM_VERSION;
+
+ // Runtime validation + auto-fix (doublons, champs manquants)
+ if (window.validateSportProgram) {
+   try { window.validateSportProgram(program); } catch(_e) {}
+ }
+
  return program;
 }
 

@@ -394,6 +394,82 @@ function resetS(overrides) {
 })();
 
 // ══════════════════════════════════════════════════════════════════════
+// 9. VALIDATORS — Gardes runtime (validateSportProgram / validateWeekPlan)
+// ══════════════════════════════════════════════════════════════════════
+(function testValidators() {
+  if (!window.validateSportProgram) { T.assert(false, 'validators: validateSportProgram exporté'); return; }
+  if (!window.validateWeekPlan) { T.assert(false, 'validators: validateWeekPlan exporté'); return; }
+  if (!window.validateDataIntegrity) { T.assert(false, 'validators: validateDataIntegrity exporté'); return; }
+
+  // validateSportProgram : détecte et auto-corrige les doublons
+  var progDup = [
+    { exercises: [
+      { n: 'Rack pull', m: 'Dos', sets: '4×6', rest: '120s' },
+      { n: 'Squat', m: 'Jambes', sets: '4×8', rest: '180s' },
+      { n: 'rack pull', m: 'Dos', sets: '4×6', rest: '120s' } // doublon case-insensitive
+    ]}
+  ];
+  var rProg = window.validateSportProgram(progDup);
+  T.assert(!rProg.ok, 'validateSportProgram: détecte doublon intra-jour');
+  T.assert(rProg.fixed === true, 'validateSportProgram: auto-corrige le doublon');
+  T.eq(progDup[0].exercises.length, 2, 'validateSportProgram: doublon supprimé (3→2)');
+
+  // validateSportProgram : programme sain
+  var progOk = [
+    { exercises: [
+      { n: 'Squat', m: 'Jambes', sets: '4×8', rest: '180s' },
+      { n: 'Développé couché', m: 'Pecs', sets: '4×8', rest: '120s' }
+    ]}
+  ];
+  var rOk = window.validateSportProgram(progOk);
+  T.assert(rOk.ok, 'validateSportProgram: programme sain → ok=true');
+  T.assert(!rOk.fixed, 'validateSportProgram: programme sain → fixed=false');
+
+  // validateSportProgram : exercices fantômes supprimés
+  var progGhost = [
+    { exercises: [
+      { n: 'Squat', m: 'Jambes', sets: '4×8', rest: '180s' },
+      { n: '', m: 'Pecs', sets: '4×8', rest: '120s' }, // fantôme
+      { n: null, m: 'Dos', sets: '4×8', rest: '120s' }  // fantôme
+    ]}
+  ];
+  window.validateSportProgram(progGhost);
+  T.eq(progGhost[0].exercises.length, 1, 'validateSportProgram: exercices fantômes supprimés');
+
+  // validateWeekPlan : totaux désynchronisés → auto-fix
+  var planDesync = [{
+    breakfast: { n: 'B', k: 400, p: 30, g: 50, l: 10 },
+    lunch:     { n: 'L', k: 600, p: 45, g: 70, l: 15 },
+    snack:     { n: 'S', k: 200, p: 15, g: 25, l: 5 },
+    dinner:    { n: 'D', k: 500, p: 40, g: 55, l: 12 },
+    kcal: 9999, p: 9999, g: 9999, l: 9999 // stale
+  }];
+  var rPlan = window.validateWeekPlan(planDesync);
+  T.assert(!rPlan.ok, 'validateWeekPlan: détecte totaux désync');
+  T.assert(rPlan.fixed, 'validateWeekPlan: auto-corrige les totaux');
+  T.eq(planDesync[0].kcal, 1700, 'validateWeekPlan: kcal recalculé (400+600+200+500=1700)');
+  T.eq(planDesync[0].p, 130, 'validateWeekPlan: p recalculé (30+45+15+40=130)');
+
+  // validateWeekPlan : doublon de repas
+  var planDup = [{
+    breakfast: { n: 'Poulet riz', k: 500, p: 40, g: 60, l: 10 },
+    lunch:     { n: 'Poulet riz', k: 500, p: 40, g: 60, l: 10 }, // doublon
+    snack:     { n: 'Pomme', k: 100, p: 1, g: 25, l: 0 },
+    dinner:    { n: 'Saumon', k: 600, p: 50, g: 40, l: 20 },
+    kcal: 1700, p: 131, g: 185, l: 40
+  }];
+  var rDupPlan = window.validateWeekPlan(planDup);
+  T.assert(!rDupPlan.ok, 'validateWeekPlan: détecte doublon de repas intra-jour');
+
+  // validateDataIntegrity — tourne sur les vraies données
+  var rInt = window.validateDataIntegrity();
+  T.assert(rInt.ok, 'validateDataIntegrity: aucune erreur critique dans les données statiques');
+  if (!rInt.ok && rInt.errors) {
+    T.results[T.results.length - 1].detail = rInt.errors.slice(0, 3).join(' | ');
+  }
+})();
+
+// ══════════════════════════════════════════════════════════════════════
 // RESTORE + RAPPORT
 // ══════════════════════════════════════════════════════════════════════
 window.saveProfile = origSave;

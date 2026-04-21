@@ -2977,6 +2977,11 @@ if (window._verifyCriticalFunctions) {
  try { window._verifyCriticalFunctions(); } catch(e) {}
 }
 
+// DATA INTEGRITY: validation au boot des bases d'exercices et recettes (une seule fois)
+if (window.validateDataIntegrity) {
+ try { window.validateDataIntegrity(); } catch(e) {}
+}
+
 // ─── AUTOSAVE & BEFOREUNLOAD ───
 // Save on tab/browser close to avoid losing last unsaved state
 window.addEventListener('beforeunload', function() {

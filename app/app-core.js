@@ -5192,7 +5192,7 @@ if(nr&&nr.n){uL.add(nr.n);uS.add(nr.n);uD.add(nr.n);}}else if(w.key==='l'){lR=nr
 var _dP=Math.round((bR?bR.p||0:0)+(lR?lR.p||0:0)+(sR?sR.p||0:0)+(dR?dR.p||0:0));
 var _dG=Math.round((bR?bR.g||0:0)+(lR?lR.g||0:0)+(sR?sR.g||0:0)+(dR?dR.g||0:0));
 var _dL=Math.round((bR?bR.l||0:0)+(lR?lR.l||0:0)+(sR?sR.l||0:0)+(dR?dR.l||0:0));
-plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR,kcal:c,p:_dP,g:_dG,l:_dL})}return plan}
+plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR,kcal:c,p:_dP,g:_dG,l:_dL})}if(window.validateWeekPlan){try{window.validateWeekPlan(plan);}catch(_ve){}}return plan}
 function swapMeal(di,slot){
   var s=window.S;
   if(!s.weekPlan||!s.weekPlan[di])return;
@@ -5216,7 +5216,7 @@ function swapMeal(di,slot){
     var curId=(s.weekPlan[di][slot]&&s.weekPlan[di][slot]._id)||'';
     var usedSm=new Set([curId]);
     var nrSm=pickSmoothieForPlan(tgt,usedSm);
-    if(nrSm){s.weekPlan[di][slot]=nrSm;var _ssQ=['breakfast','lunch','snack','dinner'],_ssD=s.weekPlan[di],_ssT={k:0,p:0,g:0,l:0};_ssQ.forEach(function(q){var m=_ssD[q];if(m){_ssT.k+=m.k||0;_ssT.p+=m.p||0;_ssT.g+=m.g||0;_ssT.l+=m.l||0;}});_ssD.kcal=_ssT.k;_ssD.p=_ssT.p;_ssD.g=_ssT.g;_ssD.l=_ssT.l;if(typeof window.saveProfile==='function'){try{window.saveProfile();}catch(e){}}if(typeof window.render==='function')window.render();return;}
+    if(nrSm){s.weekPlan[di][slot]=nrSm;var _ssQ=['breakfast','lunch','snack','dinner'],_ssD=s.weekPlan[di],_ssT={k:0,p:0,g:0,l:0};_ssQ.forEach(function(q){var m=_ssD[q];if(m){_ssT.k+=m.k||0;_ssT.p+=m.p||0;_ssT.g+=m.g||0;_ssT.l+=m.l||0;}});_ssD.kcal=_ssT.k;_ssD.p=_ssT.p;_ssD.g=_ssT.g;_ssD.l=_ssT.l;if(window.validateWeekPlan){try{window.validateWeekPlan(s.weekPlan);}catch(_ve){}}if(typeof window.saveProfile==='function'){try{window.saveProfile();}catch(e){}}if(typeof window.render==='function')window.render();return;}
     // Fallback : smoothie DB épuisé → swap vers collation normale
   }
   // Autres slots — swap recette normale
@@ -5239,6 +5239,7 @@ function swapMeal(di,slot){
   var _rtQ=['breakfast','lunch','snack','dinner'],_rtD=s.weekPlan[di],_rtT={k:0,p:0,g:0,l:0};
   _rtQ.forEach(function(q){var m=_rtD[q];if(m){_rtT.k+=m.k||0;_rtT.p+=m.p||0;_rtT.g+=m.g||0;_rtT.l+=m.l||0;}});
   _rtD.kcal=_rtT.k;_rtD.p=_rtT.p;_rtD.g=_rtT.g;_rtD.l=_rtT.l;
+  if(window.validateWeekPlan){try{window.validateWeekPlan(s.weekPlan);}catch(_ve){}}
   if(typeof window.saveProfile==='function'){try{window.saveProfile();}catch(e){}}
   if(typeof window.render==='function')window.render();
 }
