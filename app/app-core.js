@@ -23,7 +23,7 @@ window.showToast = function(msg, type, duration) {
   if (!msg) return;
   type = type || 'success';
   duration = duration || 3000;
-  var colors = { success: '#1A4A1A', warning: '#6A4A1A', error: '#5A1010' };
+  var colors = { success: 'var(--success,#3E5C3A)', warning: 'var(--warning,#B07A2A)', error: 'var(--error,#7A1F1F)' };
   var bg = colors[type] || colors.success;
   var existing = document.querySelectorAll('.sfc-toast');
   // Stack offset
@@ -32,7 +32,7 @@ window.showToast = function(msg, type, duration) {
   toast.className = 'sfc-toast';
   toast.style.cssText = 'position:fixed;bottom:' + offset + 'px;left:50%;transform:translateX(-50%);z-index:9999;' +
     'background:' + bg + ';color:#FAF9F6;padding:10px 20px;font-family:"Helvetica Neue",Arial,sans-serif;' +
-    'font-size:11px;letter-spacing:1px;border-radius:2px;box-shadow:0 4px 16px rgba(0,0,0,0.18);' +
+    'font-size:9px;letter-spacing:3px;border-radius:0;text-transform:uppercase;' +
     'max-width:calc(100vw - 32px);text-align:center;pointer-events:none;' +
     'animation:sfcToastIn .2s ease forwards;';
   toast.textContent = msg;
@@ -1223,9 +1223,9 @@ window.showMedicalDisclaimerIfNeeded = function() {
     overlay.setAttribute('aria-labelledby', 'mtd-disclaimer-title');
     overlay.style.cssText = 'position:fixed;inset:0;background:rgba(10,10,9,0.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
     var sheet = document.createElement('div');
-    sheet.style.cssText = 'background:var(--ivory,#FAF9F6);max-width:460px;width:100%;max-height:90vh;overflow-y:auto;border:1px solid var(--black,#0A0A09);border-radius:2px;padding:28px 26px;box-shadow:0 20px 60px rgba(10,10,9,0.3);';
+    sheet.style.cssText = 'background:var(--ivory,#FAF9F6);max-width:460px;width:100%;max-height:90vh;overflow-y:auto;border:1px solid var(--black,#0A0A09);border-radius:0;padding:28px 26px;';
     var eyebrow = document.createElement('div');
-    eyebrow.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--red,#5A1010);font-weight:700;margin-bottom:10px;';
+    eyebrow.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--error,#7A1F1F);font-weight:400;margin-bottom:10px;';
     eyebrow.textContent = '\u26A0 Avertissement important';
     var title = document.createElement('h2');
     title.id = 'mtd-disclaimer-title';
@@ -4764,11 +4764,11 @@ function bmiInfo(b){
   if(b<16.0)return{label:'Dénutrition sévère',color:'#1A0050',grade:'D3',note:'Hospitalisation nécessaire (HAS 2019)'};
   if(b<17.0)return{label:'Dénutrition modérée',color:'#1A1070',grade:'D2',note:'Suivi diététique urgent'};
   if(b<18.5)return{label:'Insuffisance pondérale',color:'#1A3A6A',grade:'D1',note:'Augmenter les apports caloriques'};
-  if(b<25)return{label:'Poids normal',color:'#1A4A1A',grade:'N',note:'Maintenir les habitudes alimentaires'};
-  if(b<30)return{label:'Surpoids',color:'#6A4A1A',grade:'S',note:'Hygiène de vie à améliorer'};
+  if(b<25)return{label:'Poids normal',color:'#3E5C3A',grade:'N',note:'Maintenir les habitudes alimentaires'};
+  if(b<30)return{label:'Surpoids',color:'#7A3B0E',grade:'S',note:'Hygiène de vie à améliorer'};
   if(b<35)return{label:'Obésité grade 1',color:'#7A3010',grade:'O1',note:'Suivi médical recommandé (HAS 2022)'};
   if(b<40)return{label:'Obésité grade 2',color:'#8A1A10',grade:'O2',note:'Suivi spécialisé médical obligatoire'};
-  return{label:'Obésité grade 3 (morbide)',color:'#5A1010',grade:'O3',note:'Équipe pluridisciplinaire — chirurgie bariatrique discutable (HAS 2022)'}
+  return{label:'Obésité grade 3 (morbide)',color:'#7A1F1F',grade:'O3',note:'Équipe pluridisciplinaire — chirurgie bariatrique discutable (HAS 2022)'}
 }
 
 function calcWeightProjection(){
@@ -5713,11 +5713,11 @@ var STRENGTH_STANDARDS = {
 window.STRENGTH_STANDARDS = STRENGTH_STANDARDS;
 
 var GRADE_LABELS = {
-  A: {name: '\u00c9lite', color: '#1A4A1A', bg: 'rgba(26,74,26,.08)', desc: 'Niveau comp\u00e9tition. Impressionnant.'},
+  A: {name: '\u00c9lite', color: '#3E5C3A', bg: 'rgba(62,92,58,0.06)', desc: 'Niveau comp\u00e9tition. Impressionnant.'},
   B: {name: 'Avanc\u00e9', color: '#1A3A6A', bg: 'rgba(26,58,106,.08)', desc: 'Tr\u00e8s solide. Au-dessus de la moyenne.'},
-  C: {name: 'Interm\u00e9diaire', color: '#6A4A1A', bg: 'rgba(106,74,26,.08)', desc: 'Bon niveau. Continuez \u00e0 progresser.'},
+  C: {name: 'Interm\u00e9diaire', color: '#7A3B0E', bg: 'rgba(232,111,30,0.06)', desc: 'Bon niveau. Continuez \u00e0 progresser.'},
   D: {name: 'D\u00e9butant+', color: '#8A6A2A', bg: 'rgba(138,106,42,.08)', desc: 'En progression. Les bases sont l\u00e0.'},
-  E: {name: 'D\u00e9butant', color: '#5A1010', bg: 'rgba(90,16,16,.08)', desc: 'Tout le monde commence quelque part.'}
+  E: {name: 'D\u00e9butant', color: '#7A1F1F', bg: 'rgba(122,31,31,0.06)', desc: 'Tout le monde commence quelque part.'}
 };
 window.GRADE_LABELS = GRADE_LABELS;
 
@@ -5831,11 +5831,11 @@ window.RUNNING_GOALS = RUNNING_GOALS;
 
 // Zones FC course — modèle ACSM 5 zones FCmax (Swain & Franklin 2002)
 var RUNNING_ZONES = [
-  {zone: 'Z1', name: 'Récupération active',      pct: [50, 60], feel: 'Conversation très facile', color: '#1A4A1A'},
+  {zone: 'Z1', name: 'Récupération active',      pct: [50, 60], feel: 'Conversation très facile', color: '#3E5C3A'},
   {zone: 'Z2', name: 'Endurance fondamentale',   pct: [60, 70], feel: 'Conversation facile',      color: '#1A3A6A'},
-  {zone: 'Z3', name: 'Aérobie / Tempo',          pct: [70, 80], feel: 'Quelques phrases',          color: '#6A4A1A'},
+  {zone: 'Z3', name: 'Aérobie / Tempo',          pct: [70, 80], feel: 'Quelques phrases',          color: '#7A3B0E'},
   {zone: 'Z4', name: 'Seuil anaérobie',          pct: [80, 90], feel: 'Quelques mots seulement',   color: '#8A3A1A'},
-  {zone: 'Z5', name: 'VMA / VO2max',             pct: [90,100], feel: 'Effort maximal',             color: '#5A1010'}
+  {zone: 'Z5', name: 'VMA / VO2max',             pct: [90,100], feel: 'Effort maximal',             color: '#7A1F1F'}
 ];
 window.RUNNING_ZONES = RUNNING_ZONES;
 
@@ -6394,10 +6394,10 @@ function generateCardioPrescription(userAge, userWeight, sportGoals, sportLevel,
     fcMax:fcMax,
     zones:[
       {zone:'Z1',name:'Échauffement',range:Math.round(fcMax*0.50)+'-'+Math.round(fcMax*0.60)+' bpm',color:'#C8C8C0'},
-      {zone:'Z2',name:'Brûle-graisse',range:Math.round(fcMax*0.60)+'-'+Math.round(fcMax*0.70)+' bpm',color:'#1A4A1A'},
+      {zone:'Z2',name:'Brûle-graisse',range:Math.round(fcMax*0.60)+'-'+Math.round(fcMax*0.70)+' bpm',color:'#3E5C3A'},
       {zone:'Z3',name:'Aérobie',range:Math.round(fcMax*0.70)+'-'+Math.round(fcMax*0.80)+' bpm',color:'#1A3A6A'},
-      {zone:'Z4',name:'Seuil',range:Math.round(fcMax*0.80)+'-'+Math.round(fcMax*0.90)+' bpm',color:'#6A4A1A'},
-      {zone:'Z5',name:'Max',range:Math.round(fcMax*0.90)+'-'+fcMax+' bpm',color:'#5A1010'}
+      {zone:'Z4',name:'Seuil',range:Math.round(fcMax*0.80)+'-'+Math.round(fcMax*0.90)+' bpm',color:'#7A3B0E'},
+      {zone:'Z5',name:'Max',range:Math.round(fcMax*0.90)+'-'+fcMax+' bpm',color:'#7A1F1F'}
     ],
     prescriptions:prescriptions
   };
