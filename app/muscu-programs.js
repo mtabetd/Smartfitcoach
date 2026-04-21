@@ -2933,7 +2933,15 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Chest press machine', m: 'Pectoraux', eq: 'Machine convergente', sets: '3×12-15', rest: '60s' },
     { n: 'Câble crossover', m: 'Pectoraux', eq: 'Câble double poulie', sets: '3×12-15', rest: '60s' },
     { n: 'Pec deck / Butterfly', m: 'Pectoraux', eq: 'Machine pec deck', sets: '3×12-15', rest: '60s' },
-    { n: 'Landmine press', m: 'Pectoraux', eq: 'Barre landmine', sets: '4×10-12', rest: '90s' }
+    { n: 'Landmine press', m: 'Pectoraux', eq: 'Barre landmine', sets: '4×10-12', rest: '90s' },
+    { n: 'Développé incliné barre', m: 'Pectoraux supérieurs', eq: 'Barre + banc incliné', sets: '4×8-12', rest: '90s' },
+    { n: 'Développé décliné barre', m: 'Pectoraux inférieurs', eq: 'Barre + banc décliné', sets: '4×8-10', rest: '90s' },
+    { n: 'Écarté câble poulie haute', m: 'Pectoraux inférieurs', eq: 'Câble double poulie haute', sets: '3×12-15', rest: '60s' },
+    { n: 'Pompes prise large', m: 'Pectoraux', eq: 'Poids du corps', sets: '4×15-25', rest: '60s' },
+    { n: 'Chest press unilatéral câble', m: 'Pectoraux', eq: 'Câble basse poulie', sets: '3×12-15', rest: '60s' },
+    { n: 'Développé couché haltère unilatéral', m: 'Pectoraux', eq: 'Haltère + banc', sets: '4×10-12', rest: '75s' },
+    { n: 'Pompes archer', m: 'Pectoraux (unilatéral)', eq: 'Poids du corps', sets: '4×8-10', rest: '75s' },
+    { n: 'Écarté câble poulie basse (crossover haut)', m: 'Pectoraux supérieurs', eq: 'Câble double poulie basse', sets: '3×12-15', rest: '60s' }
   ],
   dos: [
     { n: 'Tractions pronation', m: 'Grand dorsal', eq: 'Barre de traction', sets: '4×6-10', rest: '120s' },
@@ -2947,7 +2955,15 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Straight arm pulldown câble', m: 'Dos', eq: 'Câble haute poulie', sets: '3×12-15', rest: '60s' },
     { n: 'Rack pull', m: 'Dos', eq: 'Barre + rack', sets: '4×6-8', rest: '120s' },
     { n: 'Tirage vertical prise neutre V-bar', m: 'Dos (largeur)', eq: 'Câble haute poulie + V-bar', sets: '4×10-12', rest: '90s' },
-    { n: 'Seal row', m: 'Grand dorsal / Trapèzes', eq: 'Banc plat surélevé + barre', sets: '4×8-12', rest: '90s' }
+    { n: 'Seal row', m: 'Grand dorsal / Trapèzes', eq: 'Banc plat surélevé + barre', sets: '4×8-12', rest: '90s' },
+    { n: 'Traction lestée', m: 'Grand dorsal', eq: 'Barre de traction + ceinture de lest', sets: '5×4-8', rest: '120s' },
+    { n: 'Traction prise très large', m: 'Grand dorsal / Dentelé antérieur', eq: 'Barre de traction', sets: '4×6-8', rest: '120s' },
+    { n: 'Rowing Pendlay prise large', m: 'Rhomboïdes / Trapèzes moyens', eq: 'Barre', sets: '4×5-8', rest: '120s' },
+    { n: 'Yates row', m: 'Grand dorsal / Biceps', eq: 'Barre', sets: '4×8-10', rest: '90s' },
+    { n: 'Rowing haltère prise neutre', m: 'Grand dorsal / Rhomboïdes', eq: 'Haltère + banc', sets: '4×10-12', rest: '75s' },
+    { n: 'Pull-over haltère couché', m: 'Grand dorsal / Dentelé antérieur', eq: 'Haltère + banc', sets: '3×12-15', rest: '75s' },
+    { n: 'Rowing machine unilatéral', m: 'Grand dorsal / Rhomboïdes', eq: 'Machine rowing', sets: '4×10-12', rest: '75s' },
+    { n: 'Traction élastique assistée', m: 'Grand dorsal', eq: 'Barre de traction + élastique', sets: '4×8-12', rest: '90s' }
   ],
   epaules: [
     { n: 'Développé militaire barre', m: 'Épaules', eq: 'Barre', sets: '4×8-12', rest: '90s' },
@@ -2961,7 +2977,15 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Développé militaire machine', m: 'Épaules', eq: 'Machine épaules', sets: '3×12-15', rest: '60s' },
     { n: 'Élévations latérales câble', m: 'Deltoïde latéral', eq: 'Câble basse poulie', sets: '3×15-20', rest: '30s' },
     { n: 'Rotation externe élastique', m: 'Épaules (coiffe)', eq: 'Élastique', sets: '3×15-20', rest: '30s' },
-    { n: 'Upright row câble', m: 'Deltoïde / Trapèzes', eq: 'Câble basse poulie', sets: '4×10-12', rest: '60s' }
+    { n: 'Upright row câble', m: 'Deltoïde / Trapèzes', eq: 'Câble basse poulie', sets: '4×10-12', rest: '60s' },
+    { n: 'Développé haltères debout', m: 'Épaules', eq: 'Haltères', sets: '4×10-12', rest: '75s' },
+    { n: 'Élévations latérales élastique', m: 'Deltoïde latéral', eq: 'Élastique', sets: '4×15-20', rest: '45s' },
+    { n: 'Oiseau poulie câble', m: 'Deltoïde postérieur', eq: 'Câble double poulie haute', sets: '3×15', rest: '45s' },
+    { n: 'Rotation externe haltère (coude appuyé)', m: 'Coiffe des rotateurs', eq: 'Haltère + banc', sets: '3×15-20', rest: '30s' },
+    { n: 'Développé militaire barre nuque', m: 'Épaules / Deltoïde latéral', eq: 'Barre + rack', sets: '4×8-10', rest: '90s' },
+    { n: 'Scarecrow haltères', m: 'Deltoïde postérieur / Coiffe', eq: 'Haltères', sets: '3×12-15', rest: '45s' },
+    { n: 'Élévations frontales câble', m: 'Deltoïde antérieur', eq: 'Câble basse poulie', sets: '3×12-15', rest: '45s' },
+    { n: 'Push press barre', m: 'Épaules (puissance)', eq: 'Barre', sets: '4×5-8', rest: '120s' }
   ],
   biceps: [
     { n: 'Curl barre droite', m: 'Biceps', eq: 'Barre', sets: '4×10-12', rest: '60s' },
@@ -2974,8 +2998,16 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Curl EZ barre', m: 'Biceps', eq: 'Barre EZ', sets: '4×10-12', rest: '60s' },
     { n: 'Curl spider (araignee)', m: 'Biceps (pic)', eq: 'Barre EZ ou haltères + banc incliné', sets: '3×10-12', rest: '60s' },
     { n: 'Curl marteau câble', m: 'Brachial / Brachio-radial', eq: 'Câble poulie basse + corde', sets: '3×12-15', rest: '60s' },
-    { n: 'Chin-up supination', m: 'Biceps / Grand dorsal', eq: 'Barre de traction', sets: '4×6-10', rest: '90s' },
-    { n: 'Curl 21s', m: 'Biceps (complet)', eq: 'Barre EZ ou halteres', sets: '3×21 (7+7+7)', rest: '90s' }
+    { n: 'Curl barre supination 3/4 amplitude', m: 'Biceps (chef court / contraction maximale)', eq: 'Barre droite', sets: '3×12-15', rest: '60s' },
+    { n: 'Curl 21s', m: 'Biceps (complet)', eq: 'Barre EZ ou halteres', sets: '3×21 (7+7+7)', rest: '90s' },
+    { n: 'Bayesian curl câble', m: 'Biceps (chef long)', eq: 'Câble poulie basse', sets: '3×10-15', rest: '60s' },
+    { n: 'Curl pupitre haltère unilatéral', m: 'Biceps (chef court)', eq: 'Haltère + banc preacher', sets: '3×10-12', rest: '60s' },
+    { n: 'Reverse curl câble', m: 'Brachioradial / Brachial', eq: 'Câble poulie basse + barre droite', sets: '3×12-15', rest: '60s' },
+    { n: 'Curl prise neutre barre EZ', m: 'Brachial / Brachioradial', eq: 'Barre EZ', sets: '3×10-12', rest: '75s' },
+    { n: 'Drag curl barre', m: 'Biceps (chef long)', eq: 'Barre', sets: '3×10-12', rest: '60s' },
+    { n: 'Curl incliné câble unilatéral', m: 'Biceps (chef long)', eq: 'Câble poulie basse + banc incliné', sets: '3×10-12', rest: '60s' },
+    { n: 'Zottman curl', m: 'Biceps / Brachioradial', eq: 'Haltères', sets: '3×10-12', rest: '75s' },
+    { n: 'Curl câble à 90° peak', m: 'Biceps (contraction maximale)', eq: 'Câble poulie haute', sets: '3×12-15', rest: '45s' }
   ],
   triceps: [
     { n: 'Dips triceps banc', m: 'Triceps', eq: 'Banc', sets: '4×12-15', rest: '60s' },
@@ -2989,7 +3021,15 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Skull crushers EZ', m: 'Triceps', eq: 'Barre EZ + banc', sets: '4×10-12', rest: '90s' },
     { n: 'Extension triceps machine', m: 'Triceps', eq: 'Machine triceps', sets: '3×12-15', rest: '60s' },
     { n: 'JM Press barre', m: 'Triceps', eq: 'Barre + banc', sets: '4×8-10', rest: '90s' },
-    { n: 'JM Press EZ', m: 'Triceps (chef long)', eq: 'Barre EZ + banc', sets: '4×8-10', rest: '90s' }
+    { n: 'JM Press EZ', m: 'Triceps (chef long)', eq: 'Barre EZ + banc', sets: '4×8-10', rest: '90s' },
+    { n: 'Dips barres parallèles lest', m: 'Triceps / Pectoraux', eq: 'Barres parallèles + ceinture de lest', sets: '4×6-10', rest: '120s' },
+    { n: 'Overhead extension haltères bilatéral', m: 'Triceps chef long', eq: 'Haltère', sets: '4×10-12', rest: '75s' },
+    { n: 'Kick-back câble', m: 'Triceps chef latéral', eq: 'Câble basse poulie', sets: '3×12-15', rest: '45s' },
+    { n: 'Extension triceps élastique debout', m: 'Triceps', eq: 'Élastique', sets: '3×15-20', rest: '45s' },
+    { n: 'Diamond push-up', m: 'Triceps / Pectoraux', eq: 'Poids du corps', sets: '4×12-20', rest: '60s' },
+    { n: 'Tate press', m: 'Triceps (chefs latéral et médial)', eq: 'Haltères + banc', sets: '4×10-12', rest: '75s' },
+    { n: 'Extension triceps bras tendu haltère', m: 'Triceps chef long', eq: 'Haltère', sets: '3×12-15', rest: '60s' },
+    { n: 'Bench dips lestés', m: 'Triceps', eq: 'Banc + poids', sets: '3×12-15', rest: '60s' }
   ],
   quadriceps: [
     { n: 'Squat barre', m: 'Quadriceps / Fessiers', eq: 'Barre + rack', sets: '5×5-8', rest: '180s' },
@@ -3003,19 +3043,37 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Squat Zercher', m: 'Quadriceps / Fessiers', eq: 'Barre + rack', sets: '4×6-8', rest: '120s' },
     { n: 'Leg press unilatéral', m: 'Quadriceps / Fessiers', eq: 'Machine leg press', sets: '3×10-12', rest: '90s' },
     { n: 'Sissy squat', m: 'Quadriceps', eq: 'Poids de corps', sets: '3×12-15', rest: '60s' },
-    { n: 'Fente avant barre', m: 'Quadriceps / Fessiers', eq: 'Barre', sets: '4×8-10', rest: '90s' }
+    { n: 'Fente avant barre', m: 'Quadriceps / Fessiers', eq: 'Barre', sets: '4×8-10', rest: '90s' },
+    { n: 'Front squat barre', m: 'Quadriceps', eq: 'Barre + rack', sets: '4×6-8', rest: '120s' },
+    { n: 'Fente avant barre marchée', m: 'Quadriceps / Fessiers', eq: 'Barre', sets: '3×10-12 (par jambe)', rest: '90s' },
+    { n: 'Step-up genou haut lestés', m: 'Quadriceps / Fessiers', eq: 'Box + haltères', sets: '3×10-12 (par jambe)', rest: '75s' },
+    { n: 'Wall sit isométrique', m: 'Quadriceps', eq: 'Poids du corps', sets: '4×30-60s', rest: '60s' },
+    { n: 'Terminal leg extension élastique', m: 'Vaste interne (VMO)', eq: 'Élastique', sets: '3×15-20', rest: '45s' },
+    { n: 'Leg press 1.5 rep', m: 'Quadriceps', eq: 'Machine leg press', sets: '4×8', rest: '90s' },
+    { n: 'Squat sauté', m: 'Quadriceps / Puissance', eq: 'Poids du corps', sets: '4×8-10', rest: '90s' },
+    { n: 'Fente latérale haltères', m: 'Quadriceps / Adducteurs', eq: 'Haltères', sets: '4×10-12', rest: '75s' }
   ],
   ischios: [
     { n: 'Deadlift roumain barre', m: 'Ischios / Fessiers / Dorsaux', eq: 'Barre', sets: '4×8-12', rest: '120s' },
     { n: 'Leg curl allongé', m: 'Ischios', eq: 'Machine leg curl', sets: '4×10-12', rest: '75s' },
     { n: 'Leg curl assis', m: 'Ischios', eq: 'Machine leg curl assis', sets: '4×10-12', rest: '75s' },
     { n: 'Sumo deadlift', m: 'Fessiers / Ischios / Adducteurs', eq: 'Barre', sets: '4×5-8', rest: '120s' },
-    { n: 'Good morning', m: 'Ischios / Bas du dos', eq: 'Barre', sets: '3×10-12', rest: '90s' },
+    { n: 'Glute ham raise', m: 'Ischio-jambiers excentrique / Bas du dos', eq: 'Machine GHR', sets: '3×6-10', rest: '90s' },
     { n: 'Nordic curl', m: 'Ischios excentrique', eq: 'Partenaire ou machine', sets: '3×6-8', rest: '120s' },
     { n: 'Leg curl debout câble', m: 'Ischio-jambiers', eq: 'Câble basse poulie', sets: '3×12-15', rest: '60s' },
     { n: 'Romanian deadlift haltères', m: 'Ischio-jambiers / Fessiers', eq: 'Haltères', sets: '4×10-12', rest: '90s' },
     { n: 'Hyperextension ischios-focus', m: 'Ischio-jambiers / Bas du dos', eq: 'Banc à lombaires', sets: '3×12-15', rest: '60s' },
-    { n: 'Cable pull-through', m: 'Ischio-jambiers / Fessiers', eq: 'Câble basse poulie', sets: '3×12-15', rest: '60s' }
+    { n: 'Cable pull-through', m: 'Ischio-jambiers / Fessiers', eq: 'Câble basse poulie', sets: '3×12-15', rest: '60s' },
+    { n: 'Leg curl balle suisse', m: 'Ischio-jambiers', eq: 'Swiss ball', sets: '3×10-12', rest: '75s' },
+    { n: 'Leg curl debout unilatéral câble', m: 'Ischio-jambiers', eq: 'Câble poulie basse', sets: '3×12-15 (par jambe)', rest: '60s' },
+    { n: 'RDL kettlebell', m: 'Ischio-jambiers / Fessiers', eq: 'Kettlebell', sets: '4×10-12', rest: '90s' },
+    { n: 'Sliding leg curl', m: 'Ischio-jambiers', eq: 'Disques glissants', sets: '3×8-12', rest: '90s' },
+    { n: 'Hip extension 45° ischio-focus', m: 'Ischio-jambiers / Fessiers', eq: 'Banc à 45°', sets: '4×12-15', rest: '60s' },
+    { n: 'Snatch-grip RDL barre', m: 'Ischio-jambiers / Lombaires', eq: 'Barre (prise large)', sets: '4×6-8', rest: '120s' },
+    { n: 'Leg curl élastique couché', m: 'Ischio-jambiers', eq: 'Élastique', sets: '3×15-20', rest: '45s' },
+    { n: 'Jefferson curl', m: 'Ischio-jambiers / Érecteurs (mobilité)', eq: 'Kettlebell ou haltère', sets: '3×5-8', rest: '90s' },
+    { n: 'Hamstring walkout', m: 'Ischio-jambiers (isométrique)', eq: 'Poids du corps', sets: '3×8-10', rest: '60s' },
+    { n: 'Leg curl assis unilatéral', m: 'Ischio-jambiers', eq: 'Machine leg curl assis', sets: '3×12-15 (par jambe)', rest: '60s' }
   ],
   fessiers: [
     { n: 'Hip thrust barre', m: 'Fessiers', eq: 'Barre + banc', sets: '4×10-15', rest: '90s' },
@@ -3029,7 +3087,15 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Frog pump', m: 'Grand fessier', eq: 'Poids de corps', sets: '3×15-20', rest: '30s' },
     { n: 'Sumo squat haltere', m: 'Fessiers / Adducteurs', eq: 'Haltere', sets: '4×10-12', rest: '90s' },
     { n: 'Kick-back câble fessiers', m: 'Grand fessier', eq: 'Câble bas', sets: '3×15-20', rest: '45s' },
-    { n: 'Abduction debout élastique', m: 'Fessiers / Abducteurs', eq: 'Élastique', sets: '3×15-20', rest: '30s' }
+    { n: 'Abduction debout élastique', m: 'Fessiers / Abducteurs', eq: 'Élastique', sets: '3×15-20', rest: '30s' },
+    { n: 'Hip thrust pieds surélevés', m: 'Grand fessier (amplitude étendue)', eq: 'Barre + banc', sets: '4×10-12', rest: '90s' },
+    { n: 'Monster walk élastique', m: 'Moyen fessier / Petit fessier', eq: 'Élastique miniband', sets: '3×15-20 (pas)', rest: '45s' },
+    { n: 'Clamshell élastique', m: 'Moyen fessier / Piriforme', eq: 'Élastique', sets: '3×15-20 (par côté)', rest: '45s' },
+    { n: 'Single-leg glute bridge lestée', m: 'Grand fessier', eq: 'Haltère + sol', sets: '3×12-15 (par jambe)', rest: '60s' },
+    { n: 'Abduction latérale machine debout', m: 'Moyen fessier', eq: 'Machine abduction', sets: '3×15-20', rest: '45s' },
+    { n: 'Kettlebell swing', m: 'Grand fessier / Chaîne postérieure', eq: 'Kettlebell', sets: '4×15-20', rest: '60s' },
+    { n: 'Fente latérale glissée', m: 'Grand fessier / Adducteurs', eq: 'Disques glissants', sets: '3×10-12 (par jambe)', rest: '60s' },
+    { n: 'Quadruped hip extension lestée', m: 'Grand fessier', eq: 'Haltère + sol', sets: '3×15 (par jambe)', rest: '45s' }
   ],
   mollets: [
     { n: 'Mollets debout machine', m: 'Mollets', eq: 'Machine mollets', sets: '5×12-20', rest: '60s' },
@@ -3040,7 +3106,16 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Mollets leg press', m: 'Mollets', eq: 'Machine leg press', sets: '4×15-20', rest: '60s' },
     { n: 'Mollets barre debout', m: 'Mollets', eq: 'Barre', sets: '4×12-15', rest: '60s' },
     { n: 'Donkey calf raise', m: 'Mollets', eq: 'Machine donkey ou lest', sets: '4×15-20', rest: '60s' },
-    { n: 'Sauts à la corde', m: 'Mollets', eq: 'Corde à sauter', sets: '4×60s', rest: '60s' }
+    { n: 'Sauts à la corde', m: 'Mollets', eq: 'Corde à sauter', sets: '4×60s', rest: '60s' },
+    { n: 'Mollets isométriques mur', m: 'Gastrocnémien / Soléaire', eq: 'Poids du corps', sets: '4×30-45s', rest: '45s' },
+    { n: 'Mollets assis haltère sur genoux', m: 'Soléaire', eq: 'Haltère + banc', sets: '4×15-20', rest: '45s' },
+    { n: 'Heel drops excentriques', m: 'Gastrocnémien (excentrique)', eq: 'Poids du corps + step', sets: '3×15-20', rest: '60s' },
+    { n: 'Mollets debout sur step barre', m: 'Gastrocnémien', eq: 'Barre + step surélevé', sets: '4×15-20', rest: '45s' },
+    { n: 'Saut sur box mollets', m: 'Gastrocnémien / Explosivité', eq: 'Box pliométrique', sets: '4×8-10', rest: '90s' },
+    { n: 'Tibial raise mur', m: 'Tibial antérieur', eq: 'Poids du corps', sets: '3×20-30', rest: '30s' },
+    { n: 'Triple extension mollets sauts', m: 'Gastrocnémien / Explosivité', eq: 'Poids du corps', sets: '4×8-12', rest: '75s' },
+    { n: 'Mollets assis élastique', m: 'Soléaire', eq: 'Élastique', sets: '3×20-25', rest: '30s' },
+    { n: 'Farmer carry sur orteils', m: 'Gastrocnémien / Équilibre dynamique', eq: 'Haltères', sets: '3×20-30m', rest: '60s' }
   ],
   trapezes: [
     { n: 'Shrug barre', m: 'Trap\u00e8zes sup\u00e9rieurs', eq: 'Barre', sets: '5×8-12', rest: '90s' },
@@ -3051,7 +3126,17 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Rowing debout haltères', m: 'Trapèzes supérieurs + épaules', eq: 'Haltères', sets: '4×10-12', rest: '60s' },
     { n: 'Rowing buste pench\u00e9 prise large', m: 'Trap\u00e8zes moyens + rhobo\u00efdes', eq: 'Barre', sets: '4×10', rest: '90s' },
     { n: 'Shrug halt\u00e8re unilat\u00e9ral', m: 'Trap\u00e8zes', eq: 'Halt\u00e8re', sets: '4×12', rest: '60s' },
-    { n: 'Tirage menton c\u00e2ble', m: 'Trap\u00e8zes + \u00e9paules', eq: 'C\u00e2ble', sets: '4×12', rest: '60s' }
+    { n: 'Tirage menton c\u00e2ble', m: 'Trap\u00e8zes + \u00e9paules', eq: 'C\u00e2ble', sets: '4×12', rest: '60s' },
+    { n: 'Shrug barre EZ', m: 'Trapèzes supérieurs', eq: 'Barre EZ', sets: '4×12-15', rest: '60s' },
+    { n: 'Shrug câble unilatéral', m: 'Trapèzes supérieurs', eq: 'Câble poulie basse + poignée', sets: '4×12-15', rest: '60s' },
+    { n: 'Power shrug barre', m: 'Trapèzes supérieurs / Explosif', eq: 'Barre', sets: '4×6-8', rest: '120s' },
+    { n: 'Rowing prise large debout câble', m: 'Trapèzes moyens / Rhomboïdes', eq: 'Câble poulie basse + barre longue', sets: '4×12-15', rest: '75s' },
+    { n: 'Élévation en Y banc incliné', m: 'Trapèzes inférieurs / Moyens', eq: 'Haltères légers + banc incliné', sets: '3×12-15', rest: '60s' },
+    { n: 'Dépression scapulaire à la barre', m: 'Trapèzes inférieurs / Dentelé antérieur', eq: 'Barre de traction', sets: '3×10-15', rest: '60s' },
+    { n: 'Face pull élastique', m: 'Trapèzes moyens / Rotateurs', eq: 'Élastique', sets: '4×15-20', rest: '45s' },
+    { n: 'Shrug isométrique barre', m: 'Trapèzes supérieurs', eq: 'Barre', sets: '4×8-10 (maintien 3s)', rest: '90s' },
+    { n: 'Farmer carry', m: 'Trapèzes supérieurs / Core / Avant-bras', eq: 'Haltères lourds', sets: '4×20-30m', rest: '90s' },
+    { n: 'Rowing buste penché câble prise neutre', m: 'Trapèzes moyens / Rhomboïdes', eq: 'Câble poulie haute + corde', sets: '4×12-15', rest: '75s' }
   ],
   lombaires: [
     { n: 'Soulev\u00e9 de terre conventionnel', m: 'Lombaires + dos complet', eq: 'Barre', sets: '4×5', rest: '240s' },
@@ -3062,7 +3147,17 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Superman', m: 'Lombaires + \u00e9recteurs', eq: 'Sol', sets: '4×15', rest: '45s' },
     { n: 'Bird dog', m: 'Lombaires + core stabilisation', eq: 'Sol', sets: '3×12', rest: '45s' },
     { n: 'Hyperextension reverse', m: 'Lombaires + fessiers', eq: 'Banc plat', sets: '3×15', rest: '60s' },
-    { n: 'Good morning halt\u00e8res', m: 'Lombaires + ischios', eq: 'Halt\u00e8res', sets: '4×12', rest: '90s' }
+    { n: 'Good morning halt\u00e8res', m: 'Lombaires + ischios', eq: 'Halt\u00e8res', sets: '4×12', rest: '90s' },
+    { n: 'Kettlebell swing américain', m: 'Érecteurs du rachis / Fessiers', eq: 'Kettlebell', sets: '4×15-20', rest: '60s' },
+    { n: 'Suitcase carry', m: 'Carré des lombes / Stabilisateurs latéraux', eq: 'Haltère ou kettlebell', sets: '3×20-30m (par côté)', rest: '60s' },
+    { n: 'Pallof press à genoux', m: 'Multifides / Core anti-rotation', eq: 'Câble ou élastique', sets: '3×10-12 (par côté)', rest: '45s' },
+    { n: 'McGill curl-up', m: 'Multifides / Érecteurs (stabilisation)', eq: 'Poids du corps', sets: '3×8-10', rest: '45s' },
+    { n: 'Back extension GHD lestée', m: 'Érecteurs du rachis', eq: 'Machine GHD + disque', sets: '4×10-15', rest: '75s' },
+    { n: 'Stiff-leg deadlift haltères', m: 'Érecteurs / Ischio-jambiers', eq: 'Haltères', sets: '4×10-12', rest: '90s' },
+    { n: 'Rotation du tronc câble', m: 'Carré des lombes / Obliques', eq: 'Câble poulie moyenne', sets: '3×12-15 (par côté)', rest: '45s' },
+    { n: 'Deadbug anti-flexion bâton', m: 'Multifides / Érecteurs', eq: 'Poids du corps', sets: '3×8 (par côté)', rest: '45s' },
+    { n: 'Soulevé de terre hex bar', m: 'Érecteurs du rachis / Quadriceps / Fessiers', eq: 'Trap bar (hex bar)', sets: '4×5-6', rest: '180s' },
+    { n: 'Good morning assis barre', m: 'Lombaires + ischios', eq: 'Barre + banc', sets: '4×10-12', rest: '90s' }
   ],
   abdos: [
     { n: 'Crunch classique', m: 'Abdominaux', eq: 'Poids du corps', sets: '4×20', rest: '45s' },
@@ -3075,7 +3170,16 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Dead bug', m: 'Abdominaux / Core', eq: 'Poids de corps', sets: '3×10-12', rest: '60s' },
     { n: 'L-sit', m: 'Abdominaux / Core', eq: 'Barres parallèles', sets: '3×20-30s', rest: '60s' },
     { n: 'Hollow body hold', m: 'Abdominaux / Core', eq: 'Poids de corps', sets: '3×30-45s', rest: '60s' },
-    { n: 'Ab rollout sur genoux', m: 'Abdominaux / Core', eq: 'Roulette abdominale', sets: '3×10-12', rest: '60s' }
+    { n: 'Ab rollout sur genoux', m: 'Abdominaux / Core', eq: 'Roulette abdominale', sets: '3×10-12', rest: '60s' },
+    { n: 'Crunch décliné lestée', m: 'Rectus abdominis (portion haute)', eq: 'Banc décliné + disque', sets: '3×12-15', rest: '60s' },
+    { n: 'Knee tucks suspendu', m: 'Abdominaux bas', eq: 'Barres parallèles ou barre de traction', sets: '3×12-15', rest: '60s' },
+    { n: 'Oblique crunch au sol', m: 'Obliques', eq: 'Poids du corps', sets: '3×15-20 (par côté)', rest: '30s' },
+    { n: 'Cable reverse crunch', m: 'Abdominaux bas', eq: 'Câble poulie basse + corde', sets: '3×12-15', rest: '60s' },
+    { n: 'Swiss ball crunch', m: 'Abdominaux', eq: 'Swiss ball', sets: '3×15-20', rest: '45s' },
+    { n: 'V-up complet', m: 'Abdominaux', eq: 'Poids du corps', sets: '3×10-15', rest: '60s' },
+    { n: 'Planche abdominale dynamique', m: 'Abdominaux / Core', eq: 'Poids du corps', sets: '3×45-60s', rest: '45s' },
+    { n: 'Ab crunch machine', m: 'Abdominaux', eq: 'Machine ab crunch', sets: '3×15-20', rest: '45s' },
+    { n: 'Hollow rock', m: 'Abdominaux / Core', eq: 'Poids du corps', sets: '3×20-30s', rest: '45s' }
   ]
 };
 
