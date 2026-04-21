@@ -480,8 +480,8 @@ function generateSportProgram() {
          else if (_dtype === 'push')      _filtered = ['chest','shoulders','triceps'];
          else if (_dtype === 'pull')      _filtered = ['back','biceps'];
          else if (_dtype === 'lower' || _dtype === 'legs') _filtered = ['legs','glutes'];
-         // FIX 2026-04-16 — fullbody fallback incluait seulement chest/back/legs, manquait shoulders/arms/glutes
-         else if (_dtype === 'full')      _filtered = ['chest','back','shoulders','legs','glutes'];
+         // FIX 2026-04-21 — fullbody fallback complet (avant : manquait biceps/triceps/abs cf _FULL_C ligne 445)
+         else if (_dtype === 'full')      _filtered = ['chest','back','shoulders','legs','glutes','biceps','triceps','abs'];
          else if (_dtype === 'chest_tri') _filtered = ['chest','triceps'];
          else if (_dtype === 'back_bi')   _filtered = ['back','biceps'];
          else if (_dtype === 'shoulders_only') _filtered = ['shoulders'];
