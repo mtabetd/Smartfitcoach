@@ -581,6 +581,11 @@ function generateSportProgram() {
  if (/^barre\b/.test(eq) && !/ou halt|halt[eè]res ou barre/.test(eq)) return false;
  return true;
  }
+ if (S.sportEquipment === 'none') {
+ // Poids du corps + équipement minimal (barre de traction, barres parallèles, élastique)
+ // Exclure tout ce qui nécessite achat de matériel (haltères, barre, câble, machines)
+ return /poids du corps|poids de corps|sans mat|sol|aucun|barre de traction|barres parall|parall[eè]les|élastique|elastique|gainage|planche|pompe|dips|traction|squat libre|fentes libres|burpee|mountain climber|crunch/.test(eq + ' ' + name);
+ }
  return true;
  });
  // FIX audit Marie : on respecte STRICTEMENT sportEquipment, même si <2 exos restent.
