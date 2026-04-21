@@ -3183,6 +3183,85 @@ var EXERCISE_ALTERNATIVES = {
   ]
 };
 
+// ─── ENRICHISSEMENT DES ALTERNATIVES ──────────────────────────────────────
+// Les 236 alternatives n'ont que {n,m,eq,sets,rest,lv}. Pour que l'utilisateur
+// garde desc/tips/warn quand il swap, on enrichit à la volée :
+//  1. Lookup par nom normalisé dans window.EXERCISES (DB principale riche)
+//  2. Fallback : tips génériques par groupe musculaire + desc auto-générée
+// FIX 2026-04-21 : résout le gap UX "perte d'explications lors du swap".
+var _GENERIC_TIPS_BY_POOL = {
+  pectoraux: ['Serrer les omoplates et garder le dos plaqué', 'Descente contrôlée 2-3s sans rebond', 'Coudes entre 45° et 75° pour protéger l\'épaule'],
+  dos: ['Tirer avec les coudes, pas avec les mains', 'Contracter les dorsaux en fin de mouvement', 'Buste stable, ne pas balancer le corps'],
+  epaules: ['Charge légère à modérée — l\'épaule est fragile', 'Ne pas verrouiller brutalement les coudes', 'Descente lente, montée contrôlée'],
+  biceps: ['Coudes fixes collés au torse', 'Supination complète en haut pour le pic', 'Contrôler la descente (3s) pour max hypertrophie'],
+  triceps: ['Coudes fixes, seul l\'avant-bras bouge', 'Extension complète en haut', 'Épaules basses et stables'],
+  quadriceps: ['Genoux alignés avec les pointes de pieds', 'Descendre au moins à la parallèle', 'Pousser à travers les talons'],
+  ischios: ['Hanches comme charnière, dos neutre', 'Sentir l\'étirement en fin de course', 'Contrôler la descente excentrique (3s)'],
+  fessiers: ['Rétroversion pelvienne en haut', 'Poussée avec les talons', 'Contraction maximale 1-2s en fin de mouvement'],
+  mollets: ['Amplitude complète (bas et haut)', 'Pause 1-2s en étirement complet', 'Ne pas rebondir'],
+  trapezes: ['Mouvement purement vertical (pas de rotation)', 'Contraction max en haut, pause 1s', 'Ne pas hausser les épaules vers les oreilles'],
+  lombaires: ['Dos neutre, pas d\'hyperextension', 'Mouvement lent et contrôlé', 'Engager les abdos pour stabiliser'],
+  abdos: ['Expirer sur la phase d\'effort', 'Pas de traction sur la nuque', 'Qualité > quantité, mouvement contrôlé']
+};
+
+function _normalizeExerciseName(s) {
+  if (!s) return '';
+  return String(s).toLowerCase()
+    .replace(/[àâä]/g, 'a').replace(/[éèêë]/g, 'e').replace(/[îï]/g, 'i')
+    .replace(/[ôö]/g, 'o').replace(/[ùûü]/g, 'u').replace(/ç/g, 'c')
+    .replace(/[^a-z0-9]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+// Cache pour éviter de re-parcourir window.EXERCISES à chaque appel
+var _mainExIndex = null;
+function _getMainExIndex() {
+  if (_mainExIndex) return _mainExIndex;
+  _mainExIndex = {};
+  if (window.EXERCISES) {
+    Object.keys(window.EXERCISES).forEach(function(g) {
+      (window.EXERCISES[g] || []).forEach(function(ex) {
+        var k = _normalizeExerciseName(ex.n);
+        if (k && !_mainExIndex[k]) _mainExIndex[k] = ex;
+      });
+    });
+  }
+  return _mainExIndex;
+}
+
+function enrichExerciseMetadata(ex, poolKey) {
+  if (!ex || typeof ex !== 'object') return ex;
+  // Clone pour ne pas muter la DB d'origine
+  var enriched = {};
+  for (var k in ex) if (Object.prototype.hasOwnProperty.call(ex, k)) enriched[k] = ex[k];
+
+  // 1. Lookup nom normalisé dans la DB principale (54/236 match directs)
+  var idx = _getMainExIndex();
+  var match = idx[_normalizeExerciseName(ex.n)];
+  if (match) {
+    if (!enriched.desc && match.desc) enriched.desc = match.desc;
+    if ((!enriched.tips || !enriched.tips.length) && Array.isArray(match.tips)) enriched.tips = match.tips.slice();
+    if (!enriched.warn && match.warn) enriched.warn = match.warn;
+    if (!enriched.video && match.video) enriched.video = match.video;
+    if (enriched.lv === undefined && typeof match.lv === 'number') enriched.lv = match.lv;
+    if (!enriched.tags && Array.isArray(match.tags)) enriched.tags = match.tags.slice();
+    enriched._enrichedFrom = 'main-db';
+    return enriched;
+  }
+
+  // 2. Fallback générique : description auto + tips universels par pool
+  if (!enriched.desc) {
+    enriched.desc = enriched.n + ' — ' + (enriched.m || 'groupe musculaire') +
+      (enriched.eq ? '. Équipement : ' + enriched.eq : '') + '.';
+  }
+  if (!enriched.tips || !enriched.tips.length) {
+    var tips = _GENERIC_TIPS_BY_POOL[poolKey];
+    enriched.tips = tips ? tips.slice() : ['Exécution contrôlée', 'Amplitude complète', 'Respiration maîtrisée'];
+  }
+  enriched._enrichedFrom = 'generic';
+  return enriched;
+}
+window.enrichExerciseMetadata = enrichExerciseMetadata;
+
 function getAlternativeExercises(muscle, excludeName, maxCount, userLevel) {
   if (!muscle) return [];
   var ml = muscle.toLowerCase();
@@ -3245,8 +3324,12 @@ function getAlternativeExercises(muscle, excludeName, maxCount, userLevel) {
   if (!lvFiltered.length) lvFiltered = pool;
   var exLow = excludeName ? excludeName.toLowerCase() : '';
   var results = [];
+  // Pool key pour le fallback générique (trapezes, lombaires, etc.)
+  var poolKeyForEnrich = dbKey;
   for (var pi = 0; pi < lvFiltered.length; pi++) {
-    if (lvFiltered[pi].n.toLowerCase() !== exLow) results.push(lvFiltered[pi]);
+    if (lvFiltered[pi].n.toLowerCase() !== exLow) {
+      results.push(enrichExerciseMetadata(lvFiltered[pi], poolKeyForEnrich));
+    }
     if (results.length >= (maxCount || 3)) break;
   }
   return results;

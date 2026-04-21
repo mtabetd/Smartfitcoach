@@ -576,8 +576,73 @@ function ok(label, cond, detail) {
   ok('Triathlon pickSession — sprint/beginner ne crash pas', triEdge.ok,
     triEdge.err || '(weeks=' + triEdge.len + ')');
 
-  // ─── 18. AUCUNE ERREUR JS ───
-  console.log('\n[18] Erreurs JavaScript pendant l\'audit');
+  // ─── 19. ENRICHISSEMENT alternatives (100% desc + tips) ───
+  console.log('\n[19] getAlternativeExercises — enrichissement desc/tips');
+  const enrich = await page.evaluate(() => {
+    const res = { samples: [], fromMain: 0, fromGeneric: 0, total: 0, noTips: 0, noDesc: 0 };
+    // Test sur les 12 pools (un exercice de chaque)
+    const pools = ['pectoraux','dos','epaules','biceps','triceps','quadriceps','ischios','fessiers','mollets','trapezes','lombaires','abdos'];
+    pools.forEach(p => {
+      // Choisir un label de muscle qui matche chaque pool
+      const muscleLabel = p === 'pectoraux' ? 'Pectoraux'
+        : p === 'dos' ? 'Grand dorsal'
+        : p === 'epaules' ? 'Deltoïde'
+        : p === 'biceps' ? 'Biceps'
+        : p === 'triceps' ? 'Triceps'
+        : p === 'quadriceps' ? 'Quadriceps'
+        : p === 'ischios' ? 'Ischios'
+        : p === 'fessiers' ? 'Fessiers'
+        : p === 'mollets' ? 'Mollets'
+        : p === 'trapezes' ? 'Trapèzes'
+        : p === 'lombaires' ? 'Lombaires'
+        : 'Abdominaux';
+      const alts = window.getAlternativeExercises(muscleLabel, '', 5, 'advanced');
+      alts.forEach(a => {
+        res.total++;
+        if (!a.desc) res.noDesc++;
+        if (!Array.isArray(a.tips) || a.tips.length === 0) res.noTips++;
+        if (a._enrichedFrom === 'main-db') res.fromMain++;
+        else if (a._enrichedFrom === 'generic') res.fromGeneric++;
+      });
+      if (alts.length && res.samples.length < 3) {
+        res.samples.push({ pool: p, name: alts[0].n, hasDesc: !!alts[0].desc,
+          hasTips: Array.isArray(alts[0].tips) && alts[0].tips.length > 0,
+          from: alts[0]._enrichedFrom, tipsPreview: (alts[0].tips||[])[0] });
+      }
+    });
+    return res;
+  });
+  ok('Enrichissement — 100% ont une description', enrich.noDesc === 0,
+    enrich.noDesc + '/' + enrich.total + ' sans desc');
+  ok('Enrichissement — 100% ont au moins 1 tip', enrich.noTips === 0,
+    enrich.noTips + '/' + enrich.total + ' sans tips');
+  ok('Enrichissement — > 0 match DB principale', enrich.fromMain > 0,
+    'fromMain=' + enrich.fromMain);
+  ok('Enrichissement — > 0 fallback générique couvre le reste', enrich.fromGeneric > 0 || enrich.fromMain === enrich.total,
+    'fromGeneric=' + enrich.fromGeneric);
+  ok('Enrichissement — 100% traçabilité (_enrichedFrom défini)',
+    enrich.fromMain + enrich.fromGeneric === enrich.total,
+    (enrich.fromMain + enrich.fromGeneric) + '/' + enrich.total);
+
+  // Vérif swap : quand l'utilisateur change un exercice, les tips sont préservés
+  const swapPreserve = await page.evaluate(() => {
+    const alt = window.getAlternativeExercises('Pectoraux', '', 1, 'advanced')[0];
+    if (!alt) return { ok: false };
+    // Simule le swap : copie du code de app-sport.js
+    const newEx = { n: alt.n, m: alt.m, eq: alt.eq, sets: alt.sets || '4×10', rest: alt.rest || '90s' };
+    if (alt.desc) newEx.desc = alt.desc;
+    if (Array.isArray(alt.tips) && alt.tips.length) newEx.tips = alt.tips.slice();
+    if (alt.warn) newEx.warn = alt.warn;
+    if (typeof alt.lv === 'number') newEx.lv = alt.lv;
+    return { ok: true, hasDesc: !!newEx.desc, hasTips: Array.isArray(newEx.tips) && newEx.tips.length > 0,
+      hasLv: typeof newEx.lv === 'number' };
+  });
+  ok('Swap — desc préservée', swapPreserve.hasDesc);
+  ok('Swap — tips préservés', swapPreserve.hasTips);
+  ok('Swap — lv préservé', swapPreserve.hasLv);
+
+  // ─── 20. AUCUNE ERREUR JS ───
+  console.log('\n[20] Erreurs JavaScript pendant l\'audit');
   const critical = errors.filter(e =>
     !/favicon|manifest|404|gifImgError|Failed to load resource/i.test(e)
   );

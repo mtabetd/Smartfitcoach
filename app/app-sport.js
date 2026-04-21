@@ -8199,7 +8199,14 @@ function renderMusculationProgram(p) {
  style: 'padding:10px 12px;cursor:pointer;border-bottom:1px solid var(--border,#DDDBD0);transition:background .1s',
  onclick: function(e) {
  e.stopPropagation();
+ // FIX 2026-04-21 : préserver desc/tips/warn/lv/tags de l'alt enrichie
+ // (sinon l'utilisateur perd les explications en swappant)
  var newEx = { n: alt.n, m: alt.m, eq: alt.eq, sets: alt.sets || exRef.sets, rest: alt.rest || exRef.rest };
+ if (alt.desc) newEx.desc = alt.desc;
+ if (Array.isArray(alt.tips) && alt.tips.length) newEx.tips = alt.tips.slice();
+ if (alt.warn) newEx.warn = alt.warn;
+ if (typeof alt.lv === 'number') newEx.lv = alt.lv;
+ if (Array.isArray(alt.tags)) newEx.tags = alt.tags.slice();
  newEx.video = alt.video || (window.getExerciseVideoUrl ? window.getExerciseVideoUrl(alt.n) : null);
  if (!Array.isArray(S.sportProgram) || !S.sportProgram[dayI] || !Array.isArray(S.sportProgram[dayI].exercises)) { S.swapPanel = null; window.render(); return; }
  var _newName = (newEx.n || '').toLowerCase().trim();
