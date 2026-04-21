@@ -77,7 +77,7 @@
 
 .num-input:focus {
   border-color: var(--black, #0A0A09);
-  box-shadow: 0 0 0 2px rgba(26, 74, 26, 0.12);
+  box-shadow: none;
 }
 
 
@@ -248,10 +248,10 @@
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%) translateY(4px);
-  background: #0A0A09;
-  color: #FAF9F6;
+  background: var(--black, #0A0A09);
+  color: var(--ivory, #FAF9F6);
   padding: 6px 12px;
-  font-family: 'Helvetica Neue', sans-serif;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
   font-size: 11px;
   letter-spacing: 1px;
   white-space: nowrap;
@@ -345,7 +345,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background: var(--ivory2, #F4F4F0);
+  background: var(--ivory2, #F4F1EA);
   overflow: hidden;
   transition: border-color 0.2s ease;
   position: relative;
@@ -510,7 +510,7 @@ body.dark-mode .profile-photo-frame.has-photo {
   font-size: 10px;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: var(--green, #1A4A1A);
+  color: var(--green, #3E5C3A);
   font-weight: 600;
   margin-bottom: 10px;
   display: inline-block;
@@ -520,11 +520,11 @@ body.dark-mode .profile-photo-frame.has-photo {
 }
 
 /* ── Sport-specific accent colors (border-left) ── */
-.exercise-card[data-sport="crossfit"] { border-left-color: var(--orange, #6A4A1A); }
+.exercise-card[data-sport="crossfit"] { border-left-color: var(--orange, #E86F1E); }
 .exercise-card[data-sport="running"] { border-left-color: var(--blue, #1A3A6A); }
 .exercise-card[data-sport="triathlon"] { border-left-color: var(--blue, #1A3A6A); }
 .exercise-card[data-sport="yoga"] { border-left-color: #5A6A5A; }
-.exercise-card[data-sport="cycling"] { border-left-color: var(--orange, #6A4A1A); }
+.exercise-card[data-sport="cycling"] { border-left-color: var(--orange, #E86F1E); }
 .exercise-card[data-sport="calisthenics"] { border-left-color: #4A3A2A; }
 
 .exercise-sets {
@@ -710,7 +710,7 @@ html {
   left: 25%;
   right: 25%;
   height: 2px;
-  background: var(--accent, var(--green, #1A4A1A));
+  background: var(--accent, var(--green, #3E5C3A));
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -816,7 +816,7 @@ input[inputmode="decimal"]:not([data-mini]) {
 }
 
 .skeleton {
-  background: linear-gradient(90deg, #EEEDE8 25%, #F4F4F0 50%, #EEEDE8 75%);
+  background: linear-gradient(90deg, var(--ivory3, #EEEAE0) 25%, var(--ivory2, #F4F1EA) 50%, var(--ivory3, #EEEAE0) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: 2px;
@@ -979,8 +979,8 @@ input[inputmode="decimal"]:not([data-mini]) {
   max-width: 340px;
 }
 .toast-success {
-  background: var(--sapin, var(--green, #1A4A1A));
-  border-color: var(--sapin, var(--green, #1A4A1A));
+  background: var(--sapin, var(--green, #3E5C3A));
+  border-color: var(--sapin, var(--green, #3E5C3A));
 }
 .toast-error {
   background: var(--tabac, #6A4A1A);
@@ -1224,7 +1224,7 @@ body.dark-mode ::-webkit-scrollbar-track{background:var(--ivory)}
   width: 28px;
   height: 28px;
   border-radius: 2px;
-  background: var(--ivory2, #F4F4F0);
+  background: var(--ivory2, #F4F1EA);
   border: 1px solid var(--border, #D8D8D0);
   display: flex;
   align-items: center;
@@ -1640,13 +1640,13 @@ body {
 .dash-action:focus,
 .dash-nav:focus,
 .modal-close:focus {
-  outline: 2px solid var(--accent, #1A4A1A);
+  outline: 2px solid var(--accent, var(--ink-900, #0A0A09));
   outline-offset: 2px;
 }
 
 /* WCAG 2.1 AA — Visible focus indicator (focus-visible) */
 *:focus-visible {
-  outline: 2px solid var(--accent, #1A4A1A);
+  outline: 2px solid var(--accent, var(--ink-900, #0A0A09));
   outline-offset: 2px;
 }
 button:focus-visible,
@@ -1654,7 +1654,7 @@ a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid var(--accent, #1A4A1A);
+  outline: 2px solid var(--accent, var(--ink-900, #0A0A09));
   outline-offset: 2px;
 }
 
@@ -1794,28 +1794,28 @@ p, li, .card-sub, .level-desc, .exercise-detail,
 /* Bouton toggle arabe */
 .btn-shop-ar {
   padding: 8px 14px;
-  background: #1A4A1A;
-  color: #fff;
+  background: var(--green, #3E5C3A);
+  color: var(--ivory, #FAF9F6);
   border: none;
   border-radius: 2px;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 500;
   cursor: pointer;
   font-family: 'Noto Naskh Arabic', 'Amiri', Georgia, serif;
 }
 .btn-shop-ar.active {
-  background: #0D3310;
+  background: var(--black, #0A0A09);
 }
 
 /* Bouton imprimer en arabe */
 .btn-shop-print-ar {
   padding: 8px 14px;
-  background: #1A3A6A;
-  color: #fff;
+  background: var(--black, #0A0A09);
+  color: var(--ivory, #FAF9F6);
   border: none;
   border-radius: 2px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   font-family: 'Noto Naskh Arabic', 'Amiri', Georgia, serif;
 }
@@ -1846,8 +1846,8 @@ p, li, .card-sub, .level-desc, .exercise-detail,
     text-align: right;
     font-family: 'Noto Naskh Arabic', 'Amiri', Georgia, serif;
     padding: 20px;
-    color: #000;
-    background: #fff;
+    color: #0A0A09;
+    background: #FAF9F6;
   }
 
   .shop-print-area .shop-print-title {
@@ -1861,7 +1861,7 @@ p, li, .card-sub, .level-desc, .exercise-detail,
 
   .shop-print-area .shop-print-date {
     font-size: 13px;
-    color: #666;
+    color: #6B6B65;
     margin-bottom: 16px;
     direction: rtl;
     text-align: right;
@@ -1874,8 +1874,8 @@ p, li, .card-sub, .level-desc, .exercise-detail,
 
   .shop-print-area .shop-cat-name {
     font-size: 13px;
-    font-weight: 700;
-    background: #f0f0f0;
+    font-weight: 600;
+    background: #EEEAE0;
     padding: 6px 10px;
     border-radius: 2px;
     margin-bottom: 4px;
@@ -1890,7 +1890,7 @@ p, li, .card-sub, .level-desc, .exercise-detail,
     direction: rtl;
     padding: 3px 10px;
     font-size: 13px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #D8D8D0;
     font-family: 'Noto Naskh Arabic', 'Amiri', Georgia, serif;
   }
 
@@ -2365,14 +2365,14 @@ body.dark-mode .auth-container {
 .badge-pre {
   /* Pré-entraînement : teinte orange charte, fond discret */
   background: var(--orangebg, rgba(106,74,26,.06));
-  color: var(--orange, #6A4A1A);
-  border: 1px solid var(--orange, #6A4A1A);
+  color: var(--orange, #E86F1E);
+  border: 1px solid var(--orange, #E86F1E);
 }
 .badge-post {
   /* Post-entraînement : teinte verte charte */
   background: var(--greenbg, rgba(26,74,26,.06));
-  color: var(--green, #1A4A1A);
-  border: 1px solid var(--green, #1A4A1A);
+  color: var(--green, #3E5C3A);
+  border: 1px solid var(--green, #3E5C3A);
 }
 .badge-rest {
   /* Repos : gris neutre charte */
@@ -2385,13 +2385,13 @@ body.dark-mode .auth-container {
   font-size: 11px;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: var(--green, #1A4A1A);
+  color: var(--green, #3E5C3A);
   font-weight: 400;
   margin: 8px 0 4px;
   padding: 6px 10px;
   background: var(--greenbg, rgba(26,74,26,.06));
   border-radius: 2px;
-  border-left: 3px solid var(--green, #1A4A1A);
+  border-left: 3px solid var(--green, #3E5C3A);
 }
 .day-rest-indicator {
   font-family: "Helvetica Neue", Arial, sans-serif;
@@ -2445,15 +2445,15 @@ body.dark-mode .auth-container {
   position: relative;
 }
 .set-row:nth-child(even) {
-  background: var(--ivory2, #F4F4F0);
+  background: var(--ivory2, #F4F1EA);
 }
 .set-row:hover {
   background: var(--ivory3, #EEEDE8);
-  border-left-color: var(--green, #1A4A1A);
+  border-left-color: var(--green, #3E5C3A);
 }
 .set-row-validated {
   background: var(--greenbg, rgba(26, 74, 26, 0.10)) !important;
-  border-left-color: var(--green, #1A4A1A) !important;
+  border-left-color: var(--green, #3E5C3A) !important;
 }
 .set-load-input, .set-reps-input {
   width: 60px;
@@ -2487,7 +2487,7 @@ body.dark-mode .auth-container {
   letter-spacing: 0.3px;
 }
 .delta-up {
-  color: var(--green, #1A4A1A);
+  color: var(--green, #3E5C3A);
   background: var(--greenbg, rgba(26,74,26,.10));
 }
 .delta-down {
@@ -2524,10 +2524,10 @@ body.dark-mode .auth-container {
    ------------------------------------------------------- */
 .set-validate-btn {
   padding: 8px 12px;
-  border: 1.5px solid var(--green, #1A4A1A);
+  border: 1.5px solid var(--green, #3E5C3A);
   border-radius: 2px;
   background: transparent;
-  color: var(--green, #1A4A1A);
+  color: var(--green, #3E5C3A);
   font-family: "Helvetica Neue", Arial, sans-serif;
   font-size: 10px;
   font-weight: 600;
@@ -2540,7 +2540,7 @@ body.dark-mode .auth-container {
   min-width: 44px;
 }
 .set-validate-btn:hover {
-  background: var(--green, #1A4A1A);
+  background: var(--green, #3E5C3A);
   color: var(--ivory, #FAF9F6);
   box-shadow: 0 4px 8px rgba(26, 74, 26, 0.2);
 }
@@ -2616,7 +2616,7 @@ body.dark-mode .auth-container {
 }
 .rest-timer-progress {
   fill: none;
-  stroke: var(--green, #1A4A1A);
+  stroke: var(--green, #3E5C3A);
   stroke-width: 6;
   stroke-linecap: round;
   transition: stroke-dashoffset 0.9s linear, stroke 0.3s;
@@ -2629,7 +2629,7 @@ body.dark-mode .auth-container {
   animation: timerPulse 0.5s ease-in-out infinite alternate;
 }
 .rest-timer-done .rest-timer-progress {
-  stroke: var(--green, #1A4A1A);
+  stroke: var(--green, #3E5C3A);
   stroke-dashoffset: 0 !important;
 }
 .rest-timer-time {
@@ -2708,7 +2708,7 @@ body.dark-mode .auth-container {
   text-decoration: line-through;
 }
 .rest-timer-btn-go {
-  background: var(--green, #1A4A1A);
+  background: var(--green, #3E5C3A);
   color: var(--ivory, #FAF9F6);
   padding: 14px 32px;
   font-size: 11px;
@@ -3061,41 +3061,10 @@ select {
 }
 
 
-/* === COLOUR SYSTEM — Ivoires, Noirs & Verts Raffinés === */
+/* === SHADOWS utilitaires — étendent le :root ci-dessus === */
+/* Les tokens de couleur (--ink-*, --paper*, --line, --orange, --success, --warning, --error)
+   sont définis dans index.html et constituent la seule source de vérité. */
 :root {
-  /* Ivoires — gradient chaud */
-  --ivory-0: #FAF9F6; /* FIX Hermès : blanc pur interdit — ivoire chaud */
-  --ivory-1: #FDFCFA;    /* quasi-blanc chaud */
-  --ivory-2: #FAF9F6;    /* ivoire principal */
-  --ivory-3: #F5F4F0;    /* ivoire secondaire */
-  --ivory-4: #EDEBE5;    /* ivoire sombre */
-
-  /* Noirs — gradient profond */
-  --black-0: #0A0A09;    /* noir absolu */
-  --black-1: #1A1A18;    /* noir principal */
-  --black-2: #2A2A28;    /* noir moyen */
-  --black-3: #3A3A38;    /* noir clair */
-
-  /* Gris — neutres chauds */
-  --grey-1: #4A4A48;
-  --grey-2: #6B6B65;     /* gris principal */
-  --grey-3: #8A8A83;
-  --grey-4: #AEAEA7;
-  --grey-5: #C8C8C0;
-
-  /* Vert SmartFitCoach — profond, élégant */
-  --green-dark: #0F2E0F;
-  --green-main: #1A4A1A;
-  --green-light: #2E6B2E;
-  --green-pale: #E8F0E8;
-  --green-bg: rgba(26, 74, 26, 0.06);
-
-  /* Bordures subtiles */
-  --border-light: rgba(26, 26, 24, 0.06);
-  --border-main: #E8E6DF;
-  --border-dark: #D0CEC7;
-
-  /* Shadows — luxe subtil */
   --shadow-xs: 0 1px 2px rgba(10, 10, 9, 0.04);
   --shadow-sm: 0 2px 8px rgba(10, 10, 9, 0.06);
   --shadow-md: 0 4px 16px rgba(10, 10, 9, 0.08);
@@ -3109,38 +3078,38 @@ select {
 /* Eyebrows — trait distinctif du luxe */
 .eyebrow-lux {
   font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-widest);
+  font-size: 9px;
+  letter-spacing: 5px;
   text-transform: uppercase;
-  color: var(--grey-2);
+  color: var(--ink-500, #6B6B65);
   font-weight: 400;
 }
 
 /* Titres hero Georgia */
 .title-hero {
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: Georgia, serif;
   font-size: clamp(1.8rem, 5vw, 2.8rem);
   font-weight: normal;
-  letter-spacing: var(--tracking-tight);
-  line-height: var(--leading-tight);
-  color: var(--black-1);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--ink-900, #0A0A09);
 }
 
 /* Titres section */
 .title-section {
   font-family: Georgia, serif;
-  font-size: var(--text-xl);
+  font-size: 20px;
   font-weight: normal;
   letter-spacing: -0.01em;
-  line-height: var(--leading-tight);
+  line-height: 1.2;
 }
 
 /* Sous-titres corpo */
 .subtitle-lux {
   font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-size: var(--text-sm);
-  line-height: var(--leading-relaxed);
-  color: var(--grey-2);
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--ink-500, #6B6B65);
   letter-spacing: 0.01em;
 }
 
@@ -3148,10 +3117,10 @@ select {
 .quote-text {
   font-family: Georgia, serif;
   font-style: italic;
-  font-size: var(--text-lg);
-  line-height: var(--leading-relaxed);
-  color: var(--black-2);
-  border-left: 2px solid var(--green-main);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink-700, #2B2B27);
+  border-left: 1px solid var(--line, #D8D8D0);
   padding-left: 20px;
 }
 
@@ -3161,14 +3130,14 @@ select {
 /* Divider horizontal élégant */
 .divider {
   border: none;
-  border-top: 1px solid var(--border-main);
+  border-top: 1px solid var(--line, #D8D8D0);
   margin: 24px 0;
 }
 
 /* Divider avec espacement généreux */
 .divider-lg {
   border: none;
-  border-top: 1px solid var(--border-light);
+  border-top: 1px solid var(--line, #D8D8D0);
   margin: 40px 0;
 }
 
@@ -3178,7 +3147,7 @@ select {
   align-items: center;
   gap: 16px;
   margin: 32px 0;
-  color: var(--grey-4);
+  color: var(--ink-300, #A8A8A0);
   font-family: Georgia, serif;
   font-size: 18px;
 }
@@ -3186,20 +3155,20 @@ select {
 .divider-ornament::after {
   content: '';
   flex: 1;
-  border-top: 1px solid var(--border-main);
+  border-top: 1px solid var(--line, #D8D8D0);
 }
 
 
 /* === SCROLLBAR — ultra-raffinée === */
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border-dark); border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: var(--grey-4); }
+::-webkit-scrollbar-thumb { background: var(--line, #D8D8D0); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ink-300, #A8A8A0); }
 
 
 /* === FOCUS STATES — accessibilité premium === */
 *:focus-visible {
-  outline: 2px solid var(--green-main);
+  outline: 2px solid var(--ink-900, #0A0A09);
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -3208,8 +3177,8 @@ select {
 
 /* === SÉLECTION TEXTE — personnalisée === */
 ::selection {
-  background: rgba(26, 74, 26, 0.15);
-  color: var(--black-1);
+  background: rgba(10, 10, 9, 0.12);
+  color: var(--ink-900, #0A0A09);
 }
 
 
@@ -3226,31 +3195,27 @@ select {
   letter-spacing: 0.15em;
   font-size: 11px;
   font-weight: 500;
-  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
-  box-shadow: 0 2px 8px rgba(10,10,9,0.12);
+  transition: opacity 0.2s ease, transform 0.1s ease;
   min-height: 52px;
 }
 .btn-primary:hover {
-  background: #0F2E0F;
-  box-shadow: 0 4px 16px rgba(10,10,9,0.18);
-  transform: translateY(-1px);
+  background: var(--black2, #181818);
+  opacity: 0.92;
 }
 .btn-primary:active {
   transform: translateY(0) scale(0.99);
-  box-shadow: 0 1px 4px rgba(10,10,9,0.10);
 }
 .btn-primary:disabled {
   opacity: 0.35;
   cursor: not-allowed;
   transform: none;
-  box-shadow: none;
 }
 
 /* Bouton secondaire élégant */
 .btn-secondary {
   background: transparent;
-  border: 1.5px solid var(--black-1, #1A1A18);
-  color: var(--black-1, #1A1A18);
+  border: 1px solid var(--line, #D8D8D0);
+  color: var(--black, #0A0A09);
   min-height: 48px;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   font-size: 11px;
@@ -3262,15 +3227,15 @@ select {
   padding: 0 24px;
 }
 .btn-secondary:hover {
-  background: var(--black-1, #1A1A18);
-  color: var(--ivory-2, #FAF9F6);
+  border-color: var(--black, #0A0A09);
+  background: transparent;
 }
 
 /* Bouton ghost — texte seul */
 .btn-ghost {
   background: transparent;
   border: none;
-  color: var(--grey-2, #6B6B65);
+  color: var(--ink-500, #6B6B65);
   font-family: 'Helvetica Neue', Arial, sans-serif;
   font-size: 11px;
   letter-spacing: 0.08em;
@@ -3280,28 +3245,26 @@ select {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-.btn-ghost:hover { color: var(--black-1, #1A1A18); }
+.btn-ghost:hover { color: var(--ink-900, #0A0A09); }
 
 
 /* === CARDS PREMIUM === */
 
 .card-premium {
-  background: var(--ivory-2, #FAF9F6);
-  border: 1px solid var(--border-main, #E8E6DF);
+  background: var(--paper, #FAF9F6);
+  border: 1px solid var(--line, #D8D8D0);
   border-radius: 2px;
   padding: 24px;
-  box-shadow: 0 2px 8px rgba(10,10,9,0.04);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 .card-premium:hover {
-  box-shadow: 0 4px 16px rgba(10,10,9,0.08);
-  transform: translateY(-1px);
+  border-color: var(--ink-700, #2B2B27);
 }
 
 /* Carte hero — pleine largeur avec accent */
 .card-hero {
-  background: var(--black-1, #1A1A18);
-  color: var(--ivory-2, #FAF9F6);
+  background: var(--black, #0A0A09);
+  color: var(--ivory, #FAF9F6);
   border-radius: 2px;
   padding: 32px 24px;
   position: relative;
@@ -3311,25 +3274,25 @@ select {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--green-main, #1A4A1A), transparent);
+  height: 1px;
+  background: var(--line, #D8D8D0);
 }
 
 /* Carte accent vert */
 .card-accent {
-  background: rgba(26,74,26,0.04);
-  border: 1px solid rgba(26,74,26,0.15);
-  border-left: 3px solid var(--green-main, #1A4A1A);
+  background: var(--greenbg, rgba(62,92,58,0.06));
+  border: 1px solid var(--green, #3E5C3A);
+  border-left: 3px solid var(--green, #3E5C3A);
   border-radius: 0 2px 2px 0;
   padding: 16px 20px;
 }
 
 /* Carte warning */
 .card-warning {
-  background: rgba(106,74,26,0.04);
-  border: 1px solid rgba(106,74,26,0.15);
-  border-left: 3px solid #6A4A1A;
-  border-radius: 0 3px 3px 0;
+  background: var(--orangebg, rgba(232,111,30,0.06));
+  border: 1px solid var(--orange, #E86F1E);
+  border-left: 3px solid var(--orange, #E86F1E);
+  border-radius: 0 2px 2px 0;
   padding: 16px 20px;
 }
 
@@ -3339,27 +3302,25 @@ select {
 .input-premium {
   width: 100%;
   height: 52px;
-  border: 1px solid var(--border-main, #E8E6DF);
-  border-bottom: 2px solid var(--border-dark, #D0CEC7);
-  background: var(--ivory-1, #FDFCFA);
-  font-family: Georgia, serif;
+  border: none;
+  border-bottom: 1px solid var(--border, #D8D8D0);
+  background: transparent;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
   font-size: 16px;
-  color: var(--black-1, #1A1A18);
-  padding: 0 16px;
+  color: var(--black, #0A0A09);
+  padding: 0;
   box-sizing: border-box;
-  border-radius: 2px;
+  border-radius: 0;
   outline: none;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color 0.15s ease;
   -webkit-appearance: none;
 }
 .input-premium:focus {
-  border-color: var(--green-main, #1A4A1A);
-  border-bottom-color: var(--green-main, #1A4A1A);
-  box-shadow: 0 2px 8px rgba(26,74,26,0.08);
-  background: var(--ivory, #FAF9F6); /* FIX Hermès : blanc pur interdit */
+  border-bottom-color: var(--black, #0A0A09);
+  background: transparent;
 }
 .input-premium::placeholder {
-  color: var(--grey-4, #AEAEA7);
+  color: var(--ink-300, #A8A8A0);
   font-family: 'Helvetica Neue', Arial, sans-serif;
   font-size: 14px;
 }
@@ -3380,21 +3341,21 @@ select {
   font-weight: 500;
 }
 .badge-green {
-  background: rgba(26,74,26,0.10);
-  color: var(--green-main, #1A4A1A);
+  background: var(--greenbg, rgba(62,92,58,0.10));
+  color: var(--success, #3E5C3A);
 }
 .badge-dark {
-  background: var(--black-1, #1A1A18);
-  color: var(--ivory-2, #FAF9F6);
+  background: var(--ink-900, #0A0A09);
+  color: var(--paper, #FAF9F6);
 }
 .badge-warm {
-  background: rgba(106,74,26,0.10);
-  color: #6A4A1A;
+  background: var(--orangebg, rgba(232,111,30,0.10));
+  color: var(--orange-ink, #7A3B0E);
 }
 .badge-new {
-  background: var(--green-main, #1A4A1A);
-  color: white;
-  font-size: 11px; /* FIX Hermès : plancher 11px strict (était 8px) */
+  background: var(--black, #0A0A09);
+  color: var(--ivory, #FAF9F6);
+  font-size: 11px;
 }
 
 
@@ -3402,19 +3363,18 @@ select {
 
 .progress-bar-luxury {
   height: 3px;
-  background: var(--border-main, #E8E6DF);
-  border-radius: 2px;
+  background: var(--line, #D8D8D0);
+  border-radius: 0;
   overflow: hidden;
 }
 .progress-bar-luxury .fill {
   height: 100%;
-  border-radius: 2px;
-  background: var(--black-1, #1A1A18);
+  border-radius: 0;
+  background: var(--ink-900, #0A0A09);
   transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .progress-bar-luxury.green .fill {
-  /* FIX Hermès : aplat monochrome au lieu du gradient multi-stop */
-  background: var(--green-main, #1A4A1A);
+  background: var(--success, #3E5C3A);
 }
 
 /* Macro rings — amélioration de l'animation */
@@ -3429,7 +3389,7 @@ select {
 
 .tabs-luxury {
   display: flex;
-  border-bottom: 1px solid var(--border-main, #E8E6DF);
+  border-bottom: 1px solid var(--line, #D8D8D0);
   overflow-x: auto;
   scrollbar-width: none;
   gap: 0;
@@ -3441,9 +3401,9 @@ select {
   padding: 12px 20px;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   font-size: 11px;
-  letter-spacing: 0.08em;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--grey-2, #6B6B65);
+  color: var(--ink-500, #6B6B65);
   background: transparent;
   border: none;
   border-bottom: 2px solid transparent;
@@ -3452,10 +3412,10 @@ select {
   white-space: nowrap;
   min-height: 44px;
 }
-.tab-luxury:hover { color: var(--black-1, #1A1A18); }
+.tab-luxury:hover { color: var(--ink-900, #0A0A09); }
 .tab-luxury.active {
-  color: var(--black-1, #1A1A18);
-  border-bottom-color: var(--black-1, #1A1A18);
+  color: var(--ink-900, #0A0A09);
+  border-bottom-color: var(--ink-900, #0A0A09);
 }
 
 
@@ -3466,7 +3426,7 @@ select {
   cursor: help;
 }
 .term-tooltip {
-  border-bottom: 1px dotted var(--grey-3, #8A8A83);
+  border-bottom: 1px dotted var(--ink-300, #A8A8A0);
   cursor: help;
   transition: border-color 0.15s ease;
 }
@@ -3531,7 +3491,7 @@ body.dark-mode {
   animation-duration: 0.7s;
   animation-timing-function: linear;
 }
-.term-tooltip:hover { border-bottom-color: var(--black-1, #1A1A18); }
+.term-tooltip:hover { border-bottom-color: var(--ink-900, #0A0A09); }
 
 
 /* -------------------------------------------------------
@@ -3698,13 +3658,8 @@ body.dark-mode input[type="email"] {
    compromis à 11px pour garder les eyebrow/label compacts).
    Les 9px inline sont overridés ici globalement.
    ════════════════════════════════════════════════════════════════════ */
-#app *, #app *::before, #app *::after { min-font-size: 11px; }
-/* min-font-size n'est pas standard CSS — fallback via clamp sur les classes critiques */
-.eyebrow, .section-label, .field-label, .stat-label, .num-hint,
-[style*="font-size:9px"], [style*="font-size: 9px"],
-[style*="font-size:10px"], [style*="font-size: 10px"] {
-  font-size: max(11px, inherit) !important;
-}
+/* Plancher typographique : les classes label/eyebrow restent à 9px minimum par charte Hermès.
+   La règle min-font-size n'est pas standard CSS — supprimée. Les 9px eyebrow sont volontaires. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

@@ -24,9 +24,9 @@
       'position:fixed;bottom:80px;left:16px;z-index:8900;' +
       'width:44px;height:44px;min-width:44px;min-height:44px;' +
       'background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);' +
-      'border:none;border-radius:50%;cursor:pointer;' +
+      'border:none;border-radius:0;cursor:pointer;' +
       'display:flex;align-items:center;justify-content:center;' +
-      'box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.85;transition:opacity 180ms;';
+      'opacity:.75;transition:opacity 180ms;';
     btn.addEventListener('mouseenter', function(){ btn.style.opacity = '1'; });
     btn.addEventListener('mouseleave', function(){ btn.style.opacity = '.85'; });
 
@@ -63,7 +63,8 @@
       '<div id="feedback-char" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:10px;color:var(--ink-300,#A8A8A0);text-align:right;margin-top:4px">0 / 1000</div>' +
       '<div id="feedback-msg" style="display:none;margin-top:10px;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;padding:8px 10px"></div>' +
       '<button id="feedback-send" style="margin-top:14px;width:100%;padding:14px;min-height:44px;' +
-        'background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border:none;' +
+        'background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);' +
+        'border:1px solid var(--ink-900,#0A0A09);border-radius:0;' +
         'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;">Envoyer</button>';
 
     document.body.appendChild(btn);
