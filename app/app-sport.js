@@ -7926,7 +7926,7 @@ function renderMusculationProgram(p) {
  var valBtn = h('button', {
  'class': 'set-validate-btn' + (hasData ? '' : ' set-validate-btn-disabled'),
  disabled: !hasData,
- style: 'margin-left:auto;flex-shrink:0;padding:0;font-size:20px;font-weight:700;min-width:44px;min-height:44px;line-height:1',
+ style: 'flex-shrink:0;padding:0;font-size:20px;font-weight:700;min-width:44px;min-height:44px;line-height:1',
  onclick: function(e) {
  e.stopPropagation();
  // Si l'user n'a rien modifié, confirmer automatiquement les valeurs conseillées
