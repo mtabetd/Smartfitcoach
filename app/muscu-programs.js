@@ -2955,7 +2955,7 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Élévations latérales', m: 'Deltoïde latéral', eq: 'Haltères', sets: '4×12-15', rest: '60s' },
     { n: 'Élévations frontales', m: 'Deltoïde antérieur', eq: 'Haltères', sets: '3×12-15', rest: '60s' },
     { n: 'Oiseau haltères', m: 'Deltoïde postérieur', eq: 'Haltères', sets: '4×12-15', rest: '60s' },
-    { n: 'Face pull câble', m: 'Deltoïde postérieur / Trapèzes', eq: 'Câble + corde', sets: '4×15', rest: '60s' },
+        { n: 'Face pull poulie haute', m: 'Deltoïde postérieur + rotateurs', eq: 'Câble + corde', sets: '4×15', rest: '60s' },
     { n: 'Arnold press', m: 'Épaules (3 chefs)', eq: 'Haltères', sets: '3×10-12', rest: '75s' },
     { n: 'Tirage menton', m: 'Deltoïde / Trapèzes', eq: 'Barre ou câble', sets: '3×12', rest: '60s' },
     { n: 'Développé militaire machine', m: 'Épaules', eq: 'Machine épaules', sets: '3×12-15', rest: '60s' },

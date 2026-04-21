@@ -1580,7 +1580,7 @@ function getDayType(dayIndex) {
   // L'utilisateur a explicitement planifié ses sports → priorité maximale
   if (s.weeklyCalendar && typeof s.weeklyCalendar === 'object' &&
       s.weeklyCalendar[String(dayIndex)] !== undefined) {
-    isTraining = (s.weeklyCalendar[String(dayIndex)] !== 'repos');
+    isTraining = (s.weeklyCalendar[String(dayIndex)] !== 'repos' && s.weeklyCalendar[String(dayIndex)] !== 'autre');
   }
   // Source de vérité #2 — Jours spécifiques sélectionnés en onboarding
   else if (Array.isArray(s.trainingDaysSelected) && s.trainingDaysSelected.length > 0) {
@@ -5025,7 +5025,7 @@ if(protCat&&weekProtBudget){var cnt=weekProtBudget[protCat]||0;var maxW={volaill
 // Bonus favori : 1⭐=-200, 2⭐=-400, 3⭐=-600 — domine calScore/macroScore/diversity
 var favStars=(r._id&&_favMap[r._id])?Math.max(1,Math.min(3,_favMap[r._id]|0)):0;
 var favBonus=favStars?-(favStars*200):0;
-return{recipe:r,score:calScore+macroScore+diversityPenalty+favBonus};});scored.sort(function(a,b){return a.score-b.score});var top=scored.slice(0,Math.min(5,scored.length));var picked=top[Math.floor(Math.random()*top.length)].recipe;if(picked){used.add(picked.n);var pc=getRecipeProtein(picked);if(pc){if(dayProteins)dayProteins.push(pc);if(weekProtBudget)weekProtBudget[pc]=(weekProtBudget[pc]||0)+1;}}return picked||{n:'Repas libre',k:targetK,p:0,g:0,l:0,f:0,lv:1,i:'',st:[],w:0,tags:[]}}
+return{recipe:r,score:calScore+macroScore+diversityPenalty+favBonus};});scored.sort(function(a,b){return a.score-b.score});var top=scored.slice(0,Math.min(5,scored.length));var picked=top[Math.floor(Math.random()*top.length)].recipe;if(picked){used.add(picked.n);var pc=getRecipeProtein(picked);if(pc){if(dayProteins)dayProteins.push(pc);if(weekProtBudget)weekProtBudget[pc]=(weekProtBudget[pc]||0)+1;}}return picked||{n:'Repas libre',k:targetK,p:Math.round(targetK*0.3/4),g:Math.round(targetK*0.4/4),l:Math.round(targetK*0.3/9),f:0,lv:1,i:'',st:[],w:0,tags:[]}}
 // Applique le scaling sur mesure pour les recettes R201+ (format riche) et L0XX-L3XX (format legacy)
 function enrichWithScaling(recipe, targetKcal) {
   if (!recipe) return recipe;
@@ -5216,7 +5216,7 @@ function swapMeal(di,slot){
     var curId=(s.weekPlan[di][slot]&&s.weekPlan[di][slot]._id)||'';
     var usedSm=new Set([curId]);
     var nrSm=pickSmoothieForPlan(tgt,usedSm);
-    if(nrSm){s.weekPlan[di][slot]=nrSm;if(typeof window.saveProfile==='function'){try{window.saveProfile();}catch(e){}}if(typeof window.render==='function')window.render();return;}
+    if(nrSm){s.weekPlan[di][slot]=nrSm;var _ssQ=['breakfast','lunch','snack','dinner'],_ssD=s.weekPlan[di],_ssT={k:0,p:0,g:0,l:0};_ssQ.forEach(function(q){var m=_ssD[q];if(m){_ssT.k+=m.k||0;_ssT.p+=m.p||0;_ssT.g+=m.g||0;_ssT.l+=m.l||0;}});_ssD.kcal=_ssT.k;_ssD.p=_ssT.p;_ssD.g=_ssT.g;_ssD.l=_ssT.l;if(typeof window.saveProfile==='function'){try{window.saveProfile();}catch(e){}}if(typeof window.render==='function')window.render();return;}
     // Fallback : smoothie DB épuisé → swap vers collation normale
   }
   // Autres slots — swap recette normale
@@ -5236,7 +5236,9 @@ function swapMeal(di,slot){
   if(!nr)return; // sécurité — ne devrait pas arriver après le guard ci-dessus
   nr=enrichWithScaling(nr,tgt);
   s.weekPlan[di][slot]=nr;
-  // IMPORTANT: persister le swap immédiatement
+  var _rtQ=['breakfast','lunch','snack','dinner'],_rtD=s.weekPlan[di],_rtT={k:0,p:0,g:0,l:0};
+  _rtQ.forEach(function(q){var m=_rtD[q];if(m){_rtT.k+=m.k||0;_rtT.p+=m.p||0;_rtT.g+=m.g||0;_rtT.l+=m.l||0;}});
+  _rtD.kcal=_rtT.k;_rtD.p=_rtT.p;_rtD.g=_rtT.g;_rtD.l=_rtT.l;
   if(typeof window.saveProfile==='function'){try{window.saveProfile();}catch(e){}}
   if(typeof window.render==='function')window.render();
 }
@@ -5322,7 +5324,8 @@ window.getPlanHash = function() {
     typeof s.excluded === 'string' ? s.excluded : '',
     s.cookLevel !== undefined && s.cookLevel !== null ? String(s.cookLevel) : '',
     Array.isArray(s.cuisines) ? s.cuisines.slice().sort().join(',') : '',
-    Array.isArray(s.medical) ? s.medical.slice().sort().join(',') : ''
+    Array.isArray(s.medical) ? s.medical.slice().sort().join(',') : '',
+    Array.isArray(s.wheyFlavors) ? s.wheyFlavors.slice().sort().join(',') : (s.wheyFlavors || '')
   ].join('|');
 };
 
