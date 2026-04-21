@@ -3028,7 +3028,7 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Hip thrust unilatéral', m: 'Fessiers', eq: 'Banc + haltère', sets: '3×10-12', rest: '60s' },
     { n: 'Frog pump', m: 'Grand fessier', eq: 'Poids de corps', sets: '3×15-20', rest: '30s' },
     { n: 'Sumo squat haltere', m: 'Fessiers / Adducteurs', eq: 'Haltere', sets: '4×10-12', rest: '90s' },
-    { n: 'Cable pull-through', m: 'Fessiers / Ischios', eq: 'Câble basse poulie', sets: '3×12-15', rest: '60s' },
+    { n: 'Kick-back câble fessiers', m: 'Grand fessier', eq: 'Câble bas', sets: '3×15-20', rest: '45s' },
     { n: 'Abduction debout élastique', m: 'Fessiers / Abducteurs', eq: 'Élastique', sets: '3×15-20', rest: '30s' }
   ],
   mollets: [
@@ -3048,7 +3048,7 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Shrug machine', m: 'Trap\u00e8zes sup\u00e9rieurs', eq: 'Machine', sets: '4×12-15', rest: '60s' },
     { n: 'Face pull c\u00e2ble', m: 'Trap\u00e8zes moyens + rotateurs', eq: 'C\u00e2ble + corde', sets: '4×15', rest: '60s' },
     { n: 'Tirage menton barre', m: 'Trap\u00e8zes + \u00e9paules', eq: 'Barre', sets: '4×10-12', rest: '60s' },
-    { n: 'Rack pull', m: 'Trap\u00e8zes sup\u00e9rieurs', eq: 'Barre + rack', sets: '4×5-6', rest: '180s' },
+    { n: 'Rowing debout haltères', m: 'Trapèzes supérieurs + épaules', eq: 'Haltères', sets: '4×10-12', rest: '60s' },
     { n: 'Rowing buste pench\u00e9 prise large', m: 'Trap\u00e8zes moyens + rhobo\u00efdes', eq: 'Barre', sets: '4×10', rest: '90s' },
     { n: 'Shrug halt\u00e8re unilat\u00e9ral', m: 'Trap\u00e8zes', eq: 'Halt\u00e8re', sets: '4×12', rest: '60s' },
     { n: 'Tirage menton c\u00e2ble', m: 'Trap\u00e8zes + \u00e9paules', eq: 'C\u00e2ble', sets: '4×12', rest: '60s' }

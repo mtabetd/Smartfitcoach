@@ -8183,6 +8183,9 @@ function renderMusculationProgram(p) {
  var newEx = { n: alt.n, m: alt.m, eq: alt.eq, sets: alt.sets || exRef.sets, rest: alt.rest || exRef.rest };
  newEx.video = alt.video || (window.getExerciseVideoUrl ? window.getExerciseVideoUrl(alt.n) : null);
  if (!Array.isArray(S.sportProgram) || !S.sportProgram[dayI] || !Array.isArray(S.sportProgram[dayI].exercises)) { S.swapPanel = null; window.render(); return; }
+ var _newName = (newEx.n || '').toLowerCase().trim();
+ var _dupIdx = S.sportProgram[dayI].exercises.findIndex(function(e, idx) { return idx !== exI && (e.n || '').toLowerCase().trim() === _newName; });
+ if (_dupIdx !== -1) { if (window.showToast) window.showToast('⚠ ' + newEx.n + ' est déjà dans cette séance', 'warning', 2500); S.swapPanel = null; window.render(); return; }
  S.sportProgram[dayI].exercises[exI] = newEx;
  // Migrer les données de session pour le nouvel exercice
  var _today = new Date().toISOString().slice(0, 10);
