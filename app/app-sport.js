@@ -7758,10 +7758,9 @@ function renderMusculationProgram(p) {
  // Header with set progress counter
  var _doneCount = setData.filter(function(s){ return s.validated === true; }).length;
  var setHeaderWrap = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;background:var(--surface,var(--ivory2));padding:6px 8px;border-bottom:1px solid var(--border)'});
- var setHeader = h('div', {style: 'display:grid;grid-template-columns:40px 1fr 50px;flex:1;font-size:11px;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:0.5px'});
+ var setHeader = h('div', {style: 'display:grid;grid-template-columns:40px 1fr;flex:1;font-size:11px;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:0.5px'});
  setHeader.appendChild(h('div', {}, '#'));
  setHeader.appendChild(h('div', {}, 'Conseill\u00e9'));
- setHeader.appendChild(h('div', {style:'text-align:center'}, '\u0394'));
  setHeaderWrap.appendChild(setHeader);
  var _serieProgressEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:700;white-space:nowrap;margin-left:8px;padding:2px 6px;border-radius:2px;' + (_doneCount === numSets ? 'background:var(--ink-900,#0A0A09);color:#fff' : 'background:var(--border);color:var(--grey)')}, _doneCount + '\u00a0/\u00a0' + numSets + ' s\u00e9ries');
  setHeaderWrap.appendChild(_serieProgressEl);
@@ -7770,7 +7769,7 @@ function renderMusculationProgram(p) {
  // Rows
  setData.forEach(function(setRow, si3) {
  var row = h('div', {'class': 'set-row', style: 'display:flex;flex-direction:column;padding:0;border-top:1px solid var(--border)'});
- var rowContent = h('div', {style: 'display:grid;grid-template-columns:40px 1fr 50px;padding:6px 8px;align-items:center;width:100%'});
+ var rowContent = h('div', {style: 'display:grid;grid-template-columns:40px 1fr;padding:6px 8px;align-items:center;width:100%'});
 
  rowContent.appendChild(h('div', {style: 'font-size:13px;font-weight:700;color:var(--text)'}, String(setRow.set)));
 
@@ -7805,7 +7804,7 @@ function renderMusculationProgram(p) {
  } else if (si3 > 0) {
  deltaCell.appendChild(h('span', {'class': 'set-delta delta-flat'}, '\u2192'));
  }
- rowContent.appendChild(deltaCell);
+
 
  var _pendingValBtn = null;
  var inputZone = h('div', {style: 'display:flex;align-items:center;gap:6px;padding:4px 8px 8px;border-top:1px solid var(--border,#ECF0F1);width:100%;box-sizing:border-box', onclick: function(e){ e.stopPropagation(); }});
