@@ -7363,8 +7363,32 @@ function renderMusculationProgram(p) {
  })();
 
  var _totalExercises = (day.exercises || []).length;
- (day.exercises || []).forEach(function(ex, exIdx) {
- var card = h('div', {'class': 'exercise-card', onclick: function(){ S.sportModalExercise = ex; window.render(); }});
+
+ // ─── SWIPE NAVIGATION STATE ───
+ if (S._exSwipeDayIdx !== S.selectedSportDay) { S.currentExerciseIdx = 0; S._exSwipeDayIdx = S.selectedSportDay; }
+ if (typeof S.currentExerciseIdx !== 'number' || S.currentExerciseIdx < 0 || S.currentExerciseIdx >= _totalExercises) { S.currentExerciseIdx = 0; }
+
+ // ─── NAVIGATION DOTS ───
+ if (_totalExercises > 1) {
+  var _dotsNav = h('div', {style: 'display:flex;justify-content:center;align-items:center;gap:6px;margin:4px 0 14px'});
+  for (var _di = 0; _di < _totalExercises; _di++) {
+   var _isActiveDot = _di === S.currentExerciseIdx;
+   _dotsNav.appendChild(h('div', {
+    style: 'height:4px;border-radius:2px;cursor:pointer;transition:all .25s cubic-bezier(0.4,0,0.2,1);' + (_isActiveDot ? 'width:20px;background:var(--black,#0A0A09)' : 'width:4px;background:var(--border,#D8D8D0)'),
+    onclick: (function(_i){ return function(){ S.currentExerciseIdx = _i; window.render(); }; })(_di)
+   }));
+  }
+  p.appendChild(_dotsNav);
+ }
+
+ // ─── SWIPE CONTAINER ───
+ var _swipeWrap = h('div', {'class': 'exercise-swipe-wrap', style: 'position:relative;touch-action:pan-y'});
+
+ ;(function() {
+  var exIdx = S.currentExerciseIdx;
+  var ex = day.exercises[exIdx];
+  if (!ex) return;
+  var card = h('div', {'class': 'exercise-card', onclick: function(){ S.sportModalExercise = ex; window.render(); }});
 
  // ── PROGRESS INDICATOR: "Exercice X/N" ──
  var _exProgressRow = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:2px'});
@@ -8247,8 +8271,44 @@ function renderMusculationProgram(p) {
  }
  })(ex, S.selectedSportDay, exIdx);
 
- p.appendChild(card);
- });
+ _swipeWrap.appendChild(card);
+ })(); // fin rendu exercice courant
+
+ // ─── PREV / NEXT ───
+ if (_totalExercises > 1) {
+  var _arrowRow = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;margin-top:12px'});
+  _arrowRow.appendChild(h('button', {
+   style: 'padding:10px 16px;border:1px solid var(--border,#D8D8D0);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;color:var(--grey,#6B6B65);border-radius:2px;cursor:pointer;' + (S.currentExerciseIdx === 0 ? 'opacity:0.25;pointer-events:none' : ''),
+   onclick: function(e) { e.stopPropagation(); if (S.currentExerciseIdx > 0) { S.currentExerciseIdx--; if (navigator.vibrate) navigator.vibrate(10); window.render(); } }
+  }, '‹ Précédent'));
+  _arrowRow.appendChild(h('button', {
+   style: 'padding:10px 16px;border:1px solid var(--border,#D8D8D0);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;color:var(--grey,#6B6B65);border-radius:2px;cursor:pointer;' + (S.currentExerciseIdx >= _totalExercises - 1 ? 'opacity:0.25;pointer-events:none' : ''),
+   onclick: function(e) { e.stopPropagation(); if (S.currentExerciseIdx < _totalExercises - 1) { S.currentExerciseIdx++; if (navigator.vibrate) navigator.vibrate(10); window.render(); } }
+  }, 'Suivant ›'));
+  _swipeWrap.appendChild(_arrowRow);
+ }
+
+ // ─── TOUCH SWIPE ───
+ var _tStartX = 0, _tStartY = 0, _tSwiping = false;
+ _swipeWrap.addEventListener('touchstart', function(e) {
+  _tStartX = e.touches[0].clientX;
+  _tStartY = e.touches[0].clientY;
+  _tSwiping = false;
+ }, {passive: true});
+ _swipeWrap.addEventListener('touchmove', function(e) {
+  var _dx = e.touches[0].clientX - _tStartX;
+  var _dy = e.touches[0].clientY - _tStartY;
+  if (!_tSwiping && Math.abs(_dx) > Math.abs(_dy) && Math.abs(_dx) > 8) { _tSwiping = true; }
+  if (_tSwiping) e.preventDefault();
+ }, {passive: false});
+ _swipeWrap.addEventListener('touchend', function(e) {
+  if (!_tSwiping) return;
+  var _dxEnd = e.changedTouches[0].clientX - _tStartX;
+  if (_dxEnd < -40 && S.currentExerciseIdx < _totalExercises - 1) { S.currentExerciseIdx++; if (navigator.vibrate) navigator.vibrate(10); window.render(); }
+  else if (_dxEnd > 40 && S.currentExerciseIdx > 0) { S.currentExerciseIdx--; if (navigator.vibrate) navigator.vibrate(10); window.render(); }
+ }, {passive: true});
+
+ p.appendChild(_swipeWrap);
 
  // ─── RETOUR AU CALME ───
  (function() {
