@@ -90,7 +90,6 @@
     ['Olives vertes marocaines', 150, 1.0, 4.0, 15.5],
     ['Figues de barbarie', 41, 0.7, 9.5, 0.5],
     ['Dattes Medjoul', 277, 1.8, 75.0, 0.2],
-    ['Dattes Mejhoul',  277, 1.8, 75.0, 0.2],
 
     // ─── FRANCE — Viennoiseries (batch 4 FR) ───
     ['Croissant', 406, 8.2, 46.0, 21.0],
