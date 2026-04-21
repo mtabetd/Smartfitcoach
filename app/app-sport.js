@@ -7771,9 +7771,10 @@ function renderMusculationProgram(p) {
 
  // Rows
  setData.forEach(function(setRow, si3) {
- var row = h('div', {'class': 'set-row', style: 'display:grid;grid-template-columns:' + gridCols + ';padding:6px 8px;border-top:1px solid var(--border);align-items:center'});
+ var row = h('div', {'class': 'set-row', style: 'display:flex;flex-direction:column;padding:0;border-top:1px solid var(--border)'});
+ var rowContent = h('div', {style: 'display:grid;grid-template-columns:' + gridCols + ';padding:6px 8px;align-items:center;width:100%'});
 
- row.appendChild(h('div', {style: 'font-size:13px;font-weight:700;color:var(--text)'}, String(setRow.set)));
+ rowContent.appendChild(h('div', {style: 'font-size:13px;font-weight:700;color:var(--text)'}, String(setRow.set)));
 
  var conseilleEl = h('div', {style: 'font-size:13px;color:var(--grey)'});
  var _dispW = (window.UNITS && window.UNITS.displayWeight) ? window.UNITS.displayWeight(setRow.targetWeight) : (setRow.targetWeight + ' kg');
@@ -7795,7 +7796,7 @@ function renderMusculationProgram(p) {
  if (typeof _pctDisplay === 'number' && _pctDisplay > 0 && _pctDisplay <= 100 && !_isBeginnerUser) {
  conseilleEl.appendChild(h('span', {style:'font-size:9px;color:var(--blue,#1A3C5E);margin-left:4px'}, _pctDisplay + ' %1RM'));
  }
- row.appendChild(conseilleEl);
+ rowContent.appendChild(conseilleEl);
 
  // Delta column
  var deltaCell = h('div', {style:'text-align:center'});
@@ -7806,9 +7807,10 @@ function renderMusculationProgram(p) {
  } else if (si3 > 0) {
  deltaCell.appendChild(h('span', {'class': 'set-delta delta-flat'}, '\u2192'));
  }
- row.appendChild(deltaCell);
+ rowContent.appendChild(deltaCell);
 
- var inputZone = h('div', {style: 'display:flex;align-items:center;gap:4px', onclick: function(e){ e.stopPropagation(); }});
+ var _pendingValBtn = null;
+ var inputZone = h('div', {style: 'display:flex;align-items:center;gap:4px;flex-wrap:wrap', onclick: function(e){ e.stopPropagation(); }});
 
  if (!isBodyweight) {
  var weightPlaceholder = progressiveWeight > 0 ? String(progressiveWeight) : 'kg';
@@ -7978,11 +7980,11 @@ function renderMusculationProgram(p) {
  if (window.render) window.render();
  }
  }, '\u2705 S\u00e9rie OK');
- inputZone.appendChild(valBtn);
+ _pendingValBtn = valBtn;
  }
  })(setRow, si3, exRef, numSets, isBodyweight, _exIdx, _dayExercises);
 
- row.appendChild(inputZone);
+ rowContent.appendChild(inputZone);
 
  // RIR input for advanced/pro users
  if (isAdvancedRIR) {
@@ -8021,7 +8023,20 @@ function renderMusculationProgram(p) {
     };
    })(setRow, exRef && exRef.n)
   });
-  row.appendChild(_rirInput);
+  rowContent.appendChild(_rirInput);
+ }
+ row.appendChild(rowContent);
+ if (_pendingValBtn) {
+  _pendingValBtn.style.display = 'block';
+  _pendingValBtn.style.width = '100%';
+  _pendingValBtn.style.boxSizing = 'border-box';
+  _pendingValBtn.style.borderLeft = 'none';
+  _pendingValBtn.style.borderRight = 'none';
+  _pendingValBtn.style.borderBottom = 'none';
+  _pendingValBtn.style.borderTop = '1px solid var(--border,#ccc)';
+  _pendingValBtn.style.borderRadius = '0';
+  _pendingValBtn.style.minHeight = '48px';
+  row.appendChild(_pendingValBtn);
  }
 
  setTable.appendChild(row);
