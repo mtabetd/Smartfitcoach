@@ -641,8 +641,96 @@ function ok(label, cond, detail) {
   ok('Swap — tips préservés', swapPreserve.hasTips);
   ok('Swap — lv préservé', swapPreserve.hasLv);
 
-  // ─── 20. AUCUNE ERREUR JS ───
-  console.log('\n[20] Erreurs JavaScript pendant l\'audit');
+  // ─── 20. COHÉRENCE SÉMANTIQUE YOUTUBE ───
+  // Pour chaque exercice, vérifie que la query YouTube générée contient
+  // au moins un mot-clé dérivé du nom de l'exercice (directement ou via
+  // traduction FR→EN). Détecte les mappings CURATED_QUERIES erronés.
+  console.log('\n[20] YouTube — cohérence sémantique query ↔ nom');
+  const ycoh = await page.evaluate(() => {
+    const FR_EN = {
+      'pompes':['push','up'],'pompe':['push','up'],'tractions':['pull','up'],'traction':['pull','up','chin'],
+      'développé':['press','bench'],'developpe':['press','bench'],'developpé':['press','bench'],
+      'couché':['bench'],'couche':['bench'],'incliné':['incline'],'incline':['incline'],
+      'décliné':['decline'],'militaire':['overhead','shoulder','press'],
+      'écarté':['fly'],'ecarte':['fly'],'écartés':['fly'],'fentes':['lunge'],'fente':['lunge'],
+      'soulevé':['deadlift'],'souleve':['deadlift'],'roumain':['romanian'],
+      'curl':['curl'],'marteau':['hammer'],'pupitre':['preacher'],
+      'tirage':['pulldown','row'],'rowing':['row'],'shrug':['shrug'],'shrugs':['shrug'],
+      'élévation':['raise'],'elevations':['raise'],'élévations':['raise'],'elevation':['raise'],
+      'mollets':['calf'],'mollet':['calf'],'planche':['plank'],'crunch':['crunch'],'gainage':['plank'],
+      'oiseau':['rear','delt','fly'],'superman':['superman'],'burpees':['burpee'],'burpee':['burpee'],
+      'kettlebell':['kettlebell'],'swing':['swing'],'farmer':['farmer','walk'],'carry':['carry','walk'],
+      'relevé':['raise','leg'],'releve':['raise','leg'],'jambes':['leg'],'jambe':['leg'],
+      'suspendu':['hanging'],'corde':['rope'],'sauter':['jump'],'sauté':['jump'],'saute':['jump'],
+      'cheville':['ankle'],'mobilité':['mobility'],'mobilite':['mobility'],'mur':['wall'],
+      'renforcement':['strengthening'],'poignet':['wrist'],'fléchisseurs':['flexor'],
+      'flechisseurs':['flexor'],'extenseurs':['extensor'],'complet':['complete','full'],
+      'rotation':['rotation'],'externe':['external'],'élastique':['band','resistance'],
+      'elastique':['band','resistance'],'piriforme':['piriformis'],'etirement':['stretch'],
+      'étirement':['stretch'],'activation':['activation'],'fessier':['glute'],'prone':['prone'],
+      'kick':['kickback'],'jerk':['jerk'],'deck':['deck'],'butterfly':['butterfly'],
+      'crossover':['crossover'],'câble':['cable'],'poulie':['pulley','cable'],
+      'haute':['high'],'basse':['low'],'barre':['bar','barbell'],'haltère':['dumbbell'],
+      'haltères':['dumbbell'],'haltere':['dumbbell'],'halteres':['dumbbell'],
+      'poids':['weight','body'],'corps':['body','weight'],'assis':['seated'],'debout':['standing'],
+      'plyo':['plyometric'],'plyometriques':['plyometric'],'obliques':['oblique'],
+      'rameur':['rowing','row'],'bulgare':['bulgarian'],'goblet':['goblet'],'sumo':['sumo'],
+      'hip':['hip'],'thrust':['thrust'],'glute':['glute'],'bridge':['bridge'],
+      'zercher':['zercher'],'sissy':['sissy'],'front':['front'],'nordic':['nordic'],
+      'jefferson':['jefferson'],'bird':['bird'],'dog':['dog'],
+      'isométrique':['isometric'],'isometrique':['isometric'],
+      'unilatéral':['single','unilateral'],'unilateral':['single','unilateral'],
+      'excentrique':['eccentric'],'excentriques':['eccentric'],
+      'bayesian':['bayesian'],'zottman':['zottman'],'reverse':['reverse'],
+      'drag':['drag'],'diamant':['diamond'],'concentré':['concentration'],
+      'concentre':['concentration'],'rack':['rack'],'seal':['seal'],'yates':['yates'],
+      'pendlay':['pendlay'],'close':['close'],'serré':['close'],
+      'latérales':['lateral','side'],'latéral':['lateral','side'],'latérale':['lateral','side'],
+      'frontal':['front'],'frontales':['front'],'neutral':['neutral'],'neutre':['neutral'],
+      'large':['wide'],'prise':['grip'],'abduction':['abduction'],
+      'roulette':['wheel'],'wheel':['wheel'],'plank':['plank'],'explosif':['explosive'],
+      'power':['power'],'spoto':['spoto'],'chest':['chest'],'supported':['supported'],
+      'behind':['behind'],'neck':['neck'],'nuque':['behind','neck'],'scarecrow':['scarecrow'],
+      'dead':['dead'],'bug':['bug'],'hollow':['hollow'],'rock':['rock'],
+      'ghd':['ghd'],'trap':['trap'],'hex':['hex','trap'],'suitcase':['suitcase'],
+      'stiff':['stiff'],'tibial':['tibialis'],'heel':['heel'],'drops':['drop'],
+      'américain':['american'],'americain':['american'],'sliding':['sliding'],
+      'snatch':['snatch'],'grip':['grip'],'scapulaire':['scapular'],
+      'dépression':['depression'],'archer':['archer'],'board':['board'],
+      'lying':['lying'],'allongé':['lying'],'allonge':['lying'],
+      'clamshell':['clamshell'],'donkey':['donkey'],'frog':['frog'],
+      'monster':['monster'],'walk':['walk'],'box':['box'],'jump':['jump'],
+      'step':['step'],'wall':['wall'],'sit':['sit'],'landmine':['landmine'],
+      'spider':['spider'],'tate':['tate'],'jm':['jm']
+    };
+    function tokens(s){return String(s||'').toLowerCase()
+      .replace(/[àâä]/g,'a').replace(/[éèêë]/g,'e').replace(/[îï]/g,'i')
+      .replace(/[ôö]/g,'o').replace(/[ùûü]/g,'u').replace(/ç/g,'c')
+      .replace(/[^a-z0-9]/g,' ').split(/\s+/).filter(w => w.length >= 2);}
+    function expand(ts){const s=new Set();ts.forEach(t=>{s.add(t);if(FR_EN[t])FR_EN[t].forEach(w=>s.add(w));});return [...s];}
+    function decodeQuery(url){const m=url.match(/search_query=([^&]+)/);return m?decodeURIComponent(m[1].replace(/\+/g,' ')):'';}
+    const NOISE = new Set(['tibo','inshape','major','mouvement','coach','wog','athleanx',
+      'jeff','nippard','renaissance','periodization','university','stronger','by','science',
+      'form','tutorial','correct','exercise','technique']);
+    let total=0,ok=0;const bad=[];
+    function check(ex, source) {
+      total++;
+      const url = window.EXERCISE_VIDEOS.buildSmartVideoUrl(ex.n, ex.lv || 1);
+      const q = tokens(decodeQuery(url)).filter(w => !NOISE.has(w));
+      const exp = expand(tokens(ex.n));
+      const hits = exp.filter(e => q.some(qt => qt === e || qt.indexOf(e) !== -1 || e.indexOf(qt) !== -1));
+      if (hits.length >= 1) ok++;
+      else if (bad.length < 5) bad.push(source + ':' + ex.n);
+    }
+    Object.keys(window.EXERCISES).forEach(g => (window.EXERCISES[g]||[]).forEach(ex => check(ex, 'main')));
+    Object.keys(window.EXERCISE_ALTERNATIVES).forEach(k => (window.EXERCISE_ALTERNATIVES[k]||[]).forEach(ex => check(ex, 'alt')));
+    return { total, ok, bad };
+  });
+  ok('Cohérence YouTube — 100% queries alignées avec le nom (' + ycoh.ok + '/' + ycoh.total + ')',
+    ycoh.ok === ycoh.total, ycoh.bad.join(' | '));
+
+  // ─── 21. AUCUNE ERREUR JS ───
+  console.log('\n[21] Erreurs JavaScript pendant l\'audit');
   const critical = errors.filter(e =>
     !/favicon|manifest|404|gifImgError|Failed to load resource/i.test(e)
   );
