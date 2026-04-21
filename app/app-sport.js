@@ -8181,7 +8181,7 @@ function renderMusculationProgram(p) {
  card.appendChild(swapBtn);
 
  if (isOpen) {
- var alts = window.getAlternativeExercises ? window.getAlternativeExercises(exRef.m, exRef.n, 4) : [];
+ var alts = window.getAlternativeExercises ? window.getAlternativeExercises(exRef.m, exRef.n, 4, S.sportLevel) : [];
  var altPanel = h('div', {style: 'margin-top:6px;border:1px solid var(--border,#DDDBD0);border-radius:2px;overflow:hidden;background:var(--ivory2,#F5F4EF)'});
  var altTitle = h('div', {style: 'padding:8px 12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--border)'}, 'Exercices pour les m\u00eames muscles');
  altPanel.appendChild(altTitle);

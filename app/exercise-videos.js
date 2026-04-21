@@ -159,6 +159,8 @@
     'mcgill curl up':              'mcgill curl up form tutorial',
     'ab wheel':                    'ab wheel rollout tutorial',
 
+    'diamond push up':               'diamond push up close grip form tutorial',
+
     // Cardio
     'burpees':                     'burpee form tutorial',
     'jumping jacks':               'jumping jacks form tutorial',
@@ -176,7 +178,155 @@
     'jefferson curl':              'jefferson curl form tutorial',
     'etirement piriforme figure 4':'piriformis stretch figure 4',
     'activation fessier prone':    'prone glute activation',
-    'terminal leg extension':      'terminal knee extension VMO'
+    'terminal leg extension':      'terminal knee extension VMO',
+
+    // ── Pectoraux (nouveaux) ────────────────────────────────────────────────
+    'pompes archer':                 'archer push up form tutorial',
+    'landmine press':                'landmine press chest form tutorial',
+    'developpe decline barre':       'decline barbell bench press form tutorial',
+    'developpe incline barre':       'incline barbell bench press form tutorial',
+    'chest press unilateral cable':  'single arm cable chest press tutorial',
+    'pompes prise large':            'wide grip push up form tutorial',
+    'ecarte cable poulie basse crossover haut': 'low cable fly upper chest tutorial',
+    'developpe couche haltere unilateral': 'unilateral dumbbell press form tutorial',
+
+    // ── Dos (nouveaux) ─────────────────────────────────────────────────────
+    'chest supported row':           'chest supported row form tutorial',
+    'rack pull':                     'rack pull deadlift form tutorial',
+    'seal row':                      'seal row meadows row form tutorial',
+    'traction lestee':               'weighted pull up form tutorial',
+    'traction prise tres large':     'wide overhand pull up form tutorial',
+    'yates row':                     'yates row underhand barbell row tutorial',
+    'rowing haltere prise neutre':   'neutral grip dumbbell row form tutorial',
+    'pull over haltere couche':      'dumbbell pullover chest back form tutorial',
+    'rowing machine unilateral':     'unilateral cable row machine form tutorial',
+    'traction elastique assistee':   'band assisted pull up form tutorial',
+    'tirage vertical prise neutre v bar': 'v bar lat pulldown neutral grip tutorial',
+    'rowing pendlay prise large':    'wide grip pendlay row form tutorial',
+
+    // ── Épaules (nouveaux) ─────────────────────────────────────────────────
+    'rotation externe haltere coude appuye': 'seated external rotation dumbbell rotator tutorial',
+    'developpe halteres debout':     'standing dumbbell overhead press form tutorial',
+    'oiseau poulie cable':           'cable rear delt fly form tutorial',
+    'upright row cable':             'cable upright row form tutorial',
+    'developpe militaire barre nuque': 'behind neck press tutorial risks',
+    'scarecrow halteres':            'scarecrow exercise shoulder stability tutorial',
+    'push press barre':              'barbell push press form tutorial',
+
+    // ── Biceps (nouveaux) ──────────────────────────────────────────────────
+    'curl barre supination 3 4 amplitude': 'partial bicep curl peak contraction tutorial',
+    'curl 21s':                      'barbell 21s bicep curl technique tutorial',
+    'bayesian curl cable':           'bayesian cable curl bicep long head tutorial',
+    'curl pupitre haltere unilateral': 'single arm preacher curl dumbbell tutorial',
+    'reverse curl cable':            'cable reverse curl brachialis form tutorial',
+    'curl prise neutre barre ez':    'neutral grip ez bar curl brachialis tutorial',
+    'drag curl barre':               'drag curl barbell bicep long head tutorial',
+    'curl incline cable unilateral': 'incline cable curl bicep form tutorial',
+    'zottman curl':                  'zottman curl forearm bicep tutorial',
+    'curl cable a 90 peak':          'cable curl peak contraction 90 degree tutorial',
+
+    // ── Triceps (nouveaux) ─────────────────────────────────────────────────
+    'jm press barre':                'jm press barbell tricep form tutorial',
+    'jm press ez':                   'jm press ez bar tricep tutorial',
+    'dips barres paralleles lest':   'weighted parallel bar dips tricep tutorial',
+    'tate press':                    'tate press tricep form tutorial',
+    'extension triceps bras tendu haltere': 'single arm overhead tricep extension tutorial',
+    'bench dips lestes':             'weighted bench dips tricep tutorial',
+    'extension triceps elastique debout': 'resistance band tricep pushdown tutorial',
+    'overhead extension halteres bilateral': 'overhead dumbbell tricep extension form tutorial',
+    'kick back cable':               'cable tricep kickback form tutorial',
+
+    // ── Quadriceps (nouveaux) ──────────────────────────────────────────────
+    'squat zercher':                 'zercher squat form tutorial',
+    'leg press unilateral':          'single leg press form tutorial',
+    'fente avant barre':             'barbell lunge form tutorial',
+    'fente avant barre marchee':     'barbell walking lunge form tutorial',
+    'step up genou haut lestes':     'step up high knee weighted tutorial',
+    'wall sit isometrique':          'wall sit isometric quad tutorial',
+    'leg press 15 rep':              'leg press 1.5 rep technique tutorial',
+    'squat saute':                   'jump squat form tutorial',
+    'hack squat machine':            'hack squat machine form tutorial',
+
+    // ── Ischios (nouveaux) ─────────────────────────────────────────────────
+    'glute ham raise':               'glute ham raise GHR form tutorial',
+    'cable pull through':            'cable pull through posterior chain tutorial',
+    'leg curl balle suisse':         'swiss ball hamstring curl form tutorial',
+    'leg curl debout unilateral cable': 'standing unilateral leg curl cable tutorial',
+    'rdl kettlebell':                'kettlebell romanian deadlift form tutorial',
+    'sliding leg curl':              'sliding leg curl hamstring form tutorial',
+    'snatch grip rdl barre':         'snatch grip rdl form tutorial',
+    'hamstring walkout':             'hamstring walkout isometric form tutorial',
+    'leg curl assis unilateral':     'seated unilateral leg curl form tutorial',
+    'leg curl elastique couche':     'prone hamstring curl resistance band tutorial',
+
+    // ── Fessiers (nouveaux) ────────────────────────────────────────────────
+    'frog pump':                     'frog pump glute activation form tutorial',
+    'abduction hanche cable':        'cable hip abduction standing form tutorial',
+    'hip thrust pieds sureleves':    'elevated hip thrust range of motion tutorial',
+    'monster walk elastique':        'monster walk resistance band glute medius tutorial',
+    'single leg glute bridge lestee':'weighted single leg glute bridge tutorial',
+    'abduction laterale machine debout': 'standing hip abduction machine tutorial',
+    'fente laterale glissee':        'lateral slide lunge glute adductor tutorial',
+    'quadruped hip extension lestee':'quadruped hip extension weighted glute tutorial',
+    'donkey kicks':                  'donkey kicks glute exercise form tutorial',
+
+    // ── Mollets (nouveaux) ─────────────────────────────────────────────────
+    'mollets unilateraux':           'single leg calf raise form tutorial',
+    'mollets barre debout':          'standing barbell calf raise form tutorial',
+    'donkey calf raise':             'donkey calf raise form tutorial',
+    'mollets isometriques mur':      'isometric calf raise wall form tutorial',
+    'mollets assis haltere sur genoux': 'seated dumbbell calf raise knees tutorial',
+    'heel drops excentriques':       'eccentric heel drop calf raise achilles tutorial',
+    'mollets debout sur step barre': 'barbell calf raise step form tutorial',
+    'saut sur box mollets':          'box jump calf plyometric form tutorial',
+    'tibial raise mur':              'tibialis anterior raise wall form tutorial',
+    'triple extension mollets sauts':'triple extension jump calf form tutorial',
+    'mollets assis elastique':       'seated calf raise resistance band form tutorial',
+    'farmer carry sur orteils':      'farmer walk tiptoes calf form tutorial',
+
+    // ── Trapèzes (nouveaux) ────────────────────────────────────────────────
+    'shrug barre ez':                'ez bar shrug trap form tutorial',
+    'shrug cable unilateral':        'unilateral cable shrug trap tutorial',
+    'power shrug barre':             'power shrug barbell explosive trap tutorial',
+    'rowing prise large debout cable':'wide grip cable upright row tutorial',
+    'elevation en y banc incline':   'y raise incline bench trap lower tutorial',
+    'depression scapulaire a la barre': 'scapular depression dead hang tutorial',
+    'face pull elastique':           'face pull resistance band rotator tutorial',
+    'shrug isometrique barre':       'isometric barbell shrug hold tutorial',
+    'farmer carry':                  'farmer carry trap core form tutorial',
+    'rowing buste penche cable prise neutre': 'bent over cable row neutral grip tutorial',
+    'tirage menton cable':           'cable upright row form tutorial',
+    'rowing debout halteres':        'dumbbell upright row form tutorial',
+    'rowing buste penche prise large': 'wide grip bent over barbell row tutorial',
+    'shrug haltere unilateral':      'unilateral dumbbell shrug form tutorial',
+
+    // ── Lombaires (nouveaux) ───────────────────────────────────────────────
+    'hyperextension banc lombaires': 'back extension hyperextension form tutorial',
+    'superman':                      'superman back extension floor form tutorial',
+    'hyperextension reverse':        'reverse hyperextension posterior chain tutorial',
+    'kettlebell swing americain':    'american kettlebell swing overhead tutorial',
+    'suitcase carry':                'suitcase carry lateral core form tutorial',
+    'pallof press a genoux':         'kneeling pallof press anti rotation tutorial',
+    'back extension ghd lestee':     'weighted GHD back extension form tutorial',
+    'stiff leg deadlift halteres':   'stiff leg dumbbell deadlift form tutorial',
+    'rotation du tronc cable':       'cable woodchop trunk rotation form tutorial',
+    'deadbug anti flexion baton':    'dead bug anti flexion tutorial',
+    'soulevé de terre hex bar':      'trap bar hex bar deadlift form tutorial',
+    'souleve de terre hex bar':      'trap bar hex bar deadlift form tutorial',
+    'good morning assis barre':      'seated good morning barbell lower back tutorial',
+
+    // ── Abdos (nouveaux) ───────────────────────────────────────────────────
+    'ab rollout sur genoux':         'ab wheel rollout on knees form tutorial',
+    'crunch decline lestee':         'weighted decline crunch abs form tutorial',
+    'knee tucks suspendu':           'hanging knee tucks abs form tutorial',
+    'cable reverse crunch':          'cable reverse crunch lower abs tutorial',
+    'swiss ball crunch':             'swiss ball crunch abs form tutorial',
+    'v up complet':                  'v up exercise abs form tutorial',
+    'planche abdominale dynamique':  'dynamic plank abs form tutorial',
+    'ab crunch machine':             'ab crunch machine form tutorial',
+    'hollow rock':                   'hollow rock core form tutorial',
+    'crunch cable poulie haute':     'cable crunch abs form tutorial',
+    'releve de jambes suspendu':     'hanging leg raise abs form tutorial'
   };
 
   function _normalizeName(name) {
