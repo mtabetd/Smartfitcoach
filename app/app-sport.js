@@ -7820,6 +7820,7 @@ function renderMusculationProgram(p) {
  // FIX UX 2026-04-17 : tap target 60x44 (WCAG 2.5.5) + font 16px anti-zoom iOS
  // Gris = valeur suggérée (pas encore confirmée), noir = saisie utilisateur
  style: 'width:64px;min-height:44px;padding:10px 6px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory));color:' + (_wSuggested ? 'var(--grey,#6B6B65)' : 'var(--black,#0A0A09)'),
+ onfocus: function(e) { var t = e.target; setTimeout(function(){ t.select(); }, 0); },
  oninput: (function(sr, _valBtnRef){ return function(e) {
  e.target.style.color = 'var(--black,#0A0A09)'; // confirmation utilisateur
  var v = parseFloat(e.target.value);
@@ -7875,6 +7876,7 @@ function renderMusculationProgram(p) {
  value: setRow.actualReps !== null ? String(setRow.actualReps) : (setRow.targetReps ? String(setRow.targetReps) : ''),
  // FIX UX 2026-04-17 : tap target 56x44 (WCAG 2.5.5) + font 16px anti-zoom iOS
  style: 'width:56px;min-height:44px;padding:10px 6px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory));color:' + (_rSuggested ? 'var(--grey,#6B6B65)' : 'var(--black,#0A0A09)'),
+ onfocus: function(e) { var t = e.target; setTimeout(function(){ t.select(); }, 0); },
  oninput: (function(sr, _isBw){ return function(e) {
  e.target.style.color = 'var(--black,#0A0A09)'; // confirmation utilisateur
  var v = parseInt(e.target.value);
