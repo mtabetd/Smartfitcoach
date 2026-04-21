@@ -1157,11 +1157,12 @@ function adaptSessionToLevel(session, pullups, pushups, equipment, dips) {
   var exList = session.exercises || [];
   for (var i = 0; i < exList.length; i++) {
     var ex = exList[i];
+    // FIX 2026-04-21 : defaults pour éviter undefined en UI si session mal formée
     var adapted_ex = {
-      name: ex.name,
-      sets: ex.sets,
-      reps: ex.reps,
-      rest: ex.rest,
+      name: ex.name || 'Exercice',
+      sets: (ex.sets === 0 || typeof ex.sets === 'number' || typeof ex.sets === 'string') ? ex.sets : 3,
+      reps: (ex.reps === 0 || typeof ex.reps === 'number' || typeof ex.reps === 'string') ? ex.reps : '8-10',
+      rest: ex.rest || '90s',
       skill_link: ex.skill_link || '',
       coaching: ex.coaching || ''
     };
