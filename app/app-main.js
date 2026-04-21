@@ -740,7 +740,7 @@ function renderProfilePage(container) {
 
  // ─── Photo + nom ───
  var photoSection = h('div', {style: 'display:flex;align-items:center;gap:16px;margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);'});
- var photoWrap = h('div', {style: 'width:64px;height:64px;border-radius:50%;overflow:hidden;background:var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid var(--border);'});
+ var photoWrap = h('div', {style: 'width:64px;height:64px;border-radius:0;overflow:hidden;background:var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid var(--border);'});
  if (S.profilePhoto) {
    photoWrap.appendChild(h('img', {src: S.profilePhoto, alt: 'Photo de profil', style: 'width:100%;height:100%;object-fit:cover;'}));
  } else {
@@ -965,7 +965,7 @@ function renderProfilePage(container) {
      }
    });
    var modeRow = h('div', {style: 'display:flex;align-items:center;gap:12px;'});
-   var dot = h('div', {style: 'width:14px;height:14px;border-radius:50%;border:1px solid ' + (isActive ? 'var(--black)' : 'var(--grey3,#C8C8C0)') + ';background:' + (isActive ? 'var(--black)' : 'transparent') + ';flex-shrink:0;'});
+   var dot = h('div', {style: 'width:14px;height:14px;border-radius:0;border:1px solid ' + (isActive ? 'var(--black)' : 'var(--line,#D8D8D0)') + ';background:' + (isActive ? 'var(--black)' : 'transparent') + ';flex-shrink:0;'});
    modeRow.appendChild(dot);
    var modeText = h('div', {});
    modeText.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:500;color:var(--black);margin-bottom:2px;'}, m.label));
@@ -1139,7 +1139,7 @@ function renderProfilePage(container) {
        // Toast
        try {
          var _t = document.createElement('div');
-         _t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#0A0A09;color:#FAF9F6;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;padding:12px 20px;z-index:10000;border-radius:2px;box-shadow:0 4px 20px rgba(0,0,0,0.3);';
+         _t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;padding:12px 20px;z-index:10000;border-radius:0;border:1px solid var(--ink-900,#0A0A09);white-space:nowrap;';
          _t.textContent = '\u2713 Profil mis \u00e0 jour';
          document.body.appendChild(_t);
          setTimeout(function() { if (_t.parentNode) _t.parentNode.removeChild(_t); }, 2500);
@@ -1187,19 +1187,19 @@ function renderProfilePage(container) {
      var _trialExpired = !_isSub && _daysLeft === 0 && !!S.firstLoginDate;
 
      // Palette selon état
-     var _accent = _isSub ? 'var(--accent,#1A4A1A)' : '#6A4A1A'; // sapin si abonné, tabac si trial
-     var _bgTint = _isSub ? 'rgba(26,74,26,0.04)' : 'rgba(106,74,26,0.04)';
-     var _accentBorder = _isSub ? 'rgba(26,74,26,0.22)' : 'rgba(106,74,26,0.22)';
+     var _accent = _isSub ? 'var(--ink-900,#0A0A09)' : 'var(--orange-ink,#7A3B0E)';
+     var _bgTint = _isSub ? 'var(--paper-2,#F4F1EA)' : 'rgba(232,111,30,0.04)';
+     var _accentBorder = _isSub ? 'var(--line,#D8D8D0)' : 'var(--orange,#E86F1E)';
 
      var card = h('div', {style:
        'margin:28px 0;padding:28px 24px;border:1px solid ' + _accentBorder + ';' +
-       'background:' + _bgTint + ';border-radius:2px;position:relative;'
+       'background:' + _bgTint + ';border-radius:0;position:relative;'
      });
 
      // Label maison Hermès — filet horizontal + label
      var _topLabel = h('div', {style:
-       'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:6px;' +
-       'text-transform:uppercase;color:' + _accent + ';font-weight:600;margin-bottom:18px;' +
+       'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;' +
+       'text-transform:uppercase;color:' + _accent + ';font-weight:400;margin-bottom:18px;' +
        'display:flex;align-items:center;gap:10px;'
      });
      _topLabel.appendChild(h('span', {style: 'flex:1;height:1px;background:' + _accentBorder + ';'}));
@@ -1316,7 +1316,7 @@ function renderProfilePage(container) {
  // ─── Restaurer depuis le cloud ───
  if (window.SupaSync && window.AUTH && window.AUTH.isLoggedIn()) {
    var restoreBtn = h('button', {
-     style: 'display:block;width:100%;padding:14px;border:1px solid var(--accent,#1A4A1A);background:rgba(26,74,26,0.06);color:var(--accent,#1A4A1A);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;min-height:44px;',
+     style: 'display:block;width:100%;padding:14px;border:1px solid var(--line,#D8D8D0);background:transparent;color:var(--ink-900,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;min-height:44px;',
      onclick: function() {
        if (!confirm('Restaurer vos données depuis le cloud ?\n\nLes données locales seront remplacées par la dernière sauvegarde cloud.')) return;
        restoreBtn.textContent = 'Restauration en cours...';
@@ -1467,7 +1467,7 @@ function renderProfilePage(container) {
 
  // Supprimer mon compte
  var deleteAccountBtn = h('button', {
-   style: 'background:none;border:none;padding:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--red,#5A1010);cursor:pointer;display:block;min-height:44px;',
+   style: 'background:none;border:none;padding:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--error,#7A1F1F);cursor:pointer;display:block;min-height:44px;',
    onclick: function() {
      var confirmed = window.confirm('Supprimer définitivement votre compte et toutes vos données ? Cette action est irréversible.');
      if (!confirmed) return;
@@ -1517,7 +1517,7 @@ function renderProfilePage(container) {
      onclick: function(e) { if (e.target === _modal) { S._goalModal = false; if (window.render) window.render(); } }
    });
    var _sheet = h('div', {
-     style: 'width:100%;max-width:520px;background:var(--ivory,#FAF9F6);padding:28px 24px 40px;border-radius:4px 4px 0 0;max-height:90vh;overflow-y:auto;'
+     style: 'width:100%;max-width:520px;background:var(--ivory,#FAF9F6);padding:28px 24px 40px;border-radius:0;border-top:1px solid var(--line,#D8D8D0);max-height:90vh;overflow-y:auto;'
    });
 
    // Header
@@ -1634,7 +1634,7 @@ function renderProfilePage(container) {
    // TCA conflict warning
    var _tcaConflict = (_selGoalKey === 'cut' || _selGoalKey === 'shred') && Array.isArray(S.medical) && S.medical.indexOf('tca') !== -1;
    if (_tcaConflict) {
-     _sheet.appendChild(h('div', {style: 'background:rgba(90,16,16,.06);border:1px solid #5A1010;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#5A1010;line-height:1.6;'}, 'Objectif s\u00e8che incompatible avec un historique de TCA. Choisissez Maintien ou Prise de masse.'));
+     _sheet.appendChild(h('div', {style: 'background:rgba(122,31,31,0.06);border:1px solid var(--error,#7A1F1F);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--error,#7A1F1F);line-height:1.6;'}, 'Objectif s\u00e8che incompatible avec un historique de TCA. Choisissez Maintien ou Prise de masse.'));
    }
 
    // Save button
@@ -1673,7 +1673,7 @@ function renderProfilePage(container) {
        // Toast actionnable : régénérer les plans directement
        try {
          var _toast = document.createElement('div');
-         _toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#0A0A09;color:#FAF9F6;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:0.5px;padding:12px 16px;z-index:10000;border-radius:2px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);';
+         _toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;padding:12px 16px;z-index:10000;border-radius:0;border:1px solid var(--ink-900,#0A0A09);display:flex;align-items:center;gap:12px;';
          var _toastTxt = document.createElement('span');
          _toastTxt.textContent = '\u2713 Objectif mis \u00e0 jour';
          _toast.appendChild(_toastTxt);
@@ -2058,7 +2058,7 @@ function render() {
  if (window.I18N && window.I18N.current === 'en' && window.I18N.translateDOM) {
    try { window.I18N.translateDOM(); } catch(e) {}
  }
- } catch (_renderErr) { console.error('[render] crash:', _renderErr); try { app.innerHTML = ''; var _errDiv = document.createElement('div'); _errDiv.style.cssText = 'padding:40px 24px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;'; _errDiv.innerHTML = '<div style="font-size:13px;color:#5A1010;margin-bottom:16px;">Une erreur est survenue. Vos donn\u00e9es sont sauvegard\u00e9es.</div><button onclick="window.location.reload()" style="padding:12px 24px;background:#0A0A09;color:#fff;border:none;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">Recharger</button>'; app.appendChild(_errDiv); } catch(e2) {} }
+ } catch (_renderErr) { console.error('[render] crash:', _renderErr); try { app.innerHTML = ''; var _errDiv = document.createElement('div'); _errDiv.style.cssText = 'padding:40px 24px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;'; _errDiv.innerHTML = '<div style="font-size:13px;color:var(--error,#7A1F1F);margin-bottom:16px;">Une erreur est survenue. Vos donn\u00e9es sont sauvegard\u00e9es.</div><button onclick="window.location.reload()" style="padding:12px 24px;background:#0A0A09;color:var(--paper,#FAF9F6);border:none;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;border-radius:0;">Recharger</button>'; app.appendChild(_errDiv); } catch(e2) {} }
  } finally { render._lock = false; }
 }
 
@@ -2367,7 +2367,7 @@ function renderRegister(app) {
  if (_oldDialDrop && _oldDialDrop.parentNode) _oldDialDrop.parentNode.removeChild(_oldDialDrop);
  var dialDropdown = document.createElement('div');
  dialDropdown.id = '_sfc_dial_dropdown';
- dialDropdown.style.cssText = 'display:none;position:fixed;z-index:9999;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#E8E6DF);border-radius:2px;box-shadow:0 8px 32px rgba(0,0,0,0.18);max-height:260px;overflow-y:auto;min-width:220px;';
+ dialDropdown.style.cssText = 'display:none;position:fixed;z-index:9999;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#E8E6DF);border-radius:0;max-height:260px;overflow-y:auto;min-width:220px;';
  document.body.appendChild(dialDropdown);
 
  DIAL_CODES.forEach(function(dc, idx) {
@@ -2455,7 +2455,7 @@ function renderRegister(app) {
  var consentCheck = h('input', {type: 'checkbox', id: 'rgpd-consent', style: 'margin-top:3px;min-width:18px;min-height:18px;cursor:pointer'});
  consentWrap.appendChild(consentCheck);
  var consentLabel = h('label', {'for': 'rgpd-consent', style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;cursor:pointer'});
- consentLabel.innerHTML = 'J\u2019accepte la <a href="/privacy-policy.html" target="_blank" rel="noopener" style="color:var(--green,#1A4A1A);text-decoration:underline">politique de confidentialit\u00e9</a> et les <a href="/cgu.html" target="_blank" rel="noopener" style="color:var(--green,#1A4A1A);text-decoration:underline">conditions g\u00e9n\u00e9rales d\u2019utilisation</a>. Je consens au traitement de mes donn\u00e9es de sant\u00e9 (poids, conditions m\u00e9dicales, grossesse) pour la personnalisation de mon programme.';
+ consentLabel.innerHTML = 'J\u2019accepte la <a href="/privacy-policy.html" target="_blank" rel="noopener" style="color:var(--ink-900,#0A0A09);text-decoration:underline">politique de confidentialit\u00e9</a> et les <a href="/cgu.html" target="_blank" rel="noopener" style="color:var(--ink-900,#0A0A09);text-decoration:underline">conditions g\u00e9n\u00e9rales d\u2019utilisation</a>. Je consens au traitement de mes donn\u00e9es de sant\u00e9 (poids, conditions m\u00e9dicales, grossesse) pour la personnalisation de mon programme.';
  consentWrap.appendChild(consentLabel);
  form.appendChild(consentWrap);
 
@@ -2548,7 +2548,7 @@ function renderVerifyEmail(app) {
  var client = window.getSupabaseClient ? window.getSupabaseClient() : null;
  if (!client) {
  statusMsg.textContent = 'Erreur : client non disponible.';
- statusMsg.style.color = '#5A1010';
+ statusMsg.style.color = 'var(--error,#7A1F1F)';
  return;
  }
  statusMsg.textContent = 'Envoi en cours...';
@@ -2556,14 +2556,14 @@ function renderVerifyEmail(app) {
  client.auth.resend({type: 'signup', email: S.authVerifyEmail}).then(function(res) {
  if (res.error) {
  statusMsg.textContent = res.error.message || 'Erreur lors du renvoi.';
- statusMsg.style.color = '#5A1010';
+ statusMsg.style.color = 'var(--error,#7A1F1F)';
  } else {
  statusMsg.textContent = 'Email renvoy\u00e9 !';
- statusMsg.style.color = '#1A4A1A';
+ statusMsg.style.color = 'var(--success,#3E5C3A)';
  }
  }).catch(function() {
  statusMsg.textContent = 'Erreur r\u00e9seau. R\u00e9essaye.';
- statusMsg.style.color = '#5A1010';
+ statusMsg.style.color = 'var(--error,#7A1F1F)';
  });
  }
  }, 'Renvoyer l\u2019email'));
@@ -2576,33 +2576,42 @@ function renderVerifyEmail(app) {
  var client = window.getSupabaseClient ? window.getSupabaseClient() : null;
  if (!client) {
  statusMsg.textContent = 'Erreur : client non disponible.';
- statusMsg.style.color = '#5A1010';
+ statusMsg.style.color = 'var(--error,#7A1F1F)';
  return;
  }
  statusMsg.textContent = 'V\u00e9rification...';
- statusMsg.style.color = 'var(--grey)';
- // Try getUser (server-side check) first, fallback to getSession
+ statusMsg.style.color = 'var(--ink-500,#6B6B65)';
+ var _done = false;
+ var _timeout = setTimeout(function() {
+   if (_done) return; _done = true;
+   statusMsg.textContent = 'Connexion lente. V\u00e9rifie ta connexion internet puis r\u00e9essaye.';
+   statusMsg.style.color = 'var(--error,#7A1F1F)';
+ }, 10000);
  var checkFn = client.auth.getUser ? client.auth.getUser() : client.auth.getSession();
  checkFn.then(function(res) {
- var user = res.data && (res.data.user || (res.data.session && res.data.session.user));
- if (user && user.email_confirmed_at) {
- S.authError = '';
- // Rediriger selon appMode (si déjà configuré, ne pas écraser l'onboarding en cours)
- if (S.appMode === 'sport') {
-   S.view = 'sport';
- } else {
-   S.view = 'nutrition';
-   S.nStep = 0;
- }
- if (window.GAMIFICATION) { GAMIFICATION.unlockBadge('first_login'); }
- render();
- } else {
- statusMsg.textContent = 'Email pas encore confirm\u00e9. V\u00e9rifie ta bo\u00eete mail (et les spams).';
- statusMsg.style.color = '#5A1010';
- }
+   if (_done) return; _done = true; clearTimeout(_timeout);
+   var user = res.data && (res.data.user || (res.data.session && res.data.session.user));
+   if (user && user.email_confirmed_at) {
+     S.authError = '';
+     if (S.appMode === 'sport') {
+       S.view = 'sport';
+     } else {
+       S.view = 'nutrition';
+       S.nStep = 0;
+     }
+     if (window.GAMIFICATION) { try { GAMIFICATION.unlockBadge('first_login'); } catch(e) {} }
+     try { render(); } catch(e) {
+       statusMsg.textContent = 'Erreur d\'affichage. Rechargez la page.';
+       statusMsg.style.color = 'var(--error,#7A1F1F)';
+     }
+   } else {
+     statusMsg.textContent = 'Email pas encore confirm\u00e9. V\u00e9rifie ta bo\u00eete mail (et les spams).';
+     statusMsg.style.color = 'var(--error,#7A1F1F)';
+   }
  }).catch(function() {
- statusMsg.textContent = 'Erreur de v\u00e9rification. R\u00e9essaye.';
- statusMsg.style.color = '#5A1010';
+   if (_done) return; _done = true; clearTimeout(_timeout);
+   statusMsg.textContent = 'Erreur de v\u00e9rification. R\u00e9essaye.';
+   statusMsg.style.color = 'var(--error,#7A1F1F)';
  });
  }
  }, 'J\u2019ai confirm\u00e9 mon email'));

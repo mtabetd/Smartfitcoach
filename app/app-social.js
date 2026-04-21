@@ -269,10 +269,9 @@ function _avatar(profile, size){
     return _h('div', {
       'class': 'sfc-avatar sfc-avatar-photo',
       'aria-hidden': 'true',
-      style: 'width:'+size+'px;height:'+size+'px;border-radius:50%;'+
+      style: 'width:'+size+'px;height:'+size+'px;border-radius:0;'+
         'background-image:url("'+safeUrl+'");background-size:cover;background-position:center;'+
-        'background-color:#F4F1EA;flex-shrink:0;'+
-        'box-shadow:inset 0 0 0 1px rgba(0,0,0,0.08);'
+        'background-color:#F4F1EA;flex-shrink:0;border:1px solid var(--line,#D8D8D0);'
     });
   }
   var color = (profile && profile.avatar_color) || colorForId(profile && profile.id || '');
@@ -280,12 +279,11 @@ function _avatar(profile, size){
   return _h('div', {
     'class': 'sfc-avatar',
     'aria-hidden': 'true',
-    style: 'width:'+size+'px;height:'+size+'px;border-radius:50%;background:'+color+
+    style: 'width:'+size+'px;height:'+size+'px;border-radius:0;background:'+color+
       ';color:#FAF9F6;display:flex;align-items:center;justify-content:center;'+
       'font-family:Georgia,serif;font-size:'+Math.round(size*0.38)+'px;font-weight:400;'+
       'font-feature-settings:"onum" 1;letter-spacing:0.02em;flex-shrink:0;'+
-      'user-select:none;text-transform:uppercase;'+
-      'box-shadow:inset 0 0 0 1px rgba(0,0,0,0.06);'
+      'user-select:none;text-transform:uppercase;border:1px solid rgba(0,0,0,0.08);'
   }, initials);
 }
 
@@ -355,14 +353,14 @@ function _emptyState(title, subtitle, ctaText, ctaCb){
 function _toast(msg, kind){
   kind = kind || 'info';
   try {
-    var bg = kind === 'error' ? '#7B3F00' : (kind === 'success' ? '#556B2F' : '#0A0A09');
+    var bg = kind === 'error' ? 'var(--error,#7A1F1F)' : (kind === 'success' ? 'var(--success,#3E5C3A)' : 'var(--ink-900,#0A0A09)');
     var el = document.createElement('div');
     el.textContent = msg;
     el.setAttribute('style',
       'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);'+
       'background:'+bg+';color:#FAF9F6;padding:12px 24px;border-radius:2px;'+
       'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;'+
-      'text-transform:uppercase;z-index:99999;box-shadow:0 6px 24px rgba(0,0,0,0.25);'+
+      'text-transform:uppercase;z-index:99999'+
       'max-width:90vw;text-align:center;opacity:0;transition:opacity .2s ease'
     );
     document.body.appendChild(el);
@@ -424,7 +422,7 @@ function renderProfileSetup(container){
     });
     var photoThumbHolder = _h('div', { style:'flex-shrink:0' });
     var _placeholder = _h('div', {
-      style:'width:48px;height:48px;border-radius:50%;background:#F4F1EA;'+
+      style:'width:48px;height:48px;border-radius:0;background:#F4F1EA;'+
         'display:flex;align-items:center;justify-content:center;color:var(--grey3);font-size:10px'
     }, '…');
     photoThumbHolder.appendChild(_placeholder);
@@ -479,7 +477,7 @@ function renderProfileSetup(container){
   AVATAR_COLORS.forEach(function(col){
     var chip = _h('button', {
       type:'button',
-      style:'width:36px;height:36px;border-radius:50%;border:2px solid '+
+      style:'width:36px;height:36px;border-radius:0;border:2px solid '+
         (col === selectedColor ? '#0A0A09' : 'transparent')+';background:'+col+';'+
         'cursor:pointer;outline:none;transition:transform .15s ease, border-color .15s',
       'aria-label':'Couleur '+col
@@ -1077,7 +1075,7 @@ function renderNotificationsTab(container){
     row.appendChild(body);
     if (!n.read){
       row.appendChild(_h('span', {
-        style:'width:8px;height:8px;background:#C9A84C;border-radius:50%;flex-shrink:0'
+        style:'width:8px;height:8px;background:var(--ink-900,#0A0A09);flex-shrink:0'
       }));
     }
     container.appendChild(row);
@@ -1267,7 +1265,7 @@ function renderEditProfile(container){
   AVATAR_COLORS.forEach(function(col){
     var chip = _h('button', {
       type:'button',
-      style:'width:36px;height:36px;border-radius:50%;border:2px solid '+
+      style:'width:36px;height:36px;border-radius:0;border:2px solid '+
         (col === currentColor ? '#0A0A09' : 'transparent')+';background:'+col+';cursor:pointer;outline:none',
       'aria-label':'Couleur '+col
     });

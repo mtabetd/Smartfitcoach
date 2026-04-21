@@ -816,7 +816,7 @@ function renderCardNextMeal() {
 
   // Heure prévue + kcal/macros sur une ligne discrète
   if (meal.k || slot.time) {
-    var detailsEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey2,#9A9A90);margin-bottom:14px;' });
+    var detailsEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-300,#A8A8A0);margin-bottom:14px;' });
     var parts = [];
     if (slot.time) parts.push(slot.time);
     if (meal.k) parts.push(Math.round(meal.k) + ' kcal');
@@ -945,7 +945,7 @@ function renderHeroContextuel() {
 
   // ── Row 3 : date ──
   inner.appendChild(h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:0.4px;color:#7A7A74;font-weight:300;line-height:1.4;margin-bottom:32px;'
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:0.4px;color:var(--ink-500,#6B6B65);font-weight:300;line-height:1.4;margin-bottom:32px;'
   }, dateStr));
 
   // ── Row 4 : corps contextuel (quote italic + 2 chiffres) ──
@@ -955,7 +955,7 @@ function renderHeroContextuel() {
   if (context.quote) {
     var _qBlock = h('div', { style: 'margin:0 0 32px;' });
     _qBlock.appendChild(h('p', {
-      style: 'font-family:Georgia,serif;font-style:italic;font-size:15px;line-height:1.55;color:#3E3E3A;margin:0;font-weight:normal;'
+      style: 'font-family:Georgia,serif;font-style:italic;font-size:15px;line-height:1.55;color:var(--ink-700,#2B2B27);margin:0;font-weight:normal;'
     }, '\u00AB ' + context.quote + ' \u00BB'));
     if (context.quoteAuthor) {
       _qBlock.appendChild(h('div', {
@@ -1277,16 +1277,16 @@ function renderCardBonjour(S) {
   // ── Bandeau Trial ──
   if (window.isTrialUser && window.isTrialUser()) {
     var _trialDays = window.getTrialDaysLeft ? window.getTrialDaysLeft() : 0;
-    var _trialBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;margin-bottom:12px;border:1px solid var(--orange,#6A4A1A);background:var(--orangebg,rgba(106,74,26,0.06));border-radius:2px;'});
+    var _trialBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;margin-bottom:12px;border:1px solid var(--orange,#E86F1E);background:rgba(232,111,30,0.06);border-radius:0;'});
     var _trialLeft = h('div', {});
-    _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange,#6A4A1A);font-weight:600;margin-bottom:2px;'}, 'VERSION D\u2019ESSAI'));
+    _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);font-weight:400;margin-bottom:2px;'}, 'VERSION D\u2019ESSAI'));
     if (_trialDays > 0) {
       _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'}, _trialDays + ' jour' + (_trialDays > 1 ? 's' : '') + ' restant' + (_trialDays > 1 ? 's' : '') + ' \u2014 Vous avez accès à tout'));
     } else {
-      _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--red,#5A1010);'}, 'P\u00e9riode d\u2019essai termin\u00e9e'));
+      _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--error,#7A1F1F);'}, 'P\u00e9riode d\u2019essai termin\u00e9e'));
     }
     _trialBanner.appendChild(_trialLeft);
-    _trialBanner.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;color:var(--orange,#6A4A1A);'}, _trialDays > 0 ? _trialDays + 'j' : '!'));
+    _trialBanner.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;color:var(--orange,#E86F1E);'}, _trialDays > 0 ? _trialDays + 'j' : '!'));
     c.appendChild(_trialBanner);
   }
 
@@ -1392,13 +1392,13 @@ function renderCardHeroKcal() {
   var deltaStyle = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-top:12px;font-weight:500;';
   var deltaText, deltaColor;
   if (netRem > 0) {
-    deltaColor = 'var(--accent,#1A4A1A)';
+    deltaColor = 'var(--accent,var(--ink-900,#0A0A09))';
     deltaText = netRem + ' kcal restantes';
   } else if (netRem === 0) {
     deltaColor = 'var(--grey,#6B6B65)';
     deltaText = 'Objectif atteint';
   } else {
-    deltaColor = 'var(--orange,#6A4A1A)';
+    deltaColor = 'var(--orange,#E86F1E)';
     deltaText = Math.abs(netRem) + ' kcal au-dessus';
   }
   hero.appendChild(h('div', {style: deltaStyle + 'color:' + deltaColor + ';'}, deltaText));
@@ -1416,7 +1416,7 @@ function renderCardHeroKcal() {
     }
     if (macroTargets.l > 0) {
       var lPct = Math.min(100, totals.l > 0 ? Math.round(totals.l / macroTargets.l * 100) : 0);
-      rings.appendChild(window.svgRing(52, 5, lPct, '#6A4A1A', 'Lipides', Math.round(totals.l)));
+      rings.appendChild(window.svgRing(52, 5, lPct, 'var(--orange,#E86F1E)', 'Lipides', Math.round(totals.l)));
     }
     hero.appendChild(rings);
   }
@@ -1455,7 +1455,7 @@ function renderCardMacros() {
     emptyMacro.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:normal;margin-bottom:8px;color:var(--grey);'}, 'Aucun objectif défini'));
     emptyMacro.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);line-height:1.6;margin-bottom:14px;'}, 'Définissez vos objectifs nutritionnels pour suivre vos macros quotidiens.'));
     emptyMacro.appendChild(h('button', {
-      style: 'padding:10px 16px;background:var(--black,#0A0A09);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
+      style: 'padding:10px 16px;background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border:1px solid var(--ink-900,#0A0A09);border-radius:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;min-height:44px;',
       onclick: function() { if (!window.S) return; window.S.view = 'nutrition'; window.S.nStep = 1; if (window.render) window.render(); }
     }, 'Configurer mon profil →'));
     return emptyMacro;
@@ -1523,7 +1523,7 @@ function renderCardMacros() {
     ringsRow.style.cssText = 'display:flex;justify-content:space-around;align-items:flex-start;margin-top:16px;padding-top:12px;border-top:1px solid var(--border,#E8E6DF);flex-wrap:wrap;gap:8px;';
     if (macroTargets.p > 0 && window.svgRing) {
       var pPct = Math.min(100, totals.p > 0 ? Math.round(totals.p / macroTargets.p * 100) : 0);
-      ringsRow.appendChild(window.svgRing(72, 7, pPct, 'var(--green,#1A4A1A)', 'Protéines', Math.round(totals.p)));
+      ringsRow.appendChild(window.svgRing(72, 7, pPct, 'var(--green,#3E5C3A)', 'Protéines', Math.round(totals.p)));
     }
     if (macroTargets.g > 0 && window.svgRing) {
       var gPct = Math.min(100, totals.g > 0 ? Math.round(totals.g / macroTargets.g * 100) : 0);
@@ -1531,7 +1531,7 @@ function renderCardMacros() {
     }
     if (macroTargets.l > 0 && window.svgRing) {
       var lPct = Math.min(100, totals.l > 0 ? Math.round(totals.l / macroTargets.l * 100) : 0);
-      ringsRow.appendChild(window.svgRing(72, 7, lPct, 'var(--orange,#6A4A1A)', 'Lipides', Math.round(totals.l)));
+      ringsRow.appendChild(window.svgRing(72, 7, lPct, 'var(--orange,#E86F1E)', 'Lipides', Math.round(totals.l)));
     }
     if (ringsRow.children.length > 0) c.appendChild(ringsRow);
   }
@@ -1664,7 +1664,7 @@ function _fjOpenCreateFoodModal() {
       box.appendChild(wrap);
     });
 
-    var errEl = h('div', { style: 'color:#B00020;font-size:12px;margin-bottom:8px;display:none;font-family:"Helvetica Neue",Arial,sans-serif;' });
+    var errEl = h('div', { style: 'color:var(--error,#7A1F1F);font-size:12px;margin-bottom:8px;display:none;font-family:"Helvetica Neue",Arial,sans-serif;' });
     box.appendChild(errEl);
 
     var saveBtn = h('button', {
@@ -1789,7 +1789,7 @@ function renderFoodJournalCard() {
     var btn = h('button', {
       style: 'flex:1;padding:10px 4px;min-height:44px;cursor:pointer;border:none;border-bottom:' + (active ? '2px solid var(--black,#0A0A09)' : '2px solid transparent') + ';'
         + 'background:' + (active ? 'var(--black,#0A0A09)' : 'transparent') + ';'
-        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;'
+        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;'
         + 'color:' + (active ? 'var(--ivory,#FAF9F6)' : 'var(--grey,#6B6B65)') + ';'
         + 'transition:background 0.15s,color 0.15s;'
     }, m.label);
@@ -1811,7 +1811,7 @@ function renderFoodJournalCard() {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);'
     }, 'Ajouter\u00a0\u00e0\u00a0:'),
     h('span', {
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--black,#0A0A09);font-weight:600;'
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--black,#0A0A09);font-weight:400;'
     }, MEAL_LABELS_FULL[_fjState.meal])
   ]));
 
@@ -1936,11 +1936,11 @@ function renderFoodJournalCard() {
   var pillRow = h('div', { style: 'display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;' });
   var pillSaved = h('button', {
     type: 'button',
-    style: 'padding:5px 12px;min-height:32px;border-radius:14px;cursor:pointer;box-sizing:border-box;'
-      + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;'
+    style: 'padding:5px 12px;min-height:32px;border-radius:0;cursor:pointer;box-sizing:border-box;'
+      + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;'
       + (_fjState.showSavedMeals
-        ? 'background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09);'
-        : 'background:transparent;color:var(--grey,#6B6B65);border:1px solid var(--line,#D8D8D0);')
+        ? 'background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border:1px solid var(--ink-900,#0A0A09);'
+        : 'background:transparent;color:var(--ink-500,#6B6B65);border:1px solid var(--line,#D8D8D0);')
   }, 'Mes repas');
   pillSaved.addEventListener('click', function() {
     _fjState.showSavedMeals = !_fjState.showSavedMeals;
@@ -1962,9 +1962,9 @@ function renderFoodJournalCard() {
     var pillPlan = h('button', {
       type: 'button',
       'aria-label': 'Charger le plan repas du jour dans le journal',
-      style: 'padding:5px 12px;min-height:32px;border-radius:14px;cursor:pointer;box-sizing:border-box;'
-        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;'
-        + 'background:transparent;color:var(--grey,#6B6B65);border:1px solid var(--line,#D8D8D0);'
+      style: 'padding:5px 12px;min-height:32px;border-radius:0;cursor:pointer;box-sizing:border-box;'
+        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;'
+        + 'background:transparent;color:var(--ink-500,#6B6B65);border:1px solid var(--line,#D8D8D0);'
     }, '+ Plan du jour');
     pillPlan.addEventListener('click', function() {
       if (!window.FOOD_JOURNAL) return;
@@ -2306,7 +2306,7 @@ function _fjAppendOFFResults() {
     var cancelBtn = h('button', {
       type: 'button',
       style: 'background:none;border:1px solid var(--line,#D8D8D0);padding:6px 12px;min-height:32px;cursor:pointer;'
-        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey,#6B6B65);border-radius:2px;'
+        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);border-radius:2px;'
     }, 'Annuler');
     cancelBtn.addEventListener('click', function() {
       try { if (_fjOFF.ctrl) _fjOFF.ctrl.abort(); } catch(e) {}
@@ -2676,7 +2676,7 @@ function _fjShowSelection() {
     var switchToGrams = h('button', {
       type: 'button',
       style: 'background:transparent;border:1px solid var(--line,#D8D8D0);padding:6px 12px;cursor:pointer;color:var(--grey,#6B6B65);'
-        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;border-radius:2px;margin-bottom:10px;'
+        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;border-radius:2px;margin-bottom:10px;'
     }, 'Mode grammes');
     switchToGrams.addEventListener('click', function() {
       _fjState.unitMode = 'grams';
@@ -2758,7 +2758,7 @@ function _fjShowSelection() {
       var switchToPortion = h('button', {
         type: 'button',
         style: 'background:transparent;border:1px solid var(--line,#D8D8D0);padding:6px 12px;cursor:pointer;color:var(--grey,#6B6B65);'
-          + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;border-radius:2px;margin-bottom:10px;'
+          + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;border-radius:2px;margin-bottom:10px;'
       }, 'Mode portion');
       switchToPortion.addEventListener('click', function() {
         _fjState.unitMode = 'portion';
@@ -2775,7 +2775,7 @@ function _fjShowSelection() {
   // (avant : _fjShowSelection() rebuilt tout → input perdait le focus → clavier mobile se fermait à chaque keystroke)
   box.appendChild(h('div', {
     id: 'fj-live-macros',
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--black,#0A0A09);margin-bottom:12px;line-height:1.6;font-weight:600;'
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--black,#0A0A09);margin-bottom:12px;line-height:1.6;font-weight:400;'
   }, kcal + ' kcal \u00b7 Prot ' + p + 'g \u00b7 Gluc ' + g + 'g \u00b7 Lip ' + l + 'g'));
 
   var MEAL_FULL = { breakfast: 'Petit-d\u00e9jeuner', lunch: 'D\u00e9jeuner', snack: 'Collation', dinner: 'D\u00eener' };
@@ -2889,7 +2889,7 @@ function _fjBuildEntriesList(container) {
     var copyBtn = h('button', {
       type: 'button',
       style: 'padding:6px 14px;min-height:36px;border:1px solid var(--line,#D8D8D0);border-radius:2px;cursor:pointer;background:transparent;'
-        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey,#6B6B65);'
+        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);'
     }, 'Copier d\'hier (' + yesterdayItems.length + ')');
     copyBtn.addEventListener('click', function() {
       if (!window.FOOD_JOURNAL || !window.FOOD_JOURNAL.addEntry) return;
@@ -2910,7 +2910,7 @@ function _fjBuildEntriesList(container) {
   var saveBtn = h('button', {
     type: 'button',
     style: 'padding:6px 14px;min-height:36px;border:1px solid var(--line,#D8D8D0);border-radius:2px;cursor:pointer;background:transparent;'
-      + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey,#6B6B65);'
+      + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);'
   }, 'Sauvegarder ce repas');
   saveBtn.addEventListener('click', function() {
     todayModal('Sauvegarder ce repas', function(box, overlay) {
@@ -3030,7 +3030,7 @@ function renderCardRepas() {
     var mealRef = meal;
     var prisBtn = h('button', {
       style: isLogged
-        ? 'background:var(--green,#1A4A1A);border:1px solid var(--green,#1A4A1A);color:var(--ivory,#FAF9F6);font-size:10px;padding:6px 10px;min-height:44px;cursor:pointer;margin-left:8px;flex-shrink:0;font-family:"Helvetica Neue",Arial,sans-serif;border-radius:2px;'
+        ? 'background:var(--green,#3E5C3A);border:1px solid var(--green,#3E5C3A);color:var(--ivory,#FAF9F6);font-size:10px;padding:6px 10px;min-height:44px;cursor:pointer;margin-left:8px;flex-shrink:0;font-family:"Helvetica Neue",Arial,sans-serif;border-radius:2px;'
         : 'background:transparent;border:1px solid var(--border);color:var(--grey);font-size:10px;padding:6px 10px;min-height:44px;cursor:pointer;margin-left:8px;flex-shrink:0;font-family:"Helvetica Neue",Arial,sans-serif;border-radius:2px;',
       title: isLogged ? 'Cliquer pour d\u00e9cocher' : 'Marquer comme pris',
       onclick: function(e) {
@@ -3138,7 +3138,7 @@ function buildShareCanvas() {
   ctx.fillRect(0, 0, SIZE, SIZE);
 
   // Bande verte signature en haut
-  ctx.fillStyle = '#1A4A1A';
+  ctx.fillStyle = '#3E5C3A';
   ctx.fillRect(0, 0, SIZE, 6);
 
   var PAD = 80;
@@ -3321,7 +3321,7 @@ function renderCardStreak() {
     // Message perte d'aversion — si streak ≥ 3 jours, rappelle l'enjeu
     if (streak >= 3) {
       var _lossMsg = h('div', {
-        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange,#6A4A1A);margin-top:6px;margin-bottom:4px;font-weight:500;'
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange,#E86F1E);margin-top:6px;margin-bottom:4px;font-weight:500;'
       });
       _lossMsg.textContent = 'Ne cassez pas votre série de ' + streak + ' jour' + (streak > 1 ? 's' : '') + ' !';
       c.appendChild(_lossMsg);
@@ -3357,10 +3357,10 @@ function renderCardStreak() {
         'align-items:center;',
         'gap:14px;',
         'padding:12px 14px;',
-        'border:1px solid rgba(26,74,26,0.18);',
-        'border-left:3px solid var(--accent);',
-        'background:rgba(26,74,26,0.04);',
-        'border-radius:2px;'
+        'border:1px solid var(--line,#D8D8D0);',
+        'border-left:3px solid var(--ink-900,#0A0A09);',
+        'background:var(--paper-2,#F4F1EA);',
+        'border-radius:0;'
       ].join('')
     });
 
@@ -3370,8 +3370,8 @@ function renderCardStreak() {
         'width:38px;height:38px;',
         'flex-shrink:0;',
         'display:flex;align-items:center;justify-content:center;',
-        'background:rgba(26,74,26,0.09);',
-        'border-radius:2px;',
+        'background:var(--paper-3,#EEEAE0);',
+        'border-radius:0;',
         'font-size:20px;',
         'line-height:1;'
       ].join('')
@@ -3404,8 +3404,8 @@ function renderCardStreak() {
         'font-size:11px;',
         'letter-spacing:2px;',
         'text-transform:uppercase;',
-        'color:var(--accent);',
-        'border:1px solid rgba(26,74,26,0.3);',
+        'color:var(--ink-900,#0A0A09);',
+        'border:1px solid var(--line,#D8D8D0);',
         'padding:3px 6px;',
         'border-radius:2px;',
         'white-space:nowrap;'
@@ -3456,12 +3456,12 @@ function renderCardSport() {
   // L'user ne suit pas 2 programmations en parallèle. Le programme IA est une ALTERNATIVE,
   // pas un complément. Il s'affiche UNIQUEMENT si le programme local n'existe pas ou n'est pas validé.
   if (S.muscuIAProgram && S.sportType === 'musculation' && !(Array.isArray(S.sportProgram) && S.sportProgram.length > 0 && S.sportProgramValidated)) {
-    var _iaCard = card('border-left:4px solid var(--green,#1A4A1A);');
+    var _iaCard = card('border-left:4px solid var(--green,#3E5C3A);');
     _iaCard.appendChild(eyebrow('VOTRE PROGRAMME'));
     _iaCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:8px;'}, 'Programme sur mesure actif'));
     var _iaDate = S.muscuIAProgramDate ? 'G\u00e9n\u00e9r\u00e9 le ' + new Date(S.muscuIAProgramDate).toLocaleDateString('fr-FR') : '';
     if (_iaDate) _iaCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px;'}, _iaDate));
-    _iaCard.appendChild(h('button', {style: 'padding:10px 16px;background:var(--green,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;', onclick: function() { S.view = 'sport'; S.sStep = 4; if (window.render) window.render(); }}, 'Voir mon programme \u2192'));
+    _iaCard.appendChild(h('button', {style: 'padding:10px 16px;background:var(--green,#3E5C3A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;', onclick: function() { S.view = 'sport'; S.sStep = 4; if (window.render) window.render(); }}, 'Voir mon programme \u2192'));
     return _iaCard;
   }
 
@@ -3496,13 +3496,13 @@ function renderCardSport() {
           style: [
             'padding:10px 14px;',
             'margin-bottom:12px;',
-            'background:var(--orangebg,rgba(106,74,26,.06));',
-            'border:1px solid var(--orange,#6A4A1A);',
-            'border-left:3px solid var(--orange,#6A4A1A);',
-            'border-radius:2px;',
+            'background:rgba(232,111,30,0.06);',
+            'border:1px solid var(--orange,#E86F1E);',
+            'border-left:3px solid var(--orange,#E86F1E);',
+            'border-radius:0;',
             'font-family:"Helvetica Neue",Arial,sans-serif;',
             'font-size:11px;',
-            'color:var(--orange,#6A4A1A);',
+            'color:var(--orange-ink,#7A3B0E);',
             'line-height:1.5;'
           ].join('')
         }, 'R\u00e9cup\u00e9ration insuffisante d\u00e9tect\u00e9e \u00b7 S\u00e9ance all\u00e9g\u00e9e recommand\u00e9e');
@@ -3616,7 +3616,7 @@ function renderCardSport() {
         style: 'font-family:Georgia,serif;font-size:22px;color:var(--black,#0A0A09);line-height:1;font-weight:normal;'
       }, String(val)));
       cell.appendChild(h('div', {
-        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:4px;'
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-500,#6B6B65);margin-top:4px;'
       }, label));
       return cell;
     }
@@ -4288,7 +4288,7 @@ function renderExtendedSections(wrapper, S) {
           var col = h('div', { style: 'flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;' });
           var heightPct = cnt > 0 ? Math.max(8, Math.round((cnt / max) * 100)) : 6;
           var bar = h('div', {
-            style: 'width:100%;height:' + heightPct + '%;background:' + (cnt > 0 ? 'var(--green,#1A4A1A)' : 'var(--border,#D8D8D0)') + ';border-radius:1px;transition:height 0.3s ease;'
+            style: 'width:100%;height:' + heightPct + '%;background:' + (cnt > 0 ? 'var(--green,#3E5C3A)' : 'var(--border,#D8D8D0)') + ';border-radius:1px;transition:height 0.3s ease;'
           });
           col.appendChild(bar);
           col.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey,#6B6B65);' }, dayLabels[i]));
@@ -4301,8 +4301,8 @@ function renderExtendedSections(wrapper, S) {
       if (Array.isArray(insights.patterns) && insights.patterns.length > 0) {
         var patternsWrap = h('div', { style: 'display:flex;flex-direction:column;gap:8px;' });
         insights.patterns.slice(0, 3).forEach(function(p) {
-          var colorByS = { info: 'var(--green,#1A4A1A)', warning: 'var(--orange,#6A4A1A)', alert: 'var(--red,#5A1010)' };
-          var bgBySeverity = { info: 'var(--greenbg,rgba(26,74,26,0.06))', warning: 'var(--orangebg,rgba(106,74,26,0.06))', alert: 'var(--redbg,rgba(90,16,16,0.06))' };
+          var colorByS = { info: 'var(--green,#3E5C3A)', warning: 'var(--orange,#E86F1E)', alert: 'var(--error,#7A1F1F)' };
+          var bgBySeverity = { info: 'rgba(62,92,58,0.06)', warning: 'rgba(232,111,30,0.06)', alert: 'rgba(122,31,31,0.06)' };
           var col = colorByS[p.severity] || 'var(--grey,#6B6B65)';
           var bg = bgBySeverity[p.severity] || 'transparent';
           var pChip = h('div', {
@@ -4310,7 +4310,7 @@ function renderExtendedSections(wrapper, S) {
             style: 'padding:10px 12px;background:' + bg + ';border-left:3px solid ' + col + ';'
           });
           pChip.appendChild(h('div', {
-            style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:600;color:' + col + ';margin-bottom:3px;'
+            style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:400;color:' + col + ';margin-bottom:3px;'
           }, p.label || ''));
           if (p.advice) {
             pChip.appendChild(h('div', {
@@ -4343,13 +4343,13 @@ function renderExtendedSections(wrapper, S) {
           var top = h('div', { style: 'display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;' });
           top.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);' }, label));
           var rightTxt = current + (unit ? ' ' + unit : '') + (target !== null && target !== undefined ? ' / ' + target + (unit ? ' ' + unit : '') : '');
-          var rightEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);font-weight:600;' }, rightTxt);
+          var rightEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);font-weight:400;' }, rightTxt);
           top.appendChild(rightEl);
           row.appendChild(top);
           // Progress bar
-          var trackStyle = 'width:100%;height:6px;background:var(--border,#D8D8D0);border-radius:3px;overflow:hidden;';
+          var trackStyle = 'width:100%;height:6px;background:var(--border,#D8D8D0);border-radius:0;overflow:hidden;';
           var track = h('div', { style: trackStyle });
-          var fillColor = colorByPct || 'var(--green,#1A4A1A)';
+          var fillColor = colorByPct || 'var(--green,#3E5C3A)';
           var fillWidth = pct !== null ? Math.min(100, Math.max(0, pct)) : 0;
           var fill = h('div', { style: 'width:' + fillWidth + '%;height:100%;background:' + fillColor + ';transition:width 0.4s ease;' });
           track.appendChild(fill);
@@ -4366,8 +4366,8 @@ function renderExtendedSections(wrapper, S) {
 
         // 1) Séances
         if (goals.sessions) {
-          var sCol = 'var(--green,#1A4A1A)';
-          if (goals.sessions.pct !== null && goals.sessions.pct < 50) sCol = 'var(--orange,#6A4A1A)';
+          var sCol = 'var(--green,#3E5C3A)';
+          if (goals.sessions.pct !== null && goals.sessions.pct < 50) sCol = 'var(--orange,#E86F1E)';
           goalsBox.appendChild(goalRow(
             'Séances',
             goals.sessions.done,
@@ -4381,12 +4381,12 @@ function renderExtendedSections(wrapper, S) {
 
         // 2) Kcal
         if (goals.kcalAvg) {
-          var kCol = 'var(--green,#1A4A1A)';
+          var kCol = 'var(--green,#3E5C3A)';
           // Si >110% ou <90% → warning orange, >125% ou <75% → rouge
           if (goals.kcalAvg.pct !== null) {
             var kDiff = Math.abs(goals.kcalAvg.pct - 100);
-            if (kDiff > 25) kCol = 'var(--red,#5A1010)';
-            else if (kDiff > 10) kCol = 'var(--orange,#6A4A1A)';
+            if (kDiff > 25) kCol = 'var(--error,#7A1F1F)';
+            else if (kDiff > 10) kCol = 'var(--orange,#E86F1E)';
           }
           goalsBox.appendChild(goalRow(
             'Calories (moy. 7j)',
@@ -4401,8 +4401,8 @@ function renderExtendedSections(wrapper, S) {
 
         // 3) Protéines
         if (goals.proteinAvg) {
-          var pCol = 'var(--green,#1A4A1A)';
-          if (goals.proteinAvg.pct !== null && goals.proteinAvg.pct < 80) pCol = 'var(--orange,#6A4A1A)';
+          var pCol = 'var(--green,#3E5C3A)';
+          if (goals.proteinAvg.pct !== null && goals.proteinAvg.pct < 80) pCol = 'var(--orange,#E86F1E)';
           goalsBox.appendChild(goalRow(
             'Protéines (moy. 7j)',
             goals.proteinAvg.current,
@@ -4416,8 +4416,8 @@ function renderExtendedSections(wrapper, S) {
 
         // 4) Wellness loggés
         if (goals.wellnessLogged) {
-          var wCol = 'var(--green,#1A4A1A)';
-          if (goals.wellnessLogged.pct < 50) wCol = 'var(--orange,#6A4A1A)';
+          var wCol = 'var(--green,#3E5C3A)';
+          if (goals.wellnessLogged.pct < 50) wCol = 'var(--orange,#E86F1E)';
           goalsBox.appendChild(goalRow(
             'Bilan forme',
             goals.wellnessLogged.count,
@@ -4461,7 +4461,7 @@ function renderExtendedSections(wrapper, S) {
         function trendStat(value, label) {
           var box = h('div', { 'class': 'sfc-stat-box', style: 'flex:1;text-align:center;padding:10px 12px;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#D8D8D0);border-radius:2px;' });
           box.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:18px;color:var(--black,#0A0A09);' }, value));
-          box.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:2px;' }, label));
+          box.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:2px;' }, label));
           return box;
         }
         statsRow.appendChild(trendStat(
@@ -4504,8 +4504,8 @@ function renderExtendedSections(wrapper, S) {
                   {
                     label: 'Sommeil (1-5)',
                     data: trend.sleep,
-                    borderColor: '#1A4A1A',
-                    backgroundColor: 'rgba(26,74,26,0.08)',
+                    borderColor: '#3E5C3A',
+                    backgroundColor: 'rgba(62,92,58,0.08)',
                     borderWidth: 2,
                     tension: 0.3,
                     pointRadius: 2,
@@ -4516,8 +4516,8 @@ function renderExtendedSections(wrapper, S) {
                   {
                     label: 'Énergie (bas/moyen/haut)',
                     data: trend.energyScore,
-                    borderColor: '#6A4A1A',
-                    backgroundColor: 'rgba(106,74,26,0.06)',
+                    borderColor: '#E86F1E',
+                    backgroundColor: 'rgba(232,111,30,0.06)',
                     borderWidth: 2,
                     tension: 0.3,
                     pointRadius: 2,
@@ -4597,13 +4597,13 @@ function renderExtendedSections(wrapper, S) {
           var delta = (ds.lastValue !== null && ds.firstValue !== null) ? (ds.lastValue - ds.firstValue) : null;
           var deltaPct = (delta !== null && ds.firstValue > 0) ? (delta / ds.firstValue) * 100 : null;
           var colorByDelta = (delta === null) ? 'var(--grey,#6B6B65)'
-                              : (delta > 0 ? 'var(--green,#1A4A1A)'
-                              : (delta < 0 ? 'var(--red,#5A1010)' : 'var(--grey,#6B6B65)'));
+                              : (delta > 0 ? 'var(--green,#3E5C3A)'
+                              : (delta < 0 ? 'var(--error,#7A1F1F)' : 'var(--grey,#6B6B65)'));
           var signTxt = (delta === null) ? '' : (delta > 0 ? '+' : '') + delta.toFixed(1) + ' kg';
           var pctTxt = (deltaPct !== null) ? ' (' + (deltaPct > 0 ? '+' : '') + deltaPct.toFixed(1) + '%)' : '';
           var line = h('div', { 'class': 'sfc-delta-row', style: 'display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--border,#D8D8D0);' });
           line.appendChild(h('span', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);' }, ds.name));
-          var right = h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:0.5px;color:' + colorByDelta + ';font-weight:600;' }, signTxt + pctTxt);
+          var right = h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:0.5px;color:' + colorByDelta + ';font-weight:400;' }, signTxt + pctTxt);
           line.appendChild(right);
           deltaRow.appendChild(line);
         });
@@ -4843,7 +4843,7 @@ function renderExtendedSections(wrapper, S) {
         function nutStat(value, label) {
           var box = h('div', { 'class': 'sfc-stat-box', style: 'flex:1;text-align:center;padding:10px 8px;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#D8D8D0);border-radius:2px;' });
           box.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:17px;color:var(--black,#0A0A09);' }, value));
-          box.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:2px;' }, label));
+          box.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:2px;' }, label));
           return box;
         }
         nStatsRow.appendChild(nutStat(
@@ -4884,8 +4884,8 @@ function renderExtendedSections(wrapper, S) {
               {
                 label: 'Calories (kcal)',
                 data: nutTrend.kcal,
-                borderColor: '#1A4A1A',
-                backgroundColor: 'rgba(26, 74, 26, 0.08)',
+                borderColor: '#3E5C3A',
+                backgroundColor: 'rgba(62,92,58,0.08)',
                 borderWidth: 2,
                 tension: 0.3,
                 pointRadius: 2,
@@ -4896,8 +4896,8 @@ function renderExtendedSections(wrapper, S) {
               {
                 label: 'Protéines (g)',
                 data: nutTrend.protein,
-                borderColor: '#6A4A1A',
-                backgroundColor: 'rgba(106, 74, 26, 0.06)',
+                borderColor: '#E86F1E',
+                backgroundColor: 'rgba(232,111,30,0.06)',
                 borderWidth: 2,
                 tension: 0.3,
                 pointRadius: 2,
@@ -5072,8 +5072,8 @@ function renderExtendedSections(wrapper, S) {
       window._todayKcalChart = window.createChart ? window.createChart(ctx2, {
         type: 'bar',
         data: { labels: JOURS_CH, datasets: [
-          { label: 'Kcal plan', data: dayKcals, backgroundColor: dayKcals.map(function(k) { var r = k / target; return r < 0.92 ? 'rgba(62,92,58,0.55)' : r > 1.08 ? 'rgba(90,16,16,0.50)' : 'rgba(62,92,58,0.75)'; }), borderColor: dayKcals.map(function(k) { var r = k / target; return r < 0.92 ? 'rgba(62,92,58,0.25)' : r > 1.08 ? 'rgba(90,16,16,0.25)' : 'rgba(62,92,58,0.35)'; }), borderWidth: 1, borderRadius: 1 },
-          { label: 'Cible', data: Array(7).fill(target), type: 'line', borderColor: '#5A1010', borderDash: [4,3], pointRadius: 0, borderWidth: 1.2, fill: false }
+          { label: 'Kcal plan', data: dayKcals, backgroundColor: dayKcals.map(function(k) { var r = k / target; return r < 0.92 ? 'rgba(62,92,58,0.55)' : r > 1.08 ? 'rgba(122,31,31,0.50)' : 'rgba(62,92,58,0.75)'; }), borderColor: dayKcals.map(function(k) { var r = k / target; return r < 0.92 ? 'rgba(62,92,58,0.25)' : r > 1.08 ? 'rgba(122,31,31,0.25)' : 'rgba(62,92,58,0.35)'; }), borderWidth: 1, borderRadius: 0 },
+          { label: 'Cible', data: Array(7).fill(target), type: 'line', borderColor: '#7A1F1F', borderDash: [4,3], pointRadius: 0, borderWidth: 1.2, fill: false }
         ] },
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0A0A09', titleFont: { family: 'Georgia, serif', size: 11 }, bodyFont: { family: 'Helvetica Neue, Arial, sans-serif', size: 11 }, padding: 8, callbacks: { label: function(c) { return c.dataset.label + ' : ' + Math.round(c.parsed.y) + ' kcal'; } } } }, scales: { y: { ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 }, callback: function(v) { return v + ' kcal'; } }, grid: { color: 'rgba(216,216,208,0.25)' } }, x: { grid: { display: false }, ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 } } } } }
       }) : null;
@@ -5208,7 +5208,7 @@ function renderExtendedSections(wrapper, S) {
 
     // Switch visuel (track + thumb)
     var switchTrack = h('div', {
-      style: 'position:relative;width:48px;height:28px;background:' + (currentEnabled ? 'var(--black,#0A0A09)' : 'var(--border,#D8D8D0)') + ';border-radius:14px;cursor:pointer;transition:background 0.2s ease;flex-shrink:0;',
+      style: 'position:relative;width:48px;height:24px;background:' + (currentEnabled ? 'var(--black,#0A0A09)' : 'var(--line,#D8D8D0)') + ';border-radius:2px;cursor:pointer;transition:background 0.2s ease;flex-shrink:0;',
       onclick: function() {
         var newState = !S.pushNotifsEnabled && S.pushNotifsEnabled !== false ? false : !S.pushNotifsEnabled;
         // Si jamais défini, on le set selon toggle → de true défaut à false (désactivation)
@@ -5226,7 +5226,7 @@ function renderExtendedSections(wrapper, S) {
       }
     });
     var switchThumb = h('div', {
-      style: 'position:absolute;top:2px;left:' + (currentEnabled ? '22px' : '2px') + ';width:24px;height:24px;background:var(--ivory,#FAF9F6);border-radius:50%;box-shadow:0 1px 3px rgba(10,10,9,0.2);transition:left 0.22s cubic-bezier(0.4, 0, 0.2, 1);'
+      style: 'position:absolute;top:2px;left:' + (currentEnabled ? '22px' : '2px') + ';width:20px;height:20px;background:var(--paper,#FAF9F6);border-radius:2px;transition:left 0.22s cubic-bezier(0.4, 0, 0.2, 1);'
     });
     switchTrack.appendChild(switchThumb);
     toggleRow.appendChild(switchTrack);
@@ -5236,8 +5236,8 @@ function renderExtendedSections(wrapper, S) {
     if (currentEnabled) {
       var stateText = '';
       var stateColor = 'var(--grey,#6B6B65)';
-      if (permState === 'granted') { stateText = 'Permission accordée ✓'; stateColor = 'var(--green,#1A4A1A)'; }
-      else if (permState === 'denied') { stateText = 'Permission refusée — autoriser dans les paramètres du navigateur'; stateColor = 'var(--red,#5A1010)'; }
+      if (permState === 'granted') { stateText = 'Permission accordée ✓'; stateColor = 'var(--green,#3E5C3A)'; }
+      else if (permState === 'denied') { stateText = 'Permission refusée — autoriser dans les paramètres du navigateur'; stateColor = 'var(--error,#7A1F1F)'; }
       else { stateText = 'Permission non demandée — demande apparaîtra au prochain usage'; }
       notifsCard.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:' + stateColor + ';margin-top:10px;padding-top:10px;border-top:1px solid var(--border,#D8D8D0);letter-spacing:0.3px;' }, stateText));
     }
@@ -5314,7 +5314,7 @@ function renderCardTDEEAdaptatif(S) {
   var diffKcal = Math.abs(tdee - newTDEE);
   if (diffKcal < 50) return null; // Ajustement trop faible, ignorer
 
-  var c = card('border-left:3px solid var(--orange,#6A4A1A);');
+  var c = card('border-left:3px solid var(--orange,#E86F1E);');
   c.appendChild(eyebrow('Ajustement recommandé'));
 
   var title = delta > 0
@@ -5333,11 +5333,11 @@ function renderCardTDEEAdaptatif(S) {
     ? 'R\u00e9duisez vos apports de ' + diffKcal + '\u00a0kcal/jour (cible\u00a0: ' + newTDEE + '\u00a0kcal)'
     : 'Vous pouvez augmenter vos apports de ' + diffKcal + '\u00a0kcal/jour (cible\u00a0: ' + newTDEE + '\u00a0kcal)';
 
-  c.appendChild(h('p', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:700;color:var(--orange,#6A4A1A);margin:8px 0 0;line-height:1.5;' }, adjustMsg));
+  c.appendChild(h('p', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:400;color:var(--orange-ink,#7A3B0E);margin:8px 0 0;line-height:1.5;' }, adjustMsg));
 
   // FIX FAIL-2 : avertissement explicite si on touche le plancher (perte trop rapide → médecin)
   if (newTDEE === _minSafe && delta < -1.5) {
-    c.appendChild(h('p', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--red,#5A1010);margin:8px 0 0;line-height:1.5;' },
+    c.appendChild(h('p', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--error,#7A1F1F);margin:8px 0 0;line-height:1.5;' },
       '⚠ Perte rapide détectée. Plancher kcal sécuritaire atteint. Consulte un médecin/diététicien avant de poursuivre.'
     ));
   }
@@ -5410,7 +5410,7 @@ function renderCardSundayReview(S) {
 
   // Séances
   var seancesBox = h('div', { style: 'flex:1;min-width:80px;padding:12px;background:var(--ivory2);border:1px solid var(--border);border-radius:2px;text-align:center;' });
-  seancesBox.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:24px;color:var(--green,#1A4A1A);' }, String(seancesDone)));
+  seancesBox.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:24px;color:var(--green,#3E5C3A);' }, String(seancesDone)));
   seancesBox.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:4px;' }, 'Séances'));
   statsRow.appendChild(seancesBox);
 
@@ -5425,7 +5425,7 @@ function renderCardSundayReview(S) {
   // Poids
   if (currentWeight > 0) {
     var weightBox = h('div', { style: 'flex:1;min-width:80px;padding:12px;background:var(--ivory2);border:1px solid var(--border);border-radius:2px;text-align:center;' });
-    weightBox.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:24px;color:var(--orange,#6A4A1A);' }, currentWeight + ' kg'));
+    weightBox.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:24px;color:var(--orange,#E86F1E);' }, currentWeight + ' kg'));
     weightBox.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:4px;' }, 'Poids'));
     statsRow.appendChild(weightBox);
   }
@@ -5535,13 +5535,13 @@ function renderTodayDashboard(p) {
         style:
           'display:flex;align-items:center;justify-content:space-between;gap:12px;' +
           'max-width:560px;margin:0 auto 0;padding:12px 16px;' +
-          'border:1px solid rgba(106,74,26,0.25);background:rgba(106,74,26,0.05);' +
-          'border-radius:2px;cursor:pointer;'
+          'border:1px solid var(--orange,#E86F1E);background:rgba(232,111,30,0.05);' +
+          'border-radius:0;cursor:pointer;'
       });
       _tBar.addEventListener('click', function() { S.view = 'profil'; if (window.render) window.render(); });
       var _tL = h('div', {style: 'flex:1;min-width:0;'});
       _tL.appendChild(h('div', {
-        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:4px;text-transform:uppercase;color:#6A4A1A;font-weight:600;margin-bottom:3px;'
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);font-weight:500;margin-bottom:3px;'
       }, 'VERSION D\u2019ESSAI'));
       _tL.appendChild(h('div', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.4;'
@@ -5550,7 +5550,7 @@ function renderTodayDashboard(p) {
           : 'Période d\u2019essai terminée \u2014 Voir mon abonnement'));
       _tBar.appendChild(_tL);
       var _tR = h('div', {
-        style: 'font-family:Georgia,serif;font-size:22px;color:#6A4A1A;flex-shrink:0;line-height:1;'
+        style: 'font-family:Georgia,serif;font-size:22px;color:var(--orange-ink,#7A3B0E);flex-shrink:0;line-height:1;'
       }, _td > 0 ? String(_td) + 'j' : '!');
       _tBar.appendChild(_tR);
       wrapper.appendChild(_tBar);
@@ -5614,15 +5614,15 @@ function renderTodayDashboard(p) {
       });
       _qLabel.appendChild(h('span', {style: 'flex:1;max-width:56px;height:1px;background:var(--line,#D8D8D0);'}));
       _qLabel.appendChild(h('span', {style:
-        'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:5px;' +
-        'text-transform:uppercase;color:var(--grey,#6B6B65);font-weight:600;'
+        'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;' +
+        'text-transform:uppercase;color:var(--ink-500,#6B6B65);font-weight:400;'
       }, 'Pensée du jour'));
       _qLabel.appendChild(h('span', {style: 'flex:1;max-width:56px;height:1px;background:var(--line,#D8D8D0);'}));
       _qWrap.appendChild(_qLabel);
 
       // Guillemet ouvrant Georgia XL (signature éditoriale Hermès)
       _qWrap.appendChild(h('div', { style:
-        'font-family:Georgia,serif;font-size:48px;line-height:0.4;color:var(--accent,#1A4A1A);' +
+        'font-family:Georgia,serif;font-size:48px;line-height:0.4;color:var(--accent,var(--ink-900,#0A0A09));' +
         'margin-bottom:4px;user-select:none;'
       }, '\u201C'));
 
@@ -5643,7 +5643,7 @@ function renderTodayDashboard(p) {
 
       // Filet final bas — simple trait vert sapin centré (signature maison)
       _qWrap.appendChild(h('div', { style:
-        'width:32px;height:1px;background:var(--accent,#1A4A1A);margin:16px auto 0;'
+        'width:32px;height:1px;background:var(--accent,var(--ink-900,#0A0A09));margin:16px auto 0;'
       }));
 
       _pensee = _qWrap; // Différé : append après les cartes data (Séance + Repas)
@@ -5692,12 +5692,12 @@ function renderTodayDashboard(p) {
     var _bothNeedValidation = _nutNeedsValidation && _sportNeedsValidation;
 
     if (_bothNeedValidation) {
-      var _bothBanner = card('border-left:3px solid var(--orange,#6A4A1A);');
+      var _bothBanner = card('border-left:3px solid var(--orange,#E86F1E);');
       _bothBanner.appendChild(eyebrow('VOTRE SEMAINE'));
       _bothBanner.appendChild(cardTitle('Validez vos deux programmes'));
       _bothBanner.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:12px;line-height:1.5;'}, 'Votre plan nutrition et votre programme sportif sont pr\u00eats. Confirmez-les pour activer le suivi de la semaine.'));
       _bothBanner.appendChild(h('button', {
-        style:'padding:12px 20px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
+        style:'padding:12px 20px;background:var(--accent,var(--ink-900,#0A0A09));color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
         onclick: function() {
           try {
             S.weekPlanValidated = true;
@@ -5714,12 +5714,12 @@ function renderTodayDashboard(p) {
       wrapper.appendChild(_bothBanner);
     } else {
       if (_nutNeedsValidation) {
-        var _nutBanner = card('border-left:3px solid var(--orange,#6A4A1A);');
+        var _nutBanner = card('border-left:3px solid var(--orange,#E86F1E);');
         _nutBanner.appendChild(eyebrow('NUTRITION'));
         _nutBanner.appendChild(cardTitle('Validez votre plan de la semaine'));
         _nutBanner.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:12px;line-height:1.5;'}, 'Votre plan nutrition est pr\u00eat. Confirmez-le pour qu\u2019il apparaisse dans votre suivi.'));
         _nutBanner.appendChild(h('button', {
-          style:'padding:12px 20px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
+          style:'padding:12px 20px;background:var(--accent,var(--ink-900,#0A0A09));color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
           onclick: function() {
             try {
               S.weekPlanValidated = true;
@@ -5734,12 +5734,12 @@ function renderTodayDashboard(p) {
         wrapper.appendChild(_nutBanner);
       }
       if (_sportNeedsValidation) {
-        var _sportBanner = card('border-left:3px solid var(--orange,#6A4A1A);');
+        var _sportBanner = card('border-left:3px solid var(--orange,#E86F1E);');
         _sportBanner.appendChild(eyebrow('SPORT'));
         _sportBanner.appendChild(cardTitle('Confirmez votre programme sportif'));
         _sportBanner.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:12px;line-height:1.5;'}, 'Votre programme est g\u00e9n\u00e9r\u00e9. Confirmez-le pour activer le suivi.'));
         _sportBanner.appendChild(h('button', {
-          style:'padding:12px 20px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
+          style:'padding:12px 20px;background:var(--accent,var(--ink-900,#0A0A09));color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
           onclick: function() {
             try {
               S.sportProgramValidated = true;
@@ -5809,7 +5809,7 @@ function renderTodayDashboard(p) {
       var _firstStepCard = card();
       _firstStepCard.appendChild(eyebrow('COMMENCER'));
       _firstStepCard.appendChild(h('div', {style:'font-family:Georgia,serif;font-size:22px;margin-bottom:12px;font-weight:normal;line-height:1.25;'}, 'Votre premier plan vous attend.'));
-      _firstStepCard.appendChild(h('div', {style:'font-family:Georgia,serif;font-style:italic;font-size:15px;color:#3E3E3A;line-height:1.55;margin-bottom:24px;'}, 'Deux \u00e0 trois minutes pour r\u00e9pondre \u00e0 quelques questions, et vous avez votre programme.'));
+      _firstStepCard.appendChild(h('div', {style:'font-family:Georgia,serif;font-style:italic;font-size:15px;color:var(--ink-700,#2B2B27);line-height:1.55;margin-bottom:24px;'}, 'Deux \u00e0 trois minutes pour r\u00e9pondre \u00e0 quelques questions, et vous avez votre programme.'));
       var _btnRow = h('div', {style:'display:flex;gap:12px;flex-wrap:wrap;'});
       if (S.appMode !== 'nutrition') {
         _btnRow.appendChild(h('button', {
@@ -5988,7 +5988,7 @@ function renderCoachBar() {
 
   // Puce H (coach) — 24px cercle avec lettre Georgia
   var chip = h('div', {
-    style: 'width:28px;height:28px;border:1px solid var(--ink-900,#0A0A09);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Georgia,serif;font-size:13px;color:var(--ink-900,#0A0A09);'
+    style: 'width:28px;height:28px;border:1px solid var(--ink-900,#0A0A09);border-radius:0;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Georgia,serif;font-size:13px;color:var(--ink-900,#0A0A09);'
   }, 'H');
   bar.appendChild(chip);
 
@@ -6131,16 +6131,15 @@ function renderFabLogger() {
       });
       var label = h('div', {
         style:
-          'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;' +
-          'letter-spacing:3px;text-transform:uppercase;color:#FAF9F6;font-weight:500;' +
-          'white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,0.3);'
+          'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;' +
+          'letter-spacing:3px;text-transform:uppercase;color:var(--paper,#FAF9F6);font-weight:400;' +
+          'white-space:nowrap;'
       }, item.label);
       var btn = h('button', {
         style:
-          'width:48px;height:48px;border-radius:50%;background:#FAF9F6;' +
+          'width:48px;height:48px;border-radius:0;background:var(--paper,#FAF9F6);' +
           'border:1px solid var(--line,#D8D8D0);cursor:pointer;' +
-          'display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;' +
-          'box-shadow:0 2px 8px rgba(10,10,9,0.12);',
+          'display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;',
         'aria-label': item.label,
         onclick: item.action
       });
@@ -6153,12 +6152,12 @@ function renderFabLogger() {
 
   // FAB central
   var fab = h('button', {
-    style: 'position:relative;width:56px;height:56px;border-radius:50%;background:var(--ink-900,#0A0A09);border:none;cursor:pointer;box-shadow:0 6px 16px rgba(10,10,9,0.18);display:flex;align-items:center;justify-content:center;transition:transform 120ms ease-out;transform:rotate(' + (isOpen ? '45deg' : '0deg') + ');',
+    style: 'position:relative;width:56px;height:56px;border-radius:0;background:var(--ink-900,#0A0A09);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform 120ms ease-out;transform:rotate(' + (isOpen ? '45deg' : '0deg') + ');',
     'aria-label': isOpen ? 'Fermer le menu logger' : 'Ouvrir le menu logger',
     onclick: function() { S._fabOpen = !S._fabOpen; if (window.render) window.render(); }
   });
   // Croix SVG stroke 1.5
-  fab.innerHTML = '<svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="#FAF9F6" stroke-width="1.5" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>';
+  fab.innerHTML = '<svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="var(--paper,#FAF9F6)" stroke-width="1.5" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>';
   container.appendChild(fab);
 
   wrapper.appendChild(container);
@@ -6292,7 +6291,7 @@ function renderCardTodayForYou() {
   }, content.title));
 
   c.appendChild(h('p', {
-    style: 'font-family:Georgia,serif;font-style:italic;font-size:15px;line-height:1.55;color:#3E3E3A;margin:0 0 20px;'
+    style: 'font-family:Georgia,serif;font-style:italic;font-size:15px;line-height:1.55;color:var(--ink-700,#2B2B27);margin:0 0 20px;'
   }, content.body));
 
   // Liste items avec filets
@@ -6528,7 +6527,7 @@ function renderCardVolumeTracking() {
     var pctOfMrv = Math.min(100, (sets / z.mrv) * 100);
     return (
       '<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(10,10,9,0.06);">' +
-        '<div style="flex:0 0 84px;font-size:13px;font-weight:500;color:#0A0A09;">' + muscleLabels[m] + '</div>' +
+        '<div style="flex:0 0 84px;font-size:13px;font-weight:400;color:var(--ink-900,#0A0A09);">' + muscleLabels[m] + '</div>' +
         '<div style="flex:1;display:flex;flex-direction:column;gap:4px;">' +
           '<div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(10,10,9,0.6);">' +
             '<span>' + sets + ' sets</span>' +
@@ -6546,9 +6545,9 @@ function renderCardVolumeTracking() {
   if (!rows) return null;
 
   var html = (
-    '<div style="background:var(--ivory,#FAF9F6);border:1px solid rgba(10,10,9,0.08);border-radius:16px;padding:20px;margin-bottom:16px;">' +
+    '<div style="background:var(--paper,#FAF9F6);border:1px solid var(--line,#D8D8D0);border-radius:0;padding:20px;margin-bottom:16px;">' +
       '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(10,10,9,0.45);margin-bottom:4px;">Volume hebdo</div>' +
-      '<div style="font-size:16px;font-weight:500;color:#0A0A09;margin-bottom:2px;">Charge par groupe musculaire</div>' +
+      '<div style="font-size:16px;font-weight:400;color:var(--ink-900,#0A0A09);margin-bottom:2px;">Charge par groupe musculaire</div>' +
       '<div style="font-size:12px;color:rgba(10,10,9,0.55);margin-bottom:16px;">7 derniers jours · landmarks Renaissance Periodization (Dr Mike Israetel)</div>' +
       rows +
     '</div>'
@@ -6835,7 +6834,7 @@ function jargonTooltip(term, displayText) {
   });
   var label = h('span', {}, displayText || term);
   var helper = h('button', {
-    style: 'display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;margin-left:4px;border:1px solid var(--ink-500,#6B6B65);border-radius:50%;background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--ink-500,#6B6B65);cursor:pointer;padding:0;line-height:1;vertical-align:middle;',
+    style: 'display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;margin-left:4px;border:1px solid var(--ink-500,#6B6B65);border-radius:0;background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--ink-500,#6B6B65);cursor:pointer;padding:0;line-height:1;vertical-align:middle;',
     'aria-label': 'Définition : ' + def.title,
     'aria-describedby': id,
     onclick: function(e) {
@@ -6845,7 +6844,7 @@ function jargonTooltip(term, displayText) {
       var pop = h('div', {
         id: id,
         role: 'tooltip',
-        style: 'position:absolute;top:100%;left:0;margin-top:8px;width:260px;max-width:calc(100vw - 40px);padding:16px;background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border-radius:2px;z-index:1100;box-shadow:0 6px 16px rgba(10,10,9,0.2);'
+        style: 'position:absolute;top:100%;left:0;margin-top:8px;width:260px;max-width:calc(100vw - 40px);padding:16px;background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border-radius:0;z-index:1100;'
       });
       pop.appendChild(h('div', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--paper,#FAF9F6);margin-bottom:8px;font-weight:500;opacity:0.7;'

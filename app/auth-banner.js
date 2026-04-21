@@ -58,10 +58,12 @@
     toast.setAttribute('aria-live', 'polite');
     toast.style.cssText = [
       'position:fixed', 'bottom:24px', 'left:50%', 'transform:translateX(-50%)',
-      'background:var(--black,#0A0A09)', 'color:var(--ivory,#FAF9F6)',
-      'font-family:"Helvetica Neue",Arial,sans-serif', 'font-size:11px',
-      'letter-spacing:1px', 'padding:12px 24px', 'border-radius:2px',
-      'z-index:10100', 'box-shadow:0 4px 16px rgba(0,0,0,.2)',
+      'background:var(--ink-900,#0A0A09)', 'color:var(--paper,#FAF9F6)',
+      'font-family:"Helvetica Neue",Arial,sans-serif', 'font-size:9px',
+      'letter-spacing:3px', 'text-transform:uppercase',
+      'padding:12px 24px', 'border-radius:0',
+      'border:1px solid var(--ink-900,#0A0A09)',
+      'z-index:10100',
       'max-width:90vw', 'text-align:center', 'opacity:0',
       'transition:opacity .3s ease'
     ].join(';');
@@ -93,8 +95,9 @@
 
     var sheet = document.createElement('div');
     sheet.style.cssText = [
-      'background:var(--ivory,#FAF9F6)', 'width:100%', 'max-width:680px',
-      'border-radius:2px 2px 0 0', 'padding:32px 24px 40px',
+      'background:var(--paper,#FAF9F6)', 'width:100%', 'max-width:600px',
+      'border-radius:0', 'border-top:1px solid var(--line,#D8D8D0)',
+      'padding:32px 24px 40px',
       'transform:translateY(100%)', 'transition:transform .25s ease',
       'max-height:90vh', 'overflow-y:auto'
     ].join(';');
@@ -111,9 +114,9 @@
     closeBtn.type = 'button';
     closeBtn.setAttribute('aria-label', 'Fermer');
     closeBtn.style.cssText = [
-      'width:44px', 'height:44px', 'background:var(--ivory2,#F4F4F0)',
-      'border:1px solid var(--border,#D8D8D0)', 'border-radius:2px',
-      'cursor:pointer', 'font-size:16px', 'color:var(--black,#0A0A09)',
+      'width:44px', 'height:44px', 'background:transparent',
+      'border:none', 'border-radius:0',
+      'cursor:pointer', 'font-size:18px', 'color:var(--ink-500,#6B6B65)',
       'display:flex', 'align-items:center', 'justify-content:center'
     ].join(';');
     closeBtn.textContent = '×';
@@ -155,9 +158,9 @@
     var errEl = document.createElement('div');
     errEl.style.cssText = [
       'display:none', 'font-family:"Helvetica Neue",Arial,sans-serif',
-      'font-size:11px', 'color:var(--red,#5A1010)', 'padding:8px',
-      'border:1px solid var(--red,#5A1010)', 'background:rgba(90,16,16,.06)',
-      'margin-bottom:12px', 'border-radius:2px'
+      'font-size:11px', 'color:var(--error,#7A1F1F)', 'padding:8px',
+      'border:1px solid var(--error,#7A1F1F)', 'background:var(--redbg,rgba(122,31,31,.06))',
+      'margin-bottom:12px', 'border-radius:0'
     ].join(';');
     form.appendChild(errEl);
 
@@ -165,11 +168,11 @@
     var submitBtn = document.createElement('button');
     submitBtn.type = 'submit';
     submitBtn.style.cssText = [
-      'width:100%', 'margin-top:8px', 'background:var(--accent,#1A4A1A)',
-      'color:var(--ivory,#FAF9F6)', 'font-family:"Helvetica Neue",Arial,sans-serif',
-      'font-size:11px', 'letter-spacing:2px', 'text-transform:uppercase',
-      'padding:14px', 'border:none', 'border-radius:2px',
-      'cursor:pointer'
+      'width:100%', 'margin-top:8px', 'background:var(--black,#0A0A09)',
+      'color:var(--paper,#FAF9F6)', 'font-family:"Helvetica Neue",Arial,sans-serif',
+      'font-size:9px', 'letter-spacing:4px', 'text-transform:uppercase',
+      'padding:14px', 'border:1px solid var(--black,#0A0A09)', 'border-radius:0',
+      'min-height:44px', 'cursor:pointer'
     ].join(';');
     submitBtn.textContent = 'Créer mon compte';
     form.appendChild(submitBtn);
@@ -310,13 +313,13 @@
     bar.setAttribute('role', 'banner');
     bar.style.cssText = [
       'position:fixed', 'top:0', 'left:0', 'right:0', 'z-index:10010',
-      'background:var(--accent,var(--green,#1A4A1A))',
-      'color:#fff', 'display:flex', 'align-items:center',
+      'background:var(--ink-900,#0A0A09)',
+      'color:var(--paper,#FAF9F6)', 'display:flex', 'align-items:center',
       'justify-content:space-between', 'gap:12px',
       'padding:10px 16px', 'flex-wrap:wrap',
       'font-family:"Helvetica Neue",Arial,sans-serif',
       'font-size:11px', 'line-height:1.4',
-      'box-shadow:0 2px 8px rgba(0,0,0,.15)'
+      'border-bottom:1px solid var(--ink-700,#2B2B27)'
     ].join(';');
 
     // Texte
@@ -332,12 +335,12 @@
     var ctaBtn = document.createElement('button');
     ctaBtn.type = 'button';
     ctaBtn.style.cssText = [
-      'background:var(--ivory,#FAF9F6)', 'color:var(--accent,#1A4A1A)',
-      'border:1px solid var(--ivory,#FAF9F6)', 'border-radius:2px',
+      'background:var(--paper,#FAF9F6)', 'color:var(--ink-900,#0A0A09)',
+      'border:1px solid var(--paper,#FAF9F6)', 'border-radius:0',
       'font-family:"Helvetica Neue",Arial,sans-serif',
       'font-size:9px', 'letter-spacing:4px', 'text-transform:uppercase',
-      'padding:8px 14px', 'cursor:pointer', 'white-space:nowrap',
-      'font-weight:500'
+      'padding:8px 14px', 'min-height:36px', 'cursor:pointer', 'white-space:nowrap',
+      'font-weight:400'
     ].join(';');
     ctaBtn.textContent = 'Créer mon compte';
     ctaBtn.addEventListener('click', openSignupModal);
@@ -347,9 +350,10 @@
     dismissBtn.type = 'button';
     dismissBtn.setAttribute('aria-label', 'Fermer la bannière');
     dismissBtn.style.cssText = [
-      'background:transparent', 'border:none', 'color:#fff',
+      'background:transparent', 'border:none', 'color:var(--paper,#FAF9F6)',
       'font-size:18px', 'cursor:pointer', 'padding:4px 6px',
-      'line-height:1', 'opacity:.8'
+      'min-width:44px', 'min-height:36px', 'line-height:1', 'opacity:.8',
+      'display:flex', 'align-items:center', 'justify-content:center'
     ].join(';');
     dismissBtn.textContent = '×';
     dismissBtn.addEventListener('click', function() {
