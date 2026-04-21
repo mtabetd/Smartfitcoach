@@ -7276,91 +7276,33 @@ function renderMusculationProgram(p) {
  // Current day — bounds check (already reset above)
  var day = S.sportProgram[S.selectedSportDay];
  if (day) {
- p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);margin:16px 0 12px'}, day.focus || ''));
+ // ─── EN-TÊTE COMPACT : focus · semaine · durée · progression ───
+ (function() {
+  var _hdrRow = h('div', {style: 'display:flex;justify-content:space-between;align-items:baseline;margin:14px 0 10px;gap:8px'});
+  _hdrRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap'}, day.focus || ''));
+  var _hdrMeta = h('div', {style: 'display:flex;align-items:center;gap:10px;flex-shrink:0;white-space:nowrap'});
+  var _hdrWeek = S.muscuWeek || 1;
+  _hdrMeta.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65)'}, 'Sém.\u00a0' + _hdrWeek));
+  var _hdrAllEx = (day.exercises || []).concat((S.bonusExercises || {})[S.selectedSportDay] || []);
+  var _hdrDur = calcSessionDuration(_hdrAllEx);
+  if (_hdrDur > 0) _hdrMeta.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65)'}, '~' + _hdrDur + '\u00a0min'));
+  var _hdrProgRate = S.sportLevel === 'beginner' ? 0.025 : 0.05;
+  var _hdrProgPct = Math.round(_hdrProgRate * Math.min(_hdrWeek - 1, 12) * 100);
+  if (_hdrProgPct > 0) _hdrMeta.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:600;color:var(--success,#3E5C3A)'}, '+' + _hdrProgPct + '%'));
+  _hdrRow.appendChild(_hdrMeta);
+  p.appendChild(_hdrRow);
+ })();
 
- // ─── SESSION BRIEF CARD (beginners only) ───
- if (S.sportLevel === 'beginner') {
-  var MUSCLE_BRIEFS = {
-   'poitrine':    { why: 'les pectoraux, c\'est la base du push — ça renforce tes bras et tes épaules en même temps', tip: 'Sens bien la contraction à chaque rep — la qualité prime sur le poids' },
-   'pectoral':    { why: 'les pectoraux, c\'est la base du push — ça renforce tes bras et tes épaules en même temps', tip: 'Sens bien la contraction à chaque rep — la qualité prime sur le poids' },
-   'dos':         { why: 'un dos fort = meilleure posture et moins de douleurs au quotidien', tip: 'Tire avec les coudes, pas avec les mains — c\'est là que le dos bosse vraiment' },
-   'dorsaux':     { why: 'un dos fort = meilleure posture et moins de douleurs au quotidien', tip: 'Tire avec les coudes, pas avec les mains — c\'est là que le dos bosse vraiment' },
-   'épaule':      { why: 'des épaules solides stabilisent tout ton upper body — indispensables pour pousser et tirer fort', tip: 'Commence léger — les épaules, ça se blesse vite' },
-   'jambe':       { why: 'tes jambes sont tes plus gros muscles — elles brûlent un max de calories et boostent toute ta force', tip: 'Garde le genou dans l\'axe du pied à chaque rep' },
-   'quadri':      { why: 'les quadriceps te propulsent à chaque pas, saut ou accélération — bosser les jambes, c\'est tout gagner', tip: 'Descends lentement (3s) — c\'est là que l\'essentiel se passe' },
-   'fessier':     { why: 'les fessiers = ton moteur de puissance et la meilleure protection de ton dos', tip: 'Serre bien en haut de chaque mouvement — c\'est là que ça travaille vraiment' },
-   'bras':        { why: 'biceps et triceps ensemble : tout pour tirer fort et pousser fort', tip: 'Contrôle la descente — c\'est la phase où le muscle grandit le plus' },
-   'biceps':      { why: 'les biceps te permettent de tirer — indispensables pour les tractions et un dos puissant', tip: 'Contrôle la descente — c\'est la phase où le muscle grandit le plus' },
-   'triceps':     { why: 'les triceps représentent 2/3 du volume du bras — si tu veux des bras, travaille-les !', tip: 'Extension complète à chaque rep — ne raccourcis pas le mouvement' },
-   'abdo':        { why: 'un core solide, c\'est chaque mouvement plus puissant et ton dos protégé', tip: 'Gainage plutôt que crunches — tiens la position, c\'est bien plus efficace' },
-   'abdominaux':  { why: 'un core solide, c\'est chaque mouvement plus puissant et ton dos protégé', tip: 'Gainage plutôt que crunches — tiens la position, c\'est bien plus efficace' },
-   'corps entier':{ why: 'séance complète = tu stimules tous les muscles et brûles un maximum de calories', tip: 'Récupère bien — t\'as beaucoup bossé aujourd\'hui !' }
-  };
-  var focusLower = (day.focus || '').toLowerCase();
-  var matchedBrief = null;
-  var briefKeys = Object.keys(MUSCLE_BRIEFS);
-  for (var bk = 0; bk < briefKeys.length; bk++) {
-   if (focusLower.indexOf(briefKeys[bk]) !== -1) { matchedBrief = MUSCLE_BRIEFS[briefKeys[bk]]; break; }
-  }
-  var briefCard = h('div', {style: 'background:var(--paper-2,#F4F1EA);border-left:3px solid var(--ink-900,#0A0A09);padding:14px 16px;margin-bottom:16px;border-radius:0'});
-  briefCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--success,#3E5C3A);margin-bottom:6px'}, 'SÉANCE DU JOUR'));
-  briefCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin-bottom:8px;color:var(--black,#1A1A18)'}, day.focus || ''));
-  if (matchedBrief) {
-   briefCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:8px'}, matchedBrief.why));
-   briefCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey,#6B6B65)'}, matchedBrief.tip));
-  } else {
-   briefCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:8px'}, 'Aujourd\'hui tu travailles ' + day.focus));
-   briefCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey,#6B6B65)'}, 'Chaque rep compte — concentre-toi sur la technique, pas sur le poids'));
-  }
-  p.appendChild(briefCard);
- }
-
- // ─── CTA SÉANCE — badge "validée" en haut si session complétée (bouton déplacé en bas) ───
+ // ─── BADGE SÉANCE VALIDÉE ───
  var _ctaToday = new Date().toISOString().slice(0, 10);
  var _ctaTodayKey = S.selectedSportDay + '_' + _ctaToday;
  var _ctaDone = S.sessionHistory && S.sessionHistory[_ctaTodayKey];
  if (_ctaDone) {
-   var _ctaDoneBadge = h('div', {style: 'border:1px solid var(--line,#D8D8D0);background:rgba(62,92,58,0.06);padding:10px 14px;margin-bottom:14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--success,#3E5C3A);display:flex;align-items:center;gap:8px;'});
+   var _ctaDoneBadge = h('div', {style: 'border:1px solid var(--line,#D8D8D0);background:rgba(62,92,58,0.06);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--success,#3E5C3A);display:flex;align-items:center;gap:8px;'});
    _ctaDoneBadge.appendChild(h('span', {}, '\u2714'));
-   _ctaDoneBadge.appendChild(h('span', {}, 'S\u00e9ance valid\u00e9e \u2014 ' + _ctaDone.duration + '\u00a0min \u00b7 ' + _ctaDone.kcalTotal + '\u00a0kcal'));
+   _ctaDoneBadge.appendChild(h('span', {}, 'Séance validée\u00a0— ' + _ctaDone.duration + '\u00a0min\u00a0·\u00a0' + _ctaDone.kcalTotal + '\u00a0kcal'));
    p.appendChild(_ctaDoneBadge);
  }
-
- // ─── INDICATEUR SURCHARGE PROGRESSIVE ───
- (function() {
-  var weekNum = S.muscuWeek || 1;
-  var progressRate = S.sportLevel === 'beginner' ? 0.025 : 0.05;
-  var progressPct = Math.round(progressRate * Math.min(weekNum - 1, 12) * 100);
-  if (weekNum > 1) {
-   var _progInd = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);letter-spacing:0.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px'});
-   _progInd.appendChild(h('span', {style: 'font-weight:600;color:var(--black,#1A1A18)'}, 'Semaine ' + weekNum));
-   if (progressPct > 0) {
-    _progInd.appendChild(h('span', {style: 'color:var(--success,#3E5C3A);font-weight:600'}, '· Objectif progression +' + progressPct + '%'));
-   }
-   p.appendChild(_progInd);
-  }
- })();
-
- // ─── ÉCHAUFFEMENT ───
- (function() {
-  var wu = day.warmup || {
-   duration: 8,
-   exercises: [
-    { name: 'Cardio léger (vélo/tapis)', duration: '5 min', intensity: 'Faible' },
-    { name: 'Mobilité articulaire', duration: '3 min', notes: 'Cercles épaules, hanches, chevilles' }
-   ]
-  };
-  var wuCard = h('div', {style: 'background:rgba(62,92,58,0.06);border:1px solid var(--line,#D8D8D0);border-left:3px solid var(--success,#3E5C3A);padding:16px;margin-bottom:16px;border-radius:2px'});
-  wuCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--green,#3E5C3A);font-weight:600;margin-bottom:8px'}, 'ÉCHAUFFEMENT · ' + wu.duration + ' min'));
-  (wu.exercises || []).forEach(function(ex) {
-   var row = h('div', {style: 'display:flex;align-items:flex-start;gap:8px;margin-bottom:4px'});
-   row.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#1A1A18);font-weight:500;flex-shrink:0;min-width:180px'}, ex.name + ' — ' + ex.duration));
-   var detail = (ex.intensity || '') + (ex.notes ? (ex.intensity ? ' · ' : '') + ex.notes : '');
-   if (detail) row.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);line-height:1.4'}, detail));
-   wuCard.appendChild(row);
-  });
-  p.appendChild(wuCard);
- })();
 
  var _totalExercises = (day.exercises || []).length;
 
@@ -8310,7 +8252,37 @@ function renderMusculationProgram(p) {
 
  p.appendChild(_swipeWrap);
 
- // ─── RETOUR AU CALME ───
+ // ─── ÉCHAUFFEMENT (collapsible) ───
+ (function() {
+  var wu = day.warmup || {
+   duration: 8,
+   exercises: [
+    { name: 'Cardio léger (vélo/tapis)', duration: '5 min', intensity: 'Faible' },
+    { name: 'Mobilité articulaire', duration: '3 min', notes: 'Cercles épaules, hanches, chevilles' }
+   ]
+  };
+  var _wuOpen = !!S._wuOpen;
+  var wuBar = h('div', {
+   style: 'display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:rgba(62,92,58,0.04);border:1px solid var(--border,#D8D8D0);border-left:3px solid var(--success,#3E5C3A);cursor:pointer;margin-top:12px;margin-bottom:' + (_wuOpen ? '0' : '16px'),
+   onclick: function(e) { e.stopPropagation(); S._wuOpen = !S._wuOpen; window.render(); }
+  });
+  wuBar.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--green,#3E5C3A);font-weight:600'}, '\u00c9CHAUFFEMENT\u00a0·\u00a0' + wu.duration + '\u00a0min'));
+  wuBar.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65)'}, _wuOpen ? '\u25b2' : '\u25bc'));
+  p.appendChild(wuBar);
+  if (_wuOpen) {
+   var wuContent = h('div', {style: 'background:rgba(62,92,58,0.03);border:1px solid var(--border,#D8D8D0);border-top:none;border-left:3px solid var(--success,#3E5C3A);padding:12px 14px;margin-bottom:16px;'});
+   (wu.exercises || []).forEach(function(ex) {
+    var row = h('div', {style: 'display:flex;align-items:flex-start;gap:8px;margin-bottom:4px'});
+    row.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#1A1A18);font-weight:500;flex-shrink:0;min-width:180px'}, ex.name + '\u00a0—\u00a0' + ex.duration));
+    var detail = (ex.intensity || '') + (ex.notes ? (ex.intensity ? '\u00a0·\u00a0' : '') + ex.notes : '');
+    if (detail) row.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);line-height:1.4'}, detail));
+    wuContent.appendChild(row);
+   });
+   p.appendChild(wuContent);
+  }
+ })();
+
+ // ─── RÉCUPÉRATION (collapsible) ───
  (function() {
   var cd = day.cooldown || {
    duration: 5,
@@ -8319,17 +8291,74 @@ function renderMusculationProgram(p) {
     { name: 'Étirements statiques', duration: '2 min', notes: 'Groupes musculaires travaillés' }
    ]
   };
-  var cdCard = h('div', {style: 'background:rgba(26,58,106,0.06);border:1px solid rgba(26,58,106,0.12);border-left:3px solid var(--blue,#1A3A6A);padding:16px;margin-top:12px;margin-bottom:16px;border-radius:2px'});
-  cdCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#1A3A6A;font-weight:600;margin-bottom:8px'}, 'RÉCUPÉRATION · ' + cd.duration + ' min'));
-  (cd.exercises || []).forEach(function(ex) {
-   var row = h('div', {style: 'display:flex;align-items:flex-start;gap:8px;margin-bottom:4px'});
-   row.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#1A1A18);font-weight:500;flex-shrink:0;min-width:180px'}, ex.name + ' — ' + ex.duration));
-   var detail = (ex.intensity || '') + (ex.notes ? (ex.intensity ? ' · ' : '') + ex.notes : '');
-   if (detail) row.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);line-height:1.4'}, detail));
-   cdCard.appendChild(row);
+  var _cdOpen = !!S._cdOpen;
+  var cdBar = h('div', {
+   style: 'display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:rgba(26,58,106,0.04);border:1px solid rgba(26,58,106,0.12);border-left:3px solid var(--blue,#1A3A6A);cursor:pointer;margin-bottom:' + (_cdOpen ? '0' : '16px'),
+   onclick: function(e) { e.stopPropagation(); S._cdOpen = !S._cdOpen; window.render(); }
   });
-  p.appendChild(cdCard);
+  cdBar.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:#1A3A6A;font-weight:600'}, 'RÉCUPÉRATION\u00a0·\u00a0' + cd.duration + '\u00a0min'));
+  cdBar.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65)'}, _cdOpen ? '\u25b2' : '\u25bc'));
+  p.appendChild(cdBar);
+  if (_cdOpen) {
+   var cdContent = h('div', {style: 'background:rgba(26,58,106,0.03);border:1px solid rgba(26,58,106,0.12);border-top:none;border-left:3px solid var(--blue,#1A3A6A);padding:12px 14px;margin-bottom:16px;'});
+   (cd.exercises || []).forEach(function(ex) {
+    var row = h('div', {style: 'display:flex;align-items:flex-start;gap:8px;margin-bottom:4px'});
+    row.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#1A1A18);font-weight:500;flex-shrink:0;min-width:180px'}, ex.name + '\u00a0—\u00a0' + ex.duration));
+    var detail = (ex.intensity || '') + (ex.notes ? (ex.intensity ? '\u00a0·\u00a0' : '') + ex.notes : '');
+    if (detail) row.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);line-height:1.4'}, detail));
+    cdContent.appendChild(row);
+   });
+   p.appendChild(cdContent);
+  }
  })();
+
+ // ─── BRIEF DÉBUTANT (collapsible, en bas) ───
+ if (S.sportLevel === 'beginner') {
+  (function() {
+   var MUSCLE_BRIEFS_B = {
+    'poitrine':    { why: 'les pectoraux, c\'est la base du push — ça renforce tes bras et tes épaules en même temps', tip: 'Sens bien la contraction à chaque rep — la qualité prime sur le poids' },
+    'pectoral':    { why: 'les pectoraux, c\'est la base du push — ça renforce tes bras et tes épaules en même temps', tip: 'Sens bien la contraction à chaque rep — la qualité prime sur le poids' },
+    'dos':         { why: 'un dos fort = meilleure posture et moins de douleurs au quotidien', tip: 'Tire avec les coudes, pas avec les mains — c\'est là que le dos bosse vraiment' },
+    'dorsaux':     { why: 'un dos fort = meilleure posture et moins de douleurs au quotidien', tip: 'Tire avec les coudes, pas avec les mains — c\'est là que le dos bosse vraiment' },
+    'épaule':      { why: 'des épaules solides stabilisent tout ton upper body — indispensables pour pousser et tirer fort', tip: 'Commence léger — les épaules, ça se blesse vite' },
+    'jambe':       { why: 'tes jambes sont tes plus gros muscles — elles brûlent un max de calories et boostent toute ta force', tip: 'Garde le genou dans l\'axe du pied à chaque rep' },
+    'quadri':      { why: 'les quadriceps te propulsent à chaque pas, saut ou accélération — bosser les jambes, c\'est tout gagner', tip: 'Descends lentement (3s) — c\'est là que l\'essentiel se passe' },
+    'fessier':     { why: 'les fessiers = ton moteur de puissance et la meilleure protection de ton dos', tip: 'Serre bien en haut de chaque mouvement — c\'est là que ça travaille vraiment' },
+    'bras':        { why: 'biceps et triceps ensemble : tout pour tirer fort et pousser fort', tip: 'Contrôle la descente — c\'est la phase où le muscle grandit le plus' },
+    'biceps':      { why: 'les biceps te permettent de tirer — indispensables pour les tractions et un dos puissant', tip: 'Contrôle la descente — c\'est la phase où le muscle grandit le plus' },
+    'triceps':     { why: 'les triceps représentent 2/3 du volume du bras — si tu veux des bras, travaille-les !', tip: 'Extension complète à chaque rep — ne raccourcis pas le mouvement' },
+    'abdo':        { why: 'un core solide, c\'est chaque mouvement plus puissant et ton dos protégé', tip: 'Gainage plutôt que crunches — tiens la position, c\'est bien plus efficace' },
+    'abdominaux':  { why: 'un core solide, c\'est chaque mouvement plus puissant et ton dos protégé', tip: 'Gainage plutôt que crunches — tiens la position, c\'est bien plus efficace' },
+    'corps entier':{ why: 'séance complète = tu stimules tous les muscles et brûles un maximum de calories', tip: 'Récupère bien — t\'as beaucoup bossé aujourd\'hui !' }
+   };
+   var _focusLowB = (day.focus || '').toLowerCase();
+   var _matchedBriefB = null;
+   var _briefKeysB = Object.keys(MUSCLE_BRIEFS_B);
+   for (var _bkB = 0; _bkB < _briefKeysB.length; _bkB++) {
+    if (_focusLowB.indexOf(_briefKeysB[_bkB]) !== -1) { _matchedBriefB = MUSCLE_BRIEFS_B[_briefKeysB[_bkB]]; break; }
+   }
+   var _briefOpen = !!S._briefOpen;
+   var briefBar = h('div', {
+    style: 'display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--paper-2,#F4F1EA);border:1px solid var(--border,#D8D8D0);border-left:3px solid var(--ink-900,#0A0A09);cursor:pointer;margin-bottom:' + (_briefOpen ? '0' : '16px'),
+    onclick: function(e) { e.stopPropagation(); S._briefOpen = !S._briefOpen; window.render(); }
+   });
+   briefBar.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--success,#3E5C3A);font-weight:600'}, 'POURQUOI CES MUSCLES\u00a0?'));
+   briefBar.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65)'}, _briefOpen ? '\u25b2' : '\u25bc'));
+   p.appendChild(briefBar);
+   if (_briefOpen) {
+    var briefContentB = h('div', {style: 'background:var(--paper-2,#F4F1EA);border:1px solid var(--border,#D8D8D0);border-top:none;border-left:3px solid var(--ink-900,#0A0A09);padding:14px 16px;margin-bottom:16px;'});
+    briefContentB.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;margin-bottom:8px;color:var(--black,#1A1A18)'}, day.focus || ''));
+    if (_matchedBriefB) {
+     briefContentB.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:8px'}, _matchedBriefB.why));
+     briefContentB.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey,#6B6B65)'}, _matchedBriefB.tip));
+    } else {
+     briefContentB.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:8px'}, 'Aujourd\'hui tu travailles ' + day.focus));
+     briefContentB.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey,#6B6B65)'}, 'Chaque rep compte — concentre-toi sur la technique, pas sur le poids'));
+    }
+    p.appendChild(briefContentB);
+   }
+  })();
+ }
 
  // ─── EXERCICES BONUS (depuis programmes dédiés) ───
  var bonusDayList = (S.bonusExercises || {})[S.selectedSportDay] || [];
