@@ -399,6 +399,27 @@ function _initAuth() {
       if (event === 'SIGNED_IN' && window.SOCIAL && window.SOCIAL.initProfile) {
         window.SOCIAL.initProfile().catch(function(){});
       }
+      // FIX EMAIL CONFIRM 2026-04 : quand Supabase redirige vers l'app avec
+      // #access_token=... après confirmation email, le client traite le hash et
+      // fire SIGNED_IN — mais render() n'était jamais appelé → écran authVerify
+      // restait bloqué (bouton "J'ai confirmé mon email" semblait mort).
+      if (event === 'SIGNED_IN' && window.S && window.S.view === 'authVerify' && _currentSession) {
+        _migrateAnonKeys(_currentSession.id);
+        window.S.authError = '';
+        if (window.S.appMode === 'sport') {
+          window.S.view = 'sport';
+        } else {
+          window.S.view = 'nutrition';
+          window.S.nStep = 0;
+        }
+        if (window.GAMIFICATION) {
+          try { window.GAMIFICATION.unlockBadge('first_login'); } catch(e) {}
+        }
+        if (window.SupaSync) {
+          try { window.SupaSync.syncOnLogin(); window.SupaSync.startAutoSync(); } catch(e) {}
+        }
+        if (window.render) { try { window.render(); } catch(e) {} }
+      }
     } else {
       _currentSession = null;
     }
