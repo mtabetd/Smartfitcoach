@@ -3406,5 +3406,6 @@ window.WEEKLY_SPLITS = WEEKLY_SPLITS;
 window.getPersonalizedProgram = getPersonalizedProgram;
 window.getProgressiveProgram = getProgressiveProgram;
 window.getWeeklySplit = getWeeklySplit;
+window.EXERCISE_ALTERNATIVES = EXERCISE_ALTERNATIVES;
 
 })();

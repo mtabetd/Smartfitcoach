@@ -11534,4 +11534,6 @@ window.exportSportPDF = function() {
   } catch(e) { console.error('[exportSportPDF] Erreur:', e); if (window.showToast) window.showToast('Erreur lors de la g\u00e9n\u00e9ration du PDF programme', 'error', 3500); }
 };
 
+window.generateSportProgram = generateSportProgram;
+
 })();

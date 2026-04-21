@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartFitCoach — Suite de tests</title>
+<style>
+  body { font-family: "Helvetica Neue", Arial, sans-serif; background: #FAF9F6; color: #0A0A09; padding: 40px 20px; margin: 0; }
+  .wrap { max-width: 600px; margin: 0 auto; }
+  h1 { font-family: Georgia, serif; font-size: 28px; color: #0A0A09; margin: 0 0 8px; }
+  p { color: #6B6B65; font-size: 13px; line-height: 1.6; }
+  .warn { background: rgba(240, 170, 0, .1); border-left: 3px solid #C8860D; padding: 12px 16px; margin: 20px 0; font-size: 12px; color: #6A4A1A; }
+  code { background: #EFEDE6; padding: 2px 6px; border-radius: 2px; font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Suite de tests SmartFitCoach</h1>
+  <p>Cette page charge l'ensemble des modules de l'app puis exécute <code>tests.js</code>. Le rapport s'affiche dans un panneau latéral (et dans la console du navigateur).</p>
+  <div class="warn">
+    <strong>⚠ Ne pas déployer en production.</strong> Cette page ne doit pas être linkée depuis l'app utilisateur — elle sert uniquement à valider le code en local ou après déploiement d'une nouvelle version.
+  </div>
+  <p>En cas d'échec, ouvrir la console (F12) pour voir le détail des assertions qui ont échoué.</p>
+</div>
+
+<!-- Mêmes scripts que index.html, ordre identique pour garantir un environnement représentatif -->
+<script defer src="./security-init.js"></script>
+<script defer src="./gate.js"></script>
+<script defer src="./error-boundary.js"></script>
+<script defer src="./chart.umd.min.js"></script>
+<script defer src="./jspdf.umd.min.js"></script>
+<script defer src="./prices-db.js"></script>
+<script defer src="./recipe-engine.js"></script>
+<script defer src="./supabase.min.js"></script>
+<script defer src="supabase-client.js"></script>
+<script defer src="./exercise-gifs-map.js"></script>
+<script defer src="./exercises-db.js"></script>
+<script defer src="./crossfit-wods.js"></script>
+<script defer src="./crossfit-wods-cycle2.js"></script>
+<script defer src="./crossfit-wods-cycle3.js"></script>
+<script defer src="./crossfit-wods-merge.js"></script>
+<script defer src="./crossfit-haltero-cycles.js"></script>
+<script defer src="./auth.js"></script>
+<script defer src="./gamification.js"></script>
+<script defer src="./extras.js"></script>
+<script defer src="./food-db.js"></script>
+<script defer src="./food-portions.js"></script>
+<script defer src="./analytics.js"></script>
+<script defer src="./tips-assistant.js"></script>
+<script defer src="./muscu-programs.js"></script>
+<script defer src="./exercise-videos.js"></script>
+<script defer src="./nutrition-master.js"></script>
+<script defer src="./muscle-taxonomy.js"></script>
+<script defer src="./app-core.js"></script>
+<script defer src="./triathlon-program.js"></script>
+<script defer src="./perf-history.js"></script>
+<script defer src="./app-nutrition.js"></script>
+<script defer src="./calisthenics-program.js"></script>
+<script defer src="./app-sport.js"></script>
+<script defer src="./motivation.js"></script>
+<script defer src="./motivation-library.js"></script>
+<script defer src="./today-dashboard.js"></script>
+<script defer src="./smart-calendar.js"></script>
+
+<!-- Suite de tests — doit être chargée EN DERNIER pour que toutes les fonctions soient exposées -->
+<script defer src="./tests.js"></script>
+</body>
+</html>
