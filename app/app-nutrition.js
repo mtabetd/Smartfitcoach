@@ -3525,6 +3525,9 @@ function renderStep9(p) {
     if (timingBadge) mealTypeEl.appendChild(timingBadge);
     card.appendChild(mealTypeEl);
     card.appendChild(h('div', {'class': 'meal-name'}, [h('span', {'class': 'meal-flag'}, r.f || ''), txt(r.n || 'Repas')]));
+    if (r.n === 'Repas libre') {
+      card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--tabac,#6A4A1A);margin-bottom:4px;'}, '◦ À personnaliser — aucune recette disponible avec vos filtres'));
+    }
     card.appendChild(h('div', {'class': 'meal-kcal'}, (r.k || 0) + ' kcal'));
     var mc = h('div', {'class': 'meal-macros'});
     var _microMacroStyle = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);';
