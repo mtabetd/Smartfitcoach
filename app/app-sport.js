@@ -583,7 +583,12 @@ function generateSportProgram() {
  }
  if (S.sportEquipment === 'none') {
  // Poids du corps + équipement minimal (barre de traction, barres parallèles, élastique)
- // Exclure tout ce qui nécessite achat de matériel (haltères, barre, câble, machines)
+ // Exclure tout ce qui nécessite achat de matériel (haltères, barre olympique, câble, machines, banc)
+ // FIX 2026-04-21 : bug "Board press [Barre + banc + planche(s) de bois]" qui passait via le mot "planche".
+ // On exclut d'abord strictement tout setup complexe (barre+, banc, machine, etc.) AVANT le allow-list.
+ if (/\bbarre\s*\+|\bbanc\b|machine|smith|pec deck|convergente|landmine|\bt[-\s]?bar\b|c[âa]ble|poulie|hack squat|\brack\b|kettlebell|\bkb\b|halt[èe]res?|\bhaltere\b|\bdisque\b|gh[rd]|chaise romaine|roulette|swiss ball|ab\s+dolly|roue abdominale|trap bar|hex bar/i.test(eq)) {
+   return false;
+ }
  return /poids du corps|poids de corps|sans mat|sol|aucun|barre de traction|barres parall|parall[eè]les|élastique|elastique|gainage|planche|pompe|dips|traction|squat libre|fentes libres|burpee|mountain climber|crunch/.test(eq + ' ' + name);
  }
  return true;

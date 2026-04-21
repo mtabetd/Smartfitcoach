@@ -3203,7 +3203,20 @@ function getAlternativeExercises(muscle, excludeName, maxCount, userLevel) {
     ['abdo', 'abdos'], ['abdominaux', 'abdos'], ['core', 'abdos'],
     ['trap\u00e8ze', 'trapezes'], ['trapeze', 'trapezes'], ['rhombo', 'trapezes'], ['shrug', 'trapezes'],
     ['lombaire', 'lombaires'], ['\u00e9recteur', 'lombaires'], ['erecteur', 'lombaires'], ['bas du dos', 'lombaires'], ['lower back', 'lombaires'],
-    ['bras', 'biceps']
+    ['bras', 'biceps'],
+    // ── Mappings supplémentaires couvrant les m-values de exercises-db.js ─
+    ['coiffe', 'epaules'],
+    ['rotateur', 'epaules'],
+    ['gastrocnem', 'mollets'],
+    ['tibial', 'mollets'],
+    ['cheville', 'mollets'],
+    ['vaste interne', 'quadriceps'],
+    ['vmo', 'quadriceps'],
+    ['adducteur', 'fessiers'],
+    ['piriforme', 'fessiers'],
+    ['serratus', 'epaules'],
+    ['psoas', 'abdos'],
+    ['colonne', 'lombaires']
   ];
   for (var ki = 0; ki < keyMap.length; ki++) {
     if (ml.indexOf(keyMap[ki][0]) !== -1) { dbKey = keyMap[ki][1]; break; }
