@@ -5217,7 +5217,7 @@ function swapMeal(di,slot){
     var usedSm=new Set([curId]);
     var nrSm=pickSmoothieForPlan(tgt,usedSm);
     if(nrSm){s.weekPlan[di][slot]=nrSm;if(typeof window.saveProfile==='function'){try{window.saveProfile();}catch(e){}}if(typeof window.render==='function')window.render();return;}
-    else return;
+    // Fallback : smoothie DB épuisé → swap vers collation normale
   }
   // Autres slots — swap recette normale
   var pool=filterRecipes(getPool(slot),slot);
