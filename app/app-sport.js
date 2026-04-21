@@ -1005,7 +1005,7 @@ function renderSportChoice(p) {
       if (_restTimerInterval) { clearInterval(_restTimerInterval); _restTimerInterval = null; }
       S.sportType = null; S.sStep = 0; S.selectedSportDay = 0;
       S.sportGoals = []; S.sportLevel = null; S.sportFocus = {};
-      S.sportProgram = null; S.sportDays = 3; S.sportSessionDuration = null;
+      S.sportProgram = null; S.sportDays = 3; S.sportSessionDuration = null; S.bonusExercises = {};
       S.bonusExercises = {}; S._splitChoice = null; S.cfCalendarOpen = false;
       S.trainingDaysSelected = [];
       S.sportMixEnabled = false; S.sportMixSecondary = null;
@@ -1190,7 +1190,7 @@ window.SPORT = {
        // Réinitialiser tous les champs liés au sport actif
        S.sportType = null; S.sStep = 0; S.selectedSportDay = 0;
        S.sportGoals = []; S.sportLevel = null; S.sportFocus = {};
-       S.sportProgram = null; S.sportDays = 3; S.sportSessionDuration = null;
+       S.sportProgram = null; S.sportDays = 3; S.sportSessionDuration = null; S.bonusExercises = {};
        S.bonusExercises = {}; S._splitChoice = null; S.cfCalendarOpen = false;
        S.trainingDaysSelected = [];
        S.sportMixEnabled = false; S.sportMixSecondary = null;
@@ -1969,7 +1969,7 @@ function renderMuscuMedicalQ(p) {
  delete S._muscuMedicalEdit;
  // FIX DESYNC CRITICAL 2026-04-16 — régénérer le programme après modif bilan médical
  // Avant : user modifie "hernie discale" depuis step 4, revient → deadlifts toujours dans le programme
- if (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) { S.sportProgram = null; S.muscuIAProgram = null; }
+ if (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) { S.sportProgram = null; S.muscuIAProgram = null; S.bonusExercises = {}; }
  if (S._medicalReturnToDashboard) { S._medicalReturnToDashboard = false; S.sStep = 4; }
  else { S.sStep = !S.sportLevel ? 1 : 16; }
  window.render();
@@ -1982,7 +1982,7 @@ function renderMuscuMedicalQ(p) {
  S.muscuMedical.done = true;
  delete S._muscuMedicalEdit;
  // FIX DESYNC CRITICAL 2026-04-16 — idem bouton Passer
- if (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) { S.sportProgram = null; S.muscuIAProgram = null; }
+ if (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) { S.sportProgram = null; S.muscuIAProgram = null; S.bonusExercises = {}; }
  if (S._medicalReturnToDashboard) { S._medicalReturnToDashboard = false; S.sStep = 4; }
  else { S.sStep = !S.sportLevel ? 1 : 16; }
  window.render();
@@ -2545,7 +2545,7 @@ function renderMusculationGoals(p) {
  if (on) S.sportGoals = S.sportGoals.filter(function(x){ return x !== gl.id; });
  else if (S.sportGoals.length < 3) S.sportGoals.push(gl.id);
  // FIX DESYNC 2026-04-16 — invalider sportProgram si goals changent (repos/reps baked at gen time)
- if (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) { S.sportProgram = null; S.muscuIAProgram = null; }
+ if (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) { S.sportProgram = null; S.muscuIAProgram = null; S.bonusExercises = {}; }
  syncSportGoalsToNutrition();
  window.render();
  }}, [
@@ -4858,6 +4858,7 @@ function renderMusculationLevel(p) {
    if (prevLevel && prevLevel !== lv.id && Array.isArray(S.sportProgram) && S.sportProgram.length > 0) {
      S.sportProgram = null;
      S.muscuIAProgram = null;
+     S.bonusExercises = {};
      try { if (window.showToast) window.showToast('Niveau changé. Régénère ton programme.', 'info', 3000); } catch(_e) {}
    }
    window.render();
@@ -4872,8 +4873,8 @@ function renderMusculationLevel(p) {
  var nw = h('div', {'class': 'num-input-wrap'});
  nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '6', value: String(S.sportDays || 3), inputmode: 'numeric', 'aria-label': 'Nombre de jours d\'entraînement par semaine',
  // FIX DESYNC 2026-04-16 — invalider sportProgram si days change (sinon labels 3j mais programme 5j)
- oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) { var prev = S.sportDays; S.sportDays = v; if (prev !== v && Array.isArray(S.sportProgram) && S.sportProgram.length > 0) { S.sportProgram = null; S.muscuIAProgram = null; } if (S.sportMixSecondary && S.sportMixSecondary.days >= v) { S.sportMixSecondary.days = Math.max(1, v - 2); } window.render(); } },
- onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) { v = 2; e.target.value = S.sportDays = 2; } else if (v > 6) { v = 6; e.target.value = S.sportDays = 6; } if (Array.isArray(S.sportProgram) && S.sportProgram.length > 0 && S.sportProgram.length !== v) { S.sportProgram = null; S.muscuIAProgram = null; } if (S.sportMixSecondary && S.sportMixSecondary.days >= v) { S.sportMixSecondary.days = Math.max(1, v - 2); } window.render(); }
+ oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) { var prev = S.sportDays; S.sportDays = v; if (prev !== v && Array.isArray(S.sportProgram) && S.sportProgram.length > 0) { S.sportProgram = null; S.muscuIAProgram = null; S.bonusExercises = {}; } if (S.sportMixSecondary && S.sportMixSecondary.days >= v) { S.sportMixSecondary.days = Math.max(1, v - 2); } window.render(); } },
+ onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) { v = 2; e.target.value = S.sportDays = 2; } else if (v > 6) { v = 6; e.target.value = S.sportDays = 6; } if (Array.isArray(S.sportProgram) && S.sportProgram.length > 0 && S.sportProgram.length !== v) { S.sportProgram = null; S.muscuIAProgram = null; S.bonusExercises = {}; } if (S.sportMixSecondary && S.sportMixSecondary.days >= v) { S.sportMixSecondary.days = Math.max(1, v - 2); } window.render(); }
  }));
  nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
  p.appendChild(nw);
@@ -4913,7 +4914,7 @@ function renderMusculationLevel(p) {
        var _prevDays = S.sportDays;
        if (S.trainingDaysSelected.length > 0) S.sportDays = Math.max(2, S.trainingDaysSelected.length);
        // FIX DESYNC 2026-04-16 — invalider sportProgram si nombre de jours change
-       if (_prevDays !== S.sportDays && Array.isArray(S.sportProgram) && S.sportProgram.length > 0) { S.sportProgram = null; S.muscuIAProgram = null; }
+       if (_prevDays !== S.sportDays && Array.isArray(S.sportProgram) && S.sportProgram.length > 0) { S.sportProgram = null; S.muscuIAProgram = null; S.bonusExercises = {}; }
        // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (jours training changés)
        if (window.devalidateWeekPlan) window.devalidateWeekPlan('trainingDaysSelected changed');
        else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
@@ -4967,6 +4968,7 @@ function renderMusculationLevel(p) {
    if (prevEq && prevEq !== eq.id && Array.isArray(S.sportProgram) && S.sportProgram.length > 0) {
      S.sportProgram = null;
      S.muscuIAProgram = null;
+     S.bonusExercises = {};
      try { if (window.showToast) window.showToast('Équipement changé. Régénère ton programme.', 'info', 3000); } catch(_e) {}
    }
    window.render();
@@ -6437,6 +6439,7 @@ function renderMusculationProgram(p) {
      console.warn('[sport] Programme non-validé stale (v' + (S._sportProgramVersion || 0) + ') — régénération');
      S.sportProgram = null;
      S._sportProgramVersion = null;
+     S.bonusExercises = {};
    }
  }
  if (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) {
@@ -8904,16 +8907,26 @@ function renderMusculationProgram(p) {
  right.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:2px'}, ex.rest));
  // Bouton + / Ajouté — ajoute l'exercice en bonus à la séance courante
  var bonusArr = (S.bonusExercises || {})[S.selectedSportDay] || [];
+ var _exBaseKey = (exBase.name || '').toLowerCase().trim();
  var isAddedBonus = false;
- for (var bci = 0; bci < bonusArr.length; bci++) { if (bonusArr[bci].n === exBase.name) { isAddedBonus = true; break; } }
+ for (var bci = 0; bci < bonusArr.length; bci++) { if ((bonusArr[bci].n || '').toLowerCase().trim() === _exBaseKey) { isAddedBonus = true; break; } }
+ // Anti-doublon global : l'exercice est-il déjà dans la séance principale ?
+ var _inMain = false;
+ if (Array.isArray(S.sportProgram) && S.sportProgram[S.selectedSportDay] && Array.isArray(S.sportProgram[S.selectedSportDay].exercises)) {
+   for (var bmi = 0; bmi < S.sportProgram[S.selectedSportDay].exercises.length; bmi++) {
+     if ((S.sportProgram[S.selectedSportDay].exercises[bmi].n || '').toLowerCase().trim() === _exBaseKey) { _inMain = true; break; }
+   }
+ }
  var addBtn = h('div', {
- style: 'margin-top:6px;padding:4px 8px;cursor:pointer;font-family:"Helvetica Neue",sans-serif;font-size:11px;text-align:center;border:1px solid ' + (isAddedBonus ? '#1A4A1A' : 'var(--border)') + ';color:' + (isAddedBonus ? '#1A4A1A' : 'var(--grey)') + ';background:' + (isAddedBonus ? 'rgba(39,174,96,0.08)' : 'transparent'),
- onclick: (function(exBCapture) { return function(e) {
+ style: 'margin-top:6px;padding:4px 8px;cursor:' + (_inMain && !isAddedBonus ? 'not-allowed' : 'pointer') + ';font-family:"Helvetica Neue",sans-serif;font-size:11px;text-align:center;border:1px solid ' + (isAddedBonus ? '#1A4A1A' : (_inMain ? '#DDDBD0' : 'var(--border)')) + ';color:' + (isAddedBonus ? '#1A4A1A' : (_inMain ? '#AAA7A0' : 'var(--grey)')) + ';background:' + (isAddedBonus ? 'rgba(39,174,96,0.08)' : 'transparent') + ';opacity:' + (_inMain && !isAddedBonus ? '0.55' : '1'),
+ onclick: (function(exBCapture, inMainCapture) { return function(e) {
  e.stopPropagation();
+ if (inMainCapture) { if (window.showToast) window.showToast('⚠ ' + exBCapture.name + ' est déjà dans cette séance', 'warning', 2500); return; }
  if (!S.bonusExercises) S.bonusExercises = {};
  var arr = S.bonusExercises[S.selectedSportDay] || [];
+ var _k = (exBCapture.name || '').toLowerCase().trim();
  var existIdx = -1;
- for (var ii = 0; ii < arr.length; ii++) { if (arr[ii].n === exBCapture.name) { existIdx = ii; break; } }
+ for (var ii = 0; ii < arr.length; ii++) { if ((arr[ii].n || '').toLowerCase().trim() === _k) { existIdx = ii; break; } }
  if (existIdx === -1) {
  var ph = getMuscuPhase(S.muscuWeek || 1);
  var appl = applyPhaseToExercise(exBCapture, ph);
@@ -8924,8 +8937,8 @@ function renderMusculationProgram(p) {
  S.bonusExercises[S.selectedSportDay] = arr;
  }
  window.render();
- }; })(exBase)
- }, isAddedBonus ? '\u2713 Ajout\u00e9' : '+ Ajouter \u00e0 ma s\u00e9ance');
+ }; })(exBase, _inMain)
+ }, isAddedBonus ? '\u2713 Ajout\u00e9' : (_inMain ? 'D\u00e9j\u00e0 dans la s\u00e9ance' : '+ Ajouter \u00e0 ma s\u00e9ance'));
  right.appendChild(addBtn);
  row.appendChild(right);
  card.appendChild(row);
@@ -11530,6 +11543,28 @@ window.exportSportPDF = function() {
         doc.setTextColor(black[0], black[1], black[2]);
         y += 10;
       });
+
+      // Exercices bonus ajout\u00e9s par l'utilisateur (FIX audit 2026-04)
+      var bonusList = (S.bonusExercises && S.bonusExercises[di]) || [];
+      if (bonusList.length > 0) {
+        if (y > 265) { doc.addPage(); y = 20; }
+        doc.setFont('helvetica', 'italic'); doc.setFontSize(8);
+        doc.setTextColor(grey[0], grey[1], grey[2]);
+        doc.text('Bonus :', M + 2, y);
+        y += 5;
+        bonusList.forEach(function(bex) {
+          if (y > 275) { doc.addPage(); y = 20; }
+          doc.setFont('times', 'normal'); doc.setFontSize(10);
+          doc.setTextColor(black[0], black[1], black[2]);
+          doc.text('+ ' + (bex.n || 'Exercice bonus'), M + 4, y);
+          doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
+          doc.setTextColor(grey[0], grey[1], grey[2]);
+          doc.text((bex.sets || '') + '  |  Repos ' + (bex.rest || '60s') + (bex.eq ? '  |  ' + bex.eq : ''), M + 4, y + 4);
+          doc.setTextColor(black[0], black[1], black[2]);
+          y += 9;
+        });
+      }
+
       y += 6;
     });
 
