@@ -2092,7 +2092,7 @@ function renderLogin(app) {
  form.appendChild(f2);
 
  // Login button
- var loginBtn = h('button', {'class': 'btn-primary', onclick: function(){
+ var loginBtn = h('button', {'class': 'btn-primary', 'type': 'button', onclick: function(){
  if (loginBtn.disabled) return;
  var email = emailInput.value.trim();
  var pw = pwInput.value;
@@ -2460,7 +2460,7 @@ function renderRegister(app) {
  form.appendChild(consentWrap);
 
  // ── Register button ───────────────────────────────────────────────
- var regBtn = h('button', {'class': 'btn-primary', onclick: function(){
+ var regBtn = h('button', {'class': 'btn-primary', 'type': 'button', onclick: function(){
  if (regBtn.disabled) return;
  var name = nameInput.value.trim();
  var nom  = nomInput.value.trim();
@@ -2543,6 +2543,7 @@ function renderVerifyEmail(app) {
  // Resend button
  form.appendChild(h('button', {
  'class': 'btn-primary',
+ 'type': 'button',
  style: 'background:transparent;border:1px solid var(--border);color:var(--fg);margin-bottom:10px;width:100%',
  onclick: function() {
  var client = window.getSupabaseClient ? window.getSupabaseClient() : null;
@@ -2571,6 +2572,7 @@ function renderVerifyEmail(app) {
  // Confirm button
  form.appendChild(h('button', {
  'class': 'btn-primary',
+ 'type': 'button',
  style: 'width:100%',
  onclick: function() {
  var client = window.getSupabaseClient ? window.getSupabaseClient() : null;
@@ -2671,7 +2673,7 @@ function renderForgotPassword(app) {
  form.appendChild(f1);
 
  // Send button
- var sendBtn = h('button', {'class': 'btn-primary', onclick: function() {
+ var sendBtn = h('button', {'class': 'btn-primary', 'type': 'button', onclick: function() {
  if (sendBtn.disabled) return;
  var email = emailInput.value.trim();
  if (!email) { S.authError = 'Veuillez entrer votre adresse email'; render(); return; }
@@ -2724,7 +2726,7 @@ function renderNewPassword(app) {
  h('div', {style: 'font-family:Georgia,serif;font-size:24px;margin-bottom:16px'}, 'Mot de passe modifi\u00e9'),
  h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);line-height:1.7;margin-bottom:24px'},
  'Votre mot de passe a \u00e9t\u00e9 mis \u00e0 jour. Vous \u00eates connect\u00e9 et votre programme vous attend.'),
- h('button', {'class': 'btn-primary', onclick: function() {
+ h('button', {'class': 'btn-primary', 'type': 'button', onclick: function() {
  S._passwordUpdated = false;
  S.authError = '';
  S.view = 'today';
@@ -2751,7 +2753,7 @@ function renderNewPassword(app) {
  f2.appendChild(pw2);
  form.appendChild(f2);
 
- var saveBtn = h('button', {'class': 'btn-primary', onclick: function() {
+ var saveBtn = h('button', {'class': 'btn-primary', 'type': 'button', onclick: function() {
  if (saveBtn.disabled) return;
  var p1 = pw1.value, p2 = pw2.value;
  if (!p1 || p1.length < 6) { S.authError = 'Minimum 6 caract\u00e8res'; render(); return; }
