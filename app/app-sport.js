@@ -7982,45 +7982,7 @@ function renderMusculationProgram(p) {
  }
  })(setRow, si3, exRef, numSets, isBodyweight, _exIdx, _dayExercises);
 
- // RIR input for advanced/pro users
- if (isAdvancedRIR) {
-  var _rirVal = setRow.rirActual !== null && setRow.rirActual !== undefined ? String(setRow.rirActual) : '';
-  var _rirInput = h('input', {
-   type: 'number', min: '0', max: '5', step: '1', inputmode: 'numeric',
-   value: _rirVal,
-   placeholder: '-',
-   // FIX P2 batch 2 : tap target 44×44px, font 16px anti-iOS-zoom, ivory bg harmonisé
-   style: 'width:44px;min-height:44px;padding:6px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:16px;text-align:center;background:var(--ivory);box-sizing:border-box',
-   onclick: function(e) { e.stopPropagation(); },
-   onchange: (function(_setRow, _exName) {
-    return function(e) {
-     e.stopPropagation();
-     var v = parseInt(e.target.value);
-     if (!isNaN(v) && v >= 0 && v <= 5) {
-      _setRow.rirActual = v;
-      // FIX 2026-04-16 — RIR target dérivé de MUSCU_PHASES (comme l'affichage ligne 6714)
-      // Avant : utilisait MESOCYCLE_WEEKS qui contredisait MUSCU_PHASES.
-      var _phaseForRIR = window.getMuscuPhase ? window.getMuscuPhase(S.muscuWeek || 1) : null;
-      var _rirTarget2 = _phaseForRIR ? Math.max(0, 10 - (_phaseForRIR.rpe || 8)) : 2;
-      // FIX P2 batch 2 — Auto-régulation charges basée sur RIR (Israetel RP).
-      // Écart de 2+ points → suggestion concrète ±2.5 kg (lift haut du corps)
-      //                   ou ±5 kg (lift bas du corps / compound lourd).
-      var _lbRegex = /squat|leg|fessier|ischios|mollet|presse|hip.*thrust|rdl|deadlift|soulev|cuisse|jambe/i;
-      var _incr = _lbRegex.test((_exName || '')) ? 5 : 2.5;
-      var _dRIR = v - _rirTarget2;
-      if (_dRIR >= 2) _setRow.rirNote = 'Trop facile — augmente de +' + _incr + ' kg la prochaine fois';
-      else if (_dRIR === 1) _setRow.rirNote = 'Facile — charge à maintenir ou +' + _incr + ' kg';
-      else if (_dRIR <= -2) _setRow.rirNote = 'Trop dur — réduis de −' + _incr + ' kg ou baisse les reps';
-      else if (_dRIR === -1) _setRow.rirNote = 'Limite — reste à cette charge';
-      else _setRow.rirNote = null;
-      try { localStorage.setItem('mtd_muscu_session_' + ((window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon'), JSON.stringify(S.muscuSessionLog)); } catch(e2) {}
-      window.render();
-     }
-    };
-   })(setRow, exRef && exRef.n)
-  });
-  inputZone.appendChild(_rirInput);
- }
+
  if (_pendingValBtn) { inputZone.appendChild(_pendingValBtn); }
  row.appendChild(rowContent);
  row.appendChild(inputZone);
