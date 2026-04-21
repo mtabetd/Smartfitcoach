@@ -183,7 +183,8 @@ var NUTRITION_PLAN_KEYS = [
 var SPORT_PROGRAM_KEYS = [
  'sportLevel', 'sportDays', 'sportEquipment', 'sportType', 'sportGoals',
  'sportFocus', 'muscuMedical',
- 'sportMixEnabled', 'sportMixSecondary'
+ 'sportMixEnabled', 'sportMixSecondary',
+ 'pregnant', 'pregnancyWeek' // grossesse filtre les exercices dangereux → programme doit être régénéré
 ];
 
 function saveProfile() {
