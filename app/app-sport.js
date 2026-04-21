@@ -7293,21 +7293,20 @@ function renderMusculationProgram(p) {
  // Current day — bounds check (already reset above)
  var day = S.sportProgram[S.selectedSportDay];
  if (day) {
- // ─── EN-TÊTE COMPACT : focus · semaine · durée · progression ───
+ // ─── EN-TÊTE : focus pleine largeur + méta en dessous ───
  (function() {
-  var _hdrRow = h('div', {style: 'display:flex;justify-content:space-between;align-items:baseline;margin:14px 0 10px;gap:8px'});
-  _hdrRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap'}, day.focus || ''));
-  var _hdrMeta = h('div', {style: 'display:flex;align-items:center;gap:10px;flex-shrink:0;white-space:nowrap'});
   var _hdrWeek = S.muscuWeek || 1;
-  _hdrMeta.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65)'}, 'Sém.\u00a0' + _hdrWeek));
   var _hdrAllEx = (day.exercises || []).concat((S.bonusExercises || {})[S.selectedSportDay] || []);
   var _hdrDur = calcSessionDuration(_hdrAllEx);
-  if (_hdrDur > 0) _hdrMeta.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65)'}, '~' + _hdrDur + '\u00a0min'));
   var _hdrProgRate = S.sportLevel === 'beginner' ? 0.025 : 0.05;
   var _hdrProgPct = Math.round(_hdrProgRate * Math.min(_hdrWeek - 1, 12) * 100);
-  if (_hdrProgPct > 0) _hdrMeta.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:600;color:var(--success,#3E5C3A)'}, '+' + _hdrProgPct + '%'));
-  _hdrRow.appendChild(_hdrMeta);
-  p.appendChild(_hdrRow);
+  var _hdrWrap = h('div', {style: 'margin:14px 0 10px'});
+  _hdrWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);line-height:1.6;word-break:break-word;margin-bottom:4px'}, day.focus || ''));
+  var _metaParts = ['Sém.\u00a0' + _hdrWeek];
+  if (_hdrDur > 0) _metaParts.push('~' + _hdrDur + '\u00a0min');
+  if (_hdrProgPct > 0) _metaParts.push('+' + _hdrProgPct + '%');
+  _hdrWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65)'}, _metaParts.join('\u00a0·\u00a0')));
+  p.appendChild(_hdrWrap);
  })();
 
  // ─── BADGE SÉANCE VALIDÉE ───
