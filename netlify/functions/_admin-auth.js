@@ -34,9 +34,12 @@ function corsHeaders(origin, methods) {
 // The admin client uses SUPABASE_SERVICE_ROLE_KEY so it bypasses RLS.
 async function requireAdmin(event) {
   var url = process.env.SUPABASE_URL;
-  var svc = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  // Accept both env-var names. Historically the project uses SUPABASE_SERVICE_KEY
+  // (set in Netlify), while the standard Supabase naming is SUPABASE_SERVICE_ROLE_KEY.
+  // Check both so deployment doesn't depend on one specific spelling.
+  var svc = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
   if (!url || !svc) {
-    return { error: { statusCode: 500, msg: 'Server misconfigured (missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY)' } };
+    return { error: { statusCode: 500, msg: 'Server misconfigured (missing SUPABASE_URL or SUPABASE_SERVICE_KEY)' } };
   }
 
   var admins = (process.env.ADMIN_EMAILS || '')
