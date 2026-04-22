@@ -266,6 +266,55 @@ function incrementMealsLogged() {
   updateNutritionStreak();
 }
 
+// ─── SHARE WORTHY BADGES — déclenche un nudge de partage post-unlock ───
+var SHARE_WORTHY_BADGES = {
+  streak_7: true, streak_14: true, streak_30: true, streak_90: true,
+  weight_goal: true, five_kg: true, first_kg_lost: true,
+  bench_100: true, squat_100: true, deadlift_100: true, total_300: true, total_400: true,
+  calisth_muscle_up: true, hyrox_sub90: true, hyrox_sub60: true,
+  nutrition_streak_30: true, muscu_sessions_50: true
+};
+
+// Nudge discret "Partager cette progression →" qui apparaît après la disparition du toast badge
+function showShareNudge() {
+  if (typeof window === 'undefined') return;
+  setTimeout(function() {
+    try {
+      var existing = document.querySelector('.sfc-share-nudge');
+      if (existing) existing.remove();
+      var nudge = document.createElement('div');
+      nudge.className = 'sfc-share-nudge';
+      nudge.style.cssText = [
+        'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);',
+        'z-index:10100;display:flex;align-items:center;gap:10px;',
+        'background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);',
+        'padding:11px 18px;border-radius:2px;white-space:nowrap;',
+        'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;',
+        'cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.35);',
+        'opacity:0;transition:opacity .3s ease;'
+      ].join('');
+      var _txt = document.createElement('span');
+      _txt.textContent = 'Partager cette progression';
+      nudge.appendChild(_txt);
+      var _arr = document.createElement('span');
+      _arr.style.cssText = 'font-family:Georgia,serif;font-size:14px;';
+      _arr.textContent = ' →';
+      nudge.appendChild(_arr);
+      nudge.addEventListener('click', function() {
+        nudge.remove();
+        if (window.shareProgression) { try { window.shareProgression(); } catch(e) {} }
+      });
+      document.body.appendChild(nudge);
+      setTimeout(function() { nudge.style.opacity = '1'; }, 30);
+      // Auto-dismiss après 8 secondes
+      setTimeout(function() {
+        nudge.style.opacity = '0';
+        setTimeout(function() { if (nudge.parentNode) nudge.parentNode.removeChild(nudge); }, 300);
+      }, 8000);
+    } catch(e) {}
+  }, 3800); // Après disparition du badge toast (3500ms)
+}
+
 // ─── BADGE SYSTEM ───
 function getUserBadges() {
   var user = window.AUTH ? window.AUTH.getUser() : null;
@@ -287,12 +336,16 @@ function unlockBadge(badgeId) {
   // Sync badge vers Supabase
   if (window.SupaSync) SupaSync.saveBadge(badgeId);
 
-  // Show badge celebration toast
+  // Show badge celebration toast — wording premium
+  var _badgeToastMsg = def.icon + ' ' + def.name + ' — palmarès personnel';
   if (window.showToast) {
-    window.showToast(def.icon + ' ' + def.name + ' débloqué !', 'badge', 3500);
+    window.showToast(_badgeToastMsg, 'badge', 3500);
   } else {
-    showToast(def.icon + ' ' + def.name + ' débloqué !');
+    showToast(_badgeToastMsg);
   }
+
+  // Share nudge pour les badges marquants (après disparition du toast)
+  if (SHARE_WORTHY_BADGES[badgeId]) { showShareNudge(); }
 
   if (window.BLACKBOX) window.BLACKBOX.log('badge_unlocked', {badge: badgeId, name: def.name});
 }
@@ -438,7 +491,7 @@ function renderStreakWidget(container) {
   var info = _h('div', '');
   var label = _h('div', '');
   label.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65)';
-  label.textContent = 'Jours consécutifs';
+  label.textContent = 'Séquence';
   info.appendChild(label);
 
   var best = _h('div', '');
