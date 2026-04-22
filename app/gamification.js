@@ -258,12 +258,100 @@ function updateNutritionStreak() {
   if (data.current >= 30) unlockBadge('nutrition_streak_30');
 }
 
+// ─── VARIABLE REWARD — récompense surprise 30% du temps sur les repas loggés ───
+// Pool de messages positifs variés, jamais deux fois le même dans la même journée.
+// Le délai de 400ms évite la collision avec le toast principal de l'action.
+var _VR_MESSAGES = [
+  'Votre constance se voit. Continuez.',
+  'Chaque repas loggé est une décision consciente.',
+  'Vous construisez quelque chose de solide.',
+  'La régularité fait plus que l\'intensité.',
+  'Bien noté. Votre corps vous remercie.',
+  'Vous êtes dans les 5% qui font vraiment le travail.',
+  'Ce geste simple change tout sur le long terme.',
+  'Chaque entrée compte. Vous le savez déjà.',
+  'Un repas de plus dans le bon sens.',
+  'Votre futur vous remercie de ce que vous faites aujourd\'hui.',
+  'Précis. Constant. C\'est ça la méthode.',
+  'Les champions font exactement ce que vous venez de faire.',
+  'Pas de génie. Juste de la rigueur. Vous l\'avez.',
+  'Votre corps retient tout ce que vous lui enseignez.',
+  'Une brique de plus sur votre transformation.'
+];
+var _VR_LAST_DATE = '';
+var _VR_FIRED_TODAY = false;
+
+function triggerVariableReward() {
+  try {
+    var _today = new Date().toISOString().slice(0, 10);
+    if (_VR_LAST_DATE !== _today) { _VR_LAST_DATE = _today; _VR_FIRED_TODAY = false; }
+    if (_VR_FIRED_TODAY) return; // 1 seule surprise par jour maximum
+    if (Math.random() > 0.30) return; // 30% de chance
+    _VR_FIRED_TODAY = true;
+    var _doy = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+    var _msg = _VR_MESSAGES[(_doy + Math.floor(Math.random() * 3)) % _VR_MESSAGES.length];
+    setTimeout(function() {
+      if (window.showToast) window.showToast(_msg, 'info', 3000);
+    }, 400);
+  } catch(e) {}
+}
+
 function incrementMealsLogged() {
   var user = window.AUTH ? window.AUTH.getUser() : null;
   if (!user) return;
   var count = incrementCounter('meals_logged');
   if (count >= 50) unlockBadge('meals_logged_50');
   updateNutritionStreak();
+  triggerVariableReward();
+}
+
+// ─── SHARE WORTHY BADGES — déclenche un nudge de partage post-unlock ───
+var SHARE_WORTHY_BADGES = {
+  streak_7: true, streak_14: true, streak_30: true, streak_90: true,
+  weight_goal: true, five_kg: true, first_kg_lost: true,
+  bench_100: true, squat_100: true, deadlift_100: true, total_300: true, total_400: true,
+  calisth_muscle_up: true, hyrox_sub90: true, hyrox_sub60: true,
+  nutrition_streak_30: true, muscu_sessions_50: true
+};
+
+// Nudge discret "Partager cette progression →" qui apparaît après la disparition du toast badge
+function showShareNudge() {
+  if (typeof window === 'undefined') return;
+  setTimeout(function() {
+    try {
+      var existing = document.querySelector('.sfc-share-nudge');
+      if (existing) existing.remove();
+      var nudge = document.createElement('div');
+      nudge.className = 'sfc-share-nudge';
+      nudge.style.cssText = [
+        'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);',
+        'z-index:10100;display:flex;align-items:center;gap:10px;',
+        'background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);',
+        'padding:11px 18px;border-radius:2px;white-space:nowrap;',
+        'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;',
+        'cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.35);',
+        'opacity:0;transition:opacity .3s ease;'
+      ].join('');
+      var _txt = document.createElement('span');
+      _txt.textContent = 'Partager cette progression';
+      nudge.appendChild(_txt);
+      var _arr = document.createElement('span');
+      _arr.style.cssText = 'font-family:Georgia,serif;font-size:14px;';
+      _arr.textContent = ' →';
+      nudge.appendChild(_arr);
+      nudge.addEventListener('click', function() {
+        nudge.remove();
+        if (window.shareProgression) { try { window.shareProgression(); } catch(e) {} }
+      });
+      document.body.appendChild(nudge);
+      setTimeout(function() { nudge.style.opacity = '1'; }, 30);
+      // Auto-dismiss après 8 secondes
+      setTimeout(function() {
+        nudge.style.opacity = '0';
+        setTimeout(function() { if (nudge.parentNode) nudge.parentNode.removeChild(nudge); }, 300);
+      }, 8000);
+    } catch(e) {}
+  }, 3800); // Après disparition du badge toast (3500ms)
 }
 
 // ─── BADGE SYSTEM ───
@@ -287,12 +375,16 @@ function unlockBadge(badgeId) {
   // Sync badge vers Supabase
   if (window.SupaSync) SupaSync.saveBadge(badgeId);
 
-  // Show badge celebration toast
+  // Show badge celebration toast — wording premium
+  var _badgeToastMsg = def.icon + ' ' + def.name + ' — palmarès personnel';
   if (window.showToast) {
-    window.showToast(def.icon + ' ' + def.name + ' débloqué !', 'badge', 3500);
+    window.showToast(_badgeToastMsg, 'badge', 3500);
   } else {
-    showToast(def.icon + ' ' + def.name + ' débloqué !');
+    showToast(_badgeToastMsg);
   }
+
+  // Share nudge pour les badges marquants (après disparition du toast)
+  if (SHARE_WORTHY_BADGES[badgeId]) { showShareNudge(); }
 
   if (window.BLACKBOX) window.BLACKBOX.log('badge_unlocked', {badge: badgeId, name: def.name});
 }
@@ -438,7 +530,7 @@ function renderStreakWidget(container) {
   var info = _h('div', '');
   var label = _h('div', '');
   label.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65)';
-  label.textContent = 'Jours consécutifs';
+  label.textContent = 'Séquence';
   info.appendChild(label);
 
   var best = _h('div', '');

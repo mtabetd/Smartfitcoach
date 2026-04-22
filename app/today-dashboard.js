@@ -3349,7 +3349,7 @@ function renderCardStreak() {
     var streakLabel = h('div', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey);'
     });
-    streakLabel.textContent = streak > 1 ? 'Jours consécutifs' : 'Premier jour';
+    streakLabel.textContent = streak > 1 ? 'Séquence' : 'Jour 1';
 
     streakWrap.appendChild(streakNum);
     streakWrap.appendChild(streakLabel);
@@ -5518,7 +5518,7 @@ function renderTodayDashboard(p) {
     if (typeof openTodayWeightPrompt === 'function') { setTimeout(function() { openTodayWeightPrompt(); }, 50); }
   }
 
-  // ─── BILAN DE FORME — plein écran à la connexion ───
+  // ─── BILAN DE FORME — card inline (non bloquant depuis 2026-04-22) ───
   // Seulement pour les utilisateurs ayant le sport (sport ou both)
   var _todayDate = new Date().toISOString().slice(0, 10);
   var _w = S.todayWellness;
@@ -5531,17 +5531,17 @@ function renderTodayDashboard(p) {
   var _hasSport = (S.appMode === 'sport' || S.appMode === 'both');
   // Bilan de forme uniquement à partir de J+1 (pas le jour même de l'inscription)
   var _isFirstDay = !S.firstLoginDate || S.firstLoginDate === _todayDate;
-  if (_needCheckin && _hasSport && !_isFirstDay) {
-    if (window.renderWellnessCheckin) {
-      var wellnessWrap = h('div', { style: 'padding:32px 20px;max-width:480px;margin:0 auto;' });
-      window.renderWellnessCheckin(wellnessWrap, function() {
+  // _wellnessCard est injecté après le hero — pas de return, dashboard visible en même temps
+  var _wellnessCard = null;
+  if (_needCheckin && _hasSport && !_isFirstDay && window.renderWellnessCheckin) {
+    var _wc = h('div', { style: 'max-width:560px;margin:0 auto;' });
+    try {
+      window.renderWellnessCheckin(_wc, function() {
         if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
         renderTodayDashboard(p);
       });
-      p.appendChild(wellnessWrap);
-      return;
-    }
-    // Fallback : renderWellnessCheckin indisponible → afficher le dashboard directement
+      _wellnessCard = _wc;
+    } catch(_eWc) { console.warn('[wellness card inline]', _eWc); }
   }
 
   var wrapper = h('div', { style: 'padding-bottom:16px;' });
@@ -5599,6 +5599,85 @@ function renderTodayDashboard(p) {
   // 1 hero = 1 foyer. Matin (6h-11h) / Midi (11h-17h) / Soir (17h-23h).
   var hero = renderHeroContextuel();
   if (hero) wrapper.appendChild(hero);
+
+  // ── Wellness check-in inline (non bloquant) — après le hero ──
+  if (_wellnessCard) wrapper.appendChild(_wellnessCard);
+
+  // ── Mini-pill Séquence (streak) — visible immédiatement sous le hero ──
+  try {
+    var _muid = (window.AUTH && window.AUTH.getUser) ? ((window.AUTH.getUser()) || {}).id : null;
+    var _msd = _muid ? JSON.parse(localStorage.getItem('mtd_streak_' + _muid) || '{}') : {};
+    var _msc = (typeof _msd.current === 'number') ? _msd.current : 0;
+    var _todayStr2 = new Date().toISOString().slice(0, 10);
+    var _isFirstDay2 = !S.firstLoginDate || S.firstLoginDate === _todayStr2;
+    if (_msc >= 1 && !_isFirstDay2) {
+      var _jTotals = (window.FOOD_JOURNAL && window.FOOD_JOURNAL.getDayTotal) ? window.FOOD_JOURNAL.getDayTotal() : { kcal: 0, count: 0 };
+      var _actionDone = (_jTotals.count > 0) || (_jTotals.kcal > 0);
+      var _miniStreak = h('div', {
+        style: 'max-width:560px;margin:6px auto 0;padding:8px 16px;' +
+               'display:flex;align-items:center;justify-content:space-between;' +
+               'background:var(--paper-2,#F4F1EA);border:1px solid var(--line,#D8D8D0);'
+      });
+      _miniStreak.appendChild(h('span', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;' +
+               'letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);'
+      }, 'Séquence'));
+      _miniStreak.appendChild(h('span', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;' +
+               'text-transform:uppercase;color:' + (_actionDone ? '#27AE60' : 'var(--grey,#6B6B65)') + ';'
+      }, _actionDone ? '✓ validée' : '○ en attente'));
+      var _mRight = h('div', { style: 'display:flex;align-items:baseline;gap:4px;' });
+      _mRight.appendChild(h('span', {
+        style: 'font-family:Georgia,serif;font-size:20px;font-style:italic;color:var(--black,#0A0A09);'
+      }, String(_msc)));
+      _mRight.appendChild(h('span', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;' +
+               'letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);'
+      }, 'jour' + (_msc > 1 ? 's' : '')));
+      _miniStreak.appendChild(_mRight);
+      wrapper.appendChild(_miniStreak);
+    }
+  } catch(_eMini) {}
+
+  // ── Carte Forme du Jour — affichée quand le bilan est déjà complété aujourd'hui ──
+  if (!_needCheckin && _hasSport && !_isFirstDay && window.getWellnessAdaptation) {
+    try {
+      var _adapt = window.getWellnessAdaptation();
+      if (_adapt && _adapt.level) {
+        var _adaptLabels = {
+          recovery: 'Séance de récupération conseillée',
+          reduced: 'Intensité réduite conseillée',
+          peak: 'Forme optimale',
+          normal: 'Forme du jour — correcte'
+        };
+        var _adaptAdvice = {
+          recovery: 'Votre état de forme nécessite une séance légère. Intensité réduite de 40 %.',
+          reduced: 'Légère fatigue détectée. Intensité réduite de 20 %. Écoutez votre corps.',
+          peak: 'Excellent état de forme. Vous pouvez pousser sur les sets lourds.',
+          normal: 'Bonne séance en perspective. Respectez les temps de repos.'
+        };
+        var _recCard = h('div', {
+          style: 'max-width:560px;margin:6px auto 0;padding:10px 16px;' +
+                 'display:flex;align-items:flex-start;gap:10px;' +
+                 'background:var(--paper-2,#F4F1EA);border:1px solid var(--line,#D8D8D0);' +
+                 'border-left:3px solid ' + _adapt.color + ';'
+        });
+        var _recInner = h('div', { style: 'flex:1;min-width:0;' });
+        _recInner.appendChild(h('div', {
+          style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;' +
+                 'text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:3px;'
+        }, 'Forme du jour'));
+        _recInner.appendChild(h('div', {
+          style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#0A0A09);'
+        }, _adaptLabels[_adapt.level] || _adapt.label));
+        _recInner.appendChild(h('div', {
+          style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:2px;line-height:1.5;'
+        }, _adaptAdvice[_adapt.level] || _adapt.advice));
+        _recCard.appendChild(_recInner);
+        wrapper.appendChild(_recCard);
+      }
+    } catch(_eRec) {}
+  }
 
   // ═══ PENSÉE DU JOUR (Hermès — citation de motivation, change chaque jour) ═══
   // FIX 2026-04-16 : les citations motivantes vivaient dans renderCardBonjour (code
@@ -5904,8 +5983,11 @@ function renderTodayDashboard(p) {
 
 // ─── EXPOSE GLOBALLY ───
 window.TODAY = {
-  render: renderTodayDashboard
+  render: renderTodayDashboard,
+  shareProgression: shareProgression
 };
+// Exposé séparément pour gamification.js (share nudge sur badge unlock)
+window.shareProgression = shareProgression;
 // FIX F1 COHÉRENCE PROFIL 2026-04 : exposer getCalorieTarget + getMacroTargets en window
 // pour que app-main.js renderProfilePage puisse les utiliser (source unique).
 // Avant : ces fonctions étaient dans l'IIFE de today-dashboard.js, inaccessibles depuis
@@ -6131,8 +6213,13 @@ function renderFabLogger() {
           if (window.render) window.render();
         } },
       { label: 'REPAS', icon: 'M4 5h8M4 8h8M4 11h8', action: function() {
-          S.view = 'nutrition'; S.nStep = 12; S._fabOpen = false;
+          S._fabOpen = false;
           if (window.render) window.render();
+          setTimeout(function() {
+            var _jc = document.getElementById('fj-card-root');
+            if (_jc) { _jc.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+            S.view = 'nutrition'; S.nStep = 12; if (window.render) window.render();
+          }, 80);
         } },
       { label: 'POIDS', icon: 'M3 7h10v6H3zM6 7V4h4v3', action: function() {
           S._modalQuickWeight = true; S._fabOpen = false;
