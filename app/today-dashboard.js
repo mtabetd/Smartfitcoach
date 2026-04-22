@@ -3619,7 +3619,7 @@ function renderCardSport() {
       if (hasMuscu || hasSession) _weekDone++;
     }
   } catch(e) {}
-  var _weekTarget = (S.trainingDaysSelected && S.trainingDaysSelected.length > 0) ? S.trainingDaysSelected.length : (S.sportDays || 3);
+  var _weekTarget = (Array.isArray(S.trainingDaysSelected) && S.trainingDaysSelected.length > 0) ? S.trainingDaysSelected.length : (S.sportDays || 3);
 
   var c = card();
   if (_recoveryBanner) c.appendChild(_recoveryBanner);
