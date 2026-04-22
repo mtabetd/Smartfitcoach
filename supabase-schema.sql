@@ -309,3 +309,74 @@ create policy "Users can view own photos"
 create policy "Users can delete own photos"
   on storage.objects for delete
   using (bucket_id = 'progress-photos' and auth.uid()::text = (storage.foldername(name))[1]);
+
+
+-- ============================================================
+-- SUBSCRIPTION — SERVER-AUTHORITATIVE (2026-04)
+-- ============================================================
+-- Problem: subscriptionPlan / subscriptionEnd used to live inside
+-- profiles.data JSONB, which is user-writable under the UPDATE policy.
+-- Any logged-in user could self-grant 'unlimited' from DevTools.
+--
+-- Fix: move these two fields to dedicated columns that users can READ
+-- but NOT WRITE. Service role (Netlify functions) remains the only
+-- writer. A trigger also strips the keys from any JSONB update path
+-- so the migration is robust if a caller forgets to sanitize client-side.
+--
+-- This migration is idempotent: rerun-safe, additive, no data loss.
+alter table public.profiles
+  add column if not exists subscription_plan text,
+  add column if not exists subscription_end  date;
+
+-- One-time backfill from existing JSONB. Only writes when column is null,
+-- so re-running is a no-op.
+update public.profiles
+   set subscription_plan = data->>'subscriptionPlan'
+ where subscription_plan is null
+   and data ? 'subscriptionPlan';
+
+update public.profiles
+   set subscription_end = nullif(data->>'subscriptionEnd','')::date
+ where subscription_end is null
+   and data ? 'subscriptionEnd';
+
+-- Replace UPDATE policy: users may update their profile but not the two
+-- subscription columns. The "is not distinct from" comparison allows
+-- unchanged values to pass (otherwise every other field update would
+-- break).
+drop policy if exists "Users can update own profile" on public.profiles;
+create policy "Users can update own profile"
+  on public.profiles for update
+  to authenticated
+  using (auth.uid() = id)
+  with check (
+       auth.uid() = id
+    and subscription_plan is not distinct from
+        (select p.subscription_plan from public.profiles p where p.id = auth.uid())
+    and subscription_end  is not distinct from
+        (select p.subscription_end  from public.profiles p where p.id = auth.uid())
+  );
+
+-- Defense-in-depth: strip the two keys from any JSONB payload written by
+-- a non-service role. If the client forgets to sanitize, the trigger
+-- quietly erases the forged values before they land in the JSONB.
+create or replace function public.profiles_strip_subscription_keys()
+returns trigger language plpgsql as $$
+begin
+  -- Service role bypasses RLS but still fires triggers — allowlist it
+  -- explicitly so admin writes via Netlify functions (using a separate
+  -- columns-only update) are not affected.
+  if coalesce(current_setting('request.jwt.claim.role', true), '') <> 'service_role' then
+    if new.data is not null and (new.data ? 'subscriptionPlan' or new.data ? 'subscriptionEnd') then
+      new.data = new.data - 'subscriptionPlan' - 'subscriptionEnd';
+    end if;
+  end if;
+  return new;
+end$$;
+
+drop trigger if exists profiles_strip_sub_keys on public.profiles;
+create trigger profiles_strip_sub_keys
+  before insert or update on public.profiles
+  for each row execute procedure public.profiles_strip_subscription_keys();
+
+create index if not exists idx_profiles_subscription_end on public.profiles(subscription_end);

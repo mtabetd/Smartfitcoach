@@ -217,13 +217,27 @@
 
         // Note: birth_date and email_optin removed from dedicated columns
         // (not in schema) — already preserved inside the `data` JSONB field below.
+        // Strip subscription keys before upsert — these are server-authoritative
+        // columns (profiles.subscription_plan/end) since the 2026-04 migration.
+        // A user-side write can never set them; stripping client-side avoids
+        // unnecessary churn (the BEFORE trigger would strip them anyway) and
+        // keeps the JSONB clean for the admin JSONB fallback during rollout.
+        var _safeData = data;
+        try {
+          if (data && (data.subscriptionPlan !== undefined || data.subscriptionEnd !== undefined)) {
+            _safeData = Object.assign({}, data);
+            delete _safeData.subscriptionPlan;
+            delete _safeData.subscriptionEnd;
+          }
+        } catch(e) { _safeData = data; }
+
         return client
           .from('profiles')
           .upsert({
             id: userId,
             email: session.user.email,
             name: data.name || session.user.user_metadata.name || '',
-            data: data,
+            data: _safeData,
             updated_at: new Date().toISOString()
           }, { onConflict: 'id' })
           .then(function(result) {
@@ -257,12 +271,19 @@
 
         return client
           .from('profiles')
-          .select('data, updated_at')
+          .select('data, subscription_plan, subscription_end, updated_at')
           .eq('id', session.user.id)
           .single()
           .then(function(result) {
             if (result.error || !result.data) return null;
             var payload = result.data.data || {};
+            // Server-authoritative subscription state: the dedicated columns
+            // override any stale JSONB value so a tampered localStorage or a
+            // pre-migration profile can never claim a fake plan. Property
+            // names are kept identical so every consumer of S.subscriptionPlan
+            // / S.subscriptionEnd continues to work unchanged.
+            if (result.data.subscription_plan) payload.subscriptionPlan = result.data.subscription_plan;
+            if (result.data.subscription_end)  payload.subscriptionEnd  = result.data.subscription_end;
             // Attacher le timestamp cloud pour comparaison multidevice dans syncOnLogin
             if (result.data.updated_at) payload._cloudUpdatedAt = result.data.updated_at;
             return payload;

@@ -9,9 +9,10 @@
 body{font-family:'Helvetica Neue',Arial,sans-serif;background:#FAF9F6;color:#0A0A09;padding:24px;max-width:960px;margin:0 auto}
 h1{font-family:Georgia,serif;font-size:24px;font-weight:normal;margin-bottom:4px}
 .sub{font-size:11px;color:#6B6B65;letter-spacing:3px;text-transform:uppercase;margin-bottom:24px}
-.gate{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:16px}
-.gate input{padding:12px 16px;border:1px solid #D8D8D0;border-radius:2px;font-size:14px;width:280px;text-align:center}
+.gate{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:12px}
+.gate input{padding:12px 16px;border:1px solid #D8D8D0;border-radius:2px;font-size:14px;width:280px}
 .gate button{padding:12px 24px;background:#0A0A09;color:#FAF9F6;border:none;border-radius:2px;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer}
+.gate .sign-out{background:transparent;color:#6B6B65;border:1px solid #D8D8D0;font-size:10px;padding:6px 12px;margin-top:8px}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:28px}
 .stat-card{border:1px solid #D8D8D0;border-radius:2px;padding:16px;text-align:center;background:#F4F4F0}
 .stat-val{font-family:Georgia,serif;font-size:24px;margin-bottom:4px}
@@ -37,22 +38,29 @@ select,button{font-family:'Helvetica Neue',Arial,sans-serif}
 .field label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#6B6B65;margin-bottom:6px}
 .field select,.field input{width:100%;padding:10px 12px;border:1px solid #D8D8D0;border-radius:2px;font-size:14px;background:#FAF9F6}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0A0A09;color:#FAF9F6;padding:12px 20px;border-radius:2px;font-size:12px;display:none;z-index:200}
+.top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.top-bar .who{font-size:10px;color:#6B6B65;letter-spacing:2px;text-transform:uppercase}
 #app{display:none}
 </style>
 </head>
 <body>
 
-<!-- GATE -->
+<!-- GATE: Supabase login (admin-only, verified server-side via ADMIN_EMAILS) -->
 <div class="gate" id="admin-gate">
   <div style="font-family:Georgia,serif;font-size:20px">Console Admin</div>
   <div style="font-size:11px;color:#6B6B65">SmartFitCoach</div>
-  <input type="password" id="admin-pw" placeholder="Mot de passe admin">
-  <button onclick="tryLogin()">Accéder</button>
-  <div id="gate-error" style="color:#5A1010;font-size:12px"></div>
+  <input type="email" id="admin-email" placeholder="Email admin" autocomplete="email">
+  <input type="password" id="admin-pw" placeholder="Mot de passe" autocomplete="current-password">
+  <button onclick="tryLogin()">Connexion</button>
+  <div id="gate-error" style="color:#5A1010;font-size:12px;max-width:320px;text-align:center"></div>
 </div>
 
 <!-- APP -->
 <div id="app">
+  <div class="top-bar">
+    <div class="who" id="who"></div>
+    <button class="btn-sm" onclick="signOut()">Déconnexion</button>
+  </div>
   <h1>Console Admin</h1>
   <p class="sub">SmartFitCoach · Gestion des utilisateurs</p>
 
@@ -106,147 +114,229 @@ select,button{font-family:'Helvetica Neue',Arial,sans-serif}
 
 <div class="toast" id="toast"></div>
 
+<!-- Reuse the main app's Supabase client to avoid duplicating URL/anon key literals. -->
 <script src="./supabase.min.js"></script>
+<script src="./supabase-client.js"></script>
 <script>
-// ── CONFIG ──
-var SUPABASE_URL = 'https://uwaoxkgsgbzohakzgyvq.supabase.co';
-var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV3YW94a2dzZ2J6b2hha3pneXZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4ODUxMjUsImV4cCI6MjA5MDQ2MTEyNX0.N2ohXmi6ctG322205S0yE2UaE4fS43QCc8xBhO9iVyo';
-// SHA-256 hash of admin password (change this!)
-var ADMIN_HASH = 'a1b2c3d4e5f6'; // placeholder — will be set properly
-var client = null;
+// ── STATE ──
+// No client-side SHA256 gate. Authentication goes through Supabase login,
+// and every privileged operation is a fetch() to a Netlify function that
+// verifies the caller's JWT + checks ADMIN_EMAILS server-side.
+var _client = null;
+var _accessToken = null;
+var _currentEmail = null;
 var _editingUserId = null;
 
-// ── GATE — SHA-256 hashed (mot de passe jamais en clair dans le code) ──
-var ADMIN_SHA256 = '64a4d5b88b2e9885cb77945a2cf37d528c9d415d2642922051e21e653a0395a7';
-var ADMIN_SALT = 'sfc_admin_2026';
-var _adminAttempts = 0;
-var _adminLocked = 0;
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(function() { t.style.display = 'none'; }, 3000);
+}
+
+function setGateError(msg) {
+  document.getElementById('gate-error').textContent = msg || '';
+}
+
+function getClient() {
+  if (_client) return _client;
+  try {
+    if (typeof window.getSupabaseClient === 'function') {
+      _client = window.getSupabaseClient();
+    }
+  } catch(e) {}
+  if (!_client && window.supabase && window.SUPABASE_URL && window.SUPABASE_ANON_KEY) {
+    _client = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+  }
+  return _client;
+}
 
 async function tryLogin() {
-  // Rate limiting — 5 tentatives puis lockout 5 minutes
-  if (_adminLocked > Date.now()) {
-    var mins = Math.ceil((_adminLocked - Date.now()) / 60000);
-    document.getElementById('gate-error').textContent = 'Trop de tentatives. R\u00e9essayez dans ' + mins + ' minute(s).';
-    return;
-  }
-  var pw = document.getElementById('admin-pw').value;
-  if (!pw || pw.length < 4) {
-    document.getElementById('gate-error').textContent = 'Mot de passe requis';
-    return;
-  }
+  setGateError('');
+  var email = (document.getElementById('admin-email').value || '').trim();
+  var pw = document.getElementById('admin-pw').value || '';
+  if (!email || !pw) { setGateError('Email et mot de passe requis'); return; }
+
+  var c = getClient();
+  if (!c) { setGateError('Client Supabase indisponible — rechargez la page'); return; }
+
   try {
-    var enc = new TextEncoder();
-    var buf = await crypto.subtle.digest('SHA-256', enc.encode(pw + ADMIN_SALT));
-    var hex = Array.from(new Uint8Array(buf)).map(function(b) { return ('00' + b.toString(16)).slice(-2); }).join('');
-    if (hex === ADMIN_SHA256) {
-      _adminAttempts = 0;
-      document.getElementById('admin-gate').style.display = 'none';
-      document.getElementById('app').style.display = 'block';
-      client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-      loadUsers();
-    } else {
-      _adminAttempts++;
-      if (_adminAttempts >= 5) {
-        _adminLocked = Date.now() + 5 * 60 * 1000;
-        document.getElementById('gate-error').textContent = 'Trop de tentatives. Bloqu\u00e9 5 minutes.';
-      } else {
-        document.getElementById('gate-error').textContent = 'Mot de passe incorrect (' + (5 - _adminAttempts) + ' tentatives restantes)';
-      }
+    var res = await c.auth.signInWithPassword({ email: email, password: pw });
+    if (res.error || !res.data || !res.data.session) {
+      setGateError('Email ou mot de passe invalide');
+      return;
     }
-  } catch(e) {
-    document.getElementById('gate-error').textContent = 'Erreur de v\u00e9rification';
+    _accessToken = res.data.session.access_token;
+    _currentEmail = (res.data.user && res.data.user.email) || email;
+    await openApp();
+  } catch (e) {
+    setGateError('Erreur de connexion : ' + (e.message || 'inconnue'));
   }
 }
 
-document.getElementById('admin-pw').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') tryLogin();
+async function openApp() {
+  // Probe the admin endpoint once to confirm this email is actually in
+  // ADMIN_EMAILS. Avoids showing the full UI to a regular user who would
+  // then hit 403s on every action.
+  var r;
+  try {
+    r = await fetch('/.netlify/functions/admin-list-users', {
+      headers: { 'Authorization': 'Bearer ' + _accessToken }
+    });
+  } catch (e) {
+    setGateError('Serveur injoignable. Réessayez dans un instant.');
+    return;
+  }
+
+  if (r.status === 403) {
+    setGateError('Ce compte (' + _currentEmail + ') n\'est pas déclaré admin. Ajoutez-le à ADMIN_EMAILS dans Netlify.');
+    await signOut(true);
+    return;
+  }
+  if (r.status === 500) {
+    var body = null;
+    try { body = await r.json(); } catch(e) {}
+    setGateError('Configuration serveur : ' + ((body && body.error) || 'erreur 500'));
+    return;
+  }
+  if (!r.ok) {
+    setGateError('Échec de chargement (HTTP ' + r.status + ')');
+    return;
+  }
+
+  document.getElementById('admin-gate').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('who').textContent = _currentEmail || '';
+
+  var json = await r.json();
+  renderUsers(json.users || []);
+}
+
+async function signOut(silent) {
+  var c = getClient();
+  if (c) {
+    try { await c.auth.signOut(); } catch(e) {}
+  }
+  _accessToken = null;
+  _currentEmail = null;
+  if (!silent) {
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('admin-gate').style.display = 'flex';
+    document.getElementById('admin-pw').value = '';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var pw = document.getElementById('admin-pw');
+  if (pw) pw.addEventListener('keydown', function(e) { if (e.key === 'Enter') tryLogin(); });
+
+  // Auto-login if session already present (e.g. refresh)
+  var c = getClient();
+  if (c) {
+    c.auth.getSession().then(function(r) {
+      if (r && r.data && r.data.session) {
+        _accessToken = r.data.session.access_token;
+        _currentEmail = (r.data.session.user && r.data.session.user.email) || null;
+        openApp();
+      }
+    }).catch(function(){});
+  }
 });
 
 // ── LOAD USERS ──
 async function loadUsers() {
-  if (!client) return;
+  if (!_accessToken) return;
   try {
-    var { data, error } = await client.from('profiles').select('id, email, name, data, updated_at').order('updated_at', { ascending: false });
-    if (error) { console.error(error); return; }
+    var r = await fetch('/.netlify/functions/admin-list-users', {
+      headers: { 'Authorization': 'Bearer ' + _accessToken }
+    });
+    if (r.status === 401) { showToast('Session expirée, reconnectez-vous'); return signOut(); }
+    if (!r.ok) { showToast('Échec du chargement (HTTP ' + r.status + ')'); return; }
+    var json = await r.json();
+    renderUsers(json.users || []);
+  } catch (e) {
+    showToast('Erreur: ' + (e.message || 'inconnue'));
+  }
+}
 
-    var tbody = document.getElementById('users-body');
-    tbody.innerHTML = '';
+function renderUsers(users) {
+  var tbody = document.getElementById('users-body');
+  tbody.innerHTML = '';
 
-    var now = new Date();
-    var statsTrials = 0, statsActive = 0, statsExpired = 0, statsUnlimited = 0;
+  var now = new Date();
+  var statsTrials = 0, statsActive = 0, statsExpired = 0, statsUnlimited = 0;
 
-    (data || []).forEach(function(user) {
-      var profile = user.data || {};
-      var subEnd = profile.subscriptionEnd || null;
-      var subPlan = profile.subscriptionPlan || null;
-      var firstLogin = profile.firstLoginDate || null;
+  users.forEach(function(user) {
+    var profile = user.data || {};
+    // Prefer the server-authoritative columns; fall back to the legacy
+    // JSONB for pre-migration rows until every profile is backfilled.
+    var subEnd  = user.subscription_end  || profile.subscriptionEnd  || null;
+    var subPlan = user.subscription_plan || profile.subscriptionPlan || null;
+    var firstLogin = profile.firstLoginDate || null;
 
-      // Determine status. Build the badge as a real DOM element — subPlan
-      // comes from the user's own profiles.data JSONB (self-editable via
-      // RLS) so string-concat + innerHTML would let a malicious value
-      // execute JS in the admin's browser (stored XSS).
-      var status, badgeEl = document.createElement('span');
-      badgeEl.className = 'badge';
-      if (subPlan === 'unlimited') {
-        status = 'unlimited';
-        badgeEl.classList.add('badge-unlimited');
-        badgeEl.textContent = 'Illimité';
-        statsUnlimited++;
-      } else if (subEnd && new Date(subEnd) > now) {
-        status = 'active';
-        badgeEl.classList.add('badge-active');
-        badgeEl.textContent = 'Actif · ' + (subPlan || '');
-        statsActive++;
-      } else if (firstLogin) {
-        var trialEnd = new Date(firstLogin);
-        trialEnd.setDate(trialEnd.getDate() + 7);
-        if (trialEnd > now) {
-          var daysLeft = Math.ceil((trialEnd - now) / (1000 * 60 * 60 * 24));
-          status = 'trial';
-          badgeEl.classList.add('badge-trial');
-          badgeEl.textContent = 'Trial · ' + daysLeft + 'j restants';
-          statsTrials++;
-        } else {
-          status = 'expired';
-          badgeEl.classList.add('badge-expired');
-          badgeEl.textContent = 'Expiré';
-          statsExpired++;
-        }
-      } else {
+    // Build the badge as a real DOM element — subPlan originates from
+    // user-writable JSONB on legacy rows, so string-concat + innerHTML
+    // would enable stored XSS against the admin. Use textContent.
+    var status, badgeEl = document.createElement('span');
+    badgeEl.className = 'badge';
+    if (subPlan === 'unlimited') {
+      status = 'unlimited';
+      badgeEl.classList.add('badge-unlimited');
+      badgeEl.textContent = 'Illimité';
+      statsUnlimited++;
+    } else if (subEnd && new Date(subEnd) > now) {
+      status = 'active';
+      badgeEl.classList.add('badge-active');
+      badgeEl.textContent = 'Actif · ' + (subPlan || '');
+      statsActive++;
+    } else if (firstLogin) {
+      var trialEnd = new Date(firstLogin);
+      trialEnd.setDate(trialEnd.getDate() + 7);
+      if (trialEnd > now) {
+        var daysLeft = Math.ceil((trialEnd - now) / (1000 * 60 * 60 * 24));
         status = 'trial';
         badgeEl.classList.add('badge-trial');
-        badgeEl.textContent = 'Nouveau';
+        badgeEl.textContent = 'Trial · ' + daysLeft + 'j restants';
         statsTrials++;
+      } else {
+        status = 'expired';
+        badgeEl.classList.add('badge-expired');
+        badgeEl.textContent = 'Expiré';
+        statsExpired++;
       }
+    } else {
+      status = 'trial';
+      badgeEl.classList.add('badge-trial');
+      badgeEl.textContent = 'Nouveau';
+      statsTrials++;
+    }
 
-      var tr = document.createElement('tr');
-      function _td(text) { var td = document.createElement('td'); td.textContent = text || '\u2014'; return td; }
-      tr.appendChild(_td(profile.prenom || user.name));
-      tr.appendChild(_td(user.email));
-      tr.appendChild(_td(firstLogin));
-      var badgeTd = document.createElement('td'); badgeTd.appendChild(badgeEl); tr.appendChild(badgeTd);
-      tr.appendChild(_td(subPlan === 'unlimited' ? '\u221e' : subEnd));
-      var actionTd = document.createElement('td');
-      var actionBtn = document.createElement('button');
-      actionBtn.className = 'btn-sm';
-      actionBtn.textContent = 'G\u00e9rer';
-      actionBtn.onclick = (function(uid, uname, uplan, uend) { return function() { openModal(uid, uname, uplan, uend); }; })(user.id, profile.prenom || user.name || '', subPlan || '', subEnd || '');
-      actionTd.appendChild(actionBtn);
-      tr.appendChild(actionTd);
-      tbody.appendChild(tr);
-    });
+    var tr = document.createElement('tr');
+    function _td(text) { var td = document.createElement('td'); td.textContent = text || '—'; return td; }
+    tr.appendChild(_td(profile.prenom || user.name));
+    tr.appendChild(_td(user.email));
+    tr.appendChild(_td(firstLogin));
+    var badgeTd = document.createElement('td'); badgeTd.appendChild(badgeEl); tr.appendChild(badgeTd);
+    tr.appendChild(_td(subPlan === 'unlimited' ? '∞' : subEnd));
+    var actionTd = document.createElement('td');
+    var actionBtn = document.createElement('button');
+    actionBtn.className = 'btn-sm';
+    actionBtn.textContent = 'Gérer';
+    actionBtn.onclick = (function(uid, uname, uplan, uend) { return function() { openModal(uid, uname, uplan, uend); }; })(user.id, profile.prenom || user.name || '', subPlan || '', subEnd || '');
+    actionTd.appendChild(actionBtn);
+    tr.appendChild(actionTd);
+    tbody.appendChild(tr);
+  });
 
-    document.getElementById('user-count').textContent = (data || []).length + ' utilisateur' + ((data || []).length > 1 ? 's' : '');
+  document.getElementById('user-count').textContent = users.length + ' utilisateur' + (users.length > 1 ? 's' : '');
 
-    // Stats
-    document.getElementById('stats').innerHTML =
-      '<div class="stat-card"><div class="stat-val">' + (data || []).length + '</div><div class="stat-label">Total</div></div>' +
-      '<div class="stat-card"><div class="stat-val">' + statsTrials + '</div><div class="stat-label">Trials</div></div>' +
-      '<div class="stat-card"><div class="stat-val">' + statsActive + '</div><div class="stat-label">Actifs</div></div>' +
-      '<div class="stat-card"><div class="stat-val">' + statsUnlimited + '</div><div class="stat-label">Illimités</div></div>' +
-      '<div class="stat-card"><div class="stat-val">' + statsExpired + '</div><div class="stat-label">Expirés</div></div>';
-
-  } catch(e) { console.error('loadUsers error:', e); }
+  // Stats block: all values are trusted integers, safe to inline.
+  document.getElementById('stats').innerHTML =
+    '<div class="stat-card"><div class="stat-val">' + users.length + '</div><div class="stat-label">Total</div></div>' +
+    '<div class="stat-card"><div class="stat-val">' + statsTrials + '</div><div class="stat-label">Trials</div></div>' +
+    '<div class="stat-card"><div class="stat-val">' + statsActive + '</div><div class="stat-label">Actifs</div></div>' +
+    '<div class="stat-card"><div class="stat-val">' + statsUnlimited + '</div><div class="stat-label">Illimités</div></div>' +
+    '<div class="stat-card"><div class="stat-val">' + statsExpired + '</div><div class="stat-label">Expirés</div></div>';
 }
 
 // ── MODAL ──
@@ -257,7 +347,6 @@ function openModal(userId, name, currentPlan, currentEnd) {
   document.getElementById('modal-date').value = currentEnd || '';
   document.getElementById('modal').classList.add('open');
 
-  // Auto-calculate date when plan changes
   document.getElementById('modal-plan').onchange = function() {
     var plan = this.value;
     var d = new Date();
@@ -269,7 +358,6 @@ function openModal(userId, name, currentPlan, currentEnd) {
     else if (plan === 'trial') { var t = new Date(); t.setDate(t.getDate() + 7); document.getElementById('modal-date').value = t.toISOString().slice(0,10); return; }
     document.getElementById('modal-date').value = d.toISOString().slice(0, 10);
   };
-  // Trigger auto-calc
   document.getElementById('modal-plan').onchange();
 }
 
@@ -279,35 +367,32 @@ function closeModal() {
 }
 
 async function saveSubscription() {
-  if (!_editingUserId || !client) return;
-
+  if (!_editingUserId || !_accessToken) return;
   var plan = document.getElementById('modal-plan').value;
   var endDate = document.getElementById('modal-date').value;
+  if (plan === 'unlimited') endDate = '2099-12-31';
 
   try {
-    // Read current profile data
-    var { data: existing, error: readErr } = await client.from('profiles').select('data').eq('id', _editingUserId).single();
-    if (readErr) { showToast('Erreur lecture: ' + readErr.message); return; }
-
-    var profileData = existing.data || {};
-    profileData.subscriptionPlan = plan;
-    profileData.subscriptionEnd = (plan === 'unlimited') ? '2099-12-31' : endDate;
-
-    // Write back
-    var { error: writeErr } = await client.from('profiles').update({ data: profileData, updated_at: new Date().toISOString() }).eq('id', _editingUserId);
-    if (writeErr) { showToast('Erreur écriture: ' + writeErr.message); return; }
-
+    var r = await fetch('/.netlify/functions/admin-update-subscription', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + _accessToken
+      },
+      body: JSON.stringify({ userId: _editingUserId, plan: plan, end: endDate })
+    });
+    if (r.status === 401) { showToast('Session expirée'); return signOut(); }
+    var json = null; try { json = await r.json(); } catch(e) {}
+    if (!r.ok) {
+      showToast('Erreur: ' + ((json && json.error) || ('HTTP ' + r.status)));
+      return;
+    }
     showToast('Abonnement mis à jour');
     closeModal();
     loadUsers();
-  } catch(e) { showToast('Erreur: ' + e.message); }
-}
-
-function showToast(msg) {
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.display = 'block';
-  setTimeout(function() { t.style.display = 'none'; }, 3000);
+  } catch (e) {
+    showToast('Erreur: ' + (e.message || 'inconnue'));
+  }
 }
 </script>
 

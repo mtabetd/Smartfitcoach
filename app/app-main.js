@@ -123,8 +123,10 @@ var PROFILE_KEYS = [
  'muscuObjectifSpecifique','muscuZonesCibles','muscuRenforcementNote',
  // Programme IA personnalisé
  'muscuIAProgram','muscuIAProgramDate',
- // Subscription
- 'subscriptionPlan','subscriptionEnd','_prePregnancyGoal'
+ // Subscription fields removed — now server-authoritative on profiles.subscription_plan/end.
+ // Repopulated into window.S on every loadProfile(), never persisted to localStorage,
+ // so a stale or tampered local value can never bypass the server check.
+ '_prePregnancyGoal'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
