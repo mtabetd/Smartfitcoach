@@ -3486,7 +3486,7 @@ function renderStep9(p) {
     }
     var cancelFoodBtn = h('button', {
       style: 'width:100%;padding:10px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);cursor:pointer',
-      onclick: function() { S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false; S._foodManualData = null; window.render(); }
+      onclick: function() { S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false; S._foodManualData = null; S._foodPortionItem = null; S._foodPortionGrams = null; window.render(); }
     }, 'Annuler');
     foodCard.appendChild(cancelFoodBtn);
     p.appendChild(foodCard);
