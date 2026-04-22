@@ -8009,6 +8009,17 @@ function renderMusculationProgram(p) {
  style: 'flex-shrink:0;padding:0;font-size:20px;font-weight:700;min-width:44px;min-height:44px;line-height:1',
  onclick: function(e) {
  e.stopPropagation();
+ // Ripple visuel depuis le point de tap
+ try {
+   var _rEl = document.createElement('span');
+   var _rect = e.currentTarget.getBoundingClientRect();
+   var _rSize = Math.max(_rect.width, _rect.height) * 2;
+   var _rx = (e.clientX - _rect.left) - _rSize / 2;
+   var _ry = (e.clientY - _rect.top) - _rSize / 2;
+   _rEl.style.cssText = 'position:absolute;border-radius:50%;background:rgba(62,92,58,0.3);pointer-events:none;width:' + _rSize + 'px;height:' + _rSize + 'px;left:' + _rx + 'px;top:' + _ry + 'px;animation:ripple-muscu 0.45s ease-out forwards;';
+   e.currentTarget.appendChild(_rEl);
+   setTimeout(function() { try { _rEl.parentNode && _rEl.parentNode.removeChild(_rEl); } catch(_re) {} }, 500);
+ } catch(_ripErr) {}
  // Si l'user n'a rien modifié, confirmer automatiquement les valeurs conseillées
  if (_sr.actualWeight === null && !_bwNoWeight && _sr.targetWeight > 0) _sr.actualWeight = _sr.targetWeight;
  if (_sr.actualReps === null && _sr.targetReps) _sr.actualReps = _sr.targetReps;
@@ -8310,6 +8321,40 @@ function renderMusculationProgram(p) {
  }, {passive: true});
 
  p.appendChild(_swipeWrap);
+
+ // ─── DAY SWIPE (switches selectedSportDay left/right) ───
+ (function() {
+  var _nDays = S.sportProgram.length;
+  if (_nDays < 2) return;
+  var _dTX = 0, _dTY = 0, _dBlocked = false, _dSwiping = false;
+  p.addEventListener('touchstart', function(e) {
+   _dTX = e.touches[0].clientX;
+   _dTY = e.touches[0].clientY;
+   _dBlocked = _swipeWrap.contains(e.target);
+   _dSwiping = false;
+  }, {passive: true});
+  p.addEventListener('touchmove', function(e) {
+   if (_dBlocked) return;
+   var dx = e.touches[0].clientX - _dTX;
+   var dy = e.touches[0].clientY - _dTY;
+   if (!_dSwiping && Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10) _dSwiping = true;
+  }, {passive: true});
+  p.addEventListener('touchend', function(e) {
+   if (!_dSwiping || _dBlocked) return;
+   var dx = e.changedTouches[0].clientX - _dTX;
+   if (dx < -50 && S.selectedSportDay < _nDays - 1) {
+    S.selectedSportDay++;
+    S.currentExerciseIdx = 0;
+    if (navigator.vibrate) try { navigator.vibrate(10); } catch(_v) {}
+    window.render();
+   } else if (dx > 50 && S.selectedSportDay > 0) {
+    S.selectedSportDay--;
+    S.currentExerciseIdx = 0;
+    if (navigator.vibrate) try { navigator.vibrate(10); } catch(_v) {}
+    window.render();
+   }
+  }, {passive: true});
+ })();
 
  // ─── ÉCHAUFFEMENT (collapsible) ───
  (function() {

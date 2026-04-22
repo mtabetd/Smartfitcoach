@@ -231,6 +231,22 @@
   border-top: 1px solid var(--border, #D8D8D0);
 }
 
+@keyframes sheetSlideUp {
+  from { transform: translateY(100%); opacity: 0.6; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.sheet-slide-up {
+  animation: sheetSlideUp 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: transform;
+}
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.overlay-fade-in {
+  animation: overlayFadeIn 0.22s ease;
+}
+
 
 /* -------------------------------------------------------
    12. TOOLTIP SYSTEM
@@ -2920,6 +2936,15 @@ button[disabled],
 .set-validate-btn:active:not([disabled]) {
   transform: scale(0.95);
   transition: transform 0.08s ease;
+}
+
+@keyframes ripple-muscu {
+  0%   { transform: scale(0); opacity: 0.5; }
+  100% { transform: scale(3); opacity: 0; }
+}
+.set-validate-btn {
+  position: relative;
+  overflow: hidden;
 }
 
 /* ── 10. CARDS — minimum padding 16px on mobile ── */
