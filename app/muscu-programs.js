@@ -608,8 +608,11 @@ function getWeeklySplit(daysPerWeek, userProfile) {
     for (var di = split.days.length - 1; di >= 0; di--) {
       if (split.days[di].muscles.indexOf(parentGroup) !== -1) { targetDay = split.days[di]; break; }
     }
-    // If no matching day, use the last day
-    if (!targetDay) targetDay = split.days[split.days.length - 1];
+    // FIX BUG SPRINT 2026-04-22 — Si aucun jour "parent" (ex: pas de jambes dans un
+    // split PPL custom), on n'injecte PLUS sur le dernier jour (qui pouvait être Push
+    // ou Pull → exos fessiers sur jour Push absurde). On abandonne l'injection pour
+    // cette zone plutôt que de polluer un jour non-pertinent.
+    if (!targetDay) return;
     // Inject dedicated program
     if (targetDay.muscles.indexOf(dediedKey) === -1) {
       targetDay.muscles.push(dediedKey);
@@ -2441,13 +2444,72 @@ function buildPersonalizedMuscuPlan(S) {
   }
 
   // 7. PROGRAMME SEMAINE : construit jour par jour
+  // ═══ FIX BUG SPRINT 2026-04-22 — Styles full-body + split non-full-body ═══
+  // Les styles 'starting', 'greyskull', 'texas' sont full-body par nature :
+  // chaque groupe musculaire (pectoraux, dos, epaules, bras...) contient un workout
+  // complet qui inclut des exercices multi-muscles (Squat, Deadlift, Power Clean).
+  // Si on pair ces styles avec un split où un jour est spécialisé (ex: PPL Push day
+  // = pectoraux+epaules seulement), le forEach(muscle) ci-dessous injecte TOUS les
+  // exercices incluant Squat/Deadlift sur le jour Push/Pull → bug jambes sur Push.
+  // Solution : filtrer les exos par muscle réel pour ne garder que ceux correspondant
+  // aux muscles du jour — MAIS uniquement si le jour n'est pas lui-même full-body
+  // (≥ 2 "systèmes" push/pull/legs → on considère le jour assez large pour garder
+  // les exercices multi-muscles du style full-body d'origine).
+  var FULL_BODY_STYLES = { starting: 1, greyskull: 1, texas: 1 };
+  var isFullBodyStyle = !!FULL_BODY_STYLES[style];
+  function getSystemsForMuscles(muscles) {
+    var sys = {};
+    (muscles || []).forEach(function(m) {
+      var mLow = String(m).toLowerCase();
+      if (/pectoraux|epaules|shoulder|chest/.test(mLow)) sys.push = 1;
+      else if (/dos|trapez|lombaires|back/.test(mLow)) sys.pull = 1;
+      else if (/jambes|fessier|mollet|quadri|ischio|legs|glute/.test(mLow)) sys.legs = 1;
+    });
+    return sys;
+  }
   var activeDays = (split.days || []).filter(function(d) { return d.muscles && d.muscles.length > 0; });
   var weekProgram = activeDays.map(function(dayPlan, idx) {
+    // Set des muscles autorisés pour ce jour (avec mapping dedied→parent)
+    var dayMuscleSet = {};
+    (dayPlan.muscles || []).forEach(function(m) {
+      var mLow = String(m).toLowerCase();
+      dayMuscleSet[mLow] = 1;
+      // Mapping variants dédiés → parents
+      if (mLow === 'fessiers_dedied') dayMuscleSet['fessiers'] = 1;
+      if (mLow === 'biceps_dedied' || mLow === 'triceps_dedied') dayMuscleSet['bras'] = 1;
+      if (mLow === 'abdos_dedied') dayMuscleSet['abdos'] = 1;
+    });
+    // Si le jour couvre déjà plusieurs "systèmes" (push+pull, push+legs, pull+legs,
+    // ou tous), on considère ce jour full-body et on N'applique PAS le filtre :
+    // l'exercice multi-muscle reste pertinent. Sinon (jour spécialisé Push/Pull/Legs
+    // d'un split PPL ou Upper/Lower), on filtre pour éviter la pollution inter-groupes.
+    var dayNeedsFullBodyFilter = false;
+    if (isFullBodyStyle) {
+      var sys = getSystemsForMuscles(dayPlan.muscles);
+      var nbSystems = (sys.push ? 1 : 0) + (sys.pull ? 1 : 0) + (sys.legs ? 1 : 0);
+      dayNeedsFullBodyFilter = nbSystems < 2;
+    }
+    function exerciseMatchesDay(ex) {
+      var exMuscle = String(ex.muscle || ex.m || '').toLowerCase().trim();
+      if (!exMuscle) return true; // sans tag muscle → on garde (bénéfice du doute)
+      // Accepte si n'importe quelle cible du jour apparaît dans le champ muscle de l'exo
+      for (var dm in dayMuscleSet) {
+        if (exMuscle.indexOf(dm) >= 0) return true;
+      }
+      return false;
+    }
     var allExercises = [];
     (dayPlan.muscles || []).forEach(function(muscle) {
       var prog = getStyleProgram(style, muscle, level);
       if (!prog || !prog.exercises) return;
       var exos = prog.exercises.filter(equipOk);
+      // FIX BUG 2026-04-22 : styles full-body + jour spécialisé → filtrer par muscles
+      // du jour pour éviter Squat/Deadlift/Power Clean sur un jour Push ou Pull.
+      if (dayNeedsFullBodyFilter) {
+        var filtered = exos.filter(exerciseMatchesDay);
+        // Safety : si le filtre vide tout, on garde la liste d'origine (fallback non-vide).
+        if (filtered.length > 0) exos = filtered;
+      }
       // FIX P0r contre-audit : fallback enrichi (avant: kick si exos.length===0 seulement,
       // → Thomas calisthenics home recevait 1 exo/jour). Maintenant : garantir ≥ 3 exos
       // par groupe en tirant des alternatives bodyweight/élastique compatibles.
