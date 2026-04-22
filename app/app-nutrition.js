@@ -1345,6 +1345,7 @@ function renderStep5(p) {
     dessertWrap.appendChild(h('span', {'class': 'chip' + (isOn ? ' on' : ''), style: chipStyle, onclick: function() {
       if (dessertDisabled) return;
       S.wantsDessert = opt.startsWith('Oui');
+      if (window.devalidateWeekPlan) window.devalidateWeekPlan('wantsDessert changed');
       window.render();
     }}, opt));
   });
@@ -1592,9 +1593,8 @@ function renderStep6(p) {
   if (S.pregnant && S.sex === 'femme') {
     p.appendChild(h('p', {'class': 'subtitle'}, 'Nutrition adapt\u00e9e \u00e0 chaque trimestre de votre grossesse.'));
 
-    // Auto-select maintain uniquement si objectif actuel est coupe/sèche (incompatible)
-    // Ne pas écraser bulk/recompo à chaque render — préserver le choix si compatible
-    if (S.goal === null || !GOALS[S.goal] || GOALS[S.goal].key === 'cut' || GOALS[S.goal].key === 'shred') {
+    // Auto-select maintain si objectif actuel est incompatible avec la grossesse (coupe/sèche/masse)
+    if (S.goal === null || !GOALS[S.goal] || GOALS[S.goal].key === 'cut' || GOALS[S.goal].key === 'shred' || GOALS[S.goal].key === 'bulk' || GOALS[S.goal].key === 'lean_bulk') {
       var _maintIdx = GOALS.findIndex(function(g){ return g.key === 'maintain'; });
       // Sauvegarder le goal original pour le restaurer si l'utilisatrice décoche "enceinte"
       if (S._prePregnancyGoal === null || S._prePregnancyGoal === undefined) {
@@ -1702,8 +1702,8 @@ function renderStep6(p) {
   var _isAllait = Array.isArray(S.medical) && S.medical.indexOf('allaitement') !== -1;
   var _isPreg = !!S.pregnant;
   if (_isPreg || _isAllait) {
-    // Forcer maintien si objectif actuel est coupe ou sèche (OMS 2016, ACOG 2020 — restriction calorique contre-indiquée)
-    if (S.goal !== null && GOALS[S.goal] && (GOALS[S.goal].key === 'cut' || GOALS[S.goal].key === 'shred')) {
+    // Forcer maintien si objectif incompatible grossesse/allaitement (OMS 2016, ACOG 2020)
+    if (S.goal !== null && GOALS[S.goal] && (GOALS[S.goal].key === 'cut' || GOALS[S.goal].key === 'shred' || GOALS[S.goal].key === 'bulk' || GOALS[S.goal].key === 'lean_bulk')) {
       var _maintIdx2 = GOALS.findIndex(function(g){ return g.key === 'maintain'; });
       S.goal = _maintIdx2 !== -1 ? _maintIdx2 : 2; // lookup "maintain" par clé (robuste si GOALS change)
     }
@@ -1730,7 +1730,7 @@ function renderStep6(p) {
   }
   var gg = h('div', {'class': 'card-grid-2'});
   GOALS.forEach(function(gl, i) {
-    var _pregBlock = (_isPreg || _isAllait) && (gl.key === 'cut' || gl.key === 'shred');
+    var _pregBlock = (_isPreg || _isAllait) && (gl.key === 'cut' || gl.key === 'shred' || gl.key === 'bulk' || gl.key === 'lean_bulk');
     gg.appendChild(h('div', {
       'class': 'sel-card' + (S.goal === i ? ' on' : '') + (_pregBlock ? ' disabled' : ''),
       style: _pregBlock ? 'opacity:0.35;cursor:not-allowed;pointer-events:none;' : '',
@@ -1848,7 +1848,7 @@ function renderStep7(p) {
   p.appendChild(h('div', {'class': 'section-label'}, 'Niveau cuisine'));
   var cl = h('div', {'class': 'card-grid-4'});
   COOK_LEVELS.forEach(function(c) {
-    cl.appendChild(h('div', {'class': 'sel-card' + (S.cookLevel === c.val ? ' on' : ''), onclick: function() { S.cookLevel = c.val; window.render(); }}, [
+    cl.appendChild(h('div', {'class': 'sel-card' + (S.cookLevel === c.val ? ' on' : ''), onclick: function() { S.cookLevel = c.val; if (window.devalidateWeekPlan) window.devalidateWeekPlan('cookLevel changed'); window.render(); }}, [
       h('div', {'class': 'card-name'}, c.name),
       h('div', {'class': 'card-sub'}, c.desc)
     ]));
@@ -1911,6 +1911,7 @@ function renderStep7(p) {
             var idx = S.wheyFlavors.indexOf(fid);
             if (idx !== -1) { S.wheyFlavors.splice(idx, 1); }
             else { S.wheyFlavors.push(fid); }
+            if (window.devalidateWeekPlan) window.devalidateWeekPlan('wheyFlavors changed');
             window.render();
           };
         })(f.id)
@@ -2016,7 +2017,7 @@ function renderStep7(p) {
   // Excluded
   p.appendChild(h('div', {'class': 'section-label'}, 'Aliments exclus'));
   var fi = h('div', {'class': 'field'});
-  fi.appendChild(h('input', {type: 'text', placeholder: 'Ex: avocat, bœuf, saumon...', value: S.excluded, oninput: function(e) { S.excluded = e.target.value; if (window.saveProfile) try { window.saveProfile(); } catch(e2) {} }}));
+  fi.appendChild(h('input', {type: 'text', placeholder: 'Ex: avocat, bœuf, saumon...', value: S.excluded, oninput: function(e) { S.excluded = e.target.value; if (window.devalidateWeekPlan) window.devalidateWeekPlan('excluded changed'); if (window.saveProfile) try { window.saveProfile(); } catch(e2) {} }}));
   p.appendChild(fi);
 
   // Cuisines
@@ -2027,6 +2028,7 @@ function renderStep7(p) {
     cg.appendChild(h('div', {'class': 'check-item' + (on ? ' on' : ''), onclick: function() {
       if (i === 0) { S.cuisines = on ? [] : [0]; }
       else { S.cuisines = S.cuisines.filter(function(x) { return x !== 0; }); if (on) S.cuisines = S.cuisines.filter(function(x) { return x !== i; }); else S.cuisines.push(i); }
+      if (window.devalidateWeekPlan) window.devalidateWeekPlan('cuisines changed');
       window.render();
     }}, [
       h('div', {'class': 'check-box'}, '\u2713'),

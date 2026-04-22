@@ -4911,7 +4911,7 @@ function calcFiberTarget(){
 }
 window.calcFiberTarget=calcFiberTarget;
 
-function getAge(){var s=window.S;if(s.birthDate){var today=new Date();var b=new Date(s.birthDate);if(!isNaN(b.getTime())){var a=today.getFullYear()-b.getFullYear();var m=today.getMonth()-b.getMonth();if(m<0||(m===0&&today.getDate()<b.getDate()))a--;return a;}}return s.age||null;}
+function getAge(){var s=window.S;if(s.birthDate){var today=new Date();var b=new Date(s.birthDate);if(!isNaN(b.getTime())){var a=today.getFullYear()-b.getFullYear();var m=today.getMonth()-b.getMonth();if(m<0||(m===0&&today.getDate()<b.getDate()))a--;if(a<0||a>120)return null;return a;}}return s.age||null;}
 function isBirthday(){var s=window.S;if(!s.birthDate)return false;var today=new Date();var b=new Date(s.birthDate);if(isNaN(b.getTime()))return false;return today.getMonth()===b.getMonth()&&today.getDate()===b.getDate();}
 window.getAge=getAge;window.isBirthday=isBirthday;
 
