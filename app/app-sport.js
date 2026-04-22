@@ -6100,6 +6100,9 @@ function saveMuscuSessionLog() {
  } catch(_ec) {}
  } catch (e) {
  console.warn('[saveMuscuSessionLog] localStorage error:', e);
+ if (e && e.name === 'QuotaExceededError' && window.showToast) {
+   window.showToast('Stockage plein — séance non sauvegardée. Libérez de l\'espace.', 'error', 4000);
+ }
  }
 }
 
