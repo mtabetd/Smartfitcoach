@@ -328,17 +328,36 @@ alter table public.profiles
   add column if not exists subscription_plan text,
   add column if not exists subscription_end  date;
 
--- One-time backfill from existing JSONB. Only writes when column is null,
--- so re-running is a no-op.
+-- One-time backfill from existing JSONB. Only copies values that cannot
+-- have been forged advantageously:
+--   • trial plans (no privilege)
+--   • end dates already in the past (expired subscriptions)
+-- Any 'unlimited' / non-trial / future-dated subscription is intentionally
+-- NOT backfilled — it is left NULL so an admin can review and re-grant
+-- via admin.html, using Stripe / payment logs as the real source of truth.
+-- This closes the "laundering" path: a user who self-granted 'unlimited'
+-- before the migration does not silently keep it after.
 update public.profiles
    set subscription_plan = data->>'subscriptionPlan'
  where subscription_plan is null
-   and data ? 'subscriptionPlan';
+   and data->>'subscriptionPlan' = 'trial';
 
 update public.profiles
-   set subscription_end = nullif(data->>'subscriptionEnd','')::date
+   set subscription_end = nullif(data->>'subscriptionEnd','')::date,
+       subscription_plan = coalesce(subscription_plan, data->>'subscriptionPlan')
  where subscription_end is null
-   and data ? 'subscriptionEnd';
+   and data ? 'subscriptionEnd'
+   and (nullif(data->>'subscriptionEnd','')::date) < current_date;
+
+-- Audit query for the operator (copy-paste to flag suspicious rows):
+--   select id, email, data->>'subscriptionPlan' as claimed_plan,
+--          data->>'subscriptionEnd' as claimed_end
+--     from public.profiles
+--    where subscription_plan is null
+--      and data ? 'subscriptionPlan'
+--      and data->>'subscriptionPlan' <> 'trial';
+-- Cross-check each row against payment records, then use admin.html to
+-- set the authoritative plan.
 
 -- Replace UPDATE policy: users may update their profile but not the two
 -- subscription columns. The "is not distinct from" comparison allows
@@ -366,7 +385,13 @@ begin
   -- Service role bypasses RLS but still fires triggers — allowlist it
   -- explicitly so admin writes via Netlify functions (using a separate
   -- columns-only update) are not affected.
-  if coalesce(current_setting('request.jwt.claim.role', true), '') <> 'service_role' then
+  --
+  -- Use auth.role() which is the canonical Supabase helper. The older
+  -- current_setting('request.jwt.claim.role') returns NULL on modern
+  -- PostgREST/GoTrue so the strip used to fire for every role — the
+  -- behavior was still safe (it's a deny path, not allow) but the
+  -- allowlist was effectively dead code.
+  if auth.role() is distinct from 'service_role' then
     if new.data is not null and (new.data ? 'subscriptionPlan' or new.data ? 'subscriptionEnd') then
       new.data = new.data - 'subscriptionPlan' - 'subscriptionEnd';
     end if;

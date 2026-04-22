@@ -12,8 +12,11 @@ ALLOWED_ORIGINS.push('http://localhost:8888', 'http://127.0.0.1:3000', 'http://l
 function isAllowedOrigin(origin) {
   if (!origin) return true;
   if (ALLOWED_ORIGINS.indexOf(origin) !== -1) return true;
+  // Allow only smartfitcoach deploy previews and branches. The wider
+  // ^https://[a-z0-9-]+\.netlify\.app$ regex would accept any attacker-
+  // owned netlify.app subdomain, which becomes an account-takeover
+  // vector the moment auth moves to cookies. Keep strict.
   if (/^https:\/\/[a-z0-9-]+--smartfitcoach\.netlify\.app$/.test(origin)) return true;
-  if (/^https:\/\/[a-z0-9-]+\.netlify\.app$/.test(origin)) return true;
   return false;
 }
 

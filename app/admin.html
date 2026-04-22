@@ -145,9 +145,6 @@ function getClient() {
       _client = window.getSupabaseClient();
     }
   } catch(e) {}
-  if (!_client && window.supabase && window.SUPABASE_URL && window.SUPABASE_ANON_KEY) {
-    _client = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
-  }
   return _client;
 }
 

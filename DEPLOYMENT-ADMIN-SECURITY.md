@@ -9,6 +9,18 @@ migration and set two Netlify env vars. Until then, the new admin page
 will show `ADMIN_EMAILS env var not set`, and the old JSONB-based
 subscription read will keep working untouched.
 
+## ⚠ CRITICAL — order matters
+
+**Step 1 (SQL migration) MUST run BEFORE Step 2 (Netlify deploy).** If
+you ship the new `admin-list-users` function against a pre-migration
+database, the `subscription_plan` / `subscription_end` columns do not
+exist yet and the function returns a 500 with a "column missing" error
+— the admin UI will not load. Conversely, if the migration lands but
+the old client bundle is still cached on user tabs, those old tabs can
+keep writing `subscriptionPlan` into the JSONB; the new trigger strips
+it immediately, so there's no bypass, but you may see console warnings
+in users' tabs until they refresh.
+
 ---
 
 ## 1. Supabase — run the migration

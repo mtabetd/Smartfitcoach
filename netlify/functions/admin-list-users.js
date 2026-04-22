@@ -28,7 +28,32 @@ exports.handler = async function(event) {
     if (result.error) {
       return { statusCode: 500, headers: headers, body: JSON.stringify({ error: 'DB error' }) };
     }
-    return { statusCode: 200, headers: headers, body: JSON.stringify({ users: result.data || [] }) };
+
+    // Project only the JSONB fields the admin UI actually renders. Full
+    // profiles.data contains weight history, medical flags, progress
+    // photos (base64), PARQ answers — admin-reading is allowed but
+    // unnecessary, and Netlify 5xx logs could retain the body.
+    var slim = (result.data || []).map(function(u) {
+      var d = u.data || {};
+      return {
+        id: u.id,
+        email: u.email,
+        name: u.name,
+        subscription_plan: u.subscription_plan,
+        subscription_end: u.subscription_end,
+        updated_at: u.updated_at,
+        data: {
+          prenom: d.prenom || null,
+          firstLoginDate: d.firstLoginDate || null,
+          // Legacy fallback so pre-migration rows still render the
+          // right badge while the admin is reviewing them.
+          subscriptionPlan: d.subscriptionPlan || null,
+          subscriptionEnd: d.subscriptionEnd || null
+        }
+      };
+    });
+
+    return { statusCode: 200, headers: headers, body: JSON.stringify({ users: slim }) };
   } catch (e) {
     console.error('[admin-list-users] error:', e);
     return { statusCode: 500, headers: headers, body: JSON.stringify({ error: 'Internal error' }) };
