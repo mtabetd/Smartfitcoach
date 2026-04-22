@@ -574,7 +574,7 @@ function generateSportProgram() {
    // Autorisé : poids corps, élastique, haltères, kettlebell, banc, barre de traction
    return /poids du corps|poids de corps|sans mat|sol|\u00e9lastique|elastique|halt[eè]re|kettlebell|\bkb\b|banc|barre fixe|barre de traction|aucun/.test(eq + ' ' + name);
  }
- if (S.sportEquipment === 'dumbbells') {
+ if (S.sportEquipment === 'dumbbells' || S.sportEquipment === 'home_dumbbells') {
  // Exclude exercises requiring cable machines, barbells, or specialized machines
  if (/câble|poulie|machine|t-bar|landmine|convergente|pec deck|barre de traction/.test(eq)) return false;
  // "barre + banc" requires barbell — exclude, but "haltères ou barre" → allow (use dumbbells)
@@ -593,15 +593,19 @@ function generateSportProgram() {
  }
  return true;
  });
- // FIX audit Marie : on respecte STRICTEMENT sportEquipment, même si <2 exos restent.
- // Mieux vaut 1 exo bodyweight correct que 5 exos inadaptés (câble/machine pour home).
  if (eqFiltered.length > 0) {
    available = eqFiltered;
- } else {
-   // Fallback ultra-strict : bodyweight pur uniquement
-   available = available.filter(function(ex) {
-     return /poids du corps|gainage|planche|burpee|pompe|squat saut|mountain climber|crunch sol/i.test(ex.n || ex.name || '');
+ } else if (S.sportEquipment === 'none') {
+   // Fallback 1 : exos sans machines ni câbles ni barbell (haltères légers / élastique acceptés)
+   // Évite d'avoir 0 exo sur des groupes sans variantes poids de corps (épaules, dos, biceps).
+   var _noneRelaxed = _medSafeAvailable.filter(function(ex) {
+     var _eq = (ex.eq || '').toLowerCase();
+     return !/machine|c[âa]ble|poulie|pec deck|smith|convergente|\bbarre\s*\+|hack squat|\bt[-\s]?bar\b|landmine/i.test(_eq);
    });
+   available = _noneRelaxed.length > 0 ? _noneRelaxed : _medSafeAvailable.slice();
+ } else {
+   // Fallback pour autres équipements : pool médical complet
+   available = _medSafeAvailable.slice();
  }
  }
 
@@ -860,6 +864,43 @@ function generateSportProgram() {
    _seen[_k] = true;
    return true;
   });
+ })();
+
+ // FIX 2026-04-22: Full Body days risk losing all lower-body exercises when the duration
+ // cap slices after the compound sort. If the day covers legs/glutes but the first durMax
+ // exercises are all upper-body compounds (bench/row/OHP/dips…), legs vanish entirely.
+ // Guard: compare against the actual EXERCISES.legs / EXERCISES.glutes pools (by name)
+ // so only genuine lower-body pool exercises are considered — not back compounds like
+ // "Snatch grip deadlift" that share the keyword "deadlift".
+ (function() {
+   var _dayHasLower = groups.some(function(g) { return g === 'legs' || g === 'glutes'; });
+   if (!_dayHasLower || !S.sportSessionDuration) return;
+   var _durLookup = { '45min': 5, '1h': 6, '1h15': 7, '1h30': 8 };
+   var _cap = _durLookup[S.sportSessionDuration] || 6;
+   // Build a set of lower-body exercise names from the actual pools
+   var _lowerNames = {};
+   ['legs', 'glutes'].forEach(function(cat) {
+     ((window.EXERCISES && window.EXERCISES[cat]) || []).forEach(function(ex) {
+       _lowerNames[(ex.n || '').toLowerCase().trim()] = true;
+     });
+   });
+   function _isLowerPoolEx(ex) {
+     return !!_lowerNames[(ex.n || '').toLowerCase().trim()];
+   }
+   // Check if a genuine lower-body exercise sits within the slice that survives the cap
+   var _slicedHasLegs = dayExercises.slice(0, _cap).some(_isLowerPoolEx);
+   if (!_slicedHasLegs) {
+     // Find the earliest genuine lower-body exercise beyond the cap boundary
+     var _legIdx = -1;
+     for (var _li = _cap; _li < dayExercises.length; _li++) {
+       if (_isLowerPoolEx(dayExercises[_li])) { _legIdx = _li; break; }
+     }
+     if (_legIdx !== -1 && _cap > 1) {
+       // Swap it into the last position of the surviving slice
+       var _legEx = dayExercises.splice(_legIdx, 1)[0];
+       dayExercises.splice(_cap - 1, 0, _legEx);
+     }
+   }
  })();
 
  // Pregnancy: add Kegel exercises to every day
