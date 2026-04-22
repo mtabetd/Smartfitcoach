@@ -181,27 +181,41 @@ async function loadUsers() {
       var subPlan = profile.subscriptionPlan || null;
       var firstLogin = profile.firstLoginDate || null;
 
-      // Determine status
-      var status, badge;
+      // Determine status. Build the badge as a real DOM element — subPlan
+      // comes from the user's own profiles.data JSONB (self-editable via
+      // RLS) so string-concat + innerHTML would let a malicious value
+      // execute JS in the admin's browser (stored XSS).
+      var status, badgeEl = document.createElement('span');
+      badgeEl.className = 'badge';
       if (subPlan === 'unlimited') {
-        status = 'unlimited'; badge = '<span class="badge badge-unlimited">Illimité</span>';
+        status = 'unlimited';
+        badgeEl.classList.add('badge-unlimited');
+        badgeEl.textContent = 'Illimité';
         statsUnlimited++;
       } else if (subEnd && new Date(subEnd) > now) {
-        status = 'active'; badge = '<span class="badge badge-active">Actif · ' + (subPlan || '') + '</span>';
+        status = 'active';
+        badgeEl.classList.add('badge-active');
+        badgeEl.textContent = 'Actif · ' + (subPlan || '');
         statsActive++;
       } else if (firstLogin) {
         var trialEnd = new Date(firstLogin);
         trialEnd.setDate(trialEnd.getDate() + 7);
         if (trialEnd > now) {
           var daysLeft = Math.ceil((trialEnd - now) / (1000 * 60 * 60 * 24));
-          status = 'trial'; badge = '<span class="badge badge-trial">Trial · ' + daysLeft + 'j restants</span>';
+          status = 'trial';
+          badgeEl.classList.add('badge-trial');
+          badgeEl.textContent = 'Trial · ' + daysLeft + 'j restants';
           statsTrials++;
         } else {
-          status = 'expired'; badge = '<span class="badge badge-expired">Expiré</span>';
+          status = 'expired';
+          badgeEl.classList.add('badge-expired');
+          badgeEl.textContent = 'Expiré';
           statsExpired++;
         }
       } else {
-        status = 'trial'; badge = '<span class="badge badge-trial">Nouveau</span>';
+        status = 'trial';
+        badgeEl.classList.add('badge-trial');
+        badgeEl.textContent = 'Nouveau';
         statsTrials++;
       }
 
@@ -210,7 +224,7 @@ async function loadUsers() {
       tr.appendChild(_td(profile.prenom || user.name));
       tr.appendChild(_td(user.email));
       tr.appendChild(_td(firstLogin));
-      var badgeTd = document.createElement('td'); badgeTd.innerHTML = badge; tr.appendChild(badgeTd);
+      var badgeTd = document.createElement('td'); badgeTd.appendChild(badgeEl); tr.appendChild(badgeTd);
       tr.appendChild(_td(subPlan === 'unlimited' ? '\u221e' : subEnd));
       var actionTd = document.createElement('td');
       var actionBtn = document.createElement('button');
