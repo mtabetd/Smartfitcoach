@@ -159,7 +159,8 @@ var EXERCISES = {
       desc: "Poulies basses, tirer les câbles vers le haut et croiser au niveau des pectoraux.",
       tips: ["Petite flexion vers l'avant", "Sentir le stretch en position ouverte", "Contracter fort en croisant"],
       lv: 2,
-      tags: ["pectoraux", "isolation", "cable", "finition"]
+      tags: ["pectoraux", "isolation", "cable", "finition"],
+    video: "https://www.youtube.com/watch?v=bMNGiVvBzuA"
     },
     {
       n: "Pec deck / Butterfly",
@@ -170,7 +171,8 @@ var EXERCISES = {
       desc: "Assis à la machine, ramener les bras devant la poitrine en arc de cercle.",
       tips: ["Coudes en ligne avec les épaules", "Amplitude maximale pour l'étirement", "Idéal pour finition et congestion"],
       lv: 1,
-      tags: ["pectoraux", "machine", "isolation", "finition"]
+      tags: ["pectoraux", "machine", "isolation", "finition"],
+    video: "https://www.youtube.com/watch?v=W1YytWnvBKE"
     },
     {
       n: "Pompes déclinées",
@@ -181,7 +183,8 @@ var EXERCISES = {
       desc: "Pieds surélevés sur un banc, pompes en position déclinée.",
       tips: ["Plus les pieds sont hauts, plus le bas de pec est cible", "Corps parfaitement gainé", "Excellent sans matériel"],
       lv: 2,
-      tags: ["pectoraux", "poids du corps"]
+      tags: ["pectoraux", "poids du corps"],
+    video: "https://www.youtube.com/watch?v=iIa2-uVHzM0"
     },
     {
       n: "Écarté câble croisé",
@@ -192,7 +195,8 @@ var EXERCISES = {
       desc: "Poulies à hauteur des épaules, croiser les câbles devant la poitrine.",
       tips: ["Permet une tension constante contrairement aux haltères", "Sentir le stretch à chaque rep", "Angle modifiable pour cibler haut/bas"],
       lv: 2,
-      tags: ["pectoraux", "cable", "isolation"]
+      tags: ["pectoraux", "cable", "isolation"],
+    video: "https://www.youtube.com/watch?v=eoeipFPGUXA"
     },
     {
       n: "Pompes plyométriques",
@@ -203,7 +207,8 @@ var EXERCISES = {
       desc: "Pompes explosives avec décollment des mains du sol en haut du mouvement.",
       tips: ["Atterrir en douceur avec légère flexion des coudes", "Excellent pour la puissance explosive", "Ne pas faire sous fatigue extreme"],
       lv: 3,
-      tags: ["pectoraux", "puissance", "explosif", "poids du corps"]
+      tags: ["pectoraux", "puissance", "explosif", "poids du corps"],
+    video: "https://www.youtube.com/watch?v=CbI4VhVoiPQ"
     }
 ,
     {
@@ -431,7 +436,8 @@ var EXERCISES = {
       desc: "Debout face à la poulie haute, bras tendus, tirer le câble vers les cuisses.",
       tips: ["Bras tendus tout le long", "Isolation parfaite du grand dorsal", "Excellent exercice de finition"],
       lv: 2,
-      tags: ["dos", "dorsaux", "cable", "isolation"]
+      tags: ["dos", "dorsaux", "cable", "isolation"],
+    video: "https://www.youtube.com/watch?v=wcVDItawocI"
     },
     {
       n: "Pendlay row",
@@ -442,7 +448,8 @@ var EXERCISES = {
       desc: "Barre au sol, dos horizontal à 90 degrés. Tirer explosif vers les abdos, reposer au sol à chaque rep.",
       tips: ["Barre au sol entre chaque rep — pas de triche", "Explosif à la montee", "Excellent pour la force du dos"],
       lv: 3,
-      tags: ["dos", "force", "puissance", "compose"]
+      tags: ["dos", "force", "puissance", "compose"],
+    video: "https://www.youtube.com/watch?v=OjuKHVXvS1Q"
     },
     {
       n: "Traction prise neutre",
@@ -453,7 +460,8 @@ var EXERCISES = {
       desc: "Prise neutre (paumes se font face), traction complète jusqu'au menton.",
       tips: ["Intermédiaire entre supination et pronation", "Moins de stress sur les coudes", "Excellent pour les coudes sensibles"],
       lv: 3,
-      tags: ["dos", "biceps", "compose", "poids du corps"]
+      tags: ["dos", "biceps", "compose", "poids du corps"],
+    video: "https://www.youtube.com/watch?v=WVIydSNFsm4"
     },
     {
       n: "Rowing assis câble prise large",
@@ -464,7 +472,8 @@ var EXERCISES = {
       desc: "Assis à la poulie basse, prise large, tirer vers le bas de la poitrine.",
       tips: ["Coudes evases pour cibler les rhomboides", "Different du rowing prise serrée (dorsaux)", "Idéal pour l'épaisseur du dos"],
       lv: 2,
-      tags: ["dos", "rhomboides", "trapezes", "cable"]
+      tags: ["dos", "rhomboides", "trapezes", "cable"],
+    video: "https://www.youtube.com/watch?v=YKAeU55CkVk"
     },
     {
       n: "T-bar Row Machine",
@@ -475,7 +484,8 @@ var EXERCISES = {
       desc: "Buste penche à 45 degrés, saisir le T-bar, tirer vers la poitrine.",
       tips: ["Buste fixe à 45 degrés", "Tirer les coudes vers l'arrière", "Amplitude complete — etirer les dorsaux en bas"],
       lv: 2,
-      tags: ["dos", "dorsaux", "force", "compose"]
+      tags: ["dos", "dorsaux", "force", "compose"],
+    video: "https://www.youtube.com/watch?v=SbZycT7Eq58"
     }
 ,
     {
@@ -760,7 +770,8 @@ var EXERCISES = {
       desc: "Câble bas, lever le bras droit devant soi jusqu'à la parallele.",
       tips: ["Tension constante vs haltere (câble superieur)", "Lever jusqu'à hauteur des épaules seulement", "Alterner ou simultane"],
       lv: 2,
-      tags: ["epaules", "deltoides", "cable", "isolation"]
+      tags: ["epaules", "deltoides", "cable", "isolation"],
+    video: "https://www.youtube.com/watch?v=2pGT3PRuoUU"
     },
     {
       n: "Oiseau haltères rear delt",
@@ -771,7 +782,8 @@ var EXERCISES = {
       desc: "Buste penche à 90 degrés, bras pendants, lever les haltères sur les cotes.",
       tips: ["Légère flexion des coudes", "Pointer les coudes vers le plafond", "Deltoïde postérieur  très souvent neglige"],
       lv: 2,
-      tags: ["epaules", "deltoides-posterieurs", "posture"]
+      tags: ["epaules", "deltoides-posterieurs", "posture"],
+    video: "https://www.youtube.com/watch?v=H9QQdMz2syA"
     },
     {
       n: "Lu raise",
@@ -782,7 +794,8 @@ var EXERCISES = {
       desc: "Combine : élévation frontale + latérale + rotation. Mouvement en Y.",
       tips: ["Poids très léger (2-5 kg max)", "Renforce la coiffe en position d'étirement", "Popularisé par Lu Xiaojun"],
       lv: 2,
-      tags: ["epaules", "coiffe", "prehab-avance"]
+      tags: ["epaules", "coiffe", "prehab-avance"],
+    video: "https://www.youtube.com/watch?v=C0JTTq7TLoM"
     },
     {
       n: "Shrugs haltères",
@@ -793,7 +806,8 @@ var EXERCISES = {
       desc: "Debout, haltères aux flancs, hausser les épaules au maximum.",
       tips: ["Mouvement vertical — pas de rotation", "Pause 1 seconde en haut", "Ne pas rouler les épaules"],
       lv: 1,
-      tags: ["epaules", "trapezes", "isolation"]
+      tags: ["epaules", "trapezes", "isolation"],
+    video: "https://www.youtube.com/watch?v=uN5rwCivJXc"
     },
     {
       n: "Développé militaire halteres",
@@ -805,7 +819,8 @@ var EXERCISES = {
       desc: "Assis ou debout, pousser les haltères de l'épaule vers le haut.",
       tips: ["Plus grande amplitude qu'a la barre", "Coudes légèrement en avant du corps", "Variante plus stable pour les épaules", "Ne jamais depasser la douleur — toute douleur au pincement en haut = arreter"],
       lv: 2,
-      tags: ["epaules", "force", "compose"]
+      tags: ["epaules", "force", "compose"],
+    video: "https://www.youtube.com/watch?v=_JOHuViN9Mk"
     },
     {
         n: "Cable lateral raise",
@@ -1018,7 +1033,8 @@ var EXERCISES = {
       desc: "Allongé sur banc incliné à 60 degrés, bras pendant dans le vide. Curler les haltères.",
       tips: ["Étirement maximal du chef long", "Ne pas balancer les bras", "Tension des le départ de l'étirement"],
       lv: 2,
-      tags: ["biceps", "chef-long", "etirement"]
+      tags: ["biceps", "chef-long", "etirement"],
+    video: "https://www.youtube.com/watch?v=DCe8f6vMe9A"
     },
     {
       n: "Curl marteau câble",
@@ -1029,7 +1045,8 @@ var EXERCISES = {
       desc: "Corde à la poulie basse, curl en prise neutre (marteau).",
       tips: ["Tension constante du câble", "Ciblage du brachial sous le biceps", "Ameliore le thickness du bras"],
       lv: 1,
-      tags: ["biceps", "brachial", "cable"]
+      tags: ["biceps", "brachial", "cable"],
+    video: "https://www.youtube.com/watch?v=vsarApmqJmo"
     },
     {
       n: "Curl spider (araignee)",
@@ -1040,7 +1057,8 @@ var EXERCISES = {
       desc: "Allonge face contre le banc incliné à 45 degrés, curler la barre en partant bras tendus.",
       tips: ["Coudes fixes devant le banc", "Mouvement  très strict — impossible de tricher", "Excellent pour le pic du biceps"],
       lv: 2,
-      tags: ["biceps", "isolation", "strict"]
+      tags: ["biceps", "isolation", "strict"],
+    video: "https://www.youtube.com/watch?v=K23Wx3shKvY"
     },
     {
         n: "Bayesian cable curl",
@@ -1215,7 +1233,8 @@ var EXERCISES = {
       desc: "Développé couché prise serrée, amener la barre vers le front en pliant les coudes.",
       tips: ["Hybride entre développé et extension triceps", "Charge lourde possible", "Excellent pour la masse triceps"],
       lv: 3,
-      tags: ["triceps", "force", "masse", "compose"]
+      tags: ["triceps", "force", "masse", "compose"],
+    video: "https://www.youtube.com/watch?v=mTxOBkKDkzs"
     },
     {
       n: "Extension triceps câble corde",
@@ -1226,7 +1245,8 @@ var EXERCISES = {
       desc: "Corde à la poulie haute, pousser vers le bas en écartant la corde en bas.",
       tips: ["Ecarter la corde en bas pour finition maximale", "Coudes contre le corps", "Tension constante du câble"],
       lv: 1,
-      tags: ["triceps", "cable", "isolation", "finition"]
+      tags: ["triceps", "cable", "isolation", "finition"],
+    video: "https://www.youtube.com/watch?v=chga5H9EPe0"
     },
     {
       n: "Barre au front skullcrusher",
@@ -1237,7 +1257,8 @@ var EXERCISES = {
       desc: "Allongé, descendre la barre vers le front en pliant les coudes.",
       tips: ["Descendre jusqu'au front ou derrière la tête pour plus de stretch", "Coudes vers l'interieur", "Ne pas verrouiller complètement"],
       lv: 3,
-      tags: ["triceps", "masse", "isolation"]
+      tags: ["triceps", "masse", "isolation"],
+    video: "https://www.youtube.com/watch?v=6XhWo0i3cdI"
     },
     {
         n: "Overhead tricep extension câble",
@@ -1489,7 +1510,8 @@ var EXERCISES = {
       desc: "Debout, barre aux hanches, descendre en gardant les jambes semi-fléchies jusqu'au tibia.",
       tips: ["Dos plat OBLIGATOIRE — la moindre flexion lombaire sous charge = risque disque", "Sentir l'étirement des ischios", "Barre contre les jambes tout le long", "Amplitude limitée à la flexion de hanche sans perte de lordose"],
       lv: 3,
-      tags: ["jambes", "ischios", "fessiers", "compose"]
+      tags: ["jambes", "ischios", "fessiers", "compose"],
+    video: "https://www.youtube.com/watch?v=OjYtl68wxy4"
     },
     {
       n: "Leg press pied haut",
@@ -1500,7 +1522,8 @@ var EXERCISES = {
       desc: "Pieds hauts sur la plateforme, descendre profondément. Variation fessier/ischios.",
       tips: ["Pieds à mi-hauteur de la plateforme", "Descente profonde", "Genoux dans l'axe des orteils"],
       lv: 1,
-      tags: ["jambes", "fessiers", "ischios", "machine"]
+      tags: ["jambes", "fessiers", "ischios", "machine"],
+    video: "https://www.youtube.com/watch?v=slFRFu4Dkag"
     },
     {
       n: "Step-up halteres",
@@ -1511,7 +1534,8 @@ var EXERCISES = {
       desc: "Monter sur le banc avec une jambe, amener l'autre genou en haut.",
       tips: ["Pousser depuis le talon de la jambe qui monte", "Contrôler la descente", "Excellent pour équilibre et genoux"],
       lv: 2,
-      tags: ["jambes", "fessiers", "unilateral", "fonctionnel"]
+      tags: ["jambes", "fessiers", "unilateral", "fonctionnel"],
+    video: "https://www.youtube.com/watch?v=aKj-6hgiViA"
     },
     {
       n: "Sissy squat",
@@ -1523,7 +1547,8 @@ var EXERCISES = {
       desc: "Debout, se tenir à un support, descendre en laissant les genoux aller loin en avant.",
       tips: ["Pointes de pieds rélevées", "Stretch intense des quadriceps", "Progresser avec lest", "STOP immediat si douleur au genou — ne pas confondre brulure musculaire et douleur articulaire"],
       lv: 3,
-      tags: ["jambes", "quadriceps", "isolation", "avance"]
+      tags: ["jambes", "quadriceps", "isolation", "avance"],
+    video: "https://www.youtube.com/watch?v=0CG823N6uWU"
     },
     {
       n: "Goblet squat",
@@ -1534,7 +1559,8 @@ var EXERCISES = {
       desc: "Tenir l'haltère à la poitrine, squat profond avec les coudes entre les genoux.",
       tips: ["Excellent pour apprendre le squat profond", "Coudes poussent les genoux vers l'extérieur", "Ideal débutants et mobilité cheville"],
       lv: 1,
-      tags: ["jambes", "fessiers", "débutant", "mobilite"]
+      tags: ["jambes", "fessiers", "débutant", "mobilite"],
+    video: "https://www.youtube.com/watch?v=MeIiIdhvXT4"
     }
 ,
     {
@@ -1864,7 +1890,8 @@ var EXERCISES = {
       desc: "Épaules sur le banc, barre sur les hanches, pousser vers le haut en contractant les fessiers.",
       tips: ["L'exercice ROI pour les fessiers (EMG le plus eleve)", "Menton vers la poitrine — ne pas hyperetendre le cou", "Pause 2 secondes en haut"],
       lv: 2,
-      tags: ["fessiers", "force", "compose", "roi-fessiers"]
+      tags: ["fessiers", "force", "compose", "roi-fessiers"],
+    video: "https://www.youtube.com/watch?v=lBZZFJ6Z3Dg"
     },
     {
       n: "Hip thrust unilatéral léger",
@@ -1875,7 +1902,8 @@ var EXERCISES = {
       desc: "Même position que le hip thrust, mais sur une seule jambe. Version légère pour correction d'asymétries.",
       tips: ["Correction asymétries fessières", "Charge réduite vs bilateral", "Excellent pour sportifs"],
       lv: 3,
-      tags: ["fessiers", "unilateral", "asymetrie"]
+      tags: ["fessiers", "unilateral", "asymetrie"],
+    video: "https://www.youtube.com/watch?v=zx3BTcnT5wg"
     },
     {
       n: "Kickback câble fessier",
@@ -1886,7 +1914,8 @@ var EXERCISES = {
       desc: "Cheville à la poulie basse, penche en avant, lancer la jambe vers l'arrière.",
       tips: ["Contracter le fessier en haut", "Ne pas balancer — mouvement contrôlé", "Congestion maximale"],
       lv: 1,
-      tags: ["fessiers", "isolation", "cable", "finition"]
+      tags: ["fessiers", "isolation", "cable", "finition"],
+    video: "https://www.youtube.com/watch?v=5jJNfIlKTmg"
     },
     {
       n: "Sumo squat haltere",
@@ -1897,7 +1926,8 @@ var EXERCISES = {
       desc: "Pieds largement écartés, pointes vers l'extérieur, haltère entre les jambes.",
       tips: ["Descendre profond entre les jambes", "Ciblage adducteurs et fessiers moyens", "Excellent pour les femmes"],
       lv: 1,
-      tags: ["fessiers", "adducteurs", "débutant"]
+      tags: ["fessiers", "adducteurs", "débutant"],
+    video: "https://www.youtube.com/watch?v=Sq88Uw0roVU"
     },
     {
       n: "Fentes latérales",
@@ -1908,7 +1938,8 @@ var EXERCISES = {
       desc: "Écarter une jambe sur le côté, plier le genou et descendre, l'autre jambe tendue.",
       tips: ["Pied pointe vers l'extérieur du cote qui flechit", "Excellent pour les adducteurs et moyen fessier", "Contrôler le genou dans l'axe du pied"],
       lv: 2,
-      tags: ["fessiers", "adducteurs", "unilateral"]
+      tags: ["fessiers", "adducteurs", "unilateral"],
+    video: "https://www.youtube.com/watch?v=kVY0fXtrrs0"
     }
 ,
     {
@@ -2235,7 +2266,8 @@ var EXERCISES = {
       desc: "Allongé, tenir la barre derrière la tête, monter et descendre le corps raide comme une planche.",
       tips: ["Corps RIGIDE comme une planche", "Exercice de Bruce Lee —  très difficile", "Commencer avec les jambes fléchies"],
       lv: 3,
-      tags: ["abdos", "core", "avance", "expert"]
+      tags: ["abdos", "core", "avance", "expert"],
+    video: "https://www.youtube.com/watch?v=7fRemwjcXOQ"
     },
     {
       n: "L-sit progressions",
@@ -2246,7 +2278,8 @@ var EXERCISES = {
       desc: "Soutenu sur les mains, jambes tendues horizontales. Tenir.",
       tips: ["Progression : 1 jambe → 2 jambes pliees → L-sit complet", "Jambes parfaitement horizontales", "Force abdos + flexion hanche"],
       lv: 3,
-      tags: ["abdos", "psoas", "calisthenics", "avance"]
+      tags: ["abdos", "psoas", "calisthenics", "avance"],
+    video: "https://www.youtube.com/watch?v=HxDP7SqggpI"
     },
     {
       n: "Windshield wipers",
@@ -2257,7 +2290,8 @@ var EXERCISES = {
       desc: "Suspendu à la barre, jambes tendues, basculer de gauche a droite comme des essuie-glaces.",
       tips: ["Jambes tendues pour plus de difficulté", "Controle de la rotation — ne pas balancer", "Progresser avec jambes fléchies"],
       lv: 3,
-      tags: ["abdos", "obliques", "avance", "suspension"]
+      tags: ["abdos", "obliques", "avance", "suspension"],
+    video: "https://www.youtube.com/watch?v=JxoH7IjSM9I"
     },
     {
       n: "Obliques chaise romaine",
@@ -2268,7 +2302,8 @@ var EXERCISES = {
       desc: "Installé sur la chaise romaine, effectuer des rotations latérales contrôlées en fléchissant le tronc sur le côté.",
       tips: ["12 reps chaque côté", "Rotation latérale contrôlée — ne pas utiliser l'inertie", "Contrôler la montée et la descente", "Amplitude complète pour maximiser l'activation des obliques"],
       lv: 2,
-      tags: ["abdos", "obliques", "chaise romaine", "lateral"]
+      tags: ["abdos", "obliques", "chaise romaine", "lateral"],
+    video: "https://www.youtube.com/watch?v=-H_OK2mlAB0"
     },
     {
         n: "Dead bug",
@@ -2516,7 +2551,8 @@ var EXERCISES = {
       desc: "Coude à 90 degrés contre le corps, tirer l'élastique vers l'extérieur en rotation externe.",
       tips: ["Coude colle au flanc", "Mouvement lent et contrôlé", "Amplitude complete sans douleur"],
       lv: 1,
-      tags: ["prehab", "epaules", "coiffe", "prevention"]
+      tags: ["prehab", "epaules", "coiffe", "prevention"],
+    video: "https://www.youtube.com/watch?v=o7PYStgOgE0"
     },
     {
       n: "Face pull prehab",
@@ -2527,7 +2563,8 @@ var EXERCISES = {
       desc: "Tirer le câble vers le visage, coudes au-dessus des épaules, ouvrir les bras.",
       tips: ["Coudes hauts en permanence", "Contractez les trapez\u00e8s inferieurs", "Excellent contre-exercice au développé"],
       lv: 1,
-      tags: ["prehab", "epaules", "posture", "prevention"]
+      tags: ["prehab", "epaules", "posture", "prevention"],
+    video: "https://www.youtube.com/watch?v=CU4Xc2qlLC0"
     },
     // ── DOS LOMBAIRES ──
     {
@@ -2539,7 +2576,8 @@ var EXERCISES = {
       desc: "Allongé, creuser le bas du dos contre le sol, jambes et bras tendus à 45 degrés. Tenir.",
       tips: ["Bas du dos plaqué au sol en permanence", "Respiration normale", "Progresser en éloignant les bras/jambes"],
       lv: 2,
-      tags: ["prehab", "core", "lombaires", "prevention"]
+      tags: ["prehab", "core", "lombaires", "prevention"],
+    video: "https://www.youtube.com/watch?v=JnuYfsJ3CKg"
     },
     {
       n: "Bird-dog",
@@ -2550,7 +2588,8 @@ var EXERCISES = {
       desc: "A 4 pattes, etendre le bras droit et la jambe gauche simultanément. Alterner.",
       tips: ["Dos horizontal — ne pas se dehancher", "Pointer les orteils", "Rentrer le nombril"],
       lv: 1,
-      tags: ["prehab", "lombaires", "core", "équilibre"]
+      tags: ["prehab", "lombaires", "core", "équilibre"],
+    video: "https://www.youtube.com/watch?v=S1QbyYZaXIg"
     },
     {
       n: "McGill curl-up",
@@ -2561,7 +2600,8 @@ var EXERCISES = {
       desc: "Allongé, une jambe fléchie, mains sous les lombaires. Lever légèrement la tête et les épaules.",
       tips: ["NE PAS arrondir le bas du dos", "Mouvement minimal — 2-3cm suffisent", "Recommande par Stuart McGill pour lombalgie"],
       lv: 1,
-      tags: ["prehab", "abdos", "lombaires", "rehabilitation"]
+      tags: ["prehab", "abdos", "lombaires", "rehabilitation"],
+    video: "https://www.youtube.com/watch?v=_tz9WGVH25g"
     },
     // ── GENOUX ──
     {
@@ -2573,7 +2613,8 @@ var EXERCISES = {
       desc: "Debout, élastique derrière le genou, extension complete des 30 derniers degrés.",
       tips: ["Ciblage du VMO pour stabiliser la rotule", "Alternative au leg extension pour tendinopathie", "Serrer fort en extension"],
       lv: 1,
-      tags: ["prehab", "genoux", "VMO", "tendinite-rotulienne"]
+      tags: ["prehab", "genoux", "VMO", "tendinite-rotulienne"],
+    video: "https://www.youtube.com/watch?v=SM-gh-ztwZU"
     },
     {
       n: "Clamshell élastique",
@@ -2584,7 +2625,8 @@ var EXERCISES = {
       desc: "Allongé sur le côté, genoux fléchis, élastique au-dessus des genoux. Ouvrir le genou du dessus.",
       tips: ["Bassin fixe — ne pas rouler", "Ciblage fessier moyen pour stabilité genou/hanche", "Progression : debout en pont fessier"],
       lv: 1,
-      tags: ["prehab", "fessiers", "hanches", "genoux"]
+      tags: ["prehab", "fessiers", "hanches", "genoux"],
+    video: "https://www.youtube.com/watch?v=EG5_gXcfozw"
     },
     // ── CHEVILLE / PIED ──
     {
@@ -2596,7 +2638,8 @@ var EXERCISES = {
       desc: "Debout face au mur, pied à 10-15cm. Genou vers le mur sans lever le talon.",
       tips: ["Mesurer la distance pied-mur", "Indispensable pour squat profond", "Augmenter progressivement la distance"],
       lv: 1,
-      tags: ["prehab", "cheville", "mobilite", "squat"]
+      tags: ["prehab", "cheville", "mobilite", "squat"],
+    video: "https://www.youtube.com/watch?v=Y1IZXkdPPdw"
     },
     // ── POIGNETS / AVANT-BRAS ──
     {
@@ -2608,7 +2651,8 @@ var EXERCISES = {
       desc: "Avant-bras pose sur la cuisse, poignet en dehors. Fléchir/etendre le poignet.",
       tips: ["Poids très léger (1-2 kg suffisent)", "Prévention épicondylite mediale", "Mouvement d'amplitude complete"],
       lv: 1,
-      tags: ["prehab", "poignets", "avant-bras", "épicondylite"]
+      tags: ["prehab", "poignets", "avant-bras", "épicondylite"],
+    video: "https://www.youtube.com/watch?v=eOYwu-dHAD4"
     },
     {
       n: "Renforcement poignet extenseurs",
@@ -2619,7 +2663,8 @@ var EXERCISES = {
       desc: "Avant-bras posé, paume vers le bas. Étendre le poignet vers le haut.",
       tips: ["Prévention épicondylite laterale (tennis elbow)", "Poids 1-2 kg maximum", "Mouvement lent et contrôlé"],
       lv: 1,
-      tags: ["prehab", "poignets", "extenseurs", "tennis-elbow"]
+      tags: ["prehab", "poignets", "extenseurs", "tennis-elbow"],
+    video: "https://www.youtube.com/watch?v=la-0c4ubkvs"
     },
     // ── POSTURE / COLONNE ──
     {
@@ -2631,7 +2676,8 @@ var EXERCISES = {
       desc: "Debout sur une marche, descendre vertebre par vertebre avec un poids très léger.",
       tips: ["Poids TRES leger (5-10 kg max)", "Mouvement LENT — 5-8 secondes", "Renforce les disques EN FLEXION CONTROLEE — differe du deadlift"],
       lv: 2,
-      tags: ["prehab", "colonne", "mobilite", "decompression"]
+      tags: ["prehab", "colonne", "mobilite", "decompression"],
+    video: "https://www.youtube.com/watch?v=dJ_ikJyzuOA"
     },
     {
       n: "Étirement piriforme (figure 4)",
@@ -2642,7 +2688,8 @@ var EXERCISES = {
       desc: "Allongé, croiser la cheville droite sur le genou gauche. Tirer la jambe gauche vers la poitrine.",
       tips: ["Sentir l'étirement dans la fesse", "Prévention sciatique par compression piriforme", "Maintenir 30 secondes minimum"],
       lv: 1,
-      tags: ["prehab", "hanches", "piriforme", "sciatique", "etirement"]
+      tags: ["prehab", "hanches", "piriforme", "sciatique", "etirement"],
+    video: "https://www.youtube.com/watch?v=E6sqUHFt6Ng"
     },
     {
       n: "Activation fessier proné",
@@ -2653,7 +2700,8 @@ var EXERCISES = {
       desc: "Allongé sur le ventre, contracter le fessier et lever une jambe légèrement du sol.",
       tips: ["Contracter le fessier AVANT de lever la jambe", "Evite d'activer les lombaires à la place", "Indispensable si amnesie gluteale (bureau, sedentarite)"],
       lv: 1,
-      tags: ["prehab", "fessiers", "activation", "lombaires"]
+      tags: ["prehab", "fessiers", "activation", "lombaires"],
+    video: "https://www.youtube.com/watch?v=cM_v8v2ihtA"
     },
     // ─── SPRINT P3 #6 — Enrichissement biblio (+3 prehab) ───
     { n: "Scapular push-ups", m: "Sérratus antérieur / Scapula", eq: "Poids du corps", sets: "3×10-15", rest: "30s", video: "https://www.youtube.com/watch?v=59BPdBnDjLY", desc: "Position de pompe classique, bras tendus. Protraction/rétraction des omoplates sans fléchir les coudes.", tips: ["Coudes restent tendus", "Écarter omoplates puis rapprocher", "Santé scapulaire + stabilité épaule"], lv: 1, tags: ["prehab", "scapula", "serratus", "home"] },
