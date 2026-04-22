@@ -12,8 +12,11 @@ ALLOWED_ORIGINS.push('http://localhost:8888', 'http://127.0.0.1:3000', 'http://l
 function isAllowedOrigin(origin) {
   if (!origin) return true;
   if (ALLOWED_ORIGINS.indexOf(origin) !== -1) return true;
+  // Only smartfitcoach deploy previews and branch deploys. The broader
+  // ^https://[a-z0-9-]+\.netlify\.app$ regex would accept any attacker-
+  // owned netlify.app subdomain and enable an account-takeover vector
+  // as soon as the victim's JWT is replayable.
   if (/^https:\/\/[a-z0-9-]+--smartfitcoach\.netlify\.app$/.test(origin)) return true;
-  if (/^https:\/\/[a-z0-9-]+\.netlify\.app$/.test(origin)) return true;
   return false;
 }
 
