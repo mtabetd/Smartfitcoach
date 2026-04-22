@@ -289,7 +289,7 @@ function getNutritionDelta(field, compareDays) {
     if (sorted.length > 1) previous = sorted[sorted.length - 2];
   }
   if (!current || current[field] === undefined) return null;
-  var cVal = current[field], pVal = previous ? previous[field] : null;
+  var cVal = current[field], pVal = (previous && typeof previous[field] === 'number') ? previous[field] : null;
   var dVal = pVal !== null ? +(cVal - pVal).toFixed(0) : null;
   var dPct = (pVal && pVal > 0 && dVal !== null) ? +(((cVal - pVal) / pVal) * 100).toFixed(1) : null;
   return { current: cVal, previous: pVal, deltaKg: dVal, deltaPct: dPct, trend: dVal > 0 ? 'up' : dVal < 0 ? 'down' : 'stable', currentDate: current.date };

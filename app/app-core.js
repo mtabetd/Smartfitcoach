@@ -238,6 +238,7 @@ window.devalidateSportProgram = function(reason) {
   try {
     var S = window.S;
     if (!S) return;
+    if (!S.sportProgram || !Array.isArray(S.sportProgram) || !S.sportProgram.length) return;
     S.sportProgramValidated = false;
     if (reason) console.log('[sportProgram] Dévalidé :', reason);
   } catch(e) {}
@@ -1313,8 +1314,8 @@ window.sanitizeHTML = function(str) {
 // ─── PROFILE VALIDATION ───
 window.validateProfile = function validateProfile(data) {
   var errors = [];
-  if (data.age !== undefined && (isNaN(data.age) || data.age < 10 || data.age > 100))
-    errors.push('Âge invalide (10-100 ans)');
+  if (data.age !== undefined && (isNaN(data.age) || data.age < 10 || data.age > 120))
+    errors.push('Âge invalide (10-120 ans)');
   if (data.weight !== undefined && (isNaN(data.weight) || data.weight < 30 || data.weight > 300))
     errors.push('Poids invalide (30-300 kg)');
   if (data.height !== undefined && (isNaN(data.height) || data.height < 100 || data.height > 250))
@@ -4477,7 +4478,11 @@ return Math.round(bmrRaw)} // Mifflin-St Jeor 1990 (Frankenfield 2005) + correct
 function calcTDEE(){var s=window.S;if(s.activity===null||s.activity===undefined||!ACTIVITIES[s.activity])return 0;var selectedFactor=ACTIVITIES[s.activity].factor;// Auto-correct activity factor based on sport days (user may have selected wrong level)
 // Uses the MAXIMUM of user's selected factor and sport-based estimate
 // BUG A fix : utiliser trainingDaysSelected.length si disponible (plus précis que sportDays)
-var sportDays=Array.isArray(s.trainingDaysSelected)&&s.trainingDaysSelected.length>0?s.trainingDaysSelected.length:(s.sportDays||0);var sportFactor=1.2;if(sportDays>=5)sportFactor=1.725;else if(sportDays>=3)sportFactor=1.55;else if(sportDays>=2)sportFactor=1.375;var effectiveFactor=Math.max(selectedFactor,sportFactor);return calcBMR()*effectiveFactor}
+var sportDays=Array.isArray(s.trainingDaysSelected)&&s.trainingDaysSelected.length>0?s.trainingDaysSelected.length:(s.sportDays||0);var sportFactor=1.2;if(sportDays>=5)sportFactor=1.725;else if(sportDays>=3)sportFactor=1.55;else if(sportDays>=2)sportFactor=1.375;var effectiveFactor=Math.max(selectedFactor,sportFactor);
+// Beginner cap : un débutant ne peut pas avoir un PAL > 1.55 (modéré) quelles que soient ses déclarations.
+// Évite un surplus calorique 3× trop élevé si l'utilisateur débutant a coché "Athlète" par excès de confiance.
+if(s.sportLevel==='beginner'&&effectiveFactor>1.55)effectiveFactor=1.55;
+return calcBMR()*effectiveFactor}
 function calcTarget(){var s=window.S;if(s.goal===null||s.goal===undefined||!GOALS[s.goal])return 0;var tdeeVal=calcTDEE();var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&s.sex==='femme'){var tri=getPregnancyTrimester();var pregExtra=tri?tri.trimester.calorieExtra:300;
 // Si allaitement ET enceinte (fin de grossesse + allaitement aîné) → ADDITIF (ACOG 2018 + 2022)
 var allaitExtra=(s.medical&&s.medical.indexOf('allaitement')!==-1)?500:0;
@@ -4680,6 +4685,10 @@ function calcMacros(){
   var gGrams=Math.max(130,Math.round(gCal/4)); // IOM 2005: min 130g/j (cerveau+SNC)
   // Cap carbs to goal-specific maximum (g/kg) — prevents excessive carb surplus (Helms 2014, ISSN 2017)
   var carbCapGpkg=goalKey==='shred'?3.5:goalKey==='cut'?4.0:(goalKey==='bulk'||goalKey==='lean_bulk')?6.0:5.0;
+  // Endurance : relever le cap à 8 g/kg (ISSN 2016 : 6-10 g/kg selon intensité)
+  // Sans ce cap relevé, le glucides restant (après protéines + lipides) était plafonné à 5g/kg
+  // et l'excédent redirigé vers les lipides → plan inadapté au marathon/cyclisme.
+  if(hasEndurOnly)carbCapGpkg=Math.max(carbCapGpkg,8.0);
   var carbCap=Math.round(bw*carbCapGpkg);
   if(gGrams>carbCap){
     // CRITIQUE : redistribuer les calories libérées par le plafond glucides sur les lipides
@@ -6452,6 +6461,17 @@ function computeNutritionState(trainingDay) {
       adjustedMacros.p * 4 + adjustedMacros.g * 4 + adjustedMacros.l * 9
     );
   }
+
+  // Détection conflit objectif nutrition ↔ sport (bulk + endurance = surplus inutile)
+  var _gk = window.GOALS && window.GOALS[window.S.goal] ? window.GOALS[window.S.goal].key : null;
+  var _isBulk = _gk === 'bulk' || _gk === 'lean_bulk';
+  var _sg = window.S.sportGoals || [];
+  var _hasMuscSport = _sg.indexOf('muscle') !== -1 || _sg.indexOf('shred') !== -1;
+  var _hasEndurSport = _sg.length > 0 && !_hasMuscSport &&
+    (_sg.indexOf('endurance') !== -1 || _sg.indexOf('weightloss') !== -1 || _sg.indexOf('general') !== -1);
+  result.goalConflict = (_isBulk && _hasEndurSport)
+    ? 'Votre objectif nutrition (prise de masse) est incompatible avec votre programme sport (endurance/cardio). Un surplus calorique sans entraînement en force favorise la prise de gras. Alignez vos objectifs pour de meilleurs résultats.'
+    : null;
 
   window.S._nm = result;
   return result;
