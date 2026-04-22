@@ -610,15 +610,17 @@ function generateSportProgram() {
  } else if (S.sportEquipment === 'none') {
    // Fallback 1 : exos sans machines ni câbles ni barbell (haltères légers / élastique acceptés)
    // Évite d'avoir 0 exo sur des groupes sans variantes poids de corps (épaules, dos, biceps).
-   var _noneRelaxed = _medSafeAvailable.filter(function(ex) {
+   // FIX 2026-04: _medSafeAvailable n'est défini qu'à la ligne 723 (après filtres médicaux) ;
+   // utiliser `available` ici (pool filtré par niveau, avant équipement) évite le crash
+   // TypeError: undefined.filter. Les filtres médicaux s'appliquent de toute façon plus bas.
+   var _noneRelaxed = available.filter(function(ex) {
      var _eq = (ex.eq || '').toLowerCase();
      return !/machine|c[âa]ble|poulie|pec deck|smith|convergente|\bbarre\s*\+|hack squat|\bt[-\s]?bar\b|landmine/i.test(_eq);
    });
-   available = _noneRelaxed.length > 0 ? _noneRelaxed : _medSafeAvailable.slice();
- } else {
-   // Fallback pour autres équipements : pool médical complet
-   available = _medSafeAvailable.slice();
+   if (_noneRelaxed.length > 0) available = _noneRelaxed;
+   // else: `available` reste le pool niveau-filtré (les filtres médicaux suivants affineront)
  }
+ // else: si eqFiltered vide pour un autre équipement, `available` garde le pool niveau-filtré
  }
 
  // Pregnancy: filter forbidden exercises
@@ -996,6 +998,18 @@ function generateSportProgram() {
  var _splitDayLabels = S._splitChoice ? (_SPLIT_DAY_LABELS[S._splitChoice] || null) : null;
  var _dayName = (_splitDayLabels && _splitDayLabels[d]) ? _splitDayLabels[d] : ('Jour ' + (d + 1));
 
+ // Guard : ne jamais pousser un jour sans exercice — tous les filtres cumulés
+ // (équipement + médical + grossesse + niveau) peuvent vider dayExercises.
+ if (dayExercises.length === 0) {
+   S._sportFilterIncomplete = true;
+   // Fallback minimal : prendre 3 exos du pool brut (niveau filtré) du premier groupe
+   var _fbGroup = groups[0];
+   var _fbPool = (window.EXERCISES && window.EXERCISES[_fbGroup]) || [];
+   var _fbAvail = _fbPool.filter(function(e) { return e.lv <= maxLv; });
+   if (!_fbAvail.length) _fbAvail = _fbPool.slice();
+   dayExercises = _fbAvail.slice(0, 3);
+   if (dayExercises.length === 0) continue; // groupe vraiment vide → on ignore ce jour
+ }
  program.push({
  name: _dayName,
  focus: focusLabel,
@@ -6071,7 +6085,7 @@ function saveMuscuSessionLog() {
  if (completedW.length === 0 && completedR.length === 0) return;
  var avgWeight = completedW.length > 0 ? completedW.reduce(function(sum, s) { return sum + (s.actualWeight || 0); }, 0) / completedW.length : 0;
  var avgReps = completedR.length > 0 ? completedR.reduce(function(sum, s) { return sum + (s.actualReps || 0); }, 0) / completedR.length : 0;
- if (isNaN(avgWeight)) return;
+ if (isNaN(avgWeight) || isNaN(avgReps)) return;
 
  if (!S.muscuProgressionHistory[exName]) S.muscuProgressionHistory[exName] = [];
  var existing = S.muscuProgressionHistory[exName].find(function(entry) { return entry.date === _today2; });
@@ -8927,6 +8941,10 @@ function renderMusculationProgram(p) {
    }
  } catch(_e) {}
  S._sessionFeedbackDraft = { rpe: null, feeling: null, pain: null };
+ // Persister poids/reps dans localStorage avant de fermer le panneau.
+ // Les séries validées individuellement (✓) ont déjà appelé saveMuscuSessionLog()
+ // mais un appel final garantit que rien n'est perdu (ex : reps saisies sans ✓).
+ try { saveMuscuSessionLog(); } catch(_sve) {}
  // Sync session vers Supabase
  if (window.SupaSync) SupaSync.saveSession({
  date: todayKey,
