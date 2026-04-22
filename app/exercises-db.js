@@ -2406,7 +2406,7 @@ var EXERCISES = {
       eq: "Chaussures de running",
       sets: "20-45 min",
       rest: "N/A",
-      video: "https://www.youtube.com/watch?v=wgbSH01I1To",
+      video: "https://www.youtube.com/watch?v=_kGESn8ArrU",
       desc: "Courir à un rythme régulier, en zone 2 pour le cardio de base.",
       tips: ["Commencer par 20 minutes", "Respirer par le nez et la bouche", "Augmenter progressivement la durée"],
       lv: 1,
