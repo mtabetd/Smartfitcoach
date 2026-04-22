@@ -324,6 +324,31 @@ var EXERCISES = {
 
   // ─── DOS ───
   back: [
+    // ─── Bodyweight back exercises (for equipment='none') ───
+    {
+      n: "Inverted row (sous une table)",
+      m: "Grand dorsal / Rhomboïdes / Biceps",
+      eq: "Poids du corps",
+      sets: "3×8-15",
+      rest: "75s",
+      video: "https://www.youtube.com/results?search_query=inverted+row+table",
+      desc: "Allongé sous une table solide, saisissez le bord et tirez la poitrine vers le bord. Equivalent au rowing pour le dos.",
+      tips: ["Corps gainé comme une planche", "Tirer les omoplates ensemble", "Table stable et sécurisée"],
+      lv: 1,
+      tags: ["dos", "compose", "poids_corps"]
+    },
+    {
+      n: "Reverse snow angel (au sol)",
+      m: "Rhomboïdes / Trapèzes moyens / Deltoïdes postérieurs",
+      eq: "Poids du corps",
+      sets: "3×15-20",
+      rest: "45s",
+      video: "https://www.youtube.com/results?search_query=reverse+snow+angel+exercise",
+      desc: "Allongé ventre au sol, bras le long du corps. Soulevez bras et poitrine, faites glisser les bras en arc jusqu'à la tête. Renforce les rhomboïdes.",
+      tips: ["Pouce vers le haut pendant le mouvement", "Ne pas forcer sur le cou", "Tenir 1s en haut"],
+      lv: 1,
+      tags: ["dos", "isolation", "poids_corps"]
+    },
     {
       n: "Tractions pronation",
       m: "Grand dorsal",
@@ -627,6 +652,43 @@ var EXERCISES = {
 
   // ─── EPAULES ───
   shoulders: [
+    // ─── Bodyweight shoulder exercises (for equipment='none') ───
+    {
+      n: "Pike push-up",
+      m: "Deltoïdes antérieurs / Triceps",
+      eq: "Poids du corps",
+      sets: "3×8-12",
+      rest: "60s",
+      video: "https://www.youtube.com/results?search_query=pike+push+up",
+      desc: "En position de V inversé, fléchissez les coudes pour descendre la tête vers le sol. Travaille les épaules comme un développé militaire.",
+      tips: ["Hanches hautes en V", "Tête entre les bras en bas", "Coudes légèrement vers l'extérieur"],
+      lv: 1,
+      tags: ["epaules", "compose", "poids_corps"]
+    },
+    {
+      n: "Decline push-up (pieds surélevés)",
+      m: "Deltoïdes antérieurs / Pectoraux supérieurs / Triceps",
+      eq: "Poids du corps",
+      sets: "3×10-15",
+      rest: "60s",
+      video: "https://www.youtube.com/results?search_query=decline+push+up",
+      desc: "Pompes avec les pieds surélevés (chaise, escalier). Accent sur les épaules et la poitrine haute.",
+      tips: ["Pieds sur une chaise ou marche", "Corps gainé", "Descendre jusqu'au sol"],
+      lv: 1,
+      tags: ["epaules", "compose", "poids_corps"]
+    },
+    {
+      n: "Dive bomber push-up",
+      m: "Deltoïdes / Pectoraux / Triceps / Dorsaux",
+      eq: "Poids du corps",
+      sets: "3×8-10",
+      rest: "75s",
+      video: "https://www.youtube.com/results?search_query=dive+bomber+push+up",
+      desc: "Depuis le V inversé, piqué vers le bas en arc de cercle en terminant cobra. Mobilise toute la ceinture scapulaire.",
+      tips: ["Mouvement fluide en arc", "Pas de blocage bas du dos", "Retour en V inversé pour fermer"],
+      lv: 2,
+      tags: ["epaules", "compose", "poids_corps"]
+    },
     // ─── FIX SPRINT P1.6 — Exos manquants épaules ───
     {
       n: "Push press",
@@ -913,6 +975,19 @@ var EXERCISES = {
 
   // ─── BICEPS ───
   biceps: [
+    // ─── Bodyweight biceps exercise (for equipment='none') ───
+    {
+      n: "Curl inversé poids du corps (sous table)",
+      m: "Biceps / Brachioradialis",
+      eq: "Poids du corps",
+      sets: "3×10-15",
+      rest: "60s",
+      video: "https://www.youtube.com/results?search_query=bodyweight+bicep+curl+table",
+      desc: "Sous une table, paumes vers le haut, fléchissez les coudes en tirant la poitrine vers le dessous de table. Variante biceps de l'inverted row.",
+      tips: ["Paumes vers le haut (supination)", "Coudes fixes, ne pas balancer", "Table stable"],
+      lv: 1,
+      tags: ["biceps", "compose", "poids_corps"]
+    },
     {
       n: "Curl barre droite",
       m: "Biceps",

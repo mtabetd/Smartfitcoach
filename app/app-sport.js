@@ -574,7 +574,7 @@ function generateSportProgram() {
    // Autorisé : poids corps, élastique, haltères, kettlebell, banc, barre de traction
    return /poids du corps|poids de corps|sans mat|sol|\u00e9lastique|elastique|halt[eè]re|kettlebell|\bkb\b|banc|barre fixe|barre de traction|aucun/.test(eq + ' ' + name);
  }
- if (S.sportEquipment === 'dumbbells') {
+ if (S.sportEquipment === 'dumbbells' || S.sportEquipment === 'home_dumbbells') {
  // Exclude exercises requiring cable machines, barbells, or specialized machines
  if (/câble|poulie|machine|t-bar|landmine|convergente|pec deck|barre de traction/.test(eq)) return false;
  // "barre + banc" requires barbell — exclude, but "haltères ou barre" → allow (use dumbbells)
@@ -593,15 +593,19 @@ function generateSportProgram() {
  }
  return true;
  });
- // FIX audit Marie : on respecte STRICTEMENT sportEquipment, même si <2 exos restent.
- // Mieux vaut 1 exo bodyweight correct que 5 exos inadaptés (câble/machine pour home).
  if (eqFiltered.length > 0) {
    available = eqFiltered;
- } else {
-   // Fallback ultra-strict : bodyweight pur uniquement
-   available = available.filter(function(ex) {
-     return /poids du corps|gainage|planche|burpee|pompe|squat saut|mountain climber|crunch sol/i.test(ex.n || ex.name || '');
+ } else if (S.sportEquipment === 'none') {
+   // Fallback 1 : exos sans machines ni câbles ni barbell (haltères légers / élastique acceptés)
+   // Évite d'avoir 0 exo sur des groupes sans variantes poids de corps (épaules, dos, biceps).
+   var _noneRelaxed = _medSafeAvailable.filter(function(ex) {
+     var _eq = (ex.eq || '').toLowerCase();
+     return !/machine|c[âa]ble|poulie|pec deck|smith|convergente|\bbarre\s*\+|hack squat|\bt[-\s]?bar\b|landmine/i.test(_eq);
    });
+   available = _noneRelaxed.length > 0 ? _noneRelaxed : _medSafeAvailable.slice();
+ } else {
+   // Fallback pour autres équipements : pool médical complet
+   available = _medSafeAvailable.slice();
  }
  }
 
