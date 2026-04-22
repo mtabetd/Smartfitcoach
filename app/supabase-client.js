@@ -261,32 +261,56 @@
       });
     },
 
-    // Charger le profil depuis Supabase
+    // Charger le profil depuis Supabase.
+    // Resilient to the subscription migration state: tries the new columns
+    // first, falls back to the pre-migration SELECT if Supabase answers
+    // "column does not exist" (error code 42703). This means the code can
+    // ship BEFORE the SQL migration runs without breaking any user login.
     loadProfile: function() {
       var client = getClient();
       if (!client) return Promise.reject('No client');
 
+      function mergePayload(row) {
+        if (!row) return null;
+        var payload = row.data || {};
+        // Server-authoritative subscription state — the dedicated columns
+        // override any stale JSONB value. Property names are kept identical
+        // so every consumer of S.subscriptionPlan / S.subscriptionEnd works
+        // unchanged. When the columns don't exist yet (pre-migration), the
+        // JSONB values inside row.data remain the fallback.
+        if (row.subscription_plan) payload.subscriptionPlan = row.subscription_plan;
+        if (row.subscription_end)  payload.subscriptionEnd  = row.subscription_end;
+        if (row.updated_at) payload._cloudUpdatedAt = row.updated_at;
+        return payload;
+      }
+
       return SupaAuth.getSession().then(function(session) {
         if (!session || !session.user) return null;
+        var userId = session.user.id;
 
         return client
           .from('profiles')
           .select('data, subscription_plan, subscription_end, updated_at')
-          .eq('id', session.user.id)
+          .eq('id', userId)
           .single()
           .then(function(result) {
+            // Pre-migration fallback: 42703 = undefined_column. Retry with
+            // the legacy SELECT so users can still log in before the DB
+            // migration has been executed.
+            if (result.error && (result.error.code === '42703' || /column .* does not exist/i.test(result.error.message || ''))) {
+              console.warn('[SupaSync] subscription_plan/end columns missing — falling back to legacy select. Run the migration in supabase-schema.sql.');
+              return client
+                .from('profiles')
+                .select('data, updated_at')
+                .eq('id', userId)
+                .single()
+                .then(function(r2) {
+                  if (r2.error || !r2.data) return null;
+                  return mergePayload(r2.data);
+                });
+            }
             if (result.error || !result.data) return null;
-            var payload = result.data.data || {};
-            // Server-authoritative subscription state: the dedicated columns
-            // override any stale JSONB value so a tampered localStorage or a
-            // pre-migration profile can never claim a fake plan. Property
-            // names are kept identical so every consumer of S.subscriptionPlan
-            // / S.subscriptionEnd continues to work unchanged.
-            if (result.data.subscription_plan) payload.subscriptionPlan = result.data.subscription_plan;
-            if (result.data.subscription_end)  payload.subscriptionEnd  = result.data.subscription_end;
-            // Attacher le timestamp cloud pour comparaison multidevice dans syncOnLogin
-            if (result.data.updated_at) payload._cloudUpdatedAt = result.data.updated_at;
-            return payload;
+            return mergePayload(result.data);
           });
       });
     },
