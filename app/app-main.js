@@ -219,8 +219,8 @@ function saveProfile() {
  if (!raw2 || !S.weekPlan) return; // nothing to compare or no plan to invalidate
  var prev = null;
  if (window._storageDecode) { prev = window._storageDecode(raw2); }
- if (!prev) { try { prev = JSON.parse(raw2); } catch(e2) {} }
- if (!prev) return;
+ if (prev == null) { try { prev = JSON.parse(raw2); } catch(e2) {} }
+ if (prev == null) return;
  var planImpacted = NUTRITION_PLAN_KEYS.some(function(k) {
  var pv = prev[k], sv = S[k];
  // Si la clé était absente du profil sauvegardé, impossible qu'elle ait "changé"
@@ -254,8 +254,8 @@ function saveProfile() {
  if (!raw3 || !S.sportProgram) return;
  var prev = null;
  if (window._storageDecode) { prev = window._storageDecode(raw3); }
- if (!prev) { try { prev = JSON.parse(raw3); } catch(e2) {} }
- if (!prev) return;
+ if (prev == null) { try { prev = JSON.parse(raw3); } catch(e2) {} }
+ if (prev == null) return;
  var sportImpacted = SPORT_PROGRAM_KEYS.some(function(k) {
  var pv = prev[k], sv = S[k];
  if (pv === undefined) return false;

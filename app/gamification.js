@@ -449,7 +449,7 @@ function incrementCounter(counterName) {
   var user = window.AUTH ? window.AUTH.getUser() : null;
   if (!user) return 0;
   var key = 'mtd_counter_' + counterName + '_' + user.id;
-  var count = parseInt(localStorage.getItem(key) || '0', 10) + 1;
+  var count = (parseInt(localStorage.getItem(key) || '0', 10) || 0) + 1;
   try { localStorage.setItem(key, String(count)); } catch(e) {}
   return count;
 }
@@ -457,7 +457,7 @@ function incrementCounter(counterName) {
 function getCounter(counterName) {
   var user = window.AUTH ? window.AUTH.getUser() : null;
   if (!user) return 0;
-  return parseInt(localStorage.getItem('mtd_counter_' + counterName + '_' + user.id) || '0', 10);
+  return (parseInt(localStorage.getItem('mtd_counter_' + counterName + '_' + user.id) || '0', 10) || 0);
 }
 
 // ─── RENDER HELPERS ───

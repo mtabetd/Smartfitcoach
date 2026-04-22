@@ -1313,8 +1313,8 @@ window.sanitizeHTML = function(str) {
 // ─── PROFILE VALIDATION ───
 window.validateProfile = function validateProfile(data) {
   var errors = [];
-  if (data.age !== undefined && (isNaN(data.age) || data.age < 10 || data.age > 100))
-    errors.push('Âge invalide (10-100 ans)');
+  if (data.age !== undefined && (isNaN(data.age) || data.age < 10 || data.age > 120))
+    errors.push('Âge invalide (10-120 ans)');
   if (data.weight !== undefined && (isNaN(data.weight) || data.weight < 30 || data.weight > 300))
     errors.push('Poids invalide (30-300 kg)');
   if (data.height !== undefined && (isNaN(data.height) || data.height < 100 || data.height > 250))
