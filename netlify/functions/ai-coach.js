@@ -2,6 +2,7 @@
 // Proxy sécurisé vers l'API Anthropic — la clé API reste côté serveur
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
+const { createClient } = require('@supabase/supabase-js');
 // UPGRADE 2026-04 : Haiku → Sonnet 4.6 pour coach adaptatif avec raisonnement fin
 // (ajustements charges ISSN/ACSM, interprétation RPE + cycle + wellness).
 // Rate limit déjà strict (10/h, 30/j par IP) → coût maîtrisé.
@@ -21,70 +22,144 @@ ALLOWED_ORIGINS.push('http://localhost:8888', 'http://127.0.0.1:3000', 'http://l
 function isAllowedOrigin(origin) {
   if (!origin) return true; // same-origin requests (pas de header Origin)
   if (ALLOWED_ORIGINS.indexOf(origin) !== -1) return true;
-  // Accepter tout sous-domaine Netlify (deploy previews)
+  // Only smartfitcoach deploy previews and branch deploys. The broader
+  // ^https://[a-z0-9-]+\.netlify\.app$ regex would accept any attacker-
+  // owned netlify.app subdomain and enable API key abuse.
   if (/^https:\/\/[a-z0-9-]+--smartfitcoach\.netlify\.app$/.test(origin)) return true;
-  if (/^https:\/\/[a-z0-9-]+\.netlify\.app$/.test(origin)) return true;
   return false;
 }
 
-// ── Rate Limiting (sliding window horaire + quota journalier) ────────────────
-var _hourStore = new Map(); // ip -> [{ts}]
-var _dayStore = new Map();  // ip -> {date: 'YYYY-MM-DD', count: N}
+// ── Rate Limiting ────────────────────────────────────────────────────────────
+// Primaire  : Supabase table `rate_limits` (persistant cross-cold-starts).
+// Fallback  : Maps en mémoire (si Supabase indisponible → pas de blocage user).
+// Migration : supabase/migrations/20260422_rate_limits.sql
 
 var HOUR_WINDOW_MS = 3600000; // 1 heure
-var HOUR_MAX = 10;  // max 10 req/heure par IP
-var DAY_MAX = 30;   // max 30 req/jour par IP
+var HOUR_MAX = 10;             // max 10 req/heure par IP
+var DAY_MAX  = 30;             // max 30 req/jour par IP
+
+// ── Fallback in-memory (inchangé) ────────────────────────────────────────────
+var _hourStore = new Map();
+var _dayStore  = new Map();
 
 function getTodayUTC() {
-  return new Date().toISOString().slice(0, 10); // 'YYYY-MM-DD'
+  return new Date().toISOString().slice(0, 10);
 }
 
-function checkRateLimit(ip) {
-  var now = Date.now();
+function checkRateLimitMemory(ip) {
+  var now   = Date.now();
   var today = getTodayUTC();
-
-  // ── Quota journalier ──
   var dayEntry = _dayStore.get(ip);
-  if (!dayEntry || dayEntry.date !== today) {
-    dayEntry = { date: today, count: 0 };
-  }
-  if (dayEntry.count >= DAY_MAX) {
-    return { allowed: false, reason: 'quota_day' };
-  }
-
-  // ── Sliding window horaire ──
-  var hourList = _hourStore.get(ip) || [];
-  hourList = hourList.filter(function(t) { return now - t < HOUR_WINDOW_MS; });
-  if (hourList.length >= HOUR_MAX) {
-    return { allowed: false, reason: 'quota_hour' };
-  }
-
-  // Enregistrer la requête
+  if (!dayEntry || dayEntry.date !== today) dayEntry = { date: today, count: 0 };
+  if (dayEntry.count >= DAY_MAX) return { allowed: false, reason: 'quota_day', hourRemaining: 0, dayRemaining: 0 };
+  var hourList = (_hourStore.get(ip) || []).filter(function(t) { return now - t < HOUR_WINDOW_MS; });
+  if (hourList.length >= HOUR_MAX) return { allowed: false, reason: 'quota_hour', hourRemaining: 0, dayRemaining: Math.max(0, DAY_MAX - dayEntry.count) };
   hourList.push(now);
   _hourStore.set(ip, hourList);
   dayEntry.count += 1;
   _dayStore.set(ip, dayEntry);
-
-  // POLISH 2026-04 (V1.3) : retourner les restants pour affichage UI client.
-  return {
-    allowed: true,
-    hourRemaining: Math.max(0, HOUR_MAX - hourList.length),
-    dayRemaining: Math.max(0, DAY_MAX - dayEntry.count)
-  };
+  return { allowed: true, hourRemaining: Math.max(0, HOUR_MAX - hourList.length), dayRemaining: Math.max(0, DAY_MAX - dayEntry.count) };
 }
 
-// Nettoyer périodiquement pour éviter la fuite mémoire
 function pruneStores() {
-  var now = Date.now();
+  var now   = Date.now();
   var today = getTodayUTC();
   _hourStore.forEach(function(list, ip) {
-    var filtered = list.filter(function(t) { return now - t < HOUR_WINDOW_MS; });
-    if (filtered.length === 0) _hourStore.delete(ip);
-    else _hourStore.set(ip, filtered);
+    var f = list.filter(function(t) { return now - t < HOUR_WINDOW_MS; });
+    if (f.length === 0) _hourStore.delete(ip); else _hourStore.set(ip, f);
   });
   _dayStore.forEach(function(entry, ip) {
     if (entry.date !== today) _dayStore.delete(ip);
   });
+}
+
+// ── Supabase client (lazy, module-level pour réutilisation entre invocations chaudes) ──
+var _supabaseRl = null;
+function getSupabaseRl() {
+  if (_supabaseRl) return _supabaseRl;
+  var url = process.env.SUPABASE_URL;
+  var key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
+  if (!url || !key) return null;
+  try {
+    _supabaseRl = createClient(url, key, { auth: { autoRefreshToken: false, persistSession: false } });
+  } catch(e) {
+    console.warn('[ai-coach] Supabase client init failed:', e.message);
+    return null;
+  }
+  return _supabaseRl;
+}
+
+// ── Rate limiting persistant via Supabase ─────────────────────────────────────
+// Retourne un objet { allowed, reason?, hourRemaining, dayRemaining }
+// ou null si Supabase est indisponible (→ caller utilise checkRateLimitMemory).
+async function checkRateLimitDb(ip) {
+  var db = getSupabaseRl();
+  if (!db) return null;
+
+  try {
+    var now = new Date();
+
+    // Lire l'entrée courante
+    var sel = await db
+      .from('rate_limits')
+      .select('hour_count, hour_reset_at, day_count, day_reset_at')
+      .eq('ip', ip)
+      .maybeSingle();
+
+    if (sel.error) throw sel.error;
+
+    var hourCount, dayCount, hourResetAt, dayResetAt;
+
+    if (!sel.data) {
+      // Première requête de cette IP : on initialise
+      hourCount   = 0;
+      dayCount    = 0;
+      hourResetAt = new Date(now.getTime() + HOUR_WINDOW_MS).toISOString();
+      dayResetAt  = new Date(now.getTime() + 86400000).toISOString();
+    } else {
+      var row         = sel.data;
+      var hourExpired = now >= new Date(row.hour_reset_at);
+      var dayExpired  = now >= new Date(row.day_reset_at);
+      hourCount   = hourExpired ? 0 : row.hour_count;
+      dayCount    = dayExpired  ? 0 : row.day_count;
+      hourResetAt = hourExpired ? new Date(now.getTime() + HOUR_WINDOW_MS).toISOString() : row.hour_reset_at;
+      dayResetAt  = dayExpired  ? new Date(now.getTime() + 86400000).toISOString()       : row.day_reset_at;
+
+      // Vérifier les limites AVANT d'incrémenter
+      if (hourCount >= HOUR_MAX) {
+        return { allowed: false, reason: 'quota_hour', hourRemaining: 0, dayRemaining: Math.max(0, DAY_MAX - dayCount) };
+      }
+      if (dayCount >= DAY_MAX) {
+        return { allowed: false, reason: 'quota_day', hourRemaining: Math.max(0, HOUR_MAX - hourCount), dayRemaining: 0 };
+      }
+    }
+
+    var newHour = hourCount + 1;
+    var newDay  = dayCount  + 1;
+
+    // Écriture fire-and-forget : si l'upsert échoue, la requête passe quand même.
+    // Pire cas : 1-2 requêtes supplémentaires en cas d'erreur transitoire. Acceptable.
+    db.from('rate_limits').upsert({
+      ip:            ip,
+      hour_count:    newHour,
+      hour_reset_at: hourResetAt,
+      day_count:     newDay,
+      day_reset_at:  dayResetAt,
+      updated_at:    now.toISOString()
+    }, { onConflict: 'ip' }).then(function(r) {
+      if (r.error) console.warn('[ai-coach] rate_limits upsert error:', r.error.message);
+    });
+
+    return {
+      allowed:        true,
+      hourRemaining:  Math.max(0, HOUR_MAX - newHour),
+      dayRemaining:   Math.max(0, DAY_MAX  - newDay)
+    };
+
+  } catch(e) {
+    console.warn('[ai-coach] checkRateLimitDb failed, using in-memory fallback:', e.message);
+    return null; // signal au caller d'utiliser le fallback mémoire
+  }
 }
 
 // ── Input Sanitization ───────────────────────────────────────────────────────
@@ -377,11 +452,15 @@ exports.handler = async function(event, context) {
   }
 
   // ── Rate Limiting ──────────────────────────────────────────────────────────
-  pruneStores();
   var clientIp = event.headers['x-forwarded-for'] || event.headers['client-ip'] || 'unknown';
   clientIp = clientIp.split(',')[0].trim();
 
-  var rl = checkRateLimit(clientIp);
+  var rl = await checkRateLimitDb(clientIp);
+  if (!rl) {
+    // Supabase indisponible → fallback in-memory (jamais de blocage utilisateur par erreur)
+    pruneStores();
+    rl = checkRateLimitMemory(clientIp);
+  }
   if (!rl.allowed) {
     var retryAfter = rl.reason === 'quota_hour' ? '3600' : '86400';
     var rlMsg = rl.reason === 'quota_day'
