@@ -1656,7 +1656,7 @@ function _fjOpenCreateFoodModal() {
       scanBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M3 3 L3 13 M5 3 L5 13 M7.5 3 L7.5 13 M10 3 L10 13 M13 3 L13 13"/></svg><span>Scanner un code-barres</span>';
       scanBtn.addEventListener('click', function() {
         try {
-          todayModal('Scanner un code-barres', function(scanBox) {
+          todayModal('Scanner un code-barres', function(scanBox, scanOverlay) {
             var scanContainer = h('div', { style: 'margin-top:8px;' });
             try { window.SCANNER.renderWidget(scanContainer, { onPrefill: function(p) {
               if (!p) return;
@@ -1666,11 +1666,7 @@ function _fjOpenCreateFoodModal() {
               if (inputs['cf-g'])    inputs['cf-g'].value    = (p.carbs != null ? p.carbs : '');
               if (inputs['cf-l'])    inputs['cf-l'].value    = (p.fat != null ? p.fat : '');
               try { if (window.SCANNER && window.SCANNER.stopCamera) window.SCANNER.stopCamera(); } catch(e) {}
-              var overlay = document.body.lastChild;
-              while (overlay && overlay.getAttribute && !overlay.getAttribute('role')) overlay = overlay.previousSibling;
-              if (overlay && overlay.getAttribute && overlay.getAttribute('role') === 'dialog') {
-                try { document.body.removeChild(overlay); } catch(e) {}
-              }
+              try { if (scanOverlay && scanOverlay.parentNode) scanOverlay.parentNode.removeChild(scanOverlay); } catch(e) {}
               if (window.showToast) window.showToast('Valeurs pré-remplies — vérifiez avant d\'enregistrer.', 'success', 2500);
             } }); }
             catch(e) { scanContainer.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, 'Scanner indisponible sur ce navigateur.')); }
@@ -3909,10 +3905,14 @@ function todayModal(title, buildFn) {
   var box = h('div', {
     style: 'background:var(--ivory,#FAF9F6);max-width:480px;width:90%;max-height:80vh;overflow-y:auto;padding:28px 24px;position:relative;'
   });
+  function _closeModal() {
+    try { if (window.SCANNER && window.SCANNER.stopCamera) window.SCANNER.stopCamera(); } catch(e) {}
+    if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+  }
   var closeBtn = h('button', {
     style: 'position:absolute;top:12px;right:16px;background:none;border:none;font-size:18px;cursor:pointer;color:var(--grey);',
     'aria-label': 'Fermer',
-    onclick: function() { document.body.removeChild(overlay); }
+    onclick: _closeModal
   }, '\u00D7');
   box.appendChild(closeBtn);
   box.appendChild(h('div', {
@@ -3920,7 +3920,7 @@ function todayModal(title, buildFn) {
   }, title));
   buildFn(box, overlay);
   overlay.appendChild(box);
-  overlay.addEventListener('click', function(e) { if (e.target === overlay) document.body.removeChild(overlay); });
+  overlay.addEventListener('click', function(e) { if (e.target === overlay) _closeModal(); });
   document.body.appendChild(overlay);
 }
 

@@ -483,10 +483,12 @@ window.SCANNER = {
     manualDiv.appendChild(manualInput);
     var manualBtn = document.createElement('button');
     manualBtn.textContent = window.t('scan.search');
-    manualBtn.onclick = function() {
+    function _doManualSearch() {
       var code = manualInput.value.trim();
       if (isValidBarcode(code)) lookupAndAnalyze(code);
-    };
+    }
+    manualBtn.onclick = _doManualSearch;
+    manualInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') _doManualSearch(); });
     manualDiv.appendChild(manualBtn);
     scannerDiv.appendChild(manualDiv);
 
