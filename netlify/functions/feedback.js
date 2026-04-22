@@ -11,7 +11,6 @@ function isAllowedOrigin(origin) {
   if (!origin) return true;
   if (ALLOWED_ORIGINS.indexOf(origin) !== -1) return true;
   if (/^https:\/\/[a-z0-9-]+--smartfitcoach\.netlify\.app$/.test(origin)) return true;
-  if (/^https:\/\/[a-z0-9-]+\.netlify\.app$/.test(origin)) return true;
   return false;
 }
 
