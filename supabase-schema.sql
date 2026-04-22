@@ -179,7 +179,18 @@ create table public.early_registrations (
 
 -- RLS : accessible uniquement via service key (fonction Netlify) — aucun accès client direct
 alter table public.early_registrations enable row level security;
--- Pas de policy publique : seul le service role (bypass RLS) peut insérer
+-- Explicit deny for anon and authenticated roles. Postgres denies by default
+-- when RLS is on with no policy, but an explicit policy documents intent and
+-- protects against a legacy permissive policy being created accidentally.
+drop policy if exists "deny_all_anon" on public.early_registrations;
+create policy "deny_all_anon"
+  on public.early_registrations
+  for all
+  to anon, authenticated
+  using (false)
+  with check (false);
+-- Service role bypasses RLS entirely — Netlify functions using SUPABASE_SERVICE_KEY
+-- are the only way to read/insert into this table.
 
 
 -- ============================================================
