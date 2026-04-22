@@ -3255,99 +3255,185 @@ function renderStep9(p) {
     foodCard.appendChild(toggleRow);
 
     if (!S._foodManualEntry) {
-      // OpenFoodFacts search
-      var searchInput = h('input', {
-        type: 'search',
-        placeholder: 'Rechercher un aliment\u2026',
-        autocomplete: 'off',
-        'aria-label': 'Rechercher un aliment',
-        value: S._foodSearchQuery || '',
-        style: 'width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:16px;background:var(--ivory,#FAF9F6);margin-bottom:8px'
-      });
-      searchInput.oninput = function(e) {
-        var _val = e.target.value;
-        if (window._foodSearchTimer) clearTimeout(window._foodSearchTimer);
-        window._foodSearchTimer = setTimeout(function() {
-          S._foodSearchQuery = _val;
-          if (window.render) window.render();
-        }, 300);
-      };
-      foodCard.appendChild(searchInput);
-      var searchGoBtn = h('button', {
-        style: 'width:100%;padding:10px;min-height:48px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:10px',
-        disabled: S._foodSearchResults === 'loading',
-        'aria-label': 'Lancer la recherche',
-        onclick: function() {
-          var q = S._foodSearchQuery;
-          if (!q || q.trim().length < 2) return;
-          S._foodSearchResults = 'loading';
-          window.render();
-          var _offCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-          var _offTimer = _offCtrl ? setTimeout(function() { _offCtrl.abort(); }, 10000) : null;
-          window.fetch('https://world.openfoodfacts.org/cgi/search.pl?search_terms=' + encodeURIComponent(q) + '&search_simple=1&action=process&json=1&page_size=5&fields=product_name,nutriments', {
-            signal: _offCtrl ? _offCtrl.signal : undefined
-          })
-          .then(function(r3) {
-            if (_offTimer) clearTimeout(_offTimer);
-            return r3.json();
-          })
-          .then(function(data) {
-            S._foodSearchResults = (data.products || []).filter(function(pr) { return pr.product_name; }).map(function(pr) {
-              var n2 = pr.nutriments || {};
-              return {
-                name: pr.product_name,
-                kcal: Math.round(n2['energy-kcal_100g'] || 0),
-                p: Math.round(n2['proteins_100g'] || 0),
-                g: Math.round(n2['carbohydrates_100g'] || 0),
-                l: Math.round(n2['fat_100g'] || 0)
-              };
+      // ── PORTION CONFIRMATION ─────────────────────────────────────────────
+      if (S._foodPortionItem) {
+        var pItem = S._foodPortionItem;
+        var pGrams = parseFloat(S._foodPortionGrams) || 100;
+        var pRatio = pGrams / 100;
+        foodCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:600;color:var(--black,#0A0A09);margin-bottom:4px;line-height:1.4'}, pItem.name));
+        foodCard.appendChild(h('div', {style: 'font-size:11px;color:var(--grey,#6B6B65);margin-bottom:14px;font-family:"Helvetica Neue",Arial,sans-serif'}, Math.round(pItem.kcal * pRatio) + ' kcal \u00b7 P\u00a0' + Math.round(pItem.p * pRatio) + 'g \u00b7 G\u00a0' + Math.round(pItem.g * pRatio) + 'g \u00b7 L\u00a0' + Math.round(pItem.l * pRatio) + 'g'));
+        foodCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-bottom:4px;letter-spacing:1px;text-transform:uppercase'}, 'Quantit\u00e9 (g)'));
+        var gramsRow = h('div', {style: 'display:flex;align-items:center;gap:6px;margin-bottom:10px'});
+        var gramsMinusBtn = h('button', {
+          style: 'min-width:44px;min-height:44px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-size:20px;cursor:pointer;color:var(--black,#0A0A09)',
+          onclick: function() { S._foodPortionGrams = Math.max(5, (parseFloat(S._foodPortionGrams) || 100) - 25); window.render(); }
+        }, '\u2212');
+        var gramsInput = h('input', {
+          type: 'number', min: '5', max: '2000', step: '5',
+          inputmode: 'decimal', autocomplete: 'off', 'aria-label': 'Quantit\u00e9 en grammes',
+          value: String(pGrams),
+          style: 'flex:1;padding:10px 8px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:18px;background:var(--ivory,#FAF9F6);text-align:center;min-height:44px'
+        });
+        gramsInput.oninput = function(e) { S._foodPortionGrams = parseFloat(e.target.value) || 100; window.render(); };
+        gramsInput.onfocus = function(e) { setTimeout(function(){ e.target.select(); }, 0); };
+        var gramsPlusBtn = h('button', {
+          style: 'min-width:44px;min-height:44px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-size:20px;cursor:pointer;color:var(--black,#0A0A09)',
+          onclick: function() { S._foodPortionGrams = (parseFloat(S._foodPortionGrams) || 100) + 25; window.render(); }
+        }, '+');
+        gramsRow.appendChild(gramsMinusBtn);
+        gramsRow.appendChild(gramsInput);
+        gramsRow.appendChild(gramsPlusBtn);
+        foodCard.appendChild(gramsRow);
+        var presetsRow = h('div', {style: 'display:flex;gap:6px;margin-bottom:12px'});
+        [50, 100, 150, 200].forEach(function(pg) {
+          var isActive = Math.abs(pGrams - pg) < 1;
+          presetsRow.appendChild(h('button', {
+            style: 'flex:1;padding:7px 0;border:1px solid ' + (isActive ? 'var(--black,#0A0A09)' : 'var(--border,#D8D8D0)') + ';border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;cursor:pointer;background:' + (isActive ? 'var(--black,#0A0A09)' : 'transparent') + ';color:' + (isActive ? 'var(--ivory,#FAF9F6)' : 'var(--black,#0A0A09)'),
+            onclick: (function(p) { return function() { S._foodPortionGrams = p; window.render(); }; })(pg)
+          }, pg + 'g'));
+        });
+        foodCard.appendChild(presetsRow);
+        var addPortionBtn = h('button', {
+          style: 'width:100%;padding:14px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:8px',
+          onclick: function() {
+            var gr = parseFloat(S._foodPortionGrams) || 100;
+            var r = gr / 100;
+            var slotKey3 = S._foodSearchSlot;
+            if (!S.weekPlan) return;
+            if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
+            S.weekPlan[S.selectedDay][slotKey3] = { n: pItem.name, k: Math.round(pItem.kcal * r), kcal: Math.round(pItem.kcal * r), p: Math.round(pItem.p * r), g: Math.round(pItem.g * r), l: Math.round(pItem.l * r), f: '\u25CE', emoji: '\u25CE', custom: true, portions: gr };
+            S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false; S._foodPortionItem = null; S._foodPortionGrams = null;
+            try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saveProfile error:', e); }
+            try { var _cn = (pItem.name||'').toLowerCase(), _cw=[]; if(!S.allowPork&&/porc|jambon|bacon|lardon(?!.*(?:dinde|volaille|poulet))|saucisson|prosciutto|pancetta|chorizo/.test(_cn))_cw.push('porc'); if(S.regime===2&&/poulet|boeuf|b\u0153uf|veau|dinde|saumon|thon|poisson/.test(_cn))_cw.push('non v\u00e9g\u00e9tarien'); if(S.regime===3&&/poulet|boeuf|b\u0153uf|veau|oeuf|fromage|yaourt|lait/.test(_cn))_cw.push('non vegan'); if(_cw.length&&window.showToast)window.showToast('\u26a0\ufe0f Repas ajout\u00e9 \u2014 contient : '+_cw.join(', '), 'warning', 4000); } catch(_wE){}
+            if (window.incrementMealsLogged) window.incrementMealsLogged();
+            window.render();
+          }
+        }, 'Ajouter ce repas');
+        foodCard.appendChild(addPortionBtn);
+        foodCard.appendChild(h('button', {
+          style: 'width:100%;padding:8px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);cursor:pointer',
+          onclick: function() { S._foodPortionItem = null; S._foodPortionGrams = null; window.render(); }
+        }, '\u2190 Retour aux r\u00e9sultats'));
+      } else {
+        // ── RECENT FOODS (chips) ────────────────────────────────────────────
+        var _recentFoods = [];
+        var _recentSeen = {};
+        if (S.weekPlan) {
+          var _rDays = Object.keys(S.weekPlan).sort().reverse();
+          for (var _rd2 = 0; _rd2 < Math.min(_rDays.length, 14); _rd2++) {
+            var _rDay = S.weekPlan[_rDays[_rd2]];
+            if (!_rDay) continue;
+            ['breakfast','lunch','snack','dinner'].forEach(function(mSlot) {
+              var _rm = _rDay[mSlot];
+              if (_rm && _rm.n && (_rm.kcal || _rm.k) > 0 && !_recentSeen[_rm.n]) {
+                _recentSeen[_rm.n] = true;
+                _recentFoods.push(_rm);
+              }
             });
-            window.render();
-          })
-          .catch(function(err) {
-            if (_offTimer) clearTimeout(_offTimer);
-            S._foodSearchResults = [];
-            window.render();
-          });
+            if (_recentFoods.length >= 4) break;
+          }
         }
-      }, 'Rechercher');
-      foodCard.appendChild(searchGoBtn);
-      if (S._foodSearchResults === 'loading') {
-        var searchLoadDiv = h('div', {style: 'text-align:center;padding:12px;font-size:12px;color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif', role: 'status', 'aria-live': 'polite'});
-        var searchSpinner = document.createElement('span');
-        searchSpinner.className = 'loading-spinner';
-        searchSpinner.setAttribute('aria-hidden', 'true');
-        searchLoadDiv.appendChild(searchSpinner);
-        searchLoadDiv.appendChild(document.createTextNode('Recherche en cours\u2026'));
-        foodCard.appendChild(searchLoadDiv);
-      } else if (Array.isArray(S._foodSearchResults)) {
-        if (S._foodSearchResults.length === 0) {
-          foodCard.appendChild(h('div', {style: 'font-size:12px;color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif;margin-bottom:8px'}, 'Aucun résultat. Essayez en manuel.'));
-        } else {
-          var resultsList = h('div', {style: 'margin-bottom:8px'});
-          S._foodSearchResults.forEach(function(item) {
-            (function(food) {
-              var row2 = h('div', {
-                style: 'padding:10px 12px;border:1px solid var(--border,#D8D8D0);border-radius:2px;margin-bottom:6px;cursor:pointer;background:var(--ivory,#FAF9F6)',
+        if (_recentFoods.length > 0) {
+          foodCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, 'R\u00e9cents'));
+          var chipsRow = h('div', {style: 'display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px'});
+          _recentFoods.forEach(function(rfood) {
+            (function(rf) {
+              chipsRow.appendChild(h('button', {
+                style: 'padding:7px 10px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;cursor:pointer;background:transparent;color:var(--black,#0A0A09);text-align:left;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap',
                 onclick: function() {
-                  var slotKey3 = S._foodSearchSlot;
+                  var slotKey3c = S._foodSearchSlot;
                   if (!S.weekPlan) return;
                   if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
-                  S.weekPlan[S.selectedDay][slotKey3] = { n: food.name, k: food.kcal, kcal: food.kcal, p: food.p, g: food.g, l: food.l, f: '\u25CE', emoji: '\u25CE', custom: true };
+                  S.weekPlan[S.selectedDay][slotKey3c] = { n: rf.n, k: rf.kcal || rf.k || 0, kcal: rf.kcal || rf.k || 0, p: rf.p || 0, g: rf.g || 0, l: rf.l || 0, f: '\u25CE', emoji: '\u25CE', custom: true };
                   S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false;
-                  try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saveProfile error:', e); }
-                  try { var _cn = (food.name||'').toLowerCase(), _cw=[]; if(!S.allowPork&&/porc|jambon|bacon|lardon(?!.*(?:dinde|volaille|poulet))|saucisson|prosciutto|pancetta|chorizo/.test(_cn))_cw.push('porc'); if(S.regime===2&&/poulet|boeuf|bœuf|veau|dinde|saumon|thon|poisson/.test(_cn))_cw.push('non végétarien'); if(S.regime===3&&/poulet|boeuf|bœuf|veau|oeuf|fromage|yaourt|lait/.test(_cn))_cw.push('non vegan'); if(_cw.length&&window.showToast)window.showToast('\u26a0\ufe0f Repas ajouté — contient : '+_cw.join(', '), 'warning', 4000); } catch(_wE){}
+                  try { if (window.saveProfile) window.saveProfile(); } catch(e) {}
+                  if (window.incrementMealsLogged) window.incrementMealsLogged();
                   window.render();
                 }
-              });
-              row2.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--black,#0A0A09);margin-bottom:3px'}, food.name));
-              var infoRow = h('div', {style: 'font-size:10px;color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif'});
-              infoRow.appendChild(document.createTextNode(food.kcal + ' kcal/100g \u00b7 P ' + food.p + 'g \u00b7 G ' + food.g + 'g \u00b7 L ' + food.l + 'g'));
-              row2.appendChild(infoRow);
-              resultsList.appendChild(row2);
-            })(item);
+              }, rf.n.length > 20 ? rf.n.slice(0, 20) + '\u2026' : rf.n));
+            })(rfood);
           });
-          foodCard.appendChild(resultsList);
+          foodCard.appendChild(chipsRow);
+        }
+        // ── LIVE SEARCH ─────────────────────────────────────────────────────
+        var searchInput = h('input', {
+          type: 'search',
+          placeholder: 'Rechercher un aliment\u2026',
+          autocomplete: 'off',
+          'aria-label': 'Rechercher un aliment',
+          value: S._foodSearchQuery || '',
+          style: 'width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:16px;background:var(--ivory,#FAF9F6);margin-bottom:8px'
+        });
+        searchInput.oninput = function(e) {
+          var _val = e.target.value;
+          if (window._foodSearchTimer) clearTimeout(window._foodSearchTimer);
+          window._foodSearchTimer = setTimeout(function() {
+            S._foodSearchQuery = _val;
+            if (!_val || _val.trim().length < 2) { S._foodSearchResults = null; window.render(); return; }
+            S._foodSearchResults = 'loading';
+            window.render();
+            var _offCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+            var _offTimer = _offCtrl ? setTimeout(function() { _offCtrl.abort(); }, 10000) : null;
+            window.fetch('https://world.openfoodfacts.org/cgi/search.pl?search_terms=' + encodeURIComponent(_val.trim()) + '&search_simple=1&action=process&json=1&page_size=5&fields=product_name,nutriments', {
+              signal: _offCtrl ? _offCtrl.signal : undefined
+            })
+            .then(function(r3) {
+              if (_offTimer) clearTimeout(_offTimer);
+              return r3.json();
+            })
+            .then(function(data) {
+              S._foodSearchResults = (data.products || []).filter(function(pr) { return pr.product_name; }).map(function(pr) {
+                var n2 = pr.nutriments || {};
+                return {
+                  name: pr.product_name,
+                  kcal: Math.round(n2['energy-kcal_100g'] || 0),
+                  p: Math.round(n2['proteins_100g'] || 0),
+                  g: Math.round(n2['carbohydrates_100g'] || 0),
+                  l: Math.round(n2['fat_100g'] || 0)
+                };
+              });
+              window.render();
+            })
+            .catch(function(err) {
+              if (_offTimer) clearTimeout(_offTimer);
+              S._foodSearchResults = [];
+              window.render();
+            });
+          }, 400);
+        };
+        foodCard.appendChild(searchInput);
+        if (S._foodSearchResults === 'loading') {
+          var searchLoadDiv = h('div', {style: 'text-align:center;padding:12px;font-size:12px;color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif', role: 'status', 'aria-live': 'polite'});
+          var searchSpinner = document.createElement('span');
+          searchSpinner.className = 'loading-spinner';
+          searchSpinner.setAttribute('aria-hidden', 'true');
+          searchLoadDiv.appendChild(searchSpinner);
+          searchLoadDiv.appendChild(document.createTextNode('Recherche en cours\u2026'));
+          foodCard.appendChild(searchLoadDiv);
+        } else if (Array.isArray(S._foodSearchResults)) {
+          if (S._foodSearchResults.length === 0) {
+            foodCard.appendChild(h('div', {style: 'font-size:12px;color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif;margin-bottom:8px'}, 'Aucun r\u00e9sultat. Essayez en manuel.'));
+          } else {
+            var resultsList = h('div', {style: 'margin-bottom:8px'});
+            S._foodSearchResults.forEach(function(item) {
+              (function(food) {
+                var row2 = h('div', {
+                  style: 'padding:10px 12px;border:1px solid var(--border,#D8D8D0);border-radius:2px;margin-bottom:6px;cursor:pointer;background:var(--ivory,#FAF9F6)',
+                  onclick: function() {
+                    S._foodPortionItem = food;
+                    S._foodPortionGrams = 100;
+                    window.render();
+                  }
+                });
+                row2.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--black,#0A0A09);margin-bottom:3px'}, food.name));
+                var infoRow = h('div', {style: 'font-size:10px;color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif'});
+                infoRow.appendChild(document.createTextNode(food.kcal + ' kcal/100g \u00b7 P ' + food.p + 'g \u00b7 G ' + food.g + 'g \u00b7 L ' + food.l + 'g'));
+                row2.appendChild(infoRow);
+                resultsList.appendChild(row2);
+              })(item);
+            });
+            foodCard.appendChild(resultsList);
+          }
         }
       }
     } else {
@@ -3400,7 +3486,7 @@ function renderStep9(p) {
     }
     var cancelFoodBtn = h('button', {
       style: 'width:100%;padding:10px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);cursor:pointer',
-      onclick: function() { S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false; S._foodManualData = null; window.render(); }
+      onclick: function() { S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false; S._foodManualData = null; S._foodPortionItem = null; S._foodPortionGrams = null; window.render(); }
     }, 'Annuler');
     foodCard.appendChild(cancelFoodBtn);
     p.appendChild(foodCard);

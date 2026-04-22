@@ -7645,7 +7645,37 @@ function renderMusculationProgram(p) {
  }
  }; })(ex.n, eqType)
  });
+ var _wcMinus = h('button', {
+ style: 'min-width:36px;min-height:36px;padding:0;background:transparent;border:1px solid var(--border);border-radius:2px;font-size:16px;cursor:pointer;color:var(--black,#0A0A09)',
+ onclick: (function(exN, eqT, inp) { return function(e) {
+   e.stopPropagation();
+   var cur = parseFloat(inp.value) || 0;
+   var nv = Math.max(0, Math.round((cur - 2.5) * 2) / 2);
+   inp.value = String(nv);
+   S.musculationWeights[exN] = { weight: nv, type: eqT };
+   var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
+   try { localStorage.setItem('mtd_muscu_weights_' + uid, JSON.stringify(S.musculationWeights)); } catch(e2) {}
+   if (window.PERF_HISTORY) PERF_HISTORY.recordMuscuWeight(exN, nv, eqT);
+   window.render();
+ }; })(ex.n, eqType, wInput)
+}, '\u2212');
+ weightRow.appendChild(_wcMinus);
  weightRow.appendChild(wInput);
+ var _wcPlus = h('button', {
+ style: 'min-width:36px;min-height:36px;padding:0;background:transparent;border:1px solid var(--border);border-radius:2px;font-size:16px;cursor:pointer;color:var(--black,#0A0A09)',
+ onclick: (function(exN, eqT, inp) { return function(e) {
+   e.stopPropagation();
+   var cur = parseFloat(inp.value) || 0;
+   var nv = Math.round((cur + 2.5) * 2) / 2;
+   inp.value = String(nv);
+   S.musculationWeights[exN] = { weight: nv, type: eqT };
+   var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
+   try { localStorage.setItem('mtd_muscu_weights_' + uid, JSON.stringify(S.musculationWeights)); } catch(e2) {}
+   if (window.PERF_HISTORY) PERF_HISTORY.recordMuscuWeight(exN, nv, eqT);
+   window.render();
+ }; })(ex.n, eqType, wInput)
+}, '+');
+ weightRow.appendChild(_wcPlus);
  weightRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, window.UNITS ? window.UNITS.weightLabel() : 'kg'));
 
  if (currentWeight) {
@@ -7826,7 +7856,33 @@ function renderMusculationProgram(p) {
  if (_btn) { var _ok = (sr.actualReps !== null || !!sr.targetReps) && (sr.actualWeight !== null || sr.targetWeight > 0); _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
  }; })(setRow)
  });
+ var _wMinBtn = h('button', {
+ style: 'min-width:36px;min-height:44px;padding:0;background:transparent;border:1px solid var(--border);border-radius:2px;font-size:16px;cursor:pointer;color:var(--black,#0A0A09);line-height:1',
+ onclick: (function(sr, inp) { return function(e) {
+   e.stopPropagation();
+   var cur = parseFloat(inp.value); if (isNaN(cur)) cur = sr.targetWeight || 0;
+   var nv = Math.max(0, Math.round((cur - 2.5) * 2) / 2);
+   inp.value = String(nv); inp.style.color = 'var(--black,#0A0A09)';
+   sr.actualWeight = nv; saveMuscuSessionLog();
+   var _vb = inp.closest ? inp.closest('.set-row') : null; if (_vb) _vb = _vb.querySelector('.set-validate-btn');
+   if (_vb) { var _ok = (sr.actualReps !== null || !!sr.targetReps) && sr.actualWeight !== null; _vb.disabled = !_ok; _vb.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
+ }; })(setRow, weightInput)
+}, '\u2212');
+ inputZone.appendChild(_wMinBtn);
  inputZone.appendChild(weightInput);
+ var _wPlusBtn = h('button', {
+ style: 'min-width:36px;min-height:44px;padding:0;background:transparent;border:1px solid var(--border);border-radius:2px;font-size:16px;cursor:pointer;color:var(--black,#0A0A09);line-height:1',
+ onclick: (function(sr, inp) { return function(e) {
+   e.stopPropagation();
+   var cur = parseFloat(inp.value); if (isNaN(cur)) cur = sr.targetWeight || 0;
+   var nv = Math.round((cur + 2.5) * 2) / 2;
+   inp.value = String(nv); inp.style.color = 'var(--black,#0A0A09)';
+   sr.actualWeight = nv; saveMuscuSessionLog();
+   var _vb = inp.closest ? inp.closest('.set-row') : null; if (_vb) _vb = _vb.querySelector('.set-validate-btn');
+   if (_vb) { var _ok = (sr.actualReps !== null || !!sr.targetReps) && sr.actualWeight !== null; _vb.disabled = !_ok; _vb.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
+ }; })(setRow, weightInput)
+}, '+');
+ inputZone.appendChild(_wPlusBtn);
  inputZone.appendChild(h('span', {style: 'font-size:9px;color:var(--grey)'}, (window.UNITS ? window.UNITS.weightLabel() : 'kg')));
  } else {
  // Exercice poids du corps : reps uniquement par défaut, poids optionnel via toggle "Lestés"
@@ -7882,7 +7938,33 @@ function renderMusculationProgram(p) {
  if (_btn) { var _ok = (sr.actualReps !== null || !!sr.targetReps) && (sr.actualWeight !== null || (_isBw && !sr.weighted) || sr.targetWeight > 0); _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
  }; })(setRow, isBodyweight)
  });
+ var _rMinBtn = h('button', {
+ style: 'min-width:32px;min-height:44px;padding:0;background:transparent;border:1px solid var(--border);border-radius:2px;font-size:16px;cursor:pointer;color:var(--black,#0A0A09);line-height:1',
+ onclick: (function(sr, inp, _isBw2) { return function(e) {
+   e.stopPropagation();
+   var cur = parseInt(inp.value); if (isNaN(cur)) cur = sr.targetReps || 0;
+   var nv = Math.max(0, cur - 1);
+   inp.value = String(nv); inp.style.color = 'var(--black,#0A0A09)';
+   sr.actualReps = nv; saveMuscuSessionLog();
+   var _vb = inp.closest ? inp.closest('.set-row') : null; if (_vb) _vb = _vb.querySelector('.set-validate-btn');
+   if (_vb) { var _ok = (sr.actualReps !== null || !!sr.targetReps) && (sr.actualWeight !== null || (_isBw2 && !sr.weighted) || sr.targetWeight > 0); _vb.disabled = !_ok; _vb.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
+ }; })(setRow, repsInput, isBodyweight)
+}, '\u2212');
+ var _rPlusBtn = h('button', {
+ style: 'min-width:32px;min-height:44px;padding:0;background:transparent;border:1px solid var(--border);border-radius:2px;font-size:16px;cursor:pointer;color:var(--black,#0A0A09);line-height:1',
+ onclick: (function(sr, inp, _isBw2) { return function(e) {
+   e.stopPropagation();
+   var cur = parseInt(inp.value); if (isNaN(cur)) cur = sr.targetReps || 0;
+   var nv = cur + 1;
+   inp.value = String(nv); inp.style.color = 'var(--black,#0A0A09)';
+   sr.actualReps = nv; saveMuscuSessionLog();
+   var _vb = inp.closest ? inp.closest('.set-row') : null; if (_vb) _vb = _vb.querySelector('.set-validate-btn');
+   if (_vb) { var _ok = (sr.actualReps !== null || !!sr.targetReps) && (sr.actualWeight !== null || (_isBw2 && !sr.weighted) || sr.targetWeight > 0); _vb.disabled = !_ok; _vb.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
+ }; })(setRow, repsInput, isBodyweight)
+}, '+');
+ inputZone.appendChild(_rMinBtn);
  inputZone.appendChild(repsInput);
+ inputZone.appendChild(_rPlusBtn);
  inputZone.appendChild(h('span', {style: 'font-size:9px;color:var(--grey)'}, window.t('muscu.reps')));
 
  // Verrouiller les inputs si la série est déjà validée
