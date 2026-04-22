@@ -3069,7 +3069,7 @@ function renderCardRepas() {
       onclick: function(e) {
         e.stopPropagation();
         S.mealsLogged = S.mealsLogged || {};
-        var tk = new Date().toISOString().slice(0, 10);
+        var _tkNow = new Date(); var tk = _tkNow.getFullYear() + '-' + String(_tkNow.getMonth()+1).padStart(2,'0') + '-' + String(_tkNow.getDate()).padStart(2,'0');
         S.mealsLogged[tk] = S.mealsLogged[tk] || {};
         var wasLogged = S.mealsLogged[tk][slotKey] === true;
         if (wasLogged) {
@@ -5954,6 +5954,14 @@ function renderTodayDashboard(p) {
 
   // Card — Macros du jour (seulement si pas de hero)
   var cardMacros = renderCardMacros(); if (cardMacros && !hero) wrapper.appendChild(cardMacros);
+
+  // Warning — Conflit objectif nutrition × sport
+  var _nm = window.S && window.S._nm;
+  if (_nm && _nm.goalConflict) {
+    wrapper.appendChild(h('div', {
+      style: 'margin:0 0 16px;padding:12px 14px;background:var(--warning-bg,#FFF8E1);border:1px solid var(--warning-border,#F9A825);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--ink-900,#0A0A09);line-height:1.6;'
+    }, '⚠️ ' + _nm.goalConflict));
+  }
 
   // Card — TDEE adaptatif
   var cardTDEE = renderCardTDEEAdaptatif(S);
