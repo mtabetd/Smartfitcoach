@@ -175,8 +175,12 @@ test('guard age=10 (sous plancher 13) → 0', function() {
   assert.strictEqual(calcBMR(), 0);
 });
 
-test('guard age=105 (au-dessus plafond 100) → 0', function() {
+test('guard age=105 (valide 13-120) → BMR > 0', function() {
   setState({ age: 105 });
+  assert.ok(calcBMR() > 0, 'BMR should be positive for age 105 (valid range 13-120)');
+});
+test('guard age=125 (au-dessus plafond 120) → 0', function() {
+  setState({ age: 125 });
   assert.strictEqual(calcBMR(), 0);
 });
 

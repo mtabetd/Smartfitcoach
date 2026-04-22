@@ -490,6 +490,18 @@ function generateSportProgram() {
          else if (_dtype === 'arms')      _filtered = ['biceps','triceps'];
          else _filtered = ['chest','back','shoulders','legs','glutes','biceps','triceps','abs']; // safe fallback
        }
+       // FIX 2026-04 : garantir les catégories synergiques minimales même quand l'user
+       // n'a pas explicitement coché la zone dans sportFocus.
+       // Ex: user coche "Jambes" mais pas "Fessiers" → jour Legs = ['legs'] seul → 2 exos seulement.
+       // Sans ce fix, Lower/Legs day d'un débutant a 2 exercices au lieu de 4+.
+       if ((_dtype === 'lower' || _dtype === 'legs') && _filtered.indexOf('glutes') === -1)
+         _filtered = _filtered.concat(['glutes']);
+       if (_dtype === 'push' && _filtered.indexOf('triceps') === -1)
+         _filtered = _filtered.concat(['triceps']);
+       if ((_dtype === 'pull' || _dtype === 'back_bi') && _filtered.indexOf('biceps') === -1)
+         _filtered = _filtered.concat(['biceps']);
+       if (_dtype === 'chest_tri' && _filtered.indexOf('triceps') === -1)
+         _filtered = _filtered.concat(['triceps']);
        // Re-sort by priority
        _filtered.sort(function(a, b) { return (categoryPriority[b] || 0) - (categoryPriority[a] || 0); });
        daySplits[_sd] = _filtered;
@@ -7298,7 +7310,19 @@ function renderMusculationProgram(p) {
    var _todayIdx = (new Date().getDay() + 6) % 7;
    if (Array.isArray(S.trainingDaysSelected) && S.trainingDaysSelected.length > 0) {
      var _pos = S.trainingDaysSelected.indexOf(_todayIdx);
-     S.selectedSportDay = (_pos >= 0) ? Math.min(_pos, S.sportProgram.length - 1) : 0;
+     if (_pos >= 0) {
+       // Aujourd'hui est un jour d'entraînement → afficher ce jour
+       S.selectedSportDay = Math.min(_pos, S.sportProgram.length - 1);
+     } else {
+       // Aujourd'hui est un jour de repos → trouver le prochain jour d'entraînement
+       var _nextIdx = -1;
+       for (var _di = 1; _di <= 7; _di++) {
+         var _candidate = (_todayIdx + _di) % 7;
+         var _nextPos = S.trainingDaysSelected.indexOf(_candidate);
+         if (_nextPos >= 0) { _nextIdx = _nextPos; break; }
+       }
+       S.selectedSportDay = (_nextIdx >= 0) ? Math.min(_nextIdx, S.sportProgram.length - 1) : 0;
+     }
    } else {
      S.selectedSportDay = Math.min(_todayIdx, S.sportProgram.length - 1);
    }
@@ -7328,7 +7352,7 @@ function renderMusculationProgram(p) {
   var _short = _shortFocus(day.focus);
   var _dayPrefix = _hasDayMap ? _dayAbbrFR[S.trainingDaysSelected[i]] : ('J' + (i + 1));
   var _tabLabel = _short ? (_dayPrefix + ' \u00b7 ' + _short) : _dayPrefix;
-  tabs.appendChild(h('button', {'class': 'day-tab' + (S.selectedSportDay === i ? ' active' : ''), onclick: (function(idx){ return function(){ S.selectedSportDay = idx; window.render(); }; })(i)}, _tabLabel));
+  tabs.appendChild(h('button', {'class': 'day-tab' + (S.selectedSportDay === i ? ' active' : ''), onclick: (function(idx){ return function(){ S.selectedSportDay = idx; S.currentExerciseIdx = 0; S._exSwipeDayIdx = idx; window.render(); }; })(i)}, _tabLabel));
  });
  p.appendChild(tabs);
 
@@ -7412,11 +7436,13 @@ function renderMusculationProgram(p) {
  if (_progHistory && _progHistory.length >= 2) {
    var _last = _progHistory[_progHistory.length - 1];
    var _prev = _progHistory[_progHistory.length - 2];
-   var _deltaW = Math.round((_last.weight - _prev.weight) * 2) / 2;
-   if (_deltaW !== 0) {
+   var _lastW = parseFloat(_last && _last.weight) || 0;
+   var _prevW = parseFloat(_prev && _prev.weight) || 0;
+   var _deltaW = (_lastW > 0 && _prevW > 0) ? Math.round((_lastW - _prevW) * 2) / 2 : 0;
+   if (_deltaW !== 0 && !isNaN(_deltaW)) {
      var _deltaEl = h('span', {
        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:600;margin-left:6px;' + (_deltaW > 0 ? 'color:var(--success,#3E5C3A);' : 'color:var(--error,#7A1F1F);')
-     }, (_deltaW > 0 ? '↑' : '↓') + ' ' + Math.abs(_deltaW) + ' kg');
+     }, (_deltaW > 0 ? '↑' : '↓') + ' ' + Math.abs(_deltaW) + ' kg');
      _exNameEl.appendChild(_deltaEl);
    }
  }
