@@ -78,6 +78,28 @@ var EXERCISES = {
       tags: ["pectoraux", "triceps", "poids du corps"]
     },
     {
+      n: "Pompes surélevées (mains sur chaise)",
+      m: "Pectoraux inférieurs / Triceps",
+      eq: "Poids du corps",
+      sets: "3×12-15",
+      rest: "60s",
+      desc: "Mains posées sur une chaise ou un step stable, corps incliné vers le bas. Pompe déclinée sans équipement spécifique.",
+      tips: ["Plus les mains sont hautes, plus c'est facile", "Corps parfaitement aligné", "Travailler les pectoraux inférieurs", "Idéal pour progresser vers les pompes déclinées sur banc"],
+      lv: 1,
+      tags: ["pectoraux", "poids du corps", "home", "débutant"]
+    },
+    {
+      n: "Pompes prise large",
+      m: "Pectoraux (faisceau sternal) / Épaules",
+      eq: "Poids du corps",
+      sets: "3×12-15",
+      rest: "60s",
+      desc: "Pompes avec les mains plus larges que la largeur des épaules pour cibler davantage le faisceau sternal et l'extérieur des pectoraux.",
+      tips: ["Mains à 1.5-2x la largeur des épaules", "Coudes à 45-60° du tronc — pas perpendiculaires", "Amplitude complète, poitrine vers le sol", "Variante utile pour introduire de la diversité"],
+      lv: 1,
+      tags: ["pectoraux", "poids du corps", "débutant"]
+    },
+    {
       n: "Écarté haltères",
       m: "Pectoraux",
       eq: "Haltères + banc",
@@ -451,6 +473,28 @@ var EXERCISES = {
       tips: ["Ne pas hyper-étendre le cou", "Contracter les fessiers", "Maintenir 2-3 secondes en haut"],
       lv: 1,
       tags: ["dos", "lombaires", "poids du corps"]
+    },
+    {
+      n: "Pull-apart élastique",
+      m: "Rhomboïdes / Deltoïdes postérieurs",
+      eq: "Bande élastique",
+      sets: "3×15-20",
+      rest: "45s",
+      desc: "Tenir l'élastique tendu devant soi à hauteur de poitrine, écarter les bras en tirant l'élastique jusqu'à la poitrine.",
+      tips: ["Bras pratiquement tendus pendant le mouvement", "Pincer les omoplates en fin de mouvement", "Excellente prévention des blessures d'épaule", "Réaliser lentement et en contrôle"],
+      lv: 1,
+      tags: ["dos", "rhomboïdes", "poids du corps", "prevention", "débutant"]
+    },
+    {
+      n: "Good morning poids du corps",
+      m: "Ischio-jambiers / Lombaires / Fessiers",
+      eq: "Poids du corps",
+      sets: "3×12-15",
+      rest: "60s",
+      desc: "Debout, bras croisés sur la poitrine ou derrière la tête, fléchir les hanches vers l'avant (pas les lombaires) en gardant le dos plat.",
+      tips: ["Flexion de hanche — pas flexion lombaire", "Garder le dos plat tout au long du mouvement", "Sentir l'étirement des ischio-jambiers", "Excellent exercice d'apprentissage du mouvement de charnière à la hanche"],
+      lv: 1,
+      tags: ["dos", "lombaires", "jambes", "ischios", "poids du corps", "débutant"]
     },
     {
       n: "Straight-arm pulldown barre",
@@ -935,6 +979,28 @@ var EXERCISES = {
         tags: ["epaules", "trapèzes", "prehab", "posture", "prevention"]
     },
     {
+      n: "Rotation externe élastique (épaule)",
+      m: "Rotateurs externes de l'épaule (coiffe)",
+      eq: "Bande élastique",
+      sets: "3×15-20",
+      rest: "45s",
+      desc: "Coude à 90°, bras collé au corps, tourner l'avant-bras vers l'extérieur contre la résistance de l'élastique — renforce la coiffe des rotateurs.",
+      tips: ["Coude fixe contre le flanc, ne pas le décoller", "Mouvement lent et contrôlé — la résistance doit être faible", "Exercice de prévention prioritaire pour les sportifs effectuant des mouvements au-dessus de la tête", "Peut être réalisé debout ou allongé sur le côté"],
+      lv: 1,
+      tags: ["epaules", "coiffe", "prehab", "prevention", "débutant"]
+    },
+    {
+      n: "Face pull élastique",
+      m: "Deltoïdes postérieurs / Trapèzes / Coiffe",
+      eq: "Bande élastique",
+      sets: "3×15-20",
+      rest: "45s",
+      desc: "Élastique ancré en hauteur, tirer les poignées vers le visage en écartant les coudes, en rotation externe des épaules.",
+      tips: ["Tirer vers le nez/front, coudes hauts et écartés", "Rotation externe maximale en fin de mouvement", "Garder les omoplates rétractées", "Excellente prévention de l'instabilité d'épaule"],
+      lv: 1,
+      tags: ["epaules", "deltoïdes postérieurs", "trapèzes", "prehab", "prevention", "débutant"]
+    },
+    {
         n: "Leaning lateral raise",
         m: "Deltoïde latéral",
         eq: "Haltère + support",
@@ -1004,6 +1070,28 @@ var EXERCISES = {
       tips: ["Paumes vers le haut (supination)", "Coudes fixes, ne pas balancer", "Table stable"],
       lv: 1,
       tags: ["biceps", "compose", "poids_corps"]
+    },
+    {
+      n: "Chin-up négatif (descente lente)",
+      m: "Biceps / Brachial",
+      eq: "Barre de traction",
+      sets: "3×5-8",
+      rest: "90s",
+      desc: "Sauter ou utiliser un step pour atteindre le sommet de la traction, puis descendre le plus lentement possible (5-8 secondes) en résistant avec les biceps.",
+      tips: ["Prendre une prise supination (paumes vers vous)", "Descente sur 5 à 8 secondes minimum", "Corps bien droit, pas de balancement", "Excellent pour développer la force des biceps sans pouvoir faire des vraies tractions"],
+      lv: 2,
+      tags: ["biceps", "poids du corps", "excentrique", "prevention"]
+    },
+    {
+      n: "Curl isométrique résistance manuelle",
+      m: "Biceps",
+      eq: "Poids du corps",
+      sets: "3×8-10 par bras",
+      rest: "45s",
+      desc: "Placer la paume de la main opposée sur l'avant-bras comme résistance, puis fléchir le coude contre cette résistance en créant une tension isométrique ou légèrement dynamique.",
+      tips: ["Contrôler l'intensité de la résistance avec la main opposée", "Garder le coude fixe contre le corps", "Peut être fait debout ou assis", "Variante utile sans aucun équipement"],
+      lv: 1,
+      tags: ["biceps", "poids du corps", "isometrique", "débutant"]
     },
     {
       n: "Curl barre droite",
@@ -1230,6 +1318,28 @@ var EXERCISES = {
       tags: ["triceps", "poids du corps", "débutant"]
     },
     {
+      n: "Extension triceps au sol (poids du corps)",
+      m: "Triceps (longue portion)",
+      eq: "Poids du corps",
+      sets: "3×8-12",
+      rest: "60s",
+      desc: "A genoux, bras en appui sur le sol legèrement en avant, fléchir et etendre les coudes comme un skull crusher inversé — variante bodyweight.",
+      tips: ["Placer les mains a largeur d'épaules légèrement en avant", "Laisser les coudes fléchir vers l'avant en descendant le front vers le sol", "Pousser en extension complète en contractant les triceps", "Progresser en éloignant les pieds pour augmenter la difficulté"],
+      lv: 1,
+      tags: ["triceps", "poids du corps", "longue portion", "débutant"]
+    },
+    {
+      n: "Tricep push-up (prise serrée)",
+      m: "Triceps / Pectoraux internes",
+      eq: "Poids du corps",
+      sets: "3×10-15",
+      rest: "60s",
+      desc: "Pompe avec les mains rapprochées sous la poitrine, coudes longeant le corps pour maximiser le travail des triceps.",
+      tips: ["Mains sous les pectoraux, légèrement rapprochées", "Coudes contre le corps pendant toute la descente", "Fessiers serrés pour maintenir l'alignement", "Plus facile que les pompes diamant"],
+      lv: 1,
+      tags: ["triceps", "pectoraux", "poids du corps", "débutant"]
+    },
+    {
       n: "Skull crushers (barre front)",
       m: "Triceps (longue portion)",
       eq: "Barre EZ + banc",
@@ -1416,6 +1526,51 @@ var EXERCISES = {
 
   // ─── JAMBES ───
   legs: [
+    // ─── Exercices poids du corps — débutants sans équipement ───
+    {
+      n: "Squat poids du corps",
+      m: "Quadriceps / Fessiers",
+      eq: "Poids du corps",
+      sets: "3×15-20",
+      rest: "60s",
+      desc: "Squat classique sans charge — pieds largeur d'épaules, descendre jusqu'au parallèle.",
+      tips: ["Dos droit, regard droit", "Genoux dans l'axe des orteils", "Pousser dans les talons à la montée", "Parfait pour apprendre le patron moteur"],
+      lv: 1,
+      tags: ["jambes", "quadriceps", "fessiers", "débutant", "poids du corps"]
+    },
+    {
+      n: "Fentes avant poids du corps",
+      m: "Quadriceps / Fessiers",
+      eq: "Poids du corps",
+      sets: "3×12 par jambe",
+      rest: "60s",
+      desc: "Faire un grand pas en avant et descendre le genou arrière vers le sol.",
+      tips: ["Genou avant à 90°", "Genou arrière frôle le sol sans le toucher", "Tronc droit", "Alterner les jambes"],
+      lv: 1,
+      tags: ["jambes", "quadriceps", "fessiers", "unilateral", "débutant", "poids du corps"]
+    },
+    {
+      n: "Squat sumo poids du corps",
+      m: "Quadriceps / Adducteurs / Fessiers",
+      eq: "Poids du corps",
+      sets: "3×15",
+      rest: "60s",
+      desc: "Squat pieds très écartés, orteils tournés à 45°, descendre profondément.",
+      tips: ["Écarter les pieds au-delà de la largeur des épaules", "Orteils à 45° vers l'extérieur", "Genoux poussés vers l'extérieur", "Descente profonde tolérée grâce à la position évasée"],
+      lv: 1,
+      tags: ["jambes", "quadriceps", "adducteurs", "fessiers", "débutant", "poids du corps"]
+    },
+    {
+      n: "Fentes latérales poids du corps",
+      m: "Adducteurs / Quadriceps",
+      eq: "Poids du corps",
+      sets: "3×10 par jambe",
+      rest: "60s",
+      desc: "Grand pas latéral, fléchir le genou de la jambe de travail, l'autre jambe reste tendue.",
+      tips: ["Pied du côté de la fente à plat sur le sol", "Genou dans l'axe du pied", "Tronc droit", "Revenir en position de départ"],
+      lv: 1,
+      tags: ["jambes", "adducteurs", "quadriceps", "débutant", "poids du corps"]
+    },
     // ─── FIX SPRINT P1.6 — Exos basiques manquants (référencés par programmes mais absents DB) ───
     {
       n: "Soulevé de terre",

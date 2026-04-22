@@ -554,6 +554,9 @@ function generateSportProgram() {
 
  // BUG-10: Track how many times each group has appeared this week (intra-week progression)
  var groupWeekOccurrence = {};
+ // Cross-week deduplication: track exercise names already used this week so the same
+ // exercise never appears on two different days (e.g. JM Press in Upper A AND Upper B).
+ var weekUsedNames = {};
 
  // Generate exercises for each day
  var maxLv = S.sportLevel === 'beginner' ? 2 : S.sportLevel === 'intermediate' ? 3 : 3; // lv:4 not yet in DB — cap at 3
@@ -768,14 +771,37 @@ function generateSportProgram() {
  var groupOcc = groupWeekOccurrence[group] || 0;
  groupWeekOccurrence[group] = groupOcc + 1;
 
+ // Cross-week dedup: prioritise exercises not yet used this week so the same exercise
+ // never appears on two different days of the same split (e.g. JM Press Upper A + B).
+ // When the pool is very small (tiny bodyweight selection) we can't always avoid repeats:
+ // in that case we put fresh exercises first and repeats at the end so the slice picks
+ // fresh ones whenever they exist.
+ var _availForPick = available;
+ var _dedupActive = false;
+ if (groupOcc > 0) {
+   var _fresh   = available.filter(function(e) { return !weekUsedNames[(e.n||'').toLowerCase().trim()]; });
+   var _repeats = available.filter(function(e) { return  weekUsedNames[(e.n||'').toLowerCase().trim()]; });
+   if (_fresh.length >= count) {
+     _availForPick = _fresh;                // enough fresh — use only fresh
+     _dedupActive = true;
+   } else if (_fresh.length > 0) {
+     _availForPick = _fresh.concat(_repeats); // some fresh — fresh first, repeats as fallback
+     _dedupActive = true;
+   }
+   // else all exercises already used (pool smaller than count) — keep full available
+ }
+
  // Rotation offset: combine intra-week occurrence (groupOcc) and cycle number
  // so Upper A ≠ Upper B within a week, and exercises rotate across cycles.
- var poolRemainder = available.length - count;
+ // When dedup is active, reset offset to 0: fresh exercises are at the front of _availForPick
+ // and we must start from index 0 to pick them (not from a rotated position that wraps into repeats).
+ var poolRemainder = _availForPick.length - count;
  var _rotBase = groupOcc * count + ((S.muscuCycle || 1) - 1) * count;
- var cycleOffset = (poolRemainder > 0 && available.length > count) ? (_rotBase % available.length) : 0;
+ var cycleOffset = (_dedupActive || poolRemainder <= 0 || _availForPick.length <= count) ? 0
+   : (_rotBase % _availForPick.length);
  var groupStartIdx = dayExercises.length; // track where this group's exercises start
  for (var i = 0; i < count; i++) {
- var ex = Object.assign({}, available[(i + cycleOffset) % available.length]);
+ var ex = Object.assign({}, _availForPick[(i + cycleOffset) % _availForPick.length]);
 
  // Override rest based on goals
  if (restOverride) ex.rest = restOverride;
@@ -826,6 +852,7 @@ function generateSportProgram() {
  if (supersetNote && i > 0 && i % 2 === 0 && ex.n) ex.n = ex.n + supersetNote;
 
  dayExercises.push(ex);
+ weekUsedNames[(ex.n||'').toLowerCase().trim()] = true;
  }
 
  // BUG-10: Apply intra-week progressive overload variation for repeated muscle groups
