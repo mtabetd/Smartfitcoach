@@ -429,8 +429,10 @@ function stopCamera() {
 // ─── RENDER ───
 window.SCANNER = {
   stopCamera: stopCamera,
-  renderWidget: function(container) {
+  renderWidget: function(container, options) {
     stopCamera(); // Clean up any previous camera stream on re-render
+    options = options || {};
+    var onPrefill = typeof options.onPrefill === 'function' ? options.onPrefill : null;
     var scannerDiv = document.createElement('div');
     scannerDiv.className = 'scanner-container';
 
@@ -450,15 +452,26 @@ window.SCANNER = {
     var showCamera = false;
     var resultContainer = document.createElement('div');
 
-    // Scan button
-    var scanBtn = document.createElement('div');
-    scanBtn.className = 'scan-btn';
-    scanBtn.textContent = '\uD83D\uDCF7 ' + window.t('scan.scan');
-    scanBtn.onclick = function() {
-      showCamera = true;
-      renderCameraView();
-    };
-    scannerDiv.appendChild(scanBtn);
+    // iOS Safari: BarcodeDetector API is not available. Instead of letting users
+    // open a camera that will never decode anything, show an explicit notice.
+    if (!barcodeDetector) {
+      var iosNotice = document.createElement('div');
+      iosNotice.style.cssText = 'padding:10px 12px;margin-bottom:12px;background:rgba(232,111,30,0.08);border-left:2px solid #E86F1E;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;line-height:1.5;color:var(--black,#0A0A09)';
+      iosNotice.textContent = 'Sur iPhone/iPad, Safari ne supporte pas le scan automatique. Tapez les chiffres du code-barres ci-dessous pour r\u00e9cup\u00e9rer le produit via Open Food Facts.';
+      scannerDiv.appendChild(iosNotice);
+    }
+
+    // Scan button — only shown when native BarcodeDetector is available
+    if (barcodeDetector) {
+      var scanBtn = document.createElement('div');
+      scanBtn.className = 'scan-btn';
+      scanBtn.textContent = '\uD83D\uDCF7 ' + window.t('scan.scan');
+      scanBtn.onclick = function() {
+        showCamera = true;
+        renderCameraView();
+      };
+      scannerDiv.appendChild(scanBtn);
+    }
 
     // Manual input
     var manualDiv = document.createElement('div');
@@ -620,6 +633,12 @@ window.SCANNER = {
         addToScanHistory(product, currentScore);
 
         renderProductResult();
+
+        // Prefill callback — used when scanner is opened from the Create-food modal.
+        // Sends nutritional values back to the parent form so user can review and save.
+        if (onPrefill) {
+          try { onPrefill(product); } catch(e) { console.warn('[scanner] onPrefill failed:', e); }
+        }
 
         // Find alternatives if score < 75
         if (currentScore < 75) {

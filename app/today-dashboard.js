@@ -1644,6 +1644,43 @@ function _fjOpenCreateFoodModal() {
       { id: 'cf-l',    label: 'Lipides / 100g (g)', placeholder: '0', inputmode: 'decimal' }
     ];
     var inputs = {};
+
+    // Barcode prefill — top of modal so discoverable
+    if (window.SCANNER && typeof window.SCANNER.renderWidget === 'function') {
+      var scanBtn = h('button', {
+        type: 'button',
+        style: 'width:100%;padding:12px 14px;min-height:44px;margin-bottom:14px;background:transparent;border:1px solid var(--black,#0A0A09);border-radius:2px;cursor:pointer;'
+          + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--black,#0A0A09);'
+          + 'display:flex;align-items:center;justify-content:center;gap:8px;box-sizing:border-box;'
+      });
+      scanBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M3 3 L3 13 M5 3 L5 13 M7.5 3 L7.5 13 M10 3 L10 13 M13 3 L13 13"/></svg><span>Scanner un code-barres</span>';
+      scanBtn.addEventListener('click', function() {
+        try {
+          todayModal('Scanner un code-barres', function(scanBox) {
+            var scanContainer = h('div', { style: 'margin-top:8px;' });
+            try { window.SCANNER.renderWidget(scanContainer, { onPrefill: function(p) {
+              if (!p) return;
+              if (inputs['cf-name']) inputs['cf-name'].value = p.name || '';
+              if (inputs['cf-kcal']) inputs['cf-kcal'].value = (p.kcal != null ? p.kcal : '');
+              if (inputs['cf-p'])    inputs['cf-p'].value    = (p.protein != null ? p.protein : '');
+              if (inputs['cf-g'])    inputs['cf-g'].value    = (p.carbs != null ? p.carbs : '');
+              if (inputs['cf-l'])    inputs['cf-l'].value    = (p.fat != null ? p.fat : '');
+              try { if (window.SCANNER && window.SCANNER.stopCamera) window.SCANNER.stopCamera(); } catch(e) {}
+              var overlay = document.body.lastChild;
+              while (overlay && overlay.getAttribute && !overlay.getAttribute('role')) overlay = overlay.previousSibling;
+              if (overlay && overlay.getAttribute && overlay.getAttribute('role') === 'dialog') {
+                try { document.body.removeChild(overlay); } catch(e) {}
+              }
+              if (window.showToast) window.showToast('Valeurs pré-remplies — vérifiez avant d\'enregistrer.', 'success', 2500);
+            } }); }
+            catch(e) { scanContainer.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, 'Scanner indisponible sur ce navigateur.')); }
+            scanBox.appendChild(scanContainer);
+          });
+        } catch(e) { console.warn('[create-food] scanner open failed:', e); }
+      });
+      box.appendChild(scanBtn);
+    }
+
     fields.forEach(function(f) {
       var wrap = h('div', { style: 'margin-bottom:10px;' });
       var lbl = h('label', {
@@ -1816,7 +1853,7 @@ function renderFoodJournalCard() {
   ]));
 
   // ─── Barre de recherche + toggle favoris ───
-  var searchRow = h('div', { style: 'display:flex;gap:8px;margin-bottom:10px;' });
+  var searchRow = h('div', { style: 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;' });
   var input = h('input', {
     type: 'text',
     placeholder: 'Rechercher un aliment',
