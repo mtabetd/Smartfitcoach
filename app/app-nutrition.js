@@ -3201,6 +3201,15 @@ function renderStep9(p) {
       row.appendChild(track);
       progressCard.appendChild(row);
     });
+    // ── SVG rings (visual summary) ──
+    if (window.svgRing) {
+      var _ringsRow = document.createElement('div');
+      _ringsRow.style.cssText = 'display:flex;justify-content:space-around;align-items:flex-start;margin:12px 0 8px;flex-wrap:wrap;gap:8px;';
+      _ringsRow.appendChild(window.svgRing(64, 6, pPct, 'var(--green,#3E5C3A)', 'P', Math.round(_preTotalP)));
+      _ringsRow.appendChild(window.svgRing(64, 6, gPct, 'var(--blue,#1A3A6A)', 'G', Math.round(_preTotalG)));
+      _ringsRow.appendChild(window.svgRing(64, 6, lPct, 'var(--orange,#E86F1E)', 'L', Math.round(_preTotalL)));
+      progressCard.appendChild(_ringsRow);
+    }
     // ── Restant kcal ──
     var _remaining = Math.round((_tgt || 0) - (_preTotal || 0));
     var _remainEl = h('div', {
@@ -3403,12 +3412,12 @@ function renderStep9(p) {
         };
         foodCard.appendChild(searchInput);
         if (S._foodSearchResults === 'loading') {
-          var searchLoadDiv = h('div', {style: 'text-align:center;padding:12px;font-size:12px;color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif', role: 'status', 'aria-live': 'polite'});
-          var searchSpinner = document.createElement('span');
-          searchSpinner.className = 'loading-spinner';
-          searchSpinner.setAttribute('aria-hidden', 'true');
-          searchLoadDiv.appendChild(searchSpinner);
-          searchLoadDiv.appendChild(document.createTextNode('Recherche en cours\u2026'));
+          var searchLoadDiv = h('div', {'aria-live': 'polite', role: 'status', style: 'margin-bottom:8px'});
+          ['skeleton skeleton-line skeleton-w-60','skeleton skeleton-line','skeleton skeleton-line skeleton-w-40','skeleton skeleton-line skeleton-w-60','skeleton skeleton-line skeleton-w-40'].forEach(function(cls) {
+            var sk = document.createElement('div');
+            sk.className = cls;
+            searchLoadDiv.appendChild(sk);
+          });
           foodCard.appendChild(searchLoadDiv);
         } else if (Array.isArray(S._foodSearchResults)) {
           if (S._foodSearchResults.length === 0) {
@@ -3516,12 +3525,14 @@ function renderStep9(p) {
 
         if (S._addMealModalSlot === slotKey) {
           var overlay = h('div', {
+            'class': 'overlay-fade-in',
             style: 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,9,0.45);z-index:9000;display:flex;align-items:flex-end;justify-content:center',
             onclick: function(e) {
               if (e.target === overlay) { S._addMealModalSlot = null; window.render(); }
             }
           });
           var sheet = h('div', {
+            'class': 'sheet-slide-up',
             style: 'background:var(--card,#FAF9F6);border-radius:0;padding:24px 20px 32px;width:100%;max-width:480px;max-height:80vh;overflow-y:auto;'
           });
           sheet.appendChild(h('div', {
@@ -3693,6 +3704,7 @@ function renderStep9(p) {
           }
         });
         var sheet = h('div', {
+          'class': 'sheet-slide-up',
           style: 'background:var(--ivory,#FAF9F6);border-radius:0;padding:24px 20px 32px;width:100%;max-width:480px;border-top:1px solid var(--border,#D8D8D0);max-height:80vh;overflow-y:auto;'
         });
         sheet.appendChild(h('div', {
