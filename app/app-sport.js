@@ -8318,7 +8318,7 @@ function renderMusculationProgram(p) {
 
  // ─── DAY SWIPE (switches selectedSportDay left/right) ───
  (function() {
-  var _nDays = S.sportProgram.length;
+  var _nDays = Array.isArray(S.sportProgram) ? S.sportProgram.length : 0;
   if (_nDays < 2) return;
   var _dTX = 0, _dTY = 0, _dBlocked = false, _dSwiping = false;
   p.addEventListener('touchstart', function(e) {

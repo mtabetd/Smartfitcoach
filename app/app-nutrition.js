@@ -3698,6 +3698,7 @@ function renderStep9(p) {
 
       if (S._addMealModalSlot === slotKey) {
         var overlay = h('div', {
+          'class': 'overlay-fade-in',
           style: 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,9,0.45);z-index:9000;display:flex;align-items:flex-end;justify-content:center',
           onclick: function(e) {
             if (e.target === overlay) { S._addMealModalSlot = null; window.render(); }
