@@ -29607,7 +29607,8 @@
     var alcoholExclusions = filters.allowAlcohol ? [] : ALCOHOL_EXCLUSIONS;
 
     // ── Combine all ingredient exclusions ──
-    var allExclusions = allergyExclusions.concat(intoleranceExclusions).concat(halalExclusions);
+    // Note: halalExclusions replaced by porkExclusions + alcoholExclusions (allowPork / allowAlcohol opt-in)
+    var allExclusions = allergyExclusions.concat(intoleranceExclusions);
 
     // ── Build regime constraint ──
     var regimeIdx = (filters.regime !== undefined && filters.regime !== null) ? filters.regime : null;
