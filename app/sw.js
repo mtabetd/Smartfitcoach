@@ -8,8 +8,8 @@
 // Smart Fit Coach — Service Worker
 // Cache version: bump this string to force a full cache refresh on next visit.
 // 2026-04 NIVEAU 1 : versions unifiées pour éviter caches orphelins lors du bump
-const CACHE_VERSION = 'sfc-v103';
-const RUNTIME_CACHE = 'sfc-runtime-v103';
+const CACHE_VERSION = 'sfc-v104';
+const RUNTIME_CACHE = 'sfc-runtime-v104';
 
 // Max age for static assets in the runtime cache: 7 days (in milliseconds).
 const STATIC_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
@@ -181,11 +181,13 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // JS/CSS: network-first so code fixes (RGPD, bugs) arrive immédiatement.
-  // Cache reste fallback pour offline.
+  // JS/CSS: stale-while-revalidate — serve cached copy instantly, fetch
+  // update in the background so next visit has the latest. Cuts revisit
+  // load from ~5 s (full network round-trip on every asset) to ~50 ms
+  // (disk cache). Code fixes still propagate within one refresh.
   const ext = url.pathname.split('.').pop().toLowerCase();
   if (['js', 'css'].includes(ext)) {
-    event.respondWith(networkFirst(request));
+    event.respondWith(staleWhileRevalidate(request));
     return;
   }
 
@@ -225,6 +227,29 @@ async function networkFirst(request) {
     const cached = await caches.match(request);
     return cached || offlineFallback();
   }
+}
+
+/**
+ * Stale-while-revalidate: return the cached copy immediately (fast), and
+ * kick off a background fetch that updates the cache for next time. If no
+ * cache entry exists, await the network.
+ */
+async function staleWhileRevalidate(request) {
+  const cache = await caches.open(CACHE_VERSION);
+  const cached = await cache.match(request);
+  const networkPromise = fetch(request)
+    .then((networkResponse) => {
+      if (networkResponse && networkResponse.ok) {
+        cache.put(request, networkResponse.clone()).catch(() => {});
+      }
+      return networkResponse;
+    })
+    .catch(() => null);
+
+  if (cached) return cached;
+  const fromNetwork = await networkPromise;
+  if (fromNetwork) return fromNetwork;
+  return offlineFallback();
 }
 
 /**
