@@ -6066,11 +6066,12 @@ function saveMuscuSessionLog() {
  Object.keys(_todayLog).forEach(function(exName) {
  var sets = _todayLog[exName];
  if (!Array.isArray(sets)) return;
- var completed = sets.filter(function(s) { return s.actualWeight !== null || s.actualReps !== null; });
- if (completed.length === 0) return;
- var avgWeight = completed.reduce(function(sum, s) { return sum + (s.actualWeight || 0); }, 0) / completed.length;
- var avgReps = completed.reduce(function(sum, s) { return sum + (s.actualReps || 0); }, 0) / completed.length;
- if (completed.length === 0 || isNaN(avgWeight)) return;
+ var completedW = sets.filter(function(s) { return s.actualWeight !== null; });
+ var completedR = sets.filter(function(s) { return s.actualReps !== null; });
+ if (completedW.length === 0 && completedR.length === 0) return;
+ var avgWeight = completedW.length > 0 ? completedW.reduce(function(sum, s) { return sum + (s.actualWeight || 0); }, 0) / completedW.length : 0;
+ var avgReps = completedR.length > 0 ? completedR.reduce(function(sum, s) { return sum + (s.actualReps || 0); }, 0) / completedR.length : 0;
+ if (isNaN(avgWeight)) return;
 
  if (!S.muscuProgressionHistory[exName]) S.muscuProgressionHistory[exName] = [];
  var existing = S.muscuProgressionHistory[exName].find(function(entry) { return entry.date === _today2; });
@@ -6112,6 +6113,9 @@ function saveMuscuSessionLog() {
  } catch(_ec) {}
  } catch (e) {
  console.warn('[saveMuscuSessionLog] localStorage error:', e);
+ if (e && e.name === 'QuotaExceededError' && window.showToast) {
+   window.showToast('Stockage plein — séance non sauvegardée. Libérez de l\'espace.', 'error', 4000);
+ }
  }
 }
 

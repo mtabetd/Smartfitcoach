@@ -105,8 +105,9 @@ function syncCfMuscuStrength() {
     var cfVal = S.crossfit1RM[m.cf];
     var muscuVal = S.muscuStrengthProfile[m.muscu];
     if (cfVal && cfVal > 0 && (!muscuVal || muscuVal === 0)) {
-      // CF → muscu : si user CF a saisi back_squat=180kg, propager dans muscu.squat
-      S.muscuStrengthProfile[m.muscu] = cfVal;
+      // CF → muscu : diviser par (1+1/30) pour que la reconversion Epley (muscu→CF)
+      // redonne exactement cfVal. Sans ça : 180 × 1.033 → 186 (perte ronde-trip 3%).
+      S.muscuStrengthProfile[m.muscu] = Math.round(cfVal / (1 + 1 / 30));
       S.muscuStrengthProfile[m.muscu + '_reps'] = 1;
       try { console.log('[syncCfMuscu] ' + m.cf + '→' + m.muscu + ' = ' + cfVal); } catch(_e) {}
     } else if (muscuVal && muscuVal > 0 && (!cfVal || cfVal === 0)) {
