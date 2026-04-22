@@ -21,18 +21,8 @@
     }
   }
 
-  if (isProd) {
-    var devtoolsOpen = false;
-    function detectDevTools() {
-      var widthThreshold = window.outerWidth - window.innerWidth > 160;
-      var heightThreshold = window.outerHeight - window.innerHeight > 160;
-      if ((widthThreshold || heightThreshold) && !devtoolsOpen) {
-        devtoolsOpen = true;
-        // Silent detection — no console output in production
-      } else if (!widthThreshold && !heightThreshold) {
-        devtoolsOpen = false;
-      }
-    }
-    setInterval(detectDevTools, 1000);
-  }
+  // Removed the 1 s devtools-detection setInterval. It did nothing — the
+  // "Silent detection" branch had no side effects — while permanently
+  // waking the main thread every second on low-end iPhones. Pure cost,
+  // zero security value (dedicated users open devtools regardless).
 })();
