@@ -235,15 +235,19 @@
         var today = _d1.getFullYear() + '-' + String(_d1.getMonth() + 1).padStart(2, '0') + '-' + String(_d1.getDate()).padStart(2, '0');
         var last = new Date(lastDate);
         var diff = Math.floor((new Date(today) - last) / 86400000);
-        if (diff >= 3) {
-          // Inactif depuis 3+ jours — envoyer la notification maintenant (ou à 11h si avant 11h)
+        if (diff >= 2) {
+          // Inactif depuis 2+ jours — relance douce dès J+2 (pas J+3 comme avant)
           var now = new Date();
           var notifTime = new Date(now);
           notifTime.setHours(11, 0, 0, 0);
           var streak = streakData.current || 0;
-          var msg = streak > 0
-            ? 'Tu n\'as pas encore agi aujourd\'hui. Ton streak de ' + streak + ' jour' + (streak > 1 ? 's' : '') + ' t\'attend — ne le laisse pas tomber !'
-            : 'Ça fait ' + diff + ' jours qu\'on ne t\'a pas vu. Reprends là où tu t\'es arrêté(e) — chaque action compte !';
+          var msg = diff === 2
+            ? (streak > 0
+                ? 'Votre séquence de ' + streak + ' jour' + (streak > 1 ? 's' : '') + ' vous attend. C\'est encore aujourd\'hui.'
+                : 'Hier, vous n\'avez pas loggé. Aujourd\'hui, c\'est possible.')
+            : (streak > 0
+                ? 'Ton streak de ' + streak + ' jour' + (streak > 1 ? 's' : '') + ' t\'attend — ne le laisse pas tomber !'
+                : 'Ça fait ' + diff + ' jours qu\'on ne t\'a pas vu. Reprends là où tu t\'es arrêté(e) — chaque action compte !');
           if (now < notifTime) {
             this.scheduleAndPersist('comeback', 'SmartFitCoach', msg, notifTime.getTime());
           } else {

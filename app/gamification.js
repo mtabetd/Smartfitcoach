@@ -229,12 +229,64 @@ function updateStreak() {
   // Sync streak vers Supabase
   if (window.SupaSync) SupaSync.saveStreak({current: data.current, best: data.best, lastDate: data.lastDate, dates: data.dates});
 
-  // Check streak badges
+  // Check streak badges + identity progression
   if (data.current >= 3) unlockBadge('streak_3');
-  if (data.current >= 7) unlockBadge('streak_7');
-  if (data.current >= 14) unlockBadge('streak_14');
-  if (data.current >= 30) unlockBadge('streak_30');
-  if (data.current >= 90) unlockBadge('streak_90');
+  if (data.current >= 7)  { unlockBadge('streak_7');  celebrateIdentity(data.current); }
+  if (data.current >= 14) { unlockBadge('streak_14'); celebrateIdentity(data.current); }
+  if (data.current >= 30) { unlockBadge('streak_30'); celebrateIdentity(data.current); }
+  if (data.current >= 90) { unlockBadge('streak_90'); celebrateIdentity(data.current); }
+}
+
+// ─── IDENTITY PROGRESSION — messages narratifs aux jalons clés ───────────────
+// Affichés 2.5s après le badge toast pour laisser l'utilisateur lire le badge d'abord.
+// Basés sur la psychologie comportementale de Fogg : l'identité précède le comportement.
+var _IDENTITY_SHOWN = {}; // { '7': true } — évite de réafficher dans la même session
+
+function celebrateIdentity(days) {
+  try {
+    var _key = String(days);
+    if (_IDENTITY_SHOWN[_key]) return;
+    var _messages = {
+      7:  { title: 'Vous êtes régulier(e).', body: '7 jours de suite — vous faites partie des 15 % qui tiennent vraiment leurs engagements.' },
+      14: { title: 'Discipline confirmée.', body: '2 semaines sans interruption. C\'est la marque d\'une intention sérieuse, pas d\'un caprice.' },
+      30: { title: 'Transformation en cours.', body: '30 jours — un changement physiologique est désormais mesurable dans votre corps.' },
+      90: { title: 'Vous êtes exceptionnel(le).', body: '90 jours de constance. Moins de 3 % des utilisateurs atteignent ce palier.' }
+    };
+    var _thresholds = [7, 14, 30, 90];
+    var _match = null;
+    for (var _i = 0; _i < _thresholds.length; _i++) {
+      if (days === _thresholds[_i]) { _match = _messages[_thresholds[_i]]; break; }
+    }
+    if (!_match) return;
+    _IDENTITY_SHOWN[_key] = true;
+    setTimeout(function() {
+      try {
+        var _existing = document.querySelector('.sfc-identity-card');
+        if (_existing) _existing.remove();
+        var _card = document.createElement('div');
+        _card.className = 'sfc-identity-card';
+        _card.style.cssText = [
+          'position:fixed;left:50%;transform:translateX(-50%)',
+          'bottom:calc(80px + env(safe-area-inset-bottom))',
+          'max-width:340px;width:calc(100% - 32px)',
+          'background:var(--ink-900,#0A0A09);color:var(--ivory,#FAF9F6)',
+          'padding:16px 20px;z-index:9800',
+          'border-left:3px solid #C9A84C',
+          'font-family:"Helvetica Neue",Arial,sans-serif'
+        ].join(';');
+        var _t = document.createElement('div');
+        _t.style.cssText = 'font-family:Georgia,serif;font-size:15px;font-style:italic;margin-bottom:6px;color:#C9A84C;';
+        _t.textContent = _match.title;
+        var _b = document.createElement('div');
+        _b.style.cssText = 'font-size:11px;line-height:1.6;letter-spacing:0.3px;color:rgba(250,249,246,0.82);';
+        _b.textContent = _match.body;
+        _card.appendChild(_t);
+        _card.appendChild(_b);
+        document.body.appendChild(_card);
+        setTimeout(function() { if (_card.parentNode) _card.remove(); }, 5500);
+      } catch(e) {}
+    }, 2500);
+  } catch(e) {}
 }
 
 // ─── NUTRITION STREAK ───
@@ -261,23 +313,34 @@ function updateNutritionStreak() {
 // ─── VARIABLE REWARD — récompense surprise 30% du temps sur les repas loggés ───
 // Pool de messages positifs variés, jamais deux fois le même dans la même journée.
 // Le délai de 400ms évite la collision avec le toast principal de l'action.
-var _VR_MESSAGES = [
-  'Votre constance se voit. Continuez.',
-  'Chaque repas loggé est une décision consciente.',
-  'Vous construisez quelque chose de solide.',
-  'La régularité fait plus que l\'intensité.',
-  'Bien noté. Votre corps vous remercie.',
-  'Vous êtes dans les 5% qui font vraiment le travail.',
-  'Ce geste simple change tout sur le long terme.',
-  'Chaque entrée compte. Vous le savez déjà.',
-  'Un repas de plus dans le bon sens.',
-  'Votre futur vous remercie de ce que vous faites aujourd\'hui.',
-  'Précis. Constant. C\'est ça la méthode.',
-  'Les champions font exactement ce que vous venez de faire.',
-  'Pas de génie. Juste de la rigueur. Vous l\'avez.',
-  'Votre corps retient tout ce que vous lui enseignez.',
-  'Une brique de plus sur votre transformation.'
-];
+// ─── VARIABLE REWARD — ratio 30%, 1×/jour, pools par niveau de streak ────────
+// Hook Model (Nir Eyal) : la variabilité de la récompense crée l'addiction.
+// Pools distincts : utilisateur débutant vs. confirmé vs. élite — messages adaptés.
+var _VR_POOLS = {
+  beginner: [ // streak 0-6
+    'Vous construisez quelque chose de solide.',
+    'Chaque repas loggé est une décision consciente.',
+    'Un repas de plus dans le bon sens.',
+    'La régularité fait plus que l\'intensité.',
+    'Bien noté. Votre corps vous remercie.'
+  ],
+  regular: [ // streak 7-20
+    'Une semaine de suite. Votre futur vous remercie.',
+    'Votre constance se voit. Vous êtes sur le bon chemin.',
+    'Ce geste simple change tout sur le long terme.',
+    'Précis. Constant. C\'est ça la méthode.',
+    'Votre corps retient tout ce que vous lui enseignez.',
+    'Chaque entrée compte. Vous le savez déjà.'
+  ],
+  elite: [ // streak 21+
+    'Vous êtes dans les 5 % qui font vraiment le travail.',
+    'Les champions font exactement ce que vous venez de faire.',
+    'Pas de génie. Juste de la rigueur. Vous l\'avez.',
+    'Une brique de plus sur votre transformation.',
+    '30 % des gens craquent avant J+15. Pas vous.',
+    'Votre discipline est visible — dans vos habitudes, dans vos résultats.'
+  ]
+};
 var _VR_LAST_DATE = '';
 var _VR_FIRED_TODAY = false;
 
@@ -285,14 +348,47 @@ function triggerVariableReward() {
   try {
     var _today = new Date().toISOString().slice(0, 10);
     if (_VR_LAST_DATE !== _today) { _VR_LAST_DATE = _today; _VR_FIRED_TODAY = false; }
-    if (_VR_FIRED_TODAY) return; // 1 seule surprise par jour maximum
-    if (Math.random() > 0.30) return; // 30% de chance
+    if (_VR_FIRED_TODAY) return;
+    if (Math.random() > 0.30) return;
     _VR_FIRED_TODAY = true;
+    var _user = window.AUTH ? window.AUTH.getUser() : null;
+    var _streak = 0;
+    if (_user) {
+      try { _streak = (JSON.parse(localStorage.getItem('mtd_streak_' + _user.id) || '{}')).current || 0; } catch(e) {}
+    }
+    var _pool = _streak >= 21 ? _VR_POOLS.elite : (_streak >= 7 ? _VR_POOLS.regular : _VR_POOLS.beginner);
     var _doy = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
-    var _msg = _VR_MESSAGES[(_doy + Math.floor(Math.random() * 3)) % _VR_MESSAGES.length];
+    var _msg = _pool[(_doy + Math.floor(Math.random() * 2)) % _pool.length];
     setTimeout(function() {
-      if (window.showToast) window.showToast(_msg, 'info', 3000);
-    }, 400);
+      if (window.showToast) window.showToast(_msg, 'info', 3200);
+    }, 700);
+  } catch(e) {}
+}
+
+// ─── PREMIER REPAS DU JOUR — célébration immédiate ────────────────────────────
+// Déclenchée quand getDayTotal().count ≤ 1 = c'est la toute première entrée du jour.
+// Toast premium distinct du variable reward (pas de conflit : le VR a un délai de 700ms,
+// le first-meal a 500ms mais ne fire qu'une fois par jour via _FM_LAST_DATE).
+var _FM_LAST_DATE = '';
+
+function triggerFirstMealCelebration() {
+  try {
+    var _today = new Date().toISOString().slice(0, 10);
+    if (_FM_LAST_DATE === _today) return;
+    var _jt = (window.FOOD_JOURNAL && window.FOOD_JOURNAL.getDayTotal) ? window.FOOD_JOURNAL.getDayTotal() : { count: 0 };
+    if ((_jt.count || 0) > 1) return; // Pas le premier
+    _FM_LAST_DATE = _today;
+    var _user = window.AUTH ? window.AUTH.getUser() : null;
+    var _streak = 0;
+    if (_user) {
+      try { _streak = (JSON.parse(localStorage.getItem('mtd_streak_' + _user.id) || '{}')).current || 0; } catch(e) {}
+    }
+    var _msg = _streak >= 2
+      ? 'Jour ' + _streak + ' — votre régularité se renforce'
+      : 'Premier repas du jour — votre journée commence';
+    setTimeout(function() {
+      if (window.showToast) window.showToast(_msg, 'success', 2800);
+    }, 500);
   } catch(e) {}
 }
 
@@ -301,6 +397,7 @@ function incrementMealsLogged() {
   if (!user) return;
   var count = incrementCounter('meals_logged');
   if (count >= 50) unlockBadge('meals_logged_50');
+  triggerFirstMealCelebration();
   updateNutritionStreak();
   triggerVariableReward();
 }

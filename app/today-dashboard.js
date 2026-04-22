@@ -1811,6 +1811,35 @@ function renderFoodJournalCard() {
   totalsBox.appendChild(totCell('Lip.', totals.l, macroT.l, 'g'));
   c.appendChild(totalsBox);
 
+  // ─── Métrique urgente — langage humain, 1 phrase claire ───────────────────
+  // Traduction des chiffres bruts en message actionnable (Competitor agent rec.)
+  try {
+    if (kcalTarget > 0 && totals.count >= 0) {
+      var _kcalLeft = Math.round(kcalTarget - totals.kcal);
+      var _pLeft = Math.round((macroT.p || 0) - totals.p);
+      var _msgUrgent = '';
+      var _colUrgent = 'var(--grey,#6B6B65)';
+      if (totals.kcal === 0) {
+        _msgUrgent = 'Commencez par logger votre premier repas du jour.';
+      } else if (_kcalLeft > 200) {
+        _msgUrgent = 'Il vous reste  ' + _kcalLeft + ' kcal — ' + (_pLeft > 10 ? 'privilégiez les protéines (' + _pLeft + 'g restants).' : 'objectif presque atteint.');
+        _colUrgent = '#1A3A6A';
+      } else if (_kcalLeft >= -100) {
+        _msgUrgent = 'Budget calorique atteint. Excellente journée.';
+        _colUrgent = '#27AE60';
+      } else {
+        _msgUrgent = 'Budget dépassé de ' + Math.abs(_kcalLeft) + ' kcal. Ajustez demain.';
+        _colUrgent = '#C0392B';
+      }
+      if (_msgUrgent) {
+        c.appendChild(h('div', {
+          style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + _colUrgent + ';' +
+                 'line-height:1.5;padding:6px 0 10px;border-bottom:1px solid var(--line,#D8D8D0);margin-bottom:12px;'
+        }, _msgUrgent));
+      }
+    }
+  } catch(_eUrgent) {}
+
   // ─── Tabs repas ───
   var MEALS = [
     { key: 'breakfast', label: 'Petit-d\u00e9j' },
@@ -1941,7 +1970,8 @@ function renderFoodJournalCard() {
         + 'background:transparent;border:1px solid var(--black,#0A0A09);border-radius:2px;cursor:pointer;box-sizing:border-box;flex-shrink:0;'
     });
     // SVG code-barres 16x16 trait 1.4
-    barcodeBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M3 3 L3 13 M5 3 L5 13 M7.5 3 L7.5 13 M10 3 L10 13 M13 3 L13 13"/></svg>';
+    barcodeBtn.style.cssText += 'gap:6px;padding:0 10px;min-width:unset;';
+    barcodeBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M3 3 L3 13 M5 3 L5 13 M7.5 3 L7.5 13 M10 3 L10 13 M13 3 L13 13"/></svg><span style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;">Code-barres</span>';
     barcodeBtn.addEventListener('click', function() {
       try {
         todayModal('Scanner un code-barres', function(box) {
@@ -5639,6 +5669,62 @@ function renderTodayDashboard(p) {
     }
   } catch(_eMini) {}
 
+  // ── Heatmap 7 jours — visualisation perte de momentum (loss aversion) ──
+  // 7 cercles L M M J V S D : remplis si repas loggé ce jour-là.
+  // Affiché uniquement à partir de J+2 pour ne pas perturber le tout premier jour.
+  try {
+    if (_muid && !_isFirstDay2) {
+      var _fjKey = 'mtd_food_journal_' + _muid;
+      var _fjData = {};
+      try { _fjData = JSON.parse(localStorage.getItem(_fjKey) || '{}'); } catch(e) {}
+      // Construire la liste des 7 derniers jours (lundi→dimanche de la semaine courante)
+      var _hmToday = new Date();
+      var _hmDow = _hmToday.getDay(); // 0=dim, 1=lun, ...
+      var _hmMonday = new Date(_hmToday);
+      _hmMonday.setDate(_hmToday.getDate() - ((_hmDow + 6) % 7));
+      var _hmDays = ['L','M','M','J','V','S','D'];
+      var _hmHasAny = false;
+      var _hmDots = [];
+      for (var _hi = 0; _hi < 7; _hi++) {
+        var _hmD = new Date(_hmMonday);
+        _hmD.setDate(_hmMonday.getDate() + _hi);
+        var _hmStr = _hmD.getFullYear() + '-' + String(_hmD.getMonth()+1).padStart(2,'0') + '-' + String(_hmD.getDate()).padStart(2,'0');
+        var _hmFuture = _hmD > _hmToday;
+        var _hmLogged = !_hmFuture && _fjData[_hmStr] && Array.isArray(_fjData[_hmStr]) && _fjData[_hmStr].length > 0;
+        if (_hmLogged) _hmHasAny = true;
+        _hmDots.push({ label: _hmDays[_hi], logged: _hmLogged, today: _hmStr === _todayStr2, future: _hmFuture });
+      }
+      if (_hmHasAny || _msc >= 1) {
+        var _hmWrap = h('div', {
+          style: 'max-width:560px;margin:4px auto 0;padding:8px 16px;' +
+                 'background:var(--paper-2,#F4F1EA);border:1px solid var(--line,#D8D8D0);' +
+                 'display:flex;align-items:center;justify-content:space-between;'
+        });
+        _hmWrap.appendChild(h('span', {
+          style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);'
+        }, 'Semaine'));
+        var _hmRow = h('div', { style: 'display:flex;gap:6px;align-items:center;' });
+        _hmDots.forEach(function(_hd) {
+          var _dot = h('div', { style: 'display:flex;flex-direction:column;align-items:center;gap:2px;' });
+          _dot.appendChild(h('span', {
+            style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:0;text-transform:uppercase;color:var(--grey,#6B6B65);'
+          }, _hd.label));
+          _dot.appendChild(h('div', {
+            style: 'width:10px;height:10px;border-radius:50%;' + (
+              _hd.future ? 'background:transparent;border:1px solid var(--line,#D8D8D0);' :
+              _hd.today && !_hd.logged ? 'background:transparent;border:1.5px solid var(--orange,#E86F1E);' :
+              _hd.logged ? 'background:var(--black,#0A0A09);' :
+              'background:transparent;border:1px dashed var(--grey,#6B6B65);opacity:0.4;'
+            )
+          }));
+          _hmRow.appendChild(_dot);
+        });
+        _hmWrap.appendChild(_hmRow);
+        wrapper.appendChild(_hmWrap);
+      }
+    }
+  } catch(_eHm) {}
+
   // ── Carte Forme du Jour — affichée quand le bilan est déjà complété aujourd'hui ──
   if (!_needCheckin && _hasSport && !_isFirstDay && window.getWellnessAdaptation) {
     try {
@@ -5807,67 +5893,43 @@ function renderTodayDashboard(p) {
     // Préserve intégralement la logique individuelle quand un seul plan est concerné.
     var _bothNeedValidation = _nutNeedsValidation && _sportNeedsValidation;
 
+    // Auto-activation silencieuse — zéro friction pour l'utilisateur.
+    // Un plan généré est prêt à l'emploi : pas besoin d'une confirmation manuelle.
+    // Toast discret uniquement lors de la première activation de la semaine.
+    var _autoActivated = false;
     if (_bothNeedValidation) {
-      var _bothBanner = card('border-left:3px solid var(--orange,#E86F1E);');
-      _bothBanner.appendChild(eyebrow('VOTRE SEMAINE'));
-      _bothBanner.appendChild(cardTitle('Validez vos deux programmes'));
-      _bothBanner.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:12px;line-height:1.5;'}, 'Votre plan nutrition et votre programme sportif sont pr\u00eats. Confirmez-les pour activer le suivi de la semaine.'));
-      _bothBanner.appendChild(h('button', {
-        style:'padding:12px 20px;background:var(--accent,var(--ink-900,#0A0A09));color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
-        onclick: function() {
-          try {
-            S.weekPlanValidated = true;
-            if (_isoWeek) S.weekPlanValidatedISOWeek = _isoWeek;
-            S._planHash = window.getPlanHash ? window.getPlanHash() : '';
-            S.sportProgramValidated = true;
-            S.sportProgramValidatedAt = new Date().toISOString();
-            if (window.saveProfile) window.saveProfile();
-            if (window.showToast) window.showToast('Programmes valid\u00e9s pour la semaine', 'success', 2200);
-          } catch(_eBoth) { console.warn('[both banner validate]', _eBoth); }
-          if (window.render) window.render();
-        }
-      }, 'VALIDER MES DEUX PROGRAMMES'));
-      wrapper.appendChild(_bothBanner);
+      try {
+        S.weekPlanValidated = true;
+        if (_isoWeek) S.weekPlanValidatedISOWeek = _isoWeek;
+        S._planHash = window.getPlanHash ? window.getPlanHash() : '';
+        S.sportProgramValidated = true;
+        S.sportProgramValidatedAt = new Date().toISOString();
+        if (window.saveProfile) window.saveProfile();
+        _autoActivated = true;
+      } catch(_eBoth) { console.warn('[auto-activate both]', _eBoth); }
     } else {
       if (_nutNeedsValidation) {
-        var _nutBanner = card('border-left:3px solid var(--orange,#E86F1E);');
-        _nutBanner.appendChild(eyebrow('NUTRITION'));
-        _nutBanner.appendChild(cardTitle('Validez votre plan de la semaine'));
-        _nutBanner.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:12px;line-height:1.5;'}, 'Votre plan nutrition est pr\u00eat. Confirmez-le pour qu\u2019il apparaisse dans votre suivi.'));
-        _nutBanner.appendChild(h('button', {
-          style:'padding:12px 20px;background:var(--accent,var(--ink-900,#0A0A09));color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
-          onclick: function() {
-            try {
-              S.weekPlanValidated = true;
-              if (_isoWeek) S.weekPlanValidatedISOWeek = _isoWeek;
-              S._planHash = window.getPlanHash ? window.getPlanHash() : '';
-              if (window.saveProfile) window.saveProfile();
-              if (window.showToast) window.showToast('Plan nutrition valid\u00e9', 'success', 1800);
-            } catch(_eNut) { console.warn('[nut banner validate]', _eNut); }
-            if (window.render) window.render();
-          }
-        }, 'VALIDER MON PLAN NUTRITION'));
-        wrapper.appendChild(_nutBanner);
+        try {
+          S.weekPlanValidated = true;
+          if (_isoWeek) S.weekPlanValidatedISOWeek = _isoWeek;
+          S._planHash = window.getPlanHash ? window.getPlanHash() : '';
+          if (window.saveProfile) window.saveProfile();
+          _autoActivated = true;
+        } catch(_eNut) { console.warn('[auto-activate nut]', _eNut); }
       }
       if (_sportNeedsValidation) {
-        var _sportBanner = card('border-left:3px solid var(--orange,#E86F1E);');
-        _sportBanner.appendChild(eyebrow('SPORT'));
-        _sportBanner.appendChild(cardTitle('Confirmez votre programme sportif'));
-        _sportBanner.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:12px;line-height:1.5;'}, 'Votre programme est g\u00e9n\u00e9r\u00e9. Confirmez-le pour activer le suivi.'));
-        _sportBanner.appendChild(h('button', {
-          style:'padding:12px 20px;background:var(--accent,var(--ink-900,#0A0A09));color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
-          onclick: function() {
-            try {
-              S.sportProgramValidated = true;
-              S.sportProgramValidatedAt = new Date().toISOString();
-              if (window.saveProfile) window.saveProfile();
-              if (window.showToast) window.showToast('Programme sport valid\u00e9', 'success', 1800);
-            } catch(_eSp) { console.warn('[sport banner validate]', _eSp); }
-            if (window.render) window.render();
-          }
-        }, 'CONFIRMER MON PROGRAMME'));
-        wrapper.appendChild(_sportBanner);
+        try {
+          S.sportProgramValidated = true;
+          S.sportProgramValidatedAt = new Date().toISOString();
+          if (window.saveProfile) window.saveProfile();
+          _autoActivated = true;
+        } catch(_eSp) { console.warn('[auto-activate sport]', _eSp); }
       }
+    }
+    if (_autoActivated) {
+      setTimeout(function() {
+        if (window.showToast) window.showToast('Programmes activés pour la semaine', 'success', 1600);
+      }, 300);
     }
   } catch(_eVal) { console.warn('[validation banners]', _eVal); }
 

@@ -3048,7 +3048,7 @@ function renderStep9(p) {
             if (window.render) window.render();
           } catch(e) { console.error('[renderStep9] validate failed', e); }
         }
-      }, hashChanged ? 'Confirmer mon plan actuel' : weekChanged ? 'Valider la nouvelle semaine' : 'Valider mon programme');
+      }, hashChanged ? 'Confirmer mon plan actuel' : weekChanged ? 'Activer la nouvelle semaine' : 'Activer mon programme');
       validateBox.appendChild(validateBtn);
       p.appendChild(validateBox);
     } else {
@@ -3425,7 +3425,7 @@ function renderStep9(p) {
         });
         emptyCard.appendChild(h('div', {style: 'font-size:13px;font-weight:400;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;color:var(--grey,#888)'}, slotLabel));
         emptyCard.appendChild(h('div', {style: 'font-size:24px;margin-bottom:4px'}, '+'));
-        emptyCard.appendChild(h('div', {style: 'font-size:13px'}, 'Ajouter un repas'));
+        emptyCard.appendChild(h('div', {style: 'font-size:13px'}, 'Composer mon repas'));
         p.appendChild(emptyCard);
 
         if (S._addMealModalSlot === slotKey) {
@@ -6481,6 +6481,19 @@ window.NUTRITION = {
       var hdr = h('header', {'class': 'header'});
       hdr.appendChild(h('div', {'class': 'logo', html: 'SMARTFITCOACH<span>Nutrition & Sport</span>'}));
       p.appendChild(hdr);
+      // ── Barre de progression onboarding (Hermès — discrète, sticky) ──────────
+      var _obLabels = {1:'Profil',2:'Naissance',3:'Morphologie',4:'Objectifs',5:'Mode de vie',6:'Analyse',7:'Aperçu',8:'Médical',9:'Habitudes',10:'Préférences'};
+      var _obPct = Math.round((S.nStep / 10) * 100);
+      var _obBar = h('div', { style: 'max-width:560px;margin:0 auto;padding:8px 16px 0;' });
+      var _obTop = h('div', { style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;' });
+      _obTop.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);' }, _obLabels[S.nStep] || ''));
+      _obTop.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;color:var(--grey,#6B6B65);' }, S.nStep + ' / 10'));
+      _obBar.appendChild(_obTop);
+      var _obTrack = h('div', { style: 'height:2px;background:var(--line,#D8D8D0);border-radius:1px;' });
+      var _obFill = h('div', { style: 'height:2px;background:var(--black,#0A0A09);border-radius:1px;width:' + _obPct + '%;transition:width 0.3s;' });
+      _obTrack.appendChild(_obFill);
+      _obBar.appendChild(_obTrack);
+      p.appendChild(_obBar);
     }
     var content = h('div', {'class': 'fade-in'});
     if (S.shopListOpen) { renderShoppingList(content); p.appendChild(content); return; }
