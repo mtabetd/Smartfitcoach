@@ -5611,6 +5611,8 @@ function renderTodayDashboard(p) {
     var _todayStr2 = new Date().toISOString().slice(0, 10);
     var _isFirstDay2 = !S.firstLoginDate || S.firstLoginDate === _todayStr2;
     if (_msc >= 1 && !_isFirstDay2) {
+      var _jTotals = (window.FOOD_JOURNAL && window.FOOD_JOURNAL.getDayTotal) ? window.FOOD_JOURNAL.getDayTotal() : { kcal: 0, count: 0 };
+      var _actionDone = (_jTotals.count > 0) || (_jTotals.kcal > 0);
       var _miniStreak = h('div', {
         style: 'max-width:560px;margin:6px auto 0;padding:8px 16px;' +
                'display:flex;align-items:center;justify-content:space-between;' +
@@ -5620,6 +5622,10 @@ function renderTodayDashboard(p) {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;' +
                'letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);'
       }, 'Séquence'));
+      _miniStreak.appendChild(h('span', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;' +
+               'text-transform:uppercase;color:' + (_actionDone ? '#27AE60' : 'var(--grey,#6B6B65)') + ';'
+      }, _actionDone ? '✓ validée' : '○ en attente'));
       var _mRight = h('div', { style: 'display:flex;align-items:baseline;gap:4px;' });
       _mRight.appendChild(h('span', {
         style: 'font-family:Georgia,serif;font-size:20px;font-style:italic;color:var(--black,#0A0A09);'
@@ -5632,6 +5638,46 @@ function renderTodayDashboard(p) {
       wrapper.appendChild(_miniStreak);
     }
   } catch(_eMini) {}
+
+  // ── Carte Forme du Jour — affichée quand le bilan est déjà complété aujourd'hui ──
+  if (!_needCheckin && _hasSport && !_isFirstDay && window.getWellnessAdaptation) {
+    try {
+      var _adapt = window.getWellnessAdaptation();
+      if (_adapt && _adapt.level) {
+        var _adaptLabels = {
+          recovery: 'Séance de récupération conseillée',
+          reduced: 'Intensité réduite conseillée',
+          peak: 'Forme optimale',
+          normal: 'Forme du jour — correcte'
+        };
+        var _adaptAdvice = {
+          recovery: 'Votre état de forme nécessite une séance légère. Intensité réduite de 40 %.',
+          reduced: 'Légère fatigue détectée. Intensité réduite de 20 %. Écoutez votre corps.',
+          peak: 'Excellent état de forme. Vous pouvez pousser sur les sets lourds.',
+          normal: 'Bonne séance en perspective. Respectez les temps de repos.'
+        };
+        var _recCard = h('div', {
+          style: 'max-width:560px;margin:6px auto 0;padding:10px 16px;' +
+                 'display:flex;align-items:flex-start;gap:10px;' +
+                 'background:var(--paper-2,#F4F1EA);border:1px solid var(--line,#D8D8D0);' +
+                 'border-left:3px solid ' + _adapt.color + ';'
+        });
+        var _recInner = h('div', { style: 'flex:1;min-width:0;' });
+        _recInner.appendChild(h('div', {
+          style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;' +
+                 'text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:3px;'
+        }, 'Forme du jour'));
+        _recInner.appendChild(h('div', {
+          style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#0A0A09);'
+        }, _adaptLabels[_adapt.level] || _adapt.label));
+        _recInner.appendChild(h('div', {
+          style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:2px;line-height:1.5;'
+        }, _adaptAdvice[_adapt.level] || _adapt.advice));
+        _recCard.appendChild(_recInner);
+        wrapper.appendChild(_recCard);
+      }
+    } catch(_eRec) {}
+  }
 
   // ═══ PENSÉE DU JOUR (Hermès — citation de motivation, change chaque jour) ═══
   // FIX 2026-04-16 : les citations motivantes vivaient dans renderCardBonjour (code
@@ -6167,8 +6213,13 @@ function renderFabLogger() {
           if (window.render) window.render();
         } },
       { label: 'REPAS', icon: 'M4 5h8M4 8h8M4 11h8', action: function() {
-          S.view = 'nutrition'; S.nStep = 12; S._fabOpen = false;
+          S._fabOpen = false;
           if (window.render) window.render();
+          setTimeout(function() {
+            var _jc = document.getElementById('fj-card-root');
+            if (_jc) { _jc.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+            S.view = 'nutrition'; S.nStep = 12; if (window.render) window.render();
+          }, 80);
         } },
       { label: 'POIDS', icon: 'M3 7h10v6H3zM6 7V4h4v3', action: function() {
           S._modalQuickWeight = true; S._fabOpen = false;

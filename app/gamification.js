@@ -258,12 +258,51 @@ function updateNutritionStreak() {
   if (data.current >= 30) unlockBadge('nutrition_streak_30');
 }
 
+// ─── VARIABLE REWARD — récompense surprise 30% du temps sur les repas loggés ───
+// Pool de messages positifs variés, jamais deux fois le même dans la même journée.
+// Le délai de 400ms évite la collision avec le toast principal de l'action.
+var _VR_MESSAGES = [
+  'Votre constance se voit. Continuez.',
+  'Chaque repas loggé est une décision consciente.',
+  'Vous construisez quelque chose de solide.',
+  'La régularité fait plus que l\'intensité.',
+  'Bien noté. Votre corps vous remercie.',
+  'Vous êtes dans les 5% qui font vraiment le travail.',
+  'Ce geste simple change tout sur le long terme.',
+  'Chaque entrée compte. Vous le savez déjà.',
+  'Un repas de plus dans le bon sens.',
+  'Votre futur vous remercie de ce que vous faites aujourd\'hui.',
+  'Précis. Constant. C\'est ça la méthode.',
+  'Les champions font exactement ce que vous venez de faire.',
+  'Pas de génie. Juste de la rigueur. Vous l\'avez.',
+  'Votre corps retient tout ce que vous lui enseignez.',
+  'Une brique de plus sur votre transformation.'
+];
+var _VR_LAST_DATE = '';
+var _VR_FIRED_TODAY = false;
+
+function triggerVariableReward() {
+  try {
+    var _today = new Date().toISOString().slice(0, 10);
+    if (_VR_LAST_DATE !== _today) { _VR_LAST_DATE = _today; _VR_FIRED_TODAY = false; }
+    if (_VR_FIRED_TODAY) return; // 1 seule surprise par jour maximum
+    if (Math.random() > 0.30) return; // 30% de chance
+    _VR_FIRED_TODAY = true;
+    var _doy = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+    var _msg = _VR_MESSAGES[(_doy + Math.floor(Math.random() * 3)) % _VR_MESSAGES.length];
+    setTimeout(function() {
+      if (window.showToast) window.showToast(_msg, 'info', 3000);
+    }, 400);
+  } catch(e) {}
+}
+
 function incrementMealsLogged() {
   var user = window.AUTH ? window.AUTH.getUser() : null;
   if (!user) return;
   var count = incrementCounter('meals_logged');
   if (count >= 50) unlockBadge('meals_logged_50');
   updateNutritionStreak();
+  triggerVariableReward();
 }
 
 // ─── SHARE WORTHY BADGES — déclenche un nudge de partage post-unlock ───
