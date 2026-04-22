@@ -7265,13 +7265,11 @@ function renderMusculationProgram(p) {
  }
 
  var tabs = h('div', {'class': 'day-tabs'});
- // FIX UX 2026-04-17 : enrichir les onglets "Jour N" avec le focus musculaire (ex : "J1 · Push").
- // Avant : user devait ouvrir chaque jour pour savoir si c'est Push/Pull/Legs → 3-4 taps.
- // Maintenant : focus visible dès la tab bar.
+ var _dayAbbrFR = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+ var _hasDayMap = Array.isArray(S.trainingDaysSelected) && S.trainingDaysSelected.length === S.sportProgram.length;
  function _shortFocus(focus) {
   if (!focus) return '';
   var f = String(focus).toLowerCase();
-  // Mots-clés muscu → labels courts
   if (/push|pectoral|poitrine|pecs/.test(f)) return 'Push';
   if (/pull|dos|dorsaux/.test(f)) return 'Pull';
   if (/leg|jambe|quadri|fessier|ischio|mollet/.test(f)) return 'Legs';
@@ -7282,20 +7280,14 @@ function renderMusculationProgram(p) {
   if (/\bcore\b|abdo|gain/.test(f)) return 'Core';
   if (/cardio|hiit/.test(f)) return 'Cardio';
   if (/repos|rest/.test(f)) return 'Repos';
-  // Fallback : premier mot, cap à 8 chars
   var first = focus.split(/[\s,·\-]/)[0];
   return first.length > 10 ? first.slice(0, 10) : first;
  }
  S.sportProgram.forEach(function(day, i) {
-  var _base = (_currentSplitOpt && _currentSplitOpt.dayLabels && _currentSplitOpt.dayLabels[i])
-   ? _currentSplitOpt.dayLabels[i]
-   : day.name;
   var _short = _shortFocus(day.focus);
-  // Si le label de base contient déjà le focus (ex : "Push"), ne pas dupliquer
-  var _tabLabel = _short && _base && !_base.toLowerCase().includes(_short.toLowerCase())
-   ? 'J' + (i + 1) + ' \u00b7 ' + _short
-   : (_base || ('J' + (i + 1)));
-  tabs.appendChild(h('button', {'class': 'day-tab' + (S.selectedSportDay === i ? ' active' : ''), onclick: function(){ S.selectedSportDay = i; window.render(); }}, _tabLabel));
+  var _dayPrefix = _hasDayMap ? _dayAbbrFR[S.trainingDaysSelected[i]] : ('J' + (i + 1));
+  var _tabLabel = _short ? (_dayPrefix + ' \u00b7 ' + _short) : _dayPrefix;
+  tabs.appendChild(h('button', {'class': 'day-tab' + (S.selectedSportDay === i ? ' active' : ''), onclick: (function(idx){ return function(){ S.selectedSportDay = idx; window.render(); }; })(i)}, _tabLabel));
  });
  p.appendChild(tabs);
 
@@ -7311,7 +7303,9 @@ function renderMusculationProgram(p) {
   var _hdrProgPct = Math.round(_hdrProgRate * Math.min(_hdrWeek - 1, 12) * 100);
   var _hdrWrap = h('div', {style: 'margin:14px 0 10px'});
   _hdrWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);line-height:1.6;word-break:break-word;margin-bottom:4px'}, day.focus || ''));
-  var _metaParts = ['Sém.\u00a0' + _hdrWeek];
+  var _dayAbbr2 = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+  var _hdrDayStr = (Array.isArray(S.trainingDaysSelected) && S.trainingDaysSelected.length === S.sportProgram.length) ? _dayAbbr2[S.trainingDaysSelected[S.selectedSportDay]] : null;
+  var _metaParts = [_hdrDayStr ? _hdrDayStr + '\u00a0\u2014\u00a0Sém.\u00a0' + _hdrWeek : 'Sém.\u00a0' + _hdrWeek];
   if (_hdrDur > 0) _metaParts.push('~' + _hdrDur + '\u00a0min');
   if (_hdrProgPct > 0) _metaParts.push('+' + _hdrProgPct + '%');
   _hdrWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65)'}, _metaParts.join('\u00a0·\u00a0')));

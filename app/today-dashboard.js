@@ -3627,7 +3627,9 @@ function renderCardSport() {
   c.appendChild(cardTitle('Entraînement'));
 
   var nameEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-bottom:6px;' });
-  nameEl.textContent = 'Jour\u00a0' + (idx + 1) + '\u00a0\u2014\u00a0' + dayName;
+  var _dashDayAbbr = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+  var _dashWeekday = (Array.isArray(S.trainingDaysSelected) && S.trainingDaysSelected.length > idx && typeof S.trainingDaysSelected[idx] === 'number') ? _dashDayAbbr[S.trainingDaysSelected[idx]] : ('Jour\u00a0' + (idx + 1));
+  nameEl.textContent = _dashWeekday + '\u00a0\u2014\u00a0' + dayName;
   c.appendChild(nameEl);
 
   // FIX 2026-04-16 : CrossFit WOD type badge (AMRAP/For Time/EMOM etc.)
