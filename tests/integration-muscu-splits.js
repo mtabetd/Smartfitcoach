@@ -97,9 +97,16 @@ function exercisesMatchCategories(day, allowedCats) {
   return violations;
 }
 
-// Initialise S pour un profil donné
+// Initialise S pour un profil donné.
+// IMPORTANT: app-sport.js captures `var S = window.S` at IIFE load time — a local ref to the
+// original S object. Replacing global.S with a new object would leave that local ref stale.
+// We must MUTATE the existing window.S in-place (clear + refill) so the IIFE's S stays in sync.
 function setupProfile(opts) {
-  global.S = {
+  var target = window.S;
+  // Clear all existing keys so stale properties don't bleed across tests
+  Object.keys(target).forEach(function(k) { delete target[k]; });
+  // Refill with the desired profile
+  Object.assign(target, {
     sportLevel: opts.level || 'intermediate',
     sportDays: opts.days || 3,
     sportFocus: opts.focus || { Poitrine: 3, Dos: 3, 'Épaules': 3, Bras: 2, Jambes: 3, Fessiers: 2, Abdominaux: 1 },
@@ -119,7 +126,7 @@ function setupProfile(opts) {
     bonusExercises: {},
     sportProgram: null,
     _sportProgramVersion: null
-  };
+  });
   // S'assurer que SPORT_LEVELS existe
   if (!global.SPORT_LEVELS) {
     global.SPORT_LEVELS = [
@@ -397,9 +404,129 @@ if (typeof generateSportProgram !== 'function') {
   });
 
 } else {
-  // Si generateSportProgram EST accessible, on fait les tests complets
+  // ─── TESTS E2E — generateSportProgram accessible ──────────────────────────
   console.log('generateSportProgram accessible — tests E2E complets');
-  // TODO: ajouter tests dynamiques ici si la fonction est exposée
+
+  // Mots-clés qui signalent un exercice de jambes
+  var LEG_KEYWORDS = /squat|leg press|presse|fente|lunge|bulgare|sumo|hack|step.?up|mollet|calf|ischio|leg curl|leg extension|nordic|rdl|roumain|deadlift siff|sissy|pistol|hip thrust|glute|fessier|adducteur|abducteur/i;
+
+  // Muscles jambes qui ne doivent JAMAIS apparaître dans un jour Push/Pull
+  var LEG_MUSCLES = /quadriceps|ischio|fessier|mollet|adducteur|abducteur|jambe/i;
+
+  function checkNoPushPullLegs(program, splitId, style) {
+    var violations = [];
+    program.forEach(function(day, i) {
+      var focus = (day.focus || '').toLowerCase();
+      var isPush = /push/.test(focus);
+      var isPull = /pull/.test(focus);
+      if (!isPush && !isPull) return;
+      (day.exercises || []).forEach(function(ex) {
+        var name = ex.n || ex.name || '';
+        var muscle = ex.m || ex.muscle || '';
+        if (LEG_KEYWORDS.test(name) || LEG_MUSCLES.test(muscle)) {
+          violations.push('Jour ' + (i+1) + ' (' + day.focus + ') → "' + name + '" [' + muscle + ']');
+        }
+      });
+    });
+    return violations;
+  }
+
+  // Profiles de test
+  var PROFILES = [
+    { label: 'PPL 3j intermédiaire gym', level: 'intermediate', days: 3, split: 'ppl_3', style: null },
+    { label: 'PPL 5j avancé gym', level: 'advanced', days: 5, split: 'ppl_5', style: null },
+    { label: 'PPL 6j avancé gym', level: 'advanced', days: 6, split: 'ppl_6', style: null },
+    { label: 'Upper/Lower 4j intermédiaire', level: 'intermediate', days: 4, split: 'upper_lower', style: null },
+    { label: 'Full Body 2j débutant', level: 'beginner', days: 2, split: 'fullbody_ab', style: null },
+    { label: 'PPL 3j style starting_strength', level: 'intermediate', days: 3, split: 'ppl_3', style: 'starting_strength' },
+    { label: 'PPL 3j style greyskull', level: 'intermediate', days: 3, split: 'ppl_3', style: 'greyskull' },
+    { label: 'PPL 3j style texas_method', level: 'intermediate', days: 3, split: 'ppl_3', style: 'texas_method' },
+    { label: 'PPL 3j maison (haltères)', level: 'intermediate', days: 3, split: 'ppl_3', equipment: 'home_dumbbells' },
+    { label: 'PPL 3j débutant', level: 'beginner', days: 3, split: null, style: null },
+  ];
+
+  console.log('');
+  console.log('RÈGLE CRITIQUE : zéro exercice jambes dans un jour Push ou Pull');
+
+  PROFILES.forEach(function(prof) {
+    test(prof.label + ' — jambes absentes des jours Push/Pull', function() {
+      setupProfile({
+        level: prof.level,
+        days: prof.days,
+        split: prof.split,
+        equipment: prof.equipment || 'gym',
+        style: prof.style
+      });
+      if (prof.style) S.muscuStyle = prof.style;
+      var program;
+      try { program = generateSportProgram(); } catch(e) { throw new Error('generateSportProgram crash: ' + e.message); }
+      assert.ok(Array.isArray(program) && program.length > 0, 'Programme vide ou non-array');
+      var violations = checkNoPushPullLegs(program, prof.split, prof.style);
+      assert.ok(violations.length === 0,
+        violations.length + ' violation(s) :\n    ' + violations.join('\n    '));
+    });
+  });
+
+  console.log('');
+  console.log('RÈGLE : jours Legs ont bien des exercices jambes');
+
+  PROFILES.filter(function(p) { return p.days >= 3; }).forEach(function(prof) {
+    test(prof.label + ' — jour Legs contient des exercices jambes', function() {
+      setupProfile({
+        level: prof.level,
+        days: prof.days,
+        split: prof.split,
+        equipment: prof.equipment || 'gym',
+        style: prof.style
+      });
+      if (prof.style) S.muscuStyle = prof.style;
+      var program;
+      try { program = generateSportProgram(); } catch(e) { return; } // skip si crash
+      if (!Array.isArray(program)) return;
+      var legDays = program.filter(function(d) { return /legs|jambe|leg/i.test(d.focus || ''); });
+      if (legDays.length === 0) return; // split sans jour jambes explicite (upper/lower) → skip
+      legDays.forEach(function(day) {
+        var hasLegs = (day.exercises || []).some(function(ex) {
+          return LEG_KEYWORDS.test(ex.n || ex.name || '') || LEG_MUSCLES.test(ex.m || ex.muscle || '');
+        });
+        assert.ok(hasLegs, 'Jour "' + day.focus + '" n\'a aucun exercice de jambes');
+      });
+    });
+  });
+
+  console.log('');
+  console.log('RÈGLE : programme a le bon nombre de jours');
+
+  [2, 3, 4, 5, 6].forEach(function(days) {
+    test('sportDays=' + days + ' → programme de ' + days + ' jours', function() {
+      setupProfile({ level: 'intermediate', days: days });
+      var program;
+      try { program = generateSportProgram(); } catch(e) { throw new Error('crash: ' + e.message); }
+      assert.ok(Array.isArray(program), 'Programme non-array');
+      assert.strictEqual(program.length, days, 'Programme a ' + program.length + ' jours au lieu de ' + days);
+    });
+  });
+
+  console.log('');
+  console.log('RÈGLE : chaque jour a au moins 3 exercices');
+
+  test('PPL 3j — chaque jour a >= 3 exercices', function() {
+    setupProfile({ level: 'intermediate', days: 3, split: 'ppl_3' });
+    var program = generateSportProgram();
+    program.forEach(function(day, i) {
+      var count = (day.exercises || []).length;
+      assert.ok(count >= 3, 'Jour ' + (i+1) + ' (' + day.focus + ') n\'a que ' + count + ' exercice(s)');
+    });
+  });
+
+  test('PPL 5j — chaque jour a >= 3 exercices', function() {
+    setupProfile({ level: 'advanced', days: 5, split: 'ppl_5' });
+    var program = generateSportProgram();
+    program.forEach(function(day, i) {
+      var count = (day.exercises || []).length;
+      assert.ok(count >= 3, 'Jour ' + (i+1) + ' (' + day.focus + ') n\'a que ' + count + ' exercice(s)');
+    });
+  });
 }
 
 // ─── 5. RÉSULTAT ─────────────────────────────────────────────────────────────
