@@ -320,7 +320,7 @@ function getTodayTotals() {
     var uid = user ? user.id : 'anon';
     var key = 'mtd_food_journal_' + uid;
     var journal = JSON.parse(localStorage.getItem(key) || '{}');
-    var today = new Date().toISOString().split('T')[0];
+    var _now = new Date(); var today = _now.getFullYear() + '-' + String(_now.getMonth()+1).padStart(2,'0') + '-' + String(_now.getDate()).padStart(2,'0');
     var entries = journal[today] || [];
     return entries.filter(function(e) { return e && typeof e === 'object'; }).reduce(function(acc, e) {
       acc.kcal += (e.kcal || 0);
@@ -3048,7 +3048,7 @@ function renderCardRepas() {
     { key: 'dinner', label: 'Dîner' }
   ];
 
-  var todayKey = new Date().toISOString().slice(0, 10);
+  var _tlNow = new Date(); var todayKey = _tlNow.getFullYear() + '-' + String(_tlNow.getMonth()+1).padStart(2,'0') + '-' + String(_tlNow.getDate()).padStart(2,'0');
   var mealsLoggedToday = (S.mealsLogged && S.mealsLogged[todayKey]) ? S.mealsLogged[todayKey] : {};
 
   var hasAny = false;
@@ -5542,6 +5542,12 @@ function renderTodayDashboard(p) {
     try { window.GAMIFICATION.updateStreak(); } catch(e) {}
   }
 
+  // Calcul état nutritionnel (goalConflict, hydratation, macros contexte) à chaque rendu
+  // si le mode inclut la nutrition et que _nm est périmé ou absent.
+  if (S.appMode !== 'sport' && !S._nm && window.computeNutritionState) {
+    try { window.computeNutritionState(false); } catch(e) {}
+  }
+
   p.innerHTML = '';
 
   // FIX 2026-04-16 — FAB Logger bouton POIDS : le flag était set mais jamais lu
@@ -6019,9 +6025,9 @@ function renderTodayDashboard(p) {
   // Card — Macros du jour (seulement si pas de hero)
   var cardMacros = renderCardMacros(); if (cardMacros && !hero) wrapper.appendChild(cardMacros);
 
-  // Warning — Conflit objectif nutrition × sport
+  // Warning — Conflit objectif nutrition × sport (mode nutrition ou both uniquement)
   var _nm = window.S && window.S._nm;
-  if (_nm && _nm.goalConflict) {
+  if (_nm && _nm.goalConflict && S.appMode !== 'sport') {
     wrapper.appendChild(h('div', {
       style: 'margin:0 0 16px;padding:12px 14px;background:var(--warning-bg,#FFF8E1);border:1px solid var(--warning-border,#F9A825);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--ink-900,#0A0A09);line-height:1.6;'
     }, '⚠️ ' + _nm.goalConflict));

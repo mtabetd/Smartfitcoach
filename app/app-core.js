@@ -4450,7 +4450,7 @@ function calcAdjustedWeight(){
 }
 window.calcAdjustedWeight=calcAdjustedWeight;
 
-function calcBMR(){var s=window.S;if(!s.sex)return 0;var _age=getAge();if(!_age||_age<13||_age>100)return 0;if(!s.weight||s.weight<30||s.weight>300)return 0;if(!s.height||s.height<100||s.height>300)return 0;
+function calcBMR(){var s=window.S;if(!s.sex)return 0;var _age=getAge();if(!_age||_age<13||_age>120)return 0;if(!s.weight||s.weight<30||s.weight>300)return 0;if(!s.height||s.height<100||s.height>300)return 0;
 // GROSSESSE : utiliser le poids pré-grossesse pour le BMR de base (ACOG 2018, OMS 2016)
 // Les calories supplémentaires (+340 T2 / +450 T3) s'ajoutent à ce TDEE de référence via calcTarget()
 // Utiliser s.weight actuel (gonflé par la grossesse) surestimerait le TDEE de base et additionnerait

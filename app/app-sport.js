@@ -6474,7 +6474,7 @@ function renderMusculationProgram(p) {
      h('p', {style: 'font-size:14px;color:var(--text-secondary,#6B6B65);max-width:300px;margin:0 auto 24px;line-height:1.5;'}, S._programGenerationError),
      h('button', {'class': 'btn-primary', style: 'margin:0 auto;display:block;', onclick: function() {
        S._programGenerationError = null;
-       S.sportProgram = [];
+       S.sportProgram = null;
        S._generatingProgram = false;
        if (window.render) window.render();
      }}, 'Réessayer')
