@@ -1332,9 +1332,18 @@ function renderObjectif(p) {
 
  // Strong personalized headline
  var _splashHeadline = h('div', {style: 'font-family:Georgia,serif;font-size:clamp(28px,8vw,40px);font-weight:normal;line-height:1.1;letter-spacing:-.02em;color:var(--black);opacity:0;animation:splashFadeUp .6s ease .35s forwards;margin-bottom:16px;max-width:340px'});
- var _headlineText = _prenomSplash ? (_prenomSplash + ', votre\u00a0programme\u00a0sport\u00a0vous\u00a0attend.') : 'Entra\u00eenez-vous mieux.\n<em>Progressez plus vite.</em>';
- _splashHeadline.innerHTML = _headlineText;
+ // Escape _prenomSplash via textContent — profile field round-trips to
+ // Supabase and could contain HTML (self-XSS today, stored XSS if ever
+ // shown to peers). Fallback keeps its static <em> via DOM construction.
  _splashHeadline.style.whiteSpace = 'pre-line';
+ if (_prenomSplash) {
+   _splashHeadline.textContent = _prenomSplash + ', votre\u00a0programme\u00a0sport\u00a0vous\u00a0attend.';
+ } else {
+   _splashHeadline.appendChild(document.createTextNode('Entra\u00eenez-vous mieux.\n'));
+   var _splashEm = document.createElement('em');
+   _splashEm.textContent = 'Progressez plus vite.';
+   _splashHeadline.appendChild(_splashEm);
+ }
  splash.appendChild(_splashHeadline);
 
  splash.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;color:var(--grey);line-height:1.65;max-width:290px;opacity:0;animation:splashFadeUp .6s ease .5s forwards;margin-bottom:28px'}, 'Un protocole sport con\u00e7u sur vos objectifs, votre niveau et votre agenda.'));
@@ -7723,8 +7732,6 @@ function renderMusculationProgram(p) {
  var setTable = h('div', {style: 'margin-top:8px;border:1px solid var(--border);border-radius:2px;overflow-x:auto;-webkit-overflow-scrolling:touch'});
 
  var isAdvancedRIR = (S.sportLevel === 'advanced' || S.sportLevel === 'pro' || S.sportLevel === 'intermediate');
- // FIX P2 batch 2 : RIR column 44→56px pour tap target 44px + label RIR lisible
- var gridCols = isAdvancedRIR ? '40px 1fr 50px 1fr 56px' : '40px 1fr 60px 1fr';
 
  // RIR target display for advanced users
  // FIX 2026-04-16 — UNIFIÉ : RIR dérivé de MUSCU_PHASES (RPE), plus de MESOCYCLE_WEEKS.
@@ -7794,17 +7801,6 @@ function renderMusculationProgram(p) {
  conseilleEl.appendChild(h('span', {style:'font-size:9px;color:var(--blue,#1A3C5E);margin-left:4px'}, _pctDisplay + ' %1RM'));
  }
  rowContent.appendChild(conseilleEl);
-
- // Delta column
- var deltaCell = h('div', {style:'text-align:center'});
- if (setRow.deltaFromPrev !== null && setRow.deltaFromPrev !== undefined && setRow.deltaFromPrev !== 0) {
- var _dcls = setRow.deltaFromPrev > 0 ? 'delta-up' : 'delta-down';
- var _darr = setRow.deltaFromPrev > 0 ? '\u25B2' : '\u25BC';
- deltaCell.appendChild(h('span', {'class': 'set-delta ' + _dcls}, _darr + Math.abs(setRow.deltaFromPrev) + '%'));
- } else if (si3 > 0) {
- deltaCell.appendChild(h('span', {'class': 'set-delta delta-flat'}, '\u2192'));
- }
-
 
  var _pendingValBtn = null;
  var inputZone = h('div', {style: 'display:flex;align-items:center;gap:6px;padding:4px 8px 8px;border-top:1px solid var(--border,#ECF0F1);width:100%;box-sizing:border-box', onclick: function(e){ e.stopPropagation(); }});

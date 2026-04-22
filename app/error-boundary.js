@@ -28,7 +28,14 @@ function _showErrorPage(msg) {
   app.innerHTML = '';
   app.appendChild(wrap);
 }
+// Preserve any previously-installed onerror (e.g. crash-reporter.js). Without
+// this chain, the assignment below silently drops crash telemetry from every
+// subsequent error — reporter.js just gets overwritten.
+var _prevOnError = window.onerror;
 window.onerror = function(msg, url, line, col, err) {
+  if (typeof _prevOnError === 'function') {
+    try { _prevOnError.call(this, msg, url, line, col, err); } catch (_) {}
+  }
   _showErrorPage(msg);
   console.error('GLOBAL ERROR:', msg, url, line, col, err);
   return true;
