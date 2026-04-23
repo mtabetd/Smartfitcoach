@@ -1310,14 +1310,17 @@ function renderProfilePage(container) {
      });
      card.appendChild(_featsWrap);
 
-     // Sélecteur de plan — données live depuis get-pricing, fallback si pas encore chargé
+     // Sélecteur de plan — Hermès pricing UI
      if (!_isSub) {
        var _pData = window.SFC_PRICING_DATA || [];
        var _ui = window._sfcPricingUI = window._sfcPricingUI || { tier: 'athlete', duration: 'saison' };
        var _tiers = ['athlete', 'champion', 'legende'];
        var _tierLabels = { athlete: 'Athlete', champion: 'Champion', legende: 'Légende' };
+       var _tierSubs  = { athlete: 'Accès complet', champion: 'Le plus choisi', legende: 'Soutien Légende' };
        var _durs = ['saison', 'cycle', 'engagement'];
-       var _durLabels = { saison: 'Trimestriel', cycle: 'Semestriel', engagement: 'Annuel' };
+       var _durLabels  = { saison: 'Trimestriel', cycle: 'Semestriel', engagement: 'Annuel' };
+       var _durMonths  = { saison: 3, cycle: 6, engagement: 12 };
+       var _durPeriods = { saison: '/trimestre', cycle: '/semestre', engagement: '/an' };
        function _findPlan(t, d) {
          for (var _k = 0; _k < _pData.length; _k++) {
            if (_pData[_k].tier === t && _pData[_k].duration === d) return _pData[_k];
@@ -1327,49 +1330,116 @@ function renderProfilePage(container) {
        var _selPlan = _findPlan(_ui.tier, _ui.duration);
 
        if (_pData.length > 0) {
-         var _tabRow = h('div', {style: 'display:flex;border:1px solid var(--border);overflow:hidden;border-radius:2px;margin-top:20px;margin-bottom:12px;'});
+         // ── Titre section ──
+         var _pLabel = h('div', {style:
+           'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;' +
+           'text-transform:uppercase;color:var(--grey);margin:24px 0 14px;' +
+           'display:flex;align-items:center;gap:10px;'
+         });
+         _pLabel.appendChild(h('span', {style: 'flex:1;height:1px;background:var(--border);'}));
+         _pLabel.appendChild(h('span', {}, 'VOTRE PLAN'));
+         _pLabel.appendChild(h('span', {style: 'flex:1;height:1px;background:var(--border);'}));
+         card.appendChild(_pLabel);
+
+         // ── Tier cards ──
+         var _tierRow = h('div', {style: 'display:flex;gap:8px;margin-bottom:16px;'});
          _tiers.forEach(function(t) {
            var isAct = _ui.tier === t;
-           var btn = h('button', {
-             style: 'flex:1;padding:10px 2px;border:none;border-right:1px solid var(--border);cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;background:' + (isAct ? 'var(--black,#0A0A09)' : 'transparent') + ';color:' + (isAct ? '#FAF9F6' : 'var(--grey)') + ';transition:all 0.2s;min-height:40px;',
+           var isReco = t === 'champion';
+           var tcard = h('div', {
+             style: 'flex:1;padding:12px 8px 10px;border:' + (isAct ? '1.5px solid var(--black)' : '1px solid var(--border)') + ';' +
+               'background:' + (isAct ? 'var(--black,#0A0A09)' : 'transparent') + ';' +
+               'cursor:pointer;text-align:center;transition:all 0.2s;position:relative;',
              onclick: (function(tier) { return function() { window._sfcPricingUI.tier = tier; if (window.render) window.render(); }; })(t)
-           }, _tierLabels[t]);
-           _tabRow.appendChild(btn);
+           });
+           if (isReco && !isAct) {
+             var _badge = h('div', {style:
+               'position:absolute;top:-8px;left:50%;transform:translateX(-50%);' +
+               'background:var(--black);color:#FAF9F6;font-family:"Helvetica Neue",Arial,sans-serif;' +
+               'font-size:7px;letter-spacing:2px;padding:2px 6px;white-space:nowrap;'
+             }, 'POPULAIRE');
+             tcard.appendChild(_badge);
+           }
+           tcard.appendChild(h('div', {style:
+             'font-family:Georgia,serif;font-size:13px;' +
+             'color:' + (isAct ? '#FAF9F6' : 'var(--black)') + ';margin-bottom:3px;'
+           }, _tierLabels[t]));
+           tcard.appendChild(h('div', {style:
+             'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:1px;' +
+             'color:' + (isAct ? 'rgba(250,249,246,0.7)' : 'var(--grey)') + ';'
+           }, _tierSubs[t]));
+           _tierRow.appendChild(tcard);
          });
-         if (_tabRow.lastChild) _tabRow.lastChild.style.borderRight = 'none';
-         card.appendChild(_tabRow);
+         card.appendChild(_tierRow);
 
-         var _priceBox = h('div', {style: 'text-align:center;padding:16px 0 8px;'});
-         if (_selPlan) {
-           _priceBox.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:30px;color:var(--black);line-height:1;margin-bottom:4px;'}, _selPlan.label_mad));
-           var _durPeriods = { saison: '/trimestre', cycle: '/semestre', engagement: '/an' };
-           var _durSub = (_durLabels[_ui.duration] || _ui.duration).toLowerCase() + ' ' + (_durPeriods[_ui.duration] || '');
-           if (_selPlan.savings_pct > 0) _durSub += ' · −' + _selPlan.savings_pct + ' %';
-           _priceBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;color:var(--grey);'}, _durSub));
-         }
-         card.appendChild(_priceBox);
-
-         var _durRow = h('div', {style: 'display:flex;gap:6px;justify-content:center;margin-bottom:6px;flex-wrap:wrap;'});
+         // ── Duration pills ──
+         var _durRow = h('div', {style: 'display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap;'});
          _durs.forEach(function(d) {
            var isAct = _ui.duration === d;
            var dp = _findPlan(_ui.tier, d);
-           var pillLabel = _durLabels[d] || d;
-           if (dp && dp.savings_pct > 0) pillLabel += ' −' + dp.savings_pct + '%';
+           var pillTxt = _durLabels[d] || d;
            var pill = h('button', {
-             style: 'padding:7px 12px;border:1px solid ' + (isAct ? 'var(--black)' : 'var(--border)') + ';background:' + (isAct ? 'var(--black)' : 'transparent') + ';color:' + (isAct ? '#FAF9F6' : 'var(--grey)') + ';cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;border-radius:2px;min-height:36px;transition:all 0.2s;',
+             style: 'flex:1;padding:8px 4px;border:1px solid ' + (isAct ? 'var(--black)' : 'var(--border)') + ';' +
+               'background:' + (isAct ? 'var(--black)' : 'transparent') + ';' +
+               'color:' + (isAct ? '#FAF9F6' : 'var(--grey)') + ';' +
+               'cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;' +
+               'letter-spacing:1px;text-transform:uppercase;min-height:36px;transition:all 0.2s;text-align:center;',
              onclick: (function(dur) { return function() { window._sfcPricingUI.duration = dur; if (window.render) window.render(); }; })(d)
-           }, pillLabel);
+           });
+           pill.appendChild(h('div', {}, pillTxt));
+           if (dp && dp.savings_pct > 0) {
+             pill.appendChild(h('div', {style:
+               'font-family:Georgia,serif;font-size:10px;' +
+               'color:' + (isAct ? 'rgba(250,249,246,0.8)' : 'var(--grey)') + ';margin-top:1px;'
+             }, '−' + dp.savings_pct + ' %'));
+           }
            _durRow.appendChild(pill);
          });
          card.appendChild(_durRow);
+
+         // ── Prix principal ──
+         if (_selPlan) {
+           var _priceWrap = h('div', {style: 'text-align:center;padding:4px 0 16px;border-top:1px solid var(--border);'});
+           _priceWrap.appendChild(h('div', {style:
+             'font-family:Georgia,serif;font-size:36px;color:var(--black);line-height:1;margin:12px 0 4px;'
+           }, _selPlan.label_mad));
+
+           var _months = _durMonths[_ui.duration] || 1;
+           var _perMonth = Math.round(_selPlan.price_mad / _months);
+           var _periodLabel = _durPeriods[_ui.duration] || '';
+           var _subLine = _periodLabel + ( _months > 1 ? (' · soit ' + _perMonth + ' MAD/mois') : '');
+           _priceWrap.appendChild(h('div', {style:
+             'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);letter-spacing:0.5px;'
+           }, _subLine));
+
+           // Économies en valeur absolue (si durée > 1 mois)
+           if (_selPlan.savings_pct > 0) {
+             var _basePlan = _findPlan(_ui.tier, 'saison');
+             if (_basePlan) {
+               var _baseTotal = Math.round(_basePlan.price_mad / 3 * _months);
+               var _saved = _baseTotal - _selPlan.price_mad;
+               if (_saved > 0) {
+                 var _savingsBadge = h('div', {style:
+                   'display:inline-block;margin-top:10px;padding:4px 12px;' +
+                   'border:1px solid var(--black);font-family:"Helvetica Neue",Arial,sans-serif;' +
+                   'font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--black);'
+                 }, 'Vous économisez ' + _saved + ' MAD');
+                 _priceWrap.appendChild(_savingsBadge);
+               }
+             }
+           }
+           card.appendChild(_priceWrap);
+         }
        } else {
          var _priceRow = h('div', {style: 'text-align:center;margin:18px 0 4px;'});
-         _priceRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);font-style:italic;'}, 'Chargement des tarifs…'));
+         _priceRow.appendChild(h('div', {style:
+           'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);font-style:italic;'
+         }, 'Chargement des tarifs…'));
          card.appendChild(_priceRow);
        }
      }
 
-     // CTA — bouton Hermès noir laqué (ou info si abonné)
+          // CTA — bouton Hermès noir laqué
      if (!_isSub) {
        var _pData2 = window.SFC_PRICING_DATA || [];
        var _ui2 = window._sfcPricingUI || { tier: 'athlete', duration: 'saison' };
@@ -1377,21 +1447,30 @@ function renderProfilePage(container) {
        for (var _ci = 0; _ci < _pData2.length; _ci++) {
          if (_pData2[_ci].tier === _ui2.tier && _pData2[_ci].duration === _ui2.duration) { _ctaPlan = _pData2[_ci]; break; }
        }
-       var _ctaLabel = _trialExpired ? 'Réactiver mon accès' : _daysLeft <= 1 ? 'Dernier jour — S\'abonner' : _daysLeft <= 2 ? 'Plus que ' + _daysLeft + ' jours — S\'abonner' : ((function() { var _p = { saison: '/trimestre', cycle: '/semestre', engagement: '/an' }; return _ctaPlan ? 'S\'abonner — ' + _ctaPlan.label_mad + (_p[_ui2.duration] || '') : 'Passer à Premium'; })());
+       var _durPer2 = { saison: '/trimestre', cycle: '/semestre', engagement: '/an' };
+       var _ctaBase = _trialExpired ? 'Réactiver mon accès' : _daysLeft <= 1 ? 'Dernier jour — S\'abonner' : _daysLeft <= 2 ? 'Plus que ' + _daysLeft + ' jours — S\'abonner' : 'S\'abonner';
+       var _ctaSuffix = _ctaPlan ? ' — ' + _ctaPlan.label_mad + (_durPer2[_ui2.duration] || '') : '';
        var _cta = h('button', {
          style:
-           'display:block;width:100%;margin-top:16px;padding:16px;' +
+           'display:block;width:100%;margin-top:16px;padding:18px;' +
            'background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);' +
-           'border:none;border-radius:2px;cursor:pointer;' +
+           'border:none;cursor:pointer;' +
            'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;' +
-           'letter-spacing:4px;text-transform:uppercase;min-height:48px;',
+           'letter-spacing:3px;text-transform:uppercase;min-height:52px;',
          onclick: function() {
            if (window.showPaywall) window.showPaywall('premium');
            else if (window.showToast) window.showToast('Abonnement bientôt disponible', 'info', 3000);
          }
-       }, _ctaLabel);
+       }, _ctaBase + _ctaSuffix);
        card.appendChild(_cta);
-     } else {
+
+       // Réassurance
+       card.appendChild(h('div', {style:
+         'text-align:center;margin-top:10px;font-family:"Helvetica Neue",Arial,sans-serif;' +
+         'font-size:9px;letter-spacing:1px;color:var(--grey);line-height:1.8;'
+       }, 'Résiliable à tout moment · Paiement sécurisé'));
+
+          } else {
        card.appendChild(h('div', {style:
          'text-align:center;margin-top:20px;padding:14px;' +
          'border-top:1px solid ' + _accentBorder + ';' +
