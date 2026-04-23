@@ -1553,6 +1553,7 @@ var SPORT_MED_NAME = {
 };
 
 function renderSportGenericMedical(p) {
+  if (!S.sportType) { S.sStep = 0; if (window.render) window.render(); return; }
   var _zones = SPORT_MED_ZONES[S.sportType] || [];
   var _name  = SPORT_MED_NAME[S.sportType] || (S.sportType || '');
 
