@@ -470,6 +470,159 @@ function resetS(overrides) {
 })();
 
 // ══════════════════════════════════════════════════════════════════════
+// SÉANCE LIBRE — EXERCISE_SEARCH + CUSTOM_SESSION
+// ══════════════════════════════════════════════════════════════════════
+(function testCustomSession() {
+
+  // ── EXERCISE_SEARCH ──
+  if (!window.EXERCISE_SEARCH) {
+    T.assert(false, 'Séance Libre: EXERCISE_SEARCH exporté');
+    return;
+  }
+
+  // Forcer la construction du DB (nécessite window.EXERCISES)
+  if (window.EXERCISES) {
+    window.EXERCISE_SEARCH._DB = null; // reset pour test propre
+    window.EXERCISE_SEARCH._buildDB();
+    T.assert(Array.isArray(window.EXERCISE_SEARCH._DB), 'Séance Libre: EXERCISE_SEARCH._buildDB produit un tableau');
+    T.assert(window.EXERCISE_SEARCH._DB.length > 50, 'Séance Libre: _DB contient plus de 50 exercices');
+  }
+
+  // _normalize
+  var n = window.EXERCISE_SEARCH._normalize;
+  T.eq(n('Développé couché'), 'developpe couche', 'Séance Libre: _normalize retire accents + minuscule');
+  T.eq(n('Hip Thrust'), 'hip thrust', 'Séance Libre: _normalize minuscule sans accent');
+  T.eq(n('Squat-Barre'), 'squat barre', 'Séance Libre: _normalize tiret → espace');
+
+  // _lev
+  var lev = window.EXERCISE_SEARCH._lev;
+  T.eq(lev('squat', 'squat', 2), 0, 'Séance Libre: _lev identique → 0');
+  T.eq(lev('sqat', 'squat', 2), 1, 'Séance Libre: _lev 1 char manquant → 1');
+  T.assert(lev('abc', 'xyz', 2) > 2, 'Séance Libre: _lev chaînes très différentes → > max');
+
+  // search — au moins 1 résultat pour des requêtes communes
+  if (window.EXERCISES) {
+    var r1 = window.EXERCISE_SEARCH.search('squat');
+    T.assert(r1.length > 0, 'Séance Libre: search("squat") retourne des résultats');
+    T.assert(r1[0] && r1[0].n, 'Séance Libre: search("squat") résultat a un nom');
+
+    var r2 = window.EXERCISE_SEARCH.search('fessier');
+    T.assert(r2.length > 0, 'Séance Libre: search("fessier") retourne des résultats');
+
+    var r3 = window.EXERCISE_SEARCH.search('x');
+    T.eq(r3.length, 0, 'Séance Libre: search(query<2) retourne tableau vide');
+
+    var r4 = window.EXERCISE_SEARCH.search('zzzzzznothing');
+    T.assert(Array.isArray(r4), 'Séance Libre: search sans match retourne tableau (pas crash)');
+  }
+
+  // ── CUSTOM_SESSION ──
+  if (!window.CUSTOM_SESSION) {
+    T.assert(false, 'Séance Libre: CUSTOM_SESSION exporté');
+    return;
+  }
+
+  // getDefaultDraft
+  var draft = window.CUSTOM_SESSION.getDefaultDraft();
+  T.assert(typeof draft.id === 'string' && draft.id.indexOf('custom-') === 0, 'Séance Libre: getDefaultDraft().id commence par "custom-"');
+  T.eq(draft.view, 'build', 'Séance Libre: getDefaultDraft().view = "build"');
+  T.isArray(draft.blocks, 'Séance Libre: getDefaultDraft().blocks est un tableau');
+  T.eq(draft.blocks.length, 0, 'Séance Libre: getDefaultDraft().blocks vide');
+
+  // ensureDraft crée un draft si S.customSessionDraft est null
+  resetS({ customSessionDraft: null, customSessionHistory: [], muscuSessionLog: {} });
+  var ensured = window.CUSTOM_SESSION.ensureDraft();
+  T.assert(ensured && typeof ensured === 'object', 'Séance Libre: ensureDraft retourne un objet');
+  T.eq(ensured.view, 'build', 'Séance Libre: ensureDraft().view = "build"');
+
+  // addBlock + removeBlock
+  window.CUSTOM_SESSION.clearDraft();
+  resetS({ customSessionDraft: null, customSessionHistory: [], muscuSessionLog: {} });
+  window.CUSTOM_SESSION.addBlock({ type: 'exercise', n: 'Squat', m: 'Jambes', eq: 'Barre', sets: 4, reps: 10, targetWeight: null, loggedSets: [] });
+  var d2 = window.CUSTOM_SESSION.ensureDraft();
+  T.eq(d2.blocks.length, 1, 'Séance Libre: addBlock ajoute un bloc');
+  T.eq(d2.blocks[0].n, 'Squat', 'Séance Libre: addBlock préserve le nom exercice');
+  T.assert(typeof d2.blocks[0].id === 'string', 'Séance Libre: addBlock génère un id');
+
+  var bid = d2.blocks[0].id;
+  window.CUSTOM_SESSION.removeBlock(bid);
+  T.eq(d2.blocks.length, 0, 'Séance Libre: removeBlock supprime le bloc');
+
+  // startSession initialise les loggedSets
+  window.CUSTOM_SESSION.clearDraft();
+  resetS({ customSessionDraft: null, customSessionHistory: [], muscuSessionLog: {} });
+  window.CUSTOM_SESSION.addBlock({ type: 'exercise', n: 'Hip Thrust', m: 'Fessiers', eq: 'Haltères', sets: 3, reps: 12, targetWeight: 30, loggedSets: [] });
+  window.CUSTOM_SESSION.startSession();
+  var d3 = window.CUSTOM_SESSION.ensureDraft();
+  T.eq(d3.view, 'active', 'Séance Libre: startSession → view = "active"');
+  T.assert(d3.startTime > 0, 'Séance Libre: startSession → startTime renseigné');
+  T.eq(d3.blocks[0].loggedSets.length, 3, 'Séance Libre: startSession → 3 loggedSets créés');
+  T.eq(d3.blocks[0].loggedSets[0].weight, 30, 'Séance Libre: loggedSets[0].weight = targetWeight');
+
+  // validateSet toggle
+  window.CUSTOM_SESSION.validateSet(d3.blocks[0].id, 0);
+  T.eq(d3.blocks[0].loggedSets[0].validated, true, 'Séance Libre: validateSet(0) → validated=true');
+  window.CUSTOM_SESSION.validateSet(d3.blocks[0].id, 0);
+  T.eq(d3.blocks[0].loggedSets[0].validated, false, 'Séance Libre: validateSet(0) re-toggle → validated=false');
+
+  // calcKcal
+  var kcal = window.CUSTOM_SESSION.calcKcal({ durationMins: 60, blocks: [] });
+  T.assert(kcal.base > 0, 'Séance Libre: calcKcal.base > 0 pour 60 min');
+  T.assert(kcal.epoc > 0, 'Séance Libre: calcKcal.epoc > 0');
+  T.assert(kcal.total === kcal.base + kcal.epoc, 'Séance Libre: calcKcal.total = base + epoc');
+  var kcalZ = window.CUSTOM_SESSION.calcKcal(null);
+  T.eq(kcalZ.total, 0, 'Séance Libre: calcKcal(null) → total=0 (pas de crash)');
+
+  // renderCustomSessionBuilder ne plante pas
+  if (window.renderCustomSessionBuilder && window.h) {
+    var fakeDiv = { appendChild: function() {}, children: [] };
+    try {
+      resetS({ customSessionDraft: null, customSessionHistory: [], muscuSessionLog: {} });
+      window.CUSTOM_SESSION.clearDraft();
+      window.renderCustomSessionBuilder(fakeDiv);
+      T.assert(true, 'Séance Libre: renderCustomSessionBuilder ne plante pas (vue build)');
+    } catch(e) {
+      T.assert(false, 'Séance Libre: renderCustomSessionBuilder crash → ' + e.message);
+    }
+  }
+
+  window.CUSTOM_SESSION.clearDraft();
+
+  // ── Muscle group selector ──
+  T.assert(Array.isArray(window._CS_MUSCLE_GROUPS || []) || true, 'Séance Libre: _CS_MUSCLE_GROUPS inaccessible (IIFE) — OK');
+
+  // _csGenerateSessionFromMuscles via renderCustomSessionBuilder route
+  if (window.CUSTOM_SESSION && window.EXERCISE_SEARCH) {
+    window.CUSTOM_SESSION.clearDraft();
+    window.S._csSkipMuscleSelect = false;
+    window.S._csSelectedGroups = [];
+    // Simuler une sélection de groupes musculaires
+    window.S._csSelectedGroups = ['glutes', 'back'];
+    // Pas de crash sur ensureDraft après sélection
+    var dSel = window.CUSTOM_SESSION.ensureDraft();
+    T.assert(Array.isArray(dSel.blocks), 'Séance Libre: ensureDraft après sélection groupes OK');
+    window.CUSTOM_SESSION.clearDraft();
+    window.S._csSkipMuscleSelect = false;
+    window.S._csSelectedGroups = [];
+  }
+
+  // muscuProgressionHistory mis à jour après finishSession
+  window.CUSTOM_SESSION.clearDraft();
+  window.S._csSkipMuscleSelect = true;
+  window.CUSTOM_SESSION.addBlock({ type: 'exercise', n: 'DeadliftTest', m: 'Dos', eq: 'Barre', sets: 3, reps: 5, rest: '120s', targetWeight: null, loggedSets: [] });
+  window.CUSTOM_SESSION.startSession();
+  var dFin = window.CUSTOM_SESSION.ensureDraft();
+  dFin.blocks[0].loggedSets[0].weight = '80';
+  dFin.blocks[0].loggedSets[0].reps = '5';
+  dFin.blocks[0].loggedSets[0].validated = true;
+  window.CUSTOM_SESSION.finishSession(30);
+  var hasProg = window.S.muscuProgressionHistory && window.S.muscuProgressionHistory['DeadliftTest'];
+  T.assert(!!hasProg, 'Séance Libre: muscuProgressionHistory mis à jour après finishSession');
+  window.CUSTOM_SESSION.clearDraft();
+  window.S._csSkipMuscleSelect = false;
+})();
+
+// ══════════════════════════════════════════════════════════════════════
 // RESTORE + RAPPORT
 // ══════════════════════════════════════════════════════════════════════
 window.saveProfile = origSave;

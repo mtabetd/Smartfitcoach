@@ -3814,7 +3814,10 @@ window.S = {
   yogaStyle: null, yogaDuration: null, yogaObjectif: null,
   yogaWeek: 1, yogaDay: 0,
   // Calisthenics onboarding
-  calisthenicsOnboardingStep: null
+  calisthenicsOnboardingStep: null,
+  // Séance Libre
+  customSessionDraft:   null,  // brouillon en cours { id, title, blocks, view, startTime… }
+  customSessionHistory: []     // max 90 résumés de séances passées
 };
 
 // ═══════════════════════════════════════════════════════════════
