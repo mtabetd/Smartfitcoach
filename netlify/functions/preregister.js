@@ -103,6 +103,24 @@ function renderEmail(firstName) {
 '</table></td></tr></table></body></html>';
 }
 
+async function callResend(resendKey, fromAddress, to, subject, html) {
+  var res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + resendKey,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ from: fromAddress, to: to, subject: subject, html: html })
+  });
+  if (!res.ok) {
+    var errText = await res.text().catch(function(){ return ''; });
+    console.error('[preregister] Resend error ' + res.status + ':', errText);
+    return { sent: false, reason: 'resend_error', status: res.status };
+  }
+  return { sent: true };
+}
+
+// Email de confirmation à l'inscrit
 async function sendEmail(toEmail, firstName) {
   var resendKey = process.env.RESEND_API_KEY;
   var fromAddress = process.env.RESEND_FROM_EMAIL || 'SmartFitCoach <noreply@smartfitcoach.fitness>';
@@ -110,29 +128,69 @@ async function sendEmail(toEmail, firstName) {
     console.warn('[preregister] RESEND_API_KEY absent — email non envoyé');
     return { sent: false, reason: 'no_api_key' };
   }
+  return callResend(resendKey, fromAddress, [toEmail], 'Votre nom est inscrit.', renderEmail(firstName));
+}
 
-  var html = renderEmail(firstName);
+// Email de notification au propriétaire à chaque nouvelle inscription
+async function sendOwnerNotification(firstName, lastName, email, phone) {
+  var resendKey = process.env.RESEND_API_KEY;
+  var fromAddress = process.env.RESEND_FROM_EMAIL || 'SmartFitCoach <noreply@smartfitcoach.fitness>';
+  var ownerEmail = process.env.OWNER_EMAIL || 'smartfitcoach@proton.me';
+  if (!resendKey) return { sent: false, reason: 'no_api_key' };
 
-  var res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      'Authorization': 'Bearer ' + resendKey,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      from: fromAddress,
-      to: [toEmail],
-      subject: 'Votre nom est inscrit.',
-      html: html
-    })
-  });
+  var now = new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris', dateStyle: 'full', timeStyle: 'short' });
+  var safeFirst = escapeHtml(firstName);
+  var safeLast  = escapeHtml(lastName);
+  var safeEmail = escapeHtml(email);
+  var safePhone = phone ? escapeHtml(phone) : '—';
 
-  if (!res.ok) {
-    var errText = await res.text().catch(function(){ return ''; });
-    console.error('[preregister] Resend error:', res.status, errText);
-    return { sent: false, reason: 'resend_error', status: res.status };
-  }
-  return { sent: true };
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head>' +
+'<body style="margin:0;padding:0;background:#F5F5F0;font-family:\'Helvetica Neue\',Arial,sans-serif;">' +
+'<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#F5F5F0;"><tr><td align="center" style="padding:30px 10px;">' +
+'<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="520" style="max-width:520px;width:100%;background:#FFFFFF;">' +
+'<tr><td style="height:40px;"></td></tr>' +
+'<tr><td align="center" style="padding:0 40px;">' +
+  '<p style="margin:0;font-family:Georgia,serif;font-size:11px;letter-spacing:6px;text-transform:uppercase;color:#1A1A1A;">SMARTFITCOACH</p>' +
+'</td></tr>' +
+'<tr><td style="height:20px;"></td></tr>' +
+'<tr><td align="center"><table cellpadding="0" cellspacing="0" border="0"><tr><td style="width:40px;height:1px;background:#E0E0DA;font-size:0;line-height:0;">&nbsp;</td></tr></table></td></tr>' +
+'<tr><td style="height:28px;"></td></tr>' +
+'<tr><td align="center" style="padding:0 40px;">' +
+  '<h1 style="margin:0;font-family:Georgia,serif;font-size:26px;font-weight:normal;font-style:italic;color:#1A1A1A;">Nouvelle inscription.</h1>' +
+'</td></tr>' +
+'<tr><td style="height:24px;"></td></tr>' +
+'<tr><td style="padding:0 40px;">' +
+  '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-top:1px solid #E0E0DA;">' +
+    '<tr><td style="padding:12px 0;border-bottom:1px solid #F0F0EA;">' +
+      '<p style="margin:0;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#9A9A94;font-family:\'Helvetica Neue\',Arial,sans-serif;">Prénom</p>' +
+      '<p style="margin:4px 0 0;font-size:15px;color:#1A1A1A;font-family:Georgia,serif;">' + safeFirst + '</p>' +
+    '</td></tr>' +
+    '<tr><td style="padding:12px 0;border-bottom:1px solid #F0F0EA;">' +
+      '<p style="margin:0;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#9A9A94;font-family:\'Helvetica Neue\',Arial,sans-serif;">Nom</p>' +
+      '<p style="margin:4px 0 0;font-size:15px;color:#1A1A1A;font-family:Georgia,serif;">' + safeLast + '</p>' +
+    '</td></tr>' +
+    '<tr><td style="padding:12px 0;border-bottom:1px solid #F0F0EA;">' +
+      '<p style="margin:0;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#9A9A94;font-family:\'Helvetica Neue\',Arial,sans-serif;">Email</p>' +
+      '<p style="margin:4px 0 0;font-size:15px;color:#1A1A1A;font-family:\'Helvetica Neue\',Arial,sans-serif;">' + safeEmail + '</p>' +
+    '</td></tr>' +
+    '<tr><td style="padding:12px 0;border-bottom:1px solid #F0F0EA;">' +
+      '<p style="margin:0;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#9A9A94;font-family:\'Helvetica Neue\',Arial,sans-serif;">Téléphone</p>' +
+      '<p style="margin:4px 0 0;font-size:15px;color:#1A1A1A;font-family:\'Helvetica Neue\',Arial,sans-serif;">' + safePhone + '</p>' +
+    '</td></tr>' +
+    '<tr><td style="padding:12px 0;">' +
+      '<p style="margin:0;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#9A9A94;font-family:\'Helvetica Neue\',Arial,sans-serif;">Date</p>' +
+      '<p style="margin:4px 0 0;font-size:13px;color:#6B6B65;font-family:\'Helvetica Neue\',Arial,sans-serif;">' + now + '</p>' +
+    '</td></tr>' +
+  '</table>' +
+'</td></tr>' +
+'<tr><td style="height:30px;"></td></tr>' +
+'<tr><td align="center" style="padding:0 40px;">' +
+  '<p style="margin:0;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:#9A9A94;font-style:italic;">Vous recevez cet email car une nouvelle inscription a été enregistrée sur SmartFitCoach.</p>' +
+'</td></tr>' +
+'<tr><td style="height:30px;"></td></tr>' +
+'</table></td></tr></table></body></html>';
+
+  return callResend(resendKey, fromAddress, [ownerEmail], 'Nouvelle inscription — ' + safeFirst + ' ' + safeLast, html);
 }
 
 exports.handler = async function(event) {
@@ -205,12 +263,18 @@ exports.handler = async function(event) {
       }) };
     }
 
-    // Email — best-effort : un échec d'envoi ne bloque pas l'inscription
+    // Emails — best-effort : un échec d'envoi ne bloque pas l'inscription
     var mailResult;
     try { mailResult = await sendEmail(email, firstName); }
     catch (mailErr) {
       console.error('[preregister] Email send exception:', mailErr && mailErr.message);
       mailResult = { sent: false, reason: 'exception' };
+    }
+
+    // Notification propriétaire — best-effort indépendant
+    try { await sendOwnerNotification(firstName, lastName, email, phone); }
+    catch (ownerErr) {
+      console.error('[preregister] Owner notification exception:', ownerErr && ownerErr.message);
     }
 
     return {
