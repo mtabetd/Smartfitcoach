@@ -1309,11 +1309,27 @@ function renderProfilePage(container) {
      });
      card.appendChild(_featsWrap);
 
+     // Prix — affiché uniquement pour les non-abonnés
+     if (!_isSub) {
+       var _priceRow = h('div', {style:
+         'text-align:center;margin:18px 0 4px;'
+       });
+       var _priceLabel = window.SFC_PREMIUM_PRICE || '9,99 €/mois';
+       _priceRow.appendChild(h('div', {style:
+         'font-family:Georgia,serif;font-size:24px;color:var(--black);line-height:1;'
+       }, _priceLabel));
+       _priceRow.appendChild(h('div', {style:
+         'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;' +
+         'letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:4px;'
+       }, 'Sans engagement · Résiliable à tout moment'));
+       card.appendChild(_priceRow);
+     }
+
      // CTA — bouton Hermès noir laqué (ou info si abonné)
      if (!_isSub) {
        var _cta = h('button', {
          style:
-           'display:block;width:100%;margin-top:22px;padding:16px;' +
+           'display:block;width:100%;margin-top:16px;padding:16px;' +
            'background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);' +
            'border:none;border-radius:2px;cursor:pointer;' +
            'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;' +
@@ -1324,13 +1340,6 @@ function renderProfilePage(container) {
          }
        }, _trialExpired ? 'Réactiver mon accès' : 'Passer à Premium');
        card.appendChild(_cta);
-
-       // Mention discrète sous le CTA — ton maison
-       card.appendChild(h('div', {style:
-         'text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;' +
-         'font-size:9px;letter-spacing:2px;text-transform:uppercase;' +
-         'color:var(--grey);margin-top:10px;'
-       }, 'Sans engagement · Résiliable à tout moment'));
      } else {
        card.appendChild(h('div', {style:
          'text-align:center;margin-top:20px;padding:14px;' +

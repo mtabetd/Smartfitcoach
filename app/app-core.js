@@ -4418,6 +4418,9 @@ function isTrialUser() {
     return true; // pas d'abonnement = trial (actif ou expiré)
   } catch(e) { return false; }
 }
+// Prix affiché dans le paywall — à mettre à jour si les tarifs changent
+var PREMIUM_PRICE_LABEL = window.SFC_PREMIUM_PRICE || '9,99 €/mois';
+
 // Paywall modal — affiche un message d'upgrade pour les features premium
 function showPaywall(feature) {
   var featureNames = {
@@ -4445,8 +4448,10 @@ function showPaywall(feature) {
     '<div style="font-family:Georgia,serif;font-size:20px;margin-bottom:8px;">Passez \u00e0 Premium</div>' +
     '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:#6B6B65;line-height:1.6;margin-bottom:20px;">' +
     '<strong>' + name + '</strong> est r\u00e9serv\u00e9(e) aux abonn\u00e9s SmartFitCoach Premium. D\u00e9bloquez toutes les fonctionnalit\u00e9s avanc\u00e9es pour atteindre vos objectifs.</div>' +
-    '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:#6B6B65;margin-bottom:20px;">' +
-    'Scanner repas IA \u00b7 Coach IA illimit\u00e9 \u00b7 Export PDF \u00b7 Historique \u00b7 Analyse corporelle</div>';
+    '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:#6B6B65;margin-bottom:12px;">' +
+    'Scanner repas IA \u00b7 Coach IA illimit\u00e9 \u00b7 Export PDF \u00b7 Historique \u00b7 Analyse corporelle</div>' +
+    '<div style="font-family:Georgia,serif;font-size:22px;color:#0A0A09;margin-bottom:4px;">' + PREMIUM_PRICE_LABEL + '</div>' +
+    '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:10px;color:#6B6B65;letter-spacing:1px;margin-bottom:20px;">SANS ENGAGEMENT \u00b7 R\u00c9SILIABLE \u00c0 TOUT MOMENT</div>';
   var dismiss = function() { ov.style.opacity = '0'; setTimeout(function() { if (ov.parentNode) ov.parentNode.removeChild(ov); }, 250); };
   var upgradeBtn = document.createElement('button');
   upgradeBtn.style.cssText = 'width:100%;padding:14px;margin-bottom:8px;background:var(--black,#0A0A09);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#fff;cursor:pointer;min-height:44px;letter-spacing:1px;';
