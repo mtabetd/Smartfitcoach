@@ -1286,7 +1286,7 @@ function getWellnessScore() {
 window.getWellnessScore = getWellnessScore;
 
 // ─── RENDER ───
-window.SPORT = {
+window.SPORT = { BAD SYNTAX BAD SYNTAX
  render: function(p) {
  var content = h('div', {'class': 'fade-in'});
 
