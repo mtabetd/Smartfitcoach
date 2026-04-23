@@ -9515,7 +9515,7 @@ function renderWeightChartSport(container) {
  section.appendChild(h('div', {style: 'text-align:center;padding:20px;font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'}, 'Enregistrez votre poids régulièrement pour voir votre courbe'));
  }
 
- var canvas = h('canvas', {'class': 'weight-chart', width: '600', height: '200'});
+ var canvas = h('canvas', {'class': 'weight-chart', width: '600', height: '200', style: 'display:none'});
  section.appendChild(canvas);
  container.appendChild(section);
 
@@ -9588,6 +9588,7 @@ function renderWeightChartSport(container) {
  cleanData.push(w);
  });
  if (cleanData.length < 2) return;
+ canvas.style.display = '';
  try { window.createChart(canvas, {
  type: 'line',
  data: {
