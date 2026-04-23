@@ -132,7 +132,8 @@ var PROFILE_KEYS = [
  // Subscription fields removed — now server-authoritative on profiles.subscription_plan/end.
  // Repopulated into window.S on every loadProfile(), never persisted to localStorage,
  // so a stale or tampered local value can never bypass the server check.
- '_prePregnancyGoal'
+ '_prePregnancyGoal',
+ '_medicalDisclaimerShown'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
@@ -1766,6 +1767,36 @@ function renderProfilePage(container) {
  }
 }
 
+// ─── DISCLAIMER MÉDICAL (1 fois par compte) ───
+function _showMedicalDisclaimer() {
+  if (document.getElementById('sfc-medical-disclaimer')) return;
+  var S = window.S;
+  var h = window.h;
+  if (!h) return;
+  var ov = h('div', {
+    id: 'sfc-medical-disclaimer',
+    style: 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,9,0.6);z-index:9600;display:flex;align-items:flex-end;justify-content:center;padding-bottom:env(safe-area-inset-bottom);'
+  });
+  var box = h('div', {
+    style: 'background:var(--ivory,#FAF9F6);width:100%;max-width:480px;padding:28px 24px 32px;border-top:1px solid var(--line,#D8D8D0);'
+  });
+  box.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:12px;'}, 'INFORMATION IMPORTANTE'));
+  box.appendChild(h('div', {style:'font-family:Georgia,serif;font-size:16px;color:var(--black,#0A0A09);margin-bottom:12px;line-height:1.4;'}, 'SmartFitCoach ne remplace pas un professionnel de santé'));
+  box.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.7;margin-bottom:20px;'}, 'Les recommandations nutritionnelles et d\'entraînement de cette application sont à titre indicatif. Consultez un médecin, diététicien ou coach certifié avant de modifier significativement votre alimentation ou votre activité physique, en particulier en cas de pathologie.'));
+  var acceptBtn = h('button', {
+    style: 'display:block;width:100%;padding:16px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;min-height:48px;',
+    onclick: function() {
+      S._medicalDisclaimerShown = true;
+      window._profileDirty = true;
+      if (window.saveProfile) try { window.saveProfile(); } catch(_) {}
+      if (ov.parentNode) ov.parentNode.removeChild(ov);
+    }
+  }, 'J\'AI COMPRIS');
+  box.appendChild(acceptBtn);
+  ov.appendChild(box);
+  document.body.appendChild(ov);
+}
+
 // ─── MAIN RENDER ───
 function render() {
  if (render._lock) return;
@@ -2087,6 +2118,8 @@ function render() {
  try { if (window.AuthBanner) window.AuthBanner.render(document.body); } catch(e) {}
  // Onboarding screen (P10) — écran de bienvenue personnalisé (1 seule fois)
  try { if (window.OnboardingComplete) window.OnboardingComplete.check(); } catch(e) {}
+ // Disclaimer médical (1 seule fois par compte, après onboarding)
+ try { if (S.appMode && !S._medicalDisclaimerShown) _showMedicalDisclaimer(); } catch(e) {}
 
  // Post-render scroll: reset scroll position after content is in DOM
  if (_didNavigate) {
