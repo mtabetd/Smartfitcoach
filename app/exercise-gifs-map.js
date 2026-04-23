@@ -250,3 +250,5 @@ var EXERCISE_GIFS = {
   'Activation fessier proné':              _BASE + '/Barbell_Hip_Thrust/0.jpg',
 
 };
+
+window.EXERCISE_GIFS = EXERCISE_GIFS;

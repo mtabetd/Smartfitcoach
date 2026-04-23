@@ -13,6 +13,9 @@ if (window.history && window.history.scrollRestoration) { window.history.scrollR
 var S = window.S;
 var h = window.h, txt = window.txt;
 
+// ─── APP VERSION (used by crash-reporter & feedback-widget) ───
+window.APP_VERSION = '2.5.0';
+
 // ─── NAVIGATION CALLBACKS for dashboard ───
 window.APP_NAVIGATE = function(view) {
  S.view = view;
