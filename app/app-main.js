@@ -1458,8 +1458,7 @@ function renderProfilePage(container) {
            'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;' +
            'letter-spacing:3px;text-transform:uppercase;min-height:52px;',
          onclick: function() {
-           if (window.showPaywall) window.showPaywall('premium');
-           else if (window.showToast) window.showToast('Abonnement bientôt disponible', 'info', 3000);
+           if (window.showSubscriptionContact) window.showSubscriptionContact(_ctaPlan, _ui2);
          }
        }, _ctaBase + _ctaSuffix);
        card.appendChild(_cta);

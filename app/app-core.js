@@ -4501,6 +4501,95 @@ window.getTrialDaysLeft = getTrialDaysLeft;
 window.isTrialUser = isTrialUser;
 window.showPaywall = showPaywall;
 
+// Modale de contact abonnement — email smartfitcoach@proton.me
+function showSubscriptionContact(plan, ui) {
+  var old = document.getElementById('sfc-contact-modal');
+  if (old && old.parentNode) old.parentNode.removeChild(old);
+
+  var EMAIL = 'smartfitcoach@proton.me';
+  var SUBJECT = encodeURIComponent('Demande d’accès — SmartFitCoach');
+  var BODY = encodeURIComponent(
+    'Bonjour,\n\n' +
+    'Je souhaite en savoir davantage sur SmartFitCoach et ses formules d’abonnement.\n\n' +
+    'Pourriez-vous m’adresser les informations nécessaires ?\n\n' +
+    '[Votre prénom]'
+  );
+  var mailto = 'mailto:' + EMAIL + '?subject=' + SUBJECT + '&body=' + BODY;
+
+  // Plan info line
+  var _durPer = { saison: '/trimestre', cycle: '/semestre', engagement: '/an' };
+  var planLine = '';
+  if (plan && ui) {
+    var _tierLabels = { athlete: 'Athlete', champion: 'Champion', legende: 'Légende' };
+    planLine = (_tierLabels[ui.tier] || ui.tier) + ' · ' + (plan.label_mad || '') + (_durPer[ui.duration] || '');
+  }
+
+  var ov = document.createElement('div');
+  ov.id = 'sfc-contact-modal';
+  ov.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,9,0.6);z-index:9500;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s ease;';
+
+  var box = document.createElement('div');
+  box.style.cssText = 'background:var(--ivory,#FAF9F6);max-width:400px;width:92%;padding:36px 28px 28px;position:relative;';
+
+  // Filet + titre
+  var _headerLine = document.createElement('div');
+  _headerLine.style.cssText = 'display:flex;align-items:center;gap:10px;margin-bottom:20px;';
+  var _l1 = document.createElement('span'); _l1.style.cssText = 'flex:1;height:1px;background:var(--border,#D8D8D0);';
+  var _titleSpan = document.createElement('span');
+  _titleSpan.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);white-space:nowrap;';
+  _titleSpan.textContent = 'VOTRE ACCÈS SUR MESURE';
+  var _l2 = document.createElement('span'); _l2.style.cssText = 'flex:1;height:1px;background:var(--border,#D8D8D0);';
+  _headerLine.appendChild(_l1); _headerLine.appendChild(_titleSpan); _headerLine.appendChild(_l2);
+  box.appendChild(_headerLine);
+
+  // Titre Georgia
+  var _h = document.createElement('div');
+  _h.style.cssText = 'font-family:Georgia,serif;font-size:22px;color:var(--black,#0A0A09);margin-bottom:6px;font-weight:normal;line-height:1.3;';
+  _h.textContent = 'Une expérience conçue\npour quelques-uns.';
+  box.appendChild(_h);
+
+  // Plan sélectionné
+  if (planLine) {
+    var _planTag = document.createElement('div');
+    _planTag.style.cssText = 'display:inline-block;border:1px solid var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;margin:12px 0 16px;color:var(--black,#0A0A09);';
+    _planTag.textContent = planLine;
+    box.appendChild(_planTag);
+  }
+
+  // Corps
+  var _body = document.createElement('div');
+  _body.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.8;margin-bottom:24px;';
+  _body.textContent = 'L’accès à SmartFitCoach se fait par invitation personnalisée. Écrivez-nous, et nous vous répondrons dans les meilleurs délais avec l’ensemble des détails : formules, tarifs et modalités d’accès. Chaque demande reçoit notre attention complète.';
+  box.appendChild(_body);
+
+  // Bouton principal — mailto
+  var _mailBtn = document.createElement('a');
+  _mailBtn.href = mailto;
+  _mailBtn.style.cssText = 'display:block;width:100%;padding:16px;margin-bottom:10px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;box-sizing:border-box;cursor:pointer;';
+  _mailBtn.textContent = 'Écrire à l’équipe';
+  box.appendChild(_mailBtn);
+
+  // Bouton secondaire — fermer
+  var dismiss = function() { ov.style.opacity = '0'; setTimeout(function() { if (ov.parentNode) ov.parentNode.removeChild(ov); }, 300); };
+  var _closeBtn = document.createElement('button');
+  _closeBtn.style.cssText = 'display:block;width:100%;padding:13px;background:transparent;border:1px solid var(--border,#D8D8D0);color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;';
+  _closeBtn.textContent = 'Peut-être plus tard';
+  _closeBtn.onclick = dismiss;
+  box.appendChild(_closeBtn);
+
+  // Réassurance
+  var _reassure = document.createElement('div');
+  _reassure.style.cssText = 'text-align:center;margin-top:14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;color:var(--grey,#6B6B65);';
+  _reassure.textContent = 'Discrétion assurée — nous ne partageons aucune information personnelle.';
+  box.appendChild(_reassure);
+
+  ov.appendChild(box);
+  ov.onclick = function(e) { if (e.target === ov) dismiss(); };
+  document.body.appendChild(ov);
+  requestAnimationFrame(function() { ov.style.opacity = '1'; });
+}
+window.showSubscriptionContact = showSubscriptionContact;
+
 function getPregnancyTrimester() {
   var s = window.S;
   if (!s.pregnant || s.sex !== 'femme') return null;
