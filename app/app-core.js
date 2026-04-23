@@ -4424,8 +4424,11 @@ function showPaywall(feature) {
     scanner: 'Scanner de repas IA',
     pdf: 'Export PDF',
     coach: 'Coach IA illimité',
+    'ai-coach': 'Coach IA',
     history: 'Historique de progression',
-    body: 'Analyse corporelle IA'
+    body: 'Analyse corporelle IA',
+    'body-analysis': 'Analyse corporelle IA',
+    'muscu-program': 'Générateur de programme IA'
   };
   var name = featureNames[feature] || 'Cette fonctionnalité';
   var old = document.getElementById('sfc-paywall-modal');
@@ -4443,13 +4446,22 @@ function showPaywall(feature) {
     '<strong>' + name + '</strong> est r\u00e9serv\u00e9(e) aux abonn\u00e9s SmartFitCoach Premium. D\u00e9bloquez toutes les fonctionnalit\u00e9s avanc\u00e9es pour atteindre vos objectifs.</div>' +
     '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:#6B6B65;margin-bottom:20px;">' +
     'Scanner repas IA \u00b7 Coach IA illimit\u00e9 \u00b7 Export PDF \u00b7 Historique \u00b7 Analyse corporelle</div>';
+  var dismiss = function() { ov.style.opacity = '0'; setTimeout(function() { if (ov.parentNode) ov.parentNode.removeChild(ov); }, 250); };
+  var upgradeBtn = document.createElement('button');
+  upgradeBtn.style.cssText = 'width:100%;padding:14px;margin-bottom:8px;background:var(--black,#0A0A09);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#fff;cursor:pointer;min-height:44px;letter-spacing:1px;';
+  upgradeBtn.textContent = 'Découvrir Premium →';
+  upgradeBtn.onclick = function() {
+    dismiss();
+    if (window.S && window.render) { window.S.view = 'profil'; window.render(); }
+  };
   var closeBtn = document.createElement('button');
   closeBtn.style.cssText = 'width:100%;padding:14px;background:transparent;border:1px solid #D8D8D0;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#6B6B65;cursor:pointer;min-height:44px;';
   closeBtn.textContent = 'Fermer';
-  closeBtn.onclick = function() { ov.style.opacity = '0'; setTimeout(function() { if (ov.parentNode) ov.parentNode.removeChild(ov); }, 250); };
+  closeBtn.onclick = dismiss;
+  box.appendChild(upgradeBtn);
   box.appendChild(closeBtn);
   ov.appendChild(box);
-  ov.onclick = function(e) { if (e.target === ov) closeBtn.onclick(); };
+  ov.onclick = function(e) { if (e.target === ov) dismiss(); };
   document.body.appendChild(ov);
   requestAnimationFrame(function() { ov.style.opacity = '1'; });
 }

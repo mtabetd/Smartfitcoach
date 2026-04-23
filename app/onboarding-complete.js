@@ -17,6 +17,7 @@
 (function() {
 
   var DONE_KEY = 'mtd_onboarding_done';
+  var _showing = false;
 
   // Retourne true si l'utilisateur a les données minimales pour l'onboarding
   function hasMinProfile() {
@@ -262,6 +263,7 @@
   }
 
   function _closeOverlay(overlay) {
+    _showing = false;
     overlay.style.opacity = '0';
     setTimeout(function() {
       if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
@@ -283,7 +285,8 @@
       // Après 4 clics : 5 overlays superposés avec "VOTRE OBJECTIF — Nutrition : X kcal/jour"
       // répétés verticalement. L'user perçoit "ça s'additionne".
       // Fix : dédup par ID avant de monter.
-      if (document.getElementById('onboarding-complete-overlay')) return;
+      if (_showing || document.getElementById('onboarding-complete-overlay')) return;
+      _showing = true;
       // Afficher l'écran
       showOnboardingScreen();
     }
