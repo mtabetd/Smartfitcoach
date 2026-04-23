@@ -9508,7 +9508,7 @@ function renderMusculationProgram(p) {
      if (window.CUSTOM_SESSION && typeof window.CUSTOM_SESSION.open === 'function') {
        window.CUSTOM_SESSION.open();
      } else {
-       S.sStep = 27;
+       S.sStep = 30;
        if (window.render) window.render();
      }
    }
