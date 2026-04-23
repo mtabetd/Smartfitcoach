@@ -1098,7 +1098,7 @@ function renderActiviteSommeil(p) {
     }, label));
   });
   p.appendChild(_dayBtns3);
-  var _selCount3 = S.trainingDaysSelected.length;
+  var _selCount3 = Array.isArray(S.trainingDaysSelected) ? S.trainingDaysSelected.length : 0;
   var _hint3 = _selCount3 === 0
     ? 'Optionnel \u2014 laissez vide pour r\u00e9partition automatique'
     : _selCount3 + '\u00a0jour' + (_selCount3 > 1 ? 's' : '') + ' s\u00e9lectionn\u00e9' + (_selCount3 > 1 ? 's' : '');
@@ -3078,7 +3078,7 @@ function renderStep9(p) {
             if (window.saveProfile) { try { window.saveProfile(); } catch(eS) {} }
             if (window.render) window.render();
             // Après validation, ramener l'user sur le tableau de bord (1.5s pour voir ✓)
-            setTimeout(function() { S.view = 'today'; if (window.render) window.render(); }, 1500);
+            setTimeout(function() { if (S.view === 'nutrition' && window.render) { S.view = 'today'; window.render(); } }, 1500);
           } catch(e) { console.error('[renderStep9] validate failed', e); }
         }
       }, hashChanged ? 'Confirmer mon plan actuel' : weekChanged ? 'Activer la nouvelle semaine' : 'Activer mon programme');
@@ -4570,7 +4570,7 @@ var SIGNATURE_BOWLS = [
 // Résoudre une composition signature en objets SALAD_DB complets
 function resolveSignatureBowl(sig) {
   function findItem(cat, name) {
-    var list = SALAD_DB[cat];
+    var list = SALAD_DB[cat] || [];
     for (var i = 0; i < list.length; i++) {
       if (list[i].name === name) return JSON.parse(JSON.stringify(list[i]));
     }
@@ -4799,7 +4799,7 @@ function renderSaladBar(p) {
   function findInDb(name) {
     var cats = ['bases', 'proteins', 'veggies', 'fats', 'sauces'];
     for (var c = 0; c < cats.length; c++) {
-      var list = SALAD_DB[cats[c]];
+      var list = SALAD_DB[cats[c]] || [];
       for (var i = 0; i < list.length; i++) {
         if (list[i].name === name) return list[i];
       }

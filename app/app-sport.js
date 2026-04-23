@@ -1302,7 +1302,8 @@ window.SPORT = {
    return;
  }
 
- // ─── Séance Libre (sStep=30) — bypass tous les guards d'onboarding ───
+ // ─── Séance Libre (sStep=30) — réservé aux users avec un sportType défini ───
+ if (S.sStep === 30 && !S.sportType) { S.sStep = 0; }
  if (S.sStep === 30) {
    if (window.renderCustomSessionBuilder) {
      window.renderCustomSessionBuilder(content);
@@ -1656,9 +1657,10 @@ function renderObjectif(p) {
  ]));
 
  // Cross Training - clicking goes through PAR-Q (if not done), then CF level (step 5)
- // FIX SÉCURITÉ 2026-04-16 — Bloquer CrossFit pour HTA sévère et grossesse T3
- var _cfBlocked = (Array.isArray(S.medical) && S.medical.indexOf('hta_severe') !== -1) || (S.pregnant && S.sex === 'femme' && typeof S.pregnancyWeek === 'number' && S.pregnancyWeek >= 28);
- var _cfBlockReason = _cfBlocked ? (S.pregnant ? 'Contre-indiqué pendant le 3e trimestre (ACOG 2020)' : 'Contre-indiqué avec HTA sévère (ESC/ESH 2018)') : '';
+ // FIX SÉCURITÉ 2026-04 — Bloquer CrossFit pour HTA sévère, cardiopathie et grossesse T3
+ var _cfCardio = Array.isArray(S.medical) && (S.medical.indexOf('cardio') !== -1 || S.medical.indexOf('insuffisance_card') !== -1);
+ var _cfBlocked = (Array.isArray(S.medical) && S.medical.indexOf('hta_severe') !== -1) || _cfCardio || (S.pregnant && S.sex === 'femme' && typeof S.pregnancyWeek === 'number' && S.pregnancyWeek >= 28);
+ var _cfBlockReason = _cfBlocked ? (S.pregnant ? 'Contre-indiqué pendant le 3e trimestre (ACOG 2020)' : _cfCardio ? 'Contre-indiqué en cas de cardiopathie (AHA 2018)' : 'Contre-indiqué avec HTA sévère (ESC/ESH 2018)') : '';
  typeGrid.appendChild(h('div', {'class': 'sel-card' + (_cfBlocked ? ' disabled' : ''), style:'cursor:' + (_cfBlocked ? 'not-allowed' : 'pointer') + ';' + (_cfBlocked ? 'opacity:0.35;pointer-events:none;' : ''), onclick: _cfBlocked ? null : function(){
  S.sportType = 'crossfit';
  if (!S.parqDone) { S._parqNextStep = 5; S.sStep = 26; } else { S.sStep = 5; }
@@ -5458,6 +5460,10 @@ function getSuggestedWeight(exerciseName, reps, phase) {
  // Macrocycle intensity modifier: Force phase = +12% 1RM, Transition = -10%
  var _macroBonus = getMacroCyclePhase(S.muscuCycle || 1).pct1rmBonus || 0;
  pct = Math.min(0.95, Math.max(0.40, pct + _macroBonus));
+ // HTA sévère : limiter à 60% du 1RM (ESC/ESH 2018 — éviter manœuvre de Valsalva)
+ if (Array.isArray(S.medical) && S.medical.indexOf('hta_severe') !== -1) {
+   pct = Math.min(pct, 0.60);
+ }
  // Priority 1: use user's actual 1RM from strength profile (Epley-calculated)
  if (S.muscuStrengthProfile && window.MUSCU_KEY_EXERCISES) {
  var nameLow = (exerciseName || '').toLowerCase();
@@ -7615,16 +7621,16 @@ function renderMusculationProgram(p) {
   p.appendChild(_hdrWrap);
 
   // Chrono séance — mis à jour toutes les 30s sans re-render complet
+  if (window._chronoInterval) { clearInterval(window._chronoInterval); window._chronoInterval = null; }
   if (S._sessionStartTime) {
     var _elapsed = Math.floor((Date.now() - S._sessionStartTime) / 60000);
     var _chronoEl = document.createElement('div');
     _chronoEl.id = 'session-chrono';
     _chronoEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:center;margin-bottom:8px;';
     _chronoEl.textContent = 'Séance en cours — ' + _elapsed + ' min';
-    // Updater le texte toutes les 30s directement dans le DOM (sans re-render)
-    var _chronoInterval = setInterval(function() {
+    window._chronoInterval = setInterval(function() {
       var el = document.getElementById('session-chrono');
-      if (!el || !S._sessionStartTime) { clearInterval(_chronoInterval); return; }
+      if (!el || !S._sessionStartTime) { clearInterval(window._chronoInterval); window._chronoInterval = null; return; }
       var _mins = Math.floor((Date.now() - S._sessionStartTime) / 60000);
       el.textContent = 'Séance en cours — ' + _mins + ' min';
     }, 30000);
