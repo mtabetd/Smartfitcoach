@@ -1481,48 +1481,54 @@ var SPORT_QUOTES = [
  {t:"L'entra\u00eenement dur pr\u00e9pare aux comp\u00e9titions faciles.",a:""}
 ];
 
+// ─── SPORT SPLASH INTRO ───
+function renderSportSplash(p) {
+  p.appendChild(h('div', {'class': 'eyebrow'}, 'Sport · Bilan initial'));
+  p.appendChild(h('h1', {html: 'Un programme<br><em>fait pour vous.</em>'}));
+  p.appendChild(h('p', {'class': 'subtitle'}, 'Quelques questions pour calibrer votre programme sur votre niveau, vos objectifs et votre santé.'));
+
+  var pills = h('div', {style: 'display:flex;flex-wrap:wrap;gap:8px;margin:20px 0;'});
+  [
+    '∼ 8 minutes',
+    'Évaluation médicale incluse',
+    'Programme sur-mesure'
+  ].forEach(function(txt) {
+    pills.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);border:1px solid var(--line,#D8D8D0);padding:5px 10px;border-radius:2px;'
+    }, txt));
+  });
+  p.appendChild(pills);
+
+  var benefits = [
+    {icon: '■', title: 'Programme scientifique', desc: 'Basé sur les recommandations ACSM, NSCA et Renaissance Periodization'},
+    {icon: '●', title: 'Sécurité d’abord', desc: 'Dépistage médical PAR-Q — 7 questions recommandées par l’ACSM (2018)'},
+    {icon: '◆', title: 'Adapté à votre vie', desc: 'Votre niveau, votre équipement, vos disponibilités, vos objectifs'}
+  ];
+  var benefitList = h('div', {style: 'display:flex;flex-direction:column;gap:12px;margin:24px 0 28px;'});
+  benefits.forEach(function(b) {
+    var row = h('div', {style: 'display:flex;gap:12px;align-items:flex-start;'});
+    row.appendChild(h('span', {style: 'font-size:10px;color:var(--grey,#6B6B65);margin-top:3px;flex-shrink:0;'}, b.icon));
+    var txt = h('div', {});
+    txt.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:500;color:var(--black,#0A0A09);margin-bottom:2px;'}, b.title));
+    txt.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.5;'}, b.desc));
+    row.appendChild(txt);
+    benefitList.appendChild(row);
+  });
+  p.appendChild(benefitList);
+
+  p.appendChild(h('button', {'class': 'btn-primary', onclick: function() {
+    S.sportSplashDone = true;
+    if (window.render) window.render();
+  }}, 'Commencer mon bilan sportif'));
+}
+
 // ─── STEP 0: TYPE SELECTION ONLY ───
 function renderObjectif(p) {
- // Sport splash with strong headline and random quote
- if (!S.sportSplashDone) {
- var q = SPORT_QUOTES[Math.floor(Math.random() * SPORT_QUOTES.length)];
- var _prenomSplash = S.prenom || '';
- var splash = h('div', {style: 'display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 24px 40px;min-height:60vh'});
- splash.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);margin-bottom:10px;opacity:0;animation:splashFadeUp .5s ease .1s forwards'}, 'SMARTFITCOACH \u00b7 SPORT'));
- splash.appendChild(h('div', {style: 'width:36px;height:1px;background:var(--black);margin:0 auto 24px;opacity:0;animation:splashFadeUp .5s ease .25s forwards'}));
-
- // Strong personalized headline
- var _splashHeadline = h('div', {style: 'font-family:Georgia,serif;font-size:clamp(28px,8vw,40px);font-weight:normal;line-height:1.1;letter-spacing:-.02em;color:var(--black);opacity:0;animation:splashFadeUp .6s ease .35s forwards;margin-bottom:16px;max-width:340px'});
- // Escape _prenomSplash via textContent — profile field round-trips to
- // Supabase and could contain HTML (self-XSS today, stored XSS if ever
- // shown to peers). Fallback keeps its static <em> via DOM construction.
- _splashHeadline.style.whiteSpace = 'pre-line';
- if (_prenomSplash) {
-   _splashHeadline.textContent = _prenomSplash + ', votre\u00a0programme\u00a0sport\u00a0vous\u00a0attend.';
- } else {
-   _splashHeadline.appendChild(document.createTextNode('Entra\u00eenez-vous mieux.\n'));
-   var _splashEm = document.createElement('em');
-   _splashEm.textContent = 'Progressez plus vite.';
-   _splashHeadline.appendChild(_splashEm);
- }
- splash.appendChild(_splashHeadline);
-
- splash.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;color:var(--grey);line-height:1.65;max-width:290px;opacity:0;animation:splashFadeUp .6s ease .5s forwards;margin-bottom:28px'}, 'Un protocole sport con\u00e7u sur vos objectifs, votre niveau et votre agenda.'));
-
- // Quote
- var quoteDiv = h('div', {style: 'font-family:Georgia,serif;font-size:15px;font-style:italic;color:var(--black);line-height:1.6;max-width:300px;opacity:0;animation:splashFadeUp .6s ease .6s forwards;margin-bottom:32px;padding:16px 20px;border-left:2px solid var(--border,#D8D8D0);text-align:left'});
- quoteDiv.appendChild(h('span', {}, '\u201C' + q.t + '\u201D'));
- if (q.a) {
-   quoteDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-top:10px'}, '\u2014 ' + q.a));
- }
- splash.appendChild(quoteDiv);
-
- var _splashBtn = h('button', {style: 'display:block;width:100%;max-width:320px;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;min-height:56px;padding:0 24px;border:none;cursor:pointer;opacity:0;animation:splashFadeUp .6s ease .8s forwards;border-radius:2px', onclick: function(){ S.sportSplashDone = true; if(window.BLACKBOX)BLACKBOX.log('sport_splash_done'); window.render(); }}, 'Je commence \u2192');
- splash.appendChild(_splashBtn);
- p.appendChild(splash);
- return;
- }
-
+  // Splash intro sport — affiché une seule fois avant la sélection du type
+  if (!S.sportSplashDone) {
+    renderSportSplash(p);
+    return;
+  }
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Sport'));
  p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Choisissez votre type de programme sportif.'));
