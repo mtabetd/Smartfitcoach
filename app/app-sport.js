@@ -2206,7 +2206,7 @@ function renderChargesQuestionnaire(p) {
  if (hasDiabetes) {
  p.appendChild(h('div', {style: 'background:rgba(232,111,30,0.06);border:1px solid var(--orange,#E86F1E);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;line-height:1.6'}, [
  h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange,#E86F1E);margin-bottom:6px'}, 'Diabète — Précautions sportives'),
- h('div', {style: 'color:var(--grey,#6B6B65)'}, 'Mesurez votre glycémie avant/après chaque séance. Évitez l\'entraînement si glycémie < 4,0 mmol/L ou > 14,0 mmol/L. Gardez toujours une source de sucres rapides à portée de main. Intensité progressive recommandée (RPE max 7/10 les 4 premières semaines).')
+ (function(){ var _d = h('div', {style: 'color:var(--grey,#6B6B65)'}); _d.appendChild(document.createTextNode('Mesurez votre glycémie avant/après chaque séance. Évitez l\'entraînement si glycémie < 4,0 mmol/L ou > 14,0 mmol/L. Gardez toujours une source de sucres rapides à portée de main. Intensité progressive recommandée (')); _d.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _d.appendChild(document.createTextNode(' max 7/10 les 4 premières semaines).')); return _d; })()
  ]));
  }
  if (getAge() >= 50) {
@@ -4660,7 +4660,7 @@ function renderCrossfitProgram(p) {
   aerCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:4px'}, wod.aerobic.type));
   aerCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'}, wod.aerobic.desc || ''));
   if (wod.aerobic.rpe !== undefined) {
-   aerCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:#1A5A5A;margin-top:6px'}, 'RPE cible : ' + wod.aerobic.rpe + '/10 — Effort Zone 2 confortable'));
+   (function(){ var _ae = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:#1A5A5A;margin-top:6px'}); _ae.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _ae.appendChild(document.createTextNode(' cible : ' + wod.aerobic.rpe + '/10 — Effort Zone 2 confortable')); aerCard.appendChild(_ae); })();
   }
   p.appendChild(aerCard);
  }
@@ -6446,7 +6446,7 @@ function renderWeekTracker(p) {
  displayRpeNote = 'RPE 7 — Plafonné à 7/10 pour diabète T1 (risque hypoglycémie à RPE 8-9, ADA 2023). Glucomètre obligatoire.';
  }
  var rpeBadge = h('div', {style: 'display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid ' + phase.color + ';margin-bottom:8px'});
- rpeBadge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:' + phase.color}, 'RPE ' + displayRpe + '/10'));
+ rpeBadge.appendChild((function(){ var _rb = h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:' + phase.color}); _rb.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _rb.appendChild(document.createTextNode(' ' + displayRpe + '/10')); return _rb; })());
  rpeBadge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, displayRpeNote.replace('RPE ' + displayRpe + ' — ', '')));
  container.appendChild(rpeBadge);
 
@@ -6932,10 +6932,18 @@ function renderMusculationProgram(p) {
  // Medical/age contextual warnings in program view
  var hasDiabProg = S.medical && (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1);
  if (hasDiabProg) {
- var diabMsg = S.medical.indexOf('diabete_t1') !== -1
- ? ' Diabète T1 : RPE plafonné à 7/10 (risque hypoglycémie à haute intensité). Glycémie cible avant séance : 7-10 mmol/L. Glucomètre obligatoire avant/après. Gardez 15-20g glucides rapides à portée.'
- : ' Diabète : Vérifiez votre glycémie avant/après chaque séance. Gardez du sucre rapide à portée. Intensité maximale RPE 8/10 — jamais à l\'échec. Hydratation ×1.5.';
- _bannerTarget.appendChild(h('div', {style: 'background:rgba(232,111,30,0.06);border-left:3px solid var(--orange,#E86F1E);padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E)'}, diabMsg));
+ var _diabDiv = h('div', {style: 'background:rgba(232,111,30,0.06);border-left:3px solid var(--orange,#E86F1E);padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E)'});
+ var _rpeTooltip6936 = termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)');
+ if (S.medical.indexOf('diabete_t1') !== -1) {
+  _diabDiv.appendChild(document.createTextNode(' Diabète T1 : '));
+  _diabDiv.appendChild(_rpeTooltip6936);
+  _diabDiv.appendChild(document.createTextNode(' plafonné à 7/10 (risque hypoglycémie à haute intensité). Glycémie cible avant séance : 7-10 mmol/L. Glucomètre obligatoire avant/après. Gardez 15-20g glucides rapides à portée.'));
+ } else {
+  _diabDiv.appendChild(document.createTextNode(' Diabète : Vérifiez votre glycémie avant/après chaque séance. Gardez du sucre rapide à portée. Intensité maximale '));
+  _diabDiv.appendChild(_rpeTooltip6936);
+  _diabDiv.appendChild(document.createTextNode(' 8/10 — jamais à l\'échec. Hydratation ×1.5.'));
+ }
+ _bannerTarget.appendChild(_diabDiv);
  }
  if (getAge() >= 50) {
  _bannerTarget.appendChild(h('div', {style: 'background:rgba(62,92,58,0.06);border-left:3px solid var(--ink-900,#0A0A09);padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--success,#3E5C3A)'}, ' 50+ : Échauffement 15-20 min obligatoire. Décharge toutes les 4-5 semaines. Favorisez les mouvements guidés pour protéger les articulations.'));

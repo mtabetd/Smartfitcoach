@@ -1778,12 +1778,12 @@ window.BODY_ZONES = BODY_ZONES;
 
 // FIX Hermès : icônes sobres unicode (tonal-on-tonal). Emojis 💪🫀🧘🔥⚡ retirés.
 var SPORT_GOALS = [
-  {id:'muscle',      name:'Prise de muscle',  desc:'Hypertrophie et force',           icon:'\u25A0'},
-  {id:'endurance',   name:'Endurance',        desc:'Cardio et stamina',               icon:'\u25CF'},
-  {id:'flexibility', name:'Souplesse',        desc:'Mobilité et stretching',          icon:'\u25CB'},
-  {id:'weightloss',  name:'Perte de poids',   desc:'Brûler des calories',             icon:'\u2193'},
-  {id:'general',     name:'Forme générale',   desc:'Un peu de tout',                  icon:'\u25C6'},
-  {id:'shred',       name:'Sèche',            desc:'Perdre du gras, garder le muscle',icon:'\u25BC'}
+  {id:'muscle',      name:'Prise de muscle',  desc:'Prendre du volume — programme de force et hypertrophie',        icon:'\u25A0'},
+  {id:'endurance',   name:'Endurance',        desc:'Améliorer le souffle — cardio, longue distance, stamina',       icon:'\u25CF'},
+  {id:'flexibility', name:'Souplesse',        desc:'Gagner en souplesse — mobilité, stretching et amplitude',       icon:'\u25CB'},
+  {id:'weightloss',  name:'Perte de poids',   desc:'Perdre du poids — déficit calorique et cardio brûle-graisses', icon:'\u2193'},
+  {id:'general',     name:'Forme générale',   desc:'Se sentir mieux — mélange force, cardio et mobilité',           icon:'\u25C6'},
+  {id:'shred',       name:'Sèche',            desc:'Garder le muscle, perdre le gras — sèche progressive',         icon:'\u25BC'}
 ];
 window.SPORT_GOALS = SPORT_GOALS;
 
