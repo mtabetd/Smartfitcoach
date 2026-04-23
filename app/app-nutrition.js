@@ -1006,6 +1006,17 @@ function renderStep3(p) {
     window._s2page = (S.sex === 'femme' && !(_bkAge >= 50 || _bkMeno)) ? 1 : 0;
     goStep(2);
   }, html: backArrowHtml() + window.t('onb.back')}));
+  // ─── Mode Express : skip vers les résultats macros ───
+  var _skip = h('div', {style: 'text-align:center;margin-top:20px;padding-top:16px;border-top:1px solid var(--border,#E8E6DF)'});
+  _skip.appendChild(h('button', {
+    style: 'background:transparent;border:none;color:var(--grey,#9A9A90);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;padding:8px 0;min-height:44px;',
+    onclick: function() {
+      if (S.activity === null || S.activity === undefined) S.activity = 2;
+      if (S.goal === null || S.goal === undefined) S.goal = 2;
+      goStep(11);
+    }
+  }, 'ou passer au résultat →'));
+  p.appendChild(_skip);
 }
 
 // ─── STEP 5 (N6+N7): ACTIVITE + SOMMEIL ───
