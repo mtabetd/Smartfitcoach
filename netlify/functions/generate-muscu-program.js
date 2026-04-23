@@ -2,7 +2,7 @@
 // Génération de programme musculation hyper-personnalisé — Sonnet IA
 const { requirePremium } = require('./_user-auth');
 
-const MODEL = 'claude-haiku-4-5-20251001';
+const MODEL = 'claude-sonnet-4-6';
 const MAX_TOKENS = 2000;
 
 // CORS — Domaines autorisés
