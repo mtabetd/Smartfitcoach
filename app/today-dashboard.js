@@ -1297,13 +1297,17 @@ function renderCardBonjour(S) {
   // ── Bandeau Trial ──
   if (window.isTrialUser && window.isTrialUser()) {
     var _trialDays = window.getTrialDaysLeft ? window.getTrialDaysLeft() : 0;
-    var _trialBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;margin-bottom:12px;border:1px solid var(--orange,#E86F1E);background:rgba(232,111,30,0.06);border-radius:0;'});
-    var _trialLeft = h('div', {});
+    var _trialUrgent = _trialDays <= 2;
+    var _trialBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;margin-bottom:12px;border:1px solid var(--orange,#E86F1E);background:rgba(232,111,30,0.06);border-radius:0;' + (_trialUrgent ? 'cursor:pointer;' : '')});
+    if (_trialUrgent) {
+      _trialBanner.onclick = function() { S.view = 'profil'; if (window.render) window.render(); };
+    }
+    var _trialLeft = h('div', {style: 'flex:1;min-width:0;'});
     _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);font-weight:400;margin-bottom:2px;'}, 'VERSION D\u2019ESSAI'));
     if (_trialDays > 0) {
-      _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'}, _trialDays + ' jour' + (_trialDays > 1 ? 's' : '') + ' restant' + (_trialDays > 1 ? 's' : '') + ' \u2014 Vous avez accès à tout'));
+      _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'}, _trialDays + ' jour' + (_trialDays > 1 ? 's' : '') + ' restant' + (_trialDays > 1 ? 's' : '') + (_trialUrgent ? ' \u2014 Passer Premium \u2192' : ' \u2014 Vous avez acc\u00e8s \u00e0 tout')));
     } else {
-      _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--error,#7A1F1F);'}, 'P\u00e9riode d\u2019essai termin\u00e9e'));
+      _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--error,#7A1F1F);'}, 'P\u00e9riode d\u2019essai termin\u00e9e \u2014 Voir Premium \u2192'));
     }
     _trialBanner.appendChild(_trialLeft);
     _trialBanner.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;color:var(--orange,#E86F1E);'}, _trialDays > 0 ? _trialDays + 'j' : '!'));
