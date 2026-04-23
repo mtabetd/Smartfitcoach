@@ -21,7 +21,7 @@ create table public.weight_history (
   id bigint generated always as identity primary key,
   user_id uuid not null references auth.users(id) on delete cascade,
   date date not null,
-  weight numeric(5,1) not null,  -- ex: 75.5
+  weight numeric(5,1) not null check (weight > 0),  -- ex: 75.5
   created_at timestamptz not null default now(),
   unique(user_id, date)  -- 1 pesee par jour max
 );
@@ -72,7 +72,7 @@ create table public.food_journal (
   id bigint generated always as identity primary key,
   user_id uuid not null references auth.users(id) on delete cascade,
   date date not null,
-  meal text not null,        -- 'breakfast', 'lunch', 'snack', 'dinner'
+  meal text not null check (meal in ('breakfast','lunch','snack','dinner')),
   name text not null,
   kcal int,
   protein numeric(5,1),
@@ -80,7 +80,7 @@ create table public.food_journal (
   fat numeric(5,1),
   qty text,                  -- "150g", "2 oeufs", etc.
   time text,                 -- "08:30"
-  source text default 'manual',  -- 'manual', 'plan', 'scan'
+  source text default 'manual' check (source in ('manual','plan','scan','barcode')),
   created_at timestamptz not null default now()
 );
 
@@ -158,7 +158,7 @@ create table public.perf_history (
 create table public.progress_photos (
   id bigint generated always as identity primary key,
   user_id uuid not null references auth.users(id) on delete cascade,
-  photo_type text not null,   -- 'front', 'back'
+  photo_type text not null check (photo_type in ('front','back','side')),
   date date not null,
   storage_path text not null, -- chemin dans Supabase Storage
   created_at timestamptz not null default now()
