@@ -4230,13 +4230,13 @@ function appendSportMedicalBanner(p, sportName) {
         calisthenics:'Genoux : pistol squats remplacés par chaise murale ou band-assisted. Pas de réception sur sol dur.'
       },
       cheville: {
-        running:'Cheville / Tendon d'Achille : échauffement strict (10 min). Pas de sprints ni de côtes raides. Kilométrage réduit de 30%.',
+        running:'Cheville / Tendon d\'Achille : échauffement strict (10 min). Pas de sprints ni de côtes raides. Kilométrage réduit de 30%.',
         padel:'Cheville : chaussures à soutien latéral. Propioception hors du court. Cheillière recommandée.',
         triathlon:'Cheville : protégez le tendon en dernière portion course. Évitez les sorties post-vélo sur dénivelé.',
         calisthenics:'Cheville : pas de sauts avec réception unipodale. Substitut : step-ups et squats bilatéraux.'
       },
       tibia: {
-        running:'Tibias (shin splints) : kilométrage réduit de 40%. Pas d'interval training. Semelles de soutien d'arche. Repos si douleur aiguë.'
+        running:'Tibias (shin splints) : kilométrage réduit de 40%. Pas d\'interval training. Semelles de soutien d\'arche. Repos si douleur aiguë.'
       },
       lombaire: {
         running:'Bas du dos : gainage avant chaque séance (planche, bird-dog). Évitez les longues sorties sans échauffement postural.',
@@ -4259,7 +4259,7 @@ function appendSportMedicalBanner(p, sportName) {
       },
       poignet: {
         crossfit:'Poignets : wraps obligatoires. Pas de kipping pull-ups. Cleans remplacés par hex bar deadlifts si douloureux.',
-        yoga:'Poignets : planche sur les poings ou les coudes. Blocs sous les paumes pour réduire l'extension.',
+        yoga:'Poignets : planche sur les poings ou les coudes. Blocs sous les paumes pour réduire l\'extension.',
         calisthenics:'Poignets : planche sur les poings. Évitez le L-sit en appui direct. Isométriques progressifs.',
         golf:'Poignets : grip ferme mais non crispé. Antivibration sur le club.'
       },
@@ -4270,7 +4270,7 @@ function appendSportMedicalBanner(p, sportName) {
       },
       hanche: {
         running:'Hanche / Ilio-psoas : étirements hip flexors après séance (2 × 90 sec/côté). Renforcement fessiers.',
-        yoga:'Hanches : pigeon pose avec bloc sous la hanche. Amplitude progressive. Surveillez tout pincement à l'aine.'
+        yoga:'Hanches : pigeon pose avec bloc sous la hanche. Amplitude progressive. Surveillez tout pincement à l\'aine.'
       },
       cervicale: {
         crossfit:'Nuque : position overhead vérifiée. Soulévé de terre tête neutre obligatoire. Mobilité cervicale en échauffement.',
