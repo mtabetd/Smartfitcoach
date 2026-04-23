@@ -45,4 +45,5 @@ window.addEventListener('unhandledrejection', function(event) {
   var msg = (reason && reason.message) ? reason.message : String(reason || 'Promise rejection');
   console.error('UNHANDLED PROMISE REJECTION:', reason);
   _showErrorPage(msg);
+  event.preventDefault();
 });

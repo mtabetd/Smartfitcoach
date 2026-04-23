@@ -729,7 +729,7 @@ exports.handler = async function(event) {
 
   // Rate limiting
   pruneRateLimitStore();
-  var clientIp = event.headers['x-forwarded-for'] || event.headers['client-ip'] || 'unknown';
+  var clientIp = event.headers['x-nf-client-connection-ip'] || event.headers['x-forwarded-for'] || event.headers['client-ip'] || 'unknown';
   clientIp = clientIp.split(',')[0].trim();
   var rl = checkRateLimit(clientIp);
   if (!rl.allowed) {
