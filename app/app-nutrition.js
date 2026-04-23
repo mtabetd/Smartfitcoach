@@ -340,6 +340,7 @@ function renderStep1(p) {
         // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (grossesse/allaitement reset)
         S._nm = null;
         if (window.devalidateWeekPlan) window.devalidateWeekPlan('pregnancy reset');
+        if (window.devalidateSportProgram) window.devalidateSportProgram('pregnancy reset');
         else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
         window._s2page = 0; // Forcer page date naissance, pas la page cycle/grossesse
       }
@@ -605,6 +606,7 @@ function renderStep2b(p) {
       // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (cycle/grossesse changé)
       S._nm = null;
       if (window.devalidateWeekPlan) window.devalidateWeekPlan('cycle/grossesse change');
+      if (window.devalidateSportProgram) window.devalidateSportProgram('cycle/grossesse change');
       else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
       if (window.validatePregnancyState) validatePregnancyState();
       window.render();
@@ -1022,7 +1024,7 @@ function renderActiviteSommeil(p) {
   p.appendChild(actLabel);
   var list = h('div', {'class': 'level-list'});
   ACTIVITIES.forEach(function(a, i) {
-    list.appendChild(h('div', {'class': 'level-item' + (S.activity === i ? ' on' : ''), onclick: function() { var _prev = S.activity; S.activity = i; if (_prev !== i) { S._nm = null; if (window.devalidateWeekPlan) window.devalidateWeekPlan('activity changed'); } window.render(); }}, [
+    list.appendChild(h('div', {'class': 'level-item' + (S.activity === i ? ' on' : ''), onclick: function() { var _prev = S.activity; S.activity = i; if (_prev !== i) { S._nm = null; if (window.devalidateWeekPlan) window.devalidateWeekPlan('activity changed'); if (window.devalidateSportProgram) window.devalidateSportProgram('activity changed'); } window.render(); }}, [
       h('div', {}, [h('div', {'class': 'level-name'}, a.name), h('div', {'class': 'level-desc'}, a.desc)]),
       h('span', {'class': 'level-badge'}, '\u00d7' + a.factor)
     ]));
@@ -1208,6 +1210,7 @@ function renderStep4(p) {
           // laissaient le plan stale → macros incorrects, recettes inadaptées.
           S._nm = null;
           if (window.devalidateWeekPlan) window.devalidateWeekPlan('medical off: ' + item.id);
+          if (window.devalidateSportProgram) window.devalidateSportProgram('medical off: ' + item.id);
           else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
         } else {
           S.medical.push(item.id);
@@ -1218,6 +1221,7 @@ function renderStep4(p) {
           // FIX DESYNC 2026-04-16 — idem pour ajout de condition
           S._nm = null;
           if (window.devalidateWeekPlan) window.devalidateWeekPlan('medical on: ' + item.id);
+          if (window.devalidateSportProgram) window.devalidateSportProgram('medical on: ' + item.id);
           else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
         }
         if (window.validatePregnancyState) validatePregnancyState();

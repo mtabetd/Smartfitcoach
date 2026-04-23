@@ -235,6 +235,7 @@ function getPregnancySportWarning() {
 var SPORT_PROGRAM_VERSION = 3; // v1=initial, v2=split fix, v3=desync+medical+weakZones
 
 function generateSportProgram() {
+ var S = window.S; // always use current state (module-level S may be stale if replaced)
  // FIX 2026-04-16 : clamp days 2-6 — 1 jour/sem n'a pas de split muscu viable
  var days = Math.min(6, Math.max(2, S.sportDays || 3));
  var level = (window.SPORT_LEVELS || []).find(function(l){ return l.id === S.sportLevel; });
@@ -577,7 +578,7 @@ function generateSportProgram() {
  // FIX BIBLE MUSCU §5 audit Marie : avant, regex 'home' trop restrictif (manquait
  // "élastique"/"haltères"/"kettlebell") + fallback ligne 474 trop permissif ré-injectait
  // machines/câbles. Marie voyait "Rowing câble MACHINE" et "Fentes haltère 20 kg".
- if (S.sportEquipment && S.sportEquipment !== 'gym') {
+ if (S.sportEquipment && typeof S.sportEquipment === 'string' && S.sportEquipment !== 'gym') {
  var eqFiltered = available.filter(function(ex) {
  var eq = (ex.eq || '').toLowerCase();
  var name = (ex.n || ex.name || '').toLowerCase();
@@ -693,6 +694,10 @@ function generateSportProgram() {
    // FIBROMYALGIE
    if (_medList.indexOf('fibromyalgie') !== -1) {
      _medRegexes.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre|burpee|box\s+jump|jump\s+squat|pompes\s+plyo/i);
+   }
+   // IRC / INSUFFISANCE RÉNALE CHRONIQUE (KDOQI 2012 — intensité modérée, éviter Valsalva)
+   if (_medList.indexOf('irc') !== -1) {
+     _medRegexes.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre|back\s+squat|front\s+squat|\bsnatch\b|arrach[eé]|\bclean\b|[eé]paul[eé]|jerk|thruster|burpee|box\s+jump|jump\s+squat/i);
    }
    if (_medRegexes.length > 0) {
      var _beforeMedGen = available.length;
@@ -2652,9 +2657,14 @@ function renderMusculationGoals(p) {
  if (!Array.isArray(S.sportGoals)) S.sportGoals = [];
  p.appendChild(h('div', {'class': 'section-label'}, 'Objectifs'));
  var g = h('div', {'class': 'card-grid-2'});
+ var _tcaActive = Array.isArray(S.medical) && S.medical.indexOf('tca') !== -1;
  (window.SPORT_GOALS || []).forEach(function(gl) {
  var on = S.sportGoals.indexOf(gl.id) !== -1;
- g.appendChild(h('div', {'class': 'sel-card' + (on ? ' on' : ''), onclick: function(){
+ // TCA : bloquer objectifs de déficit calorique (ANAD, IOC 2018 — cohérent avec restriction nutrition)
+ var _tcaBlock = _tcaActive && (gl.id === 'weightloss' || gl.id === 'shred');
+ g.appendChild(h('div', {'class': 'sel-card' + (on ? ' on' : '') + (_tcaBlock ? ' disabled' : ''),
+ style: _tcaBlock ? 'opacity:0.35;cursor:not-allowed;pointer-events:none;' : '',
+ onclick: _tcaBlock ? null : function(){
  if (on) S.sportGoals = S.sportGoals.filter(function(x){ return x !== gl.id; });
  else if (S.sportGoals.length < 3) S.sportGoals.push(gl.id);
  // FIX DESYNC 2026-04-16 — invalider sportProgram si goals changent (repos/reps baked at gen time)
@@ -6889,6 +6899,15 @@ function renderMusculationProgram(p) {
  _bannerTarget.appendChild(htaDiv);
  }
 
+ // IRC : avertissement intensité sport (KDOQI 2012 — intensité modérée, éviter Valsalva)
+ if (S.medical && S.medical.indexOf('irc') !== -1) {
+ var ircDiv = h('div', {style: 'background:rgba(62,92,58,0.06);border-left:3px solid var(--green,#3E5C3A);padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--green-ink,#2A4027)'});
+ ircDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;margin-bottom:6px'}, 'IRC — Programme adapté'));
+ ircDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '⚠ Insuffisance Rénale Chronique : exercices à forte pression intra-abdominale retirés (KDOQI 2012). Intensité modérée recommandée.'));
+ ircDiv.appendChild(h('div', {}, '• Évitez le Valsalva : soulevé de terre, squat lourd, arraché — privilégiez machines et poids libres légers.'));
+ _bannerTarget.appendChild(ircDiv);
+ }
+
  // Sommeil insuffisant : avertissement récupération (S.sleep 0=<6h, 1=6-7h) — ACSM 2020, IOC 2018
  if (S.sleep !== null && S.sleep !== undefined && S.sleep <= 1) {
  var sleepLabels = ['< 6h', '6-7h'];
@@ -7132,7 +7151,7 @@ function renderMusculationProgram(p) {
     }
 
     // C5: Equipment filter for SFC exercises (strict — respect S.sportEquipment profile)
-    if (Array.isArray(_phaseExos) && _phaseExos.length > 0 && S.sportEquipment && S.sportEquipment !== 'gym') {
+    if (Array.isArray(_phaseExos) && _phaseExos.length > 0 && S.sportEquipment && typeof S.sportEquipment === 'string' && S.sportEquipment !== 'gym') {
      var _sfcFiltered = _phaseExos.filter(function(exo) {
       var _eq = (exo.equipment || '').toLowerCase();
       if (S.sportEquipment === 'home') {
