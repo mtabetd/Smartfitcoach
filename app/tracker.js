@@ -43,13 +43,17 @@
   function _flush() {
     if (_sending || _queue.length === 0) return;
     _sending = true;
-    var payload = _queue.shift();
+    var payload = _queue[0];
     fetch('/.netlify/functions/analytics-track', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
       keepalive: true
-    }).catch(function() {}).finally(function() {
+    }).then(function() {
+      _queue.shift();
+    }).catch(function() {
+      // Leave payload in queue — it will retry on next flush trigger
+    }).finally(function() {
       _sending = false;
       if (_queue.length > 0) setTimeout(_flush, 100);
     });
