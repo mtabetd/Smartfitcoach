@@ -3755,6 +3755,17 @@ function renderCardSport() {
     }, 'Vous reprenez où vous en étiez.'));
   }
 
+  // ── Séance Libre ──
+  c.appendChild(h('button', {
+    style: 'display:block;width:100%;padding:12px;margin-top:10px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;color:var(--ink-900,#0A0A09);min-height:44px;',
+    onclick: function() {
+      var S2 = window.S;
+      S2.view = 'sport';
+      S2.sStep = 30;
+      if (window.render) window.render();
+    }
+  }, '+ Séance libre'));
+
   return c;
 }
 
@@ -3841,6 +3852,17 @@ function renderCardRestDay(S) {
     moodRow.appendChild(moodBtn);
   });
   c.appendChild(moodRow);
+
+  // ── Séance Libre (jour de repos) ──
+  c.appendChild(h('button', {
+    style: 'display:block;width:100%;padding:12px;margin-top:14px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;color:var(--ink-900,#0A0A09);min-height:44px;',
+    onclick: function() {
+      var S2 = window.S;
+      S2.view = 'sport';
+      S2.sStep = 30;
+      if (window.render) window.render();
+    }
+  }, '+ Séance libre'));
 
   return c;
 }

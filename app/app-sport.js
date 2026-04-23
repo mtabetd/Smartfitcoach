@@ -1253,6 +1253,19 @@ window.SPORT = {
    return;
  }
 
+ // ─── Séance Libre (sStep=30) — bypass tous les guards d'onboarding ───
+ if (S.sStep === 30) {
+   if (window.renderCustomSessionBuilder) {
+     window.renderCustomSessionBuilder(content);
+   } else {
+     // fallback si script non chargé
+     content.appendChild(h('div', {style:'padding:24px;text-align:center;font-family:Georgia,serif;'}, 'Chargement...'));
+     S.sStep = 0;
+   }
+   p.appendChild(content);
+   return;
+ }
+
  // ─── Guard : sStep > 0 sans sportType → page blanche possible, réinitialiser ───
  if (S.sStep > 0 && !S.sportType) { S.sStep = 0; }
 
@@ -1325,7 +1338,7 @@ window.SPORT = {
  p.appendChild(pb);
  }
 
- var _validSSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26];
+ var _validSSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 30];
  if (_validSSteps.indexOf(S.sStep) === -1) { S.sStep = 0; }
 
  if (S.sStep === 0) renderObjectif(content); // Type selection
@@ -5441,6 +5454,8 @@ function getSuggestedWeight(exerciseName, reps, phase) {
  return null;
 }
 
+window.getSuggestedWeight = getSuggestedWeight;
+
 function renderSparkline(values, color) {
  color = color || '#3E5C3A';
  if (!values || !Array.isArray(values)) return null;
@@ -6189,6 +6204,7 @@ function saveMuscuSessionLog() {
  }
  }
 }
+window.saveMuscuSessionLog = saveMuscuSessionLog;
 
 // Returns { streak, totalSessions, milestone } — streak = consecutive distinct training days
 function getMuscuConsistencyStreak() {
