@@ -1782,7 +1782,7 @@ function _showMedicalDisclaimer() {
   });
   box.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:12px;'}, 'INFORMATION IMPORTANTE'));
   box.appendChild(h('div', {style:'font-family:Georgia,serif;font-size:16px;color:var(--black,#0A0A09);margin-bottom:12px;line-height:1.4;'}, 'SmartFitCoach ne remplace pas un professionnel de santé'));
-  box.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.7;margin-bottom:20px;'}, 'Les recommandations nutritionnelles et d\'entraînement de cette application sont à titre indicatif. Consultez un médecin, diététicien ou coach certifié avant de modifier significativement votre alimentation ou votre activité physique, en particulier en cas de pathologie.'));
+  box.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.7;margin-bottom:20px;'}, 'Les informations fournies par cette application sont à titre indicatif. Consultez un médecin avant de prendre toute décision relative à votre santé, en particulier en cas de pathologie ou de traitement médical en cours.'));
   var acceptBtn = h('button', {
     style: 'display:block;width:100%;padding:16px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;min-height:48px;',
     onclick: function() {
