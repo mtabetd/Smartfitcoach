@@ -196,7 +196,9 @@
             'mtd_muscu_cycle_',         // numéro de cycle
             'mtd_muscu_start_',         // date de début du programme
             // CrossFit
-            'mtd_cf_1rm_'
+            'mtd_cf_1rm_',
+            // Daily challenges
+            'mtd_daily_challenge_'
           ];
           // Clés exactes sans UID (programme IA, progression, générations)
           var SYNC_EXACT = ['mtd_muscu_program', 'mtd_muscu_ia_progress', 'mtd_muscu_generations'];

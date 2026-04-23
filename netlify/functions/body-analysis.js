@@ -163,7 +163,7 @@ exports.handler = async function(event, context) {
 
   // ── Rate Limiting ──────────────────────────────────────────────────────────
   pruneRateLimitStore();
-  var clientIp = event.headers['x-forwarded-for'] || event.headers['client-ip'] || 'unknown';
+  var clientIp = event.headers['x-nf-client-connection-ip'] || event.headers['x-forwarded-for'] || event.headers['client-ip'] || 'unknown';
   // Prendre uniquement la première IP si liste (x-forwarded-for peut contenir plusieurs IPs)
   clientIp = clientIp.split(',')[0].trim();
 

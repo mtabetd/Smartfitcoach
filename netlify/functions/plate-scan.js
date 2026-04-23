@@ -85,7 +85,7 @@ exports.handler = async function(event, context) {
 
   // ── Rate Limiting ──────────────────────────────────────────────────────────
   pruneScanStore();
-  var clientIp = event.headers['x-forwarded-for'] || event.headers['client-ip'] || 'unknown';
+  var clientIp = event.headers['x-nf-client-connection-ip'] || event.headers['x-forwarded-for'] || event.headers['client-ip'] || 'unknown';
   clientIp = clientIp.split(',')[0].trim();
 
   var rl = checkScanRateLimit(clientIp);

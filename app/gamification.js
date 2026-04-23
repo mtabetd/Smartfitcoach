@@ -447,7 +447,7 @@ function showShareNudge() {
       nudge.addEventListener('click', function() {
         nudge.remove();
         if (window.shareProgression) { try { window.shareProgression(); } catch(e) {} }
-      });
+      }, { once: true });
       document.body.appendChild(nudge);
       setTimeout(function() { nudge.style.opacity = '1'; }, 30);
       // Auto-dismiss après 8 secondes
