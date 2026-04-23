@@ -55,7 +55,7 @@ var PROFILE_KEYS = [
  // Calisthenics
  'calisthenicsLevel','calisthenicsGoal','calisthenicsdays','calisthPullups','calisthPushups',
  'calisthenicsEquipment','calisthDips','calisthCurrentWeek',
- 'calisthenicsWeek','selectedCalisthDay',
+ 'calisthenicsWeek','selectedCalisthDay','calisthenicsProgram',
  // Musculation
  'muscuWeek','muscuCycle','muscuProgramCount','sportSplashDone','nStep','sStep','selectedSportDay',
  'sportProgram','_sportProgramVersion',
@@ -77,6 +77,7 @@ var PROFILE_KEYS = [
  'pushNotifsEnabled',
  'profilePhoto','photoFront','photoBack',
  'mealTimes','restDayMood',
+ 'waterToday','waterTodayDate',
  'todayWellness',
  'aiCoachHistory',
  'appMode',
