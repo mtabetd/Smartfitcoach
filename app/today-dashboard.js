@@ -6067,7 +6067,7 @@ function renderTodayDashboard(p) {
       var _firstStepCard = card();
       _firstStepCard.appendChild(eyebrow('COMMENCER'));
       _firstStepCard.appendChild(h('div', {style:'font-family:Georgia,serif;font-size:22px;margin-bottom:12px;font-weight:normal;line-height:1.25;'}, 'Votre premier plan vous attend.'));
-      _firstStepCard.appendChild(h('div', {style:'font-family:Georgia,serif;font-style:italic;font-size:15px;color:var(--ink-700,#2B2B27);line-height:1.55;margin-bottom:24px;'}, 'Deux \u00e0 trois minutes pour r\u00e9pondre \u00e0 quelques questions, et vous avez votre programme.'));
+      _firstStepCard.appendChild(h('div', {style:'font-family:Georgia,serif;font-style:italic;font-size:15px;color:var(--ink-700,#2B2B27);line-height:1.55;margin-bottom:24px;'}, 'Commencez votre bilan personnalis\u00e9 \u2014 nutrition, sport, sant\u00e9.'));
       var _btnRow = h('div', {style:'display:flex;gap:12px;flex-wrap:wrap;'});
       if (S.appMode !== 'nutrition') {
         _btnRow.appendChild(h('button', {

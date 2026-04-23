@@ -599,6 +599,12 @@ window.renderWelcomeScreen = function renderWelcomeScreen(app) {
  inner.appendChild(corps1);
  inner.appendChild(corps2);
  inner.appendChild(corps3);
+
+ var timingPill = h('div', {
+   style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#9A9A90);margin-top:8px;opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;'
+ }, '~5 min · Vos données restent sur l’appareil');
+ inner.appendChild(timingPill);
+
  inner.appendChild(divider);
  inner.appendChild(cta);
  inner.appendChild(signature);
@@ -607,8 +613,8 @@ window.renderWelcomeScreen = function renderWelcomeScreen(app) {
  app.appendChild(wrap);
 
  // Staggered entrance — chaque élément apparaît individuellement
- var _animEls = [logo, titre, sousTitre, corps1, corps2, corps3, divider, cta, signature];
- var _delays  = [0, 80, 160, 240, 320, 400, 460, 520, 600];
+ var _animEls = [logo, titre, sousTitre, corps1, corps2, corps3, timingPill, divider, cta, signature];
+ var _delays  = [0, 80, 160, 240, 320, 400, 430, 460, 520, 600];
  requestAnimationFrame(function() {
    requestAnimationFrame(function() {
      _animEls.forEach(function(el, i) {
@@ -656,9 +662,10 @@ window.renderModuleChoice = function renderModuleChoice(content) {
    {
      title: 'Entra\u00eenement',
      desc: 'Programmes adapt\u00e9s, charge hebdomadaire et progression.',
+     hint: '\u00c9valuation m\u00e9dicale incluse',
      badge: null, svg: _svgSport, delay: '.26s',
      onclick: function() {
-       S.appMode = 'sport'; S.view = 'sport'; S.sStep = 0; S.sportSplashDone = true; // saute le splash sport
+       S.appMode = 'sport'; S.view = 'sport'; S.sStep = 0; // splash sport affiché par renderSportSplash
        window._profileDirty = true;
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        window.render();
@@ -667,9 +674,10 @@ window.renderModuleChoice = function renderModuleChoice(content) {
    {
      title: 'Nutrition & Entra\u00eenement',
      desc: 'L\u2019approche compl\u00e8te pour des r\u00e9sultats durables.',
+     hint: '\u00c9valuation m\u00e9dicale incluse',
      badge: 'RECOMMAND\u00c9', svg: _svgBoth, delay: '.32s',
      onclick: function() {
-       S.appMode = 'both'; S.view = 'nutrition'; S.nStep = 1; S.sportSplashDone = true; // saute les deux splashs
+       S.appMode = 'both'; S.view = 'nutrition'; S.nStep = 1; // splash sport affiché par renderSportSplash quand l'utilisateur arrive sur Sport
        window._profileDirty = true;
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        window.render();
@@ -698,6 +706,9 @@ window.renderModuleChoice = function renderModuleChoice(content) {
    var left = h('div', {style: 'display:flex;flex-direction:column;gap:4px;flex:1'});
    left.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;color:var(--black,#1A1A18);letter-spacing:.01em;line-height:1.2'}, card.title));
    left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);line-height:1.55;letter-spacing:.01em'}, card.desc));
+   if (card.hint) {
+     left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:6px;'}, card.hint));
+   }
    el.appendChild(left);
 
    // Badge RECOMMANDÉ — absolute top-right
