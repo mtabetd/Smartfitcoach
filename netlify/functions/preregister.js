@@ -58,48 +58,50 @@ function escapeHtml(s) {
 // Synchronisez-les lors de toute mise à jour visuelle.
 function renderEmail(firstName) {
   var safe = escapeHtml(firstName);
-  return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\n' +
+  var SEP = '<tr><td align="center"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td style="width:50px;height:1px;background-color:#E0E0DA;font-size:0;line-height:0;">&nbsp;</td></tr></table></td></tr>';
+  var SP = function(h) { return '<tr><td style="height:' + h + 'px;font-size:0;line-height:0;">&nbsp;</td></tr>'; };
+  return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' +
 '<html xmlns="http://www.w3.org/1999/xhtml"><head>' +
 '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />' +
 '<meta name="viewport" content="width=device-width, initial-scale=1.0" />' +
-'<title>Bienvenue dans le cercle &mdash; SmartFitCoach</title></head>' +
+'<title>Vous &ecirc;tes du premier cercle &mdash; SmartFitCoach</title></head>' +
 '<body style="margin:0;padding:0;background-color:#F5F5F0;font-family:\'Helvetica Neue\',Helvetica,Arial,sans-serif;">' +
 '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#F5F5F0;"><tr><td align="center" style="padding:20px 10px;">' +
 '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="max-width:600px;width:100%;background-color:#FFFFFF;">' +
-'<tr><td style="height:60px;font-size:0;line-height:0;">&nbsp;</td></tr>' +
+SP(60) +
 '<tr><td align="center" style="padding:0 55px;"><p style="margin:0;font-family:Georgia,\'Times New Roman\',Times,serif;font-size:12px;font-weight:normal;letter-spacing:7px;color:#1A1A1A;text-transform:uppercase;">SMARTFITCOACH</p></td></tr>' +
-'<tr><td style="height:35px;font-size:0;line-height:0;">&nbsp;</td></tr>' +
-'<tr><td align="center"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td style="width:50px;height:1px;background-color:#E0E0DA;font-size:0;line-height:0;">&nbsp;</td></tr></table></td></tr>' +
-'<tr><td style="height:45px;font-size:0;line-height:0;">&nbsp;</td></tr>' +
-'<tr><td align="center" style="padding:0 55px;"><h1 style="margin:0;font-family:Georgia,\'Times New Roman\',Times,serif;font-size:38px;font-weight:normal;font-style:italic;color:#1A1A1A;line-height:1.2;">Bienvenue, ' + safe + '.</h1></td></tr>' +
-'<tr><td style="height:35px;font-size:0;line-height:0;">&nbsp;</td></tr>' +
+SP(35) +
+SEP +
+SP(45) +
+'<tr><td align="center" style="padding:0 55px;"><h1 style="margin:0;font-family:Georgia,\'Times New Roman\',Times,serif;font-size:38px;font-weight:normal;font-style:italic;color:#1A1A1A;line-height:1.2;">Vous &ecirc;tes du premier cercle, ' + safe + '.</h1></td></tr>' +
+SP(35) +
 '<tr><td align="center" style="padding:0 55px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" width="420" style="max-width:420px;width:100%;"><tr><td>' +
-'<p style="margin:0 0 20px 0;font-family:\'Helvetica Neue\',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.85;color:#4A4A46;">Merci d&rsquo;avoir laiss&eacute; votre nom. Vous figurez parmi les tout premiers &agrave; nous avoir rejoints, avant m&ecirc;me que les portes ne s&rsquo;ouvrent.</p>' +
-'<p style="margin:0 0 20px 0;font-family:\'Helvetica Neue\',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.85;color:#4A4A46;">En reconnaissance de cette confiance, une promotion exclusive vous sera r&eacute;serv&eacute;e le jour de l&rsquo;ouverture. Elle ne sera offerte qu&rsquo;une fois, et qu&rsquo;aux membres du premier cercle.</p>' +
-'<p style="margin:0;font-family:\'Helvetica Neue\',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.85;color:#4A4A46;">Tr&egrave;s bient&ocirc;t, nous reviendrons vers vous. Sans pr&eacute;avis, &agrave; l&rsquo;instant juste.</p>' +
+'<p style="margin:0 0 20px 0;font-family:\'Helvetica Neue\',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.85;color:#4A4A46;">Peu de personnes verront SmartFitCoach avant son ouverture au grand public. Vous en faites partie &mdash; et ce n&rsquo;est pas un hasard.</p>' +
+'<p style="margin:0 0 20px 0;font-family:\'Helvetica Neue\',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.85;color:#4A4A46;">En signe de reconnaissance, une offre exclusive vous sera r&eacute;serv&eacute;e le jour de l&rsquo;ouverture. Elle ne sera propos&eacute;e qu&rsquo;une seule fois, et uniquement aux membres du premier cercle.</p>' +
+'<p style="margin:0;font-family:\'Helvetica Neue\',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.85;color:#4A4A46;">Nous reviendrons vers vous. Sans pr&eacute;avis &mdash; &agrave; l&rsquo;instant choisi.</p>' +
 '</td></tr></table></td></tr>' +
-'<tr><td style="height:55px;font-size:0;line-height:0;">&nbsp;</td></tr>' +
-'<tr><td align="center"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td style="width:50px;height:1px;background-color:#E0E0DA;font-size:0;line-height:0;">&nbsp;</td></tr></table></td></tr>' +
-'<tr><td style="height:40px;font-size:0;line-height:0;">&nbsp;</td></tr>' +
-'<tr><td align="center" style="padding:0 55px;"><p style="margin:0;font-family:Georgia,\'Times New Roman\',Times,serif;font-size:12px;letter-spacing:7px;text-transform:uppercase;color:#1A1A1A;">CE QUI VOUS ATTEND</p></td></tr>' +
-'<tr><td style="height:20px;font-size:0;line-height:0;">&nbsp;</td></tr>' +
+SP(55) +
+SEP +
+SP(40) +
+'<tr><td align="center" style="padding:0 55px;"><p style="margin:0;font-family:Georgia,\'Times New Roman\',Times,serif;font-size:12px;letter-spacing:7px;text-transform:uppercase;color:#1A1A1A;">CE QUI VOUS SERA R&Eacute;SERV&Eacute;</p></td></tr>' +
+SP(20) +
 '<tr><td align="center" style="padding:0 55px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">' +
-'<tr><td align="center"><p style="margin:0;font-family:\'Helvetica Neue\',Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#4A4A46;">Une nutrition pes&eacute;e au gramme,<br />&eacute;crite pour vous seul</p></td></tr>' +
-'<tr><td style="height:28px;font-size:0;line-height:0;">&nbsp;</td></tr>' +
-'<tr><td align="center"><p style="margin:0;font-family:\'Helvetica Neue\',Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#4A4A46;">Des entra&icirc;nements taill&eacute;s,<br />&agrave; la mesure de votre niveau</p></td></tr>' +
-'<tr><td style="height:28px;font-size:0;line-height:0;">&nbsp;</td></tr>' +
-'<tr><td align="center"><p style="margin:0;font-family:\'Helvetica Neue\',Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#4A4A46;">Une progression observ&eacute;e,<br />semaine apr&egrave;s semaine</p></td></tr>' +
+'<tr><td align="center"><p style="margin:0;font-family:\'Helvetica Neue\',Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#4A4A46;">Un acc&egrave;s prioritaire,<br />avant l&rsquo;ouverture officielle</p></td></tr>' +
+SP(28) +
+'<tr><td align="center"><p style="margin:0;font-family:\'Helvetica Neue\',Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#4A4A46;">Une offre de lancement exclusive,<br />r&eacute;serv&eacute;e au premier cercle</p></td></tr>' +
+SP(28) +
+'<tr><td align="center"><p style="margin:0;font-family:\'Helvetica Neue\',Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#4A4A46;">Un programme con&ccedil;u pour vous,<br />d&egrave;s le premier jour</p></td></tr>' +
 '</table></td></tr>' +
-'<tr><td style="height:50px;font-size:0;line-height:0;">&nbsp;</td></tr>' +
+SP(50) +
 '<tr><td align="center" style="padding:0 55px;"><p style="margin:0;font-family:Georgia,\'Times New Roman\',Times,serif;font-size:14px;font-style:italic;color:#1A1A1A;">L&rsquo;&eacute;quipe SmartFitCoach</p></td></tr>' +
-'<tr><td style="height:45px;font-size:0;line-height:0;">&nbsp;</td></tr>' +
-'<tr><td align="center"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td style="width:50px;height:1px;background-color:#E0E0DA;font-size:0;line-height:0;">&nbsp;</td></tr></table></td></tr>' +
-'<tr><td style="height:20px;font-size:0;line-height:0;">&nbsp;</td></tr>' +
+SP(45) +
+SEP +
+SP(20) +
 '<tr><td align="center" style="padding:0 55px;">' +
 '<p style="margin:0 0 8px 0;font-family:\'Helvetica Neue\',Helvetica,Arial,sans-serif;font-size:11px;font-style:italic;color:#9A9A94;">&copy; 2026 SmartFitCoach</p>' +
-'<p style="margin:0;font-family:\'Helvetica Neue\',Helvetica,Arial,sans-serif;font-size:11px;font-style:italic;color:#9A9A94;line-height:1.6;">Si vous ne vous &ecirc;tes pas inscrit, ignorez simplement cet email.</p>' +
+'<p style="margin:0;font-family:\'Helvetica Neue\',Helvetica,Arial,sans-serif;font-size:11px;font-style:italic;color:#9A9A94;line-height:1.6;">Si vous n&rsquo;&ecirc;tes pas &agrave; l&rsquo;origine de cette inscription, ignorez simplement cet email.</p>' +
 '</td></tr>' +
-'<tr><td style="height:40px;font-size:0;line-height:0;">&nbsp;</td></tr>' +
+SP(40) +
 '</table></td></tr></table></body></html>';
 }
 
