@@ -4499,10 +4499,30 @@ function renderCrossfitProgram(p) {
 
  var movList = h('div', {style: 'margin-bottom:10px'});
  var _cfMedFiltered = 0;
+ // Pre-compute S.medical list once for movement filtering
+ var _cfSMedList = Array.isArray(S.medical) ? S.medical.map(function(m){ return String(m).toLowerCase(); }) : [];
  (_wod.movements || []).forEach(function(mov) {
  if (S.muscuMedical && S.muscuMedical.done && !filterExerciseByMedical(mov, S.muscuMedical)) {
    _cfMedFiltered++;
    return;
+ }
+ // S.medical onboarding conditions (hta, osteo, cardio, irc) — same movements as buildPersonalizedMuscuPlan
+ if (_cfSMedList.length > 0) {
+   var _mn = String(mov.name || '').toLowerCase();
+   var _cfSBlock = false;
+   if (!_cfSBlock && (_cfSMedList.indexOf('hta') !== -1 || _cfSMedList.indexOf('hypertension') !== -1 || _cfSMedList.indexOf('hta_severe') !== -1)) {
+     _cfSBlock = /snatch|clean|jerk|deadlift|thruster|hspu|handstand\s+push|l[\s-]sit|dragon\s+flag/.test(_mn);
+   }
+   if (!_cfSBlock && (_cfSMedList.indexOf('osteoporose') !== -1 || _cfSMedList.indexOf('osteoporosis') !== -1)) {
+     _cfSBlock = /snatch|clean|box\s+jump|burpee|double\s+under|jump\s+squat/.test(_mn);
+   }
+   if (!_cfSBlock && (_cfSMedList.indexOf('cardio') !== -1 || _cfSMedList.indexOf('insuffisance_card') !== -1)) {
+     _cfSBlock = /snatch|clean|deadlift|assault\s+bike|burpee|box\s+jump|thruster/.test(_mn);
+   }
+   if (!_cfSBlock && _cfSMedList.indexOf('irc') !== -1) {
+     _cfSBlock = /snatch|clean|deadlift|thruster|burpee|box\s+jump|jump\s+squat/.test(_mn);
+   }
+   if (_cfSBlock) { _cfMedFiltered++; return; }
  }
  var movText = formatCFMovement(mov);
  var movDiv = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;padding:4px 0;border-bottom:1px solid var(--border)'}, movText);
@@ -11620,7 +11640,7 @@ function renderCalisthenicsProgram(content) {
  // Generate the full plan
  var planData;
  try {
-  planData = window.generateCalisthenicsPlan(level, skills, pullups, pushups, days, equipment, dips);
+  planData = window.generateCalisthenicsPlan(level, skills, pullups, pushups, days, equipment, dips, S.medical);
  } catch(e) {
   content.appendChild(h('div', {'class': 'card'}, h('div', {style: 'color:red;font-size:13px'}, 'Impossible d\'afficher le programme — réessayez ou rechargez la page. (' + e.message + ')')));
   return;

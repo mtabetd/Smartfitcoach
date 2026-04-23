@@ -1303,10 +1303,27 @@ function applyDeloadToSessions(sessions, volumeMult) {
 
 // ── MAIN EXPORT ─────────────────────────────────────────────────────────────
 
-window.generateCalisthenicsPlan = function(level, goals, pullups, pushups, daysPerWeek, equipment, dips) {
+window.generateCalisthenicsPlan = function(level, goals, pullups, pushups, daysPerWeek, equipment, dips, medicalConditions) {
   // Defensive defaults
   var safeLevel = level || 'debutant';
   var safeGoals = Array.isArray(goals) ? goals : [];
+  // Medical filter: remove dangerous skills for at-risk profiles
+  var _medList = Array.isArray(medicalConditions) ? medicalConditions.map(function(m){ return String(m).toLowerCase(); }) : [];
+  if (_medList.length > 0) {
+    var _hasHta = _medList.indexOf('hta') !== -1 || _medList.indexOf('hypertension') !== -1 || _medList.indexOf('hta_severe') !== -1;
+    var _hasOsteo = _medList.indexOf('osteoporose') !== -1 || _medList.indexOf('osteoporosis') !== -1;
+    var _hasPreg = _medList.indexOf('grossesse') !== -1 || _medList.indexOf('pregnant') !== -1;
+    var _hasCardio = _medList.indexOf('cardio') !== -1 || _medList.indexOf('insuffisance_card') !== -1;
+    safeGoals = safeGoals.filter(function(sk) {
+      // Inversions + Valsalva intenses = contre-indiqués HTA/cardio/grossesse
+      if ((_hasHta || _hasCardio || _hasPreg) && (sk === 'handstand' || sk === 'handstand_free' || sk === 'muscle_up' || sk === 'muscle_up_rings')) return false;
+      // Chutes + charge axiale lombaire = contre-indiqués ostéo/grossesse
+      if ((_hasOsteo || _hasPreg) && (sk === 'back_lever' || sk === 'planche' || sk === 'planche_lean')) return false;
+      // Isométrique intense + pression intracrânienne = contre-indiqué HTA sévère
+      if (_hasHta && (sk === 'back_lever' || sk === 'planche' || sk === 'planche_lean' || sk === 'front_lever')) return false;
+      return true;
+    });
+  }
   var safePullups = (typeof pullups === 'number' && !isNaN(pullups)) ? pullups : 0;
   var safePushups = (typeof pushups === 'number' && !isNaN(pushups)) ? pushups : 0;
   var safeDips = (typeof dips === 'number' && !isNaN(dips)) ? dips : 0;
