@@ -4436,6 +4436,8 @@ function loadSFCPricing() {
   return window._sfcPricingPromise;
 }
 window.loadSFCPricing = loadSFCPricing;
+// Pré-charger les prix dès le démarrage de l'app
+loadSFCPricing();
 
 // Paywall modal — affiche un message d'upgrade pour les features premium
 function showPaywall(feature) {

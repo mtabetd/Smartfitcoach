@@ -754,6 +754,9 @@ function renderProfilePage(container) {
  var S = window.S;
  var user = window.AUTH ? window.AUTH.getUser() : null;
  var c = h('div', {style: 'max-width:480px;margin:0 auto;padding:24px 20px 48px'});
+ if (!window.SFC_PRICING_DATA && window.loadSFCPricing) {
+   window.loadSFCPricing().then(function() { if (window.SFC_PRICING_DATA && window.render) window.render(); });
+ }
 
  // Back button — FIX UX audit : min-height 44px (avant 12px = injoignable mobile)
  var backBtn = h('button', {
