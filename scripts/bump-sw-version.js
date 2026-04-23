@@ -28,3 +28,15 @@ if (updated === sw) {
 
 fs.writeFileSync(swPath, updated);
 console.log(`[bump-sw] CACHE_VERSION → sfc-v${ts}`);
+
+// Inject SENTRY_DSN into index.html at build time (Netlify env var)
+const sentryDsn = process.env.SENTRY_DSN || '';
+if (sentryDsn) {
+  const indexPath = path.join(__dirname, '../app/index.html');
+  const html = fs.readFileSync(indexPath, 'utf8');
+  const patched = html.replace('data-dsn="SENTRY_DSN_PLACEHOLDER"', `data-dsn="${sentryDsn}"`);
+  if (patched !== html) {
+    fs.writeFileSync(indexPath, patched);
+    console.log('[bump-sw] Sentry DSN injected');
+  }
+}

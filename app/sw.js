@@ -8,8 +8,8 @@
 // Smart Fit Coach — Service Worker
 // Cache version: bump this string to force a full cache refresh on next visit.
 // 2026-04 NIVEAU 1 : versions unifiées pour éviter caches orphelins lors du bump
-const CACHE_VERSION = 'sfc-vmobqim4b';
-const RUNTIME_CACHE = 'sfc-runtime-vmobqim4b';
+const CACHE_VERSION = 'sfc-vmobu0nml';
+const RUNTIME_CACHE = 'sfc-runtime-vmobu0nml';
 
 // Max age for static assets in the runtime cache: 7 days (in milliseconds).
 const STATIC_MAX_AGE_MS = 1 * 24 * 60 * 60 * 1000;
@@ -19,64 +19,15 @@ const APP_SHELL = [
   './',
   './index.html',
   './security-init.js',
+  './crash-reporter.js',
   './gate.js',
   './error-boundary.js',
-  './sw-register.js',
-  './app-core.js',
-  './app-main.js',
-  './sport-data.js',
-  './app-sport.js',
-  './app-nutrition.js',
-  './auth.js',
-  './recipe-engine.js',
-  './exercises-db.js',
-  './gamification.js',
-  './extras.js',
-  './tips-assistant.js',
-  './crossfit-haltero-cycles.js',
-  './crossfit-wods.js',
-  './crossfit-wods-cycle2.js',
-  './crossfit-wods-cycle3.js',
-  './crossfit-wods-merge.js',
-  './calisthenics-program.js',
-  './muscu-programs.js',
-  './triathlon-program.js',
-  './ai-coach.js',
-  './motivation.js',
-  './motivation-library.js',
-  './body-analysis.js',
-  './today-dashboard.js',
-  './pdf-weekly-report.js',
-  './push-manager.js',
-  './auth-banner.js',
-  './onboarding-complete.js',
-  './app-social.js',
-  './muscu-program-generator.js',
-  './prices-db.js',
-  './nutrition-master.js',
-  './perf-history.js',
+  './bundle.js',
+  './jspdf.umd.min.js',
   './premium-ui.css',
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
-  './jspdf.umd.min.js',
-  './chart.umd.min.js',
-  './supabase-client.js',
-  './supabase.min.js',
-  './exercise-gifs-map.js',
-  './smart-calendar.js',
-  './plate-scan.js',
-  './muscle-taxonomy.js',
-  './pwa-install.js',
-  './crash-reporter.js',
-  './analytics.js',
-  './food-db.js',
-  './food-portions.js',
-  './exercise-videos.js',
-  './validators.js',
-  './custom-session.js',
-  './feedback-widget.js',
-  './scanner.js'
 ];
 
 // Critical static assets to pre-cache during install.

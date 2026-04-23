@@ -13,3 +13,6 @@ audit-*.sh
 
 # Local Netlify folder
 .netlify
+
+# Generated bundle (built at deploy time by scripts/build-bundle.js)
+app/bundle.js
