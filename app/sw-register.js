@@ -5,6 +5,9 @@
  * is strictly prohibited without explicit written permission.
  * Contact: contact@smartfitcoach.com
  */
+if (navigator.storage && navigator.storage.persist) {
+  navigator.storage.persist().catch(function() {});
+}
 if ('serviceWorker' in navigator) {
   var _reloadedForSW = false;
   window.addEventListener('load', function() {
