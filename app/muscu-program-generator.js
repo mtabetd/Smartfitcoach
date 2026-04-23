@@ -1408,7 +1408,7 @@
     _fetchPromise
     .then(function(r) {
       if (!r.ok) {
-        if (r.status === 401 || r.status === 403) { if (window.showPaywall) window.showPaywall('muscu-program'); throw new Error('__paywall__'); }
+        if (r.status === 401 || r.status === 403) { if (window.showPaywall) window.showPaywall('muscu-program'); var _pe = new Error('paywall'); _pe._paywall = true; throw _pe; }
         return r.json()
           .then(function(err) { throw new Error(err.error || 'Erreur HTTP ' + r.status); })
           .catch(function() { throw new Error('Le serveur a mis trop de temps à répondre. Réessayez dans quelques instants.'); });
@@ -1497,7 +1497,7 @@
       _generating = false;
       if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
       if (_generationSafetyTimer) { clearTimeout(_generationSafetyTimer); _generationSafetyTimer = null; }
-      if (err && err.message === '__paywall__') return;
+      if (err && err._paywall) return;
       console.warn('[muscu-prog] serveur indisponible, bascule fallback local:', err && err.message);
 
       // Guard: modal may have been closed during async fetch — content would be null → silent crash

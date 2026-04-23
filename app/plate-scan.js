@@ -170,7 +170,7 @@ function openScan(mealSlot) {
       .then(function(res) {
         if (timer) clearTimeout(timer);
         if (!res.ok) {
-          if (res.status === 401 || res.status === 403) { if (window.showPaywall) window.showPaywall('scanner'); throw new Error('__paywall__'); }
+          if (res.status === 401 || res.status === 403) { if (window.showPaywall) window.showPaywall('scanner'); var _pe = new Error('paywall'); _pe._paywall = true; throw _pe; }
           return res.json().catch(function() { return {}; }).then(function(e) { throw new Error(e.error || 'Erreur ' + res.status); });
         }
         return res.json();
@@ -186,7 +186,7 @@ function openScan(mealSlot) {
         _scanning = false;
         loader.style.display = 'none';
         photoZone.style.display = 'flex';
-        if (err && err.message === '__paywall__') return;
+        if (err && err._paywall) return;
         var msg = (err && err.name === 'AbortError')
           ? 'L\u2019analyse prend trop de temps. R\u00e9essayez.'
           : (err && err.message) || 'Erreur de connexion.';

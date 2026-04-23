@@ -8,6 +8,17 @@ const { createClient } = require('@supabase/supabase-js');
 
 const TRIAL_DAYS = 7;
 
+// Module-level client reused across warm Netlify invocations
+let _adminClient = null;
+function getAdminClient() {
+  if (_adminClient) return _adminClient;
+  const url = process.env.SUPABASE_URL;
+  const svc = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
+  if (!url || !svc) return null;
+  _adminClient = createClient(url, svc, { auth: { autoRefreshToken: false, persistSession: false } });
+  return _adminClient;
+}
+
 /**
  * Verify the caller's Supabase JWT and check premium / trial status.
  *
@@ -21,21 +32,16 @@ const TRIAL_DAYS = 7;
  *   2. 7-day trial          : profiles.data.firstLoginDate + 7d >= today
  */
 async function requirePremium(event) {
-  const url = process.env.SUPABASE_URL;
-  const svc = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
+  const admin = getAdminClient();
 
   // No Supabase credentials → local dev / CI — skip enforcement
-  if (!url || !svc) return { skip: true };
+  if (!admin) return { skip: true };
 
   const authHeader = (event.headers && (event.headers.authorization || event.headers.Authorization)) || '';
   const token = authHeader.replace(/^Bearer\s+/i, '').trim();
   if (!token) {
     return { error: { statusCode: 401, msg: 'Authentification requise' } };
   }
-
-  const admin = createClient(url, svc, {
-    auth: { autoRefreshToken: false, persistSession: false }
-  });
 
   // Verify JWT
   let userResp;

@@ -663,7 +663,7 @@ function replayLastUserMessage(_unused) {
   }).then(function(res) {
     if (_tm) clearTimeout(_tm);
     if (!res.ok) {
-      if (res.status === 401 || res.status === 403) { if (window.showPaywall) window.showPaywall('ai-coach'); throw new Error('__paywall__'); }
+      if (res.status === 401 || res.status === 403) { if (window.showPaywall) window.showPaywall('ai-coach'); var _pe = new Error('paywall'); _pe._paywall = true; throw _pe; }
       return res.json().catch(function(){ return {}; }).then(function(e){ throw new Error(e.error || 'Erreur HTTP ' + res.status); });
     }
     return res.json();
@@ -686,7 +686,7 @@ function replayLastUserMessage(_unused) {
   }).catch(function(err) {
     if (_tm) clearTimeout(_tm);
     if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
-    if (err && err.message === '__paywall__') return;
+    if (err && err._paywall) return;
     var errMsg = (err && err.name === 'AbortError')
       ? 'Le coach met trop de temps à répondre. Réessaie dans quelques instants.'
       : 'Impossible de régénérer. Vérifie ta connexion.';
@@ -1276,7 +1276,7 @@ function sendMessage() {
   }).then(function(res) {
     if (_coachTimer) clearTimeout(_coachTimer);
     if (!res.ok) {
-      if (res.status === 401 || res.status === 403) { if (window.showPaywall) window.showPaywall('ai-coach'); throw new Error('__paywall__'); }
+      if (res.status === 401 || res.status === 403) { if (window.showPaywall) window.showPaywall('ai-coach'); var _pe = new Error('paywall'); _pe._paywall = true; throw _pe; }
       return res.json().catch(function(){ return {}; }).then(function(e){ throw new Error(e.error || 'Erreur HTTP ' + res.status); });
     }
     return res.json();
@@ -1310,7 +1310,7 @@ function sendMessage() {
   }).catch(function(err) {
     if (_coachTimer) clearTimeout(_coachTimer);
     if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
-    if (err && err.message === '__paywall__') return;
+    if (err && err._paywall) return;
     var errMsg = (err && err.name === 'AbortError')
       ? 'Le coach met trop de temps \u00e0 r\u00e9pondre. R\u00e9essaie dans quelques instants.'
       : (err && err.message && err.message.indexOf('429') !== -1)
