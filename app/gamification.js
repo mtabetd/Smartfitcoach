@@ -136,6 +136,7 @@ var BADGE_DEFS = [
   {id: 'total_400', name: 'Elite Force', desc: 'Total (bench+squat+dl) ≥ 400 kg', icon: '★', category: 'muscu'},
   {id: 'muscu_sessions_10', name: 'Régularité Fer', desc: '10 séances muscu enregistrées', icon: '△', category: 'muscu'},
   {id: 'muscu_sessions_50', name: 'Dédicace', desc: '50 séances muscu enregistrées', icon: '★', category: 'muscu'},
+  {id: 'first_custom_session', name: 'Séance Libre', desc: 'Première séance personnalisée complétée', icon: '◇', category: 'muscu'},
   {id: 'first_pr', name: 'Premier PR', desc: 'Premier record personnel établi', icon: '◇', category: 'muscu'},
 
   // Photos

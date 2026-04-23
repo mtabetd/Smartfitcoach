@@ -335,10 +335,14 @@ window.CUSTOM_SESSION = {
     if (S.customSessionHistory.length > 90) S.customSessionHistory = S.customSessionHistory.slice(0, 90);
     try { localStorage.setItem(this._histKey(), JSON.stringify(S.customSessionHistory)); } catch(e) {}
 
-    // compte aussi dans sessionHistory pour le widget "semaine" du dashboard
+    // compte aussi dans sessionHistory pour le widget "semaine" + brûlé du dashboard
     var todayStr = new Date().toISOString().slice(0, 10);
     if (!S.sessionHistory) S.sessionHistory = {};
-    S.sessionHistory[todayStr] = { date: todayStr, duration: draft.durationMins, type: 'custom', title: draft.title };
+    var _kcal = this.calcKcal(draft);
+    S.sessionHistory[todayStr] = {
+      date: todayStr, duration: draft.durationMins, type: 'custom', title: draft.title,
+      kcalBase: _kcal.base, kcalEpoc: _kcal.epoc, kcalTotal: _kcal.total
+    };
     try {
       localStorage.setItem('mtd_session_history_' + this._uid(), JSON.stringify(S.sessionHistory));
     } catch(e) {}
@@ -373,6 +377,10 @@ window.CUSTOM_SESSION = {
     }
 
     this.saveDraft();
+    // Persiste sessionHistory + muscuProgressionHistory + customSessionHistory dans le profil
+    if (typeof window.saveProfile === 'function') {
+      try { window.saveProfile(); } catch(ep) {}
+    }
   },
 
   calcKcal: function(draft) {
@@ -384,6 +392,42 @@ window.CUSTOM_SESSION = {
     var base = Math.round((met * weight * 3.5 / 200) * mins);
     var epoc = Math.round(base * 0.12);
     return { base: base, epoc: epoc, total: base + epoc };
+  },
+
+  // ─── Templates de séance ───────────────────────────────────────────────────
+  _tplKey: function() { return 'mtd_cs_tpl_' + this._uid(); },
+
+  getTemplates: function() {
+    try { return JSON.parse(localStorage.getItem(this._tplKey()) || '[]'); } catch(e) { return []; }
+  },
+
+  saveAsTemplate: function(name) {
+    var draft = this.ensureDraft();
+    var tpls = this.getTemplates();
+    var blocks = draft.blocks.map(function(b) {
+      return {
+        type: b.type, n: b.n, m: b.m, eq: b.eq,
+        sets: b.sets, reps: b.reps, rest: b.rest,
+        targetWeight: b.targetWeight,
+        subtype: b.subtype, label: b.label,
+        duration: b.duration, speed: b.speed, incline: b.incline
+      };
+    });
+    tpls.unshift({ name: name, date: new Date().toISOString().slice(0, 10), blocks: blocks });
+    if (tpls.length > 10) tpls = tpls.slice(0, 10);
+    try { localStorage.setItem(this._tplKey(), JSON.stringify(tpls)); } catch(e) {}
+    return tpls;
+  },
+
+  loadTemplate: function(tpl) {
+    this.clearDraft();
+    var S = window.S;
+    if (S) {
+      S._csSkipMuscleSelect = true;
+      S._csSelectedGroups = [];
+    }
+    var self = this;
+    (tpl.blocks || []).forEach(function(b) { self.addBlock(JSON.parse(JSON.stringify(b))); });
   }
 
 }; // fin CUSTOM_SESSION
@@ -713,6 +757,34 @@ function _csRenderBuild(container, draft) {
   cardioSect.appendChild(cardioRow);
   container.appendChild(cardioSect);
 
+  // ── Templates sauvegardés (quand builder vide) ──
+  if (draft.blocks.length === 0) {
+    var tpls = window.CUSTOM_SESSION.getTemplates();
+    if (tpls.length > 0) {
+      container.appendChild(h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px;margin-top:6px;'
+      }, 'MES SÉANCES SAUVEGARDÉES'));
+      tpls.forEach(function(tpl) {
+        var tRow = h('div', {
+          style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--border,#D8D8D0);margin-bottom:6px;background:var(--ivory,#FAF9F6);cursor:pointer;border-radius:2px;',
+          onclick: function() {
+            window.CUSTOM_SESSION.loadTemplate(tpl);
+            if (window.render) window.render();
+          }
+        });
+        tRow.onmouseover = function() { tRow.style.background = 'rgba(0,0,0,0.03)'; };
+        tRow.onmouseout  = function() { tRow.style.background = 'var(--ivory,#FAF9F6)'; };
+        var tLeft = h('div', { style: 'flex:1;min-width:0;' });
+        tLeft.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--black,#0A0A09);' }, tpl.name));
+        tLeft.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:2px;' },
+          (tpl.blocks || []).filter(function(b) { return b.type === 'exercise'; }).length + ' exercices · ' + tpl.date));
+        tRow.appendChild(tLeft);
+        tRow.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--green,#3E5C3A);margin-left:10px;' }, 'Charger →'));
+        container.appendChild(tRow);
+      });
+    }
+  }
+
   // ── Liste des blocs du brouillon ──
   if (draft.blocks.length > 0) {
     container.appendChild(h('div', {
@@ -921,6 +993,35 @@ function _csRenderDone(container, draft) {
   container.appendChild(kcalBox);
 
   // Retour dashboard
+  // ── Sauvegarder comme template ──
+  var exBlocks2 = draft.blocks.filter(function(b) { return b.type === 'exercise' || b.type === 'cardio'; });
+  if (exBlocks2.length > 0) {
+    var tplRow = h('div', {
+      style: 'border:1px solid var(--border,#D8D8D0);padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;background:var(--ivory,#FAF9F6);'
+    });
+    var tplInp = h('input', {
+      type: 'text', placeholder: 'Nom du template…',
+      value: draft.title || '',
+      style: 'flex:1;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;background:var(--ivory);min-width:0;',
+      onclick: function(e) { e.stopPropagation(); }
+    });
+    tplRow.appendChild(tplInp);
+    tplRow.appendChild(h('button', {
+      style: 'flex-shrink:0;padding:8px 14px;background:var(--green,#3E5C3A);color:#fff;border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;white-space:nowrap;',
+      onclick: function() {
+        var name = tplInp.value.trim() || draft.title;
+        if (!name) { tplInp.focus(); return; }
+        window.CUSTOM_SESSION.saveAsTemplate(name);
+        if (window.showToast) window.showToast('Template « ' + name + ' » sauvegardé.', 'success', 2500);
+        if (window.render) window.render();
+      }
+    }, 'Sauvegarder'));
+    container.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px;'
+    }, 'Refaire cette séance plus tard'));
+    container.appendChild(tplRow);
+  }
+
   container.appendChild(h('button', {
     style: 'display:block;width:100%;padding:16px;background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;min-height:52px;',
     onclick: function() {

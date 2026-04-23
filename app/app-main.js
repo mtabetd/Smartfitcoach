@@ -60,7 +60,7 @@ var PROFILE_KEYS = [
  'muscuWeek','muscuCycle','muscuProgramCount','sportSplashDone','nStep','sStep','selectedSportDay',
  'sportProgram','_sportProgramVersion',
  'competitionGoal','competitionDate','competitionType','sportHobbies',
- 'bonusExercises','sessionHistory',
+ 'bonusExercises','sessionHistory','customSessionHistory',
  'muscuSessionLog','muscuProgressionHistory','musculationWeights','sportEquipment','installations',
  // Nutrition plan
  'shopChecked','weekPlan','selectedDay','_weekPlanGeneratedAt','nutritionLog',
