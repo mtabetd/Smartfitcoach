@@ -3817,7 +3817,81 @@ window.S = {
   calisthenicsOnboardingStep: null,
   // Séance Libre
   customSessionDraft:   null,  // brouillon en cours { id, title, blocks, view, startTime… }
-  customSessionHistory: []     // max 90 résumés de séances passées
+  customSessionHistory: [],     // max 90 résumés de séances passées
+  // ── Propriétés PROFILE_KEYS manquantes de l'init (ajout 2026-04) ──────────────────
+  // Profil de base
+  nom: null,                    // nom de famille
+  phone: null,                  // numéro de téléphone
+  // CrossFit extended
+  crossfitCompGoal: null,       // objectif compétition crossfit
+  crossfitOpenDate: null,       // date de l'Open crossfit
+  cfHalteroCycleWeek: 1,        // semaine du cycle haltérophilie CF
+  crossfitBenchmarks: {},       // benchmarks CrossFit { wod: time, ... }
+  // Triathlon extended
+  triathlonFTP: null,           // FTP cyclisme (W)
+  triathlonRaceDate: null,      // date de la course cible
+  // Calisthenics extended
+  calisthenicsEquipment: null,  // équipement dispo (barre, anneaux, etc.)
+  calisthDips: null,            // nb dips max
+  calisthCurrentWeek: 1,        // semaine courante programme calisthénics
+  // Sport program metadata
+  _sportProgramVersion: null,   // version hash du programme sport généré
+  competitionGoal: null,        // objectif de compétition (texte libre)
+  competitionDate: null,        // date de la compétition cible
+  competitionType: null,        // type de compétition
+  sportHobbies: [],             // activités sportives secondaires
+  installations: null,          // installations sportives disponibles
+  // Nutrition plan metadata
+  _weekPlanGeneratedAt: null,   // timestamp de génération du plan semaine
+  saladBuilder: null,           // configuration salad builder sauvegardée
+  // Wellness / tracking
+  todayWellness: null,          // check-in bien-être du jour { date, score, ... }
+  // App state
+  appMode: null,                // mode actif de l'app ('nutrition','sport',...)
+  stress: null,                 // niveau de stress déclaré (0-10 ou label)
+  cfDeloadRecommended: false,   // déload CrossFit recommandé par le coach
+  sessionPostponed: false,      // séance reportée au prochain jour
+  // Anthropométrie
+  waist: null,                  // tour de taille (cm)
+  // Suivi alimentaire
+  mealsLogged: null,            // repas loggés du jour (structure libre)
+  // PAR-Q
+  parqDone: false,              // questionnaire PAR-Q complété
+  parqResult: null,             // résultat PAR-Q ('ok','consult',...)
+  // Streaks & gamification
+  streakFreezeUsedMonth: null,  // mois (YYYY-MM) du dernier streak freeze utilisé
+  streakFreezeAvailable: 0,     // nombre de freeze disponibles
+  swapCount: 0,                 // nombre de swaps repas effectués
+  welcomeShown: false,          // écran de bienvenue déjà affiché
+  firstLoginDate: null,         // date du premier login (YYYY-MM-DD)
+  // Sport mix
+  sportMixEnabled: false,       // mode sport mixte activé
+  sportMixSecondary: null,      // sport secondaire en mode mixte
+  // Body composition
+  _bodyFatEstimate: null,       // estimation % masse grasse (calcul interne)
+  _bodyCompositionProfile: null,// profil composition corporelle détaillé
+  _bodyCompositionWeight: null, // poids de référence pour body composition
+  bodyScanDone: false,          // body scan initial complété
+  // Onboarding flags internes
+  _parqNextStep: null,          // prochaine étape après PAR-Q
+  _sportProfileDone: false,     // profil sport onboarding terminé
+  _switchedFromSport: false,    // a basculé depuis le mode sport
+  _switchedFromNutrition: false,// a basculé depuis le mode nutrition
+  // Sync cloud
+  _cloudUpdatedAt: null,        // timestamp dernière sync cloud (ISO)
+  // Smart Calendar
+  weeklyCalendar: null,         // calendrier hebdomadaire généré
+  smartCalendarEnabled: false,  // calendrier intelligent activé
+  smartCalendarDismissed: false,// bandeau smart calendar ignoré
+  // Nutrition plan hash
+  _planHash: null,              // hash des paramètres nutritionnels du plan
+  // Programme muscu enrichi
+  muscuObjectifSpecifique: null,// objectif muscu spécifique (texte)
+  muscuRenforcementNote: null,  // note de renforcement musculaire
+  muscuIAProgram: null,         // programme IA personnalisé (objet JSON)
+  muscuIAProgramDate: null,     // date de génération du programme IA
+  // Grossesse
+  _prePregnancyGoal: null       // objectif pré-grossesse conservé
 };
 
 // ═══════════════════════════════════════════════════════════════

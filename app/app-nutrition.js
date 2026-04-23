@@ -2555,10 +2555,10 @@ function renderStep8(p) {
   var _wRange = (window.UNITS && window.UNITS.weightRange) ? window.UNITS.weightRange() : { min: 30, max: 200, stepW: 0.1 };
   var _wDisplay = (window.UNITS && window.UNITS.fromKg) ? window.UNITS.fromKg(S.weight || 0) : (S.weight || 0);
   var weightInputWrap = h('div', {style: 'display:flex;gap:8px;align-items:center;margin:12px 0'});
-  var weightIn = h('input', {'class': 'num-input', type: 'number', min: String(_wRange.min), max: String(_wRange.max), step: String(_wRange.stepW || 0.1), placeholder: String(Math.round(_wDisplay * 10) / 10), style: 'font-size:18px;padding:10px;flex:1', inputmode: 'decimal'});
+  var weightIn = h('input', {'class': 'num-input', type: 'number', min: String(_wRange.min), max: String(_wRange.max), step: String(_wRange.stepW || 0.1), placeholder: String(Math.round(_wDisplay * 10) / 10), style: 'font-size:18px;padding:10px;flex:1;min-height:44px', inputmode: 'decimal'});
   weightInputWrap.appendChild(weightIn);
   weightInputWrap.appendChild(h('span', {'class': 'num-unit'}, _wUnit));
-  weightInputWrap.appendChild(h('button', {'class': 'btn-primary', style: 'width:auto;padding:10px 20px;margin-top:0', onclick: function() {
+  weightInputWrap.appendChild(h('button', {'class': 'btn-primary', style: 'width:auto;padding:10px 20px;margin-top:0;min-height:44px;', onclick: function() {
     var v = parseFloat(weightIn.value);
     if (isNaN(v) || v < _wRange.min || v > _wRange.max) return;
     // Convertir vers kg pour stockage interne (aligné app-sport.js:7098-7114)
