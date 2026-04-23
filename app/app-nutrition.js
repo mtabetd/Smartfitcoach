@@ -3077,6 +3077,8 @@ function renderStep9(p) {
             if (_planHashNow) S._planHash = _planHashNow;
             if (window.saveProfile) { try { window.saveProfile(); } catch(eS) {} }
             if (window.render) window.render();
+            // Après validation, ramener l'user sur le tableau de bord (1.5s pour voir ✓)
+            setTimeout(function() { S.view = 'today'; if (window.render) window.render(); }, 1500);
           } catch(e) { console.error('[renderStep9] validate failed', e); }
         }
       }, hashChanged ? 'Confirmer mon plan actuel' : weekChanged ? 'Activer la nouvelle semaine' : 'Activer mon programme');

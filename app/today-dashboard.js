@@ -6326,6 +6326,150 @@ function renderCoachBar() {
 // Cercle 56×56 noir, fixed bottom-right 20px, au-dessus coach bar (+20px).
 // Tap → menu radial 4 items (Repas / Poids / Eau / Séance).
 // ═══════════════════════════════════════════════════════════════════════════
+
+function getDefaultMealSlot() {
+  var h = new Date().getHours();
+  if (h < 10) return 'breakfast';
+  if (h < 14) return 'lunch';
+  if (h < 17) return 'snack';
+  return 'dinner';
+}
+
+function renderQuickAddDrawer() {
+  var S = window.S;
+  var slot = S._quickAddSlot || getDefaultMealSlot();
+  var MEAL_LABELS = { breakfast: 'Petit-déj', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
+  var MEAL_FULL = { breakfast: 'Petit-déjeuner', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
+
+  // Récupérer les aliments récents (même logique que le journal)
+  var recentFoods = [];
+  try {
+    var _qaUid = (window.AUTH && window.AUTH.getUser) ? ((window.AUTH.getUser()) || {}).id : 'anon';
+    var _qaJournalKey = 'mtd_food_journal_' + (_qaUid || 'anon');
+    var _qaJournal = JSON.parse(localStorage.getItem(_qaJournalKey) || '{}');
+    var _qaDays = Object.keys(_qaJournal).sort().reverse().slice(0, 7);
+    var _qaSeen = {};
+    for (var _qaD = 0; _qaD < _qaDays.length; _qaD++) {
+      var _qaEntries = _qaJournal[_qaDays[_qaD]] || [];
+      for (var _qaEi = _qaEntries.length - 1; _qaEi >= 0; _qaEi--) {
+        var _qaE = _qaEntries[_qaEi];
+        if (!_qaE || !_qaE.name || _qaSeen[_qaE.name]) continue;
+        _qaSeen[_qaE.name] = true;
+        recentFoods.push({ name: _qaE.name, kcal: _qaE.kcal || 0, p: _qaE.p || 0, g: _qaE.g || 0, l: _qaE.l || 0 });
+        if (recentFoods.length >= 6) break;
+      }
+      if (recentFoods.length >= 6) break;
+    }
+  } catch(_eQaLoad) { recentFoods = []; }
+
+  var wrapper = h('div', { id: 'quick-add-drawer-wrapper' });
+
+  // Backdrop
+  var backdrop = h('div', {
+    style: 'position:fixed;inset:0;background:rgba(10,10,9,0.4);z-index:960;',
+    onclick: function() { S._quickAddSlot = null; if (window.render) window.render(); }
+  });
+  wrapper.appendChild(backdrop);
+
+  // Drawer panel
+  var panel = h('div', {
+    style: 'position:fixed;left:0;right:0;bottom:0;z-index:970;background:var(--paper,#FAF9F6);border-top:1px solid var(--line,#D8D8D0);padding:0 0 calc(64px + env(safe-area-inset-bottom));max-height:80vh;overflow-y:auto;'
+  });
+
+  // Handle bar
+  var handle = h('div', { style: 'display:flex;align-items:center;justify-content:space-between;padding:14px 20px 10px;border-bottom:1px solid var(--line,#D8D8D0);' });
+  handle.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);' }, 'Ajouter un repas'));
+  var closeBtn = h('button', {
+    style: 'background:none;border:none;cursor:pointer;padding:4px;color:var(--grey,#6B6B65);font-size:18px;line-height:1;min-height:32px;min-width:32px;',
+    onclick: function() { S._quickAddSlot = null; if (window.render) window.render(); }
+  }, '×');
+  handle.appendChild(closeBtn);
+  panel.appendChild(handle);
+
+  // Meal slot selector
+  var slotWrap = h('div', { style: 'display:flex;gap:8px;padding:12px 16px;overflow-x:auto;' });
+  ['breakfast', 'lunch', 'snack', 'dinner'].forEach(function(key) {
+    var active = slot === key;
+    var chip = h('button', {
+      style: 'flex-shrink:0;padding:6px 14px;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;cursor:pointer;min-height:36px;'
+        + (active
+          ? 'background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border:1px solid var(--ink-900,#0A0A09);'
+          : 'background:transparent;color:var(--grey,#6B6B65);border:1px solid var(--line,#D8D8D0);'),
+      onclick: function() { S._quickAddSlot = key; if (window.render) window.render(); }
+    }, MEAL_LABELS[key]);
+    slotWrap.appendChild(chip);
+  });
+  panel.appendChild(slotWrap);
+
+  if (recentFoods.length > 0) {
+    panel.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);padding:4px 20px 8px;'
+    }, 'Récents'));
+
+    recentFoods.forEach(function(food) {
+      var defP = (window.FOOD_PORTIONS && window.FOOD_PORTIONS.getDefaultPortion) ? window.FOOD_PORTIONS.getDefaultPortion(food.name) : null;
+      var grams = defP ? defP.g : 100;
+      var fac = grams / 100;
+      var portionLabel = defP ? defP.label : '100g';
+
+      var row = h('div', {
+        style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 20px;border-bottom:1px solid var(--line,#D8D8D0);cursor:pointer;',
+        onclick: function() {
+          if (!window.FOOD_JOURNAL || !window.FOOD_JOURNAL.addEntry) return;
+          window.FOOD_JOURNAL.addEntry(
+            slot,
+            food.name,
+            Math.round(food.kcal * fac),
+            Math.round(food.p * fac * 10) / 10,
+            Math.round(food.g * fac * 10) / 10,
+            Math.round(food.l * fac * 10) / 10,
+            portionLabel
+          );
+          S._quickAddSlot = null;
+          if (window.showToast) window.showToast('✓ ' + food.name + ' ajouté au ' + MEAL_FULL[slot].toLowerCase(), 'success', 2000);
+          if (window.render) window.render();
+        }
+      });
+
+      var info = h('div', { style: 'flex:1;min-width:0;' });
+      info.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--ink-900,#0A0A09);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;' }, food.name));
+      info.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:2px;' }, portionLabel + ' · ' + Math.round(food.kcal * fac) + ' kcal'));
+      row.appendChild(info);
+
+      var addBtn = h('div', {
+        style: 'width:32px;height:32px;border-radius:2px;background:var(--ink-900,#0A0A09);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:12px;'
+      });
+      addBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="var(--paper,#FAF9F6)" stroke-width="1.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>';
+      row.appendChild(addBtn);
+      panel.appendChild(row);
+    });
+  } else {
+    panel.appendChild(h('div', {
+      style: 'padding:20px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);'
+    }, 'Aucun aliment récent — utilisez la recherche ci-dessous.'));
+  }
+
+  // Bouton "Rechercher dans la base →"
+  var searchBtn = h('button', {
+    style: 'display:block;width:calc(100% - 32px);margin:12px 16px;padding:12px;background:transparent;border:1px solid var(--line,#D8D8D0);color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;text-align:center;min-height:44px;',
+    onclick: function() {
+      S._quickAddSlot = null;
+      S._fabOpen = false;
+      // Naviguer vers le journal nutritionnel
+      setTimeout(function() {
+        var jc = document.getElementById('fj-card-root');
+        if (jc) { jc.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        else { S.view = 'nutrition'; S.nStep = 12; if (window.render) window.render(); }
+      }, 80);
+      if (window.render) window.render();
+    }
+  }, 'Rechercher dans la base →');
+  panel.appendChild(searchBtn);
+
+  wrapper.appendChild(panel);
+  return wrapper;
+}
+
 function renderFabLogger() {
   var S = window.S;
   if (!S) return null;
@@ -6333,6 +6477,11 @@ function renderFabLogger() {
   if (S.modalRecipe || S.modalSmoothie || S.shopArMode) return null;
 
   var isOpen = !!S._fabOpen;
+
+  // Quick Add Drawer — prioritaire sur le FAB normal
+  if (S._quickAddSlot) {
+    return renderQuickAddDrawer();
+  }
 
   // FIX 2026-04-16 : restructuré le FAB pour que les boutons ne soient PAS bloqués
   // par le backdrop. Avant : backdrop position:fixed+inset:0 DANS le container → les
@@ -6364,12 +6513,8 @@ function renderFabLogger() {
         } },
       { label: 'REPAS', icon: 'M4 5h8M4 8h8M4 11h8', action: function() {
           S._fabOpen = false;
+          S._quickAddSlot = getDefaultMealSlot();
           if (window.render) window.render();
-          setTimeout(function() {
-            var _jc = document.getElementById('fj-card-root');
-            if (_jc) { _jc.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
-            S.view = 'nutrition'; S.nStep = 12; if (window.render) window.render();
-          }, 80);
         } },
       { label: 'POIDS', icon: 'M3 7h10v6H3zM6 7V4h4v3', action: function() {
           S._modalQuickWeight = true; S._fabOpen = false;

@@ -1746,6 +1746,7 @@ function render() {
  render._lock = true;
  // Clean any stale tooltips left over from previous view
  try { document.querySelectorAll('.sfc-tooltip-pop').forEach(function(el){ el.remove(); }); } catch(_eTp) {}
+ try { if (S._quickAddSlot && S.view !== 'today') { S._quickAddSlot = null; } } catch(_eQa) {}
  try {
  // === SAFETY: conditions incompatibles avec certains objectifs (OMS 2016, ACOG 2020/2022, ANAD, IOC 2018) ===
  // Correction silencieuse — attrape les données persistées en localStorage avant le fix
