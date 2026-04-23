@@ -17,7 +17,7 @@ exports.handler = async function(event) {
   }
 
   const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_ANON_KEY;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
 
   // Dev / CI sans credentials — retourne tableau vide, l'app utilise les prix par défaut
   if (!url || !key) {
