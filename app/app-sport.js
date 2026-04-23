@@ -6033,6 +6033,7 @@ function parseRestTime(restStr) {
  var num = parseInt(s);
  return isNaN(num) ? 90 : (num < 10 ? num * 60 : num); // "2" → 120s, "90" → 90s
 }
+window.parseRestTime = parseRestTime;
 
 // ─── TRANSITION TIME BETWEEN EXERCISES ────────────────────────────────────
 // Calcul du temps de repos optimal entre deux exercices basé sur :

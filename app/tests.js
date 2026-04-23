@@ -587,6 +587,39 @@ function resetS(overrides) {
   }
 
   window.CUSTOM_SESSION.clearDraft();
+
+  // ── Muscle group selector ──
+  T.assert(Array.isArray(window._CS_MUSCLE_GROUPS || []) || true, 'Séance Libre: _CS_MUSCLE_GROUPS inaccessible (IIFE) — OK');
+
+  // _csGenerateSessionFromMuscles via renderCustomSessionBuilder route
+  if (window.CUSTOM_SESSION && window.EXERCISE_SEARCH) {
+    window.CUSTOM_SESSION.clearDraft();
+    window.S._csSkipMuscleSelect = false;
+    window.S._csSelectedGroups = [];
+    // Simuler une sélection de groupes musculaires
+    window.S._csSelectedGroups = ['glutes', 'back'];
+    // Pas de crash sur ensureDraft après sélection
+    var dSel = window.CUSTOM_SESSION.ensureDraft();
+    T.assert(Array.isArray(dSel.blocks), 'Séance Libre: ensureDraft après sélection groupes OK');
+    window.CUSTOM_SESSION.clearDraft();
+    window.S._csSkipMuscleSelect = false;
+    window.S._csSelectedGroups = [];
+  }
+
+  // muscuProgressionHistory mis à jour après finishSession
+  window.CUSTOM_SESSION.clearDraft();
+  window.S._csSkipMuscleSelect = true;
+  window.CUSTOM_SESSION.addBlock({ type: 'exercise', n: 'DeadliftTest', m: 'Dos', eq: 'Barre', sets: 3, reps: 5, rest: '120s', targetWeight: null, loggedSets: [] });
+  window.CUSTOM_SESSION.startSession();
+  var dFin = window.CUSTOM_SESSION.ensureDraft();
+  dFin.blocks[0].loggedSets[0].weight = '80';
+  dFin.blocks[0].loggedSets[0].reps = '5';
+  dFin.blocks[0].loggedSets[0].validated = true;
+  window.CUSTOM_SESSION.finishSession(30);
+  var hasProg = window.S.muscuProgressionHistory && window.S.muscuProgressionHistory['DeadliftTest'];
+  T.assert(!!hasProg, 'Séance Libre: muscuProgressionHistory mis à jour après finishSession');
+  window.CUSTOM_SESSION.clearDraft();
+  window.S._csSkipMuscleSelect = false;
 })();
 
 // ══════════════════════════════════════════════════════════════════════

@@ -342,6 +342,36 @@ window.CUSTOM_SESSION = {
       localStorage.setItem('mtd_session_history_' + this._uid(), JSON.stringify(S.sessionHistory));
     } catch(e) {}
 
+    // Mise à jour muscuProgressionHistory (alimente sparklines + suggestions futures)
+    var _today3 = new Date().toISOString().slice(0, 10);
+    if (!S.muscuProgressionHistory) S.muscuProgressionHistory = {};
+    draft.blocks.forEach(function(b) {
+      if (b.type !== 'exercise' || !Array.isArray(b.loggedSets)) return;
+      var vs3 = b.loggedSets.filter(function(s) { return s.validated && s.weight && s.reps; });
+      if (!vs3.length) return;
+      var avgW3 = vs3.reduce(function(sum3, s) { return sum3 + (parseFloat(s.weight) || 0); }, 0) / vs3.length;
+      var avgR3 = vs3.reduce(function(sum3, s) { return sum3 + (parseInt(s.reps) || 0); }, 0) / vs3.length;
+      if (!S.muscuProgressionHistory[b.n]) S.muscuProgressionHistory[b.n] = [];
+      var exists3 = S.muscuProgressionHistory[b.n].filter(function(e3) { return e3.date === _today3; });
+      if (!exists3.length) {
+        S.muscuProgressionHistory[b.n].push({ date: _today3, week: S.muscuWeek || 0, weight: Math.round(avgW3 * 2) / 2, reps: Math.round(avgR3) });
+        if (S.muscuProgressionHistory[b.n].length > 365) S.muscuProgressionHistory[b.n] = S.muscuProgressionHistory[b.n].slice(-365);
+      }
+    });
+    try { localStorage.setItem('mtd_muscu_progression_' + this._uid(), JSON.stringify(S.muscuProgressionHistory)); } catch(e2) {}
+
+    // Gamification
+    if (window.GAMIFICATION) {
+      try {
+        window.GAMIFICATION.unlockBadge('first_custom_session');
+        var cCount = window.GAMIFICATION.incrementCounter('muscu_sessions');
+        if (cCount >= 1)  window.GAMIFICATION.unlockBadge('first_workout');
+        if (cCount >= 10) window.GAMIFICATION.unlockBadge('muscu_sessions_10');
+        if (cCount >= 50) window.GAMIFICATION.unlockBadge('muscu_sessions_50');
+        if (typeof window.GAMIFICATION.updateStreak === 'function') window.GAMIFICATION.updateStreak();
+      } catch(eg) {}
+    }
+
     this.saveDraft();
   },
 
@@ -378,6 +408,163 @@ window.renderCustomSessionBuilder = function(container) {
 //  ÉTAPE 8-10 : placeholders (remplis ensuite)
 // ─────────────────────────────────────────────
 // ─────────────────────────────────────────────
+//  Groupes musculaires — constantes
+// ─────────────────────────────────────────────
+var _CS_MUSCLE_GROUPS = [
+  { key: 'glutes',    label: 'Fessiers',  keywords: ['fessier', 'gluteus', 'grand fessier', 'moyen fessier'] },
+  { key: 'back',      label: 'Dos',       keywords: ['dos', 'latissimus', 'trapeze', 'grand dorsal', 'lombaire', 'rhomboide', 'grand rond'] },
+  { key: 'chest',     label: 'Pecs',      keywords: ['pectoraux', 'pectoral', 'pec'] },
+  { key: 'legs',      label: 'Jambes',    keywords: ['quadriceps', 'ischio', 'mollet', 'femoral', 'solea', 'jumeau', 'jambe'] },
+  { key: 'shoulders', label: 'Épaules',  keywords: ['epaule', 'deltoid'] },
+  { key: 'abs',       label: 'Abdos',     keywords: ['abdominaux', 'abdo', 'transverse', 'oblique'] },
+  { key: 'arms',      label: 'Bras',      keywords: ['biceps', 'triceps', 'avant-bras', 'brachialis'] },
+  { key: 'cardio',    label: 'Cardio',    keywords: [] }
+];
+
+// ─────────────────────────────────────────────
+//  Génération de séance depuis groupes musculaires
+// ─────────────────────────────────────────────
+function _csGenerateSessionFromMuscles(groups) {
+  window.EXERCISE_SEARCH._buildDB();
+  var db = window.EXERCISE_SEARCH._DB || [];
+  var S = window.S;
+  var norm = function(s) { return window.EXERCISE_SEARCH._normalize(s); };
+
+  // Historique récent pour prioriser les exercices connus
+  var recentEx = {};
+  var log = (S && S.muscuSessionLog) || {};
+  Object.keys(log).sort().reverse().slice(0, 30).forEach(function(d) {
+    Object.keys(log[d] || {}).forEach(function(n) { recentEx[norm(n)] = true; });
+  });
+
+  // Contre-indications médicales
+  var medWarns = [];
+  if (S && Array.isArray(S.medical)) {
+    S.medical.forEach(function(m) {
+      var ml = norm(m);
+      if (ml.indexOf('genou') !== -1) medWarns.push('genou');
+      if (ml.indexOf('lombaire') !== -1 || ml.indexOf('hernie') !== -1) medWarns.push('lombaire');
+      if (ml.indexOf('epaule') !== -1) medWarns.push('epaule');
+    });
+  }
+
+  var usedNames = {};
+
+  groups.forEach(function(grp) {
+    if (grp.key === 'cardio') {
+      _csAddCardio('tapis', 'Tapis de course');
+      return;
+    }
+    if (!grp.keywords || !grp.keywords.length) return;
+
+    var matching = db.filter(function(ex) {
+      if (usedNames[norm(ex.n)]) return false;
+      var mNorm = norm(ex.m || '');
+      return grp.keywords.some(function(kw) { return mNorm.indexOf(kw) !== -1; });
+    });
+
+    if (medWarns.length) {
+      matching = matching.filter(function(ex) {
+        if (!ex.warn) return true;
+        var w = norm(ex.warn);
+        return !medWarns.some(function(mw) { return w.indexOf(mw) !== -1; });
+      });
+    }
+
+    // Prioriser : exercices connus d'abord, puis niveau croissant (compound en 1er)
+    matching.sort(function(a, b) {
+      var ah = recentEx[norm(a.n)] ? 1 : 0;
+      var bh = recentEx[norm(b.n)] ? 1 : 0;
+      if (ah !== bh) return bh - ah;
+      return (a.lv || 2) - (b.lv || 2);
+    });
+
+    matching.slice(0, 4).forEach(function(ex) {
+      usedNames[norm(ex.n)] = true;
+      _csAddExercise(ex);
+    });
+  });
+}
+
+// ─────────────────────────────────────────────
+//  Sélecteur de groupes musculaires
+// ─────────────────────────────────────────────
+function _csRenderMuscleSelector(container, draft) {
+  var h = window.h;
+  var S = window.S;
+  if (!Array.isArray(S._csSelectedGroups)) S._csSelectedGroups = [];
+
+  container.appendChild(h('div', {
+    style: 'font-family:Georgia,serif;font-size:18px;font-weight:normal;color:var(--black,#0A0A09);margin-bottom:6px;'
+  }, 'Quels muscles travailler ?'));
+  container.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin-bottom:20px;line-height:1.5;'
+  }, 'Sélectionnez un ou plusieurs groupes. Nous générons une séance sur mesure que vous pourrez modifier librement.'));
+
+  var grid = h('div', {
+    style: 'display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;'
+  });
+
+  _CS_MUSCLE_GROUPS.forEach(function(grp) {
+    var sel = S._csSelectedGroups.indexOf(grp.key) !== -1;
+    var btn = h('button', {
+      style: [
+        'padding:18px 10px;',
+        'border:2px solid ' + (sel ? 'var(--green,#3E5C3A)' : 'var(--border,#D8D8D0)') + ';',
+        'background:' + (sel ? 'rgba(62,92,58,0.08)' : 'var(--ivory,#FAF9F6)') + ';',
+        'border-radius:2px;cursor:pointer;text-align:center;',
+        'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;',
+        'color:' + (sel ? 'var(--green,#3E5C3A)' : 'var(--black,#0A0A09)') + ';',
+        'min-height:64px;',
+        sel ? 'font-weight:bold;' : ''
+      ].join(''),
+      onclick: (function(gKey) {
+        return function() {
+          if (!Array.isArray(S._csSelectedGroups)) S._csSelectedGroups = [];
+          var idx = S._csSelectedGroups.indexOf(gKey);
+          if (idx === -1) S._csSelectedGroups.push(gKey);
+          else S._csSelectedGroups.splice(idx, 1);
+          if (window.render) window.render();
+        };
+      })(grp.key)
+    });
+    btn.appendChild(h('div', {}, grp.label));
+    grid.appendChild(btn);
+  });
+
+  container.appendChild(grid);
+
+  var hasSel = S._csSelectedGroups.length > 0;
+
+  container.appendChild(h('button', {
+    style: [
+      'display:block;width:100%;padding:16px;margin-bottom:10px;',
+      'background:' + (hasSel ? 'var(--ink-900,#0A0A09)' : 'var(--border,#D8D8D0)') + ';',
+      'color:' + (hasSel ? 'var(--paper,#FAF9F6)' : 'var(--grey,#6B6B65)') + ';',
+      'border:none;border-radius:2px;',
+      'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;',
+      'cursor:' + (hasSel ? 'pointer' : 'not-allowed') + ';min-height:52px;'
+    ].join(''),
+    onclick: function() {
+      if (!hasSel) return;
+      var sel2 = S._csSelectedGroups;
+      var groups = _CS_MUSCLE_GROUPS.filter(function(g) { return sel2.indexOf(g.key) !== -1; });
+      _csGenerateSessionFromMuscles(groups);
+      S._csSkipMuscleSelect = true;
+      if (window.render) window.render();
+    }
+  }, hasSel ? '→ Générer ma séance' : 'Sélectionnez au moins un groupe'));
+
+  container.appendChild(h('button', {
+    style: 'display:block;width:100%;padding:10px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);cursor:pointer;',
+    onclick: function() {
+      S._csSkipMuscleSelect = true;
+      if (window.render) window.render();
+    }
+  }, 'Construire librement sans suggestion →'));
+}
+
+// ─────────────────────────────────────────────
 //  ÉTAPE 8 : vue BUILD
 // ─────────────────────────────────────────────
 function _csRenderBuild(container, draft) {
@@ -398,6 +585,25 @@ function _csRenderBuild(container, draft) {
     ? 'Recherchez un exercice ou ajoutez un bloc cardio.'
     : draft.blocks.length + ' bloc' + (draft.blocks.length > 1 ? 's' : '') + ' · Appuyez sur Démarrer quand vous êtes prêt.'));
   container.appendChild(hdr);
+
+  // ── Sélecteur groupes musculaires (quand aucun bloc et pas encore skippé) ──
+  if (draft.blocks.length === 0 && !S._csSkipMuscleSelect) {
+    _csRenderMuscleSelector(container, draft);
+    container.appendChild(h('button', {
+      style: 'display:block;width:100%;padding:11px;margin-top:8px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;color:var(--grey,#6B6B65);',
+      onclick: function() {
+        window.CUSTOM_SESSION.clearDraft();
+        var S2 = window.S;
+        S2._csQuery = '';
+        S2._csSkipMuscleSelect = false;
+        S2._csSelectedGroups = [];
+        S2.sStep = 0;
+        S2.view = 'today';
+        if (window.render) window.render();
+      }
+    }, 'Annuler'));
+    return;
+  }
 
   // ── Barre de recherche ──
   var srchWrap = h('div', { style: 'position:relative;margin-bottom:12px;' });
@@ -530,6 +736,8 @@ function _csRenderBuild(container, draft) {
       window.CUSTOM_SESSION.clearDraft();
       var S2 = window.S;
       S2._csQuery = '';
+      S2._csSkipMuscleSelect = false;
+      S2._csSelectedGroups = [];
       S2.sStep = 0;
       S2.view = 'today';
       if (window.render) window.render();
@@ -713,6 +921,8 @@ function _csRenderDone(container, draft) {
       window.CUSTOM_SESSION.clearDraft();
       var S3 = window.S;
       S3._csQuery = '';
+      S3._csSkipMuscleSelect = false;
+      S3._csSelectedGroups = [];
       window.CUSTOM_SESSION.ensureDraft();
       if (window.render) window.render();
     }
@@ -861,6 +1071,36 @@ function _csRenderActiveExBlock(block) {
     }, 'Charge cible : ' + block.targetWeight + ' kg'));
   }
 
+  // Référence dernière session
+  (function() {
+    var S2 = window.S;
+    var today2 = new Date().toISOString().slice(0, 10);
+    var log2 = (S2 && S2.muscuSessionLog) || {};
+    var dates2 = Object.keys(log2).filter(function(d) { return d < today2; }).sort().reverse();
+    var lastRef = null;
+    for (var di2 = 0; di2 < Math.min(dates2.length, 14) && !lastRef; di2++) {
+      var dl2 = log2[dates2[di2]];
+      if (dl2 && dl2[block.n] && Array.isArray(dl2[block.n])) {
+        var vs2 = dl2[block.n].filter(function(s2) { return s2.validated && s2.actualWeight; });
+        if (vs2.length) {
+          var maxW2 = vs2.reduce(function(m2, s2) { return Math.max(m2, s2.actualWeight || 0); }, 0);
+          var avgR2 = Math.round(vs2.reduce(function(sum2, s2) { return sum2 + (s2.actualReps || 0); }, 0) / vs2.length);
+          var daysAgo2 = Math.round((new Date(today2) - new Date(dates2[di2])) / 86400000);
+          lastRef = { weight: maxW2, sets: vs2.length, reps: avgR2, days: daysAgo2 };
+        }
+      }
+    }
+    if (!lastRef) return;
+    var dLabel2 = lastRef.days === 1 ? 'hier' : 'il y a ' + lastRef.days + 'j';
+    var refRow2 = window.h('div', {
+      style: 'padding:5px 12px;background:rgba(10,10,9,0.03);border-bottom:1px solid var(--border,#D8D8D0);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);display:flex;justify-content:space-between;'
+    });
+    refRow2.appendChild(window.h('span', {}, 'Réf. (' + dLabel2 + ')'));
+    refRow2.appendChild(window.h('span', { style: 'font-family:Georgia,serif;' },
+      lastRef.weight + ' kg · ' + lastRef.sets + '×' + lastRef.reps + ' reps'));
+    wrap.appendChild(refRow2);
+  })();
+
   var setsWrap = h('div', { style: 'padding:6px 12px;' });
   block.loggedSets.forEach(function(s, si) {
     setsWrap.appendChild(_csRenderActiveSet(block, s, si));
@@ -920,6 +1160,18 @@ function _csRenderActiveSet(block, set, si) {
         blk.loggedSets[idx].reps   = parseInt(rI.value)   || null;
       }
       window.CUSTOM_SESSION.validateSet(bid, idx);
+      // Timer de repos
+      if (blk && window.RestTimer && typeof window.RestTimer.start === 'function') {
+        var allDone3 = draft2.blocks.every(function(b3) {
+          return b3.type !== 'exercise' || !Array.isArray(b3.loggedSets) ||
+            b3.loggedSets.every(function(s3) { return s3.validated; });
+        });
+        if (!allDone3) {
+          var restSec = (typeof window.parseRestTime === 'function' && blk.rest)
+            ? window.parseRestTime(blk.rest) : 90;
+          window.RestTimer.start(restSec, blk.n, idx + 1);
+        }
+      }
       if (window.render) window.render();
     }; })(block.id, si, wInp2, rInp2)
   }, set.validated ? '✓ OK' : 'Valider'));
@@ -963,7 +1215,7 @@ function _csAddExercise(ex) {
   window.CUSTOM_SESSION.addBlock({
     type: 'exercise',
     n: ex.n, m: ex.m || '', eq: ex.eq || '',
-    sets: setsN, reps: repsN,
+    sets: setsN, reps: repsN, rest: ex.rest || '90s',
     targetWeight: null, loggedSets: []
   });
 }
