@@ -723,15 +723,17 @@ function _postCard(post){
       'color:'+(post._myLike?'#7B3F00':'var(--grey)')+';cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:4px 0',
     'aria-label': post._myLike ? 'Retirer le like' : 'Liker'
   });
-  likeBtn.innerHTML = '<span aria-hidden="true">' + (post._myLike?'♥':'♡') + '</span> ' + post._likes;
+  likeBtn.appendChild(_h('span', {'aria-hidden':'true'}, post._myLike ? '♥' : '♡'));
+  likeBtn.appendChild(document.createTextNode(' ' + post._likes));
   likeBtn.addEventListener('click', async function(){
     try {
       var r = await toggleLike(post.id);
       post._myLike = r.liked;
       post._likes += r.liked ? 1 : -1;
       if (post._likes < 0) post._likes = 0;
-      // Re-render local du bouton
-      likeBtn.innerHTML = '<span aria-hidden="true">'+(post._myLike?'♥':'♡')+'</span> ' + post._likes;
+      likeBtn.textContent = '';
+      likeBtn.appendChild(_h('span', {'aria-hidden':'true'}, post._myLike ? '♥' : '♡'));
+      likeBtn.appendChild(document.createTextNode(' ' + post._likes));
       likeBtn.style.color = post._myLike ? '#7B3F00' : 'var(--grey)';
     } catch(e){ _toast('Erreur', 'error'); }
   });
@@ -741,7 +743,8 @@ function _postCard(post){
     style:'background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;'+
       'color:var(--grey);cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:4px 0'
   });
-  commentBtn.innerHTML = '<span aria-hidden="true">💬</span> ' + post._comments;
+  commentBtn.appendChild(_h('span', {'aria-hidden':'true'}, '💬'));
+  commentBtn.appendChild(document.createTextNode(' ' + post._comments));
   actions.appendChild(commentBtn);
   card.appendChild(actions);
 
