@@ -25,6 +25,7 @@ const APP_SHELL = [
   './tracker.js',
   './bundle.js',
   './jspdf.umd.min.js',
+  './chart.umd.min.js',
   './premium-ui.css',
   './manifest.json',
   './icon-192.png',

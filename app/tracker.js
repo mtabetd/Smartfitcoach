@@ -39,6 +39,7 @@
 
   var _queue = [];
   var _sending = false;
+  var _MAX_QUEUE = 500;
 
   function _flush() {
     if (_sending || _queue.length === 0) return;
@@ -72,6 +73,7 @@
         try { window.BLACKBOX.log(eventName, properties || {}); } catch(_) {}
       }
       _queue.push(payload);
+      if (_queue.length > _MAX_QUEUE) _queue.shift(); // drop oldest if overflow
       // Debounce flush to batch rapid events
       setTimeout(_flush, 50);
     } catch(_) {}

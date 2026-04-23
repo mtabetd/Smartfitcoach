@@ -34,8 +34,14 @@ function getAdminClient() {
 async function requirePremium(event) {
   const admin = getAdminClient();
 
-  // No Supabase credentials → local dev / CI — skip enforcement
-  if (!admin) return { skip: true };
+  // No Supabase credentials → local dev / CI only (never in production)
+  if (!admin) {
+    if (process.env.NETLIFY) {
+      // Production with missing env vars: refuse access rather than grant it
+      return { error: { statusCode: 503, msg: 'Service temporairement indisponible — réessayez' } };
+    }
+    return { skip: true }; // local dev / CI
+  }
 
   const authHeader = (event.headers && (event.headers.authorization || event.headers.Authorization)) || '';
   const token = authHeader.replace(/^Bearer\s+/i, '').trim();

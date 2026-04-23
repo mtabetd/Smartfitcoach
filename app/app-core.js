@@ -4424,15 +4424,17 @@ window._sfcPricingPromise = null;
 function loadSFCPricing() {
   if (window.SFC_PRICING_DATA) return Promise.resolve(window.SFC_PRICING_DATA);
   if (window._sfcPricingPromise) return window._sfcPricingPromise;
-  window._sfcPricingPromise = fetch('/.netlify/functions/get-pricing')
-    .then(function(r) { return r.json(); })
+  var _ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  var _timeout = setTimeout(function() { if (_ctrl) _ctrl.abort(); }, 5000);
+  window._sfcPricingPromise = fetch('/.netlify/functions/get-pricing', _ctrl ? { signal: _ctrl.signal } : {})
+    .then(function(r) { clearTimeout(_timeout); return r.json(); })
     .then(function(json) {
       if (json && json.ok && Array.isArray(json.data) && json.data.length > 0)
         window.SFC_PRICING_DATA = json.data;
       window._sfcPricingPromise = null;
       return window.SFC_PRICING_DATA;
     })
-    .catch(function() { window._sfcPricingPromise = null; return null; });
+    .catch(function() { clearTimeout(_timeout); window._sfcPricingPromise = null; return null; });
   return window._sfcPricingPromise;
 }
 window.loadSFCPricing = loadSFCPricing;
