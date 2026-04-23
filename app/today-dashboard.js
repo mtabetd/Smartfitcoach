@@ -6004,7 +6004,7 @@ function renderTodayDashboard(p) {
     var _hasSportPlan = (Array.isArray(S.sportProgram) && S.sportProgram.length > 0)
                         || (S.muscuIAProgram && typeof S.muscuIAProgram === 'string' && S.muscuIAProgram.length > 100)
                         || (S.activeProgram && Array.isArray(S.activeProgram.weekProgram) && S.activeProgram.weekProgram.length > 0)
-                        || (S.sportType === 'crossfit' && (window.CF_WODS_FULL || []).length > 0)
+                        || (S.sportType === 'crossfit' && S.sStep === 0)
                         || (S.sportType === 'running' && S.runningProgram)
                         || (S.sportType === 'triathlon' && S.triathlonProgram)
                         || (S.sportType === 'hyrox' && S.hyroxProgram)
