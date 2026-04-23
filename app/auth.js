@@ -1119,6 +1119,18 @@ window.AUTH = {
   },
 
   /**
+   * Retourne le JWT Supabase de la session courante (pour les appels Netlify Functions).
+   * @returns {Promise<string|null>}
+   */
+  getJWT: function() {
+    var client = _getClient();
+    if (!client) return Promise.resolve(null);
+    return client.auth.getSession().then(function(res) {
+      return (res && res.data && res.data.session) ? res.data.session.access_token : null;
+    }).catch(function() { return null; });
+  },
+
+  /**
    * Update user profile data (name)
    * @param {string} newName
    * @returns {{ok:boolean, error?:string}}

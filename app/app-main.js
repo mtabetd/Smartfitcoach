@@ -66,7 +66,7 @@ var PROFILE_KEYS = [
  'bonusExercises','sessionHistory','customSessionHistory',
  'muscuSessionLog','muscuProgressionHistory','musculationWeights','sportEquipment','installations',
  // Nutrition plan
- 'shopChecked','weekPlan','selectedDay','_weekPlanGeneratedAt','nutritionLog',
+ 'shopChecked','weekPlan','selectedDay','_weekPlanGeneratedAt','nutritionLog','waterToday','waterTodayDate',
  // System
  'lang','weightUnit','heightUnit',
  'muscuMedical','crossfit1RM','muscuStrengthProfile','muscuProgramStart',

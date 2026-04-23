@@ -157,15 +157,22 @@ function openScan(mealSlot) {
       var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
       var timer = ctrl ? setTimeout(function() { ctrl.abort(); }, 24000) : null;
 
-      fetch(FUNCTION_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: b64, mediaType: 'image/jpeg' }),
-        signal: ctrl ? ctrl.signal : undefined
+      (window.AUTH && window.AUTH.getJWT ? window.AUTH.getJWT() : Promise.resolve(null)).then(function(_jwt) {
+        var _hdrs = { 'Content-Type': 'application/json' };
+        if (_jwt) _hdrs['Authorization'] = 'Bearer ' + _jwt;
+        return fetch(FUNCTION_URL, {
+          method: 'POST',
+          headers: _hdrs,
+          body: JSON.stringify({ image: b64, mediaType: 'image/jpeg' }),
+          signal: ctrl ? ctrl.signal : undefined
+        });
       })
       .then(function(res) {
         if (timer) clearTimeout(timer);
-        if (!res.ok) return res.json().catch(function() { return {}; }).then(function(e) { throw new Error(e.error || 'Erreur ' + res.status); });
+        if (!res.ok) {
+          if (res.status === 401 || res.status === 403) { if (window.showPaywall) window.showPaywall('scanner'); var _pe = new Error('paywall'); _pe._paywall = true; throw _pe; }
+          return res.json().catch(function() { return {}; }).then(function(e) { throw new Error(e.error || 'Erreur ' + res.status); });
+        }
         return res.json();
       })
       .then(function(data) {
@@ -179,6 +186,7 @@ function openScan(mealSlot) {
         _scanning = false;
         loader.style.display = 'none';
         photoZone.style.display = 'flex';
+        if (err && err._paywall) return;
         var msg = (err && err.name === 'AbortError')
           ? 'L\u2019analyse prend trop de temps. R\u00e9essayez.'
           : (err && err.message) || 'Erreur de connexion.';

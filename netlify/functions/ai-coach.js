@@ -3,6 +3,7 @@
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
 const { createClient } = require('@supabase/supabase-js');
+const { requirePremium } = require('./_user-auth');
 // UPGRADE 2026-04 : Haiku → Sonnet 4.6 pour coach adaptatif avec raisonnement fin
 // (ajustements charges ISSN/ACSM, interprétation RPE + cycle + wellness).
 // Rate limit déjà strict (10/h, 30/j par IP) → coût maîtrisé.
@@ -431,7 +432,7 @@ exports.handler = async function(event, context) {
 
   var headers = {
     'Access-Control-Allow-Origin': allowedOrigin,
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Credentials': 'false',
     'Content-Type': 'application/json',
@@ -471,6 +472,12 @@ exports.handler = async function(event, context) {
       headers: Object.assign({}, headers, { 'Retry-After': retryAfter }),
       body: JSON.stringify({ error: rlMsg })
     };
+  }
+
+  // ── Premium check ─────────────────────────────────────────────────────────
+  var auth = await requirePremium(event);
+  if (auth.error) {
+    return { statusCode: auth.error.statusCode, headers: headers, body: JSON.stringify({ error: auth.error.msg }) };
   }
 
   // ── API Key ────────────────────────────────────────────────────────────────

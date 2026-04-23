@@ -675,15 +675,19 @@ async function runAnalysis() {
     // Timeout client 43s (marge 2s avant le timeout serveur Netlify 45s)
     var _baCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
     var _baTimer = _baCtrl ? setTimeout(function() { _baCtrl.abort(); }, 25000) : null;
+    var _baJwt = (window.AUTH && window.AUTH.getJWT) ? await window.AUTH.getJWT().catch(function() { return null; }) : null;
+    var _baHdrs = { 'Content-Type': 'application/json' };
+    if (_baJwt) _baHdrs['Authorization'] = 'Bearer ' + _baJwt;
     var resp = await fetch(FUNCTION_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: _baHdrs,
       body: JSON.stringify({ images: images, context: ctx, exercisesDb: exercisesDb }),
       signal: _baCtrl ? _baCtrl.signal : undefined
     });
     if (_baTimer) clearTimeout(_baTimer);
 
     if (!resp.ok) {
+      if (resp.status === 401 || resp.status === 403) { if (window.showPaywall) window.showPaywall('body-analysis'); return; }
       var errBody = await resp.json().catch(function() { return {}; });
       throw new Error(errBody.error || 'Erreur serveur HTTP ' + resp.status);
     }

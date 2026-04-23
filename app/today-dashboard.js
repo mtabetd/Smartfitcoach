@@ -6537,11 +6537,11 @@ function renderFabLogger() {
           if (window.render) window.render();
         } },
       { label: 'EAU', icon: 'M8 2C8 2 4 7 4 10a4 4 0 1 0 8 0c0-3-4-8-4-8z', action: function() {
-          var _today = new Date().toISOString().slice(0,10);
-          if (S.waterTodayDate !== _today) { S.waterToday = 0; S.waterTodayDate = _today; }
-          S.waterToday = Math.min(10, (S.waterToday || 0) + 1);
           S._fabOpen = false;
-          if (window.saveProfile) window.saveProfile();
+          if (window.WATER_TRACKER) {
+            var _wd = WATER_TRACKER.addGlass();
+            if (_wd && window.showToast) window.showToast('+1 verre — ' + _wd.glasses + ' / ' + _wd.target, 'success', 1800);
+          }
           if (window.render) window.render();
         } }
     ];

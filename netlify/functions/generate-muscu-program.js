@@ -1,5 +1,6 @@
 // netlify/functions/generate-muscu-program.js
 // Génération de programme musculation hyper-personnalisé — Sonnet IA
+const { requirePremium } = require('./_user-auth');
 
 const MODEL = 'claude-haiku-4-5-20251001';
 const MAX_TOKENS = 2000;
@@ -707,7 +708,7 @@ exports.handler = async function(event) {
 
   var headers = {
     'Access-Control-Allow-Origin': allowedOrigin,
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Credentials': 'false',
     'Content-Type': 'application/json',
@@ -738,6 +739,12 @@ exports.handler = async function(event) {
       headers: Object.assign({}, headers, { 'Retry-After': retryAfter }),
       body: JSON.stringify({ error: 'Tu as utilisé tes 3 générations cette semaine. Nouvelles disponibles lundi !' })
     };
+  }
+
+  // ── Premium check ─────────────────────────────────────────────────────────
+  var auth = await requirePremium(event);
+  if (auth.error) {
+    return { statusCode: auth.error.statusCode, headers: headers, body: JSON.stringify({ error: auth.error.msg }) };
   }
 
   // Body validation

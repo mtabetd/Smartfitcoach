@@ -658,14 +658,21 @@ function replayLastUserMessage(_unused) {
   var ctx = buildContext();
   var _ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
   var _tm = _ctrl ? setTimeout(function() { _ctrl.abort(); }, 25000) : null;
-  fetch(FUNCTION_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages: apiMessages, context: ctx }),
-    signal: _ctrl ? _ctrl.signal : undefined
+  (window.AUTH && window.AUTH.getJWT ? window.AUTH.getJWT() : Promise.resolve(null)).then(function(_jwt) {
+    var _hdrs = { 'Content-Type': 'application/json' };
+    if (_jwt) _hdrs['Authorization'] = 'Bearer ' + _jwt;
+    return fetch(FUNCTION_URL, {
+      method: 'POST',
+      headers: _hdrs,
+      body: JSON.stringify({ messages: apiMessages, context: ctx }),
+      signal: _ctrl ? _ctrl.signal : undefined
+    });
   }).then(function(res) {
     if (_tm) clearTimeout(_tm);
-    if (!res.ok) return res.json().catch(function(){ return {}; }).then(function(e){ throw new Error(e.error || 'Erreur HTTP ' + res.status); });
+    if (!res.ok) {
+      if (res.status === 401 || res.status === 403) { if (window.showPaywall) window.showPaywall('ai-coach'); var _pe = new Error('paywall'); _pe._paywall = true; throw _pe; }
+      return res.json().catch(function(){ return {}; }).then(function(e){ throw new Error(e.error || 'Erreur HTTP ' + res.status); });
+    }
     return res.json();
   }).then(function(data) {
     if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
@@ -686,6 +693,7 @@ function replayLastUserMessage(_unused) {
   }).catch(function(err) {
     if (_tm) clearTimeout(_tm);
     if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
+    if (err && err._paywall) return;
     var errMsg = (err && err.name === 'AbortError')
       ? 'Le coach met trop de temps à répondre. Réessaie dans quelques instants.'
       : 'Impossible de régénérer. Vérifie ta connexion.';
@@ -1263,14 +1271,21 @@ function sendMessage() {
   // Si Sonnet dépasse → AbortController force une sortie propre + message erreur.
   var _coachCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
   var _coachTimer = _coachCtrl ? setTimeout(function() { _coachCtrl.abort(); }, 25000) : null;
-  fetch(FUNCTION_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages: apiMessages, context: ctx }),
-    signal: _coachCtrl ? _coachCtrl.signal : undefined
+  (window.AUTH && window.AUTH.getJWT ? window.AUTH.getJWT() : Promise.resolve(null)).then(function(_jwt) {
+    var _hdrs = { 'Content-Type': 'application/json' };
+    if (_jwt) _hdrs['Authorization'] = 'Bearer ' + _jwt;
+    return fetch(FUNCTION_URL, {
+      method: 'POST',
+      headers: _hdrs,
+      body: JSON.stringify({ messages: apiMessages, context: ctx }),
+      signal: _coachCtrl ? _coachCtrl.signal : undefined
+    });
   }).then(function(res) {
     if (_coachTimer) clearTimeout(_coachTimer);
-    if (!res.ok) return res.json().catch(function(){ return {}; }).then(function(e){ throw new Error(e.error || 'Erreur HTTP ' + res.status); });
+    if (!res.ok) {
+      if (res.status === 401 || res.status === 403) { if (window.showPaywall) window.showPaywall('ai-coach'); var _pe = new Error('paywall'); _pe._paywall = true; throw _pe; }
+      return res.json().catch(function(){ return {}; }).then(function(e){ throw new Error(e.error || 'Erreur HTTP ' + res.status); });
+    }
     return res.json();
   }).then(function(data) {
     if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
@@ -1303,6 +1318,7 @@ function sendMessage() {
   }).catch(function(err) {
     if (_coachTimer) clearTimeout(_coachTimer);
     if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
+    if (err && err._paywall) return;
     var errMsg = (err && err.name === 'AbortError')
       ? 'Le coach met trop de temps \u00e0 r\u00e9pondre. R\u00e9essaie dans quelques instants.'
       : (err && err.message && err.message.indexOf('429') !== -1)

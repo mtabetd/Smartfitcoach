@@ -149,6 +149,7 @@
     _syncInterval: null,
     _debounceTimer: null,
     _syncPending: false,
+    _counterTimers: {},
 
     // Sauvegarder le profil complet vers Supabase
     saveProfile: function() {
@@ -181,8 +182,10 @@
           // qui étaient PERDUES au changement de device (jamais sync cloud).
           var SYNC_PREFIXES = [
             // Historiques génériques
-            'mtd_perf_hist_', 'mtd_badges_', 'mtd_streak_',
+            'mtd_perf_hist_', 'mtd_badges_', 'mtd_streak_', 'mtd_nutrition_streak_',
             'mtd_food_journal_', 'mtd_water_', 'mtd_weight_history_',
+            // Gamification counters
+            'mtd_counter_',
             // Sport — séances loggées
             'mtd_muscu_session_',
             // Sport — charges & progression (étaient absents)
@@ -430,6 +433,27 @@
             badge_id: badgeId
           }, { onConflict: 'user_id,badge_id' });
       }).catch(function(e) { console.warn('[SupaSync] saveBadge failed:', e); });
+    },
+
+    // Sauvegarder un compteur gamification (debounced 2s pour éviter des upserts répétés)
+    saveCounter: function(counterName, value) {
+      var self = this;
+      if (self._counterTimers[counterName]) clearTimeout(self._counterTimers[counterName]);
+      self._counterTimers[counterName] = setTimeout(function() {
+        delete self._counterTimers[counterName];
+        var client = getClient();
+        if (!client) return;
+        SupaAuth.getSession().then(function(session) {
+          if (!session || !session.user) return;
+          return client
+            .from('counters')
+            .upsert({
+              user_id: session.user.id,
+              counter_name: counterName,
+              value: value
+            }, { onConflict: 'user_id,counter_name' });
+        }).catch(function(e) { console.warn('[SupaSync] saveCounter failed:', e); });
+      }, 2000);
     },
 
     // Sauvegarder le streak
