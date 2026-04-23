@@ -1310,24 +1310,73 @@ function renderProfilePage(container) {
      });
      card.appendChild(_featsWrap);
 
-     // Prix — affiché uniquement pour les non-abonnés
+     // Sélecteur de plan — données live depuis get-pricing, fallback si pas encore chargé
      if (!_isSub) {
-       var _priceRow = h('div', {style:
-         'text-align:center;margin:18px 0 4px;'
-       });
-       var _priceLabel = window.SFC_PREMIUM_PRICE || '9,99 €/mois';
-       _priceRow.appendChild(h('div', {style:
-         'font-family:Georgia,serif;font-size:24px;color:var(--black);line-height:1;'
-       }, _priceLabel));
-       _priceRow.appendChild(h('div', {style:
-         'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;' +
-         'letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:4px;'
-       }, 'Sans engagement · Résiliable à tout moment'));
-       card.appendChild(_priceRow);
+       var _pData = window.SFC_PRICING_DATA || [];
+       var _ui = window._sfcPricingUI = window._sfcPricingUI || { tier: 'athlete', duration: 'saison' };
+       var _tiers = ['athlete', 'champion', 'legende'];
+       var _tierLabels = { athlete: 'Athlete', champion: 'Champion', legende: 'Légende' };
+       var _durs = ['saison', 'cycle', 'engagement'];
+       var _durLabels = { saison: 'Mensuel', cycle: 'Trimestriel', engagement: 'Annuel' };
+       function _findPlan(t, d) {
+         for (var _k = 0; _k < _pData.length; _k++) {
+           if (_pData[_k].tier === t && _pData[_k].duration === d) return _pData[_k];
+         }
+         return null;
+       }
+       var _selPlan = _findPlan(_ui.tier, _ui.duration);
+
+       if (_pData.length > 0) {
+         var _tabRow = h('div', {style: 'display:flex;border:1px solid var(--border);overflow:hidden;border-radius:2px;margin-top:20px;margin-bottom:12px;'});
+         _tiers.forEach(function(t) {
+           var isAct = _ui.tier === t;
+           var btn = h('button', {
+             style: 'flex:1;padding:10px 2px;border:none;border-right:1px solid var(--border);cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;background:' + (isAct ? 'var(--black,#0A0A09)' : 'transparent') + ';color:' + (isAct ? '#FAF9F6' : 'var(--grey)') + ';transition:all 0.2s;min-height:40px;',
+             onclick: (function(tier) { return function() { window._sfcPricingUI.tier = tier; if (window.render) window.render(); }; })(t)
+           }, _tierLabels[t]);
+           _tabRow.appendChild(btn);
+         });
+         if (_tabRow.lastChild) _tabRow.lastChild.style.borderRight = 'none';
+         card.appendChild(_tabRow);
+
+         var _priceBox = h('div', {style: 'text-align:center;padding:16px 0 8px;'});
+         if (_selPlan) {
+           _priceBox.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:30px;color:var(--black);line-height:1;margin-bottom:4px;'}, _selPlan.label_mad));
+           var _durSub = (_durLabels[_ui.duration] || _ui.duration).toLowerCase();
+           if (_selPlan.savings_pct > 0) _durSub += ' · −' + _selPlan.savings_pct + ' %';
+           _priceBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;color:var(--grey);'}, _durSub));
+         }
+         card.appendChild(_priceBox);
+
+         var _durRow = h('div', {style: 'display:flex;gap:6px;justify-content:center;margin-bottom:6px;flex-wrap:wrap;'});
+         _durs.forEach(function(d) {
+           var isAct = _ui.duration === d;
+           var dp = _findPlan(_ui.tier, d);
+           var pillLabel = _durLabels[d] || d;
+           if (dp && dp.savings_pct > 0) pillLabel += ' −' + dp.savings_pct + '%';
+           var pill = h('button', {
+             style: 'padding:7px 12px;border:1px solid ' + (isAct ? 'var(--black)' : 'var(--border)') + ';background:' + (isAct ? 'var(--black)' : 'transparent') + ';color:' + (isAct ? '#FAF9F6' : 'var(--grey)') + ';cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;border-radius:2px;min-height:36px;transition:all 0.2s;',
+             onclick: (function(dur) { return function() { window._sfcPricingUI.duration = dur; if (window.render) window.render(); }; })(d)
+           }, pillLabel);
+           _durRow.appendChild(pill);
+         });
+         card.appendChild(_durRow);
+       } else {
+         var _priceRow = h('div', {style: 'text-align:center;margin:18px 0 4px;'});
+         _priceRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);font-style:italic;'}, 'Chargement des tarifs…'));
+         card.appendChild(_priceRow);
+       }
      }
 
      // CTA — bouton Hermès noir laqué (ou info si abonné)
      if (!_isSub) {
+       var _pData2 = window.SFC_PRICING_DATA || [];
+       var _ui2 = window._sfcPricingUI || { tier: 'athlete', duration: 'saison' };
+       var _ctaPlan = null;
+       for (var _ci = 0; _ci < _pData2.length; _ci++) {
+         if (_pData2[_ci].tier === _ui2.tier && _pData2[_ci].duration === _ui2.duration) { _ctaPlan = _pData2[_ci]; break; }
+       }
+       var _ctaLabel = _trialExpired ? 'Réactiver mon accès' : _daysLeft <= 1 ? 'Dernier jour — S\'abonner' : _daysLeft <= 2 ? 'Plus que ' + _daysLeft + ' jours — S\'abonner' : (_ctaPlan ? 'S\'abonner — ' + _ctaPlan.label_mad + '/mois' : 'Passer à Premium');
        var _cta = h('button', {
          style:
            'display:block;width:100%;margin-top:16px;padding:16px;' +
@@ -1339,7 +1388,7 @@ function renderProfilePage(container) {
            if (window.showPaywall) window.showPaywall('premium');
            else if (window.showToast) window.showToast('Abonnement bientôt disponible', 'info', 3000);
          }
-       }, _trialExpired ? 'Réactiver mon accès' : _daysLeft <= 1 ? 'Dernier jour — S\'abonner maintenant' : _daysLeft <= 2 ? 'Plus que ' + _daysLeft + ' jours — S\'abonner' : 'Passer à Premium');
+       }, _ctaLabel);
        card.appendChild(_cta);
      } else {
        card.appendChild(h('div', {style:
