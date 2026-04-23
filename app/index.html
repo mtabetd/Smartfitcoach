@@ -418,18 +418,14 @@ canvas.weight-chart{width:100%;height:200px}
 <script src="./gate.js"></script>
 <script src="./error-boundary.js"></script>
 <script defer src="./chart.umd.min.js"></script>
-<script defer src="./jspdf.umd.min.js"></script>
+<!-- jspdf: lazy-loaded on PDF export click (~411KB saved at startup) -->
 <script defer src="./prices-db.js"></script>
 <script defer src="./recipe-engine.js"></script>
 <script defer src="./supabase.min.js"></script>
 <script defer src="supabase-client.js"></script>
 <script defer src="./exercise-gifs-map.js"></script>
 <script defer src="./exercises-db.js"></script>
-<script defer src="./crossfit-wods.js"></script>
-<script defer src="./crossfit-wods-cycle2.js"></script>
-<script defer src="./crossfit-wods-cycle3.js"></script>
-<script defer src="./crossfit-wods-merge.js"></script>
-<script defer src="./crossfit-haltero-cycles.js"></script>
+<!-- crossfit-wods: lazy-loaded via _loadCFScripts() only for CrossFit users (~543KB saved for other users) -->
 <script defer src="./auth.js"></script>
 <script defer src="./gamification.js"></script>
 <script defer src="./extras.js"></script>

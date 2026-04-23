@@ -3029,7 +3029,7 @@ function renderCardRepas() {
     _emptyCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);margin-bottom:20px;line-height:1.55;max-width:260px;margin-left:auto;margin-right:auto;'}, 'Calibré sur votre corps, vos objectifs et votre quotidien.'));
     _emptyCard.appendChild(h('button', {
       style: 'padding:14px 24px;min-height:48px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
-      onclick: function() { var S = window.S; S.view = 'nutrition'; if (window.render) window.render(); }
+      onclick: function() { if (!window.S) return; window.S.view = 'nutrition'; if (window.render) window.render(); }
     }, 'Composer mon plan'));
     _emptyCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:14px;'}, '5 min \u00b7 Gratuit \u00b7 Personnalis\u00e9'));
     c.appendChild(_emptyCard);
@@ -3285,9 +3285,8 @@ function buildShareCanvas() {
   try {
     var _user = window.AUTH ? window.AUTH.getUser() : null;
     var _uid = _user ? _user.id : 'anon';
-    var _wh = [];
-    try { _wh = JSON.parse(localStorage.getItem('mtd_weight_history_' + _uid) || '[]'); } catch(e2) {}
-    if (!_wh.length && Array.isArray(S.weightHistory)) _wh = S.weightHistory;
+    var _wh = (Array.isArray(S.weightHistory) && S.weightHistory.length) ? S.weightHistory : [];
+    if (!_wh.length) { try { _wh = JSON.parse(localStorage.getItem('mtd_weight_history_' + _uid) || '[]'); } catch(e2) {} }
     if (Array.isArray(_wh) && _wh.length >= 2) {
       _wh.sort(function(a, b) { return (a.date || '').localeCompare(b.date || ''); });
       var _fw = parseFloat(_wh[0].weight);
@@ -3539,7 +3538,7 @@ function renderCardSport() {
     _sportEmpty.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);margin-bottom:20px;line-height:1.55;max-width:260px;margin-left:auto;margin-right:auto;'}, 'Choisissez votre sport, votre niveau et votre agenda.'));
     _sportEmpty.appendChild(h('button', {
       style: 'padding:14px 24px;min-height:48px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
-      onclick: function() { var S2 = window.S; S2.view = 'sport'; if (window.render) window.render(); }
+      onclick: function() { if (!window.S) return; window.S.view = 'sport'; if (window.render) window.render(); }
     }, 'Composer mon programme'));
     _sportEmpty.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:14px;'}, '3 min \u00b7 Gratuit \u00b7 Personnalis\u00e9'));
     _sportEmptyCard.appendChild(_sportEmpty);
@@ -4028,14 +4027,15 @@ function openTodayWeightPrompt() {
         var user = window.AUTH ? window.AUTH.getUser() : null;
         var userId = user ? user.id : 'anon';
         var whKey = 'mtd_weight_history_' + userId;
-        var wh = [];
-        try { wh = JSON.parse(localStorage.getItem(whKey) || '[]'); } catch(e) { wh = []; }
-        wh.push({ date: new Date().toISOString().split('T')[0], weight: valKg });
+        var wh = (window.S && Array.isArray(window.S.weightHistory) && window.S.weightHistory.length)
+          ? window.S.weightHistory
+          : [];
+        if (!wh.length) { try { wh = JSON.parse(localStorage.getItem(whKey) || '[]'); } catch(e) { wh = []; } }
+        var _newEntry = { date: new Date().toISOString().split('T')[0], weight: valKg };
+        wh.push(_newEntry);
         try { localStorage.setItem(whKey, JSON.stringify(wh)); } catch(e) {}
         if (window.SupaSync) SupaSync.saveWeight(new Date().toISOString().split('T')[0], valKg);
-        if (window.S && Array.isArray(window.S.weightHistory)) {
-          window.S.weightHistory.push({ date: new Date().toISOString().split('T')[0], weight: valKg });
-        }
+        if (window.S) window.S.weightHistory = wh;
         // Persister le nouveau poids dans le profil (évite la perte de données si l'utilisateur ferme l'app)
         if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
         var _wLabel = 'Poids enregistré : ' + (window.UNITS ? window.UNITS.displayWeight(valKg) : valKg + ' kg');
@@ -5345,8 +5345,8 @@ function renderCardTDEEAdaptatif(S) {
   var uid = (window.AUTH && window.AUTH.getUser()) ? window.AUTH.getUser().id : 'anon';
 
   // Charger l'historique du poids (mtd_weight_history_{uid})
-  var weightHistory = [];
-  try { weightHistory = JSON.parse(localStorage.getItem('mtd_weight_history_' + uid) || '[]'); } catch(e) {}
+  var weightHistory = (window.S && Array.isArray(window.S.weightHistory)) ? window.S.weightHistory : [];
+  if (!weightHistory.length) { try { weightHistory = JSON.parse(localStorage.getItem('mtd_weight_history_' + uid) || '[]'); } catch(e) {} }
 
   // Besoin d'au moins 2 entrées avec 7 jours d'écart
   if (!Array.isArray(weightHistory) || weightHistory.length < 2) return null;
