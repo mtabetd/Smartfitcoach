@@ -156,6 +156,11 @@ function getStreak() {
   var user = window.AUTH ? window.AUTH.getUser() : null;
   if (!user) return {current: 0, best: 0, lastDate: null};
   var data = {}; try { data = JSON.parse(localStorage.getItem(STREAK_KEY + user.id) || '{"current":0,"best":0,"lastDate":null,"dates":[]}'); } catch(e) { data = {current:0,best:0,lastDate:null,dates:[]}; }
+  // Defensive: normalize missing/non-numeric keys (valid JSON {} would have undefined 'current')
+  if (typeof data.current !== 'number') data.current = 0;
+  if (typeof data.best !== 'number') data.best = 0;
+  if (!('lastDate' in data)) data.lastDate = null;
+  if (!Array.isArray(data.dates)) data.dates = [];
   return data;
 }
 

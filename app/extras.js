@@ -224,7 +224,7 @@ window.WATER_TRACKER = {
     return {
       glasses: glasses,
       target: target,
-      percent: Math.min(100, Math.round((glasses / target) * 100))
+      percent: target > 0 ? Math.min(100, Math.round((glasses / target) * 100)) : 0
     };
   },
 

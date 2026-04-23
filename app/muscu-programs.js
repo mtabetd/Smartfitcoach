@@ -2311,6 +2311,11 @@ function buildPersonalizedMuscuPlan(S) {
   var style = 'fusion';
   var goalKey = (S.goal !== null && S.goal !== undefined && window.GOALS && window.GOALS[S.goal])
     ? window.GOALS[S.goal].key : '';
+  // TCA : forcer maintenance même si objectif persisté = cut/shred (ANAD, IOC 2018 — RED-S prevention)
+  // Cohérence avec calcTarget/calcMacros (app-core.js) qui redirigent déjà vers 'maintain' pour TCA.
+  if ((goalKey === 'cut' || goalKey === 'shred') && Array.isArray(S.medical) && S.medical.indexOf('tca') !== -1) {
+    goalKey = 'maintain';
+  }
   var sportGoals = S.sportGoals || [];
   // Facteurs de volume globaux — appliqués à tous les muscles
   var _isDeficit = goalKey === 'cut' || goalKey === 'shred'; // déficit calorique → préserver muscle, réduire volume
@@ -2352,7 +2357,8 @@ function buildPersonalizedMuscuPlan(S) {
   // FIX régression 2026-04-15 : Starting Strength EXIGE barbell (squat, bench, DL, press).
   // Pour user `sportEquipment='home'` sans barre, Starting Strength = pool vide.
   // On force classic (équipement-agnostique) à la place.
-  var _userEquip = S.sportEquipment || 'gym';
+  var _userEquip = S.sportEquipment;
+  if (!_userEquip || typeof _userEquip !== 'string') _userEquip = 'gym'; // type guard: [] is truthy but not a valid equip string
   var userDaysRequested = S.sportDays || 3;
   // FIX P0r : NE PAS forcer Starting Strength si pathologies lourdes (osteo/cardio/poly-
   // arthrite/fibromyalgie) car SS = squat barre + DC + DL + Power Clean → tous filtrés
@@ -2424,7 +2430,8 @@ function buildPersonalizedMuscuPlan(S) {
   (S.weakZones || []).forEach(function(z) { if (priorityMuscles.indexOf(z) < 0) priorityMuscles.push(z); });
 
   // 6. ÉQUIPEMENT : filtre exercices selon matériel disponible
-  var equip = S.sportEquipment || 'gym';
+  var equip = S.sportEquipment;
+  if (!equip || typeof equip !== 'string') equip = 'gym'; // type guard: [] is truthy but not a valid equip string
   function equipOk(ex) {
     if (equip === 'gym') return true;
     if (equip === 'dumbbells') return ['halteres','haltères','poids_corps','poids du corps','banc','barre_ez'].indexOf(ex.equipment) >= 0;
@@ -2700,7 +2707,11 @@ function buildPersonalizedMuscuPlan(S) {
       if (medList.indexOf('cardio') !== -1 || medList.indexOf('insuffisance_card') !== -1) {
         medFilters.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre\s+lourd|\bsnatch\b|\bclean\b|burpee|box\s+jump|hiit/i);
       }
-      // GOUTTE / CALCULS / IRC : pas d'exclusion exos directe (impact diététique surtout)
+      // IRC — intensité modérée, éviter Valsalva (KDOQI 2012 — cohérent avec app-sport.js l.699)
+      if (medList.indexOf('irc') !== -1) {
+        medFilters.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre|back\s+squat|front\s+squat|\bsnatch\b|arrach[eé]|\bclean\b|[eé]paul[eé]|jerk|thruster|burpee|box\s+jump|jump\s+squat/i);
+      }
+      // GOUTTE / CALCULS : pas d'exclusion exos directe (impact diététique surtout)
       // RHUMATISMES / POLYARTHRITE / ARTHRITE
       // FIX 2026-04-16 : ajout 'arthrite' (forme française générique) — avant, seuls
       // 'polyarthrite' et 'rheumatoid' étaient matchés.

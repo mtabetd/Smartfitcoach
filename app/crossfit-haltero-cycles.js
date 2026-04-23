@@ -538,6 +538,19 @@ function renderCycleInfo(container, totalWeeks, sex, level) {
     var testNote = h('div', {style: 'margin-top:12px;padding:10px 14px;background:var(--redbg,rgba(90,16,16,.06));border-left:2px solid var(--red,#5A1010);font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--red,#5A1010)'});
     testNote.textContent = 'SEMAINE DE TEST — C\'est le moment de tout donner. Échauffement long, montée progressive, tentative de PR !';
     card.appendChild(testNote);
+    // Medical warning: HTA/cardio users should NOT do 1RM Valsalva (ESC/ESH 2018, KDOQI 2012)
+    var _med1rmList = window.S && Array.isArray(window.S.medical) ? window.S.medical.map(function(m){ return String(m).toLowerCase(); }) : [];
+    var _1rmBlocked = _med1rmList.indexOf('hta_severe') !== -1 || _med1rmList.indexOf('cardio') !== -1 || _med1rmList.indexOf('insuffisance_card') !== -1;
+    var _1rmCaution = !_1rmBlocked && (_med1rmList.indexOf('hta') !== -1 || _med1rmList.indexOf('hypertension') !== -1 || _med1rmList.indexOf('irc') !== -1);
+    if (_1rmBlocked) {
+      var blockNote = h('div', {style: 'margin-top:8px;padding:10px 14px;background:rgba(220,53,69,0.1);border-left:3px solid #8B0000;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#8B0000'});
+      blockNote.textContent = '⚠ CONTRE-INDIQUÉ — Votre profil médical (HTA sévère / insuffisance cardiaque) contre-indique les tentatives de 1RM. La manœuvre de Valsalva sous charge maximale présente un risque cardiovasculaire sérieux. Consultez votre médecin. Remplacez par 3×5 à 75%.';
+      card.appendChild(blockNote);
+    } else if (_1rmCaution) {
+      var cautionNote = h('div', {style: 'margin-top:8px;padding:10px 14px;background:rgba(255,193,7,0.1);border-left:3px solid #856404;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#856404'});
+      cautionNote.textContent = '⚠ Attention médicale — HTA / IRC détectée. Limitez à 85-90% du 1RM maximum. Évitez l\'apnée (Valsalva) sous charge. Consultez votre médecin avant de tester votre max. — ESC/ESH 2018';
+      card.appendChild(cautionNote);
+    }
   }
 
   container.appendChild(card);
