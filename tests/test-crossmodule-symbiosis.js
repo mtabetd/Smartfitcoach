@@ -41,6 +41,7 @@ eval(fs.readFileSync(ROOT + '/app/food-db.js', 'utf8'));
 eval(fs.readFileSync(ROOT + '/app/extras.js', 'utf8'));
 eval(fs.readFileSync(ROOT + '/app/app-core.js', 'utf8'));  // sets window.S
 eval(fs.readFileSync(ROOT + '/app/exercises-db.js', 'utf8'));
+eval(fs.readFileSync(ROOT + '/app/sport-data.js', 'utf8'));  // données statiques sport (Phase 2)
 eval(fs.readFileSync(ROOT + '/app/app-sport.js', 'utf8'));
 
 var GOALS = window.GOALS || [];
