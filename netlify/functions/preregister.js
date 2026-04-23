@@ -200,15 +200,8 @@ exports.handler = async function(event) {
         return { statusCode: 409, headers: corsHeaders(origin), body: JSON.stringify({ error: 'Vous figurez déjà parmi les premiers inscrits.' }) };
       }
       console.error('[preregister] Supabase insert error:', insertRes.error);
-      // DEBUG — renvoyer l'erreur détaillée au client le temps de diagnostiquer
       return { statusCode: 500, headers: corsHeaders(origin), body: JSON.stringify({
-        error: 'Impossible d\'enregistrer votre inscription.',
-        debug: {
-          code: insertRes.error.code || null,
-          message: insertRes.error.message || null,
-          details: insertRes.error.details || null,
-          hint: insertRes.error.hint || null
-        }
+        error: 'Impossible d\'enregistrer votre inscription.'
       }) };
     }
 
