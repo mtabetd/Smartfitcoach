@@ -48,9 +48,8 @@ async function requirePremium(event) {
   try {
     userResp = await admin.auth.getUser(token);
   } catch (e) {
-    // Supabase unreachable — fail open (don't block user)
-    console.warn('[_user-auth] Supabase getUser exception — fail open:', e && e.message);
-    return { skip: true };
+    console.warn('[_user-auth] Supabase getUser exception:', e && e.message);
+    return { error: { statusCode: 503, msg: 'Service temporairement indisponible — réessayez' } };
   }
 
   if (userResp.error || !userResp.data || !userResp.data.user) {
@@ -69,9 +68,8 @@ async function requirePremium(event) {
       .single();
     profile = data;
   } catch (e) {
-    // DB unreachable — fail open
-    console.warn('[_user-auth] profiles fetch exception — fail open:', e && e.message);
-    return { skip: true };
+    console.warn('[_user-auth] profiles fetch exception:', e && e.message);
+    return { error: { statusCode: 503, msg: 'Service temporairement indisponible — réessayez' } };
   }
 
   const today = new Date().toISOString().slice(0, 10);
