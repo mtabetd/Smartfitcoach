@@ -6831,6 +6831,12 @@ function renderMusculationProgram(p) {
     S.selectedSportDay = _todayPosInProg;
     S.currentExerciseIdx = 0;
     S._exSwipeDayIdx = _todayPosInProg;
+    // Démarrer le chrono si pas encore commencé aujourd'hui
+    var _today2 = new Date().toISOString().slice(0,10);
+    if (!S._sessionStartTime || !S._sessionStartDate || S._sessionStartDate !== _today2) {
+      S._sessionStartTime = Date.now();
+      S._sessionStartDate = _today2;
+    }
     if (window.render) window.render();
    }
   }, '→ Commencer maintenant'));
@@ -7607,6 +7613,55 @@ function renderMusculationProgram(p) {
   if (_hdrProgPct > 0) _metaParts.push('+' + _hdrProgPct + '%');
   _hdrWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65)'}, _metaParts.join('\u00a0·\u00a0')));
   p.appendChild(_hdrWrap);
+
+  // Chrono séance — mis à jour toutes les 30s sans re-render complet
+  if (S._sessionStartTime) {
+    var _elapsed = Math.floor((Date.now() - S._sessionStartTime) / 60000);
+    var _chronoEl = document.createElement('div');
+    _chronoEl.id = 'session-chrono';
+    _chronoEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:center;margin-bottom:8px;';
+    _chronoEl.textContent = 'Séance en cours — ' + _elapsed + ' min';
+    // Updater le texte toutes les 30s directement dans le DOM (sans re-render)
+    var _chronoInterval = setInterval(function() {
+      var el = document.getElementById('session-chrono');
+      if (!el || !S._sessionStartTime) { clearInterval(_chronoInterval); return; }
+      var _mins = Math.floor((Date.now() - S._sessionStartTime) / 60000);
+      el.textContent = 'Séance en cours — ' + _mins + ' min';
+    }, 30000);
+    p.appendChild(_chronoEl);
+  }
+
+  // Progress bar séance (sets validés / sets totaux)
+  (function() {
+    var _day = (S.sportProgram || [])[S.selectedSportDay];
+    if (!_day || !Array.isArray(_day.exercises)) return;
+    var _totalSets = 0, _doneSets = 0;
+    var _today3 = new Date().toISOString().slice(0,10);
+    var _todayLog = (S.muscuSessionLog || {})[_today3] || {};
+    _day.exercises.forEach(function(ex) {
+      var _exName = ex.n || ex.name || '';
+      var _exSets = parseInt(ex.sets) || 3;
+      _totalSets += _exSets;
+      var _logged = _todayLog[_exName] || [];
+      _doneSets += _logged.filter(function(s) { return s && s.validated; }).length;
+    });
+    if (_totalSets === 0) return;
+    var _pct = Math.min(100, Math.round(_doneSets / _totalSets * 100));
+    var _progressWrap = document.createElement('div');
+    _progressWrap.style.cssText = 'max-width:560px;margin:0 auto 12px;';
+    var _progressBar = document.createElement('div');
+    _progressBar.style.cssText = 'height:2px;background:var(--line,#D8D8D0);border-radius:1px;overflow:hidden;';
+    var _progressFill = document.createElement('div');
+    _progressFill.style.cssText = 'height:100%;width:' + _pct + '%;background:var(--black,#0A0A09);transition:width 0.4s ease;';
+    _progressBar.appendChild(_progressFill);
+    var _progressLabel = document.createElement('div');
+    _progressLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:right;margin-top:4px;';
+    _progressLabel.textContent = _doneSets + ' / ' + _totalSets + ' sets · ' + _pct + '%';
+    _progressWrap.appendChild(_progressBar);
+    _progressWrap.appendChild(_progressLabel);
+    p.appendChild(_progressWrap);
+  })();
+
  })();
 
  // ─── BADGE SÉANCE VALIDÉE ───
@@ -8259,6 +8314,19 @@ function renderMusculationProgram(p) {
  inputZone.appendChild(repsInput);
  inputZone.appendChild(_rPlusBtn);
  inputZone.appendChild(h('span', {style: 'font-size:9px;color:var(--grey)'}, window.t('muscu.reps')));
+
+ // Last Session Ghost — valeurs exactes de la dernière session
+ if (_lastSessionSets && _lastSessionSets[si3] && _lastSessionSets[si3].validated) {
+   var _ghost = _lastSessionSets[si3];
+   var _ghostW = (_ghost.actualWeight > 0 && !isBodyweight) ? (window.UNITS ? window.UNITS.displayWeight(_ghost.actualWeight) : _ghost.actualWeight + ' kg') : null;
+   var _ghostR = _ghost.actualReps > 0 ? _ghost.actualReps + ' reps' : null;
+   if (_ghostW || _ghostR) {
+     var _ghostLine = document.createElement('div');
+     _ghostLine.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;color:var(--grey,#9A9A90);text-align:center;margin-top:4px;padding:2px 0;';
+     _ghostLine.textContent = '↑ ' + [_ghostW, _ghostR].filter(Boolean).join(' × ');
+     inputZone.appendChild(_ghostLine);
+   }
+ }
 
  // Verrouiller les inputs si la série est déjà validée
  if (setRow.validated === true) {
