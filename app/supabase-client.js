@@ -140,6 +140,14 @@
     }
   };
 
+  // UUID v4 generator (no crypto dependency, sufficient for client-side row IDs)
+  function _uuid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0;
+      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+  }
+
   // ─── SYNC MODULE ──────────────────────────────────────────
   // Stratégie : localStorage = source primaire (rapide, offline)
   //             Supabase = backup cloud (sync en arrière-plan)
@@ -341,12 +349,14 @@
     saveSession: function(sessionData) {
       var client = getClient();
       if (!client) return Promise.resolve();
+      var sessionId = sessionData.sessionId || _uuid();
 
       return SupaAuth.getSession().then(function(session) {
         if (!session || !session.user) return;
         return client
           .from('sport_sessions')
-          .insert({
+          .upsert({
+            session_id: sessionId,
             user_id: session.user.id,
             date: sessionData.date || new Date().toISOString().slice(0, 10),
             sport_type: window.S.sportType || 'musculation',
@@ -357,7 +367,7 @@
             kcal_total: sessionData.kcalTotal,
             rpe: sessionData.rpe,
             heart_rate: sessionData.hr
-          });
+          }, { onConflict: 'session_id' });
       }).catch(function(e) { console.warn('[SupaSync] saveSession failed:', e); });
     },
 
@@ -383,12 +393,14 @@
     saveFoodEntry: function(entry) {
       var client = getClient();
       if (!client) return Promise.resolve();
+      var entryId = entry.entryId || _uuid();
 
       return SupaAuth.getSession().then(function(session) {
         if (!session || !session.user) return;
         return client
           .from('food_journal')
-          .insert({
+          .upsert({
+            entry_id: entryId,
             user_id: session.user.id,
             date: entry.date || new Date().toISOString().slice(0, 10),
             meal: entry.meal,
@@ -400,7 +412,7 @@
             qty: entry.qty,
             time: entry.time,
             source: entry.source || 'manual'
-          });
+          }, { onConflict: 'entry_id' });
       }).catch(function(e) { console.warn('[SupaSync] saveFoodEntry failed:', e); });
     },
 
@@ -456,6 +468,47 @@
             }, { onConflict: 'user_id,counter_name' });
         }).catch(function(e) { console.warn('[SupaSync] saveCounter failed:', e); });
       }, 2000);
+    },
+
+    // Sauvegarder une analyse corporelle IA
+    saveBodyAnalysis: function(analyse, programme) {
+      var client = getClient();
+      if (!client) return Promise.resolve();
+
+      return SupaAuth.getSession().then(function(session) {
+        if (!session || !session.user) return;
+        return client
+          .from('body_analyses')
+          .insert({
+            user_id: session.user.id,
+            analyse: analyse || {},
+            programme: programme || {}
+          });
+      }).catch(function(e) { console.warn('[SupaSync] saveBodyAnalysis failed:', e); });
+    },
+
+    // Sauvegarder un scan de plat IA ajouté au journal
+    savePlateScan: function(scanData) {
+      var client = getClient();
+      if (!client) return Promise.resolve();
+
+      return SupaAuth.getSession().then(function(session) {
+        if (!session || !session.user) return;
+        return client
+          .from('plate_scan_history')
+          .insert({
+            user_id: session.user.id,
+            name: scanData.name || '',
+            kcal: scanData.kcal || 0,
+            protein: scanData.p || 0,
+            carbs: scanData.g || 0,
+            fat: scanData.l || 0,
+            portion: scanData.portion || null,
+            meal_slot: scanData.mealSlot || null,
+            meal_date: scanData.mealDate || new Date().toISOString().slice(0, 10),
+            added_to_plan: scanData.addedToPlan || false
+          });
+      }).catch(function(e) { console.warn('[SupaSync] savePlateScan failed:', e); });
     },
 
     // Sauvegarder le streak

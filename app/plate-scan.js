@@ -268,6 +268,17 @@ function openScan(mealSlot) {
         };
         if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       }
+      if (window.SupaSync && window.SupaSync.savePlateScan) {
+        try {
+          window.SupaSync.savePlateScan({
+            name: data.name, kcal: data.kcal, p: data.p, g: data.g, l: data.l,
+            portion: data.portion,
+            mealSlot: mealSlot,
+            mealDate: new Date().toISOString().slice(0, 10),
+            addedToPlan: true
+          });
+        } catch(e) {}
+      }
       closeModal();
       if (window.render) window.render();
     };
