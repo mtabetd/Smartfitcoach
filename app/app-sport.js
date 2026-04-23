@@ -1388,11 +1388,12 @@ window.SPORT = {
  p.appendChild(pb);
  }
 
- var _validSSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 30];
+ var _validSSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 30];
  if (_validSSteps.indexOf(S.sStep) === -1) { S.sStep = 0; }
 
  if (S.sStep === 0) renderObjectif(content); // Type selection
  else if (S.sStep === 26) renderPARQ(content); // PAR-Q screening (ACSM 2018)
+ else if (S.sStep === 27) renderSportGenericMedical(content); // Bilan médical sport-spécifique
  else if (S.sStep === 20) renderMuscuMedicalQ(content); // Medical questionnaire muscu
  else if (S.sStep === 16) renderChargesQuestionnaire(content); // Charges questionnaire
  else if (S.sStep === 15) renderDedicatedPrograms(content); // Dedicated programs
@@ -1483,6 +1484,131 @@ var SPORT_QUOTES = [
 ];
 
 // ─── SPORT SPLASH INTRO ───
+// ─── Zones médicales spécifiques par sport (step 27) — ACSM/AHA/IOC ───
+var SPORT_MED_ZONES = {
+  running: [
+    {key:'genou',     label:'Genoux',              desc:'Syndrome fémoro-patellaire, IT band'},
+    {key:'cheville',  label:'Cheville / Pied',      desc:'Tendon d\'Achille, fasciite plantaire'},
+    {key:'tibia',     label:'Tibias',               desc:'Syndrome tibial antérieur (shin splints)'},
+    {key:'hanche',    label:'Hanche / Ilio-psoas',  desc:'Douleur coxo-fémorale, labrum'},
+    {key:'lombaire',  label:'Bas du dos',            desc:'Lombalgie, hernie discale'}
+  ],
+  crossfit: [
+    {key:'epaule',    label:'Épaules',              desc:'Overhead, impingement, coiffe des rotateurs'},
+    {key:'lombaire',  label:'Bas du dos',            desc:'Deadlifts, cleans, soulevés de terre'},
+    {key:'genou',     label:'Genoux',               desc:'Box jumps, squat snatches, thrusters'},
+    {key:'poignet',   label:'Poignets',             desc:'Kipping, barbell cleans, wall balls'},
+    {key:'cervicale', label:'Nuque / Cervicales',   desc:'Positions overhead prolongées'}
+  ],
+  yoga: [
+    {key:'epaule',    label:'Épaules / Nuque',      desc:'Inversions, chaturangas, backbends'},
+    {key:'lombaire',  label:'Bas du dos',            desc:'Forward folds, backbends profonds'},
+    {key:'genou',     label:'Genoux',               desc:'Postures assises, pigeon pose, lotus'},
+    {key:'hanche',    label:'Hanches',              desc:'Amplitude limitée, labrum'},
+    {key:'poignet',   label:'Poignets',             desc:'Support du poids du corps, planche'}
+  ],
+  cycling: [
+    {key:'genou',     label:'Genoux',               desc:'Syndrome fémoro-patellaire, IT band'},
+    {key:'lombaire',  label:'Bas du dos',            desc:'Position aéro prolongée'},
+    {key:'cervicale', label:'Nuque / Cervicales',   desc:'Position tête baissée (TT, aéro)'},
+    {key:'hta_severe',label:'Hypertension sévère',  desc:'Intensité FTP limitée'}
+  ],
+  hyrox: [
+    {key:'cardio',    label:'Cardiovasculaire',      desc:'Effort soutenu haute intensité'},
+    {key:'epaule',    label:'Épaules / Dos',         desc:'Sled push/pull, wall balls'},
+    {key:'lombaire',  label:'Bas du dos',            desc:'Farmer carry, rowing machine'},
+    {key:'genou',     label:'Genoux',               desc:'Lunges, burpees, squats jump'}
+  ],
+  padel: [
+    {key:'epaule',    label:'Épaule / Coiffe',       desc:'Smashes, service, accélération'},
+    {key:'coude',     label:'Coude / Avant-bras',    desc:'Épicondylite (tennis elbow)'},
+    {key:'genou',     label:'Genoux',               desc:'Pivots, changements de direction'},
+    {key:'cheville',  label:'Chevilles',             desc:'Entorses récurrentes, instabilité'}
+  ],
+  golf: [
+    {key:'lombaire',  label:'Bas du dos',            desc:'Rotation du swing, contrainte L4-L5'},
+    {key:'coude',     label:'Coude / Avant-bras',    desc:'Épicondyle médial ou latéral'},
+    {key:'epaule',    label:'Épaule',               desc:'Finition du swing, rotation externe'},
+    {key:'poignet',   label:'Poignets',             desc:'Impact, vibrations du club'}
+  ],
+  triathlon: [
+    {key:'cardio',    label:'Cardiovasculaire',      desc:'Effort prolongé multi-sport'},
+    {key:'epaule',    label:'Épaules',              desc:'Natation overuse, crawl répétitif'},
+    {key:'genou',     label:'Genoux',               desc:'Vélo + course en enchaînement'},
+    {key:'lombaire',  label:'Bas du dos',            desc:'Position vélo aéro + transition'},
+    {key:'cheville',  label:'Cheville / Tendon',     desc:'Course après natation et vélo'}
+  ],
+  calisthenics: [
+    {key:'epaule',    label:'Épaules',              desc:'Handstands, muscle-ups, front lever'},
+    {key:'poignet',   label:'Poignets',             desc:'L-sit, planche, push-ups lestés'},
+    {key:'coude',     label:'Coudes',               desc:'Brachialite, golfer\'s elbow'},
+    {key:'genou',     label:'Genoux',               desc:'Pistol squats, sauts en réception'}
+  ]
+};
+
+var SPORT_MED_NAME = {
+  running:'Running', crossfit:'Cross Training', yoga:'Yoga & Mobilité',
+  cycling:'Cyclisme', hyrox:'Hyrox', padel:'Padel',
+  golf:'Golf', triathlon:'Triathlon / IRONMAN', calisthenics:'Callisthénie'
+};
+
+function renderSportGenericMedical(p) {
+  var _zones = SPORT_MED_ZONES[S.sportType] || [];
+  var _name  = SPORT_MED_NAME[S.sportType] || (S.sportType || '');
+
+  p.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:center;margin-bottom:16px;'}, 'Bilan Santé · ' + _name));
+  p.appendChild(h('h1', {style:'font-family:Georgia,serif;font-size:28px;font-weight:400;text-align:center;margin:0 0 8px;line-height:1.2;'}, 'Votre corps, notre priorité.'));
+  p.appendChild(h('p', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);text-align:center;margin:0 0 24px;max-width:320px;margin-left:auto;margin-right:auto;'}, 'Signalez toute zone sensible — votre programme sera adapté en conséquence. 30 secondes.'));
+
+  // Fast track
+  var _ftRow = h('div', {style:'text-align:center;margin-bottom:20px;'});
+  _ftRow.appendChild(h('button', {
+    style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--line,#D8D8D0);padding:10px 20px;cursor:pointer;color:var(--black,#0A0A09);',
+    onclick: function() {
+      S.sportMedDone = true; S._sportMedType = S.sportType;
+      if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+      S.sStep = S._sportMedNextStep || 0;
+      if (window.render) window.render();
+    }
+  }, 'Tout va bien — continuer →'));
+  p.appendChild(_ftRow);
+
+  // Zone cards grid
+  var _grid = h('div', {style:'display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:420px;margin:0 auto 24px;'});
+  _zones.forEach(function(zone) {
+    var _sel = Array.isArray(S.medical) && S.medical.indexOf(zone.key) !== -1;
+    var _card = h('div', {
+      'class': 'sel-card' + (_sel ? ' on' : ''),
+      style: 'cursor:pointer;padding:12px 10px;',
+      onclick: function() {
+        if (!Array.isArray(S.medical)) S.medical = [];
+        var _i = S.medical.indexOf(zone.key);
+        if (_i !== -1) { S.medical.splice(_i, 1); } else { S.medical.push(zone.key); }
+        if (window.render) window.render();
+      }
+    });
+    _card.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:600;margin-bottom:3px;'}, zone.label));
+    _card.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey,#6B6B65);line-height:1.35;'}, zone.desc));
+    _grid.appendChild(_card);
+  });
+  p.appendChild(_grid);
+
+  // Confirm CTA
+  var _hasSel = Array.isArray(S.medical) && _zones.some(function(z){ return S.medical.indexOf(z.key) !== -1; });
+  p.appendChild(h('button', {
+    'class': 'btn-primary',
+    style: 'display:block;margin:0 auto;',
+    onclick: function() {
+      S.sportMedDone = true; S._sportMedType = S.sportType;
+      if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+      S.sStep = S._sportMedNextStep || 0;
+      if (window.render) window.render();
+    }
+  }, _hasSel ? 'Adapter mon programme →' : 'Continuer →'));
+
+  p.appendChild(h('p', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey,#6B6B65);text-align:center;margin-top:16px;letter-spacing:1px;'}, 'Données 100% locales · Consultez un médecin en cas de doute'));
+}
+
 function renderSportSplash(p) {
   p.appendChild(h('div', {'class': 'eyebrow'}, 'Sport · Bilan initial'));
   p.appendChild(h('h1', {html: 'Un programme<br><em>fait pour vous.</em>'}));
@@ -1663,7 +1789,9 @@ function renderObjectif(p) {
  var _cfBlockReason = _cfBlocked ? (S.pregnant ? 'Contre-indiqué pendant le 3e trimestre (ACOG 2020)' : _cfCardio ? 'Contre-indiqué en cas de cardiopathie (AHA 2018)' : 'Contre-indiqué avec HTA sévère (ESC/ESH 2018)') : '';
  typeGrid.appendChild(h('div', {'class': 'sel-card' + (_cfBlocked ? ' disabled' : ''), style:'cursor:' + (_cfBlocked ? 'not-allowed' : 'pointer') + ';' + (_cfBlocked ? 'opacity:0.35;pointer-events:none;' : ''), onclick: _cfBlocked ? null : function(){
  S.sportType = 'crossfit';
- if (!S.parqDone) { S._parqNextStep = 5; S.sStep = 26; } else { S.sStep = 5; }
+ S._sportMedNextStep = 5;
+ var _cfNeedMed = !S.sportMedDone || S._sportMedType !== 'crossfit';
+ if (!S.parqDone) { S._parqNextStep = _cfNeedMed ? 27 : 5; S.sStep = 26; } else if (_cfNeedMed) { S.sStep = 27; } else { S.sStep = 5; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'crossfit'});
  _loadCFScripts(function() { if (window.render) window.render(); });
  window.render();
@@ -1676,7 +1804,9 @@ function renderObjectif(p) {
  // Running card
  typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
  S.sportType = 'running';
- if (!S.parqDone) { S._parqNextStep = 7; S.sStep = 26; } else { S.sStep = 7; }
+ S._sportMedNextStep = 7;
+ var _runNeedMed = !S.sportMedDone || S._sportMedType !== 'running';
+ if (!S.parqDone) { S._parqNextStep = _runNeedMed ? 27 : 7; S.sStep = 26; } else if (_runNeedMed) { S.sStep = 27; } else { S.sStep = 7; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'running'});
  window.render();
  }}, [
@@ -1688,7 +1818,9 @@ function renderObjectif(p) {
  // Hyrox card
  typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
  S.sportType = 'hyrox';
- if (!S.parqDone) { S._parqNextStep = 9; S.sStep = 26; } else { S.sStep = 9; }
+ S._sportMedNextStep = 9;
+ var _hxNeedMed = !S.sportMedDone || S._sportMedType !== 'hyrox';
+ if (!S.parqDone) { S._parqNextStep = _hxNeedMed ? 27 : 9; S.sStep = 26; } else if (_hxNeedMed) { S.sStep = 27; } else { S.sStep = 9; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'hyrox'});
  window.render();
  }}, [
@@ -1700,7 +1832,9 @@ function renderObjectif(p) {
  // Padel card
  typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
  S.sportType = 'padel';
- if (!S.parqDone) { S._parqNextStep = 11; S.sStep = 26; } else { S.sStep = 11; }
+ S._sportMedNextStep = 11;
+ var _pdNeedMed = !S.sportMedDone || S._sportMedType !== 'padel';
+ if (!S.parqDone) { S._parqNextStep = _pdNeedMed ? 27 : 11; S.sStep = 26; } else if (_pdNeedMed) { S.sStep = 27; } else { S.sStep = 11; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'padel'});
  window.render();
  }}, [
@@ -1712,7 +1846,9 @@ function renderObjectif(p) {
  // Golf card
  typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
  S.sportType = 'golf';
- if (!S.parqDone) { S._parqNextStep = 13; S.sStep = 26; } else { S.sStep = 13; }
+ S._sportMedNextStep = 13;
+ var _gfNeedMed = !S.sportMedDone || S._sportMedType !== 'golf';
+ if (!S.parqDone) { S._parqNextStep = _gfNeedMed ? 27 : 13; S.sStep = 26; } else if (_gfNeedMed) { S.sStep = 27; } else { S.sStep = 13; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'golf'});
  window.render();
  }}, [
@@ -1724,7 +1860,9 @@ function renderObjectif(p) {
  // Triathlon / IRONMAN card
  typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
  S.sportType = 'triathlon';
- if (!S.parqDone) { S._parqNextStep = 17; S.sStep = 26; } else { S.sStep = 17; }
+ S._sportMedNextStep = 17;
+ var _triNeedMed = !S.sportMedDone || S._sportMedType !== 'triathlon';
+ if (!S.parqDone) { S._parqNextStep = _triNeedMed ? 27 : 17; S.sStep = 26; } else if (_triNeedMed) { S.sStep = 27; } else { S.sStep = 17; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'triathlon'});
  window.render();
  }}, [
@@ -1736,7 +1874,9 @@ function renderObjectif(p) {
  // Yoga & Mobilité card
  typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
  S.sportType = 'yoga';
- if (!S.parqDone) { S._parqNextStep = 19; S.sStep = 26; } else { S.sStep = 19; }
+ S._sportMedNextStep = 19;
+ var _ygNeedMed = !S.sportMedDone || S._sportMedType !== 'yoga';
+ if (!S.parqDone) { S._parqNextStep = _ygNeedMed ? 27 : 19; S.sStep = 26; } else if (_ygNeedMed) { S.sStep = 27; } else { S.sStep = 19; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'yoga'});
  window.render();
  }}, [
@@ -1748,7 +1888,9 @@ function renderObjectif(p) {
  // Cyclisme card
  typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
  S.sportType = 'cycling';
- if (!S.parqDone) { S._parqNextStep = 22; S.sStep = 26; } else { S.sStep = 22; }
+ S._sportMedNextStep = 22;
+ var _cycNeedMed = !S.sportMedDone || S._sportMedType !== 'cycling';
+ if (!S.parqDone) { S._parqNextStep = _cycNeedMed ? 27 : 22; S.sStep = 26; } else if (_cycNeedMed) { S.sStep = 27; } else { S.sStep = 22; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'cycling'});
  window.render();
  }}, [
@@ -1761,7 +1903,9 @@ function renderObjectif(p) {
  typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
  S.sportType = 'calisthenics';
  S.calisthenicsOnboardingStep = 'A';
- if (!S.parqDone) { S._parqNextStep = 24; S.sStep = 26; } else { S.sStep = 24; }
+ S._sportMedNextStep = 24;
+ var _calNeedMed = !S.sportMedDone || S._sportMedType !== 'calisthenics';
+ if (!S.parqDone) { S._parqNextStep = _calNeedMed ? 27 : 24; S.sStep = 26; } else if (_calNeedMed) { S.sStep = 27; } else { S.sStep = 24; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'calisthenics'});
  window.render();
  }}, [
@@ -4064,6 +4208,80 @@ function appendSportMedicalBanner(p, sportName) {
       p.appendChild(_mwc);
     }
   }
+  // ── ZONES SPORT-SPÉCIFIQUES (depuis bilan santé step 27) ──
+  if (Array.isArray(S.medical) && S.medical.length > 0 && S.sportType) {
+    var _zwm = {
+      genou: {
+        running:'Genoux : évitez les descentes et surfaces dures. Réduisez le volume de 20%. Natation comme cross-training (ACSM 2021).',
+        crossfit:'Genoux : pas de box jumps à impact maximal ni de squat snatches lourds. Substituez par step-ups et goblet squats (NSCA 2020).',
+        yoga:'Genoux : modifiez le pigeon pose et le lotus. Blocs sous les hanches. Évitez la flexion maximale.',
+        cycling:'Genoux : selle à bonne hauteur (genou légèrement fléchi en bas). Évitez les cadences < 60 RPM avec forte résistance.',
+        hyrox:'Genoux : remplacez les lunges par des step-ups. Réduisez les sauts.',
+        padel:'Genoux : chauffage prolongé obligatoire. Réduisez les pivots brusques. Genouillère recommandée.',
+        triathlon:'Genoux : vérifiez le fit vélo. Foulée plus courte en course. Évitez les longues descentes.',
+        calisthenics:'Genoux : pistol squats remplacés par chaise murale ou band-assisted. Pas de réception sur sol dur.'
+      },
+      cheville: {
+        running:'Cheville / Tendon d'Achille : échauffement strict (10 min). Pas de sprints ni de côtes raides. Kilométrage réduit de 30%.',
+        padel:'Cheville : chaussures à soutien latéral. Propioception hors du court. Cheillière recommandée.',
+        triathlon:'Cheville : protégez le tendon en dernière portion course. Évitez les sorties post-vélo sur dénivelé.',
+        calisthenics:'Cheville : pas de sauts avec réception unipodale. Substitut : step-ups et squats bilatéraux.'
+      },
+      tibia: {
+        running:'Tibias (shin splints) : kilométrage réduit de 40%. Pas d'interval training. Semelles de soutien d'arche. Repos si douleur aiguë.'
+      },
+      lombaire: {
+        running:'Bas du dos : gainage avant chaque séance (planche, bird-dog). Évitez les longues sorties sans échauffement postural.',
+        crossfit:'Bas du dos : deadlifts plafonnés à 70% 1RM. Dos neutre strict. Pas de cleans lourds.',
+        yoga:'Bas du dos : backbends profonds évités (Camel pose). Twists sans forçage. Forward folds avec genoux légèrement fléchis.',
+        cycling:'Bas du dos : guidon plus haut. Échauffement postural avant sortie. Positions aéro prolongées déconseillées.',
+        hyrox:'Bas du dos : farmer carry léger, dos neutre sur sled push. Rowing machine : gainage obligatoire.',
+        golf:'Bas du dos : mobilité thoracique en préalable. Swing progressif. Renforcez les abdominaux profonds.',
+        triathlon:'Bas du dos : fit vélo professionnel. Étirements lombaires en transition T2.',
+        calisthenics:'Bas du dos : front lever à extension contrôlée uniquement. L-sit avec gainage strict.'
+      },
+      epaule: {
+        crossfit:'Épaules : pas de snatch ni de clean & jerk overhead. Scale systématique. Mouvements sous la hauteur des épaules.',
+        yoga:'Épaules : inversions déconseillées (handstand, headstand). Chaturanga modifié sur les genoux.',
+        hyrox:'Épaules : sled push amplitude réduite. Wall balls à hauteur modérée.',
+        padel:'Épaule / Coiffe : pas de smash à pleine puissance. Service avec amplitude réduite. Kinésithérapie si douleur persistante.',
+        triathlon:'Épaules : overreach réduit en crawl. Brasse ou dos crawlé si douloureux. Volume natation réduit.',
+        calisthenics:'Épaules : pas de handstand ni muscle-up. Remplacez par dips (amplitude limitée) et rows.',
+        golf:'Épaule : finition du swing réduite. Compensez par la rotation thoracique.'
+      },
+      poignet: {
+        crossfit:'Poignets : wraps obligatoires. Pas de kipping pull-ups. Cleans remplacés par hex bar deadlifts si douloureux.',
+        yoga:'Poignets : planche sur les poings ou les coudes. Blocs sous les paumes pour réduire l'extension.',
+        calisthenics:'Poignets : planche sur les poings. Évitez le L-sit en appui direct. Isométriques progressifs.',
+        golf:'Poignets : grip ferme mais non crispé. Antivibration sur le club.'
+      },
+      coude: {
+        padel:'Coude / Épicondylite : pas de coup droit avec spin excessif. Poignée plus épaisse. Strapping. Arrêtez si douleur irradie.',
+        golf:'Coude : swing raccourci en backswing. Grip plus léger. Manchon de compression.',
+        calisthenics:'Coudes : pas de muscle-ups ni tractions kippées. Renforcement excentrique progressif.'
+      },
+      hanche: {
+        running:'Hanche / Ilio-psoas : étirements hip flexors après séance (2 × 90 sec/côté). Renforcement fessiers.',
+        yoga:'Hanches : pigeon pose avec bloc sous la hanche. Amplitude progressive. Surveillez tout pincement à l'aine.'
+      },
+      cervicale: {
+        crossfit:'Nuque : position overhead vérifiée. Soulévé de terre tête neutre obligatoire. Mobilité cervicale en échauffement.',
+        cycling:'Cervicales : guidon plus haut. Pauses mobilité cervicale toutes les 30 min sur les longues sorties.'
+      }
+    };
+    var _szWarns = [];
+    Object.keys(_zwm).forEach(function(zone) {
+      if (S.medical.indexOf(zone) !== -1 && _zwm[zone][S.sportType]) {
+        _szWarns.push('\u26a0 ' + _zwm[zone][S.sportType]);
+      }
+    });
+    if (_szWarns.length > 0) {
+      var _szc = h('div', {style:'border-left:3px solid var(--orange,#E86F1E);background:rgba(232,111,30,0.06);padding:12px 16px;margin-bottom:12px'});
+      _szc.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);margin-bottom:6px'}, 'Adaptations \u2014 ' + sportName));
+      _szWarns.forEach(function(w) { _szc.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);line-height:1.6;margin-bottom:4px'}, w)); });
+      p.appendChild(_szc);
+    }
+  }
 }
 
 function appendWellnessBanner(p) {
@@ -4240,6 +4458,7 @@ function renderCrossfitProgram(p) {
  var _subtitleMix = _mixSec ? (' + ' + _mixSecDays + ' j ' + (_SECLAB_SUB[_mixSec.type] || 'Sport')) : '';
  p.appendChild(h('p', {'class': 'subtitle'}, daysPerWeek + ' j CrossFit' + _subtitleMix + ' \u2014 ' + (levelObj ? levelObj.icon + ' ' + levelObj.name : '')));
 
+ appendSportMedicalBanner(p, 'Cross Training');
  appendWellnessBanner(p);
 
  // ─── AVERTISSEMENT GROSSESSE (CrossFit) ───
@@ -11206,6 +11425,7 @@ function renderYogaProgram(p) {
  pw.appendChild(h('div', {style: 'margin-top:6px;font-weight:600'}, '\u00c9viter : Inversions (Navasana, poirier), compression abdominale, d\u00e9cubitus dorsal >20 min. Variantes T2/T3 : postures assises ou en appui lat\u00e9ral.'));
  p.appendChild(pw);
  }
+ appendSportMedicalBanner(p, 'Yoga');
 
  // Medical warnings
  var med = S.muscuMedical || {};
@@ -11565,6 +11785,7 @@ function renderCyclingProgram(p) {
  (speedTarget ? ' · Vitesse cible : ~' + speedTarget + ' km/h' : '');
  p.appendChild(h('p', {'class': 'subtitle'}, infoLine));
 
+ appendSportMedicalBanner(p, 'Cyclisme');
  appendWellnessBanner(p);
 
  var med = S.muscuMedical || {};
@@ -11897,6 +12118,7 @@ function renderCalisthenicsProgram(content) {
   window.GAMIFICATION.checkCalisthenicsBadges({ currentWeek: S.calisthCurrentWeek, pullups: pullups });
  }
 
+ appendSportMedicalBanner(content, 'Callisthénie');
  // ── HEADER ──
  var headerCard = h('div', {'class': 'card', style: 'margin-bottom:16px'});
  headerCard.appendChild(h('div', {'class': 'label-caps', style: 'margin-bottom:4px'}, 'CALLISTHENIE'));
