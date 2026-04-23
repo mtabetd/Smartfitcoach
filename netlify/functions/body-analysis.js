@@ -1,6 +1,7 @@
 // netlify/functions/body-analysis.js
 // Analyse corporelle par vision IA — clé API côté serveur uniquement
 
+const { requirePremium } = require('./_user-auth');
 const MODEL = 'claude-sonnet-4-6';
 const MAX_TOKENS = 2500; // Programme 4 semaines complet (JSON ~1800-2200 tokens)
 
@@ -138,7 +139,7 @@ exports.handler = async function(event, context) {
 
   var headers = {
     'Access-Control-Allow-Origin': allowedOrigin,
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Credentials': 'false',
     'Content-Type': 'application/json',
@@ -175,6 +176,12 @@ exports.handler = async function(event, context) {
       headers: Object.assign({}, headers, { 'Retry-After': retryAfter }),
       body: JSON.stringify({ error: rlMsg })
     };
+  }
+
+  // ── Premium check ─────────────────────────────────────────────────────────
+  var auth = await requirePremium(event);
+  if (auth.error) {
+    return { statusCode: auth.error.statusCode, headers: headers, body: JSON.stringify({ error: auth.error.msg }) };
   }
 
   // ── API Key ────────────────────────────────────────────────────────────────
