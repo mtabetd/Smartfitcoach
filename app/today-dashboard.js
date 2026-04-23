@@ -1471,6 +1471,16 @@ function renderCardHeroKcal() {
     hero.appendChild(rings);
   }
 
+  // Bouton "+ Ajouter un repas" — accès direct au quick-add sans ouvrir le FAB
+  if (S.appMode !== 'sport' && typeof getDefaultMealSlot === 'function') {
+    var _qaRow = h('div', { style: 'margin-top:20px;text-align:center;' });
+    _qaRow.appendChild(h('button', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);background:transparent;border:1px solid var(--line,#D8D8D0);padding:9px 24px;cursor:pointer;min-height:36px;',
+      onclick: function() { var _S = window.S; if (!_S) return; _S._quickAddSlot = getDefaultMealSlot(); if (window.render) window.render(); }
+    }, '+ Ajouter un repas'));
+    hero.appendChild(_qaRow);
+  }
+
   return hero;
 }
 
@@ -5745,7 +5755,7 @@ function renderTodayDashboard(p) {
                'letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);'
       }, 'jour' + (_msc > 1 ? 's' : '')));
       _miniStreak.appendChild(_mRight);
-      wrapper.appendChild(_miniStreak);
+      _streakPill = _miniStreak;
     }
   } catch(_eMini) {}
 
@@ -5800,7 +5810,7 @@ function renderTodayDashboard(p) {
           _hmRow.appendChild(_dot);
         });
         _hmWrap.appendChild(_hmRow);
-        wrapper.appendChild(_hmWrap);
+        _heatmap = _hmWrap;
       }
     }
   } catch(_eHm) {}
@@ -5840,7 +5850,7 @@ function renderTodayDashboard(p) {
           style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:2px;line-height:1.5;'
         }, _adaptAdvice[_adapt.level] || _adapt.advice));
         _recCard.appendChild(_recInner);
-        wrapper.appendChild(_recCard);
+        _formeCard = _recCard;
       }
     } catch(_eRec) {}
   }
@@ -5851,6 +5861,7 @@ function renderTodayDashboard(p) {
   // MOTIVATION_LIBRARY (300+ phrases, rotation déterministe jour/weekday/streak).
   // FIX UX 2026-04-17 : la Pensée du Jour est construite ici mais appendChild() est
   // reporté après les cartes Séance + Repas (data first, motivation ensuite — UX audit).
+  var _streakPill = null; var _heatmap = null; var _formeCard = null;
   var _pensee = null;
   try {
     var _dailyQuote = null;
@@ -6026,6 +6037,11 @@ function renderTodayDashboard(p) {
     var cardFoodJournal = renderFoodJournalCard();
     if (cardFoodJournal) wrapper.appendChild(cardFoodJournal);
   } catch(_eFJ) { console.warn('[today] renderFoodJournalCard error', _eFJ); }
+
+  // ── Éléments secondaires différés — visibles après le contenu actionnable ──
+  if (_formeCard) wrapper.appendChild(_formeCard);
+  if (_streakPill) wrapper.appendChild(_streakPill);
+  if (_heatmap) wrapper.appendChild(_heatmap);
 
   // ── Pensée du jour (différée : après les cartes data, avant progression) ──
   if (_pensee) wrapper.appendChild(_pensee);
