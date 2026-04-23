@@ -11,6 +11,50 @@
 var S = window.S;
 var h = window.h, txt = window.txt;
 
+// ─── CROSSFIT LAZY LOADER ───
+// CrossFit WOD files (~543KB) are not included in the initial page load.
+// They are loaded on-demand only for users with sportType === 'crossfit'.
+var _cfLoaded = !!(window.CF_WODS_FULL || window.CF_WODS_CYCLE1); // already loaded (e.g. via SW cache)
+var _cfLoading = false;
+var _cfCallbacks = [];
+function _loadCFScripts(onDone) {
+  if (_cfLoaded) { if (onDone) onDone(); return; }
+  if (onDone) _cfCallbacks.push(onDone);
+  if (_cfLoading) return;
+  _cfLoading = true;
+  var scripts = [
+    './crossfit-wods.js',
+    './crossfit-wods-cycle2.js',
+    './crossfit-wods-cycle3.js',
+    './crossfit-haltero-cycles.js',
+    './crossfit-wods-merge.js'
+  ];
+  var i = 0;
+  function next() {
+    if (i >= scripts.length) {
+      _cfLoaded = true; _cfLoading = false;
+      _cfCallbacks.forEach(function(cb) { try { cb(); } catch(e) {} });
+      _cfCallbacks = [];
+      return;
+    }
+    var src = scripts[i++];
+    // skip if already executed (e.g. loaded via SW)
+    if ((src.indexOf('wods.js') !== -1 && window.CF_WODS_CYCLE1) ||
+        (src.indexOf('cycle2') !== -1 && window.CF_WODS_CYCLE2) ||
+        (src.indexOf('cycle3') !== -1 && window.CF_WODS_CYCLE3) ||
+        (src.indexOf('haltero') !== -1 && window.HALTERO_CYCLES) ||
+        (src.indexOf('merge') !== -1 && window.CF_WODS_FULL)) {
+      next(); return;
+    }
+    var el = document.createElement('script');
+    el.src = src;
+    el.onload = next;
+    el.onerror = function() { console.warn('[CF lazy] failed:', src); next(); };
+    document.head.appendChild(el);
+  }
+  next();
+}
+
 // ─── I3: TERM TOOLTIP HELPER ───
 // FIX UX 2026-04-17 : tooltip cliquable sur mobile (title attr seul = invisible iOS/Android).
 // Desktop : hover affiche le title natif. Mobile : tap affiche un popover custom.
@@ -1246,6 +1290,11 @@ window.SPORT = {
  render: function(p) {
  var content = h('div', {'class': 'fade-in'});
 
+ // Lazy-load CrossFit data for existing CrossFit users (not yet loaded)
+ if (S.sportType === 'crossfit' && !_cfLoaded && !_cfLoading) {
+   _loadCFScripts(function() { if (window.render) window.render(); });
+ }
+
  // ─── Mode sport-seulement : collecter identité si manquante ───
  if (S.appMode === 'sport' && (!S.sex || !S.age || !S.weight || !S._sportProfileDone)) {
    renderSportQuickProfile(content);
@@ -1608,6 +1657,7 @@ function renderObjectif(p) {
  S.sportType = 'crossfit';
  if (!S.parqDone) { S._parqNextStep = 5; S.sStep = 26; } else { S.sStep = 5; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'crossfit'});
+ _loadCFScripts(function() { if (window.render) window.render(); });
  window.render();
  }}, [
  h('div', {'class': 'card-name'}, 'Cross Training' + (_cfBlocked ? ' — Indisponible' : '')),
@@ -9465,7 +9515,7 @@ function renderWeightChartSport(container) {
  section.appendChild(h('div', {style: 'text-align:center;padding:20px;font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'}, 'Enregistrez votre poids régulièrement pour voir votre courbe'));
  }
 
- var canvas = h('canvas', {'class': 'weight-chart', width: '600', height: '200'});
+ var canvas = h('canvas', {'class': 'weight-chart', width: '600', height: '200', style: 'display:none'});
  section.appendChild(canvas);
  container.appendChild(section);
 
@@ -9538,6 +9588,7 @@ function renderWeightChartSport(container) {
  cleanData.push(w);
  });
  if (cleanData.length < 2) return;
+ canvas.style.display = '';
  try { window.createChart(canvas, {
  type: 'line',
  data: {
@@ -11873,7 +11924,11 @@ window.renderWellnessCheckin = renderWellnessCheckin;
 // ─── EXPORT SPORT PROGRAM PDF ─────────────────────────────────────────────
 window.exportSportPDF = function() {
   if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
-  if (!window.jspdf || !window.jspdf.jsPDF) { if (window.showToast) window.showToast('PDF non disponible. Rechargez la page.', 'error', 3500); return; }
+  if (!window.jspdf || !window.jspdf.jsPDF) {
+    if (window.showToast) window.showToast('Chargement du PDF…', 'info', 2000);
+    if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', window.exportSportPDF); }
+    return;
+  }
   if (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) { if (window.showToast) window.showToast('Aucun programme \u00e0 exporter. G\u00e9n\u00e9rez votre programme.', 'error', 4000); return; }
   try {
     var jsPDF = window.jspdf.jsPDF;

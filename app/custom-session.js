@@ -293,6 +293,15 @@ window.CUSTOM_SESSION = {
     if (setIdx < 0 || setIdx >= block.loggedSets.length) return;
     block.loggedSets[setIdx].validated = !block.loggedSets[setIdx].validated;
 
+    // Pré-remplir la série suivante avec les valeurs réelles de la série validée
+    if (block.loggedSets[setIdx].validated) {
+      var nextSet = block.loggedSets[setIdx + 1];
+      if (nextSet && !nextSet.validated) {
+        if (block.loggedSets[setIdx].weight != null) nextSet.weight = block.loggedSets[setIdx].weight;
+        if (block.loggedSets[setIdx].reps   != null) nextSet.reps   = block.loggedSets[setIdx].reps;
+      }
+    }
+
     // persistance dans muscuSessionLog (même structure que le programme muscu)
     var S = window.S;
     var today = new Date().toISOString().slice(0, 10);
@@ -590,11 +599,13 @@ function _csRenderMuscleSelector(container, draft) {
       'cursor:' + (hasSel ? 'pointer' : 'not-allowed') + ';min-height:52px;'
     ].join(''),
     onclick: function() {
-      if (!hasSel) return;
+      if (!hasSel || S._csGenerating) return;
+      S._csGenerating = true;
       var sel2 = S._csSelectedGroups;
       var groups = _CS_MUSCLE_GROUPS.filter(function(g) { return sel2.indexOf(g.key) !== -1; });
       _csGenerateSessionFromMuscles(groups);
       S._csSkipMuscleSelect = true;
+      S._csGenerating = false;
       if (window.render) window.render();
     }
   }, hasSel ? '→ Générer ma séance' : 'Sélectionnez au moins un groupe'));
@@ -848,11 +859,27 @@ function _csRenderActive(container, draft) {
   });
   var allDone = (totalSets > 0 && doneSets === totalSets);
 
+  // Chrono temps réel — interval persistant entre renders, rafraîchit uniquement le span
+  if (window._csChronoInterval) { clearInterval(window._csChronoInterval); window._csChronoInterval = null; }
+  var _chronoStart = draft.startTime || Date.now();
+  function _fmtElapsed(ms) {
+    var sec = Math.floor(ms / 1000);
+    var m = Math.floor(sec / 60); var s = sec % 60;
+    return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+  }
+
   // En-tête
   var hdr = h('div', { style: 'margin-bottom:14px;' });
-  hdr.appendChild(h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:4px;'
+  var hdrTop = h('div', { style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;' });
+  hdrTop.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);'
   }, 'SÉANCE EN COURS'));
+  var chronoSpan = h('span', {
+    id: 'cs-elapsed-timer',
+    style: 'font-family:Georgia,serif;font-size:13px;color:var(--grey,#6B6B65);letter-spacing:1px;'
+  }, _fmtElapsed(Date.now() - _chronoStart));
+  hdrTop.appendChild(chronoSpan);
+  hdr.appendChild(hdrTop);
   hdr.appendChild(h('div', {
     style: 'font-family:Georgia,serif;font-size:20px;font-weight:normal;color:var(--black,#0A0A09);margin-bottom:6px;'
   }, draft.title));
@@ -866,6 +893,13 @@ function _csRenderActive(container, draft) {
     }, doneSets + '/' + totalSets + ' séries validées'));
   }
   container.appendChild(hdr);
+
+  // Démarrer le chrono (met à jour #cs-elapsed-timer sans re-render)
+  window._csChronoInterval = setInterval(function() {
+    var el = document.getElementById('cs-elapsed-timer');
+    if (el) { el.textContent = _fmtElapsed(Date.now() - _chronoStart); }
+    else { clearInterval(window._csChronoInterval); window._csChronoInterval = null; }
+  }, 1000);
 
   // Blocs
   draft.blocks.forEach(function(block) {
@@ -886,6 +920,7 @@ function _csRenderActive(container, draft) {
       'cursor:pointer;min-height:52px;'
     ].join(''),
     onclick: function() {
+      if (window._csChronoInterval) { clearInterval(window._csChronoInterval); window._csChronoInterval = null; }
       var elapsed = draft.startTime ? Math.max(1, Math.round((Date.now() - draft.startTime) / 60000)) : 30;
       window.CUSTOM_SESSION.finishSession(elapsed);
       if (window.render) window.render();
@@ -897,6 +932,7 @@ function _csRenderActive(container, draft) {
     style: 'display:block;width:100%;padding:10px;margin-top:8px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;color:var(--grey,#6B6B65);',
     onclick: function() {
       if (!confirm('Abandonner la séance ? Les séries validées sont conservées.')) return;
+      if (window._csChronoInterval) { clearInterval(window._csChronoInterval); window._csChronoInterval = null; }
       var elapsed2 = draft.startTime ? Math.max(1, Math.round((Date.now() - draft.startTime) / 60000)) : 5;
       window.CUSTOM_SESSION.finishSession(elapsed2);
       if (window.render) window.render();
@@ -1028,6 +1064,8 @@ function _csRenderDone(container, draft) {
       window.CUSTOM_SESSION.clearDraft();
       var S2 = window.S;
       S2._csQuery = '';
+      S2._csSkipMuscleSelect = false;
+      S2._csSelectedGroups = [];
       S2.sStep = 0;
       S2.view = 'today';
       if (window.render) window.render();

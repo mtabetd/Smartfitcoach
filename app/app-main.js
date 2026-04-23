@@ -196,6 +196,10 @@ function saveProfile() {
  // L'utilisateur doit reload la page pour clear ce flag (et idéalement contacter support).
  if (S._loadCorrupted) {
    console.warn('[saveProfile] BLOQUÉ — données corrompues détectées au load. Reload nécessaire.');
+   if (!window._corruptedToastShown && window.showToast) {
+     window._corruptedToastShown = true;
+     window.showToast('Données corrompues détectées. Rechargez la page pour restaurer.', 'error', 6000);
+   }
    return;
  }
  // FIX V4 2026-04 : si Supabase est en train de restorer la session (~12s au démarrage),
@@ -579,6 +583,7 @@ window.renderWelcomeScreen = function renderWelcomeScreen(app) {
    onmouseup:    function(e){ e.currentTarget.style.transform='scale(1)'; },
    onclick: function() {
      if (window.S) S.welcomeShown = true;
+     window._profileDirty = true;
      saveProfile();
      window.render();
    }
@@ -643,6 +648,7 @@ window.renderModuleChoice = function renderModuleChoice(content) {
      badge: null, svg: _svgNutrition, delay: '.2s',
      onclick: function() {
        S.appMode = 'nutrition'; S.view = 'nutrition'; S.nStep = 1; // saute le splash (nStep=0)
+       window._profileDirty = true;
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        window.render();
      }
@@ -653,6 +659,7 @@ window.renderModuleChoice = function renderModuleChoice(content) {
      badge: null, svg: _svgSport, delay: '.26s',
      onclick: function() {
        S.appMode = 'sport'; S.view = 'sport'; S.sStep = 0; S.sportSplashDone = true; // saute le splash sport
+       window._profileDirty = true;
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        window.render();
      }
@@ -663,6 +670,7 @@ window.renderModuleChoice = function renderModuleChoice(content) {
      badge: 'RECOMMAND\u00c9', svg: _svgBoth, delay: '.32s',
      onclick: function() {
        S.appMode = 'both'; S.view = 'nutrition'; S.nStep = 1; S.sportSplashDone = true; // saute les deux splashs
+       window._profileDirty = true;
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        window.render();
      }
@@ -779,6 +787,7 @@ function renderProfilePage(container) {
        canvas.width = w; canvas.height = _h;
        canvas.getContext('2d').drawImage(img, 0, 0, w, _h);
        S.profilePhoto = canvas.toDataURL('image/jpeg', 0.75);
+       window._profileDirty = true;
        if (window.saveProfile) { try { window.saveProfile(); } catch(ex) {} }
        if (window.render) window.render();
      };
@@ -962,6 +971,7 @@ function renderProfilePage(container) {
          S.view = 'today';
        }
 
+       window._profileDirty = true;
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        if (window.render) window.render();
      }
@@ -1025,6 +1035,7 @@ function renderProfilePage(container) {
          onclick: function() {
            if (!S.favoriteRecipes) S.favoriteRecipes = {};
            delete S.favoriteRecipes[rid];
+           window._profileDirty = true;
            if (window.saveProfile) { try { window.saveProfile(); } catch(ex) {} }
            if (window.render) window.render();
          }
@@ -1137,6 +1148,7 @@ function renderProfilePage(container) {
        if (window.devalidateWeekPlan) window.devalidateWeekPlan('profile edit save');
        else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
        S._profileEdit = false;
+       window._profileDirty = true;
        if (window.saveProfile) { try { window.saveProfile(); } catch(ex) {} }
        // Toast
        try {
@@ -1338,6 +1350,7 @@ function renderProfilePage(container) {
            }
          }
          S._cloudUpdatedAt = new Date().toISOString();
+         window._profileDirty = true;
          if (window.saveProfile) saveProfile();
          if (window.showToast) window.showToast('Données restaurées avec succès.', 'success', 3000);
          if (window.render) render();
@@ -1671,6 +1684,7 @@ function renderProfilePage(container) {
        delete S._modalGoal;
        delete S._modalTargetWeight;
        S._goalModal = false;
+       window._profileDirty = true;
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        // Toast actionnable : régénérer les plans directement
        try {
@@ -1692,6 +1706,7 @@ function renderProfilePage(container) {
                  window.S._weekPlanGeneratedAt = new Date().toISOString();
                }
              }
+             window._profileDirty = true;
              if (window.saveProfile) window.saveProfile();
            } catch(e2) {}
            if (_toast.parentNode) _toast.parentNode.removeChild(_toast);
@@ -1740,10 +1755,12 @@ function render() {
    var _isTca = Array.isArray(window.S.medical) && window.S.medical.indexOf('tca') !== -1;
    if (_isUnsafeGoal && (_isPregnant || _isAllait)) {
      window.S.goal = 2; // Forcer maintien — index 2 = maintain
+     window._profileDirty = true;
      if (window.saveProfile) window.saveProfile();
      _goalCorrected = true;
    } else if (_isUnsafeGoalTca && _isTca) {
      window.S.goal = 2; // TCA : forcer maintien (ANAD, IOC 2018)
+     window._profileDirty = true;
      if (window.saveProfile) window.saveProfile();
      _goalCorrected = true;
    }
@@ -1942,16 +1959,26 @@ function render() {
 
  if (S.view === 'profil' || S.view === 'profile') {
  renderProfilePage(content);
- } else if (S.view === 'calendar' && window.SMART_CALENDAR) {
- window.SMART_CALENDAR.render(content);
- } else if (S.view === 'sport' && window.SPORT) {
- window.SPORT.render(content);
- } else if (S.view === 'nutrition' && window.NUTRITION) {
- window.NUTRITION.render(content);
- } else if (S.view === 'analytics' && window.ANALYTICS) {
- window.ANALYTICS.render(content);
- } else if (S.view === 'social' && window.SOCIAL) {
- window.SOCIAL.render(content);
+ } else if (['calendar','sport','nutrition','analytics','social'].indexOf(S.view) !== -1) {
+ var _modMap = { calendar: 'SMART_CALENDAR', sport: 'SPORT', nutrition: 'NUTRITION', analytics: 'ANALYTICS', social: 'SOCIAL' };
+ var _modName = _modMap[S.view];
+ if (window[_modName]) {
+   window[_modName].render(content);
+ } else {
+   var _mLoader = h('div', {style: 'padding:48px 24px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'}, 'Chargement…');
+   content.appendChild(_mLoader);
+   var _mRetryCount = 0;
+   var _mRetryId = setInterval(function() {
+     _mRetryCount++;
+     if (window[_modName]) {
+       clearInterval(_mRetryId);
+       try { window.render(); } catch(e) { console.warn('[module retry]', e); }
+     } else if (_mRetryCount >= 15) {
+       clearInterval(_mRetryId);
+       try { _mLoader.textContent = 'Erreur de chargement. Rechargez la page (Ctrl+R).'; } catch(_e) {}
+     }
+   }, 200);
+ }
  } else {
  // Default + 'today' + 'dashboard' → vue Aujourd'hui
  S.view = 'today';
@@ -2032,29 +2059,13 @@ function render() {
 
  // Post-render scroll: reset scroll position after content is in DOM
  if (_didNavigate) {
- window.scrollTo(0, 0);
- document.documentElement.scrollTop = 0;
- document.body.scrollTop = 0;
- if (app) app.scrollTop = 0;
- var _wrap = app.querySelector('.app');
- if (_wrap) _wrap.scrollTop = 0;
- // Double-rAF: first frame ensures layout is complete, second ensures paint is done
- requestAnimationFrame(function() {
- window.scrollTo(0, 0);
- document.documentElement.scrollTop = 0;
- document.body.scrollTop = 0;
- if (app) app.scrollTop = 0;
- var _w2 = app.querySelector('.app');
- if (_w2) _w2.scrollTop = 0;
- requestAnimationFrame(function() {
- window.scrollTo(0, 0);
- document.documentElement.scrollTop = 0;
- document.body.scrollTop = 0;
- // Restore CSS smooth scrolling after navigation is fully settled
- document.documentElement.style.scrollBehavior = '';
- document.body.style.scrollBehavior = '';
- });
- });
+   window.scrollTo(0, 0);
+   document.documentElement.scrollTop = 0;
+   document.body.scrollTop = 0;
+   requestAnimationFrame(function() {
+     document.documentElement.style.scrollBehavior = '';
+     document.body.style.scrollBehavior = '';
+   });
  }
  // Translate DOM if EN
  if (window.I18N && window.I18N.current === 'en' && window.I18N.translateDOM) {
@@ -2215,6 +2226,7 @@ function renderLogin(app) {
  // Enregistre la date du premier login (pour bloquer le bilan de forme au J+1)
  if (!window.S.firstLoginDate) {
    window.S.firstLoginDate = new Date().toISOString().slice(0, 10);
+   window._profileDirty = true;
    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
  }
  render();
@@ -2794,7 +2806,42 @@ function renderNewPassword(app) {
 }
 
 // ─── MAKE RENDER GLOBAL ───
-window.render = render;
+// window.render is the debounced public API (coalesces rapid calls from other modules into 1 DOM rebuild per frame).
+// Internal app-main calls use render() directly for immediate synchronous execution (auth flows, etc.).
+window.render = (function(_fn) {
+  var _t = null;
+  return function() {
+    if (_t) clearTimeout(_t);
+    _t = setTimeout(function() { _t = null; _fn(); }, 16);
+  };
+})(render);
+
+// ─── LAZY SCRIPT LOADER ───
+// Loads a JS file on-demand (once), calls all queued callbacks when ready.
+window._lazyLoad = (function() {
+  var _loaded = {}, _pending = {}, _timers = {};
+  return function(src, cb) {
+    if (_loaded[src]) { if (cb) cb(); return; }
+    if (_pending[src]) { if (cb) _pending[src].push(cb); return; }
+    _pending[src] = cb ? [cb] : [];
+    var el = document.createElement('script');
+    el.src = src;
+    var _flush = function(ok) {
+      clearTimeout(_timers[src]);
+      if (ok) _loaded[src] = true;
+      (_pending[src] || []).forEach(function(fn) { try { fn(); } catch(e) {} });
+      delete _pending[src];
+      delete _timers[src];
+    };
+    el.onload = function() { _flush(true); };
+    el.onerror = function() { _flush(false); };
+    _timers[src] = setTimeout(function() {
+      console.warn('[_lazyLoad] timeout:', src);
+      _flush(false);
+    }, 8000);
+    document.head.appendChild(el);
+  };
+})();
 
 // ─── DARK MODE PREFERENCE ───
 try { if (localStorage.getItem('mtd_dark_mode') === '1') document.body.classList.add('dark-mode'); } catch(e) {}
@@ -2839,6 +2886,7 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  // Store first login date (needed for J+1 wellness guard)
  if (!S.firstLoginDate) {
    S.firstLoginDate = new Date().toISOString().slice(0, 10);
+   window._profileDirty = true;
    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
  }
  // POLISH 2026-04 : disclaimer médical au premier login (si pas encore accepté).
@@ -3004,7 +3052,12 @@ window.addEventListener('beforeunload', function() {
 });
 // Periodic autosave every 30s as safety net (render() already saves on interaction)
 setInterval(function() {
- try { if (window.AUTH && window.AUTH.isLoggedIn()) saveProfile(); } catch(e) {}
+  try {
+    if (window.AUTH && window.AUTH.isLoggedIn() && window._profileDirty) {
+      window._profileDirty = false;
+      saveProfile();
+    }
+  } catch(e) {}
 }, 30000);
 
 // Purge journal entries > 6 mois (prévient saturation localStorage) — une fois par session

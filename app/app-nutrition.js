@@ -4126,7 +4126,11 @@ function renderModal(app) {
 // ─── PDF EXPORT ───
 function exportDayPDF(dayIdx) {
   if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
-  if (!window.jspdf || !window.jspdf.jsPDF) { if (window.showToast) window.showToast('PDF non disponible. Rechargez la page.', 'error', 3500); return; }
+  if (!window.jspdf || !window.jspdf.jsPDF) {
+    if (window.showToast) window.showToast('Chargement du PDF…', 'info', 2000);
+    if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', function() { exportDayPDF(dayIdx); }); }
+    return;
+  }
   if (!Array.isArray(S.weekPlan) || !S.weekPlan[dayIdx]) { if (window.showToast) window.showToast('Aucun plan disponible pour ce jour. G\u00e9n\u00e9rez votre plan nutritionnel.', 'error', 4000); return; }
   try {
   var jsPDF = window.jspdf.jsPDF;
@@ -4231,7 +4235,11 @@ window.exportDayPDF = exportDayPDF;
 
 function exportRecipePDF(r) {
   if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
-  if (!window.jspdf || !window.jspdf.jsPDF) { if (window.showToast) window.showToast('PDF non disponible. Rechargez la page.', 'error', 3500); return; }
+  if (!window.jspdf || !window.jspdf.jsPDF) {
+    if (window.showToast) window.showToast('Chargement du PDF…', 'info', 2000);
+    if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', function() { exportRecipePDF(r); }); }
+    return;
+  }
   if (!r || !r.n) { if (window.showToast) window.showToast('Recette non disponible pour l\u2019export', 'error', 3000); return; }
   try {
   var jsPDF = window.jspdf.jsPDF;
@@ -6292,7 +6300,11 @@ function printShoppingListAR(list) {
 
 function exportShoppingListPDF(list, shopChecked) {
   if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
-  if (!window.jspdf || !window.jspdf.jsPDF) { if (window.showToast) window.showToast('Export PDF non disponible. Rechargez la page.', 'error', 3500); return; }
+  if (!window.jspdf || !window.jspdf.jsPDF) {
+    if (window.showToast) window.showToast('Chargement du PDF…', 'info', 2000);
+    if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', function() { exportShoppingListPDF(list, shopChecked); }); }
+    return;
+  }
   if (!Array.isArray(list) || list.length === 0) { if (window.showToast) window.showToast('Liste de courses vide \u2014 g\u00e9n\u00e9rez votre plan nutritionnel', 'error', 4000); return; }
   try {
   var jsPDF = window.jspdf.jsPDF;

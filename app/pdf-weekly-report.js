@@ -108,7 +108,8 @@ window.exportWeeklyReportPDF = function() {
       return;
     }
     if (!window.jspdf || !window.jspdf.jsPDF) {
-      if (window.showToast) window.showToast('PDF non disponible. Rechargez la page.', 'error', 3500);
+      if (window.showToast) window.showToast('Chargement du PDF…', 'info', 2000);
+      if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', window.exportWeeklyReportPDF); }
       return;
     }
     var jsPDF = window.jspdf.jsPDF;
