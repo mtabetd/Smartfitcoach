@@ -1299,12 +1299,22 @@
   function _scheduleGenerationSafetyReset() {
     if (_generationSafetyTimer) clearTimeout(_generationSafetyTimer);
     _generationSafetyTimer = setTimeout(function() {
-      if (_generating) {
-        console.warn('[muscu-prog] Safety reset: _generating flag stuck, force release');
-        _generating = false;
-        if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
-      }
       _generationSafetyTimer = null;
+      if (!_generating) return;
+      console.warn('[muscu-prog] Safety reset: generation stuck after 35s, force release');
+      _generating = false;
+      if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
+      // Update UI — spinner would otherwise run forever (CSS animation not controlled by JS)
+      var content = document.getElementById('muscu-prog-content');
+      if (content) {
+        content.innerHTML =
+          '<div style="text-align:center;padding:40px 20px;">' +
+          '<div style="font-family:Georgia,serif;font-style:italic;font-size:15px;color:var(--ink-500,#6B6B65);margin-bottom:20px;line-height:1.55;">La génération a pris trop de temps. Vérifiez votre connexion et réessayez.</div>' +
+          '<button id="muscu-prog-retry-safety" style="background:transparent;border:1px solid var(--ink-900,#0A0A09);color:var(--ink-900,#0A0A09);padding:12px 20px;font-family:Georgia,serif;font-style:italic;font-size:13px;cursor:pointer;border-radius:2px;min-height:44px;">Réessayer</button>' +
+          '</div>';
+        var btn = document.getElementById('muscu-prog-retry-safety');
+        if (btn) btn.addEventListener('click', function() { generateMuscuProgram(); });
+      }
     }, 35000);
   }
 
@@ -1345,15 +1355,26 @@
       if (window.showToast) window.showToast('Profil incomplet \u2014 compl\u00e9tez votre onboarding (sexe, poids, taille)', 'error', 4000);
       return;
     }
-    // FIX BIBLE MUSCU §4 : timeout 25s → 10s. L'utilisateur perd la foi après.
+    // Timeout 10s via AbortController (modern) ou Promise.race (fallback vieux navigateurs).
+    // Sans ce guard, fetch peut pendre indéfiniment sur mobile avec connexion instable.
     var _mcCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
     var _mcTimer = _mcCtrl ? setTimeout(function() { _mcCtrl.abort(); }, 10000) : null;
-    fetch('/.netlify/functions/generate-muscu-program', {
+    var _fetchPromise = fetch('/.netlify/functions/generate-muscu-program', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ profile: profile }),
       signal: _mcCtrl ? _mcCtrl.signal : undefined
-    })
+    });
+    // Fallback timeout for browsers without AbortController
+    if (!_mcCtrl) {
+      _fetchPromise = Promise.race([
+        _fetchPromise,
+        new Promise(function(_, reject) {
+          setTimeout(function() { reject(new Error('Timeout — vérifiez votre connexion')); }, 10000);
+        })
+      ]);
+    }
+    _fetchPromise
     .then(function(r) {
       if (!r.ok) {
         return r.json()
@@ -1446,9 +1467,11 @@
       if (_generationSafetyTimer) { clearTimeout(_generationSafetyTimer); _generationSafetyTimer = null; }
       console.warn('[muscu-prog] serveur indisponible, bascule fallback local:', err && err.message);
 
-      // FIX BIBLE MUSCU §4 : FALLBACK LOCAL SILENCIEUX.
-      // Si Netlify tombe (timeout, 405, 500, etc.) → on bascule sur buildPersonalizedMuscuPlan.
-      // L'utilisateur ne doit jamais voir "serveur indisponible" — on parle d'appareil.
+      // Guard: modal may have been closed during async fetch — content would be null → silent crash
+      var content = document.getElementById('muscu-prog-content');
+      if (!content) return;
+
+      // FALLBACK LOCAL SILENCIEUX — si Netlify tombe on génère en local
       try {
         if (typeof window.buildPersonalizedMuscuPlan === 'function') {
           var localPlan = window.buildPersonalizedMuscuPlan(window.S || {});
