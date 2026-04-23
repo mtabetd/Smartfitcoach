@@ -1296,7 +1296,7 @@
   // dans .then, race condition, etc.) _generating reste bloqué à true, on le libère
   // automatiquement après 35s (timeout fetch = 10s → 35s est un upper bound safe).
   // Évite le bouton "Générer" bloqué forever qui nécessitait un reload.
-  function _scheduleGenerationSafetyReset() {
+  function _scheduleGenerationSafetyReset(_localPlanRef) {
     if (_generationSafetyTimer) clearTimeout(_generationSafetyTimer);
     _generationSafetyTimer = setTimeout(function() {
       _generationSafetyTimer = null;
@@ -1306,14 +1306,33 @@
       if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
       // Update UI — spinner would otherwise run forever (CSS animation not controlled by JS)
       var content = document.getElementById('muscu-prog-content');
-      if (content) {
+      if (!content) return;
+      if (_localPlanRef && Array.isArray(_localPlanRef.weekProgram) && _localPlanRef.weekProgram.length > 0) {
+        var _planSummary = _localPlanRef.weekProgram.map(function(day, i) {
+          var exos = Array.isArray(day.exercises) ? day.exercises.map(function(ex, j) {
+            return (j + 1) + '. ' + (ex.n || ex.name || '') + ' — ' + (ex.sets || 3) + 'x' + (ex.reps || 10);
+          }).join('\n') : '';
+          return 'JOUR ' + (i + 1) + ' — ' + (day.label || day.focus || 'Séance ' + (i + 1)) + '\n' + exos;
+        }).join('\n\n');
+        var _escaped = _planSummary.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        content.innerHTML =
+          '<div style="padding:16px 20px;margin-bottom:16px;border-left:3px solid var(--ink-500,#6B6B65);background:var(--paper-2,#F4F1EA);">' +
+            '<p style="font-family:Georgia,serif;font-style:italic;font-size:13px;color:var(--ink-500,#6B6B65);margin:0;line-height:1.55;">Programme personnalisé sur votre appareil.</p>' +
+          '</div>' +
+          '<div style="white-space:pre-wrap;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;color:var(--ink-900,#0A0A09);">' + _escaped + '</div>' +
+          '<div style="margin-top:24px;text-align:center;border-top:1px solid var(--line,#D8D8D0);padding-top:16px;">' +
+            '<button id="muscu-prog-retry-ia" style="background:transparent;border:1px solid var(--ink-900,#0A0A09);color:var(--ink-900,#0A0A09);padding:12px 20px;font-family:Georgia,serif;font-style:italic;font-size:13px;cursor:pointer;border-radius:2px;min-height:44px;">Régénérer avec l’IA</button>' +
+          '</div>';
+        var _retryIaBtn = document.getElementById('muscu-prog-retry-ia');
+        if (_retryIaBtn) _retryIaBtn.addEventListener('click', function() { window.openMuscuProgramGenerator(); });
+      } else {
         content.innerHTML =
           '<div style="text-align:center;padding:40px 20px;">' +
           '<div style="font-family:Georgia,serif;font-style:italic;font-size:15px;color:var(--ink-500,#6B6B65);margin-bottom:20px;line-height:1.55;">La génération a pris trop de temps. Vérifiez votre connexion et réessayez.</div>' +
           '<button id="muscu-prog-retry-safety" style="background:transparent;border:1px solid var(--ink-900,#0A0A09);color:var(--ink-900,#0A0A09);padding:12px 20px;font-family:Georgia,serif;font-style:italic;font-size:13px;cursor:pointer;border-radius:2px;min-height:44px;">Réessayer</button>' +
           '</div>';
-        var btn = document.getElementById('muscu-prog-retry-safety');
-        if (btn) btn.addEventListener('click', function() { generateMuscuProgram(); });
+        var _btn = document.getElementById('muscu-prog-retry-safety');
+        if (_btn) _btn.addEventListener('click', function() { generateMuscuProgram(); });
       }
     }, 35000);
   }
@@ -1321,7 +1340,15 @@
   function generateMuscuProgram() {
     if (_generating) return;
     _generating = true;
-    _scheduleGenerationSafetyReset();
+    // Pre-generate local plan synchronously so it is always available if server fails
+    var _localPlanPregen = null;
+    try {
+      if (typeof window.buildPersonalizedMuscuPlan === 'function') {
+        var _pre = window.buildPersonalizedMuscuPlan(window.S || {});
+        if (_pre && Array.isArray(_pre.weekProgram) && _pre.weekProgram.length > 0) _localPlanPregen = _pre;
+      }
+    } catch (_ePre) {}
+    _scheduleGenerationSafetyReset(_localPlanPregen);
     // Détecter si c'est la première génération
     var _S = window.S || {};
     var _isFirstProgram = (!_S.muscuProgramCount || _S.muscuProgramCount === 0);
@@ -1471,11 +1498,10 @@
       var content = document.getElementById('muscu-prog-content');
       if (!content) return;
 
-      // FALLBACK LOCAL SILENCIEUX — si Netlify tombe on génère en local
+      // FALLBACK LOCAL — uses pre-generated plan from closure, or generates on-the-fly
       try {
-        if (typeof window.buildPersonalizedMuscuPlan === 'function') {
-          var localPlan = window.buildPersonalizedMuscuPlan(window.S || {});
-          if (localPlan && Array.isArray(localPlan.weekProgram) && localPlan.weekProgram.length > 0) {
+        var localPlan = _localPlanPregen || (typeof window.buildPersonalizedMuscuPlan === 'function' ? window.buildPersonalizedMuscuPlan(window.S || {}) : null);
+        if (localPlan && Array.isArray(localPlan.weekProgram) && localPlan.weekProgram.length > 0) {
             var _Snow2 = window.S || {};
             _Snow2.muscuProgramCount = (_Snow2.muscuProgramCount || 0) + 1;
             _Snow2.muscuIAProgram = localPlan;
@@ -1506,7 +1532,6 @@
             if (retryIaBtn) retryIaBtn.addEventListener('click', function() { window.openMuscuProgramGenerator(); });
             return;
           }
-        }
       } catch(eFallback) {
         console.error('[muscu-prog] fallback local failed:', eFallback);
       }
