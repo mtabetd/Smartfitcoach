@@ -679,7 +679,7 @@ function getNextSportDay() {
     try {
       if (S.yogaLevel) {
         var _yWeekIdx = Math.max(0, Math.min((S.yogaWeek || 1) - 1, 3));
-        var _yDayIdx = S.yogaDay || 0;
+        var _yDayIdx = Math.max(0, Math.min(S.yogaDay || 0, (S.yogaDays || 3) - 1));
         var _yPhase = '';
         // YOGA_WEEKS is local to app-sport.js, we read the phase from a simple lookup
         var _YOGA_PHASES = ['Fondations', '\u00c9quilibre et Force', 'Ouverture des Hanches & Torsions', 'Backbends & Inversions'];
