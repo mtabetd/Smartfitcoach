@@ -1192,6 +1192,15 @@ function renderStep4(p) {
   dvd.appendChild(h('div', {'class': 'divider-line'}));
   p.appendChild(dvd);
 
+  // UX FIX : sous-titres explicatifs pour les sigles médicaux peu connus
+  var _medicalHints = {
+    hta: 'Hypertension (tension élevée)',
+    hta_severe: 'Hypertension sévère (tension très élevée)',
+    irc: 'Insuffisance rénale chronique',
+    tca: 'Rapport difficile avec la nourriture',
+    cardio: 'Maladie cardiaque'
+  };
+
   MEDICAL.forEach(function(cat) {
     p.appendChild(h('div', {'class': 'section-label'}, cat.cat));
     var catList = h('div', {'class': 'level-list'});
@@ -1226,10 +1235,15 @@ function renderStep4(p) {
         }
         if (window.validatePregnancyState) validatePregnancyState();
         window.render();
-      }}, [
-        h('div', {}, [h('div', {'class': 'level-name'}, item.icon + ' ' + item.name), h('div', {'class': 'level-desc'}, item.desc)]),
-        h('span', {'class': 'level-badge'}, on ? '\u2713' : '+')
-      ]));
+      }}, (function() {
+        var _inner = h('div', {});
+        _inner.appendChild(h('div', {'class': 'level-name'}, item.icon + ' ' + item.name));
+        if (_medicalHints[item.id]) {
+          _inner.appendChild(h('div', {style: 'font-size:10px;color:var(--grey,#9A9A90);margin-top:1px;line-height:1.3'}, _medicalHints[item.id]));
+        }
+        _inner.appendChild(h('div', {'class': 'level-desc'}, item.desc));
+        return [_inner, h('span', {'class': 'level-badge'}, on ? '\u2713' : '+')];
+      })()));
     });
     p.appendChild(catList);
   });
@@ -3909,7 +3923,7 @@ function renderStep9(p) {
       } else {
         // IMPORTANT-G2: feedback si pool vide
         console.warn('[nutrition] regen: generateWeek() a retourné un plan vide');
-        if (window.showToast) window.showToast('Impossible de g\u00e9n\u00e9rer un nouveau plan. V\u00e9rifiez vos pr\u00e9f\u00e9rences alimentaires.', 'error', 4500);
+        if (window.showToast) window.showToast('Plan non g\u00e9n\u00e9r\u00e9 \u2014 v\u00e9rifiez vos allergies et pr\u00e9f\u00e9rences (onglet Profil).', 'error', 5000);
       }
       window.render();
     } finally {
@@ -4131,7 +4145,7 @@ function exportDayPDF(dayIdx) {
     if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', function() { exportDayPDF(dayIdx); }); }
     return;
   }
-  if (!Array.isArray(S.weekPlan) || !S.weekPlan[dayIdx]) { if (window.showToast) window.showToast('Aucun plan disponible pour ce jour. G\u00e9n\u00e9rez votre plan nutritionnel.', 'error', 4000); return; }
+  if (!Array.isArray(S.weekPlan) || !S.weekPlan[dayIdx]) { if (window.showToast) window.showToast('Aucun plan pour ce jour \u2014 g\u00e9n\u00e9rez votre plan semaine d\'abord.', 'error', 4000); return; }
   try {
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({unit: 'mm', format: 'a4'});
@@ -6305,7 +6319,7 @@ function exportShoppingListPDF(list, shopChecked) {
     if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', function() { exportShoppingListPDF(list, shopChecked); }); }
     return;
   }
-  if (!Array.isArray(list) || list.length === 0) { if (window.showToast) window.showToast('Liste de courses vide \u2014 g\u00e9n\u00e9rez votre plan nutritionnel', 'error', 4000); return; }
+  if (!Array.isArray(list) || list.length === 0) { if (window.showToast) window.showToast('Liste de courses vide \u2014 votre plan semaine doit \u00eatre g\u00e9n\u00e9r\u00e9 d\'abord.', 'error', 4000); return; }
   try {
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({ unit: 'mm', format: 'a4' });
