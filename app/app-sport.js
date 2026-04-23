@@ -1349,7 +1349,7 @@ window.SPORT = {
  hdr.appendChild(h('div', {'class': 'logo', html: 'SMARTFITCOACH<span>' + sportLabel + '</span>'}));
  var totalSteps = S.sportType === 'crossfit' ? 2 : S.sportType === 'running' ? 2 : S.sportType === 'hyrox' ? 2 : S.sportType === 'padel' ? 2 : S.sportType === 'golf' ? 2 : S.sportType === 'triathlon' ? 2 : S.sportType === 'yoga' ? 2 : S.sportType === 'cycling' ? 2 : S.sportType === 'calisthenics' ? 2 : 4;
  // sStep 20 (medical) maps to display step 0 for musculation (shown as "Éval. médicale")
- var currentDisplay = S.sStep === 26 ? 0 : S.sStep === 20 ? 0 : S.sportType === 'crossfit' ? S.sStep - 4 : S.sportType === 'running' ? S.sStep - 6 : S.sportType === 'hyrox' ? S.sStep - 8 : S.sportType === 'padel' ? S.sStep - 10 : S.sportType === 'golf' ? S.sStep - 12 : S.sportType === 'triathlon' ? S.sStep - 16 : S.sportType === 'yoga' ? S.sStep - 18 : S.sportType === 'cycling' ? S.sStep - 21 : S.sportType === 'calisthenics' ? S.sStep - 23 : S.sStep;
+ var currentDisplay = S.sStep === 26 ? 0 : S.sStep === 27 ? 0 : S.sStep === 20 ? 0 : S.sportType === 'crossfit' ? S.sStep - 4 : S.sportType === 'running' ? S.sStep - 6 : S.sportType === 'hyrox' ? S.sStep - 8 : S.sportType === 'padel' ? S.sStep - 10 : S.sportType === 'golf' ? S.sStep - 12 : S.sportType === 'triathlon' ? S.sStep - 16 : S.sportType === 'yoga' ? S.sStep - 18 : S.sportType === 'cycling' ? S.sStep - 21 : S.sportType === 'calisthenics' ? S.sStep - 23 : S.sStep;
  var _progStep = _SPORT_PROGRAM_STEP[S.sportType] || 4;
  var _isOnProgram = (S.sStep === _progStep || (S.sStep === 6 && S.cfCalendarOpen));
  if (_isOnProgram) {
@@ -1378,12 +1378,12 @@ window.SPORT = {
    // Hermès polish : clamp currentDisplay [1, totalSteps] — jamais d'étape négative/dépassée affichée
    var _clampedStep = Math.max(1, Math.min(totalSteps, currentDisplay));
    var _stepValid = (currentDisplay >= 1 && currentDisplay <= totalSteps);
-   var stepLabel = S.sStep === 26 ? 'Questionnaire sant\u00e9' : S.sStep === 20 ? '\u00c9val. m\u00e9dicale' : S.sStep === 16 ? '\u00c9val. des charges' : S.sStep === 15 ? 'Programmes d\u00e9di\u00e9s' : (_stepValid ? ('\u00c9tape ' + _clampedStep + ' / ' + totalSteps) : '\u2014');
+   var stepLabel = S.sStep === 26 ? 'Questionnaire sant\u00e9' : S.sStep === 27 ? 'Bilan m\u00e9dical' : S.sStep === 20 ? '\u00c9val. m\u00e9dicale' : S.sStep === 16 ? '\u00c9val. des charges' : S.sStep === 15 ? 'Programmes d\u00e9di\u00e9s' : (_stepValid ? ('\u00c9tape ' + _clampedStep + ' / ' + totalSteps) : '\u2014');
    hdr.appendChild(h('div', {'class': 'step-indicator'}, stepLabel));
  }
  p.appendChild(hdr);
  var pb = h('div', {'class': 'progress-bar'});
- var _pbPct = S.sStep === 26 ? 5 : S.sStep === 20 ? 5 : S.sStep === 16 ? 15 : S.sStep === 15 ? 100 : Math.min(100, Math.max(0, (currentDisplay / totalSteps * 100)));
+ var _pbPct = S.sStep === 26 ? 5 : S.sStep === 27 ? 10 : S.sStep === 20 ? 5 : S.sStep === 16 ? 15 : S.sStep === 15 ? 100 : Math.min(100, Math.max(0, (currentDisplay / totalSteps * 100)));
  pb.appendChild(h('div', {'class': 'progress-fill', style: 'width:' + _pbPct + '%'}));
  p.appendChild(pb);
  }
@@ -1574,7 +1574,7 @@ function renderSportGenericMedical(p) {
   p.appendChild(_ftRow);
 
   // Zone cards grid
-  var _grid = h('div', {style:'display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:420px;margin:0 auto 24px;'});
+  var _grid = h('div', {style:'display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;max-width:420px;margin:0 auto 24px;'});
   _zones.forEach(function(zone) {
     var _sel = Array.isArray(S.medical) && S.medical.indexOf(zone.key) !== -1;
     var _card = h('div', {
@@ -1607,6 +1607,13 @@ function renderSportGenericMedical(p) {
   }, _hasSel ? 'Adapter mon programme →' : 'Continuer →'));
 
   p.appendChild(h('p', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey,#6B6B65);text-align:center;margin-top:16px;letter-spacing:1px;'}, 'Données 100% locales · Consultez un médecin en cas de doute'));
+
+  var _backRow = h('div', {style:'text-align:center;margin-top:12px;'});
+  _backRow.appendChild(h('button', {
+    style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;background:none;border:none;color:var(--grey,#6B6B65);cursor:pointer;padding:8px;',
+    onclick: function() { S.sStep = 0; S.sportType = null; if (window.render) window.render(); }
+  }, '← Changer de sport'));
+  p.appendChild(_backRow);
 }
 
 function renderSportSplash(p) {
@@ -4198,7 +4205,7 @@ function appendSportMedicalBanner(p, sportName) {
     if (S.muscuMedical.feet) {
       _mw.push('\u26A0 Pieds / Fasciite : évitez les impacts répétés (course, sauts). Semelles adaptées obligatoires.');
     }
-    if (S.muscuMedical.hypertension) {
+    if (S.muscuMedical.hypertension && _ml.indexOf('hta') === -1 && _ml.indexOf('hta_severe') === -1 && _ml.indexOf('hypertension') === -1) {
       _mw.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode('\u26A0 HTA (profil muscu) : pas d\u2019efforts isométriques maximaux. ')); _el.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _el.appendChild(document.createTextNode(' max 6/10. Restez en Zone 1-2.')); return _el; })());
     }
     if (_mw.length > 0) {
@@ -11429,7 +11436,7 @@ function renderYogaProgram(p) {
 
  // Medical warnings
  var med = S.muscuMedical || {};
- if (med.herniaDisc || med.lowerBack) {
+ if ((med.herniaDisc || med.lowerBack) && (!Array.isArray(S.medical) || S.medical.indexOf('lombaire') === -1)) {
  var hw = h('div', {style: 'background:rgba(232,111,30,0.06);border-left:3px solid var(--orange,#E86F1E);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--orange-ink,#7A3B0E);line-height:1.6'});
  hw.appendChild(h('div', {style: 'font-weight:700;color:var(--orange-ink,#7A3B0E);margin-bottom:4px'}, '\u26A0 Hernie discale / Bas du dos'));
  hw.appendChild(h('div', {}, '\u00c9viter forward fold profond sans genoux fl\u00e9chis. Paschimottanasana : toujours garder une micro-flexion des genoux. Privil\u00e9gier Balasana, torsions douces assises.'));

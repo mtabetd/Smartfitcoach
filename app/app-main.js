@@ -88,6 +88,8 @@ var PROFILE_KEYS = [
  'mealsLogged',
  'parqDone',
  'parqResult',
+ 'sportMedDone',
+ '_sportMedType',
  'streakFreezeUsedMonth',
  'streakFreezeAvailable',
  'swapCount',
