@@ -22,7 +22,9 @@ module.exports = defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         viewport: { width: 390, height: 844 },
-        launchOptions: {
+        launchOptions: process.env.CI ? {
+          args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        } : {
           executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
           args: ['--no-sandbox', '--disable-setuid-sandbox'],
         },

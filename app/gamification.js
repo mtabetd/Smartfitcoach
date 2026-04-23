@@ -241,6 +241,12 @@ function updateStreak() {
   if (data.current >= 14) { unlockBadge('streak_14'); celebrateIdentity(data.current); }
   if (data.current >= 30) { unlockBadge('streak_30'); celebrateIdentity(data.current); }
   if (data.current >= 90) { unlockBadge('streak_90'); celebrateIdentity(data.current); }
+
+  // Partage social aux jalons clés (7, 14, 30, 90 jours) — une seule fois par jalon
+  var _socialMilestones = [7, 14, 30, 90];
+  if (_socialMilestones.indexOf(data.current) !== -1 && window.SOCIAL && window.SOCIAL.shareStreak) {
+    try { window.SOCIAL.shareStreak({ days: data.current }); } catch(e) {}
+  }
 }
 
 // ─── IDENTITY PROGRESSION — messages narratifs aux jalons clés ───────────────

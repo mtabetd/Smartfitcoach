@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#FAF9F6">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-iN7wpJdxHlpujRppkOA8N0+Mzp0ZqZr3lCtxM00Y63c='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https://world.openfoodfacts.org https://images.openfoodfacts.org; connect-src 'self' https://world.openfoodfacts.org https://*.supabase.co wss://localhost:* ws://localhost:*; object-src 'none'; base-uri 'self'; form-action 'self'; worker-src 'self'; manifest-src 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-iN7wpJdxHlpujRppkOA8N0+Mzp0ZqZr3lCtxM00Y63c=' https://browser.sentry-cdn.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https://world.openfoodfacts.org https://images.openfoodfacts.org; connect-src 'self' https://world.openfoodfacts.org https://*.supabase.co https://*.ingest.sentry.io wss://localhost:* ws://localhost:*; object-src 'none'; base-uri 'self'; form-action 'self'; worker-src 'self'; manifest-src 'self';">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <!-- meta robots noindex supprimé — indexation activée -->
@@ -371,6 +371,12 @@ canvas.weight-chart{width:100%;height:200px}
 <body>
 <script src="./security-init.js"></script>
 <script src="./crash-reporter.js"></script>
+<script
+  src="https://browser.sentry-cdn.com/loader/8.x.min.js"
+  data-dsn="SENTRY_DSN_PLACEHOLDER"
+  data-lazy="no"
+  crossorigin="anonymous">
+</script>
 <div id="gate" style="position:fixed;top:0;left:0;right:0;bottom:0;background:var(--ivory,#FAF9F6);z-index:9999;display:flex;align-items:center;justify-content:center">
 <div style="text-align:center;max-width:340px;padding:24px">
 <div style="font-family:Georgia,serif;font-size:11px;letter-spacing:8px;text-transform:uppercase;margin-bottom:6px;color:var(--black,#0A0A09)">SMARTFITCOACH</div>
@@ -417,57 +423,7 @@ canvas.weight-chart{width:100%;height:200px}
 <main id="app" role="main" style="display:none"></main>
 <script src="./gate.js"></script>
 <script src="./error-boundary.js"></script>
-<script defer src="./chart.umd.min.js"></script>
-<!-- jspdf: lazy-loaded on PDF export click (~411KB saved at startup) -->
-<script defer src="./prices-db.js"></script>
-<script defer src="./recipe-engine.js"></script>
-<script defer src="./supabase.min.js"></script>
-<script defer src="./supabase-client.js"></script>
-<script defer src="./exercise-gifs-map.js"></script>
-<script defer src="./exercises-db.js"></script>
-<!-- crossfit-wods: lazy-loaded via _loadCFScripts() only for CrossFit users (~543KB saved for other users) -->
-<script defer src="./auth.js"></script>
-<script defer src="./gamification.js"></script>
-<script defer src="./extras.js"></script>
-<script defer src="./food-db.js"></script>
-<script defer src="./food-portions.js"></script>
-<script defer src="./analytics.js"></script>
-<script defer src="./tips-assistant.js"></script>
-<script defer src="./muscu-programs.js"></script>
-<script defer src="./exercise-videos.js"></script>
-<script defer src="./nutrition-master.js"></script>
-<script defer src="./muscle-taxonomy.js"></script>
-<script defer src="./validators.js"></script>
-<script defer src="./app-core.js"></script>
-<script defer src="./triathlon-program.js"></script>
-<script defer src="./perf-history.js"></script>
-<!-- FIX D12 2026-04 : dashboard.js legacy retiré (code mort).
-     window.TODAY (today-dashboard.js) remplace window.DASHBOARD depuis longtemps.
-     dashboard.js polluait le scope global avec computeStreak/firstName/h etc. -->
-<script defer src="./app-nutrition.js"></script>
-<script defer src="./calisthenics-program.js"></script>
-<script defer src="./sport-data.js"></script>
-<script defer src="./app-sport.js"></script>
-<script defer src="./custom-session.js"></script>
-<script defer src="./motivation.js"></script>
-<script defer src="./motivation-library.js"></script>
-<script defer src="./today-dashboard.js"></script>
-<script defer src="./pdf-weekly-report.js"></script>
-<script defer src="./smart-calendar.js"></script>
-<script defer src="./auth-banner.js"></script>
-<script defer src="./onboarding-complete.js"></script>
-<!-- Projet 2.0 Phase A : Social (amis, feed privé, likes, commentaires) -->
-<script defer src="./app-social.js"></script>
-<script defer src="./feedback-widget.js"></script>
-<script defer src="./plate-scan.js"></script>
-<script defer src="./scanner.js"></script>
-<script defer src="./app-main.js"></script>
-<script defer src="./ai-coach.js"></script>
-<script defer src="./body-analysis.js"></script>
-<script defer src="./muscu-program-generator.js"></script>
-<script defer src="./sw-register.js"></script>
-<script defer src="./push-manager.js"></script>
-<script defer src="./pwa-install.js"></script>
+<script defer src="./bundle.js"></script>
 <div id="offline-banner" role="status" aria-live="polite" style="display:none;position:fixed;top:0;left:0;right:0;z-index:10000;background:var(--tabac,#6A4A1A);color:var(--ivory,#FAF9F6);text-align:center;padding:10px 16px;font-size:10px;font-family:'Helvetica Neue',Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;">
   Hors ligne &middot; Vos donn&eacute;es sont sauvegard&eacute;es localement
 </div>

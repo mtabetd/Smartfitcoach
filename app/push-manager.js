@@ -10,6 +10,20 @@
 
   var PUSH_KEY = 'mtd_push_prefs'; // Préférences stockées en localStorage
 
+  // VAPID public key — fill in after running: npx web-push generate-vapid-keys
+  // Leave empty to skip server-side push subscription (graceful degradation).
+  var VAPID_PUBLIC_KEY = '';
+
+  // Convert a URL-safe base64 string to Uint8Array (required by pushManager.subscribe)
+  function urlBase64ToUint8Array(base64String) {
+    var padding = '='.repeat((4 - base64String.length % 4) % 4);
+    var base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    var rawData = atob(base64);
+    var outputArray = new Uint8Array(rawData.length);
+    for (var i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
+    return outputArray;
+  }
+
   // NOTE: window.PushManager is reserved by the Web Push API (browsers expose it natively).
   // We use window.SFCPushManager to avoid clobbering the native interface.
   window.SFCPushManager = {
@@ -81,7 +95,70 @@
 
     enable: function() {
       // Re-demande permission + scheduling si user réactive
-      this.askPermission();
+      var self = this;
+      var result = this.askPermission();
+      // If askPermission returned a Promise (permission dialog was shown), chain subscribe
+      if (result && typeof result.then === 'function') {
+        result.then(function(perm) {
+          if (perm === 'granted') self.subscribe();
+        });
+      } else if (Notification.permission === 'granted') {
+        // Permission was already granted — subscribe now
+        this.subscribe();
+      }
+    },
+
+    // Register this browser with the push server so server-side notifications work.
+    // Silently skips when VAPID_PUBLIC_KEY is empty or SW is unavailable.
+    subscribe: function() {
+      try {
+        if (!VAPID_PUBLIC_KEY) return; // No VAPID key configured — skip silently
+        if (!('serviceWorker' in navigator)) return;
+        navigator.serviceWorker.ready.then(function(registration) {
+          if (!registration.pushManager) return;
+          registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+          }).then(function(subscription) {
+            // Get auth token for the request
+            var token = '';
+            try {
+              if (window.AUTH && typeof window.AUTH.getSession === 'function') {
+                var session = window.AUTH.getSession();
+                if (session && session.access_token) token = session.access_token;
+              }
+            } catch(e) {}
+
+            var payload = JSON.stringify({
+              action: 'subscribe',
+              subscription: {
+                endpoint: subscription.endpoint,
+                keys: {
+                  p256dh: subscription.toJSON().keys.p256dh,
+                  auth: subscription.toJSON().keys.auth
+                }
+              }
+            });
+
+            var fetchOpts = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: payload
+            };
+            if (token) fetchOpts.headers['Authorization'] = 'Bearer ' + token;
+
+            fetch('/.netlify/functions/push-subscribe', fetchOpts).catch(function(err) {
+              console.warn('[SFCPushManager] subscribe fetch error:', err && err.message);
+            });
+          }).catch(function(err) {
+            console.warn('[SFCPushManager] pushManager.subscribe error:', err && err.message);
+          });
+        }).catch(function(err) {
+          console.warn('[SFCPushManager] serviceWorker.ready error:', err && err.message);
+        });
+      } catch(e) {
+        console.warn('[SFCPushManager] subscribe exception:', e && e.message);
+      }
     },
 
     // Notifications locales planifiées (pas de serveur requis)

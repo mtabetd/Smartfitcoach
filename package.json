@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "SmartFitCoach - Application PWA de nutrition et fitness",
   "scripts": {
-    "start": "live-server app --port=3000 --host=0.0.0.0 --no-browser --entry-file=index.html",
+    "build": "node scripts/build-bundle.js",
+    "start": "node scripts/build-bundle.js && live-server app --port=3000 --host=0.0.0.0 --no-browser --entry-file=index.html",
     "test": "node tests/unit-calculs.js"
   },
   "devDependencies": {
@@ -13,6 +14,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.101.1",
-    "jspdf": "^4.2.1"
+    "jspdf": "^4.2.1",
+    "web-push": "^3.6.7"
   }
 }
