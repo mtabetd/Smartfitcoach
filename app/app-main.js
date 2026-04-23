@@ -1349,13 +1349,16 @@ function renderProfilePage(container) {
            var tcard = h('div', {
              style: 'flex:1;padding:12px 8px 10px;border:' + (isAct ? '1.5px solid var(--black)' : '1px solid var(--border)') + ';' +
                'background:' + (isAct ? 'var(--black,#0A0A09)' : 'transparent') + ';' +
-               'cursor:pointer;text-align:center;transition:all 0.2s;position:relative;',
+               'cursor:pointer;text-align:center;border-radius:0;transition:background 0.2s ease,border-color 0.2s ease,color 0.2s ease;position:relative;',
              onclick: (function(tier) { return function() { window._sfcPricingUI.tier = tier; if (window.render) window.render(); }; })(t)
            });
-           if (isReco && !isAct) {
+           if (isReco) {
              var _badge = h('div', {style:
                'position:absolute;top:-8px;left:50%;transform:translateX(-50%);' +
-               'background:var(--black);color:#FAF9F6;font-family:"Helvetica Neue",Arial,sans-serif;' +
+               'background:' + (isAct ? 'var(--ivory,#FAF9F6)' : 'var(--black)') + ';' +
+               'color:' + (isAct ? 'var(--black,#0A0A09)' : '#FAF9F6') + ';' +
+               'border:1px solid var(--black);' +
+               'font-family:"Helvetica Neue",Arial,sans-serif;' +
                'font-size:7px;letter-spacing:2px;padding:2px 6px;white-space:nowrap;'
              }, 'POPULAIRE');
              tcard.appendChild(_badge);
@@ -1365,7 +1368,7 @@ function renderProfilePage(container) {
              'color:' + (isAct ? '#FAF9F6' : 'var(--black)') + ';margin-bottom:3px;'
            }, _tierLabels[t]));
            tcard.appendChild(h('div', {style:
-             'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:1px;' +
+             'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;' +
              'color:' + (isAct ? 'rgba(250,249,246,0.7)' : 'var(--grey)') + ';'
            }, _tierSubs[t]));
            _tierRow.appendChild(tcard);
@@ -1383,7 +1386,7 @@ function renderProfilePage(container) {
                'background:' + (isAct ? 'var(--black)' : 'transparent') + ';' +
                'color:' + (isAct ? '#FAF9F6' : 'var(--grey)') + ';' +
                'cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;' +
-               'letter-spacing:1px;text-transform:uppercase;min-height:36px;transition:all 0.2s;text-align:center;',
+               'letter-spacing:3px;text-transform:uppercase;min-height:44px;border-radius:0;appearance:none;-webkit-appearance:none;transition:background 0.2s ease,border-color 0.2s ease,color 0.2s ease;text-align:center;',
              onclick: (function(dur) { return function() { window._sfcPricingUI.duration = dur; if (window.render) window.render(); }; })(d)
            });
            pill.appendChild(h('div', {}, pillTxt));
@@ -1420,7 +1423,7 @@ function renderProfilePage(container) {
                var _saved = _baseTotal - _selPlan.price_mad;
                if (_saved > 0) {
                  var _savingsBadge = h('div', {style:
-                   'display:inline-block;margin-top:10px;padding:4px 12px;' +
+                   'display:inline-block;margin-top:10px;padding:4px 12px;border-radius:0;' +
                    'border:1px solid var(--black);font-family:"Helvetica Neue",Arial,sans-serif;' +
                    'font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--black);'
                  }, 'Vous économisez ' + _saved + ' MAD');

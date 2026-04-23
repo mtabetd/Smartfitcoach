@@ -4529,7 +4529,7 @@ function showSubscriptionContact(plan, ui) {
   ov.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,9,0.6);z-index:9500;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s ease;';
 
   var box = document.createElement('div');
-  box.style.cssText = 'background:var(--ivory,#FAF9F6);max-width:400px;width:92%;padding:36px 28px 28px;position:relative;';
+  box.style.cssText = 'background:var(--ivory,#FAF9F6);max-width:400px;width:92%;padding:36px 28px 28px;position:relative;border-radius:0;box-sizing:border-box;';
 
   // Filet + titre
   var _headerLine = document.createElement('div');
@@ -4545,11 +4545,15 @@ function showSubscriptionContact(plan, ui) {
   // Titre Georgia
   var _h = document.createElement('div');
   _h.style.cssText = 'font-family:Georgia,serif;font-size:22px;color:var(--black,#0A0A09);margin-bottom:6px;font-weight:normal;line-height:1.3;';
-  _h.textContent = 'Une expérience conçue\npour quelques-uns.';
+  _h.innerHTML = 'Une exp&eacute;rience con&ccedil;ue<br>pour quelques-uns.';
   box.appendChild(_h);
 
   // Plan sélectionné
   if (planLine) {
+    var _selLabel = document.createElement('div');
+    _selLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px;margin-top:12px;';
+    _selLabel.textContent = 'VOTRE SÉLECTION';
+    box.appendChild(_selLabel);
     var _planTag = document.createElement('div');
     _planTag.style.cssText = 'display:inline-block;border:1px solid var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;margin:12px 0 16px;color:var(--black,#0A0A09);';
     _planTag.textContent = planLine;
@@ -4565,21 +4569,22 @@ function showSubscriptionContact(plan, ui) {
   // Bouton principal — mailto
   var _mailBtn = document.createElement('a');
   _mailBtn.href = mailto;
-  _mailBtn.style.cssText = 'display:block;width:100%;padding:16px;margin-bottom:10px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;box-sizing:border-box;cursor:pointer;';
+  _mailBtn.style.cssText = 'display:block;width:100%;padding:16px;margin-bottom:10px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;text-decoration:none;box-sizing:border-box;cursor:pointer;border-radius:0;';
   _mailBtn.textContent = 'Écrire à l’équipe';
   box.appendChild(_mailBtn);
 
   // Bouton secondaire — fermer
   var dismiss = function() { ov.style.opacity = '0'; setTimeout(function() { if (ov.parentNode) ov.parentNode.removeChild(ov); }, 300); };
   var _closeBtn = document.createElement('button');
-  _closeBtn.style.cssText = 'display:block;width:100%;padding:13px;background:transparent;border:1px solid var(--border,#D8D8D0);color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;';
+  _closeBtn.style.cssText = 'display:block;width:100%;padding:16px;background:transparent;border:1px solid var(--border,#D8D8D0);color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;border-radius:0;appearance:none;-webkit-appearance:none;';
   _closeBtn.textContent = 'Peut-être plus tard';
   _closeBtn.onclick = dismiss;
   box.appendChild(_closeBtn);
 
   // Réassurance
   var _reassure = document.createElement('div');
-  _reassure.style.cssText = 'text-align:center;margin-top:14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;color:var(--grey,#6B6B65);';
+  var _filet = document.createElement('div'); _filet.style.cssText = 'height:1px;background:var(--border,#D8D8D0);margin:20px 0 14px;'; box.appendChild(_filet);
+  _reassure.style.cssText = 'text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;color:var(--grey,#6B6B65);';
   _reassure.textContent = 'Discrétion assurée — nous ne partageons aucune information personnelle.';
   box.appendChild(_reassure);
 
