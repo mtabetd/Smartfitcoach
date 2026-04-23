@@ -318,6 +318,7 @@ window.CUSTOM_SESSION = {
   finishSession: function(durationMins) {
     var draft = this.ensureDraft();
     var S = window.S;
+    if (!S) return;
     draft.view = 'done';
     draft.endTime = Date.now();
     draft.durationMins = durationMins || Math.max(1, Math.round(((draft.endTime - (draft.startTime || draft.endTime)) / 60000))) || 30;
@@ -352,8 +353,7 @@ window.CUSTOM_SESSION = {
       var avgW3 = vs3.reduce(function(sum3, s) { return sum3 + (parseFloat(s.weight) || 0); }, 0) / vs3.length;
       var avgR3 = vs3.reduce(function(sum3, s) { return sum3 + (parseInt(s.reps) || 0); }, 0) / vs3.length;
       if (!S.muscuProgressionHistory[b.n]) S.muscuProgressionHistory[b.n] = [];
-      var exists3 = S.muscuProgressionHistory[b.n].filter(function(e3) { return e3.date === _today3; });
-      if (!exists3.length) {
+      if (!S.muscuProgressionHistory[b.n].some(function(e3) { return e3.date === _today3; })) {
         S.muscuProgressionHistory[b.n].push({ date: _today3, week: S.muscuWeek || 0, weight: Math.round(avgW3 * 2) / 2, reps: Math.round(avgR3) });
         if (S.muscuProgressionHistory[b.n].length > 365) S.muscuProgressionHistory[b.n] = S.muscuProgressionHistory[b.n].slice(-365);
       }
@@ -559,6 +559,7 @@ function _csRenderMuscleSelector(container, draft) {
     style: 'display:block;width:100%;padding:10px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);cursor:pointer;',
     onclick: function() {
       S._csSkipMuscleSelect = true;
+      S._csSelectedGroups = [];
       if (window.render) window.render();
     }
   }, 'Construire librement sans suggestion →'));
@@ -579,11 +580,15 @@ function _csRenderBuild(container, draft) {
   hdr.appendChild(h('div', {
     style: 'font-family:Georgia,serif;font-size:22px;font-weight:normal;color:var(--black,#0A0A09);margin-bottom:4px;'
   }, draft.title));
+  var _genGroups = (S._csSelectedGroups && S._csSelectedGroups.length && S._csSkipMuscleSelect);
+  var _subtitleText = draft.blocks.length === 0
+    ? 'Recherchez un exercice ou ajoutez un bloc cardio.'
+    : _genGroups
+      ? draft.blocks.length + ' exercice' + (draft.blocks.length > 1 ? 's' : '') + ' suggérés · Modifiez librement avant de démarrer.'
+      : draft.blocks.length + ' bloc' + (draft.blocks.length > 1 ? 's' : '') + ' · Appuyez sur Démarrer quand vous êtes prêt.';
   hdr.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);'
-  }, draft.blocks.length === 0
-    ? 'Recherchez un exercice ou ajoutez un bloc cardio.'
-    : draft.blocks.length + ' bloc' + (draft.blocks.length > 1 ? 's' : '') + ' · Appuyez sur Démarrer quand vous êtes prêt.'));
+  }, _subtitleText));
   container.appendChild(hdr);
 
   // ── Sélecteur groupes musculaires (quand aucun bloc et pas encore skippé) ──
@@ -603,6 +608,13 @@ function _csRenderBuild(container, draft) {
       }
     }, 'Annuler'));
     return;
+  }
+
+  // ── Bandeau "séance générée" si groupes sélectionnés mais 0 résultats ──
+  if (S._csSkipMuscleSelect && S._csSelectedGroups && S._csSelectedGroups.length > 0 && draft.blocks.length === 0) {
+    container.appendChild(h('div', {
+      style: 'padding:10px 14px;margin-bottom:12px;background:rgba(10,10,9,0.04);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'
+    }, 'Aucun exercice trouvé pour ces groupes musculaires. Ajoutez vos exercices manuellement ci-dessous.'));
   }
 
   // ── Barre de recherche ──
@@ -749,6 +761,12 @@ function _csRenderBuild(container, draft) {
 // ─────────────────────────────────────────────
 function _csRenderActive(container, draft) {
   var h = window.h;
+  var S = window.S;
+
+  // Pré-calcul dates log (partagé entre tous les blocs pour éviter N tris)
+  var _logToday = new Date().toISOString().slice(0, 10);
+  var _logAll = (S && S.muscuSessionLog) || {};
+  S._csActiveDates = Object.keys(_logAll).filter(function(d) { return d < _logToday; }).sort().reverse();
 
   // comptage sets
   var totalSets = 0, doneSets = 0;
@@ -1051,6 +1069,11 @@ function _csRenderDraftBlock(block) {
 // ─────────────────────────────────────────────
 function _csRenderActiveExBlock(block) {
   var h = window.h;
+  if (!block || !Array.isArray(block.loggedSets)) {
+    var empty = h('div', { style: 'border:1px solid var(--border,#D8D8D0);margin-bottom:12px;padding:10px 12px;background:var(--ivory,#FAF9F6);border-radius:2px;' });
+    empty.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:13px;' }, block && block.n || 'Exercice'));
+    return empty;
+  }
   var validCnt = block.loggedSets.filter(function(s) { return s.validated; }).length;
   var allDone = validCnt === block.loggedSets.length;
 
@@ -1071,35 +1094,32 @@ function _csRenderActiveExBlock(block) {
     }, 'Charge cible : ' + block.targetWeight + ' kg'));
   }
 
-  // Référence dernière session
-  (function() {
-    var S2 = window.S;
-    var today2 = new Date().toISOString().slice(0, 10);
-    var log2 = (S2 && S2.muscuSessionLog) || {};
-    var dates2 = Object.keys(log2).filter(function(d) { return d < today2; }).sort().reverse();
-    var lastRef = null;
-    for (var di2 = 0; di2 < Math.min(dates2.length, 14) && !lastRef; di2++) {
-      var dl2 = log2[dates2[di2]];
-      if (dl2 && dl2[block.n] && Array.isArray(dl2[block.n])) {
-        var vs2 = dl2[block.n].filter(function(s2) { return s2.validated && s2.actualWeight; });
-        if (vs2.length) {
-          var maxW2 = vs2.reduce(function(m2, s2) { return Math.max(m2, s2.actualWeight || 0); }, 0);
-          var avgR2 = Math.round(vs2.reduce(function(sum2, s2) { return sum2 + (s2.actualReps || 0); }, 0) / vs2.length);
-          var daysAgo2 = Math.round((new Date(today2) - new Date(dates2[di2])) / 86400000);
-          lastRef = { weight: maxW2, sets: vs2.length, reps: avgR2, days: daysAgo2 };
-        }
-      }
+  // Référence dernière session (dates pré-calculées par _csRenderActive)
+  var _lref = (function() {
+    var log = ((window.S && window.S.muscuSessionLog) || {});
+    var dates = (window.S && window.S._csActiveDates) ||
+      Object.keys(log).filter(function(d) { return d < new Date().toISOString().slice(0, 10); }).sort().reverse();
+    for (var i = 0; i < Math.min(dates.length, 14); i++) {
+      var day = log[dates[i]];
+      if (!day || !day[block.n] || !Array.isArray(day[block.n])) continue;
+      var validSets = day[block.n].filter(function(s) { return s.validated && s.actualWeight; });
+      if (!validSets.length) continue;
+      var maxW = validSets.reduce(function(m, s) { return Math.max(m, s.actualWeight || 0); }, 0);
+      var avgR = Math.round(validSets.reduce(function(sum, s) { return sum + (s.actualReps || 0); }, 0) / validSets.length);
+      var ago = Math.round((Date.now() - new Date(dates[i]).getTime()) / 86400000);
+      return { weight: maxW, sets: validSets.length, reps: avgR, days: ago };
     }
-    if (!lastRef) return;
-    var dLabel2 = lastRef.days === 1 ? 'hier' : 'il y a ' + lastRef.days + 'j';
-    var refRow2 = window.h('div', {
+    return null;
+  })();
+  if (_lref) {
+    var refRow = window.h('div', {
       style: 'padding:5px 12px;background:rgba(10,10,9,0.03);border-bottom:1px solid var(--border,#D8D8D0);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);display:flex;justify-content:space-between;'
     });
-    refRow2.appendChild(window.h('span', {}, 'Réf. (' + dLabel2 + ')'));
-    refRow2.appendChild(window.h('span', { style: 'font-family:Georgia,serif;' },
-      lastRef.weight + ' kg · ' + lastRef.sets + '×' + lastRef.reps + ' reps'));
-    wrap.appendChild(refRow2);
-  })();
+    refRow.appendChild(window.h('span', {}, 'Réf. (' + (_lref.days === 1 ? 'hier' : 'il y a ' + _lref.days + 'j') + ')'));
+    refRow.appendChild(window.h('span', { style: 'font-family:Georgia,serif;' },
+      _lref.weight + ' kg · ' + _lref.sets + '×' + _lref.reps + ' reps'));
+    wrap.appendChild(refRow);
+  }
 
   var setsWrap = h('div', { style: 'padding:6px 12px;' });
   block.loggedSets.forEach(function(s, si) {
