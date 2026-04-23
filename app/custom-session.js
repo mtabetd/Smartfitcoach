@@ -691,30 +691,26 @@ function _csRenderBuild(container, draft) {
       '-webkit-appearance:none;outline:none;'
     ].join('')
   });
-  var _srchTimer = null;
-  srchInput.oninput = function(e) {
-    if (_srchTimer) clearTimeout(_srchTimer);
-    var val = e.target.value;
-    _srchTimer = setTimeout(function() {
-      S._csQuery = val;
-      if (window.render) window.render();
-    }, 180);
-  };
-  srchInput.onfocus = function() { srchInput.style.borderColor = 'var(--black,#0A0A09)'; };
-  srchInput.onblur  = function() { srchInput.style.borderColor = 'var(--border,#D8D8D0)'; };
-  if (S._csQuery) {
-    var clearBtn = h('button', {
-      style: 'position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;font-size:18px;cursor:pointer;color:var(--grey,#6B6B65);padding:4px 6px;',
-      onclick: function() { S._csQuery = ''; if (window.render) window.render(); }
-    }, '×');
-    srchWrap.appendChild(clearBtn);
-  }
+  var clearBtn = h('button', {
+    style: 'position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;font-size:18px;cursor:pointer;color:var(--grey,#6B6B65);padding:4px 6px;display:' + (S._csQuery ? 'block' : 'none') + ';',
+    onclick: function() {
+      S._csQuery = '';
+      srchInput.value = '';
+      clearBtn.style.display = 'none';
+      _csUpdateResults('');
+    }
+  }, '×');
+  srchWrap.appendChild(clearBtn);
   srchWrap.appendChild(srchInput);
   container.appendChild(srchWrap);
 
-  // ── Résultats ──
-  var q = S._csQuery || '';
-  if (q.length >= 2) {
+  // ── Résultats (mis à jour sans re-render global pour préserver le focus clavier) ──
+  var srchResultsContainer = h('div', {});
+  container.appendChild(srchResultsContainer);
+
+  function _csUpdateResults(q) {
+    while (srchResultsContainer.firstChild) srchResultsContainer.removeChild(srchResultsContainer.firstChild);
+    if (!q || q.length < 2) return;
     var results = window.EXERCISE_SEARCH.search(q);
     var resBox = h('div', {
       style: 'border:1px solid var(--border,#D8D8D0);border-radius:2px;margin-bottom:14px;max-height:260px;overflow-y:auto;background:var(--ivory,#FAF9F6);'
@@ -743,8 +739,23 @@ function _csRenderBuild(container, draft) {
         resBox.appendChild(row);
       });
     }
-    container.appendChild(resBox);
+    srchResultsContainer.appendChild(resBox);
   }
+
+  _csUpdateResults(S._csQuery || '');
+
+  srchInput.onfocus = function() { srchInput.style.borderColor = 'var(--black,#0A0A09)'; };
+  srchInput.onblur  = function() { srchInput.style.borderColor = 'var(--border,#D8D8D0)'; };
+  var _srchTimer = null;
+  srchInput.oninput = function(e) {
+    if (_srchTimer) clearTimeout(_srchTimer);
+    var val = e.target.value;
+    clearBtn.style.display = val ? 'block' : 'none';
+    _srchTimer = setTimeout(function() {
+      S._csQuery = val;
+      _csUpdateResults(val);
+    }, 180);
+  };
 
   // ── Blocs cardio rapides ──
   var cardioSect = h('div', { style: 'margin-bottom:18px;' });
