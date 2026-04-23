@@ -4433,6 +4433,7 @@ function showPaywall(feature) {
   var name = featureNames[feature] || 'Cette fonctionnalité';
   var old = document.getElementById('sfc-paywall-modal');
   if (old && old.parentNode) old.parentNode.removeChild(old);
+  if (window.TRACKER) window.TRACKER.track('paywall_hit', { feature: feature });
   var h = window.h;
   if (!h) { if (window.showToast) window.showToast(name + ' est r\u00e9serv\u00e9e aux abonn\u00e9s', 'error', 3500); return; }
   var ov = document.createElement('div');

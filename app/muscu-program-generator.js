@@ -1491,6 +1491,7 @@
       }
       // Sauvegarder localement
       try { localStorage.setItem(LS_KEY_PROGRAM, JSON.stringify({ program: programText, generatedAt: data.generatedAt })); } catch(e) { console.error('[muscu-prog] save fail:', e); }
+      if (window.TRACKER) window.TRACKER.track('program_generated', { sport_type: window.S && window.S.sportType });
     })
     .catch(function(err) {
       if (_mcTimer) clearTimeout(_mcTimer);

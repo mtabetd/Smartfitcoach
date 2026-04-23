@@ -1251,6 +1251,7 @@ window.FOOD_CALC = {
           window.FOOD_JOURNAL.addEntry(mealSlot, food.name, kcal, prot, carbs, fat, g + 'g', 'scanner');
         }
         log('food_add_journal', { food: food.name, quantity: g });
+        if (window.TRACKER) window.TRACKER.track('meal_logged', { source: 'scanner', kcal: kcal });
         addBtn.textContent = 'Ajoute !';
         addBtn.style.borderColor = 'var(--green,#1A4A1A)';
         addBtn.style.color = 'var(--green,#1A4A1A)';

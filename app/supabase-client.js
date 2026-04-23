@@ -367,7 +367,13 @@
             kcal_total: sessionData.kcalTotal,
             rpe: sessionData.rpe,
             heart_rate: sessionData.hr
-          }, { onConflict: 'session_id' });
+          }, { onConflict: 'session_id' })
+          .then(function(r) {
+            if (!r || !r.error) {
+              if (window.TRACKER) window.TRACKER.track('workout_completed', { sport_type: window.S && window.S.sportType, kcal: sessionData.kcalTotal, duration: sessionData.duration });
+            }
+            return r;
+          });
       }).catch(function(e) { console.warn('[SupaSync] saveSession failed:', e); });
     },
 

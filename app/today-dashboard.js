@@ -4099,6 +4099,7 @@ function openTodayWeightPrompt() {
         wh.push(_newEntry);
         try { localStorage.setItem(whKey, JSON.stringify(wh)); } catch(e) {}
         if (window.SupaSync) SupaSync.saveWeight(new Date().toISOString().split('T')[0], valKg);
+        if (window.TRACKER) window.TRACKER.track('weight_logged', { weight_kg: valKg });
         if (window.S) window.S.weightHistory = wh;
         // Persister le nouveau poids dans le profil (évite la perte de données si l'utilisateur ferme l'app)
         if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }

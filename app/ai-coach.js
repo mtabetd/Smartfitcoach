@@ -1227,6 +1227,7 @@ function sendMessage() {
 
   var text = input.value.trim();
   if (!text) return;
+  if (window.TRACKER) window.TRACKER.track('ai_coach_used', {});
 
   // Premium gate — coach IA illimité = premium (trial = 3 messages/jour)
   if (window.isTrialUser && window.isTrialUser()) {
