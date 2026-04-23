@@ -16,6 +16,7 @@ var MAX_API_MESSAGES = 10; // max messages envoyés à l'API (5 échanges)
 var MAX_MSG_CHARS = 500;   // tronquer chaque message à 500 chars avant envoi
 var _panelOpen = false;
 var _sending = false;
+var _lastRemaining = null; // dernier quota reçu du backend
 
 // POLISH 2026-04 (i18n) : helper local i18n avec fallback FR (si window.I18N absent
 // ou clé inexistante). Permet refactor incrémental sans casser le hardcoded existant.
@@ -612,6 +613,12 @@ function stripRegenerateButtonsFromPrevious(container) {
 function regenerateLastResponse() {
   try {
     if (_sending) return;
+    if (_lastRemaining) {
+      var _hr = typeof _lastRemaining.hourRemaining === 'number' ? _lastRemaining.hourRemaining : null;
+      var _dy = typeof _lastRemaining.dayRemaining === 'number' ? _lastRemaining.dayRemaining : null;
+      if (_hr === 0) { showToast('Limite horaire atteinte — réessaie dans 1h'); return; }
+      if (_dy === 0) { showToast('Quota journalier atteint — retour demain'); return; }
+    }
     var S = window.S || {};
     if (!Array.isArray(S.aiCoachHistory) || !S.aiCoachHistory.length) return;
     // Trouver le dernier message user
@@ -1285,6 +1292,7 @@ function sendMessage() {
       }
       // POLISH 2026-04 (V1.3) : mettre à jour le hint rate-limit si backend fournit les restants.
       if (data.remaining && typeof data.remaining === 'object') {
+        _lastRemaining = data.remaining;
         updateRateLimitHint(data.remaining);
       }
       // Sauvegarder profil
