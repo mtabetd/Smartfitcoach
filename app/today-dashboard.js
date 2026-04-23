@@ -1298,19 +1298,22 @@ function renderCardBonjour(S) {
   if (window.isTrialUser && window.isTrialUser()) {
     var _trialDays = window.getTrialDaysLeft ? window.getTrialDaysLeft() : 0;
     var _trialUrgent = _trialDays <= 2;
-    var _trialBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;margin-bottom:12px;border:1px solid var(--orange,#E86F1E);background:rgba(232,111,30,0.06);border-radius:0;' + (_trialUrgent ? 'cursor:pointer;' : '')});
-    if (_trialUrgent) {
-      _trialBanner.onclick = function() { S.view = 'profil'; if (window.render) window.render(); };
-    }
+    var _trialBorderColor = _trialUrgent ? '#C0390E' : 'var(--orange,#E86F1E)';
+    var _trialBg = _trialUrgent ? 'rgba(192,57,14,0.07)' : 'rgba(232,111,30,0.06)';
+    var _trialBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;margin-bottom:12px;border:1px solid ' + _trialBorderColor + ';background:' + _trialBg + ';border-radius:0;cursor:pointer;'});
+    _trialBanner.onclick = function() {
+      if (window.showPaywall) window.showPaywall('premium');
+      else { S.view = 'profil'; if (window.render) window.render(); }
+    };
     var _trialLeft = h('div', {style: 'flex:1;min-width:0;'});
     _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);font-weight:400;margin-bottom:2px;'}, 'VERSION D\u2019ESSAI'));
-    if (_trialDays > 0) {
-      _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'}, _trialDays + ' jour' + (_trialDays > 1 ? 's' : '') + ' restant' + (_trialDays > 1 ? 's' : '') + (_trialUrgent ? ' \u2014 Passer Premium \u2192' : ' \u2014 Vous avez acc\u00e8s \u00e0 tout')));
-    } else {
-      _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--error,#7A1F1F);'}, 'P\u00e9riode d\u2019essai termin\u00e9e \u2014 Voir Premium \u2192'));
-    }
+    var _trialCopy = _trialDays <= 0 ? 'Essai termin\u00e9 \u2014 D\u00e9bloquez l\u2019acc\u00e8s \u2192'
+      : _trialDays === 1 ? 'Dernier jour \u2014 Abonnez-vous pour continuer \u2192'
+      : _trialUrgent ? 'Plus que ' + _trialDays + ' jours \u2014 Continuez sans interruption \u2192'
+      : _trialDays + ' jour' + (_trialDays > 1 ? 's' : '') + ' pour tout explorer \u2014 S\u2019abonner \u2192';
+    _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + (_trialUrgent ? '#7A1F1F' : 'var(--grey,#6B6B65)') + ';'}, _trialCopy));
     _trialBanner.appendChild(_trialLeft);
-    _trialBanner.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;color:var(--orange,#E86F1E);'}, _trialDays > 0 ? _trialDays + 'j' : '!'));
+    _trialBanner.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;color:' + (_trialUrgent ? '#C0390E' : 'var(--orange,#E86F1E)') + ';'}, _trialDays > 0 ? _trialDays + 'j' : '!'));
     c.appendChild(_trialBanner);
   }
 
@@ -5693,26 +5696,34 @@ function renderTodayDashboard(p) {
   try {
     if (window.isTrialUser && window.isTrialUser()) {
       var _td = (typeof window.getTrialDaysLeft === 'function') ? window.getTrialDaysLeft() : 0;
+      var _tdUrgent = _td <= 2;
+      var _tBorder = _tdUrgent ? '#C0390E' : 'var(--orange,#E86F1E)';
+      var _tBg = _tdUrgent ? 'rgba(192,57,14,0.07)' : 'rgba(232,111,30,0.05)';
       var _tBar = h('div', {
         style:
           'display:flex;align-items:center;justify-content:space-between;gap:12px;' +
           'max-width:560px;margin:0 auto 0;padding:12px 16px;' +
-          'border:1px solid var(--orange,#E86F1E);background:rgba(232,111,30,0.05);' +
+          'border:1px solid ' + _tBorder + ';background:' + _tBg + ';' +
           'border-radius:0;cursor:pointer;'
       });
-      _tBar.addEventListener('click', function() { S.view = 'profil'; if (window.render) window.render(); });
+      _tBar.addEventListener('click', function() {
+        if (window.showPaywall) window.showPaywall('premium');
+        else { S.view = 'profil'; if (window.render) window.render(); }
+      });
       var _tL = h('div', {style: 'flex:1;min-width:0;'});
       _tL.appendChild(h('div', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);font-weight:500;margin-bottom:3px;'
       }, 'VERSION D\u2019ESSAI'));
+      var _tCopy = _td <= 0 ? 'Essai terminé \u2014 Débloquez l\u2019accès \u2192'
+        : _td === 1 ? 'Dernier jour \u2014 Abonnez-vous pour continuer \u2192'
+        : _td <= 3 ? 'Plus que ' + _td + ' jours \u2014 Continuez sans interruption \u2192'
+        : _td + ' jours pour tout explorer \u2014 S\u2019abonner \u2192';
       _tL.appendChild(h('div', {
-        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.4;'
-      }, _td > 0
-          ? (_td + ' jour' + (_td > 1 ? 's' : '') + ' restant' + (_td > 1 ? 's' : '') + ' \u2014 Vous avez accès à tout')
-          : 'Période d\u2019essai terminée \u2014 Voir mon abonnement'));
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + (_tdUrgent ? '#7A1F1F' : 'var(--grey,#6B6B65)') + ';line-height:1.4;'
+      }, _tCopy));
       _tBar.appendChild(_tL);
       var _tR = h('div', {
-        style: 'font-family:Georgia,serif;font-size:22px;color:var(--orange-ink,#7A3B0E);flex-shrink:0;line-height:1;'
+        style: 'font-family:Georgia,serif;font-size:22px;color:' + (_tdUrgent ? '#C0390E' : 'var(--orange-ink,#7A3B0E)') + ';flex-shrink:0;line-height:1;'
       }, _td > 0 ? String(_td) + 'j' : '!');
       _tBar.appendChild(_tR);
       wrapper.appendChild(_tBar);

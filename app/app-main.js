@@ -1339,7 +1339,7 @@ function renderProfilePage(container) {
            if (window.showPaywall) window.showPaywall('premium');
            else if (window.showToast) window.showToast('Abonnement bientôt disponible', 'info', 3000);
          }
-       }, _trialExpired ? 'Réactiver mon accès' : 'Passer à Premium');
+       }, _trialExpired ? 'Réactiver mon accès' : _daysLeft <= 1 ? 'Dernier jour — S\'abonner maintenant' : _daysLeft <= 2 ? 'Plus que ' + _daysLeft + ' jours — S\'abonner' : 'Passer à Premium');
        card.appendChild(_cta);
      } else {
        card.appendChild(h('div', {style:
