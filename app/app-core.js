@@ -4471,10 +4471,10 @@ function showPaywall(feature) {
     if (_d && _d.length) {
       for (var _pi = 0; _pi < _d.length; _pi++) {
         if (_d[_pi].tier === 'athlete' && _d[_pi].duration === 'saison')
-          return 'À partir de ' + (_d[_pi].label_mad || '249 MAD') + '/mois';
+          return 'À partir de ' + (_d[_pi].label_mad || '249 MAD') + '/trimestre';
       }
     }
-    return window.SFC_PREMIUM_PRICE || 'À partir de 249 MAD/mois';
+    return window.SFC_PREMIUM_PRICE || 'À partir de 249 MAD/trimestre';
   })() + '</div>' +
     '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:10px;color:#6B6B65;letter-spacing:1px;margin-bottom:20px;">SANS ENGAGEMENT \u00b7 R\u00c9SILIABLE \u00c0 TOUT MOMENT</div>';
   var dismiss = function() { ov.style.opacity = '0'; setTimeout(function() { if (ov.parentNode) ov.parentNode.removeChild(ov); }, 250); };

@@ -1317,7 +1317,7 @@ function renderProfilePage(container) {
        var _tiers = ['athlete', 'champion', 'legende'];
        var _tierLabels = { athlete: 'Athlete', champion: 'Champion', legende: 'Légende' };
        var _durs = ['saison', 'cycle', 'engagement'];
-       var _durLabels = { saison: 'Mensuel', cycle: 'Trimestriel', engagement: 'Annuel' };
+       var _durLabels = { saison: 'Trimestriel', cycle: 'Semestriel', engagement: 'Annuel' };
        function _findPlan(t, d) {
          for (var _k = 0; _k < _pData.length; _k++) {
            if (_pData[_k].tier === t && _pData[_k].duration === d) return _pData[_k];
@@ -1342,7 +1342,8 @@ function renderProfilePage(container) {
          var _priceBox = h('div', {style: 'text-align:center;padding:16px 0 8px;'});
          if (_selPlan) {
            _priceBox.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:30px;color:var(--black);line-height:1;margin-bottom:4px;'}, _selPlan.label_mad));
-           var _durSub = (_durLabels[_ui.duration] || _ui.duration).toLowerCase();
+           var _durPeriods = { saison: '/trimestre', cycle: '/semestre', engagement: '/an' };
+           var _durSub = (_durLabels[_ui.duration] || _ui.duration).toLowerCase() + ' ' + (_durPeriods[_ui.duration] || '');
            if (_selPlan.savings_pct > 0) _durSub += ' · −' + _selPlan.savings_pct + ' %';
            _priceBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;color:var(--grey);'}, _durSub));
          }
@@ -1376,7 +1377,7 @@ function renderProfilePage(container) {
        for (var _ci = 0; _ci < _pData2.length; _ci++) {
          if (_pData2[_ci].tier === _ui2.tier && _pData2[_ci].duration === _ui2.duration) { _ctaPlan = _pData2[_ci]; break; }
        }
-       var _ctaLabel = _trialExpired ? 'Réactiver mon accès' : _daysLeft <= 1 ? 'Dernier jour — S\'abonner' : _daysLeft <= 2 ? 'Plus que ' + _daysLeft + ' jours — S\'abonner' : (_ctaPlan ? 'S\'abonner — ' + _ctaPlan.label_mad + '/mois' : 'Passer à Premium');
+       var _ctaLabel = _trialExpired ? 'Réactiver mon accès' : _daysLeft <= 1 ? 'Dernier jour — S\'abonner' : _daysLeft <= 2 ? 'Plus que ' + _daysLeft + ' jours — S\'abonner' : ((function() { var _p = { saison: '/trimestre', cycle: '/semestre', engagement: '/an' }; return _ctaPlan ? 'S\'abonner — ' + _ctaPlan.label_mad + (_p[_ui2.duration] || '') : 'Passer à Premium'; })());
        var _cta = h('button', {
          style:
            'display:block;width:100%;margin-top:16px;padding:16px;' +
