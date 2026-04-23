@@ -704,6 +704,9 @@ async function runAnalysis() {
       resultZone.appendChild(errEl);
     } else if (data.result) {
       renderResult(resultZone, data.result);
+      if (window.SupaSync && window.SupaSync.saveBodyAnalysis) {
+        try { window.SupaSync.saveBodyAnalysis(data.result.analyse, data.result.programme); } catch(e) {}
+      }
     } else if (data.rawText) {
       var rawEl = document.createElement('div');
       rawEl.className = 'ba-morpho';
