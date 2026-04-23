@@ -4019,7 +4019,7 @@ function appendSportMedicalBanner(p, sportName) {
       _warns.push('\u26A0 Arthrite : évitez les impacts répétés et les charges lourdes. Privilégiez les mouvements doux à amplitude contrôlée. Arrêtez en cas de poussée inflammatoire (EULAR 2020).');
     }
     if (_ml.indexOf('fibromyalgie') !== -1) {
-      _warns.push('\u26A0 Fibromyalgie : intensité légère uniquement (RPE max 5/10). Progression très graduelle. Évitez l\u2019épuisement (Häuser, Cochrane 2017).');
+      _warns.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode('\u26A0 Fibromyalgie : intensité légère uniquement (')); _el.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _el.appendChild(document.createTextNode(' max 5/10). Progression très graduelle. Évitez l\u2019épuisement (Häuser, Cochrane 2017).')); return _el; })());
     }
     if (_warns.length > 0) {
       var _mc = h('div', {style: 'border-left:3px solid var(--orange,#E86F1E);background:rgba(232,111,30,0.06);padding:12px 16px;margin-bottom:12px'});
@@ -4047,7 +4047,7 @@ function appendSportMedicalBanner(p, sportName) {
       _mw.push('\u26A0 Pieds / Fasciite : évitez les impacts répétés (course, sauts). Semelles adaptées obligatoires.');
     }
     if (S.muscuMedical.hypertension) {
-      _mw.push('\u26A0 HTA (profil muscu) : pas d\u2019efforts isométriques maximaux. RPE max 6/10. Restez en Zone 1-2.');
+      _mw.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode('\u26A0 HTA (profil muscu) : pas d\u2019efforts isométriques maximaux. ')); _el.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _el.appendChild(document.createTextNode(' max 6/10. Restez en Zone 1-2.')); return _el; })());
     }
     if (_mw.length > 0) {
       var _mwc = h('div', {style: 'border-left:3px solid var(--error,#7A1F1F);background:rgba(122,31,31,0.04);padding:12px 16px;margin-bottom:12px'});
@@ -4288,7 +4288,7 @@ function renderCrossfitProgram(p) {
  if (cfMed.meniscus) cfMedRestrictions.push('\u26A0 M\u00e9nisque\u00a0: pas de Box Jumps ni Pistols. Squats limit\u00e9s \u00e0 90\u00b0 de flexion maximum sous charge.');
  if (cfMed.lowerBack || cfMed.herniaDisc) cfMedRestrictions.push('\u26A0 Dos / Hernie discale\u00a0: r\u00e9duisez la charge sur Deadlifts et Back Squats (\u226470\u00a0% 1RM). \u00c9vitez Good Morning et Jefferson Curl.');
  if (cfMed.shoulders || cfMed.rotatorCuff) cfMedRestrictions.push('\u26A0 \u00c9paules\u00a0: remplacez HSPU par Pike Push-ups. Overhead Press all\u00e9g\u00e9. \u00c9vitez les mouvements overhead douloureux (Ludewig & Cook, Phys Ther 2000).');
- if (cfMed.hypertension) cfMedRestrictions.push('\u26A0 HTA\u00a0: intensit\u00e9 plafonn\u00e9e RPE\u00a07/10 maximum. \u00c9vitez Valsalva lors des charges lourdes (AHA/ACSM 2007).');
+ if (cfMed.hypertension) cfMedRestrictions.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode('\u26A0 HTA\u00a0: intensit\u00e9 plafonn\u00e9e ')); _el.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _el.appendChild(document.createTextNode('\u00a07/10 maximum. \u00c9vitez Valsalva lors des charges lourdes (AHA/ACSM 2007).')); return _el; })());
  if (cfMed.osteoporosis) cfMedRestrictions.push('\u26A0 Ost\u00e9oporose\u00a0: pas de Box Jumps ni sauts. Charges \u226470\u00a0% 1RM uniquement. \u00c9vitez flexions vert\u00e9brales r\u00e9p\u00e9t\u00e9es (Sinaki, Spine 2002).');
  if (cfMedRestrictions.length > 0) {
  var cfMedBanner = h('div', {style: 'border-left:3px solid #E07B00;background:rgba(224,123,0,0.07);padding:12px 16px;margin-bottom:16px'});
@@ -4687,13 +4687,13 @@ function renderCrossfitProgram(p) {
   var elitePoints = [
    'INTENT: Chaque WOD a un objectif precis dans la programmation. Lis les notes du WOD AVANT de commencer.',
    'PACING: Un champion ne commence jamais a 100% avant le round 3. Reserve 15% de capacite pour la fin.',
-   'JOURNAL: Notez votre score, votre RPE, et vos observations. La progression vient de l\'analyse, pas juste du travail.',
+   (function(){ var _el = document.createDocumentFragment(); _el.appendChild(document.createTextNode('JOURNAL: Notez votre score, votre ')); _el.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _el.appendChild(document.createTextNode(', et vos observations. La progression vient de l\'analyse, pas juste du travail.')); return _el; })(),
    'RECOVERY: Le muscle grandit pendant le repos, pas pendant l\'entrainement. Dors 8h minimum ce soir.',
    'MENTAL: "Les jours difficiles sont les jours qui nous construisent. Les jours faciles sont des jours de maintenance."'
   ];
   var eliteList = h('div', {});
   elitePoints.forEach(function(pt, idx) {
-   eliteList.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:#8B2FC9;padding:3px 0;border-bottom:1px solid rgba(139,47,201,0.15)'}, (idx + 1) + '. ' + pt));
+   var _eDiv = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:#8B2FC9;padding:3px 0;border-bottom:1px solid rgba(139,47,201,0.15)'}); if (typeof pt === 'string') { _eDiv.textContent = (idx + 1) + '. ' + pt; } else { _eDiv.appendChild(document.createTextNode((idx + 1) + '. ')); _eDiv.appendChild(pt); } eliteList.appendChild(_eDiv);
   });
   eliteCard.appendChild(eliteList);
   p.appendChild(eliteCard);
@@ -6770,6 +6770,71 @@ function renderMusculationProgram(p) {
    else S.dailyChallengeHistory = {};
  }
 
+ // ─── SÉANCE DU JOUR — carte highlight en haut du programme ───
+ (function() {
+  var _todayCardIdx = (new Date().getDay() + 6) % 7; // 0=Lun … 6=Dim
+  var _dayFullFR = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+  var _todayDayName = _dayFullFR[_todayCardIdx];
+
+  // Vérifier que aujourd'hui est un jour d'entraînement
+  if (!Array.isArray(S.trainingDaysSelected) || S.trainingDaysSelected.length === 0) return;
+  var _todayPosInProg = S.trainingDaysSelected.indexOf(_todayCardIdx);
+  if (_todayPosInProg < 0) return; // Jour de repos — pas de carte
+
+  // Vérifier que le programme existe et contient ce jour
+  if (!Array.isArray(S.sportProgram) || _todayPosInProg >= S.sportProgram.length) return;
+  var _todayDay = S.sportProgram[_todayPosInProg];
+  if (!_todayDay || !Array.isArray(_todayDay.exercises) || _todayDay.exercises.length === 0) return;
+
+  // Vérifier si la séance a déjà été complétée aujourd'hui
+  var _todayISOKey = new Date().toISOString().slice(0, 10);
+  var _doneToday = S.muscuSessionLog && S.muscuSessionLog[_todayISOKey] && Object.keys(S.muscuSessionLog[_todayISOKey]).length > 0;
+  if (_doneToday) return; // Séance déjà faite — ne pas afficher la carte
+
+  // ── Construction de la carte ──
+  var _card = h('div', {style: 'border:1px solid var(--border,#D8D8D0);border-left:3px solid var(--accent,#1A4A1A);background:var(--ivory2,#F4F4F0);padding:16px;margin-bottom:20px;border-radius:2px;'});
+
+  // Eyebrow : "AUJOURD'HUI · Lundi"
+  _card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--accent,#1A4A1A);margin-bottom:6px;font-weight:600;'}, "AUJOURD’HUI · " + _todayDayName));
+
+  // Titre : focus + nombre d'exercices
+  var _exCount = _todayDay.exercises.length;
+  var _cardTitle = (_todayDay.focus || 'Séance') + ' — ' + _exCount + ' exercice' + (_exCount > 1 ? 's' : '');
+  _card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:15px;font-weight:700;color:var(--black,#0A0A09);margin-bottom:12px;line-height:1.3;'}, _cardTitle));
+
+  // Aperçu des 3 premiers exercices
+  var _previewExos = _todayDay.exercises.slice(0, 3);
+  var _exList = h('div', {style: 'margin-bottom:14px;'});
+  _previewExos.forEach(function(ex) {
+   var _exRow = h('div', {style: 'display:flex;align-items:baseline;gap:8px;margin-bottom:5px;'});
+   _exRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--black,#0A0A09);flex:1;line-height:1.4;'}, ex.n || ex.name || ''));
+   if (ex.sets) {
+    _exRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);white-space:nowrap;flex-shrink:0;'}, ex.sets));
+   }
+   _exList.appendChild(_exRow);
+  });
+  if (_exCount > 3) {
+   _exList.appendChild(h('div', {style: 'font-family:Georgia,serif;font-style:italic;font-size:11px;color:var(--grey,#6B6B65);margin-top:2px;'}, '+ ' + (_exCount - 3) + ' autre' + (_exCount - 3 > 1 ? 's' : '') + '…'));
+  }
+  _card.appendChild(_exList);
+
+  // Bouton Commencer maintenant
+  _card.appendChild(h('button', {
+   style: 'display:block;width:100%;padding:14px;background:var(--black,#0A0A09);color:var(--paper,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;min-height:44px;font-weight:500;',
+   onclick: function() {
+    S.selectedSportDay = _todayPosInProg;
+    S.currentExerciseIdx = 0;
+    S._exSwipeDayIdx = _todayPosInProg;
+    if (window.render) window.render();
+   }
+  }, '→ Commencer maintenant'));
+
+  p.appendChild(_card);
+
+  // Séparateur visuel
+  p.appendChild(h('hr', {style: 'border:none;border-top:1px solid var(--border,#D8D8D0);margin:0 0 20px;'}));
+ })();
+
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
  p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
 
@@ -6869,7 +6934,7 @@ function renderMusculationProgram(p) {
  if (med.lowerBack || med.herniaDisc) restrictions.push('\u26A0 Dos\u00a0: soulev\u00e9 de terre et flexions lourdes retir\u00e9s');
  if (med.knees || med.acl) restrictions.push('\u26A0 Genoux\u00a0: squats profonds remplac\u00e9s');
  if (med.herniaInguinal) restrictions.push('\u26A0 Hernie inguinale\u00a0: exercices hyperpressifs retir\u00e9s');
- if (med.hypertension) restrictions.push('\u26A0 HTA\u00a0: intensit\u00e9 plafonn\u00e9e RPE\u00a07/10, Valsalva interdit');
+ if (med.hypertension) restrictions.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode('\u26A0 HTA\u00a0: intensit\u00e9 plafonn\u00e9e ')); _el.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _el.appendChild(document.createTextNode('\u00a07/10, Valsalva interdit')); return _el; })());
  if (med.osteoporosis) restrictions.push('\u26A0 Ost\u00e9oporose\u00a0: charges \u2264\u00a070\u00a0% 1RM, pas d\'impacts ni flexions vert\u00e9brales (Sinaki, Spine 2002)');
  if (med.rheumatoidArthritis) restrictions.push('\u26A0 Polyarthrite rhumato\u00efde\u00a0: charges l\u00e9g\u00e8res, exercices doux en r\u00e9mission uniquement \u2014 arr\u00eatez en cas de pouss\u00e9e (EULAR 2020)');
  if (med.fibromyalgia) restrictions.push('\u26A0 Fibromyalgie\u00a0: intensit\u00e9 mod\u00e9r\u00e9e max, pas de HIIT ni charges maximales \u2014 exercices a\u00e9robies doux recommand\u00e9s (Cochrane 2017)');
@@ -6978,7 +7043,7 @@ function renderMusculationProgram(p) {
  var htaLightDiv = h('div', {style: 'background:rgba(232,111,30,0.06);border-left:3px solid var(--orange,#E86F1E);padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E)'});
  htaLightDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);margin-bottom:6px'}, 'HTA — Précautions sport'));
  htaLightDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u26A0 HTA légère (140-159/90-99 mmHg) : l\'exercice régulier est bénéfique mais doit rester contrôlé (ESC/ESH 2018).'));
- htaLightDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u2022 Intensité maximale recommandée : RPE 8/10 — évitez les efforts maximaux'));
+ htaLightDiv.appendChild((function(){ var _d = h('div', {style: 'margin-bottom:4px'}); _d.appendChild(document.createTextNode('\u2022 Intensité maximale recommandée : ')); _d.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _d.appendChild(document.createTextNode(' 8/10 — évitez les efforts maximaux')); return _d; })());
  htaLightDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u2022 Évitez le Valsalva (apnée en poussée lourde) — favorisez une respiration continue'));
  htaLightDiv.appendChild(h('div', {}, '\u2022 Contrôle tensionnel mensuel recommandé. Consultez votre médecin si PA > 160/100 mmHg à l\'effort.'));
  _bannerTarget.appendChild(htaLightDiv);
@@ -6990,7 +7055,7 @@ function renderMusculationProgram(p) {
  var htaDiv = h('div', {style: 'background:rgba(122,31,31,0.06);border-left:3px solid var(--error,#7A1F1F);padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--error,#7A1F1F)'});
  htaDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--error,#7A1F1F);margin-bottom:6px'}, 'HTA Sévère — Restrictions sport obligatoires'));
  htaDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u26A0 HTA sévère (≥180/110 mmHg) : HIIT, CrossFit et efforts isométriques lourds sont contre-indiqués (ESC/ESH 2018). Risque de pic tensionnel >300/150 mmHg (ACC 2019).'));
- htaDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u2022 Intensité maximale : RPE 6/10 — cardio Z1-Z2 uniquement (<65% FCmax)'));
+ htaDiv.appendChild((function(){ var _d = h('div', {style: 'margin-bottom:4px'}); _d.appendChild(document.createTextNode('\u2022 Intensité maximale : ')); _d.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _d.appendChild(document.createTextNode(' 6/10 — cardio Z1-Z2 uniquement (<65% FCmax)')); return _d; })());
  htaDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u2022 Évitez le Valsalva (squat lourd, soulevé de terre, arraché) — Lamotte et al., Arch Cardiovasc Dis 2015'));
  htaDiv.appendChild(h('div', {}, '\u2022 Consultation cardiologique obligatoire avant tout programme. Test d\'effort recommandé.'));
  _bannerTarget.appendChild(htaDiv);
@@ -8900,7 +8965,7 @@ function renderMusculationProgram(p) {
  kr3.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;font-weight:bold'}, 'Total estim\u00e9'));
  kr3.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:17px;font-weight:bold;color:var(--green,#3E5C3A)'}, kcalRes.total + '\u00a0kcal'));
  kcalBox.appendChild(kr3);
- kcalBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);margin-top:6px;font-style:italic'}, 'FC estim\u00e9e\u00a0' + kcalRes.hr + '\u00a0bpm \u2014 RPE\u00a0' + kcalRes.rpe + '/10 \u2014 MET\u00a0Ainsworth\u00a02011 \u00b7 Tanaka\u00a02001'));
+ kcalBox.appendChild((function(){ var _d = h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);margin-top:6px;font-style:italic'}); _d.appendChild(document.createTextNode('FC estim\u00e9e\u00a0' + kcalRes.hr + '\u00a0bpm \u2014 ')); _d.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _d.appendChild(document.createTextNode('\u00a0' + kcalRes.rpe + '/10 \u2014 MET\u00a0Ainsworth\u00a02011 \u00b7 Tanaka\u00a02001')); return _d; })());
  compPanel.appendChild(kcalBox);
  // Note TDEE — évite le double-comptage (audit interdépendance)
  compPanel.appendChild(h('div', {style: 'background:rgba(232,111,30,0.06);border-left:3px solid var(--orange,#E86F1E);padding:8px 12px;margin-bottom:14px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--text,#0A0A09);line-height:1.5'}, '\u26a0 Ces calories sont d\u00e9j\u00e0 int\u00e9gr\u00e9es dans votre TDEE via votre facteur d\'activit\u00e9. Ce bilan confirme votre d\u00e9pense r\u00e9elle — ne les d\u00e9duisez pas en plus de votre objectif calorique journalier.'));
@@ -8964,7 +9029,7 @@ function renderMusculationProgram(p) {
  // RPE 1-10 (slider)
  var rpeRow = h('div', {style: 'margin-bottom:14px'});
  var rpeLabel = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:6px'});
- rpeLabel.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:13px'}, 'Effort ressenti (RPE)'));
+ rpeLabel.appendChild((function(){ var _s = h('span', {style: 'font-family:Georgia,serif;font-size:13px'}); _s.appendChild(document.createTextNode('Effort ressenti (')); _s.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _s.appendChild(document.createTextNode(')')); return _s; })());
  var rpeValSpan = h('span', {style: 'font-family:Georgia,serif;font-size:15px;font-weight:bold;color:var(--black,#0A0A09);min-width:42px;text-align:right'},
    fbDraft.rpe ? (fbDraft.rpe + '/10') : '—');
  rpeLabel.appendChild(rpeValSpan);
@@ -11326,7 +11391,7 @@ function renderCyclingOnboarding(p) {
  var wLabel = i === 0 ? ('< ' + b[1] + 'W') : (b[0] + '-' + b[1] + 'W');
  zonesCard.appendChild(h('div', {style: 'display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-family:Helvetica Neue,Arial,sans-serif;font-size:13px'}, [
  h('span', {style: 'color:' + z.color + ';font-weight:bold'}, 'Z' + z.zone + ' ' + z.name),
- h('span', {style: 'color:var(--grey)'}, wLabel + ' · RPE ' + z.rpe)
+ (function(){ var _s = h('span', {style: 'color:var(--grey)'}); _s.appendChild(document.createTextNode(wLabel + ' · ')); _s.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _s.appendChild(document.createTextNode(' ' + z.rpe)); return _s; })()
  ]));
  });
  p.appendChild(zonesCard);
@@ -11529,7 +11594,7 @@ function renderCyclingProgram(p) {
  sessCard.appendChild(metaRow);
 
  if (zoneData) {
- sessCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-top:4px'}, zoneData.desc + ' — RPE ' + zoneData.rpe));
+ sessCard.appendChild((function(){ var _d = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-top:4px'}); _d.appendChild(document.createTextNode(zoneData.desc + ' — ')); _d.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _d.appendChild(document.createTextNode(' ' + zoneData.rpe)); return _d; })());
  }
  p.appendChild(sessCard);
  }
