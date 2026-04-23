@@ -536,7 +536,7 @@ function _migrateAnonKeys(uid) {
     }
 
     // Migrer les clés legacy anon → uid (historique, badges, streaks, logs)
-    var _LEGACY_PREFIXES = ['mtd_perf_hist_', 'mtd_badges_', 'mtd_streak_', 'mtd_food_journal_', 'mtd_water_', 'mtd_muscu_session_', 'mtd_weight_history_'];
+    var _LEGACY_PREFIXES = ['mtd_perf_hist_', 'mtd_badges_', 'mtd_streak_', 'mtd_food_journal_', 'mtd_water_', 'mtd_muscu_session_', 'mtd_weight_history_', 'mtd_run_history_', 'mtd_session_history_', 'mtd_daily_challenge_', 'mtd_saved_meals_'];
     _LEGACY_PREFIXES.forEach(function(prefix) {
       var anonKey = prefix + 'anon';
       var uidKey = prefix + uid;

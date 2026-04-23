@@ -1371,7 +1371,9 @@ function renderProfilePage(container) {
    style: 'display:flex;align-items:center;justify-content:space-between;width:100%;padding:14px;border:1px solid var(--border);background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;min-height:44px;',
    onclick: function() {
      var on = document.body.classList.toggle('dark-mode');
-     try { localStorage.setItem('mtd_dark_mode', on ? '1' : '0'); } catch(e) {}
+     var _dmUid = (window.AUTH && window.AUTH.getUser && window.AUTH.getUser()) ? window.AUTH.getUser().id : null;
+     var _dmKey = _dmUid ? ('mtd_dark_mode_' + _dmUid) : 'mtd_dark_mode';
+     try { localStorage.setItem(_dmKey, on ? '1' : '0'); } catch(e) {}
      if (window.render) window.render();
    }
  });
@@ -1742,6 +1744,8 @@ function renderProfilePage(container) {
 function render() {
  if (render._lock) return;
  render._lock = true;
+ // Clean any stale tooltips left over from previous view
+ try { document.querySelectorAll('.sfc-tooltip-pop').forEach(function(el){ el.remove(); }); } catch(_eTp) {}
  try {
  // === SAFETY: conditions incompatibles avec certains objectifs (OMS 2016, ACOG 2020/2022, ANAD, IOC 2018) ===
  // Correction silencieuse — attrape les données persistées en localStorage avant le fix
@@ -2117,42 +2121,6 @@ function renderLogin(app) {
  S.authError = '';
  S.justLoggedIn = true;
  S.view = 'today';
- // Migrate anon profile data to this user's key (data entered before login)
- try {
- var _loginUser = AUTH.getUser();
- var _loginUid = _loginUser ? _loginUser.id : null;
- if (_loginUid && _loginUid !== 'anon') {
- // Profil principal
- var _anonRaw = localStorage.getItem('mtd_profile_anon');
- var _userRaw = localStorage.getItem('mtd_profile_' + _loginUid);
- if (_anonRaw && !_userRaw) {
- localStorage.setItem('mtd_profile_' + _loginUid, _anonRaw);
- localStorage.removeItem('mtd_profile_anon');
- }
- // Streak
- var _anonStreak = localStorage.getItem('mtd_streak_anon');
- if (_anonStreak && !localStorage.getItem('mtd_streak_' + _loginUid)) {
- localStorage.setItem('mtd_streak_' + _loginUid, _anonStreak);
- localStorage.removeItem('mtd_streak_anon');
- }
- // Badges
- var _anonBadges = localStorage.getItem('mtd_badges_anon');
- if (_anonBadges && !localStorage.getItem('mtd_badges_' + _loginUid)) {
- localStorage.setItem('mtd_badges_' + _loginUid, _anonBadges);
- localStorage.removeItem('mtd_badges_anon');
- }
- // Historique poids
- var _anonWh = localStorage.getItem('mtd_weight_history_anon');
- if (_anonWh && !localStorage.getItem('mtd_weight_history_' + _loginUid)) {
- localStorage.setItem('mtd_weight_history_' + _loginUid, _anonWh);
- localStorage.removeItem('mtd_weight_history_anon');
- }
- }
- } catch(e) {
-   // 2026-04 P0 FIX : log la migration échec (évite fail silencieux)
-   console.warn('[anon→uid migration] échec lors du transfert des données anon vers user:', e);
-   window._anonMigrationFailed = true;
- }
  // Restore profile from localStorage for this user
  loadProfile();
  _migrateSteps();
@@ -2844,7 +2812,9 @@ window._lazyLoad = (function() {
 })();
 
 // ─── DARK MODE PREFERENCE ───
-try { if (localStorage.getItem('mtd_dark_mode') === '1') document.body.classList.add('dark-mode'); } catch(e) {}
+var _dmUid = (window.AUTH && window.AUTH.getUser && window.AUTH.getUser()) ? window.AUTH.getUser().id : null;
+var _dmKey = _dmUid ? ('mtd_dark_mode_' + _dmUid) : 'mtd_dark_mode';
+try { if (localStorage.getItem(_dmKey) === '1') document.body.classList.add('dark-mode'); } catch(e) {}
 
 // ─── DEV ONLY: ?reset=users handler (localhost only) ───
 (function() {

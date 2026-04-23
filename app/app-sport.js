@@ -73,7 +73,7 @@ function termTooltip(term, definition) {
   var pop = document.createElement('div');
   pop.className = 'sfc-tooltip-pop';
   pop.textContent = definition;
-  pop.style.cssText = 'position:fixed;max-width:280px;padding:12px 14px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;line-height:1.5;border:1px solid var(--grey,#6B6B65);border-radius:2pxz-index:10020;pointer-events:auto;';
+  pop.style.cssText = 'position:fixed;max-width:280px;padding:12px 14px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;line-height:1.5;border:1px solid var(--grey,#6B6B65);border-radius:2px;z-index:10020;pointer-events:auto;';
   var rect = span.getBoundingClientRect();
   var top = rect.bottom + 8;
   var left = Math.max(12, Math.min(rect.left, window.innerWidth - 292));
@@ -4152,7 +4152,7 @@ function appendWellnessBanner(p) {
   } else {
     var textWrap = h('div', {style: 'flex:1;min-width:0'});
     textWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:' + cm.textColor + ';margin-bottom:3px;font-weight:700'}, adapt.label));
-    textWrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px;font-style:italic;color:var(--black,#1A1A18);line-height:1.5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap'}, adapt.advice));
+    textWrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px;font-style:italic;color:var(--black,#1A1A18);line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical'}, adapt.advice));
     var actionBtn = h('button', {
       style: 'margin-top:5px;background:none;border:none;border-bottom:1px solid ' + cm.borderColor + ';padding:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:' + cm.textColor + ';cursor:pointer;line-height:1.6',
       onclick: function() {
@@ -5456,7 +5456,7 @@ function getSuggestedWeight(exerciseName, reps, phase) {
  var matchedEx = null;
  for (var mi = 0; mi < window.MUSCU_KEY_EXERCISES.length; mi++) {
  var kex = window.MUSCU_KEY_EXERCISES[mi];
- if (nameLow.indexOf(kex.name.toLowerCase().split(' ')[0]) !== -1 || nameLow.indexOf(kex.key.replace('_',' ')) !== -1) {
+ if ((kex.name && nameLow.indexOf(kex.name.toLowerCase().split(' ')[0]) !== -1) || nameLow.indexOf(kex.key.replace('_',' ')) !== -1) {
  matchedEx = kex; break;
  }
  }
@@ -6776,7 +6776,7 @@ function renderMusculationProgram(p) {
    var _updateBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border:1px solid var(--ink-900,#0A0A09);background:rgba(62,92,58,0.06);margin-bottom:12px;border-radius:2px'});
    _updateBanner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--ink-900,#0A0A09)'}, 'Une mise à jour du programme est disponible.'));
    _updateBanner.appendChild(h('button', {
-     style: 'padding:6px 12px;background:var(--ink-900,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;min-height:36px;white-space:nowrap;',
+     style: 'padding:6px 12px;background:var(--ink-900,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;min-height:44px;white-space:nowrap;',
      onclick: function() {
        try { S.sportProgram = generateSportProgram(); S.sportProgramValidated = true; S.sportProgramValidatedAt = new Date().toISOString(); } catch(e) {}
        S._sportUpdateAvailable = false;
@@ -7858,7 +7858,7 @@ function renderMusculationProgram(p) {
  }; })(ex.n, eqType)
  });
  var _wcMinus = h('button', {
- style: 'min-width:36px;min-height:36px;padding:0;background:transparent;border:1px solid var(--border);border-radius:2px;font-size:16px;cursor:pointer;color:var(--black,#0A0A09)',
+ style: 'min-width:44px;min-height:44px;padding:0;background:transparent;border:1px solid var(--border);border-radius:2px;font-size:16px;cursor:pointer;color:var(--black,#0A0A09)',
  onclick: (function(exN, eqT, inp) { return function(e) {
    e.stopPropagation();
    var cur = parseFloat(inp.value) || 0;
@@ -7874,7 +7874,7 @@ function renderMusculationProgram(p) {
  weightRow.appendChild(_wcMinus);
  weightRow.appendChild(wInput);
  var _wcPlus = h('button', {
- style: 'min-width:36px;min-height:36px;padding:0;background:transparent;border:1px solid var(--border);border-radius:2px;font-size:16px;cursor:pointer;color:var(--black,#0A0A09)',
+ style: 'min-width:44px;min-height:44px;padding:0;background:transparent;border:1px solid var(--border);border-radius:2px;font-size:16px;cursor:pointer;color:var(--black,#0A0A09)',
  onclick: (function(exN, eqT, inp) { return function(e) {
    e.stopPropagation();
    var cur = parseFloat(inp.value) || 0;
