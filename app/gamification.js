@@ -311,6 +311,8 @@ function updateNutritionStreak() {
   data.current = (data.lastDate === ydStr) ? (data.current || 0) + 1 : 1;
   data.lastDate = todayStr;
   try { localStorage.setItem(key, JSON.stringify(data)); } catch(e) {}
+  // Sync nutrition streak via next profile save (backed up in _legacy_storage)
+  if (window.SupaSync) SupaSync.scheduleSave();
   if (data.current >= 7)  unlockBadge('nutrition_streak_7');
   if (data.current >= 14) unlockBadge('nutrition_streak_14');
   if (data.current >= 30) unlockBadge('nutrition_streak_30');
@@ -554,6 +556,7 @@ function incrementCounter(counterName) {
   var key = 'mtd_counter_' + counterName + '_' + user.id;
   var count = (parseInt(localStorage.getItem(key) || '0', 10) || 0) + 1;
   try { localStorage.setItem(key, String(count)); } catch(e) {}
+  if (window.SupaSync) SupaSync.saveCounter(counterName, count);
   return count;
 }
 
