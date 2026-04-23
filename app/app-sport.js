@@ -3836,6 +3836,7 @@ function renderWellnessBanner(p) {
   try { if (window.pushWellnessHistory) window.pushWellnessHistory(S.todayWellness); } catch(e) {}
   S._wellnessReminder = false;
   banner.style.display = 'none';
+  if (window.showToast) window.showToast('Bilan du matin enregistré', 'success', 2000);
   if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
   if (window.render) { try { window.render(); } catch(e) {} }
  });
@@ -3937,6 +3938,7 @@ function renderWellnessCheckin(p, onComplete) {
   S.todayWellness = { date: today, sleep: state.sleep, muscles: state.muscles, energy: state.energy };
   // POLISH 2026-04 : push dans wellness history multi-jours (90j glissants)
   try { if (window.pushWellnessHistory) window.pushWellnessHistory(S.todayWellness); } catch(e) {}
+  if (window.showToast) window.showToast('Bilan du matin enregistré', 'success', 2000);
   if (onComplete) onComplete();
  }}, 'Commencer la seance');
  p.appendChild(startBtn);
@@ -9497,6 +9499,21 @@ function renderMusculationProgram(p) {
   p.appendChild(window._pendingSfcSection);
   window._pendingSfcSection = null;
  }
+
+ // Bouton "Séance libre" — accès discret depuis la vue programme muscu
+ var _freeTxt = h('div', {style: 'text-align:center;margin-top:28px;padding-top:16px;border-top:1px solid var(--border,#E8E6DF)'});
+ _freeTxt.appendChild(h('button', {
+   style: 'background:transparent;border:none;color:var(--grey,#9A9A90);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;padding:8px 0;min-height:44px;',
+   onclick: function() {
+     if (window.CUSTOM_SESSION && typeof window.CUSTOM_SESSION.open === 'function') {
+       window.CUSTOM_SESSION.open();
+     } else {
+       S.sStep = 30;
+       if (window.render) window.render();
+     }
+   }
+ }, 'ou créer une séance libre →'));
+ p.appendChild(_freeTxt);
 
  p.appendChild(h('div', {style: 'height:12px'}));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 3; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier les zones'}));

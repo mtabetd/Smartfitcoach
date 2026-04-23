@@ -169,9 +169,29 @@ function progressBar(val, max, color) {
   return outer;
 }
 
+// Tooltips pour les labels macros (title HTML natif — zero-JS, accessible)
+var MACRO_TOOLTIPS = {
+  'Prot.':    'Protéines — construction et récupération musculaire',
+  'Gluc.':    'Glucides — énergie pour vos séances',
+  'Lip.':     'Lipides — hormones et absorption des vitamines',
+  'Protéines':'Protéines — construction et récupération musculaire',
+  'Glucides': 'Glucides — énergie pour vos séances',
+  'Lipides':  'Lipides — hormones et absorption des vitamines'
+};
+
 function macroRow(label, val, max) {
   var row = h('div', { style: 'display:flex;align-items:center;gap:8px;margin-bottom:8px;' });
-  row.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);width:68px;flex-shrink:0;' }, label));
+  var tooltip = MACRO_TOOLTIPS[label] || null;
+  var labelEl;
+  if (tooltip) {
+    labelEl = h('span', {
+      title: tooltip,
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);width:68px;flex-shrink:0;border-bottom:1px dotted var(--grey);cursor:help;'
+    }, label);
+  } else {
+    labelEl = h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);width:68px;flex-shrink:0;' }, label);
+  }
+  row.appendChild(labelEl);
   row.appendChild(progressBar(val, max));
   row.appendChild(h('span', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);white-space:nowrap;'
@@ -1387,21 +1407,51 @@ function renderCardHeroKcal() {
   // Animer l'anneau après render (50ms) — même pattern que svgRing existant
   setTimeout(function() { fg.setAttribute('stroke-dashoffset', off); }, 50);
 
-  // Delta ligne — calories restantes (accent vert si positif, orange si dépassement)
+  // Delta ligne — calories restantes avec pourcentage et zones de couleur
   var netRem = Math.round(calorieTarget - kcalConsumed);
+  var kcalPct = calorieTarget > 0 ? Math.round((kcalConsumed / calorieTarget) * 100) : 0;
   var deltaStyle = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-top:12px;font-weight:500;';
-  var deltaText, deltaColor;
-  if (netRem > 0) {
-    deltaColor = 'var(--accent,var(--ink-900,#0A0A09))';
-    deltaText = netRem + ' kcal restantes';
-  } else if (netRem === 0) {
-    deltaColor = 'var(--grey,#6B6B65)';
-    deltaText = 'Objectif atteint';
-  } else {
+  var subStyle = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;margin-top:4px;font-weight:400;';
+  var deltaText, deltaColor, statusText, statusColor;
+  if (kcalPct >= 85 && kcalPct <= 105) {
+    // Zone verte : 85-105%
+    deltaColor = 'var(--accent,#1A4A1A)';
+    statusColor = 'var(--accent,#1A4A1A)';
+    if (netRem > 0) {
+      deltaText = kcalPct + '% · ' + kcalConsumed + '/' + Math.round(calorieTarget) + ' kcal';
+    } else if (netRem === 0) {
+      deltaText = '100% · ' + kcalConsumed + '/' + Math.round(calorieTarget) + ' kcal';
+    } else {
+      deltaText = kcalPct + '% · ' + kcalConsumed + '/' + Math.round(calorieTarget) + ' kcal';
+    }
+    statusText = 'Objectif du jour atteint';
+  } else if (kcalPct < 70) {
+    // Zone orange : sous-alimenté
     deltaColor = 'var(--orange,#E86F1E)';
-    deltaText = Math.abs(netRem) + ' kcal au-dessus';
+    statusColor = 'var(--orange,#E86F1E)';
+    deltaText = kcalPct + '% · ' + kcalConsumed + '/' + Math.round(calorieTarget) + ' kcal';
+    statusText = 'Pensez à ajouter une collation';
+  } else if (kcalPct > 115) {
+    // Zone rouge : dépassement
+    deltaColor = 'var(--red,#C0392B)';
+    statusColor = 'var(--red,#C0392B)';
+    deltaText = kcalPct + '% · ' + kcalConsumed + '/' + Math.round(calorieTarget) + ' kcal';
+    statusText = 'Dépassement modéré';
+  } else if (netRem > 0) {
+    // Zone neutre : 70-84% (sous la cible mais pas critique)
+    deltaColor = 'var(--grey,#6B6B65)';
+    statusColor = 'var(--grey,#6B6B65)';
+    deltaText = kcalPct + '% · ' + kcalConsumed + '/' + Math.round(calorieTarget) + ' kcal';
+    statusText = netRem + ' kcal restantes';
+  } else {
+    // Zone neutre : 106-115% (léger dépassement)
+    deltaColor = 'var(--orange,#E86F1E)';
+    statusColor = 'var(--orange,#E86F1E)';
+    deltaText = kcalPct + '% · ' + kcalConsumed + '/' + Math.round(calorieTarget) + ' kcal';
+    statusText = 'Dépassement modéré';
   }
   hero.appendChild(h('div', {style: deltaStyle + 'color:' + deltaColor + ';'}, deltaText));
+  hero.appendChild(h('div', {style: subStyle + 'color:' + statusColor + ';'}, statusText));
 
   // Mini-rings macros (P / G / L) en ligne, 48px chacun
   if (macroTargets && (macroTargets.p > 0 || macroTargets.g > 0 || macroTargets.l > 0) && window.svgRing) {
