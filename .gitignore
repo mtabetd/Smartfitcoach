@@ -17,6 +17,13 @@ audit-*.sh
 # Generated bundle (built at deploy time by scripts/build-bundle.js)
 app/bundle.js
 
+# Secrets
+.env
+.env.local
+*.key
+*.pem
+.vapid-keys*
+
 # Capacitor native projects (générés par npx cap add)
 android/
 ios/
