@@ -1,0 +1,11 @@
+{
+  "appId": "com.smartfitcoach.app",
+  "appName": "SmartFitCoach",
+  "webDir": "app",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "backgroundColor": "#FAF9F6"
+  }
+}
