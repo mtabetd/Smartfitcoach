@@ -74,6 +74,9 @@ exports.handler = async function(event) {
   if (!endpoint || endpoint.length > 2048) {
     return { statusCode: 400, headers: headers, body: JSON.stringify({ error: 'endpoint invalide' }) };
   }
+  try { var _pu = new URL(endpoint); if (_pu.protocol !== 'https:') throw 0; } catch(_) {
+    return { statusCode: 400, headers: headers, body: JSON.stringify({ error: 'endpoint invalide' }) };
+  }
 
   // In skip-mode (no Supabase env) just return OK so local dev works
   if (auth.skip) {

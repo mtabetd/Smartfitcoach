@@ -85,10 +85,12 @@
         var prefs = this.getPrefs();
         prefs.granted = false;
         this.savePrefs(prefs);
-        // Annuler les setTimeouts scheduled s'ils existent
-        if (window._sfcNotifTimers && Array.isArray(window._sfcNotifTimers)) {
-          window._sfcNotifTimers.forEach(function(t) { try { clearTimeout(t); } catch(e) {} });
-          window._sfcNotifTimers = [];
+        // Annuler les setTimeouts scheduled s'ils existent (keyed par tag dans _SFCTimers)
+        if (window._SFCTimers && typeof window._SFCTimers === 'object') {
+          Object.keys(window._SFCTimers).forEach(function(tag) {
+            try { clearTimeout(window._SFCTimers[tag]); } catch(e) {}
+          });
+          window._SFCTimers = {};
         }
       } catch(e) {}
     },

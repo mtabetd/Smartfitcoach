@@ -3514,8 +3514,8 @@ function renderStep9(p) {
           if (!S.weekPlan) return;
           if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
           S.weekPlan[S.selectedDay][slotKey4] = {
-            n: fd.name.trim(), k: parseFloat(fd.kcal) || 0, kcal: parseFloat(fd.kcal) || 0,
-            p: parseFloat(fd.p) || 0, g: parseFloat(fd.g) || 0, l: parseFloat(fd.l) || 0,
+            n: fd.name.trim(), k: Math.max(0, parseFloat(fd.kcal) || 0), kcal: Math.max(0, parseFloat(fd.kcal) || 0),
+            p: Math.max(0, parseFloat(fd.p) || 0), g: Math.max(0, parseFloat(fd.g) || 0), l: Math.max(0, parseFloat(fd.l) || 0),
             f: '\u25CE', emoji: '\u25CE', custom: true
           };
           S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false; S._foodManualData = null;
