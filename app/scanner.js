@@ -488,7 +488,7 @@ window.SCANNER = {
         resultContainer.innerHTML = '';
         var errDiv = document.createElement('div');
         errDiv.className = 'scan-error';
-        errDiv.textContent = 'Impossible d'analyser la photo. Entrez le code-barres manuellement.';
+        errDiv.textContent = 'Impossible d\'analyser la photo. Entrez le code-barres manuellement.';
         resultContainer.appendChild(errDiv);
       });
     };
