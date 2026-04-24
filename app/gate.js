@@ -57,8 +57,14 @@
     var gateBtnEl=document.getElementById('gate-btn');
     var gatePwEl=document.getElementById('gate-pw');
     if(!gateEl||!gateBtnEl||!gatePwEl){unlock();return;}
-    // Bypass gate for Supabase password recovery links — require both type=recovery AND access_token
-    if (window.location.hash && window.location.hash.indexOf('type=recovery') !== -1 && window.location.hash.indexOf('access_token=') !== -1) { unlock(); return; }
+    // Bypass gate for Supabase password recovery links — validate JWT format (3 base64url segments)
+    if (window.location.hash && window.location.hash.indexOf('type=recovery') !== -1) {
+      var _atIdx = window.location.hash.indexOf('access_token=');
+      if (_atIdx !== -1) {
+        var _atVal = window.location.hash.slice(_atIdx + 13).split('&')[0];
+        if (/^[A-Za-z0-9\-_]+\.[A-Za-z0-9\-_]+\.[A-Za-z0-9\-_]+$/.test(_atVal)) { unlock(); return; }
+      }
+    }
     gateEl.style.display='flex';
     gateBtnEl.addEventListener('click', tryUnlock);
     gatePwEl.addEventListener('keydown',function(e){if(e.key==='Enter')tryUnlock();});
