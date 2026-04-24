@@ -1196,13 +1196,14 @@ function _csRenderDraftBlock(block) {
     }
 
     // ── charge cible ──
+    var _bwBlock = block.eq === 'Poids du corps';
     var wtRow = h('div', { style: 'padding:9px 12px;border-top:1px solid var(--border,#D8D8D0);display:flex;align-items:center;gap:8px;' });
-    wtRow.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);min-width:80px;' }, 'Charge cible'));
+    wtRow.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);min-width:80px;' }, _bwBlock ? 'Lest (opt.)' : 'Charge cible'));
     var wInp = h('input', {
       type: 'number', step: '0.5', min: '0', max: '500', inputmode: 'decimal',
       value: block.targetWeight != null ? String(block.targetWeight) : '',
-      placeholder: 'kg',
-      style: 'width:68px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:16px;text-align:center;background:var(--ivory);-webkit-appearance:none;',
+      placeholder: _bwBlock ? 'lest' : 'kg',
+      style: 'width:68px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:16px;text-align:center;background:var(--ivory);-webkit-appearance:none;' + (_bwBlock ? 'opacity:0.7;' : ''),
       onclick: function(e) { e.stopPropagation(); },
       onchange: (function(b) { return function(e) { var v = parseFloat(e.target.value); if (!isNaN(v) && v >= 0) { b.targetWeight = v; window.CUSTOM_SESSION.saveDraft(); } }; })(block)
     });
@@ -1329,17 +1330,18 @@ function _csRenderActiveSet(block, set, si) {
       (set.validated ? 'background:var(--green,#3E5C3A);color:#fff;' : 'background:var(--border,#D8D8D0);color:var(--black,#0A0A09);')
   }, set.validated ? '✓' : String(si + 1)));
 
+  var _isBodyweight = block.eq === 'Poids du corps';
   var wInp2 = h('input', {
     type: 'number', step: '0.5', min: '0', max: '500', inputmode: 'decimal',
     value: (set.weight !== null && set.weight !== undefined && set.weight !== '') ? String(set.weight) : (block.targetWeight != null ? String(block.targetWeight) : ''),
-    placeholder: 'kg',
+    placeholder: _isBodyweight ? 'lest' : 'kg',
     disabled: set.validated,
-    style: 'width:62px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:14px;text-align:center;background:var(--ivory);-webkit-appearance:none;',
+    style: 'width:62px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:14px;text-align:center;background:var(--ivory);-webkit-appearance:none;' + (_isBodyweight ? 'opacity:0.6;' : ''),
     onclick: function(e) { e.stopPropagation(); },
     oninput: (function(s2) { return function(e) { s2.weight = e.target.value; }; })(set)
   });
   row.appendChild(wInp2);
-  row.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);' }, 'kg'));
+  row.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);' }, _isBodyweight ? 'kg (opt.)' : 'kg'));
 
   var rInp2 = h('input', {
     type: 'number', min: '0', max: '100', inputmode: 'numeric',

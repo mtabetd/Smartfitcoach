@@ -9521,10 +9521,11 @@ function renderMusculationProgram(p) {
   window._pendingSfcSection = null;
  }
 
- // Bouton "Séance libre" — accès discret depuis la vue programme muscu
- var _freeTxt = h('div', {style: 'text-align:center;margin-top:28px;padding-top:16px;border-top:1px solid var(--border,#E8E6DF)'});
- _freeTxt.appendChild(h('button', {
-   style: 'background:transparent;border:none;color:var(--grey,#9A9A90);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;padding:8px 0;min-height:44px;',
+ // Bouton "Séance libre" — visible et accessible depuis le programme
+ var _freeSection = h('div', {style: 'margin-top:32px;padding-top:24px;border-top:1px solid var(--border,#E8E6DF);text-align:center;'});
+ _freeSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:14px;'}, 'SÉANCE PERSONNALISÉE'));
+ _freeSection.appendChild(h('button', {
+   style: 'display:block;width:100%;max-width:300px;padding:15px 24px;background:transparent;color:var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:1px solid var(--black,#0A0A09);cursor:pointer;margin:0 auto;min-height:44px;',
    onclick: function() {
      if (window.CUSTOM_SESSION && typeof window.CUSTOM_SESSION.open === 'function') {
        window.CUSTOM_SESSION.open();
@@ -9533,8 +9534,8 @@ function renderMusculationProgram(p) {
        if (window.render) window.render();
      }
    }
- }, 'ou créer une séance libre →'));
- p.appendChild(_freeTxt);
+ }, 'Créer une séance libre'));
+ p.appendChild(_freeSection);
 
  p.appendChild(h('div', {style: 'height:12px'}));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 3; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier les zones'}));
