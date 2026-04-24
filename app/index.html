@@ -366,6 +366,14 @@ canvas.weight-chart{width:100%;height:200px}
   .alcohol-item{flex-direction:column;align-items:flex-start;gap:6px}
   .user-bar{flex-direction:column;align-items:flex-start;gap:6px}
 }
+#gate-apk-btn{transition:background 0.25s cubic-bezier(0.25,0.46,0.45,0.94),color 0.25s cubic-bezier(0.25,0.46,0.45,0.94),border-color 0.25s cubic-bezier(0.25,0.46,0.45,0.94)}
+#gate-apk-btn:hover{background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border-color:var(--black,#0A0A09)}
+#gate-pw:focus{outline:2px solid var(--focus,#0A0A09);outline-offset:2px}
+#gate-preregister-link{transition:opacity 0.2s ease}
+#gate-preregister-link:hover{opacity:0.6}
+@media(max-width:414px){
+  #gate-apk-btn{width:100%;justify-content:center}
+}
 </style>
 </head>
 <body>
@@ -382,22 +390,22 @@ canvas.weight-chart{width:100%;height:200px}
 <div style="font-family:Georgia,serif;font-size:11px;letter-spacing:8px;text-transform:uppercase;margin-bottom:6px;color:var(--black,#0A0A09)">SMARTFITCOACH</div>
 <div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:8px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:24px">Accès restreint</div>
 <div style="width:48px;height:1px;background:var(--black,#0A0A09);margin:0 auto 24px"></div>
-<div id="gate-error" style="display:none;font-family:'Helvetica Neue',Arial,sans-serif;font-size:10px;color:var(--red,#5A1010);text-align:center;padding:8px;border:1px solid var(--red,#5A1010);background:var(--redbg,rgba(90,16,16,.06));margin-bottom:12px"></div>
+<div id="gate-error" style="display:none;font-family:'Helvetica Neue',Arial,sans-serif;font-size:10px;color:var(--error,#7A1F1F);text-align:center;padding:8px;border:1px solid var(--error,#7A1F1F);background:rgba(122,31,31,.06);margin-bottom:12px"></div>
 <form id="gate-form" autocomplete="off">
 <input type="text" name="username" autocomplete="username" style="display:none" aria-hidden="true">
 <input id="gate-pw" type="password" aria-label="Mot de passe d'accès" placeholder="Mot de passe" autocomplete="current-password" style="width:100%;padding:12px 14px;border:1px solid var(--border,#D8D8D0);font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;background:var(--ivory,#FAF9F6);color:var(--black,#0A0A09);outline:none;text-align:center;letter-spacing:2px;margin-bottom:12px" autofocus>
-<button id="gate-btn" type="button" style="width:100%;padding:14px;min-height:44px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;cursor:pointer">Entrer</button>
+<button id="gate-btn" type="button" style="width:100%;padding:14px;min-height:44px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;cursor:pointer">Entrer</button>
 </form>
 <div style="font-family:Georgia,serif;font-style:italic;font-size:12px;letter-spacing:1px;color:var(--grey,#6B6B65);margin-top:32px;text-align:center;line-height:1.6">Le standard n&rsquo;existe pas.</div>
 <div style="margin-top:14px;text-align:center"><a href="https://instagram.com/smart.fitcoach" target="_blank" rel="noopener noreferrer" style="font-family:Georgia,serif;font-style:italic;font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;letter-spacing:1px">@smart.fitcoach</a></div>
 <div style="margin-top:24px;text-align:center"><a href="#" id="gate-preregister-link" style="font-family:Georgia,serif;font-style:italic;font-size:12px;letter-spacing:1px;color:var(--grey,#6B6B65);text-decoration:none;border-bottom:1px solid #D8D8D0;padding-bottom:3px;cursor:pointer">Vous n&rsquo;avez pas encore acc&egrave;s&nbsp;?</a></div>
-<div style="margin-top:20px;text-align:center"><a href="./smartfitcoach.apk" download style="display:inline-flex;align-items:center;gap:8px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);text-decoration:none;border:1px solid var(--black,#0A0A09);padding:10px 16px">&#8595; Application Android</a></div>
+<div style="margin-top:20px;text-align:center"><a id="gate-apk-btn" href="./smartfitcoach.apk" download style="display:inline-flex;align-items:center;gap:8px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);text-decoration:none;border:1px solid var(--black,#0A0A09);padding:12px 24px;min-height:44px;box-sizing:border-box">&#8595; Application Android</a></div>
 </div>
 </div>
 
 <!-- Pré-inscription early-member — overlay + modal, affichés à la demande par gate.js -->
 <div id="gate-preregister-overlay" style="display:none;position:fixed;inset:0;background-color:rgba(26,26,26,0.55);z-index:9998;opacity:0;transition:opacity 360ms ease-out;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)"></div>
-<div id="gate-preregister-modal" role="dialog" aria-modal="true" aria-labelledby="gate-preregister-title" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-48%) scale(0.98);z-index:9999;width:92%;max-width:520px;max-height:92vh;overflow-y:auto;background-color:var(--ivory,#FAF9F6);box-shadow:0 40px 80px -20px rgba(0,0,0,0.35);opacity:0;transition:opacity 360ms ease-out,transform 360ms ease-out">
+<div id="gate-preregister-modal" role="dialog" aria-modal="true" aria-labelledby="gate-preregister-title" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-48%) scale(0.98);z-index:9999;width:92%;max-width:520px;max-height:92vh;overflow-y:auto;background-color:var(--ivory,#FAF9F6);box-shadow:0 40px 80px -20px rgba(0,0,0,0.12);opacity:0;transition:opacity 360ms ease-out,transform 360ms ease-out">
 <button type="button" id="gate-preregister-close" aria-label="Fermer" style="position:absolute;top:14px;right:18px;background:transparent;border:0;font-family:Georgia,serif;font-size:22px;color:var(--grey,#6B6B65);cursor:pointer;line-height:1;padding:6px">&times;</button>
 <div style="height:60px"></div>
 <div style="text-align:center;padding:0 40px"><p style="margin:0;font-family:Georgia,serif;font-size:12px;letter-spacing:7px;color:var(--black,#0A0A09);text-transform:uppercase">SMARTFITCOACH</p></div>
@@ -409,7 +417,7 @@ canvas.weight-chart{width:100%;height:200px}
 <div style="text-align:center;padding:0 55px"><p style="margin:0 auto;max-width:380px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:1.85;color:var(--ink-500,#4A4A46)">Laissez-nous votre nom. Les premiers inscrits b&eacute;n&eacute;ficieront, &agrave; l&rsquo;ouverture, d&rsquo;une offre exclusive &mdash; r&eacute;serv&eacute;e &agrave; eux seuls.</p></div>
 <div style="height:45px"></div>
 <form id="gate-preregister-form" style="padding:0 55px" novalidate>
-<div id="gate-preregister-error" style="display:none;font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;color:#5A1010;text-align:center;padding:10px;border:1px solid #5A1010;background:rgba(90,16,16,.06);margin-bottom:20px"></div>
+<div id="gate-preregister-error" style="display:none;font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;color:#7A1F1F;text-align:center;padding:8px;border:1px solid #7A1F1F;background:rgba(122,31,31,.06);margin-bottom:16px"></div>
 <div style="margin-bottom:22px"><label for="gate-pre-first" style="display:block;font-family:'Helvetica Neue',Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px">Pr&eacute;nom</label><input id="gate-pre-first" name="first_name" type="text" required maxlength="60" autocomplete="given-name" style="width:100%;box-sizing:border-box;padding:10px 0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:15px;color:var(--black,#0A0A09);background:transparent;border:0;border-bottom:1px solid var(--line,#D8D8D0);outline:none;transition:border-color 200ms ease"></div>
 <div style="margin-bottom:22px"><label for="gate-pre-last" style="display:block;font-family:'Helvetica Neue',Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px">Nom</label><input id="gate-pre-last" name="last_name" type="text" required maxlength="60" autocomplete="family-name" style="width:100%;box-sizing:border-box;padding:10px 0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:15px;color:var(--black,#0A0A09);background:transparent;border:0;border-bottom:1px solid var(--line,#D8D8D0);outline:none;transition:border-color 200ms ease"></div>
 <div style="margin-bottom:22px"><label for="gate-pre-email" style="display:block;font-family:'Helvetica Neue',Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px">Email</label><input id="gate-pre-email" name="email" type="email" required maxlength="120" autocomplete="email" style="width:100%;box-sizing:border-box;padding:10px 0;font-family:'Helvetica Neue',Arial,sans-serif;font-size:15px;color:var(--black,#0A0A09);background:transparent;border:0;border-bottom:1px solid var(--line,#D8D8D0);outline:none;transition:border-color 200ms ease"></div>

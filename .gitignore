@@ -27,3 +27,7 @@ app/bundle.js
 # Capacitor native projects (générés par npx cap add)
 android/
 ios/
+
+# Android binaries — hosted via Netlify large files, not git
+*.apk
+*.aab
