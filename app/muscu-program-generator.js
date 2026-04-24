@@ -1432,6 +1432,16 @@
       var programText = typeof data.program === 'string' ? data.program : '';
       var footerQuote = FOOTER_QUOTES[Math.floor(Math.random() * FOOTER_QUOTES.length)];
 
+      // Validation minimale côté client (double-check du serveur)
+      if (!programText || !/SEMAINE\s+\d+/i.test(programText)) {
+        content.innerHTML = '<div style="text-align:center;padding:48px 24px;">' +
+          '<p style="font-family:Georgia,serif;font-style:italic;font-size:18px;color:var(--black,#0A0A09);margin-bottom:12px;">Programme incomplet</p>' +
+          '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);">La génération n\'a pas produit un programme valide. Réessaie dans quelques secondes.</p>' +
+          '<button onclick="this.closest(\'[data-modal]\') ? this.closest(\'[data-modal]\').remove() : history.back()" style="margin-top:24px;padding:12px 24px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer">Réessayer</button>' +
+          '</div>';
+        return;
+      }
+
       // Sauvegarder le programme IA pour l'afficher dans la vue Sport + Dashboard
       _Snow.muscuIAProgram = programText;
       _Snow.muscuIAProgramDate = new Date().toISOString();
@@ -1447,7 +1457,7 @@
       if (parsedHTML) {
         programBodyHTML = '<div id="muscu-prog-cards">' + parsedHTML + '</div>';
       } else {
-        // Fallback: plain text display
+        // Fallback: plain text display (text escapé pour sécurité XSS)
         var escaped = programText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         programBodyHTML = '<div style="white-space:pre-wrap;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;">' + escaped + '</div>';
       }

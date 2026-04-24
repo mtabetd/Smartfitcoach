@@ -56,6 +56,19 @@ function pruneRateLimitStore() {
   });
 }
 
+// ── Validation structurelle du programme généré ──────────────────────────────
+function validateProgramStructure(text) {
+  // Doit contenir au moins 1 marqueur de semaine
+  if (!/SEMAINE\s+\d+/i.test(text)) return 'Aucune semaine détectée';
+  // Doit contenir au moins 4 exercices numérotés
+  var exercises = text.match(/^\s*\d+[\.\)]\s+\S/gm);
+  if (!exercises || exercises.length < 4) return 'Moins de 4 exercices détectés';
+  // LOI 7 : pas de blocs cardio dominants (>3 mentions de cardio X min)
+  var cardioBlocs = text.match(/(?:cardio|vélo|velo|running|course|natation|rameur|elliptique)\s+\d{2,3}\s*min/gi) || [];
+  if (cardioBlocs.length > 3) return 'Programme dominé par le cardio (LOI 7 musculation)';
+  return null; // OK
+}
+
 // ── Input Sanitization ───────────────────────────────────────────────────────
 var PROMPT_INJECTION_PATTERNS = [
   /ignore\s+(all\s+)?(previous|prior|above)\s+instructions/gi,
@@ -808,6 +821,13 @@ exports.handler = async function(event) {
 
     if (!programText) {
       return { statusCode: 502, headers: headers, body: JSON.stringify({ error: 'Réponse IA vide' }) };
+    }
+
+    // Validation structurelle minimale : détecte les réponses malformées
+    var validationError = validateProgramStructure(programText);
+    if (validationError) {
+      console.error('[generate-muscu-program] validation failed:', validationError, programText.slice(0, 200));
+      return { statusCode: 502, headers: headers, body: JSON.stringify({ error: 'Programme généré invalide — réessaie dans quelques secondes.' }) };
     }
 
     return {
