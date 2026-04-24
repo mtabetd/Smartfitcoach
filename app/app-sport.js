@@ -8161,7 +8161,7 @@ function renderMusculationProgram(p) {
  onclick: (function(sr, inp, _isBw2) { return function(e) {
    e.stopPropagation();
    var cur = parseInt(inp.value); if (isNaN(cur)) cur = sr.targetReps || 0;
-   var nv = cur + 1;
+   var nv = Math.max(0, Math.min(999, cur + 1));
    inp.value = String(nv); inp.style.color = 'var(--black,#0A0A09)';
    sr.actualReps = nv; saveMuscuSessionLog();
    var _vb = inp.closest ? inp.closest('.set-row') : null; if (_vb) _vb = _vb.querySelector('.set-validate-btn');

@@ -70,6 +70,7 @@
 
   function tryUnlock(){
     var now = Date.now();
+    try { var _stored = parseInt(sessionStorage.getItem('_gateLockedUntil')||'0',10)||0; if (_stored > _lockedUntil) _lockedUntil = _stored; } catch(e) {}
     if (now < _lockedUntil) {
       var err=document.getElementById('gate-error');
       if (err) { err.style.display='block'; err.textContent='Trop de tentatives. Attendez quelques secondes.'; }

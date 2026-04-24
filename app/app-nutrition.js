@@ -3316,11 +3316,11 @@ function renderStep9(p) {
           value: String(pGrams),
           style: 'flex:1;padding:10px 8px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:18px;background:var(--ivory,#FAF9F6);text-align:center;min-height:44px'
         });
-        gramsInput.oninput = function(e) { S._foodPortionGrams = parseFloat(e.target.value) || 100; window.render(); };
+        gramsInput.oninput = function(e) { S._foodPortionGrams = Math.min(2000, Math.max(5, parseFloat(e.target.value) || 100)); window.render(); };
         gramsInput.onfocus = function(e) { setTimeout(function(){ e.target.select(); }, 0); };
         var gramsPlusBtn = h('button', {
           style: 'min-width:44px;min-height:44px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-size:20px;cursor:pointer;color:var(--black,#0A0A09)',
-          onclick: function() { S._foodPortionGrams = (parseFloat(S._foodPortionGrams) || 100) + 25; window.render(); }
+          onclick: function() { S._foodPortionGrams = Math.min(2000, (parseFloat(S._foodPortionGrams) || 100) + 25); window.render(); }
         }, '+');
         gramsRow.appendChild(gramsMinusBtn);
         gramsRow.appendChild(gramsInput);
