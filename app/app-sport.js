@@ -545,7 +545,19 @@ function generateSportProgram() {
          if (_dtype === 'upper')          _filtered = ['chest','back','shoulders'];
          else if (_dtype === 'push')      _filtered = ['chest','shoulders','triceps'];
          else if (_dtype === 'pull')      _filtered = ['back','biceps'];
-         else if (_dtype === 'lower' || _dtype === 'legs') _filtered = ['legs','glutes'];
+         else if (_dtype === 'lower' || _dtype === 'legs') {
+           // FIX 2026-04-24: only fall back to legs/glutes if user actually selected lower body.
+           // A beginner who picked only upper-body zones should NOT get a legs day on PPL/upper-lower.
+           var _hasLowerCats = allCategories.some(function(c){ return c==='legs'||c==='glutes'; });
+           if (_hasLowerCats) {
+             _filtered = ['legs','glutes'];
+           } else {
+             // No lower-body zone selected — fill the day with the user's upper-body categories
+             _filtered = allCategories.filter(function(c){ return !!_UPPER_C[c]; });
+             if (!_filtered.length) _filtered = allCategories.slice();
+             if (!_filtered.length) _filtered = ['chest','back','shoulders'];
+           }
+         }
          // FIX 2026-04-21 — fullbody fallback complet (avant : manquait biceps/triceps/abs cf _FULL_C ligne 445)
          else if (_dtype === 'full')      _filtered = ['chest','back','shoulders','legs','glutes','biceps','triceps','abs'];
          else if (_dtype === 'chest_tri') _filtered = ['chest','triceps'];
@@ -560,7 +572,8 @@ function generateSportProgram() {
        // n'a pas explicitement coché la zone dans sportFocus.
        // Ex: user coche "Jambes" mais pas "Fessiers" → jour Legs = ['legs'] seul → 2 exos seulement.
        // Sans ce fix, Lower/Legs day d'un débutant a 2 exercices au lieu de 4+.
-       if ((_dtype === 'lower' || _dtype === 'legs') && _filtered.indexOf('glutes') === -1)
+       // Only add glutes synergy when 'legs' is actually in the filtered set (lower-body day)
+       if ((_dtype === 'lower' || _dtype === 'legs') && _filtered.indexOf('glutes') === -1 && _filtered.some(function(c){ return c === 'legs'; }))
          _filtered = _filtered.concat(['glutes']);
        if (_dtype === 'push' && _filtered.indexOf('triceps') === -1)
          _filtered = _filtered.concat(['triceps']);
