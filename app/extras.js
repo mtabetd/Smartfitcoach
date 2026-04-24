@@ -1449,7 +1449,7 @@ window.WEEKLY_SUMMARY = {
     var streak = self._getStreak();
     var statStreak = el('div', 'summary-stat');
     statStreak.appendChild(el('span', 'summary-stat-label', 'Série en cours'));
-    statStreak.appendChild(el('span', 'summary-stat-value', streak + ' jour' + (streak > 1 ? 's' : '')));
+    statStreak.appendChild(el('span', 'summary-stat-value', streak + ' ' + window.locPlural(streak, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}})));
     wrap.appendChild(statStreak);
 
     // Measurements trend
@@ -1541,7 +1541,7 @@ window.FOOD_JOURNAL = {
       g: Math.round(carbs * 10) / 10,
       l: Math.round(fat * 10) / 10,
       qty: quantity || '100g',
-      time: new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}),
+      time: window.formatTime(new Date(), {hour:'2-digit', minute:'2-digit'}),
       source: arguments[7] || 'manual'
     });
     localStorage.setItem(key, JSON.stringify(journal));
@@ -1854,7 +1854,8 @@ window.FOOD_JOURNAL = {
         del.onclick = function() {
           // 2026-04 NIVEAU 1 : confirmation avant suppression aliment (1 clic = perte macros)
           var entryName = (item.entry && item.entry.name) || 'cet aliment';
-          if (!confirm('Retirer « ' + entryName + ' » du journal ?')) return;
+          var _rmMsg = (window.isEnglish && window.isEnglish()) ? ('Remove "' + entryName + '" from the journal?') : ('Retirer « ' + entryName + ' » du journal ?');
+          if (!(window.sfcConfirm || confirm)(_rmMsg)) return;
           self.removeEntry(today, item.index);
           if (window.APP_RENDER) APP_RENDER();
           else if (window.render) render();

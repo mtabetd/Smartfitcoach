@@ -205,7 +205,9 @@ function updateStreak() {
           window.S.streakFreezeAvailable = false;
           if (window.saveProfile) { try { window.saveProfile(); } catch(e2) {} }
         }
-        showToast('\u2744 Streak Freeze activ\u00e9 \u2014 ton streak de ' + data.current + ' jour' + (data.current > 1 ? 's' : '') + ' est prot\u00e9g\u00e9\u00a0!');
+        showToast((window.isEnglish && window.isEnglish())
+          ? ('\u2744 Streak Freeze activated \u2014 your ' + data.current + '-day streak is protected!')
+          : ('\u2744 Streak Freeze activ\u00e9 \u2014 ton streak de ' + data.current + ' ' + window.locPlural(data.current, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + ' est prot\u00e9g\u00e9\u00a0!'));
         // On reprend le streak normalement sans reset
         data.current++;
       } else {

@@ -1899,7 +1899,7 @@ window.CF_LIFT_ALIASES = CF_LIFT_ALIASES;
 function getCFWorkingWeight(standardsKey, percentage) {
   var s = window.S;
   if (!s) return '?';
-  var sexKey = s.sex === 'homme' ? 'm' : 'f';
+  var sexKey = window.isMale(s) ? 'm' : 'f';
   // FIX P2 audit user Karim : si crossfitLevel non set, inférer depuis sportLevel
   // (avancé → rx, pro → rx_plus). Évite de bloquer tous les users à 65% faute de config.
   var cfLvl = s.crossfitLevel;
@@ -4229,7 +4229,7 @@ window.CYCLE_PHASES = CYCLE_PHASES;
 
 function getCurrentCyclePhase() {
   var s = window.S;
-  if (!s.cycleTracking || !s.lastPeriodDate || s.sex !== 'femme') return null;
+  if (!s.cycleTracking || !s.lastPeriodDate || !window.isFemale(s)) return null;
 
   var start = new Date(s.lastPeriodDate);
   if(isNaN(start.getTime())) return null; // Date invalide → ne pas propager NaN
@@ -4363,7 +4363,7 @@ window.PREGNANCY_WEIGHT_GAIN = PREGNANCY_WEIGHT_GAIN;
 function validatePregnancyState() {
   var s = window.S;
   if (!s) return;
-  if (s.pregnant && s.sex !== 'femme') {
+  if (s.pregnant && !window.isFemale(s)) {
     s.pregnant = false;
     s.pregnancyWeek = null;
     s.prePregnancyWeight = null;
@@ -4609,7 +4609,7 @@ window.showSubscriptionContact = showSubscriptionContact;
 
 function getPregnancyTrimester() {
   var s = window.S;
-  if (!s.pregnant || s.sex !== 'femme') return null;
+  if (!s.pregnant || !window.isFemale(s)) return null;
   // C3: Semaine non renseignée → défaut T2 semaine 20 (OMS 2016: +340 kcal/j)
   // Evite sous-nutrition si femme enceinte sans semaine de grossesse saisie
   var week = s.pregnancyWeek || 20;
@@ -4631,7 +4631,7 @@ window.getPregnancyTrimester = getPregnancyTrimester;
 
 function getPregnancyWeightGuideline() {
   var s = window.S;
-  if (!s.pregnant || s.sex !== 'femme') return null;
+  if (!s.pregnant || !window.isFemale(s)) return null;
   var bmi = (s.prePregnancyWeight && s.height && s.height >= 100) ? s.prePregnancyWeight / Math.pow(s.height / 100, 2) : calcBMI();
   if (!bmi) return null; // cannot compute guideline without BMI
   var guideline = null;
@@ -4670,7 +4670,7 @@ function calcAdjustedWeight(){
   var bmi=s.weight/Math.pow(s.height/100,2);
   if(bmi<=30)return s.weight; // Pas d'ajustement si IMC ≤ 30
   var heightInches=s.height/2.54;
-  var ibw=s.sex==='homme'?(50+2.3*(heightInches-60)):(45.5+2.3*(heightInches-60));
+  var ibw=window.isMale(s)?(50+2.3*(heightInches-60)):(45.5+2.3*(heightInches-60));
   ibw=Math.max(40,Math.min(120,ibw));
   if(s.weight<=ibw)return s.weight; // sécurité : ne pas pénaliser si poids < IBW (ne devrait pas arriver si IMC>30)
   return Math.round((ibw+0.4*(s.weight-ibw))*10)/10; // Poids ajusté (Adjusted Body Weight)
@@ -4683,8 +4683,8 @@ function calcBMR(){var s=window.S;if(!s.sex)return 0;var _age=getAge();if(!_age|
 // Utiliser s.weight actuel (gonflé par la grossesse) surestimerait le TDEE de base et additionnerait
 // deux fois les besoins énergétiques liés à la grossesse.
 var bw=s.weight;
-if(s.pregnant&&s.sex==='femme'&&s.prePregnancyWeight&&s.prePregnancyWeight>=30&&s.prePregnancyWeight<=300)bw=s.prePregnancyWeight;
-else if(s.pregnant&&s.sex==='femme'&&!s.prePregnancyWeight&&s.pregnancyWeek){
+if(s.pregnant&&window.isFemale(s)&&s.prePregnancyWeight&&s.prePregnancyWeight>=30&&s.prePregnancyWeight<=300)bw=s.prePregnancyWeight;
+else if(s.pregnant&&window.isFemale(s)&&!s.prePregnancyWeight&&s.pregnancyWeek){
   // Estimation poids pré-grossesse si non renseigné (IOM 2009 : gain moyen ~0.5kg/semaine après S12)
   var _estGain=s.pregnancyWeek>12?Math.round((s.pregnancyWeek-12)*0.5):0;
   bw=Math.max(40,s.weight-_estGain);
@@ -4698,7 +4698,7 @@ if(_bf!==undefined&&_bf!==null&&_bf>=4&&_bf<=60){
   if(_age>=65)bmrKM=bmrKM*0.95;
   return Math.round(bmrKM); // Katch-McArdle — basé sur masse maigre mesurée
 }
-var bmrRaw;if(s.sex==='homme')bmrRaw=(10*bw)+(6.25*s.height)-(5*_age)+5;else bmrRaw=(10*bw)+(6.25*s.height)-(5*_age)-161;
+var bmrRaw;if(window.isMale(s))bmrRaw=(10*bw)+(6.25*s.height)-(5*_age)+5;else bmrRaw=(10*bw)+(6.25*s.height)-(5*_age)-161;
 // Correction seniors 65+ : Mifflin-St Jeor surestime le BMR de ~5% après 65 ans (Amirkalali 2008)
 if(_age>=65)bmrRaw=bmrRaw*0.95;
 return Math.round(bmrRaw)} // Mifflin-St Jeor 1990 (Frankenfield 2005) + correction seniors 65+ (Amirkalali 2008)
@@ -4710,7 +4710,7 @@ var sportDays=Array.isArray(s.trainingDaysSelected)&&s.trainingDaysSelected.leng
 // Évite un surplus calorique 3× trop élevé si l'utilisateur débutant a coché "Athlète" par excès de confiance.
 if(s.sportLevel==='beginner'&&effectiveFactor>1.55)effectiveFactor=1.55;
 return calcBMR()*effectiveFactor}
-function calcTarget(){var s=window.S;if(s.goal===null||s.goal===undefined||!GOALS[s.goal])return 0;var tdeeVal=calcTDEE();var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&s.sex==='femme'){var tri=getPregnancyTrimester();var pregExtra=tri?tri.trimester.calorieExtra:300;
+function calcTarget(){var s=window.S;if(s.goal===null||s.goal===undefined||!GOALS[s.goal])return 0;var tdeeVal=calcTDEE();var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&window.isFemale(s)){var tri=getPregnancyTrimester();var pregExtra=tri?tri.trimester.calorieExtra:300;
 // Si allaitement ET enceinte (fin de grossesse + allaitement aîné) → ADDITIF (ACOG 2018 + 2022)
 var allaitExtra=(s.medical&&s.medical.indexOf('allaitement')!==-1)?500:0;
 base=Math.round(tdeeVal)+pregExtra+allaitExtra;
@@ -4723,10 +4723,10 @@ if((goalKey==='shred'||goalKey==='cut')&&tdeeVal>0){base=Math.max(base,Math.roun
 if((goalKey==='bulk'||goalKey==='lean_bulk')&&tdeeVal>0){base=Math.min(base,Math.round(tdeeVal+500));}
 // Allaitement (non-enceinte) : +500 kcal/j (ACOG 2022) — appliqué dans le flow normal (pas de early return)
 // pour que les protections ado/diabète/ménopause/cycle/alcool soient respectées
-if(s.medical&&s.medical.indexOf('allaitement')!==-1&&s.sex==='femme'){base=Math.max(Math.round(tdeeVal)+500,base);base=Math.max(base,1800);}
+if(s.medical&&s.medical.indexOf('allaitement')!==-1&&window.isFemale(s)){base=Math.max(Math.round(tdeeVal)+500,base);base=Math.max(base,1800);}
 // TCA/anorexie : forcer maintenance, bloquer cut/shred (ANAD, IOC 2018 — RED-S prevention)
 // Profil incomplet (tdeeVal=0) : retourner plancher sécurisé pour éviter 0 kcal sur profil vulnérable
-if(s.medical&&s.medical.indexOf('tca')!==-1){return Math.max(Math.round(tdeeVal),s.sex==='femme'?1800:1900);}
+if(s.medical&&s.medical.indexOf('tca')!==-1){return Math.max(Math.round(tdeeVal),window.isFemale(s)?1800:1900);}
 // Adolescent (13-17 ans) : déficit max -300kcal/j (ACSM 2007, IOC 2018 — préservation croissance + pic de masse osseuse)
 // Surplus max +300kcal/j en bulk (ACSM adolescent — éviter accumulation graisseuse pendant croissance hormonale)
 var _ageT=getAge();if(_ageT>=13&&_ageT<18&&tdeeVal>0){
@@ -4736,15 +4736,15 @@ var _ageT=getAge();if(_ageT>=13&&_ageT<18&&tdeeVal>0){
 var hasDiabetes=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);if(hasDiabetes&&tdeeVal>0){var minCal=Math.round(tdeeVal-500);if(base<minCal)base=minCal;}// Ménopause : réduction métabolique ~100 kcal/j (NAMS 2022, Poehlman 1995)
 // Ménopause : réduction métabolique ~150 kcal/j (NAMS 2022, Poehlman 1995)
 // Plancher 1400 kcal/j maintenu — les femmes ménopausées doivent être encouragées à rester actives (NAMS 2022)
-if(s.sex==='femme'&&s.medical&&s.medical.indexOf('menopause')!==-1){base=base-150;// Re-enforce déficit cap -500 kcal : la réduction ménopause ne doit pas créer un déficit > 500 kcal/j (Helms 2014)
+if(window.isFemale(s)&&s.medical&&s.medical.indexOf('menopause')!==-1){base=base-150;// Re-enforce déficit cap -500 kcal : la réduction ménopause ne doit pas créer un déficit > 500 kcal/j (Helms 2014)
 if((goalKey==='shred'||goalKey==='cut')&&tdeeVal>0){base=Math.max(base,Math.round(tdeeVal-500));}base=Math.max(1400,base);} // PMC Menopause 2024: -150-200 kcal/j (perte masse maigre + chute estrogènes) — femme uniquement
-if(s.sex==='femme'){var cycleInfo=getCurrentCyclePhase();if(cycleInfo&&cycleInfo.phase.calorieAdjust){var adj=cycleInfo.phase.calorieAdjust;// Pendant une sèche/coupe, plafonner l'ajout du cycle à +5% max (préserver le déficit)
+if(window.isFemale(s)){var cycleInfo=getCurrentCyclePhase();if(cycleInfo&&cycleInfo.phase.calorieAdjust){var adj=cycleInfo.phase.calorieAdjust;// Pendant une sèche/coupe, plafonner l'ajout du cycle à +5% max (préserver le déficit)
 if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*(1+adj));}}
 // Plancher calorique sexe-spécifique (ISSN 2017, ACSM 2016, IOC 2018 RED-S prevention)
 // Femme : plancher 1400 kcal/j — ISSN 2017 / ACSM 2016 (l'ancien plancher 1200 est obsolète et dangereux)
 // Homme : plancher 1500 kcal/j (ACSM — plancher physiologique masculin)
 var effectivePAL=s.activity!==null&&ACTIVITIES[s.activity]?ACTIVITIES[s.activity].factor:1.2;
-var kcalFloor=s.sex==='femme'?1400:1500;
+var kcalFloor=window.isFemale(s)?1400:1500;
 base=Math.max(base,kcalFloor);
 // Plancher BMR : le déficit ne doit JAMAIS descendre sous le métabolisme de base (sécurité métabolique)
 var bmrFloor=calcBMR();if(bmrFloor>0)base=Math.max(base,bmrFloor);
@@ -4787,7 +4787,7 @@ function calcMacros(){
   //           oxydation leucine réduite) | ISSN 2017 | Helms 2014 | EFSA 2012 | IOC 2011
   var ppk=1.8;
   var actFactor=(s.activity!==null&&s.activity!==undefined&&ACTIVITIES[s.activity])?ACTIVITIES[s.activity].factor:1.2;
-  var isFemale=s.sex==='femme';
+  var isFemale=window.isFemale(s);
 
   if(goalKey==='maintain'){
     // ─── MAINTIEN — ppk selon activité ET sexe ───
@@ -4894,14 +4894,14 @@ function calcMacros(){
   if(!_isIrc){var _sarcAge=(typeof getAge==='function'?getAge():null)||(s.age||0);if(_sarcAge>=50)ppk=Math.min(3.5,ppk+0.4);else if(_sarcAge>=40)ppk=Math.min(3.5,ppk+0.3);}
   var pGrams=Math.round(bw*ppk);
   // Pregnancy protein bonus: +25g/day T2+T3 (ACOG 2018, WHO)
-  if(s.pregnant&&s.sex==='femme'){var triP=getPregnancyTrimester();if(triP&&triP.trimester.proteinExtra)pGrams=Math.round(pGrams+triP.trimester.proteinExtra);}
+  if(s.pregnant&&window.isFemale(s)){var triP=getPregnancyTrimester();if(triP&&triP.trimester.proteinExtra)pGrams=Math.round(pGrams+triP.trimester.proteinExtra);}
   var pCal=pGrams*4;
   // Fat g/kg (minimum 0.5g/kg for hormonal health)
   var fpk=1.0;
   if(goalKey==='shred')fpk=0.7;else if(goalKey==='cut')fpk=0.85;else if(goalKey==='recomposition')fpk=0.9;else if(goalKey==='bulk'||goalKey==='lean_bulk')fpk=1.1;else fpk=1.0;
-  if(s.sex==='femme')fpk=Math.round((fpk+0.1)*10)/10;
+  if(window.isFemale(s))fpk=Math.round((fpk+0.1)*10)/10;
   // Min lipides femme 0.7g/kg (ISSN 2021) — santé hormonale (vs 0.5 homme)
-  var lipidMin=s.sex==='femme'?0.7:0.5;
+  var lipidMin=window.isFemale(s)?0.7:0.5;
   fpk=Math.max(lipidMin,Math.min(1.5,fpk));
   var lGrams=Math.round(bw*fpk);var lCal=lGrams*9;
   // Plancher 20% lipides (santé hormonale — ISSN 2017, Volek 2006)
@@ -4936,7 +4936,7 @@ function calcMacros(){
   }
   // Medical adjustments
   if(s.medical){for(var i=0;i<s.medical.length;i++){var mId=s.medical[i];var a=MEDICAL_ADVICE[mId];if(a&&a.macroAdj){// ménopause, sopk, grossesse, allaitement : ajustements féminins uniquement
-var femaleOnly=['menopause','sopk','grossesse','allaitement'];if(femaleOnly.indexOf(mId)!==-1&&s.sex!=='femme')continue;gGrams=Math.round(gGrams*(1+(a.macroAdj.g||0)));pGrams=Math.round(pGrams*(1+(a.macroAdj.p||0)));lGrams=Math.round(lGrams*(1+(a.macroAdj.l||0)))}}}
+var femaleOnly=['menopause','sopk','grossesse','allaitement'];if(femaleOnly.indexOf(mId)!==-1&&!window.isFemale(s))continue;gGrams=Math.round(gGrams*(1+(a.macroAdj.g||0)));pGrams=Math.round(pGrams*(1+(a.macroAdj.p||0)));lGrams=Math.round(lGrams*(1+(a.macroAdj.l||0)))}}}
   // Re-enforce IRC protein cap after all medical adjustments (KDOQI 2020: 0.6g/kg CKD 3-5 non-dialysis)
   // Vegan/végétarien IRC : +10% DIAAS correction → cap 0.66g/kg (FAO 2013, Messina 2019)
   if(s.medical&&s.medical.indexOf('irc')!==-1){var _ircCapGpkg=(s.regime===3||s.regime===2)?0.66:0.60;var maxIrcP=Math.round(bw*_ircCapGpkg);if(pGrams>maxIrcP)pGrams=maxIrcP;}
@@ -4952,7 +4952,7 @@ var femaleOnly=['menopause','sopk','grossesse','allaitement'];if(femaleOnly.inde
     pGrams=Math.max(pGrams,Math.round(bw*1.6)); // Bauer 2013 PROT-AGE: ≥1.6g/kg anti-sarcopénie 65+
   }
   // Apply cycle-phase macro adjustments (only for non-pregnant women with cycle tracking)
-  if(!s.pregnant&&s.sex==='femme'&&s.cycleTracking){var cycleM=getCurrentCyclePhase();if(cycleM&&cycleM.phase.macroAdjust){var mAdj=cycleM.phase.macroAdjust;// Small modulations per cycle phase — carb/fat shift, protein stable
+  if(!s.pregnant&&window.isFemale(s)&&s.cycleTracking){var cycleM=getCurrentCyclePhase();if(cycleM&&cycleM.phase.macroAdjust){var mAdj=cycleM.phase.macroAdjust;// Small modulations per cycle phase — carb/fat shift, protein stable
 gGrams=Math.round(gGrams*(1+(mAdj.g||0)));lGrams=Math.round(lGrams*(1+(mAdj.l||0)));// Never reduce protein during cycle — keep stable
 }}
   gGrams=Math.max(130,gGrams);
@@ -4983,14 +4983,14 @@ gGrams=Math.round(gGrams*(1+(mAdj.g||0)));lGrams=Math.round(lGrams*(1+(mAdj.l||0
       var remainGap=c-(gGrams*4+pGrams*4+lGrams*9);
       lGrams=Math.max(20,lGrams+Math.round(remainGap/9));
       // Re-enforce lipid floor for women (ISSN 2021: ≥0.7g/kg — santé hormonale, production oestrogènes)
-      if(s.sex==='femme')lGrams=Math.max(Math.round(bw*0.7),lGrams);
+      if(window.isFemale(s))lGrams=Math.max(Math.round(bw*0.7),lGrams);
     }
   }
   // FINAL IRC re-enforce — après planchers absolus Math.max(40,...) et redistribution DG
   // Ces opérations peuvent repousser pGrams au-dessus du cap KDOQI (ex: 60kg → floor 40 > cap 36)
   // C'est le dernier garde-fou garantissant que le plan servi respecte KDOQI 2020 sans exception
   if(_isIrc){var _finalIrcCap=(s.regime===3||s.regime===2)?0.66:0.60;var _finalMaxP=Math.round(bw*_finalIrcCap);if(pGrams>_finalMaxP){pGrams=_finalMaxP;ppk=Math.round(pGrams/bw*100)/100;}}
-  return{g:gGrams,p:pGrams,l:lGrams,proteinPerKg:ppk,fatPerKg:fpk,carbsPerKg:Math.round(gGrams/bw*10)/10,cyclePhase:(!s.pregnant&&s.sex==='femme'&&s.cycleTracking)?getCurrentCyclePhase():null}
+  return{g:gGrams,p:pGrams,l:lGrams,proteinPerKg:ppk,fatPerKg:fpk,carbsPerKg:Math.round(gGrams/bw*10)/10,cyclePhase:(!s.pregnant&&window.isFemale(s)&&s.cycleTracking)?getCurrentCyclePhase():null}
 }
 function calcBMI(){var s=window.S;if(!s.height||!s.weight||s.height<100)return null;var ht=s.height/100;return Math.round((s.weight/Math.pow(ht,2))*10)/10}
 // OMS : 3 grades d'obésité — prise en charge radicalement différente selon le grade
@@ -5076,14 +5076,14 @@ function calcHydration(){
     else if(factor>=1.375)actBonus=500;  // Léger: +500ml/j
   }
   // Ajustement grossesse : +300ml/j (OMS 2020)
-  var pregnancyBonus=(s.pregnant&&s.sex==='femme')?300:0;
+  var pregnancyBonus=(s.pregnant&&window.isFemale(s))?300:0;
   // Ajustement allaitement : +700ml/j (EFSA 2010, ANSES 2021)
   var allaitBonus=(s.medical&&s.medical.indexOf('allaitement')!==-1)?700:0;
   // Créatine : +500ml/j minimum (ISSN 2017 — créatine augmente rétention intramusculaire, risque microlithiase si sous-hydratation)
   var creatineBonus=s.creatine?500:0;
   var total=base+actBonus+pregnancyBonus+allaitBonus+creatineBonus;
   total=Math.ceil(total/100)*100; // arrondir à 100ml
-  var minFloor=s.sex==='femme'?2000:2500; // minimums EFSA
+  var minFloor=window.isFemale(s)?2000:2500; // minimums EFSA
   total=Math.max(total,minFloor);
   return{
     ml:total,
@@ -5098,7 +5098,7 @@ function calcHydration(){
       actBonus>0?'Ajoutez 500-750ml par heure d\'entraînement':'Buvez régulièrement, sans attendre la soif',
       // Électrolytes pour efforts > 1h (Maughan & Shirreffs, BJSM 2010 — sodium 500-1000mg/h, potassium 200-400mg/h)
       actBonus>=750?'Effort > 60 min : ajoutez des électrolytes (sodium 500-1000 mg/h, potassium 200-400 mg/h) pour prévenir hyponatrémie et crampes (Maughan & Shirreffs, BJSM 2010).':null,
-      (s.pregnant&&s.sex==='femme')?'+300ml/j recommandé en grossesse (OMS)':null,
+      (s.pregnant&&window.isFemale(s))?'+300ml/j recommandé en grossesse (OMS)':null,
       (s.medical&&s.medical.indexOf('allaitement')!==-1)?'+700ml/j supplémentaires pendant l\'allaitement (ANSES 2021)':null,
       s.creatine?'+500ml/j obligatoires avec la créatine (ISSN 2017 — prévient la microlithiase rénale)':null
     ].filter(Boolean)
@@ -5111,7 +5111,7 @@ window.calcHydration=calcHydration;
 // Ajustements médicaux : ADA 2023 (diabète), NICE 2021 (IRC), FODMAP (SII)
 function calcFiberTarget(){
   var s=window.S;
-  var base=s.sex==='homme'?35:25; // IOM 2005: hommes 38g, femmes 25g (ajusté ANSES 2016)
+  var base=window.isMale(s)?35:25; // IOM 2005: hommes 38g, femmes 25g (ajusté ANSES 2016)
   var adjustments=[];
   var hasDiab=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);
   if(hasDiab){base=Math.max(base,38);adjustments.push('Diabète : fibres solubles ≥ 38g/j (ADA 2023) — ralentissent absorption glucose');}
@@ -5207,7 +5207,7 @@ function filterRecipes(pool,type){
   // Grossesse : exclure les aliments contre-indiqués pendant la grossesse (OMS / ANSES 2022)
   // Risques : listériose (charcuterie crue, fromage au lait cru), parasites (poisson cru, sushi)
   // L'alcool traverse le placenta — aucune dose sûre (OMS 2014, ACOG 2021)
-  if(s.pregnant&&s.sex==='femme'){r=r.filter(function(x){var i=_ri(x);
+  if(s.pregnant&&window.isFemale(s)){r=r.filter(function(x){var i=_ri(x);
     // Poisson cru / sushi / carpaccio / ceviche / gravlax / tartare de poisson — élargi (carpaccio.*saumon, saumon tranché fin)
     if((/sushi|sashimi|tartare de (?:saumon|thon|poisson)|gravlax|carpaccio.*(?:saumon|thon|poisson)|ceviche|poisson cru|saumon (?:cru|tranché fin)|truite fumée|saumon fumé/).test(i))return false;
     // Alcool (même en cuisine — l'alcool ne s'évapore jamais totalement)
@@ -5574,7 +5574,7 @@ var SUPPLEMENTS_DB = [
     unnecessary_if:'Inutile si vous atteignez vos prot\u00e9ines via l\'alimentation seule',
     dosageCalc:function(s){var w=Number(s.weight)||75;var d=w>80?35:25;return{dose:d,unit:'g/prise',timing:'Post-entra\u00eenement ou petit-d\u00e9jeuner',note:'Objectif total : '+Math.round(w*1.8)+'g prot/jour (alimentation + whey)'};}},
   {id:'creatine',name:'Cr\u00e9atine Monohydrate',icon:'\uD83D\uDC8A',desc:'Force, masse musculaire, r\u00e9cup\u00e9ration',evidence:'ISSN 2017 \u2014 Niveau A (500+ \u00e9tudes, le suppl\u00e9ment le plus \u00e9tudi\u00e9)',grade:'A',
-    condition:function(s){if((s.pregnant&&s.sex==='femme')||(getAge()!==null&&getAge()<18))return false;if(s.medical&&s.medical.indexOf('irc')!==-1)return false;var goals=s.sportGoals||[];return s.activity!==null&&s.activity>=2&&(goals.indexOf('muscle')!==-1||goals.indexOf('shred')!==-1);},
+    condition:function(s){if((s.pregnant&&window.isFemale(s))||(getAge()!==null&&getAge()<18))return false;if(s.medical&&s.medical.indexOf('irc')!==-1)return false;var goals=s.sportGoals||[];return s.activity!==null&&s.activity>=2&&(goals.indexOf('muscle')!==-1||goals.indexOf('shred')!==-1);},
     unnecessary_if:'Non n\u00e9cessaire si objectif uniquement endurance/cardio sans musculation',
     dosageCalc:function(s){return{dose:'3-5',unit:'g/jour',timing:'Apr\u00e8s l\'entra\u00eenement avec glucides',note:'Tous les jours y compris repos. Pas de phase de charge n\u00e9cessaire'};}},
   {id:'vitamine_d',name:'Vitamine D3',icon:'\u2600\uFE0F',desc:'Carence fr\u00e9quente m\u00eame en climat ensoleill\u00e9 (travail en int\u00e9rieur, cr\u00e8me solaire)',evidence:'Endocrine Society 2011 \u2014 Recommandation forte',grade:'A',
@@ -5596,13 +5596,13 @@ var SUPPLEMENTS_DB = [
   {id:'magnesium',name:'Magn\u00e9sium (Bisglycinate)',icon:'\uD83E\uDDEA',desc:'Sommeil, crampes, r\u00e9cup\u00e9ration — sensibilit\u00e9 \u00e0 l\'insuline (diab\u00e8te T2)',evidence:'EFSA 2015 \u2014 Apport recommand\u00e9. ADA 2023 : d\u00e9ficit magn\u00e9sium fr\u00e9quent en diab\u00e8te T2 (r\u00e9sistance insuline)',grade:'A',
     condition:function(s){var hasDiab=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('prediabete')!==-1);return hasDiab||(s.sleep!==null&&s.sleep<=1)||(s.activity!==null&&s.activity>=3);},
     unnecessary_if:'Non prioritaire si bon sommeil, entra\u00eenement mod\u00e9r\u00e9 et absence de diab\u00e8te/pr\u00e9-diab\u00e8te',
-    dosageCalc:function(s){var d=s.sex==='homme'?400:310;if(s.activity!==null&&s.activity>=3)d+=50;var hasDiab=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('prediabete')!==-1);return{dose:d,unit:'mg/jour',timing:'Le soir avant le coucher',note:hasDiab?'Forme bisglycinate mieux tol\u00e9r\u00e9e. Le magn\u00e9sium am\u00e9liore la sensibilit\u00e9 \u00e0 l\'insuline et r\u00e9duit l\'insulino-r\u00e9sistance (ADA 2023, Guerrero-Romero 2011). Bilan magn\u00e9s\u00e9mie conseill\u00e9.':'Forme bisglycinate mieux tol\u00e9r\u00e9e'};}},
+    dosageCalc:function(s){var d=window.isMale(s)?400:310;if(s.activity!==null&&s.activity>=3)d+=50;var hasDiab=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('prediabete')!==-1);return{dose:d,unit:'mg/jour',timing:'Le soir avant le coucher',note:hasDiab?'Forme bisglycinate mieux tol\u00e9r\u00e9e. Le magn\u00e9sium am\u00e9liore la sensibilit\u00e9 \u00e0 l\'insuline et r\u00e9duit l\'insulino-r\u00e9sistance (ADA 2023, Guerrero-Romero 2011). Bilan magn\u00e9s\u00e9mie conseill\u00e9.':'Forme bisglycinate mieux tol\u00e9r\u00e9e'};}},
   {id:'fer',name:'Fer',icon:'\uD83E\uDE78',desc:'Transport d\'oxyg\u00e8ne, \u00e9nergie',evidence:'OMS \u2014 Recommandation (femmes)',grade:'A',
-    condition:function(s){return (s.sex==='femme'&&getAge()<51)||(s.pregnant&&s.sex==='femme');},
+    condition:function(s){return (window.isFemale(s)&&getAge()<51)||(s.pregnant&&window.isFemale(s));},
     unnecessary_if:'Hommes : ne suppl\u00e9mentez PAS sans analyse de sang (surdosage dangereux)',warning:'\u26A0 Dosage sanguin (ferritine) OBLIGATOIRE avant suppl\u00e9mentation',
-    dosageCalc:function(s){var d=(s.pregnant&&s.sex==='femme')?27:18;if(s.sex==='femme'&&getAge()>50)d=8;return{dose:d,unit:'mg/jour',timing:'\u00c0 jeun avec vitamine C',note:'Surdosage dangereux. Toujours sur avis m\u00e9dical'};}},
+    dosageCalc:function(s){var d=(s.pregnant&&window.isFemale(s))?27:18;if(window.isFemale(s)&&getAge()>50)d=8;return{dose:d,unit:'mg/jour',timing:'\u00c0 jeun avec vitamine C',note:'Surdosage dangereux. Toujours sur avis m\u00e9dical'};}},
   {id:'folique',name:'Acide folique',icon:'\uD83E\uDD30',desc:'Pr\u00e9vention spina bifida (grossesse)',evidence:'ACOG 2020 \u2014 Recommandation forte',grade:'A',
-    condition:function(s){return s.pregnant===true&&s.sex==='femme';},
+    condition:function(s){return s.pregnant===true&&window.isFemale(s);},
     unnecessary_if:'Uniquement pendant la grossesse (et id\u00e9alement d\u00e8s le projet de grossesse)',
     dosageCalc:function(){return{dose:'400-800',unit:'\u00b5g/jour',timing:'Le matin',note:'Commencer d\u00e8s le projet de grossesse, maintenir pendant tout le T1'};}},
   {id:'vitamine_b12',name:'Vitamine B12',icon:'\uD83D\uDC8A',desc:'Ind\u00e9pensable pour les v\u00e9gans — absente des v\u00e9g\u00e9taux',evidence:'EFSA 2015 \u2014 Niveau A — seule vitamine introuvable dans les v\u00e9g\u00e9taux',grade:'A',
@@ -5611,17 +5611,17 @@ var SUPPLEMENTS_DB = [
     unnecessary_if:'Non n\u00e9cessaire si r\u00e9gime omnivore, pescétarien ou v\u00e9g\u00e9tarien lacto-ovo (\u0153ufs et produits laitiers en apportent)',
     dosageCalc:function(){return{dose:'1000',unit:'\u00b5g/semaine (ou 50\u00b5g/jour)',timing:'Avec un repas',note:'Formes recommand\u00e9es : m\u00e9thylcobalamine ou cyanocobalamine. Prise de sang ferritine + B12 annuelle.'};}},
   {id:'dha_algues',name:'DHA Algues (Om\u00e9ga-3 v\u00e9gan)',icon:'\uD83C\uDF3F',desc:'Source v\u00e9gane de DHA — bioéquivalent au DHA de poisson',evidence:'EFSA 2012 \u2014 DHA algues bioéquivalent au DHA poisson (gras cérébraux, cardiovasculaire)',grade:'A',
-    condition:function(s){return s.regime===3||(s.pregnant&&s.sex==='femme'&&s.allergies&&s.allergies.indexOf('Poisson')!==-1);},
+    condition:function(s){return s.regime===3||(s.pregnant&&window.isFemale(s)&&s.allergies&&s.allergies.indexOf('Poisson')!==-1);},
     unnecessary_if:'Non n\u00e9cessaire si vous consommez du poisson gras 2-3x/semaine (saumon, sardines, maquereau)',
-    dosageCalc:function(s){var d=(s.pregnant&&s.sex==='femme')?300:200;return{dose:d,unit:'mg DHA/jour',timing:'Pendant un repas avec des graisses',note:'Cherchez "DHA d\'algues" ou "algal DHA". Durable et sans contaminants marins.'};}},
+    dosageCalc:function(s){var d=(s.pregnant&&window.isFemale(s))?300:200;return{dose:d,unit:'mg DHA/jour',timing:'Pendant un repas avec des graisses',note:'Cherchez "DHA d\'algues" ou "algal DHA". Durable et sans contaminants marins.'};}},
   {id:'calcium_vegan',name:'Calcium',icon:'\uD83E\uDDB4',desc:'Ossature, contraction musculaire, nerveux',evidence:'IOF 2017 \u2014 Apport r\u00e9f\u00e9rence nutritionnel : 1000 mg/jour',grade:'A',
-    condition:function(s){return s.regime===3&&!(s.pregnant&&s.sex==='femme');},
+    condition:function(s){return s.regime===3&&!(s.pregnant&&window.isFemale(s));},
     unnecessary_if:'Non n\u00e9cessaire si vous consommez produits laitiers régulièrement (lacto-ovo végétarien, omnivore)',
     dosageCalc:function(){return{dose:1000,unit:'mg/jour (fractionner en 500mg × 2)',timing:'Avec les repas (matin + soir)',note:'Formes : citrate de calcium (mieux absorbé) ou carbonate avec repas. Associer à vitamine D.'};}},
   {id:'iode_vegan',name:'Iode',icon:'\uD83C\uDF0A',desc:'Thyroïde, métabolisme, développement cérébral',evidence:'OMS 2007 — Apport recommand\u00e9 150-250 µg/jour',grade:'A',
     condition:function(s){return s.regime>=2;},
     unnecessary_if:'Non n\u00e9cessaire si vous consommez poissons, fruits de mer ou produits laitiers régulièrement',
-    dosageCalc:function(s){var d=(s.pregnant&&s.sex==='femme')?220:150;return{dose:d,unit:'\u00b5g/jour',timing:'Avec un repas',note:'Utiliser sel iod\u00e9 et consommer algues mod\u00e9r\u00e9ment (wakame, nori). Attention aux algues riches en iode (kelp) : risque surdosage.'};
+    dosageCalc:function(s){var d=(s.pregnant&&window.isFemale(s))?220:150;return{dose:d,unit:'\u00b5g/jour',timing:'Avec un repas',note:'Utiliser sel iod\u00e9 et consommer algues mod\u00e9r\u00e9ment (wakame, nori). Attention aux algues riches en iode (kelp) : risque surdosage.'};
   }},
   {id:'zinc_vegan',name:'Zinc',icon:'\uD83E\uDDEC',desc:'Immunité, testostérone, synthèse protéique — biodisponibilité réduite dans les végétaux',evidence:'FAO/OMS 2002 — Biodisponibilité zinc végétal réduite de 50% par les phytates (légumineuses, céréales)',grade:'A',
     condition:function(s){return s.regime>=2;}, // Végétarien, Pescétarien, Végan
@@ -5629,7 +5629,7 @@ var SUPPLEMENTS_DB = [
     warning:'\u26A0 Phytates dans légumineuses et céréales complètes réduisent absorption zinc de 40-50%. Techniques : trempage/germination des légumineuses, fermentation (pain au levain).',
     dosageCalc:function(s){
       // OMS 2002 : AJR zinc × 1.5 pour végans/végétariens (correction phytates)
-      var base=s.sex==='homme'?11:8; // AJR standard ANSES 2021
+      var base=window.isMale(s)?11:8; // AJR standard ANSES 2021
       var dose=Math.round(base*1.5); // +50% pour compenser phytates
       return{dose:dose,unit:'mg/jour',timing:'Entre les repas ou au coucher (éloigné du calcium/fer)',note:'Formes recommandées : gluconate ou citrate de zinc. Max 25mg/j (seuil UL EFSA). Prise de sang zinc sérique conseillée si supplémentation >3 mois.'};
     }
@@ -5639,7 +5639,7 @@ var SUPPLEMENTS_DB = [
   // Sécurité : contre-indiqué grossesse (> 200mg/j — OMS), HTA non contrôlée, anxiété sévère
   {id:'cafeine',name:'Caféine',icon:'\u2615',desc:'Performance, focus, endurance, force',evidence:'ISSN Position Stand 2021 (Grgic et al.) \u2014 Niveau A',grade:'A',
     condition:function(s){
-      if(s.pregnant&&s.sex==='femme')return false; // OMS : max 200mg/j grossesse → supplément déconseillé
+      if(s.pregnant&&window.isFemale(s))return false; // OMS : max 200mg/j grossesse → supplément déconseillé
       if(s.medical&&(s.medical.indexOf('hta')!==-1||s.medical.indexOf('insuffisance_card')!==-1))return false;
       if(s.medical&&s.medical.indexOf('insomnia')!==-1)return false;
       return s.activity!==null&&s.activity>=2; // Modérément actif minimum
@@ -5657,7 +5657,7 @@ var SUPPLEMENTS_DB = [
   // Bénéfice principal : efforts 1-4 min (seuil lactate) — moins efficace force pure ou < 60s
   {id:'beta_alanine',name:'Bêta-Alanine',icon:'\uD83D\uDCAA',desc:'Tamponnage acide lactique — endurance musculaire, HIIT, musculation volume',evidence:'ISSN Position Stand 2015 (Hobson et al.) \u2014 Niveau A',grade:'A',
     condition:function(s){
-      if(s.pregnant&&s.sex==='femme')return false;
+      if(s.pregnant&&window.isFemale(s))return false;
       var goals=s.sportGoals||[];
       var hasEndur=goals.indexOf('endurance')!==-1;
       var hasMusc=goals.indexOf('muscle')!==-1||goals.indexOf('shred')!==-1;
@@ -5710,7 +5710,7 @@ function detectREDS() {
   // Fat % estimate from BMI (crude but functional)
   var bmi=s.weight/((s.height/100)*(s.height/100));
   var fatPct;
-  var _ageF=getAge();if(s.sex==='femme'){fatPct=1.20*bmi+0.23*_ageF-5.4;}
+  var _ageF=getAge();if(window.isFemale(s)){fatPct=1.20*bmi+0.23*_ageF-5.4;}
   else{fatPct=1.20*bmi+0.23*_ageF-16.2;}
   fatPct=Math.max(10,Math.min(45,fatPct))/100;
   var lbm=s.weight*(1-fatPct);
@@ -5720,10 +5720,10 @@ function detectREDS() {
   var eee=Math.max(0,tdeeVal-bmrVal);
   var ea=(target-eee)/lbm;
   // Seuils IOC 2018 : femmes < 30 kcal/kgLBM/j, hommes < 25 kcal/kgLBM/j
-  var eaThreshold = s.sex === 'femme' ? 30 : 25;
-  var eaCritical  = s.sex === 'femme' ? 20 : 15;
+  var eaThreshold = window.isFemale(s) ? 30 : 25;
+  var eaCritical  = window.isFemale(s) ? 20 : 15;
   if(ea<eaThreshold){
-    var isMale = s.sex === 'homme';
+    var isMale = window.isMale(s);
     var critSymptoms = isMale
       ? 'Risque : déficit testostérone, ostéoporose, immunodépression, arythmies.'
       : 'Risque : aménorrhée, ostéoporose, immunodépression, arythmies.';
@@ -5760,17 +5760,17 @@ function detectMedicalConflicts() {
   }
   // Conflit -2 : TCA + Grossesse → deux pathologies qui nécessitent une surveillance médicale spécialisée conjointe
   // IOC 2018 + ACOG 2022 : la restriction alimentaire en TCA est incompatible avec les besoins fœtaux
-  if(s.pregnant&&s.sex==='femme'&&med.indexOf('tca')!==-1){
+  if(s.pregnant&&window.isFemale(s)&&med.indexOf('tca')!==-1){
     conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT MÉDICAL CRITIQUE : TCA + Grossesse — Les troubles du comportement alimentaire pendant la grossesse sont associés à un risque élevé de complications (retard de croissance intra-utérin, prématurité, fausses couches — ACOG 2022). Un suivi psychiatrique ou psychologique ET obstétrical est OBLIGATOIRE. Ne suivez pas un programme diététique sans supervision médicale spécialisée.'});
   }
   // Conflit 0 : Grossesse + IRC → protéines plafonnées à 0.6g/kg = insuffisant pour le fœtus (C1)
   // OMS 2016 : grossesse T3 = +25g protéines/j | KDOQI 2020 : IRC CKD 3-5 = 0.6g/kg/j max
   // Conflit irrésoluble : les deux contraintes sont incompatibles → OBLIGATOIREMENT suivi médical spécialisé
-  if(s.pregnant&&s.sex==='femme'&&med.indexOf('irc')!==-1){
+  if(s.pregnant&&window.isFemale(s)&&med.indexOf('irc')!==-1){
     conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT MÉDICAL CRITIQUE : Grossesse + Insuffisance Rénale Chronique — Les besoins protéiques de la grossesse (75-100g/j) sont incompatibles avec le plafond IRC (0.6g/kg/j = ~36-45g/j). Ce profil NÉCESSITE un suivi conjoint néphrologue + diététicienne spécialisée grossesse. Ne pas modifier l\'alimentation sans avis médical.'});
   }
   // Conflit 1 : Grossesse + Diabète gestationnel + Végan → impossible de couvrir 2600kcal avec glucides ≤200g/j
-  if(s.pregnant&&s.sex==='femme'&&med.indexOf('diabete_gest')!==-1&&s.regime===3){
+  if(s.pregnant&&window.isFemale(s)&&med.indexOf('diabete_gest')!==-1&&s.regime===3){
     conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT : Grossesse + Diabète gestationnel + Végan — Contraintes caloriques incompatibles. Il peut être impossible de couvrir vos besoins ('+calcTarget()+' kcal) avec glucides ≤200g/j sans consommer d\'œufs ou produits laitiers. Consultation diététicienne spécialisée OBLIGATOIRE.'});
   }
   // Alerte B12 automatique régime végane (EFSA 2023, Messina 2019)
@@ -5856,7 +5856,7 @@ function detectMedicalConflicts() {
     }
   }
   // Conflit 8 : Grossesse + sèche/coupe — risque déficit pour le fœtus
-  if(s.pregnant&&s.sex==='femme'&&s.goal!==null&&GOALS[s.goal]){
+  if(s.pregnant&&window.isFemale(s)&&s.goal!==null&&GOALS[s.goal]){
     var pGoalKey=GOALS[s.goal].key;
     if(pGoalKey==='cut'||pGoalKey==='shred'){
       conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT : Grossesse + déficit calorique — Tout déficit calorique pendant la grossesse est contre-indiqué (ACOG 2018). Les besoins augmentent de +300 kcal/j (T2-T3). La restriction calorique pendant la grossesse est associée à un retard de croissance intra-utérin (RCIU). Objectif automatiquement corrigé.'});
@@ -5961,7 +5961,7 @@ function calculateStrengthGrade() {
   var s = window.S;
   if (!s.weight || !s.sex) return null;
 
-  var sexKey = s.sex === 'homme' ? 'm' : 'f';
+  var sexKey = window.isMale(s) ? 'm' : 'f';
   var standards = STRENGTH_STANDARDS[sexKey];
   var bw = s.weight;
 

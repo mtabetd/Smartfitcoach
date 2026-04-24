@@ -30,6 +30,9 @@ const APP_SHELL = [
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
+  './i18n/exercises-en.json',
+  './i18n/motivations-en.json',
+  './i18n/taxonomy-en.json',
 ];
 
 // Critical static assets to pre-cache during install.

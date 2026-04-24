@@ -170,7 +170,7 @@
     if (!base) base = wh[0];
     var delta = _calcDelta(base.weight, last.weight);
     s.appendChild(metricBig('Aujourd\'hui', last.weight, ' kg', delta, 'il y a ' + (period || 4) + ' sem.'));
-    s.appendChild(h('div', { style: ST.sub + 'margin-top:6px;' }, wh.length + ' mesure' + (wh.length > 1 ? 's' : '') + ' enregistrée' + (wh.length > 1 ? 's' : '')));
+    s.appendChild(h('div', { style: ST.sub + 'margin-top:6px;' }, wh.length + ' ' + window.locPlural(wh.length, {fr:{one:'mesure enregistrée',other:'mesures enregistrées'},en:{one:'measurement recorded',other:'measurements recorded'}})));
     return s;
   }
 
@@ -232,7 +232,7 @@
     var avgPace = totalKm > 0 ? (totalMin / totalKm) : 0;
     var pMin = Math.floor(avgPace), pSec = Math.round((avgPace - pMin) * 60);
     var paceStr = pMin + ':' + (pSec < 10 ? '0' : '') + pSec + ' /km';
-    s.appendChild(metricBig('Distance (' + (period || 4) + ' sem.)', totalKm.toFixed(1), ' km', null, recent.length + ' course' + (recent.length > 1 ? 's' : '')));
+    s.appendChild(metricBig('Distance (' + (period || 4) + ' sem.)', totalKm.toFixed(1), ' km', null, recent.length + ' ' + window.locPlural(recent.length, {fr:{one:'course',other:'courses'},en:{one:'run',other:'runs'}})));
     s.appendChild(h('div', { style: 'margin-top:12px;' }));
     s.appendChild(metricBig('Allure moyenne', paceStr, '', null, null));
     return s;
@@ -285,7 +285,7 @@
         h('div', { style: ST.value }, Math.round(totalL / n) + 'g')
       ])
     ]));
-    s.appendChild(h('div', { style: ST.sub + 'margin-top:10px;' }, 'Moyenne sur ' + n + ' jour' + (n > 1 ? 's' : '') + ' de suivi · ' + (period || 4) + ' dernières semaines'));
+    s.appendChild(h('div', { style: ST.sub + 'margin-top:10px;' }, 'Moyenne sur ' + n + ' ' + window.locPlural(n, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + ' de suivi · ' + (period || 4) + ' dernières semaines'));
     return s;
   }
 
@@ -333,7 +333,7 @@
       h('div', { style: 'flex:1;min-width:120px;' }, [
         h('div', { style: ST.sub + 'margin-bottom:2px;' }, 'Série en cours'),
         h('div', { style: ST.value }, streak),
-        h('div', { style: ST.sub }, 'jour' + (streak > 1 ? 's' : '') + ' consécutif' + (streak > 1 ? 's' : ''))
+        h('div', { style: ST.sub }, window.locPlural(streak, {fr:{one:'jour consécutif',other:'jours consécutifs'},en:{one:'day in a row',other:'days in a row'}}))
       ]),
       h('div', { style: 'flex:1;min-width:120px;' }, [
         h('div', { style: ST.sub + 'margin-bottom:2px;' }, 'Badges débloqués'),

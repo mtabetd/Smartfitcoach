@@ -172,7 +172,7 @@
     }
     if (sport) {
       var sportLine = sport;
-      if (sportDays > 0) sportLine = sportDays + ' séance' + (sportDays > 1 ? 's' : '') + '/semaine · ' + sport;
+      if (sportDays > 0) sportLine = sportDays + ' ' + window.locPlural(sportDays, {fr:{one:'séance',other:'séances'},en:{one:'workout',other:'workouts'}}) + '/' + (window.isEnglish && window.isEnglish() ? 'week' : 'semaine') + ' · ' + sport;
       progLines.push('Sport : ' + sportLine);
     }
 

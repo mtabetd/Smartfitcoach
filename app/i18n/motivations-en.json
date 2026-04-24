@@ -1,0 +1,186 @@
+{
+  "_meta": {
+    "source": "motivation-library.js",
+    "count": 137,
+    "tone": "literary-sober (Hermes/Stoic)",
+    "variables": ["{firstName}", "{streak}", "{goalName}"],
+    "note": "Indices mirror the FR file exactly: 0=Sunday, 1=Monday, ..., 6=Saturday."
+  },
+  "monday": [
+    "The week begins. Today's choices write Friday's.",
+    "A new page. No one will write it for you, {firstName}.",
+    "Monday is not a constraint. It is an appointment with your best self.",
+    "Seven days lie ahead. Only one truly counts: this one.",
+    "To start tomorrow is the art of never starting at all.",
+    "The week ahead is a promise. Keep it.",
+    "Your body cannot tell Monday from Saturday. You can. Decide.",
+    "The true luxury is consistency. Grant yourself that luxury, {firstName}.",
+    "What you rehearse on Monday, you master by Sunday.",
+    "Nothing happens by halves. Not the week that begins.",
+    "A successful Monday is not intense. It is precise.",
+    "Intention, not perfection. Set yours now.",
+    "Every Monday is a chance to refuse the almost-good-enough.",
+    "Discipline does not wait for the mood. It precedes it.",
+    "You know the road. You need only take the first step."
+  ],
+  "tuesday": [
+    "Tuesday rewards those who held the line on Monday. That is you.",
+    "You recognise an athlete by their Tuesdays, never by their Mondays.",
+    "Consistency is a form of elegance. It is not seen, it is felt.",
+    "It is not the perfect session that counts. It is the session done.",
+    "Your body is keeping record. Even without the spectacular. Above all without the spectacular.",
+    "On Tuesday, Monday's promises turn into habits.",
+    "Two consecutive days. That is already a trajectory.",
+    "True work is quiet. Yours is, {firstName}.",
+    "Progress loves repetition. It dislikes improvisation.",
+    "Today, be precise. Not severe. Precise.",
+    "One right effort is worth ten approximate ones.",
+    "Fatigue is not an obstacle. It is a signal.",
+    "What seems ordinary today will look remarkable in three months.",
+    "Tuesday is the real test of commitment. You are passing it.",
+    "Do not count your sessions. Make each session count."
+  ],
+  "wednesday": [
+    "In the middle of the week, you see who is truly committed.",
+    "Wednesday is a border. Those who cross it go far.",
+    "No slackening. No surging. Only continuity.",
+    "Three days of effort is already a signature.",
+    "It is not the summit that is hard. It is the middle slope.",
+    "Your week will resemble the decisions you make today.",
+    "On Wednesday, you stop thinking \"begin\" and start thinking \"continue\".",
+    "Consistency is built precisely here, in the middle.",
+    "You are at the halfway point. Too late to doubt, not too late to adjust.",
+    "Honour the plan. It was built for this week, not for your mood.",
+    "Real strength is doing what was planned when nothing forces you to.",
+    "One more day. Then another. That is how a life is changed.",
+    "Today is not an average day. It is a decisive one.",
+    "The middle of the week is not negotiated. It is crossed.",
+    "You are already ahead of the person you were on Monday."
+  ],
+  "thursday": [
+    "Thursday is the day sessions count twice: in fatigue, and in meaning.",
+    "You are closing in. Do not slow down. Tighten up.",
+    "Today's effort weighs more than yesterday's. That is normal. That is good.",
+    "Four days held. You are the reference now, {firstName}.",
+    "A tired body progresses better than a fresh one, provided it is respected.",
+    "Great weeks are won on Thursdays.",
+    "Today, ask yourself: am I executing, or am I performing?",
+    "The effort that costs you nothing has not yet begun.",
+    "Today's quality will be read in your results six weeks from now.",
+    "On Thursday, we stop talking. We do.",
+    "Your consistency since Monday is a rare act. Honour it.",
+    "Seven days make a week. Four days already make a commitment.",
+    "People do not quit at the start or the end. They quit on Thursday. Not you.",
+    "What you do today, your body will remember six months from now.",
+    "The threshold is not physical. It is mental. You are on the right side of it."
+  ],
+  "friday": [
+    "You are reaching the end. Neither first day nor last. Decisive.",
+    "Friday is the day of the final ten percent. The part that makes the difference.",
+    "Finishing a week like this one is already an achievement.",
+    "No pre-weekend letting go. The week is not yet done.",
+    "On Friday evening, you will want to remember this Friday morning.",
+    "Five days. You are an example to the person you were on Monday.",
+    "Accumulated fatigue is the finest fuel for a clean effort.",
+    "You did not come this far for nothing. Close the week as you opened it.",
+    "Today, close your week the way one closes a contract: with care.",
+    "Friday is a ritual. Respect it, {firstName}.",
+    "What you finish today will carry you through the weekend.",
+    "The best weeks are the ones whose Friday resembles their Monday.",
+    "The last effort of the week is also the most meaningful.",
+    "Finish strong. Rest will only feel more earned.",
+    "You are sturdier than on day one. That, precisely, is progress."
+  ],
+  "saturday": [
+    "Saturday is an art: the art of resting without losing oneself.",
+    "True relaxation is not excess. It is the chosen moment.",
+    "Enjoy. But enjoy with awareness, {firstName}.",
+    "What you do on Saturday counts as much as what you do on Tuesday.",
+    "A chosen indulgence is worth more than ten you did not choose.",
+    "The weekend is not a parenthesis. It is a continuation.",
+    "Thoughtful pleasure ruins nothing. It enriches everything.",
+    "A recovery day is never a lost day.",
+    "Saturday morning says much about the week just past. And about the one to come.",
+    "To recover is not to stop. It is to choose another kind of effort.",
+    "The body calls for rest as the mind calls for reading. Respect that.",
+    "Today, eat well. Move gently. Breathe fully.",
+    "A clear-headed Saturday prepares a serene Sunday.",
+    "Pleasure, yes. Drift, no. You know the difference.",
+    "Rest is an ingredient. Not an exception."
+  ],
+  "sunday": [
+    "On Sunday, we look back without nostalgia. And ahead without haste.",
+    "One week ends. Another takes shape. Everything lives in the interval.",
+    "Sunday is a day of tidying, mental as much as physical.",
+    "What you prepare today spares you from improvising on Monday.",
+    "Take some time for yourself, {firstName}. You have earned it.",
+    "One quiet Sunday is worth a thousand chaotic weeks.",
+    "Breathe. The week past is engraved. The one to come is still to be written.",
+    "Anticipate without rushing. That is the finest form of mastery.",
+    "Sunday is the day of calm decisions.",
+    "Look over your plan for the week. Be proud to have held it.",
+    "Before you project, savour. The present counts too.",
+    "True performance is also nourished by these days without performance.",
+    "A Sunday well lived is already a Monday well begun.",
+    "Slow down. It is, at times, the highest form of discipline.",
+    "Review, accept, begin again. The Sunday triptych."
+  ],
+  "training_day": [
+    "A session awaits today. Approach it as you would a serious appointment.",
+    "The body is ready. So is the mind, if you decide it is.",
+    "No perfect sessions. Only sessions done. Do this one, {firstName}.",
+    "Prepare yourself physically. Prepare yourself mentally. Both matter.",
+    "Today's programme is not an obligation. It is a tool.",
+    "Ten minutes of warm-up spare you six months of injury.",
+    "Every working set performed cleanly is a set won.",
+    "Breathe, ground yourself, begin. The rest will follow.",
+    "You are not chasing performance. You are chasing precision.",
+    "Today, be the athlete you quietly admire."
+  ],
+  "rest_day": [
+    "Rest day. It is part of the plan. Honour it as you would a session.",
+    "Muscle does not grow during the effort. It grows now.",
+    "Sleeping well is an invisible session. Sleep well tonight.",
+    "Eat cleanly. Hydrate. Walk a little. That is your real training today.",
+    "Rest is never a luxury. It is a requirement.",
+    "Today your body thanks you for yesterday and prepares for tomorrow.",
+    "Nothing to force. Nothing to prove. Only to recover, {firstName}.",
+    "One day of intelligent recovery is worth three sloppy sessions."
+  ],
+  "streaks": {
+    "3": [
+      "Three days in a row. A habit is beginning to take root, {firstName}."
+    ],
+    "7": [
+      "Seven days. A full week without breaking the line. That is rare.",
+      "Seven consecutive days. You have just crossed the border."
+    ],
+    "14": [
+      "Two weeks. This is no longer an attempt. It is a way of life.",
+      "Fourteen days. You are officially consistent."
+    ],
+    "21": [
+      "Twenty-one days. The number said to belong to habit. You are there, {firstName}."
+    ],
+    "30": [
+      "Thirty days. This is no longer motivation. It is discipline.",
+      "A full month. You are not the same person you were thirty days ago."
+    ],
+    "50": [
+      "Fifty days. This is what separates those who try from those who do."
+    ],
+    "60": [
+      "Two months. Your body and your choices are no longer strangers, {firstName}."
+    ],
+    "100": [
+      "One hundred days. Few ever reach this number. You have.",
+      "One hundred days. You have crossed into the territory of the serious."
+    ],
+    "200": [
+      "Two hundred days. At this stage, we no longer speak of effort. We speak of identity."
+    ],
+    "365": [
+      "One year. A full year without letting go. You have become the reference, {firstName}."
+    ]
+  }
+}

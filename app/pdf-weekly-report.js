@@ -151,14 +151,14 @@ window.exportWeeklyReportPDF = function() {
     color(doc, 'text', ivory);
     doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
     var prenom = (typeof window.getDisplayFirstName === 'function') ? window.getDisplayFirstName() : (S.prenom || '');
-    var dateStr = new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    var dateStr = window.formatDate(new Date(), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
     doc.text((prenom ? prenom + '  ·  ' : '') + dateStr, M, 38);
 
     var y = 58;
 
     // ═══ 1. PROFIL ═══
     y = sectionTitle(doc, y, 'Profil');
-    if (S.sex) y = kvLine(doc, y, 'Sexe', S.sex === 'homme' ? 'Homme' : 'Femme', { emphasis: false });
+    if (S.sex) y = kvLine(doc, y, 'Sexe', window.isMale(S) ? 'Homme' : 'Femme', { emphasis: false });
     if (S.age) y = kvLine(doc, y, 'Âge', S.age + ' ans', { emphasis: false });
     if (S.weight) y = kvLine(doc, y, 'Poids actuel', S.weight + ' kg');
     if (S.height) y = kvLine(doc, y, 'Taille', S.height + ' cm', { emphasis: false });
@@ -212,7 +212,7 @@ window.exportWeeklyReportPDF = function() {
     var wperf = (typeof window.getWeekPerformanceSummary === 'function') ? window.getWeekPerformanceSummary() : null;
     if (ws) {
       y = kvLine(doc, y, 'Séances effectuées', ws.sessions + '   (' + ws.daysActive + ' jours actifs)');
-      if (ws.kcalTotal > 0) y = kvLine(doc, y, 'Kcal dépensées', ws.kcalTotal.toLocaleString('fr-FR') + ' kcal');
+      if (ws.kcalTotal > 0) y = kvLine(doc, y, 'Kcal dépensées', window.formatNumber(ws.kcalTotal) + ' kcal');
       if (ws.durationTotal > 0) y = kvLine(doc, y, 'Temps total', ws.durationTotal + ' min');
     }
     if (wAvg && wAvg.sleepAvg !== null) {
@@ -297,7 +297,7 @@ window.exportWeeklyReportPDF = function() {
       if (typeof records.maxStreak === 'number' && records.maxStreak > 0) {
         cells.push({
           label: 'Plus longue série',
-          value: records.maxStreak + ' jour' + (records.maxStreak > 1 ? 's' : ''),
+          value: records.maxStreak + ' ' + window.locPlural(records.maxStreak, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}),
           detail: 'Jours consécutifs'
         });
       }
@@ -329,7 +329,7 @@ window.exportWeeklyReportPDF = function() {
       var tgtP = (nutTrend.targets && nutTrend.targets.p) ? nutTrend.targets.p : null;
       if (kcalAvg !== null) {
         y = kvLine(doc, y, 'Kcal moyennes (30j)',
-          kcalAvg.toLocaleString('fr-FR') + (tgtKcal ? ' / ' + tgtKcal.toLocaleString('fr-FR') + ' kcal' : ' kcal'));
+          window.formatNumber(kcalAvg) + (tgtKcal ? ' / ' + window.formatNumber(tgtKcal) + ' kcal' : ' kcal'));
       }
       if (pAvg !== null) {
         y = kvLine(doc, y, 'Protéines moyennes (30j)',
@@ -466,7 +466,7 @@ window.exportWeeklyReportPDF = function() {
       doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
       doc.text('Smart Fit Coach', M, 291);
       doc.setFont('helvetica', 'italic'); doc.setFontSize(6.5);
-      doc.text(new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' }), M, 294.5);
+      doc.text(window.formatDate(new Date(), { day: '2-digit', month: 'long', year: 'numeric' }), M, 294.5);
       doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
       var pn = pi + ' / ' + pageCount;
       var pnW = doc.getTextWidth(pn);

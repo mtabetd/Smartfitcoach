@@ -26,6 +26,7 @@ const DEFERRED_SCRIPTS = [
   './muscle-taxonomy.js',
   './validators.js',
   './app-core.js',
+  './i18n-helpers.js',
   './triathlon-program.js',
   './perf-history.js',
   './app-nutrition.js',

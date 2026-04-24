@@ -727,11 +727,11 @@ function updateRateLimitHint(remaining) {
     if (hr !== null && dy !== null) {
       var limiting = (hr <= dy) ? hr : dy;
       var label = (hr <= dy) ? 'cette heure' : 'aujourd\'hui';
-      el.textContent = limiting + ' question' + (limiting > 1 ? 's' : '') + ' ' + label;
+      el.textContent = limiting + ' ' + window.locPlural(limiting, {fr:{one:'question',other:'questions'},en:{one:'question',other:'questions'}}) + ' ' + label;
     } else {
       var v = hr !== null ? hr : dy;
       var lbl = hr !== null ? 'cette heure' : 'aujourd\'hui';
-      el.textContent = v + ' question' + (v > 1 ? 's' : '') + ' ' + lbl;
+      el.textContent = v + ' ' + window.locPlural(v, {fr:{one:'question',other:'questions'},en:{one:'question',other:'questions'}}) + ' ' + lbl;
     }
   } catch(e) {}
 }

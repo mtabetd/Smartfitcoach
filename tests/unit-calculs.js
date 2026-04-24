@@ -49,6 +49,15 @@ try {
   process.exit(1);
 }
 
+// Charger les helpers i18n (isFemale, isMale, etc.) utilisés par app-core.js
+try {
+  var helpersCode = fs.readFileSync(path.join(__dirname, '../app/i18n-helpers.js'), 'utf8');
+  vm.runInThisContext(helpersCode, { filename: 'i18n-helpers.js' });
+} catch(e) {
+  console.error('[FATAL] Erreur au chargement de i18n-helpers.js:', e.message);
+  process.exit(1);
+}
+
 // Vérifier que les fonctions sont bien exportées
 var required = ['calcBMR', 'calcTDEE', 'calcTarget', 'calcMacros', 'calcBMI', 'getAge'];
 required.forEach(function(fn) {

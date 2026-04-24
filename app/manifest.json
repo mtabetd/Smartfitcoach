@@ -1,7 +1,7 @@
 {
   "name": "Smart Fit Coach",
   "short_name": "SmartFit",
-  "description": "Smart Fit Coach — Nutrition personnalisée et programmes sportifs sur mesure",
+  "description": "Personalized nutrition and tailored training programs · Nutrition personnalisée et programmes sportifs sur mesure",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#FAF9F6",

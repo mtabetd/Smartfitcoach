@@ -1310,7 +1310,7 @@ function renderCardBonjour(S) {
     var _trialCopy = _trialDays <= 0 ? 'Essai termin\u00e9 \u2014 D\u00e9bloquez l\u2019acc\u00e8s \u2192'
       : _trialDays === 1 ? 'Dernier jour \u2014 Abonnez-vous pour continuer \u2192'
       : _trialUrgent ? 'Plus que ' + _trialDays + ' jours \u2014 Continuez sans interruption \u2192'
-      : _trialDays + ' jour' + (_trialDays > 1 ? 's' : '') + ' pour tout explorer \u2014 S\u2019abonner \u2192';
+      : _trialDays + ' ' + window.locPlural(_trialDays, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + ((window.isEnglish && window.isEnglish()) ? ' to explore everything \u2014 Subscribe \u2192' : ' pour tout explorer \u2014 S\u2019abonner \u2192');
     _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + (_trialUrgent ? '#7A1F1F' : 'var(--grey,#6B6B65)') + ';'}, _trialCopy));
     _trialBanner.appendChild(_trialLeft);
     _trialBanner.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;color:' + (_trialUrgent ? '#C0390E' : 'var(--orange,#E86F1E)') + ';'}, _trialDays > 0 ? _trialDays + 'j' : '!'));
@@ -2109,7 +2109,7 @@ function renderFoodJournalCard() {
           if (window.showToast) window.showToast('Plan du jour chargé dans le journal', 'success', 2200);
           _reRenderFJCard();
         };
-        if (hasEntries && window.confirm('Des repas sont déjà dans votre journal. Voulez-vous quand même ajouter le plan du jour ?')) {
+        if (hasEntries && (window.sfcConfirm ? window.sfcConfirm('Des repas sont déjà dans votre journal. Voulez-vous quand même ajouter le plan du jour ?') : window.confirm('Des repas sont déjà dans votre journal. Voulez-vous quand même ajouter le plan du jour ?'))) {
           doLoad();
         } else if (!hasEntries) {
           doLoad();
@@ -2190,7 +2190,7 @@ function _fjUpdateMultiCTA() {
   var ctaBtn = h('button', {
     style: 'width:100%;padding:12px 16px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;cursor:pointer;'
       + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;min-height:44px;margin-bottom:8px;'
-  }, 'Ajouter ' + names.length + ' aliment' + (names.length > 1 ? 's' : '') + ' · ' + (MEAL_FULL[_fjState.meal] || _fjState.meal));
+  }, ((window.isEnglish && window.isEnglish()) ? 'Add ' : 'Ajouter ') + names.length + ' ' + window.locPlural(names.length, {fr:{one:'aliment',other:'aliments'},en:{one:'item',other:'items'}}) + ' · ' + (MEAL_FULL[_fjState.meal] || _fjState.meal));
 
   ctaBtn.addEventListener('click', function() {
     if (!window.FOOD_JOURNAL || !window.FOOD_JOURNAL.addEntry) return;
@@ -2217,7 +2217,7 @@ function _fjUpdateMultiCTA() {
     _fjState.query = '';
     _fjState.selectedFood = null;
     _reRenderFJCard();
-    if (window.showToast) window.showToast(count + ' aliment' + (count > 1 ? 's ajoutés' : ' ajouté') + ' !', 'success', 2000);
+    if (window.showToast) window.showToast(count + ' ' + window.locPlural(count, {fr:{one:'aliment ajouté',other:'aliments ajoutés'},en:{one:'item added',other:'items added'}}) + ' !', 'success', 2000);
   });
 
   box.appendChild(ctaBtn);
@@ -2481,7 +2481,7 @@ function _fjRenderSavedMeals(box) {
   }
   box.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);padding:4px 4px 8px;'
-  }, 'Mes repas · ' + saved.length + ' sauvegardé' + (saved.length > 1 ? 's' : '')));
+  }, ((window.isEnglish && window.isEnglish()) ? 'My meals · ' : 'Mes repas · ') + saved.length + ' ' + window.locPlural(saved.length, {fr:{one:'sauvegardé',other:'sauvegardés'},en:{one:'saved',other:'saved'}})));
 
   saved.forEach(function(meal) {
     if (!meal || !meal.entries) return;
@@ -2495,7 +2495,7 @@ function _fjRenderSavedMeals(box) {
     }, meal.name));
     info.appendChild(h('div', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:2px;'
-    }, meal.entries.length + ' aliment' + (meal.entries.length > 1 ? 's' : '') + ' \u00b7 ' + Math.round(totalKcal) + ' kcal'));
+    }, meal.entries.length + ' ' + window.locPlural(meal.entries.length, {fr:{one:'aliment',other:'aliments'},en:{one:'item',other:'items'}}) + ' \u00b7 ' + Math.round(totalKcal) + ' kcal'));
     row.appendChild(info);
 
     // Bouton re-logger
@@ -2531,7 +2531,8 @@ function _fjRenderSavedMeals(box) {
     delBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M2 2 L10 10 M10 2 L2 10"/></svg>';
     delBtn.addEventListener('click', function(e) {
       e.stopPropagation();
-      if (!confirm('Supprimer « ' + meal.name + ' » ?')) return;
+      var _delMealMsg = (window.isEnglish && window.isEnglish()) ? ('Delete "' + meal.name + '"?') : ('Supprimer « ' + meal.name + ' » ?');
+      if (!(window.sfcConfirm ? window.sfcConfirm(_delMealMsg) : window.confirm(_delMealMsg))) return;
       _fjDeleteSavedMeal(meal.id);
       _fjRefreshResults();
     });
@@ -2628,7 +2629,7 @@ function _fjRefreshResults() {
   if (list.length > 0 && allowOFF) {
     box.appendChild(h('div', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);padding:4px 4px 6px;'
-    }, 'Base cur\u00e9e \u00b7 ' + list.length + ' r\u00e9sultat' + (list.length > 1 ? 's' : '')));
+    }, ((window.isEnglish && window.isEnglish()) ? 'Curated database \u00b7 ' : 'Base cur\u00e9e \u00b7 ') + list.length + ' ' + window.locPlural(list.length, {fr:{one:'r\u00e9sultat',other:'r\u00e9sultats'},en:{one:'result',other:'results'}})));
   } else if (list.length === 0 && allowOFF) {
     box.appendChild(h('div', {
       style: 'padding:12px 4px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'
@@ -2963,7 +2964,7 @@ function _fjBuildEntriesList(container) {
   var MEAL_LABELS = { breakfast: 'Petit-d\u00e9jeuner', lunch: 'D\u00e9jeuner', snack: 'Collation', dinner: 'D\u00eener' };
   var header = h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px;padding-top:8px;border-top:1px solid var(--line,#D8D8D0);'
-  }, MEAL_LABELS[_fjState.meal] + ' \u00b7 ' + mealEntries.length + ' aliment' + (mealEntries.length > 1 ? 's' : ''));
+  }, MEAL_LABELS[_fjState.meal] + ' \u00b7 ' + mealEntries.length + ' ' + window.locPlural(mealEntries.length, {fr:{one:'aliment',other:'aliments'},en:{one:'item',other:'items'}}));
   container.appendChild(header);
 
   if (mealEntries.length === 0) {
@@ -3000,7 +3001,8 @@ function _fjBuildEntriesList(container) {
       if (window.FOOD_JOURNAL && window.FOOD_JOURNAL.removeEntry) {
         // 2026-04 NIVEAU 1 : confirmation avant suppression aliment du journal
         var entryName = (entry && entry.name) || 'cet aliment';
-        if (!confirm('Retirer « ' + entryName + ' » du journal ?')) return;
+        var _rmEntryMsg = (window.isEnglish && window.isEnglish()) ? ('Remove "' + entryName + '" from the journal?') : ('Retirer « ' + entryName + ' » du journal ?');
+        if (!(window.sfcConfirm ? window.sfcConfirm(_rmEntryMsg) : window.confirm(_rmEntryMsg))) return;
         var today = new Date().toISOString().slice(0, 10);
         window.FOOD_JOURNAL.removeEntry(today, absIdx);
         _reRenderFJCard();
@@ -3031,7 +3033,7 @@ function _fjBuildEntriesList(container) {
         );
       });
       _reRenderFJCard();
-      if (window.showToast) window.showToast(yesterdayItems.length + ' aliment' + (yesterdayItems.length > 1 ? 's copiés' : ' copié') + ' !', 'success', 2000);
+      if (window.showToast) window.showToast(yesterdayItems.length + ' ' + window.locPlural(yesterdayItems.length, {fr:{one:'aliment copié',other:'aliments copiés'},en:{one:'item copied',other:'items copied'}}) + ' !', 'success', 2000);
     });
     actionsRow.appendChild(copyBtn);
   }
@@ -3048,7 +3050,7 @@ function _fjBuildEntriesList(container) {
       var defaultName = MEAL_LABELS2[_fjState.meal] || 'Mon repas';
       box.appendChild(h('div', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin-bottom:10px;'
-      }, mealEntries.length + ' aliment' + (mealEntries.length > 1 ? 's' : '') + ' — donnez un nom à ce repas'));
+      }, mealEntries.length + ' ' + window.locPlural(mealEntries.length, {fr:{one:'aliment',other:'aliments'},en:{one:'item',other:'items'}}) + ((window.isEnglish && window.isEnglish()) ? ' — name this meal' : ' — donnez un nom à ce repas')));
       var inp = h('input', {
         type: 'text',
         placeholder: defaultName,
@@ -3331,7 +3333,7 @@ function buildShareCanvas() {
 
   // ── Objectif ──
   var goalLabel = '';
-  if (S.pregnant && S.sex === 'femme') {
+  if (S.pregnant && window.isFemale(S)) {
     // Femme enceinte : afficher "Grossesse" même si S.goal est cut/shred (calcTarget() corrige les calories)
     goalLabel = 'Grossesse';
   } else if (window.GOALS && typeof S.goal === 'number' && window.GOALS[S.goal]) {
@@ -3441,7 +3443,7 @@ function renderCardStreak() {
     var streakLabel = h('div', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey);'
     });
-    streakLabel.textContent = streak > 1 ? 'Séquence' : 'Jour 1';
+    streakLabel.textContent = streak > 1 ? ((window.isEnglish && window.isEnglish()) ? 'Streak' : 'Séquence') : ((window.isEnglish && window.isEnglish()) ? 'Day 1' : 'Jour 1');
 
     streakWrap.appendChild(streakNum);
     streakWrap.appendChild(streakLabel);
@@ -3452,7 +3454,7 @@ function renderCardStreak() {
       var _lossMsg = h('div', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange,#E86F1E);margin-top:6px;margin-bottom:4px;font-weight:500;'
       });
-      _lossMsg.textContent = 'Ne cassez pas votre série de ' + streak + ' jour' + (streak > 1 ? 's' : '') + ' !';
+      _lossMsg.textContent = ((window.isEnglish && window.isEnglish()) ? ('Don\'t break your ' + streak + '-' + window.locPlural(streak, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'day'}}) + ' streak!') : ('Ne cassez pas votre série de ' + streak + ' ' + window.locPlural(streak, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + ' !'));
       c.appendChild(_lossMsg);
     }
 
@@ -3588,7 +3590,7 @@ function renderCardSport() {
     var _iaCard = card('border-left:4px solid var(--green,#3E5C3A);');
     _iaCard.appendChild(eyebrow('VOTRE PROGRAMME'));
     _iaCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:8px;'}, 'Programme sur mesure actif'));
-    var _iaDate = S.muscuIAProgramDate ? 'G\u00e9n\u00e9r\u00e9 le ' + new Date(S.muscuIAProgramDate).toLocaleDateString('fr-FR') : '';
+    var _iaDate = S.muscuIAProgramDate ? 'G\u00e9n\u00e9r\u00e9 le ' + window.formatDate(S.muscuIAProgramDate) : '';
     if (_iaDate) _iaCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px;'}, _iaDate));
     _iaCard.appendChild(h('button', {style: 'padding:10px 16px;background:var(--green,#3E5C3A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;', onclick: function() { S.view = 'sport'; S.sStep = 4; if (window.render) window.render(); }}, 'Voir mon programme \u2192'));
     return _iaCard;
@@ -3760,7 +3762,7 @@ function renderCardSport() {
       _statsRow.appendChild(_statCell(_weekTarget > 0 ? (_weekDone + '/' + _weekTarget) : '—', 'Semaine', true));
     } else {
       // Bible Hermès §3.4 : accord singulier/pluriel correct ("1 EXERCICE" pas "1 EXERCICES")
-      _statsRow.appendChild(_statCell(exCount || '—', (exCount === 1 ? 'Exercice' : 'Exercices'), false));
+      _statsRow.appendChild(_statCell(exCount || '—', window.locPlural(exCount, {fr:{one:'Exercice',other:'Exercices'},en:{one:'Exercise',other:'Exercises'}}), false));
       _statsRow.appendChild(_statCell(_estMins ? ('~' + _estMins + "'") : '—', 'Durée', false));
       _statsRow.appendChild(_statCell(_weekTarget > 0 ? (_weekDone + '/' + _weekTarget) : '—', 'Semaine', true));
     }
@@ -3852,7 +3854,7 @@ function renderCardRestDay(S) {
 
   var weightKg = (S && S.weight) ? parseFloat(S.weight) : 70;
   // 35 ml/kg (EFSA 2010 / ANSES) + plancher EFSA : 2.0 L femme, 2.5 L homme (cohérent avec calcHydration())
-  var _efsa_floor = (S && S.sex === 'homme') ? 2.5 : 2.0;
+  var _efsa_floor = window.isMale(S) ? 2.5 : 2.0;
   var waterGoal = Math.max(_efsa_floor, Math.round(weightKg * 0.035 * 10) / 10);
 
   var _restTips = {
@@ -4273,7 +4275,7 @@ function todayImportData() {
       try {
         var backup = JSON.parse(ev.target.result);
         if (!backup.data || !backup.version) { if (window.showToast) window.showToast('Fichier invalide', 'error', 3000); return; }
-        if (!confirm('Cela remplacera vos données actuelles. Continuer ?')) return;
+        if (!(window.sfcConfirm ? window.sfcConfirm('Cela remplacera vos données actuelles. Continuer ?') : window.confirm('Cela remplacera vos données actuelles. Continuer ?'))) return;
         Object.keys(backup.data).forEach(function(key) {
           localStorage.setItem(key, typeof backup.data[key] === 'string' ? backup.data[key] : JSON.stringify(backup.data[key]));
         });
@@ -4287,7 +4289,7 @@ function todayImportData() {
 }
 
 function todayDeleteAllData() {
-  if (!confirm('Action irr\u00e9versible. Toutes vos donn\u00e9es seront supprim\u00e9es d\u00e9finitivement. Continuer ?')) return;
+  if (!(window.sfcConfirm ? window.sfcConfirm('Action irr\u00e9versible. Toutes vos donn\u00e9es seront supprim\u00e9es d\u00e9finitivement. Continuer ?') : window.confirm('Action irr\u00e9versible. Toutes vos donn\u00e9es seront supprim\u00e9es d\u00e9finitivement. Continuer ?'))) return;
   var keysToRemove = [];
   for (var i = 0; i < localStorage.length; i++) {
     var key = localStorage.key(i);
@@ -4429,7 +4431,7 @@ function renderExtendedSections(wrapper, S) {
       var sessions = (insights.sessions || 0);
       var kcal = (insights.kcalTotal || 0);
       statsGrid.appendChild(insightStat(sessions, 'Séances'));
-      statsGrid.appendChild(insightStat(kcal > 0 ? kcal.toLocaleString('fr-FR') : '—', 'Kcal dépensées'));
+      statsGrid.appendChild(insightStat(kcal > 0 ? window.formatNumber(kcal) : '—', 'Kcal dépensées'));
       var sleep = (typeof insights.sleepAvg === 'number') ? insights.sleepAvg.toFixed(1) + '/5' : '—';
       statsGrid.appendChild(insightStat(sleep, 'Sommeil moyen'));
       var rpe = (typeof insights.rpeAvg === 'number') ? insights.rpeAvg.toFixed(1) + '/10' : '—';
@@ -4956,7 +4958,7 @@ function renderExtendedSections(wrapper, S) {
         if (typeof records.maxStreak === 'number' && records.maxStreak > 0) {
           recordsBox.appendChild(recordLine(
             'Plus longue série',
-            records.maxStreak + ' jour' + (records.maxStreak > 1 ? 's' : ''),
+            records.maxStreak + ' ' + window.locPlural(records.maxStreak, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}),
             'Jours consécutifs'
           ));
           hasContent = true;
@@ -5006,7 +5008,7 @@ function renderExtendedSections(wrapper, S) {
           return box;
         }
         nStatsRow.appendChild(nutStat(
-          kcalAvg !== null ? Math.round(kcalAvg).toLocaleString('fr-FR') : '—',
+          kcalAvg !== null ? window.formatNumber(Math.round(kcalAvg)) : '—',
           'Kcal moy.'
         ));
         nStatsRow.appendChild(nutStat(
@@ -5465,7 +5467,7 @@ function renderCardTDEEAdaptatif(S) {
   // (avant : 1200 kcal pour homme 70kg = irresponsable, peut induire carences).
   // OMS / EFSA : minimum sécuritaire 1500 kcal femme, 1800 kcal homme.
   var _S = window.S || {};
-  var _minSafe = _S.sex === 'femme' ? 1500 : 1800;
+  var _minSafe = window.isFemale(_S) ? 1500 : 1800;
   // Adoucir aussi : pas plus de ±300 kcal/j d'ajustement vs TDEE actuel (anti-yoyo)
   var _maxStep = 300;
   if (Math.abs(kcalAdjust) > _maxStep) kcalAdjust = (kcalAdjust > 0 ? _maxStep : -_maxStep);
@@ -5769,7 +5771,7 @@ function renderTodayDashboard(p) {
       _mRight.appendChild(h('span', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;' +
                'letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);'
-      }, 'jour' + (_msc > 1 ? 's' : '')));
+      }, window.locPlural(_msc, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}})));
       _miniStreak.appendChild(_mRight);
       _streakPill = _miniStreak;
     }
@@ -7055,7 +7057,7 @@ function renderCardMuscu1RM() {
     }, 'Tonnage 7 jours'));
     tonnageLeft.appendChild(h('div', {
       style: 'font-family:Georgia,serif;font-style:italic;font-size:11px;color:var(--ink-500,#6B6B65);'
-    }, weeklyTonnage.sets + ' séries · ' + weeklyTonnage.days + ' jour' + (weeklyTonnage.days > 1 ? 's' : '') + ' actif'));
+    }, weeklyTonnage.sets + ' ' + window.locPlural(weeklyTonnage.sets, {fr:{one:'série',other:'séries'},en:{one:'set',other:'sets'}}) + ' · ' + weeklyTonnage.days + ' ' + window.locPlural(weeklyTonnage.days, {fr:{one:'jour actif',other:'jours actifs'},en:{one:'active day',other:'active days'}})));
     tonnageRow.appendChild(tonnageLeft);
     tonnageRow.appendChild(h('div', {
       style: 'font-family:Georgia,serif;font-size:24px;color:var(--ink-900,#0A0A09);font-feature-settings:"tnum" 1;line-height:1;'

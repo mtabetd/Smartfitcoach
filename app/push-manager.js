@@ -322,10 +322,10 @@
           var streak = streakData.current || 0;
           var msg = diff === 2
             ? (streak > 0
-                ? 'Votre séquence de ' + streak + ' jour' + (streak > 1 ? 's' : '') + ' vous attend. C\'est encore aujourd\'hui.'
+                ? ((window.isEnglish && window.isEnglish()) ? ('Your ' + streak + '-' + window.locPlural(streak, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'day'}}) + ' streak is waiting. Today still counts.') : ('Votre séquence de ' + streak + ' ' + window.locPlural(streak, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + ' vous attend. C\'est encore aujourd\'hui.'))
                 : 'Hier, vous n\'avez pas loggé. Aujourd\'hui, c\'est possible.')
             : (streak > 0
-                ? 'Ton streak de ' + streak + ' jour' + (streak > 1 ? 's' : '') + ' t\'attend — ne le laisse pas tomber !'
+                ? ((window.isEnglish && window.isEnglish()) ? ('Your ' + streak + '-' + window.locPlural(streak, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'day'}}) + ' streak is waiting — don\'t let it slip!') : ('Ton streak de ' + streak + ' ' + window.locPlural(streak, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + ' t\'attend — ne le laisse pas tomber !'))
                 : 'Ça fait ' + diff + ' jours qu\'on ne t\'a pas vu. Reprends là où tu t\'es arrêté(e) — chaque action compte !');
           if (now < notifTime) {
             this.scheduleAndPersist('comeback', 'SmartFitCoach', msg, notifTime.getTime());

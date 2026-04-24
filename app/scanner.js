@@ -841,11 +841,18 @@ window.SCANNER = {
           try {
             window.FOOD_JOURNAL.addEntry(mealSlot, p.name, kc, pr, cb, ft, g + 'g', 'scanner');
           } catch(e) {}
-          addBtn.textContent = 'Ajout\u00e9 \u2713';
+          addBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Added \u2713' : 'Ajout\u00e9 \u2713';
           addBtn.disabled = true;
           addBtn.style.background = 'var(--grey,#6B6B65)';
           if (window.showToast) {
-            try { window.showToast('Ajout\u00e9 au ' + (mealLabels[mealSlot] || 'repas') + ' : ' + p.name, 'success', 2500); } catch(_){}
+            try {
+              var _slot = (mealLabels[mealSlot] || 'repas');
+              var _slotT = (window.trTax ? window.trTax('meal_slots', _slot) : _slot);
+              var _toastMsg = (window.isEnglish && window.isEnglish())
+                ? ('Added to ' + String(_slotT).toLowerCase() + ': ' + p.name)
+                : ('Ajout\u00e9 au ' + _slot + ' : ' + p.name);
+              window.showToast(_toastMsg, 'success', 2500);
+            } catch(_){}
           }
         });
         addRow.appendChild(addBtn);

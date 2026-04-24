@@ -173,7 +173,7 @@ function renderProgressBar(p, current, total) {
 // ─── INTERSTITIEL: programme existant ───
 function renderNutritionChoice(app) {
   // Detect cycle phase change — invalidate weekPlan if phase shifted since last generation
-  if (S.sex === 'femme' && S.cycleTracking && window.getCurrentCyclePhase) {
+  if (window.isFemale(S) && S.cycleTracking && window.getCurrentCyclePhase) {
     var _cpNow = window.getCurrentCyclePhase();
     var _cpId = _cpNow ? _cpNow.phase.id : null;
     if (_cpId && S._weekPlanCyclePhase && S._weekPlanCyclePhase !== _cpId) {
@@ -381,7 +381,7 @@ function renderStep1(p) {
 function renderStep2(p) {
   if (typeof window._s2page === 'undefined') window._s2page = 0;
   // N4b: cycle/grossesse — femmes seulement après avoir saisi la date
-  if (window._s2page === 1 && S.sex === 'femme') {
+  if (window._s2page === 1 && window.isFemale(S)) {
     renderStep2b(p);
     return;
   }
@@ -480,7 +480,7 @@ function renderStep2(p) {
     // Femmes → étape cycle/grossesse (N4b), sauf ménopause ou âge ≥ 50
     var _age2 = getAge();
     var _isMeno = Array.isArray(S.medical) && S.medical.indexOf('menopause') !== -1;
-    if (S.sex === 'femme' && !(_age2 >= 50 || _isMeno)) {
+    if (window.isFemale(S) && !(_age2 >= 50 || _isMeno)) {
       window._s2page = 1;
       window.render();
     } else {
@@ -577,7 +577,7 @@ function renderStep2b(p) {
       }
     }
     // ─── GROSSESSE (femmes uniquement) ───
-    if (S.sex === 'femme') {
+    if (window.isFemale(S)) {
     var pregDivider = h('div', {'class': 'divider', style: 'margin:20px 0 12px'});
     pregDivider.appendChild(h('div', {'class': 'divider-line'}));
     pregDivider.appendChild(h('div', {'class': 'divider-text'}, 'Grossesse'));
@@ -713,7 +713,7 @@ function renderStep2b(p) {
         }
       }
     }
-    } // fin if (S.sex === 'femme') — gate grossesse
+    } // fin if (isFemale) — gate grossesse
 
     p.appendChild(h('div', {style: 'height:8px'}));
 
@@ -1003,7 +1003,7 @@ function renderStep3(p) {
     // Femmes : revenir à N4b sauf si ménopause ou âge ≥ 50
     var _bkAge = getAge();
     var _bkMeno = Array.isArray(S.medical) && S.medical.indexOf('menopause') !== -1;
-    window._s2page = (S.sex === 'femme' && !(_bkAge >= 50 || _bkMeno)) ? 1 : 0;
+    window._s2page = (window.isFemale(S) && !(_bkAge >= 50 || _bkMeno)) ? 1 : 0;
     goStep(2);
   }, html: backArrowHtml() + window.t('onb.back')}));
   // ─── Mode Express : skip vers les résultats macros ───
@@ -1101,7 +1101,7 @@ function renderActiviteSommeil(p) {
   var _selCount3 = Array.isArray(S.trainingDaysSelected) ? S.trainingDaysSelected.length : 0;
   var _hint3 = _selCount3 === 0
     ? 'Optionnel \u2014 laissez vide pour r\u00e9partition automatique'
-    : _selCount3 + '\u00a0jour' + (_selCount3 > 1 ? 's' : '') + ' s\u00e9lectionn\u00e9' + (_selCount3 > 1 ? 's' : '');
+    : _selCount3 + '\u00a0' + window.locPlural(_selCount3, {fr:{one:'jour s\u00e9lectionn\u00e9',other:'jours s\u00e9lectionn\u00e9s'},en:{one:'day selected',other:'days selected'}});
   p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:4px;'}, _hint3));
 
   // ─── HEURE D'ENTRAÎNEMENT (mode 'both' uniquement — l'utilisateur s'entraîne activement, le timing affecte la répartition des macros) ───
@@ -1235,7 +1235,7 @@ function renderStep4(p) {
         } else {
           S.medical.push(item.id);
           // Sync: activer grossesse médicale → activer S.pregnant pour déclencher les protections
-          if (item.id === 'grossesse' && S.sex === 'femme') {
+          if (item.id === 'grossesse' && window.isFemale(S)) {
             S.pregnant = true; S.cycleTracking = false;
           }
           // FIX DESYNC 2026-04-16 — idem pour ajout de condition
@@ -1262,7 +1262,7 @@ function renderStep4(p) {
   if (S.medical.length > 0) {
     p.appendChild(h('div', {style: 'height:12px'}));
     var sel = h('div', {style: 'border-left:2px solid var(--orange);padding:12px 16px;background:rgba(232,111,30,0.06);margin-bottom:16px'});
-    sel.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange);margin-bottom:8px'}, S.medical.length + ' condition' + (S.medical.length > 1 ? 's' : '') + ' s\u00e9lectionn\u00e9e' + (S.medical.length > 1 ? 's' : '')));
+    sel.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange);margin-bottom:8px'}, S.medical.length + ' ' + window.locPlural(S.medical.length, {fr:{one:'condition s\u00e9lectionn\u00e9e',other:'conditions s\u00e9lectionn\u00e9es'},en:{one:'condition selected',other:'conditions selected'}})));
     S.medical.forEach(function(id) {
       var adv = MEDICAL_ADVICE[id];
       if (adv) sel.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px;padding-left:8px;border-left:1px solid var(--border)'}, adv.warn));
@@ -1466,7 +1466,7 @@ function renderStep5(p) {
   ];
   suppChipList.forEach(function(item) {
     // Pregnancy: hide caffeine
-    if (S.pregnant && S.sex === 'femme' && item.id === 'cafeine') return;
+    if (S.pregnant && window.isFemale(S) && item.id === 'cafeine') return;
     var isOn = S.supplements.indexOf(item.id) !== -1;
     suppChipWrap.appendChild(h('span', {'class': 'chip' + (isOn ? ' on' : ''), onclick: function() {
       var idx = S.supplements.indexOf(item.id);
@@ -1476,12 +1476,12 @@ function renderStep5(p) {
     }}, item.name));
   });
   p.appendChild(suppChipWrap);
-  if (S.pregnant && S.sex === 'femme') {
+  if (S.pregnant && window.isFemale(S)) {
     p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);margin-top:6px'}, '\u26A0 Caf\u00e9ine : max 200 mg/jour pendant la grossesse (environ 1 tasse de caf\u00e9)'));
   }
 
   // Divider: Consommation d'alcool
-  if (S.pregnant && S.sex === 'femme') {
+  if (S.pregnant && window.isFemale(S)) {
     // Pregnancy: no alcohol
     var alcPregDiv = h('div', {'class': 'divider', style: 'margin:28px 0 18px'});
     alcPregDiv.appendChild(h('div', {'class': 'divider-line'}));
@@ -1619,7 +1619,7 @@ function renderStep6(p) {
   if (window.TIPS) TIPS.renderTip(p, 'goal');
 
   // Pregnancy: override goal
-  if (S.pregnant && S.sex === 'femme') {
+  if (S.pregnant && window.isFemale(S)) {
     p.appendChild(h('p', {'class': 'subtitle'}, 'Nutrition adapt\u00e9e \u00e0 chaque trimestre de votre grossesse.'));
 
     // Auto-select maintain si objectif actuel est incompatible avec la grossesse (coupe/sèche/masse)
@@ -1703,7 +1703,7 @@ function renderStep6(p) {
   (function() {
     var _goalKey = (S.goal !== null && S.goal !== undefined && GOALS[S.goal]) ? GOALS[S.goal].key : null;
     var _isCutOrShred = _goalKey === 'cut' || _goalKey === 'shred';
-    var _isFemme = S.sex === 'femme';
+    var _isFemme = window.isFemale(S);
     var _lowSleep = S.sleep !== null && S.sleep !== undefined && S.sleep <= 1; // index 0 = <6h, 1 = 6-7h
     var _highActivity = S.activity !== null && S.activity !== undefined && S.activity >= 2;
     // Try window.detectREDS first (covers both sexes, uses EA threshold)
@@ -1832,7 +1832,7 @@ function renderStep6(p) {
         projBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, 'Projection'));
         projBox.appendChild(h('div', {style: 'font-family:Georgia;font-size:24px;font-style:italic'}, '~' + proj.weeks + ' semaines'));
         projBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);margin-top:4px'},
-          proj.months + ' mois \u2014 ' + proj.targetDate.toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'})));
+          proj.months + ' mois \u2014 ' + window.formatDate(proj.targetDate, {day:'numeric',month:'long',year:'numeric'})));
         projBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--ink-300,#A8A8A0);margin-top:4px'},
           (proj.weeklyChange > 0 ? '+' : '') + (proj.weeklyChange || 0).toFixed(2) + ' kg/semaine'));
         p.appendChild(projBox);
@@ -2224,7 +2224,7 @@ function renderStep8(p) {
   })();
   rh.appendChild(h('div', {'class': 'result-rule'}));
   var _ageDisplay = (typeof getAge === 'function' ? getAge() : (S.age || '?'));
-  var _profItems = [S.sex==='homme'?'Homme':'Femme', _ageDisplay+' ans', (window.UNITS ? window.UNITS.displayWeight(S.weight) : S.weight+'kg'), (window.UNITS ? window.UNITS.displayHeight(S.height) : (S.height/100).toFixed(2)+'m')];
+  var _profItems = [window.isMale(S)?'Homme':'Femme', _ageDisplay+' ans', (window.UNITS ? window.UNITS.displayWeight(S.weight) : S.weight+'kg'), (window.UNITS ? window.UNITS.displayHeight(S.height) : (S.height/100).toFixed(2)+'m')];
   if(S.activity!==null&&S.activity!==undefined&&ACTIVITIES[S.activity])_profItems.push(ACTIVITIES[S.activity].name);
   if(S.goal!==null&&S.goal!==undefined&&GOALS[S.goal])_profItems.push(GOALS[S.goal].name);
   rh.appendChild(h('div', {style:'text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);letter-spacing:1px;margin:8px 0'}, _profItems.join(' \u00B7 ')));
@@ -2242,8 +2242,8 @@ function renderStep8(p) {
   }
   if (window.TIPS) {
     TIPS.renderTip(p, 'results');
-    if (S.pregnant && S.sex === 'femme') TIPS.renderTip(p, 'pregnancy');
-    if (S.sex === 'femme' && S.cycleTracking) TIPS.renderTip(p, 'cycle');
+    if (S.pregnant && window.isFemale(S)) TIPS.renderTip(p, 'pregnancy');
+    if (window.isFemale(S) && S.cycleTracking) TIPS.renderTip(p, 'cycle');
   }
 
   // ─── ALERTES MÉDICALES ET SÉCURITÉ ───
@@ -2303,7 +2303,7 @@ function renderStep8(p) {
       sessTitle.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:' + cohBorder}, 'S\u00e9ances musculation — 7 jours'));
       sessTitle.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;color:' + cohBorder}, totalWkKcal + '\u00a0kcal'));
       sessBox.appendChild(sessTitle);
-      sessBox.appendChild(h('div', {style: 'color:var(--grey)'}, weekSess.length + '\u00a0s\u00e9ance' + (weekSess.length > 1 ? 's' : '') + ' valid\u00e9e' + (weekSess.length > 1 ? 's' : '') + ' \u2014 moy. ' + avgPerSess + '\u00a0kcal/s\u00e9ance'));
+      sessBox.appendChild(h('div', {style: 'color:var(--grey)'}, weekSess.length + '\u00a0' + window.locPlural(weekSess.length, {fr:{one:'s\u00e9ance valid\u00e9e',other:'s\u00e9ances valid\u00e9es'},en:{one:'workout completed',other:'workouts completed'}}) + ' \u2014 ' + (window.isEnglish && window.isEnglish() ? 'avg' : 'moy') + '. ' + avgPerSess + '\u00a0kcal/' + (window.isEnglish && window.isEnglish() ? 'workout' : 's\u00e9ance')));
       sessBox.appendChild(h('div', {style: 'color:var(--grey);margin-top:4px;font-style:italic;font-size:9px'}, coherenceOk ? '\u2713 Coh\u00e9rent avec votre facteur d\'activit\u00e9 TDEE' : '\u26a0 D\u00e9calage vs facteur d\'activit\u00e9 s\u00e9lectionn\u00e9 \u2014 pensez \u00e0 mettre \u00e0 jour votre niveau d\'activit\u00e9 dans votre profil'));
       p.appendChild(sessBox);
     }
@@ -2365,8 +2365,8 @@ function renderStep8(p) {
     var _chickenN = Math.ceil(m.p / 50);
     var _tunaN = Math.ceil(m.p / 44);
     var _eqParts = [];
-    if (_chickenN > 0) _eqParts.push(_chickenN + ' escalope' + (_chickenN > 1 ? 's' : '') + ' de poulet');
-    if (_tunaN > 0) _eqParts.push(_tunaN + ' bo\u00eete' + (_tunaN > 1 ? 's' : '') + ' de thon');
+    if (_chickenN > 0) _eqParts.push(_chickenN + ' ' + window.locPlural(_chickenN, {fr:{one:'escalope de poulet',other:'escalopes de poulet'},en:{one:'chicken breast',other:'chicken breasts'}}));
+    if (_tunaN > 0) _eqParts.push(_tunaN + ' ' + window.locPlural(_tunaN, {fr:{one:'bo\u00eete de thon',other:'bo\u00eetes de thon'},en:{one:'can of tuna',other:'cans of tuna'}}));
     if (_eqParts.length > 0) {
       p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin:-4px 0 16px;text-align:center;'},
         '\u2248 ' + _eqParts.join(' \u00b7 ')));
@@ -2397,7 +2397,7 @@ function renderStep8(p) {
   }
 
   // ─── GROSSESSE — Résultats ───
-  if (S.pregnant && S.sex === 'femme') {
+  if (S.pregnant && window.isFemale(S)) {
     var triRes = window.getPregnancyTrimester ? window.getPregnancyTrimester() : null;
     if (triRes) {
       var triResColors = {trimester1: '#E8A87C', trimester2: '#C38D6B', trimester3: '#D4A5A5'};
@@ -2514,7 +2514,7 @@ function renderStep8(p) {
   }
 
   // Cycle menstruel — Phase actuelle
-  if (S.sex === 'femme' && S.cycleTracking) {
+  if (window.isFemale(S) && S.cycleTracking) {
     var cycleInfo = window.getCurrentCyclePhase ? window.getCurrentCyclePhase() : null;
     if (cycleInfo) {
       var phaseColors = {menstruation: 'var(--error,#7A1F1F)', follicular: 'var(--orange-ink,#7A3B0E)', ovulation: 'var(--success,#3E5C3A)', luteal: 'var(--orange-ink,#7A3B0E)'};
@@ -3008,7 +3008,7 @@ function renderStep9(p) {
         S.weekPlanValidated = true;
         if (window.currentISOWeek) S.weekPlanValidatedISOWeek = window.currentISOWeek();
         // Snapshot cycle phase at generation — used to detect phase drift
-        if (S.sex === 'femme' && S.cycleTracking && window.getCurrentCyclePhase) {
+        if (window.isFemale(S) && S.cycleTracking && window.getCurrentCyclePhase) {
           var _cpGen = window.getCurrentCyclePhase();
           if (_cpGen) S._weekPlanCyclePhase = _cpGen.phase.id;
         }
@@ -3093,7 +3093,7 @@ function renderStep9(p) {
       validated.appendChild(h('button', {
         style: 'background:none;border:none;padding:2px 6px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);cursor:pointer;text-decoration:underline;',
         onclick: function() {
-          if (!confirm('Régénérer un nouveau plan ? Votre plan actuel sera remplacé.')) return;
+          if (!(window.sfcConfirm || confirm)('Régénérer un nouveau plan ? Votre plan actuel sera remplacé.')) return;
           try {
             var _wkR = generateWeek();
             if (Array.isArray(_wkR) && _wkR.length === 7) {
@@ -3103,7 +3103,7 @@ function renderStep9(p) {
               if (window.currentISOWeek) S.weekPlanValidatedISOWeek = window.currentISOWeek();
               if (_planHashNow) S._planHash = _planHashNow;
               // Snapshot cycle phase for drift detection
-              if (S.sex === 'femme' && S.cycleTracking && window.getCurrentCyclePhase) {
+              if (window.isFemale(S) && S.cycleTracking && window.getCurrentCyclePhase) {
                 var _cpReg = window.getCurrentCyclePhase();
                 if (_cpReg) S._weekPlanCyclePhase = _cpReg.phase.id;
               }
@@ -3176,7 +3176,7 @@ function renderStep9(p) {
   // Cible calorique : plan du jour si présent, sinon fallback calcTarget()×multiplier
   var _tgt = _planKcal > 0
     ? Math.round(_planKcal)
-    : (calcTarget() || (S.sex === 'femme' ? 1800 : 2000));
+    : (calcTarget() || (window.isFemale(S) ? 1800 : 2000));
   if (_planKcal === 0 && _dayAdapt && _dayAdapt.calMultiplier) {
     _tgt = Math.round(_tgt * _dayAdapt.calMultiplier);
   }
@@ -3656,7 +3656,7 @@ function renderStep9(p) {
     if (timingBadge) mealTypeEl.appendChild(timingBadge);
     card.appendChild(mealTypeEl);
     card.appendChild(h('div', {'class': 'meal-name'}, [h('span', {'class': 'meal-flag'}, r.f || ''), txt(r.n || 'Repas')]));
-    if (r.n === 'Repas libre') {
+    if (window.isFreeMeal ? window.isFreeMeal(r) : (r.n === 'Repas libre')) {
       card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);margin-bottom:4px;'}, '◦ À personnaliser — aucune recette disponible avec vos filtres'));
     }
     card.appendChild(h('div', {'class': 'meal-kcal'}, (r.k || 0) + ' kcal'));
@@ -3680,7 +3680,7 @@ function renderStep9(p) {
       [1, 2, 3].forEach(function(n) {
         var isFilled = _curRating >= n;
         var starBtn = h('span', {
-          'aria-label': 'Favori ' + n + ' étoile' + (n>1?'s':''),
+          'aria-label': (window.isEnglish && window.isEnglish() ? 'Favorite ' : 'Favori ') + n + ' ' + window.locPlural(n, {fr:{one:'étoile',other:'étoiles'},en:{one:'star',other:'stars'}}),
           role: 'button',
           tabindex: '0',
           style: 'cursor:pointer;font-size:18px;line-height:1;padding:2px 3px;transition:all 0.2s ease;' + (isFilled ? 'opacity:1' : 'opacity:0.2'),
@@ -3954,7 +3954,7 @@ function renderStep9(p) {
     'class': 'btn-secondary',
     style: 'width:100%;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);border-color:var(--border,#D8D8D0)',
     onclick: function() {
-      if (!confirm('Refaire le questionnaire nutrition ? Votre plan actuel sera supprimé.')) return;
+      if (!(window.sfcConfirm || confirm)('Refaire le questionnaire nutrition ? Votre plan actuel sera supprimé.')) return;
       S.weekPlan = null;
       S._nm = null;
       S._weekPlanGeneratedAt = null;
@@ -4248,7 +4248,7 @@ function exportDayPDF(dayIdx) {
   var pages = doc.internal.getNumberOfPages();
   for (var i = 1; i <= pages; i++) {
     doc.setPage(i); doc.setFontSize(6); doc.setTextColor(grey[0], grey[1], grey[2]);
-    doc.text('Smart Fit Coach \u2014 g\u00e9n\u00e9r\u00e9 le ' + new Date().toLocaleDateString('fr-FR'), M, 290);
+    doc.text('Smart Fit Coach \u2014 g\u00e9n\u00e9r\u00e9 le ' + window.formatDate(new Date()), M, 290);
     doc.text('Page ' + i + '/' + pages, W - M, 290, {align: 'right'});
   }
   var safeDayName = (DAY_NAMES[dayIdx] || 'jour').toLowerCase()
@@ -5711,7 +5711,7 @@ function renderRecipePicker(p) {
   }
 
   // Result count indicator
-  listWrap.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:10px' }, filtered.length + ' recette' + (filtered.length !== 1 ? 's' : '') + ' trouv\u00e9e' + (filtered.length !== 1 ? 's' : '')));
+  listWrap.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:10px' }, filtered.length + ' ' + window.locPlural(filtered.length, {fr:{one:'recette trouv\u00e9e',other:'recettes trouv\u00e9es'},en:{one:'recipe found',other:'recipes found'}})));
 
   if (!filtered.length) {
     listWrap.appendChild(h('div', { style: 'text-align:center;color:var(--grey,#888);padding:40px 16px;font-size:13px' }, 'Aucune recette trouv\u00e9e.'));
@@ -6003,7 +6003,7 @@ function showSmoothieModal(sm) {
         lv: 1, _id: sm.id, _smoothie: true
       };
       var split = window.getMealSplit ? window.getMealSplit() : null;
-      var totalTarget = (typeof calcTarget === 'function' ? calcTarget() : 0) || window.S.caloriesTarget || (window.S.sex === 'femme' ? 1500 : 1800);
+      var totalTarget = (typeof calcTarget === 'function' ? calcTarget() : 0) || window.S.caloriesTarget || (window.isFemale(window.S) ? 1500 : 1800);
       var snackTargetBefore = split ? Math.round(totalTarget * split.pctSnack) : Math.round(totalTarget * 0.15);
       var delta = sm.cal - snackTargetBefore;
       var dayPlan = S.weekPlan[S.selectedDay];
@@ -6349,7 +6349,7 @@ function exportShoppingListPDF(list, shopChecked) {
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(120);
-  doc.text('Semaine du ' + new Date().toLocaleDateString('fr-FR'), margin, y);
+  doc.text('Semaine du ' + window.formatDate(new Date()), margin, y);
   doc.setTextColor(0);
   y += 10;
 
@@ -6401,7 +6401,7 @@ function exportShoppingListPDF(list, shopChecked) {
   // Note bas de page
   doc.setFontSize(8);
   doc.setTextColor(150);
-  doc.text('Généré par SmartFitCoach — ' + new Date().toLocaleDateString('fr-FR'), margin, 290);
+  doc.text('Généré par SmartFitCoach — ' + window.formatDate(new Date()), margin, 290);
 
   doc.save('liste-courses-smartfitcoach.pdf');
   } catch(e) { console.error('[exportShoppingListPDF] Erreur:', e); if (window.showToast) window.showToast('Erreur lors de la g\u00e9n\u00e9ration du PDF liste', 'error', 3500); }
@@ -6467,7 +6467,7 @@ function renderBodyScan(p) {
     {id: 'heavy',         label: 'Fort',             range: [33, 45],  desc: '33-45% MG', sub: 'Surpoids notable'}
   ];
   // Adjust ranges for women (women carry ~5-8% more essential fat)
-  if (S.sex === 'femme') {
+  if (window.isFemale(S)) {
     _bodyTypes = [
       {id: 'very_lean',     label: 'Tr\u00e8s sec',     range: [14, 18], desc: '14-18% MG', sub: 'Ath\u00e8te de comp\u00e9tition'},
       {id: 'lean',          label: 'Sec',             range: [19, 24], desc: '19-24% MG', sub: 'D\u00e9finition visible'},

@@ -86,7 +86,10 @@ function openScan(mealSlot) {
   // Subtitle
   var sub = document.createElement('div');
   sub.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:20px;letter-spacing:0.3px;';
-  sub.textContent = 'Prenez une photo de votre ' + slotLabel.toLowerCase() + '. Notre IA estimera les calories et macronutriments en quelques secondes.';
+  var _slotLabelEN = (window.trTax ? window.trTax('meal_slots', slotLabel) : slotLabel);
+  sub.textContent = (window.isEnglish && window.isEnglish())
+    ? ('Take a photo of your ' + String(_slotLabelEN || slotLabel).toLowerCase() + '. Our AI will estimate calories and macros in a few seconds.')
+    : ('Prenez une photo de votre ' + slotLabel.toLowerCase() + '. Notre IA estimera les calories et macronutriments en quelques secondes.');
   sheet.appendChild(sub);
 
   // Photo zone

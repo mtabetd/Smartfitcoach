@@ -1,0 +1,252 @@
+{
+  "audit_date": "2026-04-24",
+  "audited_file": "/home/user/Smartfitcoach/app/app-core.js",
+  "dict_location_lines": "2141-2665",
+  "existing_fr_keys_count": 219,
+  "existing_en_keys_count": 219,
+  "keys_perfectly_parallel": true,
+  "missing_en_translations": [],
+  "missing_fr_translations": [],
+  "orphan_keys_used_in_code": [
+    {
+      "key": "coach.disclaimer",
+      "used_in": "/home/user/Smartfitcoach/app/ai-coach.js:477",
+      "fallback_fr": "Coach IA — ne remplace pas l'avis d'un médecin ou professionnel de santé.",
+      "suggested_en": "AI Coach — does not replace medical or healthcare professional advice.",
+      "note": "Used via _t() helper with inline FR fallback; should be added to dict.fr and dict.en"
+    }
+  ],
+  "unused_defined_keys_sample": [
+    "Langue / Language",
+    "auth.error_credentials",
+    "auth.error_email",
+    "auth.rate_limit",
+    "coach.action_copy",
+    "coach.action_not_useful",
+    "coach.action_regenerate",
+    "coach.action_useful",
+    "coach.action_voice",
+    "coach.error_offline",
+    "coach.error_rate_limit",
+    "coach.error_too_long",
+    "coach.toast_copied",
+    "coach.toast_copy_fail",
+    "coach.toast_feedback_saved",
+    "coach.toast_regenerating",
+    "coach.toast_thanks",
+    "coach.toast_voice_denied",
+    "coach.toast_voice_network",
+    "coach.toast_voice_no_mic",
+    "coach.toast_voice_start_error",
+    "coach.toast_voice_unsupported"
+  ],
+  "unused_defined_keys_note": "These keys exist in dict but are not called via window.t() / I18N.t() / _t(). Likely referenced indirectly through the DOM translator (buildMap/translateDOM) or pending integration.",
+  "zones_covered": [
+    "auth",
+    "coach",
+    "common",
+    "dash",
+    "extras",
+    "muscu",
+    "nav",
+    "onb",
+    "onb.s1",
+    "onb.s2",
+    "onb.s3",
+    "onb.s4",
+    "onb.s5",
+    "onb.s6",
+    "onb.s8",
+    "onb.s9",
+    "scan",
+    "shop",
+    "sport"
+  ],
+  "zones_partially_covered": [
+    {
+      "zone": "onb",
+      "note": "Missing step 7 (onb.s7.*) — only steps 1,2,3,4,5,6,8,9 exist."
+    },
+    {
+      "zone": "sport",
+      "note": "Has pain_* and zone_* but no full workout UI, rest-timer prompts, PR/1RM labels, deload, warmup sets, etc."
+    },
+    {
+      "zone": "coach",
+      "note": "Missing coach.disclaimer (orphan), plus no keys for slash-commands / suggestion chips / rating prompts."
+    }
+  ],
+  "zones_not_covered_in_dict": [
+    "toasts (global cross-module toasts)",
+    "confirms (confirmation dialogs)",
+    "alerts (system alerts / banners)",
+    "forms (field validators, placeholders)",
+    "errors (generic error messages beyond auth.* and coach.error_*)",
+    "medical (health conditions list, injuries, contraindications)",
+    "admin (admin panel)",
+    "gamification (badges, streaks, XP, levels)",
+    "social (feed, comments, likes, share)",
+    "notifications (push notifications, reminders)",
+    "premium (paywall, plans, upgrade)",
+    "recipes (recipe cards, filters, steps)",
+    "scanner (detailed scanner copy beyond title/score)",
+    "body (body-analysis, measurements detail)",
+    "pdf (weekly report, export labels)",
+    "settings (lang, units, preferences, account)",
+    "feedback (feedback-widget)",
+    "tips (tips-assistant)",
+    "exercises (exercises-db, gifs, muscle taxonomy)",
+    "programs (muscu/crossfit/calisthenics/triathlon program names + phases)",
+    "nutrition (shopping aisles, food categories beyond shop.*)",
+    "time (dates, days, months, relative time)",
+    "units (weight/height imperial units)",
+    "a11y (aria labels)"
+  ],
+  "naming_pattern": {
+    "format": "dot.notation.snake_case",
+    "structure": "<namespace>.<subsection?>.<key>",
+    "examples": [
+      "auth.error_password_match",
+      "onb.s1.title",
+      "onb.s9.breakfast",
+      "coach.toast_voice_denied",
+      "sport.zone_lower_back"
+    ],
+    "exceptions": [
+      "Single key 'Langue / Language' uses raw string (legacy, to migrate to settings.language)"
+    ],
+    "casing": "snake_case within final segment; onboarding uses sN sub-namespace (s1, s2 ... s9)"
+  },
+  "recommended_new_namespaces": {
+    "toasts": {
+      "purpose": "Global ephemeral notifications",
+      "example_keys": [
+        "toasts.saved",
+        "toasts.deleted",
+        "toasts.copied",
+        "toasts.error_generic",
+        "toasts.offline",
+        "toasts.network_error",
+        "toasts.sync_ok",
+        "toasts.sync_fail"
+      ]
+    },
+    "confirms": {
+      "purpose": "Confirmation dialogs (delete, discard, logout)",
+      "example_keys": [
+        "confirms.delete_item",
+        "confirms.discard_changes",
+        "confirms.logout",
+        "confirms.reset_data",
+        "confirms.cancel_session"
+      ]
+    },
+    "alerts": {
+      "purpose": "Blocking banners / critical messages",
+      "example_keys": [
+        "alerts.offline_mode",
+        "alerts.update_available",
+        "alerts.quota_reached",
+        "alerts.session_expired"
+      ]
+    },
+    "forms": {
+      "purpose": "Placeholders, validation, helper text",
+      "example_keys": [
+        "forms.required",
+        "forms.invalid",
+        "forms.min_length",
+        "forms.placeholder_search"
+      ]
+    },
+    "errors": {
+      "purpose": "Error messages not tied to auth/coach",
+      "example_keys": [
+        "errors.generic",
+        "errors.network",
+        "errors.server",
+        "errors.not_found",
+        "errors.permission_denied"
+      ]
+    },
+    "medical": {
+      "purpose": "Health conditions, injuries, contraindications",
+      "example_keys": [
+        "medical.diabetes",
+        "medical.hypertension",
+        "medical.injury_knee",
+        "medical.disclaimer"
+      ]
+    },
+    "settings": {
+      "purpose": "Language, units, preferences, account",
+      "example_keys": [
+        "settings.language",
+        "settings.units",
+        "settings.weight_unit_kg",
+        "settings.weight_unit_lb",
+        "settings.height_unit_cm",
+        "settings.height_unit_ft",
+        "settings.account",
+        "settings.delete_account"
+      ]
+    },
+    "units": {
+      "purpose": "Imperial + metric unit labels (extends common.*)",
+      "example_keys": [
+        "units.lb",
+        "units.ft",
+        "units.inch",
+        "units.oz",
+        "units.fl_oz"
+      ]
+    },
+    "time": {
+      "purpose": "Days, months, relative time (today / yesterday / X days ago)",
+      "example_keys": [
+        "time.today",
+        "time.yesterday",
+        "time.monday",
+        "time.january",
+        "time.ago",
+        "time.in"
+      ]
+    },
+    "gamification": {
+      "purpose": "Badges, streaks, XP, levels, milestones",
+      "example_keys": [
+        "gam.streak_days",
+        "gam.badge_unlocked",
+        "gam.level_up",
+        "gam.xp_earned"
+      ]
+    },
+    "premium": {
+      "purpose": "Paywall, plans, subscription UI",
+      "example_keys": [
+        "premium.upgrade",
+        "premium.trial",
+        "premium.plan_monthly",
+        "premium.plan_yearly",
+        "premium.benefits"
+      ]
+    },
+    "a11y": {
+      "purpose": "Aria labels for icon-only buttons / screen readers",
+      "example_keys": [
+        "a11y.close",
+        "a11y.back",
+        "a11y.menu",
+        "a11y.loading"
+      ]
+    }
+  },
+  "action_items": [
+    "Add missing 'coach.disclaimer' key in both dict.fr and dict.en (currently orphan with inline fallback in ai-coach.js)",
+    "Extend onboarding dict with onb.s7.* (step 7 exists but no keys)",
+    "Add toasts.* namespace and migrate window.Toast.show(...) hard-coded FR strings",
+    "Add confirms.* namespace and migrate confirm() calls across app-sport.js / app-nutrition.js / today-dashboard.js",
+    "Add settings.* namespace and migrate 'Langue / Language' raw key",
+    "Consider splitting dict out of app-core.js into /app/i18n/fr.json + /app/i18n/en.json for maintainability"
+  ]
+}

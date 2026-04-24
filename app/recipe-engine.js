@@ -29807,19 +29807,19 @@
     if (n.indexOf('blanc') >= 0 && (n.indexOf('uf') >= 0 || n.indexOf('oeuf') >= 0 || n.indexOf('œuf') >= 0)) {
       if (u === 'g') {
         var blancs = Math.round(q / 30);
-        if (blancs >= 1) return { qty: blancs, unit: blancs > 1 ? 'blancs' : 'blanc' };
+        if (blancs >= 1) return { qty: blancs, unit: window.locPlural(blancs, {fr:{one:'blanc',other:'blancs'},en:{one:'egg white',other:'egg whites'}}) };
       }
     }
     if (n.indexOf('jaune') >= 0 && (n.indexOf('uf') >= 0 || n.indexOf('oeuf') >= 0 || n.indexOf('œuf') >= 0)) {
       if (u === 'g') {
         var jaunes = Math.round(q / 20);
-        if (jaunes >= 1) return { qty: jaunes, unit: jaunes > 1 ? 'jaunes' : 'jaune' };
+        if (jaunes >= 1) return { qty: jaunes, unit: window.locPlural(jaunes, {fr:{one:'jaune',other:'jaunes'},en:{one:'egg yolk',other:'egg yolks'}}) };
       }
     }
     if ((n.indexOf('oeuf') >= 0 || n.indexOf('œuf') >= 0) && n.indexOf('blanc') < 0 && n.indexOf('jaune') < 0) {
       if (u === 'g') {
         var oeufs = Math.round(q / 50);
-        if (oeufs >= 1) return { qty: oeufs, unit: oeufs > 1 ? 'œufs' : 'œuf' };
+        if (oeufs >= 1) return { qty: oeufs, unit: window.locPlural(oeufs, {fr:{one:'œuf',other:'œufs'},en:{one:'egg',other:'eggs'}}) };
       }
     }
 
@@ -29840,12 +29840,12 @@
         // Générique : multiples de 15
         if (q > 0 && q % 15 === 0) {
           var tbsp = q / 15;
-          return { qty: tbsp, unit: tbsp > 1 ? 'c.à.soupe' : 'c.à.soupe' };
+          return { qty: tbsp, unit: window.locPlural(tbsp, {fr:{one:'c.à.soupe',other:'c.à.soupe'},en:{one:'tbsp',other:'tbsp'}}) };
         }
         // Petites quantités : multiples de 5
         if (q > 0 && q <= 20 && q % 5 === 0) {
           var tsp = q / 5;
-          return { qty: tsp, unit: tsp > 1 ? 'c.à.café' : 'c.à.café' };
+          return { qty: tsp, unit: window.locPlural(tsp, {fr:{one:'c.à.café',other:'c.à.café'},en:{one:'tsp',other:'tsp'}}) };
         }
       }
     }
@@ -29912,7 +29912,7 @@
     }
     if ((n.indexOf('ail') >= 0) && n.indexOf('poudre') < 0 && u === 'g') {
       var gousses = Math.round(q / 5);
-      if (gousses >= 1) return { qty: gousses, unit: gousses > 1 ? 'gousses' : 'gousse' };
+      if (gousses >= 1) return { qty: gousses, unit: window.locPlural(gousses, {fr:{one:'gousse',other:'gousses'},en:{one:'clove',other:'cloves'}}) };
     }
     if (n.indexOf('oignon') >= 0 && n.indexOf('poudre') < 0 && u === 'g') {
       if (Math.round(q) === 100) return { qty: 1,   unit: 'oignon moyen' };
@@ -30462,7 +30462,7 @@
       else if (/pois chiche|haricots?\s+(rouge|blanc|noir|mungo)/i.test(lname2)) canSize = 400;
       else if (/lentilles/i.test(lname2))                                     canSize = 400;
       var cans2 = Math.max(1, Math.ceil(inG / canSize));
-      return { qty: cans2, unit: cans2 === 1 ? 'boîte' : 'boîtes' };
+      return { qty: cans2, unit: window.locPlural(cans2, {fr:{one:'boîte',other:'boîtes'},en:{one:'can',other:'cans'}}) };
     }
 
     // Produits laitiers solides (hors lait géré côté liquide)

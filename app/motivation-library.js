@@ -277,27 +277,61 @@
     var pickedText = null;
     var source = 'weekday';
 
+    // Locale-aware pool selection: if EN is active and the external dict is loaded,
+    // use English pools from /i18n/motivations-en.json. Fallback to FR pools.
+    var _enDict = null;
+    try {
+      if (window.isEnglish && window.isEnglish() &&
+          window._extI18N && window._extI18N.motivations) {
+        _enDict = window._extI18N.motivations;
+      }
+    } catch(e) {}
+
+    var DAY_KEYS = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+    var byWeekday = BY_WEEKDAY;
+    var trainingDay = TRAINING_DAY;
+    var restDay = REST_DAY;
+    var streakMilestones = STREAK_MILESTONES;
+    if (_enDict) {
+      byWeekday = {};
+      for (var _i = 0; _i < 7; _i++) {
+        var _arr = _enDict[DAY_KEYS[_i]];
+        byWeekday[_i] = (Array.isArray(_arr) && _arr.length) ? _arr : BY_WEEKDAY[_i];
+      }
+      if (Array.isArray(_enDict.training_day) && _enDict.training_day.length) trainingDay = _enDict.training_day;
+      if (Array.isArray(_enDict.rest_day)     && _enDict.rest_day.length)     restDay     = _enDict.rest_day;
+      if (_enDict.streaks && typeof _enDict.streaks === 'object') {
+        streakMilestones = {};
+        for (var _k in _enDict.streaks) {
+          if (_enDict.streaks.hasOwnProperty(_k)) {
+            var _v = _enDict.streaks[_k];
+            streakMilestones[_k] = Array.isArray(_v) ? _v : [String(_v)];
+          }
+        }
+      }
+    }
+
     // 1. Milestone streak prioritaire
-    if (streak > 0 && STREAK_MILESTONES[streak] && STREAK_MILESTONES[streak].length) {
-      pickedText = STREAK_MILESTONES[streak][seed % STREAK_MILESTONES[streak].length];
+    if (streak > 0 && streakMilestones[streak] && streakMilestones[streak].length) {
+      pickedText = streakMilestones[streak][seed % streakMilestones[streak].length];
       source = 'streak-' + streak;
     }
 
     // 2. Boost training day (env. 1 fois sur 3)
-    if (!pickedText && isTraining && seed % 3 === 0 && TRAINING_DAY.length) {
-      pickedText = TRAINING_DAY[seed % TRAINING_DAY.length];
+    if (!pickedText && isTraining && seed % 3 === 0 && trainingDay.length) {
+      pickedText = trainingDay[seed % trainingDay.length];
       source = 'training';
     }
 
     // 3. Boost rest day (env. 1 fois sur 3)
-    if (!pickedText && isRest && seed % 3 === 0 && REST_DAY.length) {
-      pickedText = REST_DAY[seed % REST_DAY.length];
+    if (!pickedText && isRest && seed % 3 === 0 && restDay.length) {
+      pickedText = restDay[seed % restDay.length];
       source = 'rest';
     }
 
     // 4. Rotation weekday (défaut)
     if (!pickedText) {
-      var pool = BY_WEEKDAY[weekday] || BY_WEEKDAY[1];
+      var pool = byWeekday[weekday] || byWeekday[1];
       pickedText = pool[seed % pool.length];
       source = 'weekday-' + weekday;
     }

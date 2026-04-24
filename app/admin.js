@@ -193,7 +193,7 @@ function renderUsers(users) {
     tbody.appendChild(tr);
   });
 
-  document.getElementById('user-count').textContent = users.length + ' utilisateur' + (users.length > 1 ? 's' : '');
+  document.getElementById('user-count').textContent = users.length + ' ' + window.locPlural(users.length, {fr:{one:'utilisateur',other:'utilisateurs'},en:{one:'user',other:'users'}});
 
   // Stats block: all values are trusted integers, safe to inline.
   document.getElementById('stats').innerHTML =

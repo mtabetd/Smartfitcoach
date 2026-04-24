@@ -575,7 +575,7 @@ function _fallbackLogin(email, password, startTime) {
       var attemptsLeft = Math.max(0, MAX_ATTEMPTS - rlAfter.attempts);
       var errMsg = 'Email ou mot de passe incorrect';
       if (attemptsLeft > 0 && attemptsLeft <= 2) {
-        errMsg += ' (' + attemptsLeft + ' tentative' + (attemptsLeft > 1 ? 's' : '') + ' restante' + (attemptsLeft > 1 ? 's' : '') + ')';
+        errMsg += ' (' + attemptsLeft + ' ' + window.locPlural(attemptsLeft, {fr:{one:'tentative restante',other:'tentatives restantes'},en:{one:'attempt left',other:'attempts left'}}) + ')';
       }
       return { ok: false, error: errMsg };
     }
@@ -769,7 +769,7 @@ window.AUTH = {
     var rl = checkRateLimit(email);
     if (rl.blocked) {
       var mins = Math.ceil(rl.remaining / 60);
-      return Promise.resolve({ ok: false, error: 'Trop de tentatives. R\u00e9essayez dans ' + mins + ' minute' + (mins > 1 ? 's' : '') + '.' });
+      return Promise.resolve({ ok: false, error: (window.isEnglish && window.isEnglish()) ? 'Too many attempts. Try again in ' + mins + ' ' + window.locPlural(mins, {fr:{one:'minute',other:'minutes'},en:{one:'minute',other:'minutes'}}) + '.' : 'Trop de tentatives. R\u00e9essayez dans ' + mins + ' ' + window.locPlural(mins, {fr:{one:'minute',other:'minutes'},en:{one:'minute',other:'minutes'}}) + '.' });
     }
 
     // Tenter Supabase
@@ -808,7 +808,7 @@ window.AUTH = {
           var attemptsLeft = Math.max(0, MAX_ATTEMPTS - rlAfter.attempts);
           var errMsg = mapSupabaseError(result.error);
           if (attemptsLeft > 0 && attemptsLeft <= 2) {
-            errMsg += ' (' + attemptsLeft + ' tentative' + (attemptsLeft > 1 ? 's' : '') + ' restante' + (attemptsLeft > 1 ? 's' : '') + ')';
+            errMsg += ' (' + attemptsLeft + ' ' + window.locPlural(attemptsLeft, {fr:{one:'tentative restante',other:'tentatives restantes'},en:{one:'attempt left',other:'attempts left'}}) + ')';
           }
           return { ok: false, error: errMsg };
         }

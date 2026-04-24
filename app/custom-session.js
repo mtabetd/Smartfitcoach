@@ -650,8 +650,8 @@ function _csRenderBuild(container, draft) {
   var _subtitleText = draft.blocks.length === 0
     ? 'Recherchez un exercice ou ajoutez un bloc cardio.'
     : _genGroups
-      ? draft.blocks.length + ' exercice' + (draft.blocks.length > 1 ? 's' : '') + ' suggérés · Modifiez librement avant de démarrer.'
-      : draft.blocks.length + ' bloc' + (draft.blocks.length > 1 ? 's' : '') + ' · Appuyez sur Démarrer quand vous êtes prêt.';
+      ? draft.blocks.length + ' ' + window.locPlural(draft.blocks.length, {fr:{one:'exercice suggéré',other:'exercices suggérés'},en:{one:'suggested exercise',other:'suggested exercises'}}) + (window.isEnglish && window.isEnglish() ? ' · Edit freely before starting.' : ' · Modifiez librement avant de démarrer.')
+      : draft.blocks.length + ' ' + window.locPlural(draft.blocks.length, {fr:{one:'bloc',other:'blocs'},en:{one:'block',other:'blocks'}}) + (window.isEnglish && window.isEnglish() ? ' · Tap Start when ready.' : ' · Appuyez sur Démarrer quand vous êtes prêt.');
   hdr.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);'
   }, _subtitleText));
@@ -953,7 +953,7 @@ function _csRenderActive(container, draft) {
   container.appendChild(h('button', {
     style: 'display:block;width:100%;padding:10px;margin-top:8px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;color:var(--grey,#6B6B65);',
     onclick: function() {
-      if (!confirm('Abandonner la séance ? Les séries validées sont conservées.')) return;
+      if (!(window.sfcConfirm ? window.sfcConfirm('Abandonner la séance ? Les séries validées sont conservées.') : confirm('Abandonner la séance ? Les séries validées sont conservées.'))) return;
       if (window._csChronoInterval) { clearInterval(window._csChronoInterval); window._csChronoInterval = null; }
       var elapsed2 = draft.startTime ? Math.max(1, Math.round((Date.now() - draft.startTime) / 60000)) : 5;
       window.CUSTOM_SESSION.finishSession(elapsed2);
@@ -1196,7 +1196,7 @@ function _csRenderDraftBlock(block) {
     }
 
     // ── charge cible ──
-    var _bwBlock = block.eq === 'Poids du corps';
+    var _bwBlock = window.isBodyweightExercise ? window.isBodyweightExercise(block) : (block.eq === 'Poids du corps');
     var wtRow = h('div', { style: 'padding:9px 12px;border-top:1px solid var(--border,#D8D8D0);display:flex;align-items:center;gap:8px;' });
     wtRow.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);min-width:80px;' }, _bwBlock ? 'Lest (opt.)' : 'Charge cible'));
     var wInp = h('input', {
@@ -1330,7 +1330,7 @@ function _csRenderActiveSet(block, set, si) {
       (set.validated ? 'background:var(--green,#3E5C3A);color:#fff;' : 'background:var(--border,#D8D8D0);color:var(--black,#0A0A09);')
   }, set.validated ? '✓' : String(si + 1)));
 
-  var _isBodyweight = block.eq === 'Poids du corps';
+  var _isBodyweight = window.isBodyweightExercise ? window.isBodyweightExercise(block) : (block.eq === 'Poids du corps');
   var wInp2 = h('input', {
     type: 'number', step: '0.5', min: '0', max: '500', inputmode: 'decimal',
     value: (set.weight !== null && set.weight !== undefined && set.weight !== '') ? String(set.weight) : (block.targetWeight != null ? String(block.targetWeight) : ''),

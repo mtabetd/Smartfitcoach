@@ -94,7 +94,7 @@ function timeAgo(iso){
   if (diff < 3600) return 'il y a ' + Math.floor(diff/60) + ' min';
   if (diff < 86400) return 'il y a ' + Math.floor(diff/3600) + ' h';
   if (diff < 604800) return 'il y a ' + Math.floor(diff/86400) + ' j';
-  try { return new Date(iso).toLocaleDateString('fr-FR', {day:'2-digit', month:'short'}); }
+  try { return window.formatDate(iso, {day:'2-digit', month:'short'}); }
   catch(e){ return ''; }
 }
 
@@ -585,7 +585,7 @@ function renderSocialHub(container){
   }, _myProfile.pseudo));
   hMeta.appendChild(_h('div', {
     style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:2px'
-  }, _friends.length + ' ami' + (_friends.length>1?'s':'') + (_pendingIn.length ? ' · ' + _pendingIn.length + ' demande'+(_pendingIn.length>1?'s':'') : '')));
+  }, _friends.length + ' ' + window.locPlural(_friends.length, {fr:{one:'ami',other:'amis'},en:{one:'friend',other:'friends'}}) + (_pendingIn.length ? ' · ' + _pendingIn.length + ' ' + window.locPlural(_pendingIn.length, {fr:{one:'demande',other:'demandes'},en:{one:'request',other:'requests'}}) : '')));
   header.appendChild(hMeta);
 
   var settingsBtn = _h('button', {
@@ -690,7 +690,7 @@ function _postCard(post){
       'aria-label':'Supprimer',
       style:'background:none;border:none;color:var(--grey3);cursor:pointer;font-size:16px;padding:4px 8px',
       onclick: async function(){
-        if (!confirm('Supprimer ce post ?')) return;
+        if (!(window.sfcConfirm || confirm)('Supprimer ce post ?')) return;
         try { await deletePost(post.id); _toast('Supprimé', 'success'); await loadFeed(); window.render(); }
         catch(e){ _toast('Erreur de suppression', 'error'); }
       }
@@ -791,7 +791,7 @@ function _renderCommentsBox(box, post, comments){
           style:'background:none;border:none;color:var(--grey3);cursor:pointer;font-size:14px;padding:0 4px',
           'aria-label':'Supprimer',
           onclick: async function(){
-            if (!confirm('Supprimer ce commentaire ?')) return;
+            if (!(window.sfcConfirm || confirm)('Supprimer ce commentaire ?')) return;
             try { await deleteComment(c.id); row.style.display = 'none'; } catch(e){ _toast('Erreur', 'error'); }
           }
         }, '×');
@@ -1003,24 +1003,24 @@ function _friendRow(f, kind){
       catch(e){ _toast('Erreur', 'error'); }
     }, 'primary'));
     actions.appendChild(_act('Refuser', async function(){
-      if (!confirm('Refuser la demande de ' + f.pseudo + ' ?')) return;
+      if (!(window.sfcConfirm || confirm)((window.isEnglish && window.isEnglish()) ? ('Decline request from ' + f.pseudo + '?') : ('Refuser la demande de ' + f.pseudo + ' ?'))) return;
       try { await declineFriendRequest(f._fsId); await loadFriendships(); window.render(); }
       catch(e){ _toast('Erreur', 'error'); }
     }));
   } else if (kind === 'outgoing'){
     actions.appendChild(_act('Annuler', async function(){
-      if (!confirm('Annuler la demande ?')) return;
+      if (!(window.sfcConfirm || confirm)('Annuler la demande ?')) return;
       try { await cancelFriendRequest(f._fsId); await loadFriendships(); window.render(); }
       catch(e){ _toast('Erreur', 'error'); }
     }));
   } else { // friend
     actions.appendChild(_act('Retirer', async function(){
-      if (!confirm('Retirer ' + f.pseudo + ' de vos amis ?')) return;
+      if (!(window.sfcConfirm || confirm)((window.isEnglish && window.isEnglish()) ? ('Remove ' + f.pseudo + ' from your friends?') : ('Retirer ' + f.pseudo + ' de vos amis ?'))) return;
       try { await removeFriend(f._fsId); _toast('Ami retiré'); await loadFriendships(); window.render(); }
       catch(e){ _toast('Erreur', 'error'); }
     }));
     actions.appendChild(_act('Bloquer', async function(){
-      if (!confirm('Bloquer ' + f.pseudo + ' ? Cette personne ne pourra plus vous contacter.')) return;
+      if (!(window.sfcConfirm || confirm)((window.isEnglish && window.isEnglish()) ? ('Block ' + f.pseudo + '? This person will no longer be able to contact you.') : ('Bloquer ' + f.pseudo + ' ? Cette personne ne pourra plus vous contacter.'))) return;
       try { await blockUser(f.id); _toast('Utilisateur bloqué', 'success'); await loadFriendships(); window.render(); }
       catch(e){ _toast('Erreur de blocage', 'error'); }
     }));

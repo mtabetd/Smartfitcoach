@@ -281,7 +281,7 @@ function filterExerciseByMedical(ex, med) {
 // 150 min/semaine d'activité modérée recommandées (ACOG 2020, OMS 2020).
 function getPregnancySportWarning() {
  var s = window.S;
- if (!s || !s.pregnant || s.sex !== 'femme') return null;
+ if (!s || !s.pregnant || !window.isFemale(s)) return null;
  var week = s.pregnancyWeek || 0;
  if (week < 14) {
  // T1 : nausées, fatigue → intensité réduite, pas de sur-échauffement
@@ -618,7 +618,7 @@ function generateSportProgram() {
  var pregTri = null;
  var pregForbidden = [];
  var pregIntensityFactor = 1.0;
- if (S.pregnant && S.sex === 'femme' && window.getPregnancyTrimester) {
+ if (S.pregnant && window.isFemale(S) && window.getPregnancyTrimester) {
  pregTri = window.getPregnancyTrimester();
  if (pregTri && pregTri.trimester) {
  pregForbidden = pregTri.trimester.forbiddenExercises || [];
@@ -628,7 +628,7 @@ function generateSportProgram() {
  // Cycle phase: get intensity factor for menstrual cycle phase (non-pregnant women)
  var cycleIntensityFactor = 1.0;
  var cyclePhaseInfo = null;
- if (!S.pregnant && S.sex === 'femme' && S.cycleTracking && window.getCurrentCyclePhase) {
+ if (!S.pregnant && window.isFemale(S) && S.cycleTracking && window.getCurrentCyclePhase) {
  cyclePhaseInfo = window.getCurrentCyclePhase();
  if (cyclePhaseInfo && cyclePhaseInfo.phase && cyclePhaseInfo.phase.intensityFactor) {
  cycleIntensityFactor = cyclePhaseInfo.phase.intensityFactor;
@@ -1601,7 +1601,7 @@ function renderObjectif(p) {
   if (S.sportType || (Array.isArray(S.sportProgram) && S.sportProgram.length > 0)) return;
   var _rGoalKey = (S.goal !== null && window.GOALS && window.GOALS[S.goal]) ? window.GOALS[S.goal].key : '';
   var _rAge = typeof getAge === 'function' ? getAge() : (S.age || 0);
-  var _isFemale = S.sex === 'femme';
+  var _isFemale = window.isFemale(S);
 
   // Matrice de recommandation
   var _rec = null;
@@ -1720,7 +1720,7 @@ function renderObjectif(p) {
  // Cross Training - clicking goes through PAR-Q (if not done), then CF level (step 5)
  // FIX SÉCURITÉ 2026-04 — Bloquer CrossFit pour HTA sévère, cardiopathie et grossesse T3
  var _cfCardio = Array.isArray(S.medical) && (S.medical.indexOf('cardio') !== -1 || S.medical.indexOf('insuffisance_card') !== -1);
- var _cfBlocked = (Array.isArray(S.medical) && S.medical.indexOf('hta_severe') !== -1) || _cfCardio || (S.pregnant && S.sex === 'femme' && typeof S.pregnancyWeek === 'number' && S.pregnancyWeek >= 28);
+ var _cfBlocked = (Array.isArray(S.medical) && S.medical.indexOf('hta_severe') !== -1) || _cfCardio || (S.pregnant && window.isFemale(S) && typeof S.pregnancyWeek === 'number' && S.pregnancyWeek >= 28);
  var _cfBlockReason = _cfBlocked ? (S.pregnant ? 'Contre-indiqué pendant le 3e trimestre (ACOG 2020)' : _cfCardio ? 'Contre-indiqué en cas de cardiopathie (AHA 2018)' : 'Contre-indiqué avec HTA sévère (ESC/ESH 2018)') : '';
  typeGrid.appendChild(h('div', {'class': 'sel-card' + (_cfBlocked ? ' disabled' : ''), style:'cursor:' + (_cfBlocked ? 'not-allowed' : 'pointer') + ';' + (_cfBlocked ? 'opacity:0.35;pointer-events:none;' : ''), onclick: _cfBlocked ? null : function(){
  S.sportType = 'crossfit';
@@ -1965,7 +1965,7 @@ function renderPARQ(p) {
   { id: 'jointIssue',   text: 'Avez-vous un problème osseux ou articulaire aggravé par l\'exercice ?' },
   { id: 'pregnant',     text: 'Êtes-vous enceinte ou avez-vous accouché il y a moins de 6 semaines ?', femmeOnly: true },
   { id: 'otherReason',  text: 'Avez-vous une autre raison médicale de ne pas faire d\'activité physique ?' }
- ].filter(function(q) { return !q.femmeOnly || S.sex === 'femme'; });
+ ].filter(function(q) { return !q.femmeOnly || window.isFemale(S); });
 
  var _hasYes = PARQ_QUESTIONS.some(function(q) { return S._parqAnswers[q.id] === true; });
  var _allAnswered = PARQ_QUESTIONS.every(function(q) { return S._parqAnswers[q.id] === true || S._parqAnswers[q.id] === false; });
@@ -2025,7 +2025,7 @@ function renderPARQ(p) {
   p.appendChild(warnDiv);
 
   var docBtn = h('button', {'class': 'btn-primary', onclick: function() {
-   if (S._parqAnswers.pregnant === true && S.sex === 'femme') S.pregnant = true;
+   if (S._parqAnswers.pregnant === true && window.isFemale(S)) S.pregnant = true;
    S.parqDone = true;
    S.parqResult = 'medical_cleared';
    S._parqAnswers = {};
@@ -2040,7 +2040,7 @@ function renderPARQ(p) {
   var overrideBtn = h('button', {
    style: 'display:block;width:100%;margin-top:10px;padding:12px;border:1px solid var(--border,#E8E6DF);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);cursor:pointer;border-radius:2px;text-align:center',
    onclick: function() {
-    if (S._parqAnswers.pregnant === true && S.sex === 'femme') S.pregnant = true;
+    if (S._parqAnswers.pregnant === true && window.isFemale(S)) S.pregnant = true;
     S.parqDone = true;
     S.parqResult = 'user_override';
     S._parqAnswers = {};
@@ -2302,7 +2302,7 @@ function renderChargesQuestionnaire(p) {
  h('div', {style: 'color:var(--grey,#6B6B65)'}, 'Échauffement prolongé 15-20 min (vs 5-10 min standard). Décharge toutes les 4-5 semaines (vs 6 semaines). Préférez machines guidées aux barres libres pour les charges maximales. Récupération inter-séance 48-72h minimum. Contrôle médical annuel conseillé.')
  ]));
  }
- if (S.pregnant && S.sex === 'femme') {
+ if (S.pregnant && window.isFemale(S)) {
  p.appendChild(h('div', {style: 'background:rgba(122,31,31,0.06);border:1px solid var(--error,#7A1F1F);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;line-height:1.6'}, [
  h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--error,#7A1F1F);margin-bottom:6px'}, 'Grossesse — Exercices autorisés seulement'),
  h('div', {style: 'color:var(--grey,#6B6B65)'}, 'Évitez les charges lourdes, exercices allongés sur le dos (après 20 SA), abdominaux hyperpressifs, sauts et HIIT intense. Privilégiez marche, natation, yoga prénatal, Kegel. Consultez votre médecin avant tout entraînement.')
@@ -2395,7 +2395,7 @@ function renderChargesQuestionnaire(p) {
  // ─── STRENGTH LEADERBOARD PERSO ───
  (function() {
    var _bw = S.weight || 75;
-   var _sex = S.sex === 'femme' ? 'f' : 'm';
+   var _sex = window.isFemale(S) ? 'f' : 'm';
    // Percentile thresholds [ratio×BW] by sex for Bench/Squat/Deadlift
    // Sources: Symmetric Strength population data (general gym population)
    var _thresholds = {
@@ -2462,7 +2462,7 @@ function renderChargesQuestionnaire(p) {
    var _bench1rm = _est1rm('bench_press');
    var _squat1rm = _est1rm('squat');
    var _dl1rm = _est1rm('deadlift');
-   var _isFemme = S.sex === 'femme';
+   var _isFemme = window.isFemale(S);
    var _advExercises = [
      { name: 'Développé couché pause-reps', unlock: _bench1rm >= (_isFemme ? 0.5 : 0.8) * _bw, req: (_isFemme ? '0.5' : '0.8') + '× PC bench', desc: 'Pause 2s en bas pour éliminer l\'élan — force pure.' },
      { name: 'Squat tempo 3-1-3', unlock: _squat1rm >= (_isFemme ? 0.7 : 1.0) * _bw, req: (_isFemme ? '0.7' : '1.0') + '× PC squat', desc: '3s descente, 1s pause, 3s montée — contrôle maximal.' },
@@ -2749,7 +2749,7 @@ function renderDedicatedPrograms(p) {
 
 function syncSportGoalsToNutrition() {
  if (S.goal === null) return; // only sync if nutrition was filled first
- if (S.pregnant && S.sex === 'femme') return; // ÉLEVÉ-4: grossesse → ne pas écraser le maintien forcé
+ if (S.pregnant && window.isFemale(S)) return; // ÉLEVÉ-4: grossesse → ne pas écraser le maintien forcé
  // GOALS: [0=bulk, 1=lean_bulk, 2=maintain, 3=cut, 4=shred, 5=recomposition]
  var _sgls = S.sportGoals || [];
  if (_sgls.length === 0) { S.goal = 2; return; } // désélection totale → reset maintien
@@ -2841,7 +2841,7 @@ function renderCrossfitLevel(p) {
  p.appendChild(h('p', {'class': 'subtitle'}, 'Sélectionnez votre niveau pour adapter les charges et mouvements.'));
 
  if (S.sex) {
- p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:16px'}, 'Charges adaptées pour : ' + (S.sex === 'homme' ? 'Homme' : 'Femme')));
+ p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:16px'}, 'Charges adaptées pour : ' + (window.isMale(S) ? 'Homme' : 'Femme')));
  }
 
  p.appendChild(h('div', {'class': 'section-label'}, 'Niveau (obligatoire)'));
@@ -2944,9 +2944,9 @@ function renderCrossfitLevel(p) {
  var hintColor = diff === 0 ? 'var(--ink-500,#6B6B65)' : (diff > 0 ? 'var(--error,#7A1F1F)' : 'var(--orange-ink,#7A3B0E)');
  var hintText = selCount === 0
    ? 'Aucun jour sélectionné — répartition automatique'
-   : diff === 0 ? selCount + ' / ' + _selTarget + ' jour' + (selCount > 1 ? 's' : '') + ' — parfait'
-   : diff > 0 ? selCount + ' / ' + _selTarget + ' — retirez ' + diff + ' jour' + (diff > 1 ? 's' : '')
-   : selCount + ' / ' + _selTarget + ' — sélectionnez encore ' + Math.abs(diff) + ' jour' + (Math.abs(diff) > 1 ? 's' : '');
+   : diff === 0 ? selCount + ' / ' + _selTarget + ' ' + window.locPlural(selCount, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + ' — parfait'
+   : diff > 0 ? selCount + ' / ' + _selTarget + ' — retirez ' + diff + ' ' + window.locPlural(diff, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}})
+   : selCount + ' / ' + _selTarget + ' — sélectionnez encore ' + Math.abs(diff) + ' ' + window.locPlural(Math.abs(diff), {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}});
  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + hintColor + ';text-align:center;margin-bottom:4px;letter-spacing:.5px;transition:color .2s'}, hintText));
 
  // Recommendation based on level
@@ -3125,7 +3125,7 @@ function getCFLevelIdx() {
 }
 
 function getCFSexKey() {
- return S.sex === 'homme' ? 'm' : 'f';
+ return window.isMale(S) ? 'm' : 'f';
 }
 
 function formatCFMovement(mov) {
@@ -3830,7 +3830,7 @@ window.getWellnessAdaptation = getWellnessAdaptation;
 // Un user avec cardiopathie recevait des intervals Z4-Z5, une femme enceinte du Hyrox.
 function appendSportMedicalBanner(p, sportName) {
   // ── GROSSESSE ──
-  if (S.pregnant && S.sex === 'femme' && !S._sportMedPregShown) {
+  if (S.pregnant && window.isFemale(S) && !S._sportMedPregShown) {
     var _pw = window.getPregnancySportWarning ? window.getPregnancySportWarning() : null;
     var _pwC = h('div', {style: 'border-left:3px solid #FF6B6B;background:#FFF3CD;padding:12px 16px;margin-bottom:12px'});
     _pwC.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#C00;margin-bottom:6px'}, 'Grossesse \u2014 Adaptations obligatoires'));
@@ -4148,7 +4148,7 @@ function renderCrossfitProgram(p) {
  appendWellnessBanner(p);
 
  // ─── AVERTISSEMENT GROSSESSE (CrossFit) ───
- if (S.pregnant && S.sex === 'femme') {
+ if (S.pregnant && window.isFemale(S)) {
    var _pregWarn = window.getPregnancySportWarning ? window.getPregnancySportWarning() : null;
    var _pwCard = h('div', {style: 'border-left:3px solid #FF6B6B;background:#FFF3CD;padding:12px 16px;margin-bottom:16px'});
    _pwCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#C00;margin-bottom:6px'}, 'Grossesse \u2014 Adaptations obligatoires'));
@@ -5068,9 +5068,9 @@ function renderMusculationLevel(p) {
  var _mColor = _mDiff === 0 && _mCount > 0 ? 'var(--ink-500,#6B6B65)' : (_mDiff > 0 ? 'var(--error,#7A1F1F)' : 'var(--ink-500,#6B6B65)');
  var _mHint = _mCount === 0
    ? 'Optionnel \u2014 laissez vide pour r\u00e9partition automatique'
-   : _mDiff === 0 ? _mCount + '\u00a0/' + '\u00a0' + _musTarget + '\u00a0jour' + (_mCount > 1 ? 's' : '') + '\u00a0\u2014 parfait'
-   : _mDiff > 0 ? _mCount + '\u00a0/\u00a0' + _musTarget + '\u00a0\u2014 retirez\u00a0' + _mDiff + '\u00a0jour' + (_mDiff > 1 ? 's' : '')
-   : _mCount + '\u00a0/\u00a0' + _musTarget + '\u00a0\u2014 s\u00e9lectionnez encore\u00a0' + Math.abs(_mDiff) + '\u00a0jour' + (Math.abs(_mDiff) > 1 ? 's' : '');
+   : _mDiff === 0 ? _mCount + '\u00a0/' + '\u00a0' + _musTarget + '\u00a0' + window.locPlural(_mCount, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + '\u00a0\u2014 parfait'
+   : _mDiff > 0 ? _mCount + '\u00a0/\u00a0' + _musTarget + '\u00a0\u2014 retirez\u00a0' + _mDiff + '\u00a0' + window.locPlural(_mDiff, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}})
+   : _mCount + '\u00a0/\u00a0' + _musTarget + '\u00a0\u2014 s\u00e9lectionnez encore\u00a0' + Math.abs(_mDiff) + '\u00a0' + window.locPlural(Math.abs(_mDiff), {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}});
  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + _mColor + ';text-align:center;margin-bottom:4px;transition:color .2s;'}, _mHint));
 
  // Equipment selection
@@ -6409,7 +6409,7 @@ function calcSessionKcal(exercises, durationMin) {
  var s = window.S;
  var weight = s.weight || 75;
  var age = getAge() || 30;
- var sex = (s.sex === 'femme') ? 'femme' : 'homme';
+ var sex = window.isFemale(s) ? 'femme' : 'homme';
  // Phase courante → RPE
  var phase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(s.muscuWeek || 1) : null;
  var rpe = phase ? phase.rpe : 7;
@@ -6471,7 +6471,7 @@ function renderMusculationProgram(p) {
      && !(Array.isArray(S.sportProgram) && S.sportProgram.length > 0 && S.sportProgramValidated)) {
    p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
    p.appendChild(h('h1', {html: 'Votre programme<br><em>sur mesure</em>'}));
-   var _iaDateStr = S.muscuIAProgramDate ? new Date(S.muscuIAProgramDate).toLocaleDateString('fr-FR') : '';
+   var _iaDateStr = S.muscuIAProgramDate ? window.formatDate(S.muscuIAProgramDate) : '';
    if (_iaDateStr) p.appendChild(h('p', {'class': 'subtitle'}, 'G\u00e9n\u00e9r\u00e9 le ' + _iaDateStr));
 
    // Conteneur du programme IA parsé
@@ -6681,7 +6681,7 @@ function renderMusculationProgram(p) {
 
   // Titre : focus + nombre d'exercices
   var _exCount = _todayDay.exercises.length;
-  var _cardTitle = (_todayDay.focus || 'Séance') + ' — ' + _exCount + ' exercice' + (_exCount > 1 ? 's' : '');
+  var _cardTitle = (_todayDay.focus || (window.isEnglish && window.isEnglish() ? 'Workout' : 'Séance')) + ' — ' + _exCount + ' ' + window.locPlural(_exCount, {fr:{one:'exercice',other:'exercices'},en:{one:'exercise',other:'exercises'}});
   _card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:15px;font-weight:700;color:var(--black,#0A0A09);margin-bottom:12px;line-height:1.3;'}, _cardTitle));
 
   // Aperçu des 3 premiers exercices
@@ -6696,7 +6696,7 @@ function renderMusculationProgram(p) {
    _exList.appendChild(_exRow);
   });
   if (_exCount > 3) {
-   _exList.appendChild(h('div', {style: 'font-family:Georgia,serif;font-style:italic;font-size:11px;color:var(--grey,#6B6B65);margin-top:2px;'}, '+ ' + (_exCount - 3) + ' autre' + (_exCount - 3 > 1 ? 's' : '') + '…'));
+   _exList.appendChild(h('div', {style: 'font-family:Georgia,serif;font-style:italic;font-size:11px;color:var(--grey,#6B6B65);margin-top:2px;'}, '+ ' + (_exCount - 3) + ' ' + window.locPlural(_exCount - 3, {fr:{one:'autre',other:'autres'},en:{one:'more',other:'more'}}) + '…'));
   }
   _card.appendChild(_exList);
 
@@ -6776,7 +6776,7 @@ function renderMusculationProgram(p) {
    if (_mm.shoulders || _mm.rotatorCuff || _mm.lowerBack || _mm.herniaDisc || _mm.knees || _mm.acl || _mm.herniaInguinal || _mm.hypertension || _mm.osteoporosis || _mm.rheumatoidArthritis || _mm.fibromyalgia || _mm.meniscus || _mm.feet || _mm.spondylarthritis || _mm.kneeOsteoarthritis || _mm.epicondylitis || _mm.elbows) _adaptCount++;
  }
  if (Array.isArray(S.medical) && S.medical.length > 0) _adaptCount++;
- if (S.pregnant && S.sex === 'femme') _adaptCount++;
+ if (S.pregnant && window.isFemale(S)) _adaptCount++;
  if (Array.isArray(S.medical) && (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1)) _adaptCount++;
  if (Array.isArray(S.medical) && (S.medical.indexOf('cardio') !== -1 || S.medical.indexOf('hta') !== -1 || S.medical.indexOf('hta_severe') !== -1)) _adaptCount++;
  if (typeof getAge === 'function' && getAge() >= 50) _adaptCount++;
@@ -6792,7 +6792,7 @@ function renderMusculationProgram(p) {
        else { c.style.display = 'none'; this.querySelector('span:last-child').textContent = '\u25BC'; }
      }
    });
-   _adaptHeader.appendChild(h('span', {}, _adaptCount + ' adaptation' + (_adaptCount > 1 ? 's' : '') + ' active' + (_adaptCount > 1 ? 's' : '')));
+   _adaptHeader.appendChild(h('span', {}, _adaptCount + ' ' + window.locPlural(_adaptCount, {fr:{one:'adaptation active',other:'adaptations actives'},en:{one:'active adaptation',other:'active adaptations'}})));
    _adaptHeader.appendChild(h('span', {style: 'font-size:10px'}, '\u25BC'));
    p.appendChild(_adaptHeader);
    p.appendChild(_adaptContainer);
@@ -7098,7 +7098,7 @@ function renderMusculationProgram(p) {
 
  // Cycle menstruel — data nécessaire pour le badge intensité dans les exercices
  var cycleInfo = null;
- if (S.sex === 'femme' && S.cycleTracking) {
+ if (window.isFemale(S) && S.cycleTracking) {
  cycleInfo = window.getCurrentCyclePhase ? window.getCurrentCyclePhase() : null;
  }
 
@@ -7696,7 +7696,7 @@ function renderMusculationProgram(p) {
  })(ex);
 
  // Cycle intensity badge
- if (S.sex === 'femme' && S.cycleTracking && cycleInfo) {
+ if (window.isFemale(S) && S.cycleTracking && cycleInfo) {
  var intPct = Math.round(cycleInfo.phase.intensityFactor * 100);
  var intColor = intPct >= 100 ? 'var(--success,#3E5C3A)' : intPct >= 80 ? 'var(--orange-ink,#7A3B0E)' : 'var(--error,#7A1F1F)';
  card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:' + intColor + ';margin-top:4px'}, 'Intensit\u00e9 cycle : ' + intPct + '%'));
@@ -8726,7 +8726,7 @@ function renderMusculationProgram(p) {
  var allEx = (day.exercises || []).concat(bonusDayList);
  var estDuration = calcSessionDuration(allEx);
  var summary = h('div', {'class': 'day-total'});
- summary.appendChild(h('div', {'class': 'dt-label'}, allEx.length + ' exercice' + (allEx.length > 1 ? 's' : '') + (bonusDayList.length > 0 ? ' (dont ' + bonusDayList.length + ' bonus)' : '')));
+ summary.appendChild(h('div', {'class': 'dt-label'}, allEx.length + ' ' + window.locPlural(allEx.length, {fr:{one:'exercice',other:'exercices'},en:{one:'exercise',other:'exercises'}}) + (bonusDayList.length > 0 ? ((window.isEnglish && window.isEnglish() ? ' (incl. ' : ' (dont ') + bonusDayList.length + ' bonus)') : '')));
  summary.appendChild(h('div', {'class': 'dt-val'}, '~' + estDuration + ' min'));
  p.appendChild(summary);
 
@@ -8826,7 +8826,7 @@ function renderMusculationProgram(p) {
    _prBanner.style.cssText = 'margin-top:8px;padding:10px 12px;background:rgba(62,92,58,0.06);border-left:2px solid var(--success,#3E5C3A);';
    var _prLbl = document.createElement('div');
    _prLbl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--success,#3E5C3A);font-weight:600;margin-bottom:4px;';
-   _prLbl.textContent = 'Record' + (_prList.length > 1 ? 's' : '') + ' battu' + (_prList.length > 1 ? 's' : '');
+   _prLbl.textContent = window.locPlural(_prList.length, {fr:{one:'Record battu',other:'Records battus'},en:{one:'PR broken',other:'PRs broken'}});
    _prBanner.appendChild(_prLbl);
    _prList.slice(0, 3).forEach(function(pr){
     var _prLine = document.createElement('div');
@@ -8841,7 +8841,7 @@ function renderMusculationProgram(p) {
    if (_prList.length > 3) {
     var _prMore = document.createElement('div');
     _prMore.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#6B6B65;margin-top:4px;';
-    _prMore.textContent = '+ ' + (_prList.length - 3) + ' autre' + (_prList.length - 3 > 1 ? 's' : '');
+    _prMore.textContent = '+ ' + (_prList.length - 3) + ' ' + window.locPlural(_prList.length - 3, {fr:{one:'autre',other:'autres'},en:{one:'more',other:'more'}});
     _prBanner.appendChild(_prMore);
    }
    _celCard.appendChild(_prBanner);
@@ -8859,7 +8859,10 @@ function renderMusculationProgram(p) {
  doneBadge.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--success,#3E5C3A);margin-top:4px'}, doneSess.duration + '\u00a0min \u2014 ' + doneSess.kcalTotal + '\u00a0kcal brul\u00e9es (dont +' + doneSess.kcalEpoc + '\u00a0kcal EPOC)'));
  doneBadge.appendChild(h('button', {style: 'margin-top:8px;font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);background:none;border:none;cursor:pointer;padding:0', onclick: function() {
    // 2026-04 NIVEAU 1 : confirmation avant d'annuler une séance validée (1 clic accidentel = journée perdue)
-   if (!confirm('Annuler la séance validée de ce jour ?\nVous perdrez les ' + (doneSess.kcalTotal || 0) + ' kcal enregistrées.')) return;
+   var _cancelMsg = (window.isEnglish && window.isEnglish())
+     ? ("Cancel today's validated workout?\nYou will lose the " + (doneSess.kcalTotal || 0) + ' kcal logged.')
+     : ('Annuler la séance validée de ce jour ?\nVous perdrez les ' + (doneSess.kcalTotal || 0) + ' kcal enregistrées.');
+   if (!(window.sfcConfirm ? window.sfcConfirm(_cancelMsg) : window.confirm(_cancelMsg))) return;
    delete S.sessionHistory[todayKey]; window.render();
  }}, 'Annuler'));
  p.appendChild(doneBadge);
@@ -9144,7 +9147,7 @@ function renderMusculationProgram(p) {
    streakLeft.appendChild(streakLabel);
    var streakVal = document.createElement('div');
    streakVal.style.cssText = 'font-family:Georgia,serif;font-size:14px;color:var(--black,#0A0A09);';
-   streakVal.textContent = (_streak > 1 ? _streak + ' jours consécutifs' : _total + ' séance' + (_total > 1 ? 's' : '') + ' au total');
+   streakVal.textContent = (_streak > 1 ? (_streak + ' ' + window.locPlural(_streak, {fr:{one:'jour consécutif',other:'jours consécutifs'},en:{one:'day in a row',other:'days in a row'}})) : (_total + ' ' + window.locPlural(_total, {fr:{one:'séance au total',other:'séances au total'},en:{one:'workout total',other:'workouts total'}})));
    streakLeft.appendChild(streakVal);
    streakRow.appendChild(streakLeft);
    var nextMile = _streak < 7 ? (7 - _streak + ' j → badge') : _streak < 14 ? (14 - _streak + ' j → exercices avancés') : '';
@@ -9216,7 +9219,7 @@ function renderMusculationProgram(p) {
    cLogo.textContent = 'SmartFitCoach';
    var cDate = document.createElement('div');
    cDate.style.cssText = 'font-size:9px;letter-spacing:1px;color:rgba(250,249,246,0.5);';
-   cDate.textContent = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+   cDate.textContent = window.formatDate(new Date(), { day: 'numeric', month: 'long', year: 'numeric' });
    cHeader.appendChild(cLogo);
    cHeader.appendChild(cDate);
    card.appendChild(cHeader);
@@ -9435,7 +9438,7 @@ function renderMusculationProgram(p) {
  // ne doivent pas repousser les exercices hors du viewport mobile.
 
  // ─── GROSSESSE — Adaptations sport ───
- if (S.pregnant && S.sex === 'femme') {
+ if (S.pregnant && window.isFemale(S)) {
  var triSport = window.getPregnancyTrimester ? window.getPregnancyTrimester() : null;
  if (triSport && triSport.trimester) {
  var triSportColor = 'var(--error,#7A1F1F)';
@@ -9890,7 +9893,7 @@ function renderRunningProgram(p) {
  if (!currentWeekData) { p.appendChild(h('div', {style:'text-align:center;padding:32px;font-size:13px;color:var(--grey)'}, 'Semaine introuvable.')); p.appendChild(h('button', {'class':'btn-back', onclick: function(){ S.sStep = 7; window.render(); }}, '← Retour')); return; }
 
  // ─── AVERTISSEMENT GROSSESSE (Running) ───
- if (S.pregnant && S.sex === 'femme') {
+ if (S.pregnant && window.isFemale(S)) {
    var _rpw = window.getPregnancySportWarning ? window.getPregnancySportWarning() : null;
    var _rpwC = h('div', {style: 'border-left:3px solid #FF6B6B;background:#FFF3CD;padding:12px 16px;margin-bottom:16px'});
    _rpwC.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#C00;margin-bottom:6px'}, 'Grossesse \u2014 Adaptations obligatoires'));
@@ -10711,7 +10714,7 @@ function renderTriathlonProgram(p) {
  if (!weekData) return;
 
  // ─── AVERTISSEMENT GROSSESSE (Triathlon) ───
- if (S.pregnant && S.sex === 'femme') {
+ if (S.pregnant && window.isFemale(S)) {
    var _tpw = window.getPregnancySportWarning ? window.getPregnancySportWarning() : null;
    var _tpwC = h('div', {style: 'border-left:3px solid #FF6B6B;background:#FFF3CD;padding:12px 16px;margin-bottom:16px'});
    _tpwC.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#C00;margin-bottom:6px'}, 'Grossesse \u2014 Adaptations obligatoires'));
@@ -10728,7 +10731,7 @@ function renderTriathlonProgram(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Triathlon / IRONMAN'));
  p.appendChild(h('h1', {html: (goalObj ? goalObj.name : 'Triathlon') + '<br><em>Programme</em>'}));
  var subtitleParts = [totalWeeks + ' semaines', (levelObj ? levelObj.name : ''), '80/20', 'Méthode Jan Frodeno'];
- if (program[0] && program[0].raceDate) { try { var rdDisp = new Date(program[0].raceDate); subtitleParts.unshift('Course : ' + rdDisp.toLocaleDateString('fr-FR', {day:'numeric',month:'short',year:'numeric'})); } catch(e) {} }
+ if (program[0] && program[0].raceDate) { try { subtitleParts.unshift('Course : ' + window.formatDate(program[0].raceDate, {day:'numeric',month:'short',year:'numeric'})); } catch(e) {} }
  p.appendChild(h('p', {'class': 'subtitle'}, subtitleParts.join(' · ')));
 
  appendWellnessBanner(p);
@@ -11967,7 +11970,7 @@ window.exportSportPDF = function() {
 
     // Footer
     doc.setFontSize(6); doc.setTextColor(grey[0], grey[1], grey[2]);
-    doc.text('Smart Fit Coach \u2014 ' + new Date().toLocaleDateString('fr-FR'), M, 290);
+    doc.text('Smart Fit Coach \u2014 ' + window.formatDate(new Date()), M, 290);
     doc.save('programme-musculation-sem' + (S.muscuWeek || 1) + '.pdf');
   } catch(e) { console.error('[exportSportPDF] Erreur:', e); if (window.showToast) window.showToast('Erreur lors de la g\u00e9n\u00e9ration du PDF programme', 'error', 3500); }
 };

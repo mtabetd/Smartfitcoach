@@ -537,7 +537,7 @@ function getPersonalizedProgram(muscleGroup, userProfile) {
   var result; try { result = JSON.parse(JSON.stringify(template)); } catch(e) { return null; }
   if (!result) return null;
   if (!result.exercises) result.exercises = [];
-  if (S.sex === 'femme') {
+  if (window.isFemale(S)) {
     result.exercises.forEach(function(ex) {
       if (ex.type === 'compound' && goalKey === 'masse' && typeof ex.reps === 'number') ex.reps = Math.min(ex.reps + 2, 15);
     });
@@ -2346,7 +2346,7 @@ function buildPersonalizedMuscuPlan(S) {
     style = level === 'advanced' ? 'fusion' : (level === 'intermediate' ? 'volume' : 'classic');
   }
   // Femme : privilégier le volume (meilleur pour fessiers/jambes)
-  var isFemale = S.sex === 'female' || S.sex === 'femme';
+  var isFemale = window.isFemale(S);
   if (isFemale && style === 'intensity') style = 'fusion';
 
   // FIX P1 audit user Thomas (débutant) : forcer Starting Strength (full-body)

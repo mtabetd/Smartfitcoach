@@ -118,7 +118,7 @@
     var remaining = getGenerationsRemaining();
     if (remaining >= 2) {
       return '<p id="muscu-prog-counter" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;text-align:center;color:var(--accent,#1A4A1A);margin:0 auto 16px auto;">' +
-        remaining + ' g\u00e9n\u00e9ration' + (remaining > 1 ? 's' : '') + ' restante' + (remaining > 1 ? 's' : '') + ' cette semaine' +
+        remaining + ' ' + window.locPlural(remaining, {fr:{one:'g\u00e9n\u00e9ration restante',other:'g\u00e9n\u00e9rations restantes'},en:{one:'generation left',other:'generations left'}}) + ((window.isEnglish && window.isEnglish()) ? ' this week' : ' cette semaine') +
       '</p>';
     } else if (remaining === 1) {
       return '<p id="muscu-prog-counter" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;text-align:center;color:var(--orange,#B85C00);margin:0 auto 16px auto;">' +
@@ -632,7 +632,7 @@
     return {
       prenom: S.prenom || S.name || 'Athlète',
       age: S.age || null,
-      sexe: S.sex === 'femme' ? 'femme' : (S.sex === 'female' ? 'femme' : 'homme'),
+      sexe: window.isFemale(S) ? 'femme' : 'homme',
       poids: S.weight || null,
       taille: S.height || null,
       objectif: objectifLabel,
@@ -677,7 +677,7 @@
       semaineActuelle: semaineActuelle,
       cycleActuel: cycleActuel,
       // Données démographiques supplémentaires
-      pregnant: !!(S.pregnant && (S.sex === 'femme' || S.sex === 'female')),
+      pregnant: !!(S.pregnant && window.isFemale(S)),
       // Points forts/faibles et préférences (champs libres si renseignés)
       pointsForts: S.pointsForts || '',
       pointsFaibles: S.pointsFaibles || '',
@@ -707,7 +707,7 @@
       })(),
       muscuMedical: S.muscuMedical && S.muscuMedical.done ? S.muscuMedical : null,
       medicalConditions: Array.isArray(S.medical) && S.medical.length ? S.medical.join(', ') : null,
-      cycleTracking: !!(S.cycleTracking && S.sex === 'femme'),
+      cycleTracking: !!(S.cycleTracking && window.isFemale(S)),
       lastPeriodDate: S.lastPeriodDate || null
     };
   }

@@ -841,14 +841,14 @@ function renderProfilePage(container) {
  // ── Section 1: Identité ──
  var sec1 = h('div', {style: 'margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);'});
  sec1.appendChild(h('div', {style: _sh}, 'IDENTIT\u00c9'));
- sec1.appendChild(_infoRow('Sexe', S.sex === 'homme' ? 'Homme' : S.sex === 'femme' ? 'Femme' : null));
+ sec1.appendChild(_infoRow('Sexe', window.isMale(S) ? 'Homme' : window.isFemale(S) ? 'Femme' : null));
  sec1.appendChild(_infoRow('\u00c2ge', S.age ? S.age + ' ans' : null));
  sec1.appendChild(_infoRow('Poids', S.weight ? S.weight + ' kg' : null));
  // FIX D16 COHÉRENCE PRE-PREGNANCY 2026-04 : affiche le poids pré-grossesse si applicable.
  // Avant : calcTarget utilisait prePregnancyWeight (invisible dans profil) → user voyait
  //         son poids actuel (ex 75 kg) dans profil mais la cible kcal était basée sur
  //         68 kg → mismatch incompréhensible pour l'user.
- if (S.sex === 'femme' && S.pregnant && S.prePregnancyWeight && S.prePregnancyWeight !== S.weight) {
+ if (window.isFemale(S) && S.pregnant && S.prePregnancyWeight && S.prePregnancyWeight !== S.weight) {
    sec1.appendChild(_infoRow('Poids pré-grossesse', S.prePregnancyWeight + ' kg'));
  }
  sec1.appendChild(_infoRow('Taille', S.height ? S.height + ' cm' : null));
@@ -866,13 +866,13 @@ function renderProfilePage(container) {
      if (_sRaw) {
        var _sObj = JSON.parse(_sRaw);
        if (_sObj && typeof _sObj.current === 'number' && _sObj.current > 0) {
-         sec1.appendChild(_infoRow('Streak', _sObj.current + ' jour' + (_sObj.current > 1 ? 's' : '')));
+         sec1.appendChild(_infoRow('Streak', _sObj.current + ' ' + window.locPlural(_sObj.current, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}})));
        }
      }
    } catch(eStreak) {}
  })();
- if (S.sex === 'femme' && S.pregnant) sec1.appendChild(_infoRow('Grossesse', 'Semaine ' + (S.pregnancyWeek || '?')));
- if (S.sex === 'femme' && S.cycleTracking) sec1.appendChild(_infoRow('Cycle', S.cycleLength + ' jours'));
+ if (window.isFemale(S) && S.pregnant) sec1.appendChild(_infoRow('Grossesse', 'Semaine ' + (S.pregnancyWeek || '?')));
+ if (window.isFemale(S) && S.cycleTracking) sec1.appendChild(_infoRow('Cycle', S.cycleLength + ' jours'));
  c.appendChild(sec1);
 
  // ── Section 2: Objectif & Nutrition ──
@@ -1016,7 +1016,7 @@ function renderProfilePage(container) {
    var favSection = h('div', {style: 'margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);'});
    var favHeader = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;'});
    favHeader.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);'}, 'MES RECETTES FAVORITES'));
-   favHeader.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px;color:var(--grey);'}, favIds.length + ' ' + (favIds.length > 1 ? 'recettes' : 'recette')));
+   favHeader.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px;color:var(--grey);'}, favIds.length + ' ' + window.locPlural(favIds.length, {fr:{one:'recette',other:'recettes'},en:{one:'recipe',other:'recipes'}})));
    favSection.appendChild(favHeader);
    if (!favIds.length) {
      favSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);line-height:1.6;font-style:italic;'}, 'Notez une recette avec ★ dans votre planning pour qu\u2019elle revienne régulièrement dans vos semaines.'));
@@ -1248,7 +1248,7 @@ function renderProfilePage(container) {
        _numRow.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:40px;color:var(--black);line-height:1;'}, '\u2014'));
      } else if (_daysLeft > 0) {
        _numRow.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:56px;color:var(--black);line-height:1;font-weight:normal;letter-spacing:-1px;'}, String(_daysLeft)));
-       _numRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-top:8px;'}, _daysLeft > 1 ? 'jours restants' : 'jour restant'));
+       _numRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-top:8px;'}, window.locPlural(_daysLeft, {fr:{one:'jour restant',other:'jours restants'},en:{one:'day left',other:'days left'}})));
      } else {
        _numRow.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:28px;color:var(--black);line-height:1.3;'}, 'Essai terminé'));
      }
@@ -1262,8 +1262,9 @@ function renderProfilePage(container) {
        if (S.subscriptionEnd && S.subscriptionPlan !== 'unlimited') {
          try {
            var _d = new Date(S.subscriptionEnd);
-           _endStr = ' · renouvellement le ' + _d.getDate() + ' ' +
-             ['janv.','févr.','mars','avril','mai','juin','juil.','août','sept.','oct.','nov.','déc.'][_d.getMonth()] + ' ' + _d.getFullYear();
+           var _monthName = (window.getMonthName ? window.getMonthName(_d.getMonth(), true) : ['janv.','févr.','mars','avril','mai','juin','juil.','août','sept.','oct.','nov.','déc.'][_d.getMonth()]);
+           var _renewLabel = (window.tr ? window.tr('profile.renewal', 'renouvellement le') : 'renouvellement le');
+           _endStr = ' · ' + _renewLabel + ' ' + _d.getDate() + ' ' + _monthName + ' ' + _d.getFullYear();
          } catch(e) {}
        }
        _subtitle = _planLabel + _endStr;
@@ -1493,7 +1494,7 @@ function renderProfilePage(container) {
    var restoreBtn = h('button', {
      style: 'display:block;width:100%;padding:14px;border:1px solid var(--line,#D8D8D0);background:transparent;color:var(--ink-900,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;min-height:44px;',
      onclick: function() {
-       if (!confirm('Restaurer vos données depuis le cloud ?\n\nLes données locales seront remplacées par la dernière sauvegarde cloud.')) return;
+       if (!(window.sfcConfirm ? window.sfcConfirm('Restaurer vos données depuis le cloud ?\n\nLes données locales seront remplacées par la dernière sauvegarde cloud.') : confirm('Restaurer vos données depuis le cloud ?\n\nLes données locales seront remplacées par la dernière sauvegarde cloud.'))) return;
        restoreBtn.textContent = 'Restauration en cours...';
        restoreBtn.disabled = true;
        SupaSync.loadProfile().then(function(cloudData) {
@@ -1626,8 +1627,10 @@ function renderProfilePage(container) {
        }
        var sizeMB = (jsonStr.length / (1024 * 1024));
        if (sizeMB > 50) {
-         var ok = window.confirm('Votre export fait ' + sizeMB.toFixed(1) + ' Mo (contient probablement beaucoup de photos). '
-           + 'Le téléchargement peut être long. Continuer ?');
+         var _exportMsg = (window.isEnglish && window.isEnglish())
+           ? ('Your export is ' + sizeMB.toFixed(1) + ' MB (may contain many photos). The download may take a while. Continue?')
+           : ('Votre export fait ' + sizeMB.toFixed(1) + ' Mo (contient probablement beaucoup de photos). Le téléchargement peut être long. Continuer ?');
+         var ok = (window.sfcConfirm ? window.sfcConfirm(_exportMsg) : window.confirm(_exportMsg));
          if (!ok) return;
        }
        var blob = new Blob([jsonStr], {type: 'application/json'});
@@ -1647,7 +1650,7 @@ function renderProfilePage(container) {
  var deleteAccountBtn = h('button', {
    style: 'background:none;border:none;padding:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--error,#7A1F1F);cursor:pointer;display:block;min-height:44px;',
    onclick: function() {
-     var confirmed = window.confirm('Supprimer définitivement votre compte et toutes vos données ? Cette action est irréversible.');
+     var confirmed = (window.sfcConfirm ? window.sfcConfirm('Supprimer définitivement votre compte et toutes vos données ? Cette action est irréversible.') : window.confirm('Supprimer définitivement votre compte et toutes vos données ? Cette action est irréversible.'));
      if (!confirmed) return;
      // 1. Vider localStorage
      try {
@@ -1946,7 +1949,7 @@ function render() {
    var _safetyGoalKey = window.GOALS[window.S.goal].key;
    var _isUnsafeGoal = _safetyGoalKey === 'cut' || _safetyGoalKey === 'shred';
    var _isUnsafeGoalTca = _safetyGoalKey === 'cut' || _safetyGoalKey === 'shred' || _safetyGoalKey === 'bulk' || _safetyGoalKey === 'lean_bulk';
-   var _isPregnant = window.S.pregnant && window.S.sex === 'femme';
+   var _isPregnant = window.S.pregnant && window.isFemale(window.S);
    var _isAllait = Array.isArray(window.S.medical) && window.S.medical.indexOf('allaitement') !== -1;
    var _isTca = Array.isArray(window.S.medical) && window.S.medical.indexOf('tca') !== -1;
    if (_isUnsafeGoal && (_isPregnant || _isAllait)) {
@@ -2043,7 +2046,7 @@ function render() {
      if (_sVal >= 2) {
        var _streakEl = h('div', {
          style: 'display:flex;align-items:center;gap:3px;min-height:44px;cursor:default;',
-         title: _sVal + ' jour' + (_sVal > 1 ? 's' : '') + ' cons\u00e9cutif' + (_sVal > 1 ? 's' : '')
+         title: _sVal + ' ' + window.locPlural(_sVal, {fr:{one:'jour cons\u00e9cutif',other:'jours cons\u00e9cutifs'},en:{one:'day in a row',other:'days in a row'}})
        });
        // FIX Hermès : remplacement emojis 🏆/🔥 par glyphe ● avec opacity selon seuil.
        _streakEl.appendChild(h('span', {style: 'font-size:10px;line-height:1;opacity:' + (_sVal >= 7 ? '1' : '0.55') + ';color:var(--black);'}, '\u25CF'));
@@ -3020,7 +3023,7 @@ try { if (localStorage.getItem(_dmKey) === '1') document.body.classList.add('dar
  localStorage.removeItem(k);
  }
  });
- alert('Base utilisateurs effacée. Rechargement...');
+ (window.sfcAlert ? window.sfcAlert('Base utilisateurs effacée. Rechargement...') : alert('Base utilisateurs effacée. Rechargement...'));
  location.href = location.pathname;
  }
 })();
