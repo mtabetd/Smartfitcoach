@@ -8081,7 +8081,7 @@ function renderMusculationProgram(p) {
  onclick: (function(sr, inp) { return function(e) {
    e.stopPropagation();
    var cur = parseFloat(inp.value); if (isNaN(cur)) cur = sr.targetWeight || 0;
-   var nv = Math.round((cur + 2.5) * 2) / 2;
+   var nv = Math.max(0, Math.round((cur + 2.5) * 2) / 2);
    inp.value = String(nv); inp.style.color = 'var(--black,#0A0A09)';
    sr.actualWeight = nv; saveMuscuSessionLog();
    var _vb = inp.closest ? inp.closest('.set-row') : null; if (_vb) _vb = _vb.querySelector('.set-validate-btn');
@@ -8138,7 +8138,7 @@ function renderMusculationProgram(p) {
  oninput: (function(sr, _isBw){ return function(e) {
  e.target.style.color = 'var(--black,#0A0A09)'; // confirmation utilisateur
  var v = parseInt(e.target.value);
- sr.actualReps = isNaN(v) ? null : Math.max(0, v);
+ sr.actualReps = isNaN(v) ? null : Math.max(0, Math.min(999, v));
  saveMuscuSessionLog();
  var _btn = e.target.closest('.set-row') ? e.target.closest('.set-row').querySelector('.set-validate-btn') : null;
  if (_btn) { var _ok = (sr.actualReps !== null || !!sr.targetReps) && (sr.actualWeight !== null || (_isBw && !sr.weighted) || sr.targetWeight > 0); _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }

@@ -6,7 +6,7 @@
     "androidScheme": "https",
     "url": "https://smartfitcoach.netlify.app",
     "cleartext": false,
-    "allowNavigation": ["smartfitcoach.netlify.app"]
+    "allowNavigation": ["smartfitcoach.netlify.app", "*.supabase.co", "world.openfoodfacts.org", "*.ingest.sentry.io"]
   },
   "android": {
     "backgroundColor": "#FAF9F6"

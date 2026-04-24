@@ -2196,7 +2196,7 @@ function renderStep8(p) {
     // Synchronise NutritionMaster (source de vérité pour RecipeEngine + Sport)
     if (window.computeNutritionState) { window.computeNutritionState(false); }
   var _hydInfo = window.calcHydration ? window.calcHydration() : null; // ÉLEVÉ-3: hydration fine
-  var water = _hydInfo ? _hydInfo.liters.toFixed(1) : (S.weight * 0.033).toFixed(1);
+  var water = _hydInfo ? _hydInfo.liters.toFixed(1) : (S.weight && S.weight > 0 ? S.weight * 0.033 : 0).toFixed(1);
   var ppk = (S.weight > 0 ? (m.p / S.weight) : 0).toFixed(1);
   // Enregistrer les macros journalières dans l'historique (une entrée par jour)
   if (window.PERF_HISTORY && m && tgt > 0) {
@@ -3341,6 +3341,7 @@ function renderStep9(p) {
             var gr = parseFloat(S._foodPortionGrams) || 100;
             var r = gr / 100;
             var slotKey3 = S._foodSearchSlot;
+            if (!slotKey3) return;
             if (!S.weekPlan) return;
             if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
             S.weekPlan[S.selectedDay][slotKey3] = { n: pItem.name, k: Math.round(pItem.kcal * r), kcal: Math.round(pItem.kcal * r), p: Math.round(pItem.p * r), g: Math.round(pItem.g * r), l: Math.round(pItem.l * r), f: '\u25CE', emoji: '\u25CE', custom: true, portions: gr };
