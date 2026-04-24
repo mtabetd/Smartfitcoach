@@ -430,25 +430,81 @@ window.SCANNER = {
     var showCamera = false;
     var resultContainer = document.createElement('div');
 
-    // iOS Safari: BarcodeDetector API is not available. Instead of letting users
-    // open a camera that will never decode anything, show an explicit notice.
-    if (!barcodeDetector) {
-      var iosNotice = document.createElement('div');
-      iosNotice.style.cssText = 'padding:10px 12px;margin-bottom:12px;background:rgba(232,111,30,0.08);border-left:2px solid #E86F1E;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;line-height:1.5;color:var(--black,#0A0A09)';
-      iosNotice.textContent = 'Le scan automatique n\u2019est pas disponible sur ce navigateur. Tapez les chiffres du code-barres ci-dessous pour r\u00e9cup\u00e9rer le produit via Open Food Facts.';
-      scannerDiv.appendChild(iosNotice);
-    }
+    // ── Photo scan button — always visible, works on all browsers (Chrome, Safari, Firefox).
+    // Uses native OS file picker + camera (same approach as plate-scan.js).
+    // If BarcodeDetector is available, the captured photo is auto-decoded.
+    // If not, a preview is shown so the user can read and type the barcode manually.
+    var photoScanBtn = document.createElement('div');
+    photoScanBtn.className = 'scan-btn';
+    photoScanBtn.textContent = '📷 Scanner un code-barres';
+    var photoInput = document.createElement('input');
+    photoInput.type = 'file';
+    photoInput.accept = 'image/*';
+    photoInput.capture = 'environment';
+    photoInput.style.display = 'none';
+    photoScanBtn.appendChild(photoInput);
+    photoScanBtn.onclick = function() { photoInput.click(); };
+    photoInput.onchange = function(e) {
+      var file = e.target.files && e.target.files[0];
+      photoInput.value = '';
+      if (!file) return;
 
-    // Scan button — only shown when native BarcodeDetector is available
-    if (barcodeDetector) {
-      var scanBtn = document.createElement('div');
-      scanBtn.className = 'scan-btn';
-      scanBtn.textContent = '\uD83D\uDCF7 ' + window.t('scan.scan');
-      scanBtn.onclick = function() {
+      resultContainer.innerHTML = '';
+      var loadingDiv = document.createElement('div');
+      loadingDiv.className = 'scan-loading';
+      loadingDiv.textContent = 'Analyse en cours…';
+      resultContainer.appendChild(loadingDiv);
+
+      if (!barcodeDetector) {
+        resultContainer.innerHTML = '';
+        var previewMsg = document.createElement('div');
+        previewMsg.style.cssText = 'padding:10px 12px;margin-bottom:8px;background:rgba(232,111,30,0.08);border-left:2px solid #E86F1E;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;line-height:1.5;';
+        previewMsg.textContent = 'Détection automatique non disponible dans ce navigateur. Lisez le numéro sur la photo et saisissez-le ci-dessous.';
+        var previewImg = document.createElement('img');
+        previewImg.style.cssText = 'display:block;width:100%;max-height:200px;object-fit:contain;background:#000;margin-top:8px;';
+        var objUrl = URL.createObjectURL(file);
+        previewImg.src = objUrl;
+        previewImg.onload = function() { URL.revokeObjectURL(objUrl); };
+        resultContainer.appendChild(previewMsg);
+        resultContainer.appendChild(previewImg);
+        return;
+      }
+
+      createImageBitmap(file).then(function(bitmap) {
+        return barcodeDetector.detect(bitmap);
+      }).then(function(barcodes) {
+        resultContainer.innerHTML = '';
+        if (barcodes.length > 0) {
+          var code = barcodes[0].rawValue;
+          manualInput.value = code;
+          lookupAndAnalyze(code);
+        } else {
+          var errDiv = document.createElement('div');
+          errDiv.className = 'scan-error';
+          errDiv.textContent = 'Aucun code-barres détecté dans la photo. Cadrez uniquement le code-barres et réessayez, ou entrez le numéro manuellement.';
+          resultContainer.appendChild(errDiv);
+        }
+      }).catch(function() {
+        resultContainer.innerHTML = '';
+        var errDiv = document.createElement('div');
+        errDiv.className = 'scan-error';
+        errDiv.textContent = 'Impossible d'analyser la photo. Entrez le code-barres manuellement.';
+        resultContainer.appendChild(errDiv);
+      });
+    };
+    scannerDiv.appendChild(photoScanBtn);
+
+    // ── Live scan button — bonus UX only when BarcodeDetector + getUserMedia are both available
+    if (barcodeDetector && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      var liveScanBtn = document.createElement('div');
+      liveScanBtn.className = 'scan-btn';
+      liveScanBtn.style.marginTop = '6px';
+      liveScanBtn.textContent = '🔴 Scan en temps réel';
+      liveScanBtn.onclick = function() {
         showCamera = true;
         renderCameraView();
       };
-      scannerDiv.appendChild(scanBtn);
+      scannerDiv.appendChild(liveScanBtn);
     }
 
     // Manual input
