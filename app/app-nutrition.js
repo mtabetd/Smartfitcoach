@@ -3386,7 +3386,7 @@ function renderStep9(p) {
                   var slotKey3c = S._foodSearchSlot;
                   if (!S.weekPlan) return;
                   if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
-                  S.weekPlan[S.selectedDay][slotKey3c] = { n: rf.n, k: rf.kcal || rf.k || 0, kcal: rf.kcal || rf.k || 0, p: rf.p || 0, g: rf.g || 0, l: rf.l || 0, f: '\u25CE', emoji: '\u25CE', custom: true };
+                  S.weekPlan[S.selectedDay][slotKey3c] = { n: rf.n, k: Math.max(0, rf.kcal || rf.k || 0), kcal: Math.max(0, rf.kcal || rf.k || 0), p: Math.max(0, rf.p || 0), g: Math.max(0, rf.g || 0), l: Math.max(0, rf.l || 0), f: '\u25CE', emoji: '\u25CE', custom: true };
                   S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false;
                   try { if (window.saveProfile) window.saveProfile(); } catch(e) {}
                   if (window.incrementMealsLogged) window.incrementMealsLogged();

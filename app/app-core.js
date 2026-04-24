@@ -4389,7 +4389,7 @@ function isPremium() {
     // Trial 7 jours
     if (s.firstLoginDate) {
       var trialEnd = new Date(s.firstLoginDate);
-      trialEnd.setDate(trialEnd.getDate() + 7);
+      trialEnd.setUTCDate(trialEnd.getUTCDate() + 7);
       if (trialEnd > new Date()) return true;
     }
     // Pas de firstLoginDate = nouvel utilisateur = accès trial
@@ -4405,7 +4405,7 @@ function getTrialDaysLeft() {
     if (!s || !s.firstLoginDate) return 7;
     if (s.subscriptionEnd && (s.subscriptionPlan === 'unlimited' || new Date(s.subscriptionEnd) > new Date())) return 0; // abonné
     var trialEnd = new Date(s.firstLoginDate);
-    trialEnd.setDate(trialEnd.getDate() + 7);
+    trialEnd.setUTCDate(trialEnd.getUTCDate() + 7);
     var diff = Math.ceil((trialEnd - new Date()) / (1000 * 60 * 60 * 24));
     return Math.max(0, diff);
   } catch(e) { return 7; }
@@ -6812,8 +6812,10 @@ function exportUserData() {
     gamification: {}
   };
 
-  // Profil
-  try { data.profile = JSON.parse(localStorage.getItem('mtd_profile') || '{}'); } catch(e) {}
+  // Profil — lire la clé UID-versionnée (migration V4 2026-04)
+  var _expUid = (window.AUTH && window.AUTH.getUser()) ? window.AUTH.getUser().id : null;
+  var _expKey = _expUid ? 'mtd_profile_' + _expUid : 'mtd_profile';
+  try { data.profile = JSON.parse(localStorage.getItem(_expKey) || '{}'); } catch(e) {}
 
   // Nutrition : toutes les clés mtd_weight_history_* et mtd_meals_*
   try {
