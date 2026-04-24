@@ -88,7 +88,7 @@ exports.handler = async function(event) {
     // Supprimer le compte auth (irréversible)
     var { error: deleteError } = await adminClient.auth.admin.deleteUser(userId);
     if (deleteError) {
-      return { statusCode: 500, headers: corsHeaders(origin), body: JSON.stringify({ error: 'Failed to delete auth account: ' + deleteError.message }) };
+      return { statusCode: 500, headers: corsHeaders(origin), body: JSON.stringify({ error: 'Impossible de supprimer le compte. Veuillez réessayer.' }) };
     }
 
     return {
