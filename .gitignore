@@ -28,6 +28,9 @@ app/bundle.js
 android/
 ios/
 
-# Android binaries — hosted via Netlify large files, not git
-*.apk
+# Android binaries — exception: the release APK is tracked directly
 *.aab
+*.keystore
+
+# The release APK is committed so Netlify can serve it
+!app/smartfitcoach.apk
