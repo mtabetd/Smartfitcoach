@@ -156,7 +156,7 @@ function renderUsers(users) {
       statsActive++;
     } else if (firstLogin) {
       var trialEnd = new Date(firstLogin);
-      trialEnd.setDate(trialEnd.getDate() + 7);
+      trialEnd.setUTCDate(trialEnd.getUTCDate() + 7);
       if (trialEnd > now) {
         var daysLeft = Math.ceil((trialEnd - now) / (1000 * 60 * 60 * 24));
         status = 'trial';
@@ -220,7 +220,7 @@ function openModal(userId, name, currentPlan, currentEnd) {
     else if (plan === '6m') d.setMonth(d.getMonth() + 6);
     else if (plan === '12m') d.setFullYear(d.getFullYear() + 1);
     else if (plan === 'unlimited') { document.getElementById('modal-date').value = '2099-12-31'; return; }
-    else if (plan === 'trial') { var t = new Date(); t.setDate(t.getDate() + 7); document.getElementById('modal-date').value = t.toISOString().slice(0,10); return; }
+    else if (plan === 'trial') { var t = new Date(); t.setUTCDate(t.getUTCDate() + 7); document.getElementById('modal-date').value = t.toISOString().slice(0,10); return; }
     document.getElementById('modal-date').value = d.toISOString().slice(0, 10);
   };
   document.getElementById('modal-plan').onchange();
