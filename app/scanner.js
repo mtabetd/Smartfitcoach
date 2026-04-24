@@ -333,86 +333,64 @@ var scanInterval = null;
 var _cameraInactivityTimer = null;
 
 function startCamera(videoElement, onDetected, onError) {
-  // Check if camera API is available
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
     if (onError) onError('Votre navigateur ne supporte pas l\'accès caméra. Utilisez la saisie manuelle.');
     return;
   }
+  // Call getUserMedia directly — letting the browser show its own permission dialog.
+  // Pre-querying navigator.permissions before getUserMedia causes silent failures in Chrome
+  // when the state is 'prompt': the permission dialog never appears.
+  requestCamera({ video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } } });
 
-  // Check permission first
-  if (navigator.permissions && navigator.permissions.query) {
-    navigator.permissions.query({ name: 'camera' }).then(function(result) {
-      if (result.state === 'denied') {
-        if (onError) onError('Accès caméra refusé. Autorisez la caméra dans les paramètres de votre navigateur, puis réessayez.');
-        return;
-      }
-      requestCamera();
-    }).catch(function() {
-      // permissions.query not supported for camera, try directly
-      requestCamera();
-    });
-  } else {
-    requestCamera();
+  function attachStream(stream) {
+    cameraStream = stream;
+    videoElement.srcObject = stream;
+    var playPromise = videoElement.play();
+    if (playPromise && typeof playPromise.catch === 'function') {
+      playPromise.catch(function(e) { console.warn('[scanner] video.play():', e && e.message); });
+    }
+    scanning = true;
+    if (_cameraInactivityTimer) clearTimeout(_cameraInactivityTimer);
+    _cameraInactivityTimer = setTimeout(function() { stopCamera(); }, 60000);
+    if (barcodeDetector) {
+      scanInterval = setInterval(function() {
+        if (!scanning) return;
+        barcodeDetector.detect(videoElement)
+          .then(function(barcodes) {
+            if (barcodes.length > 0) { stopCamera(); onDetected(barcodes[0].rawValue); }
+          })
+          .catch(function() {});
+      }, 500);
+    }
   }
 
-  function requestCamera() {
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } } })
-      .then(function(stream) {
-        cameraStream = stream;
-        videoElement.srcObject = stream;
-        videoElement.play();
-        scanning = true;
-
-        // Arrêt automatique après 60s d'inactivité (pas de scan détecté)
-        if (_cameraInactivityTimer) clearTimeout(_cameraInactivityTimer);
-        _cameraInactivityTimer = setTimeout(function() { stopCamera(); }, 60000);
-
-        if (barcodeDetector) {
-          scanInterval = setInterval(function() {
-            if (!scanning) return;
-            barcodeDetector.detect(videoElement)
-              .then(function(barcodes) {
-                if (barcodes.length > 0) {
-                  stopCamera();
-                  onDetected(barcodes[0].rawValue);
-                }
-              })
-              .catch(function() {});
-          }, 500);
-        }
-      })
+  function requestCamera(constraints) {
+    navigator.mediaDevices.getUserMedia(constraints)
+      .then(attachStream)
       .catch(function(err) {
-        console.warn('Camera error:', err);
-        var msg = 'Impossible d\'accéder à la caméra.';
-        if (err.name === 'NotAllowedError') msg = 'Vous avez refusé l\'accès à la caméra. Autorisez-la dans les paramètres de votre navigateur puis réessayez.';
-        else if (err.name === 'NotFoundError') msg = 'Aucune caméra détectée sur cet appareil.';
-        else if (err.name === 'NotReadableError') msg = 'La caméra est utilisée par une autre application.';
-        else if (err.name === 'OverconstrainedError') msg = 'Caméra arrière non disponible, essai avec caméra frontale...';
-
-        if (err.name === 'OverconstrainedError') {
-          // Fallback: try front camera
+        console.warn('[scanner] getUserMedia error:', err && err.name, err && err.message);
+        if (err && err.name === 'OverconstrainedError') {
+          // Rear camera unavailable — retry with any camera
           navigator.mediaDevices.getUserMedia({ video: true })
-            .then(function(stream) {
-              cameraStream = stream;
-              videoElement.srcObject = stream;
-              videoElement.play();
-              scanning = true;
-              if (_cameraInactivityTimer) clearTimeout(_cameraInactivityTimer);
-              _cameraInactivityTimer = setTimeout(function() { stopCamera(); }, 60000);
-              if (barcodeDetector) {
-                scanInterval = setInterval(function() {
-                  if (!scanning) return;
-                  barcodeDetector.detect(videoElement).then(function(barcodes) {
-                    if (barcodes.length > 0) { stopCamera(); onDetected(barcodes[0].rawValue); }
-                  }).catch(function() {});
-                }, 500);
-              }
-            })
-            .catch(function() { if (onError) onError(msg); });
-        } else {
-          if (onError) onError(msg);
+            .then(attachStream)
+            .catch(function(err2) {
+              if (onError) onError(buildErrMsg(err2));
+            });
+          return;
         }
+        if (onError) onError(buildErrMsg(err));
       });
+  }
+
+  function buildErrMsg(err) {
+    if (!err) return 'Impossible d\'accéder à la caméra.';
+    if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+      return 'Accès caméra bloqué. Dans Chrome : icône cadenas dans la barre d\'adresse → Caméra → Autoriser, puis rechargez la page.';
+    }
+    if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') return 'Aucune caméra détectée sur cet appareil.';
+    if (err.name === 'NotReadableError' || err.name === 'TrackStartError') return 'La caméra est utilisée par une autre application. Fermez-la puis réessayez.';
+    if (err.name === 'SecurityError') return 'Accès caméra bloqué par la politique de sécurité du site.';
+    return 'Impossible d\'accéder à la caméra (' + err.name + '). Utilisez la saisie manuelle.';
   }
 }
 
@@ -457,7 +435,7 @@ window.SCANNER = {
     if (!barcodeDetector) {
       var iosNotice = document.createElement('div');
       iosNotice.style.cssText = 'padding:10px 12px;margin-bottom:12px;background:rgba(232,111,30,0.08);border-left:2px solid #E86F1E;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;line-height:1.5;color:var(--black,#0A0A09)';
-      iosNotice.textContent = 'Sur iPhone/iPad, Safari ne supporte pas le scan automatique. Tapez les chiffres du code-barres ci-dessous pour r\u00e9cup\u00e9rer le produit via Open Food Facts.';
+      iosNotice.textContent = 'Le scan automatique n\u2019est pas disponible sur ce navigateur. Tapez les chiffres du code-barres ci-dessous pour r\u00e9cup\u00e9rer le produit via Open Food Facts.';
       scannerDiv.appendChild(iosNotice);
     }
 
@@ -563,6 +541,7 @@ window.SCANNER = {
       var video = document.createElement('video');
       video.setAttribute('playsinline', '');
       video.setAttribute('autoplay', '');
+      video.setAttribute('muted', '');
       view.appendChild(video);
 
       var overlay = document.createElement('div');
@@ -588,7 +567,7 @@ window.SCANNER = {
         // No native barcode support - show message and skip camera
         var msg = document.createElement('div');
         msg.style.cssText = 'text-align:center;padding:12px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)';
-        msg.textContent = 'Scan automatique non supporté sur ce navigateur. Utilisez la saisie manuelle ci-dessous.';
+        msg.textContent = 'Scan automatique non disponible sur ce navigateur. Utilisez la saisie manuelle ci-dessous.';
         cameraContainer.appendChild(msg);
       } else {
 
