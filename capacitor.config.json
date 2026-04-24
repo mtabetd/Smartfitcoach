@@ -3,7 +3,10 @@
   "appName": "SmartFitCoach",
   "webDir": "app",
   "server": {
-    "androidScheme": "https"
+    "androidScheme": "https",
+    "url": "https://smartfitcoach.netlify.app",
+    "cleartext": false,
+    "allowNavigation": ["smartfitcoach.netlify.app"]
   },
   "android": {
     "backgroundColor": "#FAF9F6"
