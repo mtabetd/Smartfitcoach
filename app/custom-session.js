@@ -276,7 +276,11 @@ window.CUSTOM_SESSION = {
       if (!Array.isArray(b.loggedSets)) b.loggedSets = [];
       var targetSets = parseInt(b.sets) || 4;
       while (b.loggedSets.length < targetSets) {
-        b.loggedSets.push({ weight: b.targetWeight != null ? b.targetWeight : '', reps: '', validated: false });
+        b.loggedSets.push({
+          weight: b.targetWeight != null ? b.targetWeight : '',
+          reps: (b.reps !== undefined && b.reps !== null && b.reps !== '') ? String(b.reps) : '',
+          validated: false
+        });
       }
       b.loggedSets = b.loggedSets.slice(0, targetSets);
     });
@@ -1126,6 +1130,30 @@ function _csRenderDraftBlock(block) {
       function(v) { block.reps = v; window.CUSTOM_SESSION.saveDraft(); if (window.render) window.render(); }));
     wrap.appendChild(cfgRow);
 
+    // ── sélecteur temps de repos ──
+    var restRow = h('div', { style: 'padding:7px 12px;border-top:1px solid var(--border,#D8D8D0);display:flex;align-items:center;gap:8px;flex-wrap:wrap;' });
+    restRow.appendChild(h('span', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);flex-shrink:0;'
+    }, 'Repos'));
+    var restPresets = [
+      { label: '1\'',    val: '60s'  },
+      { label: '1\'30', val: '90s'  },
+      { label: '2\'',   val: '120s' },
+      { label: '3\'',   val: '180s' }
+    ];
+    restPresets.forEach(function(p) {
+      var isSel = (block.rest === p.val);
+      restRow.appendChild(h('button', {
+        style: 'padding:5px 10px;min-height:30px;border:1px solid ' + (isSel ? 'var(--ink-900,#0A0A09)' : 'var(--border,#D8D8D0)') + ';background:' + (isSel ? 'var(--ink-900,#0A0A09)' : 'transparent') + ';color:' + (isSel ? 'var(--paper,#FAF9F6)' : 'var(--ink-500,#6B6B65)') + ';font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;cursor:pointer;border-radius:2px;',
+        onclick: (function(pVal) { return function() {
+          block.rest = pVal;
+          window.CUSTOM_SESSION.saveDraft();
+          if (window.render) window.render();
+        }; })(p.val)
+      }, p.label));
+    });
+    wrap.appendChild(restRow);
+
     // ── suggestion de poids ──
     var sugW = null;
     try {
@@ -1296,7 +1324,7 @@ function _csRenderActiveSet(block, set, si) {
 
   var wInp2 = h('input', {
     type: 'number', step: '0.5', min: '0', max: '500', inputmode: 'decimal',
-    value: set.weight != null ? String(set.weight) : (block.targetWeight != null ? String(block.targetWeight) : ''),
+    value: (set.weight !== null && set.weight !== undefined && set.weight !== '') ? String(set.weight) : (block.targetWeight != null ? String(block.targetWeight) : ''),
     placeholder: 'kg',
     disabled: set.validated,
     style: 'width:62px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:14px;text-align:center;background:var(--ivory);-webkit-appearance:none;',
@@ -1308,7 +1336,7 @@ function _csRenderActiveSet(block, set, si) {
 
   var rInp2 = h('input', {
     type: 'number', min: '0', max: '100', inputmode: 'numeric',
-    value: set.reps != null ? String(set.reps) : (block.reps ? String(block.reps) : ''),
+    value: (set.reps !== null && set.reps !== undefined && set.reps !== '') ? String(set.reps) : (block.reps ? String(block.reps) : ''),
     placeholder: 'reps',
     disabled: set.validated,
     style: 'width:52px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:14px;text-align:center;background:var(--ivory);-webkit-appearance:none;',
