@@ -278,7 +278,14 @@ window.CUSTOM_SESSION = {
       while (b.loggedSets.length < targetSets) {
         b.loggedSets.push({
           weight: b.targetWeight != null ? b.targetWeight : '',
-          reps: (b.reps !== undefined && b.reps !== null && b.reps !== '') ? String(b.reps) : '',
+          reps: (function() {
+            var r = b.reps;
+            if (r === undefined || r === null || r === '') return '';
+            var str = String(r);
+            // "8-12" ou "10-15" → borne inférieure (input type=number refuse les plages)
+            var range = str.match(/^(\d+)\s*[-–]\s*\d+$/);
+            return range ? range[1] : str;
+          })(),
           validated: false
         });
       }
