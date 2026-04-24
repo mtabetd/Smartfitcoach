@@ -406,7 +406,7 @@ window.CUSTOM_SESSION = {
   calcKcal: function(draft) {
     if (!draft) return { base: 0, epoc: 0, total: 0 };
     var mins   = draft.durationMins || 30;
-    var weight = (window.S && window.S.weight) ? parseFloat(window.S.weight) : 70;
+    var weight = (window.S && window.S.weight) ? (parseFloat(window.S.weight) || 70) : 70;
     var hasCardio = draft.blocks.some(function(b) { return b.type === 'cardio'; });
     var met = hasCardio ? 5.5 : 4.5;
     var base = Math.round((met * weight * 3.5 / 200) * mins);
@@ -1212,7 +1212,7 @@ function _csRenderDraftBlock(block) {
     }, '−');
     var wPlus = h('button', {
       style: 'min-width:36px;min-height:36px;background:transparent;border:1px solid var(--border);border-radius:2px;font-size:16px;cursor:pointer;',
-      onclick: (function(b3, inp) { return function(e) { e.stopPropagation(); var nv = Math.round(((parseFloat(inp.value) || 0) + 2.5) * 2) / 2; inp.value = String(nv); b3.targetWeight = nv; window.CUSTOM_SESSION.saveDraft(); }; })(block, wInp)
+      onclick: (function(b3, inp) { return function(e) { e.stopPropagation(); var nv = Math.min(500, Math.round(((parseFloat(inp.value) || 0) + 2.5) * 2) / 2); inp.value = String(nv); b3.targetWeight = nv; window.CUSTOM_SESSION.saveDraft(); }; })(block, wInp)
     }, '+');
     wtRow.appendChild(wMinus);
     wtRow.appendChild(wInp);
