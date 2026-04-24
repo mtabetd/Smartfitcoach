@@ -1773,7 +1773,7 @@ var EATING_LOCATIONS = [
 ];
 window.EATING_LOCATIONS = EATING_LOCATIONS;
 
-var BODY_ZONES = ['Poitrine','Dos','Épaules','Bras','Abdominaux','Jambes','Fessiers','Cardio'];
+var BODY_ZONES = ['Poitrine','Dos','Épaules','Trapèzes','Bras','Avant-bras','Abdominaux','Jambes','Mollets','Fessiers','Cardio'];
 window.BODY_ZONES = BODY_ZONES;
 
 // FIX Hermès : icônes sobres unicode (tonal-on-tonal). Emojis 💪🫀🧘🔥⚡ retirés.

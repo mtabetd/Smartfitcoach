@@ -341,8 +341,9 @@ function generateSportProgram() {
  // Map zone names to exercise categories
  var zoneToCategory = {
  'Poitrine': 'chest', 'Dos': 'back', 'Épaules': 'shoulders',
- 'Bras': ['biceps', 'triceps'], 'Abdominaux': 'abs',
- 'Jambes': 'legs', 'Fessiers': 'glutes', 'Cardio': 'cardio'
+ 'Trapèzes': 'traps', 'Bras': ['biceps', 'triceps'], 'Avant-bras': 'forearms',
+ 'Abdominaux': 'abs', 'Jambes': 'legs', 'Mollets': 'calves',
+ 'Fessiers': 'glutes', 'Cardio': 'cardio'
  };
 
  // Sort zones by priority (highest first)
@@ -503,12 +504,12 @@ function generateSportProgram() {
  // to enforce strict upper/lower/push/pull/legs boundaries.
  // Without this, the frequency-based algorithm can put "shoulders" on a "Lower A" day.
  if (S._splitChoice && days >= 2) {
-   var _UPPER_C = {chest:1, back:1, shoulders:1, biceps:1, triceps:1, abs:1};
-   var _LOWER_C = {legs:1, glutes:1};
+   var _UPPER_C = {chest:1, back:1, shoulders:1, traps:1, biceps:1, triceps:1, forearms:1, abs:1};
+   var _LOWER_C = {legs:1, glutes:1, calves:1};
    var _PUSH_C  = {chest:1, shoulders:1, triceps:1};
-   var _PULL_C  = {back:1, biceps:1};
+   var _PULL_C  = {back:1, traps:1, biceps:1, forearms:1};
    // FIX P0 2026-04-16 : ajout biceps/triceps/abs manquants — sinon fullbody drops user focus
-   var _FULL_C  = {chest:1, back:1, shoulders:1, legs:1, glutes:1, biceps:1, triceps:1, abs:1};
+   var _FULL_C  = {chest:1, back:1, shoulders:1, traps:1, legs:1, glutes:1, calves:1, biceps:1, triceps:1, forearms:1, abs:1};
    var _SPLIT_TMPL = {
      'upper_lower': ['upper','lower','upper','lower'],
      'ppl_3':       ['push','pull','legs'],
@@ -528,11 +529,11 @@ function generateSportProgram() {
      'legs':           _LOWER_C,
      'full':           _FULL_C,
      'chest_tri':      {chest:1, triceps:1},
-     'back_bi':        {back:1, biceps:1},
-     'shoulders_only': {shoulders:1},
+     'back_bi':        {back:1, traps:1, biceps:1, forearms:1},
+     'shoulders_only': {shoulders:1, traps:1},
      'chest_only':     {chest:1},
-     'back_only':      {back:1},
-     'arms':           {biceps:1, triceps:1}
+     'back_only':      {back:1, traps:1},
+     'arms':           {biceps:1, triceps:1, forearms:1}
    };
    var _dayTypes = _SPLIT_TMPL[S._splitChoice];
    if (_dayTypes) {
@@ -565,7 +566,7 @@ function generateSportProgram() {
          else if (_dtype === 'shoulders_only') _filtered = ['shoulders'];
          else if (_dtype === 'chest_only') _filtered = ['chest'];
          else if (_dtype === 'back_only') _filtered = ['back'];
-         else if (_dtype === 'arms')      _filtered = ['biceps','triceps'];
+         else if (_dtype === 'arms')      _filtered = ['biceps','triceps','forearms'];
          else _filtered = ['chest','back','shoulders','legs','glutes','biceps','triceps','abs']; // safe fallback
        }
        // FIX 2026-04 : garantir les catégories synergiques minimales même quand l'user
@@ -575,6 +576,9 @@ function generateSportProgram() {
        // Only add glutes synergy when 'legs' is actually in the filtered set (lower-body day)
        if ((_dtype === 'lower' || _dtype === 'legs') && _filtered.indexOf('glutes') === -1 && _filtered.some(function(c){ return c === 'legs'; }))
          _filtered = _filtered.concat(['glutes']);
+       // Calves synergy : seulement si l'user a sélectionné Mollets (pas forcé comme glutes)
+       if ((_dtype === 'lower' || _dtype === 'legs') && _filtered.indexOf('calves') === -1 && _filtered.some(function(c){ return c === 'legs'; }) && allCategories.indexOf('calves') !== -1)
+         _filtered = _filtered.concat(['calves']);
        if (_dtype === 'push' && _filtered.indexOf('triceps') === -1)
          _filtered = _filtered.concat(['triceps']);
        if ((_dtype === 'pull' || _dtype === 'back_bi') && _filtered.indexOf('biceps') === -1)
@@ -1072,8 +1076,9 @@ function generateSportProgram() {
  // Build focus label with star ratings (French names, max 5 stars, deduplicated)
  var categoryToFrench = {
  'chest': 'Poitrine', 'back': 'Dos', 'shoulders': 'Épaules',
- 'biceps': 'Bras', 'triceps': 'Bras', 'legs': 'Jambes',
- 'glutes': 'Fessiers', 'abs': 'Abdominaux', 'cardio': 'Cardio'
+ 'traps': 'Trapèzes', 'biceps': 'Bras', 'triceps': 'Bras', 'forearms': 'Avant-bras',
+ 'legs': 'Jambes', 'calves': 'Mollets', 'glutes': 'Fessiers',
+ 'abs': 'Abdominaux', 'cardio': 'Cardio'
  };
  var seenLabels = {};
  var focusParts = [];
