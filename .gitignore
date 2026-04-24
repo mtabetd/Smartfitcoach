@@ -16,3 +16,12 @@ audit-*.sh
 
 # Generated bundle (built at deploy time by scripts/build-bundle.js)
 app/bundle.js
+
+# Secrets — never commit
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+.vapid-keys*
+!.vapid-keys-example.txt

@@ -88,7 +88,7 @@ async function requirePremium(event) {
     // 2. Trial period (mirrors client-side logic in app-main.js)
     if (!premium && profile.data && profile.data.firstLoginDate) {
       const trialEnd = new Date(profile.data.firstLoginDate);
-      trialEnd.setDate(trialEnd.getDate() + TRIAL_DAYS);
+      trialEnd.setUTCDate(trialEnd.getUTCDate() + TRIAL_DAYS);
       if (new Date() <= trialEnd) premium = true;
     }
   }

@@ -37,6 +37,7 @@ var RATE_WINDOW_MS = 60 * 1000;
 var RATE_MAX = 5;
 function tooManyRequests(ip) {
   var now = Date.now();
+  _rateLimit.forEach(function(e, k) { if (now > e.resetAt) _rateLimit.delete(k); });
   var entry = _rateLimit.get(ip) || { count: 0, resetAt: now + RATE_WINDOW_MS };
   if (now > entry.resetAt) entry = { count: 0, resetAt: now + RATE_WINDOW_MS };
   entry.count++;

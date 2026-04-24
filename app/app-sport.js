@@ -8056,7 +8056,7 @@ function renderMusculationProgram(p) {
  oninput: (function(sr, _valBtnRef){ return function(e) {
  e.target.style.color = 'var(--black,#0A0A09)'; // confirmation utilisateur
  var v = parseFloat(e.target.value);
- sr.actualWeight = isNaN(v) ? null : v;
+ sr.actualWeight = isNaN(v) ? null : Math.max(0, v);
  saveMuscuSessionLog();
  var _btn = e.target.closest('.set-row') ? e.target.closest('.set-row').querySelector('.set-validate-btn') : null;
  if (_btn) { var _ok = (sr.actualReps !== null || !!sr.targetReps) && (sr.actualWeight !== null || sr.targetWeight > 0); _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
@@ -8115,7 +8115,7 @@ function renderMusculationProgram(p) {
  style: 'width:60px;min-height:44px;padding:10px 6px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory))',
  oninput: (function(sr){ return function(e) {
  var v = parseFloat(e.target.value);
- sr.actualWeight = isNaN(v) ? null : v;
+ sr.actualWeight = isNaN(v) ? null : Math.max(0, v);
  saveMuscuSessionLog();
  var _btn = e.target.closest('.set-row') ? e.target.closest('.set-row').querySelector('.set-validate-btn') : null;
  if (_btn) { var _ok = sr.actualReps !== null && sr.actualWeight !== null; _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
@@ -8138,7 +8138,7 @@ function renderMusculationProgram(p) {
  oninput: (function(sr, _isBw){ return function(e) {
  e.target.style.color = 'var(--black,#0A0A09)'; // confirmation utilisateur
  var v = parseInt(e.target.value);
- sr.actualReps = isNaN(v) ? null : v;
+ sr.actualReps = isNaN(v) ? null : Math.max(0, v);
  saveMuscuSessionLog();
  var _btn = e.target.closest('.set-row') ? e.target.closest('.set-row').querySelector('.set-validate-btn') : null;
  if (_btn) { var _ok = (sr.actualReps !== null || !!sr.targetReps) && (sr.actualWeight !== null || (_isBw && !sr.weighted) || sr.targetWeight > 0); _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
