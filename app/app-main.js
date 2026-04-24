@@ -754,7 +754,7 @@ function renderProfilePage(container) {
  var S = window.S;
  var user = window.AUTH ? window.AUTH.getUser() : null;
  var c = h('div', {style: 'max-width:480px;margin:0 auto;padding:24px 20px 48px'});
- if (!window.SFC_PRICING_DATA && window.loadSFCPricing) {
+ if (!window.SFC_PRICING_DATA && !window._sfcPricingAttempted && window.loadSFCPricing) {
    window.loadSFCPricing().then(function() { if (window.SFC_PRICING_DATA && window.render) window.render(); });
  }
 
@@ -1440,7 +1440,7 @@ function renderProfilePage(container) {
          var _priceRow = h('div', {style: 'text-align:center;margin:18px 0 4px;'});
          _priceRow.appendChild(h('div', {style:
            'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);font-style:italic;'
-         }, 'Chargement des tarifs…'));
+         }, window._sfcPricingAttempted ? 'Tarifs temporairement indisponibles' : 'Chargement des tarifs…'));
          card.appendChild(_priceRow);
        }
      }

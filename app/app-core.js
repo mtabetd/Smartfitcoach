@@ -4421,20 +4421,28 @@ function isTrialUser() {
 // Pricing cache — chargé en lazy depuis l'API get-pricing
 window.SFC_PRICING_DATA = window.SFC_PRICING_DATA || null;
 window._sfcPricingPromise = null;
+window._sfcPricingAttempted = false; // FIX 2026-04-24 : évite boucle infinie de fetches si API retourne []
 function loadSFCPricing() {
   if (window.SFC_PRICING_DATA) return Promise.resolve(window.SFC_PRICING_DATA);
+  if (window._sfcPricingAttempted) return Promise.resolve(null); // déjà tenté — ne pas refetch
   if (window._sfcPricingPromise) return window._sfcPricingPromise;
   var _ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
   var _timeout = setTimeout(function() { if (_ctrl) _ctrl.abort(); }, 5000);
   window._sfcPricingPromise = fetch('/.netlify/functions/get-pricing', _ctrl ? { signal: _ctrl.signal } : {})
     .then(function(r) { clearTimeout(_timeout); return r.json(); })
     .then(function(json) {
+      window._sfcPricingAttempted = true;
       if (json && json.ok && Array.isArray(json.data) && json.data.length > 0)
         window.SFC_PRICING_DATA = json.data;
       window._sfcPricingPromise = null;
       return window.SFC_PRICING_DATA;
     })
-    .catch(function() { clearTimeout(_timeout); window._sfcPricingPromise = null; return null; });
+    .catch(function() {
+      clearTimeout(_timeout);
+      window._sfcPricingAttempted = true;
+      window._sfcPricingPromise = null;
+      return null;
+    });
   return window._sfcPricingPromise;
 }
 window.loadSFCPricing = loadSFCPricing;
