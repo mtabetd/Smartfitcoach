@@ -276,7 +276,32 @@ window.CUSTOM_SESSION = {
   // ─────────────────────────────────────────────
   //  ÉTAPE 6 : cycle séance
   // ─────────────────────────────────────────────
+
+  _getBestWeightForExercise: function(block) {
+    if (block.targetWeight != null && parseFloat(block.targetWeight) > 0) return block.targetWeight;
+    var S = window.S;
+    if (S && S.muscuSessionLog && block.n) {
+      var today = new Date().toISOString().slice(0, 10);
+      var log = S.muscuSessionLog || {};
+      var dates = Object.keys(log).filter(function(d) { return d < today; }).sort().reverse().slice(0, 14);
+      var maxWeight = null;
+      for (var i = 0; i < dates.length; i++) {
+        var dayLog = log[dates[i]];
+        if (dayLog && dayLog[block.n] && Array.isArray(dayLog[block.n])) {
+          var validSets = dayLog[block.n].filter(function(s) { return s.actualWeight && parseFloat(s.actualWeight) > 0; });
+          if (validSets.length > 0) {
+            var dayMax = Math.max.apply(null, validSets.map(function(s) { return parseFloat(s.actualWeight) || 0; }));
+            if (dayMax > 0) maxWeight = maxWeight === null ? dayMax : Math.max(maxWeight, dayMax);
+          }
+        }
+      }
+      if (maxWeight !== null && maxWeight > 0) return maxWeight;
+    }
+    return null;
+  },
+
   startSession: function() {
+    var self = this;
     var draft = this.ensureDraft();
     draft.startTime = Date.now();
     draft.view = 'active';
@@ -284,9 +309,10 @@ window.CUSTOM_SESSION = {
       if (b.type !== 'exercise') return;
       if (!Array.isArray(b.loggedSets)) b.loggedSets = [];
       var targetSets = parseInt(b.sets) || 4;
+      var bestWeight = self._getBestWeightForExercise(b);
       while (b.loggedSets.length < targetSets) {
         b.loggedSets.push({
-          weight: b.targetWeight != null ? b.targetWeight : '',
+          weight: bestWeight != null ? bestWeight : '',
           reps: (function() {
             var r = b.reps;
             if (r === undefined || r === null || r === '') return '';
@@ -544,11 +570,15 @@ function _csGenerateSessionFromMuscles(groups) {
       });
     }
 
-    // Prioriser : exercices connus d'abord, puis niveau croissant (compound en 1er)
+    // Prioriser : exercices connus > avec équipement > compound > débutant
     matching.sort(function(a, b) {
       var ah = recentEx[norm(a.n)] ? 1 : 0;
       var bh = recentEx[norm(b.n)] ? 1 : 0;
       if (ah !== bh) return bh - ah;
+      // Déprioritiser poids du corps sauf si déjà fait récemment
+      var abw = window.isBodyweightExercise ? window.isBodyweightExercise(a) : false;
+      var bbw = window.isBodyweightExercise ? window.isBodyweightExercise(b) : false;
+      if (abw !== bbw) return abw ? 1 : -1;
       return (a.lv || 2) - (b.lv || 2);
     });
 
