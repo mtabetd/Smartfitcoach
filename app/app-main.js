@@ -3143,24 +3143,22 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  // Steps à préserver (programme généré) : 4(muscu) 6(CF) 8(running) 10(hyrox) 12(padel)
  // 14(golf) 15(prog dédié) 16(charges) 17-18(triathlon) 20(médical) 21(yoga) 23(cycling) 25(calisthenics)
  var _PROGRAM_STEPS_MAIN = [4, 6, 8, 10, 12, 14, 15, 16, 17, 18, 20, 21, 23, 25];
- // Ne réinitialiser sStep=0 que si aucun sport n'a encore été sélectionné.
- // Si sportType est déjà défini, l'utilisateur était en cours d'onboarding (ex: reload SW
- // avant la fin du debounce saveProfile) — conserver l'étape pour qu'il puisse continuer.
+ // Guard : valeur manifestement corrompue (aucun step > 30 n'existe)
+ if (S.sStep > 30) { S.sStep = 0; }
+ // Guard : step intermédiaire sans sportType → l'utilisateur n'a pas encore choisi son sport,
+ // on remet à 0 pour qu'il reparte de la sélection sport (cas reload SW avant clic sport).
  if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) === -1 && !S.sportType) {
    S.sStep = 0;
  }
- // FIX 2026-04-16 : résolution vue post-auto-login.
- // Même logique que _resolvePostLoginView() dans le flow login manuel.
- // L'indicateur fiable pour "sport onboarding terminé" = S.sportType renseigné.
- // Le programme muscu est généré ON-THE-FLY (pas stocké dans S.sportProgram).
  var _hasSportSetup2 = !!S.sportType;
  var _hasAnyProgram2 = (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) || !!S.muscuIAProgram;
- // Onboarding sport EN COURS (step intermédiaire) ET sportType pas encore défini → rester sur sport
- // FIX 2026-04-16 : si sportType est renseigné, l'onboarding est TERMINÉ — aller au dashboard.
+ // Checkpoint sans sportType → onboarding en cours (début de flow)
  if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) !== -1 && !_hasSportSetup2) { S.view = 'sport'; }
- // Onboarding sport en cours : sport choisi (sportType défini) mais step intermédiaire
- // (ex: reload SW pendant sStep=2 — debounce saveProfile n'avait pas encore persisté le nouveau step)
+ // Step intermédiaire avec sportType → reload SW pendant questionnaire (sStep=2, etc.)
  else if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) === -1 && _hasSportSetup2) { S.view = 'sport'; }
+ // Checkpoint avec sportType mais programme pas encore généré → continuer l'onboarding
+ // (ex: triathlon à sStep=17/18, muscu sStep=4 avant confirmation programme)
+ else if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) !== -1 && _hasSportSetup2 && !_hasAnyProgram2) { S.view = 'sport'; }
  // Mode sport SANS aucun setup → lancer onboarding sport
  else if (S.appMode === 'sport' && !_hasSportSetup2 && !_hasAnyProgram2) { S.view = 'sport'; }
  // Mode both : nutrition finie mais sport pas encore lancé
@@ -3246,6 +3244,8 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
      var _csSetup = !!S.sportType;
      var _csProg = (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) || !!S.muscuIAProgram;
      if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) !== -1 && !_csSetup) { S.view = 'sport'; }
+     else if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) === -1 && _csSetup) { S.view = 'sport'; }
+     else if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) !== -1 && _csSetup && !_csProg) { S.view = 'sport'; }
      else if (S.appMode === 'sport' && !_csSetup && !_csProg) { S.view = 'sport'; }
      else if (S.appMode === 'both' && S.nStep === 12 && !_csSetup && !_csProg) { S.view = 'sport'; }
      else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
