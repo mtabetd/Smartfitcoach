@@ -692,6 +692,76 @@ function _csRenderBuild(container, draft) {
     }, 'Aucun exercice trouvé pour ces groupes musculaires. Ajoutez vos exercices manuellement ci-dessous.'));
   }
 
+  // ── Liste des blocs du brouillon (EN PREMIER — l'utilisateur voit sa séance immédiatement) ──
+  if (draft.blocks.length > 0) {
+    container.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px;'
+    }, 'MA SÉANCE'));
+    draft.blocks.forEach(function(block) {
+      container.appendChild(_csRenderDraftBlock(block));
+    });
+  }
+
+  // ── Bouton Démarrer ──
+  var canStart = draft.blocks.length > 0;
+  container.appendChild(h('button', {
+    style: [
+      'display:block;width:100%;padding:16px;margin-top:18px;',
+      'background:' + (canStart ? 'var(--ink-900,#0A0A09)' : 'var(--border,#D8D8D0)') + ';',
+      'color:' + (canStart ? 'var(--paper,#FAF9F6)' : 'var(--grey,#6B6B65)') + ';',
+      'border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;',
+      'font-size:11px;letter-spacing:3px;text-transform:uppercase;',
+      'cursor:' + (canStart ? 'pointer' : 'not-allowed') + ';min-height:52px;'
+    ].join(''),
+    onclick: function() {
+      if (!canStart) return;
+      window.CUSTOM_SESSION.startSession();
+      if (window.render) window.render();
+    }
+  }, canStart ? '▶ Démarrer la séance' : 'Ajoutez au moins un exercice'));
+
+  // ── Sauvegarder comme template depuis BUILD (sans avoir besoin de finir la séance) ──
+  if (canStart) {
+    if (!S._csBuildTplOpen) {
+      container.appendChild(h('button', {
+        style: 'display:block;width:100%;padding:9px;margin-top:6px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;color:var(--grey,#6B6B65);',
+        onclick: function() { S._csBuildTplOpen = true; if (window.render) window.render(); }
+      }, '↗ Sauvegarder comme template'));
+    } else {
+      var _bTplRow = h('div', { style: 'display:flex;gap:8px;align-items:center;margin-top:6px;padding:8px;border:1px solid var(--border,#D8D8D0);border-radius:2px;background:var(--ivory,#FAF9F6);' });
+      var _bTplInput = h('input', {
+        type: 'text', placeholder: 'Nom de la séance…',
+        style: 'flex:1;padding:8px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;background:var(--ivory,#FAF9F6);min-width:0;'
+      });
+      _bTplRow.appendChild(_bTplInput);
+      _bTplRow.appendChild(h('button', {
+        style: 'flex-shrink:0;padding:8px 14px;background:var(--green,#3E5C3A);color:#fff;border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;cursor:pointer;white-space:nowrap;',
+        onclick: function() {
+          var name = _bTplInput.value.trim();
+          if (!name) return;
+          window.CUSTOM_SESSION.saveAsTemplate(name);
+          if (window.showToast) window.showToast('« ' + name + ' » sauvegardé.', 'success', 2500);
+          S._csBuildTplOpen = false;
+          if (window.render) window.render();
+        }
+      }, 'Sauvegarder'));
+      _bTplRow.appendChild(h('button', {
+        style: 'flex-shrink:0;padding:8px 10px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;cursor:pointer;font-size:14px;color:var(--grey,#6B6B65);',
+        onclick: function() { S._csBuildTplOpen = false; if (window.render) window.render(); }
+      }, '×'));
+      container.appendChild(_bTplRow);
+    }
+  }
+
+  // ── Séparateur visuel "Ajouter" (uniquement si séance non vide) ──
+  if (draft.blocks.length > 0) {
+    var _sep = h('div', { style: 'display:flex;align-items:center;gap:10px;margin:22px 0 16px;' });
+    _sep.appendChild(h('div', { style: 'flex:1;height:1px;background:var(--border,#D8D8D0);' }));
+    _sep.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);white-space:nowrap;flex-shrink:0;' }, 'Ajouter un exercice'));
+    _sep.appendChild(h('div', { style: 'flex:1;height:1px;background:var(--border,#D8D8D0);' }));
+    container.appendChild(_sep);
+  }
+
   // ── Barre de recherche ──
   var srchWrap = h('div', { style: 'position:relative;margin-bottom:12px;' });
   srchWrap.appendChild(h('div', {
@@ -826,34 +896,6 @@ function _csRenderBuild(container, draft) {
       });
     }
   }
-
-  // ── Liste des blocs du brouillon ──
-  if (draft.blocks.length > 0) {
-    container.appendChild(h('div', {
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px;'
-    }, 'MA SÉANCE'));
-    draft.blocks.forEach(function(block) {
-      container.appendChild(_csRenderDraftBlock(block));
-    });
-  }
-
-  // ── Bouton Démarrer ──
-  var canStart = draft.blocks.length > 0;
-  container.appendChild(h('button', {
-    style: [
-      'display:block;width:100%;padding:16px;margin-top:18px;',
-      'background:' + (canStart ? 'var(--ink-900,#0A0A09)' : 'var(--border,#D8D8D0)') + ';',
-      'color:' + (canStart ? 'var(--paper,#FAF9F6)' : 'var(--grey,#6B6B65)') + ';',
-      'border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;',
-      'font-size:11px;letter-spacing:3px;text-transform:uppercase;',
-      'cursor:' + (canStart ? 'pointer' : 'not-allowed') + ';min-height:52px;'
-    ].join(''),
-    onclick: function() {
-      if (!canStart) return;
-      window.CUSTOM_SESSION.startSession();
-      if (window.render) window.render();
-    }
-  }, canStart ? '▶ Démarrer la séance' : 'Ajoutez au moins un exercice'));
 
   // ── Bouton Annuler ──
   container.appendChild(h('button', {
@@ -1203,7 +1245,9 @@ function _csRenderDraftBlock(block) {
       onclick: _isFirst ? null : (function(bid) { return function() { window.CUSTOM_SESSION.moveBlock(bid, 'up'); if (window.render) window.render(); }; })(block.id) }, '↑'));
     _btnBox.appendChild(h('button', { style: _btnStyle(_isLast), disabled: _isLast, title: 'Descendre',
       onclick: _isLast ? null : (function(bid) { return function() { window.CUSTOM_SESSION.moveBlock(bid, 'down'); if (window.render) window.render(); }; })(block.id) }, '↓'));
-    _btnBox.appendChild(h('button', { style: _btnStyle(false), title: 'Dupliquer',
+    var _dupBtnEl = h('button', {
+      style: 'background:none;border:none;cursor:pointer;padding:2px 4px;min-width:34px;min-height:36px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0px;',
+      title: 'Dupliquer',
       onclick: (function(b0) { return function() {
         var _cl = JSON.parse(JSON.stringify(b0));
         _cl.id = 'b' + Date.now() + '_' + Math.floor(Math.random() * 9999);
@@ -1213,7 +1257,11 @@ function _csRenderDraftBlock(block) {
         _d0.blocks.splice(_ix + 1, 0, _cl);
         window.CUSTOM_SESSION.saveDraft();
         if (window.render) window.render();
-      }; })(block) }, '⧉'));
+      }; })(block)
+    });
+    _dupBtnEl.appendChild(h('span', { style: 'font-size:13px;color:var(--grey,#6B6B65);line-height:1.2;' }, '⊕'));
+    _dupBtnEl.appendChild(h('span', { style: 'font-size:7px;color:var(--grey,#6B6B65);letter-spacing:0.3px;line-height:1;' }, 'dup'));
+    _btnBox.appendChild(_dupBtnEl);
     _btnBox.appendChild(h('button', { style: 'background:none;border:none;cursor:pointer;font-size:17px;color:var(--grey,#6B6B65);padding:4px 6px;min-width:30px;min-height:36px;', title: 'Supprimer',
       onclick: (function(bid) { return function() { window.CUSTOM_SESSION.removeBlock(bid); if (window.render) window.render(); }; })(block.id) }, '×'));
     hRow.appendChild(_btnBox);
