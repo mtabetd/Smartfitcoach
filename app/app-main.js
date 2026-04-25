@@ -1346,35 +1346,60 @@ function renderProfilePage(container) {
          card.appendChild(_pLabel);
 
          // ── Tier cards ──
+         var _tierFeatures = {
+           athlete:  ['Tous les programmes', 'Coach IA', 'Scanner repas', 'Export PDF'],
+           champion: ['Tout Athlete', 'Support prioritaire', 'Mises à jour anticipées'],
+           legende:  ['Tout Champion', 'Support VIP', 'Membre fondateur']
+         };
          var _tierRow = h('div', {style: 'display:flex;gap:8px;margin-bottom:16px;'});
          _tiers.forEach(function(t) {
            var isAct = _ui.tier === t;
            var isReco = t === 'champion';
+           var _preview = _findPlan(t, 'saison');
+           var _previewPrice = _preview ? _preview.label_mad : null;
            var tcard = h('div', {
-             style: 'flex:1;padding:12px 8px 10px;border:' + (isAct ? '1.5px solid var(--black)' : '1px solid var(--border)') + ';' +
-               'background:' + (isAct ? 'var(--black,#0A0A09)' : 'transparent') + ';' +
-               'cursor:pointer;text-align:center;border-radius:0;transition:background 0.2s ease,border-color 0.2s ease,color 0.2s ease;position:relative;',
+             style: 'flex:1;padding:12px 8px 12px;border:' + (isAct ? '2px solid #0A0A09' : '1px solid var(--border,#E8E6DF)') + ';' +
+               'background:' + (isAct ? '#0A0A09' : '#FAFAF8') + ';' +
+               'cursor:pointer;text-align:center;border-radius:2px;' +
+               'transition:background 0.2s,border-color 0.2s,color 0.2s;position:relative;',
              onclick: (function(tier) { return function() { window._sfcPricingUI.tier = tier; if (window.render) window.render(); }; })(t)
            });
            if (isReco) {
-             var _badge = h('div', {style:
-               'position:absolute;top:-8px;left:50%;transform:translateX(-50%);' +
-               'background:' + (isAct ? 'var(--ivory,#FAF9F6)' : 'var(--black)') + ';' +
-               'color:' + (isAct ? 'var(--black,#0A0A09)' : '#FAF9F6') + ';' +
-               'border:1px solid var(--black);' +
+             tcard.appendChild(h('div', {style:
+               'position:absolute;top:-9px;left:50%;transform:translateX(-50%);' +
+               'background:' + (isAct ? '#FAF9F6' : '#0A0A09') + ';' +
+               'color:' + (isAct ? '#0A0A09' : '#FAF9F6') + ';' +
+               'border:1px solid #0A0A09;' +
                'font-family:"Helvetica Neue",Arial,sans-serif;' +
-               'font-size:7px;letter-spacing:2px;padding:2px 6px;white-space:nowrap;'
-             }, 'POPULAIRE');
-             tcard.appendChild(_badge);
+               'font-size:7px;letter-spacing:2px;padding:2px 7px;white-space:nowrap;'
+             }, 'POPULAIRE'));
            }
+           // Nom du tier
            tcard.appendChild(h('div', {style:
-             'font-family:Georgia,serif;font-size:13px;' +
-             'color:' + (isAct ? '#FAF9F6' : 'var(--black)') + ';margin-bottom:3px;'
+             'font-family:Georgia,serif;font-size:13px;margin-bottom:2px;' +
+             'color:' + (isAct ? '#FAF9F6' : '#0A0A09') + ';'
            }, _tierLabels[t]));
-           tcard.appendChild(h('div', {style:
-             'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;' +
-             'color:' + (isAct ? 'rgba(250,249,246,0.7)' : 'var(--grey)') + ';'
-           }, _tierSubs[t]));
+           // Prix dès X MAD/trim (aperçu sans cliquer)
+           if (_previewPrice) {
+             tcard.appendChild(h('div', {style:
+               'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:600;margin:4px 0 2px;' +
+               'color:' + (isAct ? '#FAF9F6' : '#0A0A09') + ';'
+             }, _previewPrice));
+             tcard.appendChild(h('div', {style:
+               'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:1px;' +
+               'color:' + (isAct ? 'rgba(250,249,246,0.6)' : 'var(--grey,#6B6B65)') + ';margin-bottom:6px;'
+             }, '/trimestre'));
+           }
+           // Features liste
+           var _fList = h('div', {style: 'margin-top:6px;border-top:1px solid ' + (isAct ? 'rgba(250,249,246,0.15)' : 'var(--border,#E8E6DF)') + ';padding-top:6px;text-align:left;'});
+           (_tierFeatures[t] || []).forEach(function(feat) {
+             _fList.appendChild(h('div', {style:
+               'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:0.5px;' +
+               'color:' + (isAct ? 'rgba(250,249,246,0.75)' : 'var(--grey,#6B6B65)') + ';' +
+               'margin-bottom:2px;display:flex;align-items:center;gap:3px;'
+             }, (isAct ? '✓ ' : '· ') + feat));
+           });
+           tcard.appendChild(_fList);
            _tierRow.appendChild(tcard);
          });
          card.appendChild(_tierRow);

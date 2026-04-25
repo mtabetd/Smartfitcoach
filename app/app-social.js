@@ -1342,6 +1342,33 @@ function _normalizeFs(row, meId){
 }
 
 // Charge friendships + hydrate profils amis en une seule passe
+async function _fetchFriendProfilesByIds(c, otherIds) {
+  // Direct query first (works for confirmed friends — RLS passes)
+  var rp = await c.from('social_profiles').select('id,pseudo,avatar_color,avatar_url,sport_main,sport_level').in('id', otherIds);
+  var byId = {};
+  (rp.data || []).forEach(function(p){ byId[p.id] = p; });
+
+  // Fallback via server-side function for IDs blocked by RLS (pending requests)
+  var missing = otherIds.filter(function(id){ return !byId[id]; });
+  if (!missing.length) return byId;
+
+  try {
+    var sess = await c.auth.getSession();
+    var token = sess && sess.data && sess.data.session && sess.data.session.access_token;
+    if (!token) return byId;
+    var resp = await fetch('/.netlify/functions/get-friend-profiles', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ ids: missing })
+    });
+    if (resp.ok) {
+      var json = await resp.json();
+      (json.data || []).forEach(function(p){ byId[p.id] = p; });
+    }
+  } catch(err) { console.warn('[SOCIAL] fetchFriendProfiles fallback error', err && err.message); }
+  return byId;
+}
+
 async function loadFriendships(){
   var c = db(); if (!c) return;
   var me = uid(); if (!me) return;
@@ -1353,22 +1380,16 @@ async function loadFriendships(){
     if (r.error) { console.warn('[SOCIAL] loadFriendships error', r.error.message); return; }
     var rows = (r.data || []).map(function(row){ return _normalizeFs(row, me); });
     var otherIds = rows.map(function(x){ return x.otherId; }).filter(Boolean);
-    // Dedup
     var uniq = {};
     otherIds = otherIds.filter(function(id){ if(uniq[id])return false; uniq[id]=1; return true; });
-    // Hydrate profils
-    var profByI = {};
-    if (otherIds.length){
-      var rp = await c.from('social_profiles').select('id,pseudo,avatar_color,avatar_url,sport_main,sport_level')
-        .in('id', otherIds);
-      (rp.data || []).forEach(function(p){ profByI[p.id] = p; });
-    }
-    _friends = rows.filter(function(x){ return x.status === 'accepted'; })
-      .map(function(x){ var p = profByI[x.otherId] || {id:x.otherId, pseudo:'(inconnu)'}; return Object.assign({}, p, {_fsId:x.id, _fsRole:x.role, _fsDate:x.updated_at}); });
+    var profByI = otherIds.length ? await _fetchFriendProfilesByIds(c, otherIds) : {};
+    var _fallback = function(x){ return profByI[x.otherId] || { id: x.otherId, pseudo: '···' }; };
+    _friends    = rows.filter(function(x){ return x.status === 'accepted'; })
+      .map(function(x){ return Object.assign({}, _fallback(x), {_fsId:x.id, _fsRole:x.role, _fsDate:x.updated_at}); });
     _pendingIn  = rows.filter(function(x){ return x.status === 'pending' && x.role === 'addressee'; })
-      .map(function(x){ var p = profByI[x.otherId] || {id:x.otherId, pseudo:'(inconnu)'}; return Object.assign({}, p, {_fsId:x.id, _fsDate:x.created_at}); });
+      .map(function(x){ return Object.assign({}, _fallback(x), {_fsId:x.id, _fsDate:x.created_at}); });
     _pendingOut = rows.filter(function(x){ return x.status === 'pending' && x.role === 'requester'; })
-      .map(function(x){ var p = profByI[x.otherId] || {id:x.otherId, pseudo:'(inconnu)'}; return Object.assign({}, p, {_fsId:x.id, _fsDate:x.created_at}); });
+      .map(function(x){ return Object.assign({}, _fallback(x), {_fsId:x.id, _fsDate:x.created_at}); });
   } finally { _loadingFriends = false; }
 }
 
