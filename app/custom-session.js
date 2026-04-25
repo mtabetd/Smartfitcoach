@@ -1043,7 +1043,7 @@ function _csRenderDone(container, draft) {
 
   // Durée éditable
   var durRow = h('div', { style: 'display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--border,#D8D8D0);margin-bottom:12px;' });
-  durRow.appendChild(h('span', { style: 'font-family:"Helvetice Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);flex:1;' }, 'Durée réelle'));
+  durRow.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);flex:1;' }, 'Durée réelle'));
   var durInp = h('input', {
     type: 'number', min: '1', max: '300', inputmode: 'numeric',
     value: String(draft.durationMins || 30),

@@ -1214,7 +1214,7 @@ var EXERCISES = {
     video: "https://www.youtube.com/watch?v=vsarApmqJmo"
     },
     {
-      n: "Curl spider (araignee)",
+      n: "Curl spider (araignée)",
       m: "Biceps (pic)",
       eq: "Barre EZ ou haltères + banc incliné",
       sets: "3\u00d710-12",
@@ -1290,10 +1290,8 @@ var EXERCISES = {
     { n: "Preacher curl", m: "Biceps court", eq: "Banc preacher + barre EZ", sets: "3×8-12", rest: "75s", video: "https://www.youtube.com/watch?v=VUxZuml-jNE", desc: "Curl barre EZ sur banc preacher — bras bloqués sur le coussinet, cible pic biceps.", tips: ["Descente contrôlée 3s", "Ne pas verrouiller coude en bas", "Coudes stables sur banc"], lv: 1, tags: ["bras", "biceps-court", "banc-preacher"] },
     { n: "Spider curl", m: "Biceps", eq: "Banc incliné (face contre dossier) + haltères", sets: "3×10-12", rest: "60s", video: "https://www.youtube.com/watch?v=w5xTuSvjVG0", desc: "Torse contre banc incliné face au dossier, bras pendants verticalement — isole parfaitement le biceps.", tips: ["Bras complètement pendants", "Concentration pic du biceps", "Supination forte"], lv: 2, tags: ["bras", "biceps", "halteres", "isolation"] },
     // ─── Enrichissement biceps ───
-    { n: "Zottman curl", m: "Biceps / Brachial / Avant-bras", eq: "Haltères", sets: "3×10-12", rest: "60s", video: "", desc: "Monter en supination (paume vers le haut), descendre en pronation (paume vers le bas). Double stimulation biceps + avant-bras.", tips: ["Montée rapide, descente lente en pronation", "Coudes fixes au corps", "Excellent finisher biceps + avant-bras"], lv: 1, tags: ["bras", "biceps", "avant-bras", "halteres"] },
     { n: "Curl concentration", m: "Pic du biceps", eq: "Haltère", sets: "3×12-15 par bras", rest: "45s", video: "", desc: "Assis, coude contre l'intérieur de la cuisse. Curl lent et contrôlé — isolation maximale du pic du biceps.", tips: ["Coude appuyé fermement sur la cuisse", "Supination complète en haut", "Contraction tenue 1s"], lv: 1, tags: ["bras", "biceps", "haltere", "isolation", "pic"] },
     { n: "Curl câble barre droite", m: "Biceps", eq: "Câble poulie basse", sets: "3×12-15", rest: "60s", video: "", desc: "Barre droite ou EZ sur poulie basse. Tension constante sur toute l'amplitude — avantage mécanique supérieur aux haltères.", tips: ["Tension constante en bas", "Coudes fixes", "Contrôler la descente 2-3s"], lv: 1, tags: ["bras", "biceps", "cable", "tension-constante"] },
-    { n: "Curl marteau câble", m: "Brachial / Brachioradial", eq: "Câble poulie basse + corde", sets: "3×12-15", rest: "60s", video: "", desc: "Prise neutre (pouce en haut) sur corde de poulie basse. Cible le brachial et le brachioradial.", tips: ["Poignets neutres tout au long", "Coudes fixes au corps", "Monter haut jusqu'aux épaules"], lv: 1, tags: ["bras", "brachial", "avant-bras", "cable"] },
     { n: "Curl inversé barre", m: "Brachioradial / Avant-bras", eq: "Barre ou haltères", sets: "3×10-12", rest: "60s", video: "", desc: "Curl en prise pronation (paumes vers le bas). Cible le brachioradial et les extenseurs de l'avant-bras.", tips: ["Prise légèrement plus large que les épaules", "Coudes fixes", "Poignets droits"], lv: 2, tags: ["bras", "avant-bras", "brachioradial", "prise-pronation"] },
     { n: "Chin-up (traction supination)", m: "Biceps / Dos", eq: "Barre de traction", sets: "4×AMRAP", rest: "120s", video: "", desc: "Traction prise supination (paumes vers soi) — recrute fortement les biceps en plus des lats.", tips: ["Prise plus étroite que les épaules", "Tirer les coudes vers les hanches", "Amplitude complète"], lv: 2, tags: ["bras", "biceps", "dos", "poids-du-corps", "compound"] },
     { n: "Curl haltère cross-body", m: "Brachial / Biceps", eq: "Haltères", sets: "3×12 par bras", rest: "45s", video: "", desc: "Curl haltère en diagonale vers l'épaule opposée — prise neutre, cible le brachial sous le biceps.", tips: ["Amener l'haltère vers l'épaule opposée", "Coude reste au corps", "Moins de supination que le curl classique"], lv: 1, tags: ["bras", "brachial", "halteres"] },
@@ -1531,11 +1529,6 @@ var EXERCISES = {
     },
     // ─── SPRINT P3 #6 — Enrichissement triceps ───
     { n: "Extension triceps haltère unilatéral overhead", m: "Triceps long", eq: "1 haltère", sets: "3×10-12 par côté", rest: "60s", video: "https://www.youtube.com/watch?v=2jl4M0Dnq4c", desc: "Haltère au-dessus de la tête tenu à une main, flexion-extension. Stretch profond du triceps long.", tips: ["Coude près de l'oreille", "Bras fixe", "Étirement max en bas"], lv: 1, tags: ["bras", "triceps-long", "halteres", "stretch"] },
-    // ─── Enrichissement triceps ───
-    { n: "JM press", m: "Triceps (3 chefs)", eq: "Barre + banc", sets: "4×8-10", rest: "90s", video: "", desc: "Hybride entre développé couché et skull crusher — barre descend vers le cou en pliant les coudes, puis pousse. Initialisé par JM Blakley.", tips: ["Coudes pointent vers les pieds (pas les côtés)", "Barre descend vers le cou/front", "Mouvement complexe — apprendre avec barre légère"], lv: 3, tags: ["bras", "triceps", "compose", "powerbuilding"] },
-    { n: "Tate press", m: "Triceps (chef latéral)", eq: "Haltères + banc", sets: "3×12-15", rest: "60s", video: "", desc: "Couché, haltères au-dessus de la poitrine pointes en bas, fléchir les coudes vers l'extérieur jusqu'aux pectoraux puis pousser.", tips: ["Coudes s'écartent latéralement", "Haltères restent au-dessus de la poitrine", "Sensation stretch chef latéral"], lv: 2, tags: ["bras", "triceps-lateral", "halteres"] },
-    { n: "Kickback triceps câble", m: "Triceps (chef latéral)", eq: "Câble poulie haute + corde", sets: "3×15-20", rest: "45s", video: "", desc: "Incliné vers la poulie haute, bras parallèle au sol, extension complète vers l'arrière. Tension constante au câble.", tips: ["Bras reste parallèle au sol", "Extension complète — squeeze en fin", "Ne compenser pas avec l'épaule"], lv: 1, tags: ["bras", "triceps", "cable", "isolation", "tension-constante"] },
-    { n: "Pompes diamant (triceps)", m: "Triceps / Pectoraux internes", eq: "Poids du corps", sets: "4×AMRAP", rest: "60s", video: "", desc: "Pompes avec mains rapprochées formant un losange (index et pouces se touchent). Isole les triceps.", tips: ["Index et pouces se rejoignent", "Coudes près du corps", "Descente contrôlée"], lv: 1, tags: ["bras", "triceps", "poids-du-corps", "home"] },
     { n: "Skull crusher barre EZ", m: "Triceps longs", eq: "Barre EZ + banc", sets: "4×10-12", rest: "75s", video: "", desc: "Couché, barre EZ vers le front en pliant uniquement les coudes. Stretch profond du triceps long.", tips: ["Coudes fixés au plafond", "Descente jusqu'à 1cm du front", "Extension explosive", "Ne pas verrouiller en haut"], lv: 2, tags: ["bras", "triceps-long", "barre-ez", "stretch"] },
     { n: "Dips lesté (barres parallèles)", m: "Triceps / Pectoraux bas", eq: "Barres parallèles + ceinture lestée", sets: "4×8-12", rest: "90s", video: "", desc: "Dips aux barres parallèles avec lest supplémentaire. Exercice roi du triceps.", tips: ["Légère inclinaison avant = + pectoraux", "Vertical = + triceps", "Descente jusqu'à 90° coudes", "Ceinture lestée pour progression"], lv: 2, tags: ["bras", "triceps", "poids-du-corps", "compose", "lest"] },
     { n: "Rolling extension haltères", m: "Triceps longs", eq: "Haltères + banc", sets: "3×10-12", rest: "60s", video: "", desc: "Extension haltères au-dessus de la tête combinée à un léger rowing : haltères vers les épaules puis extension vers le plafond.", tips: ["Fluidité du mouvement", "Étirement maximal en bas", "Coudes proches des oreilles"], lv: 2, tags: ["bras", "triceps-long", "halteres", "stretch"] },
@@ -1653,9 +1646,9 @@ var EXERCISES = {
       tags: ["jambes", "fessiers", "force", "compose"]
     },
     {
-      n: "Presse a cuisses",
+      n: "Presse à cuisses",
       m: "Quadriceps / Fessiers",
-      eq: "Presse a cuisses",
+      eq: "Presse à cuisses",
       sets: "4\u00d710-12",
       rest: "90s",
       video: "https://www.youtube.com/watch?v=K5n2vg3oZa4",
@@ -1766,7 +1759,7 @@ var EXERCISES = {
     {
       n: "Leg press pied haut",
       m: "Fessiers / Ischios",
-      eq: "Presse a cuisses",
+      eq: "Presse à cuisses",
       sets: "4\u00d710-12",
       rest: "90s",
       desc: "Pieds hauts sur la plateforme, descendre profondément. Variation fessier/ischios.",
@@ -2520,18 +2513,6 @@ var EXERCISES = {
     video: "https://www.youtube.com/watch?v=7fRemwjcXOQ"
     },
     {
-      n: "L-sit progressions",
-      m: "Psoas / Rectus / Hip flexors",
-      eq: "Barres parallèles ou sol",
-      sets: "3\u00d710-20s",
-      rest: "60s",
-      desc: "Soutenu sur les mains, jambes tendues horizontales. Tenir.",
-      tips: ["Progression : 1 jambe → 2 jambes pliees → L-sit complet", "Jambes parfaitement horizontales", "Force abdos + flexion hanche"],
-      lv: 3,
-      tags: ["abdos", "psoas", "calisthenics", "avance"],
-    video: "https://www.youtube.com/watch?v=HxDP7SqggpI"
-    },
-    {
       n: "Windshield wipers",
       m: "Obliques / Core",
       eq: "Barre de traction",
@@ -2793,7 +2774,6 @@ var EXERCISES = {
     { n: "Battle ropes (ondes)", m: "Épaules / Cardio / Bras", eq: "Battle ropes", sets: "8×30s", rest: "30s", video: "", desc: "Ondes alternées ou simultanées avec les cordes. Cardio + force-endurance épaules et bras.", tips: ["Genoux fléchis, ancrage au sol", "Ondes les plus grandes possible", "Alterne ondes alternées et simultanées"], lv: 1, tags: ["cardio", "hiit", "epaules", "endurance-musculaire"] },
     { n: "Sled push (poussée traîneau)", m: "Quadriceps / Fessiers / Cardio", eq: "Machine ou marche", sets: "6×20m", rest: "90s", video: "", desc: "Pousser un traîneau chargé sur 20m. Conditionnement des jambes et cardio sans stress lombaire.", tips: ["Angle du corps ~45°", "Pas courts et rapides", "Charge légère pour vitesse, lourde pour force"], lv: 2, tags: ["cardio", "jambes", "fessiers", "fonctionnel", "crossfit"] },
     { n: "Marche rapide inclinée (treadmill)", m: "Cardio / Fessiers / Mollets", eq: "Tapis de course", sets: "30-60 min à 12-15% pente", rest: "N/A", video: "", desc: "Marche à 5-6 km/h, inclinaison 12-15% sur tapis. Zone cardio modérée + activation fessiers et mollets. Trend TikTok '12-3-30'.", tips: ["Pente élevée (12-15%)", "Vitesse marchée (pas courue)", "Ne pas s'appuyer sur les barres"], lv: 1, tags: ["cardio", "low-impact", "fessiers", "mollets", "zone2"] },
-    { n: "Burpees", m: "Full body / Cardio", eq: "Poids du corps", sets: "5×10 ou AMRAP 5 min", rest: "60-90s", video: "", desc: "Squat → planche → pompe (optionnel) → saut. Exercice full body à haute intensité.", tips: ["Enchainer fluidement sans pause", "Ajouter pompe pour plus d'intensité", "Saut avec bras levés en haut"], lv: 2, tags: ["cardio", "full-body", "poids-du-corps", "hiit", "crossfit"] },
     { n: "Box step-up cardio", m: "Cardio / Jambes / Fessiers", eq: "Box ou banc", sets: "3×3 min continu", rest: "90s", video: "", desc: "Monter et descendre d'un box à rythme continu pour maintenir zone cardio. Accessible et efficace.", tips: ["Poser le pied entier sur le box", "Alterne les jambes de départ", "Cadence régulière 60-80 pas/min"], lv: 1, tags: ["cardio", "low-impact", "jambes", "fessiers", "accessible"] },
     { n: "Run fractionné (intervalles)", m: "Cardio / Endurance", eq: "Chaussures de running", sets: "6×400m ou 8×200m", rest: "90s entre les intervalles", video: "", desc: "Course à pied en intervalles courts à intensité élevée. Améliore VO2max et seuil lactique.", tips: ["Effort 80-90% de la VMA", "Récup trot lent entre les intervalles", "Préchauffage 10min obligatoire"], lv: 2, tags: ["cardio", "running", "fractionne", "vo2max", "endurance"] }
   ],
