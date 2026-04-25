@@ -14,6 +14,10 @@ if ('serviceWorker' in navigator) {
   function _doReload() {
     if (_reloadingForSW) return;
     _reloadingForSW = true;
+    // Flush le debounce saveProfile (750ms) avant le rechargement pour ne pas perdre
+    // l'étape d'onboarding en cours si le SW se met à jour pendant la saisie.
+    if (window._saveProfileTimer) { clearTimeout(window._saveProfileTimer); window._saveProfileTimer = null; }
+    try { if (window.saveProfile) window.saveProfile(); } catch(e) {}
     window.location.reload();
   }
 

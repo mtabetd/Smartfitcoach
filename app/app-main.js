@@ -3140,9 +3140,13 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  // pour éviter la double-migration (régression pour les users sport-only avec weekPlan)
  // Retour utilisateur : préserver le step programme (ne pas réinitialiser l'onboarding sport).
  // Steps à PRÉSERVER : 4(muscu) 6(CF) 8(running) 10(hyrox) 12(padel) 14(golf) 15(prog dédié) 16(charges) 17(triathlon cfg) 18(triathlon prog) 20(médical) 21(yoga) 23(cycling) 25(calisthenics)
- // Steps intermédiaires onboarding (1,2,3,5,7,9,11,13,19,22,24) → revenir à 0 (sélection sport)
+ // Steps à préserver (programme généré) : 4(muscu) 6(CF) 8(running) 10(hyrox) 12(padel)
+ // 14(golf) 15(prog dédié) 16(charges) 17-18(triathlon) 20(médical) 21(yoga) 23(cycling) 25(calisthenics)
  var _PROGRAM_STEPS_MAIN = [4, 6, 8, 10, 12, 14, 15, 16, 17, 18, 20, 21, 23, 25];
- if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) === -1) {
+ // Ne réinitialiser sStep=0 que si aucun sport n'a encore été sélectionné.
+ // Si sportType est déjà défini, l'utilisateur était en cours d'onboarding (ex: reload SW
+ // avant la fin du debounce saveProfile) — conserver l'étape pour qu'il puisse continuer.
+ if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) === -1 && !S.sportType) {
    S.sStep = 0;
  }
  // FIX 2026-04-16 : résolution vue post-auto-login.
@@ -3154,6 +3158,9 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  // Onboarding sport EN COURS (step intermédiaire) ET sportType pas encore défini → rester sur sport
  // FIX 2026-04-16 : si sportType est renseigné, l'onboarding est TERMINÉ — aller au dashboard.
  if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) !== -1 && !_hasSportSetup2) { S.view = 'sport'; }
+ // Onboarding sport en cours : sport choisi (sportType défini) mais step intermédiaire
+ // (ex: reload SW pendant sStep=2 — debounce saveProfile n'avait pas encore persisté le nouveau step)
+ else if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) === -1 && _hasSportSetup2) { S.view = 'sport'; }
  // Mode sport SANS aucun setup → lancer onboarding sport
  else if (S.appMode === 'sport' && !_hasSportSetup2 && !_hasAnyProgram2) { S.view = 'sport'; }
  // Mode both : nutrition finie mais sport pas encore lancé
