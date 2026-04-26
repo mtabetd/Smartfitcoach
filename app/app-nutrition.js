@@ -2230,7 +2230,7 @@ function renderStep8(p) {
   // Header
   renderProgressBar(p, 11, 12);
   var rh = h('div', {'class': 'result-header'});
-  rh.appendChild(h('div', {'class': 'result-eyebrow'}, 'R\u00e9sultats personnalis\u00e9s'));
+  rh.appendChild(h('div', {'class': 'result-eyebrow'}, (window.isEnglish && window.isEnglish() ? 'Personalised results' : 'R\u00e9sultats personnalis\u00e9s')));
   var _uName = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().name : '';
   // XSS fix: build title via DOM instead of innerHTML with user data
   (function() {
@@ -2240,7 +2240,7 @@ function renderStep8(p) {
       titleDiv.appendChild(document.createTextNode(_uName + ','));
       titleDiv.appendChild(document.createElement('br'));
     }
-    titleDiv.appendChild(document.createTextNode('Vos '));
+    titleDiv.appendChild(document.createTextNode((window.isEnglish && window.isEnglish() ? 'Your ' : 'Vos ')));
     var em = document.createElement('em');
     em.textContent = 'macros';
     titleDiv.appendChild(em);
@@ -2248,7 +2248,7 @@ function renderStep8(p) {
   })();
   rh.appendChild(h('div', {'class': 'result-rule'}));
   var _ageDisplay = (typeof getAge === 'function' ? getAge() : (S.age || '?'));
-  var _profItems = [window.isMale(S)?'Homme':'Femme', _ageDisplay+' ans', (window.UNITS ? window.UNITS.displayWeight(S.weight) : S.weight+'kg'), (window.UNITS ? window.UNITS.displayHeight(S.height) : (S.height/100).toFixed(2)+'m')];
+  var _profItems = [window.isMale(S)?(window.isEnglish && window.isEnglish()?'Male':'Homme'):(window.isEnglish && window.isEnglish()?'Female':'Femme'), _ageDisplay+(window.isEnglish && window.isEnglish()?' y.o.':', ' ans'), (window.UNITS ? window.UNITS.displayWeight(S.weight) : S.weight+'kg'), (window.UNITS ? window.UNITS.displayHeight(S.height) : (S.height/100).toFixed(2)+'m')];
   if(S.activity!==null&&S.activity!==undefined&&ACTIVITIES[S.activity])_profItems.push(ACTIVITIES[S.activity].name);
   if(S.goal!==null&&S.goal!==undefined&&GOALS[S.goal])_profItems.push(GOALS[S.goal].name);
   rh.appendChild(h('div', {style:'text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);letter-spacing:1px;margin:8px 0'}, _profItems.join(' \u00B7 ')));
@@ -2260,7 +2260,7 @@ function renderStep8(p) {
     var _kmBadge = h('div', {style: 'display:flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--line,#D8D8D0);background:rgba(62,92,58,0.06);margin-bottom:12px;border-radius:2px'});
     _kmBadge.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--green,#3E5C3A);white-space:nowrap'}, 'Katch-McArdle'));
     var _kmText = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.4'});
-    _kmText.textContent = 'Calcul affin\u00e9 par composition corporelle \u2014 ' + S._bodyFatEstimate + '% MG \u00b7 ' + _lbmVal + '\u00a0kg de masse maigre';
+    _kmText.textContent = (window.isEnglish && window.isEnglish() ? 'Refined calculation by body composition \u2014 ' + S._bodyFatEstimate + '% body fat \u00b7 ' + _lbmVal + '\u00a0kg lean mass' : 'Calcul affin\u00e9 par composition corporelle \u2014 ' + S._bodyFatEstimate + '% MG \u00b7 ' + _lbmVal + '\u00a0kg de masse maigre');
     _kmBadge.appendChild(_kmText);
     p.appendChild(_kmBadge);
   }
@@ -2286,7 +2286,7 @@ function renderStep8(p) {
   var c1 = h('div', {'class': 'big-number', style: 'margin-bottom:0'});
   c1.appendChild(h('div', {'class': 'bn-val'}, String(tdee)));
   c1.appendChild(h('div', {'class': 'bn-label'}, window.t('onb.s8.tdee')));
-  c1.appendChild(h('div', {style: 'font-size:11px;color:var(--grey);font-style:italic;margin-top:2px'}, 'Calories d\u00e9pens\u00e9es en une journ\u00e9e normale'));
+  c1.appendChild(h('div', {style: 'font-size:11px;color:var(--grey);font-style:italic;margin-top:2px'}, (window.isEnglish && window.isEnglish() ? 'Calories spent in a normal day' : 'Calories d\u00e9pens\u00e9es en une journ\u00e9e normale')));
   sr.appendChild(c1);
   var c2 = h('div', {'class': 'big-number', style: 'margin-bottom:0'});
   c2.appendChild(h('div', {'class': 'bn-val'}, String(tgt)));
@@ -2298,7 +2298,7 @@ function renderStep8(p) {
     if (window.S._nm && window.S._nm.errors && window.S._nm.errors.length === 0) {
       var nmDiv = document.createElement('div');
       nmDiv.style.cssText = 'margin:8px 0;padding:8px 12px;background:rgba(62,92,58,0.06);border-left:3px solid var(--green,#3E5C3A);font-size:13px;color:var(--text-secondary,#6B6B65)';
-      nmDiv.textContent = '\u2713 Calculs valid\u00e9s par NutritionMaster \u2014 P\u00d74 + G\u00d74 + L\u00d79 = ' + (window.S._nm.caloriesCheck !== undefined ? Number(window.S._nm.caloriesCheck) : '?') + ' kcal';
+      nmDiv.textContent = (window.isEnglish && window.isEnglish() ? '\u2713 Calculations validated by NutritionMaster \u2014 P\u00d74 + G\u00d74 + L\u00d79 = ' + (window.S._nm.caloriesCheck !== undefined ? Number(window.S._nm.caloriesCheck) : '?') + ' kcal' : '\u2713 Calculs valid\u00e9s par NutritionMaster \u2014 P\u00d74 + G\u00d74 + L\u00d79 = ' + (window.S._nm.caloriesCheck !== undefined ? Number(window.S._nm.caloriesCheck) : '?') + ' kcal');
       p.appendChild(nmDiv);
     }
 
@@ -2324,11 +2324,11 @@ function renderStep8(p) {
       var cohBorder = coherenceOk ? 'var(--green,#3E5C3A)' : 'var(--orange,#E86F1E)';
       var sessBox = h('div', {style: 'background:' + cohBg + ';border:1px solid ' + cohBorder + ';padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px'});
       var sessTitle = h('div', {style: 'display:flex;justify-content:space-between;margin-bottom:4px'});
-      sessTitle.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:' + cohBorder}, 'S\u00e9ances musculation — 7 jours'));
+      sessTitle.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:' + cohBorder}, (window.isEnglish && window.isEnglish() ? 'Strength sessions \u2014 7 days' : 'S\u00e9ances musculation \u2014 7 jours')));
       sessTitle.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;color:' + cohBorder}, totalWkKcal + '\u00a0kcal'));
       sessBox.appendChild(sessTitle);
       sessBox.appendChild(h('div', {style: 'color:var(--grey)'}, weekSess.length + '\u00a0' + window.locPlural(weekSess.length, {fr:{one:'s\u00e9ance valid\u00e9e',other:'s\u00e9ances valid\u00e9es'},en:{one:'workout completed',other:'workouts completed'}}) + ' \u2014 ' + (window.isEnglish && window.isEnglish() ? 'avg' : 'moy') + '. ' + avgPerSess + '\u00a0kcal/' + (window.isEnglish && window.isEnglish() ? 'workout' : 's\u00e9ance')));
-      sessBox.appendChild(h('div', {style: 'color:var(--grey);margin-top:4px;font-style:italic;font-size:9px'}, coherenceOk ? '\u2713 Coh\u00e9rent avec votre facteur d\'activit\u00e9 TDEE' : '\u26a0 D\u00e9calage vs facteur d\'activit\u00e9 s\u00e9lectionn\u00e9 \u2014 pensez \u00e0 mettre \u00e0 jour votre niveau d\'activit\u00e9 dans votre profil'));
+      sessBox.appendChild(h('div', {style: 'color:var(--grey);margin-top:4px;font-style:italic;font-size:9px'}, coherenceOk ? (window.isEnglish && window.isEnglish() ? '\u2713 Consistent with your TDEE activity factor' : '\u2713 Coh\u00e9rent avec votre facteur d\'activit\u00e9 TDEE') : (window.isEnglish && window.isEnglish() ? '\u26a0 Gap vs selected activity factor \u2014 consider updating your activity level in your profile' : '\u26a0 D\u00e9calage vs facteur d\'activit\u00e9 s\u00e9lectionn\u00e9 \u2014 pensez \u00e0 mettre \u00e0 jour votre niveau d\'activit\u00e9 dans votre profil')));
       p.appendChild(sessBox);
     }
   }
@@ -2340,15 +2340,15 @@ function renderStep8(p) {
   rr.appendChild(svgRing(90, 5, tot > 0 ? m.p / tot * 100 : 0, 'var(--green,#3E5C3A)', window.t('onb.s8.proteins'), m.p));
   rr.appendChild(svgRing(90, 5, tot > 0 ? m.l / tot * 100 : 0, 'var(--orange,#E86F1E)', window.t('onb.s8.fats'), m.l));
   p.appendChild(rr);
-  p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey);font-style:italic;margin-top:2px;text-align:center'}, 'Glucides \u00b7 Prot\u00e9ines \u00b7 Lipides \u2014 les 3 piliers de votre alimentation'));
+  p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey);font-style:italic;margin-top:2px;text-align:center'}, (window.isEnglish && window.isEnglish() ? 'Carbs \u00b7 Proteins \u00b7 Fats \u2014 the 3 pillars of your diet' : 'Glucides \u00b7 Prot\u00e9ines \u00b7 Lipides \u2014 les 3 piliers de votre alimentation')));
 
   // g/kg ratio for power users — shown in small grey below the gram total
   var _protRatio = (S.weight && S._nm) ? (((S._nm.proteinGrams || S._nm.p || 0)) / S.weight).toFixed(1) : null;
   if (_protRatio) {
-    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);text-align:center;margin-top:2px'}, _protRatio + ' g/kg · méthode ISSN 2017'));
+    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);text-align:center;margin-top:2px'}, _protRatio + (window.isEnglish && window.isEnglish() ? ' g/kg \u00b7 ISSN 2017 method' : ' g/kg \u00b7 m\u00e9thode ISSN 2017')));
   }
 
-  p.appendChild(h('div', {'class': 'section-label'}, 'R\u00e9partition par repas (' + (S.mealsPerDay||3) + ' repas/j)'));
+  p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Meal split (' + (S.mealsPerDay||3) + ' meals/day)' : 'R\u00e9partition par repas (' + (S.mealsPerDay||3) + ' repas/j)')));
   var ms = h('div', {'class': 'meal-split'});
   var _globalSplit = window.getMealSplit ? window.getMealSplit() : null;
   var _splitList = _globalSplit ? [
@@ -2373,8 +2373,8 @@ function renderStep8(p) {
 
   // Stats
   var stats = h('div', {'class': 'stats-row'});
-  stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val'}, water), h('div', {'class': 'stat-label'}, 'L eau/jour')]));
-  stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val'}, String(m.p)), h('div', {'class': 'stat-label'}, 'g prot\u00e9ines/j')]));
+  stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val'}, water), h('div', {'class': 'stat-label'}, (window.isEnglish && window.isEnglish() ? 'L water/day' : 'L eau/jour'))]));
+  stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val'}, String(m.p)), h('div', {'class': 'stat-label'}, (window.isEnglish && window.isEnglish() ? 'g protein/day' : 'g prot\u00e9ines/j'))]));
   if (bmi !== null) {
     var bi = bmiInfo(bmi);
     var imcClass = bmi < 18.5 ? 'stat-warn' : bmi < 25 ? 'stat-good' : bmi < 30 ? 'stat-warn' : 'stat-alert';
@@ -2402,9 +2402,9 @@ function renderStep8(p) {
   // Afficher un conseil d'activation du profil médical 'obesity' pour optimiser les macros
   if (bmi !== null && bmi >= 30 && (!S.medical || S.medical.indexOf('obesity') === -1)) {
     var obesityTip = h('div', {style: 'border-left:3px solid #7A3010;background:rgba(122,48,16,0.06);padding:12px 16px;margin:12px 0'});
-    obesityTip.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#7A3010;margin-bottom:6px'}, '\u26A0 IMC ' + bmi.toFixed(1) + ' \u2014 Ob\u00e9sit\u00e9 grade 1 (HAS 2022)'));
-    obesityTip.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--fg2,#555);margin-bottom:4px'}, 'Votre calcul est ajust\u00e9 avec le poids id\u00e9al corrig\u00e9 (ASPEN 2016) pour \u00e9viter une surestimation des besoins prot\u00e9iques. D\u00e9ficit plafonn\u00e9 \u00e0 \u2212500\u00a0kcal/j pour pr\u00e9server la masse maigre (Helms 2014).'));
-    obesityTip.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#7A3010;margin-top:4px'}, 'Conseil\u00a0: activez la condition \u00ab\u00a0Ob\u00e9sit\u00e9 (IMC\u00a0>\u00a030)\u00a0\u00bb dans vos conditions m\u00e9dicales (Contr\u00f4les sant\u00e9) pour des recommandations nutritionnelles sp\u00e9cifiques.'));
+    obesityTip.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#7A3010;margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? '\u26A0 BMI ' + bmi.toFixed(1) + ' \u2014 Obesity grade 1 (WHO 2022)' : '\u26A0 IMC ' + bmi.toFixed(1) + ' \u2014 Ob\u00e9sit\u00e9 grade 1 (HAS 2022)')));
+    obesityTip.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--fg2,#555);margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? 'Your calculation is adjusted using the corrected ideal weight (ASPEN 2016) to avoid overestimating protein needs. Deficit capped at \u2212500\u00a0kcal/day to preserve lean mass (Helms 2014).' : 'Votre calcul est ajust\u00e9 avec le poids id\u00e9al corrig\u00e9 (ASPEN 2016) pour \u00e9viter une surestimation des besoins prot\u00e9iques. D\u00e9ficit plafonn\u00e9 \u00e0 \u2212500\u00a0kcal/j pour pr\u00e9server la masse maigre (Helms 2014).')));
+    obesityTip.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#7A3010;margin-top:4px'}, (window.isEnglish && window.isEnglish() ? 'Tip\u00a0: activate the \u00ab\u00a0Obesity (BMI\u00a0>\u00a030)\u00a0\u00bb condition in your medical conditions (Health checks) for specific nutritional recommendations.' : 'Conseil\u00a0: activez la condition \u00ab\u00a0Ob\u00e9sit\u00e9 (IMC\u00a0>\u00a030)\u00a0\u00bb dans vos conditions m\u00e9dicales (Contr\u00f4les sant\u00e9) pour des recommandations nutritionnelles sp\u00e9cifiques.')));
     p.appendChild(obesityTip);
   }
 
@@ -2412,7 +2412,7 @@ function renderStep8(p) {
   if (!Array.isArray(S.medical)) S.medical = [];
   if (S.medical.length > 0) {
     var mw = h('div', {style: 'border-left:2px solid var(--orange);padding:12px 16px;background:rgba(232,111,30,0.06);margin:16px 0'});
-    mw.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange);margin-bottom:8px'}, 'Recommandations m\u00e9dicales'));
+    mw.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange);margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'Medical recommendations' : 'Recommandations m\u00e9dicales')));
     S.medical.forEach(function(id) {
       var adv = MEDICAL_ADVICE[id];
       if (adv) mw.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px;padding-left:8px;border-left:1px solid var(--border)'}, adv.warn));
@@ -2429,7 +2429,7 @@ function renderStep8(p) {
 
       // Main pregnancy card
       var pregResCard = h('div', {style: 'border-left:3px solid ' + triResColor + ';padding:16px;background:var(--ivory2);margin:16px 0'});
-      pregResCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:4px'}, triRes.trimester.icon + ' Grossesse \u2014 ' + triRes.trimester.name + ' (Semaine ' + triRes.week + '/40)'));
+      pregResCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:4px'}, triRes.trimester.icon + (window.isEnglish && window.isEnglish() ? ' Pregnancy \u2014 ' : ' Grossesse \u2014 ') + triRes.trimester.name + (window.isEnglish && window.isEnglish() ? ' (Week ' : ' (Semaine ') + triRes.week + '/40)'));
 
       // Progress bar
       var pregProgW = h('div', {style: 'height:8px;background:var(--border);border-radius:2px;overflow:hidden;margin:8px 0;display:flex'});
@@ -2441,11 +2441,11 @@ function renderStep8(p) {
       // Calorie info
       var tdeeRes = Math.round(calcTDEE());
       var extraRes = triRes.trimester.calorieExtra;
-      pregResCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin:8px 0'}, 'TDEE ' + tdeeRes + ' kcal + ' + extraRes + ' kcal grossesse = ' + (tdeeRes + extraRes) + ' kcal/jour'));
+      var tdeeRes = Math.round(calcTDEE());
 
       // Nutrition tips
       var pregNutList = h('div', {style: 'border-left:2px solid var(--ink-900,#0A0A09);padding:8px 12px;margin:10px 0'});
-      pregNutList.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--success,#3E5C3A);margin-bottom:6px'}, 'Recommandations nutritionnelles'));
+      pregNutList.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--success,#3E5C3A);margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Nutritional recommendations' : 'Recommandations nutritionnelles')));
       (triRes.trimester.nutritionTips || []).forEach(function(tip) {
         pregNutList.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:3px;padding-left:8px'}, '\u2022 ' + tip));
       });
@@ -2453,8 +2453,15 @@ function renderStep8(p) {
 
       // Essential supplements for pregnancy
       var pregSuppList = h('div', {style: 'border-left:2px solid #E8A87C;padding:8px 12px;margin:10px 0'});
-      pregSuppList.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E8A87C;margin-bottom:6px'}, 'Suppl\u00e9ments essentiels grossesse'));
-      var pregSupps = [
+      pregSuppList.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E8A87C;margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Essential supplements in pregnancy' : 'Suppl\u00e9ments essentiels grossesse')));
+      var pregSupps = window.isEnglish && window.isEnglish() ? [
+        'Folic acid: 400-800 \u00b5g/day',
+        'Iron: 27 mg/day',
+        'Calcium: 1000 mg/day',
+        'Vitamin D: 600-1000 IU/day',
+        'DHA: 200-300 mg/day',
+        'Iodine: 220 \u00b5g/day'
+      ] : [
         'Acide folique : 400-800 \u00b5g/jour',
         'Fer : 27 mg/jour',
         'Calcium : 1000 mg/jour',
@@ -2470,12 +2477,12 @@ function renderStep8(p) {
       p.appendChild(pregResCard);
 
       // Pregnancy weight tracking
-      p.appendChild(h('div', {'class': 'section-label'}, 'Suivi de poids grossesse'));
+      p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Pregnancy weight tracking' : 'Suivi de poids grossesse')));
       var pregWg = window.getPregnancyWeightGuideline ? window.getPregnancyWeightGuideline() : null;
       if (pregWg) {
         var pregWeightCanvas = h('canvas', {width: '600', height: '220', style: 'width:100%;height:220px'});
         var pregChartWrap = h('div', {'class': 'chart-container'});
-        pregChartWrap.appendChild(h('div', {'class': 'chart-title'}, 'Courbe de poids \u2014 Grossesse'));
+        pregChartWrap.appendChild(h('div', {'class': 'chart-title'}, (window.isEnglish && window.isEnglish() ? 'Weight curve \u2014 Pregnancy' : 'Courbe de poids \u2014 Grossesse')));
         pregChartWrap.appendChild(pregWeightCanvas);
         p.appendChild(pregChartWrap);
 
@@ -2494,8 +2501,8 @@ function renderStep8(p) {
             pregMaxD.push(Math.round((pregBaseW + pt1g + pt2t3w * pregWg.weeklyGainRange[1]) * 10) / 10);
           }
           var pregDatasets = [
-            { label: 'Min recommand\u00e9', data: pregMinD, borderColor: '#3E5C3A', borderWidth: 1, pointRadius: 0, fill: false },
-            { label: 'Max recommand\u00e9', data: pregMaxD, borderColor: '#3E5C3A', borderWidth: 1, pointRadius: 0, fill: '-1', backgroundColor: 'rgba(62,92,58,0.08)' }
+            { label: (window.isEnglish && window.isEnglish() ? 'Min recommended' : 'Min recommand\u00e9'), data: pregMinD, borderColor: '#3E5C3A', borderWidth: 1, pointRadius: 0, fill: false },
+            { label: (window.isEnglish && window.isEnglish() ? 'Max recommended' : 'Max recommand\u00e9'), data: pregMaxD, borderColor: '#3E5C3A', borderWidth: 1, pointRadius: 0, fill: '-1', backgroundColor: 'rgba(62,92,58,0.08)' }
           ];
           // Plot weight history points
           if (S.weightHistory && S.weightHistory.length > 0) {
@@ -2505,12 +2512,12 @@ function renderStep8(p) {
               var cWeek = S.pregnancyWeek || 0;
               histPts[Math.min(cWeek, 40)] = entry.weight;
             });
-            pregDatasets.push({ label: 'Poids mesur\u00e9', data: histPts, borderColor: '#E8A87C', pointRadius: 5, pointBackgroundColor: '#E8A87C', showLine: false });
+            pregDatasets.push({ label: (window.isEnglish && window.isEnglish() ? 'Measured weight' : 'Poids mesur\u00e9'), data: histPts, borderColor: '#E8A87C', pointRadius: 5, pointBackgroundColor: '#E8A87C', showLine: false });
           } else if (S.weight) {
             var ptData = new Array(41).fill(null);
             var cw2 = S.pregnancyWeek || 0;
             if (cw2 >= 0 && cw2 <= 40) ptData[cw2] = S.weight;
-            pregDatasets.push({ label: 'Poids actuel', data: ptData, borderColor: '#E8A87C', pointRadius: 6, pointBackgroundColor: '#E8A87C', showLine: false });
+            pregDatasets.push({ label: (window.isEnglish && window.isEnglish() ? 'Current weight' : 'Poids actuel'), data: ptData, borderColor: '#E8A87C', pointRadius: 6, pointBackgroundColor: '#E8A87C', showLine: false });
           }
           try { window.createChart(pregWeightCanvas, {
             type: 'line', data: { labels: pregLabels, datasets: pregDatasets },
@@ -2524,7 +2531,7 @@ function renderStep8(p) {
           if (aGain < pregWg.currentExpectedGainMin || aGain > pregWg.currentExpectedGainMax) {
             var aboveBelow = aGain > pregWg.currentExpectedGainMax ? 'au-dessus' : 'en dessous';
             var pregWeightWarn = h('div', {style: 'border-left:3px solid var(--orange,#E86F1E);padding:12px 16px;background:rgba(232,111,30,0.06);margin:12px 0'});
-            pregWeightWarn.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E)'}, '\u26A0 Votre poids est ' + aboveBelow + ' de la fourchette recommand\u00e9e. Consultez votre m\u00e9decin.'));
+            pregWeightWarn.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E)'}, (window.isEnglish && window.isEnglish() ? '\u26A0 Your weight is ' + (aGain > pregWg.currentExpectedGainMax ? 'above' : 'below') + ' the recommended range. Consult your doctor.' : '\u26A0 Votre poids est ' + aboveBelow + ' de la fourchette recommand\u00e9e. Consultez votre m\u00e9decin.')));
             p.appendChild(pregWeightWarn);
           }
         }
@@ -2532,7 +2539,7 @@ function renderStep8(p) {
 
       // Medical disclaimer
       var pregDisclaimer = h('div', {style: 'border-left:3px solid var(--error,#7A1F1F);padding:12px 16px;background:rgba(122,31,31,0.06);margin:12px 0'});
-      pregDisclaimer.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--error,#7A1F1F)'}, '\u26A0 Ce suivi ne remplace pas votre suivi m\u00e9dical. Consultez votre sage-femme ou gyn\u00e9cologue.'));
+      pregDisclaimer.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--error,#7A1F1F)'}, (window.isEnglish && window.isEnglish() ? '\u26A0 This tracking does not replace your medical follow-up. Consult your midwife or gynaecologist.' : '\u26A0 Ce suivi ne remplace pas votre suivi m\u00e9dical. Consultez votre sage-femme ou gyn\u00e9cologue.')));
       p.appendChild(pregDisclaimer);
     }
   }
@@ -2544,16 +2551,16 @@ function renderStep8(p) {
       var phaseColors = {menstruation: 'var(--error,#7A1F1F)', follicular: 'var(--orange-ink,#7A3B0E)', ovulation: 'var(--success,#3E5C3A)', luteal: 'var(--orange-ink,#7A3B0E)'};
       var phaseColor = phaseColors[cycleInfo.phase.id] || 'var(--ink-500,#6B6B65)';
   
-      p.appendChild(h('div', {'class': 'section-label'}, 'Cycle menstruel \u2014 Phase actuelle'));
+      p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Menstrual cycle \u2014 Current phase' : 'Cycle menstruel \u2014 Phase actuelle')));
       var cycCard = h('div', {style: 'border-left:3px solid ' + phaseColor + ';padding:16px;background:var(--ivory2);margin-bottom:16px'});
   
       cycCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:4px'}, cycleInfo.phase.icon + ' ' + cycleInfo.phase.name));
-      cycCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-bottom:8px'}, 'Jour ' + cycleInfo.dayInCycle + '/' + S.cycleLength + ' du cycle'));
+      cycCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'Day ' + cycleInfo.dayInCycle + '/' + S.cycleLength + ' of cycle' : 'Jour ' + cycleInfo.dayInCycle + '/' + S.cycleLength + ' du cycle')));
       cycCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-bottom:12px'}, cycleInfo.phase.desc));
   
       // Nutrition tips
       var tipsList = h('div', {style: 'border-left:2px solid var(--ink-900,#0A0A09);padding:8px 12px;margin-bottom:10px'});
-      tipsList.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--success,#3E5C3A);margin-bottom:6px'}, 'Conseils nutrition'));
+      tipsList.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--success,#3E5C3A);margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Nutrition tips' : 'Conseils nutrition')));
       (cycleInfo.phase.nutritionTips || []).forEach(function(tip) {
         tipsList.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:3px;padding-left:8px'}, '\u2022 ' + tip));
       });
@@ -2574,7 +2581,7 @@ function renderStep8(p) {
         var intPct = Math.round(cycleInfo.phase.intensityFactor * 100);
         var intColor = intPct >= 110 ? 'var(--success,#3E5C3A)' : intPct >= 90 ? 'var(--orange-ink,#7A3B0E)' : 'var(--error,#7A1F1F)';
         var intBadge = h('div', {style: 'display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(0,0,0,0.04);border-radius:2px;margin-bottom:8px'});
-        intBadge.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey)'},'Intensit\u00e9 recommand\u00e9e cette phase :'));
+        intBadge.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey)'},(window.isEnglish && window.isEnglish() ? 'Recommended intensity this phase:' : 'Intensit\u00e9 recommand\u00e9e cette phase :')));
         intBadge.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;font-weight:600;color:' + intColor}, intPct + '%'));
         cycCard.appendChild(intBadge);
       }
@@ -2585,7 +2592,7 @@ function renderStep8(p) {
         var baseCal = Math.round(calcTDEE() * ((S.goal !== null && GOALS[S.goal]) ? GOALS[S.goal].mult : 1));
         var adjCal = tgt;
         var adjNote = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + phaseColor + ';margin-top:4px;padding:6px 10px;background:rgba(0,0,0,0.03);border-radius:2px'});
-        adjNote.textContent = 'Calories adapt\u00e9es : ' + baseCal + ' kcal (base) + ' + adjPct + '% = ' + adjCal + ' kcal';
+        adjNote.textContent = (window.isEnglish && window.isEnglish() ? 'Adjusted calories: ' + baseCal + ' kcal (base) + ' + adjPct + '% = ' + adjCal + ' kcal' : 'Calories adapt\u00e9es : ' + baseCal + ' kcal (base) + ' + adjPct + '% = ' + adjCal + ' kcal');
         cycCard.appendChild(adjNote);
       }
 
@@ -2646,7 +2653,7 @@ function renderStep8(p) {
       }
     }
     window.render();
-  }}, 'Enregistrer'));
+  }}, (window.isEnglish && window.isEnglish() ? 'Save' : 'Enregistrer')));
   p.appendChild(weightInputWrap);
 
   // Alcohol impact
@@ -2666,7 +2673,7 @@ function renderStep8(p) {
     }
     if (totalAlcKcal > 0) {
       var alcInfo = h('div', {style: 'border-left:2px solid var(--orange);padding:12px 16px;background:rgba(232,111,30,0.06);margin:12px 0'});
-      alcInfo.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange)'}, 'Alcool : +' + totalAlcKcal + ' kcal/semaine soit +' + Math.round(totalAlcKcal / 7) + ' kcal/jour en moyenne'));
+      alcInfo.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange)'}, (window.isEnglish && window.isEnglish() ? 'Alcohol: +' + totalAlcKcal + ' kcal/week or +' + Math.round(totalAlcKcal / 7) + ' kcal/day on average' : 'Alcool : +' + totalAlcKcal + ' kcal/semaine soit +' + Math.round(totalAlcKcal / 7) + ' kcal/jour en moyenne')));
       p.appendChild(alcInfo);
     }
   }
@@ -2677,7 +2684,7 @@ function renderStep8(p) {
     var suppRecs = getSupplementRecommendations() || [];
     if (suppRecs.length > 0) {
       if (!Array.isArray(S.supplements)) S.supplements = [];
-      p.appendChild(h('div', {'class': 'section-label'}, 'Suppl\u00e9mentation recommand\u00e9e'));
+      p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Recommended supplementation' : 'Suppl\u00e9mentation recommand\u00e9e')));
 
       // If user takes creatine, show special card first
       if (S.creatine) {
@@ -2686,10 +2693,10 @@ function renderStep8(p) {
           if (suppRecs[cri].id === 'creatine') { creatRec = suppRecs[cri]; break; }
         }
         if (creatRec) {
-          var creatCard = h('div', {style: 'border-left:3px solid var(--ink-900,#0A0A09);padding:14px 16px;background:rgba(62,92,58,0.06);margin-bottom:12px'});
+          creatCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:4px'}, creatRec.icon + (window.isEnglish && window.isEnglish() ? ' Creatine \u2014 Your dose: ' : ' Cr\u00e9atine \u2014 Votre dose : ') + (S.creatineDose || '?') + (window.isEnglish && window.isEnglish() ? 'g/day' : 'g/jour')));
           creatCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:4px'}, creatRec.icon + ' Cr\u00e9atine \u2014 Votre dose : ' + (S.creatineDose || '?') + 'g/jour'));
           if (S.creatineDose && creatRec.dosage && S.creatineDose !== creatRec.dosage.dose) {
-            creatCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange);margin-bottom:4px'}, '\u26A0 Dose recommand\u00e9e : ' + creatRec.dosage.dose + 'g/jour (bas\u00e9 sur votre poids)'));
+            creatCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange);margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? '\u26A0 Recommended dose: ' + creatRec.dosage.dose + 'g/day (based on your weight)' : '\u26A0 Dose recommand\u00e9e : ' + creatRec.dosage.dose + 'g/jour (bas\u00e9 sur votre poids)')));
           }
           creatCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey)'}, creatRec.dosage.timing));
           p.appendChild(creatCard);
@@ -2702,8 +2709,8 @@ function renderStep8(p) {
         var recCard = h('div', {style: 'border:1px solid var(--border);padding:14px 16px;background:var(--ivory2);margin-bottom:8px'});
         recCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:2px'}, rec.icon + ' ' + rec.name));
         recCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:6px;font-style:italic'}, rec.desc));
-        recCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:2px'}, '\u25C6 Dosage : ' + rec.dosage.dose + ' ' + rec.dosage.unit));
-        recCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:2px'}, '\u25C6 Timing : ' + rec.dosage.timing));
+        recCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:2px'}, (window.isEnglish && window.isEnglish() ? '\u25C6 Dosage: ' + rec.dosage.dose + ' ' + rec.dosage.unit : '\u25C6 Dosage : ' + rec.dosage.dose + ' ' + rec.dosage.unit)));
+        recCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:2px'}, (window.isEnglish && window.isEnglish() ? '\u25C6 Timing: ' + rec.dosage.timing : '\u25C6 Timing : ' + rec.dosage.timing)));
         if (rec.dosage.note) {
           recCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--ink-300,#A8A8A0);margin-top:4px;font-style:italic'}, rec.dosage.note));
         }
@@ -2719,7 +2726,7 @@ function renderStep8(p) {
 
       // Medical disclaimer
       var disclaimerBox = h('div', {style: 'border-left:2px solid var(--orange);padding:12px 16px;background:rgba(232,111,30,0.06);margin:12px 0'});
-      disclaimerBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange)'}, '\u26A0 Ces recommandations sont bas\u00e9es sur des \u00e9tudes scientifiques reconnues (ISSN, NIH, EFSA). Consultez votre m\u00e9decin avant toute suppl\u00e9mentation.'));
+      disclaimerBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange)'}, (window.isEnglish && window.isEnglish() ? '\u26A0 These recommendations are based on recognised scientific studies (ISSN, NIH, EFSA). Consult your doctor before any supplementation.' : '\u26A0 Ces recommandations sont bas\u00e9es sur des \u00e9tudes scientifiques reconnues (ISSN, NIH, EFSA). Consultez votre m\u00e9decin avant toute suppl\u00e9mentation.')));
       p.appendChild(disclaimerBox);
     }
   }
@@ -2727,8 +2734,8 @@ function renderStep8(p) {
   // Food habits tip
   if (S.eatingLocation === 'office') {
     var officeTip = h('div', {'class': 'whey-tip', style: 'border-left-color:var(--blue);background:var(--bluebg);margin-top:12px'});
-    officeTip.appendChild(h('strong', {}, 'Astuce bureau \u2014 '));
-    officeTip.appendChild(h('span', {}, 'Privil\u00e9giez les meal preps transportables : wraps, salades en bocal, buddha bowls'));
+    officeTip.appendChild(h('strong', {}, (window.isEnglish && window.isEnglish() ? 'Office tip \u2014 ' : 'Astuce bureau \u2014 ')));
+    officeTip.appendChild(h('span', {}, (window.isEnglish && window.isEnglish() ? 'Favour portable meal preps: wraps, jar salads, buddha bowls' : 'Privil\u00e9giez les meal preps transportables : wraps, salades en bocal, buddha bowls')));
     p.appendChild(officeTip);
   }
 
@@ -2757,15 +2764,15 @@ function renderStep8(p) {
     }
     S._showCompletionFirst = true;
     goStep(12);
-  }}, 'Voir mon planning semaine'));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(10); }, html: backArrowHtml() + 'Modifier mes pr\u00e9f\u00e9rences'}));
+  }}, (window.isEnglish && window.isEnglish() ? 'View my weekly plan' : 'Voir mon planning semaine')));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(10); }, html: backArrowHtml() + (window.isEnglish && window.isEnglish() ? 'Edit my preferences' : 'Modifier mes pr\u00e9f\u00e9rences')}));
 
   // CTA sport — affiché en mode "les deux" quand le programme sportif n'est pas encore configuré
   if (S.appMode === 'both' && !S.sportType) {
     p.appendChild(h('div', {style: 'height:1px;background:var(--border,#E8E6DF);margin:24px 0 20px'}));
     p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px;text-align:center'}, '\u00c9TAPE SUIVANTE'));
-    p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;color:var(--black,#1A1A18);line-height:1.55;margin-bottom:16px;text-align:center'}, 'Votre socle nutritionnel est en place. Complétez l\u2019alliance gagnante avec une programmation sportive sur-mesure.'));
-    p.appendChild(h('button', {style: 'display:block;width:100%;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;min-height:52px;padding:0 24px;border:none;cursor:pointer;border-radius:2px', onclick: function() { S.view = 'sport'; window.render(); }}, 'CONFIGURER MON PROGRAMME SPORTIF'));
+    p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;color:var(--black,#1A1A18);line-height:1.55;margin-bottom:16px;text-align:center'}, (window.isEnglish && window.isEnglish() ? 'Your nutritional foundation is in place. Complete the winning combination with a tailor-made sports programme.' : 'Votre socle nutritionnel est en place. Compl\u00e9tez l\u2019alliance gagnante avec une programmation sportive sur-mesure.')));
+    p.appendChild(h('button', {style: 'display:block;width:100%;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;min-height:52px;padding:0 24px;border:none;cursor:pointer;border-radius:2px', onclick: function() { S.view = 'sport'; window.render(); }}, (window.isEnglish && window.isEnglish() ? 'SET UP MY SPORTS PROGRAMME' : 'CONFIGURER MON PROGRAMME SPORTIF')));
   }
 }
 
@@ -2776,7 +2783,7 @@ function renderWeightChart(p) {
     return;
   }
   var chartContainer = h('div', {'class': 'chart-container'});
-  chartContainer.appendChild(h('div', {'class': 'chart-title'}, '\u00c9volution du poids'));
+  chartContainer.appendChild(h('div', {'class': 'chart-title'}, (window.isEnglish && window.isEnglish() ? 'Weight progress' : '\u00c9volution du poids')));
   var canvas = h('canvas', {width: '600', height: '250', style: 'width:100%;height:250px;max-width:100%'});
   canvas.className = 'weight-chart';
   chartContainer.appendChild(canvas);
@@ -2800,7 +2807,7 @@ function renderWeightChart(p) {
       data: {
         labels: labels,
         datasets: [{
-          label: 'Poids (kg)',
+          label: (window.isEnglish && window.isEnglish() ? 'Weight (kg)' : 'Poids (kg)'),
           data: data,
           borderColor: '#0A0A09',
           backgroundColor: 'rgba(10,10,9,0.05)',
@@ -2847,7 +2854,7 @@ function renderNutritionCompletion(p) {
   // Subtitle discret "sur 12 étapes"
   achievement.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:4px;'
-  }, 'sur 12 étapes'));
+  }, (window.isEnglish && window.isEnglish() ? 'out of 12 steps' : 'sur 12 \u00e9tapes')));
   p.appendChild(achievement);
 
   // Trait noir 40px centré — signature éditoriale
@@ -2858,14 +2865,14 @@ function renderNutritionCompletion(p) {
   // Eyebrow label (existant)
   p.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:center;margin-bottom:20px'
-  }, '\u25c6 PROGRAMME NUTRITIONNEL'));
+  }, (window.isEnglish && window.isEnglish() ? '\u25c6 NUTRITION PROGRAMME' : '\u25c6 PROGRAMME NUTRITIONNEL')));
 
   // Main headline
   var headline = h('div', {style: 'font-family:Georgia,serif;font-size:28px;font-style:italic;line-height:1.25;color:var(--black,#1A1A18);text-align:center;margin-bottom:8px'});
-  headline.textContent = 'Votre nutrition';
+  headline.textContent = (window.isEnglish && window.isEnglish() ? 'Your nutrition' : 'Votre nutrition');
   p.appendChild(headline);
   var headline2 = h('div', {style: 'font-family:Georgia,serif;font-size:28px;font-style:italic;line-height:1.25;color:var(--black,#1A1A18);text-align:center;margin-bottom:32px'});
-  headline2.textContent = 'est pr\u00eate.';
+  headline2.textContent = (window.isEnglish && window.isEnglish() ? 'is ready.' : 'est pr\u00eate.');
   p.appendChild(headline2);
 
   // Macro summary stats
@@ -2880,9 +2887,9 @@ function renderNutritionCompletion(p) {
       // FIX UX 2026-04-17 : tooltips explicatifs pour termes techniques (MB/TDEE/Cible)
       // Réutilise window.termTooltip (défini dans app-sport.js) pour cohérence Hermès — DRY.
       var statItems = [
-        {label: 'MB', value: bmr + '\u00a0kcal/j', tip: 'M\u00e9tabolisme de Base \u2014 calories que votre corps consomme au repos complet (respiration, circulation, etc.)'},
-        {label: 'TDEE', value: tdee + '\u00a0kcal/j', tip: 'Total Daily Energy Expenditure \u2014 votre d\u00e9pense \u00e9nerg\u00e9tique totale sur une journ\u00e9e (MB + activit\u00e9 quotidienne + sport)'},
-        {label: 'Cible', value: tgt + '\u00a0kcal/j', tip: 'Objectif calorique quotidien \u2014 ajust\u00e9 selon votre objectif (d\u00e9ficit pour perdre, surplus pour prendre du muscle, maintien pour stabiliser)'}
+        {label: 'MB', value: bmr + '\u00a0kcal/j', tip: (window.isEnglish && window.isEnglish() ? 'Basal Metabolic Rate \u2014 calories your body uses at complete rest (breathing, circulation, etc.)' : 'M\u00e9tabolisme de Base \u2014 calories que votre corps consomme au repos complet (respiration, circulation, etc.)')},
+        {label: 'TDEE', value: tdee + '\u00a0kcal/j', tip: (window.isEnglish && window.isEnglish() ? 'Total Daily Energy Expenditure \u2014 your total daily energy expenditure (BMR + daily activity + sport)' : 'Total Daily Energy Expenditure \u2014 votre d\u00e9pense \u00e9nerg\u00e9tique totale sur une journ\u00e9e (MB + activit\u00e9 quotidienne + sport)')},
+        {label: (window.isEnglish && window.isEnglish() ? 'Target' : 'Cible'), value: tgt + '\u00a0kcal/j', tip: (window.isEnglish && window.isEnglish() ? 'Daily calorie target \u2014 adjusted for your goal (deficit to lose, surplus to gain muscle, maintenance to stabilise)' : 'Objectif calorique quotidien \u2014 ajust\u00e9 selon votre objectif (d\u00e9ficit pour perdre, surplus pour prendre du muscle, maintien pour stabiliser)')}
       ];
       var _microLabelStyle = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65)';
       statItems.forEach(function(item, idx) {
@@ -2917,11 +2924,11 @@ function renderNutritionCompletion(p) {
   if (S.appMode === 'both' && !S.sportType) {
     // Sport CTA as primary action
     var ctaLabel = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:12px;text-align:center'});
-    ctaLabel.textContent = '\u00c9TAPE SUIVANTE';
+    ctaLabel.textContent = (window.isEnglish && window.isEnglish() ? 'NEXT STEP' : '\u00c9TAPE SUIVANTE');
     p.appendChild(ctaLabel);
 
     var ctaText = h('div', {style: 'font-family:Georgia,serif;font-size:15px;font-style:italic;color:var(--black,#1A1A18);line-height:1.6;margin-bottom:24px;text-align:center;max-width:340px;margin-left:auto;margin-right:auto'});
-    ctaText.textContent = 'Votre programme nutritionnel est en place. Il est temps de construire votre programmation sportive \u2014 l\u2019alliance parfaite pour atteindre vos objectifs.';
+    ctaText.textContent = (window.isEnglish && window.isEnglish() ? 'Your nutritional programme is in place. Time to build your sports programme \u2014 the perfect combination to reach your goals.' : 'Votre programme nutritionnel est en place. Il est temps de construire votre programmation sportive \u2014 l\u2019alliance parfaite pour atteindre vos objectifs.');
     p.appendChild(ctaText);
 
     // Primary: sport CTA
@@ -2932,7 +2939,7 @@ function renderNutritionCompletion(p) {
         S.view = 'sport';
         window.render();
       }
-    }, 'CONFIGURER MA PROGRAMMATION SPORTIVE \u2192'));
+    }, (window.isEnglish && window.isEnglish() ? 'SET UP MY SPORTS PROGRAMME \u2192' : 'CONFIGURER MA PROGRAMMATION SPORTIVE \u2192')));
 
     // Secondary: see the plan
     var planLink = h('div', {
@@ -2945,7 +2952,7 @@ function renderNutritionCompletion(p) {
         window.render();
       }
     });
-    planBtn.textContent = 'Voir mon plan nutrition \u2192';
+    planBtn.textContent = (window.isEnglish && window.isEnglish() ? 'View my nutrition plan \u2192' : 'Voir mon plan nutrition \u2192');
     planLink.appendChild(planBtn);
     p.appendChild(planLink);
   } else {
@@ -2956,7 +2963,7 @@ function renderNutritionCompletion(p) {
         S._showCompletionFirst = false;
         window.render();
       }
-    }, 'VOIR MON PLAN NUTRITION \u2192'));
+    }, (window.isEnglish && window.isEnglish() ? 'VIEW MY NUTRITION PLAN \u2192' : 'VOIR MON PLAN NUTRITION \u2192')));
 
     // Secondary: back to macros
     var macrosLink = h('div', {style: 'text-align:center;margin-bottom:8px'});
@@ -2964,7 +2971,7 @@ function renderNutritionCompletion(p) {
       style: 'background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:8px 0',
       onclick: function() { S._showCompletionFirst = false; goStep(11); }
     });
-    macrosBtn.textContent = 'Acc\u00e9der \u00e0 mes macros';
+    macrosBtn.textContent = (window.isEnglish && window.isEnglish() ? 'Go to my macros' : 'Acc\u00e9der \u00e0 mes macros');
     macrosLink.appendChild(macrosBtn);
     p.appendChild(macrosLink);
   }
@@ -2974,7 +2981,7 @@ function renderNutritionCompletion(p) {
     'class': 'btn-back',
     onclick: function() { S._showCompletionFirst = false; goStep(11); },
     html: backArrowHtml() + 'Retour aux r\u00e9sultats'
-  }));
+    html: backArrowHtml() + (window.isEnglish && window.isEnglish() ? 'Back to results' : 'Retour aux r\u00e9sultats')
 }
 
 // ─── STEP 9: PLANNING ───
@@ -3074,9 +3081,9 @@ function renderStep9(p) {
       var validateLabel = h('div', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px;'
       });
-      validateLabel.textContent = hashChanged ? 'Paramètres modifiés'
-        : weekChanged ? 'Nouvelle semaine'
-        : 'Nouveau programme';
+      validateLabel.textContent = hashChanged ? (window.isEnglish && window.isEnglish() ? 'Modified settings' : 'Param\u00e8tres modifi\u00e9s')
+        : weekChanged ? (window.isEnglish && window.isEnglish() ? 'New week' : 'Nouvelle semaine')
+        : (window.isEnglish && window.isEnglish() ? 'New programme' : 'Nouveau programme');
       validateBox.appendChild(validateLabel);
 
       var validateText = h('div', {
@@ -3084,10 +3091,10 @@ function renderStep9(p) {
       });
       // FIX 2026-04-16 — label cohérent : "Valider" ne régénère plus, donc pas de "Régénérez"
       validateText.textContent = hashChanged
-        ? 'Vos informations ont changé. Validez votre plan actuel ou régénérez-le avec le bouton ci-dessous.'
+        ? (window.isEnglish && window.isEnglish() ? 'Your information has changed. Confirm your current plan or regenerate it with the button below.' : 'Vos informations ont chang\u00e9. Validez votre plan actuel ou r\u00e9g\u00e9n\u00e9rez-le avec le bouton ci-dessous.')
         : weekChanged
-        ? 'Une nouvelle semaine commence. Validez votre programme pour qu\'il démarre.'
-        : 'Validez votre programme nutritionnel pour le figer sur la semaine.';
+        ? (window.isEnglish && window.isEnglish() ? 'A new week is starting. Validate your programme to kick it off.' : 'Une nouvelle semaine commence. Validez votre programme pour qu\'il d\u00e9marre.')
+        : (window.isEnglish && window.isEnglish() ? 'Validate your nutritional programme to lock it in for the week.' : 'Validez votre programme nutritionnel pour le figer sur la semaine.');
       validateBox.appendChild(validateText);
 
       var validateBtn = h('button', {
@@ -3108,7 +3115,7 @@ function renderStep9(p) {
             setTimeout(function() { if (S.view === 'nutrition' && window.render) { S.view = 'today'; window.render(); } }, 1500);
           } catch(e) { console.error('[renderStep9] validate failed', e); }
         }
-      }, hashChanged ? 'Confirmer mon plan actuel' : weekChanged ? 'Activer la nouvelle semaine' : 'Activer mon programme');
+      }, hashChanged ? (window.isEnglish && window.isEnglish() ? 'Confirm my current plan' : 'Confirmer mon plan actuel') : weekChanged ? (window.isEnglish && window.isEnglish() ? 'Activate new week' : 'Activer la nouvelle semaine') : (window.isEnglish && window.isEnglish() ? 'Activate my programme' : 'Activer mon programme'));
       validateBox.appendChild(validateBtn);
       p.appendChild(validateBox);
     } else {
@@ -3116,11 +3123,11 @@ function renderStep9(p) {
       var validated = h('div', {
         style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:8px 12px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);'
       });
-      validated.appendChild(h('span', {}, '✓ Programme validé'));
+      validated.appendChild(h('span', {}, (window.isEnglish && window.isEnglish() ? '\u2713 Programme validated' : '\u2713 Programme valid\u00e9')));
       validated.appendChild(h('button', {
         style: 'background:none;border:none;padding:2px 6px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);cursor:pointer;text-decoration:underline;',
         onclick: function() {
-          if (!(window.sfcConfirm || confirm)('Régénérer un nouveau plan ? Votre plan actuel sera remplacé.')) return;
+          if (!(window.sfcConfirm || confirm)((window.isEnglish && window.isEnglish() ? 'Regenerate a new plan? Your current plan will be replaced.' : 'R\u00e9g\u00e9n\u00e9rer un nouveau plan ? Votre plan actuel sera remplac\u00e9.'))) return;
           try {
             var _wkR = generateWeek();
             if (Array.isArray(_wkR) && _wkR.length === 7) {
@@ -3139,7 +3146,7 @@ function renderStep9(p) {
             }
           } catch(e) { console.error('[renderStep9] regen failed', e); }
         }
-      }, 'Régénérer'));
+      }, (window.isEnglish && window.isEnglish() ? 'Regenerate' : 'R\u00e9g\u00e9n\u00e9rer')));
       p.appendChild(validated);
     }
   })();
@@ -3160,11 +3167,11 @@ function renderStep9(p) {
     var _prevBadge = h('div', {
       style: 'display:flex;justify-content:space-between;align-items:center;padding:8px 12px;margin-bottom:12px;border:1px solid var(--border,#D8D8D0);background:var(--ivory,#FAF9F6);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);'
     });
-    _prevBadge.appendChild(h('span', {}, 'Aperçu · ' + DAY_NAMES[S.selectedDay]));
+    _prevBadge.appendChild(h('span', {}, (window.isEnglish && window.isEnglish() ? 'Preview \u00b7 ' : 'Aper\u00e7u \u00b7 ') + DAY_NAMES[S.selectedDay]));
     _prevBadge.appendChild(h('button', {
       style: 'background:none;border:none;padding:2px 6px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer;text-decoration:underline;',
       onclick: function() { S.selectedDay = _todayPlanIdx; window.render(); }
-    }, 'Aujourd\'hui →'));
+    }, (window.isEnglish && window.isEnglish() ? 'Today \u2192' : 'Aujourd\'hui \u2192')));
     p.appendChild(_prevBadge);
   }
 
@@ -3174,9 +3181,9 @@ function renderStep9(p) {
     var _dayAdapt = window.getAdaptedMealSplit ? window.getAdaptedMealSplit(S.selectedDay) : null;
     if (_selDayInfo.isTraining) {
       var _tNote = (_dayAdapt && _dayAdapt.trainTimingNote) ? ' \u2014 ' + _dayAdapt.trainTimingNote : '';
-      p.appendChild(h('div', {'class': 'day-training-indicator'}, '\uD83C\uDFCB\uFE0F Jour d\u2019entra\u00eenement' + _tNote));
+      p.appendChild(h('div', {'class': 'day-training-indicator'}, (window.isEnglish && window.isEnglish() ? '\uD83C\uDFCB\uFE0F Training day' : '\uD83C\uDFCB\uFE0F Jour d\u2019entra\u00eenement') + _tNote));
     } else {
-      p.appendChild(h('div', {'class': 'day-rest-indicator'}, '\uD83D\uDE34 Jour de repos \u2014 calories adapt\u00e9es (\u221210%)'));
+      p.appendChild(h('div', {'class': 'day-rest-indicator'}, (window.isEnglish && window.isEnglish() ? '\uD83D\uDE34 Rest day \u2014 adjusted calories (\u221210%)' : '\uD83D\uDE34 Jour de repos \u2014 calories adapt\u00e9es (\u221210%)')));
     }
   }
 
@@ -3242,7 +3249,7 @@ function renderStep9(p) {
     function barColor(pct) { return pct >= 90 ? '#3E5C3A' : pct >= 60 ? '#7A3B0E' : '#7A1F1F'; }
     var progressCard = h('div', {style: 'border:1px solid var(--border,#D8D8D0);border-radius:2px;padding:14px 16px;margin-bottom:16px;background:var(--ivory2,#F4F4F0)'});
     var progressTitle = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center'});
-    progressTitle.appendChild(document.createTextNode('MACROS DU JOUR'));
+    progressTitle.appendChild(document.createTextNode((window.isEnglish && window.isEnglish() ? 'TODAY\'S MACROS' : 'MACROS DU JOUR')));
     progressTitle.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:12px;color:' + barColor(kcalPct)}, _preTotal + ' / ' + _tgt + ' kcal'));
     progressCard.appendChild(progressTitle);
     [
@@ -3274,19 +3281,19 @@ function renderStep9(p) {
     var _remaining = Math.round((_tgt || 0) - (_preTotal || 0));
     var _remainEl = h('div', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-top:6px;text-align:right;color:' + (_remaining >= 0 ? 'var(--grey)' : 'var(--error,#7A1F1F)') + ';'
-    }, _remaining >= 0 ? _remaining + ' kcal restantes' : Math.abs(_remaining) + ' kcal au-dessus');
+    }, _remaining >= 0 ? _remaining + (window.isEnglish && window.isEnglish() ? ' kcal remaining' : ' kcal restantes') : Math.abs(_remaining) + (window.isEnglish && window.isEnglish() ? ' kcal over' : ' kcal au-dessus'));
     progressCard.appendChild(_remainEl);
     // ── Célébration macro : message si objectif atteint à 90%+ sur calories ET macros ──
     var _allMacrosOk = pPct >= 85 && gPct >= 85 && lPct >= 85;
     if (kcalPct >= 100 && _allMacrosOk) {
       var _macroCelCard = document.createElement('div');
       _macroCelCard.style.cssText = 'margin-top:10px;padding:10px 12px;background:rgba(26,74,26,0.07);border-left:3px solid var(--ink-900,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--success,#3E5C3A);letter-spacing:0.3px;line-height:1.6;';
-      _macroCelCard.textContent = 'Parfait \u2014 objectifs nutritionnels atteints aujourd\u2019hui.';
+      _macroCelCard.textContent = (window.isEnglish && window.isEnglish() ? 'Perfect \u2014 nutritional goals reached today.' : 'Parfait \u2014 objectifs nutritionnels atteints aujourd\u2019hui.');
       progressCard.appendChild(_macroCelCard);
     } else if (kcalPct >= 90) {
       var _macroNearCard = document.createElement('div');
       _macroNearCard.style.cssText = 'margin-top:10px;padding:10px 12px;background:rgba(26,74,26,0.05);border-left:3px solid #5A8A5A;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--success,#3E5C3A);letter-spacing:0.3px;line-height:1.6;';
-      _macroNearCard.textContent = 'Objectif presque atteint\u00a0! Plus que quelques grammes.';
+      _macroNearCard.textContent = (window.isEnglish && window.isEnglish() ? 'Almost there\u00a0! Just a few grams to go.' : 'Objectif presque atteint\u00a0! Plus que quelques grammes.');
       progressCard.appendChild(_macroNearCard);
     }
     p.appendChild(progressCard);
@@ -3309,16 +3316,16 @@ function renderStep9(p) {
   // ── Food search / manual entry UI ─────────────────────────────────────────
   if (S._foodSearchSlot) {
     var foodCard = h('div', {style: 'border:1px solid var(--border,#D8D8D0);padding:16px;margin-bottom:16px;border-radius:2px'});
-    foodCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:12px'}, '\u270F\uFE0F AJOUTER UN ALIMENT'));
+    foodCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:12px'}, (window.isEnglish && window.isEnglish() ? '\u270F\uFE0F ADD A FOOD' : '\u270F\uFE0F AJOUTER UN ALIMENT')));
     var toggleRow = h('div', {style: 'display:flex;gap:8px;margin-bottom:12px'});
     var searchTabBtn = h('button', {
       style: 'flex:1;padding:8px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;border-radius:2px;cursor:pointer;' + (!S._foodManualEntry ? 'background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09)' : 'background:transparent;color:var(--black,#0A0A09);border:1px solid var(--border,#D8D8D0)'),
       onclick: function() { S._foodManualEntry = false; window.render(); }
-    }, 'Recherche');
+    }, (window.isEnglish && window.isEnglish() ? 'Search' : 'Recherche'));
     var manualTabBtn = h('button', {
       style: 'flex:1;padding:8px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;border-radius:2px;cursor:pointer;' + (S._foodManualEntry ? 'background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09)' : 'background:transparent;color:var(--black,#0A0A09);border:1px solid var(--border,#D8D8D0)'),
       onclick: function() { S._foodManualEntry = true; window.render(); }
-    }, 'Manuel');
+    }, (window.isEnglish && window.isEnglish() ? 'Manual' : 'Manuel'));
     toggleRow.appendChild(searchTabBtn);
     toggleRow.appendChild(manualTabBtn);
     foodCard.appendChild(toggleRow);
@@ -3331,7 +3338,7 @@ function renderStep9(p) {
         var pRatio = pGrams / 100;
         foodCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:600;color:var(--black,#0A0A09);margin-bottom:4px;line-height:1.4'}, pItem.name));
         foodCard.appendChild(h('div', {style: 'font-size:11px;color:var(--grey,#6B6B65);margin-bottom:14px;font-family:"Helvetica Neue",Arial,sans-serif'}, Math.round(pItem.kcal * pRatio) + ' kcal \u00b7 P\u00a0' + Math.round(pItem.p * pRatio) + 'g \u00b7 G\u00a0' + Math.round(pItem.g * pRatio) + 'g \u00b7 L\u00a0' + Math.round(pItem.l * pRatio) + 'g'));
-        foodCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-bottom:4px;letter-spacing:1px;text-transform:uppercase'}, 'Quantit\u00e9 (g)'));
+        foodCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-bottom:4px;letter-spacing:1px;text-transform:uppercase'}, (window.isEnglish && window.isEnglish() ? 'Quantity (g)' : 'Quantit\u00e9 (g)')));
         var gramsRow = h('div', {style: 'display:flex;align-items:center;gap:6px;margin-bottom:10px'});
         var gramsMinusBtn = h('button', {
           style: 'min-width:44px;min-height:44px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-size:20px;cursor:pointer;color:var(--black,#0A0A09)',
@@ -3380,12 +3387,12 @@ function renderStep9(p) {
             if (window.incrementMealsLogged) window.incrementMealsLogged();
             window.render();
           }
-        }, 'Ajouter ce repas');
+        }, (window.isEnglish && window.isEnglish() ? 'Add this meal' : 'Ajouter ce repas'));
         foodCard.appendChild(addPortionBtn);
         foodCard.appendChild(h('button', {
           style: 'width:100%;padding:8px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);cursor:pointer',
           onclick: function() { S._foodPortionItem = null; S._foodPortionGrams = null; window.render(); }
-        }, '\u2190 Retour aux r\u00e9sultats'));
+        }, (window.isEnglish && window.isEnglish() ? '\u2190 Back to results' : '\u2190 Retour aux r\u00e9sultats')));
       } else {
         // ── RECENT FOODS (chips) ────────────────────────────────────────────
         var _recentFoods = [];
@@ -3406,7 +3413,7 @@ function renderStep9(p) {
           }
         }
         if (_recentFoods.length > 0) {
-          foodCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, 'R\u00e9cents'));
+          foodCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Recent' : 'R\u00e9cents')));
           var chipsRow = h('div', {style: 'display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px'});
           _recentFoods.forEach(function(rfood) {
             (function(rf) {
@@ -3432,7 +3439,7 @@ function renderStep9(p) {
         // ── LIVE SEARCH ─────────────────────────────────────────────────────
         var searchInput = h('input', {
           type: 'search',
-          placeholder: 'Rechercher un aliment\u2026',
+          placeholder: (window.isEnglish && window.isEnglish() ? 'Search for a food\u2026' : 'Rechercher un aliment\u2026'),
           autocomplete: 'off',
           'aria-label': 'Rechercher un aliment',
           value: S._foodSearchQuery || '',
@@ -3486,7 +3493,7 @@ function renderStep9(p) {
           foodCard.appendChild(searchLoadDiv);
         } else if (Array.isArray(S._foodSearchResults)) {
           if (S._foodSearchResults.length === 0) {
-            foodCard.appendChild(h('div', {style: 'font-size:12px;color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif;margin-bottom:8px'}, 'Aucun r\u00e9sultat. Essayez en manuel.'));
+            foodCard.appendChild(h('div', {style: 'font-size:12px;color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif;margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'No results. Try manual entry.' : 'Aucun r\u00e9sultat. Essayez en manuel.')));
           } else {
             var resultsList = h('div', {style: 'margin-bottom:8px'});
             S._foodSearchResults.forEach(function(item) {
