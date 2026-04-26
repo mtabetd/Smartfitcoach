@@ -137,7 +137,8 @@
       'letter-spacing:-0.5px', 'line-height:1.3', 'margin-bottom:8px',
       'color:var(--black,#0A0A09)'
     ].join(';');
-    welcome.textContent = firstName ? ('Bienvenue, ' + firstName + '.') : 'Bienvenue.';
+    var _ocEN = window.isEnglish && window.isEnglish();
+    welcome.textContent = firstName ? ((_ocEN ? 'Welcome, ' : 'Bienvenue, ') + firstName + '.') : (_ocEN ? 'Welcome.' : 'Bienvenue.');
     inner.appendChild(welcome);
 
     var subtitle = document.createElement('div');
@@ -145,7 +146,7 @@
       'font-family:Georgia,serif', 'font-style:italic', 'font-size:16px',
       'color:var(--grey,#6B6B65)', 'margin-bottom:40px'
     ].join(';');
-    subtitle.textContent = 'Votre plan est prêt.';
+    subtitle.textContent = _ocEN ? 'Your plan is ready.' : 'Votre plan est prêt.';
     inner.appendChild(subtitle);
 
     // Ligne séparatrice
@@ -154,7 +155,7 @@
     // Bloc objectif
     var goalName = getGoalName();
     if (goalName) {
-      var goalBlock = _makeBlock('VOTRE OBJECTIF', goalName);
+      var goalBlock = _makeBlock(_ocEN ? 'YOUR GOAL' : 'VOTRE OBJECTIF', goalName);
       inner.appendChild(goalBlock);
     }
 
@@ -167,17 +168,17 @@
     var progLines = [];
     if (kcal > 0) {
       var nutritionLine = kcal + ' kcal/jour';
-      if (protein > 0) nutritionLine += ' · ' + protein + 'g protéines';
-      progLines.push('Nutrition : ' + nutritionLine);
+      if (protein > 0) nutritionLine += ' · ' + protein + 'g ' + (_ocEN ? 'protein' : 'protéines');
+      progLines.push((_ocEN ? 'Nutrition: ' : 'Nutrition : ') + nutritionLine);
     }
     if (sport) {
       var sportLine = sport;
       if (sportDays > 0) sportLine = sportDays + ' ' + (window.locPlural ? window.locPlural(sportDays, {fr:{one:'séance',other:'séances'},en:{one:'workout',other:'workouts'}}) : (sportDays > 1 ? 'séances' : 'séance')) + '/' + (window.isEnglish && window.isEnglish() ? 'week' : 'semaine') + ' · ' + sport;
-      progLines.push('Sport : ' + sportLine);
+      progLines.push((_ocEN ? 'Training: ' : 'Sport : ') + sportLine);
     }
 
     if (progLines.length > 0) {
-      var progBlock = _makeBlock('VOTRE PROGRAMME', progLines.join('\n'));
+      var progBlock = _makeBlock(_ocEN ? 'YOUR PROGRAM' : 'VOTRE PROGRAMME', progLines.join('\n'));
       inner.appendChild(progBlock);
     }
 
@@ -187,7 +188,7 @@
       'font-family:Georgia,serif', 'font-style:italic', 'font-size:14px',
       'color:var(--grey,#6B6B65)', 'margin:24px 0', 'line-height:1.7'
     ].join(';');
-    quote.textContent = '"Le standard n\'existe pas."';
+    quote.textContent = _ocEN ? '"There is no standard."' : '"Le standard n\'existe pas."';
     inner.appendChild(quote);
 
     // Ligne séparatrice basse
@@ -205,7 +206,7 @@
       'padding:14px', 'border:none',
       'border-radius:2px', 'cursor:pointer'
     ].join(';');
-    cta.textContent = 'Commencer maintenant →';
+    cta.textContent = _ocEN ? 'Start now →' : 'Commencer maintenant →';
     cta.addEventListener('click', function() {
       _markDone();
       _closeOverlay(overlay);
