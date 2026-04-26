@@ -2416,7 +2416,7 @@ function renderChargesQuestionnaire(p) {
  var currentReps = S.muscuStrengthProfile[repKey] || 8;
  var repInp = h('input', {
  type: 'number', min: '1', max: '30', value: String(currentReps),
- inputmode: 'numeric', autocomplete: 'off', 'aria-label': 'Nombre de répétitions',
+ inputmode: 'numeric', autocomplete: 'off', 'aria-label': (window.isEnglish && window.isEnglish() ? 'Number of repetitions' : 'Nombre de répétitions'),
  style: 'width:56px;padding:10px 4px;border:1px solid var(--border);font-family:Georgia;font-size:16px;text-align:center;background:var(--ivory);margin-left:4px;min-height:44px;',
  onchange: (function(rkey, wkey) { return function(e) {
  var rv = parseInt(e.target.value);
@@ -4259,7 +4259,7 @@ function renderCrossfitProgram(p) {
  if (cfMed.meniscus) cfMedRestrictions.push('\u26A0 M\u00e9nisque\u00a0: pas de Box Jumps ni Pistols. Squats limit\u00e9s \u00e0 90\u00b0 de flexion maximum sous charge.');
  if (cfMed.lowerBack || cfMed.herniaDisc) cfMedRestrictions.push('\u26A0 Dos / Hernie discale\u00a0: r\u00e9duisez la charge sur Deadlifts et Back Squats (\u226470\u00a0% 1RM). \u00c9vitez Good Morning et Jefferson Curl.');
  if (cfMed.shoulders || cfMed.rotatorCuff) cfMedRestrictions.push('\u26A0 \u00c9paules\u00a0: remplacez HSPU par Pike Push-ups. Overhead Press all\u00e9g\u00e9. \u00c9vitez les mouvements overhead douloureux (Ludewig & Cook, Phys Ther 2000).');
- if (cfMed.hypertension) cfMedRestrictions.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode('\u26A0 HTA\u00a0: intensit\u00e9 plafonn\u00e9e ')); _el.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _el.appendChild(document.createTextNode('\u00a07/10 maximum. \u00c9vitez Valsalva lors des charges lourdes (AHA/ACSM 2007).')); return _el; })());
+ if (cfMed.hypertension) cfMedRestrictions.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode('\u26A0 HTA\u00a0: intensit\u00e9 plafonn\u00e9e ')); _el.appendChild(termTooltip('RPE', (window.isEnglish && window.isEnglish() ? 'Rate of Perceived Exertion — perceived effort out of 10 (7/10 = moderate effort, last hard reps)' : 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)'))); _el.appendChild(document.createTextNode('\u00a07/10 maximum. \u00c9vitez Valsalva lors des charges lourdes (AHA/ACSM 2007).')); return _el; })());
  if (cfMed.osteoporosis) cfMedRestrictions.push('\u26A0 Ost\u00e9oporose\u00a0: pas de Box Jumps ni sauts. Charges \u226470\u00a0% 1RM uniquement. \u00c9vitez flexions vert\u00e9brales r\u00e9p\u00e9t\u00e9es (Sinaki, Spine 2002).');
  if (cfMedRestrictions.length > 0) {
  var cfMedBanner = h('div', {style: 'border-left:3px solid #E07B00;background:rgba(224,123,0,0.07);padding:12px 16px;margin-bottom:16px'});
@@ -5060,7 +5060,7 @@ function renderMusculationLevel(p) {
 
  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.days')));
  var nw = h('div', {'class': 'num-input-wrap'});
- nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '6', value: String(S.sportDays || 3), inputmode: 'numeric', 'aria-label': 'Nombre de jours d\'entraînement par semaine',
+ nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '6', value: String(S.sportDays || 3), inputmode: 'numeric', 'aria-label': (window.isEnglish && window.isEnglish() ? 'Number of training days per week' : 'Nombre de jours d\'entraînement par semaine'),
  // FIX DESYNC 2026-04-16 — invalider sportProgram si days change (sinon labels 3j mais programme 5j)
  oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) { var prev = S.sportDays; S.sportDays = v; if (prev !== v && Array.isArray(S.sportProgram) && S.sportProgram.length > 0) { S.sportProgram = null; S.muscuIAProgram = null; S.bonusExercises = {}; } if (S.sportMixSecondary && S.sportMixSecondary.days >= v) { S.sportMixSecondary.days = Math.max(1, v - 2); } window.render(); } },
  onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) { v = 2; e.target.value = S.sportDays = 2; } else if (v > 6) { v = 6; e.target.value = S.sportDays = 6; } if (Array.isArray(S.sportProgram) && S.sportProgram.length > 0 && S.sportProgram.length !== v) { S.sportProgram = null; S.muscuIAProgram = null; S.bonusExercises = {}; } if (S.sportMixSecondary && S.sportMixSecondary.days >= v) { S.sportMixSecondary.days = Math.max(1, v - 2); } window.render(); }
@@ -6409,7 +6409,7 @@ function renderWeekTracker(p) {
  displayRpeNote = (window.isEnglish && window.isEnglish() ? 'RPE 7 — Capped at 7/10 for T1 diabetes (risk of hypoglycemia at RPE 8-9, ADA 2023). Glucometer mandatory.' : 'RPE 7 — Plafonné à 7/10 pour diabète T1 (risque hypoglycémie à RPE 8-9, ADA 2023). Glucomètre obligatoire.');
  }
  var rpeBadge = h('div', {style: 'display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid ' + phase.color + ';margin-bottom:8px'});
- rpeBadge.appendChild((function(){ var _rb = h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:' + phase.color}); _rb.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _rb.appendChild(document.createTextNode(' ' + displayRpe + '/10')); return _rb; })());
+ rpeBadge.appendChild((function(){ var _rb = h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:' + phase.color}); _rb.appendChild(termTooltip('RPE', (window.isEnglish && window.isEnglish() ? 'Rate of Perceived Exertion — perceived effort out of 10 (7/10 = moderate effort, last hard reps)' : 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)'))); _rb.appendChild(document.createTextNode(' ' + displayRpe + '/10')); return _rb; })());
  rpeBadge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, displayRpeNote.replace('RPE ' + displayRpe + ' — ', '')));
  container.appendChild(rpeBadge);
 
@@ -6903,7 +6903,7 @@ function renderMusculationProgram(p) {
  if (med.lowerBack || med.herniaDisc) restrictions.push('\u26A0 Dos\u00a0: soulev\u00e9 de terre et flexions lourdes retir\u00e9s');
  if (med.knees || med.acl) restrictions.push('\u26A0 Genoux\u00a0: squats profonds remplac\u00e9s');
  if (med.herniaInguinal) restrictions.push('\u26A0 Hernie inguinale\u00a0: exercices hyperpressifs retir\u00e9s');
- if (med.hypertension) restrictions.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode('\u26A0 HTA\u00a0: intensit\u00e9 plafonn\u00e9e ')); _el.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _el.appendChild(document.createTextNode('\u00a07/10, Valsalva interdit')); return _el; })());
+ if (med.hypertension) restrictions.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode('\u26A0 HTA\u00a0: intensit\u00e9 plafonn\u00e9e ')); _el.appendChild(termTooltip('RPE', (window.isEnglish && window.isEnglish() ? 'Rate of Perceived Exertion — perceived effort out of 10 (7/10 = moderate effort, last hard reps)' : 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)'))); _el.appendChild(document.createTextNode('\u00a07/10, Valsalva interdit')); return _el; })());
  if (med.osteoporosis) restrictions.push('\u26A0 Ost\u00e9oporose\u00a0: charges \u2264\u00a070\u00a0% 1RM, pas d\'impacts ni flexions vert\u00e9brales (Sinaki, Spine 2002)');
  if (med.rheumatoidArthritis) restrictions.push('\u26A0 Polyarthrite rhumato\u00efde\u00a0: charges l\u00e9g\u00e8res, exercices doux en r\u00e9mission uniquement \u2014 arr\u00eatez en cas de pouss\u00e9e (EULAR 2020)');
  if (med.fibromyalgia) restrictions.push('\u26A0 Fibromyalgie\u00a0: intensit\u00e9 mod\u00e9r\u00e9e max, pas de HIIT ni charges maximales \u2014 exercices a\u00e9robies doux recommand\u00e9s (Cochrane 2017)');
@@ -6967,7 +6967,7 @@ function renderMusculationProgram(p) {
  var hasDiabProg = S.medical && (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1);
  if (hasDiabProg) {
  var _diabDiv = h('div', {style: 'background:rgba(232,111,30,0.06);border-left:3px solid var(--orange,#E86F1E);padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E)'});
- var _RPE_DEF = (window.isEnglish && window.isEnglish() ? 'Rate of Perceived Exertion — perceived effort out of 10 (7/10 = moderate effort, last hard reps)' : 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)');
+ var _RPE_DEF = (window.isEnglish && window.isEnglish() ? 'Rate of Perceived Exertion — perceived effort out of 10 (7/10 = moderate effort, last hard reps)' : (window.isEnglish && window.isEnglish() ? 'Rate of Perceived Exertion — perceived effort out of 10 (7/10 = moderate effort, last hard reps)' : 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)'));
  if (S.medical.indexOf('diabete_t1') !== -1) {
   _diabDiv.appendChild(document.createTextNode((window.isEnglish && window.isEnglish() ? ' Type 1 Diabetes: ' : ' Diabète T1 : ')));
   _diabDiv.appendChild(termTooltip('RPE', _RPE_DEF));
@@ -7914,8 +7914,8 @@ function renderMusculationProgram(p) {
   if (_progressiveW > _baseW) {
    var _sugBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:rgba(62,92,58,0.06);border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
    var _sugLeft = h('div', {});
-   _sugLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--green,#3E5C3A);margin-bottom:2px'}, 'Progression +' + _increment + 'kg (toutes séries réussies)'));
-   _sugLeft.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:var(--green,#3E5C3A);line-height:1'}, ((window.UNITS ? window.UNITS.displayWeight(_progressiveW) : _progressiveW + '\u00a0kg') + (eqType === 'haltere' ? '\u00a0/haltère' : eqType === 'kb' ? '\u00a0/kb' : ''))));
+   _sugLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--green,#3E5C3A);margin-bottom:2px'}, 'Progression +' + _increment + (window.isEnglish && window.isEnglish() ? 'kg (all sets complete)' : 'kg (toutes séries réussies)')));
+   _sugLeft.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:var(--green,#3E5C3A);line-height:1'}, ((window.UNITS ? window.UNITS.displayWeight(_progressiveW) : _progressiveW + '\u00a0kg') + (eqType === 'haltere' ? (window.isEnglish && window.isEnglish() ? '\u00a0/dumbbell' : '\u00a0/halt\u00e8re') : eqType === 'kb' ? '\u00a0/kb' : ''))));
    _sugBanner.appendChild(_sugLeft);
    card.appendChild(_sugBanner);
   } else if (suggested && suggested > 0) {
@@ -8031,8 +8031,8 @@ function renderMusculationProgram(p) {
  // 2026-04 FIX UX : détection unilatéral (squat 1 jambe, presse 1 main, fente bulgare…)
  // Convention : poids saisi = par CÔTÉ (jambe/bras travaillant), pas total
  var _isUnilateral = /unilat[eé]ral|1\s*jambe|une\s*jambe|1\s*main|une\s*main|1\s*bras|single.?leg|single.?arm|bulgare|pistol|shrimp|fente arri[eè]re alternee/.test(_exNameLow);
- var _weightUnit = _isHaltere ? ' kg /haltère' : (_isKb ? ' kg /kettlebell' : (_isUnilateral ? ' kg /côté' : ' kg'));
- var _weightHint = _isHaltere ? ' (par haltère, prendre 2 identiques)' : (_isKb ? ' (par kettlebell)' : (_isUnilateral ? ' (par côté travaillant)' : ''));
+ var _tWu = window.isEnglish && window.isEnglish(); var _weightUnit = _isHaltere ? ' kg /dumbbell' : (_isKb ? ' kg /kettlebell' : (_isUnilateral ? (_tWu ? ' kg /side' : ' kg /côté') : ' kg'));
+ var _weightHint = _isHaltere ? (_tWu ? ' (per dumbbell, take 2 identical)' : ' (par haltère, prendre 2 identiques)') : (_isKb ? ' (par kettlebell)' : (_isUnilateral ? (_tWu ? ' (per working side)' : ' (par côté travaillant)') : ''));
 
  var exPhase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(S.muscuWeek || 1) : null;
  var sugWeight = getSuggestedWeight(exRef.n, minReps, exPhase) || 0;
@@ -8133,7 +8133,7 @@ function renderMusculationProgram(p) {
  // 2026-04 FIX UX HALTÈRE/KB/UNILATÉRAL : suffixe explicite (jamais d'ambiguïté)
  var _wDisplay = _dispW;
  if (setRow.targetWeight > 0 && (_isHaltere || _isKb || _isUnilateral)) {
-   _wDisplay = _dispW.replace(/\s*kg\s*$/, '') + (_isHaltere ? ' kg/halt.' : _isKb ? ' kg/kb' : ' kg/côté');
+   _wDisplay = _dispW.replace(/\s*kg\s*$/, '') + (_isHaltere ? ' kg/halt.' : _isKb ? ' kg/kb' : (window.isEnglish && window.isEnglish() ? ' kg/side' : ' kg/côté'));
  }
  var conseilleStr = (setRow.targetWeight > 0 && !isBodyweight)
  ? (_wDisplay + ' \u00d7 ' + setRow.targetReps)
@@ -8241,7 +8241,7 @@ function renderMusculationProgram(p) {
  var _rSuggested = setRow.actualReps === null && !!setRow.targetReps;
  var repsInput = h('input', {
  type: 'number', min: '0', max: '50', step: '1',
- inputmode: 'numeric', autocomplete: 'off', 'aria-label': 'Répétitions',
+ inputmode: 'numeric', autocomplete: 'off', 'aria-label': (window.isEnglish && window.isEnglish() ? 'Repetitions' : 'Répétitions'),
  placeholder: String(setRow.targetReps),
  value: setRow.actualReps !== null ? String(setRow.actualReps) : (setRow.targetReps ? String(setRow.targetReps) : ''),
  // FIX UX 2026-04-17 : tap target 56x44 (WCAG 2.5.5) + font 16px anti-zoom iOS
@@ -9004,7 +9004,7 @@ function renderMusculationProgram(p) {
  if (_validSets.length === 0) return;
  var _row = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-bottom:1px solid var(--border)'});
  _row.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap'}, exName));
- var _summary = _validSets.length + ' s\u00e9ries';
+ var _summary = _validSets.length + (window.isEnglish && window.isEnglish() ? ' sets' : ' s\u00e9ries');
  var _firstValid = _validSets[0];
  if (_firstValid.actualWeight && _firstValid.actualWeight > 0) {
  _summary += ' \u2014 ' + (window.UNITS ? window.UNITS.displayWeight(_firstValid.actualWeight) : _firstValid.actualWeight + ' kg');
@@ -10802,7 +10802,7 @@ function renderGolfProgram(p) {
 function renderTriathlonConfig(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Triathlon / IRONMAN'));
  p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Your<br><em>triathlon</em> program' : 'Votre programme<br><em>triathlon</em>')}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Méthode Jan Frodeno · Patrick Lange · Daniela Ryf · 80/20 Matt Fitzgerald · Joe Friel Training Bible'));
+ p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Method Jan Frodeno · Patrick Lange · Daniela Ryf · 80/20 Matt Fitzgerald · Joe Friel Training Bible' : 'Méthode Jan Frodeno · Patrick Lange · Daniela Ryf · 80/20 Matt Fitzgerald · Joe Friel Training Bible')));
 
  if (window.TIPS) window.TIPS.renderTip(p, 'triathlon');
 
@@ -10962,7 +10962,7 @@ function renderTriathlonConfig(p) {
   raceDate: S.triathlonRaceDate || null,
   ftp: S.triathlonFTP || null
  };
- if (typeof window.generateTriathlonProgram !== 'function') { p.appendChild(h('p', {style:'text-align:center;padding:24px;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px'}, 'Module triathlon non chargé. Rechargez la page.')); return; }
+ if (typeof window.generateTriathlonProgram !== 'function') { p.appendChild(h('p', {style:'text-align:center;padding:24px;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px'}, (window.isEnglish && window.isEnglish() ? 'Triathlon module not loaded. Reload the page.' : 'Module triathlon non chargé. Rechargez la page.'))); return; }
  S.triathlonProgram = window.generateTriathlonProgram(S.triathlonGoal, S.triathlonLevel, S.triathlonWeak || null, triopts);
  S.triathlonWeek = 1;
  S.selectedTriDay = 0;
@@ -11046,7 +11046,7 @@ function renderTriathlonProgram(p) {
   }
   if (zref.bike) {
    var bz = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'});
-   bz.appendChild(h('div', {style: 'font-weight:bold;color:var(--orange-ink,#7A3B0E);margin-bottom:4px'}, ' Vélo'));
+   bz.appendChild(h('div', {style: 'font-weight:bold;color:var(--orange-ink,#7A3B0E);margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? ' Bike' : ' Vélo')));
    bz.appendChild(h('div', {}, 'Z2 : ' + (zref.bike.z2 || '—')));
    bz.appendChild(h('div', {}, 'Sweetspot : ' + (zref.bike.sweetspot || '—')));
    if (zref.ftp) bz.appendChild(h('div', {style: 'color:#E67E22'}, 'FTP : ' + zref.ftp + 'W'));
@@ -11153,7 +11153,7 @@ function renderTriathlonProgram(p) {
  if (weekData.phase === 'Peak' || weekData.phase === 'Build 2') {
  var transCard = h('div', {style: 'border:1px solid var(--border);padding:12px 16px;background:var(--ivory2);margin:12px 0'});
  transCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? ' Transition reminder' : ' Rappel Transitions')));
- transCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);line-height:1.6'}, 'T1 (Nage→Vélo) : déshabiller néo debout, clip chaussures sur pédales (avancé), casque avant de toucher vélo · T2 (Vélo→Run) : rack vélo, enlever casque, changer chaussures en courant · Jan Frodeno gagne souvent 30-60s en transition vs les autres pros'));
+ transCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);line-height:1.6'}, (window.isEnglish && window.isEnglish() ? 'T1 (Swim→Bike): remove wetsuit standing, clip shoes on pedals (advanced), helmet before touching bike · T2 (Bike→Run): rack bike, remove helmet, change shoes while running · Jan Frodeno often gains 30-60s in transition vs other pros' : 'T1 (Nage→Vélo) : déshabiller néo debout, clip chaussures sur pédales (avancé), casque avant de toucher vélo · T2 (Vélo→Run) : rack vélo, enlever casque, changer chaussures en courant · Jan Frodeno gagne souvent 30-60s en transition vs les autres pros')));
  p.appendChild(transCard);
  }
 
@@ -11455,7 +11455,7 @@ function generateCyclingPlan(level, days) {
  ];
  var template = (level === 'avance' || level === 'intermediaire') ? CYCLING_WORKOUTS.intermediaire : CYCLING_WORKOUTS.debutant;
  // VO2max override for Spécifique phase (weeks 6-7): replace Sweet Spot Z4 with Z5 intervals
- var vo2maxSession = { day: 'Jeudi', type: 'VO2max', zone: 5, duration: 60, desc: '6×4min à 106-120% FTP + 4min récup — intervalles courts haute intensité' };
+ var vo2maxSession = { day: 'Jeudi', type: 'VO2max', zone: 5, duration: 60, desc: (window.isEnglish && window.isEnglish() ? '6×4min at 106-120% FTP + 4min recovery — short high-intensity intervals' : '6×4min à 106-120% FTP + 4min récup — intervalles courts haute intensité') };
  var plan = [];
  for (var w = 1; w <= 8; w++) {
  var phase = phases[0];
@@ -11506,9 +11506,9 @@ function renderCyclingOnboarding(p) {
 
  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.level')));
  var levels = [
- { id: 'debutant', icon: '', name: window.t('sport.beginner'), desc: '< 2h par semaine, découverte du cyclisme' },
- { id: 'intermediaire', icon: '', name: window.t('sport.intermediate'), desc: '2-5h par semaine, confortable sur longues sorties' },
- { id: 'avance', icon: '', name: window.t('sport.advanced'), desc: '> 5h par semaine, FTP > 3 w/kg' }
+ { id: 'debutant', icon: '', name: window.t('sport.beginner'), desc: (window.isEnglish && window.isEnglish() ? '< 2h per week, discovering cycling' : '< 2h par semaine, découverte du cyclisme') },
+ { id: 'intermediaire', icon: '', name: window.t('sport.intermediate'), desc: (window.isEnglish && window.isEnglish() ? '2-5h per week, comfortable on long rides' : '2-5h par semaine, confortable sur longues sorties') },
+ { id: 'avance', icon: '', name: window.t('sport.advanced'), desc: (window.isEnglish && window.isEnglish() ? '> 5h per week, FTP > 3 w/kg' : '> 5h par semaine, FTP > 3 w/kg') }
  ];
  var lvlList = h('div', {'class': 'level-list'});
  levels.forEach(function(lv) {
@@ -11524,13 +11524,13 @@ function renderCyclingOnboarding(p) {
  p.appendChild(lvlList);
 
  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Objectif'));
- var goals = [
- { id: 'weightloss', icon: '', name: 'Perte de poids', desc: 'Brûler des calories, améliorer la composition corporelle' },
- { id: 'endurance', icon: '', name: 'Endurance de base', desc: 'Développer le moteur aérobie, sorties longues' },
- { id: 'competitive', icon: '', name: 'Sportif compétitif', desc: 'Améliorer FTP, puissance, classement' },
- { id: 'granfondo', icon: '', name: 'Gran Fondo', desc: 'Préparer une cyclosportive ou gran fondo' },
- { id: 'triathlon', icon: '', name: 'Triathlon', desc: 'Segment vélo du triathlon, transitions' }
- ];
+ var goals = (function(){ var _tcg = window.isEnglish && window.isEnglish(); return [
+ { id: 'weightloss', icon: '', name: _tcg ? 'Weight loss' : 'Perte de poids', desc: _tcg ? 'Burn calories, improve body composition' : 'Brûler des calories, améliorer la composition corporelle' },
+ { id: 'endurance', icon: '', name: _tcg ? 'Base endurance' : 'Endurance de base', desc: _tcg ? 'Build aerobic engine, long rides' : 'Développer le moteur aérobie, sorties longues' },
+ { id: 'competitive', icon: '', name: _tcg ? 'Competitive athlete' : 'Sportif compétitif', desc: _tcg ? 'Improve FTP, power, ranking' : 'Améliorer FTP, puissance, classement' },
+ { id: 'granfondo', icon: '', name: _tcg ? 'Gran Fondo' : 'Gran Fondo', desc: _tcg ? 'Prepare a sportive or gran fondo' : 'Préparer une cyclosportive ou gran fondo' },
+ { id: 'triathlon', icon: '', name: _tcg ? 'Triathlon' : 'Triathlon', desc: _tcg ? 'Triathlon bike segment, transitions' : 'Segment vélo du triathlon, transitions' }
+ ]; })();
  var goalGrid = h('div', {'class': 'card-grid-2'});
  goals.forEach(function(g) {
  var isOn = S.cyclingGoal === g.id;
@@ -11576,7 +11576,7 @@ function renderCyclingOnboarding(p) {
  var wLabel = i === 0 ? ('< ' + b[1] + 'W') : (b[0] + '-' + b[1] + 'W');
  zonesCard.appendChild(h('div', {style: 'display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-family:Helvetica Neue,Arial,sans-serif;font-size:13px'}, [
  h('span', {style: 'color:' + z.color + ';font-weight:bold'}, 'Z' + z.zone + ' ' + z.name),
- (function(){ var _s = h('span', {style: 'color:var(--grey)'}); _s.appendChild(document.createTextNode(wLabel + ' · ')); _s.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _s.appendChild(document.createTextNode(' ' + z.rpe)); return _s; })()
+ (function(){ var _s = h('span', {style: 'color:var(--grey)'}); _s.appendChild(document.createTextNode(wLabel + ' · ')); _s.appendChild(termTooltip('RPE', (window.isEnglish && window.isEnglish() ? 'Rate of Perceived Exertion — perceived effort out of 10 (7/10 = moderate effort, last hard reps)' : 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)'))); _s.appendChild(document.createTextNode(' ' + z.rpe)); return _s; })()
  ]));
  });
  p.appendChild(zonesCard);
@@ -11781,7 +11781,7 @@ function renderCyclingProgram(p) {
  sessCard.appendChild(metaRow);
 
  if (zoneData) {
- sessCard.appendChild((function(){ var _d = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-top:4px'}); _d.appendChild(document.createTextNode(zoneData.desc + ' — ')); _d.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _d.appendChild(document.createTextNode(' ' + zoneData.rpe)); return _d; })());
+ sessCard.appendChild((function(){ var _d = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-top:4px'}); _d.appendChild(document.createTextNode(zoneData.desc + ' — ')); _d.appendChild(termTooltip('RPE', (window.isEnglish && window.isEnglish() ? 'Rate of Perceived Exertion — perceived effort out of 10 (7/10 = moderate effort, last hard reps)' : (window.isEnglish && window.isEnglish() ? 'Rate of Perceived Exertion — perceived effort out of 10 (7/10 = moderate effort, last hard reps)' : 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')))); _d.appendChild(document.createTextNode(' ' + zoneData.rpe)); return _d; })());
  }
  p.appendChild(sessCard);
  }
