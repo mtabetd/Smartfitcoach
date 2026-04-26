@@ -7552,7 +7552,7 @@ function renderMusculationProgram(p) {
   _hdrWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);line-height:1.6;word-break:break-word;margin-bottom:4px'}, day.focus || ''));
   var _dayAbbr2 = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
   var _hdrDayStr = (Array.isArray(S.trainingDaysSelected) && S.trainingDaysSelected.length === S.sportProgram.length) ? _dayAbbr2[S.trainingDaysSelected[S.selectedSportDay]] : null;
-  var _metaParts = [_hdrDayStr ? _hdrDayStr + '\u00a0\u2014\u00a0Sém.\u00a0' + _hdrWeek : 'Sém.\u00a0' + _hdrWeek];
+  var _metaParts = [_hdrDayStr ? _hdrDayStr + '\u00a0\u2014\u00a0' + (window.isEnglish && window.isEnglish() ? 'Wk.\u00a0' : 'Sém.\u00a0') + _hdrWeek : (window.isEnglish && window.isEnglish() ? 'Wk.\u00a0' : 'Sém.\u00a0') + _hdrWeek];
   if (_hdrDur > 0) _metaParts.push('~' + _hdrDur + '\u00a0min');
   if (_hdrProgPct > 0) _metaParts.push('+' + _hdrProgPct + '%');
   _hdrWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65)'}, _metaParts.join('\u00a0·\u00a0')));
@@ -7565,12 +7565,12 @@ function renderMusculationProgram(p) {
     var _chronoEl = document.createElement('div');
     _chronoEl.id = 'session-chrono';
     _chronoEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:center;margin-bottom:8px;';
-    _chronoEl.textContent = 'Séance en cours — ' + _elapsed + ' min';
+    _chronoEl.textContent = (window.isEnglish && window.isEnglish() ? 'Session in progress \u2014 ' : 'S\u00e9ance en cours \u2014 ') + _elapsed + ' min';
     window._chronoInterval = setInterval(function() {
       var el = document.getElementById('session-chrono');
       if (!el || !S._sessionStartTime) { clearInterval(window._chronoInterval); window._chronoInterval = null; return; }
       var _mins = Math.floor((Date.now() - S._sessionStartTime) / 60000);
-      el.textContent = 'Séance en cours — ' + _mins + ' min';
+      el.textContent = (window.isEnglish && window.isEnglish() ? 'Session in progress \u2014 ' : 'S\u00e9ance en cours \u2014 ') + _mins + ' min';
     }, 30000);
     p.appendChild(_chronoEl);
   }
@@ -7582,7 +7582,7 @@ function renderMusculationProgram(p) {
     var _csIndEl = document.createElement('div');
     _csIndEl.id = 'cs-active-indicator';
     _csIndEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--green,#3E5C3A);text-align:center;margin-bottom:8px;cursor:pointer;';
-    _csIndEl.textContent = (_csIsEN ? 'Free workout in progress — ' : 'Séance libre en cours — ') + _csElapsed + ' min';
+    _csIndEl.textContent = (_csIsEN ? 'Free workout in progress \u2014 ' : 'S\u00e9ance libre en cours \u2014 ') + _csElapsed + ' min';
     _csIndEl.onclick = function() { S.sStep = 30; if (window.render) window.render(); };
     p.appendChild(_csIndEl);
   }
@@ -7665,7 +7665,7 @@ function renderMusculationProgram(p) {
  _exProgressRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--black,#0A0A09);font-weight:600;white-space:nowrap;padding:3px 8px;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#D8D8D0);border-radius:2px'}, 'Ex. ' + (exIdx + 1) + '\u00a0/\u00a0' + _totalExercises));
  card.appendChild(_exProgressRow);
 
- var _exNameEl = h('div', {'class': 'exercise-name'}, ex.n || 'Exercice');
+ var _exNameEl = h('div', {'class': 'exercise-name'}, ex.n || (window.isEnglish && window.isEnglish() ? 'Exercise' : 'Exercice'));
  // FST-7 badge: highlight exercises that use the Fascial Stretch Training 7-set technique
  if (ex.is_fst7) {
  var fst7Badge = h('span', {
@@ -7690,7 +7690,7 @@ function renderMusculationProgram(p) {
    }
  }
  card.appendChild(_exNameEl);
- card.appendChild(h('div', {'class': 'exercise-sets'}, (ex.sets || '4x10') + ' \u2014 Repos ' + (ex.rest || '90s')));
+ card.appendChild(h('div', {'class': 'exercise-sets'}, (ex.sets || '4x10') + ' \u2014 ' + (window.isEnglish && window.isEnglish() ? 'Rest ' : 'Repos ') + (ex.rest || '90s')));
  if (ex.eq) card.appendChild(h('div', {'class': 'exercise-detail'}, ex.eq));
 
  // ─── PLATEAU DETECTOR ───
@@ -7705,18 +7705,18 @@ function renderMusculationProgram(p) {
    var _repsPlat = _allReps.every(function(r) { return r === _allReps[0] && r > 0; });
    if (!_isPlat) return;
    var _platSuggestions = [
-     { icon: '▪', label: 'Tempo 3-1-3', desc: 'Ralentis : 3s descente, 1s pause bas, 3s montée' },
-     { icon: '▸', label: 'Prise variée', desc: 'Change la largeur ou le type de prise (pronation / supination)' },
-     { icon: '↓', label: 'Excentrique lent', desc: '4-5 secondes sur la phase de descente, même charge' },
-     { icon: '◂', label: 'Dropset', desc: 'Dernière série : -20 % de charge, continue jusqu\'à l\'échec' },
-     { icon: '‖', label: 'Pause reps', desc: '2s de pause en position basse avant de remonter' }
+     { icon: '▪', label: 'Tempo 3-1-3', desc: (window.isEnglish && window.isEnglish() ? 'Slow down: 3s descent, 1s pause, 3s up' : 'Ralentis : 3s descente, 1s pause bas, 3s montée') },
+     { icon: '▸', label: (window.isEnglish && window.isEnglish() ? 'Varied grip' : 'Prise variée'), desc: (window.isEnglish && window.isEnglish() ? 'Change grip width or type (pronation / supination)' : 'Change la largeur ou le type de prise (pronation / supination)') },
+     { icon: '↓', label: (window.isEnglish && window.isEnglish() ? 'Slow eccentric' : 'Excentrique lent'), desc: (window.isEnglish && window.isEnglish() ? '4-5 seconds on the descent phase, same weight' : '4-5 secondes sur la phase de descente, même charge') },
+     { icon: '◂', label: 'Dropset', desc: (window.isEnglish && window.isEnglish() ? 'Last set: -20% weight, continue to failure' : 'Dernière série : -20 % de charge, continue jusqu\'à l\'échec') },
+     { icon: '‖', label: 'Pause reps', desc: (window.isEnglish && window.isEnglish() ? '2s pause at the bottom before going back up' : '2s de pause en position basse avant de remonter') }
    ];
    var _tipIdx = (new Date().getDate() + ex.n.length) % _platSuggestions.length;
    var _tip = _platSuggestions[_tipIdx];
    var platCard = h('div', { style: 'margin-top:8px;padding:10px 12px;background:#FFF8E7;border-left:3px solid #C8A84B;border-radius:0' });
    var platHeader = h('div', { style: 'display:flex;align-items:center;gap:6px;margin-bottom:4px;' });
-   platHeader.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);font-weight:700;' }, 'Plateau détecté'));
-   platHeader.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--orange-ink,#7A3B0E);' }, '— ' + _allWeights[0] + ' kg × 3 séances'));
+   platHeader.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);font-weight:700;' }, (window.isEnglish && window.isEnglish() ? 'Plateau detected' : 'Plateau d\u00e9tect\u00e9')));
+   platHeader.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--orange-ink,#7A3B0E);' }, '\u2014 ' + _allWeights[0] + ' kg \u00d7 3 ' + (window.isEnglish && window.isEnglish() ? 'sessions' : 's\u00e9ances')));
    platCard.appendChild(platHeader);
    var platTip = h('div', { style: 'display:flex;align-items:flex-start;gap:8px;' });
    platTip.appendChild(h('span', { style: 'font-size:11px;line-height:1.4;flex-shrink:0;color:var(--orange-ink,#7A3B0E);' }, _tip.icon));
@@ -7733,7 +7733,7 @@ function renderMusculationProgram(p) {
  if ((S.sportLevel === 'beginner' || !S.sportLevel) && ex.desc) {
   // Bandeau "Comment faire" mis en avant (pas en gris-italique perdu)
   var howTo = h('div', { style: 'margin-top:10px;padding:10px 12px;background:var(--ivory,#FAF9F6);border-left:2px solid var(--black,#0A0A09);' });
-  howTo.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:4px;' }, 'Comment faire'));
+  howTo.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:4px;' }, (window.isEnglish && window.isEnglish() ? 'How to do it' : 'Comment faire')));
   howTo.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--black,#0A0A09);line-height:1.55;' }, ex.desc));
   // Top 2 tips si dispo (les plus importants)
   if (ex.tips && ex.tips.length) {
@@ -7771,7 +7771,7 @@ function renderMusculationProgram(p) {
   e.stopPropagation();
   if (window.startRestTimer) window.startRestTimer(_restSec);
   }
- }, '\u23F1 Repos ' + _restLabel);
+ }, '\u23F1 ' + (window.isEnglish && window.isEnglish() ? 'Rest ' : 'Repos ') + _restLabel);
  card.appendChild(restBtn);
  })(ex);
 
@@ -7779,7 +7779,7 @@ function renderMusculationProgram(p) {
  if (window.isFemale(S) && S.cycleTracking && cycleInfo) {
  var intPct = Math.round(cycleInfo.phase.intensityFactor * 100);
  var intColor = intPct >= 100 ? 'var(--success,#3E5C3A)' : intPct >= 80 ? 'var(--orange-ink,#7A3B0E)' : 'var(--error,#7A1F1F)';
- card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:' + intColor + ';margin-top:4px'}, 'Intensit\u00e9 cycle : ' + intPct + '%'));
+ card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:' + intColor + ';margin-top:4px'}, (window.isEnglish && window.isEnglish() ? 'Cycle intensity: ' : 'Intensit\u00e9 cycle : ') + intPct + '%'));
  }
 
  // GIF demo image — show if available from exercise-gifs-map.js
@@ -7810,7 +7810,7 @@ function renderMusculationProgram(p) {
  window.BLACKBOX && window.BLACKBOX.log('video_clicked', {exercise: ex.n});
  var count = window.GAMIFICATION ? GAMIFICATION.incrementCounter('exercises_viewed') : 0;
  if (count >= 20 && window.GAMIFICATION) GAMIFICATION.unlockBadge('exercises_20');
- }}, '\u25b6 Voir la technique');
+ }}, '\u25b6 ' + (window.isEnglish && window.isEnglish() ? 'View technique' : 'Voir la technique'));
  card.appendChild(vlink);
  }
 
@@ -7927,7 +7927,7 @@ function renderMusculationProgram(p) {
 
  if (eqType !== 'bodyweight') {
  var weightRow = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid var(--ivory3,#EEEDE8)'});
- var typeLabel = eqType === 'barre' ? 'Barre' : eqType === 'haltere' ? 'Halt\u00e8re (\u00d71)' : eqType === 'machine' ? 'Machine' : 'KB';
+ var typeLabel = eqType === 'barre' ? (window.isEnglish && window.isEnglish() ? 'Barbell' : 'Barre') : eqType === 'haltere' ? (window.isEnglish && window.isEnglish() ? 'Dumbbell (\u00d71)' : 'Halt\u00e8re (\u00d71)') : eqType === 'machine' ? 'Machine' : 'KB';
  weightRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);min-width:80px'}, typeLabel));
 
  var wInput = h('input', {
@@ -7998,7 +7998,7 @@ function renderMusculationProgram(p) {
  card.appendChild(plateDiv);
  }
  } else {
- card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);margin-top:6px;font-style:italic'}, 'Poids de corps'));
+ card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);margin-top:6px;font-style:italic'}, (window.isEnglish && window.isEnglish() ? 'Bodyweight' : 'Poids de corps')));
  }
 
  // ─── TRACKER SÉRIES : recommandations + saisie réelle ───
