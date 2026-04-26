@@ -4229,7 +4229,8 @@ function exportDayPDF(dayIdx) {
     var rNameLines = doc.splitTextToSize(r.n || (window.isEnglish && window.isEnglish() ? 'Meal' : 'Repas'), CW);
     doc.text(rNameLines, M, y); y += rNameLines.length * 5;
     doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(grey[0], grey[1], grey[2]);
-    doc.text((r.k || 0) + ' kcal  \u00b7  G ' + (r.g || 0) + 'g  \u00b7  P ' + (r.p || 0) + 'g  \u00b7  L ' + (r.l || 0) + 'g', M, y); y += 6;
+    var _macroLine = window.isEnglish && window.isEnglish() ? (r.k || 0) + ' kcal  \u00b7  C ' + (r.g || 0) + 'g  \u00b7  P ' + (r.p || 0) + 'g  \u00b7  F ' + (r.l || 0) + 'g' : (r.k || 0) + ' kcal  \u00b7  G ' + (r.g || 0) + 'g  \u00b7  P ' + (r.p || 0) + 'g  \u00b7  L ' + (r.l || 0) + 'g';
+    doc.text(_macroLine, M, y); y += 6;
     doc.setFontSize(7); doc.setTextColor(grey[0], grey[1], grey[2]);
     doc.text((window.isEnglish && window.isEnglish() ? 'INGREDIENTS' : 'INGR\u00c9DIENTS'), M, y); y += 4;
     doc.setFontSize(8); doc.setTextColor(black[0], black[1], black[2]);
