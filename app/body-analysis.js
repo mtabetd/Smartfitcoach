@@ -173,7 +173,7 @@ function renderResult(container, result) {
   if (!result || result.error) {
     var errEl = document.createElement('div');
     errEl.className = 'ba-error';
-    errEl.textContent = result && result.error ? result.error : 'Analyse impossible. Vérifiez la qualité des photos.';
+    errEl.textContent = result && result.error ? result.error : (window.isEnglish && window.isEnglish()) ? 'Analysis failed. Please check photo quality.' : 'Analyse impossible. Vérifiez la qualité des photos.';
     container.appendChild(errEl);
     return;
   }
@@ -184,7 +184,7 @@ function renderResult(container, result) {
   // ── ANALYSE ──
   var labelAnalyse = document.createElement('div');
   labelAnalyse.className = 'ba-section-label';
-  labelAnalyse.textContent = 'Analyse morphologique';
+  labelAnalyse.textContent = (window.isEnglish && window.isEnglish()) ? 'Body composition analysis' : 'Analyse morphologique';
   container.appendChild(labelAnalyse);
 
   if (analyse.morphologie) {
@@ -366,7 +366,7 @@ function renderResult(container, result) {
   shareWrap.style.cssText = 'margin-top:24px;text-align:center;';
   var shareBtn = document.createElement('button');
   shareBtn.id = 'ba-share-btn';
-  shareBtn.textContent = '⤴ Partager mon analyse';
+  shareBtn.textContent = (window.isEnglish && window.isEnglish()) ? '⤴ Share my analysis' : '⤴ Partager mon analyse';
   shareBtn.style.cssText = 'background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;padding:14px 28px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:all 0.2s ease;';
   shareBtn.addEventListener('click', shareBodyAnalysis);
   shareWrap.appendChild(shareBtn);
@@ -387,8 +387,8 @@ function renderResult(container, result) {
 
 function shareBodyAnalysis() {
   var shareData = {
-    title: 'Mon analyse corporelle Smart Fit Coach',
-    text: 'Je viens de faire analyser ma composition corporelle par l\'IA Smart Fit Coach. Programme personnalisé généré en 60 secondes.',
+    title: (window.isEnglish && window.isEnglish()) ? 'My Smart Fit Coach body analysis' : 'Mon analyse corporelle Smart Fit Coach',
+    text: (window.isEnglish && window.isEnglish()) ? 'I just had my body composition analyzed by Smart Fit Coach AI. Personalized program generated in 60 seconds.' : 'Je viens de faire analyser ma composition corporelle par l\'IA Smart Fit Coach. Programme personnalisé généré en 60 secondes.',
     url: window.location.origin
   };
   if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
@@ -418,7 +418,7 @@ function buildPanel() {
   // Static-only header: built via DOM for CSP compliance
   var _baHeaderTitle = document.createElement('div');
   _baHeaderTitle.id = 'ba-header-title';
-  _baHeaderTitle.textContent = 'Analyse corporelle IA';
+  _baHeaderTitle.textContent = (window.isEnglish && window.isEnglish()) ? 'AI Body Analysis' : 'Analyse corporelle IA';
   var _baHeaderSub = document.createElement('div');
   _baHeaderSub.id = 'ba-header-sub';
   _baHeaderSub.textContent = 'Morphologie \u00b7 Programme sur mesure';
@@ -440,7 +440,7 @@ function buildPanel() {
   // Disclaimer
   var disclaimer = document.createElement('div');
   disclaimer.id = 'ba-disclaimer';
-  disclaimer.textContent = 'Analyse IA — non médicale. Vos photos sont compressées localement et ne sont jamais stockées. Consultez un professionnel de santé pour tout avis médical.';
+  disclaimer.textContent = (window.isEnglish && window.isEnglish()) ? 'AI Analysis — not medical. Your photos are compressed locally and never stored. Consult a health professional for medical advice.' : 'Analyse IA — non médicale. Vos photos sont compressées localement et ne sont jamais stockées. Consultez un professionnel de santé pour tout avis médical.';
   content.appendChild(disclaimer);
 
   // Upload grid
@@ -448,17 +448,18 @@ function buildPanel() {
   uploadGrid.className = 'ba-upload-grid';
 
   ['face', 'dos'].forEach(function(side) {
+    var isEN = (window.isEnglish && window.isEnglish());
     var zone = document.createElement('div');
     zone.className = 'ba-upload-zone';
     zone.id = 'ba-zone-' + side;
 
     var label = document.createElement('div');
     label.className = 'ba-upload-label';
-    label.textContent = 'Photo ' + side;
+    label.textContent = 'Photo ' + (isEN ? (side === 'face' ? 'front' : 'back') : side);
 
     var sub = document.createElement('div');
     sub.className = 'ba-upload-sub';
-    sub.textContent = 'Cliquer pour sélectionner';
+    sub.textContent = isEN ? 'Click to select' : 'Cliquer pour sélectionner';
 
     var fileInput = document.createElement('input');
     fileInput.type = 'file';
@@ -477,7 +478,7 @@ function buildPanel() {
       var file = e.target.files[0];
       if (!file) return;
       if (!file.type.startsWith('image/')) {
-        if (window.showToast) window.showToast('Veuillez sélectionner une image', 'error', 3000);
+        if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Please select an image' : 'Veuillez sélectionner une image', 'error', 3000);
         return;
       }
       if (file.size > 10 * 1024 * 1024) {
@@ -493,7 +494,7 @@ function buildPanel() {
         preview.src = b64;
         var check = document.createElement('div');
         check.className = 'ba-upload-check';
-        check.textContent = '✓ Photo ' + side + ' ajoutée';
+        check.textContent = '✓ Photo ' + ((window.isEnglish && window.isEnglish()) ? (side === 'face' ? 'front' : 'back') + ' added' : side + ' ajoutée');
         zone.appendChild(preview);
         zone.appendChild(check);
         zone.classList.add('filled');
@@ -518,18 +519,18 @@ function buildPanel() {
   // FIX Hermès : span au lieu de label (label déjà autour via consentWrap).
   var consentLabel = document.createElement('span');
   consentLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.6;flex:1;';
-  consentLabel.textContent = 'J\u2019accepte que mes photos soient analys\u00e9es par intelligence artificielle (Anthropic Claude). Les photos sont transmises de mani\u00e8re s\u00e9curis\u00e9e et ne sont pas conserv\u00e9es apr\u00e8s l\u2019analyse.';
+  consentLabel.textContent = (window.isEnglish && window.isEnglish()) ? 'I consent to my photos being analyzed by artificial intelligence (Anthropic Claude). Photos are transmitted securely and are not retained after analysis.' : 'J\u2019accepte que mes photos soient analys\u00e9es par intelligence artificielle (Anthropic Claude). Les photos sont transmises de mani\u00e8re s\u00e9curis\u00e9e et ne sont pas conserv\u00e9es apr\u00e8s l\u2019analyse.';
   consentWrap.appendChild(consentLabel);
   content.appendChild(consentWrap);
 
   // Bouton analyser
   var btn = document.createElement('button');
   btn.id = 'ba-btn';
-  btn.setAttribute('aria-label', 'Analyser ma composition corporelle');
-  btn.textContent = 'Lancer l\'analyse';
+  btn.setAttribute('aria-label', (window.isEnglish && window.isEnglish()) ? 'Analyze my body composition' : 'Analyser ma composition corporelle');
+  btn.textContent = (window.isEnglish && window.isEnglish()) ? 'Start analysis' : 'Lancer l\'analyse';
   btn.disabled = true;
   btn.addEventListener('click', function() {
-    if (!consentCb.checked) { if (window.showToast) window.showToast('Veuillez accepter le consentement avant l\u2019analyse', 'error', 3500); return; }
+    if (!consentCb.checked) { if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Please accept the consent before analysis' : 'Veuillez accepter le consentement avant l\u2019analyse', 'error', 3500); return; }
     runAnalysis();
   });
   consentCb.addEventListener('change', function() { updateBtn(); });
@@ -546,7 +547,7 @@ function buildPanel() {
     _loaderDots.appendChild(dot);
   });
   var _loaderTxt = document.createElement('p');
-  _loaderTxt.textContent = 'Analyse en cours par votre coach IA... Cela peut prendre 30 \u00e0 60 secondes.';
+  _loaderTxt.textContent = (window.isEnglish && window.isEnglish()) ? 'AI analysis in progress\u2026 This may take 30 to 60 seconds.' : 'Analyse en cours par votre coach IA... Cela peut prendre 30 \u00e0 60 secondes.';
   loader.appendChild(_loaderDots);
   loader.appendChild(_loaderTxt);
   content.appendChild(loader);
@@ -600,14 +601,15 @@ function resetAnalysis() {
 
   function rebuildZone(zone, side) {
     if (!zone) return;
+    var isEN = (window.isEnglish && window.isEnglish());
     zone.className = 'ba-upload-zone';
     zone.innerHTML = '';
     var label = document.createElement('div');
     label.className = 'ba-upload-label';
-    label.textContent = 'Photo ' + side;
+    label.textContent = 'Photo ' + (isEN ? (side === 'face' ? 'front' : 'back') : side);
     var sub = document.createElement('div');
     sub.className = 'ba-upload-sub';
-    sub.textContent = 'Cliquer pour sélectionner';
+    sub.textContent = isEN ? 'Click to select' : 'Cliquer pour sélectionner';
     var fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'image/*';
@@ -629,7 +631,7 @@ function resetAnalysis() {
         preview.src = b64;
         var check = document.createElement('div');
         check.className = 'ba-upload-check';
-        check.textContent = '✓ Photo ' + side + ' ajoutée';
+        check.textContent = '✓ Photo ' + (isEN ? (side === 'face' ? 'front' : 'back') + ' added' : side + ' ajoutée');
         zone.appendChild(preview);
         zone.appendChild(check);
         zone.classList.add('filled');
@@ -724,7 +726,7 @@ async function runAnalysis() {
       var errEl2 = document.createElement('div');
       errEl2.className = 'ba-error';
       errEl2.textContent = (err && err.name === 'AbortError')
-        ? 'L\'analyse prend trop de temps. Réessaie dans quelques instants.'
+        ? ((window.isEnglish && window.isEnglish()) ? 'Analysis is taking too long. Please try again in a moment.' : 'L\'analyse prend trop de temps. Réessaie dans quelques instants.')
         : 'Erreur de connexion. Vérifiez votre réseau et réessayez.';
       resultZone.appendChild(errEl2);
     }
@@ -741,8 +743,8 @@ function injectTrigger() {
   if (suggestions && !document.getElementById('ba-trigger')) {
     var trigger = document.createElement('button');
     trigger.id = 'ba-trigger';
-    trigger.setAttribute('aria-label', 'Analyser ma composition corporelle');
-    trigger.textContent = '◆ Analyse corporelle IA';
+    trigger.setAttribute('aria-label', (window.isEnglish && window.isEnglish()) ? 'Analyze my body composition' : 'Analyser ma composition corporelle');
+    trigger.textContent = (window.isEnglish && window.isEnglish()) ? '◆ AI Body Analysis' : '◆ Analyse corporelle IA';
     trigger.addEventListener('click', openPanel);
     suggestions.parentNode.insertBefore(trigger, suggestions);
   }

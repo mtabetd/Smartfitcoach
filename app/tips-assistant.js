@@ -37,122 +37,122 @@ document.head.appendChild(style);
 var TIPS = {
   // NUTRITION - Step 1 (Identité)
   identity: [
-    { text: "Votre métabolisme ne ralentit significativement qu'après 60 ans, pas à 30 comme on le croit.", source: "Science, 2021 (Pontzer et al.)", icon: "\uD83D\uDCA1" },
-    { text: "Homme ou femme, la différence de métabolisme vient surtout de la masse musculaire, pas du sexe.", source: "AJCN, 2005", icon: "\uD83D\uDCA1" }
+    { text: "Votre m\u00e9tabolisme ne ralentit significativement qu'apr\u00e8s 60 ans, pas \u00e0 30 comme on le croit.", text_en: "Your metabolism doesn't significantly slow down until after 60 \u2014 not at 30 as commonly believed.", source: "Science, 2021 (Pontzer et al.)", icon: "\uD83D\uDCA1" },
+    { text: "Homme ou femme, la diff\u00e9rence de m\u00e9tabolisme vient surtout de la masse musculaire, pas du sexe.", text_en: "For both men and women, metabolic differences come mainly from muscle mass, not sex.", source: "AJCN, 2005", icon: "\uD83D\uDCA1" }
   ],
 
   // NUTRITION - Step 2 (Morphologie)
   morphology: [
-    { text: "L'IMC est un indicateur limité : un sportif musclé peut être classé 'obèse' alors qu'il est en excellente santé.", source: "The Lancet, 2016", icon: "\u26A0" },
-    { text: "Le tour de taille est un meilleur prédicteur de santé que le poids sur la balance.", source: "OMS, 2008", icon: "\uD83D\uDCA1" }
+    { text: "L'IMC est un indicateur limit\u00e9 : un sportif muscl\u00e9 peut \u00eatre class\u00e9 'ob\u00e8se' alors qu'il est en excellente sant\u00e9.", text_en: "BMI is a limited indicator: a muscular athlete can be classified 'obese' while in excellent health.", source: "The Lancet, 2016", icon: "\u26A0" },
+    { text: "Le tour de taille est un meilleur pr\u00e9dicteur de sant\u00e9 que le poids sur la balance.", text_en: "Waist circumference is a better health predictor than scale weight.", source: "OMS, 2008", icon: "\uD83D\uDCA1" }
   ],
 
-  // NUTRITION - Step 3 (Activité)
+  // NUTRITION - Step 3 (Activit\u00e9)
   activity: [
-    { text: "Faire du sport ne fait pas maigrir autant qu'on le pense : l'alimentation compte pour ~80% de la perte de poids.", source: "British Journal of Sports Medicine, 2015", icon: "\u26A0" },
-    { text: "30 min de marche rapide par jour apporte 80% des bénéfices santé d'un entraînement intensif.", source: "JAMA Internal Medicine, 2019", icon: "\uD83D\uDCA1" }
+    { text: "Faire du sport ne fait pas maigrir autant qu'on le pense : l'alimentation compte pour ~80% de la perte de poids.", text_en: "Exercise alone doesn't cause as much weight loss as you'd think: diet accounts for ~80% of weight loss.", source: "British Journal of Sports Medicine, 2015", icon: "\u26A0" },
+    { text: "30 min de marche rapide par jour apporte 80% des b\u00e9n\u00e9fices sant\u00e9 d'un entra\u00eenement intensif.", text_en: "30 minutes of brisk walking per day provides 80% of the health benefits of intense training.", source: "JAMA Internal Medicine, 2019", icon: "\uD83D\uDCA1" }
   ],
 
-  // NUTRITION - Step 4 (Santé)
+  // NUTRITION - Step 4 (Sant\u00e9)
   health: [
-    { text: "Le cholestérol alimentaire (œufs) a peu d'impact sur le cholestérol sanguin chez 75% des gens.", source: "American Heart Association, 2020", icon: "\u26A0" },
-    { text: "Le stress chronique fait autant grossir qu'une mauvaise alimentation via le cortisol.", source: "Obesity Reviews, 2017", icon: "\uD83D\uDCA1" }
+    { text: "Le cholest\u00e9rol alimentaire (\u0153ufs) a peu d'impact sur le cholest\u00e9rol sanguin chez 75% des gens.", text_en: "Dietary cholesterol (eggs) has little effect on blood cholesterol in 75% of people.", source: "American Heart Association, 2020", icon: "\u26A0" },
+    { text: "Le stress chronique fait autant grossir qu'une mauvaise alimentation via le cortisol.", text_en: "Chronic stress causes as much weight gain as a poor diet, through cortisol.", source: "Obesity Reviews, 2017", icon: "\uD83D\uDCA1" }
   ],
 
   // NUTRITION - Step 5 (Habitudes)
   habits: [
-    { text: "Le nombre de repas par jour n'impacte pas la perte de poids : seul le total calorique compte.", source: "British Journal of Nutrition, 2010", icon: "\u26A0" },
-    { text: "Manger le soir ne fait PAS plus grossir : c'est le total journalier qui compte, pas l'heure.", source: "Nutrients, 2019 (meta-analyse)", icon: "\u26A0" },
-    { text: "Les 'détox' et jus détox n'ont aucune base scientifique : votre foie et vos reins font déjà le travail.", source: "British Dietetic Association", icon: "\u26A0" }
+    { text: "Le nombre de repas par jour n'impacte pas la perte de poids : seul le total calorique compte.", text_en: "Meal frequency doesn't impact weight loss: only total daily calories count.", source: "British Journal of Nutrition, 2010", icon: "\u26A0" },
+    { text: "Manger le soir ne fait PAS plus grossir : c'est le total journalier qui compte, pas l'heure.", text_en: "Eating at night does NOT make you gain more weight: total daily intake matters, not meal timing.", source: "Nutrients, 2019 (meta-analyse)", icon: "\u26A0" },
+    { text: "Les 'd\u00e9tox' et jus d\u00e9tox n'ont aucune base scientifique : votre foie et vos reins font d\u00e9j\u00e0 le travail.", text_en: "'Detox' diets and juices have no scientific basis: your liver and kidneys already handle that.", source: "British Dietetic Association", icon: "\u26A0" }
   ],
 
   // NUTRITION - Step 5 (Alcool)
   alcohol: [
-    { text: "1 verre d'alcool bloque la combustion des graisses pendant 12 à 36 heures.", source: "American Journal of Clinical Nutrition, 1999", icon: "\u26A0" },
-    { text: "Le 'French Paradox' du vin rouge est un mythe : aucune quantité d'alcool n'est bénéfique pour la santé.", source: "The Lancet, 2018 (Global Burden of Disease)", icon: "\u26A0" }
+    { text: "1 verre d'alcool bloque la combustion des graisses pendant 12 \u00e0 36 heures.", text_en: "1 alcoholic drink blocks fat burning for 12 to 36 hours.", source: "American Journal of Clinical Nutrition, 1999", icon: "\u26A0" },
+    { text: "Le 'French Paradox' du vin rouge est un mythe : aucune quantit\u00e9 d'alcool n'est b\u00e9n\u00e9fique pour la sant\u00e9.", text_en: "The 'French Paradox' of red wine is a myth: no amount of alcohol is beneficial to health.", source: "The Lancet, 2018 (Global Burden of Disease)", icon: "\u26A0" }
   ],
 
   // NUTRITION - Step 6 (Objectif)
   goal: [
-    { text: "Un déficit de plus de 500 kcal/jour fait perdre autant de muscle que de graisse.", source: "ISSN Position Stand, 2017", icon: "\u26A0" },
-    { text: "Perdre 0.5 kg/semaine est le rythme optimal pour préserver le muscle — plus rapide = contre-productif.", source: "International Journal of Sport Nutrition, 2011", icon: "\uD83D\uDCA1" },
-    { text: "Les régimes yo-yo réduisent le métabolisme de base durablement : mieux vaut un petit déficit constant.", source: "Obesity, 2016 (Biggest Loser study)", icon: "\u26A0" }
+    { text: "Un d\u00e9ficit de plus de 500 kcal/jour fait perdre autant de muscle que de graisse.", text_en: "A deficit of more than 500 kcal/day causes as much muscle loss as fat loss.", source: "ISSN Position Stand, 2017", icon: "\u26A0" },
+    { text: "Perdre 0.5 kg/semaine est le rythme optimal pour pr\u00e9server le muscle \u2014 plus rapide = contre-productif.", text_en: "Losing 0.5 kg/week is the optimal rate to preserve muscle \u2014 faster is counterproductive.", source: "International Journal of Sport Nutrition, 2011", icon: "\uD83D\uDCA1" },
+    { text: "Les r\u00e9gimes yo-yo r\u00e9duisent le m\u00e9tabolisme de base durablement : mieux vaut un petit d\u00e9ficit constant.", text_en: "Yo-yo dieting durably reduces your basal metabolic rate: a small consistent deficit is better.", source: "Obesity, 2016 (Biggest Loser study)", icon: "\u26A0" }
   ],
 
-  // NUTRITION - Step 7 (Préférences)
+  // NUTRITION - Step 7 (Pr\u00e9f\u00e9rences)
   preferences: [
-    { text: "Bio \u2260 plus nutritif : les études montrent des valeurs nutritionnelles quasi identiques bio vs conventionnel.", source: "Annals of Internal Medicine, 2012 (Stanford meta-analyse)", icon: "\u26A0" },
-    { text: "Les superfoods n'existent pas : une alimentation variée bat n'importe quel aliment 'miracle'.", source: "European Journal of Clinical Nutrition, 2018", icon: "\u26A0" }
+    { text: "Bio \u2260 plus nutritif : les \u00e9tudes montrent des valeurs nutritionnelles quasi identiques bio vs conventionnel.", text_en: "Organic \u2260 more nutritious: studies show near-identical nutritional values for organic vs. conventional.", source: "Annals of Internal Medicine, 2012 (Stanford meta-analyse)", icon: "\u26A0" },
+    { text: "Les superfoods n'existent pas : une alimentation vari\u00e9e bat n'importe quel aliment 'miracle'.", text_en: "Superfoods don't exist: a varied diet beats any single 'miracle' food.", source: "European Journal of Clinical Nutrition, 2018", icon: "\u26A0" }
   ],
 
-  // NUTRITION - Step 8 (Résultats)
+  // NUTRITION - Step 8 (R\u00e9sultats)
   results: [
-    { text: "Les protéines sont le macro le plus rassasiant : augmenter les protéines réduit naturellement l'appétit de 15-20%.", source: "American Journal of Clinical Nutrition, 2005", icon: "\uD83D\uDCA1" },
-    { text: "Boire 500ml d'eau 30 min avant le repas réduit l'apport calorique de 13%.", source: "Obesity, 2015", icon: "\uD83D\uDCA1" }
+    { text: "Les prot\u00e9ines sont le macro le plus rassasiant : augmenter les prot\u00e9ines r\u00e9duit naturellement l'app\u00e9tit de 15-20%.", text_en: "Protein is the most satiating macronutrient: increasing protein naturally reduces appetite by 15-20%.", source: "American Journal of Clinical Nutrition, 2005", icon: "\uD83D\uDCA1" },
+    { text: "Boire 500ml d'eau 30 min avant le repas r\u00e9duit l'apport calorique de 13%.", text_en: "Drinking 500ml of water 30 minutes before a meal reduces calorie intake by 13%.", source: "Obesity, 2015", icon: "\uD83D\uDCA1" }
   ],
 
   // NUTRITION - Step 9 (Planning)
   planning: [
-    { text: "Cuisiner à la maison fait consommer en moyenne 200 kcal de moins par repas qu'au restaurant.", source: "Journal of the Academy of Nutrition, 2017", icon: "\uD83D\uDCA1" },
-    { text: "Préparer ses repas à l'avance (meal prep) est le meilleur prédicteur de succès d'un régime.", source: "International Journal of Behavioral Nutrition, 2017", icon: "\uD83D\uDCA1" }
+    { text: "Cuisiner \u00e0 la maison fait consommer en moyenne 200 kcal de moins par repas qu'au restaurant.", text_en: "Cooking at home results in consuming an average of 200 fewer kcal per meal than eating out.", source: "Journal of the Academy of Nutrition, 2017", icon: "\uD83D\uDCA1" },
+    { text: "Pr\u00e9parer ses repas \u00e0 l'avance (meal prep) est le meilleur pr\u00e9dicteur de succ\u00e8s d'un r\u00e9gime.", text_en: "Meal prepping is the strongest predictor of diet success.", source: "International Journal of Behavioral Nutrition, 2017", icon: "\uD83D\uDCA1" }
   ],
 
   // SPORT - Objectif
   sportGoal: [
-    { text: "Le cardio seul est inefficace pour maigrir : ajouter de la musculation double la perte de graisse.", source: "BMC Medicine, 2021", icon: "\u26A0" },
-    { text: "Le muscle ne se transforme PAS en graisse (et inversement) : ce sont deux tissus biologiquement différents.", source: "ACSM", icon: "\u26A0" }
+    { text: "Le cardio seul est inefficace pour maigrir : ajouter de la musculation double la perte de graisse.", text_en: "Cardio alone is ineffective for fat loss: adding strength training doubles fat loss.", source: "BMC Medicine, 2021", icon: "\u26A0" },
+    { text: "Le muscle ne se transforme PAS en graisse (et inversement) : ce sont deux tissus biologiquement diff\u00e9rents.", text_en: "Muscle does NOT turn into fat (or vice versa): they are two biologically different tissues.", source: "ACSM", icon: "\u26A0" }
   ],
 
   // SPORT - Niveau
   sportLevel: [
-    { text: "Un débutant peut gagner 8-12 kg de muscle la première année, mais seulement 2-3 kg après 3 ans.", source: "NSCA, 2016 (Lyle McDonald model)", icon: "\uD83D\uDCA1" },
-    { text: "Les courbatures ne sont PAS un signe d'un bon entraînement : elles indiquent juste un stimulus nouveau.", source: "Sports Medicine, 2003", icon: "\u26A0" }
+    { text: "Un d\u00e9butant peut gagner 8-12 kg de muscle la premi\u00e8re ann\u00e9e, mais seulement 2-3 kg apr\u00e8s 3 ans.", text_en: "A beginner can gain 8-12 kg of muscle in the first year, but only 2-3 kg after 3 years.", source: "NSCA, 2016 (Lyle McDonald model)", icon: "\uD83D\uDCA1" },
+    { text: "Les courbatures ne sont PAS un signe d'un bon entra\u00eenement : elles indiquent juste un stimulus nouveau.", text_en: "Soreness is NOT a sign of a good workout: it just indicates a new stimulus.", source: "Sports Medicine, 2003", icon: "\u26A0" }
   ],
 
   // SPORT - Zones
   sportZones: [
-    { text: "Cibler la perte de graisse locale (ventre, cuisses) est IMPOSSIBLE : le corps perd la graisse globalement.", source: "Journal of Strength & Conditioning, 2011", icon: "\u26A0" },
-    { text: "Faire 1000 abdos ne donne pas de tablettes : c'est le % de masse grasse qui les révèle (< 12% homme, < 20% femme).", source: "ACSM", icon: "\u26A0" }
+    { text: "Cibler la perte de graisse locale (ventre, cuisses) est IMPOSSIBLE : le corps perd la graisse globalement.", text_en: "Targeting local fat loss (belly, thighs) is IMPOSSIBLE: the body loses fat globally.", source: "Journal of Strength & Conditioning, 2011", icon: "\u26A0" },
+    { text: "Faire 1000 abdos ne donne pas de tablettes : c'est le % de masse grasse qui les r\u00e9v\u00e8le (< 12% homme, < 20% femme).", text_en: "1000 sit-ups won't reveal abs: it's body fat % that shows them (< 12% men, < 20% women).", source: "ACSM", icon: "\u26A0" }
   ],
 
   // SPORT - Programme
   sportProgram: [
-    { text: "2 séances/semaine par muscle suffisent pour 90% des gains — plus ne fait pas mieux.", source: "Sports Medicine, 2016 (Schoenfeld meta-analyse)", icon: "\uD83D\uDCA1" },
-    { text: "Le temps de repos entre séries compte : 2-3 min pour la force, 60-90s pour l'hypertrophie.", source: "Journal of Strength & Conditioning Research, 2016", icon: "\uD83D\uDCA1" },
-    { text: "S'étirer avant la musculation RÉDUIT la force de 5-8% : préférer un échauffement dynamique.", source: "Scandinavian J. of Med. & Science in Sports, 2012", icon: "\u26A0" }
+    { text: "2 s\u00e9ances/semaine par muscle suffisent pour 90% des gains \u2014 plus ne fait pas mieux.", text_en: "2 sessions/week per muscle group is enough for 90% of gains \u2014 more doesn't help.", source: "Sports Medicine, 2016 (Schoenfeld meta-analyse)", icon: "\uD83D\uDCA1" },
+    { text: "Le temps de repos entre s\u00e9ries compte : 2-3 min pour la force, 60-90s pour l'hypertrophie.", text_en: "Rest time between sets matters: 2-3 min for strength, 60-90s for hypertrophy.", source: "Journal of Strength & Conditioning Research, 2016", icon: "\uD83D\uDCA1" },
+    { text: "S'\u00e9tirer avant la musculation R\u00c9DUIT la force de 5-8% : pr\u00e9f\u00e9rer un \u00e9chauffement dynamique.", text_en: "Static stretching before lifting REDUCES strength by 5-8%: prefer a dynamic warm-up.", source: "Scandinavian J. of Med. & Science in Sports, 2012", icon: "\u26A0" }
   ],
 
   // CYCLE MENSTRUEL
   cycle: [
-    { text: "La phase folliculaire (après les règles) est le meilleur moment pour battre des records à la salle.", source: "British Journal of Sports Medicine, 2020", icon: "\uD83D\uDCA1" },
-    { text: "Les envies de sucre en phase lutéale sont biologiques (progestérone) : prévoir des snacks sains, pas les combattre.", source: "Appetite, 2016", icon: "\uD83D\uDCA1" }
+    { text: "La phase folliculaire (apr\u00e8s les r\u00e8gles) est le meilleur moment pour battre des records \u00e0 la salle.", text_en: "The follicular phase (after menstruation) is the best time to hit new PRs at the gym.", source: "British Journal of Sports Medicine, 2020", icon: "\uD83D\uDCA1" },
+    { text: "Les envies de sucre en phase lut\u00e9ale sont biologiques (progest\u00e9rone) : pr\u00e9voir des snacks sains, pas les combattre.", text_en: "Sugar cravings in the luteal phase are biological (progesterone): plan healthy snacks, don't fight them.", source: "Appetite, 2016", icon: "\uD83D\uDCA1" }
   ],
 
-  // SUPPLÉMENTS
+  // SUPPL\u00c9MENTS
   supplements: [
-    { text: "La créatine est le supplément le plus étudié au monde : sans danger et efficace, même pour les femmes.", source: "ISSN, 2017 (700+ études)", icon: "\uD83D\uDCA1" },
-    { text: "90% des gens manquent de vitamine D en hiver : c'est le seul supplément quasi universellement recommandé.", source: "Endocrine Society, 2011", icon: "\u26A0" },
-    { text: "Les BCAA sont inutiles si vous mangez assez de protéines (1.6g/kg) : économisez votre argent.", source: "JISSN, 2017", icon: "\u26A0" }
+    { text: "La cr\u00e9atine est le suppl\u00e9ment le plus \u00e9tudi\u00e9 au monde : sans danger et efficace, m\u00eame pour les femmes.", text_en: "Creatine is the most studied supplement in the world: safe and effective, even for women.", source: "ISSN, 2017 (700+ \u00e9tudes)", icon: "\uD83D\uDCA1" },
+    { text: "90% des gens manquent de vitamine D en hiver : c'est le seul suppl\u00e9ment quasi universellement recommand\u00e9.", text_en: "90% of people are deficient in vitamin D in winter: it's the only supplement nearly universally recommended.", source: "Endocrine Society, 2011", icon: "\u26A0" },
+    { text: "Les BCAA sont inutiles si vous mangez assez de prot\u00e9ines (1.6g/kg) : \u00e9conomisez votre argent.", text_en: "BCAAs are useless if you eat enough protein (1.6g/kg): save your money.", source: "JISSN, 2017", icon: "\u26A0" }
   ],
 
   // GROSSESSE
   pregnancy: [
-    { text: "Contrairement aux croyances, il ne faut PAS 'manger pour deux' : seulement +340 kcal/jour au T2.", source: "ACOG, 2020", icon: "\u26A0" },
-    { text: "Le sport pendant la grossesse RÉDUIT les risques de complications : 150 min/semaine recommandées.", source: "OMS, 2020", icon: "\uD83D\uDCA1" }
+    { text: "Contrairement aux croyances, il ne faut PAS 'manger pour deux' : seulement +340 kcal/jour au T2.", text_en: "Contrary to belief, you do NOT need to 'eat for two': only +340 kcal/day in the 2nd trimester.", source: "ACOG, 2020", icon: "\u26A0" },
+    { text: "Le sport pendant la grossesse R\u00c9DUIT les risques de complications : 150 min/semaine recommand\u00e9es.", text_en: "Exercise during pregnancy REDUCES complication risks: 150 min/week is recommended.", source: "OMS, 2020", icon: "\uD83D\uDCA1" }
   ],
 
   // TRIATHLON / IRONMAN
   triathlon: [
-    { text: "En triathlon, la transition (T1/T2) est souvent négligée à l'entraînement : 30s gagnées en transition = 30s gagnées sans effort physique.", source: "Triathlon Coach Magazine, 2019", icon: "\uD83D\uDCA1" },
-    { text: "La brique (vélo → course) est l'entraînement clé du triathlon : les jambes passent d'un mouvement rotatif à linéaire en quelques minutes.", source: "IRONMAN Coaching, 2021", icon: "\uD83D\uDCA1" },
-    { text: "En IRONMAN, 70% des abandons sont dus à une mauvaise stratégie nutritionnelle, pas au manque de forme physique.", source: "Journal of Science and Medicine in Sport, 2017", icon: "\u26A0" }
+    { text: "En triathlon, la transition (T1/T2) est souvent n\u00e9glig\u00e9e \u00e0 l'entra\u00eenement : 30s gagn\u00e9es en transition = 30s gagn\u00e9es sans effort physique.", text_en: "In triathlon, transitions (T1/T2) are often neglected in training: 30s saved in transition = 30s gained with no physical effort.", source: "Triathlon Coach Magazine, 2019", icon: "\uD83D\uDCA1" },
+    { text: "La brique (v\u00e9lo \u2192 course) est l'entra\u00eenement cl\u00e9 du triathlon : les jambes passent d'un mouvement rotatif \u00e0 lin\u00e9aire en quelques minutes.", text_en: "The brick session (bike \u2192 run) is the key triathlon workout: legs shift from rotational to linear movement in minutes.", source: "IRONMAN Coaching, 2021", icon: "\uD83D\uDCA1" },
+    { text: "En IRONMAN, 70% des abandons sont dus \u00e0 une mauvaise strat\u00e9gie nutritionnelle, pas au manque de forme physique.", text_en: "In IRONMAN, 70% of DNFs are due to poor nutrition strategy, not lack of fitness.", source: "Journal of Science and Medicine in Sport, 2017", icon: "\u26A0" }
   ],
 
-  // GÉNÉRAL
+  // G\u00c9N\u00c9RAL
   general: [
-    { text: "Dormir moins de 7h augmente la faim de 24% le lendemain via la ghréline.", source: "PLoS Medicine, 2004", icon: "\u26A0" },
-    { text: "Peser les aliments pendant 2 semaines suffit à recalibrer votre perception des portions pour longtemps.", source: "Obesity, 2014", icon: "\uD83D\uDCA1" },
-    { text: "Le petit-déjeuner n'est PAS le repas le plus important : le sauter ne ralentit pas le métabolisme.", source: "BMJ, 2019 (meta-analyse)", icon: "\u26A0" }
+    { text: "Dormir moins de 7h augmente la faim de 24% le lendemain via la ghr\u00e9line.", text_en: "Sleeping less than 7 hours increases hunger by 24% the next day via ghrelin.", source: "PLoS Medicine, 2004", icon: "\u26A0" },
+    { text: "Peser les aliments pendant 2 semaines suffit \u00e0 recalibrer votre perception des portions pour longtemps.", text_en: "Weighing food for 2 weeks is enough to recalibrate your portion perception for a long time.", source: "Obesity, 2014", icon: "\uD83D\uDCA1" },
+    { text: "Le petit-d\u00e9jeuner n'est PAS le repas le plus important : le sauter ne ralentit pas le m\u00e9tabolisme.", text_en: "Breakfast is NOT the most important meal: skipping it doesn't slow your metabolism.", source: "BMJ, 2019 (meta-analyse)", icon: "\u26A0" }
   ]
 };
 
@@ -181,7 +181,9 @@ function getTip(context) {
     seed = seed & seed;
   }
   var idx = Math.abs(seed) % tips.length;
-  return tips[idx];
+  var tip = tips[idx];
+  var _tipEN = window.isEnglish && window.isEnglish();
+  return { text: (_tipEN && tip.text_en) ? tip.text_en : tip.text, source: tip.source, icon: tip.icon };
 }
 
 // ─── RENDER FUNCTIONS ───
@@ -189,6 +191,7 @@ function getTip(context) {
 // Toggle widget (for auth screen or dashboard)
 function renderToggle(container) {
   var enabled = isTipsEnabled();
+  var _tEN = window.isEnglish && window.isEnglish();
   var toggle = document.createElement('div');
   toggle.className = 'tip-toggle' + (enabled ? ' on' : '');
   toggle.onclick = function() {
@@ -204,7 +207,7 @@ function renderToggle(container) {
   left.appendChild(label);
   var sub = document.createElement('div');
   sub.className = 'tip-toggle-sub';
-  sub.textContent = enabled ? 'Activé — Conseils scientifiques à chaque étape' : 'Désactivé — Activer les conseils anti-mythes';
+  sub.textContent = enabled ? (_tEN ? 'On — Scientific tips at every step' : 'Activé — Conseils scientifiques à chaque étape') : (_tEN ? 'Off — Enable anti-myth tips' : 'Désactivé — Activer les conseils anti-mythes');
   left.appendChild(sub);
   toggle.appendChild(left);
 
