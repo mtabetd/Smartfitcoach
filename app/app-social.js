@@ -230,7 +230,7 @@ async function loadNotifications(limit){
     (rp.data || []).forEach(function(p){ profs[p.id] = p; });
   }
   _notifications = rows.map(function(x){
-    return Object.assign({}, x, { _actor: profs[x.actor_id] || { pseudo:'(inconnu)', avatar_color:'#888' } });
+    return Object.assign({}, x, { _actor: profs[x.actor_id] || { pseudo:'Membre SmartFit', avatar_color:'#888' } });
   });
   return _notifications;
 }
@@ -929,6 +929,7 @@ function renderFriendsTab(container){
     } catch(err){
       var map = {
         user_not_found: 'Cet email n\'est pas inscrit sur SmartFitCoach.',
+        profile_not_setup: 'Cet utilisateur n\'a pas encore créé son pseudo — demandez-lui d\'aller dans l\'onglet Amis.',
         self: 'Vous ne pouvez pas vous ajouter vous-même.',
         already_friends: 'Vous êtes déjà amis.',
         already_pending: 'Une demande est déjà en attente.',
@@ -980,7 +981,7 @@ function _friendRow(f, kind){
   });
   row.appendChild(_avatar(f, 40));
   var meta = _h('div', { style:'flex:1;min-width:0' });
-  meta.appendChild(_h('div', { style:'font-family:Georgia,serif;font-size:14px' }, f.pseudo || '(inconnu)'));
+  meta.appendChild(_h('div', { style:'font-family:Georgia,serif;font-size:14px' }, f.pseudo || 'Membre SmartFit'));
   if (f.sport_main) meta.appendChild(_h('div', {
     style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey3);margin-top:2px'
   }, f.sport_main));
@@ -1416,6 +1417,7 @@ async function sendFriendRequestByEmail(email){
 
   var target = await findUserByEmail(email);
   if (!target) throw new Error('user_not_found');
+  if (!target.pseudo) throw new Error('profile_not_setup');
   if (target.id === me) throw new Error('self');
 
   // Vérifie si une friendship existe déjà (dans un sens ou l'autre)
@@ -1585,7 +1587,7 @@ async function loadFeed(limit){
     // 5. Enrichissement
     _feed = posts.map(function(p){
       return Object.assign({}, p, {
-        _author: profs[p.user_id] || { id: p.user_id, pseudo: '(inconnu)', avatar_color: '#888' },
+        _author: profs[p.user_id] || { id: p.user_id, pseudo: 'Membre SmartFit', avatar_color: '#888' },
         _likes: reactionsByPost[p.id] || 0,
         _comments: commentsByPost[p.id] || 0,
         _myLike: !!myLikes[p.id]
@@ -1639,7 +1641,7 @@ async function loadComments(postId){
     (rp.data || []).forEach(function(p){ profs[p.id] = p; });
   }
   return rows.map(function(x){
-    return Object.assign({}, x, { _author: profs[x.user_id] || { pseudo:'(inconnu)', avatar_color:'#888' } });
+    return Object.assign({}, x, { _author: profs[x.user_id] || { pseudo:'Membre SmartFit', avatar_color:'#888' } });
   });
 }
 

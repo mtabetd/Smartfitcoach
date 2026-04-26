@@ -1260,9 +1260,23 @@ function renderSportQuickProfile(p) {
       placeholder: '25'
     });
     var ageErr = h('div', {style: 'font-size:11px;color:#8B2020;margin-top:4px;display:none', role: 'alert'}, '');
+    // btnContinue referenced in _syncBtn \u2014 hoisted by var, assigned below
+    var btnContinue;
+    function _syncBtn() {
+      if (!btnContinue) return;
+      var _can = !!(S.age && S.weight);
+      btnContinue.disabled = !_can;
+      btnContinue.style.cursor = _can ? 'pointer' : 'not-allowed';
+      btnContinue.style.background = _can ? 'var(--black,#1A1A18)' : 'var(--border,#E8E6DF)';
+      btnContinue.style.color = _can ? '#FAF9F6' : 'var(--grey,#6B6B65)';
+    }
+    ageInput.addEventListener('input', function() {
+      var v = parseInt(this.value);
+      if (!isNaN(v) && v >= 13 && v <= 99) { S.age = v; ageErr.style.display = 'none'; _syncBtn(); }
+    });
     ageInput.addEventListener('change', function() {
       var v = parseInt(this.value);
-      if (!isNaN(v) && v >= 13 && v <= 99) { S.age = v; ageErr.style.display = 'none'; }
+      if (!isNaN(v) && v >= 13 && v <= 99) { S.age = v; ageErr.style.display = 'none'; _syncBtn(); }
       else { this.value = S.age ? String(S.age) : ''; ageErr.textContent = v < 13 ? '\u00c2ge entre 13 et 99 ans.' : 'Veuillez indiquer votre \u00e2ge.'; ageErr.style.display = 'block'; }
     });
     ageInput.addEventListener('focus', function() { setTimeout(function() { ageInput.scrollIntoView({behavior:'smooth', block:'center'}); }, 300); });
@@ -1277,9 +1291,13 @@ function renderSportQuickProfile(p) {
       placeholder: '70'
     });
     var weightErr = h('div', {style: 'font-size:11px;color:#8B2020;margin-top:4px;display:none', role: 'alert'}, '');
+    weightInput.addEventListener('input', function() {
+      var v = parseFloat(this.value);
+      if (!isNaN(v) && v >= 30 && v <= 300) { S.weight = v; S._nm = null; weightErr.style.display = 'none'; _syncBtn(); }
+    });
     weightInput.addEventListener('change', function() {
       var v = parseFloat(this.value);
-      if (!isNaN(v) && v >= 30 && v <= 300) { S.weight = v; S._nm = null; weightErr.style.display = 'none'; }
+      if (!isNaN(v) && v >= 30 && v <= 300) { S.weight = v; S._nm = null; weightErr.style.display = 'none'; _syncBtn(); }
       else { this.value = S.weight ? String(S.weight) : ''; weightErr.textContent = 'Entre 30 et 300 kg.'; weightErr.style.display = 'block'; }
     });
     weightInput.addEventListener('focus', function() { setTimeout(function() { weightInput.scrollIntoView({behavior:'smooth', block:'center'}); }, 300); });
@@ -1287,7 +1305,7 @@ function renderSportQuickProfile(p) {
     wrap.appendChild(weightErr);
 
     var canContinue = !!(S.age && S.weight);
-    var btnContinue = h('button', {
+    btnContinue = h('button', {
       style: 'width:100%;height:52px;margin-top:28px;border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;transition:background .2s ease,color .2s ease;cursor:' + (canContinue ? 'pointer' : 'not-allowed') + ';background:' + (canContinue ? 'var(--black,#1A1A18)' : 'var(--border,#E8E6DF)') + ';color:' + (canContinue ? '#FAF9F6' : 'var(--grey,#6B6B65)') + ';',
       disabled: !canContinue,
       onclick: function() {
