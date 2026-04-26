@@ -81,7 +81,7 @@
     try {
       if (window.GAMIFICATION && window.GAMIFICATION.getStreak) return window.GAMIFICATION.getStreak();
       var raw = localStorage.getItem('mtd_streak_' + _uid());
-      if (raw) { var s = JSON.parse(raw); return s && s.count ? s.count : 0; }
+      if (raw) { var s = JSON.parse(raw); return s && (s.current !== undefined ? s.current : (s.count || 0)); }
     } catch(e) {}
     return 0;
   }
@@ -170,7 +170,7 @@
     if (!base) base = wh[0];
     var delta = _calcDelta(base.weight, last.weight);
     s.appendChild(metricBig('Aujourd\'hui', last.weight, ' kg', delta, 'il y a ' + (period || 4) + ' sem.'));
-    s.appendChild(h('div', { style: ST.sub + 'margin-top:6px;' }, wh.length + ' ' + window.locPlural(wh.length, {fr:{one:'mesure enregistrée',other:'mesures enregistrées'},en:{one:'measurement recorded',other:'measurements recorded'}})));
+    s.appendChild(h('div', { style: ST.sub + 'margin-top:6px;' }, wh.length + ' ' + (window.locPlural ? window.locPlural(wh.length, {fr:{one:'mesure enregistrée',other:'mesures enregistrées'},en:{one:'measurement recorded',other:'measurements recorded'}}) : (wh.length > 1 ? 'mesures enregistrées' : 'mesure enregistrée'))));
     return s;
   }
 

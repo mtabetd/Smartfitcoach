@@ -600,9 +600,17 @@ function _csEqScore(eq) {
     .replace(/[éèê]/g, 'e').replace(/[àâ]/g, 'a').replace(/[ôö]/g, 'o').replace(/ç/g, 'c');
   if (/machine/.test(e))  return 5;   // machine guidée (priorité test la plus haute pour éviter faux positif barre)
   if (/cable|poulie/.test(e)) return 3; // câble / poulie
-  if (/\bbarre\b/.test(e)) return 1;   // barre olympique / barre de traction
+  if (/\bbarre\b|trap[-. ]?bar|t[-. ]?bar|landmine|hex[-. ]?bar|barbell|ez[-. ]?bar/.test(e)) return 1; // barre + variantes
   if (/haltere/.test(e))  return 2;   // haltères
   return 4;                            // autre équipement (anneaux, élastique, barres parallèles…)
+}
+
+// Détection d'exercice au poids du corps (regex élargie pour couvrir les variantes hybrides)
+if (!window.isBodyweightExercise) {
+  window.isBodyweightExercise = function(ex) {
+    var eq = (ex.eq || '').toLowerCase();
+    return /poids.du.corps|bodyweight|aucun|none|anneaux|gymnast|traction.pure|pull.?up|chin.?up|\bdip\b|push.?up/.test(eq);
+  };
 }
 
 // Ordre préféré de familles par groupe musculaire

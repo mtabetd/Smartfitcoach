@@ -570,8 +570,9 @@ function buildPanel() {
 
 function updateBtn() {
   var btn = document.getElementById('ba-btn');
+  var cb = document.getElementById('ba-consent');
   if (!btn) return;
-  btn.disabled = !(_photos.face && _photos.dos);
+  btn.disabled = !(_photos.face && _photos.dos && cb && cb.checked);
 }
 
 function openPanel() {

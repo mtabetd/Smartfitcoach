@@ -98,11 +98,11 @@ h1 em{font-style:italic}
 .divider-text{font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);white-space:nowrap}
 
 /* ── BUTTONS ── */
-.btn-primary{display:block;width:100%;margin-top:8px;background:var(--black);color:var(--ivory);font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;font-weight:400;padding:18px 28px;border:1px solid var(--black);border-radius:2px;cursor:pointer;transition:all .25s cubic-bezier(0.25,0.46,0.45,0.94);outline:none}
+.btn-primary{display:block;width:100%;margin-top:8px;background:var(--black);color:var(--ivory);font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;font-weight:400;padding:18px 28px;border:1px solid var(--black);border-radius:2px;cursor:pointer;transition:all .25s cubic-bezier(0.25,0.46,0.45,0.94);outline:none}.btn-primary:focus-visible{outline:2px solid var(--focus,#0A0A09);outline-offset:2px}
 .btn-primary:hover{background:var(--black2);transform:translateY(-2px);box-shadow:0 4px 16px rgba(10,10,9,0.12)}
 .btn-primary:active{transform:translateY(0);box-shadow:none}
 .btn-primary:disabled{background:var(--border);border-color:var(--border);color:var(--grey2);cursor:not-allowed;transform:none;box-shadow:none}
-.btn-secondary{display:block;width:100%;margin-top:8px;background:transparent;color:var(--grey);font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:12px 24px;border:1px solid var(--border);border-radius:2px;cursor:pointer;transition:all .25s cubic-bezier(0.25,0.46,0.45,0.94);outline:none}
+.btn-secondary{display:block;width:100%;margin-top:8px;background:transparent;color:var(--grey);font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:12px 24px;min-height:44px;border:1px solid var(--border);border-radius:2px;cursor:pointer;transition:all .25s cubic-bezier(0.25,0.46,0.45,0.94);outline:none}.btn-secondary:focus-visible{outline:2px solid var(--focus,#0A0A09);outline-offset:2px}
 .btn-secondary:hover{border-color:var(--black);color:var(--black);transform:translateY(-1px);box-shadow:0 2px 8px rgba(10,10,9,0.06)}
 .btn-back{display:inline-flex;align-items:center;gap:8px;background:none;border:none;font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--grey2);cursor:pointer;padding:10px 0;transition:color .2s}
 .btn-back:hover{color:var(--black)}
@@ -434,18 +434,18 @@ canvas.weight-chart{width:100%;height:200px}
 <div style="height:64px"></div>
 </div>
 <!-- /Pré-inscription -->
-<a href="#app" class="skip-nav" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:99999;padding:12px 16px;background:var(--black);color:var(--ivory);font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;text-decoration:none;border-radius:0 0 4px 0;" onfocus="this.style.position='fixed';this.style.left='0';this.style.top='0';this.style.width='auto';this.style.height='auto';this.style.overflow='visible';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';this.style.overflow='hidden';">Aller au contenu principal</a>
+<a id="skip-nav-link" href="#app" class="skip-nav" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:99999;padding:12px 16px;background:var(--black);color:var(--ivory);font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;text-decoration:none;border-radius:0 0 4px 0;">Aller au contenu principal</a>
 <main id="app" role="main" style="display:none"></main>
-<script src="./gate.js"></script>
 <script src="./error-boundary.js"></script>
-<script src="./tracker.js"></script>
-<script src="./zxing.min.js"></script>
+<script src="./gate.js"></script>
+<script defer src="./tracker.js"></script>
+<script defer src="./zxing.min.js"></script>
 <script defer src="./bundle.js"></script>
-<div id="offline-banner" role="status" aria-live="polite" style="display:none;position:fixed;top:0;left:0;right:0;z-index:10000;background:var(--tabac,#6A4A1A);color:var(--ivory,#FAF9F6);text-align:center;padding:10px 16px;font-size:10px;font-family:'Helvetica Neue',Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;">
+<div id="offline-banner" role="status" aria-live="polite" data-fr="Hors ligne · Vos données sont sauvegardées localement" data-en="Offline · Your data is saved locally" style="display:none;position:fixed;top:0;left:0;right:0;z-index:10000;background:var(--tabac,#6A4A1A);color:var(--ivory,#FAF9F6);text-align:center;padding:10px 16px;font-size:10px;font-family:'Helvetica Neue',Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;">
   Hors ligne &middot; Vos donn&eacute;es sont sauvegard&eacute;es localement
 </div>
 <div id="rest-timer-display" style="display:none;position:fixed;bottom:80px;right:16px;z-index:9100;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);padding:12px 16px;border-radius:2px;text-align:center;min-width:80px;box-shadow:0 4px 12px rgba(0,0,0,0.3)">
-  <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:4px">REPOS</div>
+  <div id="rest-timer-label" data-fr="REPOS" data-en="REST" style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:4px">REPOS</div>
   <div class="timer-count" style="font-family:Georgia,serif;font-size:28px;font-weight:300;line-height:1">1:30</div>
   <div style="display:flex;gap:6px;margin-top:8px;justify-content:center">
     <button id="rest-timer-60" data-rest-seconds="60" aria-label="D\u00e9marrer repos de 1 minute" style="font-size:9px;padding:12px 14px;min-height:44px;min-width:44px;background:transparent;border:1px solid var(--grey,#6B6B65);color:var(--grey,#6B6B65);cursor:pointer;border-radius:2px">1'</button>

@@ -12,7 +12,7 @@ const CACHE_VERSION = 'sfc-vmocmo62v';
 const RUNTIME_CACHE = 'sfc-runtime-vmocmo62v';
 
 // Max age for static assets in the runtime cache: 7 days (in milliseconds).
-const STATIC_MAX_AGE_MS = 1 * 24 * 60 * 60 * 1000;
+const STATIC_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 
 // Local assets to pre-cache during install.
 const APP_SHELL = [
@@ -33,12 +33,6 @@ const APP_SHELL = [
   './i18n/exercises-en.json',
   './i18n/motivations-en.json',
   './i18n/taxonomy-en.json',
-];
-
-// Critical static assets to pre-cache during install.
-const STATIC_ASSETS = [
-  '/', '/index.html', '/app/premium-ui.css',
-  '/app/app-core.js', '/app/recipe-engine.js'
 ];
 
 // Third-party CDN scripts to pre-cache (currently none — chart.js is bundled locally).
@@ -130,7 +124,7 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url);
 
   // API calls to Netlify Functions: network-only (never cache AI responses).
-  if (url.pathname.startsWith('/netlify/functions/')) {
+  if (url.pathname.startsWith('/.netlify/functions/')) {
     event.respondWith(fetch(request));
     return;
   }

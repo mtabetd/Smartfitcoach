@@ -21,7 +21,7 @@ var PSEUDO_REGEX = /^[a-zA-Z0-9_-]{3,20}$/;
 var RESERVED_PSEUDOS = [
   'admin','smartfit','smartfitcoach','support','coach','system','mod',
   'moderateur','moderator','null','undefined','anonymous','anonyme',
-  'deleted','supprime','sfc','root','test','null','none'
+  'deleted','supprime','sfc','root','test','none'
 ];
 // Palette Hermès : or profond + complémentaires sobres
 var AVATAR_COLORS = [
@@ -351,6 +351,7 @@ function _emptyState(title, subtitle, ctaText, ctaCb){
 }
 
 function _toast(msg, kind){
+  if (window.showToast) { window.showToast(msg, kind); return; }
   kind = kind || 'info';
   try {
     var bg = kind === 'error' ? 'var(--error,#7A1F1F)' : (kind === 'success' ? 'var(--success,#3E5C3A)' : 'var(--ink-900,#0A0A09)');
@@ -360,7 +361,7 @@ function _toast(msg, kind){
       'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);'+
       'background:'+bg+';color:#FAF9F6;padding:12px 24px;border-radius:2px;'+
       'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;'+
-      'text-transform:uppercase;z-index:99999'+
+      'text-transform:uppercase;z-index:99999;'+
       'max-width:90vw;text-align:center;opacity:0;transition:opacity .2s ease'
     );
     document.body.appendChild(el);
@@ -585,7 +586,7 @@ function renderSocialHub(container){
   }, _myProfile.pseudo));
   hMeta.appendChild(_h('div', {
     style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:2px'
-  }, _friends.length + ' ' + window.locPlural(_friends.length, {fr:{one:'ami',other:'amis'},en:{one:'friend',other:'friends'}}) + (_pendingIn.length ? ' · ' + _pendingIn.length + ' ' + window.locPlural(_pendingIn.length, {fr:{one:'demande',other:'demandes'},en:{one:'request',other:'requests'}}) : '')));
+  }, _friends.length + ' ' + (window.locPlural ? window.locPlural(_friends.length, {fr:{one:'ami',other:'amis'},en:{one:'friend',other:'friends'}}) : (_friends.length > 1 ? 'amis' : 'ami')) + (_pendingIn.length ? ' · ' + _pendingIn.length + ' ' + (window.locPlural ? window.locPlural(_pendingIn.length, {fr:{one:'demande',other:'demandes'},en:{one:'request',other:'requests'}}) : (_pendingIn.length > 1 ? 'demandes' : 'demande')) : '')));
   header.appendChild(hMeta);
 
   var settingsBtn = _h('button', {
@@ -1005,7 +1006,7 @@ function _friendRow(f, kind){
     }, 'primary'));
     actions.appendChild(_act('Refuser', async function(){
       if (!(window.sfcConfirm || confirm)((window.isEnglish && window.isEnglish()) ? ('Decline request from ' + f.pseudo + '?') : ('Refuser la demande de ' + f.pseudo + ' ?'))) return;
-      try { await declineFriendRequest(f._fsId); await loadFriendships(); window.render(); }
+      try { await declineFriendRequest(f._fsId); _toast((window.isEnglish && window.isEnglish()) ? 'Request declined' : 'Demande refusée', 'success'); await loadFriendships(); window.render(); }
       catch(e){ _toast('Erreur', 'error'); }
     }));
   } else if (kind === 'outgoing'){

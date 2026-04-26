@@ -12,13 +12,23 @@
 (function() {
   'use strict';
 
-  var DAY_NAMES = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+  var _calLang = (function(){ try { var p = JSON.parse(localStorage.getItem('sfc_profile')||'{}'); return p.lang || 'fr'; } catch(e){ return 'fr'; } })();
+  var DAY_NAMES = (function() {
+    try {
+      var locale = _calLang === 'en' ? 'en-US' : 'fr-FR';
+      var fmt = new Intl.DateTimeFormat(locale, {weekday:'long'});
+      var monday = new Date(2024, 0, 1); // Monday Jan 1 2024
+      return [0,1,2,3,4,5,6].map(function(i){ var d = new Date(monday); d.setDate(monday.getDate()+i); var s = fmt.format(d); return s.charAt(0).toUpperCase()+s.slice(1); });
+    } catch(e) {
+      return _calLang === 'en' ? ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'] : ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+    }
+  })();
 
   // ─── SPORTS DISPONIBLES SELON PROFIL ───
   function getAvailableSports() {
     var S = window.S;
     var sports = [];
-    sports.push({ value: 'repos', label: 'Repos' });
+    sports.push({ value: 'repos', label: _calLang === 'en' ? 'Rest' : 'Repos' });
     if (S) {
       if (S.sportType === 'musculation' || S.sportMixEnabled) {
         sports.push({ value: 'musculation', label: 'Musculation' });
@@ -395,7 +405,7 @@
       btnSave.style.opacity = '0.6';
       btnSave.disabled = true;
       if (window.saveProfile) window.saveProfile();
-      showToast('Calendrier sauvegarde');
+      showToast('Calendrier sauvegardé');
       setTimeout(function() {
         btnSave.textContent = 'Sauvegarder le calendrier';
         btnSave.style.opacity = '1';

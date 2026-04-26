@@ -1198,6 +1198,10 @@ function togglePanel() {
 }
 
 function openPanel() {
+  if (window.isPremium && !window.isPremium()) {
+    if (window.showPaywall) window.showPaywall('ai-coach');
+    return;
+  }
   var panel = document.getElementById('ai-coach-panel');
   if (panel) { panel.classList.add('open'); _panelOpen = true; }
   applyPanelLayout();

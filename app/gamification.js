@@ -197,8 +197,8 @@ function updateStreak() {
       var _freezeS = window.S || {};
       var freezeAvailable = _freezeS.streakFreezeAvailable !== false; // true par défaut
       var freezeUsedMonth = _freezeS.streakFreezeUsedMonth || '';
-      // Freeze uniquement pour 1 jour manqué (pas 2+ jours) — diff = 2 signifie 1 jour sauté
-      if (freezeAvailable && freezeUsedMonth !== thisMonth && (data.current || 0) >= 3 && _missedDays <= 2) {
+      // Freeze uniquement pour exactement 1 jour manqué (diff === 2 signifie 1 jour sauté)
+      if (freezeAvailable && freezeUsedMonth !== thisMonth && (data.current || 0) >= 3 && _missedDays === 2) {
         // Activer le freeze : protéger le streak
         if (window.S) {
           window.S.streakFreezeUsedMonth = thisMonth;

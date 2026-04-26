@@ -271,6 +271,20 @@ function openScan(mealSlot) {
         };
         if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       }
+      // Also record in FOOD_JOURNAL so dashboard macros reflect this meal
+      if (window.FOOD_JOURNAL && window.FOOD_JOURNAL.addEntry) {
+        try {
+          window.FOOD_JOURNAL.addEntry(
+            mealSlot,
+            data.name || 'Repas scanné',
+            data.kcal || 0,
+            data.p || 0,
+            data.g || 0,
+            data.l || 0,
+            data.portion || 100
+          );
+        } catch(e) {}
+      }
       if (window.SupaSync && window.SupaSync.savePlateScan) {
         try {
           window.SupaSync.savePlateScan({

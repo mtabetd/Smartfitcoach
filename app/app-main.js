@@ -80,7 +80,6 @@ var PROFILE_KEYS = [
  'pushNotifsEnabled',
  'profilePhoto','photoFront','photoBack',
  'mealTimes','restDayMood',
- 'waterToday','waterTodayDate',
  'todayWellness',
  'aiCoachHistory',
  'appMode',
@@ -453,8 +452,10 @@ function loadProfile() {
  'calisthenicsEquipment','calisthenicsGoal','weightHistory','trainingDaysSelected','sportHobbies',
  'aiCoachHistory','muscuZonesCibles','installations'];
  _arrFields.forEach(function(f) { if (!Array.isArray(S[f])) S[f] = []; });
- // weekPlan / weeklyCalendar are null or array — reject anything else
+ // weekPlan / weeklyCalendar are null or array — parse strings, reject everything else
+ if (S.weekPlan && typeof S.weekPlan === 'string') { try { S.weekPlan = JSON.parse(S.weekPlan); } catch(e) { S.weekPlan = null; } }
  if (S.weekPlan !== null && !Array.isArray(S.weekPlan)) S.weekPlan = null;
+ if (S.weeklyCalendar && typeof S.weeklyCalendar === 'string') { try { S.weeklyCalendar = JSON.parse(S.weeklyCalendar); } catch(e) { S.weeklyCalendar = null; } }
  if (S.weeklyCalendar !== null && !Array.isArray(S.weeklyCalendar)) S.weeklyCalendar = null;
  // mealTimes is an object {breakfast,lunch,snack,dinner} — reject malformed values
  if (S.mealTimes !== null && S.mealTimes !== undefined && (typeof S.mealTimes !== 'object' || Array.isArray(S.mealTimes))) S.mealTimes = null;
@@ -466,7 +467,7 @@ function loadProfile() {
  if (S.parqDone === undefined) S.parqDone = false;
  if (S.parqResult === undefined) S.parqResult = null;
  if (S.streakFreezeUsedMonth === undefined) S.streakFreezeUsedMonth = null;
- if (S.streakFreezeAvailable === undefined) S.streakFreezeAvailable = true;
+ if (!S.streakFreezeAvailable && S.streakFreezeAvailable !== false) S.streakFreezeAvailable = true;
  if (S.swapCount === undefined) S.swapCount = 0;
  if (S.bodyScanDone === undefined) S.bodyScanDone = false;
  if (S._bodyFatEstimate === undefined) S._bodyFatEstimate = null;
@@ -904,7 +905,11 @@ function renderProfilePage(container) {
  if (!S.allowAlcohol) sec2.appendChild(_infoRow('Alcool cuisine', 'Exclu'));
  if (Array.isArray(S.allergies) && S.allergies.length > 0 && S.allergies[0] !== 'Aucune') sec2.appendChild(_infoRow('Allergies', S.allergies.join(', ')));
  if (Array.isArray(S.medical) && S.medical.length > 0) {
-   var _medNames = S.medical.map(function(id) { var m = (window.MEDICAL || []).find(function(x) { return x.id === id; }); return m ? m.name : id; });
+   var _medNames = S.medical.map(function(id) {
+     var found = null;
+     (window.MEDICAL || []).forEach(function(cat) { (cat.items || []).forEach(function(item) { if (item.id === id) found = item; }); });
+     return found ? found.name : id;
+   });
    sec2.appendChild(_infoRow('Conditions', _medNames.join(', ')));
  }
  c.appendChild(sec2);
@@ -2149,6 +2154,7 @@ function render() {
      style: 'display:flex;align-items:center;min-height:44px;cursor:pointer',
      onclick: function() {
        var _next = (window.I18N ? window.I18N.current : (S.lang || 'fr')) === 'fr' ? 'en' : 'fr';
+       document.documentElement.lang = _next;
        if (window.I18N && window.I18N.setLang) { window.I18N.setLang(_next); } else { S.lang = _next; render(); }
      }
    });
@@ -2185,7 +2191,9 @@ function render() {
  ub.appendChild(ubRight);
  wrap.appendChild(ub);
 
- // Main navigation (tabs adaptés selon S.appMode)
+ // Main navigation (tabs adaptés selon S.appMode, masquée pendant l'onboarding)
+ var _navInOnboarding = (S.view === 'nutrition' && S.nStep > 0 && S.nStep < 12) ||
+                        (S.view === 'sport' && S.sStep > 0);
  var nav = h('nav', {'class': 'main-nav', role: 'navigation', 'aria-label': 'Navigation principale'});
  var _navIcons = {
    today: '<svg class="main-nav-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 3v2 M12 19v2 M3 12h2 M19 12h2 M5.6 5.6l1.4 1.4 M17 17l1.4 1.4 M5.6 18.4l1.4-1.4 M17 7l1.4-1.4"/></svg>',
@@ -2217,10 +2225,12 @@ function render() {
    nav.appendChild(_makeNavTab('calendar', 'Calendrier', S.view === 'calendar', 'nav_calendar', 'calendar'));
    // 2026-04 : onglet Progrès (analytics)
    nav.appendChild(_makeNavTab('analytics', 'Progrès', S.view === 'analytics', 'nav_analytics', 'analytics'));
-   // Projet 2.0 : onglet Social (amis + feed privé)
-   nav.appendChild(_makeNavTab('social', 'Social', S.view === 'social', 'nav_social', 'social'));
+   // Projet 2.0 : onglet Social (amis + feed privé) — affiché uniquement si le module est chargé
+   if (window.SOCIAL && typeof window.SOCIAL.render === 'function') {
+     nav.appendChild(_makeNavTab('social', 'Social', S.view === 'social', 'nav_social', 'social'));
+   }
  }
- wrap.appendChild(nav);
+ if (!_navInOnboarding) wrap.appendChild(nav);
 
  var content = h('div', {'class': 'fade-in', style: 'margin-top:24px'});
 
@@ -3062,11 +3072,12 @@ function renderNewPassword(app) {
  form.appendChild(saveBtn);
 
  // Lien de secours si le token Supabase expire en cours de saisie
+ c.appendChild(form);
+
+ // Lien retour \u2014 apr\u00e8s le formulaire (ordre DOM logique)
  var cancelLink = h('div', {'class': 'auth-switch'});
  cancelLink.appendChild(h('a', {onclick: function() { S.authError = ''; S.view = 'auth'; render(); }}, 'Retour \u00e0 la connexion'));
  c.appendChild(cancelLink);
-
- c.appendChild(form);
  app.appendChild(c);
 }
 
@@ -3251,6 +3262,7 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  // Restaurer la langue
  if (window.I18N && S.lang) {
  window.I18N.current = S.lang;
+ if (document.documentElement.lang !== S.lang) document.documentElement.lang = S.lang;
  }
  // Restaurer les préférences d'unités (kg/lbs, cm/ft)
  if (window.UNITS) {

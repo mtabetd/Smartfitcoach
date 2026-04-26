@@ -151,17 +151,18 @@ window.exportWeeklyReportPDF = function() {
     color(doc, 'text', ivory);
     doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
     var prenom = (typeof window.getDisplayFirstName === 'function') ? window.getDisplayFirstName() : (S.prenom || '');
-    var dateStr = window.formatDate(new Date(), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    var dateStr = (typeof window.formatDate === 'function') ? window.formatDate(new Date(), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) : new Date().toLocaleDateString(S.lang === 'en' ? 'en-US' : 'fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
     doc.text((prenom ? prenom + '  ·  ' : '') + dateStr, M, 38);
 
     var y = 58;
 
     // ═══ 1. PROFIL ═══
     y = sectionTitle(doc, y, 'Profil');
-    if (S.sex) y = kvLine(doc, y, 'Sexe', window.isMale(S) ? 'Homme' : 'Femme', { emphasis: false });
-    if (S.age) y = kvLine(doc, y, 'Âge', S.age + ' ans', { emphasis: false });
-    if (S.weight) y = kvLine(doc, y, 'Poids actuel', S.weight + ' kg');
-    if (S.height) y = kvLine(doc, y, 'Taille', S.height + ' cm', { emphasis: false });
+    var _pdfEN = S.lang === 'en';
+    if (S.sex) y = kvLine(doc, y, _pdfEN ? 'Sex' : 'Sexe', window.isMale(S) ? (_pdfEN ? 'Male' : 'Homme') : (_pdfEN ? 'Female' : 'Femme'), { emphasis: false });
+    if (S.age) y = kvLine(doc, y, _pdfEN ? 'Age' : 'Âge', S.age + (_pdfEN ? ' years' : ' ans'), { emphasis: false });
+    if (S.weight) y = kvLine(doc, y, _pdfEN ? 'Current weight' : 'Poids actuel', S.weight + ' kg');
+    if (S.height) y = kvLine(doc, y, _pdfEN ? 'Height' : 'Taille', S.height + ' cm', { emphasis: false });
     if (window.GOALS && typeof S.goal === 'number' && window.GOALS[S.goal]) {
       y = kvLine(doc, y, 'Objectif', window.GOALS[S.goal].label || window.GOALS[S.goal].key || '—', { emphasis: false });
     }
@@ -466,7 +467,7 @@ window.exportWeeklyReportPDF = function() {
       doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
       doc.text('Smart Fit Coach', M, 291);
       doc.setFont('helvetica', 'italic'); doc.setFontSize(6.5);
-      doc.text(window.formatDate(new Date(), { day: '2-digit', month: 'long', year: 'numeric' }), M, 294.5);
+      doc.text((typeof window.formatDate === 'function') ? window.formatDate(new Date(), { day: '2-digit', month: 'long', year: 'numeric' }) : new Date().toLocaleDateString(S.lang === 'en' ? 'en-US' : 'fr-FR', { day: '2-digit', month: 'long', year: 'numeric' }), M, 294.5);
       doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
       var pn = pi + ' / ' + pageCount;
       var pnW = doc.getTextWidth(pn);
