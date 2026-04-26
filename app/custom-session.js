@@ -340,6 +340,11 @@ window.CUSTOM_SESSION = {
         });
       }
       b.loggedSets = b.loggedSets.slice(0, targetSets);
+      // Generate warm-up sets for heavy exercises (≥ 40 kg)
+      var bwNum = bestWeight ? parseFloat(bestWeight) : 0;
+      b.warmupSets = bwNum >= 40 ? _csGenerateWarmup(bwNum) : [];
+      // Reset RPE for this session
+      b._rpe = 0;
     });
     this.saveDraft();
   },
@@ -433,6 +438,31 @@ window.CUSTOM_SESSION = {
       }
     });
     try { localStorage.setItem('mtd_muscu_progression_' + this._uid(), JSON.stringify(S.muscuProgressionHistory)); } catch(e2) {}
+
+    // Auto 1RM update in muscuStrengthProfile from best set per exercise
+    if (!S.muscuStrengthProfile) S.muscuStrengthProfile = {};
+    draft.blocks.forEach(function(b5) {
+      if (b5.type !== 'exercise' || !Array.isArray(b5.loggedSets)) return;
+      var vs5 = b5.loggedSets.filter(function(s5) { return s5.validated && parseFloat(s5.weight) > 0 && parseInt(s5.reps) > 0; });
+      if (!vs5.length) return;
+      var best1RM = 0, bestW5 = 0, bestR5 = 0;
+      vs5.forEach(function(s5) {
+        var est = _csEstimate1RM(s5.weight, s5.reps);
+        if (est > best1RM) { best1RM = est; bestW5 = parseFloat(s5.weight); bestR5 = parseInt(s5.reps); }
+      });
+      if (best1RM > 0) {
+        var key5 = (b5.n || '').toLowerCase()
+          .replace(/[éèê]/g,'e').replace(/[àâ]/g,'a').replace(/[ôö]/g,'o').replace(/ç/g,'c').replace(/[ùûü]/g,'u')
+          .replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'');
+        var existing1RM = parseFloat(S.muscuStrengthProfile[key5 + '_1rm']) || 0;
+        if (best1RM > existing1RM) {
+          S.muscuStrengthProfile[key5]          = bestW5;
+          S.muscuStrengthProfile[key5 + '_reps'] = bestR5;
+          S.muscuStrengthProfile[key5 + '_1rm']  = best1RM;
+        }
+      }
+    });
+    try { localStorage.setItem('mtd_muscu_strength_' + this._uid(), JSON.stringify(S.muscuStrengthProfile)); } catch(e3) {}
 
     // Gamification
     if (window.GAMIFICATION) {
@@ -1227,6 +1257,9 @@ function _csRenderDone(container, draft) {
   statsGrid.appendChild(_sc(kcal.total + ' kcal', _dEN ? 'Burned' : 'Dépense', true));
   container.appendChild(statsGrid);
 
+  // Coach Card — analysis, PRs, next targets, plateau warnings
+  _csRenderCoachCard(draft, container);
+
   // Récap exercices
   var exBlocks = draft.blocks.filter(function(b) { return b.type === 'exercise' && Array.isArray(b.loggedSets); });
   if (exBlocks.length > 0) {
@@ -1610,7 +1643,16 @@ function _csRenderActiveExBlock(block) {
     style: 'padding:9px 12px;border-bottom:1px solid var(--border,#D8D8D0);display:flex;align-items:center;justify-content:space-between;background:' + (allDone ? 'rgba(62,92,58,0.06)' : 'var(--ivory2,#F4F4F0)') + ';'
   });
   var _hdrLeft = h('div', { style: 'flex:1;min-width:0;' });
-  _hdrLeft.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;' }, block.n));
+  var _hdrNameRow = h('div', { style: 'display:flex;align-items:center;gap:6px;flex-wrap:wrap;' });
+  _hdrNameRow.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;' }, block.n));
+  // Plateau badge
+  if (_csIsOnPlateau(block.n)) {
+    _hdrNameRow.appendChild(h('span', {
+      title: (window.isEnglish && window.isEnglish()) ? 'Plateau detected' : 'Plateau détecté',
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:1px;padding:2px 5px;background:var(--orange,#E86F1E);color:#fff;border-radius:2px;white-space:nowrap;flex-shrink:0;'
+    }, 'PLATEAU'));
+  }
+  _hdrLeft.appendChild(_hdrNameRow);
   var _sparkA = (window.S && window.S.muscuProgressionHistory && block.n && window.S.muscuProgressionHistory[block.n]) ? window.S.muscuProgressionHistory[block.n].slice(-5) : [];
   if (_sparkA.length > 0) {
     _hdrLeft.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--green,#3E5C3A);margin-top:2px;' }, '↗ ' + _sparkA.map(function(p){ return (p.weight||0)+' kg'; }).join(' → ')));
@@ -1687,11 +1729,20 @@ function _csRenderActiveExBlock(block) {
     wrap.appendChild(_vtRow);
   }
 
+  // Warm-up sets (shown before working sets when weight ≥ 40 kg)
+  if (Array.isArray(block.warmupSets) && block.warmupSets.length > 0) {
+    wrap.appendChild(_csRenderWarmupRows(block.warmupSets, block.id));
+  }
+
   var setsWrap = h('div', { style: 'padding:6px 12px;' });
   block.loggedSets.forEach(function(s, si) {
     setsWrap.appendChild(_csRenderActiveSet(block, s, si));
   });
   wrap.appendChild(setsWrap);
+
+  // RPE widget appears once all working sets are validated
+  _csRenderRPEWidget(block, wrap);
+
   return wrap;
 }
 
@@ -1712,13 +1763,27 @@ function _csRenderActiveSet(block, set, si) {
 
   var _isBodyweight = window.isBodyweightExercise ? window.isBodyweightExercise(block) : (block.eq === 'Poids du corps');
   var wInp2 = h('input', {
+    id: 'cs-winp-' + block.id + '-' + si,
     type: 'number', step: '0.5', min: '0', max: '500', inputmode: 'decimal',
     value: (set.weight !== null && set.weight !== undefined && set.weight !== '') ? String(set.weight) : (block.targetWeight != null ? String(block.targetWeight) : ''),
     placeholder: _isBodyweight ? ((window.isEnglish && window.isEnglish()) ? 'vest' : 'lest') : 'kg',
     disabled: set.validated,
     style: 'width:62px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:14px;text-align:center;background:var(--ivory);-webkit-appearance:none;' + (_isBodyweight ? 'opacity:0.6;' : ''),
     onclick: function(e) { e.stopPropagation(); },
-    oninput: (function(s2) { return function(e) { s2.weight = e.target.value; }; })(set)
+    oninput: (function(s2, blk2, idx) { return function(e) {
+      var newVal = e.target.value;
+      s2.weight = newVal;
+      // Propagate to all subsequent non-validated sets in this block
+      if (blk2 && Array.isArray(blk2.loggedSets)) {
+        for (var _pj = idx + 1; _pj < blk2.loggedSets.length; _pj++) {
+          if (!blk2.loggedSets[_pj].validated) {
+            blk2.loggedSets[_pj].weight = newVal;
+            var _pinp = document.getElementById('cs-winp-' + blk2.id + '-' + _pj);
+            if (_pinp && !_pinp.disabled) _pinp.value = newVal;
+          }
+        }
+      }
+    }; })(set, block, si)
   });
   row.appendChild(wInp2);
   row.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);' }, _isBodyweight ? 'kg (opt.)' : 'kg')); // kg is the same in both languages
@@ -1793,16 +1858,367 @@ function _csRenderActiveCardioBlock(block) {
 }
 
 // ─────────────────────────────────────────────
+//  PROGRESSION INTELLIGENCE — helpers
+// ─────────────────────────────────────────────
+
+// Round to nearest 2.5 kg plate increment
+function _csRound25(w) {
+  return Math.round((parseFloat(w) || 0) / 2.5) * 2.5;
+}
+
+// 1RM estimation: Brzycki (≤6 reps) + Epley (>10 reps), average for 7–10
+function _csEstimate1RM(weight, reps) {
+  var w = parseFloat(weight) || 0, r = parseInt(reps) || 1;
+  if (w <= 0) return 0;
+  if (r === 1) return w;
+  var brzycki = w * 36 / (37 - r);
+  var epley   = w * (1 + r / 30);
+  if (r <= 6)  return _csRound25(brzycki);
+  if (r <= 10) return _csRound25((brzycki + epley) / 2);
+  return _csRound25(epley);
+}
+
+// Classify movement: compound_lower, compound_upper, isolation
+function _csGetExerciseType(name, muscle) {
+  var n = (name || '').toLowerCase()
+    .replace(/[éèê]/g,'e').replace(/[àâ]/g,'a').replace(/[ôö]/g,'o').replace(/ç/g,'c');
+  if (/squat|deadlift|souleve|leg.press|fente|lunge|hip.thrust|rdl/.test(n)) return 'compound_lower';
+  if (/developpe|bench|row|rowing|tirage|traction|pull.?up|chin.?up|dips?|militaire|ohp|shoulder.press|press.strict/.test(n)) return 'compound_upper';
+  return 'isolation';
+}
+
+// Adaptive rest from exercise type
+function _csGetDefaultRest(ex) {
+  var t = _csGetExerciseType(ex.n, ex.m);
+  if (t === 'compound_lower') return '180s';
+  if (t === 'compound_upper') return '120s';
+  return '60s';
+}
+
+// Plateau detection: last 3 history entries at same weight
+function _csIsOnPlateau(exerciseName) {
+  var S = window.S;
+  var hist = (S && S.muscuProgressionHistory && S.muscuProgressionHistory[exerciseName]) || [];
+  if (hist.length < 3) return false;
+  var last = hist.slice(-3);
+  return last[0].weight === last[1].weight && last[1].weight === last[2].weight;
+}
+
+// Double progression + RPE autoregulation → next work weight
+// allSetsSucceeded: true if all sets hit targetReps
+function _freeSessionNextWeight(exerciseName, allSetsSucceeded, bestWeight, bestReps, targetReps, rpe, exerciseType) {
+  var w = parseFloat(bestWeight) || 0;
+  if (w <= 0) return null;
+  var type = exerciseType || _csGetExerciseType(exerciseName, '');
+  var rpeVal = parseInt(rpe) || 0;
+
+  // RPE 10 → deload −2.5%
+  if (rpeVal === 10) return _csRound25(w * 0.975);
+
+  // RPE 9 → maintain weight regardless of reps
+  if (rpeVal === 9) return w;
+
+  // All sets hit target reps → add weight
+  if (allSetsSucceeded) {
+    var inc = type === 'compound_lower' ? 5 : type === 'compound_upper' ? 2.5 : 1.25;
+    // RPE ≤ 6 → felt too easy, double the increment
+    if (rpeVal > 0 && rpeVal <= 6) inc *= 2;
+    return _csRound25(w + inc);
+  }
+
+  // Reps not fully met → keep weight
+  return w;
+}
+
+// Warm-up protocol: 40%×10, 55%×6, 70%×4, 85%×2 (only if work weight ≥ 40 kg)
+function _csGenerateWarmup(workWeight) {
+  var w = parseFloat(workWeight) || 0;
+  if (w < 40) return [];
+  return [
+    { weight: _csRound25(w * 0.40), reps: 10 },
+    { weight: _csRound25(w * 0.55), reps: 6  },
+    { weight: _csRound25(w * 0.70), reps: 4  },
+    { weight: _csRound25(w * 0.85), reps: 2  }
+  ].filter(function(s) { return s.weight > 0 && s.weight < w; });
+}
+
+// Render warm-up rows inside the active exercise block
+function _csRenderWarmupRows(warmupSets, blockId) {
+  var h = window.h;
+  var _wEN = window.isEnglish && window.isEnglish();
+  var wrap = h('div', {
+    style: 'padding:4px 12px 6px;border-bottom:1px solid var(--border,#D8D8D0);background:rgba(62,92,58,0.03);'
+  });
+  wrap.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--green,#3E5C3A);margin-bottom:6px;padding-top:4px;'
+  }, _wEN ? 'WARM-UP SETS' : 'ÉCHAUFFEMENT'));
+  warmupSets.forEach(function(ws, wi) {
+    var row = h('div', {
+      id: 'cs-wu-' + blockId + '-' + wi,
+      style: 'display:flex;align-items:center;gap:10px;padding:4px 0;opacity:' + (ws.validated ? '0.45' : '0.85') + ';'
+    });
+    row.appendChild(h('div', {
+      style: 'min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;flex-shrink:0;border:1px solid var(--green,#3E5C3A);color:var(--green,#3E5C3A);background:' + (ws.validated ? 'rgba(62,92,58,0.15)' : 'transparent') + ';'
+    }, ws.validated ? '✓' : ('W' + (wi + 1))));
+    row.appendChild(h('span', {
+      style: 'font-family:Georgia,serif;font-size:13px;color:var(--green,#3E5C3A);min-width:54px;'
+    }, ws.weight + ' kg'));
+    row.appendChild(h('span', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);flex:1;'
+    }, '× ' + ws.reps + ' reps'));
+    if (!ws.validated) {
+      row.appendChild(h('button', {
+        style: 'padding:4px 10px;background:transparent;border:1px solid var(--green,#3E5C3A);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;cursor:pointer;color:var(--green,#3E5C3A);white-space:nowrap;',
+        onclick: (function(ws2, rowEl) { return function() {
+          ws2.validated = true;
+          rowEl.style.opacity = '0.45';
+          var badge = rowEl.firstChild;
+          if (badge) { badge.textContent = '✓'; badge.style.background = 'rgba(62,92,58,0.15)'; }
+          var btn = rowEl.lastChild;
+          if (btn && btn.tagName === 'BUTTON') btn.style.display = 'none';
+        }; })(ws, row)
+      }, _wEN ? 'Done' : 'OK'));
+    }
+    wrap.appendChild(row);
+  });
+  return wrap;
+}
+
+// RPE widget rendered below all validated sets (appears when last set is ticked)
+function _csRenderRPEWidget(block, container) {
+  var h = window.h;
+  var _rEN = window.isEnglish && window.isEnglish();
+  if (!Array.isArray(block.loggedSets) || !block.loggedSets.length) return;
+  var allValidated = block.loggedSets.every(function(s) { return s.validated; });
+  if (!allValidated) return;
+
+  var currentRPE = block._rpe || 0;
+
+  var rpeWrap = h('div', {
+    style: 'padding:10px 12px;border-top:1px solid var(--border,#D8D8D0);background:rgba(10,10,9,0.02);'
+  });
+  rpeWrap.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px;'
+  }, _rEN ? 'PERCEIVED EFFORT (RPE)' : 'EFFORT PERÇU (RPE)'));
+
+  var rpeLabels = _rEN
+    ? { 6: 'Easy', 7: 'Moderate', 8: 'Ideal', 9: 'Very hard', 10: 'Max — deload' }
+    : { 6: 'Facile', 7: 'Modéré', 8: 'Idéal', 9: 'Très dur', 10: 'Max — décharge' };
+
+  var rpeRow = h('div', { style: 'display:flex;gap:5px;margin-bottom:8px;' });
+  [6,7,8,9,10].forEach(function(rpe) {
+    var isSel = currentRPE === rpe;
+    rpeRow.appendChild(h('button', {
+      style: [
+        'flex:1;padding:8px 2px;min-height:40px;',
+        'border:1px solid ' + (isSel ? 'var(--ink-900,#0A0A09)' : 'var(--border,#D8D8D0)') + ';',
+        'background:' + (isSel ? 'var(--ink-900,#0A0A09)' : 'transparent') + ';',
+        'color:' + (isSel ? 'var(--paper,#FAF9F6)' : 'var(--grey,#6B6B65)') + ';',
+        'border-radius:2px;font-family:Georgia,serif;font-size:15px;cursor:pointer;',
+        'display:flex;flex-direction:column;align-items:center;gap:2px;'
+      ].join(''),
+      onclick: (function(rpeVal, blkRef) { return function() {
+        blkRef._rpe = rpeVal;
+        window.CUSTOM_SESSION.saveDraft();
+        if (window.render) window.render();
+      }; })(rpe, block)
+    }, String(rpe)));
+  });
+  rpeWrap.appendChild(rpeRow);
+
+  if (currentRPE > 0) {
+    rpeWrap.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);text-align:center;margin-bottom:8px;'
+    }, 'RPE ' + currentRPE + ' — ' + (rpeLabels[currentRPE] || '')));
+
+    // Compute next weight suggestion
+    var vs = block.loggedSets.filter(function(s) { return s.validated && parseFloat(s.weight) > 0; });
+    if (vs.length) {
+      var maxW = vs.reduce(function(m,s) { return Math.max(m, parseFloat(s.weight)||0); }, 0);
+      var tr = parseInt(block.reps) || 10;
+      var allHit = vs.every(function(s) { return (parseInt(s.reps)||0) >= tr; });
+      var nextW = _freeSessionNextWeight(block.n, allHit, maxW, 0, tr, currentRPE, _csGetExerciseType(block.n, block.m));
+      if (nextW && nextW >= 0) {
+        var diff = nextW - maxW;
+        var col = diff > 0 ? 'var(--green,#3E5C3A)' : diff < 0 ? 'var(--orange,#E86F1E)' : 'var(--grey,#6B6B65)';
+        var arrow = diff > 0 ? ' ↑' : diff < 0 ? ' ↓' : ' →';
+        var nextEl = h('div', {
+          style: 'display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#D8D8D0);border-radius:2px;'
+        });
+        nextEl.appendChild(h('span', {
+          style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);'
+        }, _rEN ? 'Next session →' : 'Prochaine séance →'));
+        nextEl.appendChild(h('span', {
+          style: 'font-family:Georgia,serif;font-size:16px;font-weight:normal;color:' + col + ';'
+        }, nextW + ' kg' + arrow));
+        rpeWrap.appendChild(nextEl);
+      }
+    }
+  }
+
+  container.appendChild(rpeWrap);
+}
+
+// Coach Card for DONE view — volume, PRs, next targets, plateau warnings, coach tip
+function _csRenderCoachCard(draft, container) {
+  var h = window.h;
+  var S = window.S;
+  var _cEN = window.isEnglish && window.isEnglish();
+
+  var exBlocks = draft.blocks.filter(function(b) { return b.type === 'exercise' && Array.isArray(b.loggedSets); });
+  if (!exBlocks.length) return;
+
+  var totalVolume = 0, prs = [], nextWeights = [], plateauWarnings = [];
+  var prevVolumeMap = {};
+
+  // Gather stats per exercise
+  exBlocks.forEach(function(b) {
+    var vs = b.loggedSets.filter(function(s) { return s.validated && parseFloat(s.weight) > 0 && parseInt(s.reps) > 0; });
+    if (!vs.length) return;
+
+    // Volume this session
+    var vol = vs.reduce(function(sum,s) { return sum + (parseFloat(s.weight)||0) * (parseInt(s.reps)||0); }, 0);
+    totalVolume += vol;
+
+    // Max weight this session
+    var maxW = vs.reduce(function(m,s) { return Math.max(m, parseFloat(s.weight)||0); }, 0);
+
+    // Previous max weight (any past session)
+    var log = (S && S.muscuSessionLog) || {};
+    var today = new Date().toISOString().slice(0, 10);
+    var prevMax = 0;
+    Object.keys(log).filter(function(d) { return d < today; }).sort().reverse().slice(0, 30).forEach(function(d) {
+      var day = log[d];
+      if (day && day[b.n] && Array.isArray(day[b.n])) {
+        day[b.n].forEach(function(s) { if ((s.actualWeight||0) > prevMax) prevMax = s.actualWeight; });
+      }
+    });
+    if (maxW > prevMax && prevMax > 0) prs.push({ n: b.n, w: maxW, prev: prevMax });
+
+    // Next weight from RPE
+    var rpe = b._rpe || 0;
+    var tr = parseInt(b.reps) || 10;
+    var allHit = vs.every(function(s) { return (parseInt(s.reps)||0) >= tr; });
+    var nextW = _freeSessionNextWeight(b.n, allHit, maxW, 0, tr, rpe, _csGetExerciseType(b.n, b.m));
+    if (nextW && nextW > 0) nextWeights.push({ n: b.n, current: maxW, next: nextW, rpe: rpe });
+
+    // Plateau
+    if (_csIsOnPlateau(b.n)) plateauWarnings.push(b.n);
+  });
+
+  var card = h('div', {
+    style: 'border:1px solid var(--border,#D8D8D0);border-radius:2px;margin-bottom:14px;overflow:hidden;'
+  });
+
+  // Header
+  var cardHdr = h('div', {
+    style: 'padding:10px 14px;background:var(--ink-900,#0A0A09);display:flex;align-items:center;gap:10px;'
+  });
+  cardHdr.appendChild(h('span', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--paper,#FAF9F6);'
+  }, _cEN ? 'COACH ANALYSIS' : 'ANALYSE DU COACH'));
+  card.appendChild(cardHdr);
+
+  // PRs section
+  if (prs.length > 0) {
+    var prSec = h('div', { style: 'padding:10px 14px;border-bottom:1px solid var(--border,#D8D8D0);background:rgba(62,92,58,0.04);' });
+    prSec.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green,#3E5C3A);margin-bottom:8px;'
+    }, _cEN ? '🏆 PERSONAL RECORDS' : '🏆 RECORDS PERSONNELS'));
+    prs.forEach(function(pr) {
+      var prRow = h('div', { style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;' });
+      prRow.appendChild(h('span', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:58%;'
+      }, pr.n));
+      prRow.appendChild(h('span', {
+        style: 'font-family:Georgia,serif;font-size:13px;color:var(--green,#3E5C3A);white-space:nowrap;'
+      }, pr.prev + ' → ' + pr.w + ' kg ↑'));
+      prSec.appendChild(prRow);
+    });
+    card.appendChild(prSec);
+  }
+
+  // Next targets table
+  if (nextWeights.length > 0) {
+    var nwSec = h('div', { style: 'padding:10px 14px;border-bottom:1px solid var(--border,#D8D8D0);' });
+    nwSec.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px;'
+    }, _cEN ? 'NEXT SESSION TARGETS' : 'OBJECTIFS PROCHAINE SÉANCE'));
+    nextWeights.forEach(function(nw) {
+      var diff = nw.next - nw.current;
+      var col = diff > 0 ? 'var(--green,#3E5C3A)' : diff < 0 ? 'var(--orange,#E86F1E)' : 'var(--grey,#6B6B65)';
+      var arrow = diff > 0 ? ' ↑' : diff < 0 ? ' ↓' : ' →';
+      var nwRow = h('div', { style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;' });
+      nwRow.appendChild(h('span', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:58%;color:var(--black,#0A0A09);'
+      }, nw.n));
+      nwRow.appendChild(h('span', { style: 'font-family:Georgia,serif;font-size:14px;color:' + col + ';white-space:nowrap;' },
+        nw.next + ' kg' + arrow + (nw.rpe ? ' (RPE ' + nw.rpe + ')' : '')));
+      nwSec.appendChild(nwRow);
+    });
+    card.appendChild(nwSec);
+  }
+
+  // Plateau warnings
+  if (plateauWarnings.length > 0) {
+    var platSec = h('div', { style: 'padding:10px 14px;border-bottom:1px solid var(--border,#D8D8D0);background:rgba(232,111,30,0.04);' });
+    platSec.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange,#E86F1E);margin-bottom:6px;'
+    }, _cEN ? '⚠ PLATEAU DETECTED' : '⚠ PLATEAU DÉTECTÉ'));
+    plateauWarnings.forEach(function(n) {
+      platSec.appendChild(h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09);margin-bottom:4px;line-height:1.4;'
+      }, _cEN
+        ? n + ' — 3 sessions at same weight. Try adding reps or +1.25 kg.'
+        : n + ' — 3 séances au même poids. Essayez d\'augmenter les reps ou ajouter +1,25 kg.'));
+    });
+    card.appendChild(platSec);
+  }
+
+  // Coach tip
+  var tip = '';
+  if (prs.length > 0) {
+    tip = _cEN
+      ? 'Outstanding! You broke ' + prs.length + ' personal record' + (prs.length > 1 ? 's' : '') + '. Prioritize sleep and protein in the next 24–48 h for optimal recovery.'
+      : 'Excellent ! ' + prs.length + ' record' + (prs.length > 1 ? 's personnel' + (prs.length > 1 ? 's' : '') + ' battu' + (prs.length > 1 ? 's' : '') : ' personnel battu') + '. Priorisez le sommeil et les protéines dans les 24–48 h pour maximiser la récupération.';
+  } else if (plateauWarnings.length > 0) {
+    tip = _cEN
+      ? 'Plateaus are normal. Try changing the rep range, reducing rest time by 15 s, or introducing a variation of the exercise to break through.'
+      : 'Les plateaux font partie du processus. Essayez de changer les reps, de réduire le repos de 15 s, ou d\'introduire une variante pour progresser.';
+  } else if (totalVolume > 0) {
+    tip = _cEN
+      ? 'Total volume: ' + Math.round(totalVolume) + ' kg lifted. Consistency with progressive overload is the most proven driver of strength gains.'
+      : 'Volume total : ' + Math.round(totalVolume) + ' kg soulevés. La régularité avec surcharge progressive est la voie la plus éprouvée pour progresser.';
+  }
+
+  if (tip) {
+    var tipEl = h('div', {
+      style: 'padding:10px 14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09);line-height:1.55;'
+    });
+    var boldSpan = document.createElement('span');
+    boldSpan.style.fontWeight = 'bold';
+    boldSpan.textContent = _cEN ? 'Coach : ' : 'Coach : ';
+    tipEl.appendChild(boldSpan);
+    tipEl.appendChild(document.createTextNode(tip));
+    card.appendChild(tipEl);
+  }
+
+  container.appendChild(card);
+}
+
+// ─────────────────────────────────────────────
 //  ÉTAPE 10e : helpers addExercise + addCardio
 // ─────────────────────────────────────────────
 function _csAddExercise(ex) {
   var parts = String(ex.sets || '4×10').split('×');
   var setsN = parseInt(parts[0]) || 4;
   var repsN = parts.length > 1 ? parts[1].trim() : '10';
+  // Use adaptive rest time based on exercise type when no explicit rest defined
+  var defaultRest = ex.rest || _csGetDefaultRest(ex);
   window.CUSTOM_SESSION.addBlock({
     type: 'exercise',
     n: ex.n, m: ex.m || '', eq: ex.eq || '',
-    sets: setsN, reps: repsN, rest: ex.rest || '90s',
+    sets: setsN, reps: repsN, rest: defaultRest,
     targetWeight: null, loggedSets: [], notes: ''
   });
 }

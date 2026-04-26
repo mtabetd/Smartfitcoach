@@ -13,72 +13,72 @@ var BADGES_KEY = 'mtd_badges_';
 var STREAK_KEY = 'mtd_streak_';
 var ACHIEVEMENTS_KEY = 'mtd_achievements_';
 
-// ─── DAILY QUOTES (French, motivational, nutrition/health themed) ───
+// ─── DAILY QUOTES (bilingual FR/EN, motivational, nutrition/health themed) ───
 var QUOTES = [
-  {text: "La nourriture que vous mangez peut \u00eatre la forme de m\u00e9decine la plus s\u00fbre ou la plus lente forme de poison.", author: "Ann Wigmore"},
-  {text: "Que ton aliment soit ta seule m\u00e9decine.", author: "Hippocrate"},
-  {text: "Le corps est le serviteur de l'esprit.", author: "James Allen"},
-  {text: "Prends soin de ton corps, c'est le seul endroit o\u00f9 tu es oblig\u00e9 de vivre.", author: "Jim Rohn"},
-  {text: "La sant\u00e9 n'est pas tout, mais sans la sant\u00e9 tout n'est rien.", author: "Schopenhauer"},
-  {text: "Le succ\u00e8s, c'est la somme de petits efforts r\u00e9p\u00e9t\u00e9s jour apr\u00e8s jour.", author: "Robert Collier"},
-  {text: "La discipline est le pont entre les objectifs et l'accomplissement.", author: "Jim Rohn"},
-  {text: "Votre corps peut r\u00e9sister \u00e0 presque tout. C'est votre esprit qu'il faut convaincre.", author: ""},
-  {text: "Chaque journ\u00e9e est une nouvelle chance de changer votre vie.", author: ""},
-  {text: "La force ne vient pas de la capacit\u00e9 physique. Elle vient d'une volont\u00e9 indomptable.", author: "Gandhi"},
-  {text: "Manger sainement est une forme de respect envers soi-m\u00eame.", author: ""},
-  {text: "Le voyage de mille lieues commence par un pas.", author: "Lao Tseu"},
-  {text: "N'abandonnez pas. Souffrez maintenant et vivez le reste de votre vie comme un champion.", author: "Muhammad Ali"},
-  {text: "La pers\u00e9v\u00e9rance n'est pas une longue course, c'est plusieurs courtes courses l'une apr\u00e8s l'autre.", author: "Walter Elliot"},
-  {text: "Un objectif sans plan n'est qu'un souhait.", author: "Antoine de Saint-Exup\u00e9ry"},
-  {text: "Le changement ne viendra pas si nous attendons une autre personne ou un autre moment.", author: "Barack Obama"},
-  {text: "Manger est une n\u00e9cessit\u00e9. Manger intelligemment est un art.", author: "La Rochefoucauld"},
-  {text: "La meilleure version de vous-m\u00eame attend de l'autre c\u00f4t\u00e9 de l'effort.", author: ""},
-  {text: "Chaque repas est une opportunit\u00e9 de nourrir votre corps avec excellence.", author: ""},
-  {text: "La motivation vous met en route. L'habitude vous fait continuer.", author: "Jim Ryun"},
-  {text: "Les champions ne sont pas faits dans les salles de sport. Ils sont faits \u00e0 partir de quelque chose de profond.", author: "Muhammad Ali"},
-  {text: "La perfection n'est pas atteignable, mais en la poursuivant nous atteignons l'excellence.", author: "Vince Lombardi"},
-  {text: "Le corps humain est le meilleur tableau de bord que nous ayons.", author: "Arbuthnot Lane"},
-  {text: "Mange pour vivre, ne vis pas pour manger.", author: "Socrate"},
-  {text: "La sant\u00e9 est la plus grande des richesses.", author: "Virgile"},
-  {text: "Nul ne peut atteindre l'aube sans passer par le chemin de la nuit.", author: "Khalil Gibran"},
-  {text: "Ce que nous sommes est le r\u00e9sultat de ce que nous avons pens\u00e9.", author: "Bouddha"},
-  {text: "Le mouvement est la vie. La vie est le mouvement.", author: "Moshe Feldenkrais"},
-  {text: "Le corps sait des choses que l'esprit refuse d'admettre.", author: "Paul Val\u00e9ry"},
-  {text: "Chaque victoire commence dans les profondeurs d'un esprit qui dit : je peux.", author: "Mary Kay Ash"},
-  {text: "Ce n'est pas la montagne que nous conqu\u00e9rons, mais nous-m\u00eames.", author: "Edmund Hillary"},
-  {text: "La force n'est pas dans les muscles. Elle est dans la d\u00e9cision.", author: ""},
-  {text: "Manger est un besoin. Savoir choisir ce que l'on mange est une sagesse.", author: ""},
-  {text: "L'alimentation est la pharmacologie la plus ancienne.", author: ""},
-  {text: "Chaque s\u00e9ance d'entra\u00eenement est un rendez-vous avec la meilleure version de soi.", author: ""},
-  {text: "La fatigue est temporaire. La fiert\u00e9 de l'effort dure toujours.", author: ""},
-  {text: "Respecter son corps, c'est respecter la vie.", author: ""},
-  {text: "Le changement est difficile au d\u00e9but, d\u00e9sordonn\u00e9 au milieu, magnifique \u00e0 la fin.", author: "Robin Sharma"},
-  {text: "Un gramme de pr\u00e9vention vaut mieux qu'un kilogramme de rem\u00e8de.", author: ""},
-  {text: "Votre sant\u00e9 n'attend pas. Commencez maintenant.", author: ""},
-  {text: "Le sommeil est la r\u00e9cup\u00e9ration active de l'esprit et du corps.", author: "Matthew Walker"},
-  {text: "L'entra\u00eenement te donnera ce que tu lui donnes.", author: ""},
-  {text: "La nutrition est l'architecture invisible de votre performance.", author: ""},
-  {text: "Tout exc\u00e8s est un ennemi de l'\u00e9quilibre.", author: ""},
-  {text: "Courir n'est pas une fuite. C'est un retour \u00e0 soi-m\u00eame.", author: ""},
-  {text: "Le poids que vous soulevez dans la salle n'a rien \u00e0 voir avec le poids que vous portez en sortant.", author: ""},
-  {text: "Les habitudes forment le corps avant m\u00eame que l'esprit s'en aper\u00e7oive.", author: ""},
-  {text: "La sant\u00e9 mentale et la sant\u00e9 physique ne font qu'un.", author: "Ren\u00e9 Dubos"},
-  {text: "Ton corps est ton instrument. Prends soin de lui comme un musicien prend soin du sien.", author: ""},
-  {text: "La discipline, c'est se souvenir de ce que l'on veut vraiment.", author: "David Campbell"},
-  {text: "Le seul mauvais entra\u00eenement est celui que vous n'avez pas fait.", author: ""},
-  {text: "La constance vaut mieux que l'intensit\u00e9.", author: ""},
-  {text: "Cuisiner est un acte d'amour envers soi-m\u00eame et les autres.", author: ""},
-  {text: "Votre sant\u00e9 est un investissement, pas une d\u00e9pense.", author: ""},
-  {text: "L'effort d'aujourd'hui est la facilit\u00e9 de demain.", author: ""},
-  {text: "Le corps accomplit ce que l'esprit choisit de nourrir.", author: ""},
-  {text: "On ne r\u00e9colte que ce que l'on a sem\u00e9. Nourrissez-vous avec intention.", author: ""},
-  {text: "L'\u00e9quilibre n'est pas une destination, c'est une pratique quotidienne.", author: ""},
-  {text: "Chaque bouchon de soin que tu prends aujourd'hui est un cadeau \u00e0 ton futur.", author: ""},
-  {text: "La v\u00e9ritable force est celle qui permet de se lever demain matin avec \u00e9nergie.", author: ""},
-  {text: "Un esprit sain dans un corps sain \u2014 non pas l'un ou l'autre, mais les deux.", author: ""},
-  {text: "Ce que l'on mange en priv\u00e9 se voit en public.", author: ""},
-  {text: "La r\u00e9gularit\u00e9 construit ce que l'intensit\u00e9 seule ne peut pas.", author: ""}
-];
+  {text: "La nourriture que vous mangez peut \u00eatre la forme de m\u00e9decine la plus s\u00fbre ou la plus lente forme de poison.", text_en: "The food you eat can be the safest or the slowest form of medicine.", author: "Ann Wigmore"},
+  {text: "Que ton aliment soit ta seule m\u00e9decine.", text_en: "Let food be thy medicine.", author: "Hippocrate"},
+  {text: "Le corps est le serviteur de l'esprit.", text_en: "The body is the servant of the mind.", author: "James Allen"},
+  {text: "Prends soin de ton corps, c'est le seul endroit o\u00f9 tu es oblig\u00e9 de vivre.", text_en: "Take care of your body. It's the only place you have to live.", author: "Jim Rohn"},
+  {text: "La sant\u00e9 n'est pas tout, mais sans la sant\u00e9 tout n'est rien.", text_en: "Health is not everything, but without health everything is nothing.", author: "Schopenhauer"},
+  {text: "Le succ\u00e8s, c'est la somme de petits efforts r\u00e9p\u00e9t\u00e9s jour apr\u00e8s jour.", text_en: "Success is the sum of small efforts repeated day in and day out.", author: "Robert Collier"},
+  {text: "La discipline est le pont entre les objectifs et l'accomplissement.", text_en: "Discipline is the bridge between goals and accomplishment.", author: "Jim Rohn"},
+  {text: "Votre corps peut r\u00e9sister \u00e0 presque tout. C'est votre esprit qu'il faut convaincre.", text_en: "Your body can stand almost anything. It's your mind you have to convince.", author: ""},
+  {text: "Chaque journ\u00e9e est une nouvelle chance de changer votre vie.", text_en: "Every day is a new chance to change your life.", author: ""},
+  {text: "La force ne vient pas de la capacit\u00e9 physique. Elle vient d'une volont\u00e9 indomptable.", text_en: "Strength does not come from physical capacity. It comes from an indomitable will.", author: "Gandhi"},
+  {text: "Manger sainement est une forme de respect envers soi-m\u00eame.", text_en: "Eating healthy is a form of self-respect.", author: ""},
+  {text: "Le voyage de mille lieues commence par un pas.", text_en: "A journey of a thousand miles begins with a single step.", author: "Lao Tseu"},
+  {text: "N'abandonnez pas. Souffrez maintenant et vivez le reste de votre vie comme un champion.", text_en: "Don't quit. Suffer now and live the rest of your life as a champion.", author: "Muhammad Ali"},
+  {text: "La pers\u00e9v\u00e9rance n'est pas une longue course, c'est plusieurs courtes courses l'une apr\u00e8s l'autre.", text_en: "Perseverance is not a long race; it is many short races one after another.", author: "Walter Elliot"},
+  {text: "Un objectif sans plan n'est qu'un souhait.", text_en: "A goal without a plan is just a wish.", author: "Antoine de Saint-Exup\u00e9ry"},
+  {text: "Le changement ne viendra pas si nous attendons une autre personne ou un autre moment.", text_en: "Change will not come if we wait for some other person or some other time.", author: "Barack Obama"},
+  {text: "Manger est une n\u00e9cessit\u00e9. Manger intelligemment est un art.", text_en: "Eating is a necessity. Eating wisely is an art.", author: "La Rochefoucauld"},
+  {text: "La meilleure version de vous-m\u00eame attend de l'autre c\u00f4t\u00e9 de l'effort.", text_en: "The best version of yourself is waiting on the other side of effort.", author: ""},
+  {text: "Chaque repas est une opportunit\u00e9 de nourrir votre corps avec excellence.", text_en: "Every meal is an opportunity to nourish your body with excellence.", author: ""},
+  {text: "La motivation vous met en route. L'habitude vous fait continuer.", text_en: "Motivation is what gets you started. Habit is what keeps you going.", author: "Jim Ryun"},
+  {text: "Les champions ne sont pas faits dans les salles de sport. Ils sont faits \u00e0 partir de quelque chose de profond.", text_en: "Champions aren't made in gyms. Champions are made from something deep inside.", author: "Muhammad Ali"},
+  {text: "La perfection n'est pas atteignable, mais en la poursuivant nous atteignons l'excellence.", text_en: "Perfection is not attainable, but if we chase perfection we can catch excellence.", author: "Vince Lombardi"},
+  {text: "Le corps humain est le meilleur tableau de bord que nous ayons.", text_en: "The human body is the best instrument we have.", author: "Arbuthnot Lane"},
+  {text: "Mange pour vivre, ne vis pas pour manger.", text_en: "Eat to live, not live to eat.", author: "Socrate"},
+  {text: "La sant\u00e9 est la plus grande des richesses.", text_en: "Health is the greatest wealth.", author: "Virgile"},
+  {text: "Nul ne peut atteindre l'aube sans passer par le chemin de la nuit.", text_en: "No one can reach dawn without passing through the path of night.", author: "Khalil Gibran"},
+  {text: "Ce que nous sommes est le r\u00e9sultat de ce que nous avons pens\u00e9.", text_en: "What we are is the result of what we have thought.", author: "Bouddha"},
+  {text: "Le mouvement est la vie. La vie est le mouvement.", text_en: "Movement is life. Life is movement.", author: "Moshe Feldenkrais"},
+  {text: "Le corps sait des choses que l'esprit refuse d'admettre.", text_en: "The body knows things the mind refuses to admit.", author: "Paul Val\u00e9ry"},
+  {text: "Chaque victoire commence dans les profondeurs d'un esprit qui dit : je peux.", text_en: "Every victory starts in the depths of a mind that says: I can.", author: "Mary Kay Ash"},
+  {text: "Ce n'est pas la montagne que nous conqu\u00e9rons, mais nous-m\u00eames.", text_en: "It is not the mountain we conquer, but ourselves.", author: "Edmund Hillary"},
+  {text: "La force n'est pas dans les muscles. Elle est dans la d\u00e9cision.", text_en: "Strength is not in the muscles. It's in the decision.", author: ""},
+  {text: "Manger est un besoin. Savoir choisir ce que l'on mange est une sagesse.", text_en: "Eating is a need. Knowing how to choose what you eat is wisdom.", author: ""},
+  {text: "L'alimentation est la pharmacologie la plus ancienne.", text_en: "Nutrition is the oldest form of pharmacology.", author: ""},
+  {text: "Chaque s\u00e9ance d'entra\u00eenement est un rendez-vous avec la meilleure version de soi.", text_en: "Every workout is an appointment with the best version of yourself.", author: ""},
+  {text: "La fatigue est temporaire. La fiert\u00e9 de l'effort dure toujours.", text_en: "Fatigue is temporary. The pride of effort lasts forever.", author: ""},
+  {text: "Respecter son corps, c'est respecter la vie.", text_en: "Respecting your body is respecting life.", author: ""},
+  {text: "Le changement est difficile au d\u00e9but, d\u00e9sordonn\u00e9 au milieu, magnifique \u00e0 la fin.", text_en: "Change is hard at first, messy in the middle, and gorgeous at the end.", author: "Robin Sharma"},
+  {text: "Un gramme de pr\u00e9vention vaut mieux qu'un kilogramme de rem\u00e8de.", text_en: "An ounce of prevention is worth a pound of cure.", author: ""},
+  {text: "Votre sant\u00e9 n'attend pas. Commencez maintenant.", text_en: "Your health doesn't wait. Start now.", author: ""},
+  {text: "Le sommeil est la r\u00e9cup\u00e9ration active de l'esprit et du corps.", text_en: "Sleep is the active recovery of mind and body.", author: "Matthew Walker"},
+  {text: "L'entra\u00eenement te donnera ce que tu lui donnes.", text_en: "Training will give you what you give it.", author: ""},
+  {text: "La nutrition est l'architecture invisible de votre performance.", text_en: "Nutrition is the invisible architecture of your performance.", author: ""},
+  {text: "Tout exc\u00e8s est un ennemi de l'\u00e9quilibre.", text_en: "Every excess is an enemy of balance.", author: ""},
+  {text: "Courir n'est pas une fuite. C'est un retour \u00e0 soi-m\u00eame.", text_en: "Running is not an escape. It's a return to yourself.", author: ""},
+  {text: "Le poids que vous soulevez dans la salle n'a rien \u00e0 voir avec le poids que vous portez en sortant.", text_en: "The weight you lift in the gym has nothing to do with the weight you carry out.", author: ""},
+  {text: "Les habitudes forment le corps avant m\u00eame que l'esprit s'en aper\u00e7oive.", text_en: "Habits shape the body before the mind even notices.", author: ""},
+  {text: "La sant\u00e9 mentale et la sant\u00e9 physique ne font qu'un.", text_en: "Mental health and physical health are one and the same.", author: "Ren\u00e9 Dubos"},
+  {text: "Ton corps est ton instrument. Prends soin de lui comme un musicien prend soin du sien.", text_en: "Your body is your instrument. Take care of it as a musician cares for theirs.", author: ""},
+  {text: "La discipline, c'est se souvenir de ce que l'on veut vraiment.", text_en: "Discipline is remembering what you really want.", author: "David Campbell"},
+  {text: "Le seul mauvais entra\u00eenement est celui que vous n'avez pas fait.", text_en: "The only bad workout is the one that didn't happen.", author: ""},
+  {text: "La constance vaut mieux que l'intensit\u00e9.", text_en: "Consistency is more valuable than intensity.", author: ""},
+  {text: "Cuisiner est un acte d'amour envers soi-m\u00eame et les autres.", text_en: "Cooking is an act of love toward yourself and others.", author: ""},
+  {text: "Votre sant\u00e9 est un investissement, pas une d\u00e9pense.", text_en: "Your health is an investment, not an expense.", author: ""},
+  {text: "L'effort d'aujourd'hui est la facilit\u00e9 de demain.", text_en: "Today's effort is tomorrow's ease.", author: ""},
+  {text: "Le corps accomplit ce que l'esprit choisit de nourrir.", text_en: "The body achieves what the mind chooses to nurture.", author: ""},
+  {text: "On ne r\u00e9colte que ce que l'on a sem\u00e9. Nourrissez-vous avec intention.", text_en: "You reap only what you have sown. Nourish yourself with intention.", author: ""},
+  {text: "L'\u00e9quilibre n'est pas une destination, c'est une pratique quotidienne.", text_en: "Balance is not a destination; it's a daily practice.", author: ""},
+  {text: "Chaque bouchon de soin que tu prends aujourd'hui est un cadeau \u00e0 ton futur.", text_en: "Every act of self-care you take today is a gift to your future self.", author: ""},
+  {text: "La v\u00e9ritable force est celle qui permet de se lever demain matin avec \u00e9nergie.", text_en: "True strength is what allows you to wake up tomorrow morning with energy.", author: ""},
+  {text: "Un esprit sain dans un corps sain \u2014 non pas l'un ou l'autre, mais les deux.", text_en: "A healthy mind in a healthy body \u2014 not one or the other, but both.", author: ""},
+  {text: "Ce que l'on mange en priv\u00e9 se voit en public.", text_en: "What you eat in private shows in public.", author: ""},
+  {text: "La r\u00e9gularit\u00e9 construit ce que l'intensit\u00e9 seule ne peut pas.", text_en: "Consistency builds what intensity alone cannot.", author: ""}
+]
 
 // ─── ACHIEVEMENTS/BADGES ───
 var BADGE_DEFS = [
@@ -335,27 +335,27 @@ function updateNutritionStreak() {
 // Pools distincts : utilisateur débutant vs. confirmé vs. élite — messages adaptés.
 var _VR_POOLS = {
   beginner: [ // streak 0-6
-    'Vous construisez quelque chose de solide.',
-    'Chaque repas loggé est une décision consciente.',
-    'Un repas de plus dans le bon sens.',
-    'La régularité fait plus que l\'intensité.',
-    'Bien noté. Votre corps vous remercie.'
+    ['You are building something solid.', 'Vous construisez quelque chose de solide.'],
+    ['Every meal logged is a conscious decision.', 'Chaque repas loggé est une décision consciente.'],
+    ['One more meal in the right direction.', 'Un repas de plus dans le bon sens.'],
+    ['Consistency does more than intensity.', 'La régularité fait plus que l\'intensité.'],
+    ['Noted. Your body thanks you.', 'Bien noté. Votre corps vous remercie.']
   ],
   regular: [ // streak 7-20
-    'Une semaine de suite. Votre futur vous remercie.',
-    'Votre constance se voit. Vous êtes sur le bon chemin.',
-    'Ce geste simple change tout sur le long terme.',
-    'Précis. Constant. C\'est ça la méthode.',
-    'Votre corps retient tout ce que vous lui enseignez.',
-    'Chaque entrée compte. Vous le savez déjà.'
+    ['One week in a row. Your future self thanks you.', 'Une semaine de suite. Votre futur vous remercie.'],
+    ['Your consistency shows. You are on the right track.', 'Votre constance se voit. Vous êtes sur le bon chemin.'],
+    ['This simple habit changes everything in the long run.', 'Ce geste simple change tout sur le long terme.'],
+    ['Precise. Consistent. That\'s the method.', 'Précis. Constant. C\'est ça la méthode.'],
+    ['Your body remembers everything you teach it.', 'Votre corps retient tout ce que vous lui enseignez.'],
+    ['Every entry counts. You already know that.', 'Chaque entrée compte. Vous le savez déjà.']
   ],
   elite: [ // streak 21+
-    'Vous êtes dans les 5 % qui font vraiment le travail.',
-    'Les champions font exactement ce que vous venez de faire.',
-    'Pas de génie. Juste de la rigueur. Vous l\'avez.',
-    'Une brique de plus sur votre transformation.',
-    '30 % des gens craquent avant J+15. Pas vous.',
-    'Votre discipline est visible — dans vos habitudes, dans vos résultats.'
+    ['You are in the 5% who truly do the work.', 'Vous êtes dans les 5 % qui font vraiment le travail.'],
+    ['Champions do exactly what you just did.', 'Les champions font exactement ce que vous venez de faire.'],
+    ['No genius. Just discipline. You have it.', 'Pas de génie. Juste de la rigueur. Vous l\'avez.'],
+    ['One more brick on your transformation.', 'Une brique de plus sur votre transformation.'],
+    ['30% of people quit before day 15. Not you.', '30 % des gens craquent avant J+15. Pas vous.'],
+    ['Your discipline is visible — in your habits, in your results.', 'Votre discipline est visible — dans vos habitudes, dans vos résultats.']
   ]
 };
 var _VR_LAST_DATE = '';
@@ -375,7 +375,8 @@ function triggerVariableReward() {
     }
     var _pool = _streak >= 21 ? _VR_POOLS.elite : (_streak >= 7 ? _VR_POOLS.regular : _VR_POOLS.beginner);
     var _doy = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
-    var _msg = _pool[(_doy + Math.floor(Math.random() * 2)) % _pool.length];
+    var _pair = _pool[(_doy + Math.floor(Math.random() * 2)) % _pool.length];
+    var _msg = (window.isEnglish && window.isEnglish()) ? _pair[0] : _pair[1];
     setTimeout(function() {
       if (window.showToast) window.showToast(_msg, 'info', 3200);
     }, 700);
@@ -401,8 +402,8 @@ function triggerFirstMealCelebration() {
       try { _streak = (JSON.parse(localStorage.getItem('mtd_streak_' + _user.id) || '{}')).current || 0; } catch(e) {}
     }
     var _msg = _streak >= 2
-      ? 'Jour ' + _streak + ' — votre régularité se renforce'
-      : 'Premier repas du jour — votre journée commence';
+      ? (window.isEnglish && window.isEnglish() ? 'Day ' + _streak + ' — your consistency grows stronger' : 'Jour ' + _streak + ' — votre régularité se renforce')
+      : (window.isEnglish && window.isEnglish() ? 'First meal of the day — your day is off to a great start' : 'Premier repas du jour — votre journée commence');
     setTimeout(function() {
       if (window.showToast) window.showToast(_msg, 'success', 2800);
     }, 500);
@@ -686,7 +687,7 @@ function renderDailyQuoteWidget(container) {
 
   var text = _h('div', '');
   text.style.cssText = 'font-family:Georgia;font-size:13px;font-style:italic;line-height:1.7;color:var(--black,#0A0A09)';
-  text.textContent = '"' + quote.text + '"';
+  text.textContent = '"' + ((window.isEnglish && window.isEnglish() && quote.text_en) ? quote.text_en : quote.text) + '"';
   widget.appendChild(text);
 
   if (quote.author) {
