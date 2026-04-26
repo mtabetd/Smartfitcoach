@@ -5514,11 +5514,18 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
    : s.actualWeight >= s.targetWeight;
  return repsOk && weightOk;
  });
- if (allSucceeded) return Math.round((last.weight + increment) / 2.5) * 2.5; // arrondi 2.5kg (disques standard)
- // Échec → maintenir le poids
- return last.weight;
+ // FIX: guard null weight — null >= 0 is true in JS, causing phantom +2.5kg increments
+ // on bodyweight exercises or entries with missing weight. Skip increment if no valid weight.
+ if (allSucceeded && last.weight !== null && last.weight > 0) {
+   return Math.round((last.weight + increment) / 2.5) * 2.5; // arrondi 2.5kg (disques standard)
  }
- return last.weight;
+ // Bodyweight or no weight data — skip increment, return last weight (or null)
+ if (last.weight !== null && last.weight > 0) return last.weight;
+ return baseWeight;
+ }
+ // No log for this exercise — return last history weight if valid, else baseWeight
+ if (last.weight !== null && last.weight > 0) return last.weight;
+ return baseWeight;
  }
 
  // Pas d'historique → utilise le poids de base calculé
@@ -7484,7 +7491,7 @@ function renderMusculationProgram(p) {
      var _pos = S.trainingDaysSelected.indexOf(_todayIdx);
      if (_pos >= 0) {
        // Aujourd'hui est un jour d'entraînement → afficher ce jour
-       S.selectedSportDay = Math.min(_pos, S.sportProgram.length - 1);
+       S.selectedSportDay = Math.max(0, Math.min(_pos, S.sportProgram.length - 1));
      } else {
        // Aujourd'hui est un jour de repos → trouver le prochain jour d'entraînement
        var _nextIdx = -1;
@@ -7493,10 +7500,10 @@ function renderMusculationProgram(p) {
          var _nextPos = S.trainingDaysSelected.indexOf(_candidate);
          if (_nextPos >= 0) { _nextIdx = _nextPos; break; }
        }
-       S.selectedSportDay = (_nextIdx >= 0) ? Math.min(_nextIdx, S.sportProgram.length - 1) : 0;
+       S.selectedSportDay = (_nextIdx >= 0) ? Math.max(0, Math.min(_nextIdx, S.sportProgram.length - 1)) : 0;
      }
    } else {
-     S.selectedSportDay = Math.min(_todayIdx, S.sportProgram.length - 1);
+     S.selectedSportDay = Math.max(0, Math.min(_todayIdx, S.sportProgram.length - 1));
    }
    S._selectedSportDayDate = _sportTodayKey;
  }
@@ -8483,7 +8490,9 @@ function renderMusculationProgram(p) {
    _prArrow.style.cssText = 'font-size:13px;font-weight:700;flex-shrink:0;';
    _prArrow.textContent = '\u2191 PR';
    var _prMsg = document.createElement('span');
-   _prMsg.textContent = 'Nouveau record personnel sur ' + _exRef2.n + '\u00a0!';
+   _prMsg.textContent = (window.isEnglish && window.isEnglish())
+     ? 'New personal record on ' + _exRef2.n + '\u00a0!'
+     : 'Nouveau record personnel sur ' + _exRef2.n + '\u00a0!';
    _prBanner.appendChild(_prArrow);
    _prBanner.appendChild(_prMsg);
    setTable.appendChild(_prBanner);
@@ -9197,6 +9206,8 @@ function renderMusculationProgram(p) {
  });
  S.sessionCompleting = false; S._sessionDuration = null;
  S._streakCache = null; // Invalider le cache streak après une nouvelle séance
+ // FIX: persist S.sessionHistory (and musculationWeights) to localStorage so data survives reload
+ if (window.saveProfile) { try { window.saveProfile(); } catch(_spErr) {} }
  // Mise à jour du streak sur action réelle (séance validée)
  if (window.GAMIFICATION) { try { window.GAMIFICATION.updateStreak(); } catch(e) {} }
  window.BLACKBOX && window.BLACKBOX.log('session_done', {day: S.selectedSportDay, kcal: kcalRes.total, duration: realDur});
