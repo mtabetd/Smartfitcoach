@@ -3869,11 +3869,14 @@ function renderStep9(p) {
     p.appendChild(netDiv);
   })();
 
-  // Whey tip
+  // Whey tip \u2014 bilingual
   if (S.whey) {
     var tip = h('div', {'class': 'whey-tip'});
-    tip.appendChild(h('strong', {}, 'Conseil Whey \u2014 '));
-    tip.appendChild(h('span', {}, 'Prenez votre whey dans les 30 min apr\u00e8s l\'entra\u00eenement pour optimiser la synth\u00e8se prot\u00e9ique.'));
+    var _isEnWhey = window.isEnglish && window.isEnglish();
+    tip.appendChild(h('strong', {}, (_isEnWhey ? 'Whey Tip \u2014 ' : 'Conseil Whey \u2014 ')));
+    tip.appendChild(h('span', {}, _isEnWhey
+      ? 'Take your whey within 30 min after training to optimize protein synthesis.'
+      : 'Prenez votre whey dans les 30 min apr\u00e8s l\'entra\u00eenement pour optimiser la synth\u00e8se prot\u00e9ique.'));
     p.appendChild(tip);
   }
 
