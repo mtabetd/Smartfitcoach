@@ -1421,7 +1421,7 @@ window.SPORT = {
  // sStep 20 = medical questionnaire (muscu pre-step), include it in progress
  if (S.sStep > 0) {
  var hdr = h('header', {'class': 'header'});
- var sportLabel = S.sportType === 'crossfit' ? 'Cross Training' : S.sportType === 'running' ? 'Running' : S.sportType === 'hyrox' ? 'Hyrox' : S.sportType === 'padel' ? 'Padel' : S.sportType === 'golf' ? 'Golf' : S.sportType === 'triathlon' ? 'Triathlon / IRONMAN' : S.sportType === 'yoga' ? 'Yoga & Mobilit\u00e9' : S.sportType === 'cycling' ? 'Cyclisme' : S.sportType === 'calisthenics' ? 'Callisth\u00e9nie' : 'Musculation';
+ var sportLabel = S.sportType === 'crossfit' ? 'Cross Training' : S.sportType === 'running' ? 'Running' : S.sportType === 'hyrox' ? 'Hyrox' : S.sportType === 'padel' ? 'Padel' : S.sportType === 'golf' ? 'Golf' : S.sportType === 'triathlon' ? 'Triathlon / IRONMAN' : S.sportType === 'yoga' ? (window.isEnglish && window.isEnglish() ? 'Yoga & Mobility' : 'Yoga & Mobilit\u00e9') : S.sportType === 'cycling' ? 'Cyclisme' : S.sportType === 'calisthenics' ? 'Callisth\u00e9nie' : 'Musculation';
  hdr.appendChild(h('div', {'class': 'logo', html: 'SMARTFITCOACH<span>' + sportLabel + '</span>'}));
  var totalSteps = S.sportType === 'crossfit' ? 2 : S.sportType === 'running' ? 2 : S.sportType === 'hyrox' ? 2 : S.sportType === 'padel' ? 2 : S.sportType === 'golf' ? 2 : S.sportType === 'triathlon' ? 2 : S.sportType === 'yoga' ? 2 : S.sportType === 'cycling' ? 2 : S.sportType === 'calisthenics' ? 2 : 4;
  // sStep 20 (medical) maps to display step 0 for musculation (shown as "Éval. médicale")
@@ -2670,7 +2670,7 @@ function renderDedicatedPrograms(p) {
  }
  S.sStep = 1;
  window.render();
- }}, 'G\u00e9n\u00e9rer mon programme'));
+ }}, (window.isEnglish && window.isEnglish() ? 'Generate my program' : 'G\u00e9n\u00e9rer mon programme')));
  p.appendChild(h('div', {style: 'height:20px'}));
 
  // ─── PROGRAMMES DÉDIÉS ───
@@ -11009,7 +11009,7 @@ function renderTriathlonProgram(p) {
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Triathlon / IRONMAN'));
  p.appendChild(h('h1', {html: (goalObj ? goalObj.name : 'Triathlon') + '<br><em>Programme</em>'}));
- var subtitleParts = [totalWeeks + ' semaines', (levelObj ? levelObj.name : ''), '80/20', 'Méthode Jan Frodeno'];
+ var subtitleParts = [totalWeeks + (window.isEnglish && window.isEnglish() ? ' weeks' : ' semaines'), (levelObj ? levelObj.name : ''), '80/20', (window.isEnglish && window.isEnglish() ? 'Method: Jan Frodeno' : 'Méthode Jan Frodeno')];
  if (program[0] && program[0].raceDate) { try { subtitleParts.unshift('Course : ' + window.formatDate(program[0].raceDate, {day:'numeric',month:'short',year:'numeric'})); } catch(e) {} }
  p.appendChild(h('p', {'class': 'subtitle'}, subtitleParts.join(' · ')));
 
@@ -11019,7 +11019,7 @@ function renderTriathlonProgram(p) {
  var zref = program[0] && program[0].zoneRef;
  if (zref && (zref.swim || zref.bike || zref.run)) {
   var zoneCard = h('div', {style: 'border:1px solid var(--border);padding:12px 16px;background:var(--ivory2);margin-bottom:16px'});
-  zoneCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;margin-bottom:8px'}, 'Vos zones personnalisées'));
+  zoneCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'Your personalized zones' : 'Vos zones personnalisées')));
   var zoneGrid = h('div', {style: 'display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px'});
   if (zref.swim) {
    var sz = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'});
@@ -11030,7 +11030,7 @@ function renderTriathlonProgram(p) {
   }
   if (zref.bike) {
    var bz = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'});
-   bz.appendChild(h('div', {style: 'font-weight:bold;color:var(--orange-ink,#7A3B0E);margin-bottom:4px'}, ' Vélo'));
+   bz.appendChild(h('div', {style: 'font-weight:bold;color:var(--orange-ink,#7A3B0E);margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? ' Cycling' : ' Vélo')));
    bz.appendChild(h('div', {}, 'Z2 : ' + (zref.bike.z2 || '—')));
    bz.appendChild(h('div', {}, 'Sweetspot : ' + (zref.bike.sweetspot || '—')));
    if (zref.ftp) bz.appendChild(h('div', {style: 'color:#E67E22'}, 'FTP : ' + zref.ftp + 'W'));
@@ -11061,9 +11061,9 @@ function renderTriathlonProgram(p) {
  // ── Info phase ──
  var phaseCard = h('div', {style: 'border-left:3px solid ' + (weekData.phaseColor || '#1A3A6A') + ';padding:12px 16px;background:var(--ivory2);margin-bottom:16px'});
  phaseCard.appendChild(h('div', {style: 'font-family:Georgia;font-size:16px;color:' + (weekData.phaseColor || '#1A3A6A') + ';margin-bottom:4px'}, 'Phase : ' + weekData.phase));
- phaseCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;color:var(--grey)'}, '~' + weekData.totalHours + ' d\'entraînement · 7 jours'));
- if (weekData.isDeload) phaseCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);margin-top:6px;font-weight:bold'}, ' Semaine de récupération — volume réduit'));
- if (weekData.isTaper) phaseCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--success,#3E5C3A);margin-top:6px;font-weight:bold'}, ' Affûtage — Volume réduit, intensité maintenue'));
+ phaseCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? '~' + weekData.totalHours + ' of training · 7 days' : '~' + weekData.totalHours + ' d\'entraînement · 7 jours')));
+ if (weekData.isDeload) phaseCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);margin-top:6px;font-weight:bold'}, (window.isEnglish && window.isEnglish() ? ' Recovery week — reduced volume' : ' Semaine de récupération — volume réduit')));
+ if (weekData.isTaper) phaseCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--success,#3E5C3A);margin-top:6px;font-weight:bold'}, (window.isEnglish && window.isEnglish() ? ' Taper — Volume reduced, intensity maintained' : ' Affûtage — Volume réduit, intensité maintenue')));
  p.appendChild(phaseCard);
 
  // ─── ESTIMATION CALORIQUE TRIATHLON ───
@@ -11137,7 +11137,7 @@ function renderTriathlonProgram(p) {
  if (weekData.phase === 'Peak' || weekData.phase === 'Build 2') {
  var transCard = h('div', {style: 'border:1px solid var(--border);padding:12px 16px;background:var(--ivory2);margin:12px 0'});
  transCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;margin-bottom:6px'}, ' Rappel Transitions'));
- transCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);line-height:1.6'}, 'T1 (Nage→Vélo) : déshabiller néo debout, clip chaussures sur pédales (avancé), casque avant de toucher vélo · T2 (Vélo→Run) : rack vélo, enlever casque, changer chaussures en courant · Jan Frodeno gagne souvent 30-60s en transition vs les autres pros'));
+ transCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);line-height:1.6'}, (window.isEnglish && window.isEnglish() ? 'T1 (Swim→Bike): remove wetsuit standing, clip shoes on pedals (advanced), helmet before touching bike · T2 (Bike→Run): rack bike, remove helmet, change shoes while running · Jan Frodeno often gains 30-60s in transitions vs other pros' : 'T1 (Nage→Vélo) : déshabiller néo debout, clip chaussures sur pédales (avancé), casque avant de toucher vélo · T2 (Vélo→Run) : rack vélo, enlever casque, changer chaussures en courant · Jan Frodeno gagne souvent 30-60s en transition vs les autres pros')));
  p.appendChild(transCard);
  }
 
@@ -11151,7 +11151,7 @@ function renderTriathlonProgram(p) {
  });
  var sumRow = h('div', {style: 'display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0'});
  if (swCount) sumRow.appendChild(h('span', {'class': 'chip on'}, ' ' + swCount + ' nage'));
- if (biCount) sumRow.appendChild(h('span', {'class': 'chip on'}, ' ' + biCount + ' vélo'));
+ if (biCount) sumRow.appendChild(h('span', {'class': 'chip on'}, ' ' + biCount + (window.isEnglish && window.isEnglish() ? ' cycling' : ' vélo')));
  if (ruCount) sumRow.appendChild(h('span', {'class': 'chip on'}, ' ' + ruCount + ' run'));
  if (brCount) sumRow.appendChild(h('span', {'class': 'chip on'}, ' ' + brCount + ' brick'));
  p.appendChild(sumRow);
@@ -11173,14 +11173,14 @@ function renderTriathlonProgram(p) {
 function renderYogaOnboarding(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Yoga & Mobilit\u00e9'));
  p.appendChild(h('h1', {html: 'Votre programme<br><em>yoga</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Flexibilit\u00e9, force, \u00e9quilibre et pleine conscience.'));
+ p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Flexibility, strength, balance and mindfulness.' : 'Flexibilit\u00e9, force, \u00e9quilibre et pleine conscience.')));
 
  // Niveau
  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.level')));
  var lvlList = h('div', {'class': 'level-list'});
  [
- { id: 'debutant', icon: '\uD83C\uDF31', name: window.t('sport.beginner'), desc: 'Premi\u00e8res postures, respiration consciente, s\u00e9ances de 20-30 min' },
- { id: 'intermediaire', icon: '\uD83C\uDF3F', name: window.t('sport.intermediate'), desc: 'Vinyasa fluide, \u00e9quilibre, force fonctionnelle' },
+ { id: 'debutant', icon: '\uD83C\uDF31', name: window.t('sport.beginner'), desc: (window.isEnglish && window.isEnglish() ? 'First postures, conscious breathing, 20-30 min sessions' : 'Premi\u00e8res postures, respiration consciente, s\u00e9ances de 20-30 min') },
+ { id: 'intermediaire', icon: '\uD83C\uDF3F', name: window.t('sport.intermediate'), desc: (window.isEnglish && window.isEnglish() ? 'Fluid Vinyasa, balance, functional strength' : 'Vinyasa fluide, \u00e9quilibre, force fonctionnelle') },
  { id: 'avance', icon: '\uD83C\uDF4A', name: window.t('sport.advanced'), desc: 'Inversions, backbends profonds, pranayama' }
  ].forEach(function(lv) {
  var isOn = S.yogaLevel === lv.id;
@@ -11198,10 +11198,10 @@ function renderYogaOnboarding(p) {
  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Objectif'));
  var objGrid = h('div', {'class': 'card-grid-2'});
  [
- { id: 'flexibilite', icon: '\uD83E\uDD38', name: 'Flexibilit\u00e9', desc: 'Augmenter la souplesse, lib\u00e9rer les tensions' },
- { id: 'stress', icon: '\uD83E\uDDD8', name: 'Stress & Sommeil', desc: 'R\u00e9duction cortisol, am\u00e9lioration du repos' },
- { id: 'force', icon: '\uD83D\uDCAA', name: 'Force & \u00c9quilibre', desc: 'Gainage fonctionnel, stabilit\u00e9 articulaire' },
- { id: 'recuperation', icon: '\uD83C\uDF1F', name: 'R\u00e9cup\u00e9ration active', desc: 'Compl\u00e9ment sport, mobilit\u00e9, r\u00e9g\u00e9n\u00e9ration' }
+ { id: 'flexibilite', icon: '\uD83E\uDD38', name: (window.isEnglish && window.isEnglish() ? 'Flexibility' : 'Flexibilit\u00e9'), desc: (window.isEnglish && window.isEnglish() ? 'Increase flexibility, release tension' : 'Augmenter la souplesse, lib\u00e9rer les tensions') },
+ { id: 'stress', icon: '\uD83E\uDDD8', name: (window.isEnglish && window.isEnglish() ? 'Stress & Sleep' : 'Stress & Sommeil'), desc: (window.isEnglish && window.isEnglish() ? 'Cortisol reduction, improved rest' : 'R\u00e9duction cortisol, am\u00e9lioration du repos') },
+ { id: 'force', icon: '\uD83D\uDCAA', name: (window.isEnglish && window.isEnglish() ? 'Strength & Balance' : 'Force & \u00c9quilibre'), desc: (window.isEnglish && window.isEnglish() ? 'Functional core, joint stability' : 'Gainage fonctionnel, stabilit\u00e9 articulaire') },
+ { id: 'recuperation', icon: '\uD83C\uDF1F', name: (window.isEnglish && window.isEnglish() ? 'Active recovery' : 'R\u00e9cup\u00e9ration active'), desc: (window.isEnglish && window.isEnglish() ? 'Sport complement, mobility, regeneration' : 'Compl\u00e9ment sport, mobilit\u00e9, r\u00e9g\u00e9n\u00e9ration') }
  ].forEach(function(obj) {
  var isOn = S.yogaObjectif === obj.id;
  objGrid.appendChild(h('div', {'class': 'sel-card' + (isOn ? ' on' : ''), onclick: function(){ S.yogaObjectif = obj.id; window.render(); }}, [
@@ -11221,10 +11221,10 @@ function renderYogaOnboarding(p) {
  }));
  nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
  p.appendChild(nw);
- p.appendChild(h('div', {'class': 'num-hint'}, '2 \u00e0 6 jours par semaine'));
+ p.appendChild(h('div', {'class': 'num-hint'}, (window.isEnglish && window.isEnglish() ? '2 to 6 days per week' : '2 \u00e0 6 jours par semaine')));
 
  // Dur\u00e9e de s\u00e9ance
- p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Dur\u00e9e de s\u00e9ance'));
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, (window.isEnglish && window.isEnglish() ? 'Session duration' : 'Dur\u00e9e de s\u00e9ance')));
  var durGrid = h('div', {style: 'display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px'});
  ['20min', '30min', '45min', '60min'].forEach(function(dur) {
  var isOn = S.yogaDuration === dur;
@@ -11233,13 +11233,13 @@ function renderYogaOnboarding(p) {
  p.appendChild(durGrid);
 
  // Style pr\u00e9f\u00e9r\u00e9
- p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Style pr\u00e9f\u00e9r\u00e9'));
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, (window.isEnglish && window.isEnglish() ? 'Preferred style' : 'Style pr\u00e9f\u00e9r\u00e9')));
  var styleGrid = h('div', {'class': 'card-grid-2'});
  [
- { id: 'hatha', icon: '\u2600\uFE0F', name: 'Hatha', desc: 'S\u00e9ances douces, postures tenues, accessible' },
- { id: 'vinyasa', icon: '\uD83C\uDF00', name: 'Vinyasa', desc: 'Encha\u00eenements dynamiques, flux continu' },
- { id: 'yin', icon: '\uD83C\uDF19', name: 'Yin', desc: 'Postures longues (3-5 min), \u00e9tirements profonds' },
- { id: 'ashtanga', icon: '\uD83D\uDD25', name: 'Ashtanga', desc: 'S\u00e9ries fix\u00e9es, intensit\u00e9 \u00e9lev\u00e9e, discipline stricte' }
+ { id: 'hatha', icon: '\u2600\uFE0F', name: 'Hatha', desc: (window.isEnglish && window.isEnglish() ? 'Gentle sessions, held postures, accessible' : 'S\u00e9ances douces, postures tenues, accessible') },
+ { id: 'vinyasa', icon: '\uD83C\uDF00', name: 'Vinyasa', desc: (window.isEnglish && window.isEnglish() ? 'Dynamic sequences, continuous flow' : 'Encha\u00eenements dynamiques, flux continu') },
+ { id: 'yin', icon: '\uD83C\uDF19', name: 'Yin', desc: (window.isEnglish && window.isEnglish() ? 'Long postures (3-5 min), deep stretching' : 'Postures longues (3-5 min), \u00e9tirements profonds') },
+ { id: 'ashtanga', icon: '\uD83D\uDD25', name: 'Ashtanga', desc: (window.isEnglish && window.isEnglish() ? 'Fixed series, high intensity, strict discipline' : 'S\u00e9ries fix\u00e9es, intensit\u00e9 \u00e9lev\u00e9e, discipline stricte') }
  ].forEach(function(st) {
  var isOn = S.yogaStyle === st.id;
  styleGrid.appendChild(h('div', {'class': 'sel-card' + (isOn ? ' on' : ''), onclick: function(){ S.yogaStyle = st.id; window.render(); }}, [
@@ -11253,7 +11253,7 @@ function renderYogaOnboarding(p) {
  p.appendChild(h('div', {style: 'height:20px'}));
  var ok = S.yogaLevel && S.yogaObjectif;
  if (!ok) {
- p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'S\u00e9lectionnez un niveau et un objectif'));
+ p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'Select a level and an objective' : 'S\u00e9lectionnez un niveau et un objectif')));
  }
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) {
@@ -11301,9 +11301,9 @@ function renderYogaProgram(p) {
  var pregWarn = getPregnancySportWarning();
  if (pregWarn) {
  var pw = h('div', {style: 'background:rgba(122,31,31,0.06);border-left:3px solid var(--error,#7A1F1F);padding:12px 14px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--error,#7A1F1F);line-height:1.6'});
- pw.appendChild(h('div', {style: 'font-weight:700;margin-bottom:4px'}, '\u26A0 Grossesse \u2014 Yoga pr\u00e9natal'));
+ pw.appendChild(h('div', {style: 'font-weight:700;margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? '\u26A0 Pregnancy \u2014 Prenatal Yoga' : '\u26A0 Grossesse \u2014 Yoga pr\u00e9natal')));
  pw.appendChild(h('div', {}, pregWarn));
- pw.appendChild(h('div', {style: 'margin-top:6px;font-weight:600'}, '\u00c9viter : Inversions (Navasana, poirier), compression abdominale, d\u00e9cubitus dorsal >20 min. Variantes T2/T3 : postures assises ou en appui lat\u00e9ral.'));
+ pw.appendChild(h('div', {style: 'margin-top:6px;font-weight:600'}, (window.isEnglish && window.isEnglish() ? 'Avoid: Inversions (Navasana, headstand), abdominal compression, supine >20 min. T2/T3 variants: seated or side-lying postures.' : '\u00c9viter : Inversions (Navasana, poirier), compression abdominale, d\u00e9cubitus dorsal >20 min. Variantes T2/T3 : postures assises ou en appui lat\u00e9ral.')));
  p.appendChild(pw);
  }
  appendSportMedicalBanner(p, 'Yoga');
@@ -11313,26 +11313,26 @@ function renderYogaProgram(p) {
  if ((med.herniaDisc || med.lowerBack) && (!Array.isArray(S.medical) || S.medical.indexOf('lombaire') === -1)) {
  var hw = h('div', {style: 'background:rgba(232,111,30,0.06);border-left:3px solid var(--orange,#E86F1E);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--orange-ink,#7A3B0E);line-height:1.6'});
  hw.appendChild(h('div', {style: 'font-weight:700;color:var(--orange-ink,#7A3B0E);margin-bottom:4px'}, '\u26A0 Hernie discale / Bas du dos'));
- hw.appendChild(h('div', {}, '\u00c9viter forward fold profond sans genoux fl\u00e9chis. Paschimottanasana : toujours garder une micro-flexion des genoux. Privil\u00e9gier Balasana, torsions douces assises.'));
+ hw.appendChild(h('div', {}, (window.isEnglish && window.isEnglish() ? 'Avoid deep forward fold without bent knees. Paschimottanasana: always keep a micro-bend in the knees. Prefer Balasana, gentle seated twists.' : '\u00c9viter forward fold profond sans genoux fl\u00e9chis. Paschimottanasana : toujours garder une micro-flexion des genoux. Privil\u00e9gier Balasana, torsions douces assises.')));
  p.appendChild(hw);
  }
  if (med.osteoporosis) {
  var ow = h('div', {style: 'background:rgba(62,92,58,0.06);border-left:3px solid var(--ink-900,#0A0A09);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--success,#3E5C3A);line-height:1.6'});
- ow.appendChild(h('div', {style: 'font-weight:700;color:var(--success,#3E5C3A);margin-bottom:4px'}, '\uD83E\uDDB4 Ost\u00e9oporose'));
- ow.appendChild(h('div', {}, '\u00c9viter flexions extr\u00eames (Paschimottanasana profond), postures sur une jambe sans support. Favoriser postures debout en appui bim\u00e9ral (Guerrier I/II avec support si besoin). Mountain pose, Virabhadrasana I/II b\u00e9n\u00e9fiques pour la densit\u00e9 osseuse.'));
+ ow.appendChild(h('div', {style: 'font-weight:700;color:var(--success,#3E5C3A);margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? '\uD83E\uDDB4 Osteoporosis' : '\uD83E\uDDB4 Ost\u00e9oporose')));
+ ow.appendChild(h('div', {}, (window.isEnglish && window.isEnglish() ? 'Avoid extreme flexions (deep Paschimottanasana), single-leg postures without support. Favor standing bilateral postures (Warrior I/II with support if needed). Mountain pose, Virabhadrasana I/II beneficial for bone density.' : '\u00c9viter flexions extr\u00eames (Paschimottanasana profond), postures sur une jambe sans support. Favoriser postures debout en appui bim\u00e9ral (Guerrier I/II avec support si besoin). Mountain pose, Virabhadrasana I/II b\u00e9n\u00e9fiques pour la densit\u00e9 osseuse.')));
  p.appendChild(ow);
  }
  if (med.knees || med.acl || med.meniscus) {
  var kw = h('div', {style: 'background:var(--bluebg,rgba(26,58,106,.06));border-left:3px solid var(--blue,#1A3A6A);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:#0D47A1;line-height:1.6'});
- kw.appendChild(h('div', {style: 'font-weight:700;margin-bottom:4px'}, '\uD83E\uDDB5 Genoux / LCA / M\u00e9nisque'));
- kw.appendChild(h('div', {}, '\u00c9viter flexion profonde du genou (lotus complet, Malasana profond). Guerrier II : ne pas d\u00e9passer 90\u00b0. Option : pose h\u00e9ros (Virasana) remplac\u00e9e par Sukhasana si g\u00eane.'));
+ kw.appendChild(h('div', {style: 'font-weight:700;margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? '\uD83E\uDDB5 Knees / ACL / Meniscus' : '\uD83E\uDDB5 Genoux / LCA / M\u00e9nisque')));
+ kw.appendChild(h('div', {}, (window.isEnglish && window.isEnglish() ? 'Avoid deep knee flexion (full lotus, deep Malasana). Warrior II: do not exceed 90\u00b0. Option: hero pose (Virasana) replaced by Sukhasana if uncomfortable.' : '\u00c9viter flexion profonde du genou (lotus complet, Malasana profond). Guerrier II : ne pas d\u00e9passer 90\u00b0. Option : pose h\u00e9ros (Virasana) remplac\u00e9e par Sukhasana si g\u00eane.')));
  p.appendChild(kw);
  }
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme Yoga'));
  p.appendChild(h('h1', {html: 'Semaine ' + S.yogaWeek + '<br><em>' + weekData.phase + '</em>'}));
 
- var objNames = { flexibilite: 'Flexibilit\u00e9', stress: 'Stress & Sommeil', force: 'Force & \u00c9quilibre', recuperation: 'R\u00e9cup\u00e9ration active' };
+ var objNames = window.isEnglish && window.isEnglish() ? { flexibilite: 'Flexibility', stress: 'Stress & Sleep', force: 'Strength & Balance', recuperation: 'Active recovery' } : { flexibilite: 'Flexibilit\u00e9', stress: 'Stress & Sommeil', force: 'Force & \u00c9quilibre', recuperation: 'R\u00e9cup\u00e9ration active' };
  var styleNames = { hatha: 'Hatha', vinyasa: 'Vinyasa', yin: 'Yin', ashtanga: 'Ashtanga' };
  p.appendChild(h('p', {'class': 'subtitle'}, (S.yogaDays || '') + ' jours/semaine \u00b7 ' + (S.yogaDuration || '') + ' \u00b7 ' + (styleNames[S.yogaStyle] || S.yogaStyle || '') + ' \u00b7 ' + (objNames[S.yogaObjectif] || '')));
 
@@ -11360,8 +11360,8 @@ function renderYogaProgram(p) {
 
  // Session card
  var sessCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid #0A0A09'});
- sessCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#0A0A09;margin-bottom:6px'}, 'S\u00e9ance Yoga'));
- sessCard.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;margin-bottom:4px'}, '\uD83E\uDDD8 S\u00e9ance ' + (S.yogaDay + 1) + ' \u2014 ' + weekData.phase));
+ sessCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#0A0A09;margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Yoga Session' : 'S\u00e9ance Yoga')));
+ sessCard.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? '\uD83E\uDDD8 Session ' + (S.yogaDay + 1) + ' \u2014 ' + weekData.phase : '\uD83E\uDDD8 S\u00e9ance ' + (S.yogaDay + 1) + ' \u2014 ' + weekData.phase)));
  sessCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-bottom:12px'}, S.yogaDuration + ' \u00b7 ' + (styleNames[S.yogaStyle] || S.yogaStyle)));
 
  // Poses list
@@ -11387,15 +11387,15 @@ function renderYogaProgram(p) {
  var benefKey = S.yogaObjectif === 'recuperation' ? 'sommeil' : S.yogaObjectif;
  if (benefKey && YOGA_BENEFITS[benefKey]) {
  var benefDiv = h('div', {style: 'border:1px solid var(--border);padding:12px 16px;background:var(--ivory2);margin:12px 0'});
- benefDiv.appendChild(h('div', {style: 'font-family:Georgia;font-size:13px;margin-bottom:6px'}, '\uD83D\uDCCA B\u00e9n\u00e9fice \u00e9tudi\u00e9'));
+ benefDiv.appendChild(h('div', {style: 'font-family:Georgia;font-size:13px;margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? '\uD83D\uDCCA Studied benefit' : '\uD83D\uDCCA B\u00e9n\u00e9fice \u00e9tudi\u00e9')));
  benefDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);line-height:1.6'}, YOGA_BENEFITS[benefKey]));
  p.appendChild(benefDiv);
  }
 
  // All benefits summary
  var allBenef = h('div', {style: 'border:1px solid var(--border);padding:12px 16px;background:var(--ivory2);margin:12px 0'});
- allBenef.appendChild(h('div', {style: 'font-family:Georgia;font-size:13px;margin-bottom:8px'}, '\uD83C\uDF31 B\u00e9n\u00e9fices du yoga (preuves scientifiques)'));
- var benefLabels = { flexibilite: 'Flexibilit\u00e9', stress: 'Stress/Sommeil', force: 'Force core', sommeil: 'Sommeil' };
+ allBenef.appendChild(h('div', {style: 'font-family:Georgia;font-size:13px;margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? '\uD83C\uDF31 Yoga benefits (scientific evidence)' : '\uD83C\uDF31 B\u00e9n\u00e9fices du yoga (preuves scientifiques)')));
+ var benefLabels = window.isEnglish && window.isEnglish() ? { flexibilite: 'Flexibility', stress: 'Stress/Sleep', force: 'Core strength', sommeil: 'Sleep' } : { flexibilite: 'Flexibilit\u00e9', stress: 'Stress/Sommeil', force: 'Force core', sommeil: 'Sommeil' };
  Object.keys(YOGA_BENEFITS).forEach(function(k) {
  var row = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);line-height:1.5;padding:3px 0;border-bottom:1px solid var(--ivory3,#EEEDE8)'});
  row.appendChild(h('span', {style: 'color:#0A0A09;font-weight:600'}, (benefLabels[k] || k) + ' \u2014 '));
