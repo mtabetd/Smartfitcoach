@@ -4254,8 +4254,9 @@ function renderCrossfitProgram(p) {
  if (S.muscuMedical && S.muscuMedical.done) {
  var cfMedRestrictions = [];
  var cfMed = S.muscuMedical;
- if (cfMed.knees || cfMed.acl) cfMedRestrictions.push('\u26A0 Genoux / LCA\u00a0: remplacez les Box Jumps par des Box Step-ups, \u00e9vitez les Jump Squats et Pistols. Thrusters et Wall Balls autoris\u00e9s avec technique contr\u00f4l\u00e9e.');
- if (cfMed.kneeOsteoarthritis) cfMedRestrictions.push('\u26A0 Gonarthrose\u00a0: \u00e9vitez tous les sauts et flexions profondes sous charge. Privil\u00e9giez le velo (Assault Bike) et le rameur (Row) comme alternatives cardio (OARSI 2014).');
+ var _tcfm = window.isEnglish && window.isEnglish();
+ if (cfMed.knees || cfMed.acl) cfMedRestrictions.push((_tcfm ? '\u26A0 Knees / ACL\u00a0: replace Box Jumps with Box Step-ups, avoid Jump Squats and Pistols. Thrusters and Wall Balls allowed with controlled technique.' : '\u26A0 Genoux / LCA\u00a0: remplacez les Box Jumps par des Box Step-ups, \u00e9vitez les Jump Squats et Pistols. Thrusters et Wall Balls autoris\u00e9s avec technique contr\u00f4l\u00e9e.'));
+ if (cfMed.kneeOsteoarthritis) cfMedRestrictions.push((_tcfm ? '\u26A0 Knee osteoarthritis\u00a0: avoid all jumps and deep loaded squats. Prefer the Assault Bike and Rower as cardio alternatives (OARSI 2014).' : '\u26A0 Gonarthrose\u00a0: \u00e9vitez tous les sauts et flexions profondes sous charge. Privil\u00e9giez le velo (Assault Bike) et le rameur (Row) comme alternatives cardio (OARSI 2014).'));
  if (cfMed.meniscus) cfMedRestrictions.push('\u26A0 M\u00e9nisque\u00a0: pas de Box Jumps ni Pistols. Squats limit\u00e9s \u00e0 90\u00b0 de flexion maximum sous charge.');
  if (cfMed.lowerBack || cfMed.herniaDisc) cfMedRestrictions.push('\u26A0 Dos / Hernie discale\u00a0: r\u00e9duisez la charge sur Deadlifts et Back Squats (\u226470\u00a0% 1RM). \u00c9vitez Good Morning et Jefferson Curl.');
  if (cfMed.shoulders || cfMed.rotatorCuff) cfMedRestrictions.push('\u26A0 \u00c9paules\u00a0: remplacez HSPU par Pike Push-ups. Overhead Press all\u00e9g\u00e9. \u00c9vitez les mouvements overhead douloureux (Ludewig & Cook, Phys Ther 2000).');
@@ -4263,7 +4264,7 @@ function renderCrossfitProgram(p) {
  if (cfMed.osteoporosis) cfMedRestrictions.push('\u26A0 Ost\u00e9oporose\u00a0: pas de Box Jumps ni sauts. Charges \u226470\u00a0% 1RM uniquement. \u00c9vitez flexions vert\u00e9brales r\u00e9p\u00e9t\u00e9es (Sinaki, Spine 2002).');
  if (cfMedRestrictions.length > 0) {
  var cfMedBanner = h('div', {style: 'border-left:3px solid #E07B00;background:rgba(224,123,0,0.07);padding:12px 16px;margin-bottom:16px'});
- cfMedBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E07B00;margin-bottom:8px'}, '\u26A0 Restrictions m\u00e9dicales \u2014 CrossFit'));
+ cfMedBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E07B00;margin-bottom:8px'}, (_tcfm ? '\u26A0 Medical restrictions \u2014 CrossFit' : '\u26A0 Restrictions m\u00e9dicales \u2014 CrossFit')));
  cfMedRestrictions.forEach(function(r) {
  cfMedBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--fg2,#555);margin-bottom:4px'}, r));
  });
@@ -4522,7 +4523,7 @@ function renderCrossfitProgram(p) {
  if (_hasOlyLift && _hasFatiguePre && _isTimePressure) {
    var safetyWarn = h('div', {style: 'border-left:3px solid #FF6B6B;background:#FFF3CD;padding:10px 14px;margin-bottom:10px'});
    safetyWarn.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px;color:#C00;margin-bottom:4px'}, 'Attention — Mouvement olympique sous fatigue'));
-   safetyWarn.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E)'}, 'Ce WOD combine un mouvement olympique avec des exercices fatigants. Priorisez la technique : posez la barre si la position se d\u00e9grade. R\u00e9duisez la charge de 10-15% si n\u00e9cessaire.'));
+   safetyWarn.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E)'}, (window.isEnglish && window.isEnglish() ? 'This WOD combines an olympic movement with tiring exercises. Prioritize technique: put the bar down if form breaks. Reduce load by 10-15% if needed.' : 'Ce WOD combine un mouvement olympique avec des exercices fatigants. Priorisez la technique : posez la barre si la position se d\u00e9grade. R\u00e9duisez la charge de 10-15% si n\u00e9cessaire.')));
    p.appendChild(safetyWarn);
  }
 
@@ -7154,7 +7155,7 @@ function renderMusculationProgram(p) {
  if (_sessionCats.length > 0) {
  var _maxSets = Math.max.apply(null, _sessionCats.map(function(c) { return _sessionSetCount[c]; }));
  var _muscleSection = h('div', {style: 'margin-bottom:20px'});
- _muscleSection.appendChild(h('div', {'class': 'section-label'}, 'Muscles de la s\u00e9ance'));
+ _muscleSection.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Session muscles' : 'Muscles de la s\u00e9ance')));
  _sessionCats.sort(function(a, b) { return _sessionSetCount[b] - _sessionSetCount[a]; });
  _sessionCats.forEach(function(cat) {
  var lm = window.VOLUME_LANDMARKS[cat];
@@ -7238,7 +7239,7 @@ function renderMusculationProgram(p) {
    }
    var _phaseSelector = h('div', {style: 'display:flex;flex-direction:row;gap:8px;margin-bottom:16px'});
    ['masse', 'seche', 'force'].forEach(function(ph) {
-    var _phLabels = {masse: 'Masse', seche: 'S\u00e8che', force: 'Force'};
+    var _phEN = window.isEnglish && window.isEnglish(); var _phLabels = {masse: _phEN ? 'Mass' : 'Masse', seche: _phEN ? 'Cut' : 'S\u00e8che', force: _phEN ? 'Strength' : 'Force'};
     var _phActive = _effectivePhase === ph;
     var _phBtn = h('button', {
      style: 'flex:1;min-height:44px;padding:8px;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;' + (_phActive ? 'background:var(--ink-900,#0A0A09);color:white;border:1px solid var(--ink-900,#0A0A09)' : 'background:transparent;color:var(--black,#1A1A18);border:1px solid var(--border,#E8E6DF)'),
@@ -7313,7 +7314,7 @@ function renderMusculationProgram(p) {
 
      // C5: Equipment limited badge
      if (_sfcEqLimitedBadge) {
-      _sfcSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);background:rgba(106,74,26,0.08);border:1px solid rgba(106,74,26,0.2);padding:6px 10px;border-radius:2px;margin-bottom:10px'}, '\u00c9quipement limit\u00e9 \u2014 ces exercices peuvent ne pas correspondre \u00e0 votre mat\u00e9riel'));
+      _sfcSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);background:rgba(106,74,26,0.08);border:1px solid rgba(106,74,26,0.2);padding:6px 10px;border-radius:2px;margin-bottom:10px'}, (window.isEnglish && window.isEnglish() ? 'Limited equipment \u2014 these exercises may not match your equipment' : '\u00c9quipement limit\u00e9 \u2014 ces exercices peuvent ne pas correspondre \u00e0 votre mat\u00e9riel')));
      }
 
      // Warmup banner
@@ -7796,7 +7797,7 @@ function renderMusculationProgram(p) {
  if (window.isFemale(S) && S.cycleTracking && cycleInfo) {
  var intPct = Math.round(cycleInfo.phase.intensityFactor * 100);
  var intColor = intPct >= 100 ? 'var(--success,#3E5C3A)' : intPct >= 80 ? 'var(--orange-ink,#7A3B0E)' : 'var(--error,#7A1F1F)';
- card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:' + intColor + ';margin-top:4px'}, 'Intensit\u00e9 cycle : ' + intPct + '%'));
+ card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:' + intColor + ';margin-top:4px'}, (window.isEnglish && window.isEnglish() ? 'Cycle intensity: ' : 'Intensit\u00e9 cycle : ') + intPct + '%'));
  }
 
  // GIF demo image — show if available from exercise-gifs-map.js
@@ -7924,7 +7925,7 @@ function renderMusculationProgram(p) {
   } else if (suggested && suggested > 0) {
    var _sugBanner2 = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:rgba(62,92,58,0.06);border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
    var _sugLeft2 = h('div', {});
-   _sugLeft2.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--green,#3E5C3A);margin-bottom:2px'}, 'Charge recommand\u00e9e'));
+   _sugLeft2.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--green,#3E5C3A);margin-bottom:2px'}, (window.isEnglish && window.isEnglish() ? 'Recommended load' : 'Charge recommand\u00e9e')));
    _sugLeft2.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:var(--green,#3E5C3A);line-height:1'}, window.UNITS ? window.UNITS.displayWeight(suggested) : suggested + '\u00a0kg'));
    _sugBanner2.appendChild(_sugLeft2);
    card.appendChild(_sugBanner2);
@@ -7944,7 +7945,7 @@ function renderMusculationProgram(p) {
 
  if (eqType !== 'bodyweight') {
  var weightRow = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid var(--ivory3,#EEEDE8)'});
- var typeLabel = eqType === 'barre' ? 'Barre' : eqType === 'haltere' ? 'Halt\u00e8re (\u00d71)' : eqType === 'machine' ? 'Machine' : 'KB';
+ var _ttEn = window.isEnglish && window.isEnglish(); var typeLabel = eqType === 'barre' ? (_ttEn ? 'Bar' : 'Barre') : eqType === 'haltere' ? (_ttEn ? 'Dumbbell (\u00d71)' : 'Halt\u00e8re (\u00d71)') : eqType === 'machine' ? 'Machine' : 'KB';
  weightRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);min-width:80px'}, typeLabel));
 
  var wInput = h('input', {
@@ -8217,7 +8218,7 @@ function renderMusculationProgram(p) {
  saveMuscuSessionLog();
  window.render();
  }; })(setRow)
- }, _isLeste ? 'Lest\u00e9s \u2713' : '+ Lest\u00e9s');
+ }, _isLeste ? (window.isEnglish && window.isEnglish() ? 'Weighted \u2713' : 'Lest\u00e9s \u2713') : (window.isEnglish && window.isEnglish() ? '+ Weighted' : '+ Lest\u00e9s'));
  inputZone.appendChild(lesteBtn);
  var pcLabel;
  if (_isLeste) {
@@ -8424,11 +8425,11 @@ function renderMusculationProgram(p) {
  var lbKeywords = /squat|leg|fessier|ischios|mollet|presse|hip.*thrust|rdl|deadlift|soulev|cuisse|jambe/i;
  var nextIncr = lbKeywords.test(exRef.n) ? 5 : 2.5;
  var progressNote = h('div', {style: 'padding:6px 8px;background:rgba(62,92,58,0.06);border-top:1px solid var(--border);font-size:11px;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif'});
- progressNote.appendChild(h('span', {}, 'Objectif semaine prochaine\u00a0: ' + (progressiveWeight + nextIncr) + '\u00a0kg si toutes s\u00e9ries r\u00e9ussies'));
+ progressNote.appendChild(h('span', {}, (window.isEnglish && window.isEnglish() ? 'Next week goal\u00a0: ' + (progressiveWeight + nextIncr) + '\u00a0kg if all sets complete' : 'Objectif semaine prochaine\u00a0: ' + (progressiveWeight + nextIncr) + '\u00a0kg si toutes s\u00e9ries r\u00e9ussies')));
  setTable.appendChild(progressNote);
  } else if (isBodyweight) {
  var bwProgressNote = h('div', {style: 'padding:6px 8px;background:rgba(62,92,58,0.06);border-top:1px solid var(--border);font-size:11px;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif'});
- bwProgressNote.appendChild(h('span', {}, 'Objectif\u00a0: +1-2 reps par s\u00e9rie si toutes s\u00e9ries r\u00e9ussies'));
+ bwProgressNote.appendChild(h('span', {}, (window.isEnglish && window.isEnglish() ? 'Goal\u00a0: +1-2 reps per set if all sets complete' : 'Objectif\u00a0: +1-2 reps par s\u00e9rie si toutes s\u00e9ries r\u00e9ussies')));
  setTable.appendChild(bwProgressNote);
  }
 
@@ -8551,14 +8552,14 @@ function renderMusculationProgram(p) {
  if (_allValidated) {
  var _nextEx2 = (_dayExercises2 && _exIdx2 + 1 < _dayExercises2.length) ? _dayExercises2[_exIdx2 + 1] : null;
  var _nudge = h('div', {style: 'margin-top:8px;padding:10px 14px;background:var(--ink-900,#0A0A09);border-radius:2px;display:flex;align-items:center;justify-content:space-between'});
- _nudge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#fff;font-weight:700'}, '\u2713 Exercice termin\u00e9'));
+ _nudge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#fff;font-weight:700'}, (window.isEnglish && window.isEnglish() ? '\u2713 Exercise done' : '\u2713 Exercice termin\u00e9')));
  if (_nextEx2) {
  var _nudgeRight = h('div', {style: 'text-align:right'});
  _nudgeRight.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:1px'}, 'Suivant'));
  _nudgeRight.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px;color:#fff;max-width:140px;text-align:right'}, _nextEx2.n));
  _nudge.appendChild(_nudgeRight);
  } else {
- _nudge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.8)'}, 'Dernier exercice \u2014 Belle s\u00e9ance\u00a0!'));
+ _nudge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.8)'}, (window.isEnglish && window.isEnglish() ? 'Last exercise \u2014 Great workout\u00a0!' : 'Dernier exercice \u2014 Belle s\u00e9ance\u00a0!')));
  }
  card.appendChild(_nudge);
  }
@@ -8582,7 +8583,7 @@ function renderMusculationProgram(p) {
  if (isOpen) {
  var alts = window.getAlternativeExercises ? window.getAlternativeExercises(exRef.m, exRef.n, 4, S.sportLevel) : [];
  var altPanel = h('div', {style: 'margin-top:6px;border:1px solid var(--border,#DDDBD0);border-radius:2px;overflow:hidden;background:var(--ivory2,#F5F4EF)'});
- var altTitle = h('div', {style: 'padding:8px 12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--border)'}, 'Exercices pour les m\u00eames muscles');
+ var altTitle = h('div', {style: 'padding:8px 12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--border)'}, (window.isEnglish && window.isEnglish() ? 'Exercises for the same muscles' : 'Exercices pour les m\u00eames muscles'));
  altPanel.appendChild(altTitle);
 
  if (alts.length === 0) {
@@ -8630,7 +8631,7 @@ function renderMusculationProgram(p) {
  href: altVideoUrl, target: '_blank', rel: 'noopener',
  style: 'font-size:11px;color:var(--error,#7A1F1F);text-decoration:none;flex-shrink:0;margin-left:8px',
  onclick: function(e) { e.stopPropagation(); }
- }, '\u25b6 Vid\u00e9o'));
+ }, (window.isEnglish && window.isEnglish() ? '\u25b6 Video' : '\u25b6 Vid\u00e9o')));
  }
  altRow.appendChild(altTop);
  altRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:2px'}, alt.m + (alt.eq ? ' \u2014 ' + alt.eq : '')));
@@ -11320,9 +11321,9 @@ function renderYogaProgram(p) {
  var pregWarn = getPregnancySportWarning();
  if (pregWarn) {
  var pw = h('div', {style: 'background:rgba(122,31,31,0.06);border-left:3px solid var(--error,#7A1F1F);padding:12px 14px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--error,#7A1F1F);line-height:1.6'});
- pw.appendChild(h('div', {style: 'font-weight:700;margin-bottom:4px'}, '\u26A0 Grossesse \u2014 Yoga pr\u00e9natal'));
+ pw.appendChild(h('div', {style: 'font-weight:700;margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? '\u26A0 Pregnancy \u2014 Prenatal yoga' : '\u26A0 Grossesse \u2014 Yoga pr\u00e9natal')));
  pw.appendChild(h('div', {}, pregWarn));
- pw.appendChild(h('div', {style: 'margin-top:6px;font-weight:600'}, '\u00c9viter : Inversions (Navasana, poirier), compression abdominale, d\u00e9cubitus dorsal >20 min. Variantes T2/T3 : postures assises ou en appui lat\u00e9ral.'));
+ pw.appendChild(h('div', {style: 'margin-top:6px;font-weight:600'}, (window.isEnglish && window.isEnglish() ? 'Avoid: Inversions (Navasana, headstand), abdominal compression, supine >20 min. T2/T3 variants: seated or side-lying postures.' : '\u00c9viter : Inversions (Navasana, poirier), compression abdominale, d\u00e9cubitus dorsal >20 min. Variantes T2/T3 : postures assises ou en appui lat\u00e9ral.')));
  p.appendChild(pw);
  }
  appendSportMedicalBanner(p, 'Yoga');
@@ -11331,14 +11332,14 @@ function renderYogaProgram(p) {
  var med = S.muscuMedical || {};
  if ((med.herniaDisc || med.lowerBack) && (!Array.isArray(S.medical) || S.medical.indexOf('lombaire') === -1)) {
  var hw = h('div', {style: 'background:rgba(232,111,30,0.06);border-left:3px solid var(--orange,#E86F1E);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--orange-ink,#7A3B0E);line-height:1.6'});
- hw.appendChild(h('div', {style: 'font-weight:700;color:var(--orange-ink,#7A3B0E);margin-bottom:4px'}, '\u26A0 Hernie discale / Bas du dos'));
- hw.appendChild(h('div', {}, '\u00c9viter forward fold profond sans genoux fl\u00e9chis. Paschimottanasana : toujours garder une micro-flexion des genoux. Privil\u00e9gier Balasana, torsions douces assises.'));
+ hw.appendChild(h('div', {style: 'font-weight:700;color:var(--orange-ink,#7A3B0E);margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? '\u26A0 Disc herniation / Lower back' : '\u26A0 Hernie discale / Bas du dos')));
+ hw.appendChild(h('div', {}, (window.isEnglish && window.isEnglish() ? 'Avoid deep forward folds without bent knees. Paschimottanasana: always keep a micro-bend at the knees. Prefer Balasana, gentle seated twists.' : '\u00c9viter forward fold profond sans genoux fl\u00e9chis. Paschimottanasana : toujours garder une micro-flexion des genoux. Privil\u00e9gier Balasana, torsions douces assises.')));
  p.appendChild(hw);
  }
  if (med.osteoporosis) {
  var ow = h('div', {style: 'background:rgba(62,92,58,0.06);border-left:3px solid var(--ink-900,#0A0A09);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--success,#3E5C3A);line-height:1.6'});
- ow.appendChild(h('div', {style: 'font-weight:700;color:var(--success,#3E5C3A);margin-bottom:4px'}, '\uD83E\uDDB4 Ost\u00e9oporose'));
- ow.appendChild(h('div', {}, '\u00c9viter flexions extr\u00eames (Paschimottanasana profond), postures sur une jambe sans support. Favoriser postures debout en appui bim\u00e9ral (Guerrier I/II avec support si besoin). Mountain pose, Virabhadrasana I/II b\u00e9n\u00e9fiques pour la densit\u00e9 osseuse.'));
+ ow.appendChild(h('div', {style: 'font-weight:700;color:var(--success,#3E5C3A);margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? '\uD83E\uDDB4 Osteoporosis' : '\uD83E\uDDB4 Ost\u00e9oporose')));
+ ow.appendChild(h('div', {}, (window.isEnglish && window.isEnglish() ? 'Avoid extreme flexions (deep Paschimottanasana), single-leg poses without support. Prefer bilateral standing poses (Warrior I/II with support if needed). Mountain pose, Virabhadrasana I/II beneficial for bone density.' : '\u00c9viter flexions extr\u00eames (Paschimottanasana profond), postures sur une jambe sans support. Favoriser postures debout en appui bim\u00e9ral (Guerrier I/II avec support si besoin). Mountain pose, Virabhadrasana I/II b\u00e9n\u00e9fiques pour la densit\u00e9 osseuse.')));
  p.appendChild(ow);
  }
  if (med.knees || med.acl || med.meniscus) {
