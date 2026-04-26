@@ -285,13 +285,19 @@ function getPregnancySportWarning() {
  var week = s.pregnancyWeek || 0;
  if (week < 14) {
  // T1 : nausées, fatigue → intensité réduite, pas de sur-échauffement
- return ' Grossesse T1 (sem. 1-13) : Activité physique modérée recommandée (150 min/sem, ACOG 2020). Évitez le sur-échauffement (>38,5°C). Consultez votre obstétricien avant tout programme intensif.';
+ return (window.isEnglish && window.isEnglish()
+   ? ' Pregnancy T1 (wk 1-13): Moderate physical activity recommended (150 min/wk, ACOG 2020). Avoid overheating (>38.5°C). Consult your obstetrician before any intensive program.'
+   : ' Grossesse T1 (sem. 1-13) : Activité physique modérée recommandée (150 min/sem, ACOG 2020). Évitez le sur-échauffement (>38,5°C). Consultez votre obstétricien avant tout programme intensif.');
  } else if (week < 28) {
  // T2 : veine cave — décubitus dorsal contre-indiqué
- return ' Grossesse T2 (sem. 14-27, ACOG 2020) : (1) Évitez le décubitus dorsal prolongé >20 min — compression de la veine cave inférieure. (2) Pas de Valsalva (squat lourd, soulevé de terre) — risque de chute de pression. (3) Sports de contact contre-indiqués. Exercices recommandés : natation, marche, vélo stationnaire, yoga prénatal.';
+ return (window.isEnglish && window.isEnglish()
+   ? ' Pregnancy T2 (wk 14-27, ACOG 2020): (1) Avoid prolonged supine position >20 min — inferior vena cava compression. (2) No Valsalva (heavy squat, deadlift) — risk of pressure drop. (3) Contact sports contraindicated. Recommended exercises: swimming, walking, stationary bike, prenatal yoga.'
+   : ' Grossesse T2 (sem. 14-27, ACOG 2020) : (1) Évitez le décubitus dorsal prolongé >20 min — compression de la veine cave inférieure. (2) Pas de Valsalva (squat lourd, soulevé de terre) — risque de chute de pression. (3) Sports de contact contre-indiqués. Exercices recommandés : natation, marche, vélo stationnaire, yoga prénatal.');
  } else {
  // T3 : mêmes contre-indications + risque chute de l'équilibre
- return ' Grossesse T3 (sem. 28+, ACOG 2020) : (1) Décubitus dorsal INTERDIT. (2) Valsalva interdit (soulevé de terre, squat lourd, développé couché). (3) Sports de contact et à risque de chute contre-indiqués. (4) Équilibre altéré — préférez exercices guidés ou en appui. Consultez votre obstétricien avant chaque modification du programme.';
+ return (window.isEnglish && window.isEnglish()
+   ? ' Pregnancy T3 (wk 28+, ACOG 2020): (1) Supine position FORBIDDEN. (2) Valsalva forbidden (deadlift, heavy squat, bench press). (3) Contact sports and fall-risk sports contraindicated. (4) Altered balance — prefer guided or supported exercises. Consult your obstetrician before each program modification.'
+   : ' Grossesse T3 (sem. 28+, ACOG 2020) : (1) Décubitus dorsal INTERDIT. (2) Valsalva interdit (soulevé de terre, squat lourd, développé couché). (3) Sports de contact et à risque de chute contre-indiqués. (4) Équilibre altéré — préférez exercices guidés ou en appui. Consultez votre obstétricien avant chaque modification du programme.');
  }
 }
 
@@ -1034,14 +1040,14 @@ function generateSportProgram() {
  // Pregnancy: add Kegel exercises to every day
  if (pregTri) {
  dayExercises.push({
- n: 'Exercices de Kegel',
- m: 'Plancher pelvien',
+ n: (window.isEnglish && window.isEnglish() ? 'Kegel Exercises' : 'Exercices de Kegel'),
+ m: (window.isEnglish && window.isEnglish() ? 'Pelvic floor' : 'Plancher pelvien'),
  sets: '3 x 10 contractions (5s tenue)',
  rest: '30s',
- eq: 'Aucun',
+ eq: (window.isEnglish && window.isEnglish() ? 'None' : 'Aucun'),
  lv: 1,
- desc: 'Contractez les muscles du plancher pelvien comme pour retenir l\'urine. Tenez 5 secondes, rel\u00e2chez 5 secondes. R\u00e9p\u00e9tez.',
- tips: ['Essentiel pour pr\u00e9parer l\'accouchement', 'Pr\u00e9vient l\'incontinence', 'Peut \u00eatre fait n\'importe o\u00f9'],
+ desc: (window.isEnglish && window.isEnglish() ? 'Contract your pelvic floor muscles as if trying to stop urination. Hold 5 seconds, release 5 seconds. Repeat.' : 'Contractez les muscles du plancher pelvien comme pour retenir l\'urine. Tenez 5 secondes, rel\u00e2chez 5 secondes. R\u00e9p\u00e9tez.'),
+ tips: (window.isEnglish && window.isEnglish() ? ['Essential to prepare for childbirth', 'Prevents incontinence', 'Can be done anywhere'] : ['Essentiel pour pr\u00e9parer l\'accouchement', 'Pr\u00e9vient l\'incontinence', 'Peut \u00eatre fait n\'importe o\u00f9']),
  video: 'https://www.youtube.com/results?search_query=exercices+kegel+grossesse'
  });
  }
@@ -1141,15 +1147,15 @@ function generateSportProgram() {
  warmup: {
   duration: 8,
   exercises: [
-   { name: 'Cardio léger (vélo/tapis)', duration: '5 min', intensity: 'Faible' },
-   { name: 'Mobilité articulaire', duration: '3 min', notes: 'Cercles épaules, hanches, chevilles' }
+   { name: (window.isEnglish && window.isEnglish() ? 'Light cardio (bike/treadmill)' : 'Cardio léger (vélo/tapis)'), duration: '5 min', intensity: (window.isEnglish && window.isEnglish() ? 'Low' : 'Faible') },
+   { name: (window.isEnglish && window.isEnglish() ? 'Joint mobility' : 'Mobilité articulaire'), duration: '3 min', notes: (window.isEnglish && window.isEnglish() ? 'Shoulder, hip, ankle circles' : 'Cercles épaules, hanches, chevilles') }
   ]
  },
  cooldown: {
   duration: 5,
   exercises: [
-   { name: 'Marche ou vélo léger', duration: '3 min', intensity: 'Très faible' },
-   { name: 'Étirements statiques', duration: '2 min', notes: 'Groupes musculaires travaillés' }
+   { name: (window.isEnglish && window.isEnglish() ? 'Walk or light bike' : 'Marche ou vélo léger'), duration: '3 min', intensity: (window.isEnglish && window.isEnglish() ? 'Very low' : 'Très faible') },
+   { name: (window.isEnglish && window.isEnglish() ? 'Static stretches' : 'Étirements statiques'), duration: '2 min', notes: (window.isEnglish && window.isEnglish() ? 'Worked muscle groups' : 'Groupes musculaires travaillés') }
   ]
  }
  });
@@ -1171,10 +1177,11 @@ function generateSportProgram() {
 // ─── INTERSTITIEL SPORT: programme existant ───
 function renderSportChoice(p) {
   var prenom = S.prenom || S.nom || '';
+  var _isEN = window.isEnglish && window.isEnglish();
   var sportLabels = {
-    musculation: 'Musculation', crossfit: 'Cross Training', running: 'Running',
+    musculation: (_isEN ? 'Weight Training' : 'Musculation'), crossfit: 'Cross Training', running: 'Running',
     hyrox: 'Hyrox', padel: 'Padel', golf: 'Golf', triathlon: 'Triathlon / IRONMAN',
-    yoga: 'Yoga & Mobilité', cycling: 'Cyclisme', calisthenics: 'Callisthénie'
+    yoga: (_isEN ? 'Yoga & Mobility' : 'Yoga & Mobilité'), cycling: (_isEN ? 'Cycling' : 'Cyclisme'), calisthenics: (_isEN ? 'Calisthenics' : 'Callisthénie')
   };
   var sportLabel = S.sportType ? (sportLabels[S.sportType] || S.sportType) : 'Sport';
   var wrap = h('div', {style: 'display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px 28px 56px;text-align:center;min-height:65vh'});
@@ -1182,10 +1189,14 @@ function renderSportChoice(p) {
   wrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:10px;letter-spacing:7px;text-transform:uppercase;font-weight:300;margin-bottom:8px;color:var(--grey)'}, 'SMARTFITCOACH'));
   wrap.appendChild(h('div', {style: 'width:36px;height:1px;background:var(--black);margin:0 auto 28px'}));
   wrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:22px;font-weight:300;font-style:italic;line-height:1.45;margin-bottom:16px'},
-    prenom ? 'Votre protocole ' + sportLabel + '\nest actif, ' + prenom + '.' : 'Votre protocole ' + sportLabel + '\nest déjà établi.'
+    (window.isEnglish && window.isEnglish()
+      ? (prenom ? 'Your ' + sportLabel + ' protocol\nis active, ' + prenom + '.' : 'Your ' + sportLabel + ' protocol\nis already set.')
+      : (prenom ? 'Votre protocole ' + sportLabel + '\nest actif, ' + prenom + '.' : 'Votre protocole ' + sportLabel + '\nest déjà établi.'))
   ));
   wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;letter-spacing:0.5px;line-height:1.7;color:var(--grey,#6B6B65);max-width:300px;margin:0 auto 40px'},
-    'Souhaitez-vous poursuivre votre programme en cours,\nou en définir un entièrement nouveau\u00a0?'
+    (window.isEnglish && window.isEnglish()
+      ? 'Would you like to continue your current program,\nor define an entirely new one\u00a0?'
+      : 'Souhaitez-vous poursuivre votre programme en cours,\nou en définir un entièrement nouveau\u00a0?')
   ));
 
   var targetStep = _SPORT_PROGRAM_STEP[S.sportType] || 4;
@@ -1193,7 +1204,7 @@ function renderSportChoice(p) {
   var btnContinue = h('button', {
     style: 'display:block;width:100%;max-width:300px;padding:16px 24px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;margin:0 auto 14px',
     onclick: function() { S.sStep = targetStep; window.render(); }
-  }, 'Poursuivre mon protocole');
+  }, (window.isEnglish && window.isEnglish() ? 'Continue my protocol' : 'Poursuivre mon protocole'));
 
   var btnNew = h('button', {
     style: 'display:block;width:100%;max-width:300px;padding:15px 24px;background:transparent;color:var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:1px solid var(--black,#0A0A09);cursor:pointer;margin:0 auto',
@@ -1212,7 +1223,7 @@ function renderSportChoice(p) {
       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       window.render();
     }
-  }, 'Définir un nouveau protocole');
+  }, (window.isEnglish && window.isEnglish() ? 'Define a new protocol' : 'Définir un nouveau protocole'));
 
   wrap.appendChild(btnContinue);
   wrap.appendChild(btnNew);
@@ -1645,51 +1656,52 @@ function renderObjectif(p) {
   var _isFemale = window.isFemale(S);
 
   // Matrice de recommandation
+  var _isENrec = window.isEnglish && window.isEnglish();
   var _rec = null;
   if (_rAge >= 50) {
-   var _50reason = 'Recommandé pour les 50+ — préserve les articulations et améliore la qualité de vie.';
-   if (_rGoalKey === 'cut' || _rGoalKey === 'shred') _50reason = 'Après 50 ans, le yoga actif favorise la perte de masse grasse douce sans stress articulaire — priorité à la longévité.';
-   else if (_rGoalKey === 'bulk' || _rGoalKey === 'lean_bulk') _50reason = 'Après 50 ans, la mobilité est la base — le yoga prépare les articulations avant d\'ajouter de la charge.';
-   _rec = { type: 'yoga', label: 'Yoga & Mobilité', icon: '🧘',
-    sub: 'Mobilité · Souplesse · Récupération active',
+   var _50reason = _isENrec ? 'Recommended for 50+ — preserves joints and improves quality of life.' : 'Recommandé pour les 50+ — préserve les articulations et améliore la qualité de vie.';
+   if (_rGoalKey === 'cut' || _rGoalKey === 'shred') _50reason = _isENrec ? 'After 50, active yoga promotes gentle fat loss without joint stress — longevity first.' : 'Après 50 ans, le yoga actif favorise la perte de masse grasse douce sans stress articulaire — priorité à la longévité.';
+   else if (_rGoalKey === 'bulk' || _rGoalKey === 'lean_bulk') _50reason = _isENrec ? 'After 50, mobility is the foundation — yoga prepares joints before adding load.' : 'Après 50 ans, la mobilité est la base — le yoga prépare les articulations avant d\'ajouter de la charge.';
+   _rec = { type: 'yoga', label: (_isENrec ? 'Yoga & Mobility' : 'Yoga & Mobilité'), icon: '🧘',
+    sub: (_isENrec ? 'Mobility · Flexibility · Active recovery' : 'Mobilité · Souplesse · Récupération active'),
     reason: _50reason,
     nextStep: 19 };
   } else if (_rGoalKey === 'bulk' || _rGoalKey === 'lean_bulk') {
-   _rec = { type: 'musculation', label: 'Musculation', icon: '🏋️',
-    sub: 'Progressive overload · Force · Masse',
-    reason: 'Programme optimal pour votre objectif prise de masse — progressive overload scientifique.',
+   _rec = { type: 'musculation', label: (_isENrec ? 'Weight Training' : 'Musculation'), icon: '🏋️',
+    sub: (_isENrec ? 'Progressive overload · Strength · Mass' : 'Progressive overload · Force · Masse'),
+    reason: (_isENrec ? 'Optimal program for your mass gain goal — scientific progressive overload.' : 'Programme optimal pour votre objectif prise de masse — progressive overload scientifique.'),
     nextStep: 20 };
   } else if (_rGoalKey === 'recomposition') {
-   _rec = { type: 'musculation', label: 'Musculation', icon: '🏋️',
-    sub: 'Force · Composition · Recomposition',
-    reason: 'La recomposition corporelle répond le mieux à la musculation avec surcharge progressive.',
+   _rec = { type: 'musculation', label: (_isENrec ? 'Weight Training' : 'Musculation'), icon: '🏋️',
+    sub: (_isENrec ? 'Strength · Composition · Recomposition' : 'Force · Composition · Recomposition'),
+    reason: (_isENrec ? 'Body recomposition responds best to weight training with progressive overload.' : 'La recomposition corporelle répond le mieux à la musculation avec surcharge progressive.'),
     nextStep: 20 };
   } else if (_rGoalKey === 'cut' || _rGoalKey === 'shred') {
    _rec = { type: 'crossfit', label: 'Cross Training', icon: '🔥',
-    sub: 'HIIT · Force · Cardio fusionnés',
-    reason: 'HIIT + force = combo maximal pour une sèche efficace — calories brûlées 24h.',
+    sub: (_isENrec ? 'HIIT · Strength · Fused cardio' : 'HIIT · Force · Cardio fusionnés'),
+    reason: (_isENrec ? 'HIIT + strength = maximum combo for an effective cut — calories burned 24h.' : 'HIIT + force = combo maximal pour une sèche efficace — calories brûlées 24h.'),
     nextStep: 5 };
   } else if (_rGoalKey === 'endurance') {
    _rec = { type: 'running', label: 'Running', icon: '🏃',
     sub: '5K · 10K · Semi · Marathon',
-    reason: 'Programme running progressif — du 5K au marathon avec plans scientifiques.',
+    reason: (_isENrec ? 'Progressive running program — from 5K to marathon with scientific plans.' : 'Programme running progressif — du 5K au marathon avec plans scientifiques.'),
     nextStep: 7 };
   } else if (_isFemale) {
-   _rec = { type: 'musculation', label: 'Musculation', icon: '🏋️',
-    sub: 'Force · Fessiers · Ventre plat',
-    reason: 'Spécialement adapté femme — priorité fessiers et abdominaux, sans bulk excessif.',
+   _rec = { type: 'musculation', label: (_isENrec ? 'Weight Training' : 'Musculation'), icon: '🏋️',
+    sub: (_isENrec ? 'Strength · Glutes · Flat stomach' : 'Force · Fessiers · Ventre plat'),
+    reason: (_isENrec ? 'Specially adapted for women — glutes and abs priority, without excessive bulk.' : 'Spécialement adapté femme — priorité fessiers et abdominaux, sans bulk excessif.'),
     nextStep: 20 };
   } else {
-   _rec = { type: 'musculation', label: 'Musculation', icon: '🏋️',
-    sub: 'Force · Volume · Performance',
-    reason: 'Le programme le plus complet pour transformer votre physique durablement.',
+   _rec = { type: 'musculation', label: (_isENrec ? 'Weight Training' : 'Musculation'), icon: '🏋️',
+    sub: (_isENrec ? 'Strength · Volume · Performance' : 'Force · Volume · Performance'),
+    reason: (_isENrec ? 'The most complete program to transform your physique durably.' : 'Le programme le plus complet pour transformer votre physique durablement.'),
     nextStep: 20 };
   }
 
   if (!_rec) return;
 
   var recWrap = h('div', {style: 'margin-bottom:28px;'});
-  recWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px'}, 'Recommandé pour votre profil'));
+  recWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px'}, (_isENrec ? 'Recommended for your profile' : 'Recommandé pour votre profil')));
 
   var recCard = h('div', {
    style: 'border:1px solid var(--black,#0A0A09);padding:20px 20px 18px;background:var(--ivory,#FAF9F6);cursor:pointer;position:relative;overflow:hidden;',
@@ -1702,7 +1714,7 @@ function renderObjectif(p) {
    }
   });
 
-  var recBadge = h('div', {style: 'position:absolute;top:0;right:0;padding:4px 12px;background:var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ivory,#FAF9F6);line-height:18px'}, '★  Adapté à vous');
+  var recBadge = h('div', {style: 'position:absolute;top:0;right:0;padding:4px 12px;background:var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ivory,#FAF9F6);line-height:18px'}, (_isENrec ? '★  Tailored for you' : '★  Adapté à vous'));
   recCard.appendChild(recBadge);
 
   var recTop = h('div', {style: 'display:flex;align-items:flex-start;gap:0;margin-bottom:14px;margin-top:22px'});
@@ -1716,13 +1728,13 @@ function renderObjectif(p) {
 
   var recCta = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:16px'});
   recCta.appendChild(h('div', {style: 'width:24px;height:1px;background:var(--black,#0A0A09)'}));
-  recCta.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09)'}, 'Commencer ce programme  →'));
+  recCta.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09)'}, (_isENrec ? 'Start this program  →' : 'Commencer ce programme  →')));
   recCard.appendChild(recCta);
   recWrap.appendChild(recCard);
 
   recWrap.appendChild(h('div', {style: 'display:flex;align-items:center;gap:16px;margin-top:20px;margin-bottom:4px'},[
    h('div', {style:'flex:1;height:1px;background:var(--border,#D8D8D0)'}),
-   h('span', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);white-space:nowrap'},'ou choisir manuellement'),
+   h('span', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);white-space:nowrap'},(_isENrec ? 'or choose manually' : 'ou choisir manuellement')),
    h('div', {style:'flex:1;height:1px;background:var(--border,#D8D8D0)'})
   ]));
 
@@ -1753,16 +1765,17 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'musculation'});
  window.render();
  }}, [
- h('div', {'class': 'card-name'}, _htaSevere ? 'Musculation \u26a0' : 'Musculation'),
- h('div', {'class': 'card-sub'}, _htaSevere ? 'Charges l\u00e9g\u00e8res uniquement \u2014 ESC/ESH 2018' : 'Programme cibl\u00e9 par groupes musculaires'),
- h('div', {'class': 'card-tag'}, _htaSevere ? '\u00c9viter >80% 1RM \u00b7 Pas de Valsalva \u00b7 Consulter un m\u00e9decin' : 'S\u00e8che \u00b7 Masse \u00b7 Force \u00b7 Endurance')
+ h('div', {'class': 'card-name'}, _htaSevere ? (window.isEnglish && window.isEnglish() ? 'Weight Training \u26a0' : 'Musculation \u26a0') : (window.isEnglish && window.isEnglish() ? 'Weight Training' : 'Musculation')),
+ h('div', {'class': 'card-sub'}, _htaSevere ? (window.isEnglish && window.isEnglish() ? 'Light loads only \u2014 ESC/ESH 2018' : 'Charges l\u00e9g\u00e8res uniquement \u2014 ESC/ESH 2018') : (window.isEnglish && window.isEnglish() ? 'Targeted program by muscle groups' : 'Programme cibl\u00e9 par groupes musculaires')),
+ h('div', {'class': 'card-tag'}, _htaSevere ? (window.isEnglish && window.isEnglish() ? '\u00c9viter >80% 1RM \u00b7 No Valsalva \u00b7 Consult a doctor' : '\u00c9viter >80% 1RM \u00b7 Pas de Valsalva \u00b7 Consulter un m\u00e9decin') : (window.isEnglish && window.isEnglish() ? 'Cut \u00b7 Mass \u00b7 Strength \u00b7 Endurance' : 'S\u00e8che \u00b7 Masse \u00b7 Force \u00b7 Endurance'))
  ]));
 
  // Cross Training - clicking goes through PAR-Q (if not done), then CF level (step 5)
  // FIX SÉCURITÉ 2026-04 — Bloquer CrossFit pour HTA sévère, cardiopathie et grossesse T3
  var _cfCardio = Array.isArray(S.medical) && (S.medical.indexOf('cardio') !== -1 || S.medical.indexOf('insuffisance_card') !== -1);
  var _cfBlocked = (Array.isArray(S.medical) && S.medical.indexOf('hta_severe') !== -1) || _cfCardio || (S.pregnant && window.isFemale(S) && typeof S.pregnancyWeek === 'number' && S.pregnancyWeek >= 28);
- var _cfBlockReason = _cfBlocked ? (S.pregnant ? 'Contre-indiqué pendant le 3e trimestre (ACOG 2020)' : _cfCardio ? 'Contre-indiqué en cas de cardiopathie (AHA 2018)' : 'Contre-indiqué avec HTA sévère (ESC/ESH 2018)') : '';
+ var _cfIsEN = window.isEnglish && window.isEnglish();
+ var _cfBlockReason = _cfBlocked ? (S.pregnant ? (_cfIsEN ? 'Contraindicated in 3rd trimester (ACOG 2020)' : 'Contre-indiqué pendant le 3e trimestre (ACOG 2020)') : _cfCardio ? (_cfIsEN ? 'Contraindicated with heart disease (AHA 2018)' : 'Contre-indiqué en cas de cardiopathie (AHA 2018)') : (_cfIsEN ? 'Contraindicated with severe HBP (ESC/ESH 2018)' : 'Contre-indiqué avec HTA sévère (ESC/ESH 2018)')) : '';
  typeGrid.appendChild(h('div', {'class': 'sel-card' + (_cfBlocked ? ' disabled' : ''), style:'cursor:' + (_cfBlocked ? 'not-allowed' : 'pointer') + ';' + (_cfBlocked ? 'opacity:0.35;pointer-events:none;' : ''), onclick: _cfBlocked ? null : function(){
  S.sportType = 'crossfit';
  S._sportMedNextStep = 5;
@@ -1772,9 +1785,9 @@ function renderObjectif(p) {
  _loadCFScripts(function() { if (window.render) window.render(); });
  window.render();
  }}, [
- h('div', {'class': 'card-name'}, 'Cross Training' + (_cfBlocked ? ' — Indisponible' : '')),
- h('div', {'class': 'card-sub'}, _cfBlocked ? _cfBlockReason : 'Halt\u00e9rophilie \u00b7 WOD \u00b7 Gymnastique'),
- h('div', {'class': 'card-tag'}, '100 WODs \u00b7 Cycles 6 semaines \u00b7 Scaled/Inter/RX')
+ h('div', {'class': 'card-name'}, 'Cross Training' + (_cfBlocked ? (_cfIsEN ? ' — Unavailable' : ' — Indisponible') : '')),
+ h('div', {'class': 'card-sub'}, _cfBlocked ? _cfBlockReason : (_cfIsEN ? 'Weightlifting \u00b7 WOD \u00b7 Gymnastics' : 'Halt\u00e9rophilie \u00b7 WOD \u00b7 Gymnastique')),
+ h('div', {'class': 'card-tag'}, (window.isEnglish && window.isEnglish() ? '100 WODs \u00b7 6-week Cycles \u00b7 Scaled/Inter/RX' : '100 WODs \u00b7 Cycles 6 semaines \u00b7 Scaled/Inter/RX'))
  ]));
 
  // Running card
@@ -1787,7 +1800,7 @@ function renderObjectif(p) {
  window.render();
  }}, [
  h('div', {'class': 'card-name'}, 'Running'),
- h('div', {'class': 'card-sub'}, 'Plan d\'entraînement course à pied'),
+ h('div', {'class': 'card-sub'}, (window.isEnglish && window.isEnglish() ? 'Running training plan' : 'Plan d\'entraînement course à pied')),
  h('div', {'class': 'card-tag'}, '5K · 10K · Semi · Marathon · Trail')
  ]));
 
@@ -1801,7 +1814,7 @@ function renderObjectif(p) {
  window.render();
  }}, [
  h('div', {'class': 'card-name'}, 'Hyrox'),
- h('div', {'class': 'card-sub'}, 'Préparation Hyrox complète'),
+ h('div', {'class': 'card-sub'}, (window.isEnglish && window.isEnglish() ? 'Complete Hyrox preparation' : 'Préparation Hyrox complète')),
  h('div', {'class': 'card-tag'}, '8 stations · Run · Simulation')
  ]));
 
@@ -1815,7 +1828,7 @@ function renderObjectif(p) {
  window.render();
  }}, [
  h('div', {'class': 'card-name'}, 'Padel'),
- h('div', {'class': 'card-sub'}, 'Programme technique et physique padel'),
+ h('div', {'class': 'card-sub'}, (window.isEnglish && window.isEnglish() ? 'Technical and physical padel program' : 'Programme technique et physique padel')),
  h('div', {'class': 'card-tag'}, 'Technique · Tactique · Match · Physique')
  ]));
 
@@ -1829,7 +1842,7 @@ function renderObjectif(p) {
  window.render();
  }}, [
  h('div', {'class': 'card-name'}, 'Golf'),
- h('div', {'class': 'card-sub'}, 'Progresser au golf — méthode Dave Pelz'),
+ h('div', {'class': 'card-sub'}, (window.isEnglish && window.isEnglish() ? 'Improve at golf — Dave Pelz method' : 'Progresser au golf — méthode Dave Pelz')),
  h('div', {'class': 'card-tag'}, 'Petit jeu · Long jeu · Parcours · Mental')
  ]));
 
@@ -1843,7 +1856,7 @@ function renderObjectif(p) {
  window.render();
  }}, [
  h('div', {'class': 'card-name'}, 'Triathlon / IRONMAN'),
- h('div', {'class': 'card-sub'}, 'Programme Jan Frodeno · Patrick Lange · Daniela Ryf'),
+ h('div', {'class': 'card-sub'}, (window.isEnglish && window.isEnglish() ? 'Program Jan Frodeno · Patrick Lange · Daniela Ryf' : 'Programme Jan Frodeno · Patrick Lange · Daniela Ryf')),
  h('div', {'class': 'card-tag'}, 'Sprint · Olympic · 70.3 · IRONMAN 140.6')
  ]));
 
@@ -1856,8 +1869,8 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'yoga'});
  window.render();
  }}, [
- h('div', {'class': 'card-name'}, 'Yoga & Mobilit\u00e9'),
- h('div', {'class': 'card-sub'}, 'Flexibilit\u00e9, force, \u00e9quilibre, pleine conscience'),
+ h('div', {'class': 'card-name'}, (window.isEnglish && window.isEnglish() ? 'Yoga & Mobility' : 'Yoga & Mobilit\u00e9')),
+ h('div', {'class': 'card-sub'}, (window.isEnglish && window.isEnglish() ? 'Flexibility, strength, balance, mindfulness' : 'Flexibilit\u00e9, force, \u00e9quilibre, pleine conscience')),
  h('div', {'class': 'card-tag'}, 'Hatha \u00b7 Vinyasa \u00b7 Yin \u00b7 Ashtanga')
  ]));
 
@@ -1870,8 +1883,8 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'cycling'});
  window.render();
  }}, [
- h('div', {'class': 'card-name'}, 'Cyclisme'),
- h('div', {'class': 'card-sub'}, 'Route, VTT, indoor \u2014 am\u00e9liore l\'endurance et la puissance'),
+ h('div', {'class': 'card-name'}, (window.isEnglish && window.isEnglish() ? 'Cycling' : 'Cyclisme')),
+ h('div', {'class': 'card-sub'}, (window.isEnglish && window.isEnglish() ? 'Road, MTB, indoor \u2014 improves endurance and power' : 'Route, VTT, indoor \u2014 am\u00e9liore l\'endurance et la puissance')),
  h('div', {'class': 'card-tag'}, 'Route \u00b7 VTT \u00b7 Indoor \u00b7 Gravel \u00b7 FTP')
  ]));
 
@@ -1885,8 +1898,8 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'calisthenics'});
  window.render();
  }}, [
- h('div', {'class': 'card-name'}, 'Callisth\u00e9nie'),
- h('div', {'class': 'card-sub'}, 'Street workout, mouvements au poids du corps'),
+ h('div', {'class': 'card-name'}, (window.isEnglish && window.isEnglish() ? 'Calisthenics' : 'Callisth\u00e9nie')),
+ h('div', {'class': 'card-sub'}, (window.isEnglish && window.isEnglish() ? 'Street workout, bodyweight movements' : 'Street workout, mouvements au poids du corps')),
  h('div', {'class': 'card-tag'}, 'Muscle-up \u00b7 Handstand \u00b7 Planche \u00b7 Front Lever')
  ]));
 
@@ -1957,7 +1970,7 @@ function buildKcalCard(kcal, durationMins) {
   var kcalCard = h('div', {style: 'border:1px solid var(--border);background:var(--ivory2,#F4F4F0);padding:16px 20px;margin-bottom:20px;display:flex;align-items:stretch;gap:0'});
 
   var leftCol = h('div', {style: 'flex:1;padding-right:20px'});
-  leftCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:6px'}, 'Estimation séance'));
+  leftCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Session estimate' : 'Estimation séance')));
   leftCol.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:26px;font-style:italic;color:var(--black);line-height:1'}, '~' + kcal + ' kcal'));
   kcalCard.appendChild(leftCol);
 
@@ -1965,7 +1978,7 @@ function buildKcalCard(kcal, durationMins) {
   kcalCard.appendChild(divider);
 
   var rightCol = h('div', {style: 'padding-left:20px;display:flex;flex-direction:column;justify-content:center'});
-  rightCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:6px'}, 'Durée'));
+  rightCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Duration' : 'Durée')));
   rightCol.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:26px;font-style:italic;color:var(--black);line-height:1'}, dureeStr));
   kcalCard.appendChild(rightCol);
 
@@ -2426,7 +2439,7 @@ function renderChargesQuestionnaire(p) {
  rightCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:' + col}, lbl));
  var _1rmDiv = h('div', {style: 'font-family:Georgia;font-size:11px;color:var(--grey);margin-top:2px'});
  _1rmDiv.appendChild(h('span', {}, '~'));
- _1rmDiv.appendChild(termTooltip('1RM', 'Répétition Maximale — la charge max que vous pouvez soulever une seule fois'));
+ _1rmDiv.appendChild(termTooltip('1RM', (window.isEnglish && window.isEnglish() ? '1 Rep Max — the maximum weight you can lift for a single rep.' : 'Répétition Maximale — la charge max que vous pouvez soulever une seule fois')));
  _1rmDiv.appendChild(h('span', {}, ' : ' + (window.UNITS ? window.UNITS.displayWeight(est1rm) : est1rm + ' kg')));
  rightCol.appendChild(_1rmDiv);
  row.appendChild(rightCol);
@@ -2533,7 +2546,7 @@ function renderChargesQuestionnaire(p) {
 
  var _chargesFooter = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-bottom:16px'});
  _chargesFooter.appendChild(h('span', {}, 'Laissez vide les exercices que vous ne pratiquez pas. Indiquez la charge ET le nombre de reps pour un calcul précis du '));
- _chargesFooter.appendChild(termTooltip('1RM', 'Répétition Maximale — la charge max que vous pouvez soulever une seule fois'));
+ _chargesFooter.appendChild(termTooltip('1RM', (window.isEnglish && window.isEnglish() ? '1 Rep Max — the maximum weight you can lift for a single rep.' : 'Répétition Maximale — la charge max que vous pouvez soulever une seule fois')));
  _chargesFooter.appendChild(h('span', {}, ' (formule d\'Epley : charge × (1 + N/30)).'));
  p.appendChild(_chargesFooter);
 
@@ -3491,10 +3504,11 @@ function renderCFCalendar(p) {
 
  // ─── Légende ───
  var legend = h('div', {style: 'display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px;align-items:center'});
+ var _cfLegEN = window.isEnglish && window.isEnglish();
  var legendItems = [
- {color: '#3E5C3A', label: 'Complété'},
- {color: '#1A3C5E', label: 'Jour actuel'},
- {color: '#999', label: 'À venir'}
+ {color: '#3E5C3A', label: (_cfLegEN ? 'Completed' : 'Complété')},
+ {color: '#1A3C5E', label: (_cfLegEN ? 'Current day' : 'Jour actuel')},
+ {color: '#999', label: (_cfLegEN ? 'Upcoming' : 'À venir')}
  ];
  legendItems.forEach(function(li) {
  var dot = h('div', {style: 'width:12px;height:12px;border-radius:0;background:' + li.color + ';flex-shrink:0'});
@@ -3537,12 +3551,13 @@ function renderCFCalendar(p) {
  var weekSection = h('div', {style: 'margin-bottom:24px'});
 
  // Header semaine
- var weekLabel = 'Semaine ' + weekNum;
+ var _cfCalEN = window.isEnglish && window.isEnglish();
+ var weekLabel = (_cfCalEN ? 'Week ' : 'Semaine ') + weekNum;
  // Phases indicatives
  if (weekNum <= 4) weekLabel += ' — Base';
- else if (weekNum <= 7) weekLabel += ' — Développement';
- else if (weekNum <= 9) weekLabel += ' — Intensité';
- else if (weekNum === 10) weekLabel += ' — Finale';
+ else if (weekNum <= 7) weekLabel += (_cfCalEN ? ' — Development' : ' — Développement');
+ else if (weekNum <= 9) weekLabel += (_cfCalEN ? ' — Intensity' : ' — Intensité');
+ else if (weekNum === 10) weekLabel += (_cfCalEN ? ' — Final' : ' — Finale');
  weekSection.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;font-style:italic;margin-bottom:10px;border-bottom:1px solid var(--border);padding-bottom:6px'}, weekLabel));
 
  var grid = h('div', {style: 'display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px'});
@@ -4273,7 +4288,7 @@ function renderCrossfitProgram(p) {
  weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine précédente', onclick: function() {
  if (S.crossfitWeek > 1) { S.crossfitWeek--; S.selectedCrossfitDay = 0; window.render(); }
  }}, '\u2190'));
- weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.crossfitWeek));
+ weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + S.crossfitWeek));
  weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine suivante', onclick: function() {
  var maxWeek = Math.ceil((window.CF_WODS || []).length / Math.max(1, daysPerWeek));
  if (S.crossfitWeek < maxWeek) { S.crossfitWeek++; S.selectedCrossfitDay = 0; window.render(); }
@@ -4297,8 +4312,8 @@ function renderCrossfitProgram(p) {
  var isCFDeload = (cfWeekNum % 4 === 0);
  if (isCFDeload) {
  var cfDeloadBanner = h('div', {style: 'background:var(--ivory2,#F4F4F0);border-left:4px solid #0A0A09;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#4A235A'});
- cfDeloadBanner.appendChild(h('div', {style: 'font-weight:700;margin-bottom:4px'}, 'Semaine ' + cfWeekNum + ' — DÉCHARGE OBLIGATOIRE (CrossFit cycle 4-1)'));
- cfDeloadBanner.appendChild(h('div', {}, 'Réduisez le volume de 40-50\u00a0% (ex. 3 séries au lieu de 5). Intensité \u226470\u00a0% du max. Gardez les mêmes mouvements — c\'est la récupération CNS et articulaire qui permet les PR des semaines suivantes. Pas de PR ni de test de max cette semaine.'));
+ cfDeloadBanner.appendChild(h('div', {style: 'font-weight:700;margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? 'Week ' + cfWeekNum + ' — MANDATORY DELOAD (CrossFit 4-1 cycle)' : 'Semaine ' + cfWeekNum + ' — DÉCHARGE OBLIGATOIRE (CrossFit cycle 4-1)')));
+ cfDeloadBanner.appendChild(h('div', {}, (window.isEnglish && window.isEnglish() ? 'Reduce volume by 40-50\u00a0% (e.g. 3 sets instead of 5). Intensity \u226470\u00a0% of max. Keep the same movements — CNS and joint recovery enables future PRs. No PR or max testing this week.' : 'Réduisez le volume de 40-50\u00a0% (ex. 3 séries au lieu de 5). Intensité \u226470\u00a0% du max. Gardez les mêmes mouvements — c\'est la récupération CNS et articulaire qui permet les PR des semaines suivantes. Pas de PR ni de test de max cette semaine.')));
  p.appendChild(cfDeloadBanner);
  }
 
@@ -4462,7 +4477,7 @@ function renderCrossfitProgram(p) {
  // Day header
  p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:24px;text-align:center;margin:16px 0 4px'}, currentDay.dayLabel + ' \u2014 ' + wod.name));
  p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);text-align:center;margin-bottom:4px'}, currentDay.focus));
- p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);text-align:center;margin-bottom:20px'}, 'Semaine ' + S.crossfitWeek + ' \u2014 Jour ' + currentDay.dayNumber + ' / ' + daysPerWeek));
+ p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);text-align:center;margin-bottom:20px'}, (window.isEnglish && window.isEnglish() ? 'Week ' + S.crossfitWeek + ' \u2014 Day ' + currentDay.dayNumber + ' / ' + daysPerWeek : 'Semaine ' + S.crossfitWeek + ' \u2014 Jour ' + currentDay.dayNumber + ' / ' + daysPerWeek)));
 
  // ─── HALTÉRO or GYM SKILLS SECTION (depending on day template) ───
  if (currentDay.hasHaltero) {
@@ -6321,19 +6336,20 @@ function renderWeekTracker(p) {
  macroContainer.appendChild(macroHeader);
 
  var macroBar = h('div', {style: 'display:flex;gap:3px;height:3px;margin-bottom:12px'});
+ var _macroPhaseLabels = (window.isEnglish && window.isEnglish()) ? ['Hypertrophy','Strength','Transition'] : ['Hypertrophie','Force','Transition'];
  ['Hypertrophie','Force','Transition'].forEach(function(phLabel, idx) {
   var isActive = idx === (cycleNum - 1) % 3;
   var isDone = idx < (cycleNum - 1) % 3;
   var segColor = [MACRO_PHASES[0].color, MACRO_PHASES[1].color, MACRO_PHASES[2].color][idx];
   macroBar.appendChild(h('div', {
-   title: phLabel,
+   title: _macroPhaseLabels[idx],
    style: 'flex:1;height:3px;border-radius:0;background:' + (isActive ? segColor : isDone ? segColor : 'var(--border,#D8D8D0)') + ';opacity:' + (isActive ? '1' : isDone ? '0.4' : '1') + ';transition:all .3s ease;'
   }));
  });
  macroContainer.appendChild(macroBar);
 
  var macroBarLabels = h('div', {style: 'display:flex;gap:3px;margin-bottom:12px'});
- ['Hypertrophie','Force','Transition'].forEach(function(phLabel, idx) {
+ _macroPhaseLabels.forEach(function(phLabel, idx) {
   var isActive = idx === (cycleNum - 1) % 3;
   macroBarLabels.appendChild(h('div', {style: 'flex:1;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + (isActive ? 'var(--black,#0A0A09)' : 'var(--grey,#6B6B65)') + ';opacity:' + (isActive ? '1' : '0.6')}, phLabel));
  });
@@ -6351,7 +6367,7 @@ function renderWeekTracker(p) {
  var top = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:12px'});
  var badge = h('div', {style: 'display:flex;align-items:center;gap:8px'});
  badge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#fff;background:' + phase.color + ';padding:3px 8px'}, phase.label));
- badge.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:13px;color:' + phase.color}, 'Semaine ' + week + ' / 7'));
+ badge.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:13px;color:' + phase.color}, (window.isEnglish && window.isEnglish() ? 'Week ' + week + ' / 7' : 'Semaine ' + week + ' / 7')));
  top.appendChild(badge);
  if (S.muscuProgramStart) {
  top.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey)'}, 'Début : ' + S.muscuProgramStart));
@@ -6407,7 +6423,7 @@ function renderWeekTracker(p) {
  btnRow.appendChild(h('button', {
  style: 'flex:1;padding:10px;background:' + phase.color + ';color:#fff;border:none;font-family:Georgia,serif;font-size:13px;cursor:pointer',
  onclick: function() { saveMuscuWeek(week + 1); window.render(); }
- }, 'Semaine ' + (week + 1) + ' \u2192'));
+ }, (window.isEnglish && window.isEnglish() ? 'Week ' + (week + 1) + ' \u2192' : 'Semaine ' + (week + 1) + ' \u2192')));
  } else {
  btnRow.appendChild(h('button', {
  style: 'flex:1;padding:10px;background:var(--ink-900,#0A0A09);color:#fff;border:none;font-family:Georgia,serif;font-size:13px;cursor:pointer',
@@ -6430,7 +6446,7 @@ function renderWeekTracker(p) {
  saveMuscuWeek(1);
  window.render();
  }
- }, '\u21BB Nouveau cycle (Semaine 1)'));
+ }, (window.isEnglish && window.isEnglish() ? '\u21BB New cycle (Week 1)' : '\u21BB Nouveau cycle (Semaine 1)')));
  }
  btnRow.appendChild(h('button', {
  style: 'padding:10px 14px;background:var(--ivory);color:var(--grey);border:1px solid var(--border);font-family:"Helvetica Neue",sans-serif;font-size:11px;cursor:pointer',
@@ -7324,9 +7340,9 @@ function renderMusculationProgram(p) {
        var _typeCol = exo.type === 'compound' ? 'var(--success,#3E5C3A)' : exo.type === 'superset' ? 'var(--error,#7A1F1F)' : 'var(--blue,#1A3A6A)';
        var _typeBadge = h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:2px 6px;background:' + _typeBg + ';color:' + _typeCol + ';border-radius:2px;flex-shrink:0;margin-left:6px'});
        if (exo.type === 'compound') {
-        _typeBadge.appendChild(termTooltip('Compound', 'Exercice poly-articulaire qui recrute plusieurs groupes musculaires simultanément'));
+        _typeBadge.appendChild(termTooltip('Compound', (window.isEnglish && window.isEnglish() ? 'Compound exercise — recruits multiple muscle groups simultaneously.' : 'Exercice poly-articulaire qui recrute plusieurs groupes musculaires simultanément')));
        } else if (exo.type === 'isolation') {
-        _typeBadge.appendChild(termTooltip('Isolation', 'Exercice mono-articulaire ciblant un seul muscle'));
+        _typeBadge.appendChild(termTooltip('Isolation', (window.isEnglish && window.isEnglish() ? 'Isolation exercise — targets a single muscle with one joint.' : 'Exercice mono-articulaire ciblant un seul muscle')));
        } else {
         _typeBadge.appendChild(h('span', {}, exo.type));
        }
@@ -7350,7 +7366,7 @@ function renderMusculationProgram(p) {
        var _rirColors = {0:'var(--error,#7A1F1F)', 1:'var(--error,#7A1F1F)', 2:'var(--orange-ink,#7A3B0E)', 3:'var(--orange-ink,#7A3B0E)', 4:'var(--success,#3E5C3A)'};
        var _rirC = _rirColors[exo.rirTarget] || 'var(--orange-ink,#7A3B0E)';
        var _rirBadge = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:' + _rirC + ';margin-top:6px;padding:3px 8px;background:rgba(232,111,30,0.06);display:inline-block;border-radius:2px'});
-       _rirBadge.appendChild(termTooltip('RIR', 'Reps In Reserve — nombre de reps que vous pourriez encore faire avant l\'échec musculaire'));
+       _rirBadge.appendChild(termTooltip('RIR', (window.isEnglish && window.isEnglish() ? 'Reps In Reserve — number of reps you could still do before muscular failure.' : 'Reps In Reserve — nombre de reps que vous pourriez encore faire avant l\'échec musculaire')));
        _rirBadge.appendChild(h('span', {}, '\u00a0cible\u00a0: ' + exo.rirTarget + (exo.rirTarget === 0 ? ' \u2014 \u00e9chec' : exo.rirTarget === 1 ? ' \u2014 quasi-\u00e9chec' : exo.rirTarget === 2 ? ' \u2014 effort intense' : exo.rirTarget === 3 ? ' \u2014 mod\u00e9r\u00e9' : ' \u2014 l\u00e9ger')));
        _exCard.appendChild(_rirBadge);
       }
@@ -8072,7 +8088,7 @@ function renderMusculationProgram(p) {
   var _rirTarget = Math.max(0, 10 - (exPhase.rpe || 8));
   var _rirLabel = _rirTarget <= 1 ? 'quasi-échec' : _rirTarget === 2 ? 'effort intense' : _rirTarget === 3 ? 'modéré' : 'léger';
   var _rirTargetDisplay = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--orange-ink,#7A3B0E);margin-bottom:6px;padding:4px 8px;background:rgba(232,111,30,0.06);border-radius:2px'});
-  _rirTargetDisplay.appendChild(termTooltip('RIR', 'Reps In Reserve — nombre de reps que vous pourriez encore faire avant l\'échec musculaire'));
+  _rirTargetDisplay.appendChild(termTooltip('RIR', (window.isEnglish && window.isEnglish() ? 'Reps In Reserve — number of reps you could still do before muscular failure.' : 'Reps In Reserve — nombre de reps que vous pourriez encore faire avant l\'échec musculaire')));
   _rirTargetDisplay.appendChild(h('span', {}, ' cible cette semaine : ' + _rirTarget + ' — ' + _rirLabel + ' (' + (exPhase.label || '') + ')'));
   card.appendChild(_rirTargetDisplay);
  }
