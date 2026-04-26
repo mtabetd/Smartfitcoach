@@ -1890,12 +1890,12 @@ function renderStep6(p) {
 function renderStep7(p) {
   renderProgressBar(p, 10, 12);
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' VII'));
-  p.appendChild(h('h1', {html: 'Vos<br><em>pr\u00e9f\u00e9rences</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
-  p.appendChild(h('p', {'class': 'subtitle'}, 'Allergies et pr\u00e9f\u00e9rences pour des recettes \u00e0 votre image.'));
+  p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Your<br><em>preferences</em>' : 'Vos<br><em>pr\u00e9f\u00e9rences</em>'), style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
+  p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Allergies and preferences for recipes tailored to you.' : 'Allergies et pr\u00e9f\u00e9rences pour des recettes \u00e0 votre image.')));
   if (window.TIPS) TIPS.renderTip(p, 'preferences');
 
   // Cook level
-  p.appendChild(h('div', {'class': 'section-label'}, 'Niveau cuisine'));
+  p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Cooking level' : 'Niveau cuisine')));
   var cl = h('div', {'class': 'card-grid-4'});
   COOK_LEVELS.forEach(function(c) {
     cl.appendChild(h('div', {'class': 'sel-card' + (S.cookLevel === c.val ? ' on' : ''), onclick: function() { S.cookLevel = c.val; if (window.devalidateWeekPlan) window.devalidateWeekPlan('cookLevel changed'); window.render(); }}, [
@@ -1908,7 +1908,7 @@ function renderStep7(p) {
   // Whey
   p.appendChild(h('div', {'class': 'section-label'}, window.t('onb.s5.whey')));
   var wg = h('div', {'class': 'card-grid-2'});
-  [{name: 'Oui', val: true}, {name: 'Non', val: false}].forEach(function(o) {
+  [{name: (window.isEnglish && window.isEnglish() ? 'Yes' : 'Oui'), val: true}, {name: (window.isEnglish && window.isEnglish() ? 'No' : 'Non'), val: false}].forEach(function(o) {
     wg.appendChild(h('div', {'class': 'sel-card' + (S.whey === o.val ? ' on' : ''), onclick: function() { S.whey = o.val; window.render(); }}, [
       h('div', {'class': 'card-name'}, o.name)
     ]));
@@ -1948,9 +1948,9 @@ function renderStep7(p) {
       {id: 'unflavored',      label: 'Nature/Unflavored',  icon: '\uD83E\uDED9'}
     ];
     var wheyLabel = h('div', {'class': 'section-label', style: 'margin-top:12px'});
-    wheyLabel.appendChild(document.createTextNode('Parfums que vous poss\u00e9dez'));
+    wheyLabel.appendChild(document.createTextNode((window.isEnglish && window.isEnglish() ? 'Flavours you own' : 'Parfums que vous poss\u00e9dez')));
     p.appendChild(wheyLabel);
-    p.appendChild(h('div', {style:'font-size:13px;color:var(--fg2,#888);margin-bottom:8px;line-height:1.4'}, 'S\u00e9lectionnez les parfums de whey que vous avez chez vous. Seules les recettes compatibles vous seront propos\u00e9es.'));
+    p.appendChild(h('div', {style:'font-size:13px;color:var(--fg2,#888);margin-bottom:8px;line-height:1.4'}, (window.isEnglish && window.isEnglish() ? 'Select the whey flavours you have at home. Only compatible recipes will be suggested.' : 'S\u00e9lectionnez les parfums de whey que vous avez chez vous. Seules les recettes compatibles vous seront propos\u00e9es.')));
     var flavorGrid = h('div', {'class': 'chip-wrap', style: 'gap:8px;margin-top:4px'});
     wheyFlavors.forEach(function(f) {
       var selected = S.wheyFlavors.indexOf(f.id) !== -1;
@@ -1974,7 +1974,7 @@ function renderStep7(p) {
   // Cross-reference whey with supplement selection
   if (S.whey === true && S.supplements.indexOf('whey') !== -1) {
     var wheyTip = h('div', {'class': 'whey-tip', style: 'margin-top:8px;margin-bottom:8px'});
-    wheyTip.appendChild(h('strong', {}, 'Whey prot\u00e9ine \u2014 '));
+    wheyTip.appendChild(h('strong', {}, (window.isEnglish && window.isEnglish() ? 'Whey protein \u2014 ' : 'Whey prot\u00e9ine \u2014 ')));
     var wheySupp = null;
     if (SUPPLEMENTS_DB) {
       for (var wi = 0; wi < SUPPLEMENTS_DB.length; wi++) {
@@ -1983,9 +1983,9 @@ function renderStep7(p) {
     }
     if (wheySupp) {
       var wheyDosage = wheySupp.dosageCalc(S);
-      wheyTip.appendChild(h('span', {}, 'Dose recommand\u00e9e : ' + wheyDosage.dose + 'g/prise. ' + wheyDosage.timing));
+      wheyTip.appendChild(h('span', {}, (window.isEnglish && window.isEnglish() ? 'Recommended dose: ' + wheyDosage.dose + 'g/serving. ' + wheyDosage.timing : 'Dose recommand\u00e9e : ' + wheyDosage.dose + 'g/prise. ' + wheyDosage.timing)));
     } else {
-      wheyTip.appendChild(h('span', {}, 'S\u00e9lectionn\u00e9 dans vos compl\u00e9ments'));
+      wheyTip.appendChild(h('span', {}, (window.isEnglish && window.isEnglish() ? 'Selected in your supplements' : 'S\u00e9lectionn\u00e9 dans vos compl\u00e9ments')));
     }
     p.appendChild(wheyTip);
   }
@@ -2042,36 +2042,36 @@ function renderStep7(p) {
   p.appendChild(rg);
 
   // Inclusions alimentaires opt-in
-  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin:12px 0 8px;'}, "J\u2019inclus dans mon alimentation"));
+  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin:12px 0 8px;'}, (window.isEnglish && window.isEnglish() ? "I include in my diet" : "J\u2019inclus dans mon alimentation")));
   var porkRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin:4px 0;cursor:pointer', onclick: function() { S.allowPork = !S.allowPork; S._nm = null; if (window.devalidateWeekPlan) window.devalidateWeekPlan('allowPork changed'); window.render(); }});
   var porkBox = h('div', {style: 'width:18px;height:18px;border-radius:2px;border:1px solid var(--black,#0A0A09);display:flex;align-items:center;justify-content:center;background:' + (S.allowPork ? 'var(--black,#0A0A09)' : 'transparent') + ';flex-shrink:0'}, S.allowPork ? h('span', {style: 'color:var(--ivory,#FAF9F6);font-size:10px;font-family:"Helvetica Neue",Arial,sans-serif'}, '\u2713') : null);
   porkRow.appendChild(porkBox);
-  porkRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09)'}, 'Porc & charcuterie porcine'));
+  porkRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09)'}, (window.isEnglish && window.isEnglish() ? 'Pork & pork cold cuts' : 'Porc & charcuterie porcine')));
   p.appendChild(porkRow);
   var alcRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin:4px 0;cursor:pointer', onclick: function() { S.allowAlcohol = !S.allowAlcohol; S._nm = null; if (window.devalidateWeekPlan) window.devalidateWeekPlan('allowAlcohol changed'); window.render(); }});
   var alcBox = h('div', {style: 'width:18px;height:18px;border-radius:2px;border:1px solid var(--black,#0A0A09);display:flex;align-items:center;justify-content:center;background:' + (S.allowAlcohol ? 'var(--black,#0A0A09)' : 'transparent') + ';flex-shrink:0'}, S.allowAlcohol ? h('span', {style: 'color:var(--ivory,#FAF9F6);font-size:10px;font-family:"Helvetica Neue",Arial,sans-serif'}, '\u2713') : null);
   alcRow.appendChild(alcBox);
-  alcRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09)'}, 'Alcool en cuisine'));
+  alcRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09)'}, (window.isEnglish && window.isEnglish() ? 'Alcohol in cooking' : 'Alcool en cuisine')));
   p.appendChild(alcRow);
 
   // Salade builder toggle
   var saladRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin:8px 0;cursor:pointer', onclick: function() { S.saladBuilder = !S.saladBuilder; window.render(); }});
   var saladBox = h('div', {style: 'width:18px;height:18px;border-radius:2px;border:1px solid var(--black,#0A0A09);display:flex;align-items:center;justify-content:center;background:' + (S.saladBuilder ? 'var(--black,#0A0A09)' : 'transparent') + ';flex-shrink:0'}, S.saladBuilder ? h('span', {style: 'color:var(--ivory,#FAF9F6);font-size:10px;font-family:"Helvetica Neue",Arial,sans-serif'}, '\u2713') : null);
   saladRow.appendChild(saladBox);
-  saladRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09)'}, 'Salades \u00e0 composer'));
+  saladRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09)'}, (window.isEnglish && window.isEnglish() ? 'Build-your-own salads' : 'Salades \u00e0 composer')));
   p.appendChild(saladRow);
   if (S.saladBuilder) {
-    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--ink-300,#A8A8A0);margin:4px 0 8px 30px;line-height:1.5'}, 'Vous pourrez composer vos salades directement dans votre plan de repas.'));
+    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--ink-300,#A8A8A0);margin:4px 0 8px 30px;line-height:1.5'}, (window.isEnglish && window.isEnglish() ? 'You can build your salads directly in your meal plan.' : 'Vous pourrez composer vos salades directement dans votre plan de repas.')));
   }
 
   // Excluded
-  p.appendChild(h('div', {'class': 'section-label'}, 'Aliments exclus'));
+  p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Excluded foods' : 'Aliments exclus')));
   var fi = h('div', {'class': 'field'});
-  fi.appendChild(h('input', {type: 'text', placeholder: 'Ex: avocat, bœuf, saumon...', value: S.excluded, oninput: function(e) { S.excluded = e.target.value; if (window.devalidateWeekPlan) window.devalidateWeekPlan('excluded changed'); if (window.saveProfile) try { window.saveProfile(); } catch(e2) {} }}));
+  fi.appendChild(h('input', {type: 'text', placeholder: (window.isEnglish && window.isEnglish() ? 'E.g.: avocado, beef, salmon...' : 'Ex: avocat, b\u0153uf, saumon...'), value: S.excluded, oninput: function(e) { S.excluded = e.target.value; if (window.devalidateWeekPlan) window.devalidateWeekPlan('excluded changed'); if (window.saveProfile) try { window.saveProfile(); } catch(e2) {} }}));
   p.appendChild(fi);
 
   // Cuisines
-  p.appendChild(h('div', {'class': 'section-label'}, 'Cuisines pr\u00e9f\u00e9r\u00e9es'));
+  p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Preferred cuisines' : 'Cuisines pr\u00e9f\u00e9r\u00e9es')));
   var cg = h('div', {'class': 'check-grid'});
   CUISINES.forEach(function(cu, i) {
     var on = S.cuisines.indexOf(i) !== -1;
@@ -2090,12 +2090,12 @@ function renderStep7(p) {
   // Shopping habits
   var shopDvd = h('div', {'class': 'divider', style: 'margin:28px 0 18px'});
   shopDvd.appendChild(h('div', {'class': 'divider-line'}));
-  shopDvd.appendChild(h('div', {'class': 'divider-text'}, 'Habitudes de courses'));
+  shopDvd.appendChild(h('div', {'class': 'divider-text'}, (window.isEnglish && window.isEnglish() ? 'Shopping habits' : 'Habitudes de courses')));
   shopDvd.appendChild(h('div', {'class': 'divider-line'}));
   p.appendChild(shopDvd);
 
   // Frequency
-  p.appendChild(h('div', {'class': 'section-label'}, 'Fr\u00e9quence de courses'));
+  p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Shopping frequency' : 'Fr\u00e9quence de courses')));
   var sfg = h('div', {'class': 'card-grid-2'});
   (SHOPPING[0]?SHOPPING[0].items:[]).forEach(function(it) {
     sfg.appendChild(h('div', {'class': 'sel-card' + (S.shopFreq === it.id ? ' on' : ''), onclick: function() { S.shopFreq = it.id; window.render(); }}, [
@@ -2106,7 +2106,7 @@ function renderStep7(p) {
   p.appendChild(sfg);
 
   // Stores
-  p.appendChild(h('div', {'class': 'section-label'}, 'O\u00f9 faites-vous vos courses ?'));
+  p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Where do you shop?' : 'O\u00f9 faites-vous vos courses ?')));
   var sg = h('div', {'class': 'chip-wrap'});
   (SHOPPING[1]?SHOPPING[1].items:[]).forEach(function(it) {
     var on = S.shopStores.indexOf(it.id) !== -1;
@@ -2120,7 +2120,7 @@ function renderStep7(p) {
   p.appendChild(h('div', {style: 'height:8px'}));
 
   // Budget
-  p.appendChild(h('div', {'class': 'section-label'}, 'Budget alimentaire'));
+  p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Food budget' : 'Budget alimentaire')));
   var bg = h('div', {'class': 'card-grid-3'});
   (SHOPPING[2]?SHOPPING[2].items:[]).forEach(function(it) {
     bg.appendChild(h('div', {'class': 'sel-card' + (S.shopBudget === it.id ? ' on' : ''), onclick: function() { S.shopBudget = it.id; window.render(); }}, [
@@ -2131,7 +2131,7 @@ function renderStep7(p) {
   p.appendChild(bg);
 
   // Preferences
-  p.appendChild(h('div', {'class': 'section-label'}, 'Pr\u00e9f\u00e9rences produits'));
+  p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Product preferences' : 'Pr\u00e9f\u00e9rences produits')));
   var pg = h('div', {'class': 'chip-wrap'});
   (SHOPPING[3]?SHOPPING[3].items:[]).forEach(function(it) {
     var on = S.shopPrefs.indexOf(it.id) !== -1;
@@ -2149,7 +2149,7 @@ function renderStep7(p) {
     if (!ok) return;
     // Feedback visuel immédiat — désactiver le bouton et afficher "Génération..."
     _genBtn.disabled = true;
-    _genBtn.textContent = 'Génération en cours...';
+    _genBtn.textContent = (window.isEnglish && window.isEnglish() ? 'Generating...' : 'G\u00e9n\u00e9ration en cours...');
     // Laisser le navigateur repeindre avant d'appeler generateWeek() (synchrone)
     if (window._nutritionGenerating) return;
     window._nutritionGenerating = true;
