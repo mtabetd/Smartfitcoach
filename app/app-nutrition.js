@@ -6020,7 +6020,7 @@ function showSmoothieModal(sm) {
     style:'width:100%;padding:16px;min-height:44px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09);border-radius:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;font-weight:400;cursor:pointer;',
     onclick: function() {
       if (!S.weekPlan || !S.weekPlan[S.selectedDay]) {
-        addBtn.textContent = 'Générez d\'abord votre plan semaine';
+        addBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Generate your weekly plan first' : 'Générez d\'abord votre plan semaine';
         addBtn.style.background = '#888';
         return;
       }
@@ -6120,7 +6120,7 @@ function renderShoppingList(p) {
   p.appendChild(btnBack);
 
   if (!s.weekPlan || !window.RecipeEngine) {
-    p.appendChild(h('div', {style:'padding:20px;text-align:center;color:var(--text-secondary)'}, arUI('no_plan', 'Générez d\'abord votre plan de repas.')));
+    p.appendChild(h('div', {style:'padding:20px;text-align:center;color:var(--text-secondary)'}, arUI('no_plan', (window.isEnglish && window.isEnglish()) ? 'Generate your meal plan first.' : 'Générez d\'abord votre plan de repas.')));
     return;
   }
 
@@ -6129,7 +6129,7 @@ function renderShoppingList(p) {
   cleanShopChecked(list);
 
   if (!list.length) {
-    p.appendChild(h('div', {style:'padding:20px;text-align:center;color:var(--text-secondary)'}, arUI('no_items', 'Aucun ingrédient détecté dans le plan.')));
+    p.appendChild(h('div', {style:'padding:20px;text-align:center;color:var(--text-secondary)'}, arUI('no_items', (window.isEnglish && window.isEnglish()) ? 'No ingredients detected in plan.' : 'Aucun ingrédient détecté dans le plan.')));
     return;
   }
 
