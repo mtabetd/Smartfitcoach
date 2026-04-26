@@ -2563,8 +2563,8 @@ function appendNutritionModeCTA(p) {
 // ─── STEP 15: PROGRAMMES DÉDIÉS ───
 function renderDedicatedPrograms(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
- p.appendChild(h('h1', {html: 'Programmes<br><em>dédiés</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'S\u00e9ances cibl\u00e9es, vari\u00e9es (A/B), pr\u00eates \u00e0 l\u2019emploi.'));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Dedicated<br><em>programs</em>' : 'Programmes<br><em>dédiés</em>')}));
+ p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Targeted sessions, varied (A/B), ready to use.' : 'S\u00e9ances cibl\u00e9es, vari\u00e9es (A/B), pr\u00eates \u00e0 l\u2019emploi.')));
 
  // ─── SUIVI 7 SEMAINES ───
  renderWeekTracker(p);
@@ -2574,13 +2574,13 @@ function renderDedicatedPrograms(p) {
    var _today = new Date().toISOString().slice(0, 10);
    var _dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
    var _challenges = [
-     { title: '20 pompes extra', desc: 'À faire après ta séance — ou séparément si pas de séance.', target: 20, unit: 'pompes' },
-     { title: '1 min de planche', desc: 'Abdominaux serrés, corps aligné — tiens bon !', target: 60, unit: 'secondes' },
-     { title: '100 sauts à la corde', desc: 'Pas de corde ? Simule le mouvement les pieds joints.', target: 100, unit: 'sauts' },
-     { title: '30 squats au poids du corps', desc: 'Descends à parallèle, genou dans l\'axe du pied.', target: 30, unit: 'squats' },
-     { title: '15 dips sur chaise', desc: 'Talons au sol, coudes près du corps — triceps !', target: 15, unit: 'reps' },
-     { title: '5 min de marche rapide', desc: '100 pas/min minimum — cardio léger actif.', target: 5, unit: 'minutes' },
-     { title: '3 séries de respirations 4-7-8', desc: 'Inspire 4s, retiens 7s, expire 8s — récupération vagale.', target: 3, unit: 'séries' }
+     { title: (window.isEnglish && window.isEnglish() ? '20 extra push-ups' : '20 pompes extra'), desc: (window.isEnglish && window.isEnglish() ? 'Do after your session — or separately if no session.' : 'À faire après ta séance — ou séparément si pas de séance.'), target: 20, unit: (window.isEnglish && window.isEnglish() ? 'push-ups' : 'pompes') },
+     { title: (window.isEnglish && window.isEnglish() ? '1 min plank' : '1 min de planche'), desc: (window.isEnglish && window.isEnglish() ? 'Core tight, body aligned — hold it!' : 'Abdominaux serrés, corps aligné — tiens bon !'), target: 60, unit: (window.isEnglish && window.isEnglish() ? 'seconds' : 'secondes') },
+     { title: (window.isEnglish && window.isEnglish() ? '100 jump rope' : '100 sauts à la corde'), desc: (window.isEnglish && window.isEnglish() ? 'No rope? Simulate with feet together.' : 'Pas de corde ? Simule le mouvement les pieds joints.'), target: 100, unit: (window.isEnglish && window.isEnglish() ? 'jumps' : 'sauts') },
+     { title: (window.isEnglish && window.isEnglish() ? '30 bodyweight squats' : '30 squats au poids du corps'), desc: (window.isEnglish && window.isEnglish() ? 'Go to parallel, knee in line with foot.' : 'Descends à parallèle, genou dans l\'axe du pied.'), target: 30, unit: 'squats' },
+     { title: (window.isEnglish && window.isEnglish() ? '15 chair dips' : '15 dips sur chaise'), desc: (window.isEnglish && window.isEnglish() ? 'Heels on floor, elbows close — triceps!' : 'Talons au sol, coudes près du corps — triceps !'), target: 15, unit: 'reps' },
+     { title: (window.isEnglish && window.isEnglish() ? '5 min brisk walk' : '5 min de marche rapide'), desc: (window.isEnglish && window.isEnglish() ? '100 steps/min minimum — light active cardio.' : '100 pas/min minimum — cardio léger actif.'), target: 5, unit: 'minutes' },
+     { title: (window.isEnglish && window.isEnglish() ? '3 sets of 4-7-8 breathing' : '3 séries de respirations 4-7-8'), desc: (window.isEnglish && window.isEnglish() ? 'Inhale 4s, hold 7s, exhale 8s — vagal recovery.' : 'Inspire 4s, retiens 7s, expire 8s — récupération vagale.'), target: 3, unit: (window.isEnglish && window.isEnglish() ? 'sets' : 'séries') }
    ];
    var _c = _challenges[_dayOfYear % _challenges.length];
    // Load from localStorage if not yet in memory (step 15 may be first render before step 4)
@@ -2605,7 +2605,7 @@ function renderDedicatedPrograms(p) {
    var challengeCard = h('div', { style: 'margin-bottom:16px;border:1px solid ' + (_doneToday ? 'var(--ink-900,#0A0A09)' : 'var(--line)') + ';background:' + (_doneToday ? 'var(--paper-2,#F4F1EA)' : 'var(--ivory2)') + ';padding:14px 16px;border-radius:0;' });
    var chRow1 = h('div', { style: 'display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;' });
    var chLeft = h('div', {});
-   chLeft.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:' + (_doneToday ? 'var(--ink-900,#0A0A09)' : 'var(--grey,#6B6B65)') + ';font-weight:700;margin-bottom:3px;' }, 'Votre défi'));
+   chLeft.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:' + (_doneToday ? 'var(--ink-900,#0A0A09)' : 'var(--grey,#6B6B65)') + ';font-weight:700;margin-bottom:3px;' }, (window.isEnglish && window.isEnglish() ? 'Your challenge' : 'Votre défi')));
    chLeft.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:16px;color:var(--black,#0A0A09);' }, _c.title));
    chRow1.appendChild(chLeft);
    if (_cStreak > 0) {
@@ -2615,7 +2615,7 @@ function renderDedicatedPrograms(p) {
    challengeCard.appendChild(chRow1);
    challengeCard.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.5;margin-bottom:12px;' }, _c.desc));
    if (_doneToday) {
-     challengeCard.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;color:var(--success,#3E5C3A);' }, '✓ Défi accompli — à demain !'));
+     challengeCard.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;color:var(--success,#3E5C3A);' }, (window.isEnglish && window.isEnglish() ? '✓ Challenge done — see you tomorrow!' : '✓ Défi accompli — à demain !')));
    } else {
      var doneBtn = h('button', {
        style: 'padding:10px 18px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
@@ -2651,16 +2651,16 @@ function renderDedicatedPrograms(p) {
          setTimeout(function() { if (burst.parentNode) burst.parentNode.removeChild(burst); }, 2500);
          window.render();
        }
-     }, '✓ Défi accompli');
+     }, (window.isEnglish && window.isEnglish() ? '✓ Challenge done' : '✓ Défi accompli'));
      challengeCard.appendChild(doneBtn);
    }
-   p.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);font-weight:700;margin-bottom:8px;margin-top:24px;' }, 'Défi quotidien'));
+   p.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);font-weight:700;margin-bottom:8px;margin-top:24px;' }, (window.isEnglish && window.isEnglish() ? 'Daily challenge' : 'Défi quotidien')));
    p.appendChild(challengeCard);
  })();
 
  // ─── BANNIÈRE : GÉNÉRER MON PROGRAMME DE MUSCULATION ───
- p.appendChild(h('div', {'class': 'section-label'}, 'Programme de musculation'));
- p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px'}, 'Créez votre programme sur mesure selon vos objectifs, niveau et zones cibles.'));
+ p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Strength program' : 'Programme de musculation')));
+ p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px'}, (window.isEnglish && window.isEnglish() ? 'Create your custom program based on your goals, level and target zones.' : 'Créez votre programme sur mesure selon vos objectifs, niveau et zones cibles.')));
  p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){
  // CRITIQUE-1 : pré-sélection ici (une seule fois, hors render)
  if (S.goal !== null && (!S.sportGoals || S.sportGoals.length === 0)) {
@@ -2670,12 +2670,12 @@ function renderDedicatedPrograms(p) {
  }
  S.sStep = 1;
  window.render();
- }}, 'G\u00e9n\u00e9rer mon programme'));
+ }}, (window.isEnglish && window.isEnglish() ? 'Generate my program' : 'G\u00e9n\u00e9rer mon programme')));
  p.appendChild(h('div', {style: 'height:20px'}));
 
  // ─── PROGRAMMES DÉDIÉS ───
- p.appendChild(h('div', {'class': 'section-label'}, 'Programmes ciblés'));
- p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px'}, 'S\u00e9ances bonus cibl\u00e9es, vari\u00e9es (A/B), pr\u00eates \u00e0 l\u2019emploi.'));
+ p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Targeted programs' : 'Programmes ciblés')));
+ p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px'}, (window.isEnglish && window.isEnglish() ? 'Targeted bonus sessions, varied (A/B), ready to use.' : 'S\u00e9ances bonus cibl\u00e9es, vari\u00e9es (A/B), pr\u00eates \u00e0 l\u2019emploi.')));
 
  var allDedicated = [
  {key: 'fessiers_dedied', icon: ''},
@@ -2746,10 +2746,10 @@ function renderDedicatedPrograms(p) {
  // 2026-04 UX-5 : si sugW > 0 → affiche la charge; sinon guidance débutant (avant : rien affiché → Sarah perdue)
  var sugW = getSuggestedWeight(ex.name, ex.reps, currentPhase);
  if (sugW && sugW > 0) {
-   left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--success,#3E5C3A);margin-top:2px;font-weight:500'}, '\u2192 Charge cible : ~' + (window.UNITS ? window.UNITS.displayWeight(sugW) : sugW + ' kg')));
+   left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--success,#3E5C3A);margin-top:2px;font-weight:500'}, (window.isEnglish && window.isEnglish() ? '\u2192 Target load: ~' : '\u2192 Charge cible : ~') + (window.UNITS ? window.UNITS.displayWeight(sugW) : sugW + ' kg')));
  } else {
    // Pas de 1RM connu → guidance débutant sobre (Hermès §13.1 : pas d'emoji)
-   left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:2px;font-style:italic'}, 'Charge à tester : commencez léger, technique avant tout. L\'app affinera après vos 2 premières séances.'));
+   left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:2px;font-style:italic'}, (window.isEnglish && window.isEnglish() ? 'Load to test: start light, technique first. The app will refine after your first 2 sessions.' : 'Charge à tester : commencez léger, technique avant tout. L\'app affinera après vos 2 premières séances.')));
  }
  row.appendChild(left);
  var right = h('div', {style: 'text-align:right;flex-shrink:0;margin-left:12px'});
@@ -11263,7 +11263,7 @@ function renderYogaOnboarding(p) {
  window.BLACKBOX && window.BLACKBOX.log('yoga_config', { level: S.yogaLevel, objectif: S.yogaObjectif, days: S.yogaDays, duration: S.yogaDuration, style: S.yogaStyle });
  window.render();
  }
- }}, 'G\u00e9n\u00e9rer mon programme'));
+ }}, (window.isEnglish && window.isEnglish() ? 'Generate my program' : 'G\u00e9n\u00e9rer mon programme')));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
 }
 
