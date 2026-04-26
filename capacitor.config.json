@@ -6,9 +6,37 @@
     "androidScheme": "https",
     "url": "https://smartfitcoach.netlify.app",
     "cleartext": false,
-    "allowNavigation": ["smartfitcoach.netlify.app", "*.supabase.co", "world.openfoodfacts.org", "*.ingest.sentry.io"]
+    "allowNavigation": [
+      "smartfitcoach.netlify.app",
+      "*.supabase.co",
+      "world.openfoodfacts.org",
+      "*.ingest.sentry.io"
+    ]
   },
   "android": {
     "backgroundColor": "#FAF9F6"
+  },
+  "ios": {
+    "scheme": "SmartFitCoach",
+    "backgroundColor": "#FAF9F6",
+    "contentInset": "automatic",
+    "allowsLinkPreview": false,
+    "scrollEnabled": true,
+    "limitsNavigationsToAppBoundDomains": true
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "launchAutoHide": true,
+      "backgroundColor": "#FAF9F6",
+      "androidSplashResourceName": "splash",
+      "androidScaleType": "CENTER_CROP",
+      "showSpinner": false,
+      "splashFullScreen": true,
+      "splashImmersive": true
+    },
+    "PushNotifications": {
+      "presentationOptions": ["badge", "sound", "alert"]
+    }
   }
 }

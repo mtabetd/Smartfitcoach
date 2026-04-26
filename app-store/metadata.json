@@ -1,0 +1,88 @@
+{
+  "_comment": "App Store Connect metadata — fill in before submission",
+  "app": {
+    "name": "SmartFitCoach",
+    "bundleId": "com.smartfitcoach.app",
+    "sku": "SMARTFITCOACH-001",
+    "primaryLanguage": "fr-FR",
+    "version": "1.0.0",
+    "buildNumber": "1",
+    "category": {
+      "primary": "HEALTH_AND_FITNESS",
+      "secondary": "FOOD_AND_DRINK"
+    },
+    "ageRating": {
+      "rating": "4+",
+      "medicalOrTreatmentInfo": "FREQUENT_OR_INTENSE",
+      "unrestricted": true,
+      "notes": "App provides nutrition and fitness guidance. No explicit content, no social features with user-generated content visible to others, no in-app purchases. Medical disclaimer present."
+    },
+    "pricing": {
+      "tier": "FREE",
+      "inAppPurchases": false
+    }
+  },
+
+  "localizations": {
+    "fr-FR": {
+      "name": "SmartFitCoach",
+      "subtitle": "Nutrition & Sport sur Mesure",
+      "description": "SmartFitCoach est votre coach nutritionnel et sportif de poche, conçu pour s'adapter précisément à votre profil, vos objectifs et votre état de santé.\n\n🥗 NUTRITION INTELLIGENTE\n• Plan alimentaire personnalisé selon votre métabolisme (formule Mifflin-St Jeor)\n• Macros quotidiens adaptés : protéines, glucides, lipides\n• Recettes adaptées à vos allergies, intolérances et préférences\n• Suivi hydratation et calories\n• Adaptation grossesse, SOPK, diabète, HTA et 12+ pathologies\n\n💪 SPORT SUR MESURE\n• Programmes musculation avec progression double (reps puis poids)\n• CrossFit, course à pied, triathlon, yoga, calisthenics, padel, golf, cyclisme\n• Calcul zones cardiaques et 1RM estimé\n• Séance libre avec intelligence de progression Rolls-Royce\n• Filtres médicaux automatiques (blessures, pathologies)\n\n🤖 COACH IA\n• Conseils personnalisés par intelligence artificielle\n• Analyse de repas par photo\n• Scan de code-barres aliments\n\n📊 SUIVI & PROGRESSION\n• Tableau de bord quotidien\n• Historique des performances\n• Badges et achievements de gamification\n• Export PDF rapport hebdomadaire\n\n🔒 CONFIDENTIALITÉ\n• Vos données ne sont jamais vendues\n• Conformité RGPD complète\n• Fonctionne hors ligne\n\nAVERTISSEMENT : SmartFitCoach n'est pas un dispositif médical. Consultez votre médecin avant de modifier votre alimentation ou commencer un programme sportif, particulièrement en cas de pathologie.",
+      "keywords": "nutrition,sport,fitness,coach,musculation,calories,macros,CrossFit,running,santé,recettes,diète",
+      "promotionalText": "Votre coach nutrition et fitness IA — personnalisé pour vous, pas pour tout le monde.",
+      "whatsNew": "Première version officielle — plans nutritionnels et sportifs personnalisés, coach IA, suivi de progression.",
+      "privacyPolicyUrl": "https://smartfitcoach.netlify.app/privacy-policy.html",
+      "supportUrl": "https://smartfitcoach.netlify.app",
+      "marketingUrl": "https://smartfitcoach.netlify.app"
+    },
+    "en-US": {
+      "name": "SmartFitCoach",
+      "subtitle": "Personal Nutrition & Fitness",
+      "description": "SmartFitCoach is your pocket nutrition and fitness coach, precisely tailored to your profile, goals, and health status.\n\n🥗 SMART NUTRITION\n• Personalized meal plan based on your metabolism (Mifflin-St Jeor formula)\n• Daily macros: protein, carbs, fats\n• Recipes adapted to your allergies, intolerances, and preferences\n• Hydration and calorie tracking\n• Adaptations for pregnancy, PCOS, diabetes, hypertension, and 12+ conditions\n\n💪 SPORT TAILORED TO YOU\n• Weightlifting programs with double progression (reps then weight)\n• CrossFit, running, triathlon, yoga, calisthenics, padel, golf, cycling\n• Heart rate zones and estimated 1RM\n• Free training with Rolls-Royce progression intelligence\n• Automatic medical filters (injuries, conditions)\n\n🤖 AI COACH\n• Personalized advice from artificial intelligence\n• Meal analysis from photo\n• Food barcode scanner\n\n📊 TRACKING & PROGRESS\n• Daily dashboard\n• Performance history\n• Gamification badges and achievements\n• Weekly PDF report export\n\n🔒 PRIVACY\n• Your data is never sold\n• Full GDPR compliance\n• Works offline\n\nDISCLAIMER: SmartFitCoach is not a medical device. Consult your doctor before changing your diet or starting an exercise program, especially if you have a medical condition.",
+      "keywords": "nutrition,fitness,sport,coach,weightlifting,calories,macros,CrossFit,running,health,recipes,workout",
+      "promotionalText": "Your AI nutrition and fitness coach — personalized for you, not everyone.",
+      "whatsNew": "First official release — personalized nutrition & sport plans, AI coach, progress tracking.",
+      "privacyPolicyUrl": "https://smartfitcoach.netlify.app/privacy-policy-en.html",
+      "supportUrl": "https://smartfitcoach.netlify.app",
+      "marketingUrl": "https://smartfitcoach.netlify.app"
+    }
+  },
+
+  "screenshots": {
+    "required": [
+      "iPhone 6.9\" (1320x2868 or 1290x2796) — REQUIRED",
+      "iPhone 6.5\" (1284x2778 or 1242x2688) — REQUIRED"
+    ],
+    "optional": [
+      "iPhone 5.5\" (1242x2208)",
+      "iPad Pro 13\" (2064x2752)",
+      "iPad Pro 11\" (1668x2388)"
+    ],
+    "guidelines": [
+      "Show the nutrition dashboard as first screenshot",
+      "Show sport program generation as second screenshot",
+      "Show AI coach as third screenshot",
+      "Show progress tracking as fourth screenshot",
+      "Show gamification/achievements as fifth screenshot",
+      "No device frame required but recommended",
+      "No marketing text overlaid directly on screenshot (use caption field)"
+    ]
+  },
+
+  "review": {
+    "demoAccount": {
+      "email": "review@smartfitcoach.com",
+      "password": "[SET BEFORE SUBMISSION]",
+      "notes": "Demo account with pre-filled profile: male, 30yo, 80kg, 180cm, goal=lean_bulk, sport=musculation. All features accessible without registration via 'Continue without account' button."
+    },
+    "notes": "SmartFitCoach is a PWA wrapped with Capacitor. It loads content from https://smartfitcoach.netlify.app. An internet connection is required for first launch. Once loaded, the app works fully offline. The AI coach and plate scan features require network. Medical disclaimer is shown on the nutrition setup screen."
+  },
+
+  "appStoreConnect": {
+    "teamId": "[YOUR APPLE TEAM ID]",
+    "bundleId": "com.smartfitcoach.app",
+    "appleId": "[YOUR APP APPLE ID — assigned after creation in App Store Connect]",
+    "signingIdentity": "Apple Distribution",
+    "provisioningProfile": "[YOUR PROVISIONING PROFILE NAME]"
+  }
+}
