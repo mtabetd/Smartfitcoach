@@ -452,7 +452,7 @@ function buildUI() {
   _aiHeaderTitle.textContent = 'Smart Fit Coach';
   var _aiHeaderSub = document.createElement('div');
   _aiHeaderSub.id = 'ai-coach-header-sub';
-  _aiHeaderSub.textContent = 'Nutrition \u00b7 Sport \u00b7 Progression';
+  _aiHeaderSub.textContent = (window.isEnglish && window.isEnglish() ? 'Nutrition \u00b7 Sport \u00b7 Progress' : 'Nutrition \u00b7 Sport \u00b7 Progression');
   headerText.appendChild(_aiHeaderTitle);
   headerText.appendChild(_aiHeaderSub);
   var closeBtn = document.createElement('button');
@@ -474,7 +474,7 @@ function buildUI() {
   // Disclaimer médical — WCAG + ACOG compliance (absent auparavant vs body-analysis.js qui en avait un)
   var disclaimer = document.createElement('div');
   disclaimer.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-500,#6B6B65);padding:0 20px 12px;text-align:center;line-height:1.5;';
-  disclaimer.textContent = _t('coach.disclaimer', 'Coach IA — ne remplace pas l\'avis d\'un médecin ou professionnel de santé.');
+  disclaimer.textContent = _t('coach.disclaimer', (window.isEnglish && window.isEnglish() ? 'AI Coach — does not replace medical or health professional advice.' : 'Coach IA — ne remplace pas l\'avis d\'un médecin ou professionnel de santé.'));
   panel.appendChild(disclaimer);
 
   // Suggestions
