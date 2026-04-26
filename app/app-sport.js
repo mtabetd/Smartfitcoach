@@ -8715,8 +8715,8 @@ function renderMusculationProgram(p) {
   var wu = day.warmup || {
    duration: 8,
    exercises: [
-    { name: 'Cardio léger (vélo/tapis)', duration: '5 min', intensity: 'Faible' },
-    { name: 'Mobilité articulaire', duration: '3 min', notes: 'Cercles épaules, hanches, chevilles' }
+    { name: (window.isEnglish && window.isEnglish() ? 'Light cardio (bike/treadmill)' : 'Cardio léger (vélo/tapis)'), duration: '5 min', intensity: (window.isEnglish && window.isEnglish() ? 'Low' : 'Faible') },
+    { name: (window.isEnglish && window.isEnglish() ? 'Joint mobility' : 'Mobilité articulaire'), duration: '3 min', notes: (window.isEnglish && window.isEnglish() ? 'Shoulder, hip, ankle circles' : 'Cercles épaules, hanches, chevilles') }
    ]
   };
   var _wuOpen = !!S._wuOpen;
@@ -8724,7 +8724,7 @@ function renderMusculationProgram(p) {
    style: 'display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:rgba(62,92,58,0.04);border:1px solid var(--border,#D8D8D0);border-left:3px solid var(--success,#3E5C3A);cursor:pointer;margin-top:12px;margin-bottom:' + (_wuOpen ? '0' : '16px'),
    onclick: function(e) { e.stopPropagation(); S._wuOpen = !S._wuOpen; window.render(); }
   });
-  wuBar.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--green,#3E5C3A);font-weight:600'}, '\u00c9CHAUFFEMENT\u00a0·\u00a0' + wu.duration + '\u00a0min'));
+  wuBar.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--green,#3E5C3A);font-weight:600'}, (window.isEnglish && window.isEnglish() ? 'WARM-UP\u00a0·\u00a0' : '\u00c9CHAUFFEMENT\u00a0·\u00a0') + wu.duration + '\u00a0min'));
   wuBar.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65)'}, _wuOpen ? '\u25b2' : '\u25bc'));
   p.appendChild(wuBar);
   if (_wuOpen) {
@@ -8745,8 +8745,8 @@ function renderMusculationProgram(p) {
   var cd = day.cooldown || {
    duration: 5,
    exercises: [
-    { name: 'Marche ou vélo léger', duration: '3 min', intensity: 'Très faible' },
-    { name: 'Étirements statiques', duration: '2 min', notes: 'Groupes musculaires travaillés' }
+    { name: (window.isEnglish && window.isEnglish() ? 'Walk or light bike' : 'Marche ou vélo léger'), duration: '3 min', intensity: (window.isEnglish && window.isEnglish() ? 'Very low' : 'Très faible') },
+    { name: (window.isEnglish && window.isEnglish() ? 'Static stretches' : 'Étirements statiques'), duration: '2 min', notes: (window.isEnglish && window.isEnglish() ? 'Worked muscle groups' : 'Groupes musculaires travaillés') }
    ]
   };
   var _cdOpen = !!S._cdOpen;
@@ -8754,7 +8754,7 @@ function renderMusculationProgram(p) {
    style: 'display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:rgba(26,58,106,0.04);border:1px solid rgba(26,58,106,0.12);border-left:3px solid var(--blue,#1A3A6A);cursor:pointer;margin-bottom:' + (_cdOpen ? '0' : '16px'),
    onclick: function(e) { e.stopPropagation(); S._cdOpen = !S._cdOpen; window.render(); }
   });
-  cdBar.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:#1A3A6A;font-weight:600'}, 'RÉCUPÉRATION\u00a0·\u00a0' + cd.duration + '\u00a0min'));
+  cdBar.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:#1A3A6A;font-weight:600'}, (window.isEnglish && window.isEnglish() ? 'COOL-DOWN\u00a0·\u00a0' : 'RÉCUPÉRATION\u00a0·\u00a0') + cd.duration + '\u00a0min'));
   cdBar.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65)'}, _cdOpen ? '\u25b2' : '\u25bc'));
   p.appendChild(cdBar);
   if (_cdOpen) {
@@ -8800,7 +8800,7 @@ function renderMusculationProgram(p) {
     style: 'display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--paper-2,#F4F1EA);border:1px solid var(--border,#D8D8D0);border-left:3px solid var(--ink-900,#0A0A09);cursor:pointer;margin-bottom:' + (_briefOpen ? '0' : '16px'),
     onclick: function(e) { e.stopPropagation(); S._briefOpen = !S._briefOpen; window.render(); }
    });
-   briefBar.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--success,#3E5C3A);font-weight:600'}, 'POURQUOI CES MUSCLES\u00a0?'));
+   briefBar.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--success,#3E5C3A);font-weight:600'}, (window.isEnglish && window.isEnglish() ? 'WHY THESE MUSCLES\u00a0?' : 'POURQUOI CES MUSCLES\u00a0?')));
    briefBar.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65)'}, _briefOpen ? '\u25b2' : '\u25bc'));
    p.appendChild(briefBar);
    if (_briefOpen) {
@@ -8821,7 +8821,7 @@ function renderMusculationProgram(p) {
  // ─── EXERCICES BONUS (depuis programmes dédiés) ───
  var bonusDayList = (S.bonusExercises || {})[S.selectedSportDay] || [];
  if (bonusDayList.length > 0) {
- p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin:16px 0 8px'}, 'Exercices bonus'));
+ p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin:16px 0 8px'}, (window.isEnglish && window.isEnglish() ? 'Bonus exercises' : 'Exercices bonus')));
  bonusDayList.forEach(function(bex, bi) {
  var bc = h('div', {'class': 'exercise-card', style: 'border-left:3px solid var(--ink-900,#0A0A09)'});
  var bnRow = h('div', {style: 'display:flex;justify-content:space-between;align-items:center'});
@@ -8904,13 +8904,13 @@ function renderMusculationProgram(p) {
   var _celLabel = document.createElement('div');
   _celLabel.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:14px;';
   var _l1 = document.createElement('span'); _l1.style.cssText = 'flex:1;max-width:56px;height:1px;background:var(--ink-900,#0A0A09);'; _celLabel.appendChild(_l1);
-  var _lt = document.createElement('span'); _lt.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--success,#3E5C3A);font-weight:400;'; _lt.textContent = 'S\u00e9ance termin\u00e9e'; _celLabel.appendChild(_lt);
+  var _lt = document.createElement('span'); _lt.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--success,#3E5C3A);font-weight:400;'; _lt.textContent = (window.isEnglish && window.isEnglish() ? 'Session complete' : 'S\u00e9ance termin\u00e9e'); _celLabel.appendChild(_lt);
   var _l2 = document.createElement('span'); _l2.style.cssText = 'flex:1;max-width:56px;height:1px;background:var(--ink-900,#0A0A09);'; _celLabel.appendChild(_l2);
   _celCard.appendChild(_celLabel);
 
   var _celTitle = document.createElement('div');
   _celTitle.style.cssText = 'font-family:Georgia,serif;font-size:18px;font-style:italic;color:#0A0A09;margin-bottom:14px;text-align:center;';
-  _celTitle.textContent = 'Excellent travail.';
+  _celTitle.textContent = (window.isEnglish && window.isEnglish() ? 'Excellent work.' : 'Excellent travail.');
   _celCard.appendChild(_celTitle);
 
   // Stats grid : séries · volume · durée
@@ -8929,12 +8929,12 @@ function renderMusculationProgram(p) {
    w.appendChild(l);
    return w;
   }
-  _statsRow.appendChild(_mkStat(String(_totalSets), 'S\u00e9ries'));
+  _statsRow.appendChild(_mkStat(String(_totalSets), (window.isEnglish && window.isEnglish() ? 'Sets' : 'S\u00e9ries')));
   if (_hasVolume) {
    var _vDisplay = window.UNITS ? window.UNITS.displayWeight(Math.round(_totalVolume)) : Math.round(_totalVolume) + '\u00a0kg';
    _statsRow.appendChild(_mkStat(_vDisplay, 'Volume'));
   }
-  _statsRow.appendChild(_mkStat('~' + estDuration + '\u00a0min', 'Dur\u00e9e'));
+  _statsRow.appendChild(_mkStat('~' + estDuration + '\u00a0min', (window.isEnglish && window.isEnglish() ? 'Duration' : 'Dur\u00e9e')));
   _celCard.appendChild(_statsRow);
 
   // PR banner (si records battus)
@@ -8995,7 +8995,7 @@ function renderMusculationProgram(p) {
  var _recapExNames = Object.keys(_recapLog);
  if (_recapExNames.length > 0) {
  var recapBox = h('div', {style: 'margin-bottom:14px;border:1px solid var(--border);background:var(--ivory)'});
- recapBox.appendChild(h('div', {style: 'padding:6px 10px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--border);font-weight:700'}, 'R\u00e9cap. des exercices'));
+ recapBox.appendChild(h('div', {style: 'padding:6px 10px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--border);font-weight:700'}, (window.isEnglish && window.isEnglish() ? 'Exercise recap' : 'R\u00e9cap. des exercices')));
  _recapExNames.forEach(function(exName) {
  var _sets = _recapLog[exName] || [];
  var _validSets = _sets.filter(function(s) { return s.validated === true; });
@@ -9016,7 +9016,7 @@ function renderMusculationProgram(p) {
 
  // Durée
  var durRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin-bottom:14px'});
- durRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);flex:1'}, 'Dur\u00e9e r\u00e9elle'));
+ durRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);flex:1'}, (window.isEnglish && window.isEnglish() ? 'Actual duration' : 'Dur\u00e9e r\u00e9elle')));
  var durInp = h('input', {type: 'number', min: '10', max: '180', inputmode: 'numeric', value: String(realDur), style: 'width:60px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:16px;text-align:center;background:var(--ivory)', onclick: function(e) { e.stopPropagation(); }, onchange: function(e) { var v = parseInt(e.target.value); if (!isNaN(v) && v > 0) { S._sessionDuration = v; window.render(); } }});
  durRow.appendChild(durInp);
  durRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, 'min'));
@@ -9024,7 +9024,7 @@ function renderMusculationProgram(p) {
  // Résultat calories
  var kcalBox = h('div', {style: 'background:var(--ivory);border:1px solid var(--border);padding:12px 16px;margin-bottom:14px'});
  var kr1 = h('div', {style: 'display:flex;justify-content:space-between;margin-bottom:6px'});
- kr1.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, 'D\u00e9pense s\u00e9ance'));
+ kr1.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? 'Session expenditure' : 'D\u00e9pense s\u00e9ance')));
  kr1.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:16px;font-weight:bold'}, kcalRes.base + '\u00a0kcal'));
  kcalBox.appendChild(kr1);
  var kr2 = h('div', {style: 'display:flex;justify-content:space-between;margin-bottom:6px'});
@@ -9032,7 +9032,7 @@ function renderMusculationProgram(p) {
  kr2.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:13px;color:var(--orange,#E86F1E)'}, '+' + kcalRes.epoc + '\u00a0kcal'));
  kcalBox.appendChild(kr2);
  var kr3 = h('div', {style: 'display:flex;justify-content:space-between;border-top:1px solid var(--border);padding-top:8px'});
- kr3.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;font-weight:bold'}, 'Total estim\u00e9'));
+ kr3.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;font-weight:bold'}, (window.isEnglish && window.isEnglish() ? 'Estimated total' : 'Total estim\u00e9')));
  kr3.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:17px;font-weight:bold;color:var(--green,#3E5C3A)'}, kcalRes.total + '\u00a0kcal'));
  kcalBox.appendChild(kr3);
  kcalBox.appendChild((function(){ var _d = h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);margin-top:6px;font-style:italic'}); _d.appendChild(document.createTextNode('FC estim\u00e9e\u00a0' + kcalRes.hr + '\u00a0bpm \u2014 ')); _d.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _d.appendChild(document.createTextNode('\u00a0' + kcalRes.rpe + '/10 \u2014 MET\u00a0Ainsworth\u00a02011 \u00b7 Tanaka\u00a02001')); return _d; })());
@@ -9054,7 +9054,7 @@ function renderMusculationProgram(p) {
  _ncWrap.style.cssText = 'margin-top:12px;padding:10px 14px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);font-size:13px';
  var _ncTitle = document.createElement('div');
  _ncTitle.style.cssText = 'font-weight:600;margin-bottom:6px;color:var(--text)';
- _ncTitle.textContent = '\uD83C\uDF7D\ufe0f Impact nutritionnel';
+ _ncTitle.textContent = (window.isEnglish && window.isEnglish() ? '\uD83C\uDF7D\ufe0f Nutritional impact' : '\uD83C\uDF7D\ufe0f Impact nutritionnel');
  _ncWrap.appendChild(_ncTitle);
  function _ncRow(label, value, valueStyle) {
    var row = document.createElement('div');
@@ -9069,7 +9069,7 @@ function renderMusculationProgram(p) {
    row.appendChild(val);
    return row;
  }
- _ncWrap.appendChild(_ncRow('Cible calorique du jour', nc.caloriesTarget + ' kcal', null));
+ _ncWrap.appendChild(_ncRow((window.isEnglish && window.isEnglish() ? 'Daily caloric target' : 'Cible calorique du jour'), nc.caloriesTarget + ' kcal', null));
  _ncWrap.appendChild(_ncRow('Calories br\u00fcl\u00e9es en session', '\u2212' + kcalRes.total + ' kcal (' + pct + '%)', warningColor));
  var _ncProRow = document.createElement('div');
  _ncProRow.style.cssText = 'display:flex;justify-content:space-between;margin-bottom:8px';
@@ -9094,7 +9094,7 @@ function renderMusculationProgram(p) {
  var fbDraft = S._sessionFeedbackDraft;
 
  var fbPanel = h('div', {style: 'border:1px solid var(--border,#D8D8D0);background:var(--ivory,#FAF9F6);padding:14px;margin-bottom:14px'});
- fbPanel.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);font-weight:700;margin-bottom:10px'}, 'Comment tu te sens ? (optionnel)'));
+ fbPanel.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);font-weight:700;margin-bottom:10px'}, (window.isEnglish && window.isEnglish() ? 'How do you feel? (optional)' : 'Comment tu te sens ? (optionnel)')));
 
  // RPE 1-10 (slider)
  var rpeRow = h('div', {style: 'margin-bottom:14px'});
@@ -9126,11 +9126,11 @@ function renderMusculationProgram(p) {
 
  // Ressenti — 3 chips
  var feelingRow = h('div', {style: 'display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap'});
- feelingRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey,#6B6B65);width:100%;margin-bottom:2px'}, 'Ressenti général'));
+ feelingRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey,#6B6B65);width:100%;margin-bottom:2px'}, (window.isEnglish && window.isEnglish() ? 'General feeling' : 'Ressenti général')));
  var feelings = [
-   { key: 'fatigue', label: 'Fatigué' },
+   { key: 'fatigue', label: (window.isEnglish && window.isEnglish() ? 'Tired' : 'Fatigué') },
    { key: 'normal', label: 'Normal' },
-   { key: 'forme', label: 'En forme' }
+   { key: 'forme', label: (window.isEnglish && window.isEnglish() ? 'Feeling great' : 'En forme') }
  ];
  feelings.forEach(function(f) {
    var active = fbDraft.feeling === f.key;
@@ -9152,14 +9152,14 @@ function renderMusculationProgram(p) {
 
  // Douleurs (optionnel) — 5 chips + aucun
  var painRow = h('div', {style: 'display:flex;gap:6px;flex-wrap:wrap'});
- painRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey,#6B6B65);width:100%;margin-bottom:2px'}, 'Douleur signalée (si nécessaire)'));
+ painRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey,#6B6B65);width:100%;margin-bottom:2px'}, (window.isEnglish && window.isEnglish() ? 'Pain reported (if needed)' : 'Douleur signalée (si nécessaire)')));
  var pains = [
-   { key: null, label: 'Aucune' },
-   { key: 'dos', label: 'Dos' },
-   { key: 'genou', label: 'Genou' },
-   { key: 'épaule', label: 'Épaule' },
-   { key: 'poignet', label: 'Poignet' },
-   { key: 'cheville', label: 'Cheville' }
+   { key: null, label: (window.isEnglish && window.isEnglish() ? 'None' : 'Aucune') },
+   { key: 'dos', label: (window.isEnglish && window.isEnglish() ? 'Back' : 'Dos') },
+   { key: 'genou', label: (window.isEnglish && window.isEnglish() ? 'Knee' : 'Genou') },
+   { key: 'épaule', label: (window.isEnglish && window.isEnglish() ? 'Shoulder' : 'Épaule') },
+   { key: 'poignet', label: (window.isEnglish && window.isEnglish() ? 'Wrist' : 'Poignet') },
+   { key: 'cheville', label: (window.isEnglish && window.isEnglish() ? 'Ankle' : 'Cheville') }
  ];
  pains.forEach(function(pn) {
    var active = (fbDraft.pain || null) === pn.key;
@@ -9244,9 +9244,9 @@ function renderMusculationProgram(p) {
    try { window.SOCIAL.shareWorkout({ sport: S.sportType || 'sport', duration: realDur, kcal: Math.round(kcalRes.total || 0) }); } catch(e) {}
  }
  window.render();
- }}, '\u2713 Valider la s\u00e9ance');
+ }}, (window.isEnglish && window.isEnglish() ? '\u2713 Validate session' : '\u2713 Valider la s\u00e9ance'));
  compPanel.appendChild(saveBtn);
- compPanel.appendChild(h('div', {style: 'text-align:center;margin-top:8px'}, h('button', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);background:none;border:none;cursor:pointer', onclick: function() { S.sessionCompleting = false; S._sessionDuration = null; window.render(); }}, 'Annuler')));
+ compPanel.appendChild(h('div', {style: 'text-align:center;margin-top:8px'}, h('button', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);background:none;border:none;cursor:pointer', onclick: function() { S.sessionCompleting = false; S._sessionDuration = null; window.render(); }}, (window.isEnglish && window.isEnglish() ? 'Cancel' : 'Annuler'))));
 
  // ─── CONSISTENCY STREAK BANNER ───
  (function() {
@@ -9262,7 +9262,7 @@ function renderMusculationProgram(p) {
    var streakLeft = document.createElement('div');
    var streakLabel = document.createElement('div');
    streakLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:2px;';
-   streakLabel.textContent = 'Régularité';
+   streakLabel.textContent = (window.isEnglish && window.isEnglish() ? 'Consistency' : 'Régularité');
    streakLeft.appendChild(streakLabel);
    var streakVal = document.createElement('div');
    streakVal.style.cssText = 'font-family:Georgia,serif;font-size:14px;color:var(--black,#0A0A09);';
@@ -9321,7 +9321,7 @@ function renderMusculationProgram(p) {
        S._shareCardOpen = !S._shareCardOpen;
        window.render();
      }
-   }, S._shareCardOpen ? 'Masquer la carte' : 'Générer ma carte de séance');
+   }, (window.isEnglish && window.isEnglish() ? (S._shareCardOpen ? 'Hide card' : 'Generate my session card') : (S._shareCardOpen ? 'Masquer la carte' : 'Générer ma carte de séance')));
    cardShareWrap.appendChild(cardShareToggle);
 
    var cardEl = document.createElement('div');
@@ -10035,7 +10035,7 @@ function renderRunningProgram(p) {
  weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine précédente', onclick: function() {
  if (S.runningWeek > 1) { S.runningWeek--; S.selectedRunDay = 0; window.render(); }
  }}, '\u2190'));
- weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.runningWeek + ' / ' + totalWeeks));
+ weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + S.runningWeek + ' / ' + totalWeeks));
  weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine suivante', onclick: function() {
  if (S.runningWeek < totalWeeks) { S.runningWeek++; S.selectedRunDay = 0; window.render(); }
  }}, '\u2192'));
@@ -10387,7 +10387,7 @@ function renderHyroxProgram(p) {
  weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine précédente', onclick: function() {
  if (S.hyroxWeek > 1) { S.hyroxWeek--; S.selectedHyroxDay = 0; window.render(); }
  }}, '\u2190'));
- weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.hyroxWeek + ' / ' + totalWeeks));
+ weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + S.hyroxWeek + ' / ' + totalWeeks));
  weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine suivante', onclick: function() {
  if (S.hyroxWeek < totalWeeks) { S.hyroxWeek++; S.selectedHyroxDay = 0; window.render(); }
  }}, '\u2192'));
@@ -10605,7 +10605,7 @@ function renderPadelProgram(p) {
  if (!week) return;
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme Padel'));
- p.appendChild(h('h1', {html: 'Semaine ' + S.padelWeek + '<br><em>' + week.phase + '</em>'}));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + S.padelWeek + '<br><em>' + week.phase + '</em>'}));
  var goalName = ''; (window.PADEL_GOALS || []).forEach(function(g){ if(g.id===S.padelGoal) goalName=g.name; });
  p.appendChild(h('p', {'class': 'subtitle'}, S.padelDays + ' jours/semaine — ' + goalName));
  p.appendChild(h('div', {style: 'text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px'}, week.notes));
@@ -10614,7 +10614,7 @@ function renderPadelProgram(p) {
  // Week navigation
  var wn = h('div', {style: 'display:flex;align-items:center;justify-content:center;gap:16px;margin:12px 0'});
  wn.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;margin:0', 'aria-label': 'Semaine précédente', disabled: S.padelWeek <= 1, onclick: function(){ S.padelWeek--; S.selectedPadelDay = 0; window.render(); }}, '←'));
- wn.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.padelWeek + ' / ' + S.padelProgram.length));
+ wn.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + S.padelWeek + ' / ' + S.padelProgram.length));
  wn.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;margin:0', 'aria-label': 'Semaine suivante', disabled: S.padelWeek >= S.padelProgram.length, onclick: function(){ S.padelWeek++; S.selectedPadelDay = 0; window.render(); }}, '→'));
  p.appendChild(wn);
 
@@ -10740,7 +10740,7 @@ function renderGolfProgram(p) {
  if (!week) return;
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme Golf'));
- p.appendChild(h('h1', {html: 'Semaine ' + S.golfWeek + '<br><em>' + week.phase + '</em>'}));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + S.golfWeek + '<br><em>' + week.phase + '</em>'}));
  var goalName = ''; (window.GOLF_GOALS || []).forEach(function(g){ if(g.id===S.golfGoal) goalName=g.name; });
  p.appendChild(h('p', {'class': 'subtitle'}, S.golfDays + ' jours/semaine — ' + goalName + (S.golfHandicap ? ' — HC ' + S.golfHandicap : '')));
  p.appendChild(h('div', {style: 'text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px'}, week.notes));
@@ -10752,7 +10752,7 @@ function renderGolfProgram(p) {
  // Week navigation
  var wn = h('div', {style: 'display:flex;align-items:center;justify-content:center;gap:16px;margin:12px 0'});
  wn.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;margin:0', 'aria-label': 'Semaine précédente', disabled: S.golfWeek <= 1, onclick: function(){ S.golfWeek--; S.selectedGolfDay = 0; window.render(); }}, '←'));
- wn.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.golfWeek + ' / ' + S.golfProgram.length));
+ wn.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + S.golfWeek + ' / ' + S.golfProgram.length));
  wn.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;margin:0', 'aria-label': 'Semaine suivante', disabled: S.golfWeek >= S.golfProgram.length, onclick: function(){ S.golfWeek++; S.selectedGolfDay = 0; window.render(); }}, '→'));
  p.appendChild(wn);
 
@@ -11065,7 +11065,7 @@ function renderTriathlonProgram(p) {
  weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine précédente', onclick: function() {
  if (S.triathlonWeek > 1) { S.triathlonWeek--; S.selectedTriDay = 0; window.render(); }
  }}, '←'));
- weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.triathlonWeek + ' / ' + totalWeeks));
+ weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + S.triathlonWeek + ' / ' + totalWeeks));
  weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine suivante', onclick: function() {
  if (S.triathlonWeek < totalWeeks) { S.triathlonWeek++; S.selectedTriDay = 0; window.render(); }
  }}, '→'));
@@ -11343,7 +11343,7 @@ function renderYogaProgram(p) {
  }
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme Yoga'));
- p.appendChild(h('h1', {html: 'Semaine ' + S.yogaWeek + '<br><em>' + weekData.phase + '</em>'}));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + S.yogaWeek + '<br><em>' + weekData.phase + '</em>'}));
 
  var objNames = { flexibilite: 'Flexibilit\u00e9', stress: 'Stress & Sommeil', force: 'Force & \u00c9quilibre', recuperation: 'R\u00e9cup\u00e9ration active' };
  var styleNames = { hatha: 'Hatha', vinyasa: 'Vinyasa', yin: 'Yin', ashtanga: 'Ashtanga' };
@@ -11352,7 +11352,7 @@ function renderYogaProgram(p) {
  // Week navigation
  var wn = h('div', {style: 'display:flex;align-items:center;justify-content:center;gap:16px;margin:12px 0'});
  wn.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;margin:0', disabled: S.yogaWeek <= 1, onclick: function(){ if(S.yogaWeek > 1){ S.yogaWeek--; S.yogaDay = 0; window.render(); } }}, '\u2190'));
- wn.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.yogaWeek + ' / 4'));
+ wn.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + S.yogaWeek + ' / 4'));
  wn.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;margin:0', disabled: S.yogaWeek >= 4, onclick: function(){ if(S.yogaWeek < 4){ S.yogaWeek++; S.yogaDay = 0; window.render(); } }}, '\u2192'));
  p.appendChild(wn);
 
@@ -11687,7 +11687,7 @@ function renderCyclingProgram(p) {
  weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine précédente', onclick: function() {
  if (S.cyclingWeek > 1) { S.cyclingWeek--; S.selectedCyclingDay = 0; window.render(); }
  }}, '←'));
- weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.cyclingWeek + ' / ' + totalWeeks));
+ weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + S.cyclingWeek + ' / ' + totalWeeks));
  weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine suivante', onclick: function() {
  if (S.cyclingWeek < totalWeeks) { S.cyclingWeek++; S.selectedCyclingDay = 0; window.render(); }
  }}, '→'));
