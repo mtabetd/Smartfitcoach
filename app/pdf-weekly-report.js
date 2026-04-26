@@ -322,9 +322,9 @@ window.exportWeeklyReportPDF = function() {
     var nutTrend = (typeof window.getNutritionTrend === 'function') ? window.getNutritionTrend(30) : null;
     if (nutTrend && nutTrend.loggedDays >= 3) {
       y = sectionTitle(doc, y, 'Nutrition 30 jours');
-      var kcalVals = nutTrend.kcal.filter(function(v) { return typeof v === 'number'; });
+      var kcalVals = (Array.isArray(nutTrend.kcal) ? nutTrend.kcal : []).filter(function(v) { return typeof v === 'number'; });
       var kcalAvg = kcalVals.length ? Math.round(kcalVals.reduce(function(a,b){return a+b;}, 0) / kcalVals.length) : null;
-      var pVals = nutTrend.protein.filter(function(v) { return typeof v === 'number'; });
+      var pVals = (Array.isArray(nutTrend.protein) ? nutTrend.protein : []).filter(function(v) { return typeof v === 'number'; });
       var pAvg = pVals.length ? Math.round(pVals.reduce(function(a,b){return a+b;}, 0) / pVals.length) : null;
       var tgtKcal = (nutTrend.targets && nutTrend.targets.kcal) ? nutTrend.targets.kcal : null;
       var tgtP = (nutTrend.targets && nutTrend.targets.p) ? nutTrend.targets.p : null;

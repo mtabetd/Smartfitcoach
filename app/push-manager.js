@@ -255,7 +255,7 @@
       var prefs = this.getPrefs();
       if (!prefs.granted) return;
       var now = new Date();
-      var mt = (window.S && window.S.mealTimes && typeof window.S.mealTimes === 'object') ? window.S.mealTimes : {};
+      var mt = (window.S && window.S.mealTimes && typeof window.S.mealTimes === 'object' && !Array.isArray(window.S.mealTimes)) ? window.S.mealTimes : {};
 
       // Utilise S.mealTimes (format "HH:MM") si disponible, fallback sur 12h00 / 19h00
       var lunchTime = this._parseHHMM(mt.lunch) || { h: 12, m: 0 };

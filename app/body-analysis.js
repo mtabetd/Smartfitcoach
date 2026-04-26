@@ -679,7 +679,7 @@ async function runAnalysis() {
 
     // Timeout client 43s (marge 2s avant le timeout serveur Netlify 45s)
     var _baCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    var _baTimer = _baCtrl ? setTimeout(function() { _baCtrl.abort(); }, 25000) : null;
+    var _baTimer = _baCtrl ? setTimeout(function() { _baCtrl.abort(); }, 43000) : null;
     var _baJwt = (window.AUTH && window.AUTH.getJWT) ? await window.AUTH.getJWT().catch(function() { return null; }) : null;
     var _baHdrs = { 'Content-Type': 'application/json' };
     if (_baJwt) _baHdrs['Authorization'] = 'Bearer ' + _baJwt;
