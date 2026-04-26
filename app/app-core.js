@@ -5482,7 +5482,8 @@ var _dG=Math.round((bR?bR.g||0:0)+(lR?lR.g||0:0)+(sR?sR.g||0:0)+(dR?dR.g||0:0));
 var _dL=Math.round((bR?bR.l||0:0)+(lR?lR.l||0:0)+(sR?sR.l||0:0)+(dR?dR.l||0:0));
 // BUG-7 FIX: use actual meal kcal sum (not planned target c) to keep day.kcal in sync with meals
 var _dK=Math.round((bR?bR.k||0:0)+(lR?lR.k||0:0)+(sR?sR.k||0:0)+(dR?dR.k||0:0));
-plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR,kcal:_dK,targetKcal:c,p:_dP,g:_dG,l:_dL})}if(window.validateWeekPlan){try{window.validateWeekPlan(plan);}catch(_ve){}}return plan}
+plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR,kcal:_dK,targetKcal:c,p:_dP,g:_dG,l:_dL})}// BUG-6 cleanup: remove per-day training flag from profile state after generation
+try{delete s._pickRecipeTrainingDay;}catch(_del){}if(window.validateWeekPlan){try{window.validateWeekPlan(plan);}catch(_ve){}}return plan}
 function swapMeal(di,slot){
   var s=window.S;
   if(!s.weekPlan||!s.weekPlan[di])return;
@@ -5497,6 +5498,8 @@ function swapMeal(di,slot){
     window.computeNutritionState(_isTrainingDay);
   }
   var cBase=calcTarget(),split=getAdaptedMealSplit(di);if(!split)return;var c=Math.round(cBase*(split.calMultiplier||1));
+  // BUG-6 FIX: set training day flag so pickRecipe sportType-aware scoring applies on swap too
+  s._pickRecipeTrainingDay=!!(split.dayInfo&&split.dayInfo.isTraining);
   var tgt=slot==='breakfast'?Math.round(c*split.pctBreak):slot==='lunch'?Math.round(c*split.pctLunch):slot==='snack'?Math.round(c*split.pctSnack):Math.round(c*split.pctDinner);
   // Snack + whey → swapper vers un autre smoothie (pas une collation normale)
   // Condition : whey activé + jour d'entraînement + non-vegan (cohérent avec generateWeek)
@@ -5529,6 +5532,8 @@ function swapMeal(di,slot){
   var _rtQ=['breakfast','lunch','snack','dinner'],_rtD=s.weekPlan[di],_rtT={k:0,p:0,g:0,l:0};
   _rtQ.forEach(function(q){var m=_rtD[q];if(m){_rtT.k+=m.k||0;_rtT.p+=m.p||0;_rtT.g+=m.g||0;_rtT.l+=m.l||0;}});
   _rtD.kcal=_rtT.k;_rtD.p=_rtT.p;_rtD.g=_rtT.g;_rtD.l=_rtT.l;
+  // BUG-6 cleanup: remove training flag from state after swap
+  try{delete s._pickRecipeTrainingDay;}catch(_del){}
   if(window.validateWeekPlan){try{window.validateWeekPlan(s.weekPlan);}catch(_ve){}}
   if(typeof window.saveProfile==='function'){try{window.saveProfile();}catch(e){}}
   if(typeof window.render==='function')window.render();
