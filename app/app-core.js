@@ -2249,6 +2249,15 @@ window.I18N = {
       'onb.s9.generate': 'Générer un nouveau plan',
       'onb.s9.shopping': 'Liste de courses',
 
+      // Nutrition — meal names
+      'nutrition.meal_breakfast': 'Petit-déjeuner',
+      'nutrition.meal_lunch': 'Déjeuner',
+      'nutrition.meal_snack': 'Collation',
+      'nutrition.meal_dinner': 'Dîner',
+      'nutrition.protein': 'Protéines',
+      'nutrition.carbs': 'Glucides',
+      'nutrition.fats': 'Lipides',
+
       // Dashboard
       'dash.greeting_morning': 'Bonjour',
       'dash.greeting_afternoon': 'Bon après-midi',
@@ -2549,6 +2558,15 @@ window.I18N = {
       'onb.s9.target': 'Target',
       'onb.s9.generate': 'Generate New Plan',
       'onb.s9.shopping': 'Shopping List',
+
+      // Nutrition — meal names
+      'nutrition.meal_breakfast': 'Breakfast',
+      'nutrition.meal_lunch': 'Lunch',
+      'nutrition.meal_snack': 'Snack',
+      'nutrition.meal_dinner': 'Dinner',
+      'nutrition.protein': 'Protein',
+      'nutrition.carbs': 'Carbs',
+      'nutrition.fats': 'Fat',
 
       // Dashboard
       'dash.greeting_morning': 'Good morning',
@@ -4710,7 +4728,17 @@ var sportDays=Array.isArray(s.trainingDaysSelected)&&s.trainingDaysSelected.leng
 // Évite un surplus calorique 3× trop élevé si l'utilisateur débutant a coché "Athlète" par excès de confiance.
 if(s.sportLevel==='beginner'&&effectiveFactor>1.55)effectiveFactor=1.55;
 return calcBMR()*effectiveFactor}
-function calcTarget(){var s=window.S;if(s.goal===null||s.goal===undefined||!GOALS[s.goal])return 0;var tdeeVal=calcTDEE();var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&window.isFemale(s)){var tri=getPregnancyTrimester();var pregExtra=tri?tri.trimester.calorieExtra:300;
+function calcTarget(){var s=window.S;if(s.goal===null||s.goal===undefined||!GOALS[s.goal])return 0;var tdeeVal=calcTDEE();
+// BUG FIX: si TDEE=0 (profil incomplet : activité/poids/taille/âge/sexe manquant), retourner 0.
+// Avant : le code tombait dans les planchers (1400/1500 kcal) → dashboard affichait une cible fictive.
+// Maintenant : 0 indique explicitement "données insuffisantes" aux appelants (dashboard, génération du plan).
+// Exception TCA : conservée ci-dessous (le plancher sécurisé est intentionnel même sur profil partiel).
+if(tdeeVal===0&&!(s.medical&&s.medical.indexOf('tca')!==-1))return 0;
+var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&window.isFemale(s)){var tri=getPregnancyTrimester();
+// BUG FIX: le fallback était 300 kcal alors que getPregnancyTrimester() défaute pregnancyWeek à 20 (T2=340 kcal).
+// Un retour null est donc théoriquement impossible pour une femme enceinte — mais si cela se produit,
+// 340 est la valeur correcte (T2, semaine 20, ACOG 2018) et non 300.
+var pregExtra=tri?tri.trimester.calorieExtra:340;
 // Si allaitement ET enceinte (fin de grossesse + allaitement aîné) → ADDITIF (ACOG 2018 + 2022)
 var allaitExtra=(s.medical&&s.medical.indexOf('allaitement')!==-1)?500:0;
 base=Math.round(tdeeVal)+pregExtra+allaitExtra;
@@ -4743,7 +4771,6 @@ if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*
 // Plancher calorique sexe-spécifique (ISSN 2017, ACSM 2016, IOC 2018 RED-S prevention)
 // Femme : plancher 1400 kcal/j — ISSN 2017 / ACSM 2016 (l'ancien plancher 1200 est obsolète et dangereux)
 // Homme : plancher 1500 kcal/j (ACSM — plancher physiologique masculin)
-var effectivePAL=s.activity!==null&&ACTIVITIES[s.activity]?ACTIVITIES[s.activity].factor:1.2;
 var kcalFloor=window.isFemale(s)?1400:1500;
 base=Math.max(base,kcalFloor);
 // Plancher BMR : le déficit ne doit JAMAIS descendre sous le métabolisme de base (sécurité métabolique)
@@ -4871,13 +4898,24 @@ function calcMacros(){
   // ISSN 2017 : endurance = 1.4-1.6 g/kg vs résistance = 1.6-2.5 g/kg
   // Tarnopolsky 2004 (MSSE) : athlètes endurance nécessitent ~0.2g/kg de moins que athlètes de force
   // S'applique uniquement si l'utilisateur n'a PAS d'objectif musculaire ou de sèche sportive
+  // FIX BUG-SPORT-PROTEIN 2026-04 : si sportGoals est vide (sport-only users sans nutrition onboarding),
+  // se rabattre sur sportType pour déduire hasMuscGoal/hasEndurOnly.
+  // Avant : yoga/running/padel users sans sportGoals ne recevaient aucun ajustement → protéines identiques
+  //         à un user muscu au même actFactor (ex: 2.2g/kg pour un yogi = sur-protéiné sans raison).
+  var _endurSportTypes = ['running','cycling','triathlon','hyrox','yoga','padel','golf'];
+  var _muscuSportTypes = ['musculation','calisthenics'];
+  var hasMuscGoal, hasEndurOnly, isDeficit;
   if(s.sportGoals&&s.sportGoals.length>0){
-    var hasMuscGoal=s.sportGoals.indexOf('muscle')!==-1||s.sportGoals.indexOf('shred')!==-1;
-    var hasEndurOnly=!hasMuscGoal&&(s.sportGoals.indexOf('endurance')!==-1||s.sportGoals.indexOf('weightloss')!==-1||s.sportGoals.indexOf('flexibility')!==-1||s.sportGoals.indexOf('general')!==-1);
-    var isDeficit=goalKey==='shred'||goalKey==='cut';
-    if(hasEndurOnly&&!isDeficit)ppk=Math.max(1.2,ppk-0.2); // Tarnopolsky 2004 : -0.2g/kg endurance pure
-    else if(hasEndurOnly&&isDeficit)ppk=Math.min(3.5,ppk+0.2); // Helms 2014: déficit calorique → +0.2g/kg pour préserver la masse maigre
+    hasMuscGoal=s.sportGoals.indexOf('muscle')!==-1||s.sportGoals.indexOf('shred')!==-1;
+    hasEndurOnly=!hasMuscGoal&&(s.sportGoals.indexOf('endurance')!==-1||s.sportGoals.indexOf('weightloss')!==-1||s.sportGoals.indexOf('flexibility')!==-1||s.sportGoals.indexOf('general')!==-1);
+  } else if(s.sportType){
+    // Fallback sur sportType quand sportGoals absent (typique en mode sport-only)
+    hasMuscGoal=_muscuSportTypes.indexOf(s.sportType)!==-1;
+    hasEndurOnly=_endurSportTypes.indexOf(s.sportType)!==-1;
   }
+  isDeficit=goalKey==='shred'||goalKey==='cut';
+  if(hasEndurOnly&&!isDeficit)ppk=Math.max(1.2,ppk-0.2); // Tarnopolsky 2004 : -0.2g/kg endurance pure
+  else if(hasEndurOnly&&isDeficit)ppk=Math.min(3.5,ppk+0.2); // Helms 2014: déficit calorique → +0.2g/kg pour préserver la masse maigre
   if(s.train&&Array.isArray(s.train)&&s.train.indexOf(0)!==-1)ppk+=0.1;
   if(s.medical&&s.medical.indexOf('irc')!==-1)ppk=Math.min(ppk,0.6); // KDOQI 2020: 0.55-0.60g/kg CKD 3-5 non-dialysis
   // Vegan/vegetarian: adjust protein for lower DIAAS bioavailability of plant proteins (Messina 2019, ISSN 2017)
@@ -5258,10 +5296,22 @@ var protCat=getRecipeProtein(r);var diversityPenalty=0;
 if(protCat&&dayProteins&&dayProteins.indexOf(protCat)!==-1)diversityPenalty=80;
 // Pénaliser si catégorie protéique sur-représentée dans la semaine
 if(protCat&&weekProtBudget){var cnt=weekProtBudget[protCat]||0;var maxW={volaille:3,poisson:3,viande_rouge:2,oeufs:3,legumineuses:3,tofu_seitan:2};if(cnt>=(maxW[protCat]||3))diversityPenalty+=60;else if(cnt>=2)diversityPenalty+=20;}
+// BUG-6 FIX: sportType-aware scoring (musculation → high-protein; endurance sports training day → high-carb)
+// S._pickRecipeTrainingDay is set by generateWeek() just before calling pickRecipe (per-day flag).
+var sportTypeBonus=0;
+if(s.sportType&&totalMacroKcal>0){
+  var protPct2=(r.p||0)*4/totalMacroKcal;
+  var carbPct2=(r.g||0)*4/totalMacroKcal;
+  if(s.sportType==='musculation'&&protPct2>=0.35){sportTypeBonus=-120;} // high-protein bonus for strength
+  else if(s.sportType==='running'||s.sportType==='cycling'||s.sportType==='hyrox'||s.sportType==='triathlon'){
+    // high-carb bonus on training days for endurance sports
+    if(s._pickRecipeTrainingDay&&carbPct2>=0.50){sportTypeBonus=-120;}
+  }
+}
 // Bonus favori : 1⭐=-200, 2⭐=-400, 3⭐=-600 — domine calScore/macroScore/diversity
 var favStars=(r._id&&_favMap[r._id])?Math.max(1,Math.min(3,_favMap[r._id]|0)):0;
 var favBonus=favStars?-(favStars*200):0;
-return{recipe:r,score:calScore+macroScore+diversityPenalty+favBonus};});scored.sort(function(a,b){return a.score-b.score});var top=scored.slice(0,Math.min(5,scored.length));var picked=top[Math.floor(Math.random()*top.length)].recipe;if(picked){used.add(picked.n);var pc=getRecipeProtein(picked);if(pc){if(dayProteins)dayProteins.push(pc);if(weekProtBudget)weekProtBudget[pc]=(weekProtBudget[pc]||0)+1;}}return picked||{n:'Repas libre',k:targetK,p:Math.round(targetK*0.3/4),g:Math.round(targetK*0.4/4),l:Math.round(targetK*0.3/9),f:0,lv:1,i:'',st:[],w:0,tags:[]}}
+return{recipe:r,score:calScore+macroScore+diversityPenalty+sportTypeBonus+favBonus};};scored.sort(function(a,b){return a.score-b.score});var top=scored.slice(0,Math.min(5,scored.length));var picked=top[Math.floor(Math.random()*top.length)].recipe;if(picked){used.add(picked.n);var pc=getRecipeProtein(picked);if(pc){if(dayProteins)dayProteins.push(pc);if(weekProtBudget)weekProtBudget[pc]=(weekProtBudget[pc]||0)+1;}}return picked||{n:'Repas libre',k:targetK,p:Math.round(targetK*0.3/4),g:Math.round(targetK*0.4/4),l:Math.round(targetK*0.3/9),f:0,lv:1,i:'',st:[],w:0,tags:[]}}
 // Applique le scaling sur mesure pour les recettes R201+ (format riche) et L0XX-L3XX (format legacy)
 function enrichWithScaling(recipe, targetKcal) {
   if (!recipe) return recipe;
@@ -5397,6 +5447,8 @@ var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w&
 var _hasLaitAllergy=Array.isArray(s.allergies)&&(s.allergies.indexOf('Lait/Produits laitiers')!==-1||s.allergies.indexOf('Lactose')!==-1);
 var _canSmooth=!!(s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length&&s.regime!==3&&!_hasLaitAllergy);
 for(var d=0;d<7;d++){var dayProteins=[];var split=getAdaptedMealSplit(d);var c=Math.round(cBase*(split.calMultiplier||1));var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);
+// BUG-6 FIX: expose per-day training flag to pickRecipe for sportType-aware scoring
+s._pickRecipeTrainingDay=!!(split.dayInfo&&split.dayInfo.isTraining);
 // Déduplication intra-journée : éviter le même plat en déjeuner ET dîner (même recette dans les 2 pools)
 var bR=pickRecipe(pB,bT,uB,dayProteins,weekProtBudget);
 // Bloquer le petit-déj dans les pools déjeuner/dîner du même jour
@@ -5428,7 +5480,10 @@ if(nr&&nr.n){uL.add(nr.n);uS.add(nr.n);uD.add(nr.n);}}else if(w.key==='l'){lR=nr
 var _dP=Math.round((bR?bR.p||0:0)+(lR?lR.p||0:0)+(sR?sR.p||0:0)+(dR?dR.p||0:0));
 var _dG=Math.round((bR?bR.g||0:0)+(lR?lR.g||0:0)+(sR?sR.g||0:0)+(dR?dR.g||0:0));
 var _dL=Math.round((bR?bR.l||0:0)+(lR?lR.l||0:0)+(sR?sR.l||0:0)+(dR?dR.l||0:0));
-plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR,kcal:c,p:_dP,g:_dG,l:_dL})}if(window.validateWeekPlan){try{window.validateWeekPlan(plan);}catch(_ve){}}return plan}
+// BUG-7 FIX: use actual meal kcal sum (not planned target c) to keep day.kcal in sync with meals
+var _dK=Math.round((bR?bR.k||0:0)+(lR?lR.k||0:0)+(sR?sR.k||0:0)+(dR?dR.k||0:0));
+plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR,kcal:_dK,targetKcal:c,p:_dP,g:_dG,l:_dL})}// BUG-6 cleanup: remove per-day training flag from profile state after generation
+try{delete s._pickRecipeTrainingDay;}catch(_del){}if(window.validateWeekPlan){try{window.validateWeekPlan(plan);}catch(_ve){}}return plan}
 function swapMeal(di,slot){
   var s=window.S;
   if(!s.weekPlan||!s.weekPlan[di])return;
@@ -5443,6 +5498,8 @@ function swapMeal(di,slot){
     window.computeNutritionState(_isTrainingDay);
   }
   var cBase=calcTarget(),split=getAdaptedMealSplit(di);if(!split)return;var c=Math.round(cBase*(split.calMultiplier||1));
+  // BUG-6 FIX: set training day flag so pickRecipe sportType-aware scoring applies on swap too
+  s._pickRecipeTrainingDay=!!(split.dayInfo&&split.dayInfo.isTraining);
   var tgt=slot==='breakfast'?Math.round(c*split.pctBreak):slot==='lunch'?Math.round(c*split.pctLunch):slot==='snack'?Math.round(c*split.pctSnack):Math.round(c*split.pctDinner);
   // Snack + whey → swapper vers un autre smoothie (pas une collation normale)
   // Condition : whey activé + jour d'entraînement + non-vegan (cohérent avec generateWeek)
@@ -5475,6 +5532,8 @@ function swapMeal(di,slot){
   var _rtQ=['breakfast','lunch','snack','dinner'],_rtD=s.weekPlan[di],_rtT={k:0,p:0,g:0,l:0};
   _rtQ.forEach(function(q){var m=_rtD[q];if(m){_rtT.k+=m.k||0;_rtT.p+=m.p||0;_rtT.g+=m.g||0;_rtT.l+=m.l||0;}});
   _rtD.kcal=_rtT.k;_rtD.p=_rtT.p;_rtD.g=_rtT.g;_rtD.l=_rtT.l;
+  // BUG-6 cleanup: remove training flag from state after swap
+  try{delete s._pickRecipeTrainingDay;}catch(_del){}
   if(window.validateWeekPlan){try{window.validateWeekPlan(s.weekPlan);}catch(_ve){}}
   if(typeof window.saveProfile==='function'){try{window.saveProfile();}catch(e){}}
   if(typeof window.render==='function')window.render();
@@ -6665,7 +6724,16 @@ function buildNMInputs(trainingDay) {
 
 function computeNutritionState(trainingDay) {
   if (!window.NutritionMaster) return null;
-  if (window.S.goal === null || window.S.sex === null) return null;
+  // FIX BUG-NM-SPORT-ONLY 2026-04 : en mode sport-only (appMode='sport'), S.goal est null
+  // (l'user n'a pas fait l'onboarding nutrition). computeNutritionState retournait null → S._nm=null
+  // → RecipeEngine.getAdaptedRecipe échouait silencieusement (no scaling, no adapted macros).
+  // buildNMInputs() defaulte déjà goal → 'maintain' si S.goal=null (ligne ~6689).
+  // Seul le guard ci-dessous bloquait le calcul. On autorise S.goal=null pour les sport-only
+  // si le profil biométrique est complet (sex + age) — NutritionMaster peut calculer.
+  // calcTarget/calcMacros retournent toujours 0 pour S.goal===null (pas d'affichage nutrition).
+  var _allowNullGoal = window.S.appMode === 'sport' && window.S.sex !== null;
+  if (!_allowNullGoal && window.S.goal === null) return null;
+  if (window.S.sex === null) return null;
   // I-02: si getAge() retourne null/0, on ne calcule pas avec age=25 fantôme
   if (!getAge()) { window.S._nm = null; return null; }
   var inputs = buildNMInputs(trainingDay);
@@ -6675,12 +6743,15 @@ function computeNutritionState(trainingDay) {
 
   // Applique les sur-couches médicales de app-core (calcTarget / calcMacros)
   // pour que les valeurs médicalement ajustées soient reflétées dans _nm
+  // FIX BUG-NM-SPORT-ONLY 2026-04 : pour sport-only (S.goal===null), calcTarget()→0 et
+  // calcMacros()→{g:0,p:0,l:0}. Ne pas écraser les valeurs NutritionMaster (goal='maintain')
+  // avec ces zéros — le result NutritionMaster est la seule source valide de macros pour ces users.
   var adjustedCalories = calcTarget();
   var adjustedMacros   = calcMacros();
   if (adjustedCalories && adjustedCalories > 0) {
     result.caloriesTarget = adjustedCalories;
   }
-  if (adjustedMacros) {
+  if (adjustedMacros && (adjustedMacros.p > 0 || adjustedMacros.g > 0 || adjustedMacros.l > 0)) {
     result.proteinGrams = adjustedMacros.p;
     result.carbsGrams   = adjustedMacros.g;
     result.fatGrams     = adjustedMacros.l;

@@ -734,6 +734,12 @@ window.MEASUREMENTS = {
 window.SLEEP_TRACKER = {
 
   _QUALITIES: ['Mauvais', 'Moyen', 'Bon'],
+  _QUALITY_LABELS: { 'Mauvais': {fr:'Mauvais', en:'Poor'}, 'Moyen': {fr:'Moyen', en:'Fair'}, 'Bon': {fr:'Bon', en:'Good'} },
+  _qualityLabel: function(q) {
+    var isEN = window.isEnglish && window.isEnglish();
+    var map = this._QUALITY_LABELS[q];
+    return map ? (isEN ? map.en : map.fr) : q;
+  },
 
   logSleep: function(hours, quality) {
     var h = parseFloat(hours);
@@ -814,7 +820,7 @@ window.SLEEP_TRACKER = {
 
     // Hours input
     var hoursRow = el('div', 'sleep-hours-row');
-    var hoursLabel = el('div', 'sleep-hours-label', 'Heures de sommeil cette nuit');
+    var hoursLabel = el('div', 'sleep-hours-label', (window.isEnglish && window.isEnglish()) ? 'Hours of sleep last night' : 'Heures de sommeil cette nuit');
     hoursRow.appendChild(hoursLabel);
     var hoursInput = el('input', 'sleep-hours-input');
     hoursInput.type = 'number';
@@ -841,7 +847,7 @@ window.SLEEP_TRACKER = {
 
     for (var i = 0; i < self._QUALITIES.length; i++) {
       (function(q) {
-        var card = el('div', 'sleep-quality-card' + (selectedQuality === q ? ' selected' : ''), q);
+        var card = el('div', 'sleep-quality-card' + (selectedQuality === q ? ' selected' : ''), self._qualityLabel(q));
         card.addEventListener('click', function() {
           selectedQuality = q;
           for (var j = 0; j < qualCards.length; j++) qualCards[j].classList.remove('selected');
@@ -869,26 +875,27 @@ window.SLEEP_TRACKER = {
     if (avg && avg.count > 0) {
       var stats = el('div', 'sleep-stats');
 
+      var _isEN = window.isEnglish && window.isEnglish();
       var avgRow = el('div', 'sleep-stat-row');
-      avgRow.appendChild(el('span', 'sleep-stat-label', 'Moyenne (7 derniers jours)'));
+      avgRow.appendChild(el('span', 'sleep-stat-label', _isEN ? 'Average (last 7 days)' : 'Moyenne (7 derniers jours)'));
       avgRow.appendChild(el('span', 'sleep-stat-value', avg.hours + 'h'));
       stats.appendChild(avgRow);
+      var qualLabel = avg.quality >= 2.5 ? (_isEN ? 'Good' : 'Bonne') : (avg.quality >= 1.5 ? (_isEN ? 'Fair' : 'Moyenne') : (_isEN ? 'Poor' : 'Mauvaise'));
 
-      var qualLabel = avg.quality >= 2.5 ? 'Bonne' : (avg.quality >= 1.5 ? 'Moyenne' : 'Mauvaise');
       var qualRow2 = el('div', 'sleep-stat-row');
-      qualRow2.appendChild(el('span', 'sleep-stat-label', 'Qualite moyenne'));
+      qualRow2.appendChild(el('span', 'sleep-stat-label', _isEN ? 'Average quality' : 'Qualité moyenne'));
       qualRow2.appendChild(el('span', 'sleep-stat-value', qualLabel));
       stats.appendChild(qualRow2);
 
       var trend = self.getTrend();
-      var trendLabel = trend === 'up' ? 'En hausse' : (trend === 'down' ? 'En baisse' : 'Stable');
+      var trendLabel = _isEN ? (trend === 'up' ? 'Improving' : (trend === 'down' ? 'Declining' : 'Stable')) : (trend === 'up' ? 'En hausse' : (trend === 'down' ? 'En baisse' : 'Stable'));
       var trendRow = el('div', 'sleep-stat-row');
-      trendRow.appendChild(el('span', 'sleep-stat-label', 'Tendance'));
+      trendRow.appendChild(el('span', 'sleep-stat-label', _isEN ? 'Trend' : 'Tendance'));
       trendRow.appendChild(el('span', 'sleep-stat-value', trendLabel));
       stats.appendChild(trendRow);
 
       var countRow = el('div', 'sleep-stat-row');
-      countRow.appendChild(el('span', 'sleep-stat-label', 'Nuits enregistrées'));
+      countRow.appendChild(el('span', 'sleep-stat-label', _isEN ? 'Nights logged' : 'Nuits enregistrées'));
       countRow.appendChild(el('span', 'sleep-stat-value', String(self.getHistory().length)));
       stats.appendChild(countRow);
 
@@ -1218,7 +1225,7 @@ window.FOOD_CALC = {
 
       // Quantity row
       var qtyRow = el('div', 'food-qty-row');
-      var qtyLabel = el('span', 'food-qty-label', 'Quantite (g) :');
+      var qtyLabel = el('span', 'food-qty-label', 'Quantité (g) :');
       qtyRow.appendChild(qtyLabel);
 
       var qtyInput = el('input', 'food-qty-input');
@@ -1811,7 +1818,7 @@ window.FOOD_JOURNAL = {
     }
 
     // Today's entries grouped by meal
-    var today = new Date().toISOString().split('T')[0];
+    var today = this._localDateStr();
     var entries = this.getToday();
     var meals = {breakfast: [], lunch: [], snack: [], dinner: []};
     var mealLabels = {breakfast: 'Petit-d\u00E9jeuner', lunch: 'D\u00E9jeuner', snack: 'Collation', dinner: 'D\u00EEner'};

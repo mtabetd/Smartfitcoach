@@ -749,10 +749,10 @@ function getNextMeal() {
   var nowMin = now.getHours() * 60 + now.getMinutes();
   var mt = (S.mealTimes && typeof S.mealTimes === 'object') ? S.mealTimes : {};
   var SLOTS = [
-    { key: 'breakfast', label: 'Petit-déjeuner', time: mt.breakfast || '08:00' },
-    { key: 'lunch',     label: 'Déjeuner',       time: mt.lunch     || '12:30' },
-    { key: 'snack',     label: 'Collation',      time: mt.snack     || '16:00' },
-    { key: 'dinner',    label: 'Dîner',          time: mt.dinner    || '19:30' }
+    { key: 'breakfast', label: window.t ? window.t('nutrition.meal_breakfast') : ((window.isEnglish && window.isEnglish()) ? 'Breakfast' : 'Petit-déjeuner'), time: mt.breakfast || '08:00' },
+    { key: 'lunch',     label: window.t ? window.t('nutrition.meal_lunch')      : ((window.isEnglish && window.isEnglish()) ? 'Lunch' : 'Déjeuner'),       time: mt.lunch     || '12:30' },
+    { key: 'snack',     label: window.t ? window.t('nutrition.meal_snack')      : ((window.isEnglish && window.isEnglish()) ? 'Snack' : 'Collation'),      time: mt.snack     || '16:00' },
+    { key: 'dinner',    label: window.t ? window.t('nutrition.meal_dinner')     : ((window.isEnglish && window.isEnglish()) ? 'Dinner' : 'Dîner'),         time: mt.dinner    || '19:30' }
   ];
 
   var TOLERANCE = 45; // minutes de tolérance après l'heure prévue (ex: petit-déj à 8h visible jusqu'à 8h45)
@@ -929,17 +929,17 @@ function renderHeroContextuel() {
   if (!S) return null;
 
   var hour = new Date().getHours();
+  var _greetEN = window.isEnglish && window.isEnglish();
   var momentKey, eyebrowWord, helloWord;
-  if (hour >= 6 && hour < 11) { momentKey = 'matin'; eyebrowWord = 'MATIN'; helloWord = 'Bonjour'; }
-  else if (hour >= 11 && hour < 17) { momentKey = 'midi'; eyebrowWord = 'MIDI'; helloWord = null; /* sec, pas de redite */ }
-  else if (hour >= 17 && hour < 23) { momentKey = 'soir'; eyebrowWord = 'SOIR'; helloWord = 'Bonsoir'; }
-  else { momentKey = 'veille'; eyebrowWord = 'NUIT'; helloWord = null; }
+  if (hour >= 6 && hour < 11) { momentKey = 'matin'; eyebrowWord = _greetEN ? 'MORNING' : 'MATIN'; helloWord = _greetEN ? 'Good morning' : 'Bonjour'; }
+  else if (hour >= 11 && hour < 17) { momentKey = 'midi'; eyebrowWord = _greetEN ? 'MIDDAY' : 'MIDI'; helloWord = null; }
+  else if (hour >= 17 && hour < 23) { momentKey = 'soir'; eyebrowWord = _greetEN ? 'EVENING' : 'SOIR'; helloWord = _greetEN ? 'Good evening' : 'Bonsoir'; }
+  else { momentKey = 'veille'; eyebrowWord = _greetEN ? 'NIGHT' : 'NUIT'; helloWord = null; }
 
-  var daysFr = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
-  var monthsFr = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
   var now = new Date();
-  var dayName = daysFr[now.getDay()].toUpperCase();
-  var dateStr = daysFr[now.getDay()] + ' ' + now.getDate() + ' ' + monthsFr[now.getMonth()];
+  var _locale = _greetEN ? 'en-US' : 'fr-FR';
+  var dayName = now.toLocaleDateString(_locale, {weekday:'long'}).toUpperCase();
+  var dateStr = now.toLocaleDateString(_locale, {weekday:'long', day:'numeric', month:'long'});
   var firstName = (window.getDisplayFirstName ? window.getDisplayFirstName() : (S.prenom || '')) || '';
 
   // Conteneur hero — full-bleed, alignement gauche, fond paper
@@ -1087,7 +1087,10 @@ function buildContextualHero(moment, S) {
   var hasMedical = Array.isArray(S.medical) && S.medical.length > 0;
   var isCFUser = S.sportType === 'crossfit';
   // FIX SPRINT P1.7 — Détection user muscu pour brancher les hero contextuels
-  var isMuscuUser = S.sportType === 'muscu' || S.sportType === 'musculation' || (S.appMode === 'sport' && !isCFUser);
+  // FIX BUG-MUSCU-HERO 2026-04 : le fallback (S.appMode === 'sport' && !isCFUser) capturait
+  // yoga/running/padel/triathlon → leur affichait le hero "musculation" (exos, séance muscu…).
+  // Maintenant : isMuscu est strict (sportType uniquement), le else-branch générique couvre le reste.
+  var isMuscuUser = S.sportType === 'muscu' || S.sportType === 'musculation' || S.sportType === 'calisthenics';
   // Récup séance du jour si user a un programme sport
   var todaySportSession = null;
   try {
@@ -1166,7 +1169,11 @@ function buildContextualHero(moment, S) {
   } else if (moment === 'midi') {
     // Midi : cadrer le déjeuner / préparer la séance
     var remaining = Math.max(0, target - totals.kcal);
-    var hasSessionToday = (typeof window.getDayType === 'function' && window.getDayType(todayIdx)) || false;
+    // FIX COHÉRENCE CALENDRIER 2026-04 : getDayType() retourne un objet {isTraining,...},
+    // toujours truthy même pour un jour de repos → hasSessionToday était TOUJOURS true.
+    // Corrigé : lire explicitement .isTraining.
+    var _dayTypeInfo = (typeof window.getDayType === 'function') ? window.getDayType(todayIdx) : null;
+    var hasSessionToday = !!(_dayTypeInfo && _dayTypeInfo.isTraining);
 
     if (isPregnant) {
       ctx.quote = 'Déjeuner riche en fer recommandé. Lentilles ou épinards ?';
@@ -1465,15 +1472,18 @@ function renderCardHeroKcal() {
     var rings = h('div', {style: 'display:flex;justify-content:center;gap:20px;margin-top:18px;'});
     if (macroTargets.p > 0) {
       var pPct = Math.min(100, totals.p > 0 ? Math.round(totals.p / macroTargets.p * 100) : 0);
-      rings.appendChild(window.svgRing(52, 5, pPct, '#0A0A09', 'Protéines', Math.round(totals.p)));
+      var _mEN = window.isEnglish && window.isEnglish();
+      rings.appendChild(window.svgRing(52, 5, pPct, '#0A0A09', _mEN ? 'Protein' : 'Protéines', Math.round(totals.p)));
     }
     if (macroTargets.g > 0) {
+      var _mEN2 = window.isEnglish && window.isEnglish();
       var gPct = Math.min(100, totals.g > 0 ? Math.round(totals.g / macroTargets.g * 100) : 0);
-      rings.appendChild(window.svgRing(52, 5, gPct, '#6B6B65', 'Glucides', Math.round(totals.g)));
+      rings.appendChild(window.svgRing(52, 5, gPct, '#6B6B65', _mEN2 ? 'Carbs' : 'Glucides', Math.round(totals.g)));
     }
     if (macroTargets.l > 0) {
+      var _mEN3 = window.isEnglish && window.isEnglish();
       var lPct = Math.min(100, totals.l > 0 ? Math.round(totals.l / macroTargets.l * 100) : 0);
-      rings.appendChild(window.svgRing(52, 5, lPct, 'var(--orange,#E86F1E)', 'Lipides', Math.round(totals.l)));
+      rings.appendChild(window.svgRing(52, 5, lPct, 'var(--orange,#E86F1E)', _mEN3 ? 'Fat' : 'Lipides', Math.round(totals.l)));
     }
     hero.appendChild(rings);
   }
@@ -3789,8 +3799,12 @@ function renderCardSport() {
   // FIX SPRINT P1.9 — Détecter séance interrompue (au moins 1 set validé aujourd'hui)
   var todayKey = new Date().toISOString().slice(0, 10);
   var hasInProgressSession = false;
+  // FIX COHÉRENCE CALENDRIER 2026-04 : détecter aussi séance 100% terminée.
+  // sessionHistory est keyed par "<dayIdx>_<date>" (format app-sport.js ligne 8886).
+  var sessionDoneKey = idx + '_' + todayKey;
+  var hasSessionDoneToday = !!(S.sessionHistory && S.sessionHistory[sessionDoneKey]);
   try {
-    if (S.muscuSessionLog && S.muscuSessionLog[todayKey]) {
+    if (!hasSessionDoneToday && S.muscuSessionLog && S.muscuSessionLog[todayKey]) {
       var dayLog = S.muscuSessionLog[todayKey];
       var anyValidated = false, anyUnvalidated = false;
       Object.keys(dayLog).forEach(function(exName) {
@@ -3799,20 +3813,30 @@ function renderCardSport() {
           else anyUnvalidated = true;
         });
       });
-      hasInProgressSession = anyValidated && anyUnvalidated;
+      // Tous les sets validés et aucun non-validé → séance terminée
+      if (anyValidated && !anyUnvalidated) hasSessionDoneToday = true;
+      else hasInProgressSession = anyValidated && anyUnvalidated;
     }
   } catch(eIp) {}
 
   // FIX SPRINT P1.3 + P1.9 — bouton "Commencer/Continuer" prominent
   // FIX MULTI-SPORTS : adapter le libellé pour les sports endurance
-  var btnLabel = hasInProgressSession ? '\u2192 Continuer la s\u00e9ance' : (_isEnduranceSport ? '\u2192 Voir mon programme' : '\u2192 Commencer la s\u00e9ance');
+  // FIX COHÉRENCE 2026-04 : si séance déjà terminée → bouton "✔ Séance terminée" désactivé
+  var btnLabel = hasSessionDoneToday
+    ? '\u2714 S\u00e9ance termin\u00e9e'
+    : (hasInProgressSession ? '\u2192 Continuer la s\u00e9ance' : (_isEnduranceSport ? '\u2192 Voir mon programme' : '\u2192 Commencer la s\u00e9ance'));
+  // FIX COHÉRENCE 2026-04 : style du bouton adapté selon l'état de la séance
+  var _btnStyle = hasSessionDoneToday
+    ? 'display:block;width:100%;padding:16px;background:rgba(62,92,58,0.08);color:var(--success,#3E5C3A);border:1px solid var(--success,#3E5C3A);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;cursor:default;border-radius:2px;min-height:52px;font-weight:500;'
+    : 'display:block;width:100%;padding:16px;background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;min-height:52px;font-weight:500;';
   var btn = h('button', {
-    style: 'display:block;width:100%;padding:16px;background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;min-height:52px;font-weight:500;',
+    style: _btnStyle,
     onclick: function() {
+      // Séance déjà terminée → naviguer quand même pour voir le bilan
       var S2 = window.S;
       if (!S2) return;
       S2.view = 'sport';
-      S2.selectedSportDay = idx;
+      S2.selectedSportDay = Math.min(idx, (Array.isArray(S2.sportProgram) ? S2.sportProgram.length - 1 : 0));
       if (window.render) window.render();
     }
   }, btnLabel);
@@ -6263,7 +6287,9 @@ function renderCoachBar() {
                : (hour >= 17 && hour < 23) ? 'soir' : 'veille';
   // FIX SPRINT P2.8 — Coach bar muscu-aware
   // Détection user muscu + état fatigue → prompts adaptés.
-  var _isMuscuUser = S.sportType === 'muscu' || S.sportType === 'musculation' || (S.appMode === 'sport');
+  // FIX BUG-MUSCU-COACHBAR 2026-04 : (S.appMode === 'sport') capturait yoga/running/padel →
+  // leur affichait les prompts musculation dans la coach bar. Maintenant : strict sur sportType.
+  var _isMuscuUser = S.sportType === 'muscu' || S.sportType === 'musculation' || S.sportType === 'calisthenics';
   var _isFatigued = false;
   try {
     var _w = S.todayWellness;

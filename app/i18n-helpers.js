@@ -140,7 +140,7 @@
   W.tr = function(key, fallback) {
     if (W.I18N && W.I18N.t) {
       var v = W.I18N.t(key);
-      if (v && v !== key) return v;
+      if (v) return v;
     }
     return (fallback != null) ? fallback : key;
   };

@@ -41,6 +41,7 @@
   var _attempts = 0;
   var MAX_ATTEMPTS = 5;
   var _lockedUntil = (function(){ try { return parseInt(sessionStorage.getItem('_gateLockedUntil')||'0',10)||0; } catch(e){ return 0; } })();
+  var _isEN = (function(){ try { var p = JSON.parse(localStorage.getItem('sfc_profile') || '{}'); return (p.lang || 'fr') === 'en'; } catch(e) { return false; } })();
 
   function checkGate(){
     var stored;
@@ -79,7 +80,7 @@
     try { var _stored = parseInt(sessionStorage.getItem('_gateLockedUntil')||'0',10)||0; if (_stored > _lockedUntil) _lockedUntil = _stored; } catch(e) {}
     if (now < _lockedUntil) {
       var err=document.getElementById('gate-error');
-      if (err) { err.style.display='block'; err.textContent='Trop de tentatives. Attendez quelques secondes.'; }
+      if (err) { err.style.display='block'; err.textContent=_isEN ? 'Too many attempts. Please wait a few seconds.' : 'Trop de tentatives. Attendez quelques secondes.'; }
       return;
     }
     var _pwEl = document.getElementById('gate-pw');
@@ -98,7 +99,7 @@
           _attempts = 0;
         }
         var err=document.getElementById('gate-error');
-        if (err) { err.style.display='block'; err.textContent='Mot de passe incorrect'; }
+        if (err) { err.style.display='block'; err.textContent=_isEN ? 'Incorrect password' : 'Mot de passe incorrect'; }
         var _pwEl2 = document.getElementById('gate-pw');
         if (_pwEl2) { _pwEl2.value=''; _pwEl2.focus(); }
       }
@@ -187,8 +188,8 @@
         };
 
         // Validation côté client — minimaliste, la function Netlify revalide
-        if(!data.first_name || !data.last_name){ showErr('Prénom et nom requis.'); return; }
-        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)){ showErr('Adresse email invalide.'); return; }
+        if(!data.first_name || !data.last_name){ showErr(_isEN ? 'First name and last name are required.' : 'Prénom et nom requis.'); return; }
+        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)){ showErr(_isEN ? 'Invalid email address.' : 'Adresse email invalide.'); return; }
 
         _preLock = true;
         if(submit){
@@ -209,16 +210,15 @@
             if(success) success.style.display = 'block';
           } else {
             _preLock = false;
-            if(submit){ submit.disabled=false; submit.textContent='Rejoindre le cercle'; submit.style.opacity='1'; }
-            var msg = (r.body && r.body.error) || 'Une erreur est survenue. Merci de réessayer.';
-            // Email déjà inscrit → message doux
-            if(r.status===409) msg = 'Vous figurez déjà parmi les premiers inscrits.';
+            if(submit){ submit.disabled=false; submit.textContent=_isEN ? 'Join the circle' : 'Rejoindre le cercle'; submit.style.opacity='1'; }
+            var msg = (r.body && r.body.error) || (_isEN ? 'An error occurred. Please try again.' : 'Une erreur est survenue. Merci de réessayer.');
+            if(r.status===409) msg = _isEN ? 'You are already among the first registered.' : 'Vous figurez déjà parmi les premiers inscrits.';
             showErr(msg);
           }
         }).catch(function(){
           _preLock = false;
-          if(submit){ submit.disabled=false; submit.textContent='Rejoindre le cercle'; submit.style.opacity='1'; }
-          showErr('Connexion impossible. Vérifiez votre réseau.');
+          if(submit){ submit.disabled=false; submit.textContent=_isEN ? 'Join the circle' : 'Rejoindre le cercle'; submit.style.opacity='1'; }
+          showErr(_isEN ? 'Connection failed. Check your network.' : 'Connexion impossible. Vérifiez votre réseau.');
         });
       });
     } catch(err) {

@@ -81,7 +81,7 @@
     try {
       if (window.GAMIFICATION && window.GAMIFICATION.getStreak) return window.GAMIFICATION.getStreak();
       var raw = localStorage.getItem('mtd_streak_' + _uid());
-      if (raw) { var s = JSON.parse(raw); return s && s.count ? s.count : 0; }
+      if (raw) { var s = JSON.parse(raw); return s && (s.current !== undefined ? s.current : (s.count || 0)); }
     } catch(e) {}
     return 0;
   }
@@ -126,7 +126,7 @@
   // Hermès pattern : eyebrow (kind) en haut + sectionTitle en dessous, pas fusionnés
   function section(title, kind) {
     var box = h('div', { style: ST.card });
-    box.appendChild(h('div', { style: ST.eyebrow }, kind || 'Progrès'));
+    box.appendChild(h('div', { style: ST.eyebrow }, kind || ((window.isEnglish && window.isEnglish()) ? 'Progress' : 'Progrès')));
     box.appendChild(h('h2', { style: ST.sectionTitle }, title));
     return box;
   }
@@ -155,9 +155,10 @@
   // ─── RENDER POIDS ───
   function _renderWeight(period) {
     var wh = _getWeightHistory().slice().sort(function(a, b) { return (a.date || '').localeCompare(b.date || ''); });
-    var s = section('Poids', 'Évolution');
+    var _wEN = window.isEnglish && window.isEnglish();
+    var s = section(_wEN ? 'Weight' : 'Poids', _wEN ? 'Progress' : 'Évolution');
     if (wh.length === 0) {
-      s.appendChild(h('div', { style: ST.sub }, 'Aucune entrée de poids. Enregistrez votre poids depuis le tableau de bord pour suivre votre progression.'));
+      s.appendChild(h('div', { style: ST.sub }, _wEN ? 'No weight entries. Record your weight from the dashboard to track your progress.' : 'Aucune entrée de poids. Enregistrez votre poids depuis le tableau de bord pour suivre votre progression.'));
       return s;
     }
     var last = wh[wh.length - 1];
@@ -169,8 +170,8 @@
     }
     if (!base) base = wh[0];
     var delta = _calcDelta(base.weight, last.weight);
-    s.appendChild(metricBig('Aujourd\'hui', last.weight, ' kg', delta, 'il y a ' + (period || 4) + ' sem.'));
-    s.appendChild(h('div', { style: ST.sub + 'margin-top:6px;' }, wh.length + ' ' + window.locPlural(wh.length, {fr:{one:'mesure enregistrée',other:'mesures enregistrées'},en:{one:'measurement recorded',other:'measurements recorded'}})));
+    s.appendChild(metricBig(_wEN ? 'Today' : 'Aujourd\'hui', last.weight, ' kg', delta, _wEN ? (period || 4) + ' wks ago' : 'il y a ' + (period || 4) + ' sem.'));
+    s.appendChild(h('div', { style: ST.sub + 'margin-top:6px;' }, wh.length + ' ' + (window.locPlural ? window.locPlural(wh.length, {fr:{one:'mesure enregistrée',other:'mesures enregistrées'},en:{one:'measurement recorded',other:'measurements recorded'}}) : (_wEN ? (wh.length > 1 ? 'measurements recorded' : 'measurement recorded') : (wh.length > 1 ? 'mesures enregistrées' : 'mesure enregistrée')))));
     return s;
   }
 
@@ -178,13 +179,14 @@
   function _renderForce() {
     var msp = _getMuscuStrength();
     var cf = _getCrossFit1RM();
-    var s = section('Force muscu — tes records', '1RM');
+    var _fEN = window.isEnglish && window.isEnglish();
+    var s = section(_fEN ? 'Strength — your records' : 'Force muscu — tes records', '1RM');
     var entries = [];
     Object.keys(msp).forEach(function(k) {
       var e = msp[k];
-      if (e && e.weight && e.reps) {
-        // Epley : 1RM = w × (1 + r/30)
-        var oneRM = Math.round(e.weight * (1 + e.reps / 30) / 2.5) * 2.5;
+      if (e && e.weight && e.reps && e.reps > 0) {
+        // Epley : 1RM = w × (1 + r/30) — reps=1 means weight IS the 1RM (no inflation)
+        var oneRM = e.reps === 1 ? e.weight : Math.round(e.weight * (1 + e.reps / 30) / 2.5) * 2.5;
         entries.push({ name: k, est: oneRM, raw: e.weight + ' × ' + e.reps });
       }
     });
@@ -192,7 +194,7 @@
       if (cf[k] && cf[k] > 0) entries.push({ name: k + ' (CF)', est: cf[k], raw: '1RM' });
     });
     if (entries.length === 0) {
-      s.appendChild(h('div', { style: ST.sub }, 'Commencez à logger vos séances pour voir vos records calculés automatiquement.'));
+      s.appendChild(h('div', { style: ST.sub }, _fEN ? 'Start logging your sessions to see your records calculated automatically.' : 'Commencez à logger vos séances pour voir vos records calculés automatiquement.'));
       return s;
     }
     // Top 6 par est 1RM
@@ -213,15 +215,16 @@
   // ─── RENDER RUNNING ───
   function _renderRunning(period) {
     var rh = _getRunHistory();
-    var s = section('Course à pied', 'Running');
+    var _rEN = window.isEnglish && window.isEnglish();
+    var s = section(_rEN ? 'Running' : 'Course à pied', 'Running');
     if (!rh.length) {
-      s.appendChild(h('div', { style: ST.sub }, 'Aucune course enregistrée.'));
+      s.appendChild(h('div', { style: ST.sub }, _rEN ? 'No runs recorded.' : 'Aucune course enregistrée.'));
       return s;
     }
     var cutoff = _weeksAgo(period || 4);
     var recent = rh.filter(function(r) { return r && r.date && r.date >= cutoff; });
     if (recent.length === 0) {
-      s.appendChild(h('div', { style: ST.sub }, 'Aucune course sur les ' + (period || 4) + ' dernières semaines.'));
+      s.appendChild(h('div', { style: ST.sub }, _rEN ? 'No runs in the last ' + (period || 4) + ' weeks.' : 'Aucune course sur les ' + (period || 4) + ' dernières semaines.'));
       return s;
     }
     var totalKm = 0, totalMin = 0;
@@ -230,27 +233,35 @@
       totalMin += Number(r.durationMin) || 0;
     });
     var avgPace = totalKm > 0 ? (totalMin / totalKm) : 0;
-    var pMin = Math.floor(avgPace), pSec = Math.round((avgPace - pMin) * 60);
-    var paceStr = pMin + ':' + (pSec < 10 ? '0' : '') + pSec + ' /km';
-    s.appendChild(metricBig('Distance (' + (period || 4) + ' sem.)', totalKm.toFixed(1), ' km', null, recent.length + ' ' + window.locPlural(recent.length, {fr:{one:'course',other:'courses'},en:{one:'run',other:'runs'}})));
+    var paceStr;
+    if (totalKm > 0 && avgPace > 0) {
+      var pMin = Math.floor(avgPace), pSec = Math.round((avgPace - pMin) * 60);
+      if (pSec === 60) { pMin += 1; pSec = 0; }
+      paceStr = pMin + ':' + (pSec < 10 ? '0' : '') + pSec + ' /km';
+    } else {
+      paceStr = '—';
+    }
+    var _runPlural = window.locPlural ? window.locPlural(recent.length, {fr:{one:'course',other:'courses'},en:{one:'run',other:'runs'}}) : (_rEN ? (recent.length > 1 ? 'runs' : 'run') : (recent.length > 1 ? 'courses' : 'course'));
+    s.appendChild(metricBig(_rEN ? 'Distance (' + (period || 4) + ' wks)' : 'Distance (' + (period || 4) + ' sem.)', totalKm.toFixed(1), ' km', null, recent.length + ' ' + _runPlural));
     s.appendChild(h('div', { style: 'margin-top:12px;' }));
-    s.appendChild(metricBig('Allure moyenne', paceStr, '', null, null));
+    s.appendChild(metricBig(_rEN ? 'Average pace' : 'Allure moyenne', paceStr, '', null, null));
     return s;
   }
 
   // ─── RENDER NUTRITION ───
   function _renderNutrition(period) {
     var journal = _getFoodJournal();
-    var s = section('Nutrition', 'Macros moyennes');
+    var _nEN = window.isEnglish && window.isEnglish();
+    var s = section('Nutrition', _nEN ? 'Average macros' : 'Macros moyennes');
     var dates = Object.keys(journal).sort();
     if (!dates.length) {
-      s.appendChild(h('div', { style: ST.sub }, 'Aucun repas enregistré. Utilisez le Journal du jour pour commencer le suivi.'));
+      s.appendChild(h('div', { style: ST.sub }, _nEN ? 'No meals logged. Use the daily Journal to start tracking.' : 'Aucun repas enregistré. Utilisez le Journal du jour pour commencer le suivi.'));
       return s;
     }
     var cutoff = _weeksAgo(period || 4);
     var recentDays = dates.filter(function(d) { return d >= cutoff; });
     if (recentDays.length === 0) {
-      s.appendChild(h('div', { style: ST.sub }, 'Aucun repas sur les ' + (period || 4) + ' dernières semaines.'));
+      s.appendChild(h('div', { style: ST.sub }, _nEN ? 'No meals logged in the last ' + (period || 4) + ' weeks.' : 'Aucun repas sur les ' + (period || 4) + ' dernières semaines.'));
       return s;
     }
     var totalK = 0, totalP = 0, totalG = 0, totalL = 0;
@@ -269,34 +280,36 @@
     var n = recentDays.length;
     s.appendChild(h('div', { style: 'display:flex;gap:12px;flex-wrap:wrap;' }, [
       h('div', { style: 'flex:1;min-width:100px;' }, [
-        h('div', { style: ST.sub + 'margin-bottom:2px;' }, 'Kcal / jour'),
+        h('div', { style: ST.sub + 'margin-bottom:2px;' }, _nEN ? 'Kcal / day' : 'Kcal / jour'),
         h('div', { style: ST.value }, Math.round(totalK / n))
       ]),
       h('div', { style: 'flex:1;min-width:100px;' }, [
-        h('div', { style: ST.sub + 'margin-bottom:2px;' }, 'Protéines'),
+        h('div', { style: ST.sub + 'margin-bottom:2px;' }, _nEN ? 'Protein' : 'Protéines'),
         h('div', { style: ST.value }, Math.round(totalP / n) + 'g')
       ]),
       h('div', { style: 'flex:1;min-width:100px;' }, [
-        h('div', { style: ST.sub + 'margin-bottom:2px;' }, 'Glucides'),
+        h('div', { style: ST.sub + 'margin-bottom:2px;' }, _nEN ? 'Carbs' : 'Glucides'),
         h('div', { style: ST.value }, Math.round(totalG / n) + 'g')
       ]),
       h('div', { style: 'flex:1;min-width:100px;' }, [
-        h('div', { style: ST.sub + 'margin-bottom:2px;' }, 'Lipides'),
+        h('div', { style: ST.sub + 'margin-bottom:2px;' }, _nEN ? 'Fat' : 'Lipides'),
         h('div', { style: ST.value }, Math.round(totalL / n) + 'g')
       ])
     ]));
-    s.appendChild(h('div', { style: ST.sub + 'margin-top:10px;' }, 'Moyenne sur ' + n + ' ' + window.locPlural(n, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + ' de suivi · ' + (period || 4) + ' dernières semaines'));
+    var _dayWord = window.locPlural ? window.locPlural(n, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) : (_nEN ? (n > 1 ? 'days' : 'day') : (n > 1 ? 'jours' : 'jour'));
+    s.appendChild(h('div', { style: ST.sub + 'margin-top:10px;' }, (_nEN ? 'Average over ' + n + ' ' + _dayWord + ' tracked · last ' + (period || 4) + ' weeks' : 'Moyenne sur ' + n + ' ' + _dayWord + ' de suivi · ' + (period || 4) + ' dernières semaines')));
     return s;
   }
 
   // ─── RENDER ACTIVITÉ SPORT ───
   function _renderActivity(period) {
     var sh = _getSessionHistory();
-    var s = section('Activité sport', 'Volume');
+    var _aEN = window.isEnglish && window.isEnglish();
+    var s = section(_aEN ? 'Sport activity' : 'Activité sport', _aEN ? 'Volume' : 'Volume');
     var cutoff = _weeksAgo(period || 4);
     var keys = Object.keys(sh).filter(function(k) { return k >= cutoff; });
     if (!keys.length) {
-      s.appendChild(h('div', { style: ST.sub }, 'Aucune séance validée sur les ' + (period || 4) + ' dernières semaines.'));
+      s.appendChild(h('div', { style: ST.sub }, _aEN ? 'No sessions validated in the last ' + (period || 4) + ' weeks.' : 'Aucune séance validée sur les ' + (period || 4) + ' dernières semaines.'));
       return s;
     }
     var totalKcal = 0, totalMin = 0;
@@ -308,15 +321,15 @@
     });
     s.appendChild(h('div', { style: 'display:flex;gap:12px;flex-wrap:wrap;' }, [
       h('div', { style: 'flex:1;min-width:100px;' }, [
-        h('div', { style: ST.sub + 'margin-bottom:2px;' }, 'Séances'),
+        h('div', { style: ST.sub + 'margin-bottom:2px;' }, _aEN ? 'Sessions' : 'Séances'),
         h('div', { style: ST.value }, keys.length)
       ]),
       h('div', { style: 'flex:1;min-width:100px;' }, [
-        h('div', { style: ST.sub + 'margin-bottom:2px;' }, 'Kcal brûlées'),
+        h('div', { style: ST.sub + 'margin-bottom:2px;' }, _aEN ? 'Kcal burned' : 'Kcal brûlées'),
         h('div', { style: ST.value }, Math.round(totalKcal))
       ]),
       h('div', { style: 'flex:1;min-width:100px;' }, [
-        h('div', { style: ST.sub + 'margin-bottom:2px;' }, 'Durée totale'),
+        h('div', { style: ST.sub + 'margin-bottom:2px;' }, _aEN ? 'Total duration' : 'Durée totale'),
         h('div', { style: ST.value }, Math.round(totalMin) + ' min')
       ])
     ]));
@@ -328,15 +341,16 @@
     var streak = _getStreak();
     var badges = _getBadges();
     var badgeCount = Object.keys(badges).filter(function(k) { return badges[k]; }).length;
-    var s = section('Régularité', 'Gamification');
+    var _sEN = window.isEnglish && window.isEnglish();
+    var s = section(_sEN ? 'Consistency' : 'Régularité', 'Gamification');
     s.appendChild(h('div', { style: 'display:flex;gap:24px;flex-wrap:wrap;' }, [
       h('div', { style: 'flex:1;min-width:120px;' }, [
-        h('div', { style: ST.sub + 'margin-bottom:2px;' }, 'Série en cours'),
+        h('div', { style: ST.sub + 'margin-bottom:2px;' }, _sEN ? 'Current streak' : 'Série en cours'),
         h('div', { style: ST.value }, streak),
-        h('div', { style: ST.sub }, window.locPlural(streak, {fr:{one:'jour consécutif',other:'jours consécutifs'},en:{one:'day in a row',other:'days in a row'}}))
+        h('div', { style: ST.sub }, window.locPlural ? window.locPlural(streak, {fr:{one:'jour consécutif',other:'jours consécutifs'},en:{one:'day in a row',other:'days in a row'}}) : (_sEN ? (streak > 1 ? 'days in a row' : 'day in a row') : (streak > 1 ? 'jours consécutifs' : 'jour consécutif')))
       ]),
       h('div', { style: 'flex:1;min-width:120px;' }, [
-        h('div', { style: ST.sub + 'margin-bottom:2px;' }, 'Badges débloqués'),
+        h('div', { style: ST.sub + 'margin-bottom:2px;' }, _sEN ? 'Badges unlocked' : 'Badges débloqués'),
         h('div', { style: ST.value }, badgeCount)
       ])
     ]));
@@ -346,11 +360,12 @@
   // ─── PERIOD SELECTOR — cubic-bezier Hermès ───
   function _renderPeriodSelector(currentPeriod, onChange) {
     var row = h('div', { style: 'display:flex;gap:8px;margin-bottom:24px;' });
+    var _pEN = window.isEnglish && window.isEnglish();
     [4, 8, 12].forEach(function(w) {
       var isActive = w === currentPeriod;
       var btn = h('button', {
         type: 'button',
-        'aria-label': 'Afficher progression sur ' + w + ' semaines',
+        'aria-label': _pEN ? 'Show progress over ' + w + ' weeks' : 'Afficher progression sur ' + w + ' semaines',
         'aria-pressed': isActive ? 'true' : 'false',
         style: 'flex:1;padding:12px 8px;min-height:44px;cursor:pointer;border:1px solid var(--line,#D8D8D0);'
           + 'background:' + (isActive ? 'var(--black,#0A0A09)' : 'transparent') + ';'
@@ -358,7 +373,7 @@
           + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;'
           + 'border-radius:2px;'
           + 'transition:background 0.24s cubic-bezier(0.25,0.46,0.45,0.94),color 0.24s cubic-bezier(0.25,0.46,0.45,0.94),border-color 0.24s cubic-bezier(0.25,0.46,0.45,0.94);'
-      }, w + ' semaines');
+      }, _pEN ? w + ' wks' : w + ' sem.');
       btn.addEventListener('click', function() { onChange(w); });
       row.appendChild(btn);
     });
@@ -376,13 +391,14 @@
     var period = S._analyticsPeriod;
 
     // Eyebrow + titre
-    container.appendChild(h('div', { style: ST.eyebrow + 'margin-top:8px;' }, 'Progrès — vue d\'ensemble'));
+    var _rEN = window.isEnglish && window.isEnglish();
+    container.appendChild(h('div', { style: ST.eyebrow + 'margin-top:8px;' }, _rEN ? 'Progress — overview' : 'Progrès — vue d\'ensemble'));
     container.appendChild(h('h1', {
       style: 'font-family:Georgia,serif;font-size:28px;font-weight:normal;margin:0 0 4px;color:var(--black,#0A0A09);letter-spacing:-0.01em;line-height:1.15;'
-    }, 'Votre progression'));
+    }, _rEN ? 'Your progress' : 'Votre progression'));
     container.appendChild(h('p', {
       style: ST.sub + 'margin:0 0 20px;'
-    }, 'Tendances, records et volumes sur les dernières semaines.'));
+    }, _rEN ? 'Trends, records and volumes over the last few weeks.' : 'Tendances, records et volumes sur les dernières semaines.'));
 
     // Sélecteur période
     container.appendChild(_renderPeriodSelector(period, function(newP) {
@@ -401,7 +417,7 @@
     // Footer discret
     container.appendChild(h('p', {
       style: ST.sub + 'text-align:center;margin-top:20px;padding-top:12px;border-top:1px solid var(--line,#D8D8D0);font-style:italic;'
-    }, 'Les données affichées proviennent de vos séances et repas enregistrés.'));
+    }, _rEN ? 'The data displayed comes from your logged sessions and meals.' : 'Les données affichées proviennent de vos séances et repas enregistrés.'));
   }
 
   // ─── EXPORT ───

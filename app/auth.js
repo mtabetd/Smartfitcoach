@@ -266,16 +266,17 @@ function isLegacySessionValid() {
 // ─── SUPABASE ERROR MAPPING ───
 function mapSupabaseError(err) {
   var msg = (err && err.message) ? err.message : String(err || '');
-  if (msg.indexOf('Invalid login credentials') !== -1) return 'Email ou mot de passe incorrect';
-  if (msg.indexOf('User already registered') !== -1) return 'Cet email est d\u00e9j\u00e0 utilis\u00e9';
-  if (msg.indexOf('Email not confirmed') !== -1) return 'Email non confirm\u00e9. V\u00e9rifiez votre bo\u00eete mail.';
-  if (msg.indexOf('Password should be at least 6 characters') !== -1) return 'Le mot de passe doit contenir au moins 6 caract\u00e8res';
-  if (msg.indexOf('Unable to validate email address') !== -1) return 'Format d\'email invalide';
-  if (msg.indexOf('Invalid API key') !== -1 || msg.indexOf('apikey') !== -1) return 'Erreur serveur. Contactez le support.';
-  if (msg.indexOf('rate limit') !== -1 || msg.indexOf('too many') !== -1) return 'Trop de tentatives. R\u00e9essayez dans quelques minutes.';
-  if (msg.indexOf('network') !== -1 || msg.indexOf('fetch') !== -1) return 'Erreur r\u00e9seau. V\u00e9rifiez votre connexion.';
+  var isEN = window.isEnglish && window.isEnglish();
+  if (msg.indexOf('Invalid login credentials') !== -1) return isEN ? 'Invalid email or password' : 'Email ou mot de passe incorrect';
+  if (msg.indexOf('User already registered') !== -1) return isEN ? 'This email is already registered' : 'Cet email est d\u00e9j\u00e0 utilis\u00e9';
+  if (msg.indexOf('Email not confirmed') !== -1) return isEN ? 'Email not confirmed. Check your inbox.' : 'Email non confirm\u00e9. V\u00e9rifiez votre bo\u00eete mail.';
+  if (msg.indexOf('Password should be at least 6 characters') !== -1) return isEN ? 'Password must be at least 6 characters' : 'Le mot de passe doit contenir au moins 6 caract\u00e8res';
+  if (msg.indexOf('Unable to validate email address') !== -1) return isEN ? 'Invalid email format' : 'Format d\'email invalide';
+  if (msg.indexOf('Invalid API key') !== -1 || msg.indexOf('apikey') !== -1) return isEN ? 'Server error. Contact support.' : 'Erreur serveur. Contactez le support.';
+  if (msg.indexOf('rate limit') !== -1 || msg.indexOf('too many') !== -1) return isEN ? 'Too many attempts. Try again in a few minutes.' : 'Trop de tentatives. R\u00e9essayez dans quelques minutes.';
+  if (msg.indexOf('network') !== -1 || msg.indexOf('fetch') !== -1) return isEN ? 'Network error. Check your connection.' : 'Erreur r\u00e9seau. V\u00e9rifiez votre connexion.';
   console.warn('[AUTH] Unmapped Supabase error:', msg);
-  return 'Erreur de connexion. R\u00e9essayez.';
+  return isEN ? 'Connection error. Please try again.' : 'Erreur de connexion. R\u00e9essayez.';
 }
 
 // ─── SUPABASE AVAILABILITY CHECK ───
@@ -315,7 +316,7 @@ function _loadLegacySession() {
     var s = getLegacySession();
     if (s) {
       _currentSession = { id: s.id, name: s.name, email: s.email, nom: s.nom || '', phone: s.phone || '' };
-      console.log('[AUTH] Legacy session restored for:', s.email);
+      if (window._SFC_DEBUG) console.log('[AUTH] Legacy session restored');
     }
   }
 }
@@ -384,7 +385,7 @@ function _initAuth() {
     if (event === 'TOKEN_REFRESHED') {
       if (session && session.user) {
         _currentSession = _extractUser(session.user);
-        if (_currentSession) console.log('[AUTH] Token refreshed — session maintenue pour:', _currentSession.email);
+        if (_currentSession && window._SFC_DEBUG) console.log('[AUTH] Token refreshed');
       }
       return;
     }
@@ -442,7 +443,7 @@ function _initAuth() {
     console.log('[AUTH] Supabase connected OK');
     if (result.data && result.data.session && result.data.session.user) {
       _currentSession = _extractUser(result.data.session.user);
-      console.log('[AUTH] Session restored for:', _currentSession.email);
+      if (window._SFC_DEBUG) console.log('[AUTH] Session restored');
       if (window.S && _currentSession) {
         if (_currentSession.nom   && !window.S.nom)   window.S.nom   = _currentSession.nom;
         if (_currentSession.phone && !window.S.phone) window.S.phone = _currentSession.phone;
@@ -958,11 +959,11 @@ window.AUTH = {
       window.S.selectedSportDay = 0; window.S.crossfitCycleWeek = 1;
       window.S.trainTime = null; window.S.heartRateRest = null;
       // Running
-      window.S.runningDays = null; window.S.runningGoal = null;
+      window.S.runningDays = 3; window.S.runningGoal = null;
       window.S.runningLevel = null; window.S.runningPace = null;
       window.S.runningWeek = 1; window.S.runningProgram = null; window.S.selectedRunDay = 0;
       // Cycling
-      window.S.cyclingDays = null; window.S.cyclingGoal = null;
+      window.S.cyclingDays = 3; window.S.cyclingGoal = null;
       window.S.cyclingLevel = null; window.S.cyclingType = null;
       window.S.cyclingSpeed = null; window.S.cyclingFTP = null;
       window.S.cyclingRelief = null; window.S.cyclingWeek = 1;
@@ -974,17 +975,17 @@ window.AUTH = {
       window.S.triathlonBikePace = null; window.S.triathlonRunPace = null;
       window.S.triathlonWeak = null;
       // Hyrox
-      window.S.hyroxDays = null; window.S.hyroxGoal = null;
+      window.S.hyroxDays = 3; window.S.hyroxGoal = null;
       window.S.hyroxLevel = null; window.S.hyroxWeek = 1;
       window.S.hyroxProgram = null; window.S.selectedHyroxDay = 0;
       window.S.hyroxBenchmarks = {};
       // Padel
-      window.S.padelDays = null; window.S.padelGoal = null;
+      window.S.padelDays = 3; window.S.padelGoal = null;
       window.S.padelLevel = null; window.S.padelWeek = 1;
       window.S.padelProgram = null; window.S.selectedPadelDay = 0;
       window.S.padelProfile = null;
       // Golf
-      window.S.golfDays = null; window.S.golfGoal = null;
+      window.S.golfDays = 3; window.S.golfGoal = null;
       window.S.golfLevel = null; window.S.golfHandicap = null;
       window.S.golfWeek = 1; window.S.golfProgram = null;
       window.S.selectedGolfDay = 0; window.S.golfProfile = null;
@@ -1219,7 +1220,7 @@ window.AUTH = {
     }
 
     var redirectUrl = window.location.origin + window.location.pathname;
-    console.log('[AUTH] resetPassword for:', email, 'redirectTo:', redirectUrl);
+    if (window._SFC_DEBUG) console.log('[AUTH] resetPassword initiated, redirectTo:', redirectUrl);
 
     return client.auth.resetPasswordForEmail(email, {
       redirectTo: redirectUrl

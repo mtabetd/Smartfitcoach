@@ -104,14 +104,21 @@
   }
 
   function formatNextGenerationDate(date) {
-    var days = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
-    var months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+    var _mpgLang = (function(){ try { var p=JSON.parse(localStorage.getItem('sfc_profile')||'{}'); return p.lang||'fr'; } catch(e){ return 'fr'; } })();
+    var days = _mpgLang === 'en'
+      ? ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+      : ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
+    var months = _mpgLang === 'en'
+      ? ['January','February','March','April','May','June','July','August','September','October','November','December']
+      : ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
     var dayName = days[date.getDay()];
     var dayNum = date.getDate();
     var monthName = months[date.getMonth()];
     var h = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
     var m = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
-    return dayName + ' ' + dayNum + ' ' + monthName + ' à ' + h + 'h' + m;
+    return _mpgLang === 'en'
+      ? dayName + ' ' + monthName + ' ' + dayNum + ' at ' + h + ':' + m
+      : dayName + ' ' + dayNum + ' ' + monthName + ' à ' + h + 'h' + m;
   }
 
   function buildGenerationCounterHTML() {
@@ -122,12 +129,12 @@
       '</p>';
     } else if (remaining === 1) {
       return '<p id="muscu-prog-counter" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;text-align:center;color:var(--orange,#B85C00);margin:0 auto 16px auto;">' +
-        '1 g\u00e9n\u00e9ration restante cette semaine' +
+        (window.isEnglish && window.isEnglish() ? '1 generation left this week' : '1 g\u00e9n\u00e9ration restante cette semaine') +
       '</p>';
     } else {
       var nextDate = getNextMondayMidnight();
       return '<p id="muscu-prog-counter" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;text-align:center;color:var(--grey,#6B6B65);margin:0 auto 16px auto;">' +
-        'Prochaine g\u00e9n\u00e9ration disponible\u00a0: ' + formatNextGenerationDate(nextDate) +
+        ((window.isEnglish && window.isEnglish()) ? 'Next generation available: ' : 'Prochaine g\u00e9n\u00e9ration disponible\u00a0: ') + formatNextGenerationDate(nextDate) +
       '</p>';
     }
   }

@@ -255,7 +255,7 @@
       var prefs = this.getPrefs();
       if (!prefs.granted) return;
       var now = new Date();
-      var mt = (window.S && window.S.mealTimes && typeof window.S.mealTimes === 'object') ? window.S.mealTimes : {};
+      var mt = (window.S && window.S.mealTimes && typeof window.S.mealTimes === 'object' && !Array.isArray(window.S.mealTimes)) ? window.S.mealTimes : {};
 
       // Utilise S.mealTimes (format "HH:MM") si disponible, fallback sur 12h00 / 19h00
       var lunchTime = this._parseHHMM(mt.lunch) || { h: 12, m: 0 };
@@ -322,10 +322,10 @@
           var streak = streakData.current || 0;
           var msg = diff === 2
             ? (streak > 0
-                ? ((window.isEnglish && window.isEnglish()) ? ('Your ' + streak + '-' + window.locPlural(streak, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'day'}}) + ' streak is waiting. Today still counts.') : ('Votre séquence de ' + streak + ' ' + window.locPlural(streak, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + ' vous attend. C\'est encore aujourd\'hui.'))
+                ? ((window.isEnglish && window.isEnglish()) ? ('Your ' + streak + '-' + window.locPlural(streak, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + ' streak is waiting. Today still counts.') : ('Votre séquence de ' + streak + ' ' + window.locPlural(streak, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + ' vous attend. C\'est encore aujourd\'hui.'))
                 : 'Hier, vous n\'avez pas loggé. Aujourd\'hui, c\'est possible.')
             : (streak > 0
-                ? ((window.isEnglish && window.isEnglish()) ? ('Your ' + streak + '-' + window.locPlural(streak, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'day'}}) + ' streak is waiting — don\'t let it slip!') : ('Ton streak de ' + streak + ' ' + window.locPlural(streak, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + ' t\'attend — ne le laisse pas tomber !'))
+                ? ((window.isEnglish && window.isEnglish()) ? ('Your ' + streak + '-' + window.locPlural(streak, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + ' streak is waiting — don\'t let it slip!') : ('Ton streak de ' + streak + ' ' + window.locPlural(streak, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + ' t\'attend — ne le laisse pas tomber !'))
                 : 'Ça fait ' + diff + ' jours qu\'on ne t\'a pas vu. Reprends là où tu t\'es arrêté(e) — chaque action compte !');
           if (now < notifTime) {
             this.scheduleAndPersist('comeback', 'SmartFitCoach', msg, notifTime.getTime());

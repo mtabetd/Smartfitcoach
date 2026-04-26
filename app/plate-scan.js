@@ -46,7 +46,14 @@ function openScan(mealSlot) {
   // Premium gate — scanner repas = feature premium
   if (window.isPremium && !window.isPremium()) {
     if (window.showPaywall) window.showPaywall('scanner');
-    else if (window.showToast) window.showToast('Fonctionnalit\u00e9 r\u00e9serv\u00e9e aux abonn\u00e9s', 'error', 3500);
+    else if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Premium feature required' : 'Fonctionnalit\u00e9 r\u00e9serv\u00e9e aux abonn\u00e9s', 'error', 3500);
+    return;
+  }
+
+  // Validate mealSlot
+  var VALID_SLOTS = ['breakfast', 'lunch', 'snack', 'dinner'];
+  if (VALID_SLOTS.indexOf(mealSlot) === -1) {
+    if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Invalid meal slot.' : 'Repas invalide.', 'error', 3000);
     return;
   }
 
@@ -72,7 +79,7 @@ function openScan(mealSlot) {
   header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;';
   var title = document.createElement('div');
   title.style.cssText = 'font-family:Georgia,serif;font-size:20px;color:var(--black,#0A0A09);';
-  title.textContent = 'Scanner mon repas';
+  title.textContent = (window.isEnglish && window.isEnglish()) ? 'Scan my meal' : 'Scanner mon repas';
   var closeBtn = document.createElement('button');
   closeBtn.style.cssText = 'background:none;border:none;font-size:20px;color:var(--grey,#6B6B65);cursor:pointer;padding:8px;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;transition:color 0.2s ease;';
   closeBtn.onmouseover = function() { closeBtn.style.color = 'var(--black,#0A0A09)'; };
@@ -103,7 +110,7 @@ function openScan(mealSlot) {
   photoLabel.textContent = '\uD83D\uDCF7';
   var photoText = document.createElement('div');
   photoText.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);';
-  photoText.textContent = 'Prendre une photo';
+  photoText.textContent = (window.isEnglish && window.isEnglish()) ? 'Take a photo' : 'Prendre une photo';
 
   var fileInput = document.createElement('input');
   fileInput.type = 'file';
@@ -125,7 +132,7 @@ function openScan(mealSlot) {
   // Loader (hidden initially)
   var loader = document.createElement('div');
   loader.style.cssText = 'display:none;text-align:center;padding:24px 0;';
-  loader.innerHTML = '<div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;animation:platePulse 2s ease-in-out infinite;">ANALYSE EN COURS</div><div style="display:flex;justify-content:center;gap:6px;margin-bottom:16px;"><span style="width:6px;height:6px;background:var(--black,#0A0A09);border-radius:50%;animation:platePulse 1.2s ease infinite;"></span><span style="width:6px;height:6px;background:var(--black,#0A0A09);border-radius:50%;animation:platePulse 1.2s ease 0.2s infinite;"></span><span style="width:6px;height:6px;background:var(--black,#0A0A09);border-radius:50%;animation:platePulse 1.2s ease 0.4s infinite;"></span></div><div style="font-family:Georgia,serif;font-size:14px;font-style:italic;color:var(--grey);">Notre IA identifie votre repas\u2026</div><style>@keyframes platePulse{0%,100%{opacity:0.3}50%{opacity:1}}</style>';
+  loader.innerHTML = '<div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;animation:platePulse 2s ease-in-out infinite;">' + ((window.isEnglish && window.isEnglish()) ? 'ANALYSIS IN PROGRESS' : 'ANALYSE EN COURS') + '</div><div style="display:flex;justify-content:center;gap:6px;margin-bottom:16px;"><span style="width:6px;height:6px;background:var(--black,#0A0A09);border-radius:50%;animation:platePulse 1.2s ease infinite;"></span><span style="width:6px;height:6px;background:var(--black,#0A0A09);border-radius:50%;animation:platePulse 1.2s ease 0.2s infinite;"></span><span style="width:6px;height:6px;background:var(--black,#0A0A09);border-radius:50%;animation:platePulse 1.2s ease 0.4s infinite;"></span></div><div style="font-family:Georgia,serif;font-size:14px;font-style:italic;color:var(--grey);">' + ((window.isEnglish && window.isEnglish()) ? 'Our AI is identifying your meal\u2026' : 'Notre IA identifie votre repas\u2026') + '</div><style>@keyframes platePulse{0%,100%{opacity:0.3}50%{opacity:1}}</style>';
   sheet.appendChild(loader);
 
   // File input handler
@@ -146,7 +153,7 @@ function openScan(mealSlot) {
       photoZone.appendChild(preview);
       var checkText = document.createElement('div');
       checkText.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-top:8px;';
-      checkText.textContent = '\u2713 Photo prise';
+      checkText.textContent = (window.isEnglish && window.isEnglish()) ? '\u2713 Photo taken' : '\u2713 Photo prise';
       photoZone.appendChild(checkText);
       photoZone.style.borderStyle = 'solid';
       photoZone.style.borderColor = 'var(--green,#1A4A1A)';
@@ -205,6 +212,7 @@ function openScan(mealSlot) {
 
   // Show result
   function showResult(data) {
+    if (!data || typeof data !== 'object') return;
     resultZone.style.display = 'block';
     resultZone.innerHTML = '';
 
@@ -251,7 +259,7 @@ function openScan(mealSlot) {
     // Disclaimer
     var disc = document.createElement('div');
     disc.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey3,#9A9A90);font-style:italic;margin-bottom:16px;text-align:center;';
-    disc.textContent = 'Estimation par IA \u2014 les valeurs peuvent varier de \u00b120%';
+    disc.textContent = (window.isEnglish && window.isEnglish()) ? 'AI estimate \u2014 values may vary by \u00b120%' : 'Estimation par IA \u2014 les valeurs peuvent varier de \u00b120%';
     resultZone.appendChild(disc);
 
     // Add button
@@ -259,7 +267,7 @@ function openScan(mealSlot) {
     addBtn.style.cssText = 'display:block;width:100%;padding:14px;background:var(--green,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:600;cursor:pointer;transition:all 0.25s cubic-bezier(0.25,0.46,0.45,0.94);min-height:48px;box-shadow:0 2px 8px rgba(26,74,26,0.15);margin-bottom:8px;';
     addBtn.onmouseover = function() { addBtn.style.boxShadow = '0 6px 16px rgba(26,74,26,0.25)'; addBtn.style.transform = 'translateY(-1px)'; };
     addBtn.onmouseout = function() { addBtn.style.boxShadow = '0 2px 8px rgba(26,74,26,0.15)'; addBtn.style.transform = 'translateY(0)'; };
-    addBtn.textContent = '\u2713 Ajouter \u00e0 ma journ\u00e9e';
+    addBtn.textContent = (window.isEnglish && window.isEnglish()) ? '\u2713 Add to my day' : '\u2713 Ajouter \u00e0 ma journ\u00e9e';
     addBtn.onclick = function() {
       // Replace meal in weekPlan
       if (Array.isArray(S.weekPlan) && S.weekPlan[todayIdx]) {
@@ -270,6 +278,20 @@ function openScan(mealSlot) {
           f: '\u25CE', custom: true, scanned: true
         };
         if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+      }
+      // Also record in FOOD_JOURNAL so dashboard macros reflect this meal
+      if (window.FOOD_JOURNAL && window.FOOD_JOURNAL.addEntry) {
+        try {
+          window.FOOD_JOURNAL.addEntry(
+            mealSlot,
+            data.name || 'Repas scanné',
+            data.kcal || 0,
+            data.p || 0,
+            data.g || 0,
+            data.l || 0,
+            data.portion || 100
+          );
+        } catch(e) {}
       }
       if (window.SupaSync && window.SupaSync.savePlateScan) {
         try {
@@ -292,7 +314,7 @@ function openScan(mealSlot) {
     cancelBtn.style.cssText = 'display:block;width:100%;padding:14px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);cursor:pointer;min-height:44px;transition:all 0.2s ease;';
     cancelBtn.onmouseover = function() { cancelBtn.style.borderColor = 'var(--black,#0A0A09)'; cancelBtn.style.color = 'var(--black,#0A0A09)'; };
     cancelBtn.onmouseout = function() { cancelBtn.style.borderColor = 'var(--border,#D8D8D0)'; cancelBtn.style.color = 'var(--grey,#6B6B65)'; };
-    cancelBtn.textContent = 'Annuler';
+    cancelBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Cancel' : 'Annuler';
     cancelBtn.onclick = function() { closeModal(); };
     resultZone.appendChild(cancelBtn);
   }

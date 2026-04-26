@@ -29,7 +29,18 @@
     // FIX P1 contre-audit : `!!s.weekPlan` considérait `[]` comme truthy → overlay s'affichait
     // avec plan nutrition vide. Vérification explicite de length.
     var _hasNutritionPlan = Array.isArray(s.weekPlan) && s.weekPlan.length > 0;
-    var _hasSportPlan = Array.isArray(s.sportProgram) && s.sportProgram.length > 0;
+    // FIX BUG 2026-04-26 : S.sportProgram ne couvre QUE la musculation.
+    // Chaque sport non-musculation stocke son programme dans sa propre clé.
+    var _hasSportPlan = (Array.isArray(s.sportProgram) && s.sportProgram.length > 0) ||
+      (Array.isArray(s.runningProgram) && s.runningProgram.length > 0) ||
+      (Array.isArray(s.hyroxProgram) && s.hyroxProgram.length > 0) ||
+      (Array.isArray(s.padelProgram) && s.padelProgram.length > 0) ||
+      (Array.isArray(s.golfProgram) && s.golfProgram.length > 0) ||
+      (Array.isArray(s.triathlonProgram) && s.triathlonProgram.length > 0) ||
+      (Array.isArray(s.cyclingProgram) && s.cyclingProgram.length > 0) ||
+      (Array.isArray(s.calisthenicsProgram) && s.calisthenicsProgram.length > 0) ||
+      (s.sportType === 'yoga' && !!s.yogaLevel && !!s.yogaObjectif) ||
+      (s.sportType === 'crossfit' && !!s.crossfitLevel);
     var hasPlan = _hasNutritionPlan || _hasSportPlan;
     return hasName && hasGoal && hasPlan;
   }
@@ -137,7 +148,8 @@
       'letter-spacing:-0.5px', 'line-height:1.3', 'margin-bottom:8px',
       'color:var(--black,#0A0A09)'
     ].join(';');
-    welcome.textContent = firstName ? ('Bienvenue, ' + firstName + '.') : 'Bienvenue.';
+    var _ocEN = window.isEnglish && window.isEnglish();
+    welcome.textContent = firstName ? ((_ocEN ? 'Welcome, ' : 'Bienvenue, ') + firstName + '.') : (_ocEN ? 'Welcome.' : 'Bienvenue.');
     inner.appendChild(welcome);
 
     var subtitle = document.createElement('div');
@@ -145,7 +157,7 @@
       'font-family:Georgia,serif', 'font-style:italic', 'font-size:16px',
       'color:var(--grey,#6B6B65)', 'margin-bottom:40px'
     ].join(';');
-    subtitle.textContent = 'Votre plan est prêt.';
+    subtitle.textContent = _ocEN ? 'Your plan is ready.' : 'Votre plan est prêt.';
     inner.appendChild(subtitle);
 
     // Ligne séparatrice
@@ -154,7 +166,7 @@
     // Bloc objectif
     var goalName = getGoalName();
     if (goalName) {
-      var goalBlock = _makeBlock('VOTRE OBJECTIF', goalName);
+      var goalBlock = _makeBlock(_ocEN ? 'YOUR GOAL' : 'VOTRE OBJECTIF', goalName);
       inner.appendChild(goalBlock);
     }
 
@@ -167,17 +179,17 @@
     var progLines = [];
     if (kcal > 0) {
       var nutritionLine = kcal + ' kcal/jour';
-      if (protein > 0) nutritionLine += ' · ' + protein + 'g protéines';
-      progLines.push('Nutrition : ' + nutritionLine);
+      if (protein > 0) nutritionLine += ' · ' + protein + 'g ' + (_ocEN ? 'protein' : 'protéines');
+      progLines.push((_ocEN ? 'Nutrition: ' : 'Nutrition : ') + nutritionLine);
     }
     if (sport) {
       var sportLine = sport;
-      if (sportDays > 0) sportLine = sportDays + ' ' + window.locPlural(sportDays, {fr:{one:'séance',other:'séances'},en:{one:'workout',other:'workouts'}}) + '/' + (window.isEnglish && window.isEnglish() ? 'week' : 'semaine') + ' · ' + sport;
-      progLines.push('Sport : ' + sportLine);
+      if (sportDays > 0) sportLine = sportDays + ' ' + (window.locPlural ? window.locPlural(sportDays, {fr:{one:'séance',other:'séances'},en:{one:'workout',other:'workouts'}}) : (sportDays > 1 ? 'séances' : 'séance')) + '/' + (window.isEnglish && window.isEnglish() ? 'week' : 'semaine') + ' · ' + sport;
+      progLines.push((_ocEN ? 'Training: ' : 'Sport : ') + sportLine);
     }
 
     if (progLines.length > 0) {
-      var progBlock = _makeBlock('VOTRE PROGRAMME', progLines.join('\n'));
+      var progBlock = _makeBlock(_ocEN ? 'YOUR PROGRAM' : 'VOTRE PROGRAMME', progLines.join('\n'));
       inner.appendChild(progBlock);
     }
 
@@ -187,7 +199,7 @@
       'font-family:Georgia,serif', 'font-style:italic', 'font-size:14px',
       'color:var(--grey,#6B6B65)', 'margin:24px 0', 'line-height:1.7'
     ].join(';');
-    quote.textContent = '"Le standard n\'existe pas."';
+    quote.textContent = _ocEN ? '"There is no standard."' : '"Le standard n\'existe pas."';
     inner.appendChild(quote);
 
     // Ligne séparatrice basse
@@ -205,7 +217,7 @@
       'padding:14px', 'border:none',
       'border-radius:2px', 'cursor:pointer'
     ].join(';');
-    cta.textContent = 'Commencer maintenant →';
+    cta.textContent = _ocEN ? 'Start now →' : 'Commencer maintenant →';
     cta.addEventListener('click', function() {
       _markDone();
       _closeOverlay(overlay);

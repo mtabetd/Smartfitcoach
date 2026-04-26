@@ -150,8 +150,9 @@ function recordNutrition(kcal, proteins, carbs, fats) {
 function migrateExistingData() {
   try {
     var uid = getUid();
-    var today = todayISO();
-    var ts = Date.now();
+    // Use a fixed past date to avoid making all historical entries look like today's data
+    var today = '2025-01-01';
+    var ts = new Date('2025-01-01').getTime();
 
     /* CF 1RM */
     if (loadHistory('cf_1rm').length === 0) {

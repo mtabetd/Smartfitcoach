@@ -1073,12 +1073,21 @@ function generateSportProgram() {
  });
  }
 
- // Build focus label with star ratings (French names, max 5 stars, deduplicated)
+ // Build focus label with star ratings (bilingual names, max 5 stars, deduplicated)
+ var _sEN = window.isEnglish && window.isEnglish();
  var categoryToFrench = {
- 'chest': 'Poitrine', 'back': 'Dos', 'shoulders': 'Épaules',
- 'traps': 'Trapèzes', 'biceps': 'Bras', 'triceps': 'Bras', 'forearms': 'Avant-bras',
- 'legs': 'Jambes', 'calves': 'Mollets', 'glutes': 'Fessiers',
- 'abs': 'Abdominaux', 'cardio': 'Cardio'
+ 'chest': _sEN ? 'Chest' : 'Poitrine',
+ 'back': _sEN ? 'Back' : 'Dos',
+ 'shoulders': _sEN ? 'Shoulders' : 'Épaules',
+ 'traps': _sEN ? 'Traps' : 'Trapèzes',
+ 'biceps': _sEN ? 'Arms' : 'Bras',
+ 'triceps': _sEN ? 'Arms' : 'Bras',
+ 'forearms': _sEN ? 'Forearms' : 'Avant-bras',
+ 'legs': _sEN ? 'Legs' : 'Jambes',
+ 'calves': _sEN ? 'Calves' : 'Mollets',
+ 'glutes': _sEN ? 'Glutes' : 'Fessiers',
+ 'abs': _sEN ? 'Core' : 'Abdominaux',
+ 'cardio': 'Cardio'
  };
  var seenLabels = {};
  var focusParts = [];
@@ -1375,9 +1384,23 @@ window.SPORT = {
  // ─── Si programme existant → afficher directement la prog (plus d'interstitiel) ───
  // Guard: ne rediriger que si un programme complet existe — évite de sauter l'onboarding
  // après un rechargement partiel (ex: sStep=26 PAR-Q réinitialisé à 0 par _doAutoLogin)
- if (S.sStep === 0 && S.sportType && _SPORT_PROGRAM_STEP[S.sportType] && Array.isArray(S.sportProgram) && S.sportProgram.length > 0) {
-   S.sStep = _SPORT_PROGRAM_STEP[S.sportType];
-   if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+ // FIX BUG 2026-04-26 : élargir la détection à tous les sports (S.sportProgram = musculation only).
+ if (S.sStep === 0 && S.sportType && _SPORT_PROGRAM_STEP[S.sportType]) {
+   var _hasExistingProgram =
+     (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) ||
+     (Array.isArray(S.runningProgram) && S.runningProgram.length > 0) ||
+     (Array.isArray(S.hyroxProgram) && S.hyroxProgram.length > 0) ||
+     (Array.isArray(S.padelProgram) && S.padelProgram.length > 0) ||
+     (Array.isArray(S.golfProgram) && S.golfProgram.length > 0) ||
+     (Array.isArray(S.triathlonProgram) && S.triathlonProgram.length > 0) ||
+     (Array.isArray(S.cyclingProgram) && S.cyclingProgram.length > 0) ||
+     (Array.isArray(S.calisthenicsProgram) && S.calisthenicsProgram.length > 0) ||
+     (S.sportType === 'yoga' && !!S.yogaLevel && !!S.yogaObjectif) ||
+     (S.sportType === 'crossfit' && !!S.crossfitLevel);
+   if (_hasExistingProgram) {
+     S.sStep = _SPORT_PROGRAM_STEP[S.sportType];
+     if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+   }
  }
 
  // ─── CHECK BIEN-ÊTRE QUOTIDIEN (NON-BLOQUANT) ───
@@ -2080,7 +2103,9 @@ function renderMuscuMedicalQ(p) {
 
  // Header with back button
  var hdr = h('div', {style: 'display:flex;align-items:center;gap:12px;margin-bottom:20px'});
- hdr.appendChild(h('button', {'class': 'btn-back', style: 'margin:0', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ // FIX BUG 2026-04-26 : back depuis éval. médicale muscu ne doit pas effacer sportType.
+ // L'user retourne à la sélection du sport (sStep 0) avec son choix "Musculation" conservé.
+ hdr.appendChild(h('button', {'class': 'btn-back', style: 'margin:0', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
  hdr.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--grey)'}, 'Évaluation médicale'));
  p.appendChild(hdr);
 
@@ -2605,7 +2630,7 @@ function renderDedicatedPrograms(p) {
          var _dcAuthUser = (window.AUTH && window.AUTH.getUser) ? AUTH.getUser() : null;
          var uid = _dcAuthUser ? _dcAuthUser.id : 'anon';
          try { localStorage.setItem('mtd_daily_challenge_' + uid, JSON.stringify(S.dailyChallengeHistory)); } catch(e) {}
-         if (window.showToast) window.showToast('\u2605 D\u00e9fi du jour valid\u00e9 !', 'success', 2500);
+         if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? '\u2605 Daily challenge completed!' : '\u2605 D\u00e9fi du jour valid\u00e9 !', 'success', 2500);
          // Confetti burst — simple DOM-based
          var burst = document.createElement('div');
          burst.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;overflow:hidden;';
@@ -3692,7 +3717,7 @@ function renderWellnessBanner(p) {
   try { if (window.pushWellnessHistory) window.pushWellnessHistory(S.todayWellness); } catch(e) {}
   S._wellnessReminder = false;
   banner.style.display = 'none';
-  if (window.showToast) window.showToast('Bilan du matin enregistré', 'success', 2000);
+  if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Morning recap saved' : 'Bilan du matin enregistré', 'success', 2000);
   if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
   if (window.render) { try { window.render(); } catch(e) {} }
  });
@@ -3794,7 +3819,7 @@ function renderWellnessCheckin(p, onComplete) {
   S.todayWellness = { date: today, sleep: state.sleep, muscles: state.muscles, energy: state.energy };
   // POLISH 2026-04 : push dans wellness history multi-jours (90j glissants)
   try { if (window.pushWellnessHistory) window.pushWellnessHistory(S.todayWellness); } catch(e) {}
-  if (window.showToast) window.showToast('Bilan du matin enregistré', 'success', 2000);
+  if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Morning recap saved' : 'Bilan du matin enregistré', 'success', 2000);
   if (onComplete) onComplete();
  }}, 'Commencer la seance');
  p.appendChild(startBtn);
@@ -4891,7 +4916,17 @@ function renderCrossfitProgram(p) {
  if (S.cfCurrentDay === wodDay && wodDay < 100) {
  S.cfCurrentDay = wodDay + 1;
  }
+ // Save to S.sessionHistory so analytics volume tracker counts CF sessions
+ if (!S.sessionHistory) S.sessionHistory = {};
+ var _cfLevel = S.crossfitLevel || 'rx';
+ var _cfDurMap = {scaled: 60, inter: 70, rx: 75, rx_plus: 90};
+ var _cfDur = _cfDurMap[_cfLevel] || 75;
+ var _cfKcal = estimateKcal('crossfit', _cfLevel, _cfDur);
+ var _cfSessKey = (S.selectedCrossfitDay || 0) + '_' + dateStr;
+ S.sessionHistory[_cfSessKey] = {duration: _cfDur, kcalBase: _cfKcal ? _cfKcal.base : 0, kcalEpoc: _cfKcal ? _cfKcal.epoc : 0, kcalTotal: _cfKcal ? _cfKcal.total : 0, date: new Date().toISOString(), sport: 'crossfit', wodDay: wodDay, score: scoreInput.value.trim()};
+ if (window.GAMIFICATION) { try { window.GAMIFICATION.updateStreak(); } catch(e) {} }
  window.BLACKBOX && window.BLACKBOX.log('cf_wod_done', {day: wodDay, score: scoreInput.value.trim()});
+ if (window.showToast) window.showToast('✓ WOD terminé — jour ' + wodDay + (scoreInput.value.trim() ? ' · ' + scoreInput.value.trim() : ''), 'success');
  window.render();
  }}, ' WOD terminé');
  doneCard.appendChild(doneBtn);
@@ -4998,7 +5033,7 @@ function renderMusculationLevel(p) {
      S.sportProgram = null;
      S.muscuIAProgram = null;
      S.bonusExercises = {};
-     try { if (window.showToast) window.showToast('Niveau changé. Régénère ton programme.', 'info', 3000); } catch(_e) {}
+     try { if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Level changed. Regenerate your program.' : 'Niveau changé. Régénère ton programme.', 'info', 3000); } catch(_e) {}
    }
    window.render();
  }}, [
@@ -5108,7 +5143,7 @@ function renderMusculationLevel(p) {
      S.sportProgram = null;
      S.muscuIAProgram = null;
      S.bonusExercises = {};
-     try { if (window.showToast) window.showToast('Équipement changé. Régénère ton programme.', 'info', 3000); } catch(_e) {}
+     try { if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Equipment changed. Regenerate your program.' : 'Équipement changé. Régénère ton programme.', 'info', 3000); } catch(_e) {}
    }
    window.render();
  }}, [
@@ -5472,7 +5507,12 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
 
  if (lastLog) {
  var allSucceeded = lastLog.sets.every(function(s) {
- return s.actualReps >= s.targetReps && s.actualWeight >= s.targetWeight;
+ // For bodyweight exercises actualWeight is null — only check reps succeeded
+ var repsOk = s.actualReps !== null && s.actualReps >= s.targetReps;
+ var weightOk = (s.actualWeight === null || s.targetWeight === null || s.targetWeight === 0)
+   ? true
+   : s.actualWeight >= s.targetWeight;
+ return repsOk && weightOk;
  });
  if (allSucceeded) return Math.round((last.weight + increment) / 2.5) * 2.5; // arrondi 2.5kg (disques standard)
  // Échec → maintenir le poids
@@ -6153,7 +6193,7 @@ function saveMuscuSessionLog() {
  } catch (e) {
  console.warn('[saveMuscuSessionLog] localStorage error:', e);
  if (e && e.name === 'QuotaExceededError' && window.showToast) {
-   window.showToast('Stockage plein — séance non sauvegardée. Libérez de l\'espace.', 'error', 4000);
+   window.showToast((window.isEnglish && window.isEnglish()) ? 'Storage full — session not saved. Free up space.' : 'Stockage plein — séance non sauvegardée. Libérez de l\'espace.', 'error', 4000);
  }
  }
 }
@@ -7343,7 +7383,7 @@ function renderMusculationProgram(p) {
        S._activeSfcProgram = null;
        S._sfcExplorerOpen = false;
        if (window.saveProfile) window.saveProfile();
-       if (window.showToast) window.showToast('\u2713 Programme scientifique adopté — tracking actif', 'success', 2000);
+       if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? '\u2713 Scientific program adopted — tracking active' : '\u2713 Programme scientifique adopté — tracking actif', 'success', 2000);
        if (window.render) window.render();
       }; })(_phaseExos, _progDisplayName, _phaseKey)
      }, 'Adopter ce programme \u2192 tracking actif');
@@ -7565,7 +7605,7 @@ function renderMusculationProgram(p) {
  if (_ctaDone) {
    var _ctaDoneBadge = h('div', {style: 'border:1px solid var(--line,#D8D8D0);background:rgba(62,92,58,0.06);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--success,#3E5C3A);display:flex;align-items:center;gap:8px;'});
    _ctaDoneBadge.appendChild(h('span', {}, '\u2714'));
-   _ctaDoneBadge.appendChild(h('span', {}, 'Séance validée\u00a0— ' + _ctaDone.duration + '\u00a0min\u00a0·\u00a0' + _ctaDone.kcalTotal + '\u00a0kcal'));
+   _ctaDoneBadge.appendChild(h('span', {}, (window.isEnglish && window.isEnglish() ? 'Session validated\u00a0— ' : 'Séance validée\u00a0— ') + _ctaDone.duration + '\u00a0min\u00a0·\u00a0' + _ctaDone.kcalTotal + '\u00a0kcal'));
    p.appendChild(_ctaDoneBadge);
  }
 
@@ -8250,7 +8290,7 @@ function renderMusculationProgram(p) {
    e.stopPropagation();
    _srUndo.validated = false;
    saveMuscuSessionLog();
-   if (window.showToast) window.showToast('S\u00e9rie d\u00e9verrouill\u00e9e', 'info', 1800);
+   if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Set unlocked' : 'S\u00e9rie d\u00e9verrouill\u00e9e', 'info', 1800);
    if (window.render) window.render();
   }; })(_sr)
  }, 'Annuler');
@@ -8286,7 +8326,7 @@ function renderMusculationProgram(p) {
  if (window.RestTimer) window.RestTimer.playTick();
 
  // FIX SPRINT P1.5 — Toast "Série loggée" feedback visuel
- try { if (window.showToast) window.showToast('Série loggée', 'success', 1400); } catch(_eT) {}
+ try { if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Set logged' : 'Série loggée', 'success', 1400); } catch(_eT) {}
 
  // FIX SPRINT P1.10 — Autofocus input REPS de la série suivante (gain UX mobile)
  try {
@@ -8390,30 +8430,52 @@ function renderMusculationProgram(p) {
  // ─── PERSONAL RECORD DETECTION ───
  (function(_exRef2, _isBodyweight2, _setData2) {
   var _prToday = new Date().toISOString().slice(0, 10);
-  // Trouver le meilleur volume (poids × reps) parmi les sessions précédentes
-  var _prevBestVolume = 0;
   var _sortedDates2 = Object.keys(S.muscuSessionLog || {}).sort();
-  _sortedDates2.forEach(function(d) {
-   if (d >= _prToday) return; // Ignorer aujourd'hui
-   var _prevSets = (S.muscuSessionLog[d] && Array.isArray(S.muscuSessionLog[d][_exRef2.n])) ? S.muscuSessionLog[d][_exRef2.n] : [];
-   _prevSets.forEach(function(s) {
-    if (s.actualReps && s.actualWeight) {
-     var vol = s.actualWeight * s.actualReps;
-     if (vol > _prevBestVolume) _prevBestVolume = vol;
-    }
+  var _isPR = false;
+  if (_isBodyweight2) {
+   // Bodyweight PR : meilleur nombre de reps sur une série
+   var _prevBestReps = 0;
+   _sortedDates2.forEach(function(d) {
+    if (d >= _prToday) return;
+    var _prevSets = (S.muscuSessionLog[d] && Array.isArray(S.muscuSessionLog[d][_exRef2.n])) ? S.muscuSessionLog[d][_exRef2.n] : [];
+    _prevSets.forEach(function(s) {
+     if (s.actualReps && s.actualReps > _prevBestReps) _prevBestReps = s.actualReps;
+    });
    });
-  });
-  if (_prevBestVolume === 0) return; // Pas d'historique, pas de PR
-  // Comparer avec les séries validées aujourd'hui
-  var _todaySets2 = _setData2 || [];
-  var _todayBestVolume = 0;
-  _todaySets2.forEach(function(s) {
-   if (s.validated && s.actualReps && s.actualWeight) {
-    var vol = s.actualWeight * s.actualReps;
-    if (vol > _todayBestVolume) _todayBestVolume = vol;
+   if (_prevBestReps > 0) {
+    var _todaySets2bw = _setData2 || [];
+    var _todayBestReps = 0;
+    _todaySets2bw.forEach(function(s) {
+     if (s.validated && s.actualReps && s.actualReps > _todayBestReps) _todayBestReps = s.actualReps;
+    });
+    if (_todayBestReps > _prevBestReps) _isPR = true;
    }
-  });
-  if (_todayBestVolume > _prevBestVolume) {
+  } else {
+   // Weighted PR : meilleur volume (poids × reps) sur une série
+   var _prevBestVolume = 0;
+   _sortedDates2.forEach(function(d) {
+    if (d >= _prToday) return;
+    var _prevSets = (S.muscuSessionLog[d] && Array.isArray(S.muscuSessionLog[d][_exRef2.n])) ? S.muscuSessionLog[d][_exRef2.n] : [];
+    _prevSets.forEach(function(s) {
+     if (s.actualReps && s.actualWeight) {
+      var vol = s.actualWeight * s.actualReps;
+      if (vol > _prevBestVolume) _prevBestVolume = vol;
+     }
+    });
+   });
+   if (_prevBestVolume > 0) {
+    var _todaySets2 = _setData2 || [];
+    var _todayBestVolume = 0;
+    _todaySets2.forEach(function(s) {
+     if (s.validated && s.actualReps && s.actualWeight) {
+      var vol = s.actualWeight * s.actualReps;
+      if (vol > _todayBestVolume) _todayBestVolume = vol;
+     }
+    });
+    if (_todayBestVolume > _prevBestVolume) _isPR = true;
+   }
+  }
+  if (_isPR) {
    // Nouveau PR !
    var _prBanner = document.createElement('div');
    _prBanner.style.cssText = 'padding:6px 10px;background:rgba(62,92,58,0.06);border-top:1px solid var(--success,#3E5C3A);display:flex;align-items:center;gap:8px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--success,#3E5C3A);letter-spacing:0.3px;';
@@ -8502,7 +8564,7 @@ function renderMusculationProgram(p) {
  if (!Array.isArray(S.sportProgram) || !S.sportProgram[dayI] || !Array.isArray(S.sportProgram[dayI].exercises)) { S.swapPanel = null; window.render(); return; }
  var _newName = (newEx.n || '').toLowerCase().trim();
  var _dupIdx = S.sportProgram[dayI].exercises.findIndex(function(e, idx) { return idx !== exI && (e.n || '').toLowerCase().trim() === _newName; });
- if (_dupIdx !== -1) { if (window.showToast) window.showToast('⚠ ' + newEx.n + ' est déjà dans cette séance', 'warning', 2500); S.swapPanel = null; window.render(); return; }
+ if (_dupIdx !== -1) { if (window.showToast) window.showToast('⚠ ' + newEx.n + ((window.isEnglish && window.isEnglish()) ? ' is already in this session' : ' est déjà dans cette séance'), 'warning', 2500); S.swapPanel = null; window.render(); return; }
  S.sportProgram[dayI].exercises[exI] = newEx;
  // Migrer les données de session pour le nouvel exercice
  var _today = new Date().toISOString().slice(0, 10);
@@ -8513,7 +8575,7 @@ function renderMusculationProgram(p) {
  }
  S.swapPanel = null;
  if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
- if (window.showToast) window.showToast('✓ ' + (newEx.n || 'Exercice') + ' ajouté au programme', 'success', 2500);
+ if (window.showToast) window.showToast('✓ ' + (newEx.n || 'Exercice') + ((window.isEnglish && window.isEnglish()) ? ' added to program' : ' ajouté au programme'), 'success', 2500);
  window.render();
  },
  onmouseover: function() { this.style.background = 'var(--ivory,#FAF9F6)'; },
@@ -9138,7 +9200,7 @@ function renderMusculationProgram(p) {
  // Mise à jour du streak sur action réelle (séance validée)
  if (window.GAMIFICATION) { try { window.GAMIFICATION.updateStreak(); } catch(e) {} }
  window.BLACKBOX && window.BLACKBOX.log('session_done', {day: S.selectedSportDay, kcal: kcalRes.total, duration: realDur});
- if (window.showToast) { var _kcalMsg = kcalRes && kcalRes.total ? ' — ' + Math.round(kcalRes.total) + ' kcal' : ''; window.showToast('\u2713 S\u00e9ance valid\u00e9e' + _kcalMsg, 'success'); }
+ if (window.showToast) { var _kcalMsg = kcalRes && kcalRes.total ? ' — ' + Math.round(kcalRes.total) + ' kcal' : ''; window.showToast(((window.isEnglish && window.isEnglish()) ? '\u2713 Session validated' : '\u2713 S\u00e9ance valid\u00e9e') + _kcalMsg, 'success'); }
  if (window.SOCIAL && window.SOCIAL.shareWorkout && window.SOCIAL.getMyProfileCached && window.SOCIAL.getMyProfileCached()) {
    try { window.SOCIAL.shareWorkout({ sport: S.sportType || 'sport', duration: realDur, kcal: Math.round(kcalRes.total || 0) }); } catch(e) {}
  }
@@ -9244,13 +9306,13 @@ function renderMusculationProgram(p) {
 
    var cTitle = document.createElement('div');
    cTitle.style.cssText = 'font-family:Georgia,serif;font-size:22px;font-style:italic;margin-bottom:4px;';
-   cTitle.textContent = 'Séance terminée';
+   cTitle.textContent = (window.isEnglish && window.isEnglish()) ? 'Session complete' : 'Séance terminée';
    card.appendChild(cTitle);
 
    var cPhase = document.createElement('div');
    cPhase.style.cssText = 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(250,249,246,0.5);margin-bottom:20px;';
    var _cMP = window.getMacroCyclePhase ? window.getMacroCyclePhase(S.muscuCycle || 1) : null;
-   cPhase.textContent = (_cMP ? _cMP.label + ' · ' : '') + ('Semaine ' + (S.muscuWeek || 1));
+   cPhase.textContent = (_cMP ? _cMP.label + ' · ' : '') + ((window.isEnglish && window.isEnglish()) ? 'Week ' : 'Semaine ') + (S.muscuWeek || 1);
    card.appendChild(cPhase);
 
    var cStats = document.createElement('div');
@@ -9268,8 +9330,9 @@ function renderMusculationProgram(p) {
      b.appendChild(l);
      return b;
    }
-   cStats.appendChild(_cStatBox('Exercices', _wExNames.length));
-   cStats.appendChild(_cStatBox('Séries', _totalSets));
+   var _cIsEN = window.isEnglish && window.isEnglish();
+   cStats.appendChild(_cStatBox(_cIsEN ? 'Exercises' : 'Exercices', _wExNames.length));
+   cStats.appendChild(_cStatBox(_cIsEN ? 'Sets' : 'Séries', _totalSets));
    cStats.appendChild(_cStatBox('Volume', _totalVol > 0 ? (Math.round(_totalVol / 100) / 10 + ' T') : '—'));
    card.appendChild(cStats);
 
@@ -9278,7 +9341,7 @@ function renderMusculationProgram(p) {
      cPr.style.cssText = 'border-top:1px solid rgba(250,249,246,0.15);padding-top:12px;margin-bottom:16px;';
      var cPrLbl = document.createElement('div');
      cPrLbl.style.cssText = 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(200,168,75,0.85);margin-bottom:8px;';
-     cPrLbl.textContent = 'Records battus';
+     cPrLbl.textContent = _cIsEN ? 'New records' : 'Records battus';
      cPr.appendChild(cPrLbl);
      _cPrList.slice(0, 3).forEach(function(pr) {
        var prLine = document.createElement('div');
@@ -9306,7 +9369,7 @@ function renderMusculationProgram(p) {
 
  p.appendChild(compPanel);
  } else {
- p.appendChild(h('button', {'class': 'regen-btn', style: 'margin-top:8px;background:var(--black);color:#fff', onclick: function() { S.sessionCompleting = S.selectedSportDay; S._sessionDuration = null; window.render(); }}, '\u2713 S\u00e9ance termin\u00e9e'));
+ p.appendChild(h('button', {'class': 'regen-btn', style: 'margin-top:8px;background:var(--black);color:#fff', onclick: function() { S.sessionCompleting = S.selectedSportDay; S._sessionDuration = null; window.render(); }}, (window.isEnglish && window.isEnglish()) ? '\u2713 Session complete' : '\u2713 S\u00e9ance termin\u00e9e'));
  }
  }
 
@@ -9396,7 +9459,7 @@ function renderMusculationProgram(p) {
  style: 'margin-top:6px;padding:4px 8px;cursor:' + (_inMain && !isAddedBonus ? 'not-allowed' : 'pointer') + ';font-family:"Helvetica Neue",sans-serif;font-size:11px;text-align:center;border:1px solid ' + (isAddedBonus ? 'var(--success,#3E5C3A)' : (_inMain ? 'var(--line,#D8D8D0)' : 'var(--border)')) + ';color:' + (isAddedBonus ? 'var(--success,#3E5C3A)' : (_inMain ? 'var(--ink-300,#A8A8A0)' : 'var(--grey)')) + ';background:' + (isAddedBonus ? 'rgba(62,92,58,0.06)' : 'transparent') + ';opacity:' + (_inMain && !isAddedBonus ? '0.55' : '1'),
  onclick: (function(exBCapture, inMainCapture) { return function(e) {
  e.stopPropagation();
- if (inMainCapture) { if (window.showToast) window.showToast('⚠ ' + exBCapture.name + ' est déjà dans cette séance', 'warning', 2500); return; }
+ if (inMainCapture) { if (window.showToast) window.showToast('⚠ ' + exBCapture.name + ((window.isEnglish && window.isEnglish()) ? ' is already in this session' : ' est déjà dans cette séance'), 'warning', 2500); return; }
  if (!S.bonusExercises) S.bonusExercises = {};
  var arr = S.bonusExercises[S.selectedSportDay] || [];
  var _k = (exBCapture.name || '').toLowerCase().trim();
@@ -9447,7 +9510,7 @@ function renderMusculationProgram(p) {
  }}, '\u21bb Recalculer le programme hebdomadaire'));
 
  // Export PDF
- p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:12px;background:var(--black2)', onclick: function() { if (typeof window.exportSportPDF === 'function') window.exportSportPDF(); else if (window.showToast) window.showToast('Export PDF non disponible.', 'info', 3000); }}, '\u21e9 Exporter le programme en PDF'));
+ p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:12px;background:var(--black2)', onclick: function() { if (typeof window.exportSportPDF === 'function') window.exportSportPDF(); else if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'PDF export not available.' : 'Export PDF non disponible.', 'info', 3000); }}, '\u21e9 Exporter le programme en PDF'));
 
  // Weight chart removed (was crashing)
 
@@ -9634,7 +9697,7 @@ function renderWeightChartSport(container) {
      else if (_isGain && v > _pastMax) _prWeightMsg = 'Nouveau record haut ce mois : ' + (window.UNITS ? window.UNITS.displayWeight(v) : v + ' kg') + ' \uD83D\uDCAA';
    }
  }
- if (window.GAMIFICATION) GAMIFICATION.showToast(_prWeightMsg || ('Poids enregistré : ' + (window.UNITS ? window.UNITS.displayWeight(v) : v + ' kg')));
+ if (window.GAMIFICATION) GAMIFICATION.showToast(_prWeightMsg || ((window.isEnglish && window.isEnglish()) ? 'Weight recorded: ' : 'Poids enregistré : ') + (window.UNITS ? window.UNITS.displayWeight(v) : v + ' kg'));
  window.render();
  }
  }}, 'Enregistrer'));
@@ -10001,6 +10064,116 @@ function renderRunningProgram(p) {
  p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;text-align:center;margin:16px 0'}, currentWeekData.notes));
  }
 
+ // ─── RUNNING SESSION LOG ───
+ // Saves to mtd_run_history (feeds analytics._renderRunning avgPace + distance).
+ // Pace = durationMin / distanceKm (min/km). Division by zero guarded (_km > 0 check).
+ (function() {
+  var _uid = (window.AUTH && window.AUTH.getUser && window.AUTH.getUser()) ? window.AUTH.getUser().id : 'anon';
+  var _runKey = 'W' + S.runningWeek + '_D' + (S.selectedRunDay + 1);
+  var _runHistKey = 'mtd_run_history_' + _uid;
+  var _runHist = [];
+  try { var _raw = localStorage.getItem(_runHistKey); if (_raw) _runHist = JSON.parse(_raw) || []; } catch(e) {}
+  if (!Array.isArray(_runHist)) _runHist = [];
+  var _todayDate = new Date().toISOString().slice(0, 10);
+  var _existing = null;
+  for (var _ri = 0; _ri < _runHist.length; _ri++) {
+    if (_runHist[_ri] && _runHist[_ri].runKey === _runKey) { _existing = _runHist[_ri]; break; }
+  }
+
+  var _logPanel = h('div', {style: 'border:1px solid var(--border,#D8D8D0);padding:14px 16px;margin:12px 0;background:var(--ivory2,#F4F4F0)'});
+  _logPanel.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px'}, 'Logger cette séance'));
+
+  if (_existing) {
+    var _recapEl = h('div', {style: 'font-family:Georgia,serif;font-size:13px;color:var(--success,#3E5C3A);margin-bottom:8px'});
+    _recapEl.textContent = '✓ ' + _existing.distanceKm + ' km — ' + _existing.durationMin + ' min — ' + _existing.paceStr + ' /km';
+    _logPanel.appendChild(_recapEl);
+    _logPanel.appendChild(h('button', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey);background:none;border:none;cursor:pointer;padding:0;letter-spacing:1px;text-transform:uppercase',
+      onclick: function() {
+        _runHist = _runHist.filter(function(r) { return !r || r.runKey !== _runKey; });
+        try { localStorage.setItem(_runHistKey, JSON.stringify(_runHist)); } catch(e) {}
+        window.render();
+      }
+    }, 'Corriger'));
+  } else {
+    var _distInp = h('input', {type: 'number', min: '0', max: '100', step: '0.1', placeholder: '0.0', inputmode: 'decimal',
+      style: 'width:70px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia,serif;font-size:16px;text-align:center;background:var(--ivory);color:#0A0A09'});
+    var _durInp = h('input', {type: 'number', min: '0', max: '600', step: '1', placeholder: '0', inputmode: 'numeric',
+      style: 'width:60px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia,serif;font-size:16px;text-align:center;background:var(--ivory);color:#0A0A09'});
+    var _pacePreview = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);min-width:80px;text-align:right'}, '');
+
+    function _updatePacePreview() {
+      var _km = parseFloat(_distInp.value) || 0;
+      var _min = parseFloat(_durInp.value) || 0;
+      if (_km > 0 && _min > 0) {
+        var _p = _min / _km;
+        var _pm = Math.floor(_p), _ps = Math.round((_p - _pm) * 60);
+        if (_ps === 60) { _pm += 1; _ps = 0; }
+        _pacePreview.textContent = _pm + ':' + (_ps < 10 ? '0' : '') + _ps + ' /km';
+      } else {
+        _pacePreview.textContent = '';
+      }
+    }
+    _distInp.addEventListener('input', _updatePacePreview);
+    _durInp.addEventListener('input', _updatePacePreview);
+
+    var _fieldsRow = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap'});
+    _fieldsRow.appendChild(h('div', {style: 'display:flex;align-items:center;gap:6px'}, [
+      _distInp,
+      h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey)'}, 'km')
+    ]));
+    _fieldsRow.appendChild(h('div', {style: 'display:flex;align-items:center;gap:6px'}, [
+      _durInp,
+      h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey)'}, 'min')
+    ]));
+    _fieldsRow.appendChild(_pacePreview);
+    _logPanel.appendChild(_fieldsRow);
+
+    var _saveRunBtn = h('button', {style: 'width:100%;padding:12px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer',
+      onclick: function() {
+        var _km = parseFloat(_distInp.value) || 0;
+        var _min = parseFloat(_durInp.value) || 0;
+        if (_km <= 0 || _min <= 0) {
+          if (window.showToast) window.showToast('Entrez une distance et une durée valides.', 'error', 2500);
+          return;
+        }
+        // Pace = min/km. _km > 0 guaranteed above — no division by zero.
+        var _pace = _min / _km;
+        var _pm = Math.floor(_pace), _ps = Math.round((_pace - _pm) * 60);
+        if (_ps === 60) { _pm += 1; _ps = 0; }
+        var _paceStr = _pm + ':' + (_ps < 10 ? '0' : '') + _ps;
+        var _entry = {
+          date: _todayDate,
+          runKey: _runKey,
+          distanceKm: parseFloat(_km.toFixed(2)),
+          durationMin: parseFloat(_min.toFixed(1)),
+          paceStr: _paceStr,
+          runningWeek: S.runningWeek,
+          runDay: S.selectedRunDay + 1,
+          sessName: (sess && sess.name) || ''
+        };
+        _runHist = _runHist.filter(function(r) { return !r || r.runKey !== _runKey; });
+        _runHist.push(_entry);
+        if (_runHist.length > 500) _runHist = _runHist.slice(_runHist.length - 500);
+        try { localStorage.setItem(_runHistKey, JSON.stringify(_runHist)); } catch(e) {
+          if (window.showToast) window.showToast('Stockage plein — séance non sauvegardée.', 'error', 3000);
+          return;
+        }
+        // Also write to S.sessionHistory for analytics volume tracker
+        if (!S.sessionHistory) S.sessionHistory = {};
+        var _sessKey = S.selectedRunDay + '_' + _todayDate;
+        var _kcalEst = estimateKcal('running', S.runningLevel || 'intermediate', Math.round(_min));
+        S.sessionHistory[_sessKey] = {duration: Math.round(_min), kcalBase: _kcalEst ? _kcalEst.base : 0, kcalEpoc: _kcalEst ? _kcalEst.epoc : 0, kcalTotal: _kcalEst ? _kcalEst.total : 0, date: new Date().toISOString(), sport: 'running'};
+        if (window.GAMIFICATION) { try { window.GAMIFICATION.updateStreak(); } catch(e) {} }
+        window.BLACKBOX && window.BLACKBOX.log('run_logged', {distanceKm: _entry.distanceKm, durationMin: _entry.durationMin, pace: _paceStr});
+        if (window.showToast) window.showToast('✓ Course enregistrée — ' + _entry.distanceKm + ' km à ' + _paceStr + ' /km', 'success');
+        window.render();
+      }
+    }, '✓ Enregistrer la course');
+    _logPanel.appendChild(_saveRunBtn);
+  }
+  p.appendChild(_logPanel);
+ })();
+
  p.appendChild(h('div', {style: 'height:12px'}));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 7; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration'}));
  appendNutritionModeCTA(p);
@@ -10274,6 +10447,46 @@ function renderHyroxProgram(p) {
  p.appendChild(bmCard);
  }
 
+ // ─── HYROX SESSION DONE ───
+ // Marks the day as complete and writes to S.sessionHistory for analytics tracking.
+ (function() {
+  if (!S.hyroxProgress || typeof S.hyroxProgress !== 'object') S.hyroxProgress = {};
+  var _hxDayKey = 'W' + S.hyroxWeek + '_D' + (S.selectedHyroxDay + 1);
+  var _hxDone = !!(S.hyroxProgress[_hxDayKey] && S.hyroxProgress[_hxDayKey].done);
+  var _hxCard = h('div', {style: 'border:1px solid ' + (_hxDone ? 'var(--ink-900,#0A0A09)' : 'var(--line,#D8D8D0)') + ';padding:14px 16px;margin:12px 0;background:' + (_hxDone ? 'rgba(62,92,58,0.04)' : 'var(--ivory2,#F4F4F0)')});
+  _hxCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, 'SUIVI — ' + _hxDayKey));
+  if (_hxDone) {
+    var _doneEl = h('div', {style: 'font-family:Georgia,serif;font-size:13px;color:var(--success,#3E5C3A);margin-bottom:8px'});
+    _doneEl.textContent = '✓ Séance complétée le ' + (S.hyroxProgress[_hxDayKey].date || '');
+    _hxCard.appendChild(_doneEl);
+    _hxCard.appendChild(h('button', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey);background:none;border:none;cursor:pointer;padding:0;letter-spacing:1px;text-transform:uppercase',
+      onclick: function() { S.hyroxProgress[_hxDayKey] = null; window.render(); }
+    }, 'Corriger'));
+  } else {
+    var _hxDoneBtn = h('button', {'class': 'btn-primary', style: 'width:100%;margin:0', onclick: function() {
+      if (!S.hyroxProgress) S.hyroxProgress = {};
+      var _htd = new Date();
+      var _hmm = _htd.getMonth() + 1, _hdd = _htd.getDate();
+      var _hdateStr = _htd.getFullYear() + '-' + (_hmm < 10 ? '0' : '') + _hmm + '-' + (_hdd < 10 ? '0' : '') + _hdd;
+      S.hyroxProgress[_hxDayKey] = { done: true, date: _hdateStr };
+      // Save to S.sessionHistory for analytics volume tracker
+      if (!S.sessionHistory) S.sessionHistory = {};
+      var _hxLevel = S.hyroxLevel || 'intermediate';
+      var _hxDurMap = {debutant: 60, beginner: 60, intermediate: 75, intermediaire: 75, advanced: 90, avance: 90, pro: 105, elite: 105};
+      var _hxDur = (sess && sess.duration) || _hxDurMap[_hxLevel] || 75;
+      var _hxKcal = estimateKcal('hyrox', _hxLevel, _hxDur);
+      var _hxSessKey = S.selectedHyroxDay + '_' + _hdateStr;
+      S.sessionHistory[_hxSessKey] = {duration: _hxDur, kcalBase: _hxKcal ? _hxKcal.base : 0, kcalEpoc: _hxKcal ? _hxKcal.epoc : 0, kcalTotal: _hxKcal ? _hxKcal.total : 0, date: new Date().toISOString(), sport: 'hyrox', hxDayKey: _hxDayKey};
+      if (window.GAMIFICATION) { try { window.GAMIFICATION.updateStreak(); } catch(e) {} }
+      window.BLACKBOX && window.BLACKBOX.log('hyrox_session_done', {week: S.hyroxWeek, day: S.selectedHyroxDay + 1, level: _hxLevel});
+      if (window.showToast) window.showToast('✓ Séance Hyrox validée — ' + _hxDayKey, 'success');
+      window.render();
+    }}, '✓ Séance terminée');
+    _hxCard.appendChild(_hxDoneBtn);
+  }
+  p.appendChild(_hxCard);
+ })();
+
  p.appendChild(h('div', {style: 'height:12px'}));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 9; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration'}));
  appendNutritionModeCTA(p);
@@ -10285,6 +10498,8 @@ function renderHyroxProgram(p) {
 
 function renderPadelConfig(p) {
  if (!S.padelProfile || typeof S.padelProfile !== 'object' || Array.isArray(S.padelProfile)) S.padelProfile = {};
+ // BUG-FIX: default padelDays — String(undefined) crashes the input value attr
+ if (!S.padelDays || S.padelDays < 2) S.padelDays = 3;
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Padel'));
  p.appendChild(h('h1', {html: 'Votre programme<br><em>padel</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Technique, tactique et préparation physique.'));
@@ -10310,7 +10525,7 @@ function renderPadelConfig(p) {
 
  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.days')));
  var nw = h('div', {'class': 'num-input-wrap'});
- nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '5', value: String(S.padelDays), oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 5) S.padelDays = v; }}));
+ nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '5', value: String(S.padelDays), inputmode: 'numeric', oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 5) { S.padelDays = v; window.render(); } }, onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) { e.target.value = S.padelDays = 2; window.render(); } else if (v > 5) { e.target.value = S.padelDays = 5; window.render(); } } }));
  nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
  p.appendChild(nw);
 
@@ -10366,7 +10581,8 @@ function renderPadelProgram(p) {
 
  // Day tabs
  var _padelSessions = week.sessions || [];
- if (S.selectedPadelDay === undefined || S.selectedPadelDay === null || S.selectedPadelDay >= _padelSessions.length) S.selectedPadelDay = 0;
+ // BUG-FIX: also guard against negative index (lower-bound was missing)
+ if (S.selectedPadelDay === undefined || S.selectedPadelDay === null || S.selectedPadelDay < 0 || S.selectedPadelDay >= _padelSessions.length) S.selectedPadelDay = 0;
  var tabs = h('div', {'class': 'day-tabs'});
  _padelSessions.forEach(function(s, i) {
  tabs.appendChild(h('button', {'class': 'day-tab' + (S.selectedPadelDay === i ? ' active' : ''), onclick: function(){ S.selectedPadelDay = i; window.render(); }}, 'Jour ' + (i + 1)));
@@ -10390,6 +10606,14 @@ function renderPadelProgram(p) {
  }
 
  if (window.renderStrengthGrade) renderStrengthGrade(p);
+ // BUG-FIX: missing kcal estimation card for Padel (all other sports have this)
+ (function() {
+  var padelLevel = S.padelLevel || 'intermediaire';
+  var SESSION_DUR_PADEL = { debutant: 60, intermediaire: 75, avance: 90, elite: 90 };
+  var padelDur = SESSION_DUR_PADEL[padelLevel] || 75;
+  var padelKcal = estimateKcal('padel', padelLevel, padelDur);
+  p.appendChild(buildKcalCard(padelKcal, padelDur));
+ }());
  p.appendChild(h('div', {style: 'height:12px'}));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 11; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration'}));
  appendNutritionModeCTA(p);
@@ -10401,6 +10625,8 @@ function renderPadelProgram(p) {
 
 function renderGolfConfig(p) {
  if (!S.golfProfile || typeof S.golfProfile !== 'object' || Array.isArray(S.golfProfile)) S.golfProfile = {};
+ // BUG-FIX: default golfDays — String(undefined) crashes the input value attr
+ if (!S.golfDays || S.golfDays < 2) S.golfDays = 3;
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Golf'));
  p.appendChild(h('h1', {html: 'Votre programme<br><em>golf</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Basé sur les méthodes Dave Pelz & Butch Harmon.'));
@@ -10425,7 +10651,7 @@ function renderGolfConfig(p) {
 
  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.days')));
  var nw = h('div', {'class': 'num-input-wrap'});
- nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '5', value: String(S.golfDays), oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 5) S.golfDays = v; }}));
+ nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '5', value: String(S.golfDays), inputmode: 'numeric', oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 5) { S.golfDays = v; window.render(); } }, onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) { e.target.value = S.golfDays = 2; window.render(); } else if (v > 5) { e.target.value = S.golfDays = 5; window.render(); } } }));
  nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
  p.appendChild(nw);
 
@@ -10493,7 +10719,8 @@ function renderGolfProgram(p) {
 
  // Day tabs
  var _golfSessions = week.sessions || [];
- if (S.selectedGolfDay === undefined || S.selectedGolfDay === null || S.selectedGolfDay >= _golfSessions.length) S.selectedGolfDay = 0;
+ // BUG-FIX: also guard against negative index (lower-bound was missing)
+ if (S.selectedGolfDay === undefined || S.selectedGolfDay === null || S.selectedGolfDay < 0 || S.selectedGolfDay >= _golfSessions.length) S.selectedGolfDay = 0;
  var tabs = h('div', {'class': 'day-tabs'});
  _golfSessions.forEach(function(s, i) {
  tabs.appendChild(h('button', {'class': 'day-tab' + (S.selectedGolfDay === i ? ' active' : ''), onclick: function(){ S.selectedGolfDay = i; window.render(); }}, 'Jour ' + (i + 1)));
@@ -10516,6 +10743,14 @@ function renderGolfProgram(p) {
  p.appendChild(card);
  }
 
+ // BUG-FIX: missing kcal estimation card for Golf (all other sports have this)
+ (function() {
+  var golfLevel = S.golfLevel || 'intermediaire';
+  var SESSION_DUR_GOLF = { debutant: 90, intermediaire: 120, avance: 150, elite: 180 };
+  var golfDur = SESSION_DUR_GOLF[golfLevel] || 120;
+  var golfKcal = estimateKcal('golf', golfLevel, golfDur);
+  p.appendChild(buildKcalCard(golfKcal, golfDur));
+ }());
  p.appendChild(h('div', {style: 'height:12px'}));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 13; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration'}));
  appendNutritionModeCTA(p);
@@ -11011,12 +11246,15 @@ function renderYogaOnboarding(p) {
 
 // ─── STEP 21: YOGA PROGRAM ───
 function renderYogaProgram(p) {
- if (!S.yogaLevel) { S.sStep = 19; setTimeout(function() { if (window.render) window.render(); }, 0); return; }
+ // FIX BUG 2026-04-26 : guard manquant sur yogaObjectif — config incomplète → session card vide
+ if (!S.yogaLevel || !S.yogaObjectif) { S.sStep = 19; setTimeout(function() { if (window.render) window.render(); }, 0); return; }
  if (!S.yogaDays) S.yogaDays = 3;
  if (!S.yogaDuration) S.yogaDuration = '30min';
  if (!S.yogaStyle) S.yogaStyle = 'hatha';
  if (!S.yogaWeek) S.yogaWeek = 1;
  if (S.yogaDay === undefined || S.yogaDay === null) S.yogaDay = 0;
+ // BUG-FIX: clamp yogaDay below yogaDays — stale value from a higher day-count crashes the session card
+ if (S.yogaDay >= S.yogaDays) S.yogaDay = 0;
 
  var totalWeeks = 4;
  if (S.yogaWeek > totalWeeks) S.yogaWeek = totalWeeks;
@@ -11140,6 +11378,15 @@ function renderYogaProgram(p) {
  });
  p.appendChild(allBenef);
 
+ // BUG-FIX: missing kcal estimation card for Yoga
+ (function() {
+  var yogaLevelKey = S.yogaLevel || 'debutant';
+  var SESSION_DUR_YOGA = { debutant: 45, intermediaire: 60, avance: 75, elite: 90 };
+  var yogaDurMin = S.yogaDuration ? parseInt(S.yogaDuration) : (SESSION_DUR_YOGA[yogaLevelKey] || 45);
+  if (isNaN(yogaDurMin) || yogaDurMin <= 0) yogaDurMin = SESSION_DUR_YOGA[yogaLevelKey] || 45;
+  var yogaKcal = estimateKcal('yoga', yogaLevelKey, yogaDurMin);
+  p.appendChild(buildKcalCard(yogaKcal, yogaDurMin));
+ }());
  p.appendChild(h('div', {style: 'height:12px'}));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 19; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration'}));
  appendNutritionModeCTA(p);
@@ -11779,7 +12026,7 @@ function renderCalisthenicsProgram(content) {
     var stepData = sk.progressions[currentStep - 1];
     var stepCard = h('div', {style: 'background:var(--surface,#F4F4F0);padding:8px 12px;border-radius:2px;font-size:12px'});
     stepCard.appendChild(h('div', {style: 'font-weight:600;margin-bottom:2px'}, 'En cours: ' + stepData.name));
-    stepCard.appendChild(h('div', {style: 'color:var(--grey3)'}, stepData.sets > 0 ? (stepData.sets + 'x' + stepData.reps + ' — Repos: ' + stepData.rest) : stepData.reps));
+    stepCard.appendChild(h('div', {style: 'color:var(--grey3)'}, stepData.sets > 0 ? (stepData.sets + 'x' + stepData.reps + ' — ' + ((window.isEnglish && window.isEnglish()) ? 'Rest: ' : 'Repos: ') + stepData.rest) : stepData.reps));
     stepCard.appendChild(h('div', {style: 'color:var(--ink-900,#0A0A09);margin-top:4px;font-size:11px'}, stepData.coaching || ''));
     skillRow.appendChild(stepCard);
    }
@@ -11863,7 +12110,7 @@ function renderCalisthenicsProgram(content) {
     exDiv.appendChild(exHdr);
     // Rest + skill link
     var metaRow = h('div', {style: 'display:flex;gap:12px;margin-bottom:3px'});
-    if (ex.rest) { metaRow.appendChild(h('div', {style: 'font-size:11px;color:var(--grey3)'}, 'Repos: ' + ex.rest)); }
+    if (ex.rest) { metaRow.appendChild(h('div', {style: 'font-size:11px;color:var(--grey3)'}, ((window.isEnglish && window.isEnglish()) ? 'Rest: ' : 'Repos: ') + ex.rest)); }
     if (ex.skill_link) { metaRow.appendChild(h('div', {style: 'font-size:11px;color:var(--ink-900,#0A0A09)'}, 'Skill: ' + ex.skill_link.replace(/_/g, ' '))); }
     exDiv.appendChild(metaRow);
     // Coaching note
@@ -11912,11 +12159,11 @@ window.renderWellnessCheckin = renderWellnessCheckin;
 window.exportSportPDF = function() {
   if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
   if (!window.jspdf || !window.jspdf.jsPDF) {
-    if (window.showToast) window.showToast('Chargement du PDF…', 'info', 2000);
+    if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Loading PDF…' : 'Chargement du PDF…', 'info', 2000);
     if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', window.exportSportPDF); }
     return;
   }
-  if (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) { if (window.showToast) window.showToast('Aucun programme \u00e0 exporter. G\u00e9n\u00e9rez votre programme.', 'error', 4000); return; }
+  if (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) { if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'No program to export. Generate your program first.' : 'Aucun programme \u00e0 exporter. G\u00e9n\u00e9rez votre programme.', 'error', 4000); return; }
   try {
     var jsPDF = window.jspdf.jsPDF;
     var doc = new jsPDF({unit: 'mm', format: 'a4'});
@@ -11990,7 +12237,7 @@ window.exportSportPDF = function() {
     doc.setFontSize(6); doc.setTextColor(grey[0], grey[1], grey[2]);
     doc.text('Smart Fit Coach \u2014 ' + window.formatDate(new Date()), M, 290);
     doc.save('programme-musculation-sem' + (S.muscuWeek || 1) + '.pdf');
-  } catch(e) { console.error('[exportSportPDF] Erreur:', e); if (window.showToast) window.showToast('Erreur lors de la g\u00e9n\u00e9ration du PDF programme', 'error', 3500); }
+  } catch(e) { console.error('[exportSportPDF] Erreur:', e); if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Error generating program PDF' : 'Erreur lors de la g\u00e9n\u00e9ration du PDF programme', 'error', 3500); }
 };
 
 window.generateSportProgram = generateSportProgram;

@@ -42,7 +42,15 @@ var CUISINES = window.CUISINES || [];
 var CUISINE_FLAGS = window.CUISINE_FLAGS || {};
 var SHOPPING = window.SHOPPING || [];
 var STAPLES = window.STAPLES || [];
-var DAY_NAMES = window.DAY_NAMES || ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+var DAY_NAMES = window.DAY_NAMES || (function() {
+  try {
+    var _lang = (function(){ try { var p=JSON.parse(localStorage.getItem('sfc_profile')||'{}'); return p.lang||'fr'; } catch(e){ return 'fr'; } })();
+    var locale = _lang === 'en' ? 'en-US' : 'fr-FR';
+    var fmt = new Intl.DateTimeFormat(locale, {weekday:'long'});
+    var monday = new Date(2024, 0, 1);
+    return [0,1,2,3,4,5,6].map(function(i){ var d = new Date(monday); d.setDate(monday.getDate()+i); var s = fmt.format(d); return s.charAt(0).toUpperCase()+s.slice(1); });
+  } catch(e) { return ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche']; }
+})();
 var MEAL_SPLIT = window.MEAL_SPLIT || {};
 var RATIOS = window.RATIOS || {};
 
@@ -148,7 +156,8 @@ function renderProgressBar(p, current, total) {
   var label = h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;'
   });
-  label.appendChild(h('span', {}, 'Étape ' + current + ' sur ' + total));
+  var _pbEN = window.isEnglish && window.isEnglish();
+  label.appendChild(h('span', {}, _pbEN ? ('Step ' + current + ' of ' + total) : ('Étape ' + current + ' sur ' + total)));
   // Pourcentage discret à droite en Georgia
   var pct = Math.round((current / total) * 100);
   label.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:11px;letter-spacing:0;text-transform:none;color:var(--black,#0A0A09);'}, pct + '%'));
@@ -412,7 +421,9 @@ function renderStep2(p) {
     _daySelect.appendChild(_dOpt);
   }
 
-  var _mNames = ['Janvier','F\u00e9vrier','Mars','Avril','Mai','Juin','Juillet','Ao\u00fbt','Septembre','Octobre','Novembre','D\u00e9cembre'];
+  var _mNames = (window.isEnglish && window.isEnglish())
+    ? ['January','February','March','April','May','June','July','August','September','October','November','December']
+    : ['Janvier','F\u00e9vrier','Mars','Avril','Mai','Juin','Juillet','Ao\u00fbt','Septembre','Octobre','Novembre','D\u00e9cembre'];
   var _monthSelect = h('select', {'class': 'num-input', style: 'flex:1.5;padding:10px 6px;font-size:14px;text-align:center;appearance:auto;-webkit-appearance:auto'});
   _monthSelect.appendChild(h('option', {value: '0', selected: !_curMonth}, 'Mois'));
   for (var _m = 0; _m < 12; _m++) {
@@ -2155,7 +2166,10 @@ function renderStep7(p) {
             _errDiv.style.cssText = 'color:var(--error,#7A1F1F);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-top:8px;text-align:center';
             _genBtn.parentNode && _genBtn.parentNode.insertBefore(_errDiv, _genBtn.nextSibling);
           }
-          _errDiv.textContent = 'Impossible de générer le plan. Vérifiez vos préférences et réessayez.';
+          // BUG-4 FIX: bilingual inline error message for empty plan
+          _errDiv.textContent = (window.isEnglish && window.isEnglish())
+            ? 'Unable to generate the plan. Check your preferences and try again.'
+            : 'Impossible de générer le plan. Vérifiez vos préférences et réessayez.';
           window._nutritionGenerating = false;
           return;
         }
@@ -3021,8 +3035,11 @@ function renderStep9(p) {
   // NOTE : on ne touche plus au plan si hash change. La bannière ci-dessous informe l'user.
   // Guard: si weekPlan est toujours null/vide après génération, afficher un message d'erreur
   if (!S.weekPlan || !S.weekPlan.length) {
-    p.appendChild(h('div', {style: 'padding:20px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'}, 'Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes.'));
-    p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(11); }}, '\u2190 Retour aux résultats'));
+    // BUG-3 FIX: bilingual empty-plan error message
+    var _isEn3 = window.isEnglish && window.isEnglish();
+    p.appendChild(h('div', {style: 'padding:20px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'},
+      _isEn3 ? 'Some information is missing to generate your plan. Complete the previous steps.' : 'Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes.'));
+    p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(11); }}, (window.isEnglish && window.isEnglish() ? '\u2190 Back to results' : '\u2190 Retour aux résultats')));
     return;
   }
   // (reset selectedDay déjà fait en haut de fonction avant calcul _nm)
@@ -3345,9 +3362,11 @@ function renderStep9(p) {
             if (!S.weekPlan) return;
             if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
             S.weekPlan[S.selectedDay][slotKey3] = { n: pItem.name, k: Math.round(pItem.kcal * r), kcal: Math.round(pItem.kcal * r), p: Math.round(pItem.p * r), g: Math.round(pItem.g * r), l: Math.round(pItem.l * r), f: '\u25CE', emoji: '\u25CE', custom: true, portions: gr };
+            // BUG-1 FIX: recalculate day aggregate totals so dashboard/shopping-list stay in sync
+            (function(_di3) { var _d3 = S.weekPlan[_di3]; if (!_d3) return; var _t3 = {k:0,p:0,g:0,l:0}; ['breakfast','lunch','snack','dinner'].forEach(function(q){var m=_d3[q];if(m){_t3.k+=m.k||0;_t3.p+=m.p||0;_t3.g+=m.g||0;_t3.l+=m.l||0;}}); _d3.kcal=_t3.k;_d3.p=_t3.p;_d3.g=_t3.g;_d3.l=_t3.l; })(S.selectedDay);
             S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false; S._foodPortionItem = null; S._foodPortionGrams = null;
             try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saveProfile error:', e); }
-            try { var _cn = (pItem.name||'').toLowerCase(), _cw=[]; if(!S.allowPork&&/porc|jambon|bacon|lardon(?!.*(?:dinde|volaille|poulet))|saucisson|prosciutto|pancetta|chorizo/.test(_cn))_cw.push('porc'); if(S.regime===2&&/poulet|boeuf|b\u0153uf|veau|dinde|saumon|thon|poisson/.test(_cn))_cw.push('non v\u00e9g\u00e9tarien'); if(S.regime===3&&/poulet|boeuf|b\u0153uf|veau|oeuf|fromage|yaourt|lait/.test(_cn))_cw.push('non vegan'); if(_cw.length&&window.showToast)window.showToast('\u26a0\ufe0f Repas ajout\u00e9 \u2014 contient : '+_cw.join(', '), 'warning', 4000); } catch(_wE){}
+            try { var _cn = (pItem.name||'').toLowerCase(), _cw=[]; if(!S.allowPork&&/porc|jambon|bacon|lardon(?!.*(?:dinde|volaille|poulet))|saucisson|prosciutto|pancetta|chorizo/.test(_cn))_cw.push('porc'); if(S.regime===2&&/poulet|boeuf|b\u0153uf|veau|dinde|saumon|thon|poisson/.test(_cn))_cw.push('non v\u00e9g\u00e9tarien'); if(S.regime===3&&/poulet|boeuf|b\u0153uf|veau|oeuf|fromage|yaourt|lait/.test(_cn))_cw.push('non vegan'); if(_cw.length&&window.showToast)window.showToast((window.isEnglish && window.isEnglish()) ? '\u26a0\ufe0f Meal added \u2014 contains: '+_cw.join(', ') : '\u26a0\ufe0f Repas ajout\u00e9 \u2014 contient : '+_cw.join(', '), 'warning', 4000); } catch(_wE){}
             if (window.incrementMealsLogged) window.incrementMealsLogged();
             window.render();
           }
@@ -3519,9 +3538,11 @@ function renderStep9(p) {
             p: Math.max(0, parseFloat(fd.p) || 0), g: Math.max(0, parseFloat(fd.g) || 0), l: Math.max(0, parseFloat(fd.l) || 0),
             f: '\u25CE', emoji: '\u25CE', custom: true
           };
+          // BUG-1 FIX: recalculate day aggregate totals so dashboard/shopping-list stay in sync
+          (function(_di4) { var _d4 = S.weekPlan[_di4]; if (!_d4) return; var _t4 = {k:0,p:0,g:0,l:0}; ['breakfast','lunch','snack','dinner'].forEach(function(q){var m=_d4[q];if(m){_t4.k+=m.k||0;_t4.p+=m.p||0;_t4.g+=m.g||0;_t4.l+=m.l||0;}}); _d4.kcal=_t4.k;_d4.p=_t4.p;_d4.g=_t4.g;_d4.l=_t4.l; })(S.selectedDay);
           S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false; S._foodManualData = null;
           try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saveProfile error:', e); }
-          try { var _mn = (fd.name||'').trim().toLowerCase(), _mw=[]; if(!S.allowPork&&/porc|jambon|bacon|lardon(?!.*(?:dinde|volaille|poulet))|saucisson|prosciutto|pancetta|chorizo/.test(_mn))_mw.push('porc'); if(S.regime===2&&/poulet|boeuf|bœuf|veau|dinde|saumon|thon|poisson/.test(_mn))_mw.push('non végétarien'); if(S.regime===3&&/poulet|boeuf|bœuf|veau|oeuf|fromage|yaourt|lait/.test(_mn))_mw.push('non vegan'); if(_mw.length&&window.showToast)window.showToast('\u26a0\ufe0f Repas ajouté — contient : '+_mw.join(', '), 'warning', 4000); } catch(_mwE){}
+          try { var _mn = (fd.name||'').trim().toLowerCase(), _mw=[]; if(!S.allowPork&&/porc|jambon|bacon|lardon(?!.*(?:dinde|volaille|poulet))|saucisson|prosciutto|pancetta|chorizo/.test(_mn))_mw.push('porc'); if(S.regime===2&&/poulet|boeuf|bœuf|veau|dinde|saumon|thon|poisson/.test(_mn))_mw.push('non végétarien'); if(S.regime===3&&/poulet|boeuf|bœuf|veau|oeuf|fromage|yaourt|lait/.test(_mn))_mw.push('non vegan'); if(_mw.length&&window.showToast)window.showToast((window.isEnglish && window.isEnglish()) ? '\u26a0\ufe0f Meal added — contains: '+_mw.join(', ') : '\u26a0\ufe0f Repas ajouté — contient : '+_mw.join(', '), 'warning', 4000); } catch(_mwE){}
           window.render();
         }
       }, 'Confirmer');
@@ -3536,7 +3557,11 @@ function renderStep9(p) {
   }
 
   // Day meals
-  var day = S.weekPlan[S.selectedDay] || {}, tgtCal = calcTarget(), dayTotal = 0, dayTotalP = 0, dayTotalG = 0, dayTotalL = 0;
+  // BUG-2 FIX: use the plan's adapted calorie target (with calMultiplier for rest/training days)
+  // rather than the bare calcTarget() which ignores the −10% rest-day multiplier.
+  // _tgt is already computed above from the plan's actual meal kcals; fall back to calcTarget()
+  // only when _tgt is 0 (empty plan). This keeps the diff badge honest.
+  var day = S.weekPlan[S.selectedDay] || {}, tgtCal = (_tgt > 0 ? _tgt : calcTarget()), dayTotal = 0, dayTotalP = 0, dayTotalG = 0, dayTotalL = 0;
   var slots = [
     {key: 'breakfast', label: window.t('onb.s9.breakfast')},
     {key: 'lunch', label: window.t('onb.s9.lunch')},
@@ -3554,7 +3579,8 @@ function renderStep9(p) {
         });
         emptyCard.appendChild(h('div', {style: 'font-size:13px;font-weight:400;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;color:var(--grey,#888)'}, slotLabel));
         emptyCard.appendChild(h('div', {style: 'font-size:24px;margin-bottom:4px'}, '+'));
-        emptyCard.appendChild(h('div', {style: 'font-size:13px'}, 'Composer mon repas'));
+        // BUG-5 FIX: bilingual label in empty meal slot placeholder
+        emptyCard.appendChild(h('div', {style: 'font-size:13px'}, (window.isEnglish && window.isEnglish()) ? 'Compose my meal' : 'Composer mon repas'));
         p.appendChild(emptyCard);
 
         if (S._addMealModalSlot === slotKey) {
@@ -3843,11 +3869,14 @@ function renderStep9(p) {
     p.appendChild(netDiv);
   })();
 
-  // Whey tip
+  // Whey tip \u2014 bilingual
   if (S.whey) {
     var tip = h('div', {'class': 'whey-tip'});
-    tip.appendChild(h('strong', {}, 'Conseil Whey \u2014 '));
-    tip.appendChild(h('span', {}, 'Prenez votre whey dans les 30 min apr\u00e8s l\'entra\u00eenement pour optimiser la synth\u00e8se prot\u00e9ique.'));
+    var _isEnWhey = window.isEnglish && window.isEnglish();
+    tip.appendChild(h('strong', {}, (_isEnWhey ? 'Whey Tip \u2014 ' : 'Conseil Whey \u2014 ')));
+    tip.appendChild(h('span', {}, _isEnWhey
+      ? 'Take your whey within 30 min after training to optimize protein synthesis.'
+      : 'Prenez votre whey dans les 30 min apr\u00e8s l\'entra\u00eenement pour optimiser la synth\u00e8se prot\u00e9ique.'));
     p.appendChild(tip);
   }
 
@@ -3937,7 +3966,7 @@ function renderStep9(p) {
       } else {
         // IMPORTANT-G2: feedback si pool vide
         console.warn('[nutrition] regen: generateWeek() a retourné un plan vide');
-        if (window.showToast) window.showToast('Plan non g\u00e9n\u00e9r\u00e9 \u2014 v\u00e9rifiez vos allergies et pr\u00e9f\u00e9rences (onglet Profil).', 'error', 5000);
+        if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Plan not generated \u2014 check your allergies and preferences (Profile tab).' : 'Plan non g\u00e9n\u00e9r\u00e9 \u2014 v\u00e9rifiez vos allergies et pr\u00e9f\u00e9rences (onglet Profil).', 'error', 5000);
       }
       window.render();
     } finally {
@@ -4155,11 +4184,11 @@ function renderModal(app) {
 function exportDayPDF(dayIdx) {
   if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
   if (!window.jspdf || !window.jspdf.jsPDF) {
-    if (window.showToast) window.showToast('Chargement du PDF…', 'info', 2000);
+    if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Loading PDF…' : 'Chargement du PDF…', 'info', 2000);
     if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', function() { exportDayPDF(dayIdx); }); }
     return;
   }
-  if (!Array.isArray(S.weekPlan) || !S.weekPlan[dayIdx]) { if (window.showToast) window.showToast('Aucun plan pour ce jour \u2014 g\u00e9n\u00e9rez votre plan semaine d\'abord.', 'error', 4000); return; }
+  if (!Array.isArray(S.weekPlan) || !S.weekPlan[dayIdx]) { if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'No plan for today \u2014 generate your weekly plan first.' : 'Aucun plan pour ce jour \u2014 g\u00e9n\u00e9rez votre plan semaine d\'abord.', 'error', 4000); return; }
   try {
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({unit: 'mm', format: 'a4'});
@@ -4174,7 +4203,7 @@ function exportDayPDF(dayIdx) {
   doc.text('SMART FIT COACH', M, 14);
   // CRITIQUE-1: garde validité dayIdx avant tout accès à DAY_NAMES/weekPlan
   if (typeof dayIdx !== 'number' || dayIdx < 0 || dayIdx > 6 || !S.weekPlan || !S.weekPlan[dayIdx]) {
-    if (window.showToast) window.showToast('Aucun plan disponible pour ce jour', 'error', 3000); return;
+    if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'No plan available for today' : 'Aucun plan disponible pour ce jour', 'error', 3000); return;
   }
   doc.setFontSize(16); doc.setFont('times', 'italic');
   doc.text((DAY_NAMES[dayIdx] || 'Jour') + ' \u2014 Plan du jour', M, 26);
@@ -4257,18 +4286,18 @@ function exportDayPDF(dayIdx) {
     .replace(/[ùûü]/g, 'u').replace(/ç/g, 'c').replace(/ñ/g, 'n')
     .replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
   doc.save('plan-' + (safeDayName || 'jour') + '.pdf');
-  } catch(e) { console.error('[exportDayPDF] Erreur:', e); if (window.showToast) window.showToast('Erreur lors de la g\u00e9n\u00e9ration du PDF. V\u00e9rifiez vos donn\u00e9es.', 'error', 4000); }
+  } catch(e) { console.error('[exportDayPDF] Erreur:', e); if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Error generating PDF. Check your data.' : 'Erreur lors de la g\u00e9n\u00e9ration du PDF. V\u00e9rifiez vos donn\u00e9es.', 'error', 4000); }
 }
 window.exportDayPDF = exportDayPDF;
 
 function exportRecipePDF(r) {
   if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
   if (!window.jspdf || !window.jspdf.jsPDF) {
-    if (window.showToast) window.showToast('Chargement du PDF…', 'info', 2000);
+    if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Loading PDF…' : 'Chargement du PDF…', 'info', 2000);
     if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', function() { exportRecipePDF(r); }); }
     return;
   }
-  if (!r || !r.n) { if (window.showToast) window.showToast('Recette non disponible pour l\u2019export', 'error', 3000); return; }
+  if (!r || !r.n) { if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Recipe not available for export' : 'Recette non disponible pour l\u2019export', 'error', 3000); return; }
   try {
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({unit: 'mm', format: 'a4'});
@@ -4336,7 +4365,7 @@ function exportRecipePDF(r) {
     .replace(/[ùûü]/g, 'u').replace(/ç/g, 'c').replace(/ñ/g, 'n')
     .replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
   doc.save((safeName || 'recette') + '.pdf');
-  } catch(e) { console.error('[exportRecipePDF] Erreur:', e); if (window.showToast) window.showToast('Erreur lors de la g\u00e9n\u00e9ration du PDF recette', 'error', 3500); }
+  } catch(e) { console.error('[exportRecipePDF] Erreur:', e); if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Error generating recipe PDF' : 'Erreur lors de la g\u00e9n\u00e9ration du PDF recette', 'error', 3500); }
 }
 window.exportRecipePDF = exportRecipePDF;
 
@@ -6037,7 +6066,7 @@ function showSmoothieModal(sm) {
       if (el && el.parentNode) el.parentNode.removeChild(el);
       S.smoothieBarOpen = false;
       goStep(12);
-      showToast('\u2713 Smoothie ajouté en collation — Plan recalculé', 2500);
+      showToast((window.isEnglish && window.isEnglish()) ? '\u2713 Smoothie added as snack — Plan recalculated' : '\u2713 Smoothie ajouté en collation — Plan recalculé', 2500);
     }
   }, 'Ajouter à mon plan — Collation '+dayLabel);
   footer.appendChild(addBtn);
@@ -6329,11 +6358,11 @@ function printShoppingListAR(list) {
 function exportShoppingListPDF(list, shopChecked) {
   if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
   if (!window.jspdf || !window.jspdf.jsPDF) {
-    if (window.showToast) window.showToast('Chargement du PDF…', 'info', 2000);
+    if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Loading PDF…' : 'Chargement du PDF…', 'info', 2000);
     if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', function() { exportShoppingListPDF(list, shopChecked); }); }
     return;
   }
-  if (!Array.isArray(list) || list.length === 0) { if (window.showToast) window.showToast('Liste de courses vide \u2014 votre plan semaine doit \u00eatre g\u00e9n\u00e9r\u00e9 d\'abord.', 'error', 4000); return; }
+  if (!Array.isArray(list) || list.length === 0) { if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Shopping list empty \u2014 generate your weekly plan first.' : 'Liste de courses vide \u2014 votre plan semaine doit \u00eatre g\u00e9n\u00e9r\u00e9 d\'abord.', 'error', 4000); return; }
   try {
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({ unit: 'mm', format: 'a4' });
@@ -6404,7 +6433,7 @@ function exportShoppingListPDF(list, shopChecked) {
   doc.text('Généré par SmartFitCoach — ' + window.formatDate(new Date()), margin, 290);
 
   doc.save('liste-courses-smartfitcoach.pdf');
-  } catch(e) { console.error('[exportShoppingListPDF] Erreur:', e); if (window.showToast) window.showToast('Erreur lors de la g\u00e9n\u00e9ration du PDF liste', 'error', 3500); }
+  } catch(e) { console.error('[exportShoppingListPDF] Erreur:', e); if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Error generating shopping list PDF' : 'Erreur lors de la g\u00e9n\u00e9ration du PDF liste', 'error', 3500); }
 }
 
 // ─── SALADE COMPOSER ───
@@ -6529,7 +6558,7 @@ function renderBodyScan(p) {
       if (window.BODY_ANALYSIS && typeof window.BODY_ANALYSIS.open === 'function') {
         window.BODY_ANALYSIS.open();
       } else {
-        if (window.showToast) window.showToast('Module d\u2019analyse corporelle non disponible. Rechargez la page.', 'error', 3500);
+        if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Body analysis module unavailable. Reload the page.' : 'Module d\u2019analyse corporelle non disponible. Rechargez la page.', 'error', 3500);
       }
     }
   });

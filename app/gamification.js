@@ -83,73 +83,73 @@ var QUOTES = [
 // ─── ACHIEVEMENTS/BADGES ───
 var BADGE_DEFS = [
   // Onboarding
-  {id: 'first_login', name: 'Premier Pas', desc: 'Première connexion', icon: '◆', category: 'onboarding'},
-  {id: 'profile_complete', name: 'Profil Complet', desc: 'Toutes les informations renseignées', icon: '◇', category: 'onboarding'},
-  {id: 'first_plan', name: 'Planificateur', desc: 'Premier planning généré', icon: '□', category: 'onboarding'},
+  {id: 'first_login', name: 'Premier Pas', name_en: 'First Step', desc: 'Première connexion', desc_en: 'First login', icon: '◆', category: 'onboarding'},
+  {id: 'profile_complete', name: 'Profil Complet', name_en: 'Complete Profile', desc: 'Toutes les informations renseignées', desc_en: 'All information filled in', icon: '◇', category: 'onboarding'},
+  {id: 'first_plan', name: 'Planificateur', name_en: 'Planner', desc: 'Premier planning généré', desc_en: 'First plan generated', icon: '□', category: 'onboarding'},
 
   // Consistency
-  {id: 'streak_3', name: '3 Jours', desc: 'Connecté 3 jours de suite', icon: '▲', category: 'streak'},
-  {id: 'streak_7', name: 'Semaine Parfaite', desc: '7 jours consécutifs', icon: '▲', category: 'streak'},
-  {id: 'streak_14', name: 'Deux Semaines', desc: '14 jours consécutifs', icon: '▲', category: 'streak'},
-  {id: 'streak_30', name: 'Mois Complet', desc: '30 jours consécutifs', icon: '★', category: 'streak'},
-  {id: 'streak_90', name: 'Transformation', desc: '90 jours consécutifs', icon: '★', category: 'streak'},
+  {id: 'streak_3', name: '3 Jours', name_en: '3 Days', desc: 'Connecté 3 jours de suite', desc_en: '3 days in a row', icon: '▲', category: 'streak'},
+  {id: 'streak_7', name: 'Semaine Parfaite', name_en: 'Perfect Week', desc: '7 jours consécutifs', desc_en: '7 consecutive days', icon: '▲', category: 'streak'},
+  {id: 'streak_14', name: 'Deux Semaines', name_en: 'Two Weeks', desc: '14 jours consécutifs', desc_en: '14 consecutive days', icon: '▲', category: 'streak'},
+  {id: 'streak_30', name: 'Mois Complet', name_en: 'Full Month', desc: '30 jours consécutifs', desc_en: '30 consecutive days', icon: '★', category: 'streak'},
+  {id: 'streak_90', name: 'Transformation', name_en: 'Transformation', desc: '90 jours consécutifs', desc_en: '90 consecutive days', icon: '★', category: 'streak'},
 
   // Weight tracking
-  {id: 'first_weigh', name: 'Suivi Lancé', desc: 'Premier poids enregistré', icon: '○', category: 'tracking'},
-  {id: 'weight_10', name: 'Régulier', desc: '10 pesées enregistrées', icon: '○', category: 'tracking'},
-  {id: 'weight_goal', name: 'Objectif Atteint', desc: 'Poids objectif atteint !', icon: '●', category: 'tracking'},
-  {id: 'first_kg_lost', name: 'Premier Kilo', desc: 'Premier kg perdu', icon: '▽', category: 'tracking'},
-  {id: 'five_kg', name: '-5 kg', desc: '5 kg perdus', icon: '▽', category: 'tracking'},
+  {id: 'first_weigh', name: 'Suivi Lancé', name_en: 'Tracking Started', desc: 'Premier poids enregistré', desc_en: 'First weight logged', icon: '○', category: 'tracking'},
+  {id: 'weight_10', name: 'Régulier', name_en: 'Consistent', desc: '10 pesées enregistrées', desc_en: '10 weigh-ins recorded', icon: '○', category: 'tracking'},
+  {id: 'weight_goal', name: 'Objectif Atteint', name_en: 'Goal Achieved', desc: 'Poids objectif atteint !', desc_en: 'Target weight reached!', icon: '●', category: 'tracking'},
+  {id: 'first_kg_lost', name: 'Premier Kilo', name_en: 'First Kilo', desc: 'Premier kg perdu', desc_en: 'First kg lost', icon: '▽', category: 'tracking'},
+  {id: 'five_kg', name: '-5 kg', name_en: '-5 kg', desc: '5 kg perdus', desc_en: '5 kg lost', icon: '▽', category: 'tracking'},
 
   // Nutrition streak
-  {id: 'nutrition_streak_7', name: 'Semaine Nutritionnelle', desc: '7 jours de repas loggés consécutifs', icon: '▲', category: 'nutrition'},
-  {id: 'nutrition_streak_14', name: 'Quinzaine Nutrition', desc: '14 jours de repas loggés consécutifs', icon: '▲', category: 'nutrition'},
-  {id: 'nutrition_streak_30', name: 'Expert Nutrition', desc: '30 jours de repas loggés consécutifs', icon: '★', category: 'nutrition'},
-  {id: 'meals_logged_50', name: 'Maître Cuisinier', desc: '50 repas enregistrés', icon: '◆', category: 'nutrition'},
+  {id: 'nutrition_streak_7', name: 'Semaine Nutritionnelle', name_en: 'Nutrition Week', desc: '7 jours de repas loggés consécutifs', desc_en: '7 consecutive days of meals logged', icon: '▲', category: 'nutrition'},
+  {id: 'nutrition_streak_14', name: 'Quinzaine Nutrition', name_en: 'Nutrition Fortnight', desc: '14 jours de repas loggés consécutifs', desc_en: '14 consecutive days of meals logged', icon: '▲', category: 'nutrition'},
+  {id: 'nutrition_streak_30', name: 'Expert Nutrition', name_en: 'Nutrition Expert', desc: '30 jours de repas loggés consécutifs', desc_en: '30 consecutive days of meals logged', icon: '★', category: 'nutrition'},
+  {id: 'meals_logged_50', name: 'Maître Cuisinier', name_en: 'Master Chef', desc: '50 repas enregistrés', desc_en: '50 meals recorded', icon: '◆', category: 'nutrition'},
 
   // Exploration
-  {id: 'recipes_10', name: 'Curieux', desc: '10 recettes consultées', icon: '◆', category: 'explore'},
-  {id: 'recipes_50', name: 'Gastronome', desc: '50 recettes consultées', icon: '◆', category: 'explore'},
-  {id: 'swap_master', name: 'Swap Master', desc: '20 repas échangés', icon: '◇', category: 'explore'},
-  {id: 'all_cuisines', name: 'Tour du Monde', desc: 'Goûté toutes les cuisines', icon: '●', category: 'explore'},
+  {id: 'recipes_10', name: 'Curieux', name_en: 'Curious', desc: '10 recettes consultées', desc_en: '10 recipes viewed', icon: '◆', category: 'explore'},
+  {id: 'recipes_50', name: 'Gastronome', name_en: 'Gourmet', desc: '50 recettes consultées', desc_en: '50 recipes viewed', icon: '◆', category: 'explore'},
+  {id: 'swap_master', name: 'Swap Master', name_en: 'Swap Master', desc: '20 repas échangés', desc_en: '20 meals swapped', icon: '◇', category: 'explore'},
+  {id: 'all_cuisines', name: 'Tour du Monde', name_en: 'World Tour', desc: 'Goûté toutes les cuisines', desc_en: 'Tasted all cuisines', icon: '●', category: 'explore'},
 
   // Sport
-  {id: 'first_workout', name: 'Sportif', desc: 'Premier programme sport', icon: '△', category: 'sport'},
-  {id: 'exercises_20', name: 'Athlète', desc: '20 exercices consultés', icon: '△', category: 'sport'},
+  {id: 'first_workout', name: 'Sportif', name_en: 'Active', desc: 'Premier programme sport', desc_en: 'First sport program', icon: '△', category: 'sport'},
+  {id: 'exercises_20', name: 'Athlète', name_en: 'Athlete', desc: '20 exercices consultés', desc_en: '20 exercises viewed', icon: '△', category: 'sport'},
 
   // Calisthenics progression badges
-  {id: 'calisth_first_session', name: 'Callisthéniste', desc: 'Premier programme callisthénie généré', icon: '◇', category: 'calisthenics'},
-  {id: 'calisth_week_4', name: 'Mois Callisthénie', desc: '4 semaines de callisthénie complétées', icon: '△', category: 'calisthenics'},
-  {id: 'calisth_week_12', name: 'Trimestriel Calisth.', desc: '12 semaines de callisthénie complétées', icon: '◆', category: 'calisthenics'},
-  {id: 'calisth_first_pullup', name: 'Première Traction', desc: 'Première traction stricte réalisée', icon: '★', category: 'calisthenics'},
-  {id: 'calisth_muscle_up', name: 'Muscle-Up', desc: 'Muscle-up strict maîtrisé', icon: '★', category: 'calisthenics'},
+  {id: 'calisth_first_session', name: 'Callisthéniste', name_en: 'Calisthenics', desc: 'Premier programme callisthénie généré', desc_en: 'First calisthenics program generated', icon: '◇', category: 'calisthenics'},
+  {id: 'calisth_week_4', name: 'Mois Callisthénie', name_en: 'Calisthenics Month', desc: '4 semaines de callisthénie complétées', desc_en: '4 weeks of calisthenics completed', icon: '△', category: 'calisthenics'},
+  {id: 'calisth_week_12', name: 'Trimestriel Calisth.', name_en: 'Quarterly Calisth.', desc: '12 semaines de callisthénie complétées', desc_en: '12 weeks of calisthenics completed', icon: '◆', category: 'calisthenics'},
+  {id: 'calisth_first_pullup', name: 'Première Traction', name_en: 'First Pull-up', desc: 'Première traction stricte réalisée', desc_en: 'First strict pull-up achieved', icon: '★', category: 'calisthenics'},
+  {id: 'calisth_muscle_up', name: 'Muscle-Up', name_en: 'Muscle Up', desc: 'Muscle-up strict maîtrisé', desc_en: 'First muscle-up achieved', icon: '★', category: 'calisthenics'},
 
   // Musculation PR badges
-  {id: 'bench_100', name: 'Centenaire', desc: 'Développé couché : 100 kg', icon: '◆', category: 'muscu'},
-  {id: 'bench_120', name: 'Power Chest', desc: 'Développé couché : 120 kg', icon: '◆', category: 'muscu'},
-  {id: 'squat_100', name: 'Squatteur', desc: 'Squat : 100 kg', icon: '◆', category: 'muscu'},
-  {id: 'squat_140', name: 'Jambes de Fer', desc: 'Squat : 140 kg', icon: '★', category: 'muscu'},
-  {id: 'deadlift_100', name: 'Terrasseur', desc: 'Soulevé de terre : 100 kg', icon: '◆', category: 'muscu'},
-  {id: 'deadlift_160', name: 'Force Brute', desc: 'Soulevé de terre : 160 kg', icon: '★', category: 'muscu'},
-  {id: 'overhead_70', name: 'Bras au Ciel', desc: 'Développé militaire : 70 kg', icon: '◆', category: 'muscu'},
-  {id: 'total_300', name: 'Powerlifter', desc: 'Total (bench+squat+dl) ≥ 300 kg', icon: '★', category: 'muscu'},
-  {id: 'total_400', name: 'Elite Force', desc: 'Total (bench+squat+dl) ≥ 400 kg', icon: '★', category: 'muscu'},
-  {id: 'muscu_sessions_10', name: 'Régularité Fer', desc: '10 séances muscu enregistrées', icon: '△', category: 'muscu'},
-  {id: 'muscu_sessions_50', name: 'Dédicace', desc: '50 séances muscu enregistrées', icon: '★', category: 'muscu'},
-  {id: 'first_custom_session', name: 'Séance Libre', desc: 'Première séance personnalisée complétée', icon: '◇', category: 'muscu'},
-  {id: 'first_pr', name: 'Premier PR', desc: 'Premier record personnel établi', icon: '◇', category: 'muscu'},
+  {id: 'bench_100', name: 'Centenaire', name_en: 'Centurion', desc: 'Développé couché : 100 kg', desc_en: 'Bench press: 100 kg', icon: '◆', category: 'muscu'},
+  {id: 'bench_120', name: 'Power Chest', name_en: 'Power Chest', desc: 'Développé couché : 120 kg', desc_en: 'Bench press: 120 kg', icon: '◆', category: 'muscu'},
+  {id: 'squat_100', name: 'Squatteur', name_en: 'Squatter', desc: 'Squat : 100 kg', desc_en: 'Squat: 100 kg', icon: '◆', category: 'muscu'},
+  {id: 'squat_140', name: 'Jambes de Fer', name_en: 'Iron Legs', desc: 'Squat : 140 kg', desc_en: 'Squat: 140 kg', icon: '★', category: 'muscu'},
+  {id: 'deadlift_100', name: 'Terrasseur', name_en: 'Lifter', desc: 'Soulevé de terre : 100 kg', desc_en: 'Deadlift: 100 kg', icon: '◆', category: 'muscu'},
+  {id: 'deadlift_160', name: 'Force Brute', name_en: 'Brute Force', desc: 'Soulevé de terre : 160 kg', desc_en: 'Deadlift: 160 kg', icon: '★', category: 'muscu'},
+  {id: 'overhead_70', name: 'Bras au Ciel', name_en: 'Arms Overhead', desc: 'Développé militaire : 70 kg', desc_en: 'Military press: 70 kg', icon: '◆', category: 'muscu'},
+  {id: 'total_300', name: 'Powerlifter', name_en: 'Powerlifter', desc: 'Total (bench+squat+dl) ≥ 300 kg', desc_en: 'Total (bench+squat+dl) ≥ 300 kg', icon: '★', category: 'muscu'},
+  {id: 'total_400', name: 'Elite Force', name_en: 'Elite Force', desc: 'Total (bench+squat+dl) ≥ 400 kg', desc_en: 'Total (bench+squat+dl) ≥ 400 kg', icon: '★', category: 'muscu'},
+  {id: 'muscu_sessions_10', name: 'Régularité Fer', name_en: 'Iron Consistency', desc: '10 séances muscu enregistrées', desc_en: '10 weight training sessions recorded', icon: '△', category: 'muscu'},
+  {id: 'muscu_sessions_50', name: 'Dédicace', name_en: 'Dedication', desc: '50 séances muscu enregistrées', desc_en: '50 weight training sessions recorded', icon: '★', category: 'muscu'},
+  {id: 'first_custom_session', name: 'Séance Libre', name_en: 'Free Session', desc: 'Première séance personnalisée complétée', desc_en: 'First custom session completed', icon: '◇', category: 'muscu'},
+  {id: 'first_pr', name: 'Premier PR', name_en: 'First PR', desc: 'Premier record personnel établi', desc_en: 'First personal record set', icon: '◇', category: 'muscu'},
 
   // Photos
-  {id: 'first_photo', name: 'Selfie', desc: 'Première photo de progression', icon: '□', category: 'photos'},
-  {id: 'both_photos', name: 'Analyse Complète', desc: 'Photos face + dos', icon: '□', category: 'photos'},
+  {id: 'first_photo', name: 'Selfie', name_en: 'Selfie', desc: 'Première photo de progression', desc_en: 'First progress photo', icon: '□', category: 'photos'},
+  {id: 'both_photos', name: 'Analyse Complète', name_en: 'Complete Analysis', desc: 'Photos face + dos', desc_en: 'Front + back photos', icon: '□', category: 'photos'},
 
   // Hyrox badges
-  {id: 'hyrox_first_program', name: 'Hyrox Starter', desc: 'Premier programme Hyrox généré', icon: '◇', category: 'hyrox'},
-  {id: 'hyrox_week_4', name: 'Mois Hyrox', desc: '4 semaines de préparation Hyrox', icon: '△', category: 'hyrox'},
-  {id: 'hyrox_week_12', name: 'Prépa Complète', desc: '12 semaines de préparation Hyrox terminées', icon: '◆', category: 'hyrox'},
-  {id: 'hyrox_sub90', name: 'Sub 1h30', desc: 'Objectif Hyrox sub 1h30 atteint', icon: '★', category: 'hyrox'},
-  {id: 'hyrox_sub60', name: 'Sub 1h00', desc: 'Objectif Hyrox sub 1h00 atteint', icon: '★', category: 'hyrox'},
-  {id: 'hyrox_pro', name: 'Élite Hyrox', desc: 'Programme niveau Pro/Élite', icon: '★', category: 'hyrox'}
+  {id: 'hyrox_first_program', name: 'Hyrox Starter', name_en: 'Hyrox Starter', desc: 'Premier programme Hyrox généré', desc_en: 'First Hyrox program generated', icon: '◇', category: 'hyrox'},
+  {id: 'hyrox_week_4', name: 'Mois Hyrox', name_en: 'Hyrox Month', desc: '4 semaines de préparation Hyrox', desc_en: '4 weeks of Hyrox preparation', icon: '△', category: 'hyrox'},
+  {id: 'hyrox_week_12', name: 'Prépa Complète', name_en: 'Full Prep', desc: '12 semaines de préparation Hyrox terminées', desc_en: '12 weeks of Hyrox preparation completed', icon: '◆', category: 'hyrox'},
+  {id: 'hyrox_sub90', name: 'Sub 1h30', name_en: 'Sub 1h30', desc: 'Objectif Hyrox sub 1h30 atteint', desc_en: 'Hyrox sub 1h30 goal achieved', icon: '★', category: 'hyrox'},
+  {id: 'hyrox_sub60', name: 'Sub 1h00', name_en: 'Sub 1h00', desc: 'Objectif Hyrox sub 1h00 atteint', desc_en: 'Hyrox sub 1h00 goal achieved', icon: '★', category: 'hyrox'},
+  {id: 'hyrox_pro', name: 'Élite Hyrox', name_en: 'Hyrox Elite', desc: 'Programme niveau Pro/Élite', desc_en: 'Pro/Elite level program', icon: '★', category: 'hyrox'}
 ];
 
 // ─── STREAK TRACKING ───
@@ -197,8 +197,8 @@ function updateStreak() {
       var _freezeS = window.S || {};
       var freezeAvailable = _freezeS.streakFreezeAvailable !== false; // true par défaut
       var freezeUsedMonth = _freezeS.streakFreezeUsedMonth || '';
-      // Freeze uniquement pour 1 jour manqué (pas 2+ jours) — diff = 2 signifie 1 jour sauté
-      if (freezeAvailable && freezeUsedMonth !== thisMonth && (data.current || 0) >= 3 && _missedDays <= 2) {
+      // Freeze uniquement pour exactement 1 jour manqué (diff === 2 signifie 1 jour sauté)
+      if (freezeAvailable && freezeUsedMonth !== thisMonth && (data.current || 0) >= 3 && _missedDays === 2) {
         // Activer le freeze : protéger le streak
         if (window.S) {
           window.S.streakFreezeUsedMonth = thisMonth;
@@ -260,11 +260,12 @@ function celebrateIdentity(days) {
   try {
     var _key = String(days);
     if (_IDENTITY_SHOWN[_key]) return;
+    var _isEN = window.isEnglish && window.isEnglish();
     var _messages = {
-      7:  { title: 'Vous êtes régulier(e).', body: '7 jours de suite — vous faites partie des 15 % qui tiennent vraiment leurs engagements.' },
-      14: { title: 'Discipline confirmée.', body: '2 semaines sans interruption. C\'est la marque d\'une intention sérieuse, pas d\'un caprice.' },
-      30: { title: 'Transformation en cours.', body: '30 jours — un changement physiologique est désormais mesurable dans votre corps.' },
-      90: { title: 'Vous êtes exceptionnel(le).', body: '90 jours de constance. Moins de 3 % des utilisateurs atteignent ce palier.' }
+      7:  { title: _isEN ? 'You are consistent.' : 'Vous êtes régulier(e).', body: _isEN ? '7 days in a row — you are among the 15% who truly keep their commitments.' : '7 jours de suite — vous faites partie des 15 % qui tiennent vraiment leurs engagements.' },
+      14: { title: _isEN ? 'Discipline confirmed.' : 'Discipline confirmée.', body: _isEN ? '2 weeks without interruption. That\'s the mark of serious intent, not a passing whim.' : '2 semaines sans interruption. C\'est la marque d\'une intention sérieuse, pas d\'un caprice.' },
+      30: { title: _isEN ? 'Transformation underway.' : 'Transformation en cours.', body: _isEN ? '30 days — a physiological change is now measurable in your body.' : '30 jours — un changement physiologique est désormais mesurable dans votre corps.' },
+      90: { title: _isEN ? 'You are exceptional.' : 'Vous êtes exceptionnel(le).', body: _isEN ? '90 days of consistency. Fewer than 3% of users reach this milestone.' : '90 jours de constance. Moins de 3 % des utilisateurs atteignent ce palier.' }
     };
     var _thresholds = [7, 14, 30, 90];
     var _match = null;
@@ -446,7 +447,7 @@ function showShareNudge() {
         'opacity:0;transition:opacity .3s ease;'
       ].join('');
       var _txt = document.createElement('span');
-      _txt.textContent = 'Partager cette progression';
+      _txt.textContent = (window.isEnglish && window.isEnglish()) ? 'Share this progress' : 'Partager cette progression';
       nudge.appendChild(_txt);
       var _arr = document.createElement('span');
       _arr.style.cssText = 'font-family:Georgia,serif;font-size:14px;';
@@ -489,7 +490,8 @@ function unlockBadge(badgeId) {
   if (window.SupaSync) SupaSync.saveBadge(badgeId);
 
   // Show badge celebration toast — wording premium
-  var _badgeToastMsg = def.icon + ' ' + def.name + ' — palmarès personnel';
+  var _isEN = window.isEnglish && window.isEnglish();
+  var _badgeToastMsg = def.icon + ' ' + (_isEN && def.name_en ? def.name_en : def.name) + ' — ' + (_isEN ? 'personal achievements' : 'palmarès personnel');
   if (window.showToast) {
     window.showToast(_badgeToastMsg, 'badge', 3500);
   } else {
@@ -611,14 +613,15 @@ function renderBadgesPanel(container) {
     icon.textContent = def.icon;
     badge.appendChild(icon);
 
+    var _bEN = window.isEnglish && window.isEnglish();
     var name = _h('div', '');
     name.style.cssText = 'font-family:Georgia;font-size:13px;margin-bottom:2px';
-    name.textContent = def.name;
+    name.textContent = (_bEN && def.name_en ? def.name_en : def.name);
     badge.appendChild(name);
 
     var desc = _h('div', '');
     desc.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;color:#9A9A90;letter-spacing:1px';
-    desc.textContent = isUnlocked ? '✓ Débloqué' : def.desc;
+    desc.textContent = isUnlocked ? (_bEN ? '✓ Unlocked' : '✓ Débloqué') : (_bEN && def.desc_en ? def.desc_en : def.desc);
     badge.appendChild(desc);
 
     grid.appendChild(badge);
@@ -642,14 +645,15 @@ function renderStreakWidget(container) {
 
   // Info
   var info = _h('div', '');
+  var _swEN = window.isEnglish && window.isEnglish();
   var label = _h('div', '');
   label.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65)';
-  label.textContent = 'Séquence';
+  label.textContent = _swEN ? 'Streak' : 'Séquence';
   info.appendChild(label);
 
   var best = _h('div', '');
   best.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#9A9A90;margin-top:2px';
-  best.textContent = 'Record : ' + streak.best + ' jours';
+  best.textContent = _swEN ? ('Best: ' + streak.best + ' days') : ('Record : ' + streak.best + ' jours');
   info.appendChild(best);
 
   widget.appendChild(info);
@@ -669,7 +673,7 @@ function renderStreakWidget(container) {
   if (S.streakFreezeAvailable !== false) {
     var freezeBadge = _h('div', '');
     freezeBadge.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#4A7A8A;border:1px solid #B0D4E0;background:rgba(176,212,224,0.15);padding:4px 10px;display:inline-block;margin-top:6px;';
-    freezeBadge.textContent = '\u2744 1 joker disponible';
+    freezeBadge.textContent = _swEN ? '\u2744 1 streak freeze available' : '\u2744 1 joker disponible';
     container.appendChild(freezeBadge);
   }
 }
