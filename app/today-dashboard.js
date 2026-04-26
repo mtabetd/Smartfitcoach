@@ -749,10 +749,10 @@ function getNextMeal() {
   var nowMin = now.getHours() * 60 + now.getMinutes();
   var mt = (S.mealTimes && typeof S.mealTimes === 'object') ? S.mealTimes : {};
   var SLOTS = [
-    { key: 'breakfast', label: 'Petit-déjeuner', time: mt.breakfast || '08:00' },
-    { key: 'lunch',     label: 'Déjeuner',       time: mt.lunch     || '12:30' },
-    { key: 'snack',     label: 'Collation',      time: mt.snack     || '16:00' },
-    { key: 'dinner',    label: 'Dîner',          time: mt.dinner    || '19:30' }
+    { key: 'breakfast', label: window.t ? window.t('nutrition.meal_breakfast') : ((window.isEnglish && window.isEnglish()) ? 'Breakfast' : 'Petit-déjeuner'), time: mt.breakfast || '08:00' },
+    { key: 'lunch',     label: window.t ? window.t('nutrition.meal_lunch')      : ((window.isEnglish && window.isEnglish()) ? 'Lunch' : 'Déjeuner'),       time: mt.lunch     || '12:30' },
+    { key: 'snack',     label: window.t ? window.t('nutrition.meal_snack')      : ((window.isEnglish && window.isEnglish()) ? 'Snack' : 'Collation'),      time: mt.snack     || '16:00' },
+    { key: 'dinner',    label: window.t ? window.t('nutrition.meal_dinner')     : ((window.isEnglish && window.isEnglish()) ? 'Dinner' : 'Dîner'),         time: mt.dinner    || '19:30' }
   ];
 
   var TOLERANCE = 45; // minutes de tolérance après l'heure prévue (ex: petit-déj à 8h visible jusqu'à 8h45)
@@ -929,17 +929,17 @@ function renderHeroContextuel() {
   if (!S) return null;
 
   var hour = new Date().getHours();
+  var _greetEN = window.isEnglish && window.isEnglish();
   var momentKey, eyebrowWord, helloWord;
-  if (hour >= 6 && hour < 11) { momentKey = 'matin'; eyebrowWord = 'MATIN'; helloWord = 'Bonjour'; }
-  else if (hour >= 11 && hour < 17) { momentKey = 'midi'; eyebrowWord = 'MIDI'; helloWord = null; /* sec, pas de redite */ }
-  else if (hour >= 17 && hour < 23) { momentKey = 'soir'; eyebrowWord = 'SOIR'; helloWord = 'Bonsoir'; }
-  else { momentKey = 'veille'; eyebrowWord = 'NUIT'; helloWord = null; }
+  if (hour >= 6 && hour < 11) { momentKey = 'matin'; eyebrowWord = _greetEN ? 'MORNING' : 'MATIN'; helloWord = _greetEN ? 'Good morning' : 'Bonjour'; }
+  else if (hour >= 11 && hour < 17) { momentKey = 'midi'; eyebrowWord = _greetEN ? 'MIDDAY' : 'MIDI'; helloWord = null; }
+  else if (hour >= 17 && hour < 23) { momentKey = 'soir'; eyebrowWord = _greetEN ? 'EVENING' : 'SOIR'; helloWord = _greetEN ? 'Good evening' : 'Bonsoir'; }
+  else { momentKey = 'veille'; eyebrowWord = _greetEN ? 'NIGHT' : 'NUIT'; helloWord = null; }
 
-  var daysFr = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
-  var monthsFr = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
   var now = new Date();
-  var dayName = daysFr[now.getDay()].toUpperCase();
-  var dateStr = daysFr[now.getDay()] + ' ' + now.getDate() + ' ' + monthsFr[now.getMonth()];
+  var _locale = _greetEN ? 'en-US' : 'fr-FR';
+  var dayName = now.toLocaleDateString(_locale, {weekday:'long'}).toUpperCase();
+  var dateStr = now.toLocaleDateString(_locale, {weekday:'long', day:'numeric', month:'long'});
   var firstName = (window.getDisplayFirstName ? window.getDisplayFirstName() : (S.prenom || '')) || '';
 
   // Conteneur hero — full-bleed, alignement gauche, fond paper
@@ -1465,15 +1465,18 @@ function renderCardHeroKcal() {
     var rings = h('div', {style: 'display:flex;justify-content:center;gap:20px;margin-top:18px;'});
     if (macroTargets.p > 0) {
       var pPct = Math.min(100, totals.p > 0 ? Math.round(totals.p / macroTargets.p * 100) : 0);
-      rings.appendChild(window.svgRing(52, 5, pPct, '#0A0A09', 'Protéines', Math.round(totals.p)));
+      var _mEN = window.isEnglish && window.isEnglish();
+      rings.appendChild(window.svgRing(52, 5, pPct, '#0A0A09', _mEN ? 'Protein' : 'Protéines', Math.round(totals.p)));
     }
     if (macroTargets.g > 0) {
+      var _mEN2 = window.isEnglish && window.isEnglish();
       var gPct = Math.min(100, totals.g > 0 ? Math.round(totals.g / macroTargets.g * 100) : 0);
-      rings.appendChild(window.svgRing(52, 5, gPct, '#6B6B65', 'Glucides', Math.round(totals.g)));
+      rings.appendChild(window.svgRing(52, 5, gPct, '#6B6B65', _mEN2 ? 'Carbs' : 'Glucides', Math.round(totals.g)));
     }
     if (macroTargets.l > 0) {
+      var _mEN3 = window.isEnglish && window.isEnglish();
       var lPct = Math.min(100, totals.l > 0 ? Math.round(totals.l / macroTargets.l * 100) : 0);
-      rings.appendChild(window.svgRing(52, 5, lPct, 'var(--orange,#E86F1E)', 'Lipides', Math.round(totals.l)));
+      rings.appendChild(window.svgRing(52, 5, lPct, 'var(--orange,#E86F1E)', _mEN3 ? 'Fat' : 'Lipides', Math.round(totals.l)));
     }
     hero.appendChild(rings);
   }

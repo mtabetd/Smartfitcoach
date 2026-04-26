@@ -42,7 +42,15 @@ var CUISINES = window.CUISINES || [];
 var CUISINE_FLAGS = window.CUISINE_FLAGS || {};
 var SHOPPING = window.SHOPPING || [];
 var STAPLES = window.STAPLES || [];
-var DAY_NAMES = window.DAY_NAMES || ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+var DAY_NAMES = window.DAY_NAMES || (function() {
+  try {
+    var _lang = (function(){ try { var p=JSON.parse(localStorage.getItem('sfc_profile')||'{}'); return p.lang||'fr'; } catch(e){ return 'fr'; } })();
+    var locale = _lang === 'en' ? 'en-US' : 'fr-FR';
+    var fmt = new Intl.DateTimeFormat(locale, {weekday:'long'});
+    var monday = new Date(2024, 0, 1);
+    return [0,1,2,3,4,5,6].map(function(i){ var d = new Date(monday); d.setDate(monday.getDate()+i); var s = fmt.format(d); return s.charAt(0).toUpperCase()+s.slice(1); });
+  } catch(e) { return ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche']; }
+})();
 var MEAL_SPLIT = window.MEAL_SPLIT || {};
 var RATIOS = window.RATIOS || {};
 
