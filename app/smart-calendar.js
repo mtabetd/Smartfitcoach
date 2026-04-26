@@ -379,18 +379,43 @@
           badgeEl.style.border = isCrit0 ? '1px solid var(--red,#5A1010)' : '1px solid var(--orange,#6A4A1A)';
         }
 
-        var card = window.h('div', {
-          style: 'background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;padding:16px;' +
-                 'margin-bottom:8px;'
-        }, [
+        // FIX COHÉRENCE CALENDRIER 2026-04 : today highlight (bordure noire) + chips session
+        var _cardStyle = isToday
+          ? 'background:var(--ivory2,#F4F4F0);border:1px solid var(--black,#0A0A09);border-left:3px solid var(--black,#0A0A09);border-radius:2px;padding:16px;margin-bottom:8px;'
+          : 'background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;padding:16px;margin-bottom:8px;';
+
+        // Chip session (aujourd'hui uniquement)
+        var _sessionChip = null;
+        if (isToday && (_calSessionDoneToday || _calSessionInProgress)) {
+          var _chipText = _calSessionDoneToday ? ('✔ ' + (_calLang === 'en' ? 'Done' : 'Terminée')) : ('○ ' + (_calLang === 'en' ? 'In progress' : 'En cours'));
+          var _chipColor = _calSessionDoneToday ? 'var(--success,#3E5C3A)' : 'var(--orange,#6A4A1A)';
+          _sessionChip = window.h('span', {
+            style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;' +
+                   'padding:2px 6px;border:1px solid ' + _chipColor + ';color:' + _chipColor + ';border-radius:2px;flex-shrink:0;'
+          }, _chipText);
+        }
+
+        // Chip "Aujourd'hui" si pas de chip session
+        var _todayChip = (isToday && !_sessionChip)
+          ? window.h('span', {
+              style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;' +
+                     'padding:2px 6px;border:1px solid var(--black,#0A0A09);color:var(--black,#0A0A09);border-radius:2px;flex-shrink:0;'
+            }, _calLang === 'en' ? 'Today' : "Aujourd'hui")
+          : null;
+
+        var _hdrChildren = [
+          window.h('span', {
+            style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:400;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);flex:1;'
+          }, DAY_NAMES[dayIdx])
+        ];
+        if (_todayChip) _hdrChildren.push(_todayChip);
+        if (_sessionChip) _hdrChildren.push(_sessionChip);
+        _hdrChildren.push(badgeEl);
+
+        var card = window.h('div', { style: _cardStyle }, [
           window.h('div', {
-            style: 'display:flex;align-items:center;margin-bottom:8px;'
-          }, [
-            window.h('span', {
-              style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:400;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);'
-            }, DAY_NAMES[dayIdx]),
-            badgeEl
-          ]),
+            style: 'display:flex;align-items:center;gap:6px;margin-bottom:8px;'
+          }, _hdrChildren),
           selectEl
         ]);
         dayCards.push(card);

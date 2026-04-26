@@ -1384,9 +1384,23 @@ window.SPORT = {
  // ─── Si programme existant → afficher directement la prog (plus d'interstitiel) ───
  // Guard: ne rediriger que si un programme complet existe — évite de sauter l'onboarding
  // après un rechargement partiel (ex: sStep=26 PAR-Q réinitialisé à 0 par _doAutoLogin)
- if (S.sStep === 0 && S.sportType && _SPORT_PROGRAM_STEP[S.sportType] && Array.isArray(S.sportProgram) && S.sportProgram.length > 0) {
-   S.sStep = _SPORT_PROGRAM_STEP[S.sportType];
-   if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+ // FIX BUG 2026-04-26 : élargir la détection à tous les sports (S.sportProgram = musculation only).
+ if (S.sStep === 0 && S.sportType && _SPORT_PROGRAM_STEP[S.sportType]) {
+   var _hasExistingProgram =
+     (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) ||
+     (Array.isArray(S.runningProgram) && S.runningProgram.length > 0) ||
+     (Array.isArray(S.hyroxProgram) && S.hyroxProgram.length > 0) ||
+     (Array.isArray(S.padelProgram) && S.padelProgram.length > 0) ||
+     (Array.isArray(S.golfProgram) && S.golfProgram.length > 0) ||
+     (Array.isArray(S.triathlonProgram) && S.triathlonProgram.length > 0) ||
+     (Array.isArray(S.cyclingProgram) && S.cyclingProgram.length > 0) ||
+     (Array.isArray(S.calisthenicsProgram) && S.calisthenicsProgram.length > 0) ||
+     (S.sportType === 'yoga' && !!S.yogaLevel && !!S.yogaObjectif) ||
+     (S.sportType === 'crossfit' && !!S.crossfitLevel);
+   if (_hasExistingProgram) {
+     S.sStep = _SPORT_PROGRAM_STEP[S.sportType];
+     if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+   }
  }
 
  // ─── CHECK BIEN-ÊTRE QUOTIDIEN (NON-BLOQUANT) ───
@@ -10509,7 +10523,7 @@ function renderPadelConfig(p) {
 
  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.days')));
  var nw = h('div', {'class': 'num-input-wrap'});
- nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '5', value: String(S.padelDays), oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 5) S.padelDays = v; }}));
+ nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '5', value: String(S.padelDays), inputmode: 'numeric', oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 5) { S.padelDays = v; window.render(); } }, onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) { e.target.value = S.padelDays = 2; window.render(); } else if (v > 5) { e.target.value = S.padelDays = 5; window.render(); } } }));
  nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
  p.appendChild(nw);
 
