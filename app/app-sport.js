@@ -2894,10 +2894,10 @@ function renderMusculationGoals(p) {
 function renderCrossfitLevel(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Cross Training'));
  p.appendChild(h('h1', {html: 'Votre<br><em>niveau</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Sélectionnez votre niveau pour adapter les charges et mouvements.'));
+ p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Select your level to adapt loads and movements.' : 'Sélectionnez votre niveau pour adapter les charges et mouvements.')));
 
  if (S.sex) {
- p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:16px'}, 'Charges adaptées pour : ' + (window.isMale(S) ? 'Homme' : 'Femme')));
+ p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:16px'}, (window.isEnglish && window.isEnglish() ? 'Adapted loads for: ' : 'Charges adaptées pour : ') + (window.isMale(S) ? (window.isEnglish && window.isEnglish() ? 'Male' : 'Homme') : (window.isEnglish && window.isEnglish() ? 'Female' : 'Femme'))));
  }
 
  p.appendChild(h('div', {'class': 'section-label'}, 'Niveau (obligatoire)'));
@@ -2918,10 +2918,11 @@ function renderCrossfitLevel(p) {
  var explainBox = h('div', {style: 'border:1px solid var(--border);padding:14px 16px;background:var(--ivory2);margin:16px 0'});
  explainBox.appendChild(h('div', {style: 'font-family:Georgia;font-size:13px;margin-bottom:8px'}, 'Que signifie chaque niveau ?'));
 
+ var _tCF = window.isEnglish && window.isEnglish();
  var explanations = [
- {icon: '', title: 'SCALED', desc: 'Mouvements adaptés (ring rows, pike push-ups, single unders), charges légères. Idéal pour débuter le CrossFit.'},
- {icon: '', title: 'INTERMÉDIAIRE', desc: 'Mouvements complets avec charge modérée, certaines adaptations gymniques. Vous maîtrisez les bases.'},
- {icon: '', title: 'RX', desc: 'Standards compétition, charges et mouvements au standard international. Niveau CrossFit Games.'}
+ {icon: '', title: 'SCALED', desc: (_tCF ? 'Adapted movements (ring rows, pike push-ups, single unders), light loads. Ideal for starting CrossFit.' : 'Mouvements adaptés (ring rows, pike push-ups, single unders), charges légères. Idéal pour débuter le CrossFit.')},
+ {icon: '', title: (_tCF ? 'INTERMEDIATE' : 'INTERMÉDIAIRE'), desc: (_tCF ? 'Full movements with moderate load, some gymnastic adaptations. You have the basics down.' : 'Mouvements complets avec charge modérée, certaines adaptations gymniques. Vous maîtrisez les bases.')},
+ {icon: '', title: 'RX', desc: (_tCF ? 'Competition standards, loads and movements at international standard. CrossFit Games level.' : 'Standards compétition, charges et mouvements au standard international. Niveau CrossFit Games.')}
  ];
  explanations.forEach(function(ex) {
  var row = h('div', {style: 'margin-bottom:6px'});
@@ -2938,13 +2939,13 @@ function renderCrossfitLevel(p) {
  oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 3 && v <= 6) { S.sportDays = v; if (S.sportMixSecondary && S.sportMixSecondary.days >= v) { S.sportMixSecondary.days = Math.max(1, v - 3); } window.render(); } },
  onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 3) { e.target.value = S.sportDays = 3; if (S.sportMixSecondary && S.sportMixSecondary.days >= 3) { S.sportMixSecondary.days = 1; } window.render(); } else if (v > 6) { e.target.value = S.sportDays = 6; window.render(); } }
  }));
- cfDaysWrap.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
+ cfDaysWrap.appendChild(h('span', {'class': 'num-unit'}, (window.isEnglish && window.isEnglish() ? 'days' : 'jours')));
  p.appendChild(cfDaysWrap);
- p.appendChild(h('div', {'class': 'num-hint'}, '3 jours minimum recommand\u00E9 pour le CrossFit'));
+ p.appendChild(h('div', {'class': 'num-hint'}, (window.isEnglish && window.isEnglish() ? '3 days minimum recommended for CrossFit' : '3 jours minimum recommand\u00E9 pour le CrossFit')));
 
  // ─── SÉLECTEUR DE JOURS SPÉCIFIQUES ───
  if (!Array.isArray(S.trainingDaysSelected)) S.trainingDaysSelected = [];
- p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:18px'}, 'Quels jours vous entraînez-vous\u00a0?'));
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:18px'}, (window.isEnglish && window.isEnglish() ? 'Which days do you train?' : 'Quels jours vous entraînez-vous\u00a0?')));
  var dayLabels = ['L', 'Ma', 'Me', 'J', 'V', 'S', 'D'];
  var dayBtnsWrap = h('div', {style: 'display:flex;gap:6px;justify-content:center;flex-wrap:nowrap;margin:10px 0'});
  var _selTarget = S.sportDays || 3;
@@ -2999,19 +3000,19 @@ function renderCrossfitLevel(p) {
  var diff = selCount - _selTarget;
  var hintColor = diff === 0 ? 'var(--ink-500,#6B6B65)' : (diff > 0 ? 'var(--error,#7A1F1F)' : 'var(--orange-ink,#7A3B0E)');
  var hintText = selCount === 0
-   ? 'Aucun jour sélectionné — répartition automatique'
-   : diff === 0 ? selCount + ' / ' + _selTarget + ' ' + window.locPlural(selCount, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + ' — parfait'
-   : diff > 0 ? selCount + ' / ' + _selTarget + ' — retirez ' + diff + ' ' + window.locPlural(diff, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}})
-   : selCount + ' / ' + _selTarget + ' — sélectionnez encore ' + Math.abs(diff) + ' ' + window.locPlural(Math.abs(diff), {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}});
+   ? (window.isEnglish && window.isEnglish() ? 'No day selected — automatic distribution' : 'Aucun jour sélectionné — répartition automatique')
+   : diff === 0 ? selCount + ' / ' + _selTarget + ' ' + window.locPlural(selCount, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + (window.isEnglish && window.isEnglish() ? ' — perfect' : ' — parfait')
+   : diff > 0 ? selCount + ' / ' + _selTarget + (window.isEnglish && window.isEnglish() ? ' — remove ' : ' — retirez ') + diff + ' ' + window.locPlural(diff, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}})
+   : selCount + ' / ' + _selTarget + (window.isEnglish && window.isEnglish() ? ' — select ' : ' — sélectionnez encore ') + Math.abs(diff) + ' ' + window.locPlural(Math.abs(diff), {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}});
  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + hintColor + ';text-align:center;margin-bottom:4px;letter-spacing:.5px;transition:color .2s'}, hintText));
 
  // Recommendation based on level
  if (S.crossfitLevel) {
  var cfDayReco = '';
- if (S.crossfitLevel === 'scaled') cfDayReco = 'Recommand\u00E9 : 3-4 jours (r\u00E9cup\u00E9ration importante)';
- else if (S.crossfitLevel === 'inter') cfDayReco = 'Recommand\u00E9 : 4-5 jours';
- else if (S.crossfitLevel === 'rx') cfDayReco = 'Recommand\u00E9 : 5-6 jours';
- else if (S.crossfitLevel === 'rx_plus') cfDayReco = 'Recommand\u00E9 : 6 jours (programme \u00E9lite Games — r\u00E9cup\u00E9ration active obligatoire)';
+ if (S.crossfitLevel === 'scaled') cfDayReco = (window.isEnglish && window.isEnglish() ? 'Recommended: 3-4 days (recovery is important)' : 'Recommand\u00E9 : 3-4 jours (r\u00E9cup\u00E9ration importante)');
+ else if (S.crossfitLevel === 'inter') cfDayReco = (window.isEnglish && window.isEnglish() ? 'Recommended: 4-5 days' : 'Recommand\u00E9 : 4-5 jours');
+ else if (S.crossfitLevel === 'rx') cfDayReco = (window.isEnglish && window.isEnglish() ? 'Recommended: 5-6 days' : 'Recommand\u00E9 : 5-6 jours');
+ else if (S.crossfitLevel === 'rx_plus') cfDayReco = (window.isEnglish && window.isEnglish() ? 'Recommended: 6 days (elite Games program — mandatory active recovery)' : 'Recommand\u00E9 : 6 jours (programme \u00E9lite Games — r\u00E9cup\u00E9ration active obligatoire)');
  if (cfDayReco) {
  p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-top:6px;font-style:italic'}, cfDayReco));
  }
@@ -3323,19 +3324,19 @@ function renderSportMixSection(p, primarySport) {
  // Règle : on n'ajoute PAS le même sport en secondaire (pas de crossfit+crossfit)
  var compatMap = {
   crossfit:    [
-   { type: 'musculation', label: 'Musculation', desc: 'Hypertrophie + force — séances de renforcement isolées' },
-   { type: 'running',     label: 'Running',     desc: 'Cardio aérobic — zone 2 endurance' },
-   { type: 'yoga',        label: 'Yoga',        desc: 'Mobilité + récupération — prévention' }
+   { type: 'musculation', label: (window.isEnglish && window.isEnglish() ? 'Weight Training' : 'Musculation'), desc: (window.isEnglish && window.isEnglish() ? 'Hypertrophy + strength — isolated strength sessions' : 'Hypertrophie + force — séances de renforcement isolées') },
+   { type: 'running',     label: 'Running',     desc: (window.isEnglish && window.isEnglish() ? 'Aerobic cardio — zone 2 endurance' : 'Cardio aérobic — zone 2 endurance') },
+   { type: 'yoga',        label: 'Yoga',        desc: (window.isEnglish && window.isEnglish() ? 'Mobility + recovery — injury prevention' : 'Mobilité + récupération — prévention') }
   ],
   musculation: [
-   { type: 'crossfit',    label: 'Cross Training', desc: 'Conditioning + WOD fonctionnel' },
-   { type: 'running',     label: 'Running',        desc: 'Cardio — fonte du gras + cœur' },
-   { type: 'yoga',        label: 'Yoga',           desc: 'Mobilité + récupération active' }
+   { type: 'crossfit',    label: 'Cross Training', desc: (window.isEnglish && window.isEnglish() ? 'Conditioning + functional WOD' : 'Conditioning + WOD fonctionnel') },
+   { type: 'running',     label: 'Running',        desc: (window.isEnglish && window.isEnglish() ? 'Cardio — fat burn + heart health' : 'Cardio — fonte du gras + cœur') },
+   { type: 'yoga',        label: 'Yoga',           desc: (window.isEnglish && window.isEnglish() ? 'Mobility + active recovery' : 'Mobilité + récupération active') }
   ],
   running:     [
-   { type: 'musculation', label: 'Musculation',    desc: 'Renforcement — prévention des blessures course' },
+   { type: 'musculation', label: (window.isEnglish && window.isEnglish() ? 'Weight Training' : 'Musculation'),    desc: (window.isEnglish && window.isEnglish() ? 'Strengthening — injury prevention for running' : 'Renforcement — prévention des blessures course') },
    { type: 'crossfit',    label: 'Cross Training', desc: 'Force fonctionnelle + power' },
-   { type: 'yoga',        label: 'Yoga',           desc: 'Souplesse + récupération' }
+   { type: 'yoga',        label: 'Yoga',           desc: (window.isEnglish && window.isEnglish() ? 'Flexibility + recovery' : 'Souplesse + récupération') }
   ]
  };
  var secondaryOptions = compatMap[primarySport] || [];
@@ -3353,8 +3354,8 @@ function renderSportMixSection(p, primarySport) {
  // ─── HEADER SECTION ───
  p.appendChild(h('div', { style: 'height:24px' }));
  p.appendChild(h('div', { style: 'border-top:1px solid var(--border,#E8E6DF);margin:0 0 20px' }));
- p.appendChild(h('div', { 'class': 'section-label' }, 'Combiner plusieurs sports\u00a0? (optionnel)'));
- p.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin-bottom:14px;line-height:1.6' }, 'Ajoutez un 2\u00e8me sport sur vos jours restants. La somme doit \u00e9galer votre total hebdomadaire.'));
+ p.appendChild(h('div', { 'class': 'section-label' }, (window.isEnglish && window.isEnglish() ? 'Combine multiple sports? (optional)' : 'Combiner plusieurs sports\u00a0? (optionnel)')));
+ p.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin-bottom:14px;line-height:1.6' }, (window.isEnglish && window.isEnglish() ? 'Add a 2nd sport on your remaining days. The total must equal your weekly target.' : 'Ajoutez un 2\u00e8me sport sur vos jours restants. La somme doit \u00e9galer votre total hebdomadaire.')));
 
  // ─── OUI / NON ───
  var _primDesc = primarySport === 'crossfit' ? 'Cross Training' : primarySport === 'musculation' ? 'Musculation' : 'Running';
@@ -3492,14 +3493,14 @@ function renderCFCalendar(p) {
  var allWods = window.CF_WODS_FULL || window.CF_WODS || [];
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'CrossFit'));
- p.appendChild(h('h1', {html: 'Programme<br><em>100 Jours</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Vue d\'ensemble — cliquez sur un jour pour y accéder'));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Program<br><em>100 Days</em>' : 'Programme<br><em>100 Jours</em>')}));
+ p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Overview — click on a day to access it' : 'Vue d\'ensemble — cliquez sur un jour pour y accéder')));
 
  // ─── Bouton retour ───
  var backBtn = h('button', {'class': 'btn-back', style: 'margin-bottom:16px', onclick: function() {
  S.cfCalendarOpen = false;
  window.render();
- }}, '← Retour au programme');
+ }}, (window.isEnglish && window.isEnglish() ? '← Back to program' : '← Retour au programme'));
  p.appendChild(backBtn);
 
  // ─── Légende ───
@@ -3524,7 +3525,7 @@ function renderCFCalendar(p) {
  var pct = Math.round(totalDone / 100 * 100);
  var progressBar = h('div', {style: 'background:#E5E4DE;height:6px;border-radius:2px;margin-bottom:20px;overflow:hidden'});
  progressBar.appendChild(h('div', {style: 'background:var(--ink-900,#0A0A09);height:100%;width:' + pct + '%;transition:width 0.4s ease'}));
- p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px'}, totalDone + ' / 100 jours complétés (' + pct + '%)'));
+ p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px'}, totalDone + (window.isEnglish && window.isEnglish() ? ' / 100 days completed (' : ' / 100 jours complétés (') + pct + '%)'));
  p.appendChild(progressBar);
 
  // ─── Grouper par semaine ───
@@ -3540,7 +3541,7 @@ function renderCFCalendar(p) {
  for (var fd = 1; fd <= 100; fd++) {
  var fw = Math.floor((fd - 1) / 7) + 1;
  if (!weeks[fw]) weeks[fw] = [];
- weeks[fw].push({ day: fd, week: fw, name: 'JOUR ' + fd });
+ weeks[fw].push({ day: fd, week: fw, name: (window.isEnglish && window.isEnglish() ? 'DAY ' : 'JOUR ') + fd });
  }
  }
 
@@ -3602,14 +3603,14 @@ function renderCFCalendar(p) {
  });
 
  // Numéro + nom du WOD
- card.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + textColor + ';margin-bottom:3px'}, 'JOUR ' + dayNum));
+ card.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + textColor + ';margin-bottom:3px'}, (window.isEnglish && window.isEnglish() ? 'DAY ' : 'JOUR ') + dayNum));
  card.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;color:' + textColor + ';font-weight:normal;line-height:1.2;word-break:break-word'}, wod.name || ('WOD ' + dayNum)));
 
  // Indicateur état
  if (isDone) {
- card.appendChild(h('div', {style: 'font-size:11px;color:var(--success,#3E5C3A);margin-top:4px'}, ' Terminé'));
+ card.appendChild(h('div', {style: 'font-size:11px;color:var(--success,#3E5C3A);margin-top:4px'}, (window.isEnglish && window.isEnglish() ? ' Done' : ' Terminé'));
  } else if (isCurrent) {
- card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:4px'}, 'Aujourd\'hui'));
+ card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:4px'}, (window.isEnglish && window.isEnglish() ? 'Today' : 'Aujourd\'hui')));
  }
 
  grid.appendChild(card);
@@ -3752,22 +3753,22 @@ function renderWellnessCheckin(p, onComplete) {
  if (!p || !p.nodeType) return; // FIX edge audit : guard p=null
  var state = { sleep: 0, muscles: '', energy: '' };
 
- p.appendChild(h('div', {'class': 'eyebrow'}, 'Bilan de forme'));
- p.appendChild(h('h1', {html: 'Comment<br><em>vous sentez-vous ?</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Quelques questions pour adapter votre seance du jour.'));
+ p.appendChild(h('div', {'class': 'eyebrow'}, (window.isEnglish && window.isEnglish() ? 'Fitness check-in' : 'Bilan de forme')));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'How do you<br><em>feel today?</em>' : 'Comment<br><em>vous sentez-vous ?</em>')}));
+ p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'A few questions to adapt your session.' : 'Quelques questions pour adapter votre seance du jour.')));
 
   // Message d'encouragement checkin
   if (window.MOTIVATION) {
     var checkinMotiv = document.createElement('p');
     checkinMotiv.style.cssText = 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--grey,#6B6B65);margin:0 0 24px;line-height:1.6;border-left:2px solid var(--border,#D8D8D0);padding-left:14px;';
-    checkinMotiv.textContent = 'Prendre une minute pour évaluer votre état, c\'est déjà un acte de performance.';
+    checkinMotiv.textContent = (window.isEnglish && window.isEnglish() ? 'Taking a minute to assess how you feel is already an act of performance.' : 'Prendre une minute pour évaluer votre état, c\'est déjà un acte de performance.');
     p.appendChild(checkinMotiv);
   }
 
  // Question 1 — Sommeil
  var q1 = h('div', {style: 'margin-bottom:24px'});
- q1.appendChild(h('div', {style: 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:10px'}, 'Qualite du sommeil'));
- var sleepLabels = ['Tres mauvais', 'Mauvais', 'Moyen', 'Bon', 'Excellent'];
+ q1.appendChild(h('div', {style: 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:10px'}, (window.isEnglish && window.isEnglish() ? 'Sleep quality' : 'Qualite du sommeil'));
+ var sleepLabels = (window.isEnglish && window.isEnglish()) ? ['Very poor', 'Poor', 'Average', 'Good', 'Excellent'] : ['Tres mauvais', 'Mauvais', 'Moyen', 'Bon', 'Excellent'];
  var sleepBtns = [];
  var sleepRow = h('div', {style: 'display:flex;gap:6px;flex-wrap:wrap'});
  sleepLabels.forEach(function(label, i) {
@@ -3788,8 +3789,8 @@ function renderWellnessCheckin(p, onComplete) {
 
  // Question 2 — Muscles
  var q2 = h('div', {style: 'margin-bottom:24px'});
- q2.appendChild(h('div', {style: 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:10px'}, 'Etat musculaire'));
- var muscleOpts = [['frais', 'Frais'], ['courbatures', 'Legeres courbatures'], ['douleurs', 'Douleurs reelles']];
+ q2.appendChild(h('div', {style: 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:10px'}, (window.isEnglish && window.isEnglish() ? 'Muscle state' : 'Etat musculaire'));
+ var muscleOpts = (window.isEnglish && window.isEnglish()) ? [['frais', 'Fresh'], ['courbatures', 'Light soreness'], ['douleurs', 'Real pain']] : [['frais', 'Frais'], ['courbatures', 'Legeres courbatures'], ['douleurs', 'Douleurs reelles']];
  var muscleBtns = [];
  var muscleRow = h('div', {style: 'display:flex;gap:6px;flex-wrap:wrap'});
  muscleOpts.forEach(function(opt) {
@@ -3809,8 +3810,8 @@ function renderWellnessCheckin(p, onComplete) {
 
  // Question 3 — Energie
  var q3 = h('div', {style: 'margin-bottom:24px'});
- q3.appendChild(h('div', {style: 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:10px'}, 'Niveau d\'energie'));
- var energyOpts = [['bas', 'Basse'], ['moyen', 'Moyenne'], ['haut', 'Haute']];
+ q3.appendChild(h('div', {style: 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:10px'}, (window.isEnglish && window.isEnglish() ? 'Energy level' : 'Niveau d\'energie'));
+ var energyOpts = (window.isEnglish && window.isEnglish()) ? [['bas', 'Low'], ['moyen', 'Medium'], ['haut', 'High']] : [['bas', 'Basse'], ['moyen', 'Moyenne'], ['haut', 'Haute']];
  var energyBtns = [];
  var energyRow = h('div', {style: 'display:flex;gap:6px;flex-wrap:wrap'});
  energyOpts.forEach(function(opt) {
@@ -3836,7 +3837,7 @@ function renderWellnessCheckin(p, onComplete) {
   try { if (window.pushWellnessHistory) window.pushWellnessHistory(S.todayWellness); } catch(e) {}
   if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Morning recap saved' : 'Bilan du matin enregistré', 'success', 2000);
   if (onComplete) onComplete();
- }}, 'Commencer la seance');
+ }}, (window.isEnglish && window.isEnglish() ? 'Start session' : 'Commencer la seance'));
  p.appendChild(startBtn);
 
  function updateStartBtn() {
@@ -3891,8 +3892,8 @@ function appendSportMedicalBanner(p, sportName) {
   if (S.pregnant && window.isFemale(S) && !S._sportMedPregShown) {
     var _pw = window.getPregnancySportWarning ? window.getPregnancySportWarning() : null;
     var _pwC = h('div', {style: 'border-left:3px solid #FF6B6B;background:#FFF3CD;padding:12px 16px;margin-bottom:12px'});
-    _pwC.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#C00;margin-bottom:6px'}, 'Grossesse \u2014 Adaptations obligatoires'));
-    _pwC.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);line-height:1.6'}, _pw ? _pw.warning : 'Réduisez l\u2019intensité et le volume. Consultez votre médecin avant de continuer ce sport.'));
+    _pwC.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#C00;margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Pregnancy \u2014 Mandatory adaptations' : 'Grossesse \u2014 Adaptations obligatoires')));
+    _pwC.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);line-height:1.6'}, _pw ? _pw.warning : (window.isEnglish && window.isEnglish() ? 'Reduce intensity and volume. Consult your doctor before continuing this sport.' : 'Réduisez l\u2019intensité et le volume. Consultez votre médecin avant de continuer ce sport.')));
     p.appendChild(_pwC);
   }
   // ── CONDITIONS MÉDICALES (S.medical) ──
@@ -3900,26 +3901,26 @@ function appendSportMedicalBanner(p, sportName) {
     var _warns = [];
     var _ml = S.medical.map(function(m) { return String(m).toLowerCase(); });
     if (_ml.indexOf('cardio') !== -1 || _ml.indexOf('insuffisance_card') !== -1) {
-      _warns.push('\u26A0 Cardiopathie : intensité max Zone 2 (< 65% FCmax). Pas de sprints, pas d\u2019intervalles courts. Arrêtez immédiatement en cas de douleur thoracique, essoufflement anormal ou vertiges (AHA 2018).');
+      _warns.push((window.isEnglish && window.isEnglish() ? '\u26A0 Heart condition: max Zone 2 intensity (< 65% HRmax). No sprints, no short intervals. Stop immediately if: chest pain, dizziness, unusual breathlessness.' : '\u26A0 Cardiopathie : intensité max Zone 2 (< 65% FCmax). Pas de sprints, pas d\u2019intervalles courts. Arrêtez immédiatement en cas de douleur thoracique, essoufflement anormal ou vertiges (AHA 2018).');
     }
     if (_ml.indexOf('hta') !== -1 || _ml.indexOf('hta_severe') !== -1 || _ml.indexOf('hypertension') !== -1) {
-      _warns.push('\u26A0 Hypertension : évitez les efforts isométriques intenses et les sprints. Restez en Zone 1-2. Mesurez votre tension avant chaque séance (ESC/ESH 2018).');
+      _warns.push((window.isEnglish && window.isEnglish() ? '\u26A0 Hypertension: avoid intense isometric efforts and sprints. Stay in Zone 1-2. Measure your blood pressure before each session (ESC/ESH 2018).' : '\u26A0 Hypertension : évitez les efforts isométriques intenses et les sprints. Restez en Zone 1-2. Mesurez votre tension avant chaque séance (ESC/ESH 2018).'));
     }
     if (_ml.indexOf('osteoporose') !== -1 || _ml.indexOf('osteoporosis') !== -1) {
-      _warns.push('\u26A0 Ostéoporose : évitez les impacts élevés (sauts, sprints, changements de direction brusques). Privilégiez les mouvements contrôlés et la marche (NOF 2022).');
+      _warns.push((window.isEnglish && window.isEnglish() ? '\u26A0 Osteoporosis: avoid high-impact activities (jumps, sprints, sudden direction changes). Prefer controlled movements and walking (NOF 2022).' : '\u26A0 Ostéoporose : évitez les impacts élevés (sauts, sprints, changements de direction brusques). Privilégiez les mouvements contrôlés et la marche (NOF 2022).'));
     }
     if (_ml.indexOf('diabete_t1') !== -1 || _ml.indexOf('diabete_t2') !== -1) {
-      _warns.push('\u26A0 Diabète : mesurez votre glycémie avant/après. Évitez l\u2019effort si < 4 mmol/L ou > 14 mmol/L. Gardez du sucre rapide à portée (ADA 2023).');
+      _warns.push((window.isEnglish && window.isEnglish() ? '\u26A0 Diabetes: measure blood glucose before/after. Avoid exercise if < 4 mmol/L or > 14 mmol/L. Keep fast-acting sugar within reach (ADA 2023).' : '\u26A0 Diabète : mesurez votre glycémie avant/après. Évitez l\u2019effort si < 4 mmol/L ou > 14 mmol/L. Gardez du sucre rapide à portée (ADA 2023).'));
     }
     if (_ml.indexOf('polyarthrite') !== -1 || _ml.indexOf('arthrite') !== -1 || _ml.indexOf('rheumatoid') !== -1) {
-      _warns.push('\u26A0 Arthrite : évitez les impacts répétés et les charges lourdes. Privilégiez les mouvements doux à amplitude contrôlée. Arrêtez en cas de poussée inflammatoire (EULAR 2020).');
+      _warns.push((window.isEnglish && window.isEnglish() ? '\u26A0 Arthritis: avoid repeated impacts and heavy loads. Prefer gentle movements with controlled range of motion. Stop during inflammatory flares (EULAR 2020).' : '\u26A0 Arthrite : évitez les impacts répétés et les charges lourdes. Privilégiez les mouvements doux à amplitude contrôlée. Arrêtez en cas de poussée inflammatoire (EULAR 2020).'));
     }
     if (_ml.indexOf('fibromyalgie') !== -1) {
       _warns.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode('\u26A0 Fibromyalgie : intensité légère uniquement (')); _el.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _el.appendChild(document.createTextNode(' max 5/10). Progression très graduelle. Évitez l\u2019épuisement (Häuser, Cochrane 2017).')); return _el; })());
     }
     if (_warns.length > 0) {
       var _mc = h('div', {style: 'border-left:3px solid var(--orange,#E86F1E);background:rgba(232,111,30,0.06);padding:12px 16px;margin-bottom:12px'});
-      _mc.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);margin-bottom:6px'}, 'Restrictions médicales \u2014 ' + sportName));
+      _mc.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Medical restrictions \u2014 ' : 'Restrictions médicales \u2014 ') + sportName));
       _warns.forEach(function(w) { _mc.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);line-height:1.6;margin-bottom:4px'}, w)); });
       p.appendChild(_mc);
     }
@@ -3928,26 +3929,26 @@ function appendSportMedicalBanner(p, sportName) {
   if (S.muscuMedical && S.muscuMedical.done) {
     var _mw = [];
     if (S.muscuMedical.knees || S.muscuMedical.acl || S.muscuMedical.meniscus || S.muscuMedical.kneeOsteoarthritis) {
-      _mw.push('\u26A0 Genoux : évitez les sauts, changements de direction brusques, sprints et descentes. Privilégiez le vélo ou la natation.');
+      _mw.push((window.isEnglish && window.isEnglish() ? '\u26A0 Knees: avoid jumps, sudden direction changes, sprints and downhill. Prefer cycling or swimming.' : '\u26A0 Genoux : évitez les sauts, changements de direction brusques, sprints et descentes. Privilégiez le vélo ou la natation.'));
     }
     if (S.muscuMedical.lowerBack || S.muscuMedical.herniaDisc || S.muscuMedical.spondylarthritis) {
-      _mw.push('\u26A0 Dos / Hernie : évitez les impacts, rotations sous charge et positions prolongées penchées. Gainage et mobilité recommandés.');
+      _mw.push((window.isEnglish && window.isEnglish() ? '\u26A0 Back / Disc: avoid impacts, loaded rotations and prolonged bent positions. Core and mobility work recommended.' : '\u26A0 Dos / Hernie : évitez les impacts, rotations sous charge et positions prolongées penchées. Gainage et mobilité recommandés.'));
     }
     if (S.muscuMedical.shoulders || S.muscuMedical.rotatorCuff) {
-      _mw.push('\u26A0 Épaules : évitez les mouvements au-dessus de la tête et les gestes balistiques (service, smash, swing).');
+      _mw.push((window.isEnglish && window.isEnglish() ? '\u26A0 Shoulders: avoid overhead movements and ballistic gestures (serve, smash, swing).' : '\u26A0 Épaules : évitez les mouvements au-dessus de la tête et les gestes balistiques (service, smash, swing).'));
     }
     if (S.muscuMedical.elbows || S.muscuMedical.epicondylitis) {
-      _mw.push('Coudes / Épicondylite : évitez les gestes répétitifs en pronation/supination forcée. Protégez avec une coudière.');
+      _mw.push((window.isEnglish && window.isEnglish() ? '\u26A0 Elbows / Epicondylitis: avoid repetitive pronation/supination. Protect with an elbow brace.' : 'Coudes / Épicondylite : évitez les gestes répétitifs en pronation/supination forcée. Protégez avec une coudière.'));
     }
     if (S.muscuMedical.feet) {
-      _mw.push('\u26A0 Pieds / Fasciite : évitez les impacts répétés (course, sauts). Semelles adaptées obligatoires.');
+      _mw.push((window.isEnglish && window.isEnglish() ? '\u26A0 Feet / Plantar fasciitis: avoid repeated impacts (running, jumps). Appropriate insoles mandatory.' : '\u26A0 Pieds / Fasciite : évitez les impacts répétés (course, sauts). Semelles adaptées obligatoires.'));
     }
     if (S.muscuMedical.hypertension && _ml.indexOf('hta') === -1 && _ml.indexOf('hta_severe') === -1 && _ml.indexOf('hypertension') === -1) {
       _mw.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode('\u26A0 HTA (profil muscu) : pas d\u2019efforts isométriques maximaux. ')); _el.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _el.appendChild(document.createTextNode(' max 6/10. Restez en Zone 1-2.')); return _el; })());
     }
     if (_mw.length > 0) {
       var _mwc = h('div', {style: 'border-left:3px solid var(--error,#7A1F1F);background:rgba(122,31,31,0.04);padding:12px 16px;margin-bottom:12px'});
-      _mwc.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--error,#7A1F1F);margin-bottom:6px'}, 'Adaptations \u2014 Profil médical'));
+      _mwc.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--error,#7A1F1F);margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Adaptations \u2014 Medical profile' : 'Adaptations \u2014 Profil médical')));
       _mw.forEach(function(w) { _mwc.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--error,#7A1F1F);line-height:1.6;margin-bottom:4px'}, w)); });
       p.appendChild(_mwc);
     }
@@ -4021,7 +4022,7 @@ function appendSportMedicalBanner(p, sportName) {
     });
     if (_szWarns.length > 0) {
       var _szc = h('div', {style:'border-left:3px solid var(--orange,#E86F1E);background:rgba(232,111,30,0.06);padding:12px 16px;margin-bottom:12px'});
-      _szc.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);margin-bottom:6px'}, 'Adaptations \u2014 ' + sportName));
+      _szc.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Adaptations \u2014 ' : 'Adaptations \u2014 ') + sportName));
       _szWarns.forEach(function(w) { _szc.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);line-height:1.6;margin-bottom:4px'}, w)); });
       p.appendChild(_szc);
     }
@@ -4038,20 +4039,20 @@ function appendWellnessBanner(p) {
       // ─── KO : Séance déconseillée ───
       var banner = h('div', {style: 'border-left:3px solid #8B2020;background:rgba(139,32,32,0.06);padding:14px 16px;margin-bottom:16px;border-radius:2px', title: 'Score basé sur votre sommeil, état musculaire et énergie du jour. Renseignez votre bilan quotidien pour personnaliser votre séance.'});
       var titleRow = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-bottom:6px'});
-      titleRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8B2020;font-weight:700'}, 'S\u00e9ance d\u00e9conseill\u00e9e aujourd\'hui'));
+      titleRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8B2020;font-weight:700'}, (window.isEnglish && window.isEnglish() ? 'Session not recommended today' : 'S\u00e9ance d\u00e9conseill\u00e9e aujourd\'hui')));
       banner.appendChild(titleRow);
-      banner.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#0A0A09);line-height:1.6;margin-bottom:12px'}, 'Votre \u00e9tat de forme est bas. Le repos favorise la r\u00e9cup\u00e9ration et la progression.'));
+      banner.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#0A0A09);line-height:1.6;margin-bottom:12px'}, (window.isEnglish && window.isEnglish() ? 'Your fitness level is low. Rest promotes recovery and progress.' : 'Votre \u00e9tat de forme est bas. Le repos favorise la r\u00e9cup\u00e9ration et la progression.')));
       var btnRow = h('div', {style: 'display:flex;gap:8px;flex-wrap:wrap'});
       var postponeBtn = h('button', {
         style: 'padding:8px 14px;background:#8B2020;color:#fff;border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer',
         onclick: function() {
           S.sessionPostponed = true;
           banner.innerHTML = '';
-          var confirmMsg = h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#0A0A09);line-height:1.6;padding:8px 0'}, '\u2714 S\u00e9ance report\u00e9e. Reposez-vous bien !');
+          var confirmMsg = h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#0A0A09);line-height:1.6;padding:8px 0'}, (window.isEnglish && window.isEnglish() ? '\u2714 Session postponed. Rest well!' : '\u2714 S\u00e9ance report\u00e9e. Reposez-vous bien !'));
           banner.appendChild(confirmMsg);
           if (window.render) window.render();
         }
-      }, 'Reporter au lendemain');
+      }, (window.isEnglish && window.isEnglish() ? 'Postpone to tomorrow' : 'Reporter au lendemain'));
       var continueBtn = h('button', {
         style: 'padding:8px 14px;background:transparent;color:#8B2020;border:1px solid #8B2020;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer',
         onclick: function() {
@@ -4059,7 +4060,7 @@ function appendWellnessBanner(p) {
           banner.style.display = 'none';
           if (window.render) window.render();
         }
-      }, 'Continuer quand m\u00eame');
+      }, (window.isEnglish && window.isEnglish() ? 'Continue anyway' : 'Continuer quand m\u00eame'));
       btnRow.appendChild(postponeBtn);
       btnRow.appendChild(continueBtn);
       banner.appendChild(btnRow);
@@ -4067,18 +4068,18 @@ function appendWellnessBanner(p) {
     } else if (score <= 3) {
       // ─── Fatigué : séance adaptée ───
       var banner2 = h('div', {style: 'border-left:3px solid #B8860B;background:rgba(184,134,11,0.06);padding:14px 16px;margin-bottom:16px;border-radius:2px', title: 'Score basé sur votre sommeil, état musculaire et énergie du jour. Renseignez votre bilan quotidien pour personnaliser votre séance.'});
-      banner2.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#B8860B;font-weight:700;margin-bottom:6px'}, 'S\u00e9ance adapt\u00e9e recommand\u00e9e'));
-      banner2.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#0A0A09);line-height:1.6;margin-bottom:12px'}, 'Consid\u00e9rez r\u00e9duire l\'intensit\u00e9\u00a0: -1 s\u00e9rie par exercice, charges all\u00e9g\u00e9es de 10-15\u00a0%.'));
+      banner2.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#B8860B;font-weight:700;margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Adapted session recommended' : 'S\u00e9ance adapt\u00e9e recommand\u00e9e')));
+      banner2.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#0A0A09);line-height:1.6;margin-bottom:12px'}, (window.isEnglish && window.isEnglish() ? 'Consider reducing intensity: -1 set per exercise, loads reduced by 10-15%.' : 'Consid\u00e9rez r\u00e9duire l\'intensit\u00e9\u00a0: -1 s\u00e9rie par exercice, charges all\u00e9g\u00e9es de 10-15\u00a0%.')));
       var comprisBtn = h('button', {
         style: 'padding:8px 14px;background:#B8860B;color:#fff;border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer',
         onclick: function() { banner2.style.display = 'none'; }
-      }, 'Compris');
+      }, (window.isEnglish && window.isEnglish() ? 'Got it' : 'Compris'));
       banner2.appendChild(comprisBtn);
       p.appendChild(banner2);
     } else if (score > 3.5) {
       // ─── En forme : badge discret ───
       var badge = h('div', {style: 'display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(26,74,26,0.3);background:var(--paper-2,#F4F1EA);padding:6px 12px;border-radius:2px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green,#3E5C3A)', title: 'Score basé sur votre sommeil, état musculaire et énergie du jour. Renseignez votre bilan quotidien pour personnaliser votre séance.'});
-      badge.appendChild(h('span', {}, 'Vous \u00eates en forme aujourd\'hui'));
+      badge.appendChild(h('span', {}, (window.isEnglish && window.isEnglish() ? 'You are in good shape today' : 'Vous \u00eates en forme aujourd\'hui')));
       p.appendChild(badge);
     }
     return;
@@ -4120,7 +4121,7 @@ function appendWellnessBanner(p) {
 
   if (isPeak) {
     // Compact badge — label only, no button
-    fallbackBanner.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--success,#3E5C3A)', title: 'Score basé sur votre sommeil, état musculaire et énergie du jour. Renseignez votre bilan quotidien pour personnaliser votre séance.'}, 'Forme optimale — poussez sur les charges'));
+    fallbackBanner.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--success,#3E5C3A)', title: (window.isEnglish && window.isEnglish() ? 'Score based on your sleep, muscle state and energy. Fill in your daily check-in to personalize your session.' : 'Score basé sur votre sommeil, état musculaire et énergie du jour. Renseignez votre bilan quotidien pour personnaliser votre séance.')}, (window.isEnglish && window.isEnglish() ? 'Optimal form — push the loads' : 'Forme optimale — poussez sur les charges')));
   } else {
     var textWrap = h('div', {style: 'flex:1;min-width:0'});
     textWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:' + cm.textColor + ';margin-bottom:3px;font-weight:700'}, adapt.label));
@@ -4132,7 +4133,7 @@ function appendWellnessBanner(p) {
         S._wellnessBannerDismissed = true;
         window.render();
       }
-    }, adapt.level === 'recovery' ? 'Reporter' : 'Compris');
+    }, adapt.level === 'recovery' ? (window.isEnglish && window.isEnglish() ? 'Postpone' : 'Reporter') : (window.isEnglish && window.isEnglish() ? 'Got it' : 'Compris'));
     textWrap.appendChild(actionBtn);
     fallbackBanner.appendChild(textWrap);
   }
@@ -10042,9 +10043,11 @@ function renderRunningProgram(p) {
 
  // Phase + volume info
  var phaseColors = {Base: 'var(--blue,#1A3A6A)', 'Développement': 'var(--orange-ink,#7A3B0E)', 'Spécifique': 'var(--error,#7A1F1F)', 'Affûtage': 'var(--success,#3E5C3A)'};
+ var phaseNamesEN = {Base: 'Base', 'Développement': 'Development', 'Spécifique': 'Specific', 'Affûtage': 'Taper'};
  var phaseColor = phaseColors[currentWeekData.phase] || '#0A0A09';
+ var phaseLabelRun = (window.isEnglish && window.isEnglish()) ? (phaseNamesEN[currentWeekData.phase] || currentWeekData.phase) : currentWeekData.phase;
  var infoCard = h('div', {style: 'border-left:3px solid ' + phaseColor + ';padding:12px 16px;background:var(--ivory2);margin-bottom:16px'});
- infoCard.appendChild(h('div', {style: 'font-family:Georgia;font-size:16px;color:' + phaseColor + ';margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? 'Phase: ' : 'Phase : ') + currentWeekData.phase));
+ infoCard.appendChild(h('div', {style: 'font-family:Georgia;font-size:16px;color:' + phaseColor + ';margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? 'Phase: ' : 'Phase : ') + phaseLabelRun));
  infoCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? 'Volume: ~' + currentWeekData.totalKm + ' km · Long run: ' + currentWeekData.longRun + ' km' : 'Volume : ~' + currentWeekData.totalKm + ' km · Sortie longue : ' + currentWeekData.longRun + ' km')));
  if (currentWeekData.isDeload) {
  infoCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);margin-top:6px;font-weight:bold'}, (window.isEnglish && window.isEnglish() ? ' Recovery week' : ' Semaine de récupération')));
@@ -11442,11 +11445,12 @@ function cyclingKcal(durationMin, zone, weightKg) {
 
 
 function generateCyclingPlan(level, days) {
+ var _tCyc = window.isEnglish && window.isEnglish();
  var phases = [
- { name: 'Base aérobie', weeks: [1, 2], color: '#1A3A6A', focus: 'Développer le moteur Z2 — qualité > quantité' },
- { name: 'Développement', weeks: [3, 4, 5], color: '#7A3B0E', focus: 'Introduire tempo et sweet spot' },
- { name: 'Spécifique', weeks: [6, 7], color: '#7A1F1F', focus: 'Intervalles seuil et VO2max' },
- { name: 'Affûtage', weeks: [8], color: '#3E5C3A', focus: 'Réduction volume — maintien intensité' }
+ { name: (_tCyc ? 'Aerobic base' : 'Base aérobie'), weeks: [1, 2], color: '#1A3A6A', focus: (_tCyc ? 'Build the Z2 engine — quality over quantity' : 'Développer le moteur Z2 — qualité > quantité') },
+ { name: (_tCyc ? 'Development' : 'Développement'), weeks: [3, 4, 5], color: '#7A3B0E', focus: (_tCyc ? 'Introduce tempo and sweet spot' : 'Introduire tempo et sweet spot') },
+ { name: (_tCyc ? 'Specific' : 'Spécifique'), weeks: [6, 7], color: '#7A1F1F', focus: (_tCyc ? 'Threshold and VO2max intervals' : 'Intervalles seuil et VO2max') },
+ { name: (_tCyc ? 'Taper' : 'Affûtage'), weeks: [8], color: '#3E5C3A', focus: (_tCyc ? 'Volume reduction — maintain intensity' : 'Réduction volume — maintien intensité') }
  ];
  var template = (level === 'avance' || level === 'intermediaire') ? CYCLING_WORKOUTS.intermediaire : CYCLING_WORKOUTS.debutant;
  // VO2max override for Spécifique phase (weeks 6-7): replace Sweet Spot Z4 with Z5 intervals
@@ -11459,7 +11463,7 @@ function generateCyclingPlan(level, days) {
  }
  var isDeload = (w === 4 || w === 8);
  var volFactor = isDeload ? 0.6 : (w <= 2 ? 0.75 : w <= 5 ? 1.0 : 1.1);
- var isSpecific = phase.name === 'Spécifique';
+ var isSpecific = phase.name === 'Spécifique' || phase.name === 'Specific';
  var maxDays = Math.min(days, template.length);
  var sessions = template.slice(0, maxDays).map(function(s) {
  // During Spécifique phase, replace Sweet Spot (Z4) with VO2max (Z5) — for intermediaire/avance
@@ -11587,10 +11591,11 @@ function renderCyclingOnboarding(p) {
  p.appendChild(speedWrap);
 
  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:16px'}, (window.isEnglish && window.isEnglish() ? 'Target elevation per ride' : 'Dénivelé cible par sortie')));
+ var _tRelief = window.isEnglish && window.isEnglish();
  var reliefs = [
- { id: 'flat', name: 'Plat', desc: '< 500m D+/100km' },
- { id: 'rolling', name: 'Vallonné', desc: '500-1000m D+/100km' },
- { id: 'mountainous', name: 'Montagneux', desc: '> 1000m D+/100km' }
+ { id: 'flat', name: (_tRelief ? 'Flat' : 'Plat'), desc: '< 500m D+/100km' },
+ { id: 'rolling', name: (_tRelief ? 'Rolling' : 'Vallonné'), desc: '500-1000m D+/100km' },
+ { id: 'mountainous', name: (_tRelief ? 'Mountainous' : 'Montagneux'), desc: '> 1000m D+/100km' }
  ];
  var reliefRow = h('div', {style: 'display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px'});
  reliefs.forEach(function(r) {
@@ -11654,15 +11659,15 @@ function renderCyclingProgram(p) {
  var bikeNames = { road: 'Route ', vtt: 'VTT ', indoor: 'Indoor ', gravel: 'Gravel ' };
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Cyclisme'));
- p.appendChild(h('h1', {html: (goalNames[S.cyclingGoal] || 'Cyclisme') + '<br><em>Plan 8 semaines</em>'}));
+ p.appendChild(h('h1', {html: (goalNames[S.cyclingGoal] || 'Cycling') + '<br><em>' + (window.isEnglish && window.isEnglish() ? '8-week plan' : 'Plan 8 semaines') + '</em>'}));
 
  var speedTarget = S.cyclingSpeed ? Math.round(S.cyclingSpeed * 1.08) : null;
  var ftpTarget = S.cyclingFTP ? Math.round(S.cyclingFTP * 1.10) : null;
  var infoLine = (levelNames[S.cyclingLevel] || '') +
  (S.cyclingType ? ' · ' + (bikeNames[S.cyclingType] || S.cyclingType) : '') +
- (S.cyclingFTP ? ' · FTP actuel : ' + S.cyclingFTP + 'W' : '') +
- (ftpTarget ? ' \u2192 cible : ~' + ftpTarget + 'W' : '') +
- (speedTarget ? ' · Vitesse cible : ~' + speedTarget + ' km/h' : '');
+ (S.cyclingFTP ? ' · ' + (window.isEnglish && window.isEnglish() ? 'Current FTP: ' : 'FTP actuel : ') + S.cyclingFTP + 'W' : '') +
+ (ftpTarget ? ' \u2192 ' + (window.isEnglish && window.isEnglish() ? 'target: ~' : 'cible : ~') + ftpTarget + 'W' : '') +
+ (speedTarget ? ' · ' + (window.isEnglish && window.isEnglish() ? 'Target speed: ~' : 'Vitesse cible : ~') + speedTarget + ' km/h' : '');
  p.appendChild(h('p', {'class': 'subtitle'}, infoLine));
 
  appendSportMedicalBanner(p, 'Cyclisme');
@@ -11670,10 +11675,10 @@ function renderCyclingProgram(p) {
 
  var med = S.muscuMedical || {};
  var warnings = [];
- if (med.hypertension) warnings.push(' HTA : évitez Z4/Z5 (Valsalva interdit) — restez en Z1-Z3 maximum');
- if (med.herniaDisc || med.lowerBack) warnings.push(' Hernie discale : position aérodynamique déconseillée — vélo droit recommandé, guidon surélevé');
- if (med.knees || med.meniscus) warnings.push(' Gonarthrose / Ménisque : cadence élevée (>90 RPM) recommandée — évitez les grosses relances');
- if (getAge() >= 50) warnings.push(' 50+ : échauffement 15 min minimum obligatoire, zones 1-3 prioritaires, récupération 48h entre séances intenses');
+ if (med.hypertension) warnings.push(window.isEnglish && window.isEnglish() ? ' HTN: avoid Z4/Z5 (no Valsalva) — stay in Z1-Z3 max' : ' HTA : évitez Z4/Z5 (Valsalva interdit) — restez en Z1-Z3 maximum');
+ if (med.herniaDisc || med.lowerBack) warnings.push(window.isEnglish && window.isEnglish() ? ' Herniated disc: aerodynamic position not recommended — upright bike, raised handlebar' : ' Hernie discale : position aérodynamique déconseillée — vélo droit recommandé, guidon surélevé');
+ if (med.knees || med.meniscus) warnings.push(window.isEnglish && window.isEnglish() ? ' Knee/Meniscus: high cadence (>90 RPM) recommended — avoid big gear efforts' : ' Gonarthrose / Ménisque : cadence élevée (>90 RPM) recommandée — évitez les grosses relances');
+ if (getAge() >= 50) warnings.push(window.isEnglish && window.isEnglish() ? ' 50+: minimum 15 min warm-up required, Z1-Z3 priority, 48h recovery between intense sessions' : ' 50+ : échauffement 15 min minimum obligatoire, zones 1-3 prioritaires, récupération 48h entre séances intenses');
  if (warnings.length) {
  var warnBox = h('div', {style: 'border:1px solid var(--orange,#E86F1E);padding:12px 16px;background:rgba(232,111,30,0.06);margin-bottom:16px'});
  warnings.forEach(function(w) {
