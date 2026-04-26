@@ -1349,8 +1349,8 @@ async function _fetchFriendProfilesByIds(c, otherIds) {
   var byId = {};
   (rp.data || []).forEach(function(p){ byId[p.id] = p; });
 
-  // Fallback via server-side function for IDs blocked by RLS (pending requests)
-  var missing = otherIds.filter(function(id){ return !byId[id]; });
+  // Fallback via server-side function pour : IDs absents (RLS) OU profils sans pseudo (auto-créés sans pseudo)
+  var missing = otherIds.filter(function(id){ return !byId[id] || !byId[id].pseudo; });
   if (!missing.length) return byId;
 
   try {
