@@ -2248,7 +2248,7 @@ function renderStep8(p) {
   })();
   rh.appendChild(h('div', {'class': 'result-rule'}));
   var _ageDisplay = (typeof getAge === 'function' ? getAge() : (S.age || '?'));
-  var _profItems = [window.isMale(S)?(window.isEnglish && window.isEnglish()?'Male':'Homme'):(window.isEnglish && window.isEnglish()?'Female':'Femme'), _ageDisplay+(window.isEnglish && window.isEnglish()?' y.o.':', ' ans'), (window.UNITS ? window.UNITS.displayWeight(S.weight) : S.weight+'kg'), (window.UNITS ? window.UNITS.displayHeight(S.height) : (S.height/100).toFixed(2)+'m')];
+  var _profItems = [window.isMale(S)?(window.isEnglish && window.isEnglish()?'Male':'Homme'):(window.isEnglish && window.isEnglish()?'Female':'Femme'), _ageDisplay+(window.isEnglish && window.isEnglish()?' y.o.':' ans'), (window.UNITS ? window.UNITS.displayWeight(S.weight) : S.weight+'kg'), (window.UNITS ? window.UNITS.displayHeight(S.height) : (S.height/100).toFixed(2)+'m')];
   if(S.activity!==null&&S.activity!==undefined&&ACTIVITIES[S.activity])_profItems.push(ACTIVITIES[S.activity].name);
   if(S.goal!==null&&S.goal!==undefined&&GOALS[S.goal])_profItems.push(GOALS[S.goal].name);
   rh.appendChild(h('div', {style:'text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);letter-spacing:1px;margin:8px 0'}, _profItems.join(' \u00B7 ')));
@@ -2980,6 +2980,7 @@ function renderNutritionCompletion(p) {
     'class': 'btn-back',
     onclick: function() { S._showCompletionFirst = false; goStep(11); },
     html: backArrowHtml() + (window.isEnglish && window.isEnglish() ? 'Back to results' : 'Retour aux r\u00e9sultats')
+}));
 }
 
 // ─── STEP 9: PLANNING ───
@@ -5127,13 +5128,13 @@ var WHEY_SMOOTHIES = [
     ingredients:[{name:'Whey nature',qty:30,unit:'g'},{name:'Lait écrémé',qty:250,unit:'ml'},{name:'Flocons d\'avoine',qty:25,unit:'g'},{name:'Amandes effilées',qty:10,unit:'g'}],
     steps:['Mixer les flocons d\'avoine avec la moitié du lait écrémé 20 secondes à pleine puissance pour créer une base "lait d\'avoine maison" lisse — les flocons hydratés s\'intègrent parfaitement et épaississent sans morceaux.','Ajouter le reste du lait froid, la whey nature et les amandes effilées ; mixer 20 secondes à vitesse moyenne — les amandes doivent être réduites en micro-éclats qui apportent le croquant, pas en poudre uniforme.','Goûter avant de servir : sur une base neutre, l\'équilibre est tout. Ajuster avec une pincée de fleur de sel si la whey manque de relief — le sel est l\'exhausteur de goût le plus puissant sur les protéines.'],
     tips:'Une base neutre n\'est pas une base fade : c\'est une toile blanche. La fleur de sel est le geste du pâtissier — elle ne sale pas, elle révèle. Une pincée change tout ce que la whey nature a à dire.' },
-  { id:'sm_nature_02', name:'Athlete\', nameEn:'Athlete\'s Shake's Functional Shake', flavors:['unflavored'], goal:['performance','recovery'], timing:'post', cal:360, p:38, c:38, f:7, prep:'3min',
+  { id:'sm_nature_02', name:'Athlete', nameEn:'Athlete\'s Functional Shake', flavors:['unflavored'], goal:['performance','recovery'], timing:'post', cal:360, p:38, c:38, f:7, prep:'3min',
     ingredients:[{name:'Whey nature',qty:35,unit:'g'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Jus d\'orange frais',qty:150,unit:'ml'},{name:'Banane',qty:80,unit:'g'},{name:'Curcuma',qty:1,unit:'g'},{name:'Poivre noir',qty:0.5,unit:'g'}],
     steps:['Commencer par mixer banane + jus d\'orange + poivre noir fraîchement moulu ensemble 15 secondes : le poivre doit se disperser dans la matière sucrée acide pour que la pipérine s\'active au contact des lipides du yaourt qui suivent.','Ajouter le yaourt grec et le curcuma, mixer 20 secondes — le curcuma se fixe sur les matières grasses du yaourt pour une absorption optimale ; ne jamais le dissoudre dans le liquide seul.','Incorporer la whey nature en dernier, mixer 15 secondes à vitesse modérée. Consommer dans les 20 minutes post-séance : la fenêtre anabolique et anti-inflammatoire combinées est maximale à ce créneau.'],
     tips:'Curcuma + poivre + matière grasse : c\'est le trio de biodisponibilité. Changer l\'ordre d\'incorporation revient à ignorer la chimie — et perdre jusqu\'à 80 % de l\'effet anti-inflammatoire du curcuma.' },
 
   // === MULTI-PARFUMS ===
-  { id:'sm_multi_01', name:'Reese\', nameEn:'Reese\'s Shake's Smoothie Bowl', flavors:['peanut','chocolate'], goal:['muscle'], timing:'anytime', cal:520, p:42, c:55, f:15, prep:'5min',
+  { id:'sm_multi_01', name:'Reese', nameEn:'Reese\'s Smoothie Bowl', flavors:['peanut','chocolate'], goal:['muscle'], timing:'anytime', cal:520, p:42, c:55, f:15, prep:'5min',
     ingredients:[{name:'Whey chocolat',qty:30,unit:'g'},{name:'Beurre de cacahuète',qty:20,unit:'g'},{name:'Banane congelée',qty:150,unit:'g'},{name:'Lait',qty:100,unit:'ml'},{name:'Granola',qty:30,unit:'g'}],
     steps:['Congeler la banane coupée en rondelles minimum 2 heures à l\'avance — c\'est l\'unique secret d\'un bowl dense et crémeux sans glace diluante.','Mixer banane congelée + lait à vitesse maximale 10 secondes seulement : stopper dès que la texture "nice cream" est atteinte, ne jamais sur-mixer ou elle devient liquide.','Ajouter le beurre de cacahuète et la whey chocolat, mixer 5 secondes en impulsions courtes pour marbrer sans homogénéiser complètement — les veines de cacahuète sont la signature visuelle.','Verser immédiatement dans un bol froid (passé 5 minutes au congélateur), déposer le granola en dernière seconde pour qu\'il reste croustillant — jamais dans le blender.'],
     tips:'La texture bowl ne se fabrique pas avec moins de liquide : elle se fabrique avec une banane congelée. C\'est la différence entre un shake raté et un vrai bowl ferme qui tient la cuillère à la verticale.' },

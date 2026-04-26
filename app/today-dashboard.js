@@ -3940,7 +3940,7 @@ function renderCardSport() {
   if (hasInProgressSession) {
     c.appendChild(h('div', {
       style: 'font-family:Georgia,serif;font-style:italic;font-size:12px;color:var(--ink-500,#6B6B65);text-align:center;margin-top:8px;'
-    }, '(window.isEnglish && window.isEnglish()) ? 'Pick up where you left off.' : 'Vous reprenez où vous en étiez.'));
+    }, (window.isEnglish && window.isEnglish()) ? 'Pick up where you left off.' : 'Vous reprenez où vous en étiez.'));
   }
 
   // ── Séance Libre ──
@@ -7124,7 +7124,7 @@ function getVolumeZone(muscle, sets, level) {
   var mavHigh = Math.round(lm.mav[1] * scale);
   var mrv = Math.round(lm.mrv * scale);
   var zone, target;
-  if (sets < mvar _vzEN = window.isEnglish && window.isEnglish();
+  var _vzEN = window.isEnglish && window.isEnglish();
   if (sets < mev)       { zone = 'below-mev'; target = _vzEN ? 'Aim for ' + mev + ' sets (MEV)' : 'Vise ' + mev + ' sets (MEV)'; }
   else if (sets < mavLow) { zone = 'mev-mav'; target = _vzEN ? 'Productive zone — aim for ' + mavLow + '-' + mavHigh + ' sets (MAV)' : 'Zone productive — vise ' + mavLow + '-' + mavHigh + ' sets (MAV)'; }
   else if (sets <= mavHigh) { zone = 'mev-mav-optimal'; target = _vzEN ? 'Sweet spot — keep up this pace' : 'Sweet spot — continue à ce rythme'; }
@@ -7336,8 +7336,7 @@ function renderProgressionDrawer() {
   sheet.appendChild(header);
 
   // Tabs scrollable
-  var tabs = [
-    var _drEN = window.isEnglish && window.isEnglish();
+  var _drEN = window.isEnglish && window.isEnglish();
   var tabs = [
     { key: 'records',   label: 'Records' },
     { key: 'tendances', label: _drEN ? 'Trends \u00b7 30 d' : 'Tendances \u00b7 30 j' },
