@@ -2307,48 +2307,48 @@ function renderChargesQuestionnaire(p) {
  // For beginners who have never trained: replace with reassurance card
  if (S.sportLevel === 'beginner' || !S.sportLevel) {
   p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
-  p.appendChild(h('h1', {html: 'Prêt\u00b7e à<br><em>commencer ?</em>'}));
+  p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Ready to<br><em>start?</em>' : 'Prêt\u00b7e à<br><em>commencer ?</em>')}));
   var reassureCard = h('div', {style: 'background:var(--paper-2,#F4F1EA);border-left:3px solid var(--ink-900,#0A0A09);padding:16px;margin-bottom:24px;border-radius:0'});
-  reassureCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;font-style:italic;margin-bottom:8px;color:var(--black,#1A1A18)'}, 'Vous débutez ? C\'est parfait.'));
-  reassureCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:8px'}, 'Pas besoin de connaître vos charges. Nous utilisons votre poids de corps comme référence de départ et adaptons progressivement.'));
-  reassureCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey)'}, 'Vous pourrez entrer vos charges après vos 2 premières séances.'));
+  reassureCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;font-style:italic;margin-bottom:8px;color:var(--black,#1A1A18)'}, (window.isEnglish && window.isEnglish() ? 'Just starting? That\'s perfect.' : 'Vous débutez ? C\'est parfait.')));
+  reassureCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'No need to know your loads. We use your body weight as a starting reference and adapt progressively.' : 'Pas besoin de connaître vos charges. Nous utilisons votre poids de corps comme référence de départ et adaptons progressivement.')));
+  reassureCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? 'You can enter your loads after your first 2 sessions.' : 'Vous pourrez entrer vos charges après vos 2 premières séances.')));
   p.appendChild(reassureCard);
   var contBtn = h('button', {
    style: 'width:100%;padding:16px;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer',
    onclick: function() { var _nxt = S._chargesFromLevel ? 3 : (S._chargesReturnToDashboard ? 4 : 1); S._chargesFromLevel = false; S._chargesReturnToDashboard = false; S.sStep = _nxt; if (window.saveProfile) window.saveProfile(); window.render(); }
-  }, 'Continuer →');
+  }, (window.isEnglish && window.isEnglish() ? 'Continue →' : 'Continuer →'));
   p.appendChild(contBtn);
-  var backLink = h('div', {style: 'text-align:center;margin-top:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);cursor:pointer;text-decoration:underline', onclick: function(){ var _bk = S._chargesFromLevel ? 2 : 15; S._chargesFromLevel = false; S.sStep = _bk; window.render(); }}, '← Retour');
+  var backLink = h('div', {style: 'text-align:center;margin-top:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);cursor:pointer;text-decoration:underline', onclick: function(){ var _bk = S._chargesFromLevel ? 2 : 15; S._chargesFromLevel = false; S.sStep = _bk; window.render(); }}, (window.isEnglish && window.isEnglish() ? '← Back' : '← Retour'));
   p.appendChild(backLink);
   return;
  }
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
- p.appendChild(h('h1', {html: '\u00c9valuation<br><em>des charges</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Optionnel mais précieux. Indiquez la charge avec laquelle vous faites 8-10 reps propres. Laissez vide si vous ne pratiquez pas l\'exercice.'));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Load<br><em>assessment</em>' : '\u00c9valuation<br><em>des charges</em>')}));
+ p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Optional but valuable. Enter the load you use for 8-10 clean reps. Leave blank if you don\'t do the exercise.' : 'Optionnel mais précieux. Indiquez la charge avec laquelle vous faites 8-10 reps propres. Laissez vide si vous ne pratiquez pas l\'exercice.')));
  var _chargesInfoCard = h('div', {style: 'background:var(--paper-2,#F4F1EA);border-left:3px solid var(--ink-900,#0A0A09);padding:12px 16px;margin-bottom:16px;border-radius:0'});
- _chargesInfoCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#1A1A18);line-height:1.6;margin-bottom:4px'}, 'Ces données permettent à l\'IA de calculer des charges au kilo près pour chaque exercice.'));
- _chargesInfoCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey)'}, 'Si vous ne connaissez pas vos charges : laissez tout vide. L\'IA utilisera votre poids de corps comme référence.'));
+ _chargesInfoCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#1A1A18);line-height:1.6;margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? 'This data allows the AI to calculate loads to the nearest kilo for each exercise.' : 'Ces données permettent à l\'IA de calculer des charges au kilo près pour chaque exercice.')));
+ _chargesInfoCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? 'If you don\'t know your loads: leave everything blank. The AI will use your body weight as a reference.' : 'Si vous ne connaissez pas vos charges : laissez tout vide. L\'IA utilisera votre poids de corps comme référence.')));
  p.appendChild(_chargesInfoCard);
 
  // Medical/age safety warnings
  var hasDiabetes = Array.isArray(S.medical) && (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1);
  if (hasDiabetes) {
  p.appendChild(h('div', {style: 'background:rgba(232,111,30,0.06);border:1px solid var(--orange,#E86F1E);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;line-height:1.6'}, [
- h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange,#E86F1E);margin-bottom:6px'}, 'Diabète — Précautions sportives'),
+ h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange,#E86F1E);margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Diabetes — Sports precautions' : 'Diabète — Précautions sportives')),
  (function(){ var _d = h('div', {style: 'color:var(--grey,#6B6B65)'}); _d.appendChild(document.createTextNode('Mesurez votre glycémie avant/après chaque séance. Évitez l\'entraînement si glycémie < 4,0 mmol/L ou > 14,0 mmol/L. Gardez toujours une source de sucres rapides à portée de main. Intensité progressive recommandée (')); _d.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _d.appendChild(document.createTextNode(' max 7/10 les 4 premières semaines).')); return _d; })()
  ]));
  }
  if (getAge() >= 50) {
  p.appendChild(h('div', {style: 'background:rgba(62,92,58,0.06);border:1px solid var(--green,#3E5C3A);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;line-height:1.6'}, [
- h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--green,#3E5C3A);margin-bottom:6px'}, 'Athlète 50+ — Adaptations recommandées'),
- h('div', {style: 'color:var(--grey,#6B6B65)'}, 'Échauffement prolongé 15-20 min (vs 5-10 min standard). Décharge toutes les 4-5 semaines (vs 6 semaines). Préférez machines guidées aux barres libres pour les charges maximales. Récupération inter-séance 48-72h minimum. Contrôle médical annuel conseillé.')
+ h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--green,#3E5C3A);margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Athlete 50+ — Recommended adaptations' : 'Athlète 50+ — Adaptations recommandées')),
+ h('div', {style: 'color:var(--grey,#6B6B65)'}, (window.isEnglish && window.isEnglish() ? 'Extended warm-up 15-20 min (vs 5-10 min standard). Deload every 4-5 weeks (vs 6 weeks). Prefer guided machines over free bars for maximum loads. Inter-session recovery 48-72h minimum. Annual medical check-up advised.' : 'Échauffement prolongé 15-20 min (vs 5-10 min standard). Décharge toutes les 4-5 semaines (vs 6 semaines). Préférez machines guidées aux barres libres pour les charges maximales. Récupération inter-séance 48-72h minimum. Contrôle médical annuel conseillé.'))
  ]));
  }
  if (S.pregnant && window.isFemale(S)) {
  p.appendChild(h('div', {style: 'background:rgba(122,31,31,0.06);border:1px solid var(--error,#7A1F1F);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;line-height:1.6'}, [
- h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--error,#7A1F1F);margin-bottom:6px'}, 'Grossesse — Exercices autorisés seulement'),
- h('div', {style: 'color:var(--grey,#6B6B65)'}, 'Évitez les charges lourdes, exercices allongés sur le dos (après 20 SA), abdominaux hyperpressifs, sauts et HIIT intense. Privilégiez marche, natation, yoga prénatal, Kegel. Consultez votre médecin avant tout entraînement.')
+ h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--error,#7A1F1F);margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Pregnancy — Authorized exercises only' : 'Grossesse — Exercices autorisés seulement')),
+ h('div', {style: 'color:var(--grey,#6B6B65)'}, (window.isEnglish && window.isEnglish() ? 'Avoid heavy loads, lying on your back exercises (after 20 weeks), hyperpressive abs, jumping and intense HIIT. Favor walking, swimming, prenatal yoga, Kegel. Consult your doctor before any training.' : 'Évitez les charges lourdes, exercices allongés sur le dos (après 20 SA), abdominaux hyperpressifs, sauts et HIIT intense. Privilégiez marche, natation, yoga prénatal, Kegel. Consultez votre médecin avant tout entraînement.'))
  ]));
  }
 
@@ -2458,14 +2458,14 @@ function renderChargesQuestionnaire(p) {
      return { pct: _percLabels[0], color: _percColors[0], ratio: Math.round(ratio * 100) / 100 };
    }
    var _powerKeys = [
-     { key: 'bench_press', name: 'Développé couché' },
+     { key: 'bench_press', name: (window.isEnglish && window.isEnglish() ? 'Bench press' : 'Développé couché') },
      { key: 'squat',       name: 'Squat' },
-     { key: 'deadlift',    name: 'Soulevé de terre' }
+     { key: 'deadlift',    name: (window.isEnglish && window.isEnglish() ? 'Deadlift' : 'Soulevé de terre') }
    ];
    var _hasAny = _powerKeys.some(function(k) { return S.muscuStrengthProfile[k.key] > 0; });
    if (!_hasAny) return;
    var lbWrap = h('div', { style: 'margin-bottom:16px;border:1px solid var(--border);background:var(--ivory2);' });
-   lbWrap.appendChild(h('div', { style: 'padding:10px 14px;border-bottom:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);font-weight:700;' }, 'Force relative — vs poids de corps'));
+   lbWrap.appendChild(h('div', { style: 'padding:10px 14px;border-bottom:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);font-weight:700;' }, (window.isEnglish && window.isEnglish() ? 'Relative strength — vs body weight' : 'Force relative — vs poids de corps')));
    _powerKeys.forEach(function(kd) {
      var w = S.muscuStrengthProfile[kd.key] || 0;
      if (w <= 0) return;
@@ -2488,7 +2488,7 @@ function renderChargesQuestionnaire(p) {
      row.appendChild(statD);
      lbWrap.appendChild(row);
    });
-   lbWrap.appendChild(h('div', { style: 'padding:6px 14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey);font-style:italic;' }, 'PC = Poids de corps. 1RM estimé (Epley). Population générale salle de sport.'));
+   lbWrap.appendChild(h('div', { style: 'padding:6px 14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey);font-style:italic;' }, (window.isEnglish && window.isEnglish() ? 'BW = Body weight. Estimated 1RM (Epley). General gym population.' : 'PC = Poids de corps. 1RM estimé (Epley). Population générale salle de sport.')));
    p.appendChild(lbWrap);
  })();
 
@@ -2517,14 +2517,14 @@ function renderChargesQuestionnaire(p) {
    var _lockedList = _advExercises.filter(function(e) { return !e.unlock; });
    if (_advExercises.length === 0 || (_bench1rm === 0 && _squat1rm === 0 && _dl1rm === 0)) return;
    var unlockWrap = h('div', { style: 'margin-bottom:16px;border:1px solid var(--border);background:var(--ivory2);' });
-   unlockWrap.appendChild(h('div', { style: 'padding:10px 14px;border-bottom:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);font-weight:700;' }, 'Exercices avancés'));
+   unlockWrap.appendChild(h('div', { style: 'padding:10px 14px;border-bottom:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);font-weight:700;' }, (window.isEnglish && window.isEnglish() ? 'Advanced exercises' : 'Exercices avancés')));
    _advExercises.forEach(function(ex) {
      var row = h('div', { style: 'display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);opacity:' + (ex.unlock ? '1' : '0.4') + ';' });
      var icon = h('div', { style: 'flex-shrink:0;width:18px;height:18px;border:' + (ex.unlock ? '1px solid var(--ink-900,#0A0A09)' : '1px solid var(--border)') + ';background:transparent;display:flex;align-items:center;justify-content:center;font-size:10px;color:' + (ex.unlock ? 'var(--success,#3E5C3A)' : 'var(--grey)') + ';margin-top:1px;' }, ex.unlock ? '✓' : '○');
      row.appendChild(icon);
      var info = h('div', { style: 'flex:1;' });
      info.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);' }, ex.name));
-     info.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);line-height:1.5;margin-top:2px;' }, ex.unlock ? ex.desc : 'Débloquez à ' + ex.req));
+     info.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);line-height:1.5;margin-top:2px;' }, ex.unlock ? ex.desc : (window.isEnglish && window.isEnglish() ? 'Unlock at ' : 'Débloquez à ') + ex.req));
      row.appendChild(info);
      unlockWrap.appendChild(row);
    });
@@ -2532,12 +2532,12 @@ function renderChargesQuestionnaire(p) {
  })();
 
  var _chargesFooter = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-bottom:16px'});
- _chargesFooter.appendChild(h('span', {}, 'Laissez vide les exercices que vous ne pratiquez pas. Indiquez la charge ET le nombre de reps pour un calcul précis du '));
+ _chargesFooter.appendChild(h('span', {}, (window.isEnglish && window.isEnglish() ? 'Leave blank exercises you don\'t do. Enter the load AND reps for an accurate calculation of ' : 'Laissez vide les exercices que vous ne pratiquez pas. Indiquez la charge ET le nombre de reps pour un calcul précis du ')));
  _chargesFooter.appendChild(termTooltip('1RM', 'Répétition Maximale — la charge max que vous pouvez soulever une seule fois'));
- _chargesFooter.appendChild(h('span', {}, ' (formule d\'Epley : charge × (1 + N/30)).'));
+ _chargesFooter.appendChild(h('span', {}, (window.isEnglish && window.isEnglish() ? ' (Epley formula: load × (1 + N/30)).' : ' (formule d\'Epley : charge × (1 + N/30)).')));
  p.appendChild(_chargesFooter);
 
- p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){ var _nxt = S._chargesFromLevel ? 3 : (S._chargesReturnToDashboard ? 4 : 15); S._chargesFromLevel = false; S._chargesReturnToDashboard = false; S.sStep = _nxt; if (window.saveProfile) window.saveProfile(); window.render(); }}, 'Continuer'));
+ p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){ var _nxt = S._chargesFromLevel ? 3 : (S._chargesReturnToDashboard ? 4 : 15); S._chargesFromLevel = false; S._chargesReturnToDashboard = false; S.sStep = _nxt; if (window.saveProfile) window.saveProfile(); window.render(); }}, (window.isEnglish && window.isEnglish() ? 'Continue' : 'Continuer')));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ var _bk = S._chargesFromLevel ? 2 : 15; S._chargesFromLevel = false; S.sStep = _bk; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
 }
 
@@ -2546,9 +2546,9 @@ function appendNutritionModeCTA(p) {
  if (!p || S.appMode !== 'both') return;
  if (!S.weekPlan || !S.weekPlan.length) return;
  var card = h('div', {style: 'border:1px solid var(--line,#D8D8D0);background:var(--paper-2,#F4F1EA);padding:20px 16px;margin-top:20px;border-radius:2px'});
- card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--success,#3E5C3A);margin-bottom:8px'}, 'PROGRAMME COMPLET'));
- card.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin-bottom:8px;color:var(--black,#1A1A18)'}, 'Votre programme sportif est prêt.'));
- card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:16px'}, 'Vos macros sont automatiquement adaptées à chaque séance d\'entraînement.'));
+ card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--success,#3E5C3A);margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'COMPLETE PROGRAM' : 'PROGRAMME COMPLET')));
+ card.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin-bottom:8px;color:var(--black,#1A1A18)'}, (window.isEnglish && window.isEnglish() ? 'Your sport program is ready.' : 'Votre programme sportif est prêt.')));
+ card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:16px'}, (window.isEnglish && window.isEnglish() ? 'Your macros are automatically adapted to each training session.' : 'Vos macros sont automatiquement adaptées à chaque séance d\'entraînement.')));
  card.appendChild(h('button', {
    style: 'width:100%;padding:16px;background:var(--ink-900,#0A0A09);color:#FAF9F6;border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer',
    onclick: function() {
@@ -2556,7 +2556,7 @@ function appendNutritionModeCTA(p) {
      if (window.saveProfile) window.saveProfile();
      if (window.render) window.render();
    }
- }, 'Voir mon plan nutrition →'));
+ }, (window.isEnglish && window.isEnglish() ? 'See my nutrition plan →' : 'Voir mon plan nutrition →')));
  p.appendChild(card);
 }
 
