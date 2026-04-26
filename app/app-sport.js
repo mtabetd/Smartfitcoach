@@ -1989,23 +1989,23 @@ function renderPARQ(p) {
 
  // Header avec retour
  var hdr = h('div', {style: 'display:flex;align-items:center;gap:12px;margin-bottom:20px'});
- hdr.appendChild(h('button', {'class': 'btn-back', style: 'margin:0', onclick: function(){ S.sStep = 0; S.sportType = null; S._parqAnswers = {}; S.sportMixEnabled = false; S.sportMixSecondary = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
- hdr.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--grey)'}, 'Évaluation médicale'));
+ hdr.appendChild(h('button', {'class': 'btn-back', style: 'margin:0', onclick: function(){ S.sStep = 0; S.sportType = null; S._parqAnswers = {}; S.sportMixEnabled = false; S.sportMixSecondary = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
+ hdr.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--grey)'}, '(window.isEnglish && window.isEnglish() ? 'Medical evaluation' : 'Évaluation médicale')));
  p.appendChild(hdr);
 
- p.appendChild(h('div', {'class': 'eyebrow'}, 'Sécurité'));
+ p.appendChild(h('div', {'class': 'eyebrow'}, (window.isEnglish && window.isEnglish() ? 'Safety' : 'Sécurité')));
  p.appendChild(h('h1', {html: 'Questionnaire<br><em>PAR-Q</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Avant de démarrer votre programme, répondez à ces 7 questions recommandées par l\'ACSM (2018). Vos réponses sont confidentielles.'));
+ p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Before starting your program, answer these 7 questions recommended by ACSM (2018). Your answers are confidential.' : 'Avant de démarrer votre programme, répondez à ces 7 questions recommandées par l\'ACSM (2018). Vos réponses sont confidentielles.')));
 
  // 7 questions PAR-Q
  var PARQ_QUESTIONS = [
-  { id: 'cardiac',       text: 'Votre médecin vous a-t-il déjà dit que vous aviez un problème cardiaque ?' },
-  { id: 'chestPain',    text: 'Ressentez-vous des douleurs thoraciques lors d\'une activité physique ?' },
-  { id: 'dizziness',    text: 'Avez-vous des étourdissements ou pertes de connaissance lors de l\'effort ?' },
-  { id: 'medication',   text: 'Prenez-vous des médicaments pour la tension artérielle ou le cœur ?' },
-  { id: 'jointIssue',   text: 'Avez-vous un problème osseux ou articulaire aggravé par l\'exercice ?' },
-  { id: 'pregnant',     text: 'Êtes-vous enceinte ou avez-vous accouché il y a moins de 6 semaines ?', femmeOnly: true },
-  { id: 'otherReason',  text: 'Avez-vous une autre raison médicale de ne pas faire d\'activité physique ?' }
+  { id: 'cardiac',       text: (window.isEnglish && window.isEnglish() ? 'Has your doctor ever told you that you have a heart condition?' : 'Votre médecin vous a-t-il déjà dit que vous aviez un problème cardiaque ?') },
+  { id: 'chestPain',    text: (window.isEnglish && window.isEnglish() ? 'Do you feel chest pain when you do physical activity?' : 'Ressentez-vous des douleurs thoraciques lors d\'une activité physique ?') },
+  { id: 'dizziness',    text: (window.isEnglish && window.isEnglish() ? 'Do you lose your balance because of dizziness or do you ever lose consciousness?' : 'Avez-vous des étourdissements ou pertes de connaissance lors de l\'effort ?') },
+  { id: 'medication',   text: (window.isEnglish && window.isEnglish() ? 'Are you currently taking medication for blood pressure or heart condition?' : 'Prenez-vous des médicaments pour la tension artérielle ou le cœur ?') },
+  { id: 'jointIssue',   text: (window.isEnglish && window.isEnglish() ? 'Do you have a bone or joint problem that could be made worse by exercise?' : 'Avez-vous un problème osseux ou articulaire aggravé par l\'exercice ?') },
+  { id: 'pregnant',     text: (window.isEnglish && window.isEnglish() ? 'Are you pregnant or have you given birth in the last 6 weeks?' : 'Êtes-vous enceinte ou avez-vous accouché il y a moins de 6 semaines ?'), femmeOnly: true },
+  { id: 'otherReason',  text: (window.isEnglish && window.isEnglish() ? 'Do you know of any other reason why you should not do physical activity?' : 'Avez-vous une autre raison médicale de ne pas faire d\'activité physique ?') }
  ].filter(function(q) { return !q.femmeOnly || window.isFemale(S); });
 
  var _hasYes = PARQ_QUESTIONS.some(function(q) { return S._parqAnswers[q.id] === true; });
@@ -2024,13 +2024,13 @@ function renderPARQ(p) {
   var yesBtn = h('button', {
    style: 'flex:1;padding:10px;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;cursor:pointer;border:1px solid ' + (isYes ? 'var(--error,#7A1F1F)' : 'var(--line,#E8E6DF)') + ';background:' + (isYes ? 'rgba(90,16,16,0.12)' : 'transparent') + ';color:' + (isYes ? 'var(--error,#7A1F1F)' : 'var(--ink-900,#0A0A09)') + ';font-weight:' + (isYes ? '700' : '400'),
    onclick: (function(_qid) { return function() { S._parqAnswers[_qid] = true; window.render(); }; })(q.id)
-  }, 'Oui');
+  }, (window.isEnglish && window.isEnglish() ? 'Yes' : 'Oui'));
   btnRow.appendChild(yesBtn);
   // NON
   var noBtn = h('button', {
    style: 'flex:1;padding:10px;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;cursor:pointer;border:1px solid ' + (!isYes && answered ? 'var(--ink-900,#0A0A09)' : 'var(--line,#E8E6DF)') + ';background:' + (!isYes && answered ? 'rgba(26,74,26,0.08)' : 'transparent') + ';color:' + (!isYes && answered ? 'var(--ink-900,#0A0A09)' : 'var(--black,#1A1A18)') + ';font-weight:' + (!isYes && answered ? '700' : '400'),
    onclick: (function(_qid) { return function() { S._parqAnswers[_qid] = false; window.render(); }; })(q.id)
-  }, 'Non');
+  }, (window.isEnglish && window.isEnglish() ? 'No' : 'Non'));
   btnRow.appendChild(noBtn);
   qRow.appendChild(btnRow);
   qList.appendChild(qRow);
@@ -2039,7 +2039,7 @@ function renderPARQ(p) {
 
  if (!_allAnswered) {
   // Pas encore toutes les réponses : bouton grisé
-  var continueBtn = h('button', {'class': 'btn-primary', style: 'opacity:0.5;cursor:not-allowed'}, 'Répondre à toutes les questions');
+  var continueBtn = h('button', {'class': 'btn-primary', style: 'opacity:0.5;cursor:not-allowed'}, (window.isEnglish && window.isEnglish() ? 'Answer all questions' : 'Répondre à toutes les questions'));
   p.appendChild(continueBtn);
   return;
  }
@@ -2055,14 +2055,14 @@ function renderPARQ(p) {
    S.sStep = nextStep;
    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
    window.render();
-  }}, 'Continuer →');
+  }}, (window.isEnglish && window.isEnglish() ? 'Continue →' : 'Continuer →'));
   p.appendChild(okBtn);
-  p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey);text-align:center;margin-top:12px'}, 'Toutes vos réponses sont "Non" — vous pouvez démarrer en toute sécurité.'));
+  p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey);text-align:center;margin-top:12px'}, (window.isEnglish && window.isEnglish() ? 'All your answers are "No" — you can start safely.' : 'Toutes vos réponses sont "Non" — vous pouvez démarrer en toute sécurité.')));
  } else {
   // Au moins une réponse OUI → avertissement médical
   var warnDiv = h('div', {style: 'border-left:3px solid var(--error,#7A1F1F);background:rgba(122,31,31,0.06);padding:14px 16px;margin-bottom:20px;border-radius:0'});
-  warnDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:700;color:var(--error,#7A1F1F);margin-bottom:8px;letter-spacing:0.5px'}, '\u26A0 Consultez votre médecin avant de démarrer ce programme.'));
-  warnDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--error,#7A1F1F);line-height:1.6'}, 'Montrez-lui ce questionnaire et obtenez son accord écrit. Une ou plusieurs de vos réponses indiquent qu\'une évaluation médicale préalable est recommandée (ACSM 2018).'));
+  warnDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:700;color:var(--error,#7A1F1F);margin-bottom:8px;letter-spacing:0.5px'}, (window.isEnglish && window.isEnglish() ? '\u26A0 Consult your doctor before starting this program.' : '\u26A0 Consultez votre médecin avant de démarrer ce programme.')));
+  warnDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--error,#7A1F1F);line-height:1.6'}, (window.isEnglish && window.isEnglish() ? 'Show them this questionnaire and get their written approval. One or more of your answers indicate that a prior medical evaluation is recommended (ACSM 2018).' : 'Montrez-lui ce questionnaire et obtenez son accord écrit. Une ou plusieurs de vos réponses indiquent qu\'une évaluation médicale préalable est recommandée (ACSM 2018).')));
   p.appendChild(warnDiv);
 
   var docBtn = h('button', {'class': 'btn-primary', onclick: function() {
@@ -2075,7 +2075,7 @@ function renderPARQ(p) {
    S.sStep = nextStep;
    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
    window.render();
-  }}, 'J\'ai consulté mon médecin et j\'ai son accord');
+  }}, (window.isEnglish && window.isEnglish() ? 'I have consulted my doctor and have their approval' : 'J\'ai consulté mon médecin et j\'ai son accord'));
   p.appendChild(docBtn);
 
   var overrideBtn = h('button', {
@@ -2091,7 +2091,7 @@ function renderPARQ(p) {
     if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
     window.render();
    }
-  }, 'Je comprends les risques et je continue');
+  }, (window.isEnglish && window.isEnglish() ? 'I understand the risks and continue' : 'Je comprends les risques et je continue'));
   p.appendChild(overrideBtn);
  }
 }
@@ -2105,26 +2105,26 @@ function renderMuscuMedicalQ(p) {
  var hdr = h('div', {style: 'display:flex;align-items:center;gap:12px;margin-bottom:20px'});
  // FIX BUG 2026-04-26 : back depuis éval. médicale muscu ne doit pas effacer sportType.
  // L'user retourne à la sélection du sport (sStep 0) avec son choix "Musculation" conservé.
- hdr.appendChild(h('button', {'class': 'btn-back', style: 'margin:0', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
- hdr.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--grey)'}, 'Évaluation médicale'));
+ hdr.appendChild(h('button', {'class': 'btn-back', style: 'margin:0', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
+ hdr.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? 'Medical evaluation' : 'Évaluation médicale'));
  p.appendChild(hdr);
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
- p.appendChild(h('h1', {html: 'Bilan<br><em>médical muscu</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Avant de g\u00e9n\u00e9rer votre programme, aidez-nous \u00e0 adapter les exercices \u00e0 votre situation physique.'));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Medical<br><em>assessment muscu</em>' : 'Bilan<br><em>médical muscu</em>')}));
+ p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Before generating your program, help us adapt exercises to your physical situation.' : 'Avant de g\u00e9n\u00e9rer votre programme, aidez-nous \u00e0 adapter les exercices \u00e0 votre situation physique.')));
 
  // FIX 2026-04-19 — Alerte HTA sévère (ESC/ESH 2018) : Valsalva et charges >80% 1RM contre-indiqués
  if (Array.isArray(S.medical) && S.medical.indexOf('hta_severe') !== -1) {
    var _htaAlert = h('div', {style: 'background:rgba(220,53,69,0.07);border:1px solid rgba(220,53,69,0.3);padding:12px 14px;margin-bottom:16px;border-radius:2px;'});
-   _htaAlert.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:700;color:#8B0000;letter-spacing:1px;margin-bottom:4px;'}, '\u26a0 HTA sévère détectée'));
-   _htaAlert.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#8B0000;line-height:1.6;'}, 'Charges limitées à 40–60% du 1RM. Éviter la manœuvre de Valsalva (apnée sous charge), les mouvements isométriques intenses et les exercices au-dessus de la tête à charge élevée. Consultez votre médecin avant de commencer. — ESC/ESH 2018'));
+   _htaAlert.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:700;color:#8B0000;letter-spacing:1px;margin-bottom:4px;'}, (window.isEnglish && window.isEnglish() ? '\u26a0 Severe hypertension detected' : '\u26a0 HTA sévère détectée')));
+   _htaAlert.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#8B0000;line-height:1.6;'}, (window.isEnglish && window.isEnglish() ? 'Loads limited to 40–60% of 1RM. Avoid Valsalva maneuver (breath-holding under load), intense isometric movements and overhead exercises with heavy loads. Consult your doctor before starting. — ESC/ESH 2018' : 'Charges limitées à 40–60% du 1RM. Éviter la manœuvre de Valsalva (apnée sous charge), les mouvements isométriques intenses et les exercices au-dessus de la tête à charge élevée. Consultez votre médecin avant de commencer. — ESC/ESH 2018')));
    p.appendChild(_htaAlert);
  }
 
  // Phrase de contexte si bilan nutrition déjà fait — évite le sentiment de répétition
  if (Array.isArray(window.S && window.S.medical)) {
    var _contextNote = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);background:var(--ivory2,#F5F3EC);border-left:2px solid var(--border);padding:10px 12px;margin-bottom:16px;line-height:1.6;'});
-   _contextNote.textContent = 'Ces questions compl\u00e8tent votre profil nutrition. Elles portent sp\u00e9cifiquement sur vos articulations et ant\u00e9c\u00e9dents orthop\u00e9diques — diff\u00e9rentes de vos conditions m\u00e9dicales g\u00e9n\u00e9rales.';
+   _contextNote.textContent = (window.isEnglish && window.isEnglish() ? 'These questions complement your nutrition profile. They specifically address your joints and orthopedic history — different from your general medical conditions.' : 'Ces questions compl\u00e8tent votre profil nutrition. Elles portent sp\u00e9cifiquement sur vos articulations et ant\u00e9c\u00e9dents orthop\u00e9diques — diff\u00e9rentes de vos conditions m\u00e9dicales g\u00e9n\u00e9rales.');
    p.appendChild(_contextNote);
  }
 
@@ -2136,15 +2136,15 @@ function renderMuscuMedicalQ(p) {
   var _anyPain = _painZones.some(function(z) { return !!S.muscuMedical[z]; });
   var _anyDiag = _diagKeys.some(function(z) { return !!S.muscuMedical[z]; });
   var _summaryCard = h('div', {style: 'border:1px solid var(--border);padding:16px;background:var(--ivory2,#F5F3EC);margin-bottom:20px;'});
-  _summaryCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px;'}, 'Profil médical enregistré'));
+  _summaryCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px;'}, (window.isEnglish && window.isEnglish() ? 'Medical profile saved' : 'Profil médical enregistré')));
   var _summaryText = _anyPain || _anyDiag
-    ? 'Des zones sensibles ont été notées — le programme les prend en compte.'
-    : 'Aucune contrainte physique signalée. Programme standard.';
+    ? (window.isEnglish && window.isEnglish() ? 'Sensitive areas have been noted — the program accounts for them.' : 'Des zones sensibles ont été notées — le programme les prend en compte.')
+    : (window.isEnglish && window.isEnglish() ? 'No physical constraints reported. Standard program.' : 'Aucune contrainte physique signalée. Programme standard.');
   _summaryCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--black);margin-bottom:12px;line-height:1.5;'}, _summaryText));
   var _editBtn = h('button', {
     style: 'padding:8px 14px;border:1px solid var(--border);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;color:var(--grey);',
     onclick: function() { S._muscuMedicalEdit = true; window.render(); }
-  }, 'Modifier');
+  }, (window.isEnglish && window.isEnglish() ? 'Edit' : 'Modifier'));
   _summaryCard.appendChild(_editBtn);
   p.appendChild(_summaryCard);
 
@@ -2154,23 +2154,23 @@ function renderMuscuMedicalQ(p) {
     else { S.sStep = !S.sportLevel ? 1 : 16; }
     if (window.saveProfile) window.saveProfile();
     window.render();
-  }}, 'Continuer'));
+  }}, (window.isEnglish && window.isEnglish() ? 'Continue' : 'Continuer')));
   return;
  }
 
  // For beginners: show a simple YES/NO filter first
  if ((S.sportLevel === 'beginner' || !S.sportLevel) && !S._muscuMedicalExpanded) {
   var filterCard = h('div', {style: 'margin-bottom:20px'});
-  filterCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--black,#1A1A18);margin-bottom:16px;line-height:1.5'}, 'Avez-vous une douleur chronique, une blessure récente ou un diagnostic médical ?'));
+  filterCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--black,#1A1A18);margin-bottom:16px;line-height:1.5'}, (window.isEnglish && window.isEnglish() ? 'Do you have chronic pain, a recent injury or a medical diagnosis?' : 'Avez-vous une douleur chronique, une blessure récente ou un diagnostic médical ?')));
   var filterBtns = h('div', {style: 'display:flex;gap:12px'});
   filterBtns.appendChild(h('button', {
    style: 'flex:1;padding:14px;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#1A1A18);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;cursor:pointer',
    onclick: function() { S._muscuMedicalExpanded = true; window.render(); }
-  }, 'Oui, j\'ai quelque chose à signaler'));
+  }, (window.isEnglish && window.isEnglish() ? 'Yes, I have something to report' : 'Oui, j\'ai quelque chose à signaler')));
   filterBtns.appendChild(h('button', {
    style: 'flex:1;padding:14px;background:transparent;color:var(--black,#1A1A18);border:1px solid var(--border,#E8E6DF);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;cursor:pointer',
    onclick: function() { S.muscuMedical = { done: true }; S.sStep = !S.sportLevel ? 1 : 16; if (window.saveProfile) window.saveProfile(); window.render(); }
-  }, 'Non, je suis en bonne santé'));
+  }, (window.isEnglish && window.isEnglish() ? 'No, I am in good health' : 'Non, je suis en bonne santé')));
   filterCard.appendChild(filterBtns);
   p.appendChild(filterCard);
   return; // Don't show the full medical form
@@ -2178,19 +2178,19 @@ function renderMuscuMedicalQ(p) {
  // S._muscuMedicalExpanded = true → show full form (existing code runs normally)
 
  // ─── Section 1 : Zones douloureuses ───
- p.appendChild(h('div', {'class': 'section-label'}, 'Avez-vous des douleurs ou fragilités ?'));
+ p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Do you have pain or vulnerabilities?' : 'Avez-vous des douleurs ou fragilités ?')));
 
  var zonesData = [
- {key: 'shoulders', label: 'Épaules', icon: ''},
- {key: 'elbows', label: 'Coudes', icon: ''},
- {key: 'wrists', label: 'Poignets', icon: ''},
- {key: 'neck', label: 'Nuque/Cervicales', icon: ''},
- {key: 'upperBack', label: 'Haut du dos', icon: ''},
- {key: 'lowerBack', label: 'Bas du dos', icon: ''},
- {key: 'hips', label: 'Hanches', icon: ''},
- {key: 'knees', label: 'Genoux', icon: ''},
- {key: 'ankles', label: 'Chevilles', icon: ''},
- {key: 'feet', label: 'Pieds (fasciite)', icon: ''}
+ {key: 'shoulders', label: (window.isEnglish && window.isEnglish() ? 'Shoulders' : 'Épaules'), icon: ''},
+ {key: 'elbows', label: (window.isEnglish && window.isEnglish() ? 'Elbows' : 'Coudes'), icon: ''},
+ {key: 'wrists', label: (window.isEnglish && window.isEnglish() ? 'Wrists' : 'Poignets'), icon: ''},
+ {key: 'neck', label: (window.isEnglish && window.isEnglish() ? 'Neck/Cervical' : 'Nuque/Cervicales'), icon: ''},
+ {key: 'upperBack', label: (window.isEnglish && window.isEnglish() ? 'Upper back' : 'Haut du dos'), icon: ''},
+ {key: 'lowerBack', label: (window.isEnglish && window.isEnglish() ? 'Lower back' : 'Bas du dos'), icon: ''},
+ {key: 'hips', label: (window.isEnglish && window.isEnglish() ? 'Hips' : 'Hanches'), icon: ''},
+ {key: 'knees', label: (window.isEnglish && window.isEnglish() ? 'Knees' : 'Genoux'), icon: ''},
+ {key: 'ankles', label: (window.isEnglish && window.isEnglish() ? 'Ankles' : 'Chevilles'), icon: ''},
+ {key: 'feet', label: (window.isEnglish && window.isEnglish() ? 'Feet (fasciitis)' : 'Pieds (fasciite)'), icon: ''}
  ];
 
  var zonesGrid = h('div', {style: 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px'});
@@ -2205,21 +2205,21 @@ function renderMuscuMedicalQ(p) {
  p.appendChild(zonesGrid);
 
  // ─── Section 2 : Antécédents diagnostiqués ───
- p.appendChild(h('div', {'class': 'section-label'}, 'Avez-vous un diagnostic confirmé ?'));
+ p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Do you have a confirmed diagnosis?' : 'Avez-vous un diagnostic confirmé ?')));
 
  var antecedentsData = [
- {key: 'herniaDisc', label: 'Hernie discale (IRM)'},
- {key: 'herniaInguinal', label: 'Hernie inguinale'},
- {key: 'rotatorCuff', label: 'Déchirure coiffe des rotateurs'},
- {key: 'acl', label: 'LCA opéré/fragilisé'},
- {key: 'osteoporosis', label: 'Ostéoporose'},
- {key: 'hypertension', label: 'HTA sévère (≥180/110)'},
- {key: 'rheumatoidArthritis', label: 'Polyarthrite rhumatoïde (PR)'},
- {key: 'fibromyalgia', label: 'Fibromyalgie'},
- {key: 'meniscus', label: 'Ménisque lésé/opéré'},
- {key: 'spondylarthritis', label: 'Spondylarthrite ankylosante'},
- {key: 'kneeOsteoarthritis', label: 'Gonarthrose (arthrose du genou)'},
- {key: 'epicondylitis', label: 'Épicondylite latérale (tennis elbow)'}
+ {key: 'herniaDisc', label: (window.isEnglish && window.isEnglish() ? 'Disc herniation (MRI)' : 'Hernie discale (IRM)')},
+ {key: 'herniaInguinal', label: (window.isEnglish && window.isEnglish() ? 'Inguinal hernia' : 'Hernie inguinale')},
+ {key: 'rotatorCuff', label: (window.isEnglish && window.isEnglish() ? 'Rotator cuff tear' : 'Déchirure coiffe des rotateurs')},
+ {key: 'acl', label: (window.isEnglish && window.isEnglish() ? 'ACL repaired/weakened' : 'LCA opéré/fragilisé')},
+ {key: 'osteoporosis', label: (window.isEnglish && window.isEnglish() ? 'Osteoporosis' : 'Ostéoporose')},
+ {key: 'hypertension', label: (window.isEnglish && window.isEnglish() ? 'Severe hypertension (≥180/110)' : 'HTA sévère (≥180/110)')},
+ {key: 'rheumatoidArthritis', label: (window.isEnglish && window.isEnglish() ? 'Rheumatoid arthritis (RA)' : 'Polyarthrite rhumatoïde (PR)')},
+ {key: 'fibromyalgia', label: (window.isEnglish && window.isEnglish() ? 'Fibromyalgia' : 'Fibromyalgie')},
+ {key: 'meniscus', label: (window.isEnglish && window.isEnglish() ? 'Meniscus damaged/repaired' : 'Ménisque lésé/opéré')},
+ {key: 'spondylarthritis', label: (window.isEnglish && window.isEnglish() ? 'Ankylosing spondylitis' : 'Spondylarthrite ankylosante')},
+ {key: 'kneeOsteoarthritis', label: (window.isEnglish && window.isEnglish() ? 'Knee osteoarthritis' : 'Gonarthrose (arthrose du genou)')},
+ {key: 'epicondylitis', label: (window.isEnglish && window.isEnglish() ? 'Lateral epicondylitis (tennis elbow)' : 'Épicondylite latérale (tennis elbow)')}
  ];
 
  var antGrid = h('div', {style: 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px'});
@@ -2236,12 +2236,12 @@ function renderMuscuMedicalQ(p) {
  // ─── Section 3 : Niveau de douleur général (si au moins une zone cochée) ───
  var hasAnyZone = zonesData.some(function(z){ return med[z.key]; });
  if (hasAnyZone) {
- p.appendChild(h('div', {'class': 'section-label'}, 'Quelle est l\'intensité générale ?'));
+ p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'What is the general intensity?' : 'Quelle est l\'intensité générale ?')));
  var painLevels = [
- {val: 0, label: 'Aucune'},
- {val: 1, label: 'Légère'},
- {val: 2, label: 'Modérée'},
- {val: 3, label: 'Sévère'}
+ {val: 0, label: (window.isEnglish && window.isEnglish() ? 'None' : 'Aucune')},
+ {val: 1, label: (window.isEnglish && window.isEnglish() ? 'Mild' : 'Légère')},
+ {val: 2, label: (window.isEnglish && window.isEnglish() ? 'Moderate' : 'Modérée')},
+ {val: 3, label: (window.isEnglish && window.isEnglish() ? 'Severe' : 'Sévère')}
  ];
  var painRow = h('div', {style: 'display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px'});
  painLevels.forEach(function(pl) {
@@ -2256,9 +2256,9 @@ function renderMuscuMedicalQ(p) {
  }
 
  // ─── Section 4 : Notes libres ───
- p.appendChild(h('div', {'class': 'section-label'}, 'Notes (optionnel)'));
+ p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Notes (optional)' : 'Notes (optionnel)')));
  var textarea = h('textarea', {
- placeholder: 'Précisez si besoin (ex: opération genou 2022, hernie L4-L5...)',
+ placeholder: (window.isEnglish && window.isEnglish() ? 'Specify if needed (e.g., knee surgery 2022, herniation L4-L5...)' : 'Précisez si besoin (ex: opération genou 2022, hernie L4-L5...)'),
  style: 'width:100%;min-height:72px;padding:10px;border:1px solid var(--border);background:var(--ivory);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;resize:vertical;box-sizing:border-box;margin-bottom:16px',
  oninput: function(e){ S.muscuMedical.notes = e.target.value; }
  });
@@ -2269,8 +2269,8 @@ function renderMuscuMedicalQ(p) {
  var hasSevere = med.painLevel === 3 || med.herniaDisc || med.rotatorCuff || med.acl || med.fibromyalgia || med.meniscus || med.osteoporosis || med.hypertension || med.spondylarthritis || med.rheumatoidArthritis;
  if (hasSevere) {
  var warn = h('div', {style: 'background:rgba(122,31,31,0.06);border:1px solid var(--error,#7A1F1F);padding:12px 14px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--error,#7A1F1F);line-height:1.6'});
- warn.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px'}, 'Attention — Antécédent grave détecté'));
- warn.appendChild(h('span', {}, 'Programme adapté en mode réhabilitation. Consultez un médecin ou kinésithérapeute avant de reprendre la musculation lourde.'));
+ warn.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Caution — Serious condition detected' : 'Attention — Antécédent grave détecté')));
+ warn.appendChild(h('span', {}, (window.isEnglish && window.isEnglish() ? 'Program adapted in rehabilitation mode. Consult a doctor or physiotherapist before resuming heavy lifting.' : 'Programme adapté en mode réhabilitation. Consultez un médecin ou kinésithérapeute avant de reprendre la musculation lourde.')));
  p.appendChild(warn);
  }
 
@@ -2284,7 +2284,7 @@ function renderMuscuMedicalQ(p) {
  if (S._medicalReturnToDashboard) { S._medicalReturnToDashboard = false; S.sStep = 4; }
  else { S.sStep = !S.sportLevel ? 1 : 16; }
  window.render();
- }}, 'Continuer \u2192'));
+ }}, (window.isEnglish && window.isEnglish() ? 'Continue \u2192' : 'Continuer \u2192')));
 
  // ─── Bouton Passer ───
  var skipLink = h('button', {
@@ -2298,7 +2298,7 @@ function renderMuscuMedicalQ(p) {
  else { S.sStep = !S.sportLevel ? 1 : 16; }
  window.render();
  }
- }, 'Passer (aucune douleur)');
+ }, (window.isEnglish && window.isEnglish() ? 'Skip (no pain)' : 'Passer (aucune douleur)'));
  p.appendChild(skipLink);
 }
 
@@ -2538,7 +2538,7 @@ function renderChargesQuestionnaire(p) {
  p.appendChild(_chargesFooter);
 
  p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){ var _nxt = S._chargesFromLevel ? 3 : (S._chargesReturnToDashboard ? 4 : 15); S._chargesFromLevel = false; S._chargesReturnToDashboard = false; S.sStep = _nxt; if (window.saveProfile) window.saveProfile(); window.render(); }}, 'Continuer'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ var _bk = S._chargesFromLevel ? 2 : 15; S._chargesFromLevel = false; S.sStep = _bk; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ var _bk = S._chargesFromLevel ? 2 : 15; S._chargesFromLevel = false; S.sStep = _bk; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
 }
 
 /// ─── HELPER: CTA "Voir mon plan nutrition" (mode both uniquement) ───
@@ -2764,7 +2764,7 @@ function renderDedicatedPrograms(p) {
  });
 
  p.appendChild(h('div', {style: 'height:16px'}));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 4; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 4; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
 
  appendNutritionModeCTA(p);
 }
@@ -2874,7 +2874,7 @@ function renderMusculationGoals(p) {
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) { S.sStep = 2; window.render(); }
  }}, 'Continuer'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 15; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 15; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
 }
 
 // ─── STEP 5 (CrossFit): NIVEAU CF ───
@@ -3156,7 +3156,7 @@ function renderCrossfitLevel(p) {
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) { S.crossfitWeek = 1; S.selectedCrossfitDay = 0; S.sStep = 6; window.BLACKBOX && window.BLACKBOX.log('crossfit_level', {level: S.crossfitLevel, days: S.sportDays, compGoal: S.crossfitCompGoal}); window.render(); }
  }}, 'Continuer'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
 }
 
 // ─── CROSSFIT HELPERS ───
@@ -4171,7 +4171,7 @@ function renderCrossfitProgram(p) {
  h('div', {style: 'font-family:Georgia,serif;font-size:13px;margin-bottom:4px'}, 'Base de WODs en cours de chargement...'),
  h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'}, 'Rechargez la page pour afficher le programme.')
  ]));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 5; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 5; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
  return;
  }
 
@@ -5229,7 +5229,7 @@ function renderMusculationLevel(p) {
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) { S._chargesFromLevel = true; S.sStep = 16; window.BLACKBOX && window.BLACKBOX.log('sport_step', {step: 16}); window.render(); }
  }}, 'Continuer'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 1; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 1; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
 }
 
 // ─── STEP 3 (Muscu): ZONES CIBLES ───
@@ -5360,7 +5360,7 @@ function renderMusculationZones(p) {
  window.render();
  }
  }}, 'Concevoir mon programme'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S._chargesFromLevel = true; S.sStep = 16; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S._chargesFromLevel = true; S.sStep = 16; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
 }
 
 // ─── MACROCYCLES (3-6 mois) ───
@@ -9973,7 +9973,7 @@ function renderRunningConfig(p) {
  S.sportDays = S.runningDays || 3;
  renderSportMixSection(p, 'running');
  S.sportDays = _prevSportDays;
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
 }
 
 // ─── STEP 8: RUNNING PROGRAM ───
@@ -9986,7 +9986,7 @@ function renderRunningProgram(p) {
  var program = S.runningProgram;
  if (!program || !program.length) {
  p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey)'}, 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 7; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 7; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
  return;
  }
  var totalWeeks = program.length;
@@ -10324,7 +10324,7 @@ function renderHyroxConfig(p) {
  window.render();
  }
  }}, 'Générer mon plan'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
 }
 
 // ─── STEP 10: HYROX PROGRAM ───
@@ -10338,7 +10338,7 @@ function renderHyroxProgram(p) {
  var program = S.hyroxProgram;
  if (!program || !program.length) {
  p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey)'}, 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 9; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 9; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
  return;
  }
  var totalWeeks = program.length;
@@ -10573,14 +10573,14 @@ function renderPadelConfig(p) {
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) { if (typeof window.generatePadelProgram !== 'function') { console.error('[padel] generatePadelProgram module not loaded'); return; } S.padelProgram = window.generatePadelProgram(S.padelDays, S.padelLevel, S.padelGoal); S.padelWeek = 1; S.selectedPadelDay = 0; S.sStep = 12; window.render(); }
  }}, 'Concevoir mon programme'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
 }
 
 function renderPadelProgram(p) {
  if (!S.padelProgram) { if (typeof window.generatePadelProgram !== 'function') { p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-size:13px;color:var(--grey)'}, 'Module Padel non disponible. Rechargez la page.')); return; } S.padelProgram = window.generatePadelProgram(S.padelDays, S.padelLevel, S.padelGoal); }
  if (!S.padelProgram || !S.padelProgram.length) {
  p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey)'}, 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 11; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 11; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
  return;
  }
  if (!S.padelWeek || S.padelWeek < 1) S.padelWeek = 1;
@@ -10708,14 +10708,14 @@ function renderGolfConfig(p) {
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) { if (typeof window.generateGolfProgram !== 'function') { console.error('[golf] generateGolfProgram module not loaded'); return; } S.golfProgram = window.generateGolfProgram(S.golfDays, S.golfLevel, S.golfGoal); S.golfWeek = 1; S.selectedGolfDay = 0; S.sStep = 14; window.render(); }
  }}, 'Concevoir mon programme'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
 }
 
 function renderGolfProgram(p) {
  if (!S.golfProgram) { if (typeof window.generateGolfProgram !== 'function') { p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-size:13px;color:var(--grey)'}, 'Module Golf non disponible. Rechargez la page.')); return; } S.golfProgram = window.generateGolfProgram(S.golfDays, S.golfLevel, S.golfGoal); }
  if (!S.golfProgram || !S.golfProgram.length) {
  p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey)'}, 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 13; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 13; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
  return;
  }
  if (!S.golfWeek || S.golfWeek < 1) S.golfWeek = 1;
@@ -11264,7 +11264,7 @@ function renderYogaOnboarding(p) {
  window.render();
  }
  }}, 'G\u00e9n\u00e9rer mon programme'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
 }
 
 // ─── STEP 21: YOGA PROGRAM ───
@@ -11937,7 +11937,7 @@ function renderCalisthenicsOnboarding(p) {
    window.render();
   }
  }}, 'Generer mon programme'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
 }
 
 
