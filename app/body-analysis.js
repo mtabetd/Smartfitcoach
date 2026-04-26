@@ -463,6 +463,7 @@ function buildPanel() {
     var fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'image/*';
+    fileInput.capture = 'environment';
     fileInput.className = 'ba-file-input';
     fileInput.id = 'ba-input-' + side;
 
@@ -609,6 +610,7 @@ function resetAnalysis() {
     var fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'image/*';
+    fileInput.capture = 'environment';
     fileInput.className = 'ba-file-input';
     fileInput.id = 'ba-input-' + side;
     zone.appendChild(label);

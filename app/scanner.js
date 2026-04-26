@@ -72,12 +72,41 @@ style.textContent = `
 document.head.appendChild(style);
 
 // ─── BARCODE DETECTION ───
-// Use BarcodeDetector API (Chrome/Edge) with fallback to manual input
+// Priority: BarcodeDetector (Chrome desktop) → ZXing.js (Android WebView + tous navigateurs) → saisie manuelle
 var barcodeDetector = null;
 if ('BarcodeDetector' in window) {
   try {
     barcodeDetector = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128'] });
-  } catch(e) { /* fallback to manual */ }
+  } catch(e) { /* fallback */ }
+}
+if (!barcodeDetector && window.ZXing) {
+  try {
+    var _zxingHints = new Map();
+    _zxingHints.set(window.ZXing.DecodeHintType.POSSIBLE_FORMATS, [
+      window.ZXing.BarcodeFormat.EAN_13, window.ZXing.BarcodeFormat.EAN_8,
+      window.ZXing.BarcodeFormat.UPC_A, window.ZXing.BarcodeFormat.UPC_E,
+      window.ZXing.BarcodeFormat.CODE_128, window.ZXing.BarcodeFormat.QR_CODE
+    ]);
+    var _zxingMFR = new window.ZXing.MultiFormatReader();
+    _zxingMFR.setHints(_zxingHints);
+    barcodeDetector = {
+      _isZXing: true,
+      detect: function(source) {
+        return new Promise(function(resolve) {
+          try {
+            var w = source.videoWidth || source.width || 640;
+            var h = source.videoHeight || source.height || 480;
+            var cv = document.createElement('canvas');
+            cv.width = w; cv.height = h;
+            cv.getContext('2d').drawImage(source, 0, 0, w, h);
+            var lum = new window.ZXing.HTMLCanvasElementLuminanceSource(cv);
+            var bmp = new window.ZXing.BinaryBitmap(new window.ZXing.HybridBinarizer(lum));
+            resolve([{ rawValue: _zxingMFR.decode(bmp).getText() }]);
+          } catch(e) { resolve([]); }
+        });
+      }
+    };
+  } catch(e) { barcodeDetector = null; }
 }
 
 // ─── SECURITY: API URL validation ───
@@ -385,7 +414,10 @@ function startCamera(videoElement, onDetected, onError) {
   function buildErrMsg(err) {
     if (!err) return 'Impossible d\'accéder à la caméra.';
     if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-      return 'Accès caméra bloqué. Dans Chrome : icône cadenas dans la barre d\'adresse → Caméra → Autoriser, puis rechargez la page.';
+      var _isApk = typeof window !== 'undefined' && window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform();
+      return _isApk
+        ? 'Accès caméra refusé. Allez dans Paramètres → Applications → SmartFitCoach → Autorisations → Caméra → Activer, puis relancez l\'app.'
+        : 'Accès caméra bloqué. Dans Chrome : icône cadenas dans la barre d\'adresse → Caméra → Autoriser, puis rechargez la page.';
     }
     if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') return 'Aucune caméra détectée sur cet appareil.';
     if (err.name === 'NotReadableError' || err.name === 'TrackStartError') return 'La caméra est utilisée par une autre application. Fermez-la puis réessayez.';
