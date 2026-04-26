@@ -5311,7 +5311,7 @@ if(s.sportType&&totalMacroKcal>0){
 // Bonus favori : 1⭐=-200, 2⭐=-400, 3⭐=-600 — domine calScore/macroScore/diversity
 var favStars=(r._id&&_favMap[r._id])?Math.max(1,Math.min(3,_favMap[r._id]|0)):0;
 var favBonus=favStars?-(favStars*200):0;
-return{recipe:r,score:calScore+macroScore+diversityPenalty+sportTypeBonus+favBonus};};scored.sort(function(a,b){return a.score-b.score});var top=scored.slice(0,Math.min(5,scored.length));var picked=top[Math.floor(Math.random()*top.length)].recipe;if(picked){used.add(picked.n);var pc=getRecipeProtein(picked);if(pc){if(dayProteins)dayProteins.push(pc);if(weekProtBudget)weekProtBudget[pc]=(weekProtBudget[pc]||0)+1;}}return picked||{n:'Repas libre',k:targetK,p:Math.round(targetK*0.3/4),g:Math.round(targetK*0.4/4),l:Math.round(targetK*0.3/9),f:0,lv:1,i:'',st:[],w:0,tags:[]}}
+return{recipe:r,score:calScore+macroScore+diversityPenalty+sportTypeBonus+favBonus};});scored.sort(function(a,b){return a.score-b.score});var top=scored.slice(0,Math.min(5,scored.length));var picked=top[Math.floor(Math.random()*top.length)].recipe;if(picked){used.add(picked.n);var pc=getRecipeProtein(picked);if(pc){if(dayProteins)dayProteins.push(pc);if(weekProtBudget)weekProtBudget[pc]=(weekProtBudget[pc]||0)+1;}}return picked||{n:'Repas libre',k:targetK,p:Math.round(targetK*0.3/4),g:Math.round(targetK*0.4/4),l:Math.round(targetK*0.3/9),f:0,lv:1,i:'',st:[],w:0,tags:[]}}
 // Applique le scaling sur mesure pour les recettes R201+ (format riche) et L0XX-L3XX (format legacy)
 function enrichWithScaling(recipe, targetKcal) {
   if (!recipe) return recipe;
