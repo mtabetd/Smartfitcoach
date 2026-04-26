@@ -10,7 +10,75 @@
 'use strict';
 
 // ─── QUOTES LOCALES (sport/motivation) ───
-var TODAY_QUOTES = [
+var _isEN = window.isEnglish && window.isEnglish();
+var TODAY_QUOTES = _isEN ? [
+  { text: "Consistency is the key to all transformation.", author: "" },
+  { text: "The body knows things the mind refuses to admit.", author: "Paul Valéry" },
+  { text: "Discipline is remembering what you really want.", author: "David Campbell" },
+  { text: "Strength does not come from physical capacity. It comes from an indomitable will.", author: "Gandhi" },
+  { text: "Success is the sum of small efforts repeated day after day.", author: "Robert Collier" },
+  { text: "Don't quit. Suffer now and live the rest of your life as a champion.", author: "Muhammad Ali" },
+  { text: "Your body can withstand almost anything. It's your mind you have to convince.", author: "" },
+  { text: "Fatigue is temporary. The pride of effort lasts forever.", author: "" },
+  { text: "It is not the mountain we conquer, but ourselves.", author: "Edmund Hillary" },
+  { text: "Movement is life. Life is movement.", author: "Moshe Feldenkrais" },
+  { text: "The pain you feel today will be the strength you feel tomorrow.", author: "" },
+  { text: "A champion is someone who gets up when they can't.", author: "Jack Dempsey" },
+  { text: "Nobody remembers the training. Everybody remembers the result.", author: "" },
+  { text: "There are no shortcuts to any place worth going.", author: "Beverly Sills" },
+  { text: "The only bad workout is the one that didn't happen.", author: "" },
+  { text: "Take care of your body. It's the only place you have to live.", author: "Jim Rohn" },
+  { text: "Health is real wealth, not pieces of gold and silver.", author: "Gandhi" },
+  { text: "Eat to fuel your ambition, not to quiet your emotions.", author: "" },
+  { text: "Your body hears everything your mind says.", author: "" },
+  { text: "Consistency beats intensity over the long term.", author: "" },
+  { text: "Every session is a conversation with your future self.", author: "" },
+  { text: "Great things are never done by impulse, but by a series of small things brought together.", author: "Vincent van Gogh" },
+  { text: "The body adapts to what you demand of it. Demand greatness.", author: "" },
+  { text: "Will can do almost anything.", author: "Honoré de Balzac" },
+  { text: "The moment you want to stop is exactly the moment you need to keep going.", author: "" },
+  { text: "What doesn't kill you makes you stronger.", author: "Friedrich Nietzsche" },
+  { text: "Work hard in silence. Let success make the noise.", author: "" },
+  { text: "Muscles don't grow during training. They grow during recovery.", author: "" },
+  { text: "Rest is part of training.", author: "" },
+  { text: "Nutrition is 80% of the work. Training is 20%.", author: "" },
+  { text: "What you eat in private, you wear in public.", author: "" },
+  { text: "Don't count the days. Make the days count.", author: "Muhammad Ali" },
+  { text: "Suffering is temporary. Quitting lasts forever.", author: "Lance Armstrong" },
+  { text: "Performance is not an accident. It's the result of high commitment.", author: "" },
+  { text: "Train your mind as hard as you train your body.", author: "" },
+  { text: "Every rep counts. Every meal counts. Every night of sleep counts.", author: "" },
+  { text: "Consistency turns the ordinary into the extraordinary.", author: "" },
+  { text: "Your body is your most precious instrument. Tune it.", author: "" },
+  { text: "A good plan today is better than a perfect plan tomorrow.", author: "George Patton" },
+  { text: "You don't have to be extreme. Just consistent.", author: "" },
+  { text: "The standard doesn't exist.", author: "SmartFitCoach" },
+  { text: "Progress, not perfection.", author: "" },
+  { text: "You become what you do regularly.", author: "Aristotle" },
+  { text: "The best version of you comes from a thousand small decisions, not one single effort.", author: "" },
+  { text: "When you feel like quitting, remember why you started.", author: "" },
+  { text: "The true athlete is not the one who wins. It's the one who refuses to stop.", author: "" },
+  { text: "Excellence is not an isolated act. It's a habit.", author: "Aristotle" },
+  { text: "The difference between the impossible and the possible lies in determination.", author: "Tommy Lasorda" },
+  { text: "If it doesn't challenge you, it doesn't change you.", author: "" },
+  { text: "Your health is an investment, not an expense.", author: "" },
+  { text: "Don't aim to be the best. Aim to be better than yesterday.", author: "" },
+  { text: "Time spent taking care of yourself is never time wasted.", author: "" },
+  { text: "A body in motion stays in motion. Start.", author: "" },
+  { text: "Confidence comes from proof. Prove something to yourself every day.", author: "" },
+  { text: "Silent victories are the most beautiful.", author: "" },
+  { text: "Every hard session builds a stronger mind.", author: "" },
+  { text: "What you do today decides who you'll be tomorrow.", author: "" },
+  { text: "Sleep is performance. Recovery is a discipline.", author: "" },
+  { text: "Changing your body starts with changing your habits.", author: "" },
+  { text: "Nutrition is the invisible architecture of your performance.", author: "" },
+  { text: "The body always adapts. Don't give it time to get used to less.", author: "" },
+  { text: "Every morning is a new chance to become better.", author: "" },
+  { text: "Today's discipline is tomorrow's freedom.", author: "" },
+  { text: "Effort without direction is waste. Follow the plan.", author: "" },
+  { text: "Habits shape destiny, not intentions.", author: "" },
+  { text: "Make your ordinary days extraordinary.", author: "" }
+] : [
   { text: "La constance est la clé de toute transformation.", author: "" },
   { text: "Le corps sait des choses que l'esprit refuse d'admettre.", author: "Paul Valéry" },
   { text: "La discipline, c'est se souvenir de ce que l'on veut vraiment.", author: "David Campbell" },
@@ -786,9 +854,9 @@ function renderCardNextMeal() {
     if (!tomorrowMeal || !tomorrowMeal.n) return null;
 
     var c2 = card('background:var(--ivory,#FAF9F6);opacity:0.85;');
-    c2.appendChild(eyebrow('DEMAIN'));
+    c2.appendChild(eyebrow((window.isEnglish && window.isEnglish()) ? 'TOMORROW' : 'DEMAIN'));
     var t2Row = h('div', { style: 'display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px;' });
-    t2Row.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:18px;' }, 'Petit-déjeuner'));
+    t2Row.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:18px;' }, (window.isEnglish && window.isEnglish()) ? 'Breakfast' : 'Petit-déjeuner'));
     t2Row.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);' }, firstTime));
     c2.appendChild(t2Row);
     var n2 = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);' });
@@ -803,14 +871,15 @@ function renderCardNextMeal() {
 
   // Formater le temps restant
   var timeLabel;
+  var _tEN = window.isEnglish && window.isEnglish();
   if (minutesUntil <= 0) {
-    timeLabel = "maintenant";
+    timeLabel = _tEN ? "now" : "maintenant";
   } else if (minutesUntil < 60) {
-    timeLabel = "dans " + minutesUntil + "\u00a0min";
+    timeLabel = _tEN ? ("in " + minutesUntil + "\u00a0min") : ("dans " + minutesUntil + "\u00a0min");
   } else {
     var h2 = Math.floor(minutesUntil / 60);
     var m2 = minutesUntil % 60;
-    timeLabel = "dans " + h2 + "h" + (m2 > 0 ? String(m2).padStart(2, '0') : '');
+    timeLabel = _tEN ? ("in " + h2 + "h" + (m2 > 0 ? String(m2).padStart(2, '0') : '')) : ("dans " + h2 + "h" + (m2 > 0 ? String(m2).padStart(2, '0') : ''));
   }
 
   // COSMÉTIQUE 2026-04 : carte Prochain repas avec chip "dans Xh" premium
@@ -854,7 +923,7 @@ function renderCardNextMeal() {
       S2.view = 'nutrition'; S2.nStep = 12; S2.selectedDay = todayIdx;
       if (window.render) window.render();
     }
-  }, 'Voir le repas \u2192');
+  }, (window.isEnglish && window.isEnglish()) ? 'View meal \u2192' : 'Voir le repas \u2192');
   c.appendChild(btn);
 
   // Bouton scanner repas par IA
@@ -874,7 +943,7 @@ function renderCardNextMeal() {
     _scanSvg.setAttribute('stroke-linecap', 'round'); _scanSvg.setAttribute('stroke-linejoin', 'round');
     _scanSvg.innerHTML = '<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>';
     scanBtn.appendChild(_scanSvg);
-    scanBtn.appendChild(h('span', {}, 'Scanner mon repas'));
+    scanBtn.appendChild(h('span', {}, (window.isEnglish && window.isEnglish()) ? 'Scan my meal' : 'Scanner mon repas'));
     c.appendChild(scanBtn);
   }
 
@@ -904,12 +973,12 @@ function renderWelcomeBanner(S) {
   var greeting = h('div', {
     style: 'font-family:Georgia,serif;font-style:italic;font-size:15px;color:var(--grey);line-height:1.5;'
   });
-  greeting.textContent = 'Bon retour parmi nous' + (firstName ? ', ' + firstName : '') + ' \u2726';
+  greeting.textContent = ((window.isEnglish && window.isEnglish()) ? 'Welcome back' : 'Bon retour parmi nous') + (firstName ? ', ' + firstName : '') + ' \u2726';
 
   var sub = h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);letter-spacing:1px;margin-top:4px;opacity:0.75;'
   });
-  sub.textContent = dateStr + ' \u00B7 Votre programme vous attend';
+  sub.textContent = dateStr + ' \u00B7 ' + ((window.isEnglish && window.isEnglish()) ? 'Your program is waiting' : 'Votre programme vous attend');
 
   banner.appendChild(greeting);
   banner.appendChild(sub);
@@ -1280,22 +1349,23 @@ function renderCardBonjour(S) {
   var quoteText = typeof quote === 'string' ? quote : (quote && quote.text ? quote.text : '');
   var quoteAuthor = (quote && quote.author) ? quote.author : '';
 
-  var eyebrow_el = eyebrow('AUJOURD\'HUI');
+  var eyebrow_el = eyebrow((window.isEnglish && window.isEnglish()) ? 'TODAY' : 'AUJOURD\'HUI');
   c.appendChild(eyebrow_el);
 
   // Salutation selon l'heure de la journée
   var _hour = new Date().getHours();
-  var _greetWord = _hour >= 18 ? 'Bonsoir' : (_hour >= 12 ? 'Bon après-midi' : 'Bonjour');
+  var _greetWord = (window.isEnglish && window.isEnglish())
+    ? (_hour >= 18 ? 'Good evening' : (_hour >= 12 ? 'Good afternoon' : 'Good morning'))
+    : (_hour >= 18 ? 'Bonsoir' : (_hour >= 12 ? 'Bon après-midi' : 'Bonjour'));
   var title = h('div', { style: 'font-family:Georgia,serif;font-size:22px;font-weight:normal;margin-bottom:4px;' });
   title.textContent = _greetWord + (firstName ? ', ' + firstName : '') + '.';
   c.appendChild(title);
 
   // Date permanente sous le titre
   (function() {
-    var _days = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
-    var _months = ['janvier','f\u00e9vrier','mars','avril','mai','juin','juillet','ao\u00fbt','septembre','octobre','novembre','d\u00e9cembre'];
     var _now2 = new Date();
-    var _dateStr = _days[_now2.getDay()] + ' ' + _now2.getDate() + ' ' + _months[_now2.getMonth()];
+    var _localeCard = (window.isEnglish && window.isEnglish()) ? 'en-US' : 'fr-FR';
+    var _dateStr = _now2.toLocaleDateString(_localeCard, {weekday:'long', day:'numeric', month:'long'});
     var _dateEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);letter-spacing:0.5px;margin-bottom:12px;' });
     _dateEl.textContent = _dateStr;
     c.appendChild(_dateEl);
@@ -1375,7 +1445,7 @@ function renderCardHeroKcal() {
   var hero = h('div', {style: 'padding:24px 0 16px;margin-bottom:16px;text-align:center;border-bottom:1px solid var(--border,#D8D8D0);'});
 
   // Label top
-  hero.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:14px;'}, "Aujourd'hui"));
+  hero.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:14px;'}, (window.isEnglish && window.isEnglish()) ? 'Today' : "Aujourd'hui"));
 
   // Ring SVG XXL (120px)
   var ns = 'http://www.w3.org/2000/svg';
@@ -1438,31 +1508,31 @@ function renderCardHeroKcal() {
     } else {
       deltaText = kcalPct + '% · ' + kcalConsumed + '/' + Math.round(calorieTarget) + ' kcal';
     }
-    statusText = 'Objectif du jour atteint';
+    statusText = (window.isEnglish && window.isEnglish()) ? 'Daily goal reached' : 'Objectif du jour atteint';
   } else if (kcalPct < 70) {
     // Zone orange : sous-alimenté
     deltaColor = 'var(--orange,#E86F1E)';
     statusColor = 'var(--orange,#E86F1E)';
     deltaText = kcalPct + '% · ' + kcalConsumed + '/' + Math.round(calorieTarget) + ' kcal';
-    statusText = 'Pensez à ajouter une collation';
+    statusText = (window.isEnglish && window.isEnglish()) ? 'Consider adding a snack' : 'Pensez à ajouter une collation';
   } else if (kcalPct > 115) {
     // Zone rouge : dépassement
     deltaColor = 'var(--red,#C0392B)';
     statusColor = 'var(--red,#C0392B)';
     deltaText = kcalPct + '% · ' + kcalConsumed + '/' + Math.round(calorieTarget) + ' kcal';
-    statusText = 'Dépassement modéré';
+    statusText = (window.isEnglish && window.isEnglish()) ? 'Moderate overshoot' : 'Dépassement modéré';
   } else if (netRem > 0) {
     // Zone neutre : 70-84% (sous la cible mais pas critique)
     deltaColor = 'var(--grey,#6B6B65)';
     statusColor = 'var(--grey,#6B6B65)';
     deltaText = kcalPct + '% · ' + kcalConsumed + '/' + Math.round(calorieTarget) + ' kcal';
-    statusText = netRem + ' kcal restantes';
+    statusText = (window.isEnglish && window.isEnglish()) ? (netRem + ' kcal remaining') : (netRem + ' kcal restantes');
   } else {
     // Zone neutre : 106-115% (léger dépassement)
     deltaColor = 'var(--orange,#E86F1E)';
     statusColor = 'var(--orange,#E86F1E)';
     deltaText = kcalPct + '% · ' + kcalConsumed + '/' + Math.round(calorieTarget) + ' kcal';
-    statusText = 'Dépassement modéré';
+    statusText = (window.isEnglish && window.isEnglish()) ? 'Moderate overshoot' : 'Dépassement modéré';
   }
   hero.appendChild(h('div', {style: deltaStyle + 'color:' + deltaColor + ';'}, deltaText));
   hero.appendChild(h('div', {style: subStyle + 'color:' + statusColor + ';'}, statusText));
@@ -1494,7 +1564,7 @@ function renderCardHeroKcal() {
     _qaRow.appendChild(h('button', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);background:transparent;border:1px solid var(--line,#D8D8D0);padding:9px 24px;cursor:pointer;min-height:36px;',
       onclick: function() { var _S = window.S; if (!_S) return; _S._quickAddSlot = getDefaultMealSlot(); if (window.render) window.render(); }
-    }, '+ Ajouter un repas'));
+    }, (window.isEnglish && window.isEnglish()) ? '+ Add a meal' : '+ Ajouter un repas'));
     hero.appendChild(_qaRow);
   }
 
@@ -1551,7 +1621,7 @@ function renderCardMacros() {
 
   var c = card();
   c.appendChild(eyebrow('NUTRITION'));
-  c.appendChild(cardTitle('Macros du jour'));
+  c.appendChild(cardTitle((window.isEnglish && window.isEnglish()) ? "Today's macros" : 'Macros du jour'));
 
   // Calorie bar
   var kcalRow = h('div', { style: 'display:flex;align-items:center;gap:8px;margin-bottom:12px;' });
@@ -1580,35 +1650,36 @@ function renderCardMacros() {
   // Bible Hermès §13.1 : pas d'emoji (⚡ ✓ ⚠). Typographie sobre.
   if (_netRemaining > 0) {
     _remEl.style.color = 'var(--success,#3E5C3A)';
-    _remEl.textContent = _netRemaining + ' kcal restantes';
+    _remEl.textContent = (window.isEnglish && window.isEnglish()) ? (_netRemaining + ' kcal remaining') : (_netRemaining + ' kcal restantes');
   } else if (_netRemaining === 0) {
     _remEl.style.color = 'var(--ink-500,#6B6B65)';
-    _remEl.textContent = 'Cible tenue.';
+    _remEl.textContent = (window.isEnglish && window.isEnglish()) ? 'Target met.' : 'Cible tenue.';
   } else {
     _remEl.style.color = 'var(--orange,#E86F1E)';
-    _remEl.textContent = 'Vous avez dépassé de ' + Math.abs(_netRemaining) + ' kcal.';
+    _remEl.textContent = (window.isEnglish && window.isEnglish()) ? ('You exceeded by ' + Math.abs(_netRemaining) + ' kcal.') : ('Vous avez dépassé de ' + Math.abs(_netRemaining) + ' kcal.');
   }
   c.appendChild(_remEl);
 
   if (macroTargets && (macroTargets.p > 0 || macroTargets.g > 0 || macroTargets.l > 0)) {
-    c.appendChild(macroRow('Protéines', Math.round(totals.p), Math.round(macroTargets.p)));
-    c.appendChild(macroRow('Glucides', Math.round(totals.g), Math.round(macroTargets.g)));
-    c.appendChild(macroRow('Lipides', Math.round(totals.l), Math.round(macroTargets.l)));
+    var _macEN = window.isEnglish && window.isEnglish();
+    c.appendChild(macroRow(_macEN ? 'Protein' : 'Protéines', Math.round(totals.p), Math.round(macroTargets.p)));
+    c.appendChild(macroRow(_macEN ? 'Carbs' : 'Glucides', Math.round(totals.g), Math.round(macroTargets.g)));
+    c.appendChild(macroRow(_macEN ? 'Fat' : 'Lipides', Math.round(totals.l), Math.round(macroTargets.l)));
 
     // Anneaux SVG — progression macros
     var ringsRow = document.createElement('div');
     ringsRow.style.cssText = 'display:flex;justify-content:space-around;align-items:flex-start;margin-top:16px;padding-top:12px;border-top:1px solid var(--border,#E8E6DF);flex-wrap:wrap;gap:8px;';
     if (macroTargets.p > 0 && window.svgRing) {
       var pPct = Math.min(100, totals.p > 0 ? Math.round(totals.p / macroTargets.p * 100) : 0);
-      ringsRow.appendChild(window.svgRing(72, 7, pPct, 'var(--green,#3E5C3A)', 'Protéines', Math.round(totals.p)));
+      ringsRow.appendChild(window.svgRing(72, 7, pPct, 'var(--green,#3E5C3A)', _macEN ? 'Protein' : 'Protéines', Math.round(totals.p)));
     }
     if (macroTargets.g > 0 && window.svgRing) {
       var gPct = Math.min(100, totals.g > 0 ? Math.round(totals.g / macroTargets.g * 100) : 0);
-      ringsRow.appendChild(window.svgRing(72, 7, gPct, 'var(--blue,#1A3A6A)', 'Glucides', Math.round(totals.g)));
+      ringsRow.appendChild(window.svgRing(72, 7, gPct, 'var(--blue,#1A3A6A)', _macEN ? 'Carbs' : 'Glucides', Math.round(totals.g)));
     }
     if (macroTargets.l > 0 && window.svgRing) {
       var lPct = Math.min(100, totals.l > 0 ? Math.round(totals.l / macroTargets.l * 100) : 0);
-      ringsRow.appendChild(window.svgRing(72, 7, lPct, 'var(--orange,#E86F1E)', 'Lipides', Math.round(totals.l)));
+      ringsRow.appendChild(window.svgRing(72, 7, lPct, 'var(--orange,#E86F1E)', _macEN ? 'Fat' : 'Lipides', Math.round(totals.l)));
     }
     if (ringsRow.children.length > 0) c.appendChild(ringsRow);
   }
@@ -1848,7 +1919,7 @@ function renderFoodJournalCard() {
   c.id = 'fj-card-root'; // Phase 2 K: stable anchor for targeted re-render
 
   // Titre standard Georgia 20px (cohérent avec renderCardSport / renderCardRepas)
-  c.appendChild(cardTitle('Journal du jour'));
+  c.appendChild(cardTitle((window.isEnglish && window.isEnglish()) ? "Today's journal" : 'Journal du jour'));
 
   // ─── Totaux du jour ───
   var totals = (window.FOOD_JOURNAL && window.FOOD_JOURNAL.getDayTotal)
@@ -1914,13 +1985,16 @@ function renderFoodJournalCard() {
   } catch(_eUrgent) {}
 
   // ─── Tabs repas ───
+  var _fjEN = window.isEnglish && window.isEnglish();
   var MEALS = [
-    { key: 'breakfast', label: 'Petit-d\u00e9j' },
-    { key: 'lunch',     label: 'D\u00e9jeuner' },
-    { key: 'snack',     label: 'Collation' },
-    { key: 'dinner',    label: 'D\u00eener' }
+    { key: 'breakfast', label: _fjEN ? 'Breakfast' : 'Petit-d\u00e9j' },
+    { key: 'lunch',     label: _fjEN ? 'Lunch'     : 'D\u00e9jeuner' },
+    { key: 'snack',     label: _fjEN ? 'Snack'     : 'Collation' },
+    { key: 'dinner',    label: _fjEN ? 'Dinner'    : 'D\u00eener' }
   ];
-  var MEAL_LABELS_FULL = { breakfast: 'Petit-d\u00e9jeuner', lunch: 'D\u00e9jeuner', snack: 'Collation', dinner: 'D\u00eener' };
+  var MEAL_LABELS_FULL = _fjEN
+    ? { breakfast: 'Breakfast', lunch: 'Lunch', snack: 'Snack', dinner: 'Dinner' }
+    : { breakfast: 'Petit-d\u00e9jeuner', lunch: 'D\u00e9jeuner', snack: 'Collation', dinner: 'D\u00eener' };
 
   var tabs = h('div', { style: 'display:flex;gap:0;margin-bottom:0;border-bottom:1px solid var(--line,#D8D8D0);' });
   MEALS.forEach(function(m) {
@@ -1948,7 +2022,7 @@ function renderFoodJournalCard() {
   }, [
     h('span', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);'
-    }, 'Ajouter\u00a0\u00e0\u00a0:'),
+    }, (window.isEnglish && window.isEnglish()) ? 'Adding to:' : 'Ajouter\u00a0\u00e0\u00a0:'),
     h('span', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--black,#0A0A09);font-weight:400;'
     }, MEAL_LABELS_FULL[_fjState.meal])
@@ -2196,7 +2270,10 @@ function _fjUpdateMultiCTA() {
   if (names.length === 0) { box.style.display = 'none'; return; }
   box.style.display = 'block';
 
-  var MEAL_FULL = { breakfast: 'Petit-déjeuner', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
+  var _mfEN = window.isEnglish && window.isEnglish();
+  var MEAL_FULL = _mfEN
+    ? { breakfast: 'Breakfast', lunch: 'Lunch', snack: 'Snack', dinner: 'Dinner' }
+    : { breakfast: 'Petit-déjeuner', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
   var ctaBtn = h('button', {
     style: 'width:100%;padding:12px 16px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;cursor:pointer;'
       + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;min-height:44px;margin-bottom:8px;'
@@ -2919,11 +2996,14 @@ function _fjShowSelection() {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--black,#0A0A09);margin-bottom:12px;line-height:1.6;font-weight:400;'
   }, kcal + ' kcal \u00b7 Prot ' + p + 'g \u00b7 Gluc ' + g + 'g \u00b7 Lip ' + l + 'g'));
 
-  var MEAL_FULL = { breakfast: 'Petit-d\u00e9jeuner', lunch: 'D\u00e9jeuner', snack: 'Collation', dinner: 'D\u00eener' };
+  var _sfEN = window.isEnglish && window.isEnglish();
+  var MEAL_FULL = _sfEN
+    ? { breakfast: 'Breakfast', lunch: 'Lunch', snack: 'Snack', dinner: 'Dinner' }
+    : { breakfast: 'Petit-d\u00e9jeuner', lunch: 'D\u00e9jeuner', snack: 'Collation', dinner: 'D\u00eener' };
   var addBtn = h('button', {
     style: 'width:100%;padding:12px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;cursor:pointer;'
       + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;min-height:44px;'
-  }, 'Ajouter \u00e0 ' + (MEAL_FULL[_fjState.meal] || 'ce repas'));
+  }, (_sfEN ? 'Add to ' : 'Ajouter \u00e0 ') + (MEAL_FULL[_fjState.meal] || (_sfEN ? 'this meal' : 'ce repas')));
   addBtn.addEventListener('click', function() {
     if (window.FOOD_JOURNAL && window.FOOD_JOURNAL.addEntry) {
       // 2026-04 R4-B2 : recompute LIVE au click (closure stale après refacto +/- sans rebuild)
@@ -2971,7 +3051,10 @@ function _fjBuildEntriesList(container) {
   var entries = (window.FOOD_JOURNAL && window.FOOD_JOURNAL.getToday) ? window.FOOD_JOURNAL.getToday() : [];
   var mealEntries = entries.filter(function(e) { return e && e.meal === _fjState.meal; });
 
-  var MEAL_LABELS = { breakfast: 'Petit-d\u00e9jeuner', lunch: 'D\u00e9jeuner', snack: 'Collation', dinner: 'D\u00eener' };
+  var _blEN = window.isEnglish && window.isEnglish();
+  var MEAL_LABELS = _blEN
+    ? { breakfast: 'Breakfast', lunch: 'Lunch', snack: 'Snack', dinner: 'Dinner' }
+    : { breakfast: 'Petit-d\u00e9jeuner', lunch: 'D\u00e9jeuner', snack: 'Collation', dinner: 'D\u00eener' };
   var header = h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px;padding-top:8px;border-top:1px solid var(--line,#D8D8D0);'
   }, MEAL_LABELS[_fjState.meal] + ' \u00b7 ' + mealEntries.length + ' ' + window.locPlural(mealEntries.length, {fr:{one:'aliment',other:'aliments'},en:{one:'item',other:'items'}}));
@@ -2980,7 +3063,7 @@ function _fjBuildEntriesList(container) {
   if (mealEntries.length === 0) {
     container.appendChild(h('div', {
       style: 'padding:8px 4px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);'
-    }, 'Aucun aliment consign\u00e9 pour ce repas.'));
+    }, (window.isEnglish && window.isEnglish()) ? 'No food logged for this meal.' : 'Aucun aliment consign\u00e9 pour ce repas.'));
     return;
   }
 
@@ -3032,7 +3115,7 @@ function _fjBuildEntriesList(container) {
       type: 'button',
       style: 'padding:6px 14px;min-height:36px;border:1px solid var(--line,#D8D8D0);border-radius:2px;cursor:pointer;background:transparent;'
         + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);'
-    }, 'Copier d\'hier (' + yesterdayItems.length + ')');
+    }, (window.isEnglish && window.isEnglish()) ? ('Copy from yesterday (' + yesterdayItems.length + ')') : ('Copier d\'hier (' + yesterdayItems.length + ')'));
     copyBtn.addEventListener('click', function() {
       if (!window.FOOD_JOURNAL || !window.FOOD_JOURNAL.addEntry) return;
       yesterdayItems.forEach(function(e) {
@@ -3053,11 +3136,15 @@ function _fjBuildEntriesList(container) {
     type: 'button',
     style: 'padding:6px 14px;min-height:36px;border:1px solid var(--line,#D8D8D0);border-radius:2px;cursor:pointer;background:transparent;'
       + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);'
-  }, 'Sauvegarder ce repas');
+  }, (window.isEnglish && window.isEnglish()) ? 'Save this meal' : 'Sauvegarder ce repas');
   saveBtn.addEventListener('click', function() {
-    todayModal('Sauvegarder ce repas', function(box, overlay) {
-      var MEAL_LABELS2 = { breakfast: 'Petit-déjeuner', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
-      var defaultName = MEAL_LABELS2[_fjState.meal] || 'Mon repas';
+    var _savTitle = (window.isEnglish && window.isEnglish()) ? 'Save this meal' : 'Sauvegarder ce repas';
+    todayModal(_savTitle, function(box, overlay) {
+      var _ml2EN = window.isEnglish && window.isEnglish();
+      var MEAL_LABELS2 = _ml2EN
+        ? { breakfast: 'Breakfast', lunch: 'Lunch', snack: 'Snack', dinner: 'Dinner' }
+        : { breakfast: 'Petit-déjeuner', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
+      var defaultName = MEAL_LABELS2[_fjState.meal] || (_ml2EN ? 'My meal' : 'Mon repas');
       box.appendChild(h('div', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin-bottom:10px;'
       }, mealEntries.length + ' ' + window.locPlural(mealEntries.length, {fr:{one:'aliment',other:'aliments'},en:{one:'item',other:'items'}}) + ((window.isEnglish && window.isEnglish()) ? ' — name this meal' : ' — donnez un nom à ce repas')));
@@ -3072,7 +3159,7 @@ function _fjBuildEntriesList(container) {
       var confirmBtn = h('button', {
         style: 'width:100%;padding:12px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;cursor:pointer;'
           + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;min-height:44px;'
-      }, 'Sauvegarder');
+      }, (window.isEnglish && window.isEnglish()) ? 'Save' : 'Sauvegarder');
       confirmBtn.addEventListener('click', function() {
         var name = (inp.value || '').trim() || defaultName;
         _fjSaveMeal(name, mealEntries.map(function(e) {
@@ -3104,13 +3191,13 @@ function renderCardRepas() {
     // No plan — empty state engageant (Hermès : vouvoiement, micro-caps, tap target ≥ 48px)
     var _emptyCard = h('div', {style: 'text-align:center;padding:36px 16px 28px;'});
     _emptyCard.appendChild(emptyIllu('nutrition'));
-    _emptyCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:20px;margin:4px 0 10px;font-weight:normal;color:var(--black,#0A0A09);line-height:1.3;max-width:240px;margin-left:auto;margin-right:auto;'}, 'Votre plan nutritionnel vous attend'));
-    _emptyCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);margin-bottom:20px;line-height:1.55;max-width:260px;margin-left:auto;margin-right:auto;'}, 'Calibré sur votre corps, vos objectifs et votre quotidien.'));
+    _emptyCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:20px;margin:4px 0 10px;font-weight:normal;color:var(--black,#0A0A09);line-height:1.3;max-width:240px;margin-left:auto;margin-right:auto;'}, (window.isEnglish && window.isEnglish()) ? 'Your nutrition plan awaits' : 'Votre plan nutritionnel vous attend'));
+    _emptyCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);margin-bottom:20px;line-height:1.55;max-width:260px;margin-left:auto;margin-right:auto;'}, (window.isEnglish && window.isEnglish()) ? 'Calibrated to your body, your goals, and your lifestyle.' : 'Calibré sur votre corps, vos objectifs et votre quotidien.'));
     _emptyCard.appendChild(h('button', {
       style: 'padding:14px 24px;min-height:48px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
       onclick: function() { if (!window.S) return; window.S.view = 'nutrition'; if (window.render) window.render(); }
-    }, 'Composer mon plan'));
-    _emptyCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:14px;'}, '5 min \u00b7 Gratuit \u00b7 Personnalis\u00e9'));
+    }, (window.isEnglish && window.isEnglish()) ? 'Build my plan' : 'Composer mon plan'));
+    _emptyCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:14px;'}, (window.isEnglish && window.isEnglish()) ? '5 min \u00b7 Free \u00b7 Personalized' : '5 min \u00b7 Gratuit \u00b7 Personnalis\u00e9'));
     c.appendChild(_emptyCard);
     return c;
   }
@@ -3120,11 +3207,12 @@ function renderCardRepas() {
   var dayData = S.weekPlan[todayIdx];
   if (!dayData) return null;
 
+  var _slotsEN = window.isEnglish && window.isEnglish();
   var SLOTS = [
-    { key: 'breakfast', label: 'Petit-déjeuner' },
-    { key: 'lunch', label: 'Déjeuner' },
-    { key: 'snack', label: 'Collation' },
-    { key: 'dinner', label: 'Dîner' }
+    { key: 'breakfast', label: _slotsEN ? 'Breakfast' : 'Petit-déjeuner' },
+    { key: 'lunch', label: _slotsEN ? 'Lunch' : 'Déjeuner' },
+    { key: 'snack', label: _slotsEN ? 'Snack' : 'Collation' },
+    { key: 'dinner', label: _slotsEN ? 'Dinner' : 'Dîner' }
   ];
 
   var _tlNow = new Date(); var todayKey = _tlNow.getFullYear() + '-' + String(_tlNow.getMonth()+1).padStart(2,'0') + '-' + String(_tlNow.getDate()).padStart(2,'0');
@@ -3174,7 +3262,7 @@ function renderCardRepas() {
       style: isLogged
         ? 'background:var(--green,#3E5C3A);border:1px solid var(--green,#3E5C3A);color:var(--ivory,#FAF9F6);font-size:10px;padding:6px 10px;min-height:44px;cursor:pointer;margin-left:8px;flex-shrink:0;font-family:"Helvetica Neue",Arial,sans-serif;border-radius:2px;'
         : 'background:transparent;border:1px solid var(--border);color:var(--grey);font-size:10px;padding:6px 10px;min-height:44px;cursor:pointer;margin-left:8px;flex-shrink:0;font-family:"Helvetica Neue",Arial,sans-serif;border-radius:2px;',
-      title: isLogged ? 'Cliquer pour d\u00e9cocher' : 'Marquer comme pris',
+      title: isLogged ? ((window.isEnglish && window.isEnglish()) ? 'Click to uncheck' : 'Cliquer pour d\u00e9cocher') : ((window.isEnglish && window.isEnglish()) ? 'Mark as taken' : 'Marquer comme pris'),
       onclick: function(e) {
         e.stopPropagation();
         S.mealsLogged = S.mealsLogged || {};
@@ -3210,7 +3298,7 @@ function renderCardRepas() {
         if (window.saveProfile) window.saveProfile();
         if (window.render) window.render();
       }
-    }, isLogged ? '\u2713 Pris' : 'Marquer pris');
+    }, isLogged ? ((window.isEnglish && window.isEnglish()) ? '\u2713 Taken' : '\u2713 Pris') : ((window.isEnglish && window.isEnglish()) ? 'Mark taken' : 'Marquer pris'));
 
     row.appendChild(left);
     row.appendChild(kcalEl);
@@ -3245,7 +3333,7 @@ function renderCardRepas() {
   var totalSlots = SLOTS.filter(function(slot) { return dayData[slot.key] && dayData[slot.key].n; }).length;
   var counterEl = h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:8px;'
-  }, loggedCount + '/' + totalSlots + ' repas aujourd\u2019hui');
+  }, loggedCount + '/' + totalSlots + ' ' + ((window.isEnglish && window.isEnglish()) ? 'meals today' : 'repas aujourd\u2019hui'));
   c.appendChild(counterEl);
 
   // Footer link
@@ -3257,7 +3345,7 @@ function renderCardRepas() {
       S.selectedDay = todayIdx;
       if (window.render) window.render();
     }
-  }, 'Voir mon programme →');
+  }, (window.isEnglish && window.isEnglish()) ? 'View my plan →' : 'Voir mon programme →');
   c.appendChild(link);
 
   return c;
