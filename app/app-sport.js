@@ -2821,9 +2821,9 @@ function syncSportGoalsToNutrition() {
 
 function renderMusculationGoals(p) {
  var _prenom1 = S.prenom || '';
- p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation \u00b7 \u00c9tape 1/3'));
- p.appendChild(h('h1', {html: (_prenom1 ? _prenom1 + ', quel est<br>' : 'Quel est<br>') + '<em>votre objectif\u00a0?</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Choisissez vos objectifs (1 \u00e0 3). Votre programme s\u2019adaptera en cons\u00e9quence.'));
+ p.appendChild(h('div', {'class': 'eyebrow'}, (window.isEnglish && window.isEnglish() ? 'Strength \u00b7 Step 1/3' : 'Musculation \u00b7 \u00c9tape 1/3')));
+ p.appendChild(h('h1', {html: (_prenom1 ? _prenom1 + (window.isEnglish && window.isEnglish() ? ', what is<br>' : ', quel est<br>') : (window.isEnglish && window.isEnglish() ? 'What is<br>' : 'Quel est<br>')) + (window.isEnglish && window.isEnglish() ? '<em>your goal\u00a0?</em>' : '<em>votre objectif\u00a0?</em>')}));
+ p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Choose your goals (1 to 3). Your program will adapt accordingly.' : 'Choisissez vos objectifs (1 \u00e0 3). Votre programme s\u2019adaptera en cons\u00e9quence.')));
  if (window.TIPS) TIPS.renderTip(p, 'sportGoal');
 
  // ── INTERDÉPENDANCE NUTRITION ──────────────────────────────────────────
@@ -2831,8 +2831,8 @@ function renderMusculationGoals(p) {
  // Reminder banner (pre-sélection déplacée dans le handler du bouton "Créer programme")
  var nutName = (window.GOALS || [])[S.goal] ? window.GOALS[S.goal].name : '';
  var banner = h('div', {style: 'border:1px solid var(--border,#D8D8D0);padding:12px 16px;background:var(--ivory2,#F4F4F0);margin-bottom:16px;border-radius:2px'});
- banner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, 'Objectif Nutrition\u00a0: ' + nutName));
- banner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65)'}, 'Toute modification sera synchronis\u00e9e avec votre plan nutrition.'));
+ banner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Nutrition goal\u00a0: ' : 'Objectif Nutrition\u00a0: ') + nutName));
+ banner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65)'}, (window.isEnglish && window.isEnglish() ? 'Any change will be synchronized with your nutrition plan.' : 'Toute modification sera synchronis\u00e9e avec votre plan nutrition.')));
  p.appendChild(banner);
  }
  // ──────────────────────────────────────────────────────────────────────
@@ -2845,7 +2845,7 @@ function renderMusculationGoals(p) {
    if (_preId) { if (!Array.isArray(S.sportGoals)) S.sportGoals = []; S.sportGoals = [_preId]; }
  }
  if (!Array.isArray(S.sportGoals)) S.sportGoals = [];
- p.appendChild(h('div', {'class': 'section-label'}, 'Objectifs'));
+ p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Goals' : 'Objectifs')));
  var g = h('div', {'class': 'card-grid-2'});
  var _tcaActive = Array.isArray(S.medical) && S.medical.indexOf('tca') !== -1;
  (window.SPORT_GOALS || []).forEach(function(gl) {
@@ -2873,21 +2873,21 @@ function renderMusculationGoals(p) {
  p.appendChild(h('div', {style: 'height:16px'}));
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) { S.sStep = 2; window.render(); }
- }}, 'Continuer'));
+ }}, (window.isEnglish && window.isEnglish() ? 'Continue' : 'Continuer')));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 15; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
 }
 
 // ─── STEP 5 (CrossFit): NIVEAU CF ───
 function renderCrossfitLevel(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Cross Training'));
- p.appendChild(h('h1', {html: 'Votre<br><em>niveau</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Sélectionnez votre niveau pour adapter les charges et mouvements.'));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Your<br><em>level</em>' : 'Votre<br><em>niveau</em>')}));
+ p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Select your level to adapt loads and movements.' : 'Sélectionnez votre niveau pour adapter les charges et mouvements.')));
 
  if (S.sex) {
- p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:16px'}, 'Charges adaptées pour : ' + (window.isMale(S) ? 'Homme' : 'Femme')));
+ p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:16px'}, (window.isEnglish && window.isEnglish() ? 'Loads adapted for: ' : 'Charges adaptées pour : ') + (window.isMale(S) ? (window.isEnglish && window.isEnglish() ? 'Male' : 'Homme') : (window.isEnglish && window.isEnglish() ? 'Female' : 'Femme'))));
  }
 
- p.appendChild(h('div', {'class': 'section-label'}, 'Niveau (obligatoire)'));
+ p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Level (required)' : 'Niveau (obligatoire)')));
  var list = h('div', {'class': 'level-list'});
  (window.CROSSFIT_LEVELS || []).forEach(function(lv) {
  var isOn = S.crossfitLevel === lv.id;
@@ -2903,12 +2903,12 @@ function renderCrossfitLevel(p) {
 
  // Level explanations
  var explainBox = h('div', {style: 'border:1px solid var(--border);padding:14px 16px;background:var(--ivory2);margin:16px 0'});
- explainBox.appendChild(h('div', {style: 'font-family:Georgia;font-size:13px;margin-bottom:8px'}, 'Que signifie chaque niveau ?'));
+ explainBox.appendChild(h('div', {style: 'font-family:Georgia;font-size:13px;margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'What does each level mean?' : 'Que signifie chaque niveau ?')));
 
  var explanations = [
- {icon: '', title: 'SCALED', desc: 'Mouvements adaptés (ring rows, pike push-ups, single unders), charges légères. Idéal pour débuter le CrossFit.'},
- {icon: '', title: 'INTERMÉDIAIRE', desc: 'Mouvements complets avec charge modérée, certaines adaptations gymniques. Vous maîtrisez les bases.'},
- {icon: '', title: 'RX', desc: 'Standards compétition, charges et mouvements au standard international. Niveau CrossFit Games.'}
+ {icon: '', title: 'SCALED', desc: (window.isEnglish && window.isEnglish() ? 'Adapted movements (ring rows, pike push-ups, single unders), light loads. Ideal for starting CrossFit.' : 'Mouvements adaptés (ring rows, pike push-ups, single unders), charges légères. Idéal pour débuter le CrossFit.')},
+ {icon: '', title: (window.isEnglish && window.isEnglish() ? 'INTERMEDIATE' : 'INTERMÉDIAIRE'), desc: (window.isEnglish && window.isEnglish() ? 'Full movements with moderate load, some gymnastic adaptations. You master the basics.' : 'Mouvements complets avec charge modérée, certaines adaptations gymniques. Vous maîtrisez les bases.')},
+ {icon: '', title: 'RX', desc: (window.isEnglish && window.isEnglish() ? 'Competition standards, loads and movements at international standard. CrossFit Games level.' : 'Standards compétition, charges et mouvements au standard international. Niveau CrossFit Games.')}
  ];
  explanations.forEach(function(ex) {
  var row = h('div', {style: 'margin-bottom:6px'});
@@ -2925,13 +2925,13 @@ function renderCrossfitLevel(p) {
  oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 3 && v <= 6) { S.sportDays = v; if (S.sportMixSecondary && S.sportMixSecondary.days >= v) { S.sportMixSecondary.days = Math.max(1, v - 3); } window.render(); } },
  onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 3) { e.target.value = S.sportDays = 3; if (S.sportMixSecondary && S.sportMixSecondary.days >= 3) { S.sportMixSecondary.days = 1; } window.render(); } else if (v > 6) { e.target.value = S.sportDays = 6; window.render(); } }
  }));
- cfDaysWrap.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
+ cfDaysWrap.appendChild(h('span', {'class': 'num-unit'}, (window.isEnglish && window.isEnglish() ? 'days' : 'jours')));
  p.appendChild(cfDaysWrap);
- p.appendChild(h('div', {'class': 'num-hint'}, '3 jours minimum recommand\u00E9 pour le CrossFit'));
+ p.appendChild(h('div', {'class': 'num-hint'}, (window.isEnglish && window.isEnglish() ? '3 days minimum recommended for CrossFit' : '3 jours minimum recommand\u00E9 pour le CrossFit')));
 
  // ─── SÉLECTEUR DE JOURS SPÉCIFIQUES ───
  if (!Array.isArray(S.trainingDaysSelected)) S.trainingDaysSelected = [];
- p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:18px'}, 'Quels jours vous entraînez-vous\u00a0?'));
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:18px'}, (window.isEnglish && window.isEnglish() ? 'Which days do you train?' : 'Quels jours vous entraînez-vous\u00a0?')));
  var dayLabels = ['L', 'Ma', 'Me', 'J', 'V', 'S', 'D'];
  var dayBtnsWrap = h('div', {style: 'display:flex;gap:6px;justify-content:center;flex-wrap:nowrap;margin:10px 0'});
  var _selTarget = S.sportDays || 3;
@@ -2986,19 +2986,19 @@ function renderCrossfitLevel(p) {
  var diff = selCount - _selTarget;
  var hintColor = diff === 0 ? 'var(--ink-500,#6B6B65)' : (diff > 0 ? 'var(--error,#7A1F1F)' : 'var(--orange-ink,#7A3B0E)');
  var hintText = selCount === 0
-   ? 'Aucun jour sélectionné — répartition automatique'
-   : diff === 0 ? selCount + ' / ' + _selTarget + ' ' + window.locPlural(selCount, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + ' — parfait'
-   : diff > 0 ? selCount + ' / ' + _selTarget + ' — retirez ' + diff + ' ' + window.locPlural(diff, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}})
-   : selCount + ' / ' + _selTarget + ' — sélectionnez encore ' + Math.abs(diff) + ' ' + window.locPlural(Math.abs(diff), {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}});
+   ? (window.isEnglish && window.isEnglish() ? 'No day selected — automatic distribution' : 'Aucun jour sélectionné — répartition automatique')
+   : diff === 0 ? selCount + ' / ' + _selTarget + ' ' + window.locPlural(selCount, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + (window.isEnglish && window.isEnglish() ? ' — perfect' : ' — parfait')
+   : diff > 0 ? selCount + ' / ' + _selTarget + (window.isEnglish && window.isEnglish() ? ' — remove ' : ' — retirez ') + diff + ' ' + window.locPlural(diff, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}})
+   : selCount + ' / ' + _selTarget + (window.isEnglish && window.isEnglish() ? ' — select ' : ' — sélectionnez encore ') + Math.abs(diff) + ' ' + window.locPlural(Math.abs(diff), {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}});
  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + hintColor + ';text-align:center;margin-bottom:4px;letter-spacing:.5px;transition:color .2s'}, hintText));
 
  // Recommendation based on level
  if (S.crossfitLevel) {
  var cfDayReco = '';
- if (S.crossfitLevel === 'scaled') cfDayReco = 'Recommand\u00E9 : 3-4 jours (r\u00E9cup\u00E9ration importante)';
- else if (S.crossfitLevel === 'inter') cfDayReco = 'Recommand\u00E9 : 4-5 jours';
- else if (S.crossfitLevel === 'rx') cfDayReco = 'Recommand\u00E9 : 5-6 jours';
- else if (S.crossfitLevel === 'rx_plus') cfDayReco = 'Recommand\u00E9 : 6 jours (programme \u00E9lite Games — r\u00E9cup\u00E9ration active obligatoire)';
+ if (S.crossfitLevel === 'scaled') cfDayReco = (window.isEnglish && window.isEnglish() ? 'Recommended: 3-4 days (important recovery)' : 'Recommand\u00E9 : 3-4 jours (r\u00E9cup\u00E9ration importante)');
+ else if (S.crossfitLevel === 'inter') cfDayReco = (window.isEnglish && window.isEnglish() ? 'Recommended: 4-5 days' : 'Recommand\u00E9 : 4-5 jours');
+ else if (S.crossfitLevel === 'rx') cfDayReco = (window.isEnglish && window.isEnglish() ? 'Recommended: 5-6 days' : 'Recommand\u00E9 : 5-6 jours');
+ else if (S.crossfitLevel === 'rx_plus') cfDayReco = (window.isEnglish && window.isEnglish() ? 'Recommended: 6 days (elite Games program — mandatory active recovery)' : 'Recommand\u00E9 : 6 jours (programme \u00E9lite Games — r\u00E9cup\u00E9ration active obligatoire)');
  if (cfDayReco) {
  p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-top:6px;font-style:italic'}, cfDayReco));
  }
@@ -3018,8 +3018,8 @@ function renderCrossfitLevel(p) {
 
  p.appendChild(h('div', {style: 'height:24px'}));
  p.appendChild(h('div', {style: 'border-top:1px solid var(--border);margin:0 0 16px;padding-top:16px'}));
- p.appendChild(h('div', {'class': 'section-label'}, 'Vos charges actuelles (optionnel)'));
- p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:16px'}, 'Renseignez vos 1RM pour une programmation sur mesure. Laissez vide si inconnu.'));
+ p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Your current loads (optional)' : 'Vos charges actuelles (optionnel)')));
+ p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:16px'}, (window.isEnglish && window.isEnglish() ? 'Enter your 1RMs for custom programming. Leave blank if unknown.' : 'Renseignez vos 1RM pour une programmation sur mesure. Laissez vide si inconnu.')));
 
  if (window.CF_1RM_LIFTS) {
  var rmGrid = h('div', {style: 'margin-bottom:16px'});
@@ -3076,13 +3076,13 @@ function renderCrossfitLevel(p) {
  p.appendChild(rmGrid);
  }
 
- p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;text-align:center;margin-bottom:16px'}, 'Si vous ne connaissez pas vos 1RM, les charges seront bas\u00E9es sur les standards internationaux pour votre niveau.'));
+ p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;text-align:center;margin-bottom:16px'}, (window.isEnglish && window.isEnglish() ? 'If you don\'t know your 1RMs, loads will be based on international standards for your level.' : 'Si vous ne connaissez pas vos 1RM, les charges seront bas\u00E9es sur les standards internationaux pour votre niveau.')));
 
  // ─── BENCHMARKS ACTUELS ───
  p.appendChild(h('div', {style: 'height:16px'}));
  p.appendChild(h('div', {style: 'border-top:1px solid var(--border);margin:0 0 16px;padding-top:16px'}));
- p.appendChild(h('div', {'class': 'section-label'}, 'Vos benchmarks CrossFit (optionnel)'));
- p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:14px'}, 'Ces donn\u00E9es permettent de suivre votre progression sur les WODs officiels du CrossFit.'));
+ p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Your CrossFit benchmarks (optional)' : 'Vos benchmarks CrossFit (optionnel)')));
+ p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:14px'}, (window.isEnglish && window.isEnglish() ? 'This data allows tracking your progression on official CrossFit WODs.' : 'Ces donn\u00E9es permettent de suivre votre progression sur les WODs officiels du CrossFit.')));
 
  S.crossfitBenchmarks = S.crossfitBenchmarks || {};
  var benchmarkFields = [
@@ -3116,11 +3116,11 @@ function renderCrossfitLevel(p) {
  p.appendChild(bmGrid);
 
  // ─── OBJECTIF COMPETITION ───
- p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:16px'}, 'Objectif comp\u00E9tition'));
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:16px'}, (window.isEnglish && window.isEnglish() ? 'Competition goal' : 'Objectif comp\u00E9tition')));
  var compGoals = [
- {id: 'loisir', label: 'Loisir — Forme physique et fun', desc: 'Pas de competition prevue'},
- {id: 'open', label: 'CrossFit Open', desc: 'Qualifier pour les phases suivantes'},
- {id: 'sanctional', label: 'Regionals / Sanctionals', desc: 'Niveau elite — competition serieuse'}
+ {id: 'loisir', label: (window.isEnglish && window.isEnglish() ? 'Leisure — Fitness and fun' : 'Loisir — Forme physique et fun'), desc: (window.isEnglish && window.isEnglish() ? 'No competition planned' : 'Pas de competition prevue')},
+ {id: 'open', label: 'CrossFit Open', desc: (window.isEnglish && window.isEnglish() ? 'Qualify for next phases' : 'Qualifier pour les phases suivantes')},
+ {id: 'sanctional', label: 'Regionals / Sanctionals', desc: (window.isEnglish && window.isEnglish() ? 'Elite level — serious competition' : 'Niveau elite — competition serieuse')}
  ];
  var compList = h('div', {style: 'margin-bottom:14px'});
  compGoals.forEach(function(cg) {
@@ -3140,8 +3140,8 @@ function renderCrossfitLevel(p) {
 
  // ─── DATE DE L'OPEN ───
  if (S.crossfitCompGoal === 'open' || S.crossfitCompGoal === 'sanctional') {
- p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:8px'}, 'Date du CrossFit Open (optionnel)'));
- p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px;text-align:center'}, 'Le programme adaptera les semaines 18-20 en pr\u00E9paration Open.'));
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:8px'}, (window.isEnglish && window.isEnglish() ? 'CrossFit Open date (optional)' : 'Date du CrossFit Open (optionnel)')));
+ p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px;text-align:center'}, (window.isEnglish && window.isEnglish() ? 'The program will adapt weeks 18-20 for Open preparation.' : 'Le programme adaptera les semaines 18-20 en pr\u00E9paration Open.')));
  var openDateInp = h('input', {
  type: 'date',
  style: 'width:100%;box-sizing:border-box;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;background:var(--ivory);color:#0A0A09;margin-bottom:16px',
@@ -3155,7 +3155,7 @@ function renderCrossfitLevel(p) {
  var ok = S.crossfitLevel !== null;
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) { S.crossfitWeek = 1; S.selectedCrossfitDay = 0; S.sStep = 6; window.BLACKBOX && window.BLACKBOX.log('crossfit_level', {level: S.crossfitLevel, days: S.sportDays, compGoal: S.crossfitCompGoal}); window.render(); }
- }}, 'Continuer'));
+ }}, (window.isEnglish && window.isEnglish() ? 'Continue' : 'Continuer')));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
 }
 
