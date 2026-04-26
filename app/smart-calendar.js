@@ -37,7 +37,8 @@
           (S.sportMixEnabled && S.sportMixSecondary && S.sportMixSecondary.type === 'crossfit')) {
         sports.push({ value: 'crossfit', label: 'CrossFit' });
       }
-      if (S.sportType === 'running') {
+      if (S.sportType === 'running' ||
+          (S.sportMixEnabled && S.sportMixSecondary && S.sportMixSecondary.type === 'running')) {
         sports.push({ value: 'running', label: 'Running' });
       }
       if (S.sportType === 'padel') {
@@ -57,16 +58,20 @@
         sports.push({ value: 'hyrox', label: 'Hyrox' });
       }
       if (S.sportType === 'triathlon') {
-        sports.push({ value: 'triathlon', label: 'Triathlon' });
+        // BUG-FIX: was hardcoded 'Triathlon' (FR only) — now bilingual
+        sports.push({ value: 'triathlon', label: _calLang === 'en' ? 'Triathlon' : 'Triathlon' });
       }
       if (S.sportType === 'calisthenics') {
-        sports.push({ value: 'calisthenics', label: 'Calisthénie' });
+        // BUG-FIX: was hardcoded 'Calisthénie' (FR only) — now bilingual
+        sports.push({ value: 'calisthenics', label: _calLang === 'en' ? 'Calisthenics' : 'Calisthénie' });
       }
       if (S.sportType === 'cycling') {
-        sports.push({ value: 'cycling', label: 'Cyclisme' });
+        // BUG-FIX: was hardcoded 'Cyclisme' (FR only) — now bilingual
+        sports.push({ value: 'cycling', label: _calLang === 'en' ? 'Cycling' : 'Cyclisme' });
       }
     }
-    sports.push({ value: 'autre', label: 'Autre' });
+    // BUG-FIX: 'Autre' was always French — now bilingual
+    sports.push({ value: 'autre', label: _calLang === 'en' ? 'Other' : 'Autre' });
     return sports;
   }
 
@@ -173,13 +178,18 @@
     for (var i = 0; i < conflicts.length; i++) {
       var c = conflicts[i];
       var isCritique = c.severity === 'critique';
-      var icon = isCritique ? 'Critique' : 'Attention';
+      // BUG-FIX: hardcoded French strings — now bilingual
+      var icon = isCritique ? (_calLang === 'en' ? 'Critical' : 'Critique') : (_calLang === 'en' ? 'Warning' : 'Attention');
       var color = isCritique ? 'var(--red,#5A1010)' : 'var(--orange,#6A4A1A)';
       var bgColor = isCritique ? 'var(--redbg,rgba(90,16,16,.06))' : 'var(--orangebg,rgba(106,74,26,.06))';
       var muscleList = c.muscles.join(', ');
-      var msg = 'Vos muscles (' + muscleList + ') seront encore en récupération le ' +
-                c.nextDayName + '. ' + c.recoveryNeeded + 'h nécessaires, ' +
-                c.recoveryAvailable + 'h disponibles.';
+      var msg = _calLang === 'en'
+        ? 'Your muscles (' + muscleList + ') will still be recovering on ' +
+          c.nextDayName + '. ' + c.recoveryNeeded + 'h needed, ' +
+          c.recoveryAvailable + 'h available.'
+        : 'Vos muscles (' + muscleList + ') seront encore en récupération le ' +
+          c.nextDayName + '. ' + c.recoveryNeeded + 'h nécessaires, ' +
+          c.recoveryAvailable + 'h disponibles.';
       var row = window.h('div', {
         style: 'display:flex;align-items:flex-start;gap:10px;padding:12px;' +
                'background:' + bgColor + ';border-radius:2px;margin-bottom:8px;' +
@@ -202,7 +212,7 @@
       window.h('div', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:400;letter-spacing:4px;text-transform:uppercase;' +
                'color:var(--grey,#6B6B65);margin-bottom:12px;'
-      }, 'Conflits détectés')
+      }, _calLang === 'en' ? 'Conflicts detected' : 'Conflits détectés')
     ]);
     for (var j = 0; j < items.length; j++) {
       zone.appendChild(items[j]);
@@ -232,7 +242,7 @@
              'padding:10px 0;display:inline-flex;align-items:center;gap:8px;min-height:44px;'
     }, [
       window.h('span', {}, '\u2190'),
-      window.h('span', {}, 'Retour')
+      window.h('span', {}, _calLang === 'en' ? 'Back' : 'Retour')
     ]);
     btnBack.addEventListener('click', function() {
       S.view = 'today';
@@ -247,16 +257,43 @@
       }, btnBack),
       window.h('h1', {
         style: 'font-family:Georgia,serif;font-size:24px;font-weight:normal;color:var(--black,#0A0A09);margin:0 0 6px 0;letter-spacing:-0.5px;'
-      }, 'Calendrier Intelligent'),
+      }, _calLang === 'en' ? 'Smart Calendar' : 'Calendrier Intelligent'),
       window.h('p', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);margin:0;line-height:1.7;font-weight:300;'
-      }, 'Planifiez vos entraînements & détectez les conflits musculaires')
+      }, _calLang === 'en' ? 'Plan your training & detect muscle conflicts' : 'Planifiez vos entraînements & détectez les conflits musculaires')
     ]);
 
     // ── Grille 7 jours ──
     var selects = [];
     var conflictBadges = [];
     var dayCards = [];
+
+    // FIX COHÉRENCE CALENDRIER 2026-04 : today detection + session state for checkmark.
+    // (new Date().getDay()+6)%7 → 0=Lun…6=Dim, cohérent avec getDayType() et trainingDaysSelected.
+    var _todayDayIdx = (new Date().getDay() + 6) % 7;
+    var _todayDateStr = new Date().toISOString().slice(0, 10);
+    // Détecter si la séance du jour est terminée ou en cours (muscu + autres sports)
+    var _calSessionDoneToday = false;
+    var _calSessionInProgress = false;
+    try {
+      // sessionHistory key = "<dayIdx>_<date>" → chercher n'importe quel dayIdx pour aujourd'hui
+      var _sh = S.sessionHistory || {};
+      var _shKeys = Object.keys(_sh);
+      for (var _ski = 0; _ski < _shKeys.length; _ski++) {
+        if (_shKeys[_ski].indexOf(_todayDateStr) !== -1) { _calSessionDoneToday = true; break; }
+      }
+      if (!_calSessionDoneToday && S.muscuSessionLog && S.muscuSessionLog[_todayDateStr]) {
+        var _ml = S.muscuSessionLog[_todayDateStr];
+        var _anyV = false, _anyU = false;
+        Object.keys(_ml).forEach(function(ex) {
+          (_ml[ex] || []).forEach(function(set) {
+            if (set.validated) _anyV = true; else _anyU = true;
+          });
+        });
+        if (_anyV && !_anyU) _calSessionDoneToday = true;
+        else if (_anyV && _anyU) _calSessionInProgress = true;
+      }
+    } catch(_calSessErr) {}
 
     var currentConflicts = detectConflicts(S.weeklyCalendar);
     var conflictsByDay = {};
@@ -268,6 +305,7 @@
       (function(dayIdx) {
         var dayKey = String(dayIdx);
         var currentSport = (S.weeklyCalendar && S.weeklyCalendar[dayKey]) ? S.weeklyCalendar[dayKey] : 'repos';
+        var isToday = (dayIdx === _todayDayIdx);
 
         // Badge conflit
         var badgeEl = window.h('span', {
@@ -310,7 +348,7 @@
             if (newConflictsByDay[bdi]) {
               var conf = newConflictsByDay[bdi];
               var isCrit = conf.severity === 'critique';
-              badge.textContent = isCrit ? 'Critique' : 'Attention';
+              badge.textContent = isCrit ? (_calLang === 'en' ? 'Critical' : 'Critique') : (_calLang === 'en' ? 'Warning' : 'Attention');
               badge.style.display = 'inline-block';
               badge.style.background = isCrit ? 'var(--redbg,rgba(90,16,16,.06))' : 'var(--orangebg,rgba(106,74,26,.06))';
               badge.style.color = isCrit ? 'var(--red,#5A1010)' : 'var(--orange,#6A4A1A)';
@@ -334,7 +372,7 @@
         if (conflictsByDay[dayIdx]) {
           var conf0 = conflictsByDay[dayIdx];
           var isCrit0 = conf0.severity === 'critique';
-          badgeEl.textContent = isCrit0 ? 'Critique' : 'Attention';
+          badgeEl.textContent = isCrit0 ? (_calLang === 'en' ? 'Critical' : 'Critique') : (_calLang === 'en' ? 'Warning' : 'Attention');
           badgeEl.style.display = 'inline-block';
           badgeEl.style.background = isCrit0 ? 'var(--redbg,rgba(90,16,16,.06))' : 'var(--orangebg,rgba(106,74,26,.06))';
           badgeEl.style.color = isCrit0 ? 'var(--red,#5A1010)' : 'var(--orange,#6A4A1A)';
@@ -375,10 +413,10 @@
     }, [
       window.h('div', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px;'
-      }, 'Nutrition adaptée'),
+      }, _calLang === 'en' ? 'Adapted nutrition' : 'Nutrition adaptée'),
       window.h('div', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;'
-      }, 'Les jours d\'entraînement, vos glucides sont automatiquement +20% pour optimiser les performances et la récupération.')
+      }, _calLang === 'en' ? 'On training days, your carbohydrates are automatically +20% to optimise performance and recovery.' : 'Les jours d\'entraînement, vos glucides sont automatiquement +20% pour optimiser les performances et la récupération.')
     ]);
 
     // ── Bouton sauvegarder ──
@@ -388,7 +426,7 @@
              'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:400;' +
              'letter-spacing:6px;text-transform:uppercase;cursor:pointer;min-height:44px;' +
              'transition:background 0.2s ease;'
-    }, 'Sauvegarder le calendrier');
+    }, _calLang === 'en' ? 'Save calendar' : 'Sauvegarder le calendrier');
     btnSave.addEventListener('click', function() {
       if (!S.weeklyCalendar) S.weeklyCalendar = {};
       for (var si = 0; si < selects.length; si++) {
@@ -401,13 +439,13 @@
       // jours d'entraînement (split calorique adapté).
       if (window.devalidateWeekPlan) window.devalidateWeekPlan('smart-calendar saved');
       else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
-      btnSave.textContent = 'Sauvegarde...';
+      btnSave.textContent = _calLang === 'en' ? 'Saving...' : 'Sauvegarde...';
       btnSave.style.opacity = '0.6';
       btnSave.disabled = true;
       if (window.saveProfile) window.saveProfile();
-      showToast('Calendrier sauvegardé');
+      showToast(_calLang === 'en' ? 'Calendar saved' : 'Calendrier sauvegardé');
       setTimeout(function() {
-        btnSave.textContent = 'Sauvegarder le calendrier';
+        btnSave.textContent = _calLang === 'en' ? 'Save calendar' : 'Sauvegarder le calendrier';
         btnSave.style.opacity = '1';
         btnSave.disabled = false;
       }, 1500);
@@ -456,19 +494,19 @@
     var title = window.h('div', {
       style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;font-weight:normal;margin-bottom:6px;' +
              'padding-right:40px;'
-    }, 'Mise à jour — Calendrier Intelligent');
+    }, _calLang === 'en' ? 'Update — Smart Calendar' : 'Mise à jour — Calendrier Intelligent');
 
     var subtitle = window.h('div', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:rgba(250,250,247,0.65);' +
              'margin-bottom:16px;line-height:1.6;padding-right:40px;letter-spacing:0.3px;'
-    }, 'Planifiez vos sports sur 7 jours et évitez les conflits musculaires');
+    }, _calLang === 'en' ? 'Plan your sports over 7 days and avoid muscle conflicts' : 'Planifiez vos sports sur 7 jours et évitez les conflits musculaires');
 
     var btnCta = window.h('button', {
       style: 'background:transparent;color:var(--ivory,#FAF9F6);border:1px solid rgba(250,250,247,0.4);' +
              'border-radius:2px;padding:10px 20px;min-height:44px;' +
              'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:400;' +
              'letter-spacing:4px;text-transform:uppercase;cursor:pointer;'
-    }, 'Découvrir');
+    }, _calLang === 'en' ? 'Discover' : 'Découvrir');
     btnCta.addEventListener('click', function() {
       var S = window.S;
       if (S) S.view = 'calendar';

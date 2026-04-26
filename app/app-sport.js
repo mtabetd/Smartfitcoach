@@ -10431,6 +10431,46 @@ function renderHyroxProgram(p) {
  p.appendChild(bmCard);
  }
 
+ // ─── HYROX SESSION DONE ───
+ // Marks the day as complete and writes to S.sessionHistory for analytics tracking.
+ (function() {
+  if (!S.hyroxProgress || typeof S.hyroxProgress !== 'object') S.hyroxProgress = {};
+  var _hxDayKey = 'W' + S.hyroxWeek + '_D' + (S.selectedHyroxDay + 1);
+  var _hxDone = !!(S.hyroxProgress[_hxDayKey] && S.hyroxProgress[_hxDayKey].done);
+  var _hxCard = h('div', {style: 'border:1px solid ' + (_hxDone ? 'var(--ink-900,#0A0A09)' : 'var(--line,#D8D8D0)') + ';padding:14px 16px;margin:12px 0;background:' + (_hxDone ? 'rgba(62,92,58,0.04)' : 'var(--ivory2,#F4F4F0)')});
+  _hxCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, 'SUIVI — ' + _hxDayKey));
+  if (_hxDone) {
+    var _doneEl = h('div', {style: 'font-family:Georgia,serif;font-size:13px;color:var(--success,#3E5C3A);margin-bottom:8px'});
+    _doneEl.textContent = '✓ Séance complétée le ' + (S.hyroxProgress[_hxDayKey].date || '');
+    _hxCard.appendChild(_doneEl);
+    _hxCard.appendChild(h('button', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey);background:none;border:none;cursor:pointer;padding:0;letter-spacing:1px;text-transform:uppercase',
+      onclick: function() { S.hyroxProgress[_hxDayKey] = null; window.render(); }
+    }, 'Corriger'));
+  } else {
+    var _hxDoneBtn = h('button', {'class': 'btn-primary', style: 'width:100%;margin:0', onclick: function() {
+      if (!S.hyroxProgress) S.hyroxProgress = {};
+      var _htd = new Date();
+      var _hmm = _htd.getMonth() + 1, _hdd = _htd.getDate();
+      var _hdateStr = _htd.getFullYear() + '-' + (_hmm < 10 ? '0' : '') + _hmm + '-' + (_hdd < 10 ? '0' : '') + _hdd;
+      S.hyroxProgress[_hxDayKey] = { done: true, date: _hdateStr };
+      // Save to S.sessionHistory for analytics volume tracker
+      if (!S.sessionHistory) S.sessionHistory = {};
+      var _hxLevel = S.hyroxLevel || 'intermediate';
+      var _hxDurMap = {debutant: 60, beginner: 60, intermediate: 75, intermediaire: 75, advanced: 90, avance: 90, pro: 105, elite: 105};
+      var _hxDur = (sess && sess.duration) || _hxDurMap[_hxLevel] || 75;
+      var _hxKcal = estimateKcal('hyrox', _hxLevel, _hxDur);
+      var _hxSessKey = S.selectedHyroxDay + '_' + _hdateStr;
+      S.sessionHistory[_hxSessKey] = {duration: _hxDur, kcalBase: _hxKcal ? _hxKcal.base : 0, kcalEpoc: _hxKcal ? _hxKcal.epoc : 0, kcalTotal: _hxKcal ? _hxKcal.total : 0, date: new Date().toISOString(), sport: 'hyrox', hxDayKey: _hxDayKey};
+      if (window.GAMIFICATION) { try { window.GAMIFICATION.updateStreak(); } catch(e) {} }
+      window.BLACKBOX && window.BLACKBOX.log('hyrox_session_done', {week: S.hyroxWeek, day: S.selectedHyroxDay + 1, level: _hxLevel});
+      if (window.showToast) window.showToast('✓ Séance Hyrox validée — ' + _hxDayKey, 'success');
+      window.render();
+    }}, '✓ Séance terminée');
+    _hxCard.appendChild(_hxDoneBtn);
+  }
+  p.appendChild(_hxCard);
+ })();
+
  p.appendChild(h('div', {style: 'height:12px'}));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 9; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration'}));
  appendNutritionModeCTA(p);

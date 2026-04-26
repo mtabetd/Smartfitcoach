@@ -258,10 +258,18 @@ function saveProfile() {
  // FIX VALIDATION SPORT 2026-04 (F6) : détection symétrique au plan nutrition.
  // Si un paramètre sport change alors qu'un programme existait → dévalidation
  // (programme préservé, flag reset, bandeau de revalidation apparaît).
+ // FIX BUG-SPORT-DEVALIDATE 2026-04 : le guard `!S.sportProgram` sortait tôt pour
+ // running/cycling/triathlon/hyrox/padel/yoga/calisthenics dont le programme vit dans
+ // S.runningProgram, S.cyclingProgram, etc. — pas dans S.sportProgram.
+ // La dévalidation ne se déclenchait jamais pour ces sportTypes quand sportLevel/sportDays changeait.
+ // Correction : vérifier tous les programmes sport connus avant de sortir.
  (function() {
  try {
  var raw3 = localStorage.getItem('mtd_profile_' + uid);
- if (!raw3 || !S.sportProgram) return;
+ var _hasAnySportProgram = !!(S.sportProgram || S.runningProgram || S.cyclingProgram
+   || S.triathlonProgram || S.hyroxProgram || S.padelProgram || S.calisthenicsProgram
+   || S.golfProgram || S.yogaProgram || S.muscuIAProgram);
+ if (!raw3 || !_hasAnySportProgram) return;
  var prev = null;
  if (window._storageDecode) { prev = window._storageDecode(raw3); }
  if (prev == null) { try { prev = JSON.parse(raw3); } catch(e2) {} }
@@ -482,7 +490,10 @@ function loadProfile() {
    if (typeof S.targetWeight === 'string') { var _tw = parseFloat(S.targetWeight); S.targetWeight = isNaN(_tw) ? null : _tw; }
    if (S.targetWeight !== null && S.targetWeight !== undefined && (S.targetWeight <= 0 || S.targetWeight > 300)) S.targetWeight = null;
    if (typeof S.height === 'string') { var _h = parseFloat(S.height); S.height = isNaN(_h) ? null : _h; }
-   if (S.height !== null && S.height !== undefined && (S.height <= 0 || S.height > 260)) S.height = null;
+   // BUG FIX: le guard précédent n'avait pas de borne inférieure (>0) — une taille en mètres
+   // (ex: 1.75) passait silencieusement mais faisait échouer calcBMR() (garde height<100).
+   // Maintenant : toute valeur < 100 ou > 260 est rejetée (nullifiée) dès le chargement du profil.
+   if (S.height !== null && S.height !== undefined && (S.height < 100 || S.height > 260)) S.height = null;
    if (typeof S.age === 'string') { var _a = parseInt(S.age, 10); S.age = isNaN(_a) ? null : _a; }
    if (S.age !== null && S.age !== undefined && (S.age < 10 || S.age > 120)) S.age = null;
    if (typeof S.prePregnancyWeight === 'string') { var _pw = parseFloat(S.prePregnancyWeight); S.prePregnancyWeight = isNaN(_pw) ? null : _pw; }
@@ -1116,7 +1127,9 @@ function renderProfilePage(container) {
      value: S.height ? String(S.height) : '',
      placeholder: '175',
      style: 'flex:1;min-width:0;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border);background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;outline:none;border-radius:2px;',
-     oninput: function(e) { var v = parseFloat(e.target.value); if (!isNaN(v) && v > 0) S.height = v; }
+     // BUG FIX: validation taille — rejeter les valeurs en mètres (ex: 1.75 < 100) ou hors plage.
+     // Avant : v>0 acceptait 1.75 → S.height=1.75 → calcBMR() retournait 0 silencieusement.
+     oninput: function(e) { var v = parseFloat(e.target.value); if (!isNaN(v) && v >= 100 && v <= 260) S.height = v; }
    });
    _efTailleWrap.appendChild(_efTaille);
    _efTailleWrap.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);'}, 'cm'));

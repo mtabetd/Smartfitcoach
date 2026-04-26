@@ -1087,7 +1087,10 @@ function buildContextualHero(moment, S) {
   var hasMedical = Array.isArray(S.medical) && S.medical.length > 0;
   var isCFUser = S.sportType === 'crossfit';
   // FIX SPRINT P1.7 — Détection user muscu pour brancher les hero contextuels
-  var isMuscuUser = S.sportType === 'muscu' || S.sportType === 'musculation' || (S.appMode === 'sport' && !isCFUser);
+  // FIX BUG-MUSCU-HERO 2026-04 : le fallback (S.appMode === 'sport' && !isCFUser) capturait
+  // yoga/running/padel/triathlon → leur affichait le hero "musculation" (exos, séance muscu…).
+  // Maintenant : isMuscu est strict (sportType uniquement), le else-branch générique couvre le reste.
+  var isMuscuUser = S.sportType === 'muscu' || S.sportType === 'musculation' || S.sportType === 'calisthenics';
   // Récup séance du jour si user a un programme sport
   var todaySportSession = null;
   try {
@@ -1166,7 +1169,11 @@ function buildContextualHero(moment, S) {
   } else if (moment === 'midi') {
     // Midi : cadrer le déjeuner / préparer la séance
     var remaining = Math.max(0, target - totals.kcal);
-    var hasSessionToday = (typeof window.getDayType === 'function' && window.getDayType(todayIdx)) || false;
+    // FIX COHÉRENCE CALENDRIER 2026-04 : getDayType() retourne un objet {isTraining,...},
+    // toujours truthy même pour un jour de repos → hasSessionToday était TOUJOURS true.
+    // Corrigé : lire explicitement .isTraining.
+    var _dayTypeInfo = (typeof window.getDayType === 'function') ? window.getDayType(todayIdx) : null;
+    var hasSessionToday = !!(_dayTypeInfo && _dayTypeInfo.isTraining);
 
     if (isPregnant) {
       ctx.quote = 'Déjeuner riche en fer recommandé. Lentilles ou épinards ?';
@@ -3792,8 +3799,12 @@ function renderCardSport() {
   // FIX SPRINT P1.9 — Détecter séance interrompue (au moins 1 set validé aujourd'hui)
   var todayKey = new Date().toISOString().slice(0, 10);
   var hasInProgressSession = false;
+  // FIX COHÉRENCE CALENDRIER 2026-04 : détecter aussi séance 100% terminée.
+  // sessionHistory est keyed par "<dayIdx>_<date>" (format app-sport.js ligne 8886).
+  var sessionDoneKey = idx + '_' + todayKey;
+  var hasSessionDoneToday = !!(S.sessionHistory && S.sessionHistory[sessionDoneKey]);
   try {
-    if (S.muscuSessionLog && S.muscuSessionLog[todayKey]) {
+    if (!hasSessionDoneToday && S.muscuSessionLog && S.muscuSessionLog[todayKey]) {
       var dayLog = S.muscuSessionLog[todayKey];
       var anyValidated = false, anyUnvalidated = false;
       Object.keys(dayLog).forEach(function(exName) {
@@ -3802,20 +3813,30 @@ function renderCardSport() {
           else anyUnvalidated = true;
         });
       });
-      hasInProgressSession = anyValidated && anyUnvalidated;
+      // Tous les sets validés et aucun non-validé → séance terminée
+      if (anyValidated && !anyUnvalidated) hasSessionDoneToday = true;
+      else hasInProgressSession = anyValidated && anyUnvalidated;
     }
   } catch(eIp) {}
 
   // FIX SPRINT P1.3 + P1.9 — bouton "Commencer/Continuer" prominent
   // FIX MULTI-SPORTS : adapter le libellé pour les sports endurance
-  var btnLabel = hasInProgressSession ? '\u2192 Continuer la s\u00e9ance' : (_isEnduranceSport ? '\u2192 Voir mon programme' : '\u2192 Commencer la s\u00e9ance');
+  // FIX COHÉRENCE 2026-04 : si séance déjà terminée → bouton "✔ Séance terminée" désactivé
+  var btnLabel = hasSessionDoneToday
+    ? '\u2714 S\u00e9ance termin\u00e9e'
+    : (hasInProgressSession ? '\u2192 Continuer la s\u00e9ance' : (_isEnduranceSport ? '\u2192 Voir mon programme' : '\u2192 Commencer la s\u00e9ance'));
+  // FIX COHÉRENCE 2026-04 : style du bouton adapté selon l'état de la séance
+  var _btnStyle = hasSessionDoneToday
+    ? 'display:block;width:100%;padding:16px;background:rgba(62,92,58,0.08);color:var(--success,#3E5C3A);border:1px solid var(--success,#3E5C3A);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;cursor:default;border-radius:2px;min-height:52px;font-weight:500;'
+    : 'display:block;width:100%;padding:16px;background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;min-height:52px;font-weight:500;';
   var btn = h('button', {
-    style: 'display:block;width:100%;padding:16px;background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;min-height:52px;font-weight:500;',
+    style: _btnStyle,
     onclick: function() {
+      // Séance déjà terminée → naviguer quand même pour voir le bilan
       var S2 = window.S;
       if (!S2) return;
       S2.view = 'sport';
-      S2.selectedSportDay = idx;
+      S2.selectedSportDay = Math.min(idx, (Array.isArray(S2.sportProgram) ? S2.sportProgram.length - 1 : 0));
       if (window.render) window.render();
     }
   }, btnLabel);
@@ -6266,7 +6287,9 @@ function renderCoachBar() {
                : (hour >= 17 && hour < 23) ? 'soir' : 'veille';
   // FIX SPRINT P2.8 — Coach bar muscu-aware
   // Détection user muscu + état fatigue → prompts adaptés.
-  var _isMuscuUser = S.sportType === 'muscu' || S.sportType === 'musculation' || (S.appMode === 'sport');
+  // FIX BUG-MUSCU-COACHBAR 2026-04 : (S.appMode === 'sport') capturait yoga/running/padel →
+  // leur affichait les prompts musculation dans la coach bar. Maintenant : strict sur sportType.
+  var _isMuscuUser = S.sportType === 'muscu' || S.sportType === 'musculation' || S.sportType === 'calisthenics';
   var _isFatigued = false;
   try {
     var _w = S.todayWellness;

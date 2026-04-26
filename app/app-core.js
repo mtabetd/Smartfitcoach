@@ -4728,7 +4728,17 @@ var sportDays=Array.isArray(s.trainingDaysSelected)&&s.trainingDaysSelected.leng
 // Évite un surplus calorique 3× trop élevé si l'utilisateur débutant a coché "Athlète" par excès de confiance.
 if(s.sportLevel==='beginner'&&effectiveFactor>1.55)effectiveFactor=1.55;
 return calcBMR()*effectiveFactor}
-function calcTarget(){var s=window.S;if(s.goal===null||s.goal===undefined||!GOALS[s.goal])return 0;var tdeeVal=calcTDEE();var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&window.isFemale(s)){var tri=getPregnancyTrimester();var pregExtra=tri?tri.trimester.calorieExtra:300;
+function calcTarget(){var s=window.S;if(s.goal===null||s.goal===undefined||!GOALS[s.goal])return 0;var tdeeVal=calcTDEE();
+// BUG FIX: si TDEE=0 (profil incomplet : activité/poids/taille/âge/sexe manquant), retourner 0.
+// Avant : le code tombait dans les planchers (1400/1500 kcal) → dashboard affichait une cible fictive.
+// Maintenant : 0 indique explicitement "données insuffisantes" aux appelants (dashboard, génération du plan).
+// Exception TCA : conservée ci-dessous (le plancher sécurisé est intentionnel même sur profil partiel).
+if(tdeeVal===0&&!(s.medical&&s.medical.indexOf('tca')!==-1))return 0;
+var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&window.isFemale(s)){var tri=getPregnancyTrimester();
+// BUG FIX: le fallback était 300 kcal alors que getPregnancyTrimester() défaute pregnancyWeek à 20 (T2=340 kcal).
+// Un retour null est donc théoriquement impossible pour une femme enceinte — mais si cela se produit,
+// 340 est la valeur correcte (T2, semaine 20, ACOG 2018) et non 300.
+var pregExtra=tri?tri.trimester.calorieExtra:340;
 // Si allaitement ET enceinte (fin de grossesse + allaitement aîné) → ADDITIF (ACOG 2018 + 2022)
 var allaitExtra=(s.medical&&s.medical.indexOf('allaitement')!==-1)?500:0;
 base=Math.round(tdeeVal)+pregExtra+allaitExtra;
@@ -4761,7 +4771,6 @@ if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*
 // Plancher calorique sexe-spécifique (ISSN 2017, ACSM 2016, IOC 2018 RED-S prevention)
 // Femme : plancher 1400 kcal/j — ISSN 2017 / ACSM 2016 (l'ancien plancher 1200 est obsolète et dangereux)
 // Homme : plancher 1500 kcal/j (ACSM — plancher physiologique masculin)
-var effectivePAL=s.activity!==null&&ACTIVITIES[s.activity]?ACTIVITIES[s.activity].factor:1.2;
 var kcalFloor=window.isFemale(s)?1400:1500;
 base=Math.max(base,kcalFloor);
 // Plancher BMR : le déficit ne doit JAMAIS descendre sous le métabolisme de base (sécurité métabolique)
@@ -4889,13 +4898,24 @@ function calcMacros(){
   // ISSN 2017 : endurance = 1.4-1.6 g/kg vs résistance = 1.6-2.5 g/kg
   // Tarnopolsky 2004 (MSSE) : athlètes endurance nécessitent ~0.2g/kg de moins que athlètes de force
   // S'applique uniquement si l'utilisateur n'a PAS d'objectif musculaire ou de sèche sportive
+  // FIX BUG-SPORT-PROTEIN 2026-04 : si sportGoals est vide (sport-only users sans nutrition onboarding),
+  // se rabattre sur sportType pour déduire hasMuscGoal/hasEndurOnly.
+  // Avant : yoga/running/padel users sans sportGoals ne recevaient aucun ajustement → protéines identiques
+  //         à un user muscu au même actFactor (ex: 2.2g/kg pour un yogi = sur-protéiné sans raison).
+  var _endurSportTypes = ['running','cycling','triathlon','hyrox','yoga','padel','golf'];
+  var _muscuSportTypes = ['musculation','calisthenics'];
+  var hasMuscGoal, hasEndurOnly, isDeficit;
   if(s.sportGoals&&s.sportGoals.length>0){
-    var hasMuscGoal=s.sportGoals.indexOf('muscle')!==-1||s.sportGoals.indexOf('shred')!==-1;
-    var hasEndurOnly=!hasMuscGoal&&(s.sportGoals.indexOf('endurance')!==-1||s.sportGoals.indexOf('weightloss')!==-1||s.sportGoals.indexOf('flexibility')!==-1||s.sportGoals.indexOf('general')!==-1);
-    var isDeficit=goalKey==='shred'||goalKey==='cut';
-    if(hasEndurOnly&&!isDeficit)ppk=Math.max(1.2,ppk-0.2); // Tarnopolsky 2004 : -0.2g/kg endurance pure
-    else if(hasEndurOnly&&isDeficit)ppk=Math.min(3.5,ppk+0.2); // Helms 2014: déficit calorique → +0.2g/kg pour préserver la masse maigre
+    hasMuscGoal=s.sportGoals.indexOf('muscle')!==-1||s.sportGoals.indexOf('shred')!==-1;
+    hasEndurOnly=!hasMuscGoal&&(s.sportGoals.indexOf('endurance')!==-1||s.sportGoals.indexOf('weightloss')!==-1||s.sportGoals.indexOf('flexibility')!==-1||s.sportGoals.indexOf('general')!==-1);
+  } else if(s.sportType){
+    // Fallback sur sportType quand sportGoals absent (typique en mode sport-only)
+    hasMuscGoal=_muscuSportTypes.indexOf(s.sportType)!==-1;
+    hasEndurOnly=_endurSportTypes.indexOf(s.sportType)!==-1;
   }
+  isDeficit=goalKey==='shred'||goalKey==='cut';
+  if(hasEndurOnly&&!isDeficit)ppk=Math.max(1.2,ppk-0.2); // Tarnopolsky 2004 : -0.2g/kg endurance pure
+  else if(hasEndurOnly&&isDeficit)ppk=Math.min(3.5,ppk+0.2); // Helms 2014: déficit calorique → +0.2g/kg pour préserver la masse maigre
   if(s.train&&Array.isArray(s.train)&&s.train.indexOf(0)!==-1)ppk+=0.1;
   if(s.medical&&s.medical.indexOf('irc')!==-1)ppk=Math.min(ppk,0.6); // KDOQI 2020: 0.55-0.60g/kg CKD 3-5 non-dialysis
   // Vegan/vegetarian: adjust protein for lower DIAAS bioavailability of plant proteins (Messina 2019, ISSN 2017)
@@ -6683,7 +6703,16 @@ function buildNMInputs(trainingDay) {
 
 function computeNutritionState(trainingDay) {
   if (!window.NutritionMaster) return null;
-  if (window.S.goal === null || window.S.sex === null) return null;
+  // FIX BUG-NM-SPORT-ONLY 2026-04 : en mode sport-only (appMode='sport'), S.goal est null
+  // (l'user n'a pas fait l'onboarding nutrition). computeNutritionState retournait null → S._nm=null
+  // → RecipeEngine.getAdaptedRecipe échouait silencieusement (no scaling, no adapted macros).
+  // buildNMInputs() defaulte déjà goal → 'maintain' si S.goal=null (ligne ~6689).
+  // Seul le guard ci-dessous bloquait le calcul. On autorise S.goal=null pour les sport-only
+  // si le profil biométrique est complet (sex + age) — NutritionMaster peut calculer.
+  // calcTarget/calcMacros retournent toujours 0 pour S.goal===null (pas d'affichage nutrition).
+  var _allowNullGoal = window.S.appMode === 'sport' && window.S.sex !== null;
+  if (!_allowNullGoal && window.S.goal === null) return null;
+  if (window.S.sex === null) return null;
   // I-02: si getAge() retourne null/0, on ne calcule pas avec age=25 fantôme
   if (!getAge()) { window.S._nm = null; return null; }
   var inputs = buildNMInputs(trainingDay);
@@ -6693,12 +6722,15 @@ function computeNutritionState(trainingDay) {
 
   // Applique les sur-couches médicales de app-core (calcTarget / calcMacros)
   // pour que les valeurs médicalement ajustées soient reflétées dans _nm
+  // FIX BUG-NM-SPORT-ONLY 2026-04 : pour sport-only (S.goal===null), calcTarget()→0 et
+  // calcMacros()→{g:0,p:0,l:0}. Ne pas écraser les valeurs NutritionMaster (goal='maintain')
+  // avec ces zéros — le result NutritionMaster est la seule source valide de macros pour ces users.
   var adjustedCalories = calcTarget();
   var adjustedMacros   = calcMacros();
   if (adjustedCalories && adjustedCalories > 0) {
     result.caloriesTarget = adjustedCalories;
   }
-  if (adjustedMacros) {
+  if (adjustedMacros && (adjustedMacros.p > 0 || adjustedMacros.g > 0 || adjustedMacros.l > 0)) {
     result.proteinGrams = adjustedMacros.p;
     result.carbsGrams   = adjustedMacros.g;
     result.fatGrams     = adjustedMacros.l;

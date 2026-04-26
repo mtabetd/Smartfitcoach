@@ -3355,6 +3355,8 @@ function renderStep9(p) {
             if (!S.weekPlan) return;
             if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
             S.weekPlan[S.selectedDay][slotKey3] = { n: pItem.name, k: Math.round(pItem.kcal * r), kcal: Math.round(pItem.kcal * r), p: Math.round(pItem.p * r), g: Math.round(pItem.g * r), l: Math.round(pItem.l * r), f: '\u25CE', emoji: '\u25CE', custom: true, portions: gr };
+            // BUG-1 FIX: recalculate day aggregate totals so dashboard/shopping-list stay in sync
+            (function(_di3) { var _d3 = S.weekPlan[_di3]; if (!_d3) return; var _t3 = {k:0,p:0,g:0,l:0}; ['breakfast','lunch','snack','dinner'].forEach(function(q){var m=_d3[q];if(m){_t3.k+=m.k||0;_t3.p+=m.p||0;_t3.g+=m.g||0;_t3.l+=m.l||0;}}); _d3.kcal=_t3.k;_d3.p=_t3.p;_d3.g=_t3.g;_d3.l=_t3.l; })(S.selectedDay);
             S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false; S._foodPortionItem = null; S._foodPortionGrams = null;
             try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saveProfile error:', e); }
             try { var _cn = (pItem.name||'').toLowerCase(), _cw=[]; if(!S.allowPork&&/porc|jambon|bacon|lardon(?!.*(?:dinde|volaille|poulet))|saucisson|prosciutto|pancetta|chorizo/.test(_cn))_cw.push('porc'); if(S.regime===2&&/poulet|boeuf|b\u0153uf|veau|dinde|saumon|thon|poisson/.test(_cn))_cw.push('non v\u00e9g\u00e9tarien'); if(S.regime===3&&/poulet|boeuf|b\u0153uf|veau|oeuf|fromage|yaourt|lait/.test(_cn))_cw.push('non vegan'); if(_cw.length&&window.showToast)window.showToast((window.isEnglish && window.isEnglish()) ? '\u26a0\ufe0f Meal added \u2014 contains: '+_cw.join(', ') : '\u26a0\ufe0f Repas ajout\u00e9 \u2014 contient : '+_cw.join(', '), 'warning', 4000); } catch(_wE){}
@@ -3529,6 +3531,8 @@ function renderStep9(p) {
             p: Math.max(0, parseFloat(fd.p) || 0), g: Math.max(0, parseFloat(fd.g) || 0), l: Math.max(0, parseFloat(fd.l) || 0),
             f: '\u25CE', emoji: '\u25CE', custom: true
           };
+          // BUG-1 FIX: recalculate day aggregate totals so dashboard/shopping-list stay in sync
+          (function(_di4) { var _d4 = S.weekPlan[_di4]; if (!_d4) return; var _t4 = {k:0,p:0,g:0,l:0}; ['breakfast','lunch','snack','dinner'].forEach(function(q){var m=_d4[q];if(m){_t4.k+=m.k||0;_t4.p+=m.p||0;_t4.g+=m.g||0;_t4.l+=m.l||0;}}); _d4.kcal=_t4.k;_d4.p=_t4.p;_d4.g=_t4.g;_d4.l=_t4.l; })(S.selectedDay);
           S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false; S._foodManualData = null;
           try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saveProfile error:', e); }
           try { var _mn = (fd.name||'').trim().toLowerCase(), _mw=[]; if(!S.allowPork&&/porc|jambon|bacon|lardon(?!.*(?:dinde|volaille|poulet))|saucisson|prosciutto|pancetta|chorizo/.test(_mn))_mw.push('porc'); if(S.regime===2&&/poulet|boeuf|bœuf|veau|dinde|saumon|thon|poisson/.test(_mn))_mw.push('non végétarien'); if(S.regime===3&&/poulet|boeuf|bœuf|veau|oeuf|fromage|yaourt|lait/.test(_mn))_mw.push('non vegan'); if(_mw.length&&window.showToast)window.showToast((window.isEnglish && window.isEnglish()) ? '\u26a0\ufe0f Meal added — contains: '+_mw.join(', ') : '\u26a0\ufe0f Repas ajouté — contient : '+_mw.join(', '), 'warning', 4000); } catch(_mwE){}
@@ -3546,7 +3550,11 @@ function renderStep9(p) {
   }
 
   // Day meals
-  var day = S.weekPlan[S.selectedDay] || {}, tgtCal = calcTarget(), dayTotal = 0, dayTotalP = 0, dayTotalG = 0, dayTotalL = 0;
+  // BUG-2 FIX: use the plan's adapted calorie target (with calMultiplier for rest/training days)
+  // rather than the bare calcTarget() which ignores the −10% rest-day multiplier.
+  // _tgt is already computed above from the plan's actual meal kcals; fall back to calcTarget()
+  // only when _tgt is 0 (empty plan). This keeps the diff badge honest.
+  var day = S.weekPlan[S.selectedDay] || {}, tgtCal = (_tgt > 0 ? _tgt : calcTarget()), dayTotal = 0, dayTotalP = 0, dayTotalG = 0, dayTotalL = 0;
   var slots = [
     {key: 'breakfast', label: window.t('onb.s9.breakfast')},
     {key: 'lunch', label: window.t('onb.s9.lunch')},
