@@ -3690,9 +3690,9 @@ function renderStep9(p) {
     card.appendChild(h('div', {'class': 'meal-kcal'}, (r.k || 0) + ' kcal'));
     var mc = h('div', {'class': 'meal-macros'});
     var _microMacroStyle = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);';
-    mc.appendChild(h('span', {title:'Glucides', style:_microMacroStyle}, 'GLU. ' + (r.g || 0) + 'g'));
-    mc.appendChild(h('span', {title:'Prot\u00e9ines', style:_microMacroStyle}, 'PROT. ' + (r.p || 0) + 'g'));
-    mc.appendChild(h('span', {title:'Lipides', style:_microMacroStyle}, 'LIP. ' + (r.l || 0) + 'g'));
+    mc.appendChild(h('span', {title:(window.isEnglish && window.isEnglish() ? 'Carbs' : 'Glucides'), style:_microMacroStyle}, 'GLU. ' + (r.g || 0) + 'g'));
+    mc.appendChild(h('span', {title:(window.isEnglish && window.isEnglish() ? 'Protein' : 'Prot\u00e9ines'), style:_microMacroStyle}, 'PROT. ' + (r.p || 0) + 'g'));
+    mc.appendChild(h('span', {title:(window.isEnglish && window.isEnglish() ? 'Fat' : 'Lipides'), style:_microMacroStyle}, 'LIP. ' + (r.l || 0) + 'g'));
     card.appendChild(mc);
     var lv = r.lv || 0;
     var stars = '';
@@ -3755,7 +3755,7 @@ function renderStep9(p) {
           S._addMealModalSlot = slotKey;
           window.render();
         }
-      }, '\u21ba Remplacer ce repas');
+      }, (window.isEnglish && window.isEnglish() ? '\u21ba Replace this meal' : '\u21ba Remplacer ce repas'));
       p.appendChild(addBtn);
 
       if (S._addMealModalSlot === slotKey) {
@@ -3772,7 +3772,7 @@ function renderStep9(p) {
         });
         sheet.appendChild(h('div', {
           style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;text-align:center'
-        }, 'Remplacer \u2014 ' + slotLabel));
+        }, (window.isEnglish && window.isEnglish() ? 'Replace \u2014 ' : 'Remplacer \u2014 ') + slotLabel));
         var choiceRow = h('div', {style: 'display:flex;gap:12px'});
         var btnRecipe = h('button', {
           style: 'flex:1;padding:14px 8px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer',
@@ -3782,7 +3782,7 @@ function renderStep9(p) {
             S._recipePicker = { slotKey: slotKey, query: '' };
             window.render();
           }
-        }, 'Recette');
+        }, (window.isEnglish && window.isEnglish() ? 'Recipe' : 'Recette'));
         var btnSalad = h('button', {
           style: 'flex:1;padding:14px 8px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer',
           onclick: function(e) {
@@ -3791,7 +3791,7 @@ function renderStep9(p) {
             window.render();
             if (window.openSaladComposer) window.openSaladComposer(slotKey);
           }
-        }, 'Salade');
+        }, (window.isEnglish && window.isEnglish() ? 'Salad' : 'Salade'));
         var btnAliment = h('button', {
           style: 'flex:1;padding:14px 8px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer',
           onclick: function(e) {
@@ -3803,7 +3803,7 @@ function renderStep9(p) {
             S._foodManualEntry = false;
             window.render();
           }
-        }, '\u270F\uFE0F Aliment');
+        }, (window.isEnglish && window.isEnglish() ? '\u270F\uFE0F Food' : '\u270F\uFE0F Aliment'));
         choiceRow.appendChild(btnRecipe);
         choiceRow.appendChild(btnSalad);
         choiceRow.appendChild(btnAliment);
@@ -4094,8 +4094,8 @@ function renderModal(app) {
       var u = (ing.unit || '').toLowerCase().trim();
       var unitStr = '';
       if (u === 'g' || u === 'ml' || u === 'cl' || u === 'l') unitStr = '\u00a0' + u;
-      else if (u === 'c.à.s' || u === 'c.a.s' || u === 'cas' || u === 'càs') unitStr = ' c.\u00e0 s.';
-      else if (u === 'c.à.c' || u === 'c.a.c' || u === 'cac' || u === 'càc') unitStr = ' c.\u00e0 c.';
+      else if (u === 'c.à.s' || u === 'c.a.s' || u === 'cas' || u === 'càs') unitStr = (window.isEnglish && window.isEnglish() ? ' tbsp' : ' c.\u00e0 s.');
+      else if (u === 'c.à.c' || u === 'c.a.c' || u === 'cac' || u === 'càc') unitStr = (window.isEnglish && window.isEnglish() ? ' tsp' : ' c.\u00e0 c.');
       else if (u === 'pce' || u === 'piece' || u === 'pièce' || u === 'unité' || u === 'unite') unitStr = '';
       else if (u) unitStr = ' ' + u;
       var name = (ing.name || '').trim();
@@ -4544,8 +4544,8 @@ var SALAD_DB = {
 var SIGNATURE_BOWLS = [
   {
     id: 'japanese_wave',
-    label: 'Vague Japonaise',
-    subtitle: 'Fra\u00eecheur umami \u00b7 \u2191 Prot\u00e9ines',
+    label: (window.isEnglish && window.isEnglish() ? 'Japanese Wave' : 'Vague Japonaise'),
+    subtitle: (window.isEnglish && window.isEnglish() ? 'Umami freshness \u00b7 \u2191 Protein' : 'Fra\u00eecheur umami \u00b7 \u2191 Prot\u00e9ines'),
     palette: '#2D6A6A',
     base: 'Riz noir V\u00e9n\u00e9r\u00e9',
     proteins: ['Steak de thon snack\u00e9', 'Edamame'],
@@ -4555,8 +4555,8 @@ var SIGNATURE_BOWLS = [
   },
   {
     id: 'mediterranean_sun',
-    label: 'M\u00e9diterran\u00e9e Dor\u00e9e',
-    subtitle: '\u00c9quilibre parfait \u00b7 Anti-inflammatoire',
+    label: (window.isEnglish && window.isEnglish() ? 'Golden Mediterranean' : 'M\u00e9diterran\u00e9e Dor\u00e9e'),
+    subtitle: (window.isEnglish && window.isEnglish() ? 'Perfect balance \u00b7 Anti-inflammatory' : '\u00c9quilibre parfait \u00b7 Anti-inflammatoire'),
     palette: '#C47A2B',
     base: 'Freekeh',
     proteins: ['Poulpe grill\u00e9', 'Feta AOP'],
@@ -4566,8 +4566,8 @@ var SIGNATURE_BOWLS = [
   },
   {
     id: 'green_goddess_bowl',
-    label: 'La D\u00e9esse Verte',
-    subtitle: 'D\u00e9tox & vitalit\u00e9 \u00b7 Faible calorie',
+    label: (window.isEnglish && window.isEnglish() ? 'The Green Goddess' : 'La D\u00e9esse Verte'),
+    subtitle: (window.isEnglish && window.isEnglish() ? 'Detox & vitality \u00b7 Low calorie' : 'D\u00e9tox & vitalit\u00e9 \u00b7 Faible calorie'),
     palette: '#2A6A3A',
     base: 'M\u00e2che',
     proteins: ['Tofu soyeux', 'Edamame'],
@@ -4577,8 +4577,8 @@ var SIGNATURE_BOWLS = [
   },
   {
     id: 'cesar_prestige',
-    label: 'C\u00e9sar R\u00e9invent\u00e9',
-    subtitle: 'Classique \u00e9lev\u00e9 \u00b7 \u2191 Sati\u00e9t\u00e9',
+    label: (window.isEnglish && window.isEnglish() ? 'Reinvented Caesar' : 'C\u00e9sar R\u00e9invent\u00e9'),
+    subtitle: (window.isEnglish && window.isEnglish() ? 'Elevated classic \u00b7 \u2191 Satiety' : 'Classique \u00e9lev\u00e9 \u00b7 \u2191 Sati\u00e9t\u00e9'),
     palette: '#5A3A8A',
     base: 'Quinoa',
     proteins: ['Poulet grill\u00e9', 'Parmesan 24 mois'],
@@ -4589,7 +4589,7 @@ var SIGNATURE_BOWLS = [
   {
     id: 'nordic_gravlax',
     label: 'Nordique Signature',
-    subtitle: 'Om\u00e9ga-3 \u00b7 Raffinement scandinave',
+    subtitle: (window.isEnglish && window.isEnglish() ? 'Omega-3 \u00b7 Scandinavian refinement' : 'Om\u00e9ga-3 \u00b7 Raffinement scandinave'),
     palette: '#3A5A8A',
     base: 'Sarrasin grill\u00e9',
     proteins: ['Gravlax maison'],
@@ -6658,7 +6658,7 @@ window.NUTRITION = {
       hdr.appendChild(h('div', {'class': 'logo', html: 'SMARTFITCOACH<span>Nutrition & Sport</span>'}));
       p.appendChild(hdr);
       // ── Barre de progression onboarding (Hermès — discrète, sticky) ──────────
-      var _obLabels = {1:'Profil',2:'Naissance',3:'Morphologie',4:'Objectifs',5:'Mode de vie',6:'Analyse',7:'Aperçu',8:'Médical',9:'Habitudes',10:'Préférences'};
+      var _obLabels = window.isEnglish && window.isEnglish() ? {1:'Profile',2:'Birth',3:'Morphology',4:'Goals',5:'Lifestyle',6:'Analysis',7:'Preview',8:'Medical',9:'Habits',10:'Preferences'} : {1:'Profil',2:'Naissance',3:'Morphologie',4:'Objectifs',5:'Mode de vie',6:'Analyse',7:'Aperçu',8:'Médical',9:'Habitudes',10:'Préférences'};
       var _obPct = Math.round((S.nStep / 10) * 100);
       var _obBar = h('div', { style: 'max-width:560px;margin:0 auto;padding:8px 16px 0;' });
       var _obTop = h('div', { style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;' });
