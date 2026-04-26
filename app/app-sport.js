@@ -5649,10 +5649,10 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  if (document.hidden) {
    try {
      if ('Notification' in window && Notification.permission === 'granted') {
-     var _notifTitle = _state.isTransition ? 'Exercice suivant !' : 'Repos terminé !';
+     var _notifTitle = _state.isTransition ? (window.isEnglish && window.isEnglish() ? 'Next exercise!' : 'Exercice suivant !') : (window.isEnglish && window.isEnglish() ? 'Rest over!' : 'Repos terminé !');
      var _notifBody = _state.isTransition
-       ? ('Prêt pour\u00a0: ' + (_state.nextExercise || 'l\'exercice suivant'))
-       : ('Série ' + _state.setNum + ' — c\'est parti !');
+       ? ((window.isEnglish && window.isEnglish() ? 'Ready for:\u00a0' : 'Prêt pour\u00a0: ') + (_state.nextExercise || (window.isEnglish && window.isEnglish() ? 'next exercise' : 'l\'exercice suivant')))
+       : ((window.isEnglish && window.isEnglish() ? 'Set ' : 'Série ') + _state.setNum + (window.isEnglish && window.isEnglish() ? ' — let\'s go!' : ' — c\'est parti !'));
      new Notification(_notifTitle, { body: _notifBody, icon: '/icons/icon-192.png', tag: 'rest-timer', requireInteraction: false });
      }
    } catch(e) {}
@@ -5720,10 +5720,10 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  if (document.hidden) {
    try {
      if ('Notification' in window && Notification.permission === 'granted') {
-     var _notifTitle = _state.isTransition ? 'Exercice suivant !' : 'Repos terminé !';
+     var _notifTitle = _state.isTransition ? (window.isEnglish && window.isEnglish() ? 'Next exercise!' : 'Exercice suivant !') : (window.isEnglish && window.isEnglish() ? 'Rest over!' : 'Repos terminé !');
      var _notifBody = _state.isTransition
-       ? ('Prêt pour\u00a0: ' + (_state.nextExercise || 'l\'exercice suivant'))
-       : ('Série ' + _state.setNum + ' — c\'est parti !');
+       ? ((window.isEnglish && window.isEnglish() ? 'Ready for:\u00a0' : 'Prêt pour\u00a0: ') + (_state.nextExercise || (window.isEnglish && window.isEnglish() ? 'next exercise' : 'l\'exercice suivant')))
+       : ((window.isEnglish && window.isEnglish() ? 'Set ' : 'Série ') + _state.setNum + (window.isEnglish && window.isEnglish() ? ' — let\'s go!' : ' — c\'est parti !'));
      new Notification(_notifTitle, { body: _notifBody, icon: '/icons/icon-192.png', tag: 'rest-timer', requireInteraction: false });
      }
    } catch(e) {}
@@ -5886,11 +5886,11 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
 
  var muteBtn = document.createElement('button');
  muteBtn.className = 'rest-timer-btn rest-timer-btn-mute' + (window._sfcMuted ? ' muted' : '');
- muteBtn.textContent = window._sfcMuted ? 'Muet' : 'Son';
+ muteBtn.textContent = window._sfcMuted ? (window.isEnglish && window.isEnglish() ? 'Mute' : 'Muet') : (window.isEnglish && window.isEnglish() ? 'Sound' : 'Son');
  muteBtn.title = window._sfcMuted ? 'Son coupé — cliquer pour activer' : 'Son actif — cliquer pour couper';
  muteBtn.addEventListener('click', function() {
  window._sfcMuted = !window._sfcMuted;
- muteBtn.textContent = window._sfcMuted ? 'Muet' : 'Son';
+ muteBtn.textContent = window._sfcMuted ? (window.isEnglish && window.isEnglish() ? 'Mute' : 'Muet') : (window.isEnglish && window.isEnglish() ? 'Sound' : 'Son');
  muteBtn.title = window._sfcMuted ? 'Son coupé — cliquer pour activer' : 'Son actif — cliquer pour couper';
  if (window._sfcMuted) { muteBtn.classList.add('muted'); } else { muteBtn.classList.remove('muted'); }
  });
@@ -5939,18 +5939,18 @@ function renderPlateCalculator(targetKg, barKg) {
   var html = '<div class="plate-calc" style="margin:12px 0;padding:12px;border:1px solid var(--border);background:var(--ivory2)">';
   // Label clair : "Cible totale 77.5kg = barre 20kg + plaques par côté"
   if (perSideKg <= 0.1) {
-    html += '<div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;color:var(--grey)">Cible ' + targetKg + ' kg \u2014 Barre seule</div>';
-    html += '<div style="font-size:12px;color:var(--grey)">Pas de plaques nécessaires (barre olympique ' + barKg + ' kg)</div>';
+    html += '<div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;color:var(--grey)>"+' (window.isEnglish && window.isEnglish() ? 'Target ' : 'Cible ') + targetKg + ' kg \u2014 ' + (window.isEnglish && window.isEnglish() ? 'Bar only' : 'Barre seule') + '</div>';
+    html += '<div style="font-size:12px;color:var(--grey)">" + (window.isEnglish && window.isEnglish() ? 'No plates needed (olympic bar ' : 'Pas de plaques nécessaires (barre olympique ') + barKg + ' kg)</div>';
   } else {
-    html += '<div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;color:var(--grey)">Cible ' + targetKg + ' kg \u2014 ' + perSideKg.toFixed(1) + ' kg de plaques par côté</div>';
-    html += '<div style="font-size:11px;color:var(--grey);margin-bottom:6px">Barre ' + barKg + ' kg + (' + perSideKg.toFixed(1) + ' kg × 2 côtés) = ' + targetKg + ' kg</div>';
+    html += '<div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;color:var(--grey)>"+(window.isEnglish && window.isEnglish() ? 'Target ' : 'Cible ') + targetKg + ' kg \u2014 ' + perSideKg.toFixed(1) + (window.isEnglish && window.isEnglish() ? ' kg plates per side</div>' : ' kg de plaques par côté</div>');
+    html += '<div style="font-size:11px;color:var(--grey);margin-bottom:6px>"+(window.isEnglish && window.isEnglish() ? 'Bar ' : 'Barre ') + barKg + ' kg + (' + perSideKg.toFixed(1) + ' kg × 2 côtés) = ' + targetKg + ' kg</div>';
     result.forEach(function(r) {
       // Couleurs cohérentes design system (palette --green/--blue/--orange/--grey)
       var color = r.plate >= 20 ? 'var(--green,#3E5C3A)' : r.plate >= 10 ? 'var(--blue,#1A3A6A)' : r.plate >= 5 ? 'var(--orange,#E86F1E)' : 'var(--grey,#6B6B65)';
       html += '<span style="display:inline-block;margin:2px 4px;padding:4px 10px;background:' + color + ';color:var(--ivory,#FAF9F6);font-size:11px;font-weight:700;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;letter-spacing:0.5px">' + r.plate + 'kg × ' + r.count + '</span>';
     });
     if (remaining > 0.1) {
-      html += '<div style="font-size:10px;color:var(--grey);margin-top:4px">Différence : ' + remaining.toFixed(2) + 'kg (microplaques)</div>';
+      html += '<div style="font-size:10px;color:var(--grey);margin-top:4px>"+(window.isEnglish && window.isEnglish() ? 'Difference: ' : 'Différence : ') + remaining.toFixed(2) + 'kg (microplates)</div>';
     }
   }
   html += '</div>';
@@ -6255,9 +6255,9 @@ function getMuscuConsistencyStreak() {
    }
  }
  var milestone = null;
- if (totalSessions === 3) milestone = { type: 'xp', msg: '+50 XP — 3 séances au compteur !', xp: 50 };
- else if (streak === 7) milestone = { type: 'badge', msg: 'Badge Semaine de Feu débloqué !', icon: 'Semaine de Feu' };
- else if (streak === 14) milestone = { type: 'unlock', msg: '2 semaines sans pause — exercices avancés débloqués !', icon: 'Elite' };
+ if (totalSessions === 3) milestone = { type: 'xp', msg: (window.isEnglish && window.isEnglish() ? '+50 XP — 3 sessions logged!' : '+50 XP — 3 séances au compteur !'), xp: 50 };
+ else if (streak === 7) milestone = { type: 'badge', msg: (window.isEnglish && window.isEnglish() ? 'Fire Week badge unlocked!' : 'Badge Semaine de Feu débloqué !'), icon: (window.isEnglish && window.isEnglish() ? 'Fire Week' : 'Semaine de Feu') };
+ else if (streak === 14) milestone = { type: 'unlock', msg: (window.isEnglish && window.isEnglish() ? '2 weeks without break — advanced exercises unlocked!' : '2 semaines sans pause — exercices avancés débloqués !'), icon: 'Elite' };
  var _result = { streak: streak, totalSessions: totalSessions, milestone: milestone };
  S._streakCache = _result;
  S._streakCacheTime = Date.now();
@@ -6333,7 +6333,7 @@ function renderWeekTracker(p) {
   h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65)'}, 'Macrocycle ' + macroCycleNum),
   h('span', {style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;color:var(--black,#0A0A09)'}, macroPhase.label),
  ]));
- macroHeader.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65)'}, 'Mésocycle ' + mesoInMacro + '\u202f/\u202f' + totalMesoInMacro));
+ macroHeader.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65)'}, (window.isEnglish && window.isEnglish() ? 'Mesocycle ' : 'Mésocycle ') + mesoInMacro + '\u202f/\u202f' + totalMesoInMacro));
  macroContainer.appendChild(macroHeader);
 
  var macroBar = h('div', {style: 'display:flex;gap:3px;height:3px;margin-bottom:12px'});
@@ -6371,7 +6371,7 @@ function renderWeekTracker(p) {
  badge.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:13px;color:' + phase.color}, (window.isEnglish && window.isEnglish() ? 'Week ' + week + ' / 7' : 'Semaine ' + week + ' / 7')));
  top.appendChild(badge);
  if (S.muscuProgramStart) {
- top.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey)'}, 'Début : ' + S.muscuProgramStart));
+ top.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? 'Start: ' : 'Début : ') + S.muscuProgramStart));
  }
  container.appendChild(top);
 
@@ -6407,7 +6407,7 @@ function renderWeekTracker(p) {
  var displayRpeNote = phase.rpeNote;
  if (hasT1D && phase.rpe > 7) {
  displayRpe = 7;
- displayRpeNote = 'RPE 7 — Plafonné à 7/10 pour diabète T1 (risque hypoglycémie à RPE 8-9, ADA 2023). Glucomètre obligatoire.';
+ displayRpeNote = (window.isEnglish && window.isEnglish() ? 'RPE 7 — Capped at 7/10 for T1 diabetes (risk of hypoglycemia at RPE 8-9, ADA 2023). Glucometer mandatory.' : 'RPE 7 — Plafonné à 7/10 pour diabète T1 (risque hypoglycémie à RPE 8-9, ADA 2023). Glucomètre obligatoire.');
  }
  var rpeBadge = h('div', {style: 'display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid ' + phase.color + ';margin-bottom:8px'});
  rpeBadge.appendChild((function(){ var _rb = h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:' + phase.color}); _rb.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _rb.appendChild(document.createTextNode(' ' + displayRpe + '/10')); return _rb; })());
@@ -6455,7 +6455,7 @@ function renderWeekTracker(p) {
  if (week > 1) { saveMuscuWeek(week - 1); window.render(); }
  },
  disabled: week <= 1
- }, '\u2190 Sem. préc.'));
+ }, (window.isEnglish && window.isEnglish() ? '\u2190 Prev. wk.' : '\u2190 Sem. préc.')));
  container.appendChild(btnRow);
 
  p.appendChild(container);
@@ -6930,14 +6930,14 @@ function renderMusculationProgram(p) {
  if (Array.isArray(S.medical) && S.medical.length > 0 && !(S.muscuMedical && S.muscuMedical.done)) {
    var _genMedRestrictions = [];
    var _gml = S.medical.map(function(m) { return String(m).toLowerCase(); });
-   if (_gml.indexOf('osteoporose') !== -1 || _gml.indexOf('osteoporosis') !== -1) _genMedRestrictions.push('\u26A0 Ostéoporose : exercices à impact et charges axiales lourdes retirés');
-   if (_gml.indexOf('hta') !== -1 || _gml.indexOf('hta_severe') !== -1 || _gml.indexOf('hypertension') !== -1) _genMedRestrictions.push('\u26A0 HTA : efforts maximaux et Valsalva retirés');
-   if (_gml.indexOf('cardio') !== -1 || _gml.indexOf('insuffisance_card') !== -1) _genMedRestrictions.push('\u26A0 Cardiopathie : exercices à haute intensité retirés');
-   if (_gml.indexOf('polyarthrite') !== -1 || _gml.indexOf('arthrite') !== -1) _genMedRestrictions.push('\u26A0 Arthrite : charges lourdes et impacts retirés');
-   if (_gml.indexOf('fibromyalgie') !== -1) _genMedRestrictions.push('\u26A0 Fibromyalgie : intensité plafonnée');
+   if (_gml.indexOf('osteoporose') !== -1 || _gml.indexOf('osteoporosis') !== -1) _genMedRestrictions.push((window.isEnglish && window.isEnglish() ? '\u26A0 Osteoporosis: high-impact exercises and heavy axial loads removed' : '\u26A0 Ostéoporose : exercices à impact et charges axiales lourdes retirés'));
+   if (_gml.indexOf('hta') !== -1 || _gml.indexOf('hta_severe') !== -1 || _gml.indexOf('hypertension') !== -1) _genMedRestrictions.push((window.isEnglish && window.isEnglish() ? '\u26A0 HTN: maximal efforts and Valsalva removed' : '\u26A0 HTA : efforts maximaux et Valsalva retirés'));
+   if (_gml.indexOf('cardio') !== -1 || _gml.indexOf('insuffisance_card') !== -1) _genMedRestrictions.push((window.isEnglish && window.isEnglish() ? '\u26A0 Heart condition: high-intensity exercises removed' : '\u26A0 Cardiopathie : exercices à haute intensité retirés'));
+   if (_gml.indexOf('polyarthrite') !== -1 || _gml.indexOf('arthrite') !== -1) _genMedRestrictions.push((window.isEnglish && window.isEnglish() ? '\u26A0 Arthritis: heavy loads and impacts removed' : '\u26A0 Arthrite : charges lourdes et impacts retirés'));
+   if (_gml.indexOf('fibromyalgie') !== -1) _genMedRestrictions.push((window.isEnglish && window.isEnglish() ? '\u26A0 Fibromyalgia: intensity capped' : '\u26A0 Fibromyalgie : intensité plafonnée'));
    if (_genMedRestrictions.length > 0) {
      var _gmBanner = h('div', {style: 'background:rgba(232,111,30,0.06);border-left:3px solid var(--orange,#E86F1E);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E)'});
-     _gmBanner.appendChild(h('div', {style: 'font-weight:bold;margin-bottom:6px'}, 'Adaptations médicales (profil nutrition)'));
+     _gmBanner.appendChild(h('div', {style: 'font-weight:bold;margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Medical adaptations (nutrition profile)' : 'Adaptations médicales (profil nutrition)')));
      _genMedRestrictions.forEach(function(r) { _gmBanner.appendChild(h('div', {style: 'margin-bottom:3px'}, r)); });
      _bannerTarget.appendChild(_gmBanner);
    }
