@@ -1536,9 +1536,9 @@ function renderSportGenericMedical(p) {
   var _zones = SPORT_MED_ZONES[S.sportType] || [];
   var _name  = SPORT_MED_NAME[S.sportType] || (S.sportType || '');
 
-  p.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:center;margin-bottom:16px;'}, 'Bilan Santé · ' + _name));
-  p.appendChild(h('h1', {style:'font-family:Georgia,serif;font-size:28px;font-weight:400;text-align:center;margin:0 0 8px;line-height:1.2;'}, 'Votre corps, notre priorité.'));
-  p.appendChild(h('p', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);text-align:center;margin:0 0 24px;max-width:320px;margin-left:auto;margin-right:auto;'}, 'Signalez toute zone sensible — votre programme sera adapté en conséquence. 30 secondes.'));
+  p.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:center;margin-bottom:16px;'}, (window.isEnglish && window.isEnglish() ? 'Health Check · ' : 'Bilan Santé · ') + _name));
+  p.appendChild(h('h1', {style:'font-family:Georgia,serif;font-size:28px;font-weight:400;text-align:center;margin:0 0 8px;line-height:1.2;'}, (window.isEnglish && window.isEnglish() ? 'Your body, our priority.' : 'Votre corps, notre priorité.')));
+  p.appendChild(h('p', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);text-align:center;margin:0 0 24px;max-width:320px;margin-left:auto;margin-right:auto;'}, (window.isEnglish && window.isEnglish() ? 'Flag any sensitive area — your programme will be adapted accordingly. 30 seconds.' : 'Signalez toute zone sensible — votre programme sera adapté en conséquence. 30 secondes.')));
 
   // Fast track
   var _ftRow = h('div', {style:'text-align:center;margin-bottom:20px;'});
@@ -1550,7 +1550,7 @@ function renderSportGenericMedical(p) {
       S.sStep = S._sportMedNextStep || 0;
       if (window.render) window.render();
     }
-  }, 'Tout va bien — continuer →'));
+  }, (window.isEnglish && window.isEnglish() ? 'All good — continue →' : 'Tout va bien — continuer →')));
   p.appendChild(_ftRow);
 
   // Zone cards grid
@@ -1584,28 +1584,28 @@ function renderSportGenericMedical(p) {
       S.sStep = S._sportMedNextStep || 0;
       if (window.render) window.render();
     }
-  }, _hasSel ? 'Adapter mon programme →' : 'Continuer →'));
+  }, (window.isEnglish && window.isEnglish() ? (_hasSel ? 'Adapt my programme →' : 'Continue →') : (_hasSel ? 'Adapter mon programme →' : 'Continuer →')));
 
-  p.appendChild(h('p', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey,#6B6B65);text-align:center;margin-top:16px;letter-spacing:1px;'}, 'Données 100% locales · Consultez un médecin en cas de doute'));
+  p.appendChild(h('p', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey,#6B6B65);text-align:center;margin-top:16px;letter-spacing:1px;'}, (window.isEnglish && window.isEnglish() ? '100% local data · Consult a doctor if in doubt' : 'Données 100% locales · Consultez un médecin en cas de doute')));
 
   var _backRow = h('div', {style:'text-align:center;margin-top:12px;'});
   _backRow.appendChild(h('button', {
     style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;background:none;border:none;color:var(--grey,#6B6B65);cursor:pointer;padding:8px;',
     onclick: function() { S.sStep = 0; S.sportType = null; if (window.render) window.render(); }
-  }, '← Changer de sport'));
+  }, (window.isEnglish && window.isEnglish() ? '← Change sport' : '← Changer de sport')));
   p.appendChild(_backRow);
 }
 
 function renderSportSplash(p) {
-  p.appendChild(h('div', {'class': 'eyebrow'}, 'Sport · Bilan initial'));
-  p.appendChild(h('h1', {html: 'Un programme<br><em>fait pour vous.</em>'}));
-  p.appendChild(h('p', {'class': 'subtitle'}, 'Quelques questions pour calibrer votre programme sur votre niveau, vos objectifs et votre santé.'));
+  p.appendChild(h('div', {'class': 'eyebrow'}, (window.isEnglish && window.isEnglish() ? 'Sport · Initial Assessment' : 'Sport · Bilan initial')));
+  p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'A programme<br><em>made for you.</em>' : 'Un programme<br><em>fait pour vous.</em>')}));
+  p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'A few questions to calibrate your programme to your level, goals and health.' : 'Quelques questions pour calibrer votre programme sur votre niveau, vos objectifs et votre santé.')));
 
   var pills = h('div', {style: 'display:flex;flex-wrap:wrap;gap:8px;margin:20px 0;'});
   [
     '∼ 8 minutes',
-    'Évaluation médicale incluse',
-    'Programme sur-mesure'
+    (window.isEnglish && window.isEnglish() ? 'Medical evaluation included' : 'Évaluation médicale incluse'),
+    (window.isEnglish && window.isEnglish() ? 'Custom-built programme' : 'Programme sur-mesure')
   ].forEach(function(txt) {
     pills.appendChild(h('div', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);border:1px solid var(--line,#D8D8D0);padding:5px 10px;border-radius:2px;'
@@ -1614,9 +1614,9 @@ function renderSportSplash(p) {
   p.appendChild(pills);
 
   var benefits = [
-    {icon: '■', title: 'Programme scientifique', desc: 'Basé sur les recommandations ACSM, NSCA et Renaissance Periodization'},
-    {icon: '●', title: 'Sécurité d’abord', desc: 'Dépistage médical PAR-Q — 7 questions recommandées par l’ACSM (2018)'},
-    {icon: '◆', title: 'Adapté à votre vie', desc: 'Votre niveau, votre équipement, vos disponibilités, vos objectifs'}
+    {icon: '■', title: (window.isEnglish && window.isEnglish() ? 'Science-based programme' : 'Programme scientifique'), desc: (window.isEnglish && window.isEnglish() ? 'Based on ACSM, NSCA and Renaissance Periodization recommendations' : 'Basé sur les recommandations ACSM, NSCA et Renaissance Periodization')},
+    {icon: '●', title: (window.isEnglish && window.isEnglish() ? 'Safety first' : 'Sécurité d’abord'), desc: (window.isEnglish && window.isEnglish() ? 'PAR-Q medical screening — 7 questions recommended by ACSM (2018)' : 'Dépistage médical PAR-Q — 7 questions recommandées par l’ACSM (2018)')},
+    {icon: '◆', title: (window.isEnglish && window.isEnglish() ? 'Adapted to your life' : 'Adapté à votre vie'), desc: (window.isEnglish && window.isEnglish() ? 'Your level, equipment, schedule and goals' : 'Votre niveau, votre équipement, vos disponibilités, vos objectifs')}
   ];
   var benefitList = h('div', {style: 'display:flex;flex-direction:column;gap:12px;margin:24px 0 28px;'});
   benefits.forEach(function(b) {
@@ -1633,7 +1633,7 @@ function renderSportSplash(p) {
   p.appendChild(h('button', {'class': 'btn-primary', onclick: function() {
     S.sportSplashDone = true;
     if (window.render) window.render();
-  }}, 'Commencer mon bilan sportif'));
+  }}, (window.isEnglish && window.isEnglish() ? 'Start my sports assessment' : 'Commencer mon bilan sportif')));
 }
 
 // ─── STEP 0: TYPE SELECTION ONLY ───
@@ -1644,8 +1644,8 @@ function renderObjectif(p) {
     return;
   }
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Sport'));
- p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Choisissez votre type de programme sportif.'));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Your<br><em>programme</em>' : 'Votre<br><em>programme</em>')}));
+ p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Choose your sport programme type.' : 'Choisissez votre type de programme sportif.')));
 
  // ─── RECOMMANDATION PROFIL ───
  // Affiché uniquement si l'utilisateur n'a encore aucun programme sport.
@@ -1745,7 +1745,7 @@ function renderObjectif(p) {
  if (window.S && window.S._switchedFromNutrition) {
    var _ctxBannerObj = document.createElement('div');
    _ctxBannerObj.style.cssText = 'margin-bottom:16px;padding:12px 14px;background:rgba(62,92,58,0.06);border:1px solid var(--line,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--green,#3E5C3A);line-height:1.5;';
-   _ctxBannerObj.textContent = 'Votre profil de base est déjà configuré. Complétez simplement vos informations sportives ci-dessous.';
+   _ctxBannerObj.textContent = (window.isEnglish && window.isEnglish() ? 'Your base profile is already set up. Simply complete your sport information below.' : 'Votre profil de base est déjà configuré. Complétez simplement vos informations sportives ci-dessous.');
    window.S._switchedFromNutrition = false; // Afficher une seule fois
    p.appendChild(_ctxBannerObj);
  }
@@ -1753,7 +1753,7 @@ function renderObjectif(p) {
  // FIX UX 2026-04-16 — Hero IA déplacé en bas (carte discrète), choix de sport en premier
  // L'user clique "Sport" pour VOIR son sport, pas pour ouvrir un modal générateur.
 
- p.appendChild(h('div', {'class': 'section-label'}, 'Type de programme'));
+ p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Programme type' : 'Type de programme')));
  var typeGrid = h('div', {'class': 'card-grid-2'});
 
  // Musculation - clicking goes to PAR-Q first (if not already done), then medical questionnaire (step 20)
@@ -2003,22 +2003,22 @@ function renderPARQ(p) {
  // Header avec retour
  var hdr = h('div', {style: 'display:flex;align-items:center;gap:12px;margin-bottom:20px'});
  hdr.appendChild(h('button', {'class': 'btn-back', style: 'margin:0', onclick: function(){ S.sStep = 0; S.sportType = null; S._parqAnswers = {}; S.sportMixEnabled = false; S.sportMixSecondary = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
- hdr.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--grey)'}, 'Évaluation médicale'));
+ hdr.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? 'Medical evaluation' : 'Évaluation médicale')));
  p.appendChild(hdr);
 
- p.appendChild(h('div', {'class': 'eyebrow'}, 'Sécurité'));
+ p.appendChild(h('div', {'class': 'eyebrow'}, (window.isEnglish && window.isEnglish() ? 'Safety' : 'Sécurité')));
  p.appendChild(h('h1', {html: 'Questionnaire<br><em>PAR-Q</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Avant de démarrer votre programme, répondez à ces 7 questions recommandées par l\'ACSM (2018). Vos réponses sont confidentielles.'));
+ p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Before starting your programme, answer these 7 questions recommended by ACSM (2018). Your answers are confidential.' : 'Avant de démarrer votre programme, répondez à ces 7 questions recommandées par l\'ACSM (2018). Vos réponses sont confidentielles.')));
 
  // 7 questions PAR-Q
  var PARQ_QUESTIONS = [
-  { id: 'cardiac',       text: 'Votre médecin vous a-t-il déjà dit que vous aviez un problème cardiaque ?' },
-  { id: 'chestPain',    text: 'Ressentez-vous des douleurs thoraciques lors d\'une activité physique ?' },
-  { id: 'dizziness',    text: 'Avez-vous des étourdissements ou pertes de connaissance lors de l\'effort ?' },
-  { id: 'medication',   text: 'Prenez-vous des médicaments pour la tension artérielle ou le cœur ?' },
-  { id: 'jointIssue',   text: 'Avez-vous un problème osseux ou articulaire aggravé par l\'exercice ?' },
-  { id: 'pregnant',     text: 'Êtes-vous enceinte ou avez-vous accouché il y a moins de 6 semaines ?', femmeOnly: true },
-  { id: 'otherReason',  text: 'Avez-vous une autre raison médicale de ne pas faire d\'activité physique ?' }
+  { id: 'cardiac',       text: (window.isEnglish && window.isEnglish() ? 'Has your doctor ever told you that you have a heart problem?' : 'Votre médecin vous a-t-il déjà dit que vous aviez un problème cardiaque ?') },
+  { id: 'chestPain',    text: (window.isEnglish && window.isEnglish() ? 'Do you feel chest pain during physical activity?' : 'Ressentez-vous des douleurs thoraciques lors d\'une activité physique ?') },
+  { id: 'dizziness',    text: (window.isEnglish && window.isEnglish() ? 'Do you have dizziness or loss of consciousness during exercise?' : 'Avez-vous des étourdissements ou pertes de connaissance lors de l\'effort ?') },
+  { id: 'medication',   text: (window.isEnglish && window.isEnglish() ? 'Do you take medication for blood pressure or heart?' : 'Prenez-vous des médicaments pour la tension artérielle ou le cœur ?') },
+  { id: 'jointIssue',   text: (window.isEnglish && window.isEnglish() ? 'Do you have a bone or joint problem aggravated by exercise?' : 'Avez-vous un problème osseux ou articulaire aggravé par l\'exercice ?') },
+  { id: 'pregnant',     text: (window.isEnglish && window.isEnglish() ? 'Are you pregnant or have you given birth in the last 6 weeks?' : 'Êtes-vous enceinte ou avez-vous accouché il y a moins de 6 semaines ?'), femmeOnly: true },
+  { id: 'otherReason',  text: (window.isEnglish && window.isEnglish() ? 'Do you have any other medical reason not to exercise?' : 'Avez-vous une autre raison médicale de ne pas faire d\'activité physique ?') }
  ].filter(function(q) { return !q.femmeOnly || window.isFemale(S); });
 
  var _hasYes = PARQ_QUESTIONS.some(function(q) { return S._parqAnswers[q.id] === true; });
@@ -2037,13 +2037,13 @@ function renderPARQ(p) {
   var yesBtn = h('button', {
    style: 'flex:1;padding:10px;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;cursor:pointer;border:1px solid ' + (isYes ? 'var(--error,#7A1F1F)' : 'var(--line,#E8E6DF)') + ';background:' + (isYes ? 'rgba(90,16,16,0.12)' : 'transparent') + ';color:' + (isYes ? 'var(--error,#7A1F1F)' : 'var(--ink-900,#0A0A09)') + ';font-weight:' + (isYes ? '700' : '400'),
    onclick: (function(_qid) { return function() { S._parqAnswers[_qid] = true; window.render(); }; })(q.id)
-  }, 'Oui');
+  }, (window.isEnglish && window.isEnglish() ? 'Yes' : 'Oui'));
   btnRow.appendChild(yesBtn);
   // NON
   var noBtn = h('button', {
    style: 'flex:1;padding:10px;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;cursor:pointer;border:1px solid ' + (!isYes && answered ? 'var(--ink-900,#0A0A09)' : 'var(--line,#E8E6DF)') + ';background:' + (!isYes && answered ? 'rgba(26,74,26,0.08)' : 'transparent') + ';color:' + (!isYes && answered ? 'var(--ink-900,#0A0A09)' : 'var(--black,#1A1A18)') + ';font-weight:' + (!isYes && answered ? '700' : '400'),
    onclick: (function(_qid) { return function() { S._parqAnswers[_qid] = false; window.render(); }; })(q.id)
-  }, 'Non');
+  }, (window.isEnglish && window.isEnglish() ? 'No' : 'Non'));
   btnRow.appendChild(noBtn);
   qRow.appendChild(btnRow);
   qList.appendChild(qRow);
@@ -2052,7 +2052,7 @@ function renderPARQ(p) {
 
  if (!_allAnswered) {
   // Pas encore toutes les réponses : bouton grisé
-  var continueBtn = h('button', {'class': 'btn-primary', style: 'opacity:0.5;cursor:not-allowed'}, 'Répondre à toutes les questions');
+  var continueBtn = h('button', {'class': 'btn-primary', style: 'opacity:0.5;cursor:not-allowed'}, (window.isEnglish && window.isEnglish() ? 'Answer all questions' : 'Répondre à toutes les questions'));
   p.appendChild(continueBtn);
   return;
  }
@@ -2068,14 +2068,14 @@ function renderPARQ(p) {
    S.sStep = nextStep;
    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
    window.render();
-  }}, 'Continuer →');
+  }}, (window.isEnglish && window.isEnglish() ? 'Continue →' : 'Continuer →'));
   p.appendChild(okBtn);
-  p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey);text-align:center;margin-top:12px'}, 'Toutes vos réponses sont "Non" — vous pouvez démarrer en toute sécurité.'));
+  p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey);text-align:center;margin-top:12px'}, (window.isEnglish && window.isEnglish() ? 'All your answers are "No" — you can start safely.' : 'Toutes vos réponses sont "Non" — vous pouvez démarrer en toute sécurité.')));
  } else {
   // Au moins une réponse OUI → avertissement médical
   var warnDiv = h('div', {style: 'border-left:3px solid var(--error,#7A1F1F);background:rgba(122,31,31,0.06);padding:14px 16px;margin-bottom:20px;border-radius:0'});
-  warnDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:700;color:var(--error,#7A1F1F);margin-bottom:8px;letter-spacing:0.5px'}, '\u26A0 Consultez votre médecin avant de démarrer ce programme.'));
-  warnDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--error,#7A1F1F);line-height:1.6'}, 'Montrez-lui ce questionnaire et obtenez son accord écrit. Une ou plusieurs de vos réponses indiquent qu\'une évaluation médicale préalable est recommandée (ACSM 2018).'));
+  warnDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:700;color:var(--error,#7A1F1F);margin-bottom:8px;letter-spacing:0.5px'}, (window.isEnglish && window.isEnglish() ? '\u26A0 Consult your doctor before starting this programme.' : '\u26A0 Consultez votre médecin avant de démarrer ce programme.')));
+  warnDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--error,#7A1F1F);line-height:1.6'}, (window.isEnglish && window.isEnglish() ? 'Show them this questionnaire and get their written approval. One or more of your answers indicate that a prior medical evaluation is recommended (ACSM 2018).' : 'Montrez-lui ce questionnaire et obtenez son accord écrit. Une ou plusieurs de vos réponses indiquent qu\'une évaluation médicale préalable est recommandée (ACSM 2018).')));
   p.appendChild(warnDiv);
 
   var docBtn = h('button', {'class': 'btn-primary', onclick: function() {
@@ -2088,7 +2088,7 @@ function renderPARQ(p) {
    S.sStep = nextStep;
    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
    window.render();
-  }}, 'J\'ai consulté mon médecin et j\'ai son accord');
+  }}, (window.isEnglish && window.isEnglish() ? 'I have consulted my doctor and have their approval' : 'J\'ai consulté mon médecin et j\'ai son accord'));
   p.appendChild(docBtn);
 
   var overrideBtn = h('button', {
@@ -2104,7 +2104,7 @@ function renderPARQ(p) {
     if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
     window.render();
    }
-  }, 'Je comprends les risques et je continue');
+  }, (window.isEnglish && window.isEnglish() ? 'I understand the risks and continue' : 'Je comprends les risques et je continue'));
   p.appendChild(overrideBtn);
  }
 }
@@ -2119,25 +2119,25 @@ function renderMuscuMedicalQ(p) {
  // FIX BUG 2026-04-26 : back depuis éval. médicale muscu ne doit pas effacer sportType.
  // L'user retourne à la sélection du sport (sStep 0) avec son choix "Musculation" conservé.
  hdr.appendChild(h('button', {'class': 'btn-back', style: 'margin:0', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
- hdr.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--grey)'}, 'Évaluation médicale'));
+ hdr.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? 'Medical evaluation' : 'Évaluation médicale'));
  p.appendChild(hdr);
 
- p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
- p.appendChild(h('h1', {html: 'Bilan<br><em>médical muscu</em>'}));
+ p.appendChild(h('div', {'class': 'eyebrow'}, (window.isEnglish && window.isEnglish() ? 'Weight Training' : 'Musculation')));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Medical<br><em>health check</em>' : 'Bilan<br><em>médical muscu</em>')}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Avant de g\u00e9n\u00e9rer votre programme, aidez-nous \u00e0 adapter les exercices \u00e0 votre situation physique.'));
 
  // FIX 2026-04-19 — Alerte HTA sévère (ESC/ESH 2018) : Valsalva et charges >80% 1RM contre-indiqués
  if (Array.isArray(S.medical) && S.medical.indexOf('hta_severe') !== -1) {
    var _htaAlert = h('div', {style: 'background:rgba(220,53,69,0.07);border:1px solid rgba(220,53,69,0.3);padding:12px 14px;margin-bottom:16px;border-radius:2px;'});
-   _htaAlert.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:700;color:#8B0000;letter-spacing:1px;margin-bottom:4px;'}, '\u26a0 HTA sévère détectée'));
-   _htaAlert.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#8B0000;line-height:1.6;'}, 'Charges limitées à 40–60% du 1RM. Éviter la manœuvre de Valsalva (apnée sous charge), les mouvements isométriques intenses et les exercices au-dessus de la tête à charge élevée. Consultez votre médecin avant de commencer. — ESC/ESH 2018'));
+   _htaAlert.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:700;color:#8B0000;letter-spacing:1px;margin-bottom:4px;'}, (window.isEnglish && window.isEnglish() ? '\u26a0 Severe hypertension detected' : '\u26a0 HTA sévère détectée')));
+   _htaAlert.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#8B0000;line-height:1.6;'}, (window.isEnglish && window.isEnglish() ? 'Loads limited to 40–60% 1RM. Avoid the Valsalva manoeuvre (breath-holding under load), intense isometric movements and overhead exercises at high load. Consult your doctor before starting. — ESC/ESH 2018' : 'Charges limitées à 40–60% du 1RM. Éviter la manœuvre de Valsalva (apnée sous charge), les mouvements isométriques intenses et les exercices au-dessus de la tête à charge élevée. Consultez votre médecin avant de commencer. — ESC/ESH 2018')));
    p.appendChild(_htaAlert);
  }
 
  // Phrase de contexte si bilan nutrition déjà fait — évite le sentiment de répétition
  if (Array.isArray(window.S && window.S.medical)) {
    var _contextNote = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);background:var(--ivory2,#F5F3EC);border-left:2px solid var(--border);padding:10px 12px;margin-bottom:16px;line-height:1.6;'});
-   _contextNote.textContent = 'Ces questions compl\u00e8tent votre profil nutrition. Elles portent sp\u00e9cifiquement sur vos articulations et ant\u00e9c\u00e9dents orthop\u00e9diques — diff\u00e9rentes de vos conditions m\u00e9dicales g\u00e9n\u00e9rales.';
+   _contextNote.textContent = (window.isEnglish && window.isEnglish() ? 'These questions complement your nutrition profile. They specifically concern your joints and orthopaedic history — distinct from your general medical conditions.' : 'Ces questions compl\u00e8tent votre profil nutrition. Elles portent sp\u00e9cifiquement sur vos articulations et ant\u00e9c\u00e9dents orthop\u00e9diques — diff\u00e9rentes de vos conditions m\u00e9dicales g\u00e9n\u00e9rales.');
    p.appendChild(_contextNote);
  }
 
@@ -2149,15 +2149,15 @@ function renderMuscuMedicalQ(p) {
   var _anyPain = _painZones.some(function(z) { return !!S.muscuMedical[z]; });
   var _anyDiag = _diagKeys.some(function(z) { return !!S.muscuMedical[z]; });
   var _summaryCard = h('div', {style: 'border:1px solid var(--border);padding:16px;background:var(--ivory2,#F5F3EC);margin-bottom:20px;'});
-  _summaryCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px;'}, 'Profil médical enregistré'));
+  _summaryCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px;'}, (window.isEnglish && window.isEnglish() ? 'Medical profile saved' : 'Profil médical enregistré')));
   var _summaryText = _anyPain || _anyDiag
-    ? 'Des zones sensibles ont été notées — le programme les prend en compte.'
-    : 'Aucune contrainte physique signalée. Programme standard.';
+    ? (window.isEnglish && window.isEnglish() ? 'Sensitive areas noted — the programme takes them into account.' : 'Des zones sensibles ont été notées — le programme les prend en compte.')
+    : (window.isEnglish && window.isEnglish() ? 'No physical constraints reported. Standard programme.' : 'Aucune contrainte physique signalée. Programme standard.');
   _summaryCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--black);margin-bottom:12px;line-height:1.5;'}, _summaryText));
   var _editBtn = h('button', {
     style: 'padding:8px 14px;border:1px solid var(--border);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;color:var(--grey);',
     onclick: function() { S._muscuMedicalEdit = true; window.render(); }
-  }, 'Modifier');
+  }, (window.isEnglish && window.isEnglish() ? 'Edit' : 'Modifier'));
   _summaryCard.appendChild(_editBtn);
   p.appendChild(_summaryCard);
 
@@ -2167,23 +2167,23 @@ function renderMuscuMedicalQ(p) {
     else { S.sStep = !S.sportLevel ? 1 : 16; }
     if (window.saveProfile) window.saveProfile();
     window.render();
-  }}, 'Continuer'));
+  }}, (window.isEnglish && window.isEnglish() ? 'Continue' : 'Continuer')));
   return;
  }
 
  // For beginners: show a simple YES/NO filter first
  if ((S.sportLevel === 'beginner' || !S.sportLevel) && !S._muscuMedicalExpanded) {
   var filterCard = h('div', {style: 'margin-bottom:20px'});
-  filterCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--black,#1A1A18);margin-bottom:16px;line-height:1.5'}, 'Avez-vous une douleur chronique, une blessure récente ou un diagnostic médical ?'));
+  filterCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--black,#1A1A18);margin-bottom:16px;line-height:1.5'}, (window.isEnglish && window.isEnglish() ? 'Do you have a chronic pain, recent injury or medical diagnosis?' : 'Avez-vous une douleur chronique, une blessure récente ou un diagnostic médical ?')));
   var filterBtns = h('div', {style: 'display:flex;gap:12px'});
   filterBtns.appendChild(h('button', {
    style: 'flex:1;padding:14px;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#1A1A18);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;cursor:pointer',
    onclick: function() { S._muscuMedicalExpanded = true; window.render(); }
-  }, 'Oui, j\'ai quelque chose à signaler'));
+  }, (window.isEnglish && window.isEnglish() ? 'Yes, I have something to flag' : 'Oui, j\'ai quelque chose à signaler')));
   filterBtns.appendChild(h('button', {
    style: 'flex:1;padding:14px;background:transparent;color:var(--black,#1A1A18);border:1px solid var(--border,#E8E6DF);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;cursor:pointer',
    onclick: function() { S.muscuMedical = { done: true }; S.sStep = !S.sportLevel ? 1 : 16; if (window.saveProfile) window.saveProfile(); window.render(); }
-  }, 'Non, je suis en bonne santé'));
+  }, (window.isEnglish && window.isEnglish() ? 'No, I am in good health' : 'Non, je suis en bonne santé')));
   filterCard.appendChild(filterBtns);
   p.appendChild(filterCard);
   return; // Don't show the full medical form
@@ -2191,19 +2191,19 @@ function renderMuscuMedicalQ(p) {
  // S._muscuMedicalExpanded = true → show full form (existing code runs normally)
 
  // ─── Section 1 : Zones douloureuses ───
- p.appendChild(h('div', {'class': 'section-label'}, 'Avez-vous des douleurs ou fragilités ?'));
+ p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Do you have any pain or fragility?' : 'Avez-vous des douleurs ou fragilités ?')));
 
  var zonesData = [
- {key: 'shoulders', label: 'Épaules', icon: ''},
- {key: 'elbows', label: 'Coudes', icon: ''},
- {key: 'wrists', label: 'Poignets', icon: ''},
- {key: 'neck', label: 'Nuque/Cervicales', icon: ''},
- {key: 'upperBack', label: 'Haut du dos', icon: ''},
- {key: 'lowerBack', label: 'Bas du dos', icon: ''},
- {key: 'hips', label: 'Hanches', icon: ''},
- {key: 'knees', label: 'Genoux', icon: ''},
- {key: 'ankles', label: 'Chevilles', icon: ''},
- {key: 'feet', label: 'Pieds (fasciite)', icon: ''}
+ (function(){ var _tZ = window.isEnglish && window.isEnglish(); return [{key: 'shoulders', label: _tZ ? 'Shoulders' : 'Épaules', icon: ''},
+ {key: 'elbows', label: _tZ ? 'Elbows' : 'Coudes', icon: ''},
+ {key: 'wrists', label: _tZ ? 'Wrists' : 'Poignets', icon: ''},
+ {key: 'neck', label: _tZ ? 'Neck/Cervical' : 'Nuque/Cervicales', icon: ''},
+ {key: 'upperBack', label: _tZ ? 'Upper back' : 'Haut du dos', icon: ''},
+ {key: 'lowerBack', label: _tZ ? 'Lower back' : 'Bas du dos', icon: ''},
+ {key: 'hips', label: _tZ ? 'Hips' : 'Hanches', icon: ''},
+ {key: 'knees', label: _tZ ? 'Knees' : 'Genoux', icon: ''},
+ {key: 'ankles', label: _tZ ? 'Ankles' : 'Chevilles', icon: ''},
+ {key: 'feet', label: _tZ ? 'Feet (fasciitis)' : 'Pieds (fasciite)', icon: ''}]; })()
  ];
 
  var zonesGrid = h('div', {style: 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px'});
@@ -2218,21 +2218,21 @@ function renderMuscuMedicalQ(p) {
  p.appendChild(zonesGrid);
 
  // ─── Section 2 : Antécédents diagnostiqués ───
- p.appendChild(h('div', {'class': 'section-label'}, 'Avez-vous un diagnostic confirmé ?'));
+ p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Do you have a confirmed diagnosis?' : 'Avez-vous un diagnostic confirmé ?')));
 
  var antecedentsData = [
- {key: 'herniaDisc', label: 'Hernie discale (IRM)'},
- {key: 'herniaInguinal', label: 'Hernie inguinale'},
- {key: 'rotatorCuff', label: 'Déchirure coiffe des rotateurs'},
- {key: 'acl', label: 'LCA opéré/fragilisé'},
- {key: 'osteoporosis', label: 'Ostéoporose'},
- {key: 'hypertension', label: 'HTA sévère (≥180/110)'},
- {key: 'rheumatoidArthritis', label: 'Polyarthrite rhumatoïde (PR)'},
- {key: 'fibromyalgia', label: 'Fibromyalgie'},
- {key: 'meniscus', label: 'Ménisque lésé/opéré'},
- {key: 'spondylarthritis', label: 'Spondylarthrite ankylosante'},
- {key: 'kneeOsteoarthritis', label: 'Gonarthrose (arthrose du genou)'},
- {key: 'epicondylitis', label: 'Épicondylite latérale (tennis elbow)'}
+ (function(){ var _tA = window.isEnglish && window.isEnglish(); return [{key: 'herniaDisc', label: _tA ? 'Disc herniation (MRI)' : 'Hernie discale (IRM)'},
+ {key: 'herniaInguinal', label: _tA ? 'Inguinal hernia' : 'Hernie inguinale'},
+ {key: 'rotatorCuff', label: _tA ? 'Rotator cuff tear' : 'Déchirure coiffe des rotateurs'},
+ {key: 'acl', label: _tA ? 'ACL (operated/fragile)' : 'LCA opéré/fragilisé'},
+ {key: 'osteoporosis', label: _tA ? 'Osteoporosis' : 'Ostéoporose'},
+ {key: 'hypertension', label: _tA ? 'Severe hypertension (≥180/110)' : 'HTA sévère (≥180/110)'},
+ {key: 'rheumatoidArthritis', label: _tA ? 'Rheumatoid arthritis (RA)' : 'Polyarthrite rhumatoïde (PR)'},
+ {key: 'fibromyalgia', label: _tA ? 'Fibromyalgia' : 'Fibromyalgie'},
+ {key: 'meniscus', label: _tA ? 'Meniscus (torn/operated)' : 'Ménisque lésé/opéré'},
+ {key: 'spondylarthritis', label: _tA ? 'Ankylosing spondylitis' : 'Spondylarthrite ankylosante'},
+ {key: 'kneeOsteoarthritis', label: _tA ? 'Knee osteoarthritis' : 'Gonarthrose (arthrose du genou)'},
+ {key: 'epicondylitis', label: _tA ? 'Lateral epicondylitis (tennis elbow)' : 'Épicondylite latérale (tennis elbow)'}]; })()
  ];
 
  var antGrid = h('div', {style: 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px'});
@@ -2249,12 +2249,12 @@ function renderMuscuMedicalQ(p) {
  // ─── Section 3 : Niveau de douleur général (si au moins une zone cochée) ───
  var hasAnyZone = zonesData.some(function(z){ return med[z.key]; });
  if (hasAnyZone) {
- p.appendChild(h('div', {'class': 'section-label'}, 'Quelle est l\'intensité générale ?'));
+ p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'What is the general intensity?' : 'Quelle est l\'intensité générale ?')));
  var painLevels = [
- {val: 0, label: 'Aucune'},
- {val: 1, label: 'Légère'},
- {val: 2, label: 'Modérée'},
- {val: 3, label: 'Sévère'}
+ (function(){ var _tP = window.isEnglish && window.isEnglish(); return [{val: 0, label: _tP ? 'None' : 'Aucune'},
+ {val: 1, label: _tP ? 'Mild' : 'Légère'},
+ {val: 2, label: _tP ? 'Moderate' : 'Modérée'},
+ {val: 3, label: _tP ? 'Severe' : 'Sévère'}]; })()
  ];
  var painRow = h('div', {style: 'display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px'});
  painLevels.forEach(function(pl) {
@@ -2269,9 +2269,9 @@ function renderMuscuMedicalQ(p) {
  }
 
  // ─── Section 4 : Notes libres ───
- p.appendChild(h('div', {'class': 'section-label'}, 'Notes (optionnel)'));
+ p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Notes (optional)' : 'Notes (optionnel)')));
  var textarea = h('textarea', {
- placeholder: 'Précisez si besoin (ex: opération genou 2022, hernie L4-L5...)',
+ placeholder: (window.isEnglish && window.isEnglish() ? 'Add details if needed (e.g. knee surgery 2022, L4-L5 herniation...)' : 'Précisez si besoin (ex: opération genou 2022, hernie L4-L5...)'),
  style: 'width:100%;min-height:72px;padding:10px;border:1px solid var(--border);background:var(--ivory);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;resize:vertical;box-sizing:border-box;margin-bottom:16px',
  oninput: function(e){ S.muscuMedical.notes = e.target.value; }
  });
@@ -2282,8 +2282,8 @@ function renderMuscuMedicalQ(p) {
  var hasSevere = med.painLevel === 3 || med.herniaDisc || med.rotatorCuff || med.acl || med.fibromyalgia || med.meniscus || med.osteoporosis || med.hypertension || med.spondylarthritis || med.rheumatoidArthritis;
  if (hasSevere) {
  var warn = h('div', {style: 'background:rgba(122,31,31,0.06);border:1px solid var(--error,#7A1F1F);padding:12px 14px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--error,#7A1F1F);line-height:1.6'});
- warn.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px'}, 'Attention — Antécédent grave détecté'));
- warn.appendChild(h('span', {}, 'Programme adapté en mode réhabilitation. Consultez un médecin ou kinésithérapeute avant de reprendre la musculation lourde.'));
+ warn.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Warning — Serious history detected' : 'Attention — Antécédent grave détecté')));
+ warn.appendChild(h('span', {}, (window.isEnglish && window.isEnglish() ? 'Programme adapted in rehabilitation mode. Consult a doctor or physiotherapist before resuming heavy weight training.' : 'Programme adapté en mode réhabilitation. Consultez un médecin ou kinésithérapeute avant de reprendre la musculation lourde.')));
  p.appendChild(warn);
  }
 
@@ -2297,7 +2297,7 @@ function renderMuscuMedicalQ(p) {
  if (S._medicalReturnToDashboard) { S._medicalReturnToDashboard = false; S.sStep = 4; }
  else { S.sStep = !S.sportLevel ? 1 : 16; }
  window.render();
- }}, 'Continuer \u2192'));
+ }}, (window.isEnglish && window.isEnglish() ? 'Continue \u2192' : 'Continuer \u2192')));
 
  // ─── Bouton Passer ───
  var skipLink = h('button', {
@@ -2311,7 +2311,7 @@ function renderMuscuMedicalQ(p) {
  else { S.sStep = !S.sportLevel ? 1 : 16; }
  window.render();
  }
- }, 'Passer (aucune douleur)');
+ }, (window.isEnglish && window.isEnglish() ? 'Skip (no pain)' : 'Passer (aucune douleur)'));
  p.appendChild(skipLink);
 }
 
@@ -2329,7 +2329,7 @@ function renderChargesQuestionnaire(p) {
   var contBtn = h('button', {
    style: 'width:100%;padding:16px;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer',
    onclick: function() { var _nxt = S._chargesFromLevel ? 3 : (S._chargesReturnToDashboard ? 4 : 1); S._chargesFromLevel = false; S._chargesReturnToDashboard = false; S.sStep = _nxt; if (window.saveProfile) window.saveProfile(); window.render(); }
-  }, 'Continuer →');
+  }, (window.isEnglish && window.isEnglish() ? 'Continue →' : 'Continuer →'));
   p.appendChild(contBtn);
   var backLink = h('div', {style: 'text-align:center;margin-top:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);cursor:pointer;text-decoration:underline', onclick: function(){ var _bk = S._chargesFromLevel ? 2 : 15; S._chargesFromLevel = false; S.sStep = _bk; window.render(); }}, '← Retour');
   p.appendChild(backLink);
@@ -3916,7 +3916,7 @@ function appendSportMedicalBanner(p, sportName) {
       _warns.push((window.isEnglish && window.isEnglish() ? '\u26A0 Arthritis: avoid repeated impacts and heavy loads. Prefer gentle movements with controlled range of motion. Stop during inflammatory flares (EULAR 2020).' : '\u26A0 Arthrite : évitez les impacts répétés et les charges lourdes. Privilégiez les mouvements doux à amplitude contrôlée. Arrêtez en cas de poussée inflammatoire (EULAR 2020).'));
     }
     if (_ml.indexOf('fibromyalgie') !== -1) {
-      _warns.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode('\u26A0 Fibromyalgie : intensité légère uniquement (')); _el.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _el.appendChild(document.createTextNode(' max 5/10). Progression très graduelle. Évitez l\u2019épuisement (Häuser, Cochrane 2017).')); return _el; })());
+      _warns.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode((window.isEnglish && window.isEnglish() ? '\u26A0 Fibromyalgia: light intensity only (' : '\u26A0 Fibromyalgie : intensité légère uniquement ('))); _el.appendChild(termTooltip('RPE', _RPE_DEF || 'Rate of Perceived Exertion')); _el.appendChild(document.createTextNode((window.isEnglish && window.isEnglish() ? ' max 5/10). Very gradual progression. Avoid exhaustion (Häuser, Cochrane 2017).' : ' max 5/10). Progression très graduelle. Évitez l\u2019épuisement (Häuser, Cochrane 2017).'))); return _el; })());
     }
     if (_warns.length > 0) {
       var _mc = h('div', {style: 'border-left:3px solid var(--orange,#E86F1E);background:rgba(232,111,30,0.06);padding:12px 16px;margin-bottom:12px'});
@@ -3938,13 +3938,13 @@ function appendSportMedicalBanner(p, sportName) {
       _mw.push((window.isEnglish && window.isEnglish() ? '\u26A0 Shoulders: avoid overhead movements and ballistic gestures (serve, smash, swing).' : '\u26A0 Épaules : évitez les mouvements au-dessus de la tête et les gestes balistiques (service, smash, swing).'));
     }
     if (S.muscuMedical.elbows || S.muscuMedical.epicondylitis) {
-      _mw.push((window.isEnglish && window.isEnglish() ? '\u26A0 Elbows / Epicondylitis: avoid repetitive pronation/supination. Protect with an elbow brace.' : 'Coudes / Épicondylite : évitez les gestes répétitifs en pronation/supination forcée. Protégez avec une coudière.'));
+      _mw.push((window.isEnglish && window.isEnglish() ? '\u26A0 Elbows / Epicondylitis: avoid repetitive pronation/supination. Protect with an elbow brace.' : '\u26A0 Coudes / Épicondylite : évitez les gestes répétitifs en pronation/supination forcée. Protégez avec une coudière.'));
     }
     if (S.muscuMedical.feet) {
       _mw.push((window.isEnglish && window.isEnglish() ? '\u26A0 Feet / Plantar fasciitis: avoid repeated impacts (running, jumps). Appropriate insoles mandatory.' : '\u26A0 Pieds / Fasciite : évitez les impacts répétés (course, sauts). Semelles adaptées obligatoires.'));
     }
     if (S.muscuMedical.hypertension && _ml.indexOf('hta') === -1 && _ml.indexOf('hta_severe') === -1 && _ml.indexOf('hypertension') === -1) {
-      _mw.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode('\u26A0 HTA (profil muscu) : pas d\u2019efforts isométriques maximaux. ')); _el.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _el.appendChild(document.createTextNode(' max 6/10. Restez en Zone 1-2.')); return _el; })());
+      _mw.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode((window.isEnglish && window.isEnglish() ? '\u26A0 Hypertension (muscu profile): no maximal isometric efforts. ' : '\u26A0 HTA (profil muscu) : pas d\u2019efforts isométriques maximaux. '))); _el.appendChild(termTooltip('RPE', _RPE_DEF || 'Rate of Perceived Exertion')); _el.appendChild(document.createTextNode((window.isEnglish && window.isEnglish() ? ' max 6/10. Stay in Zone 1-2.' : ' max 6/10. Restez en Zone 1-2.'))); return _el; })());
     }
     if (_mw.length > 0) {
       var _mwc = h('div', {style: 'border-left:3px solid var(--error,#7A1F1F);background:rgba(122,31,31,0.04);padding:12px 16px;margin-bottom:12px'});
@@ -4038,7 +4038,7 @@ function appendWellnessBanner(p) {
   if (score !== null) {
     if (score < 2) {
       // ─── KO : Séance déconseillée ───
-      var banner = h('div', {style: 'border-left:3px solid #8B2020;background:rgba(139,32,32,0.06);padding:14px 16px;margin-bottom:16px;border-radius:2px', title: 'Score basé sur votre sommeil, état musculaire et énergie du jour. Renseignez votre bilan quotidien pour personnaliser votre séance.'});
+      var banner = h('div', {style: 'border-left:3px solid #8B2020;background:rgba(139,32,32,0.06);padding:14px 16px;margin-bottom:16px;border-radius:2px', title: (window.isEnglish && window.isEnglish() ? 'Score based on your sleep, muscle state and energy of the day. Complete your daily assessment to personalise your session.' : 'Score basé sur votre sommeil, état musculaire et énergie du jour. Renseignez votre bilan quotidien pour personnaliser votre séance.')});
       var titleRow = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-bottom:6px'});
       titleRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8B2020;font-weight:700'}, (window.isEnglish && window.isEnglish() ? 'Session not recommended today' : 'S\u00e9ance d\u00e9conseill\u00e9e aujourd\'hui')));
       banner.appendChild(titleRow);
@@ -4068,7 +4068,7 @@ function appendWellnessBanner(p) {
       p.appendChild(banner);
     } else if (score <= 3) {
       // ─── Fatigué : séance adaptée ───
-      var banner2 = h('div', {style: 'border-left:3px solid #B8860B;background:rgba(184,134,11,0.06);padding:14px 16px;margin-bottom:16px;border-radius:2px', title: 'Score basé sur votre sommeil, état musculaire et énergie du jour. Renseignez votre bilan quotidien pour personnaliser votre séance.'});
+      var banner2 = h('div', {style: 'border-left:3px solid #B8860B;background:rgba(184,134,11,0.06);padding:14px 16px;margin-bottom:16px;border-radius:2px', title: (window.isEnglish && window.isEnglish() ? 'Score based on your sleep, muscle state and energy of the day. Complete your daily assessment to personalise your session.' : 'Score basé sur votre sommeil, état musculaire et énergie du jour. Renseignez votre bilan quotidien pour personnaliser votre séance.')});
       banner2.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#B8860B;font-weight:700;margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Adapted session recommended' : 'S\u00e9ance adapt\u00e9e recommand\u00e9e')));
       banner2.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#0A0A09);line-height:1.6;margin-bottom:12px'}, (window.isEnglish && window.isEnglish() ? 'Consider reducing intensity: -1 set per exercise, loads reduced by 10-15%.' : 'Consid\u00e9rez r\u00e9duire l\'intensit\u00e9\u00a0: -1 s\u00e9rie par exercice, charges all\u00e9g\u00e9es de 10-15\u00a0%.')));
       var comprisBtn = h('button', {
@@ -4079,7 +4079,7 @@ function appendWellnessBanner(p) {
       p.appendChild(banner2);
     } else if (score > 3.5) {
       // ─── En forme : badge discret ───
-      var badge = h('div', {style: 'display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(26,74,26,0.3);background:var(--paper-2,#F4F1EA);padding:6px 12px;border-radius:2px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green,#3E5C3A)', title: 'Score basé sur votre sommeil, état musculaire et énergie du jour. Renseignez votre bilan quotidien pour personnaliser votre séance.'});
+      var badge = h('div', {style: 'display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(26,74,26,0.3);background:var(--paper-2,#F4F1EA);padding:6px 12px;border-radius:2px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green,#3E5C3A)', title: (window.isEnglish && window.isEnglish() ? 'Score based on your sleep, muscle state and energy of the day. Complete your daily assessment to personalise your session.' : 'Score basé sur votre sommeil, état musculaire et énergie du jour. Renseignez votre bilan quotidien pour personnaliser votre séance.')});
       badge.appendChild(h('span', {}, (window.isEnglish && window.isEnglish() ? 'You are in good shape today' : 'Vous \u00eates en forme aujourd\'hui')));
       p.appendChild(badge);
     }
@@ -4122,7 +4122,7 @@ function appendWellnessBanner(p) {
 
   if (isPeak) {
     // Compact badge — label only, no button
-    fallbackBanner.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--success,#3E5C3A)', title: (window.isEnglish && window.isEnglish() ? 'Score based on your sleep, muscle state and energy. Fill in your daily check-in to personalize your session.' : 'Score basé sur votre sommeil, état musculaire et énergie du jour. Renseignez votre bilan quotidien pour personnaliser votre séance.')}, (window.isEnglish && window.isEnglish() ? 'Optimal form — push the loads' : 'Forme optimale — poussez sur les charges')));
+    fallbackBanner.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--success,#3E5C3A)', title: (window.isEnglish && window.isEnglish() ? 'Score based on your sleep, muscle state and energy. Fill in your daily check-in to personalize your session.' : (window.isEnglish && window.isEnglish() ? 'Score based on your sleep, muscle state and energy of the day. Complete your daily assessment to personalise your session.' : 'Score basé sur votre sommeil, état musculaire et énergie du jour. Renseignez votre bilan quotidien pour personnaliser votre séance.'))}, (window.isEnglish && window.isEnglish() ? 'Optimal form — push the loads' : 'Forme optimale — poussez sur les charges')));
   } else {
     var textWrap = h('div', {style: 'flex:1;min-width:0'});
     textWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:' + cm.textColor + ';margin-bottom:3px;font-weight:700'}, adapt.label));
