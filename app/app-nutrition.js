@@ -4208,7 +4208,7 @@ function exportDayPDF(dayIdx) {
     if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'No plan available for today' : 'Aucun plan disponible pour ce jour', 'error', 3000); return;
   }
   doc.setFontSize(16); doc.setFont('times', 'italic');
-  doc.text((DAY_NAMES[dayIdx] || 'Jour') + ' \u2014 Plan du jour', M, 26);
+  doc.text((DAY_NAMES[dayIdx] || (window.isEnglish && window.isEnglish() ? 'Day' : 'Jour')) + ' \u2014 ' + (window.isEnglish && window.isEnglish() ? 'Daily Plan' : 'Plan du jour'), M, 26);
   doc.setFontSize(7); doc.setFont('helvetica', 'normal');
   var tgt = calcTarget(), mc = calcMacros();
   doc.text(tgt + ' kcal  |  G ' + mc.g + 'g  |  P ' + mc.p + 'g  |  L ' + mc.l + 'g', M, 33);
@@ -4216,7 +4216,7 @@ function exportDayPDF(dayIdx) {
 
   // Meals (guard already done above)
   var dayPlan = S.weekPlan[dayIdx];
-  var slots = [{key: 'breakfast', label: 'PETIT-D\u00c9JEUNER'}, {key: 'lunch', label: 'D\u00c9JEUNER'}, {key: 'snack', label: 'COLLATION'}, {key: 'dinner', label: 'D\u00ceNER'}];
+  var slots = (window.isEnglish && window.isEnglish() ? [{key: 'breakfast', label: 'BREAKFAST'}, {key: 'lunch', label: 'LUNCH'}, {key: 'snack', label: 'SNACK'}, {key: 'dinner', label: 'DINNER'}] : [{key: 'breakfast', label: 'PETIT-D\u00c9JEUNER'}, {key: 'lunch', label: 'D\u00c9JEUNER'}, {key: 'snack', label: 'COLLATION'}, {key: 'dinner', label: 'D\u00ceNER'}]);
   var dayTotal = 0;
   slots.forEach(function(sl) {
     var r = dayPlan[sl.key]; if (!r) return; dayTotal += r.k || 0;
@@ -4226,12 +4226,12 @@ function exportDayPDF(dayIdx) {
     doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(grey[0], grey[1], grey[2]);
     doc.text(sl.label, M, y); y += 5;
     doc.setFont('times', 'normal'); doc.setFontSize(13); doc.setTextColor(black[0], black[1], black[2]);
-    var rNameLines = doc.splitTextToSize(r.n || 'Repas', CW);
+    var rNameLines = doc.splitTextToSize(r.n || (window.isEnglish && window.isEnglish() ? 'Meal' : 'Repas'), CW);
     doc.text(rNameLines, M, y); y += rNameLines.length * 5;
     doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(grey[0], grey[1], grey[2]);
     doc.text((r.k || 0) + ' kcal  \u00b7  G ' + (r.g || 0) + 'g  \u00b7  P ' + (r.p || 0) + 'g  \u00b7  L ' + (r.l || 0) + 'g', M, y); y += 6;
     doc.setFontSize(7); doc.setTextColor(grey[0], grey[1], grey[2]);
-    doc.text('INGR\u00c9DIENTS', M, y); y += 4;
+    doc.text((window.isEnglish && window.isEnglish() ? 'INGREDIENTS' : 'INGR\u00c9DIENTS'), M, y); y += 4;
     doc.setFontSize(8); doc.setTextColor(black[0], black[1], black[2]);
     var ingListPDF = r._scaledIngredients && r._scaledIngredients.length > 0
       ? r._scaledIngredients.map(function(ing) { return roundDisplayQty(ing.qty, ing.unit) + (ing.unit === 'pce' ? ' pce ' : ing.unit === 'ml' ? 'ml ' : 'g ') + ing.name; })
@@ -4243,7 +4243,7 @@ function exportDayPDF(dayIdx) {
     });
     y += 2;
     doc.setFontSize(7); doc.setTextColor(grey[0], grey[1], grey[2]);
-    doc.text('PR\u00c9PARATION', M, y); y += 4;
+    doc.text((window.isEnglish && window.isEnglish() ? 'PREPARATION' : 'PR\u00c9PARATION'), M, y); y += 4;
     doc.setFontSize(8); doc.setTextColor(black[0], black[1], black[2]);
     (r.st || []).forEach(function(step, si) {
       if (y > 275) { doc.addPage(); y = 20; }
@@ -4260,14 +4260,14 @@ function exportDayPDF(dayIdx) {
   doc.setFillColor(244, 244, 240);
   doc.rect(M, y - 2, CW, 10, 'F');
   doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(grey[0], grey[1], grey[2]);
-  doc.text('TOTAL DU JOUR', M + 4, y + 4);
+  doc.text((window.isEnglish && window.isEnglish() ? 'DAILY TOTAL' : 'TOTAL DU JOUR'), M + 4, y + 4);
   doc.setFont('times', 'normal'); doc.setFontSize(12); doc.setTextColor(black[0], black[1], black[2]);
   doc.text(dayTotal + ' kcal', W - M - 4, y + 4, {align: 'right'}); y += 14;
 
   // Medical warnings
   if (Array.isArray(S.medical) && S.medical.length > 0) {
     doc.setFontSize(7); doc.setTextColor(106, 74, 26);
-    doc.text('RECOMMANDATIONS M\u00c9DICALES', M, y); y += 4;
+    doc.text((window.isEnglish && window.isEnglish() ? 'MEDICAL RECOMMENDATIONS' : 'RECOMMANDATIONS M\u00c9DICALES'), M, y); y += 4;
     doc.setFontSize(7); doc.setTextColor(grey[0], grey[1], grey[2]);
     S.medical.forEach(function(id) {
       var adv = MEDICAL_ADVICE[id];
@@ -4279,7 +4279,7 @@ function exportDayPDF(dayIdx) {
   var pages = doc.internal.getNumberOfPages();
   for (var i = 1; i <= pages; i++) {
     doc.setPage(i); doc.setFontSize(6); doc.setTextColor(grey[0], grey[1], grey[2]);
-    doc.text('Smart Fit Coach \u2014 g\u00e9n\u00e9r\u00e9 le ' + window.formatDate(new Date()), M, 290);
+    doc.text((window.isEnglish && window.isEnglish() ? 'Smart Fit Coach \u2014 generated on ' : 'Smart Fit Coach \u2014 g\u00e9n\u00e9r\u00e9 le ') + window.formatDate(new Date()), M, 290);
     doc.text('Page ' + i + '/' + pages, W - M, 290, {align: 'right'});
   }
   var safeDayName = (DAY_NAMES[dayIdx] || 'jour').toLowerCase()
@@ -4320,7 +4320,7 @@ function exportRecipePDF(r) {
   y = 44;
 
   // Macro boxes
-  var macros = [{l: 'CALORIES', v: String(r.k || 0)}, {l: 'PROT\u00c9INES', v: (r.p || 0) + 'g'}, {l: 'GLUCIDES', v: (r.g || 0) + 'g'}, {l: 'LIPIDES', v: (r.l || 0) + 'g'}];
+  var macros = (window.isEnglish && window.isEnglish() ? [{l: 'CALORIES', v: String(r.k || 0)}, {l: 'PROTEIN', v: (r.p || 0) + 'g'}, {l: 'CARBS', v: (r.g || 0) + 'g'}, {l: 'FAT', v: (r.l || 0) + 'g'}] : [{l: 'CALORIES', v: String(r.k || 0)}, {l: 'PROT\u00c9INES', v: (r.p || 0) + 'g'}, {l: 'GLUCIDES', v: (r.g || 0) + 'g'}, {l: 'LIPIDES', v: (r.l || 0) + 'g'}]);
   var bw = CW / 4 - 2;
   macros.forEach(function(mc2, i) {
     var x = M + i * (bw + 2.6);
@@ -4334,7 +4334,7 @@ function exportRecipePDF(r) {
 
   // Ingredients
   doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(grey[0], grey[1], grey[2]);
-  doc.text('INGR\u00c9DIENTS', M, y);
+  doc.text((window.isEnglish && window.isEnglish() ? 'INGREDIENTS' : 'INGR\u00c9DIENTS'), M, y);
   doc.setDrawColor(border[0], border[1], border[2]); doc.line(M, y + 1.5, W - M, y + 1.5); y += 6;
   doc.setFontSize(9); doc.setTextColor(black[0], black[1], black[2]);
   var recipeIngPDF = r._scaledIngredients && r._scaledIngredients.length > 0
@@ -4348,7 +4348,7 @@ function exportRecipePDF(r) {
 
   // Steps
   doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(grey[0], grey[1], grey[2]);
-  doc.text('PR\u00c9PARATION', M, y);
+  doc.text((window.isEnglish && window.isEnglish() ? 'PREPARATION' : 'PR\u00c9PARATION'), M, y);
   doc.setDrawColor(border[0], border[1], border[2]); doc.line(M, y + 1.5, W - M, y + 1.5); y += 6;
   doc.setFontSize(9); doc.setTextColor(black[0], black[1], black[2]);
   (r.st || []).forEach(function(step, si) {
@@ -4361,12 +4361,12 @@ function exportRecipePDF(r) {
   // Footer
   doc.setFontSize(6); doc.setTextColor(grey[0], grey[1], grey[2]);
   doc.text('Smart Fit Coach', M, 290);
-  var safeName = (r.n || 'recette').toLowerCase()
+  var safeName = (r.n || (window.isEnglish && window.isEnglish() ? 'recipe' : 'recette')).toLowerCase()
     .replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e')
     .replace(/[îï]/g, 'i').replace(/[ôõö]/g, 'o')
     .replace(/[ùûü]/g, 'u').replace(/ç/g, 'c').replace(/ñ/g, 'n')
     .replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-  doc.save((safeName || 'recette') + '.pdf');
+  doc.save((safeName || (window.isEnglish && window.isEnglish() ? 'recipe' : 'recette')) + '.pdf');
   } catch(e) { console.error('[exportRecipePDF] Erreur:', e); if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Error generating recipe PDF' : 'Erreur lors de la g\u00e9n\u00e9ration du PDF recette', 'error', 3500); }
 }
 window.exportRecipePDF = exportRecipePDF;
@@ -4670,8 +4670,8 @@ function renderSaladBar(p) {
   header.appendChild(h('button', {
     style: 'background:none;border:none;font-size:16px;cursor:pointer;color:var(--text);padding:4px 8px',
     onclick: function() { S.saladBar.open = false; window.render(); }
-  }, '\u2190 Retour'));
-  header.appendChild(h('div', { style: 'font-size:18px;font-weight:400;color:var(--text);letter-spacing:-0.3px' }, '\u2728 L\u2019Atelier Bowl'));
+  }, (window.isEnglish && window.isEnglish() ? '\u2190 Back' : '\u2190 Retour')));
+  header.appendChild(h('div', { style: 'font-size:18px;font-weight:400;color:var(--text);letter-spacing:-0.3px' }, (window.isEnglish && window.isEnglish() ? '\u2728 The Bowl Studio' : '\u2728 L\u2019Atelier Bowl')));
 
   // Meal target toggle
   var toggleWrap = h('div', { style: 'display:flex;gap:4px;flex-wrap:wrap' });
@@ -4723,7 +4723,7 @@ function renderSaladBar(p) {
   var sigSection = h('div', { style: 'padding:12px 16px 4px' });
   sigSection.appendChild(h('div', {
     style: 'font-size:11px;font-weight:400;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:10px'
-  }, '★ Signatures du chef'));
+  }, (window.isEnglish && window.isEnglish() ? '★ Chef\'s signatures' : '★ Signatures du chef')));
   var sigScroll = h('div', {
     style: 'display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none'
   });
@@ -4860,7 +4860,7 @@ function renderSaladBar(p) {
 
   // ── Base ──
   p.appendChild(renderSection(
-    'La Base', '\uD83C\uDF3E',
+    (window.isEnglish && window.isEnglish() ? 'The Base' : 'La Base'), '\uD83C\uDF3E',
     SALAD_DB.bases, sb.base, true, 1,
     function(item) {
       if (sb.base && sb.base.name === item.name) { sb.base = null; }
@@ -4872,7 +4872,7 @@ function renderSaladBar(p) {
 
   // ── Proteins ──
   p.appendChild(renderSection(
-    'Prot\u00e9ines nobles', '\uD83E\uDDC0',
+    (window.isEnglish && window.isEnglish() ? 'Premium Proteins' : 'Prot\u00e9ines nobles'), '\uD83E\uDDC0',
     SALAD_DB.proteins, sb.proteins, false, 3,
     function(item) {
       var idx = -1;
@@ -4886,7 +4886,7 @@ function renderSaladBar(p) {
 
   // ── Veggies ──
   p.appendChild(renderSection(
-    'Jardini\u00e8re', '\uD83C\uDF31',
+    (window.isEnglish && window.isEnglish() ? 'Vegetables' : 'Jardini\u00e8re'), '\uD83C\uDF31',
     SALAD_DB.veggies, sb.veggies, false, 10,
     function(item) {
       var idx = -1;
@@ -4900,7 +4900,7 @@ function renderSaladBar(p) {
 
   // ── Fats ──
   p.appendChild(renderSection(
-    'Finitions & textures', '\u2728',
+    (window.isEnglish && window.isEnglish() ? 'Toppings & textures' : 'Finitions & textures'), '\u2728',
     SALAD_DB.fats, sb.fats, false, 3,
     function(item) {
       var idx = -1;
@@ -4914,7 +4914,7 @@ function renderSaladBar(p) {
 
   // ── Sauce ──
   p.appendChild(renderSection(
-    'L\u2019assaisonnement', '\uD83C\uDF3F',
+    (window.isEnglish && window.isEnglish() ? 'Dressing' : 'L\u2019assaisonnement'), '\uD83C\uDF3F',
     SALAD_DB.sauces, sb.sauce, true, 1,
     function(item) {
       if (sb.sauce && sb.sauce.name === item.name) { sb.sauce = null; }
@@ -4926,7 +4926,7 @@ function renderSaladBar(p) {
 
   // ── Recap + Actions ──
   var recap = h('div', { style: 'padding:16px;background:var(--card);margin:8px 16px;border-radius:2px;border:1px solid var(--border)' });
-  recap.appendChild(h('div', { style: 'font-size:11px;font-weight:400;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:10px' }, 'Votre composition'));
+  recap.appendChild(h('div', { style: 'font-size:11px;font-weight:400;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:10px' }, (window.isEnglish && window.isEnglish() ? 'Your composition' : 'Votre composition')));
 
   var allItems = [];
   if (sb.base) allItems.push(sb.base);
@@ -4936,7 +4936,7 @@ function renderSaladBar(p) {
   if (sb.sauce) allItems.push(sb.sauce);
 
   if (allItems.length === 0) {
-    recap.appendChild(h('div', { style: 'color:var(--grey);font-size:13px;text-align:center;padding:12px' }, 'Composez votre cr\u00e9ation ou partez d\u2019une composition signature ci-dessus'));
+    recap.appendChild(h('div', { style: 'color:var(--grey);font-size:13px;text-align:center;padding:12px' }, (window.isEnglish && window.isEnglish() ? 'Create your own or start from a signature composition above' : 'Composez votre cr\u00e9ation ou partez d\u2019une composition signature ci-dessus')));
   } else {
     allItems.forEach(function(item) {
       var m = computeItemMacros(item);
@@ -4946,7 +4946,7 @@ function renderSaladBar(p) {
       recap.appendChild(row);
     });
     var totalRow = h('div', { style: 'display:flex;justify-content:space-between;padding:8px 0 0;font-weight:400' });
-    totalRow.appendChild(h('span', { style: 'font-size:13px;color:var(--text)' }, 'Total'));
+    totalRow.appendChild(h('span', { style: 'font-size:13px;color:var(--text)' }, (window.isEnglish && window.isEnglish() ? 'Total' : 'Total')));
     totalRow.appendChild(h('span', { style: 'font-size:13px;color:' + barColor }, macros.k + 'kcal \u00b7 P' + macros.p + ' G' + macros.g + ' L' + macros.l));
     recap.appendChild(totalRow);
   }
@@ -4963,7 +4963,7 @@ function renderSaladBar(p) {
       var saladIngredients = allItems.map(function(x) { return x.name + ' ' + x.qty + x.unit; }).join(', ');
       var saladRecipe = {
         _id: 'SALAD_' + Date.now(),
-        n: 'Mon Atelier Bowl \u2728',
+        n: (window.isEnglish && window.isEnglish() ? 'My Bowl Studio \u2728' : 'Mon Atelier Bowl \u2728'),
         k: macros.k, p: macros.p, g: macros.g, l: macros.l,
         f: '\uD83E\uDD57',
         lv: 1,
@@ -4971,7 +4971,7 @@ function renderSaladBar(p) {
         _scaledIngredients: allItems.slice(),
         _scalingRatio: 1,
         tags: ['atelier', 'bowl', 'custom'],
-        st: ['Pr\u00e9parez et templ\u00e9risez vos ingr\u00e9dients.', 'Disposez la base au fond du bol.', 'Ajoutez les prot\u00e9ines et les garnitures.', 'Nappez de sauce au dernier moment et servez.']
+        st: (window.isEnglish && window.isEnglish() ? ['Prepare and temper your ingredients.', 'Place the base at the bottom of the bowl.', 'Add proteins and toppings.', 'Drizzle with dressing at the last moment and serve.'] : ['Pr\u00e9parez et templ\u00e9risez vos ingr\u00e9dients.', 'Disposez la base au fond du bol.', 'Ajoutez les prot\u00e9ines et les garnitures.', 'Nappez de sauce au dernier moment et servez.'])
       };
       if (!S.weekPlan) S.weekPlan = [];
       if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
@@ -4980,7 +4980,7 @@ function renderSaladBar(p) {
       try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saladBar saveProfile error:', e); }
       window.render();
     }
-  }, 'Valider ma composition — ' + (sb.mealTarget === 'breakfast' ? window.t('onb.s9.breakfast') : sb.mealTarget === 'snack' ? window.t('onb.s9.snack') : sb.mealTarget === 'dinner' ? window.t('onb.s9.dinner') : window.t('onb.s9.lunch')));
+  }, (window.isEnglish && window.isEnglish() ? 'Confirm my composition — ' : 'Valider ma composition — ') + (sb.mealTarget === 'breakfast' ? window.t('onb.s9.breakfast') : sb.mealTarget === 'snack' ? window.t('onb.s9.snack') : sb.mealTarget === 'dinner' ? window.t('onb.s9.dinner') : window.t('onb.s9.lunch')));
   actWrap.appendChild(btnAdd);
 
   actWrap.appendChild(h('button', {
@@ -4989,7 +4989,7 @@ function renderSaladBar(p) {
       sb.base = null; sb.proteins = []; sb.veggies = []; sb.fats = []; sb.sauce = null;
       window.render();
     }
-  }, 'Repartir de z\u00e9ro'));
+  }, (window.isEnglish && window.isEnglish() ? 'Start over' : 'Repartir de z\u00e9ro')));
 
   p.appendChild(actWrap);
 }
@@ -5516,7 +5516,7 @@ function renderRecipePicker(p) {
   if (!picker) return;
   var slotKey = picker.slotKey;
   var query = picker.query || '';
-  var slotLabels = { breakfast: 'Petit-déjeuner', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
+  var slotLabels = window.isEnglish && window.isEnglish() ? { breakfast: 'Breakfast', lunch: 'Lunch', snack: 'Snack', dinner: 'Dinner' } : { breakfast: 'Petit-déjeuner', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
   var slotLabel = slotLabels[slotKey] || slotKey;
 
   // ── Restore / init macro filter state from sessionStorage ──
@@ -5556,14 +5556,14 @@ function renderRecipePicker(p) {
     style: 'background:none;border:none;font-size:18px;cursor:pointer;padding:4px 8px',
     onclick: function() { S._recipePicker = null; window.render(); }
   }, '\u2190'));
-  hdr.appendChild(h('div', { style: 'font-size:16px;font-weight:400;color:var(--black,#0A0A09);flex:1' }, '\uD83C\uDF7D Choisir une recette \u2014 ' + slotLabel));
+  hdr.appendChild(h('div', { style: 'font-size:16px;font-weight:400;color:var(--black,#0A0A09);flex:1' }, '\uD83C\uDF7D ' + (window.isEnglish && window.isEnglish() ? 'Choose a recipe \u2014 ' : 'Choisir une recette \u2014 ') + slotLabel));
   overlay.appendChild(hdr);
 
   // Search box
   var searchWrap = h('div', { style: 'padding:12px 16px;background:var(--card,#FAF9F6);border-top:1px solid var(--border,#E5E4DE);flex-shrink:0' });
   var searchInput = h('input', {
     type: 'text',
-    placeholder: 'Rechercher une recette...',
+    placeholder: (window.isEnglish && window.isEnglish() ? 'Search for a recipe...' : 'Rechercher une recette...'),
     value: query,
     style: 'width:100%;padding:12px 16px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-size:16px;background:var(--bg,#FAF9F6);box-sizing:border-box'
   });
@@ -5579,7 +5579,7 @@ function renderRecipePicker(p) {
 
   // Min kcal
   var minKcalWrap = h('div');
-  var minKcalLabel = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px' }, 'Kcal min');
+  var minKcalLabel = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px' }, (window.isEnglish && window.isEnglish() ? 'Kcal min' : 'Kcal min'));
   var minKcalInput = h('input', {
     type: 'range',
     min: '0', max: '1200', step: '50',
@@ -5600,7 +5600,7 @@ function renderRecipePicker(p) {
 
   // Max kcal
   var maxKcalWrap = h('div');
-  var maxKcalLabel = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px' }, 'Kcal max');
+  var maxKcalLabel = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px' }, (window.isEnglish && window.isEnglish() ? 'Kcal max' : 'Kcal max'));
   var maxKcalInput = h('input', {
     type: 'range',
     min: '0', max: '1200', step: '50',
@@ -5621,7 +5621,7 @@ function renderRecipePicker(p) {
 
   // Protein min
   var minProtWrap = h('div');
-  var minProtLabel = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px' }, 'Prot\u00e9ines min.');
+  var minProtLabel = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px' }, (window.isEnglish && window.isEnglish() ? 'Protein min.' : 'Prot\u00e9ines min.'));
   var minProtInput = h('input', {
     type: 'range',
     min: '0', max: '60', step: '5',
@@ -5643,12 +5643,12 @@ function renderRecipePicker(p) {
 
   // Row 2: tag chips
   var TAG_DEFS = [
-    { key: 'high-protein', label: 'Prot\u00e9in\u00e9' },
-    { key: 'vegetarian',   label: 'V\u00e9g\u00e9tarien' },
+    { key: 'high-protein', label: (window.isEnglish && window.isEnglish() ? 'High protein' : 'Prot\u00e9in\u00e9') },
+    { key: 'vegetarian',   label: (window.isEnglish && window.isEnglish() ? 'Vegetarian' : 'V\u00e9g\u00e9tarien') },
     { key: 'vegan',        label: 'Vegan' },
     { key: 'low-carb',     label: 'Low-carb' },
-    { key: 'gluten-free',  label: 'Sans gluten' },
-    { key: 'quick',        label: 'Rapide' },
+    { key: 'gluten-free',  label: (window.isEnglish && window.isEnglish() ? 'Gluten-free' : 'Sans gluten') },
+    { key: 'quick',        label: (window.isEnglish && window.isEnglish() ? 'Quick' : 'Rapide') },
     { key: 'meal-prep',    label: 'Meal prep' }
   ];
   var tagRow = h('div', { style: 'display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px' });
@@ -5669,13 +5669,13 @@ function renderRecipePicker(p) {
 
   // Row 3: sort select + reset button
   var row3 = h('div', { style: 'display:flex;align-items:center;gap:10px' });
-  var sortLabel = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);letter-spacing:1px;text-transform:uppercase;white-space:nowrap' }, 'Trier par');
+  var sortLabel = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);letter-spacing:1px;text-transform:uppercase;white-space:nowrap' }, (window.isEnglish && window.isEnglish() ? 'Sort by' : 'Trier par'));
   var sortSelect = h('select', { style: 'flex:1;padding:6px 10px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;background:var(--ivory,#FAF9F6);color:var(--black,#0A0A09)' });
   var sortOptions = [
-    { value: 'default',   label: 'Par d\u00e9faut' },
-    { value: 'prot-desc', label: 'Prot\u00e9ines \u2193' },
-    { value: 'kcal-asc',  label: 'Calories \u2191' },
-    { value: 'kcal-desc', label: 'Calories \u2193' }
+    { value: 'default',   label: (window.isEnglish && window.isEnglish() ? 'Default' : 'Par d\u00e9faut') },
+    { value: 'prot-desc', label: (window.isEnglish && window.isEnglish() ? 'Protein \u2193' : 'Prot\u00e9ines \u2193') },
+    { value: 'kcal-asc',  label: (window.isEnglish && window.isEnglish() ? 'Calories \u2191' : 'Calories \u2191') },
+    { value: 'kcal-desc', label: (window.isEnglish && window.isEnglish() ? 'Calories \u2193' : 'Calories \u2193') }
   ];
   sortOptions.forEach(function(opt) {
     var option = document.createElement('option');
@@ -5695,7 +5695,7 @@ function renderRecipePicker(p) {
   // Reset button
   var resetBtn = h('button', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;padding:6px 12px;border:1px solid var(--border,#D8D8D0);border-radius:2px;background:transparent;color:var(--grey,#6B6B65);cursor:pointer;white-space:nowrap;letter-spacing:1px;text-transform:uppercase'
-  }, 'R\u00e9init.');
+  }, (window.isEnglish && window.isEnglish() ? 'Reset' : 'R\u00e9init.'));
   resetBtn.addEventListener('click', function() {
     picker.minKcal = 0; picker.maxKcal = 1200; picker.minProt = 0;
     picker.activeTags = []; picker.sortBy = 'default';
@@ -5745,7 +5745,7 @@ function renderRecipePicker(p) {
   listWrap.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:10px' }, filtered.length + ' ' + window.locPlural(filtered.length, {fr:{one:'recette trouv\u00e9e',other:'recettes trouv\u00e9es'},en:{one:'recipe found',other:'recipes found'}})));
 
   if (!filtered.length) {
-    listWrap.appendChild(h('div', { style: 'text-align:center;color:var(--grey,#888);padding:40px 16px;font-size:13px' }, 'Aucune recette trouv\u00e9e.'));
+    listWrap.appendChild(h('div', { style: 'text-align:center;color:var(--grey,#888);padding:40px 16px;font-size:13px' }, (window.isEnglish && window.isEnglish() ? 'No recipes found.' : 'Aucune recette trouv\u00e9e.')));
   } else {
     filtered.forEach(function(recipe) {
       var card = h('div', {
