@@ -29,7 +29,18 @@
     // FIX P1 contre-audit : `!!s.weekPlan` considérait `[]` comme truthy → overlay s'affichait
     // avec plan nutrition vide. Vérification explicite de length.
     var _hasNutritionPlan = Array.isArray(s.weekPlan) && s.weekPlan.length > 0;
-    var _hasSportPlan = Array.isArray(s.sportProgram) && s.sportProgram.length > 0;
+    // FIX BUG 2026-04-26 : S.sportProgram ne couvre QUE la musculation.
+    // Chaque sport non-musculation stocke son programme dans sa propre clé.
+    var _hasSportPlan = (Array.isArray(s.sportProgram) && s.sportProgram.length > 0) ||
+      (Array.isArray(s.runningProgram) && s.runningProgram.length > 0) ||
+      (Array.isArray(s.hyroxProgram) && s.hyroxProgram.length > 0) ||
+      (Array.isArray(s.padelProgram) && s.padelProgram.length > 0) ||
+      (Array.isArray(s.golfProgram) && s.golfProgram.length > 0) ||
+      (Array.isArray(s.triathlonProgram) && s.triathlonProgram.length > 0) ||
+      (Array.isArray(s.cyclingProgram) && s.cyclingProgram.length > 0) ||
+      (Array.isArray(s.calisthenicsProgram) && s.calisthenicsProgram.length > 0) ||
+      (s.sportType === 'yoga' && !!s.yogaLevel && !!s.yogaObjectif) ||
+      (s.sportType === 'crossfit' && !!s.crossfitLevel);
     var hasPlan = _hasNutritionPlan || _hasSportPlan;
     return hasName && hasGoal && hasPlan;
   }

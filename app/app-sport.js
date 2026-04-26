@@ -2103,7 +2103,9 @@ function renderMuscuMedicalQ(p) {
 
  // Header with back button
  var hdr = h('div', {style: 'display:flex;align-items:center;gap:12px;margin-bottom:20px'});
- hdr.appendChild(h('button', {'class': 'btn-back', style: 'margin:0', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ // FIX BUG 2026-04-26 : back depuis éval. médicale muscu ne doit pas effacer sportType.
+ // L'user retourne à la sélection du sport (sStep 0) avec son choix "Musculation" conservé.
+ hdr.appendChild(h('button', {'class': 'btn-back', style: 'margin:0', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
  hdr.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--grey)'}, 'Évaluation médicale'));
  p.appendChild(hdr);
 
@@ -10649,7 +10651,7 @@ function renderGolfConfig(p) {
 
  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.days')));
  var nw = h('div', {'class': 'num-input-wrap'});
- nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '5', value: String(S.golfDays), oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 5) S.golfDays = v; }}));
+ nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '5', value: String(S.golfDays), inputmode: 'numeric', oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 5) { S.golfDays = v; window.render(); } }, onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) { e.target.value = S.golfDays = 2; window.render(); } else if (v > 5) { e.target.value = S.golfDays = 5; window.render(); } } }));
  nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
  p.appendChild(nw);
 
@@ -11244,7 +11246,8 @@ function renderYogaOnboarding(p) {
 
 // ─── STEP 21: YOGA PROGRAM ───
 function renderYogaProgram(p) {
- if (!S.yogaLevel) { S.sStep = 19; setTimeout(function() { if (window.render) window.render(); }, 0); return; }
+ // FIX BUG 2026-04-26 : guard manquant sur yogaObjectif — config incomplète → session card vide
+ if (!S.yogaLevel || !S.yogaObjectif) { S.sStep = 19; setTimeout(function() { if (window.render) window.render(); }, 0); return; }
  if (!S.yogaDays) S.yogaDays = 3;
  if (!S.yogaDuration) S.yogaDuration = '30min';
  if (!S.yogaStyle) S.yogaStyle = 'hatha';

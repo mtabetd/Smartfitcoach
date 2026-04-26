@@ -959,11 +959,11 @@ window.AUTH = {
       window.S.selectedSportDay = 0; window.S.crossfitCycleWeek = 1;
       window.S.trainTime = null; window.S.heartRateRest = null;
       // Running
-      window.S.runningDays = null; window.S.runningGoal = null;
+      window.S.runningDays = 3; window.S.runningGoal = null;
       window.S.runningLevel = null; window.S.runningPace = null;
       window.S.runningWeek = 1; window.S.runningProgram = null; window.S.selectedRunDay = 0;
       // Cycling
-      window.S.cyclingDays = null; window.S.cyclingGoal = null;
+      window.S.cyclingDays = 3; window.S.cyclingGoal = null;
       window.S.cyclingLevel = null; window.S.cyclingType = null;
       window.S.cyclingSpeed = null; window.S.cyclingFTP = null;
       window.S.cyclingRelief = null; window.S.cyclingWeek = 1;
@@ -975,17 +975,17 @@ window.AUTH = {
       window.S.triathlonBikePace = null; window.S.triathlonRunPace = null;
       window.S.triathlonWeak = null;
       // Hyrox
-      window.S.hyroxDays = null; window.S.hyroxGoal = null;
+      window.S.hyroxDays = 3; window.S.hyroxGoal = null;
       window.S.hyroxLevel = null; window.S.hyroxWeek = 1;
       window.S.hyroxProgram = null; window.S.selectedHyroxDay = 0;
       window.S.hyroxBenchmarks = {};
       // Padel
-      window.S.padelDays = null; window.S.padelGoal = null;
+      window.S.padelDays = 3; window.S.padelGoal = null;
       window.S.padelLevel = null; window.S.padelWeek = 1;
       window.S.padelProgram = null; window.S.selectedPadelDay = 0;
       window.S.padelProfile = null;
       // Golf
-      window.S.golfDays = null; window.S.golfGoal = null;
+      window.S.golfDays = 3; window.S.golfGoal = null;
       window.S.golfLevel = null; window.S.golfHandicap = null;
       window.S.golfWeek = 1; window.S.golfProgram = null;
       window.S.selectedGolfDay = 0; window.S.golfProfile = null;

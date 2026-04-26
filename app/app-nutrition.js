@@ -156,7 +156,8 @@ function renderProgressBar(p, current, total) {
   var label = h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;'
   });
-  label.appendChild(h('span', {}, 'Étape ' + current + ' sur ' + total));
+  var _pbEN = window.isEnglish && window.isEnglish();
+  label.appendChild(h('span', {}, _pbEN ? ('Step ' + current + ' of ' + total) : ('Étape ' + current + ' sur ' + total)));
   // Pourcentage discret à droite en Georgia
   var pct = Math.round((current / total) * 100);
   label.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:11px;letter-spacing:0;text-transform:none;color:var(--black,#0A0A09);'}, pct + '%'));
@@ -2165,7 +2166,10 @@ function renderStep7(p) {
             _errDiv.style.cssText = 'color:var(--error,#7A1F1F);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-top:8px;text-align:center';
             _genBtn.parentNode && _genBtn.parentNode.insertBefore(_errDiv, _genBtn.nextSibling);
           }
-          _errDiv.textContent = 'Impossible de générer le plan. Vérifiez vos préférences et réessayez.';
+          // BUG-4 FIX: bilingual inline error message for empty plan
+          _errDiv.textContent = (window.isEnglish && window.isEnglish())
+            ? 'Unable to generate the plan. Check your preferences and try again.'
+            : 'Impossible de générer le plan. Vérifiez vos préférences et réessayez.';
           window._nutritionGenerating = false;
           return;
         }
@@ -3031,8 +3035,11 @@ function renderStep9(p) {
   // NOTE : on ne touche plus au plan si hash change. La bannière ci-dessous informe l'user.
   // Guard: si weekPlan est toujours null/vide après génération, afficher un message d'erreur
   if (!S.weekPlan || !S.weekPlan.length) {
-    p.appendChild(h('div', {style: 'padding:20px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'}, 'Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes.'));
-    p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(11); }}, '\u2190 Retour aux résultats'));
+    // BUG-3 FIX: bilingual empty-plan error message
+    var _isEn3 = window.isEnglish && window.isEnglish();
+    p.appendChild(h('div', {style: 'padding:20px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'},
+      _isEn3 ? 'Some information is missing to generate your plan. Complete the previous steps.' : 'Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes.'));
+    p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(11); }}, (window.isEnglish && window.isEnglish() ? '\u2190 Back to results' : '\u2190 Retour aux résultats')));
     return;
   }
   // (reset selectedDay déjà fait en haut de fonction avant calcul _nm)
@@ -3572,7 +3579,8 @@ function renderStep9(p) {
         });
         emptyCard.appendChild(h('div', {style: 'font-size:13px;font-weight:400;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;color:var(--grey,#888)'}, slotLabel));
         emptyCard.appendChild(h('div', {style: 'font-size:24px;margin-bottom:4px'}, '+'));
-        emptyCard.appendChild(h('div', {style: 'font-size:13px'}, 'Composer mon repas'));
+        // BUG-5 FIX: bilingual label in empty meal slot placeholder
+        emptyCard.appendChild(h('div', {style: 'font-size:13px'}, (window.isEnglish && window.isEnglish()) ? 'Compose my meal' : 'Composer mon repas'));
         p.appendChild(emptyCard);
 
         if (S._addMealModalSlot === slotKey) {
