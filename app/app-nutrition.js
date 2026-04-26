@@ -3375,7 +3375,7 @@ function renderStep9(p) {
         foodCard.appendChild(h('button', {
           style: 'width:100%;padding:8px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);cursor:pointer',
           onclick: function() { S._foodPortionItem = null; S._foodPortionGrams = null; window.render(); }
-        }, '\u2190 Retour aux r\u00e9sultats'));
+        }, (window.isEnglish && window.isEnglish() ? '\u2190 Back to results' : '\u2190 Retour aux r\u00e9sultats')));
       } else {
         // ── RECENT FOODS (chips) ────────────────────────────────────────────
         var _recentFoods = [];
@@ -3504,11 +3504,11 @@ function renderStep9(p) {
       // Manual entry form
       if (!S._foodManualData) S._foodManualData = { name: '', kcal: '', p: '', g: '', l: '' };
       var fields = [
-        {key: 'name', label: 'Nom', type: 'text', placeholder: 'Ex: Poulet grillé'},
+        {key: 'name', label: (window.isEnglish && window.isEnglish() ? 'Name' : 'Nom'), type: 'text', placeholder: 'Ex: Poulet grillé'},
         {key: 'kcal', label: 'Kcal', type: 'number', placeholder: '0'},
-        {key: 'p', label: 'Protéines (g)', type: 'number', placeholder: '0'},
-        {key: 'g', label: 'Glucides (g)', type: 'number', placeholder: '0'},
-        {key: 'l', label: 'Lipides (g)', type: 'number', placeholder: '0'}
+        {key: 'p', label: (window.isEnglish && window.isEnglish() ? 'Protein (g)' : 'Protéines (g)'), type: 'number', placeholder: '0'},
+        {key: 'g', label: (window.isEnglish && window.isEnglish() ? 'Carbs (g)' : 'Glucides (g)'), type: 'number', placeholder: '0'},
+        {key: 'l', label: (window.isEnglish && window.isEnglish() ? 'Fat (g)' : 'Lipides (g)'), type: 'number', placeholder: '0'}
       ];
       fields.forEach(function(field) {
         var lbl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-bottom:3px;letter-spacing:1px;text-transform:uppercase'}, field.label);
@@ -3547,13 +3547,13 @@ function renderStep9(p) {
           try { var _mn = (fd.name||'').trim().toLowerCase(), _mw=[]; if(!S.allowPork&&/porc|jambon|bacon|lardon(?!.*(?:dinde|volaille|poulet))|saucisson|prosciutto|pancetta|chorizo/.test(_mn))_mw.push('porc'); if(S.regime===2&&/poulet|boeuf|bœuf|veau|dinde|saumon|thon|poisson/.test(_mn))_mw.push('non végétarien'); if(S.regime===3&&/poulet|boeuf|bœuf|veau|oeuf|fromage|yaourt|lait/.test(_mn))_mw.push('non vegan'); if(_mw.length&&window.showToast)window.showToast((window.isEnglish && window.isEnglish()) ? '\u26a0\ufe0f Meal added — contains: '+_mw.join(', ') : '\u26a0\ufe0f Repas ajouté — contient : '+_mw.join(', '), 'warning', 4000); } catch(_mwE){}
           window.render();
         }
-      }, 'Confirmer');
+      }, (window.isEnglish && window.isEnglish() ? 'Confirm' : 'Confirmer'));
       foodCard.appendChild(confirmManualBtn);
     }
     var cancelFoodBtn = h('button', {
       style: 'width:100%;padding:10px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);cursor:pointer',
       onclick: function() { S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false; S._foodManualData = null; S._foodPortionItem = null; S._foodPortionGrams = null; window.render(); }
-    }, 'Annuler');
+    }, (window.isEnglish && window.isEnglish() ? 'Cancel' : 'Annuler'));
     foodCard.appendChild(cancelFoodBtn);
     p.appendChild(foodCard);
   }
@@ -3599,7 +3599,7 @@ function renderStep9(p) {
           });
           sheet.appendChild(h('div', {
             style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;text-align:center'
-          }, 'Ajouter \u00e0 ' + slotLabel));
+          }, (window.isEnglish && window.isEnglish() ? 'Add to ' + slotLabel : 'Ajouter \u00e0 ' + slotLabel)));
           var choiceRow = h('div', {style: 'display:flex;gap:12px'});
           choiceRow.appendChild(h('button', {
             style: 'flex:1;padding:14px 8px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px',
@@ -3609,7 +3609,7 @@ function renderStep9(p) {
               S._recipePicker = { slotKey: slotKey, query: '' };
               window.render();
             }
-          }, 'Recette'));
+          }, (window.isEnglish && window.isEnglish() ? 'Recipe' : 'Recette')));
           choiceRow.appendChild(h('button', {
             style: 'flex:1;padding:14px 8px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px',
             onclick: function(e) {
@@ -3618,7 +3618,7 @@ function renderStep9(p) {
               window.render();
               if (window.openSaladComposer) window.openSaladComposer(slotKey);
             }
-          }, 'Salade'));
+          }, (window.isEnglish && window.isEnglish() ? 'Salad' : 'Salade')));
           var alimentBtn = h('button', {
             style: 'flex:1;padding:14px 8px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px',
             onclick: function(e) {
@@ -3630,7 +3630,7 @@ function renderStep9(p) {
               S._foodManualEntry = false;
               window.render();
             }
-          }, '\u270F\uFE0F Aliment');
+          }, '\u270F\uFE0F ' + (window.isEnglish && window.isEnglish() ? 'Food' : 'Aliment'));
           choiceRow.appendChild(alimentBtn);
           sheet.appendChild(choiceRow);
           overlay.appendChild(sheet);
@@ -3672,20 +3672,20 @@ function renderStep9(p) {
     if (_dayInfo && _dayInfo.isTraining) {
       var slotIdx = {breakfast: 0, lunch: 1, snack: 2, dinner: 3}[sl.key];
       if (slotIdx !== undefined && _dayInfo.preSlot === slotIdx) {
-        timingBadge = h('span', {'class': 'meal-badge badge-pre'}, '\u26A1 Pr\u00e9-s\u00e9ance');
+        timingBadge = h('span', {'class': 'meal-badge badge-pre'}, (window.isEnglish && window.isEnglish() ? '\u26A1 Pre-workout' : '\u26A1 Pr\u00e9-s\u00e9ance'));
       } else if (slotIdx !== undefined && _dayInfo.postSlot === slotIdx) {
-        timingBadge = h('span', {'class': 'meal-badge badge-post'}, '\uD83D\uDCAA Post-s\u00e9ance');
+        timingBadge = h('span', {'class': 'meal-badge badge-post'}, (window.isEnglish && window.isEnglish() ? '\uD83D\uDCAA Post-workout' : '\uD83D\uDCAA Post-s\u00e9ance'));
       }
     } else if (_dayInfo && !_dayInfo.isTraining && sl.key === 'dinner') {
-      timingBadge = h('span', {'class': 'meal-badge badge-rest'}, '\uD83D\uDE34 R\u00e9cup\u00e9ration');
+      timingBadge = h('span', {'class': 'meal-badge badge-rest'}, (window.isEnglish && window.isEnglish() ? '\uD83D\uDE34 Recovery' : '\uD83D\uDE34 R\u00e9cup\u00e9ration'));
     }
     var mealTypeEl = h('div', {'class': 'meal-type'});
     mealTypeEl.appendChild(document.createTextNode(sl.label));
     if (timingBadge) mealTypeEl.appendChild(timingBadge);
     card.appendChild(mealTypeEl);
-    card.appendChild(h('div', {'class': 'meal-name'}, [h('span', {'class': 'meal-flag'}, r.f || ''), txt(r.n || 'Repas')]));
+    card.appendChild(h('div', {'class': 'meal-name'}, [h('span', {'class': 'meal-flag'}, r.f || ''), txt(r.n || (window.isEnglish && window.isEnglish() ? 'Meal' : 'Repas'))]));
     if (window.isFreeMeal ? window.isFreeMeal(r) : (r.n === 'Repas libre')) {
-      card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);margin-bottom:4px;'}, '◦ À personnaliser — aucune recette disponible avec vos filtres'));
+      card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);margin-bottom:4px;'}, (window.isEnglish && window.isEnglish() ? '◦ To customize — no recipe available with your filters' : '◦ À personnaliser — aucune recette disponible avec vos filtres')));
     }
     card.appendChild(h('div', {'class': 'meal-kcal'}, (r.k || 0) + ' kcal'));
     var mc = h('div', {'class': 'meal-macros'});
@@ -3704,7 +3704,7 @@ function renderStep9(p) {
       var _fav = (S.favoriteRecipes && typeof S.favoriteRecipes === 'object') ? S.favoriteRecipes : {};
       var _curRating = (_fav[r._id]|0) || 0;
       var _favRow = h('div', {'class': 'meal-fav-row', style: 'display:flex;align-items:center;gap:6px;margin-top:6px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65)'});
-      _favRow.appendChild(h('span', {style: 'margin-right:4px'}, _curRating ? 'Favori' : 'Noter'));
+      _favRow.appendChild(h('span', {style: 'margin-right:4px'}, _curRating ? (window.isEnglish && window.isEnglish() ? 'Favorite' : 'Favori') : (window.isEnglish && window.isEnglish() ? 'Rate' : 'Noter')));
       [1, 2, 3].forEach(function(n) {
         var isFilled = _curRating >= n;
         var starBtn = h('span', {
@@ -3824,9 +3824,9 @@ function renderStep9(p) {
 
   // Add macro breakdown
   var macroInfo = h('div', {style: 'display:flex;gap:12px;font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'});
-  macroInfo.appendChild(h('span', {title:'Glucides'}, 'Glucides ' + dayTotalG + 'g'));
-  macroInfo.appendChild(h('span', {title:'Prot\u00e9ines'}, 'Prot\u00e9ines ' + dayTotalP + 'g'));
-  macroInfo.appendChild(h('span', {title:'Lipides'}, 'Lipides ' + dayTotalL + 'g'));
+  macroInfo.appendChild(h('span', {title:(window.isEnglish && window.isEnglish() ? 'Carbs' : 'Glucides')}, (window.isEnglish && window.isEnglish() ? 'Carbs ' : 'Glucides ') + dayTotalG + 'g'));
+  macroInfo.appendChild(h('span', {title:(window.isEnglish && window.isEnglish() ? 'Protein' : 'Prot\u00e9ines')}, (window.isEnglish && window.isEnglish() ? 'Protein ' : 'Prot\u00e9ines ') + dayTotalP + 'g'));
+  macroInfo.appendChild(h('span', {title:(window.isEnglish && window.isEnglish() ? 'Fat' : 'Lipides')}, (window.isEnglish && window.isEnglish() ? 'Fat ' : 'Lipides ') + dayTotalL + 'g'));
   vd.appendChild(macroInfo);
 
   vd.appendChild(h('span', {'class': 'dt-diff', style: 'color:' + (isOk ? 'var(--success,#3E5C3A)' : 'var(--orange-ink,#7A3B0E)')}, (diff >= 0 ? '+' : '') + diff + ' kcal ' + (isOk ? '\u2713' : '\u26a0')));
@@ -3836,9 +3836,9 @@ function renderStep9(p) {
   // Target macros comparison
   var targetMacros = calcMacros();
   var macroComparison = h('div', {style: 'display:flex;justify-content:space-between;padding:8px 16px;font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);border:1px solid var(--border);border-top:none;background:var(--ivory2)'});
-  macroComparison.appendChild(h('span', {}, 'Objectif : Glucides ' + targetMacros.g + 'g \u00b7 Prot\u00e9ines ' + targetMacros.p + 'g \u00b7 Lipides ' + targetMacros.l + 'g'));
+  macroComparison.appendChild(h('span', {}, (window.isEnglish && window.isEnglish() ? 'Target: Carbs ' + targetMacros.g + 'g \u00b7 Protein ' + targetMacros.p + 'g \u00b7 Fat ' + targetMacros.l + 'g' : 'Objectif : Glucides ' + targetMacros.g + 'g \u00b7 Prot\u00e9ines ' + targetMacros.p + 'g \u00b7 Lipides ' + targetMacros.l + 'g')));
   var totalMacroKcal = dayTotalP * 4 + dayTotalG * 4 + dayTotalL * 9;
-  macroComparison.appendChild(h('span', {}, 'V\u00e9rif : ' + totalMacroKcal + ' kcal'));
+  macroComparison.appendChild(h('span', {}, (window.isEnglish && window.isEnglish() ? 'Check: ' + totalMacroKcal + ' kcal' : 'V\u00e9rif : ' + totalMacroKcal + ' kcal')));
   p.appendChild(macroComparison);
 
   // ─── INTÉGRATION SPORT → NUTRITION : dépense calorique séance d'aujourd'hui ───
@@ -3857,15 +3857,15 @@ function renderStep9(p) {
     var netTarget = tgtCal + burned; // calories nettes à consommer = objectif + brûlées
     var netDiv = h('div', {style: 'background:rgba(62,92,58,0.06);border:1px solid var(--line,#D8D8D0);border-radius:2px;padding:10px 14px;margin:8px 0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--green,#3E5C3A)'});
     var netRow = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:4px'});
-    netRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase'}, 'S\u00e9ance valid\u00e9e — d\u00e9pense'));
+    netRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase'}, (window.isEnglish && window.isEnglish() ? 'Session validated — burned' : 'S\u00e9ance valid\u00e9e — d\u00e9pense')));
     netRow.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:13px'}, '+' + burned + ' kcal'));
     netDiv.appendChild(netRow);
     var netRow2 = h('div', {style: 'display:flex;justify-content:space-between;align-items:center'});
-    netRow2.appendChild(h('span', {style: 'color:var(--green,#3E5C3A)'}, 'Objectif ajust\u00e9 (net)'));
+    netRow2.appendChild(h('span', {style: 'color:var(--green,#3E5C3A)'}, (window.isEnglish && window.isEnglish() ? 'Adjusted target (net)' : 'Objectif ajust\u00e9 (net)')));
     netRow2.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:13px;color:var(--green,#3E5C3A)'}, netTarget + ' kcal'));
     netDiv.appendChild(netRow2);
     if (todaySess.kcalEpoc) {
-      var epocNote = h('div', {style: 'color:#5A8A5A;font-size:9px;margin-top:3px'}, 'dont +' + todaySess.kcalEpoc + ' kcal EPOC (afterburn) inclus');
+      var epocNote = h('div', {style: 'color:#5A8A5A;font-size:9px;margin-top:3px'}, (window.isEnglish && window.isEnglish() ? 'incl. +' + todaySess.kcalEpoc + ' kcal EPOC (afterburn)' : 'dont +' + todaySess.kcalEpoc + ' kcal EPOC (afterburn) inclus'));
       netDiv.appendChild(epocNote);
     }
     p.appendChild(netDiv);
@@ -3886,15 +3886,15 @@ function renderStep9(p) {
   if (window.RecipeEngine && window.RecipeEngine.calcWeekPlanBudget && S.weekPlan) {
     var budget = window.RecipeEngine.calcWeekPlanBudget(S.weekPlan);
     var budgetBlock = h('div', { style: 'margin:16px 0;padding:14px 16px;background:var(--card);border-radius:2px' });
-    budgetBlock.appendChild(h('div', { style: 'font-weight:400;font-size:13px;margin-bottom:10px;color:var(--text);letter-spacing:0.5px;text-transform:uppercase' }, 'Budget courses estimé'));
+    budgetBlock.appendChild(h('div', { style: 'font-weight:400;font-size:13px;margin-bottom:10px;color:var(--text);letter-spacing:0.5px;text-transform:uppercase' }, (window.isEnglish && window.isEnglish() ? 'Estimated grocery budget' : 'Budget courses estimé')));
     if (budget.totalMAD > 0) {
       var budgetGrid = h('div', { style: 'display:grid;grid-template-columns:1fr 1fr;gap:8px' });
       budgetGrid.appendChild(h('div', { style: 'background:var(--bg);border-radius:2px;padding:10px;text-align:center' },
-        h('div', { style: 'font-size:11px;color:var(--text-secondary);margin-bottom:4px' }, 'Budget / jour'),
+        h('div', { style: 'font-size:11px;color:var(--text-secondary);margin-bottom:4px' }, (window.isEnglish && window.isEnglish() ? 'Budget / day' : 'Budget / jour')),
         h('div', { style: 'font-size:18px;font-weight:400;color:var(--accent)' }, budget.avgDailyMAD + ' ' + 'DH')
       ));
       budgetGrid.appendChild(h('div', { style: 'background:var(--bg);border-radius:2px;padding:10px;text-align:center' },
-        h('div', { style: 'font-size:11px;color:var(--text-secondary);margin-bottom:4px' }, 'Budget / semaine'),
+        h('div', { style: 'font-size:11px;color:var(--text-secondary);margin-bottom:4px' }, (window.isEnglish && window.isEnglish() ? 'Budget / week' : 'Budget / semaine')),
         h('div', { style: 'font-size:18px;font-weight:400;color:var(--accent)' }, budget.weeklyMAD + ' ' + 'DH')
       ));
       budgetBlock.appendChild(budgetGrid);
@@ -3905,19 +3905,19 @@ function renderStep9(p) {
         if (dayLimit) {
           var overBudget = budget.avgDailyMAD > dayLimit;
           var budgetStatus = overBudget
-            ? '\u26a0\ufe0f Au-dessus de votre fourchette (' + dayLimit + ' DH/j)'
-            : '\u2713 Dans votre fourchette budget';
+            ? (window.isEnglish && window.isEnglish() ? '\u26a0\ufe0f Above your budget range (' + dayLimit + ' DH/day)' : '\u26a0\ufe0f Au-dessus de votre fourchette (' + dayLimit + ' DH/j)')
+            : (window.isEnglish && window.isEnglish() ? '\u2713 Within your budget range' : '\u2713 Dans votre fourchette budget');
           budgetBlock.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + (overBudget ? 'var(--error,#7A1F1F)' : 'var(--green,#3E5C3A)') + ';margin-top:8px;text-align:center' }, budgetStatus));
         }
       }
       if (budget.coveragePct < 100) {
         budgetBlock.appendChild(h('div', { style: 'font-size:11px;color:var(--text-secondary);margin-top:8px' },
-          '* Estimation basée sur ' + budget.coveragePct + '% des repas (recettes avec prix disponibles)'
+          (window.isEnglish && window.isEnglish() ? '* Estimate based on ' + budget.coveragePct + '% of meals (recipes with available prices)' : '* Estimation basée sur ' + budget.coveragePct + '% des repas (recettes avec prix disponibles)')
         ));
       }
     } else {
       budgetBlock.appendChild(h('div', { style: 'font-size:13px;color:var(--text-secondary);text-align:center;padding:8px 0' },
-        'Prix non disponibles pour ce plan — généralement disponibles dès la semaine suivante'
+        (window.isEnglish && window.isEnglish() ? 'Prices not available for this plan — usually available from next week' : 'Prix non disponibles pour ce plan — généralement disponibles dès la semaine suivante')
       ));
     }
     // Insère après le plan semaine
@@ -3927,7 +3927,7 @@ function renderStep9(p) {
   // Bouton liste de courses améliorée — affiche le nombre d'articles en temps réel
   var _shopList = ((window.RecipeEngine && S.weekPlan) ? window.RecipeEngine.generateShoppingList(S.weekPlan, {shopFreq: S.shopFreq}) : []) || [];
   var _shopTotal = _shopList.reduce(function(n, cat) { return n + (cat && cat.items ? cat.items.length : 0); }, 0);
-  var _shopLabel = window.t('shop.title') + (_shopTotal > 0 ? ' — ' + _shopTotal + ' articles' : '');
+  var _shopLabel = window.t('shop.title') + (_shopTotal > 0 ? (window.isEnglish && window.isEnglish() ? ' — ' + _shopTotal + ' items' : ' — ' + _shopTotal + ' articles') : '');
   var btnShop = h('button', {
     'class': 'btn-secondary',
     style: 'margin:8px 0',
@@ -3936,7 +3936,7 @@ function renderStep9(p) {
   p.appendChild(btnShop);
 
   // Export PDF
-  p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:16px;background:var(--black2)', onclick: function() { window.exportDayPDF(S.selectedDay); }}, '\u21e9 Exporter le jour en PDF'));
+  p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:16px;background:var(--black2)', onclick: function() { window.exportDayPDF(S.selectedDay); }}, (window.isEnglish && window.isEnglish() ? '\u21e9 Export day to PDF' : '\u21e9 Exporter le jour en PDF')));
   p.appendChild(h('div', {style: 'height:8px'}));
   p.appendChild(h('button', {'class': 'regen-btn', onclick: function() {
     // CRITIQUE-G1: anti race-condition (même pattern que génération initiale)
@@ -3976,7 +3976,7 @@ function renderStep9(p) {
     }
   }}, '\u21bb ' + window.t('onb.s9.generate')));
   p.appendChild(h('div', {style: 'height:12px'}));
-  p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(11); }}, '\u2190 Retour aux r\u00e9sultats'));
+  p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(11); }}, (window.isEnglish && window.isEnglish() ? '\u2190 Back to results' : '\u2190 Retour aux r\u00e9sultats')));
 
   // ─── BOUTON "MODIFIER MES PRÉFÉRENCES" ───
   // Permet à l'utilisateur de refaire le questionnaire s'il le souhaite explicitement.
@@ -3985,7 +3985,7 @@ function renderStep9(p) {
     'class': 'btn-secondary',
     style: 'width:100%;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);border-color:var(--border,#D8D8D0)',
     onclick: function() {
-      if (!(window.sfcConfirm || confirm)('Refaire le questionnaire nutrition ? Votre plan actuel sera supprimé.')) return;
+      if (!(window.sfcConfirm || confirm)((window.isEnglish && window.isEnglish() ? 'Redo the nutrition questionnaire? Your current plan will be deleted.' : 'Refaire le questionnaire nutrition ? Votre plan actuel sera supprimé.'))) return;
       S.weekPlan = null;
       S._nm = null;
       S._weekPlanGeneratedAt = null;
@@ -3996,15 +3996,15 @@ function renderStep9(p) {
       if (window.saveProfile) saveProfile();
       window.render();
     }
-  }, '\u2699 Modifier mes pr\u00e9f\u00e9rences nutritionnelles');
+  }, (window.isEnglish && window.isEnglish() ? '\u2699 Edit my nutrition preferences' : '\u2699 Modifier mes pr\u00e9f\u00e9rences nutritionnelles'));
   p.appendChild(btnReset);
 
   // ─── CTA TRANSITION → SPORT (mode "les deux" uniquement) ───
   if (S.appMode === 'both' && (!S.sportProgram || S.sportProgram.length === 0)) {
     var transCard = h('div', {style: 'border:1px solid var(--line,#D8D8D0);background:var(--paper-2,#F4F1EA);padding:20px 16px;margin-top:20px;border-radius:2px'});
-    transCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--success,#3E5C3A);margin-bottom:8px'}, 'ÉTAPE 2 / 2'));
-    transCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin-bottom:8px;color:var(--black,#1A1A18)'}, 'Votre nutrition est prête.'));
-    transCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:16px'}, 'Configurez maintenant votre programme sportif pour que vos macros s\'adaptent automatiquement à chaque séance.'));
+    transCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--success,#3E5C3A);margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'STEP 2 / 2' : 'ÉTAPE 2 / 2')));
+    transCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin-bottom:8px;color:var(--black,#1A1A18)'}, (window.isEnglish && window.isEnglish() ? 'Your nutrition is ready.' : 'Votre nutrition est prête.')));
+    transCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:16px'}, (window.isEnglish && window.isEnglish() ? 'Now set up your fitness program so your macros automatically adapt to each session.' : 'Configurez maintenant votre programme sportif pour que vos macros s\'adaptent automatiquement à chaque séance.')));
     var sportCTA = h('button', {
       style: 'width:100%;padding:16px;min-height:44px;background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border:1px solid var(--ink-900,#0A0A09);border-radius:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer',
       onclick: function() {
@@ -4014,7 +4014,7 @@ function renderStep9(p) {
         if (window.saveProfile) window.saveProfile();
         if (window.render) window.render();
       }
-    }, 'Configurer mon programme sportif →');
+    }, (window.isEnglish && window.isEnglish() ? 'Set up my fitness program →' : 'Configurer mon programme sportif →'));
     transCard.appendChild(sportCTA);
     p.appendChild(transCard);
   }
@@ -4039,7 +4039,7 @@ function renderModal(app) {
     var hdr = h('div', {'class': 'modal-header'});
     // Bug 2: r.f or r.n may be undefined on legacy recipes
     var recipeEmoji = r.f || r.emoji || '';
-    var recipeName = r.n || r.name || 'Recette';
+    var recipeName = r.n || r.name || (window.isEnglish && window.isEnglish() ? 'Recipe' : 'Recette');
     hdr.appendChild(h('div', {'class': 'modal-title'}, recipeEmoji + (recipeEmoji ? ' ' : '') + recipeName));
     hdr.appendChild(h('button', {'class': 'modal-close', onclick: function() { S.modalRecipe = null; window.render(); }}, '\u2715'));
     sheet.appendChild(hdr);
@@ -4075,16 +4075,16 @@ function renderModal(app) {
         // Afficher le badge scaling si facteur ≠ 1 (±5%)
         if (Math.abs(_scaleFactor - 1) > 0.05) {
           var _scaledKcal = Math.round(kcal * _scaleFactor);
-          var _scaleLabel = _scaleFactor < 1 ? 'Portions réduites' : 'Portions augmentées';
+          var _scaleLabel = _scaleFactor < 1 ? (window.isEnglish && window.isEnglish() ? 'Reduced portions' : 'Portions réduites') : (window.isEnglish && window.isEnglish() ? 'Increased portions' : 'Portions augmentées');
           body.appendChild(h('div', {style:'display:flex;justify-content:space-between;align-items:center;padding:8px 12px;margin-bottom:12px;background:rgba(62,92,58,0.06);border:1px solid rgba(62,92,58,0.12);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--green,#3E5C3A);'}, [
-            h('span', {}, _scaleLabel + ' pour ton profil'),
+            h('span', {}, _scaleLabel + (window.isEnglish && window.isEnglish() ? ' for your profile' : ' pour ton profil')),
             h('span', {style:'font-weight:400'}, _scaledKcal + ' kcal (×' + _scaleFactor.toFixed(2) + ')')
           ]));
         }
       }
     } catch(_eScale) { _scaleFactor = 1; }
 
-    body.appendChild(h('div', {'class': 'section-label'}, 'Ingr\u00e9dients'));
+    body.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Ingredients' : 'Ingr\u00e9dients')));
     var ingredList = h('ul', {'class': 'ingredient-list'});
     // Helper: display one ingredient {name, qty, unit} as a readable line
     // FIX 2026-04-16 : "pce" masqué (affichait "1 pce Citron" au lieu de "1 Citron").
@@ -4141,13 +4141,13 @@ function renderModal(app) {
       } else if (fullR && typeof fullR.ingredients === 'string' && fullR.ingredients.length > 0) {
         fullR.ingredients.split(',').forEach(function(ing) { if (ing.trim()) ingredList.appendChild(h('li', {}, ing.trim())); });
       } else {
-        ingredList.appendChild(h('li', {style: 'color:var(--grey);font-style:italic'}, 'Ingr\u00e9dients non disponibles.'));
+        ingredList.appendChild(h('li', {style: 'color:var(--grey);font-style:italic'}, (window.isEnglish && window.isEnglish() ? 'Ingredients not available.' : 'Ingr\u00e9dients non disponibles.')));
       }
     } else {
-      ingredList.appendChild(h('li', {style: 'color:var(--grey);font-style:italic'}, 'Ingr\u00e9dients non disponibles.'));
+      ingredList.appendChild(h('li', {style: 'color:var(--grey);font-style:italic'}, (window.isEnglish && window.isEnglish() ? 'Ingredients not available.' : 'Ingr\u00e9dients non disponibles.')));
     }
     body.appendChild(ingredList);
-    body.appendChild(h('div', {'class': 'section-label'}, 'Pr\u00e9paration'));
+    body.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Preparation' : 'Pr\u00e9paration')));
     var sl = h('ol', {'class': 'step-list'});
     var steps = Array.isArray(r.st) && r.st.length > 0 ? r.st
               : Array.isArray(r.steps) && r.steps.length > 0 ? r.steps
@@ -4158,7 +4158,7 @@ function renderModal(app) {
       if (_fullR && Array.isArray(_fullR.steps) && _fullR.steps.length > 0) steps = _fullR.steps;
     }
     if (steps.length === 0) {
-      sl.appendChild(h('li', {style: 'color:var(--grey);font-style:italic'}, 'Pr\u00e9paration non disponible pour ce repas.'));
+      sl.appendChild(h('li', {style: 'color:var(--grey);font-style:italic'}, (window.isEnglish && window.isEnglish() ? 'Preparation not available for this meal.' : 'Pr\u00e9paration non disponible pour ce repas.')));
     } else {
       steps.forEach(function(s) { sl.appendChild(h('li', {}, s || '')); });
     }
@@ -4168,9 +4168,9 @@ function renderModal(app) {
     if (!isNaN(chk) && chk > 0) {
     var diffPctChk = kcal > 0 ? Math.abs((chk - kcal) / kcal * 100) : 0;
     var chkColor = diffPctChk <= 5 ? 'var(--green,#3E5C3A)' : 'var(--orange,#E86F1E)';
-    body.appendChild(h('div', {'class': 'macro-check', style: 'color:' + chkColor}, 'V\u00e9rification macros : ' + chk + ' kcal' + (diffPctChk > 5 ? ' (\u00e9cart ' + Math.round(diffPctChk) + '% vs ' + kcal + ' kcal affich\u00e9)' : ' \u2713')));
+    body.appendChild(h('div', {'class': 'macro-check', style: 'color:' + chkColor}, (window.isEnglish && window.isEnglish() ? 'Macro check: ' + chk + ' kcal' + (diffPctChk > 5 ? ' (diff ' + Math.round(diffPctChk) + '% vs ' + kcal + ' kcal displayed)' : ' \u2713') : 'V\u00e9rification macros : ' + chk + ' kcal' + (diffPctChk > 5 ? ' (\u00e9cart ' + Math.round(diffPctChk) + '% vs ' + kcal + ' kcal affich\u00e9)' : ' \u2713'))));
     }
-    var expBtn = h('button', {'class': 'btn-primary', style: 'margin-top:12px;font-size:9px', onclick: function(e) { e.stopPropagation(); window.exportRecipePDF(r); }}, '\u21e9 Exporter cette recette en PDF');
+    var expBtn = h('button', {'class': 'btn-primary', style: 'margin-top:12px;font-size:9px', onclick: function(e) { e.stopPropagation(); window.exportRecipePDF(r); }}, (window.isEnglish && window.isEnglish() ? '\u21e9 Export this recipe to PDF' : '\u21e9 Exporter cette recette en PDF'));
     body.appendChild(expBtn);
     sheet.appendChild(body);
   }
