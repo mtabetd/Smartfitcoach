@@ -521,6 +521,89 @@ var _CS_MUSCLE_GROUPS = [
 ];
 
 // ─────────────────────────────────────────────
+//  Famille de mouvement — déduplication
+// ─────────────────────────────────────────────
+function _csFamilyKey(name, normFn) {
+  var n = normFn ? normFn(name) : (name || '').toLowerCase();
+  // Tirages verticaux (poulie / machine)
+  if (/tirage.vertical|lat.pull|pulldown/.test(n))                        return 'tirage_vertical';
+  // Tractions (barre / poids du corps)
+  if (/traction|chin.?up|pull.?up/.test(n))                               return 'traction';
+  // Tirages horizontaux — rowing
+  if (/rowing|row\b/.test(n))                                              return 'horizontal_pull';
+  // Développé plat (avec banc — pas floor press)
+  if (/developpe.couche|chest.press|pec.press|bench.press/.test(n))       return 'developpe_plat';
+  // Développé incliné
+  if (/developpe.inclin|incline.press|incline.halt/.test(n))              return 'developpe_incline';
+  // Développé décliné
+  if (/developpe.decline|decline.press/.test(n))                          return 'developpe_decline';
+  // Autres développés / floor press / presse pec
+  if (/developpe|floor.press|presse.pec/.test(n))                         return 'press_autre';
+  // Hip thrust / glute bridge
+  if (/hip.thrust|glute.bridge|banded.hip/.test(n))                       return 'hip_thrust';
+  // Pompes
+  if (/pompe|push.?up/.test(n))                                            return 'pompes';
+  // Dips
+  if (/dips?/.test(n))                                                     return 'dips';
+  // Écarté / fly
+  if (/ecarte|fly\b|flye|crossover|pec.deck|butterfly/.test(n))           return 'ecarte';
+  // Curl biceps
+  if (/curl/.test(n))                                                      return 'curl';
+  // Extensions triceps
+  if (/extension.triceps|tricep.extension|pushdown|barre.fron|skull/.test(n)) return 'tricep_ext';
+  // Squat
+  if (/squat/.test(n))                                                     return 'squat';
+  // Fentes / lunges
+  if (/fente|lunge/.test(n))                                               return 'fente';
+  // Soulevé de terre / deadlift / RDL
+  if (/souleve|deadlift|rdl/.test(n))                                      return 'deadlift';
+  // Leg press / presse cuisses
+  if (/leg.press|presse.a.cuisse|hack.squat/.test(n))                     return 'leg_press';
+  // Leg curl
+  if (/leg.curl|ischios/.test(n))                                          return 'leg_curl';
+  // Développé militaire / OHP
+  if (/militaire|shoulder.press|press.strict|strict.press|arnold/.test(n)) return 'ohp';
+  // Élévations latérales
+  if (/elevation.later|lateral.raise/.test(n))                             return 'lateral_raise';
+  // Arrière épaule / face pull / rear delt
+  if (/face.pull|rear.delt|oiseau|elevation.poster|inverse/.test(n))      return 'rear_delt';
+  // Mollets
+  if (/calf.raise|mollet/.test(n))                                         return 'calf';
+  // Gainage / planche
+  if (/planche|gainage|hollow|dead.bug|bird.?dog/.test(n))                return 'planche';
+  // Crunch / abdominaux
+  if (/crunch|abdos|relevé.de.genoux|relevé.de.jamb/.test(n))            return 'crunch';
+  // Rotation
+  if (/russian.twist|woodchop|rotation|pallof/.test(n))                   return 'rotation';
+  // Fallback : premier mot significatif
+  return (n.replace(/[^a-z ]/g, '').trim().split(/\s+/)[0]) || n;
+}
+
+// Score d'équipement : barre > haltères > câble > autre > machine
+// machine est testé EN PREMIER pour éviter "T-bar machine + barre" → barre score
+function _csEqScore(eq) {
+  var e = (eq || '').toLowerCase()
+    .replace(/[éèê]/g, 'e').replace(/[àâ]/g, 'a').replace(/[ôö]/g, 'o').replace(/ç/g, 'c');
+  if (/machine/.test(e))  return 5;   // machine guidée (priorité test la plus haute pour éviter faux positif barre)
+  if (/cable|poulie/.test(e)) return 3; // câble / poulie
+  if (/\bbarre\b/.test(e)) return 1;   // barre olympique / barre de traction
+  if (/haltere/.test(e))  return 2;   // haltères
+  return 4;                            // autre équipement (anneaux, élastique, barres parallèles…)
+}
+
+// Ordre préféré de familles par groupe musculaire
+// Assure un programme équilibré quelle que soit la base d'exercices
+var _CS_GROUP_FAMILIES = {
+  'glutes':    ['hip_thrust', 'deadlift', 'squat', 'lateral_raise'],
+  'back':      ['horizontal_pull', 'tirage_vertical', 'traction', 'rear_delt'],
+  'chest':     ['developpe_plat', 'developpe_incline', 'ecarte', 'dips'],
+  'legs':      ['squat', 'deadlift', 'leg_press', 'leg_curl'],
+  'shoulders': ['ohp', 'lateral_raise', 'rear_delt', 'horizontal_pull'],
+  'abs':       ['planche', 'crunch', 'rotation', 'leg_curl'],
+  'arms':      ['curl', 'tricep_ext', 'dips', 'traction']
+};
+
+// ─────────────────────────────────────────────
 //  Génération de séance depuis groupes musculaires
 // ─────────────────────────────────────────────
 function _csGenerateSessionFromMuscles(groups) {
@@ -529,7 +612,7 @@ function _csGenerateSessionFromMuscles(groups) {
   var S = window.S;
   var norm = function(s) { return window.EXERCISE_SEARCH._normalize(s); };
 
-  // Historique récent pour prioriser les exercices connus
+  // Historique récent — tiebreaker à l'intérieur d'un même niveau d'équipement
   var recentEx = {};
   var log = (S && S.muscuSessionLog) || {};
   Object.keys(log).sort().reverse().slice(0, 30).forEach(function(d) {
@@ -570,22 +653,49 @@ function _csGenerateSessionFromMuscles(groups) {
       });
     }
 
-    // Prioriser : exercices connus > avec équipement > compound > débutant
+    // Tri : non-PDC → eqScore (barre > haltères > câble > autre > machine) → récent → niveau
+    var isBW = window.isBodyweightExercise || function(ex) { return /^(poids du corps|bodyweight|aucun|none)$/i.test(ex.eq || ''); };
     matching.sort(function(a, b) {
-      var ah = recentEx[norm(a.n)] ? 1 : 0;
-      var bh = recentEx[norm(b.n)] ? 1 : 0;
+      var abw = isBW(a) ? 1 : 0, bbw = isBW(b) ? 1 : 0;
+      if (abw !== bbw) return abw - bbw;
+      var aeq = _csEqScore(a.eq), beq = _csEqScore(b.eq);
+      if (aeq !== beq) return aeq - beq;
+      var ah = recentEx[norm(a.n)] ? 1 : 0, bh = recentEx[norm(b.n)] ? 1 : 0;
       if (ah !== bh) return bh - ah;
-      // Déprioritiser poids du corps sauf si déjà fait récemment
-      var abw = window.isBodyweightExercise ? window.isBodyweightExercise(a) : false;
-      var bbw = window.isBodyweightExercise ? window.isBodyweightExercise(b) : false;
-      if (abw !== bbw) return abw ? 1 : -1;
       return (a.lv || 2) - (b.lv || 2);
     });
 
-    matching.slice(0, 4).forEach(function(ex) {
-      usedNames[norm(ex.n)] = true;
-      _csAddExercise(ex);
-    });
+    var preferredFamilies = _CS_GROUP_FAMILIES[grp.key] || [];
+    var grpFamilies = {};
+    var grpPicked = 0;
+
+    // Passe 1 : remplir les familles préférées dans l'ordre défini
+    for (var _pi = 0; _pi < preferredFamilies.length && grpPicked < 4; _pi++) {
+      var targetFam = preferredFamilies[_pi];
+      if (grpFamilies[targetFam]) continue;
+      for (var _mi = 0; _mi < matching.length; _mi++) {
+        var _ex = matching[_mi];
+        if (usedNames[norm(_ex.n)]) continue;
+        if (_csFamilyKey(_ex.n, norm) !== targetFam) continue;
+        grpFamilies[targetFam] = true;
+        usedNames[norm(_ex.n)] = true;
+        _csAddExercise(_ex);
+        grpPicked++;
+        break;
+      }
+    }
+
+    // Passe 2 : compléter jusqu'à 4 avec n'importe quelle famille non encore utilisée
+    for (var _fi = 0; _fi < matching.length && grpPicked < 4; _fi++) {
+      var _ex2 = matching[_fi];
+      if (usedNames[norm(_ex2.n)]) continue;
+      var _fam2 = _csFamilyKey(_ex2.n, norm);
+      if (grpFamilies[_fam2]) continue;
+      grpFamilies[_fam2] = true;
+      usedNames[norm(_ex2.n)] = true;
+      _csAddExercise(_ex2);
+      grpPicked++;
+    }
   });
 }
 
