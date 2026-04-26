@@ -1581,7 +1581,7 @@ function renderSportGenericMedical(p) {
   _backRow.appendChild(h('button', {
     style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;background:none;border:none;color:var(--grey,#6B6B65);cursor:pointer;padding:8px;',
     onclick: function() { S.sStep = 0; S.sportType = null; if (window.render) window.render(); }
-  }, (window.isEnglish && window.isEnglish() ? '← Change sport' : '← Changer de sport'));
+  }, (window.isEnglish && window.isEnglish() ? '← Change sport' : '← Changer de sport')));
   p.appendChild(_backRow);
 }
 
@@ -1604,7 +1604,7 @@ function renderSportSplash(p) {
 
   var benefits = [
     {icon: '■', title: (window.isEnglish && window.isEnglish() ? 'Scientific program' : 'Programme scientifique'), desc: (window.isEnglish && window.isEnglish() ? 'Based on ACSM, NSCA and Renaissance Periodization guidelines' : 'Basé sur les recommandations ACSM, NSCA et Renaissance Periodization')},
-    {icon: '●', title: (window.isEnglish && window.isEnglish() ? 'Safety first' : 'Sécurité d’abord'), desc: (window.isEnglish && window.isEnglish() ? 'PAR-Q medical screening — 7 questions recommended by ACSM (2018)' : 'Dépistage médical PAR-Q — 7 questions recommandées par l’ACSM (2018)')},
+    {icon: '●', title: (window.isEnglish && window.isEnglish() ? 'Safety first' : 'Sécurité d\'abord'), desc: (window.isEnglish && window.isEnglish() ? 'PAR-Q medical screening — 7 questions recommended by ACSM (2018)' : 'Dépistage médical PAR-Q — 7 questions recommandées par l\'ACSM (2018)')},
     {icon: '◆', title: (window.isEnglish && window.isEnglish() ? 'Adapted to your life' : 'Adapté à votre vie'), desc: (window.isEnglish && window.isEnglish() ? 'Your level, equipment, availability, goals' : 'Votre niveau, votre équipement, vos disponibilités, vos objectifs')}
   ];
   var benefitList = h('div', {style: 'display:flex;flex-direction:column;gap:12px;margin:24px 0 28px;'});
@@ -1990,7 +1990,7 @@ function renderPARQ(p) {
  // Header avec retour
  var hdr = h('div', {style: 'display:flex;align-items:center;gap:12px;margin-bottom:20px'});
  hdr.appendChild(h('button', {'class': 'btn-back', style: 'margin:0', onclick: function(){ S.sStep = 0; S.sportType = null; S._parqAnswers = {}; S.sportMixEnabled = false; S.sportMixSecondary = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
- hdr.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--grey)'}, '(window.isEnglish && window.isEnglish() ? 'Medical evaluation' : 'Évaluation médicale')));
+ hdr.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? 'Medical evaluation' : 'Évaluation médicale')));
  p.appendChild(hdr);
 
  p.appendChild(h('div', {'class': 'eyebrow'}, (window.isEnglish && window.isEnglish() ? 'Safety' : 'Sécurité')));
@@ -2106,7 +2106,7 @@ function renderMuscuMedicalQ(p) {
  // FIX BUG 2026-04-26 : back depuis éval. médicale muscu ne doit pas effacer sportType.
  // L'user retourne à la sélection du sport (sStep 0) avec son choix "Musculation" conservé.
  hdr.appendChild(h('button', {'class': 'btn-back', style: 'margin:0', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
- hdr.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? 'Medical evaluation' : 'Évaluation médicale'));
+ hdr.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? 'Medical evaluation' : 'Évaluation médicale')));
  p.appendChild(hdr);
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
@@ -6742,8 +6742,8 @@ function renderMusculationProgram(p) {
   // ── Construction de la carte ──
   var _card = h('div', {style: 'border:1px solid var(--border,#D8D8D0);border-left:3px solid var(--accent,#1A4A1A);background:var(--ivory2,#F4F4F0);padding:16px;margin-bottom:20px;border-radius:2px;'});
 
-  // Eyebrow : "AUJOURD’HUI · Lundi"
-  _card.appendChild(h(‘div’, {style: ‘font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--accent,#1A4A1A);margin-bottom:6px;font-weight:600;’}, (window.isEnglish && window.isEnglish() ? "TODAY · " : "AUJOURD’HUI · ") + _todayDayName));
+  // Eyebrow : "AUJOURD'HUI · Lundi"
+  _card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--accent,#1A4A1A);margin-bottom:6px;font-weight:600;'}, (window.isEnglish && window.isEnglish() ? "TODAY · " : "AUJOURD'HUI · ") + _todayDayName));
 
   // Titre : focus + nombre d'exercices
   var _exCount = _todayDay.exercises.length;
@@ -6889,7 +6889,7 @@ function renderMusculationProgram(p) {
  if (med.lowerBack || med.herniaDisc) restrictions.push(_isENMed ? '\u26A0 Back : deadlifts and heavy bends removed' : '\u26A0 Dos\u00a0: soulev\u00e9 de terre et flexions lourdes retir\u00e9s');
  if (med.knees || med.acl) restrictions.push(_isENMed ? '\u26A0 Knees : deep squats replaced' : '\u26A0 Genoux\u00a0: squats profonds remplac\u00e9s');
  if (med.herniaInguinal) restrictions.push(_isENMed ? '\u26A0 Inguinal hernia : hyper-pressure exercises removed' : '\u26A0 Hernie inguinale\u00a0: exercices hyperpressifs retir\u00e9s');
- if (med.hypertension) restrictions.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode((window.isEnglish && window.isEnglish() ? '\u26A0 HTN\u00a0: intensity capped ' : '\u26A0 HTA\u00a0: intensit\u00e9 plafonn\u00e9e '))); _el.appendChild(termTooltip('RPE', _RPE_DEF)); _el.appendChild(document.createTextNode(window.isEnglish && window.isEnglish() ? '\u00a07/10, Valsalva forbidden' : '\u00a07/10, Valsalva interdit'); return _el; })());
+ if (med.hypertension) restrictions.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode((window.isEnglish && window.isEnglish() ? '\u26A0 HTN\u00a0: intensity capped ' : '\u26A0 HTA\u00a0: intensit\u00e9 plafonn\u00e9e '))); _el.appendChild(termTooltip('RPE', _RPE_DEF)); _el.appendChild(document.createTextNode(window.isEnglish && window.isEnglish() ? '\u00a07/10, Valsalva forbidden' : '\u00a07/10, Valsalva interdit')); return _el; })());
  if (med.osteoporosis) restrictions.push(_isENMed ? '\u26A0 Osteoporosis : loads \u2264 70 % 1RM, no impact or vertebral flexions (Sinaki, Spine 2002)' : '\u26A0 Ost\u00e9oporose\u00a0: charges \u2264\u00a070\u00a0% 1RM, pas d\'impacts ni flexions vert\u00e9brales (Sinaki, Spine 2002)');
  if (med.rheumatoidArthritis) restrictions.push(_isENMed ? '\u26A0 Rheumatoid arthritis : light loads, gentle exercises in remission only \u2014 stop during flare-ups (EULAR 2020)' : '\u26A0 Polyarthrite rhumato\u00efde\u00a0: charges l\u00e9g\u00e8res, exercices doux en r\u00e9mission uniquement \u2014 arr\u00eatez en cas de pouss\u00e9e (EULAR 2020)');
  if (med.fibromyalgia) restrictions.push(_isENMed ? '\u26A0 Fibromyalgia : moderate intensity max, no HIIT or maximal loads \u2014 gentle aerobic exercises recommended (Cochrane 2017)' : '\u26A0 Fibromyalgie\u00a0: intensit\u00e9 mod\u00e9r\u00e9e max, pas de HIIT ni charges maximales \u2014 exercices a\u00e9robies doux recommand\u00e9s (Cochrane 2017)');
@@ -8614,7 +8614,7 @@ function renderMusculationProgram(p) {
  href: altVideoUrl, target: '_blank', rel: 'noopener',
  style: 'font-size:11px;color:var(--error,#7A1F1F);text-decoration:none;flex-shrink:0;margin-left:8px',
  onclick: function(e) { e.stopPropagation(); }
- }, (window.isEnglish && window.isEnglish() ? '\u25b6 Video' : '\u25b6 Vid\u00e9o'));
+ }, (window.isEnglish && window.isEnglish() ? '\u25b6 Video' : '\u25b6 Vid\u00e9o')));
  }
  altRow.appendChild(altTop);
  altRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:2px'}, alt.m + (alt.eq ? ' \u2014 ' + alt.eq : '')));
@@ -9727,7 +9727,7 @@ function renderWeightChartSport(container) {
  if (window.GAMIFICATION) GAMIFICATION.showToast(_prWeightMsg || ((window.isEnglish && window.isEnglish()) ? 'Weight recorded: ' : 'Poids enregistré : ') + (window.UNITS ? window.UNITS.displayWeight(v) : v + ' kg'));
  window.render();
  }
- }}, (window.isEnglish && window.isEnglish() ? 'Log' : 'Enregistrer'));
+ }}, (window.isEnglish && window.isEnglish() ? 'Log' : 'Enregistrer')));
  container.appendChild(inputRow);
 
  // Render Chart.js
@@ -9970,7 +9970,7 @@ function renderRunningConfig(p) {
  window.BLACKBOX && window.BLACKBOX.log('running_config', {goal: S.runningGoal, level: S.runningLevel, days: S.runningDays});
  window.render();
  }
- }}, (window.isEnglish && window.isEnglish() ? 'Generate my plan' : 'Générer mon plan'));
+ }}, (window.isEnglish && window.isEnglish() ? 'Generate my plan' : 'Générer mon plan')));
  // 2026-04 PHASE 2 : offrir le mix pour running primaire aussi
  // sportDays utilisé par renderSportMixSection mappe vers runningDays ici
  var _prevSportDays = S.sportDays;
@@ -10122,7 +10122,7 @@ function renderRunningProgram(p) {
         try { localStorage.setItem(_runHistKey, JSON.stringify(_runHist)); } catch(e) {}
         window.render();
       }
-    }, (window.isEnglish && window.isEnglish() ? 'Edit' : 'Corriger'));
+    }, (window.isEnglish && window.isEnglish() ? 'Edit' : 'Corriger')));
   } else {
     var _distInp = h('input', {type: 'number', min: '0', max: '100', step: '0.1', placeholder: '0.0', inputmode: 'decimal',
       style: 'width:70px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia,serif;font-size:16px;text-align:center;background:var(--ivory);color:#0A0A09'});
@@ -10964,7 +10964,7 @@ function renderTriathlonConfig(p) {
  if (S.triathlonRunPace) PERF_HISTORY.recordTriathlonPace('run', S.triathlonRunPace, 'min/km');
  }
  window.render();
- }}, (window.isEnglish && window.isEnglish() ? 'Generate my program →' : 'Générer mon programme →'));
+ }}, (window.isEnglish && window.isEnglish() ? 'Generate my program →' : 'Générer mon programme →')));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { S.sStep = 0; S.sportType = null; window.render(); }, html: backArrow + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
 }
 
@@ -11564,7 +11564,7 @@ function renderCyclingOnboarding(p) {
  var wLabel = i === 0 ? ('< ' + b[1] + 'W') : (b[0] + '-' + b[1] + 'W');
  zonesCard.appendChild(h('div', {style: 'display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-family:Helvetica Neue,Arial,sans-serif;font-size:13px'}, [
  h('span', {style: 'color:' + z.color + ';font-weight:bold'}, 'Z' + z.zone + ' ' + z.name),
- (function(){ var _s = h('span', {style: 'color:var(--grey)'}); _s.appendChild(document.createTextNode(wLabel + ' · '))); _s.appendChild(termTooltip('RPE', _RPE_DEF)); _s.appendChild(document.createTextNode(' ' + z.rpe)); return _s; })()
+ (function(){ var _s = h('span', {style: 'color:var(--grey)'}); _s.appendChild(document.createTextNode(wLabel + ' · ')); _s.appendChild(termTooltip('RPE', _RPE_DEF)); _s.appendChild(document.createTextNode(' ' + z.rpe)); return _s; })()
  ]));
  });
  p.appendChild(zonesCard);
@@ -11768,7 +11768,7 @@ function renderCyclingProgram(p) {
  sessCard.appendChild(metaRow);
 
  if (zoneData) {
- sessCard.appendChild((function(){ var _d = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-top:4px'}); _d.appendChild(document.createTextNode(zoneData.desc + ' — '))); _d.appendChild(termTooltip('RPE', _RPE_DEF)); _d.appendChild(document.createTextNode(' ' + zoneData.rpe)); return _d; })());
+ sessCard.appendChild((function(){ var _d = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-top:4px'}); _d.appendChild(document.createTextNode(zoneData.desc + ' — ')); _d.appendChild(termTooltip('RPE', _RPE_DEF)); _d.appendChild(document.createTextNode(' ' + zoneData.rpe)); return _d; })());
  }
  p.appendChild(sessCard);
  }
