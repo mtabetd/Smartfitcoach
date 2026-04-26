@@ -250,7 +250,8 @@
     var cutoff = _weeksAgo(period || 4);
     var recentDays = dates.filter(function(d) { return d >= cutoff; });
     if (recentDays.length === 0) {
-      s.appendChild(h('div', { style: ST.sub }, 'Aucun repas sur les ' + (period || 4) + ' dernières semaines.'));
+      var _anEN0 = window.isEnglish && window.isEnglish();
+      s.appendChild(h('div', { style: ST.sub }, _anEN0 ? 'No meals logged in the last ' + (period || 4) + ' weeks.' : 'Aucun repas sur les ' + (period || 4) + ' dernières semaines.'));
       return s;
     }
     var totalK = 0, totalP = 0, totalG = 0, totalL = 0;
@@ -267,25 +268,26 @@
       });
     });
     var n = recentDays.length;
+    var _anEN = window.isEnglish && window.isEnglish();
     s.appendChild(h('div', { style: 'display:flex;gap:12px;flex-wrap:wrap;' }, [
       h('div', { style: 'flex:1;min-width:100px;' }, [
-        h('div', { style: ST.sub + 'margin-bottom:2px;' }, 'Kcal / jour'),
+        h('div', { style: ST.sub + 'margin-bottom:2px;' }, _anEN ? 'Kcal / day' : 'Kcal / jour'),
         h('div', { style: ST.value }, Math.round(totalK / n))
       ]),
       h('div', { style: 'flex:1;min-width:100px;' }, [
-        h('div', { style: ST.sub + 'margin-bottom:2px;' }, 'Protéines'),
+        h('div', { style: ST.sub + 'margin-bottom:2px;' }, _anEN ? 'Protein' : 'Protéines'),
         h('div', { style: ST.value }, Math.round(totalP / n) + 'g')
       ]),
       h('div', { style: 'flex:1;min-width:100px;' }, [
-        h('div', { style: ST.sub + 'margin-bottom:2px;' }, 'Glucides'),
+        h('div', { style: ST.sub + 'margin-bottom:2px;' }, _anEN ? 'Carbs' : 'Glucides'),
         h('div', { style: ST.value }, Math.round(totalG / n) + 'g')
       ]),
       h('div', { style: 'flex:1;min-width:100px;' }, [
-        h('div', { style: ST.sub + 'margin-bottom:2px;' }, 'Lipides'),
+        h('div', { style: ST.sub + 'margin-bottom:2px;' }, _anEN ? 'Fat' : 'Lipides'),
         h('div', { style: ST.value }, Math.round(totalL / n) + 'g')
       ])
     ]));
-    s.appendChild(h('div', { style: ST.sub + 'margin-top:10px;' }, 'Moyenne sur ' + n + ' ' + window.locPlural(n, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + ' de suivi · ' + (period || 4) + ' dernières semaines'));
+    s.appendChild(h('div', { style: ST.sub + 'margin-top:10px;' }, (_anEN ? 'Average over ' + n + ' ' + window.locPlural(n, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + ' tracked · last ' + (period || 4) + ' weeks' : 'Moyenne sur ' + n + ' ' + window.locPlural(n, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + ' de suivi · ' + (period || 4) + ' dernières semaines')));
     return s;
   }
 

@@ -875,12 +875,11 @@ window.SLEEP_TRACKER = {
     if (avg && avg.count > 0) {
       var stats = el('div', 'sleep-stats');
 
+      var _isEN = window.isEnglish && window.isEnglish();
       var avgRow = el('div', 'sleep-stat-row');
       avgRow.appendChild(el('span', 'sleep-stat-label', _isEN ? 'Average (last 7 days)' : 'Moyenne (7 derniers jours)'));
       avgRow.appendChild(el('span', 'sleep-stat-value', avg.hours + 'h'));
       stats.appendChild(avgRow);
-
-      var _isEN = window.isEnglish && window.isEnglish();
       var qualLabel = avg.quality >= 2.5 ? (_isEN ? 'Good' : 'Bonne') : (avg.quality >= 1.5 ? (_isEN ? 'Fair' : 'Moyenne') : (_isEN ? 'Poor' : 'Mauvaise'));
 
       var qualRow2 = el('div', 'sleep-stat-row');

@@ -1182,27 +1182,27 @@ function renderProfilePage(container) {
        try {
          var _t = document.createElement('div');
          _t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;padding:12px 20px;z-index:10000;border-radius:0;border:1px solid var(--ink-900,#0A0A09);white-space:nowrap;';
-         _t.textContent = '\u2713 Profil mis \u00e0 jour';
+         _t.textContent = (window.isEnglish && window.isEnglish()) ? '\u2713 Profile updated' : '\u2713 Profil mis \u00e0 jour';
          document.body.appendChild(_t);
          setTimeout(function() { if (_t.parentNode) _t.parentNode.removeChild(_t); }, 2500);
        } catch(ex) {}
        if (window.render) window.render();
      }
-   }, 'Enregistrer');
+   }, (window.isEnglish && window.isEnglish()) ? 'Save' : 'Enregistrer');
    editForm.appendChild(_efSave);
 
    // Cancel button
    var _efCancel = h('button', {
      style: 'display:block;width:100%;padding:12px 24px;min-height:44px;border:1px solid var(--border);background:transparent;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;border-radius:2px;',
      onclick: function() { S._profileEdit = false; if (window.render) window.render(); }
-   }, 'Annuler');
+   }, (window.isEnglish && window.isEnglish()) ? 'Cancel' : 'Annuler');
    editForm.appendChild(_efCancel);
    c.appendChild(editForm);
  } else {
    var editBtn = h('button', {
      style: 'display:block;width:100%;padding:14px;border:1px solid var(--black);background:var(--black);color:var(--ivory,#F8F6EF);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;',
      onclick: function() { S._profileEdit = true; if (window.render) window.render(); }
-   }, 'Modifier mon profil');
+   }, (window.isEnglish && window.isEnglish()) ? 'Edit my profile' : 'Modifier mon profil');
    c.appendChild(editBtn);
  }
 
@@ -1257,7 +1257,7 @@ function renderProfilePage(container) {
        _numRow.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:56px;color:var(--black);line-height:1;font-weight:normal;letter-spacing:-1px;'}, String(_daysLeft)));
        _numRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-top:8px;'}, window.locPlural(_daysLeft, {fr:{one:'jour restant',other:'jours restants'},en:{one:'day left',other:'days left'}})));
      } else {
-       _numRow.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:28px;color:var(--black);line-height:1.3;'}, 'Essai terminé'));
+       _numRow.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:28px;color:var(--black);line-height:1.3;'}, (window.isEnglish && window.isEnglish()) ? 'Trial ended' : 'Essai terminé'));
      }
      card.appendChild(_numRow);
 
@@ -1545,7 +1545,8 @@ function renderProfilePage(container) {
          if (_pData2[_ci].tier === _ui2.tier && _pData2[_ci].duration === _ui2.duration) { _ctaPlan = _pData2[_ci]; break; }
        }
        var _durPer2 = { saison: '/trimestre', cycle: '/semestre', engagement: '/an' };
-       var _ctaBase = _trialExpired ? 'Réactiver mon accès' : _daysLeft <= 1 ? 'Dernier jour — S\'abonner' : _daysLeft <= 2 ? 'Plus que ' + _daysLeft + ' jours — S\'abonner' : 'S\'abonner';
+       var _isEn = (window.isEnglish && window.isEnglish());
+       var _ctaBase = _trialExpired ? (_isEn ? 'Reactivate my access' : 'Réactiver mon accès') : _daysLeft <= 1 ? (_isEn ? 'Last day — Subscribe' : 'Dernier jour — S\'abonner') : _daysLeft <= 2 ? (_isEn ? 'Only ' + _daysLeft + ' days left — Subscribe' : 'Plus que ' + _daysLeft + ' jours — S\'abonner') : (_isEn ? 'Subscribe' : 'S\'abonner');
        var _ctaSuffix = _ctaPlan ? ' — ' + _ctaPlan.label_mad + (_durPer2[_ui2.duration] || '') : '';
        var _cta = h('button', {
          style:
@@ -1564,7 +1565,7 @@ function renderProfilePage(container) {
        card.appendChild(h('div', {style:
          'text-align:center;margin-top:10px;font-family:"Helvetica Neue",Arial,sans-serif;' +
          'font-size:9px;letter-spacing:1px;color:var(--grey);line-height:1.8;'
-       }, 'Résiliable à tout moment · Paiement sécurisé'));
+       }, (window.isEnglish && window.isEnglish()) ? 'Cancel anytime · Secure payment' : 'Résiliable à tout moment · Paiement sécurisé'));
 
           } else {
        card.appendChild(h('div', {style:
@@ -1640,7 +1641,7 @@ function renderProfilePage(container) {
      if (window.AUTH && window.AUTH.logout) { window.AUTH.logout(); }
      else { S.view = 'auth'; if (window.render) window.render(); }
    }
- }, 'Se déconnecter');
+ }, (window.isEnglish && window.isEnglish()) ? 'Log out' : 'Se déconnecter');
  c.appendChild(logoutBtn);
 
  // ─── Zone de danger (RGPD) ───
@@ -1740,7 +1741,8 @@ function renderProfilePage(container) {
  var deleteAccountBtn = h('button', {
    style: 'background:none;border:none;padding:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--error,#7A1F1F);cursor:pointer;display:block;min-height:44px;',
    onclick: function() {
-     var confirmed = (window.sfcConfirm ? window.sfcConfirm('Supprimer définitivement votre compte et toutes vos données ? Cette action est irréversible.') : window.confirm('Supprimer définitivement votre compte et toutes vos données ? Cette action est irréversible.'));
+     var _deleteMsg = (window.isEnglish && window.isEnglish()) ? 'Permanently delete your account and all your data? This action is irreversible.' : 'Supprimer définitivement votre compte et toutes vos données ? Cette action est irréversible.';
+     var confirmed = (window.sfcConfirm ? window.sfcConfirm(_deleteMsg) : window.confirm(_deleteMsg));
      if (!confirmed) return;
      // 1. Vider localStorage
      try {
@@ -1974,7 +1976,7 @@ function renderProfilePage(container) {
        } catch(e) {}
        if (window.render) window.render();
      }
-   }, 'Enregistrer');
+   }, (window.isEnglish && window.isEnglish()) ? 'Save' : 'Enregistrer');
    _sheet.appendChild(_saveBtn);
 
    // Cancel button
@@ -1986,7 +1988,7 @@ function renderProfilePage(container) {
        S._goalModal = false;
        if (window.render) window.render();
      }
-   }, 'Annuler');
+   }, (window.isEnglish && window.isEnglish()) ? 'Cancel' : 'Annuler');
    _sheet.appendChild(_cancelBtn);
 
    _modal.appendChild(_sheet);
@@ -2213,7 +2215,7 @@ function render() {
    btn.appendChild(h('span', {'class': 'main-nav-tab-label'}, label));
    return btn;
  }
- nav.appendChild(_makeNavTab('today', 'Aujourd\'hui', (S.view === 'today' || S.view === 'dashboard' || !S.view), 'nav_today', 'today'));
+ nav.appendChild(_makeNavTab('today', (window.isEnglish && window.isEnglish()) ? 'Today' : 'Aujourd\'hui', (S.view === 'today' || S.view === 'dashboard' || !S.view), 'nav_today', 'today'));
  if (S.appMode !== 'sport') {
    nav.appendChild(_makeNavTab('nutrition', window.t('nav.nutrition'), S.view === 'nutrition', 'nav_nutrition', 'nutrition'));
  }
@@ -2222,9 +2224,9 @@ function render() {
  }
  if (S.appMode) {
    // Calendrier accessible en mode sport ET nutrition (le calendrier pilote les jours training/repos = données nutritionnelles)
-   nav.appendChild(_makeNavTab('calendar', 'Calendrier', S.view === 'calendar', 'nav_calendar', 'calendar'));
+   nav.appendChild(_makeNavTab('calendar', (window.isEnglish && window.isEnglish()) ? 'Calendar' : 'Calendrier', S.view === 'calendar', 'nav_calendar', 'calendar'));
    // 2026-04 : onglet Progrès (analytics)
-   nav.appendChild(_makeNavTab('analytics', 'Progrès', S.view === 'analytics', 'nav_analytics', 'analytics'));
+   nav.appendChild(_makeNavTab('analytics', (window.isEnglish && window.isEnglish()) ? 'Progress' : 'Progrès', S.view === 'analytics', 'nav_analytics', 'analytics'));
    // Projet 2.0 : onglet Social (amis + feed privé) — affiché uniquement si le module est chargé
    if (window.SOCIAL && typeof window.SOCIAL.render === 'function') {
      nav.appendChild(_makeNavTab('social', 'Social', S.view === 'social', 'nav_social', 'social'));
@@ -2259,7 +2261,7 @@ function render() {
  if (window[_modName]) {
    window[_modName].render(content);
  } else {
-   var _mLoader = h('div', {style: 'padding:48px 24px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'}, 'Chargement…');
+   var _mLoader = h('div', {style: 'padding:48px 24px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'}, (window.isEnglish && window.isEnglish()) ? 'Loading…' : 'Chargement…');
    content.appendChild(_mLoader);
    var _mRetryCount = 0;
    var _mRetryId = setInterval(function() {
@@ -2269,7 +2271,7 @@ function render() {
        try { window.render(); } catch(e) { console.warn('[module retry]', e); }
      } else if (_mRetryCount >= 15) {
        clearInterval(_mRetryId);
-       try { _mLoader.textContent = 'Erreur de chargement. Rechargez la page (Ctrl+R).'; } catch(_e) {}
+       try { _mLoader.textContent = (window.isEnglish && window.isEnglish()) ? 'Loading error. Reload the page (Ctrl+R).' : 'Erreur de chargement. Rechargez la page (Ctrl+R).'; } catch(_e) {}
      }
    }, 200);
  }
@@ -2282,7 +2284,7 @@ function render() {
    // FIX audit backend 2026-04-15 : retry auto plutôt que message statique.
    // Le module TODAY peut charger après le premier render (async script) → on retente
    // toutes les 200ms pendant 3 secondes au lieu d'afficher un message permanent.
-   var _loader = h('div', {style: 'padding:48px 24px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'}, 'Chargement du dashboard…');
+   var _loader = h('div', {style: 'padding:48px 24px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'}, (window.isEnglish && window.isEnglish()) ? 'Loading dashboard…' : 'Chargement du dashboard…');
    content.appendChild(_loader);
    var _retryCount = 0;
    var _retryId = setInterval(function() {
@@ -2292,7 +2294,7 @@ function render() {
        try { window.render(); } catch(e) { console.warn('[TODAY retry]', e); }
      } else if (_retryCount >= 15) { // 3 secondes
        clearInterval(_retryId);
-       try { _loader.textContent = 'Erreur de chargement. Rechargez la page (Ctrl+R) ou vérifiez votre connexion.'; } catch(_e) {}
+       try { _loader.textContent = (window.isEnglish && window.isEnglish()) ? 'Loading error. Reload the page (Ctrl+R) or check your connection.' : 'Erreur de chargement. Rechargez la page (Ctrl+R) ou vérifiez votre connexion.'; } catch(_e) {}
      }
    }, 200);
  }
@@ -2410,9 +2412,9 @@ function renderLogin(app) {
  if (loginBtn.disabled) return;
  var email = emailInput.value.trim();
  var pw = pwInput.value;
- if (!email || !pw) { S.authError = 'Veuillez remplir tous les champs'; render(); return; }
+ if (!email || !pw) { S.authError = (window.isEnglish && window.isEnglish()) ? 'Please fill in all fields' : 'Veuillez remplir tous les champs'; render(); return; }
  loginBtn.disabled = true;
- loginBtn.textContent = 'Connexion...';
+ loginBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Logging in...' : 'Connexion...';
  AUTH.login(email, pw).then(function(result) {
  if (result.ok) {
  S.authError = '';
@@ -2501,7 +2503,7 @@ function renderLogin(app) {
  }
  }).catch(function() {
  S.view = 'auth'; // forcer le retour à l'écran login en cas d'erreur réseau
- S.authError = 'Erreur de connexion. Réessayez.';
+ S.authError = (window.isEnglish && window.isEnglish()) ? 'Connection error. Please try again.' : 'Erreur de connexion. Réessayez.';
  render();
  });
  }}, window.t('auth.login_btn'));
@@ -2512,7 +2514,7 @@ function renderLogin(app) {
  forgotLink.appendChild(h('a', {
  style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);cursor:pointer;text-decoration:underline',
  onclick: function(){ S.authError = ''; S.view = 'authForgot'; render(); }
- }, 'Mot de passe oubli\u00e9 ?'));
+ }, (window.isEnglish && window.isEnglish()) ? 'Forgot password?' : 'Mot de passe oubli\u00e9 ?'));
  form.appendChild(forgotLink);
 
  c.appendChild(form);
@@ -3068,7 +3070,7 @@ function renderNewPassword(app) {
  S.authError = 'Service indisponible';
  render();
  }
- }}, 'Enregistrer');
+ }}, (window.isEnglish && window.isEnglish()) ? 'Save' : 'Enregistrer');
  form.appendChild(saveBtn);
 
  // Lien de secours si le token Supabase expire en cours de saisie

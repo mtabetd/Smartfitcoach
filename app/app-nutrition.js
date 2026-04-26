@@ -420,7 +420,9 @@ function renderStep2(p) {
     _daySelect.appendChild(_dOpt);
   }
 
-  var _mNames = ['Janvier','F\u00e9vrier','Mars','Avril','Mai','Juin','Juillet','Ao\u00fbt','Septembre','Octobre','Novembre','D\u00e9cembre'];
+  var _mNames = (window.isEnglish && window.isEnglish())
+    ? ['January','February','March','April','May','June','July','August','September','October','November','December']
+    : ['Janvier','F\u00e9vrier','Mars','Avril','Mai','Juin','Juillet','Ao\u00fbt','Septembre','Octobre','Novembre','D\u00e9cembre'];
   var _monthSelect = h('select', {'class': 'num-input', style: 'flex:1.5;padding:10px 6px;font-size:14px;text-align:center;appearance:auto;-webkit-appearance:auto'});
   _monthSelect.appendChild(h('option', {value: '0', selected: !_curMonth}, 'Mois'));
   for (var _m = 0; _m < 12; _m++) {
@@ -3355,7 +3357,7 @@ function renderStep9(p) {
             S.weekPlan[S.selectedDay][slotKey3] = { n: pItem.name, k: Math.round(pItem.kcal * r), kcal: Math.round(pItem.kcal * r), p: Math.round(pItem.p * r), g: Math.round(pItem.g * r), l: Math.round(pItem.l * r), f: '\u25CE', emoji: '\u25CE', custom: true, portions: gr };
             S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false; S._foodPortionItem = null; S._foodPortionGrams = null;
             try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saveProfile error:', e); }
-            try { var _cn = (pItem.name||'').toLowerCase(), _cw=[]; if(!S.allowPork&&/porc|jambon|bacon|lardon(?!.*(?:dinde|volaille|poulet))|saucisson|prosciutto|pancetta|chorizo/.test(_cn))_cw.push('porc'); if(S.regime===2&&/poulet|boeuf|b\u0153uf|veau|dinde|saumon|thon|poisson/.test(_cn))_cw.push('non v\u00e9g\u00e9tarien'); if(S.regime===3&&/poulet|boeuf|b\u0153uf|veau|oeuf|fromage|yaourt|lait/.test(_cn))_cw.push('non vegan'); if(_cw.length&&window.showToast)window.showToast('\u26a0\ufe0f Repas ajout\u00e9 \u2014 contient : '+_cw.join(', '), 'warning', 4000); } catch(_wE){}
+            try { var _cn = (pItem.name||'').toLowerCase(), _cw=[]; if(!S.allowPork&&/porc|jambon|bacon|lardon(?!.*(?:dinde|volaille|poulet))|saucisson|prosciutto|pancetta|chorizo/.test(_cn))_cw.push('porc'); if(S.regime===2&&/poulet|boeuf|b\u0153uf|veau|dinde|saumon|thon|poisson/.test(_cn))_cw.push('non v\u00e9g\u00e9tarien'); if(S.regime===3&&/poulet|boeuf|b\u0153uf|veau|oeuf|fromage|yaourt|lait/.test(_cn))_cw.push('non vegan'); if(_cw.length&&window.showToast)window.showToast((window.isEnglish && window.isEnglish()) ? '\u26a0\ufe0f Meal added \u2014 contains: '+_cw.join(', ') : '\u26a0\ufe0f Repas ajout\u00e9 \u2014 contient : '+_cw.join(', '), 'warning', 4000); } catch(_wE){}
             if (window.incrementMealsLogged) window.incrementMealsLogged();
             window.render();
           }
@@ -3529,7 +3531,7 @@ function renderStep9(p) {
           };
           S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false; S._foodManualData = null;
           try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saveProfile error:', e); }
-          try { var _mn = (fd.name||'').trim().toLowerCase(), _mw=[]; if(!S.allowPork&&/porc|jambon|bacon|lardon(?!.*(?:dinde|volaille|poulet))|saucisson|prosciutto|pancetta|chorizo/.test(_mn))_mw.push('porc'); if(S.regime===2&&/poulet|boeuf|bœuf|veau|dinde|saumon|thon|poisson/.test(_mn))_mw.push('non végétarien'); if(S.regime===3&&/poulet|boeuf|bœuf|veau|oeuf|fromage|yaourt|lait/.test(_mn))_mw.push('non vegan'); if(_mw.length&&window.showToast)window.showToast('\u26a0\ufe0f Repas ajouté — contient : '+_mw.join(', '), 'warning', 4000); } catch(_mwE){}
+          try { var _mn = (fd.name||'').trim().toLowerCase(), _mw=[]; if(!S.allowPork&&/porc|jambon|bacon|lardon(?!.*(?:dinde|volaille|poulet))|saucisson|prosciutto|pancetta|chorizo/.test(_mn))_mw.push('porc'); if(S.regime===2&&/poulet|boeuf|bœuf|veau|dinde|saumon|thon|poisson/.test(_mn))_mw.push('non végétarien'); if(S.regime===3&&/poulet|boeuf|bœuf|veau|oeuf|fromage|yaourt|lait/.test(_mn))_mw.push('non vegan'); if(_mw.length&&window.showToast)window.showToast((window.isEnglish && window.isEnglish()) ? '\u26a0\ufe0f Meal added — contains: '+_mw.join(', ') : '\u26a0\ufe0f Repas ajouté — contient : '+_mw.join(', '), 'warning', 4000); } catch(_mwE){}
           window.render();
         }
       }, 'Confirmer');
@@ -3945,7 +3947,7 @@ function renderStep9(p) {
       } else {
         // IMPORTANT-G2: feedback si pool vide
         console.warn('[nutrition] regen: generateWeek() a retourné un plan vide');
-        if (window.showToast) window.showToast('Plan non g\u00e9n\u00e9r\u00e9 \u2014 v\u00e9rifiez vos allergies et pr\u00e9f\u00e9rences (onglet Profil).', 'error', 5000);
+        if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Plan not generated \u2014 check your allergies and preferences (Profile tab).' : 'Plan non g\u00e9n\u00e9r\u00e9 \u2014 v\u00e9rifiez vos allergies et pr\u00e9f\u00e9rences (onglet Profil).', 'error', 5000);
       }
       window.render();
     } finally {
@@ -4163,11 +4165,11 @@ function renderModal(app) {
 function exportDayPDF(dayIdx) {
   if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
   if (!window.jspdf || !window.jspdf.jsPDF) {
-    if (window.showToast) window.showToast('Chargement du PDF…', 'info', 2000);
+    if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Loading PDF…' : 'Chargement du PDF…', 'info', 2000);
     if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', function() { exportDayPDF(dayIdx); }); }
     return;
   }
-  if (!Array.isArray(S.weekPlan) || !S.weekPlan[dayIdx]) { if (window.showToast) window.showToast('Aucun plan pour ce jour \u2014 g\u00e9n\u00e9rez votre plan semaine d\'abord.', 'error', 4000); return; }
+  if (!Array.isArray(S.weekPlan) || !S.weekPlan[dayIdx]) { if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'No plan for today \u2014 generate your weekly plan first.' : 'Aucun plan pour ce jour \u2014 g\u00e9n\u00e9rez votre plan semaine d\'abord.', 'error', 4000); return; }
   try {
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({unit: 'mm', format: 'a4'});
@@ -4182,7 +4184,7 @@ function exportDayPDF(dayIdx) {
   doc.text('SMART FIT COACH', M, 14);
   // CRITIQUE-1: garde validité dayIdx avant tout accès à DAY_NAMES/weekPlan
   if (typeof dayIdx !== 'number' || dayIdx < 0 || dayIdx > 6 || !S.weekPlan || !S.weekPlan[dayIdx]) {
-    if (window.showToast) window.showToast('Aucun plan disponible pour ce jour', 'error', 3000); return;
+    if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'No plan available for today' : 'Aucun plan disponible pour ce jour', 'error', 3000); return;
   }
   doc.setFontSize(16); doc.setFont('times', 'italic');
   doc.text((DAY_NAMES[dayIdx] || 'Jour') + ' \u2014 Plan du jour', M, 26);
@@ -4265,18 +4267,18 @@ function exportDayPDF(dayIdx) {
     .replace(/[ùûü]/g, 'u').replace(/ç/g, 'c').replace(/ñ/g, 'n')
     .replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
   doc.save('plan-' + (safeDayName || 'jour') + '.pdf');
-  } catch(e) { console.error('[exportDayPDF] Erreur:', e); if (window.showToast) window.showToast('Erreur lors de la g\u00e9n\u00e9ration du PDF. V\u00e9rifiez vos donn\u00e9es.', 'error', 4000); }
+  } catch(e) { console.error('[exportDayPDF] Erreur:', e); if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Error generating PDF. Check your data.' : 'Erreur lors de la g\u00e9n\u00e9ration du PDF. V\u00e9rifiez vos donn\u00e9es.', 'error', 4000); }
 }
 window.exportDayPDF = exportDayPDF;
 
 function exportRecipePDF(r) {
   if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
   if (!window.jspdf || !window.jspdf.jsPDF) {
-    if (window.showToast) window.showToast('Chargement du PDF…', 'info', 2000);
+    if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Loading PDF…' : 'Chargement du PDF…', 'info', 2000);
     if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', function() { exportRecipePDF(r); }); }
     return;
   }
-  if (!r || !r.n) { if (window.showToast) window.showToast('Recette non disponible pour l\u2019export', 'error', 3000); return; }
+  if (!r || !r.n) { if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Recipe not available for export' : 'Recette non disponible pour l\u2019export', 'error', 3000); return; }
   try {
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({unit: 'mm', format: 'a4'});
@@ -4344,7 +4346,7 @@ function exportRecipePDF(r) {
     .replace(/[ùûü]/g, 'u').replace(/ç/g, 'c').replace(/ñ/g, 'n')
     .replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
   doc.save((safeName || 'recette') + '.pdf');
-  } catch(e) { console.error('[exportRecipePDF] Erreur:', e); if (window.showToast) window.showToast('Erreur lors de la g\u00e9n\u00e9ration du PDF recette', 'error', 3500); }
+  } catch(e) { console.error('[exportRecipePDF] Erreur:', e); if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Error generating recipe PDF' : 'Erreur lors de la g\u00e9n\u00e9ration du PDF recette', 'error', 3500); }
 }
 window.exportRecipePDF = exportRecipePDF;
 
@@ -6045,7 +6047,7 @@ function showSmoothieModal(sm) {
       if (el && el.parentNode) el.parentNode.removeChild(el);
       S.smoothieBarOpen = false;
       goStep(12);
-      showToast('\u2713 Smoothie ajouté en collation — Plan recalculé', 2500);
+      showToast((window.isEnglish && window.isEnglish()) ? '\u2713 Smoothie added as snack — Plan recalculated' : '\u2713 Smoothie ajouté en collation — Plan recalculé', 2500);
     }
   }, 'Ajouter à mon plan — Collation '+dayLabel);
   footer.appendChild(addBtn);
@@ -6337,11 +6339,11 @@ function printShoppingListAR(list) {
 function exportShoppingListPDF(list, shopChecked) {
   if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
   if (!window.jspdf || !window.jspdf.jsPDF) {
-    if (window.showToast) window.showToast('Chargement du PDF…', 'info', 2000);
+    if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Loading PDF…' : 'Chargement du PDF…', 'info', 2000);
     if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', function() { exportShoppingListPDF(list, shopChecked); }); }
     return;
   }
-  if (!Array.isArray(list) || list.length === 0) { if (window.showToast) window.showToast('Liste de courses vide \u2014 votre plan semaine doit \u00eatre g\u00e9n\u00e9r\u00e9 d\'abord.', 'error', 4000); return; }
+  if (!Array.isArray(list) || list.length === 0) { if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Shopping list empty \u2014 generate your weekly plan first.' : 'Liste de courses vide \u2014 votre plan semaine doit \u00eatre g\u00e9n\u00e9r\u00e9 d\'abord.', 'error', 4000); return; }
   try {
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({ unit: 'mm', format: 'a4' });
@@ -6412,7 +6414,7 @@ function exportShoppingListPDF(list, shopChecked) {
   doc.text('Généré par SmartFitCoach — ' + window.formatDate(new Date()), margin, 290);
 
   doc.save('liste-courses-smartfitcoach.pdf');
-  } catch(e) { console.error('[exportShoppingListPDF] Erreur:', e); if (window.showToast) window.showToast('Erreur lors de la g\u00e9n\u00e9ration du PDF liste', 'error', 3500); }
+  } catch(e) { console.error('[exportShoppingListPDF] Erreur:', e); if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Error generating shopping list PDF' : 'Erreur lors de la g\u00e9n\u00e9ration du PDF liste', 'error', 3500); }
 }
 
 // ─── SALADE COMPOSER ───
@@ -6537,7 +6539,7 @@ function renderBodyScan(p) {
       if (window.BODY_ANALYSIS && typeof window.BODY_ANALYSIS.open === 'function') {
         window.BODY_ANALYSIS.open();
       } else {
-        if (window.showToast) window.showToast('Module d\u2019analyse corporelle non disponible. Rechargez la page.', 'error', 3500);
+        if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Body analysis module unavailable. Reload the page.' : 'Module d\u2019analyse corporelle non disponible. Rechargez la page.', 'error', 3500);
       }
     }
   });

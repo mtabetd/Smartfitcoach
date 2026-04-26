@@ -1235,12 +1235,14 @@ function sendMessage() {
 
   // Premium gate — coach IA illimité = premium (trial = 3 messages/jour)
   if (window.isTrialUser && window.isTrialUser()) {
-    var _coachCount = parseInt(sessionStorage.getItem('sfc_coach_count') || '0');
+    var _today = new Date().toISOString().slice(0, 10);
+    var _rawCount = (function() { try { return JSON.parse(localStorage.getItem('sfc_coach_count') || 'null'); } catch(e) { return null; } })();
+    var _coachCount = (_rawCount && _rawCount.date === _today) ? (_rawCount.n || 0) : 0;
     if (_coachCount >= 3) {
       appendError(messages, 'Limite atteinte (3 messages/jour en version d\u2019essai). Abonnez-vous pour un acc\u00e8s illimit\u00e9.');
       return;
     }
-    sessionStorage.setItem('sfc_coach_count', String(_coachCount + 1));
+    try { localStorage.setItem('sfc_coach_count', JSON.stringify({ date: _today, n: _coachCount + 1 })); } catch(e) {}
   }
 
   input.value = '';

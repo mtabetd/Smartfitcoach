@@ -7,15 +7,15 @@
     var h = window.location.hash || '';
     if (h) return h.replace(/^#\/?/, '');
     var activeTab = document.querySelector('[aria-selected="true"], .tab-active, .nav-item.active');
-    return activeTab ? (activeTab.textContent || '').trim().slice(0, 40) : 'accueil';
+    return activeTab ? (activeTab.textContent || '').trim().slice(0, 40) : ((window.isEnglish && window.isEnglish()) ? 'home' : 'accueil');
   }
 
   function _createWidget() {
     // ── Bouton flottant ──────────────────────────────────────────────────────
     var btn = document.createElement('button');
     btn.id = 'feedback-fab';
-    btn.setAttribute('aria-label', 'Donner mon avis');
-    btn.setAttribute('title', 'Donner mon avis');
+    btn.setAttribute('aria-label', (window.isEnglish && window.isEnglish()) ? 'Give feedback' : 'Donner mon avis');
+    btn.setAttribute('title', (window.isEnglish && window.isEnglish()) ? 'Give feedback' : 'Donner mon avis');
     btn.innerHTML =
       '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="display:block">' +
       '<path d="M2 2h12v9H9l-3 3v-3H2V2z" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linejoin="round"/>' +
@@ -53,10 +53,10 @@
 
     sheet.innerHTML =
       '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">' +
-        '<span id="feedback-sheet-title" style="font-family:Georgia,serif;font-size:15px;font-style:italic;color:var(--ink-900,#0A0A09)">Votre avis</span>' +
+        '<span id="feedback-sheet-title" style="font-family:Georgia,serif;font-size:15px;font-style:italic;color:var(--ink-900,#0A0A09)">' + ((window.isEnglish && window.isEnglish()) ? 'Your feedback' : 'Votre avis') + '</span>' +
         '<button id="feedback-close" aria-label="Fermer" style="background:none;border:none;font-family:Georgia,serif;font-size:22px;color:var(--ink-500,#6B6B65);cursor:pointer;line-height:1;padding:4px 6px;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center">&times;</button>' +
       '</div>' +
-      '<textarea id="feedback-text" placeholder="Ce qui manque, ce qui vous plaît, ce qui bloque…" maxlength="1000" rows="4" ' +
+      '<textarea id="feedback-text" placeholder="' + ((window.isEnglish && window.isEnglish()) ? 'What\'s missing, what you like, what\'s blocking...' : 'Ce qui manque, ce qui vous plaît, ce qui bloque…') + '" maxlength="1000" rows="4" ' +
         'style="width:100%;box-sizing:border-box;padding:12px;resize:none;' +
         'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:14px;line-height:1.65;' +
         'border:1px solid var(--line,#D8D8D0);background:var(--paper,#FAF9F6);color:var(--ink-900,#0A0A09);outline:none;"></textarea>' +
@@ -65,7 +65,7 @@
       '<button id="feedback-send" style="margin-top:14px;width:100%;padding:14px;min-height:44px;' +
         'background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);' +
         'border:1px solid var(--ink-900,#0A0A09);border-radius:0;' +
-        'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;">Envoyer</button>';
+        'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;">' + ((window.isEnglish && window.isEnglish()) ? 'Send' : 'Envoyer') + '</button>';
 
     document.body.appendChild(btn);
     document.body.appendChild(overlay);
@@ -99,7 +99,7 @@
         overlay.style.display = 'none';
         msgBox.style.display = 'none';
         sendBtn.disabled = false;
-        sendBtn.textContent = 'Envoyer';
+        sendBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Send' : 'Envoyer';
       }, 260);
     }
 
@@ -110,16 +110,16 @@
     sendBtn.addEventListener('click', function() {
       var msg = textarea.value.trim();
       if (!msg || msg.length < 3) {
-        _showMsg(msgBox, 'Écrivez quelques mots avant d\'envoyer.', 'warn');
+        _showMsg(msgBox, (window.isEnglish && window.isEnglish()) ? 'Write a few words...' : 'Écrivez quelques mots avant d\'envoyer.', 'warn');
         return;
       }
       var now = Date.now();
       if (now - _lastSent < MIN_INTERVAL_MS) {
-        _showMsg(msgBox, 'Merci, votre avis a déjà été envoyé.', 'warn');
+        _showMsg(msgBox, (window.isEnglish && window.isEnglish()) ? 'Thank you, your feedback has already been sent.' : 'Merci, votre avis a déjà été envoyé.', 'warn');
         return;
       }
       sendBtn.disabled = true;
-      sendBtn.textContent = 'Envoi…';
+      sendBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Sending…' : 'Envoi…';
       msgBox.style.display = 'none';
 
       fetch('/.netlify/functions/feedback', {
@@ -138,19 +138,19 @@
           _lastSent = Date.now();
           textarea.value = '';
           charCount.textContent = '0 / 1000';
-          _showMsg(msgBox, 'Merci pour votre retour.', 'ok');
-          sendBtn.textContent = 'Envoyé';
+          _showMsg(msgBox, (window.isEnglish && window.isEnglish()) ? 'Thank you for your feedback.' : 'Merci pour votre retour.', 'ok');
+          sendBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Sent' : 'Envoyé';
           setTimeout(closeSheet, 2200);
         } else {
           sendBtn.disabled = false;
-          sendBtn.textContent = 'Envoyer';
-          _showMsg(msgBox, (res.data && res.data.error) || 'Erreur. Réessayez.', 'err');
+          sendBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Send' : 'Envoyer';
+          _showMsg(msgBox, (res.data && res.data.error) || ((window.isEnglish && window.isEnglish()) ? 'Error. Please try again.' : 'Erreur. Réessayez.'), 'err');
         }
       })
       .catch(function() {
         sendBtn.disabled = false;
-        sendBtn.textContent = 'Envoyer';
-        _showMsg(msgBox, 'Connexion impossible. Réessayez.', 'err');
+        sendBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Send' : 'Envoyer';
+        _showMsg(msgBox, (window.isEnglish && window.isEnglish()) ? 'Connection failed. Please try again.' : 'Connexion impossible. Réessayez.', 'err');
       });
     });
   }
@@ -167,16 +167,24 @@
 
   // N'afficher le bouton que quand l'app est visible (gate passée)
   function _waitForApp() {
+    var _widgetCreated = false;
     var app = document.getElementById('app');
     if (!app) { setTimeout(_waitForApp, 300); return; }
     if (app.style.display !== 'none' && app.style.display !== '') {
-      _createWidget();
+      if (!document.getElementById('feedback-fab') && !_widgetCreated) {
+        _widgetCreated = true;
+        _createWidget();
+      }
       return;
     }
     var obs = new MutationObserver(function() {
+      if (_widgetCreated) return;
       if (app.style.display !== 'none' && app.style.display !== '') {
-        obs.disconnect();
-        _createWidget();
+        if (!document.getElementById('feedback-fab')) {
+          _widgetCreated = true;
+          obs.disconnect();
+          _createWidget();
+        }
       }
     });
     obs.observe(app, { attributes: true, attributeFilter: ['style'] });

@@ -609,7 +609,7 @@ function _csEqScore(eq) {
 if (!window.isBodyweightExercise) {
   window.isBodyweightExercise = function(ex) {
     var eq = (ex.eq || '').toLowerCase();
-    return /poids.du.corps|bodyweight|aucun|none|anneaux|gymnast|traction.pure|pull.?up|chin.?up|\bdip\b|push.?up/.test(eq);
+    return /poids.du.corps|bodyweight|aucun|none|anneaux|gymnast|traction.pure|pull.?up|chin.?up|dips?|push.?up/.test(eq);
   };
 }
 
