@@ -4997,359 +4997,359 @@ function renderSaladBar(p) {
 // ─── WHEY SMOOTHIES DATABASE ───
 var WHEY_SMOOTHIES = [
   // === CHOCOLAT ===
-  { id:'sm_choco_01', name:'Chocolat Noir Énergie', flavors:['chocolate'], goal:['muscle','performance'], timing:'post', cal:380, p:35, c:42, f:8, prep:'3min',
+  { id:'sm_choco_01', name:'Chocolat Noir Énergie', nameEn:'Dark Chocolate Energy', flavors:['chocolate'], goal:['muscle','performance'], timing:'post', cal:380, p:35, c:42, f:8, prep:'3min',
     ingredients:[{name:'Whey chocolat',qty:30,unit:'g'},{name:'Lait écrémé',qty:250,unit:'ml'},{name:'Banane congelée',qty:100,unit:'g'},{name:'Cacao pur',qty:10,unit:'g'},{name:'Beurre d\'amande',qty:15,unit:'g'}],
     steps:['Verser le lait écrémé en premier, puis le beurre d\'amande — cela évite qu\'il colle aux parois.','Ajouter la banane congelée coupée en tronçons, puis tamiser le cacao pur directement sur les autres ingrédients.','Incorporer la whey en dernier, mixer 50 secondes à puissance maximale jusqu\'à consistance veloutée.','Ajouter 1 pincée de fleur de sel avant de servir — elle réveille les notes torréfiées du cacao.'],
     tips:'Le beurre d\'amande mixé froid avec la banane congelée crée une émulsion naturelle : plus de mousse, moins d\'air, une texture digne d\'une ganache fluide.' },
-  { id:'sm_choco_02', name:'Brownie Shake Récupération', flavors:['chocolate'], goal:['muscle','recovery'], timing:'post', cal:433, p:40, c:48, f:9, prep:'4min',
+  { id:'sm_choco_02', name:'Brownie Shake Récupération', nameEn:'Brownie Recovery Shake', flavors:['chocolate'], goal:['muscle','recovery'], timing:'post', cal:433, p:40, c:48, f:9, prep:'4min',
     ingredients:[{name:'Whey chocolat',qty:35,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Flocons d\'avoine',qty:40,unit:'g'},{name:'Cacao pur',qty:8,unit:'g'},{name:'Datte Medjool',qty:2,unit:'pce'}],
     steps:['Dénoyauter les dattes et les mixer 20 secondes avec le lait entier chaud (60 °C) — la chaleur liquéfie leur sucre et fond l\'amidon des flocons.','Laisser tiédir 2 minutes, puis ajouter flocons d\'avoine, cacao tamisé et whey chocolat.','Mixer 60 secondes à puissance max pour obtenir une texture onctueuse rappelant la pâte à brownie cuite.','Boire à température ambiante ou légèrement tiède — la chaleur double la perception des arômes de cacao.'],
     tips:'Une datte Medjool fondue dans du lait chaud se comporte comme un caramel naturel : elle lie, sucre et apporte une profondeur vanillée que le sucre blanc ne peut pas imiter.' },
-  { id:'sm_choco_03', name:'Chocolat Menthe Explosif', flavors:['chocolate'], goal:['fat_loss','performance'], timing:'pre', cal:290, p:32, c:28, f:6, prep:'2min',
+  { id:'sm_choco_03', name:'Chocolat Menthe Explosif', nameEn:'Explosive Chocolate Mint', flavors:['chocolate'], goal:['fat_loss','performance'], timing:'pre', cal:290, p:32, c:28, f:6, prep:'2min',
     ingredients:[{name:'Whey chocolat',qty:30,unit:'g'},{name:'Eau froide',qty:300,unit:'ml'},{name:'Épinards frais',qty:30,unit:'g'},{name:'Menthe fraîche',qty:5,unit:'g'},{name:'Glaçons',qty:100,unit:'g'}],
     steps:['Mixer l\'eau glacée avec les épinards frais 20 secondes — la base verte doit être parfaitement lisse avant d\'introduire la menthe.','Frotter les feuilles de menthe entre les paumes pour libérer les huiles essentielles, puis les ajouter avec les glaçons.','Incorporer la whey en dernier, mixer 30 secondes supplémentaires à vitesse maximale, servir aussitôt dans un verre préalablement réfrigéré.'],
     tips:'Froisser la menthe à la main juste avant de mixer libère 30 % d\'arôme supplémentaire. C\'est le même geste qu\'on utilise pour un mojito — et le résultat est tout aussi saisissant.' },
 
   // === VANILLE ===
-  { id:'sm_van_01', name:'Vanilla Cream Gainer', flavors:['vanilla'], goal:['muscle'], timing:'post', cal:500, p:38, c:65, f:10, prep:'3min',
+  { id:'sm_van_01', name:'Vanilla Cream Gainer', nameEn:'Vanilla Cream Gainer', flavors:['vanilla'], goal:['muscle'], timing:'post', cal:500, p:38, c:65, f:10, prep:'3min',
     ingredients:[{name:'Whey vanille',qty:35,unit:'g'},{name:'Lait entier',qty:250,unit:'ml'},{name:'Flocons d\'avoine',qty:50,unit:'g'},{name:'Miel',qty:15,unit:'g'},{name:'Vanille extrait',qty:2,unit:'ml'}],
     steps:['Tremper les flocons d\'avoine 2 minutes dans le lait tiède — ils gonflent et libèrent leur amidon pour une texture veloutée.','Verser la préparation dans le blender, ajouter la whey, le miel et l\'extrait de vanille.','Mixer 40 secondes à vitesse maximale jusqu\'à obtenir une consistance lisse et nappante.','Déguster immédiatement dans un verre refroidi au congélateur 5 minutes.'],
     tips:'Le trempage court des flocons est le secret d\'une texture crémeuse sans grains — la vanille s\'exprime mieux dans une base légèrement tiède avant d\'être émulsionnée.' },
-  { id:'sm_van_02', name:'Vanilla Latte Matin', flavors:['vanilla','coffee'], goal:['performance','fat_loss'], timing:'pre', cal:310, p:33, c:30, f:7, prep:'3min',
+  { id:'sm_van_02', name:'Vanilla Latte Matin', nameEn:'Vanilla Latte Morning', flavors:['vanilla','coffee'], goal:['performance','fat_loss'], timing:'pre', cal:310, p:33, c:30, f:7, prep:'3min',
     ingredients:[{name:'Whey vanille',qty:30,unit:'g'},{name:'Café expresso froid',qty:60,unit:'ml'},{name:'Lait d\'amande',qty:200,unit:'ml'},{name:'Glaçons',qty:80,unit:'g'},{name:'Cannelle',qty:1,unit:'g'}],
     steps:['Préparer l\'expresso la veille et le réfrigérer — un café froid révèle des notes de caramel absent du café chaud.','Verser le lait d\'amande, le café froid et les glaçons dans le blender, mixer 20 secondes.','Ajouter la whey et mixer 15 secondes — pas davantage pour ne pas oxyder les arômes.','Servir dans un verre givre, saupoudrer la cannelle d\'un geste circulaire au dernier moment.'],
     tips:'La cannelle posée en surface, jamais mixée, libère ses huiles essentielles au contact des lèvres — le parfum précède le goût et annonce la vanille.' },
-  { id:'sm_van_03', name:'Vanilla Banana Overnight', flavors:['vanilla','banana'], goal:['muscle','recovery'], timing:'anytime', cal:440, p:36, c:55, f:8, prep:'5min',
+  { id:'sm_van_03', name:'Vanilla Banana Overnight', nameEn:'Vanilla Banana Overnight', flavors:['vanilla','banana'], goal:['muscle','recovery'], timing:'anytime', cal:440, p:36, c:55, f:8, prep:'5min',
     ingredients:[{name:'Whey vanille',qty:30,unit:'g'},{name:'Lait écrémé',qty:200,unit:'ml'},{name:'Banane',qty:120,unit:'g'},{name:'Flocons d\'avoine',qty:40,unit:'g'},{name:'Graines de chia',qty:10,unit:'g'}],
     steps:['Mixer le lait avec la banane et la whey vanille 30 secondes — la banane très mûre donne un fil de caramel naturel.','Verser dans un récipient hermétique, incorporer les flocons et les graines de chia en remuant doucement.','Réfrigérer au moins 2 heures — la nuit idéalement — pour que le chia gélifie et que les saveurs se fondent.'],
     tips:'Choisissez une banane dont la peau montre des taches noires : c\'est là que les sucres simples se convertissent en esters fruités qui amplifient la vanille.' },
 
   // === FRAISE ===
-  { id:'sm_straw_01', name:'Fraise Citron Vitalité', flavors:['strawberry','lemon'], goal:['fat_loss','performance'], timing:'post', cal:280, p:30, c:32, f:3, prep:'3min',
+  { id:'sm_straw_01', name:'Fraise Citron Vitalité', nameEn:'Strawberry Lemon Vitality', flavors:['strawberry','lemon'], goal:['fat_loss','performance'], timing:'post', cal:280, p:30, c:32, f:3, prep:'3min',
     ingredients:[{name:'Whey fraise',qty:25,unit:'g'},{name:'Fraises congelées',qty:150,unit:'g'},{name:'Jus de citron',qty:30,unit:'ml'},{name:'Eau',qty:200,unit:'ml'},{name:'Stevia',qty:1,unit:'g'}],
     steps:['Sortir les fraises congelées 5 min à température ambiante — elles libèrent davantage de jus et d\'arôme.','Mixer fraises + jus de citron + stevia 20 secondes à puissance maximale pour émulsionner.','Ajouter la whey + eau glacée, mixer 10 secondes supplémentaires — ne pas sur-mixer pour garder la fraîcheur.','Servir immédiatement dans un verre préalablement réfrigéré.'],
     tips:'Le citron ne masque pas la fraise — il en amplifie les arômes fruités par contraste acide. Une pincée de fleur de sel magnifie le tout.' },
-  { id:'sm_straw_02', name:'Strawberry Cheesecake Shake', flavors:['strawberry'], goal:['muscle','anytime'], timing:'anytime', cal:390, p:38, c:38, f:9, prep:'4min',
+  { id:'sm_straw_02', name:'Strawberry Cheesecake Shake', nameEn:'Strawberry Cheesecake Shake', flavors:['strawberry'], goal:['muscle','anytime'], timing:'anytime', cal:390, p:38, c:38, f:9, prep:'4min',
     ingredients:[{name:'Whey fraise',qty:30,unit:'g'},{name:'Fromage blanc 0%',qty:100,unit:'g'},{name:'Fraises',qty:100,unit:'g'},{name:'Lait',qty:150,unit:'ml'},{name:'Vanille',qty:1,unit:'g'}],
     steps:['Mixer les fraises seules 15 secondes pour obtenir un coulis grossier — la base aromatique du shake.','Ajouter le lait froid, le fromage blanc, la vanille et la whey ; mixer 25 secondes à vitesse moyenne.','Ajuster la consistance avec un trait de lait si trop épais, puis servir sans attendre.'],
     tips:'Infuser la vanille dans le lait froid 10 minutes avant de mixer : l\'arôme se diffuse de façon infiniment plus profonde qu\'en ajout direct.' },
 
   // === CACAHUÈTE ===
-  { id:'sm_peanut_01', name:'PB&J Power Shake', flavors:['peanut','strawberry'], goal:['muscle','performance'], timing:'post', cal:474, p:42, c:45, f:14, prep:'3min',
+  { id:'sm_peanut_01', name:'PB&J Power Shake', nameEn:'PB&J Power Shake', flavors:['peanut','strawberry'], goal:['muscle','performance'], timing:'post', cal:474, p:42, c:45, f:14, prep:'3min',
     ingredients:[{name:'Whey cacahuète',qty:30,unit:'g'},{name:'Beurre de cacahuète',qty:20,unit:'g'},{name:'Fraises congelées',qty:80,unit:'g'},{name:'Lait écrémé',qty:250,unit:'ml'},{name:'Miel',qty:10,unit:'g'}],
     steps:['Congeler les fraises 1h minimum — elles épaississent sans diluer.','Chauffer légèrement le beurre de cacahuète 10 secondes au micro-ondes pour le fluidifier avant de mixer.','Mixer à pleine puissance 45 secondes, puis incorporer le miel en filet et mixer 5 secondes.'],
     tips:'Une goutte d\'extrait de vanille révèle la noisette naturelle de la cacahuète. La fraise apporte l\'acidité qui équilibre — ne pas la supprimer.' },
-  { id:'sm_peanut_02', name:'Cacahuète Chocolat Noir Ultime', flavors:['peanut','chocolate'], goal:['muscle'], timing:'anytime', cal:464, p:40, c:40, f:16, prep:'3min',
+  { id:'sm_peanut_02', name:'Cacahuète Chocolat Noir Ultime', nameEn:'Ultimate Peanut Dark Chocolate', flavors:['peanut','chocolate'], goal:['muscle'], timing:'anytime', cal:464, p:40, c:40, f:16, prep:'3min',
     ingredients:[{name:'Whey cacahuète',qty:25,unit:'g'},{name:'Whey chocolat',qty:15,unit:'g'},{name:'Beurre d\'arachide',qty:25,unit:'g'},{name:'Lait entier',qty:250,unit:'ml'},{name:'Banane',qty:80,unit:'g'}],
     steps:['Congeler la banane coupée en rondelles la veille — texture veloutée et froide garantie.','Mixer d\'abord le beurre d\'arachide avec le lait chaud pour émulsionner les matières grasses.','Ajouter les wheys et la banane congelée, mixer 40 secondes à pleine puissance.'],
     tips:'Choisir un cacao à 22-24% de beurre de cacao pour l\'intensité. La cacahuète et le chocolat noir partagent le même registre torréfié — l\'accord est naturel, pas construit.' },
 
   // === CAFÉ ===
-  { id:'sm_coffee_01', name:'Cold Brew Pre-Workout', flavors:['coffee'], goal:['performance','fat_loss'], timing:'pre', cal:260, p:32, c:22, f:5, prep:'3min',
+  { id:'sm_coffee_01', name:'Cold Brew Pre-Workout', nameEn:'Cold Brew Pre-Workout', flavors:['coffee'], goal:['performance','fat_loss'], timing:'pre', cal:260, p:32, c:22, f:5, prep:'3min',
     ingredients:[{name:'Whey café',qty:30,unit:'g'},{name:'Cold brew concentré',qty:100,unit:'ml'},{name:'Lait d\'amande',qty:200,unit:'ml'},{name:'Glaçons',qty:100,unit:'g'},{name:'Extrait vanille',qty:1,unit:'ml'}],
     steps:['Préparer le cold brew la veille : gros grains, eau froide, 12h au frigo — ne jamais utiliser du café chaud refroidi.','Mixer cold brew, lait d\'amande, extrait de vanille et whey avec les glaçons 30 secondes.','Servir dans un verre givré, boire dans les 10 minutes pour préserver les arômes volatils.'],
     tips:'Le cold brew est moins acide et plus riche en arômes sucrés que l\'expresso — c\'est sa supériorité ici. La vanille n\'est pas optionnelle : elle arrondit l\'amertume résiduelle.' },
-  { id:'sm_coffee_02', name:'Tiramisu Shake Masse', flavors:['coffee','vanilla'], goal:['muscle'], timing:'post', cal:430, p:38, c:50, f:8, prep:'5min',
+  { id:'sm_coffee_02', name:'Tiramisu Shake Masse', nameEn:'Tiramisu Mass Shake', flavors:['coffee','vanilla'], goal:['muscle'], timing:'post', cal:430, p:38, c:50, f:8, prep:'5min',
     ingredients:[{name:'Whey café',qty:30,unit:'g'},{name:'Ricotta légère',qty:80,unit:'g'},{name:'Café fort',qty:60,unit:'ml'},{name:'Lait',qty:150,unit:'ml'},{name:'Cacao pur',qty:5,unit:'g'},{name:'Miel',qty:10,unit:'g'}],
     steps:['Préparer un café fort serré (70ml) et le refroidir au congélateur 15 minutes — pas à température ambiante.','Mixer ricotta + lait + whey café jusqu\'à texture parfaitement lisse et aérée.','Incorporer le café froid et le miel, mixer 10 secondes, saupoudrer de cacao tamisé au service.'],
     tips:'La ricotta — et non le mascarpone — est le secret du tiramisu allégé : même onctuosité, tiers des calories. Le cacao doit être tamisé comme dans la vraie recette, pas saupoudré en bloc.' },
 
   // === MYRTILLE ===
-  { id:'sm_blue_01', name:'Blueberry Antioxydant Warrior', flavors:['blueberry'], goal:['recovery','performance'], timing:'post', cal:310, p:30, c:38, f:4, prep:'3min',
+  { id:'sm_blue_01', name:'Blueberry Antioxydant Warrior', nameEn:'Blueberry Antioxidant Warrior', flavors:['blueberry'], goal:['recovery','performance'], timing:'post', cal:310, p:30, c:38, f:4, prep:'3min',
     ingredients:[{name:'Whey myrtille ou vanille',qty:25,unit:'g'},{name:'Myrtilles congelées',qty:150,unit:'g'},{name:'Épinards',qty:30,unit:'g'},{name:'Eau de coco',qty:200,unit:'ml'},{name:'Citron',qty:10,unit:'ml'}],
     steps:['Mixer les épinards avec l\'eau de coco 20 secondes à pleine puissance — les cellules végétales doivent être totalement brisées.','Ajouter les myrtilles congelées et mixer 20 secondes supplémentaires pour une couleur violet profond homogène.','Incorporer la whey et le jus de citron, mixer 10 secondes — le citron est toujours ajouté en dernier pour préserver sa fraîcheur volatile.'],
     tips:'Le citron ajouté en fin de mixage préserve ses composés aromatiques fugaces. Il joue ici un rôle de révélateur : sans lui, les épinards prennent le dessus sur la myrtille.' },
-  { id:'sm_blue_02', name:'Myrtille Lavande Zen', flavors:['blueberry'], goal:['recovery'], timing:'anytime', cal:290, p:28, c:35, f:5, prep:'3min',
+  { id:'sm_blue_02', name:'Myrtille Lavande Zen', nameEn:'Blueberry Lavender Zen', flavors:['blueberry'], goal:['recovery'], timing:'anytime', cal:290, p:28, c:35, f:5, prep:'3min',
     ingredients:[{name:'Whey nature ou vanille',qty:25,unit:'g'},{name:'Myrtilles',qty:120,unit:'g'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Lait',qty:100,unit:'ml'},{name:'Miel de lavande',qty:10,unit:'g'}],
     steps:['Mixer lait + yaourt grec 10 secondes pour créer une base crémeuse aérée.','Ajouter les myrtilles et le miel de lavande, mixer 20 secondes — la lavande est délicate, ne pas sur-mixer.','Incorporer la whey, mixer 10 secondes, puis servir avec quelques myrtilles entières réservées au fond du verre.'],
     tips:'Le miel de lavande est le véritable secret de cette recette : son parfum floral évoque la Provence et transforme un simple smoothie protéiné en accord gastronomique. Un miel d\'acacia fonctionne aussi si la lavande est introuvable.' },
 
   // === NOIX DE COCO ===
-  { id:'sm_coco_01', name:'Tropical Gainz', flavors:['coconut','banana'], goal:['muscle','performance'], timing:'post', cal:484, p:36, c:58, f:12, prep:'4min',
+  { id:'sm_coco_01', name:'Tropical Gainz', nameEn:'Tropical Gainz', flavors:['coconut','banana'], goal:['muscle','performance'], timing:'post', cal:484, p:36, c:58, f:12, prep:'4min',
     ingredients:[{name:'Whey coco ou vanille',qty:30,unit:'g'},{name:'Lait de coco',qty:150,unit:'ml'},{name:'Banane',qty:120,unit:'g'},{name:'Ananas',qty:100,unit:'g'},{name:'Flocons de coco',qty:10,unit:'g'}],
     steps:['Couper banane et ananas en morceaux et congeler 2h minimum — le froid tropical est indispensable.','Mixer fruits congelés + lait de coco jusqu\'à texture épaisse type sorbet.','Ajouter la whey, mixer 20 secondes, garnir de flocons de coco légèrement torréfiés à sec.'],
     tips:'Torréfier les flocons de coco à sec 2 minutes dans une poêle — la différence aromatique entre coco crue et coco torréfiée est celle entre un ingrédient et une signature. La bromélaïne de l\'ananas est un bonus, le goût est la raison principale.' },
-  { id:'sm_coco_02', name:'Coco Matcha Équilibre', flavors:['coconut','matcha'], goal:['fat_loss','performance'], timing:'pre', cal:313, p:30, c:28, f:9, prep:'4min',
+  { id:'sm_coco_02', name:'Coco Matcha Équilibre', nameEn:'Coco Matcha Balance', flavors:['coconut','matcha'], goal:['fat_loss','performance'], timing:'pre', cal:313, p:30, c:28, f:9, prep:'4min',
     ingredients:[{name:'Whey nature ou vanille',qty:25,unit:'g'},{name:'Lait de coco léger',qty:200,unit:'ml'},{name:'Matcha grade cérémonial',qty:4,unit:'g'},{name:'Glaçons',qty:80,unit:'g'},{name:'Miel',qty:8,unit:'g'}],
     steps:['Dissoudre le matcha dans 30ml d\'eau à 70°C, fouetter, laisser refroidir 5 minutes.','Mixer lait de coco léger, whey et miel avec les glaçons 20 secondes.','Incorporer le matcha refroidi, mixer 10 secondes — ne pas prolonger pour préserver la fraîcheur du matcha.'],
     tips:'Coco et matcha : deux douceurs végétales qui se soutiennent sans se couvrir. Le miel doit rester en retrait — une demi-cuillère de moins que la recette classique révèle l\'amertume noble du matcha.' },
 
   // === CITRON ===
-  { id:'sm_lemon_01', name:'Limonade Protéinée Été', flavors:['lemon'], goal:['fat_loss','anytime'], timing:'anytime', cal:220, p:28, c:22, f:2, prep:'2min',
+  { id:'sm_lemon_01', name:'Limonade Protéinée Été', nameEn:'Summer Protein Lemonade', flavors:['lemon'], goal:['fat_loss','anytime'], timing:'anytime', cal:220, p:28, c:22, f:2, prep:'2min',
     ingredients:[{name:'Whey citron ou nature',qty:25,unit:'g'},{name:'Jus de citron frais',qty:60,unit:'ml'},{name:'Eau pétillante',qty:300,unit:'ml'},{name:'Stevia',qty:1,unit:'g'},{name:'Menthe',qty:3,unit:'g'}],
     steps:['Prédissoudre la whey dans 50 ml d\'eau plate en remuant — évite les grumeaux au contact de l\'acide citrique.','Ajouter le jus de citron + stevia, mélanger délicatement.','Verser l\'eau pétillante en filet sur le côté du verre incliné pour préserver les bulles, puis déposer la menthe fraîche et les glaçons.'],
     tips:'Ne jamais shaker une préparation pétillante. Verser l\'eau gazeuse toujours en dernier, en filet, comme un barman verse un Spritz : les bulles sont la texture, les tuer c\'est tuer le plaisir.' },
-  { id:'sm_lemon_02', name:'Lemon Cheesecake Detox', flavors:['lemon'], goal:['fat_loss'], timing:'anytime', cal:260, p:32, c:26, f:4, prep:'4min',
+  { id:'sm_lemon_02', name:'Lemon Cheesecake Detox', nameEn:'Lemon Cheesecake Detox', flavors:['lemon'], goal:['fat_loss'], timing:'anytime', cal:260, p:32, c:26, f:4, prep:'4min',
     ingredients:[{name:'Whey citron ou vanille',qty:25,unit:'g'},{name:'Fromage blanc 0%',qty:120,unit:'g'},{name:'Citron zeste+jus',qty:1,unit:'pce'},{name:'Lait écrémé',qty:100,unit:'ml'},{name:'Gingembre',qty:2,unit:'g'}],
     steps:['Zester finement le citron sur le fromage blanc et laisser macérer 5 minutes — le zeste infuse ses huiles essentielles dans le gras du fromage.','Ajouter le jus de citron, le lait écrémé, le gingembre râpé et la whey ; mixer 20 secondes à vitesse moyenne.','Réfrigérer 10 minutes avant de servir — la texture se raffermit et les arômes s\'homogénéisent.'],
     tips:'Macérer le zeste dans le fromage blanc avant de mixer est le geste technique décisif : les huiles essentielles du zeste sont liposolubles et s\'extraient dans la matière grasse, pas dans l\'eau. Le résultat est incomparablement plus parfumé.' },
 
   // === BANANE ===
-  { id:'sm_ban_01', name:'Banana Power Breakfast', flavors:['banana','vanilla'], goal:['muscle','performance'], timing:'pre', cal:410, p:34, c:56, f:6, prep:'3min',
+  { id:'sm_ban_01', name:'Banana Power Breakfast', nameEn:'Banana Power Breakfast', flavors:['banana','vanilla'], goal:['muscle','performance'], timing:'pre', cal:410, p:34, c:56, f:6, prep:'3min',
     ingredients:[{name:'Whey banane ou vanille',qty:30,unit:'g'},{name:'Banane mûre',qty:150,unit:'g'},{name:'Lait écrémé',qty:200,unit:'ml'},{name:'Flocons d\'avoine',qty:40,unit:'g'},{name:'Cannelle',qty:1,unit:'g'}],
     steps:['Mixer flocons d\'avoine avec lait 15 secondes pour créer une base crémeuse — les flocons s\'hydratent et s\'intègrent.','Ajouter banane bien mûre (taches noires = plus sucrée, plus aromatique) et whey.','Mixer 20 secondes, saupoudrer la cannelle après mixage — elle perfume en surface sans être noyée.'],
     tips:'La maturité de la banane change tout : une banane à taches noires apporte deux fois plus de douceur naturelle. La cannelle est un exhausteur — mettre avant l\'effort, pas dans le shake, crée un accord olfactif à la dégustation.' },
 
   // === NOISETTE ===
-  { id:'sm_hazel_01', name:'Ferrero Shake', flavors:['hazelnut','chocolate'], goal:['muscle'], timing:'anytime', cal:470, p:38, c:48, f:14, prep:'3min',
+  { id:'sm_hazel_01', name:'Ferrero Shake', nameEn:'Ferrero Shake', flavors:['hazelnut','chocolate'], goal:['muscle'], timing:'anytime', cal:470, p:38, c:48, f:14, prep:'3min',
     ingredients:[{name:'Whey noisette ou chocolat',qty:30,unit:'g'},{name:'Pâte de noisette pure',qty:15,unit:'g'},{name:'Cacao pur',qty:8,unit:'g'},{name:'Lait entier',qty:250,unit:'ml'},{name:'Banane',qty:80,unit:'g'}],
     steps:['Torréfier les éclats de noisettes à sec 3 minutes dans une poêle chaude — libère les huiles aromatiques.','Mixer banane + lait + pâte de noisette ensemble 20 secondes pour lier les graisses.','Ajouter cacao et whey, mixer 20 secondes, garnir des noisettes torréfiées au dernier moment.'],
     tips:'La torréfaction à sec des noisettes décuple le Maillard. Une pincée de fleur de sel sur les éclats au service — le contraste sel/chocolat est la signature des grands.' },
 
   // === MATCHA ===
-  { id:'sm_matcha_01', name:'Matcha Warrior Bowl', flavors:['matcha'], goal:['performance','fat_loss'], timing:'pre', cal:320, p:30, c:38, f:5, prep:'5min',
+  { id:'sm_matcha_01', name:'Matcha Warrior Bowl', nameEn:'Matcha Warrior Bowl', flavors:['matcha'], goal:['performance','fat_loss'], timing:'pre', cal:320, p:30, c:38, f:5, prep:'5min',
     ingredients:[{name:'Whey nature ou vanille',qty:25,unit:'g'},{name:'Matcha grade cérémonial',qty:5,unit:'g'},{name:'Lait d\'avoine',qty:200,unit:'ml'},{name:'Miel de manuka',qty:10,unit:'g'},{name:'Gingembre râpé',qty:2,unit:'g'}],
     steps:['Dissoudre le matcha dans 50ml d\'eau à 70°C, fouetter en W avec un chasen ou un petit fouet — jamais en cercle pour éviter les grumeaux.','Laisser refroidir le matcha 5 minutes, mixer avec lait d\'avoine, whey et miel de manuka.','Terminer avec le gingembre râpé — incorporer à la main, ne pas remixer pour préserver la fraîcheur de l\'arôme.'],
     tips:'Le miel de manuka n\'est pas un sucrant banal : sa complexité aromatique (boisé, balsamique) s\'associe parfaitement à l\'umami végétal du matcha. Utiliser grade cérémonial, jamais culinaire.' },
-  { id:'sm_matcha_02', name:'Green Machine Récupération', flavors:['matcha','coconut'], goal:['recovery'], timing:'post', cal:330, p:32, c:35, f:7, prep:'4min',
+  { id:'sm_matcha_02', name:'Green Machine Récupération', nameEn:'Green Machine Recovery', flavors:['matcha','coconut'], goal:['recovery'], timing:'post', cal:330, p:32, c:35, f:7, prep:'4min',
     ingredients:[{name:'Whey vanille',qty:25,unit:'g'},{name:'Matcha',qty:4,unit:'g'},{name:'Lait de coco léger',qty:150,unit:'ml'},{name:'Épinards',qty:40,unit:'g'},{name:'Pomme verte',qty:80,unit:'g'},{name:'Citron',qty:15,unit:'ml'}],
     steps:['Mixer d\'abord épinards + lait de coco — base verte homogène sans fils verts.','Dissoudre le matcha séparément dans 30ml d\'eau tiède, ajouter avec la pomme et la whey.','Mixer 45 secondes à pleine puissance, passer au tamis fin si nécessaire — la texture doit être soyeuse.'],
     tips:'La pomme verte apporte la fraîcheur acide que la coco ne peut pas donner. Le citron souligne — il ne doit pas dominer. Si le shake vire trop vert foncé, la pomme est insuffisante : en ajouter.' },
 
   // === NATURE / UNFLAVORED ===
-  { id:'sm_nature_01', name:'Clean Shake Neutre', flavors:['unflavored'], goal:['muscle','fat_loss'], timing:'anytime', cal:280, p:33, c:28, f:5, prep:'2min',
+  { id:'sm_nature_01', name:'Clean Shake Neutre', nameEn:'Clean Neutral Shake', flavors:['unflavored'], goal:['muscle','fat_loss'], timing:'anytime', cal:280, p:33, c:28, f:5, prep:'2min',
     ingredients:[{name:'Whey nature',qty:30,unit:'g'},{name:'Lait écrémé',qty:250,unit:'ml'},{name:'Flocons d\'avoine',qty:25,unit:'g'},{name:'Amandes effilées',qty:10,unit:'g'}],
     steps:['Mixer les flocons d\'avoine avec la moitié du lait écrémé 20 secondes à pleine puissance pour créer une base "lait d\'avoine maison" lisse — les flocons hydratés s\'intègrent parfaitement et épaississent sans morceaux.','Ajouter le reste du lait froid, la whey nature et les amandes effilées ; mixer 20 secondes à vitesse moyenne — les amandes doivent être réduites en micro-éclats qui apportent le croquant, pas en poudre uniforme.','Goûter avant de servir : sur une base neutre, l\'équilibre est tout. Ajuster avec une pincée de fleur de sel si la whey manque de relief — le sel est l\'exhausteur de goût le plus puissant sur les protéines.'],
     tips:'Une base neutre n\'est pas une base fade : c\'est une toile blanche. La fleur de sel est le geste du pâtissier — elle ne sale pas, elle révèle. Une pincée change tout ce que la whey nature a à dire.' },
-  { id:'sm_nature_02', name:'Athlete\'s Functional Shake', flavors:['unflavored'], goal:['performance','recovery'], timing:'post', cal:360, p:38, c:38, f:7, prep:'3min',
+  { id:'sm_nature_02', name:'Athlete\', nameEn:'Athlete\'s Shake's Functional Shake', flavors:['unflavored'], goal:['performance','recovery'], timing:'post', cal:360, p:38, c:38, f:7, prep:'3min',
     ingredients:[{name:'Whey nature',qty:35,unit:'g'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Jus d\'orange frais',qty:150,unit:'ml'},{name:'Banane',qty:80,unit:'g'},{name:'Curcuma',qty:1,unit:'g'},{name:'Poivre noir',qty:0.5,unit:'g'}],
     steps:['Commencer par mixer banane + jus d\'orange + poivre noir fraîchement moulu ensemble 15 secondes : le poivre doit se disperser dans la matière sucrée acide pour que la pipérine s\'active au contact des lipides du yaourt qui suivent.','Ajouter le yaourt grec et le curcuma, mixer 20 secondes — le curcuma se fixe sur les matières grasses du yaourt pour une absorption optimale ; ne jamais le dissoudre dans le liquide seul.','Incorporer la whey nature en dernier, mixer 15 secondes à vitesse modérée. Consommer dans les 20 minutes post-séance : la fenêtre anabolique et anti-inflammatoire combinées est maximale à ce créneau.'],
     tips:'Curcuma + poivre + matière grasse : c\'est le trio de biodisponibilité. Changer l\'ordre d\'incorporation revient à ignorer la chimie — et perdre jusqu\'à 80 % de l\'effet anti-inflammatoire du curcuma.' },
 
   // === MULTI-PARFUMS ===
-  { id:'sm_multi_01', name:'Reese\'s Smoothie Bowl', flavors:['peanut','chocolate'], goal:['muscle'], timing:'anytime', cal:520, p:42, c:55, f:15, prep:'5min',
+  { id:'sm_multi_01', name:'Reese\', nameEn:'Reese\'s Shake's Smoothie Bowl', flavors:['peanut','chocolate'], goal:['muscle'], timing:'anytime', cal:520, p:42, c:55, f:15, prep:'5min',
     ingredients:[{name:'Whey chocolat',qty:30,unit:'g'},{name:'Beurre de cacahuète',qty:20,unit:'g'},{name:'Banane congelée',qty:150,unit:'g'},{name:'Lait',qty:100,unit:'ml'},{name:'Granola',qty:30,unit:'g'}],
     steps:['Congeler la banane coupée en rondelles minimum 2 heures à l\'avance — c\'est l\'unique secret d\'un bowl dense et crémeux sans glace diluante.','Mixer banane congelée + lait à vitesse maximale 10 secondes seulement : stopper dès que la texture "nice cream" est atteinte, ne jamais sur-mixer ou elle devient liquide.','Ajouter le beurre de cacahuète et la whey chocolat, mixer 5 secondes en impulsions courtes pour marbrer sans homogénéiser complètement — les veines de cacahuète sont la signature visuelle.','Verser immédiatement dans un bol froid (passé 5 minutes au congélateur), déposer le granola en dernière seconde pour qu\'il reste croustillant — jamais dans le blender.'],
     tips:'La texture bowl ne se fabrique pas avec moins de liquide : elle se fabrique avec une banane congelée. C\'est la différence entre un shake raté et un vrai bowl ferme qui tient la cuillère à la verticale.' },
-  { id:'sm_multi_02', name:'Sunrise Recovery', flavors:['strawberry','banana'], goal:['recovery','muscle'], timing:'post', cal:390, p:34, c:50, f:5, prep:'3min',
+  { id:'sm_multi_02', name:'Sunrise Recovery', nameEn:'Sunrise Recovery', flavors:['strawberry','banana'], goal:['recovery','muscle'], timing:'post', cal:390, p:34, c:50, f:5, prep:'3min',
     ingredients:[{name:'Whey vanille ou fraise',qty:25,unit:'g'},{name:'Fraises',qty:100,unit:'g'},{name:'Banane',qty:100,unit:'g'},{name:'Jus d\'orange',qty:100,unit:'ml'},{name:'Miel',qty:8,unit:'g'},{name:'Glaçons',qty:80,unit:'g'}],
     steps:['Congeler les fraises entières et la banane en rondelles la veille : les fruits congelés remplacent les glaçons sans diluer les arômes — la concentration en saveur est incomparablement supérieure.','Mixer jus d\'orange + miel ensemble 5 secondes pour dissoudre le miel à froid — ne jamais ajouter un sucrant cristallisé directement sur des fruits congelés qui le bloqueraient en grumeaux.','Ajouter les fruits congelés et mixer à pleine puissance 25 secondes ; incorporer la whey en dernier, mixer 10 secondes supplémentaires — la whey ajoutée trop tôt mousse excessivement et perd en onctuosité.'],
     tips:'La règle d\'or du smoothie fruité post-effort : zéro glaçon, 100 % fruits congelés. Le froid vient des fruits, les arômes restent intacts, et la texture est soyeuse — pas aqueuse.' },
-  { id:'sm_multi_03', name:'Mocha Hazelnut Dream', flavors:['coffee','hazelnut'], goal:['performance'], timing:'pre', cal:340, p:32, c:35, f:9, prep:'4min',
+  { id:'sm_multi_03', name:'Mocha Hazelnut Dream', nameEn:'Mocha Hazelnut Dream', flavors:['coffee','hazelnut'], goal:['performance'], timing:'pre', cal:340, p:32, c:35, f:9, prep:'4min',
     ingredients:[{name:'Whey café ou noisette',qty:30,unit:'g'},{name:'Café expresso',qty:60,unit:'ml'},{name:'Pâte de noisette',qty:10,unit:'g'},{name:'Lait écrémé',qty:200,unit:'ml'},{name:'Cacao pur',qty:5,unit:'g'}],
     steps:['Préparer l\'expresso et le verser immédiatement sur la pâte de noisette dans le blender à chaud : la chaleur du café émulsionne instantanément la matière grasse de la noisette en une base soyeuse et parfumée.','Laisser la préparation café-noisette refroidir 5 minutes, puis ajouter le lait écrémé froid et le cacao tamisé (jamais en vrac : les grumeaux de cacao ne se défont plus une fois mixés).','Ajouter la whey en dernier, mixer 20 secondes à vitesse moyenne — pas maximale : le café carboné sur-agité devient amer. Servir immédiatement sur glaçons sans remuer.'],
     tips:'L\'expresso chaud sur la pâte de noisette n\'est pas un hasard : c\'est une émulsion à chaud, comme une ganache. Le résultat est un corps en bouche que le simple mixage à froid ne peut jamais donner.' },
 
   // === BANANE #2 ===
-  { id:'sm_ban_02', name:'Banana Split Recovery', flavors:['banana','vanilla'], goal:['recovery'], timing:'post', cal:380, p:36, c:48, f:6, prep:'3min',
+  { id:'sm_ban_02', name:'Banana Split Recovery', nameEn:'Banana Split Recovery', flavors:['banana','vanilla'], goal:['recovery'], timing:'post', cal:380, p:36, c:48, f:6, prep:'3min',
     ingredients:[{name:'Whey banane ou vanille',qty:30,unit:'g'},{name:'Banane congelée',qty:120,unit:'g'},{name:'Skyr nature',qty:100,unit:'g'},{name:'Lait écrémé',qty:150,unit:'ml'},{name:'Miel',qty:10,unit:'g'}],
     steps:['Utiliser une banane congelée en rondelles — impératif pour la texture glacée et crémeuse sans glaçons.','Mixer banane congelée + lait écrémé 15 secondes jusqu\'à consistance glace pilée.','Ajouter skyr et whey, mixer 20 secondes, finir avec un filet de miel sans remixer — il doit rester en veine dorée.'],
     tips:'Le skyr et la banane congelée forment ensemble une base de glace protéinée naturelle. Le miel en filet final n\'est pas une touche décorative — c\'est l\'équilibre acide-sucré du skyr qui en a besoin.' },
 
   // === NOISETTE #2 ===
-  { id:'sm_hazel_02', name:'Noisette Overnight Shake', flavors:['hazelnut'], goal:['muscle','recovery'], timing:'anytime', cal:440, p:35, c:45, f:13, prep:'5min',
+  { id:'sm_hazel_02', name:'Noisette Overnight Shake', nameEn:'Hazelnut Overnight Shake', flavors:['hazelnut'], goal:['muscle','recovery'], timing:'anytime', cal:440, p:35, c:45, f:13, prep:'5min',
     ingredients:[{name:'Whey noisette',qty:30,unit:'g'},{name:'Purée de noisette complète',qty:20,unit:'g'},{name:'Lait d\'avoine',qty:250,unit:'ml'},{name:'Flocons d\'avoine',qty:30,unit:'g'},{name:'Cacao pur',qty:5,unit:'g'},{name:'Datte Medjool',qty:1,unit:'pce'}],
     steps:['Dénoyauter la datte et la faire tremper 10 minutes dans le lait d\'avoine tiède — elle se mixe parfaitement lisse.','Ajouter flocons pré-trempés, purée de noisette, cacao et whey.','Mixer 40 secondes à pleine puissance — déguster dans l\'heure, la texture est à son apogée.'],
     tips:'La datte Medjool apporte une note de caramel brun qui contraste superbement avec l\'amertume du cacao. C\'est le sucrant qui mérite d\'être utilisé.' },
 
   // === MULTI #4 — Lemon Matcha Zen ===
-  { id:'sm_multi_04', name:'Lemon Matcha Zen', flavors:['lemon','matcha'], goal:['fat_loss','performance'], timing:'pre', cal:260, p:30, c:28, f:4, prep:'3min',
+  { id:'sm_multi_04', name:'Lemon Matcha Zen', nameEn:'Lemon Matcha Zen', flavors:['lemon','matcha'], goal:['fat_loss','performance'], timing:'pre', cal:260, p:30, c:28, f:4, prep:'3min',
     ingredients:[{name:'Whey nature ou citron',qty:25,unit:'g'},{name:'Matcha cérémonie',qty:3,unit:'g'},{name:'Jus de citron frais',qty:30,unit:'ml'},{name:'Eau de coco',qty:200,unit:'ml'},{name:'Miel',qty:8,unit:'g'},{name:'Gingembre frais',qty:5,unit:'g'}],
     steps:['Dissoudre le matcha dans 30 ml d\'eau à 70 °C précis (jamais bouillante : au-dessus de 80 °C les catéchines s\'oxydent et le matcha vire amer), fouetter en zigzag 30 secondes avec un chasen ou un petit fouet à main.','Râper finement le gingembre frais et le presser dans le jus de citron : le jus de citron extrait les arômes du gingembre bien mieux que le simple mixage — laisser macérer 2 minutes.','Verser l\'eau de coco bien froide et la whey dans le blender, mixer 15 secondes, puis incorporer le matcha refroidi et la macération citron-gingembre en dernier. Mixer 5 secondes seulement — les arômes du matcha sont volatils.'],
     tips:'Le matcha est un ingrédient thermosensible et fragile : il se dissout avant, il refroidit, il s\'incorpore en dernier. Chaque étape dans le désordre coûte la moitié du parfum.' },
 
   // === PISTACHE ===
-  { id:'sm_pist_01', name:'Pistache Baklava Dream', flavors:['pistachio'], goal:['muscle'], timing:'post', cal:420, p:36, c:31, f:17, prep:'3min',
+  { id:'sm_pist_01', name:'Pistache Baklava Dream', nameEn:'Pistachio Baklava Dream', flavors:['pistachio'], goal:['muscle'], timing:'post', cal:420, p:36, c:31, f:17, prep:'3min',
     ingredients:[{name:'Whey pistache',qty:30,unit:'g'},{name:'Lait entier',qty:250,unit:'ml'},{name:'Miel',qty:15,unit:'g'},{name:'Pistaches concassées',qty:20,unit:'g'},{name:'Eau de rose',qty:5,unit:'ml'},{name:'Glaçons',qty:80,unit:'g'}],
     steps:['Concasser les pistaches au couteau — grossier, pas en poudre, pour préserver les morceaux croquants.','Mixer lait, whey et miel 20 secondes jusqu\'à homogène.','Verser sur glaçons, ajouter l\'eau de rose et les pistaches par-dessus sans remixer — le parfum doit rester en surface.'],
     tips:'L\'eau de rose ne se mélange pas — elle se pose. Une seule goutte suffit si elle est concentrée. Les pistaches non-salées font toute la différence : la douceur naturelle ressort.' },
-  { id:'sm_pist_02', name:'Pistache Citron Frais', flavors:['pistachio','lemon'], goal:['fat_loss'], timing:'pre', cal:280, p:40, c:25, f:2, prep:'3min',
+  { id:'sm_pist_02', name:'Pistache Citron Frais', nameEn:'Pistachio Lemon Fresh', flavors:['pistachio','lemon'], goal:['fat_loss'], timing:'pre', cal:280, p:40, c:25, f:2, prep:'3min',
     ingredients:[{name:'Whey pistache',qty:30,unit:'g'},{name:'Lait écrémé',qty:250,unit:'ml'},{name:'Jus de citron frais',qty:30,unit:'ml'},{name:'Yaourt grec 0%',qty:80,unit:'g'},{name:'Glaçons',qty:100,unit:'g'},{name:'Stevia',qty:1,unit:'g'}],
     steps:['Mixer lait écrémé et yaourt grec d\'abord — base froide et dense.','Ajouter whey et stevia, mixer 20 secondes.','Presser le citron à la main directement dans le blender, couvercle fermé, puis mixer 10 secondes finale.'],
     tips:'La pistache est naturellement douce et beurrée — le citron est indispensable pour trancher cette rondeur. Ne pas sucrer davantage : la whey pistache apporte déjà sa propre douceur.' },
-  { id:'sm_pist_03', name:'Pistache Vanille Royale', flavors:['pistachio','vanilla'], goal:['recovery'], timing:'anytime', cal:365, p:44, c:27, f:9, prep:'4min',
+  { id:'sm_pist_03', name:'Pistache Vanille Royale', nameEn:'Pistachio Vanilla Royal', flavors:['pistachio','vanilla'], goal:['recovery'], timing:'anytime', cal:365, p:44, c:27, f:9, prep:'4min',
     ingredients:[{name:'Whey pistache',qty:25,unit:'g'},{name:'Whey vanille',qty:10,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Miel',qty:10,unit:'g'}],
     steps:['Verser lait entier et yaourt grec dans le blender, mixer 10 secondes pour aérer.','Ajouter whey pistache, whey vanille et miel.','Mixer à pleine puissance 25 secondes — servir aussitôt, la mousse est à son maximum.'],
     tips:'La vanille n\'est pas un doublon : elle agit comme un exhausteur de goût de la pistache, comme le sel l\'est du sucre. Ne pas les séparer — le duo est l\'accord.' },
-  { id:'sm_pist_04', name:'Pistache Matcha Green', flavors:['pistachio','matcha'], goal:['performance'], timing:'pre', cal:300, p:27, c:36, f:6, prep:'4min',
+  { id:'sm_pist_04', name:'Pistache Matcha Green', nameEn:'Pistachio Matcha Green', flavors:['pistachio','matcha'], goal:['performance'], timing:'pre', cal:300, p:27, c:36, f:6, prep:'4min',
     ingredients:[{name:'Whey pistache',qty:30,unit:'g'},{name:'Matcha grade cérémonial',qty:3,unit:'g'},{name:'Lait d\'amande',qty:250,unit:'ml'},{name:'Banane',qty:80,unit:'g'},{name:'Miel',qty:10,unit:'g'},{name:'Gingembre frais',qty:2,unit:'g'}],
     steps:['Dissoudre le matcha dans 30ml d\'eau à 70°C — jamais bouillante — en fouettant en zigzag, pas en cercle.','Congeler la banane en amont pour une texture glacée naturelle, mixer avec lait d\'amande et whey.','Incorporer le matcha refroidi et le gingembre râpé, mixer 20 secondes et servir immédiatement.'],
     tips:'Pistache et matcha partagent la même verticalité végétale. Le gingembre est le liant aromatique : sans lui, les deux saveurs coexistent sans dialoguer.' },
 
   // === NOISETTE #3 ===
-  { id:'sm_hazel_03', name:'Nutella Sportif', flavors:['hazelnut','chocolate'], goal:['muscle'], timing:'post', cal:460, p:39, c:47, f:13, prep:'4min',
+  { id:'sm_hazel_03', name:'Nutella Sportif', nameEn:'Sporty Nutella Shake', flavors:['hazelnut','chocolate'], goal:['muscle'], timing:'post', cal:460, p:39, c:47, f:13, prep:'4min',
     ingredients:[{name:'Whey noisette',qty:35,unit:'g'},{name:'Lait entier',qty:250,unit:'ml'},{name:'Cacao pur',qty:8,unit:'g'},{name:'Banane mûre',qty:80,unit:'g'},{name:'Miel',qty:10,unit:'g'}],
     steps:['Mixer la banane coupée avec le miel et le lait 15 secondes — base sucrée homogène.','Ajouter le cacao pur tamisé pour éviter les grumeaux, puis la whey noisette.','Mixer 30 secondes à haute vitesse — la banane émulsionne naturellement les graisses du cacao.'],
     tips:'Utiliser un cacao naturel non-alcalinisé pour préserver les flavonoïdes et l\'acidité légère qui tranche avec la douceur noisette. Le vrai Nutella n\'est que l\'idée — ce shake est la réalité.' },
 
   // === BANANE #3 ===
-  { id:'sm_ban_03', name:'Banana Bread Shake', flavors:['banana','vanilla'], goal:['muscle'], timing:'anytime', cal:430, p:35, c:43, f:14, prep:'4min',
+  { id:'sm_ban_03', name:'Banana Bread Shake', nameEn:'Banana Bread Shake', flavors:['banana','vanilla'], goal:['muscle'], timing:'anytime', cal:430, p:35, c:43, f:14, prep:'4min',
     ingredients:[{name:'Whey banane ou vanille',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Flocons d\'avoine',qty:30,unit:'g'},{name:'Cannelle',qty:1,unit:'g'},{name:'Miel',qty:10,unit:'g'},{name:'Noix',qty:5,unit:'g'}],
     steps:['Mixer lait entier + flocons d\'avoine 20 secondes pour une base lisse et crémeuse.','Ajouter whey, miel et cannelle, mixer 20 secondes.','Concasser les noix grossièrement au couteau et les ajouter après mixage — croquant intentionnel, ne pas les mixer.'],
     tips:'Les noix ne se mixent pas — leur croquant rompt la texture veloutée et crée un contraste textural qui transforme un shake en expérience. Une pincée de fleur de sel sur les noix décuple leur goût.' },
 
   // === CHOCOLAT #4 — Choco Framboise Express ===
-  { id:'sm_choco_04', name:'Choco Framboise Express', flavors:['chocolate','strawberry'], goal:['fat_loss','recovery'], timing:'post', cal:290, p:32, c:30, f:5, prep:'3min',
+  { id:'sm_choco_04', name:'Choco Framboise Express', nameEn:'Chocolate Raspberry Express', flavors:['chocolate','strawberry'], goal:['fat_loss','recovery'], timing:'post', cal:290, p:32, c:30, f:5, prep:'3min',
     ingredients:[{name:'Whey chocolat',qty:30,unit:'g'},{name:'Fraises congelées',qty:100,unit:'g'},{name:'Lait écrémé',qty:200,unit:'ml'},{name:'Miel',qty:5,unit:'g'},{name:'Glaçons',qty:80,unit:'g'}],
     steps:['Verser le lait écrémé froid dans le blender, ajouter le miel et mixer 5 secondes pour l\'incorporer.','Ajouter les fraises congelées directement (elles jouent le rôle des glaçons), puis la whey.','Mixer 45 secondes à pleine puissance — les fraises encore partiellement gelées créent une texture granita-mousse inimitable.','Ajouter quelques gouttes de jus de citron au service pour rehausser la vivacité fruitée sans modifier les macros.'],
     tips:'L\'acidité naturelle de la fraise tranche le chocolat avec la même élégance qu\'une framboise dans un entremets : elle allège, elle contraste, elle surprend.' },
 
   // === VANILLE #4 — Vanille Caramel Salé ===
-  { id:'sm_van_04', name:'Vanille Caramel Salé', flavors:['vanilla'], goal:['muscle','recovery'], timing:'anytime', cal:400, p:35, c:48, f:7, prep:'3min',
+  { id:'sm_van_04', name:'Vanille Caramel Salé', nameEn:'Salted Caramel Vanilla', flavors:['vanilla'], goal:['muscle','recovery'], timing:'anytime', cal:400, p:35, c:48, f:7, prep:'3min',
     ingredients:[{name:'Whey vanille',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Miel',qty:15,unit:'g'},{name:'Flocons d\'avoine',qty:30,unit:'g'},{name:'Sel',qty:1,unit:'g'}],
     steps:['Tiédir le lait entier à 40 °C — jamais plus — et y dissoudre le miel avec le sel en fouettant : la fleur de sel catalyse les notes de caramel du miel.','Verser dans le blender avec les flocons, mixer 20 secondes, ajouter la whey vanille.','Mixer 15 secondes supplémentaires à vitesse modérée pour préserver la mousse crémeuse.'],
     tips:'Une pincée de fleur de sel sur le dessus au service, pas dans le blender : elle doit craqueler sous la langue et laisser éclater le caramel vanillé en bouche.' },
 
   // === CAFÉ #3 — Café Express ===
-  { id:'sm_coffee_03', name:'Café Express Glacé', flavors:['coffee'], goal:['performance','fat_loss'], timing:'pre', cal:230, p:30, c:20, f:4, prep:'1min',
+  { id:'sm_coffee_03', name:'Café Express Glacé', nameEn:'Iced Espresso', flavors:['coffee'], goal:['performance','fat_loss'], timing:'pre', cal:230, p:30, c:20, f:4, prep:'1min',
     ingredients:[{name:'Whey café',qty:30,unit:'g'},{name:'Lait entier',qty:150,unit:'ml'},{name:'Glaçons',qty:100,unit:'g'}],
     steps:['Remplir le shaker de glaçons en premier, ajouter le lait froid puis la whey café.','Shaker 20 secondes avec vigueur — le froid extrait le maximum d\'arômes de la whey.','Servir immédiatement dans un verre préalablement réfrigéré pour conserver la température idéale.'],
     tips:'La règle d\'or des baristas : le froid en premier, le chaud en dernier. Ici tout est froid — le glaçon n\'est pas une option, c\'est la technique.' },
 
   // === FRAISE #3 — Fraise Simple ===
-  { id:'sm_straw_03', name:'Fraise Pure', flavors:['strawberry'], goal:['fat_loss','recovery'], timing:'anytime', cal:270, p:38, c:25, f:2, prep:'2min',
+  { id:'sm_straw_03', name:'Fraise Pure', nameEn:'Pure Strawberry', flavors:['strawberry'], goal:['fat_loss','recovery'], timing:'anytime', cal:270, p:38, c:25, f:2, prep:'2min',
     ingredients:[{name:'Whey fraise',qty:30,unit:'g'},{name:'Yaourt grec 0%',qty:200,unit:'g'},{name:'Fraises congelées',qty:80,unit:'g'},{name:'Eau',qty:100,unit:'ml'}],
     steps:['Mixer les fraises congelées avec l\'eau 15 secondes pour créer une base glacée homogène.','Ajouter le yaourt grec et la whey, mixer 15 secondes — la texture doit rester épaisse, presque en smoothie bowl.','Servir à la cuillère dans un bol frais, non dans un verre.'],
     tips:'La fraise congelée + yaourt grec forme une texture proche d\'un sorbet protéiné. Quelques fraises fraîches tranchées en garniture apportent le contraste chaud-froid et l\'intensité aromatique.' },
 
   // === NOISETTE #4 — Noisette Rapide ===
-  { id:'sm_hazel_04', name:'Noisette Rapide', flavors:['hazelnut'], goal:['muscle'], timing:'anytime', cal:346, p:36, c:28, f:10, prep:'1min',
+  { id:'sm_hazel_04', name:'Noisette Rapide', nameEn:'Quick Hazelnut', flavors:['hazelnut'], goal:['muscle'], timing:'anytime', cal:346, p:36, c:28, f:10, prep:'1min',
     ingredients:[{name:'Whey noisette',qty:35,unit:'g'},{name:'Lait entier',qty:300,unit:'ml'},{name:'Cacao pur',qty:5,unit:'g'}],
     steps:['Verser lait, whey noisette et cacao dans le shaker.','Shaker énergiquement 20 secondes, puis 10 secondes supplémentaires après retournement.','Servir dans un verre froid et déguster dans les 5 minutes.'],
     tips:'Trois ingrédients, zéro compromis sur la saveur. Ajouter une pincée de sel avant de shaker — cela amplifie la noisette sans ajouter une calorie.' },
 
   // === FRAMBOISE ===
-  { id:'sm_rasp_01', name:'Framboise Express', flavors:['raspberry'], goal:['fat_loss','recovery'], timing:'anytime', cal:260, p:31, c:22, f:5, prep:'2min',
+  { id:'sm_rasp_01', name:'Framboise Express', nameEn:'Raspberry Express', flavors:['raspberry'], goal:['fat_loss','recovery'], timing:'anytime', cal:260, p:31, c:22, f:5, prep:'2min',
     ingredients:[{name:'Whey framboise',qty:30,unit:'g'},{name:'Lait demi-\u00e9cr\u00e9m\u00e9',qty:200,unit:'ml'},{name:'Fruits rouges surgel\u00e9s',qty:80,unit:'g'}],
     steps:['Verser le lait froid dans le blender, ajouter les fruits rouges surgelés — le froid du lait + les fruits crée une émulsion naturelle.','Ajouter la whey framboise et mixer 25 secondes à puissance maximale.','Servir immédiatement avec quelques framboises fraîches posées sur le dessus, sans les mixer.'],
     tips:'Les fruits surgelés remplacent avantageusement les glaçons : ils refroidissent ET apportent de la densité aromatique. Ne jamais utiliser des glaçons quand on peut utiliser des fruits.' },
 
   // === CARAMEL SALÉ ===
-  { id:'sm_caramel_01', name:'Caramel Salé Express', flavors:['caramel_sale'], goal:['muscle','recovery'], timing:'post', cal:310, p:31, c:26, f:9, prep:'2min',
+  { id:'sm_caramel_01', name:'Caramel Salé Express', nameEn:'Salted Caramel Express', flavors:['caramel_sale'], goal:['muscle','recovery'], timing:'post', cal:310, p:31, c:26, f:9, prep:'2min',
     ingredients:[{name:'Whey caramel sal\u00e9',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Banane',qty:60,unit:'g'},{name:'Pincée de sel',qty:1,unit:'g'}],
     steps:['Écraser la banane à la fourchette jusqu\'à obtenir une purée lisse — aucun morceau.','Verser le lait froid sur la purée, incorporer au fouet 10 secondes pour homogénéiser.','Ajouter la whey et la pincée de sel, shaker énergiquement 20 secondes.','Servir immédiatement dans un verre frappé.'],
     tips:'Le sel ne masque pas — il révèle. Une fleur de sel ajoutée en surface juste avant de boire crée un contraste caramel-sel foudroyant, comme dans un caramel Ispahan.' },
 
   // === COOKIES & CREAM ===
-  { id:'sm_cookies_01', name:'Cookies & Cream Shake', flavors:['cookies_cream'], goal:['muscle'], timing:'post', cal:300, p:33, c:17, f:11, prep:'1min',
+  { id:'sm_cookies_01', name:'Cookies & Cream Shake', nameEn:'Cookies & Cream Shake', flavors:['cookies_cream'], goal:['muscle'], timing:'post', cal:300, p:33, c:17, f:11, prep:'1min',
     ingredients:[{name:'Whey cookies',qty:30,unit:'g'},{name:'Lait entier',qty:250,unit:'ml'},{name:'Cacao pur',qty:8,unit:'g'}],
     steps:['Tamiser le cacao directement dans le shaker pour éviter tout grumeau.','Ajouter le lait froid, puis la whey cookies, shaker 25 secondes.','Servir avec 2 glaçons dans le verre pour une texture plus ferme.'],
     tips:'Le cacao noir extra-brut intensifie le profil "oreo" — évitez le cacao sucré qui écrase les notes biscuitées de la whey.' },
 
   // === TIRAMISU ===
-  { id:'sm_tiramisu_01', name:'Tiramisu Protéiné', flavors:['tiramisu'], goal:['muscle','recovery'], timing:'anytime', cal:265, p:31, c:14, f:9, prep:'2min',
+  { id:'sm_tiramisu_01', name:'Tiramisu Protéiné', nameEn:'Protein Tiramisu', flavors:['tiramisu'], goal:['muscle','recovery'], timing:'anytime', cal:265, p:31, c:14, f:9, prep:'2min',
     ingredients:[{name:'Whey tiramisu',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Caf\u00e9 expresso froid',qty:50,unit:'ml'},{name:'Cacao pur',qty:5,unit:'g'}],
     steps:['Préparer le café la veille, refroidir au réfrigérateur toute la nuit — l\'amertume s\'adoucit.','Mélanger café froid + lait en versant doucement pour ne pas mousser.','Ajouter whey + cacao, shaker 20 secondes, saupoudrer de cacao non sucré avant de boire.'],
     tips:'Un café froid 12h au frigo perd son âcreté et développe des arômes chocolatés profonds — c\'est la même logique qu\'un cold brew, et c\'est là que le tiramisu prend son caractère.' },
 
   // === ORANGE ===
-  { id:'sm_orange_01', name:'Orange Soleil', flavors:['orange'], goal:['performance','fat_loss'], timing:'pre', cal:240, p:29, c:21, f:4, prep:'2min',
+  { id:'sm_orange_01', name:'Orange Soleil', nameEn:'Sunshine Orange', flavors:['orange'], goal:['performance','fat_loss'], timing:'pre', cal:240, p:29, c:21, f:4, prep:'2min',
     ingredients:[{name:'Whey orange',qty:30,unit:'g'},{name:'Eau de coco',qty:200,unit:'ml'},{name:'Lait demi-\u00e9cr\u00e9m\u00e9',qty:150,unit:'ml'},{name:'Jus de citron',qty:20,unit:'ml'}],
     steps:['Presser le citron sur le côté — quelques zestes râpés dans l\'eau de coco avant d\'ajouter le lait.','Mélanger eau de coco + lait froid, verser en spirale pour oxygéner légèrement.','Ajouter whey + jus de citron, shaker 20 secondes.'],
     tips:'L\'accord orange-citron-coco évoque une limonada tropicale : les zestes de citron sur l\'eau de coco libèrent des huiles essentielles aromatiques qui font toute la différence sur le nez.' },
 
   // === BIRTHDAY CAKE ===
-  { id:'sm_birthday_01', name:'Birthday Cake Shake', flavors:['birthday_cake'], goal:['muscle'], timing:'post', cal:285, p:32, c:16, f:10, prep:'1min',
+  { id:'sm_birthday_01', name:'Birthday Cake Shake', nameEn:'Birthday Cake Shake', flavors:['birthday_cake'], goal:['muscle'], timing:'post', cal:285, p:32, c:16, f:10, prep:'1min',
     ingredients:[{name:'Whey birthday cake',qty:30,unit:'g'},{name:'Lait entier',qty:250,unit:'ml'},{name:'Extrait vanille',qty:3,unit:'ml'}],
     steps:['Gratter les graines d\'une demi-gousse de vanille dans le lait avant de shaker, ou utiliser l\'extrait.','Verser lait + extrait de vanille, ajouter la whey, shaker 20 secondes vigoureusement.','Servir dans un verre froid, éventuellement avec quelques sprinkles colorés pour l\'esprit fête.'],
     tips:'La vanille vraie — même 3 ml d\'extrait pur — transforme radicalement ce shake : la vanilline synthétique de la whey devient ronde et profonde, comme un sablé breton fraîchement sorti du four.' },
 
   // === CANNELLE ===
-  { id:'sm_cinnamon_01', name:'Cannelle Dorée', flavors:['cinnamon'], goal:['muscle','fat_loss'], timing:'anytime', cal:305, p:31, c:26, f:9, prep:'2min',
+  { id:'sm_cinnamon_01', name:'Cannelle Dorée', nameEn:'Golden Cinnamon', flavors:['cinnamon'], goal:['muscle','fat_loss'], timing:'anytime', cal:305, p:31, c:26, f:9, prep:'2min',
     ingredients:[{name:'Whey cannelle',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Banane',qty:50,unit:'g'},{name:'Cannelle',qty:3,unit:'g'}],
     steps:['Laisser infuser la cannelle dans le lait froid 5 minutes avant de mixer — elle libère ses huiles essentielles sans chaleur.','Écraser la banane à la fourchette, incorporer au lait cannelle.','Ajouter la whey, shaker 20 secondes.'],
     tips:'La cannelle de Ceylan (véritable) est infiniment plus fine et florale que la cannelle Cassia — un seul gramme de plus change tout le profil aromatique du shake.' },
 
   // === CHEESECAKE CITRON ===
-  { id:'sm_cheesecake_01', name:'Cheesecake Citron Frais', flavors:['cheesecake_citron'], goal:['fat_loss','recovery'], timing:'anytime', cal:260, p:42, c:19, f:2, prep:'2min',
+  { id:'sm_cheesecake_01', name:'Cheesecake Citron Frais', nameEn:'Fresh Lemon Cheesecake', flavors:['cheesecake_citron'], goal:['fat_loss','recovery'], timing:'anytime', cal:260, p:42, c:19, f:2, prep:'2min',
     ingredients:[{name:'Whey cheesecake citron',qty:30,unit:'g'},{name:'Fromage blanc 0%',qty:150,unit:'g'},{name:'Jus de citron',qty:30,unit:'ml'},{name:'Miel',qty:10,unit:'g'}],
     steps:['Zester un demi-citron jaune directement dans le fromage blanc avant toute autre opération.','Ajouter jus de citron + miel, fouetter 10 secondes pour une base lisse.','Incorporer la whey, mixer 15 secondes — texture épaisse, ne pas allonger.'],
     tips:'Le zeste libère des huiles essentielles que le jus seul n\'apporte pas — c\'est la différence entre un cheesecake qui évoque le citron et celui qui le transcende.' },
 
   // === TOFFEE ===
-  { id:'sm_toffee_01', name:'Toffee Choco Banane', flavors:['toffee'], goal:['muscle'], timing:'post', cal:345, p:32, c:32, f:9, prep:'2min',
+  { id:'sm_toffee_01', name:'Toffee Choco Banane', nameEn:'Toffee Chocolate Banana', flavors:['toffee'], goal:['muscle'], timing:'post', cal:345, p:32, c:32, f:9, prep:'2min',
     ingredients:[{name:'Whey toffee',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Banane',qty:80,unit:'g'},{name:'Cacao pur',qty:5,unit:'g'}],
     steps:['Congeler la banane 1 heure — le sucre se concentre et le toffee devient plus profond.','Mixer banane congelée + lait + cacao 20 secondes.','Ajouter la whey, mixer 15 secondes — texture épaisse, servir immédiatement.'],
     tips:'Le cacao cru amplifie le profil caramel brun du toffee au lieu de le noyer — utiliser du cacao à 100% non sucré, en quantité minimale.' },
 
   // === CHOCOLAT BLANC ===
-  { id:'sm_whitechoc_01', name:'Chocolat Blanc Fraise', flavors:['white_chocolate'], goal:['recovery','muscle'], timing:'post', cal:300, p:31, c:23, f:9, prep:'2min',
+  { id:'sm_whitechoc_01', name:'Chocolat Blanc Fraise', nameEn:'White Chocolate Strawberry', flavors:['white_chocolate'], goal:['recovery','muscle'], timing:'post', cal:300, p:31, c:23, f:9, prep:'2min',
     ingredients:[{name:'Whey chocolat blanc',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Fraises congel\u00e9es',qty:80,unit:'g'}],
     steps:['Utiliser des fraises congelées directement — elles font office de glaçons aromatisés.','Mixer fraises + lait 20 secondes à vitesse maximale pour une base rose dense.','Ajouter la whey, mixer 10 secondes — arrêter avant que la texture ne devienne trop liquide.'],
     tips:'Le chocolat blanc est un amplificateur de texture, pas de saveur : son gras lacté porte l\'acidité de la fraise et lui donne cette rondeur veloutée qu\'on ne trouve pas avec un autre chocolat.' },
 
   // === PIÑA COLADA ===
-  { id:'sm_pina_01', name:'Pi\u00f1a Colada Protéinée', flavors:['pina_colada'], goal:['recovery','performance'], timing:'post', cal:285, p:25, c:27, f:9, prep:'3min',
+  { id:'sm_pina_01', name:'Pi\u00f1a Colada Protéinée', nameEn:'Piña Colada Protein', flavors:['pina_colada'], goal:['recovery','performance'], timing:'post', cal:285, p:25, c:27, f:9, prep:'3min',
     ingredients:[{name:'Whey pi\u00f1a colada',qty:30,unit:'g'},{name:'Eau de coco',qty:200,unit:'ml'},{name:'Ananas',qty:100,unit:'g'},{name:'Lait de coco',qty:30,unit:'ml'}],
     steps:['Couper l\'ananas en morceaux, placer au congélateur 30 minutes — froid naturel sans dilution.','Mixer ananas frais/congelé + eau de coco + lait de coco 20 secondes.','Ajouter la whey, mixer 15 secondes — texture légèrement fibreuse acceptable et désirable.'],
     tips:'Un trait de jus de citron vert pressé juste avant de servir réveille l\'ananas et rehausse le coco : c\'est l\'acidité qui fait la différence entre un piña colada plat et un piña colada vivant.' },
 
   // === VANILLE CANNELLE ===
-  { id:'sm_vanilla_cinn_01', name:'Vanille Cannelle Douce', flavors:['vanilla_cinnamon'], goal:['muscle','recovery'], timing:'anytime', cal:285, p:31, c:20, f:9, prep:'1min',
+  { id:'sm_vanilla_cinn_01', name:'Vanille Cannelle Douce', nameEn:'Sweet Vanilla Cinnamon', flavors:['vanilla_cinnamon'], goal:['muscle','recovery'], timing:'anytime', cal:285, p:31, c:20, f:9, prep:'1min',
     ingredients:[{name:'Whey vanille cannelle',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Cannelle',qty:2,unit:'g'},{name:'Miel',qty:8,unit:'g'}],
     steps:['Faire infuser la cannelle dans le lait froid 5 minutes — elle libère ses arômes sans chaleur.','Ajouter le miel, dissoudre en agitant doucement.','Incorporer la whey, shaker 20 secondes.'],
     tips:'L\'accord vanille-cannelle est un classique de la pâtisserie orientale : la cannelle apporte la chaleur épicée, la vanille la douceur florale. En hiver, c\'est le seul shake qui réchauffe l\'âme après une séance à froid.' },
 
   // === SPÉCULOOS ===
-  { id:'sm_speculoos_01', name:'Sp\u00e9culoos Shake', flavors:['speculoos'], goal:['muscle'], timing:'post', cal:340, p:31, c:33, f:9, prep:'2min',
+  { id:'sm_speculoos_01', name:'Sp\u00e9culoos Shake', nameEn:'Speculoos Shake', flavors:['speculoos'], goal:['muscle'], timing:'post', cal:340, p:31, c:33, f:9, prep:'2min',
     ingredients:[{name:'Whey sp\u00e9culoos',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Banane',qty:80,unit:'g'},{name:'Cannelle',qty:2,unit:'g'}],
     steps:['Écraser la banane très mûre (tachée) à la fourchette — le sucre naturel est à son maximum.','Mixer banane + lait 15 secondes pour une base homogène.','Ajouter whey + cannelle, shaker 15 secondes — ne pas trop mixer pour garder le côté rustique.'],
     tips:'Le spéculoos repose sur la cannelle, la cardamome et la cassonade — une banane très mûre apporte exactement cette cassonade naturelle qui manque à la whey. Choisir une cannelle de Ceylan pour le côté floral.' },
 
   // === CAPPUCCINO ===
-  { id:'sm_cappuccino_01', name:'Cappuccino Glacé', flavors:['cappuccino'], goal:['performance','fat_loss'], timing:'pre', cal:255, p:31, c:13, f:9, prep:'2min',
+  { id:'sm_cappuccino_01', name:'Cappuccino Glacé', nameEn:'Iced Cappuccino', flavors:['cappuccino'], goal:['performance','fat_loss'], timing:'pre', cal:255, p:31, c:13, f:9, prep:'2min',
     ingredients:[{name:'Whey cappuccino',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Caf\u00e9 expresso froid',qty:80,unit:'ml'},{name:'Gla\u00e7ons',qty:80,unit:'g'}],
     steps:['Préparer un ristretto serré, refroidir 5 minutes — éviter l\'expresso long qui dilue les arômes.','Shaker lait + café + glaçons + whey 20 secondes — les glaçons créent une mousse froide naturelle.','Servir immédiatement, boire avant que la mousse ne retombe.'],
     tips:'La mousse d\'un cappuccino vient du contraste chaud-froid lors du shakage — plus les glaçons sont gros, plus la mousse est dense. Un ristretto concentré plutôt qu\'un expresso dilué préserve les arômes de torréfaction.' },
 
   // === PAIN D'ÉPICES ===
-  { id:'sm_gingerbread_01', name:"Pain d'\u00c9pices Hivernal", flavors:['gingerbread'], goal:['recovery','muscle'], timing:'anytime', cal:290, p:31, c:22, f:9, prep:'2min',
+  { id:'sm_gingerbread_01', name:"Pain d'\u00c9pices Hivernal", nameEn:'Winter Gingerbread', flavors:['gingerbread'], goal:['recovery','muscle'], timing:'anytime', cal:290, p:31, c:22, f:9, prep:'2min',
     ingredients:[{name:'Whey pain d\'\u00e9pices',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Gingembre r\u00e2p\u00e9',qty:5,unit:'g'},{name:'Miel',qty:10,unit:'g'}],
     steps:['Râper le gingembre très finement sur une microplane — la pulpe et le jus, pas les fibres.','Faire infuser le gingembre râpé dans le lait froid 3 minutes avant de mixer.','Ajouter whey + miel, mixer 20 secondes — saupoudrer de cannelle sur la mousse avant de servir.'],
     tips:'Le pain d\'épices traditionnel associe gingembre, cannelle, anis étoilé et muscade — le gingembre frais apporte un piquant vivant que le gingembre sec ne peut pas reproduire. Une pincée de muscade râpée change tout le profil.' },
 
   // === RASPBERRY #2-3 ===
-  { id:'sm_rasp_02', name:'Framboise Coco Flash', flavors:['raspberry'], goal:['fat_loss','recovery'], timing:'post', cal:192, p:25, c:19, f:2, prep:'1min',
+  { id:'sm_rasp_02', name:'Framboise Coco Flash', nameEn:'Raspberry Coco Flash', flavors:['raspberry'], goal:['fat_loss','recovery'], timing:'post', cal:192, p:25, c:19, f:2, prep:'1min',
     ingredients:[{name:'Whey framboise',qty:30,unit:'g'},{name:'Eau de coco',qty:200,unit:'ml'},{name:'Fraises congelées',qty:80,unit:'g'}],
     steps:['Verser l\'eau de coco bien froide dans le shaker.','Ajouter la whey framboise et shaker vigoureusement 25 secondes pour une mousse légère.','Écraser grossièrement les fraises congelées à la fourchette et déposer dans le verre — ne pas mixer, conserver la texture en morceaux.'],
     tips:'L\'eau de coco amplifie la rondeur sucrée de la framboise sans sucre ajouté. La fraise écrasée en garniture apporte une dimension texturale que le mixage détruirait.' },
-  { id:'sm_rasp_03', name:'Framboise Myrtille Grec', flavors:['raspberry'], goal:['muscle','recovery'], timing:'post', cal:253, p:35, c:24, f:2, prep:'3min',
+  { id:'sm_rasp_03', name:'Framboise Myrtille Grec', nameEn:'Raspberry Blueberry Greek', flavors:['raspberry'], goal:['muscle','recovery'], timing:'post', cal:253, p:35, c:24, f:2, prep:'3min',
     ingredients:[{name:'Whey framboise',qty:30,unit:'g'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Myrtilles congelées',qty:80,unit:'g'},{name:'Miel',qty:10,unit:'g'},{name:'Glaçons',qty:100,unit:'g'}],
     steps:['Placer les myrtilles congelées + glaçons dans le blender, mixer 10 secondes — la base doit être granuleuse, pas encore lisse.','Ajouter yaourt grec, whey, miel ; mixer 30 secondes à puissance maximum jusqu\'à texture veloutée.','Verser en inclinant le verre pour préserver la mousse, servir aussitôt.'],
     tips:'Framboise + myrtille forment l\'accord "fruits rouges d\'altitude" : acidité vive de la framboise, profondeur tannique de la myrtille. Le miel doit être ajouté après le yaourt, jamais en premier.' },
 
   // === CARAMEL SALÉ #2-3 ===
-  { id:'sm_caramel_02', name:'Caramel Lait Flash', flavors:['caramel_sale'], goal:['muscle','performance'], timing:'anytime', cal:280, p:32, c:15, f:10, prep:'1min',
+  { id:'sm_caramel_02', name:'Caramel Lait Flash', nameEn:'Milk Caramel Flash', flavors:['caramel_sale'], goal:['muscle','performance'], timing:'anytime', cal:280, p:32, c:15, f:10, prep:'1min',
     ingredients:[{name:'Whey caramel salé',qty:30,unit:'g'},{name:'Lait entier',qty:250,unit:'ml'}],
     steps:['Refroidir le shaker 2 minutes au congélateur avant usage.','Verser le lait entier glacé, ajouter la whey, shaker 30 secondes vigoureusement.','Servir dans un verre froid et consommer immédiatement.'],
     tips:'Un shaker froid produit une mousse plus serrée et exalte les notes de caramel beurré — la température est un ingrédient à part entière.' },
-  { id:'sm_caramel_03', name:'Caramel Banane Peanut Power', flavors:['caramel_sale'], goal:['muscle','performance'], timing:'pre', cal:391, p:34, c:37, f:12, prep:'4min',
+  { id:'sm_caramel_03', name:'Caramel Banane Peanut Power', nameEn:'Caramel Banana Peanut Power', flavors:['caramel_sale'], goal:['muscle','performance'], timing:'pre', cal:391, p:34, c:37, f:12, prep:'4min',
     ingredients:[{name:'Whey caramel salé',qty:30,unit:'g'},{name:'Banane',qty:100,unit:'g'},{name:'Beurre de cacahuète',qty:15,unit:'g'},{name:'Lait demi-écrémé',qty:150,unit:'ml'}],
     steps:['Congeler la banane 1 heure avant — texture crémeuse garantie sans glaçons.','Mixer banane congelée + lait à vitesse croissante, 20 secondes.','Ajouter whey + beurre de cacahuète, mixer 20 secondes supplémentaires.','Terminer par une pincée de fleur de sel sur la mousse.'],
     tips:'Le mariage cacahuète-caramel salé est un classique de la confiserie de luxe : le gras de la cacahuète arrondit l\'amertume du caramel, la banane apporte la rondeur sucrée naturelle.' },
 
   // === COOKIES & CREAM #2-3 ===
-  { id:'sm_cookies_02', name:'Cookies Cacao Shaker', flavors:['cookies_cream'], goal:['muscle','fat_loss'], timing:'post', cal:282, p:34, c:20, f:8, prep:'1min',
+  { id:'sm_cookies_02', name:'Cookies Cacao Shaker', nameEn:'Cocoa Cookies Shaker', flavors:['cookies_cream'], goal:['muscle','fat_loss'], timing:'post', cal:282, p:34, c:20, f:8, prep:'1min',
     ingredients:[{name:'Whey cookies',qty:30,unit:'g'},{name:'Lait demi-écrémé',qty:250,unit:'ml'},{name:'Cacao pur',qty:10,unit:'g'}],
     steps:['Verser le lait dans le shaker, incorporer le cacao en pluie fine en agitant doucement — il se disperse sans coller.','Ajouter la whey cookies, fermer et shaker 30 secondes à amplitude maximale.','Servir dans un verre froid dès la fin du shaking pour profiter de la mousse.'],
     tips:'Le cacao froid se disperse mieux que le cacao ajouté après la whey — une astuce de pâtissier pour un résultat sans grumeaux ni fond chocolaté.' },
-  { id:'sm_cookies_03', name:'Cookies Cream Banana Split', flavors:['cookies_cream'], goal:['muscle'], timing:'post', cal:363, p:41, c:28, f:10, prep:'4min',
+  { id:'sm_cookies_03', name:'Cookies Cream Banana Split', nameEn:'Cookies Cream Banana Split', flavors:['cookies_cream'], goal:['muscle'], timing:'post', cal:363, p:41, c:28, f:10, prep:'4min',
     ingredients:[{name:'Whey cookies',qty:30,unit:'g'},{name:'Fromage blanc 0%',qty:100,unit:'g'},{name:'Banane',qty:80,unit:'g'},{name:'Beurre de cacahuète',qty:15,unit:'g'}],
     steps:['Congeler la banane 2 heures — elle remplace la glace et donne une texture soft-serve naturelle.','Mixer fromage blanc + banane + beurre de cacahuète 30 secondes à pleine puissance.','Ajouter la whey, mixer 15 secondes — ne pas trop mixer pour garder la texture épaisse.'],
     tips:'Ce smoothie se mange à la cuillère, pas à la paille : épaisseur de crème glacée, richesse d\'un brownie, légèreté d\'un dessert protéiné. Dispersez quelques éclats de cacao grué sur le dessus.' },
 
   // === TIRAMISU #2-3 ===
-  { id:'sm_tiramisu_02', name:'Tiramisu Expresso Shaker', flavors:['tiramisu'], goal:['performance','muscle'], timing:'pre', cal:249, p:31, c:12, f:9, prep:'1min',
+  { id:'sm_tiramisu_02', name:'Tiramisu Expresso Shaker', nameEn:'Espresso Tiramisu Shaker', flavors:['tiramisu'], goal:['performance','muscle'], timing:'pre', cal:249, p:31, c:12, f:9, prep:'1min',
     ingredients:[{name:'Whey tiramisu',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Café expresso froid',qty:60,unit:'ml'}],
     steps:['Préparer un ristretto serré, laisser refroidir 5 minutes — un expresso trop dilué noie les arômes.','Verser lait + café dans le shaker, ajouter la whey, shaker 20 secondes.','Servir aussitôt pour que le café conserve toute sa puissance aromatique.'],
     tips:'Un ristretto plutôt qu\'un long expresso concentre les arômes torréfiés sans excès d\'eau — la caféine active les performances, l\'intensité aromatique fait le reste.' },
-  { id:'sm_tiramisu_03', name:'Tiramisu Fromage Blanc Café', flavors:['tiramisu'], goal:['fat_loss','muscle'], timing:'anytime', cal:263, p:44, c:13, f:4, prep:'3min',
+  { id:'sm_tiramisu_03', name:'Tiramisu Fromage Blanc Café', nameEn:'Tiramisu White Cheese Coffee', flavors:['tiramisu'], goal:['fat_loss','muscle'], timing:'anytime', cal:263, p:44, c:13, f:4, prep:'3min',
     ingredients:[{name:'Whey tiramisu',qty:30,unit:'g'},{name:'Fromage blanc 0%',qty:150,unit:'g'},{name:'Café expresso froid',qty:80,unit:'ml'},{name:'Cacao pur',qty:10,unit:'g'},{name:'Cannelle',qty:2,unit:'g'}],
     steps:['Verser le café froid dans le blender en premier — il va "dissoudre" le fromage blanc en douceur.','Ajouter fromage blanc + whey + cacao, mixer 15 secondes.','Incorporer la cannelle en dernier, mixer 5 secondes — elle ne doit pas disparaître dans la masse.','Saupoudrer généreusement de cacao non sucré avant de servir.'],
     tips:'La cannelle est le secret du tiramisu napolitain : une touche épicée qui soulève les notes café-cacao et rappelle le vrai mascarpone.' },
 
   // === ORANGE #2-3 ===
-  { id:'sm_orange_02', name:'Orange Coco Vitesse', flavors:['orange'], goal:['fat_loss','recovery'], timing:'post', cal:173, p:25, c:15, f:2, prep:'1min',
+  { id:'sm_orange_02', name:'Orange Coco Vitesse', nameEn:'Orange Coco Speed', flavors:['orange'], goal:['fat_loss','recovery'], timing:'post', cal:173, p:25, c:15, f:2, prep:'1min',
     ingredients:[{name:'Whey orange',qty:30,unit:'g'},{name:'Eau de coco',qty:250,unit:'ml'}],
     steps:['Utiliser une eau de coco sortie du réfrigérateur — jamais à température ambiante.','Verser dans le shaker, ajouter la whey orange, shaker 20 secondes.','Servir dans un verre givré pour maximiser la sensation de fraîcheur.'],
     tips:'L\'eau de coco froide accentue le côté agrumes de la whey orange — deux sources d\'électrolytes qui se renforcent mutuellement pour une récupération cardio optimale.' },
-  { id:'sm_orange_03', name:'Orange Ananas Tropical Grec', flavors:['orange'], goal:['recovery','performance'], timing:'post', cal:264, p:35, c:27, f:2, prep:'4min',
+  { id:'sm_orange_03', name:'Orange Ananas Tropical Grec', nameEn:'Orange Pineapple Tropical Greek', flavors:['orange'], goal:['recovery','performance'], timing:'post', cal:264, p:35, c:27, f:2, prep:'4min',
     ingredients:[{name:'Whey orange',qty:30,unit:'g'},{name:'Ananas',qty:120,unit:'g'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Eau de coco',qty:100,unit:'ml'}],
     steps:['Couper l\'ananas en cubes, placer au congélateur 30 minutes pour intensifier la fraîcheur.','Mixer eau de coco + ananas frais 20 secondes, puis ajouter yaourt + whey.','Mixer 20 secondes, décorer de dés d\'ananas frais en surface.'],
     tips:'La bromélaïne de l\'ananas frais — jamais cuit ni pasteurisé — agit directement sur l\'inflammation musculaire. L\'association orange + ananas crée une acidité vive qui réveille sans agresser.' },
 
   // === BIRTHDAY CAKE #2-3 ===
-  { id:'sm_birthday_02', name:'Birthday Shake Express', flavors:['birthday_cake'], goal:['muscle'], timing:'anytime', cal:217, p:31, c:12, f:5, prep:'1min',
+  { id:'sm_birthday_02', name:'Birthday Shake Express', nameEn:'Birthday Express Shake', flavors:['birthday_cake'], goal:['muscle'], timing:'anytime', cal:217, p:31, c:12, f:5, prep:'1min',
     ingredients:[{name:'Whey birthday cake',qty:30,unit:'g'},{name:'Lait demi-écrémé',qty:200,unit:'ml'}],
     steps:['Mettre le shaker et le lait au réfrigérateur 10 minutes avant.','Verser lait froid, ajouter whey birthday cake, shaker 20 secondes fermes.','Servir immédiatement pour profiter de la texture mousseuse.'],
     tips:'Boire dans les 3 minutes après shaking pour profiter de la texture mousseuse maximale — au-delà, la mousse retombe et le shake perd son côté festif.' },
@@ -5359,151 +5359,151 @@ var WHEY_SMOOTHIES = [
     tips:'Le miel de fleurs d\'oranger sur une base birthday cake crée une complexité aromatique inattendue — floral, vanillé, fruité. Consommer dans les 30 minutes post-entraînement pour maximiser la synthèse glycogénique.' },
 
   // === CANNELLE #2-3 ===
-  { id:'sm_cinnamon_02', name:'Cannelle Pure Power', flavors:['cinnamon'], goal:['fat_loss'], timing:'anytime', cal:126, p:24, c:4, f:2, prep:'1min',
+  { id:'sm_cinnamon_02', name:'Cannelle Pure Power', nameEn:'Pure Cinnamon Power', flavors:['cinnamon'], goal:['fat_loss'], timing:'anytime', cal:126, p:24, c:4, f:2, prep:'1min',
     ingredients:[{name:'Whey cannelle',qty:30,unit:'g'},{name:'Eau',qty:250,unit:'ml'},{name:'Cannelle',qty:2,unit:'g'}],
     steps:['Verser l\'eau froide dans le shaker, ajouter la cannelle en premier et agiter 5 secondes pour la disperser.','Incorporer la whey cannelle, shaker 20 secondes.','Servir aussitôt — la cannelle se redépose rapidement si laissée au repos.'],
     tips:'Eau très froide + cannelle = amertume nulle, arôme épicé net. Pour réguler la glycémie en même temps qu\'on hydrate : une association rare et efficace.' },
-  { id:'sm_cinnamon_03', name:'Bowl Cannelle Douce', flavors:['cinnamon'], goal:['muscle','recovery'], timing:'post', cal:326, p:41, c:36, f:2, prep:'3min',
+  { id:'sm_cinnamon_03', name:'Bowl Cannelle Douce', nameEn:'Sweet Cinnamon Bowl', flavors:['cinnamon'], goal:['muscle','recovery'], timing:'post', cal:326, p:41, c:36, f:2, prep:'3min',
     ingredients:[{name:'Whey cannelle',qty:30,unit:'g'},{name:'Yaourt grec 0%',qty:150,unit:'g'},{name:'Banane',qty:80,unit:'g'},{name:'Cannelle',qty:2,unit:'g'},{name:'Miel',qty:10,unit:'g'}],
     steps:['Mixer banane + yaourt grec + miel 20 secondes — base crémeuse bien homogène.','Ajouter whey + cannelle, mixer 15 secondes à vitesse réduite pour préserver les arômes volatils.','Verser dans un bol, garnir d\'un trait de miel et d\'une pincée de cannelle pour le service.'],
     tips:'Le miel de châtaignier renforce les notes épicées de la cannelle là où le miel toutes fleurs les adoucit — choisissez selon l\'intensité souhaitée. Ce bol protéiné se sert à température fraîche, pas glacée.' },
 
   // === CHEESECAKE CITRON #2-3 ===
-  { id:'sm_cheesecake_02', name:'Cheesecake Frais Express', flavors:['cheesecake_citron'], goal:['fat_loss','muscle'], timing:'anytime', cal:218, p:42, c:8, f:2, prep:'1min',
+  { id:'sm_cheesecake_02', name:'Cheesecake Frais Express', nameEn:'Fresh Cheesecake Express', flavors:['cheesecake_citron'], goal:['fat_loss','muscle'], timing:'anytime', cal:218, p:42, c:8, f:2, prep:'1min',
     ingredients:[{name:'Whey cheesecake citron',qty:30,unit:'g'},{name:'Fromage blanc 0%',qty:150,unit:'g'},{name:'Jus de citron',qty:30,unit:'ml'}],
     steps:['Verser le fromage blanc dans un bol, fouetter 10 secondes à la main pour l\'aérer légèrement.','Ajouter whey + jus de citron, shaker ou fouet 20 secondes — conserver la texture dense.','Réfrigérer 5 minutes avant de déguster pour que la texture se raffermisse.'],
     tips:'Le fromage blanc fouetté avant l\'ajout de la whey incorpore de l\'air et donne une texture beaucoup plus légère — comme une mousse de cheesecake plutôt qu\'un simple shake.' },
-  { id:'sm_cheesecake_03', name:'Fraise Cheesecake Glacé', flavors:['cheesecake_citron'], goal:['fat_loss','recovery'], timing:'anytime', cal:246, p:35, c:22, f:2, prep:'4min',
+  { id:'sm_cheesecake_03', name:'Fraise Cheesecake Glacé', nameEn:'Frozen Strawberry Cheesecake', flavors:['cheesecake_citron'], goal:['fat_loss','recovery'], timing:'anytime', cal:246, p:35, c:22, f:2, prep:'4min',
     ingredients:[{name:'Whey cheesecake citron',qty:30,unit:'g'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Fraises congelées',qty:100,unit:'g'},{name:'Miel',qty:10,unit:'g'},{name:'Glaçons',qty:100,unit:'g'}],
     steps:['Ne jamais décongeler les fraises — elles tempèrent le miel et maintiennent la fraîcheur.','Placer yaourt + fraises congelées + miel dans le blender, mixer 30 secondes.','Ajouter whey + glaçons, mixer 20 secondes à pleine puissance pour une texture glacée dense.'],
     tips:'Les fraises congelées + citron de la whey créent un accord acidulé-fruité typique du cheesecake new-yorkais : ne pas sucrer davantage — l\'équilibre est déjà parfait.' },
 
   // === TOFFEE #2-3 ===
-  { id:'sm_toffee_02', name:'Toffee Lait Flash', flavors:['toffee'], goal:['muscle'], timing:'anytime', cal:253, p:31, c:12, f:9, prep:'1min',
+  { id:'sm_toffee_02', name:'Toffee Lait Flash', nameEn:'Toffee Milk Flash', flavors:['toffee'], goal:['muscle'], timing:'anytime', cal:253, p:31, c:12, f:9, prep:'1min',
     ingredients:[{name:'Whey toffee',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'}],
     steps:['Sortir le lait du réfrigérateur au dernier moment — lait à 4°C maximum.','Verser dans le shaker, ajouter whey toffee, shaker 20 secondes à amplitude complète.','Servir immédiatement dans un verre froid pour préserver la saveur caramel.'],
     tips:'Le lait entier est le seul medium qui révèle le toffee dans toute sa complexité : les matières grasses portent les arômes caramel beurré là où l\'eau ou le lait écrémé les aplatissent.' },
-  { id:'sm_toffee_03', name:'Toffee Banane Cacahuète', flavors:['toffee'], goal:['muscle','performance'], timing:'pre', cal:392, p:34, c:37, f:12, prep:'4min',
+  { id:'sm_toffee_03', name:'Toffee Banane Cacahuète', nameEn:'Toffee Banana Peanut', flavors:['toffee'], goal:['muscle','performance'], timing:'pre', cal:392, p:34, c:37, f:12, prep:'4min',
     ingredients:[{name:'Whey toffee',qty:30,unit:'g'},{name:'Banane',qty:100,unit:'g'},{name:'Beurre de cacahuète',qty:15,unit:'g'},{name:'Lait demi-écrémé',qty:150,unit:'ml'},{name:'Glaçons',qty:100,unit:'g'}],
     steps:['Congeler la banane 1 heure avant.','Mixer banane congelée + lait à vitesse progressive, 20 secondes.','Ajouter whey + beurre de cacahuète + glaçons, mixer 30 secondes à pleine puissance.'],
     tips:'Toffee + cacahuète + banane mûre : c\'est l\'accord Banoffee transposé en pre-workout. Les glucides rapides de la banane se combinent parfaitement à l\'énergie lente de la cacahuète — consommer 45 minutes avant l\'effort.' },
 
   // === CHOCOLAT BLANC #2-3 ===
-  { id:'sm_whitechoc_02', name:'Coco Blanc Léger', flavors:['white_chocolate'], goal:['fat_loss','recovery'], timing:'anytime', cal:178, p:25, c:15, f:2, prep:'1min',
+  { id:'sm_whitechoc_02', name:'Coco Blanc Léger', nameEn:'Light White Coco', flavors:['white_chocolate'], goal:['fat_loss','recovery'], timing:'anytime', cal:178, p:25, c:15, f:2, prep:'1min',
     ingredients:[{name:'Whey chocolat blanc',qty:30,unit:'g'},{name:'Eau de coco',qty:250,unit:'ml'}],
     steps:['Utiliser une eau de coco bien froide, sortie du réfrigérateur.','Verser dans le shaker, ajouter whey chocolat blanc, shaker 20 secondes.','Servir immédiatement dans un verre givré.'],
     tips:'L\'accord chocolat blanc + noix de coco est l\'un des plus classiques de la pâtisserie — deux sources de sucrosité douce qui se complètent sans se dominer. Idéal après un effort sous la chaleur.' },
-  { id:'sm_whitechoc_03', name:'Chocolat Blanc Myrtille Amande', flavors:['white_chocolate'], goal:['muscle','recovery'], timing:'post', cal:337, p:33, c:22, f:13, prep:'4min',
+  { id:'sm_whitechoc_03', name:'Chocolat Blanc Myrtille Amande', nameEn:'White Chocolate Blueberry Almond', flavors:['white_chocolate'], goal:['muscle','recovery'], timing:'post', cal:337, p:33, c:22, f:13, prep:'4min',
     ingredients:[{name:'Whey chocolat blanc',qty:30,unit:'g'},{name:'Lait demi-écrémé',qty:150,unit:'ml'},{name:'Myrtilles congelées',qty:80,unit:'g'},{name:'Purée d\'amande',qty:15,unit:'g'},{name:'Glaçons',qty:100,unit:'g'}],
     steps:['Verser le lait + myrtilles congelées + glaçons dans le blender, mixer 30 secondes — base violet intense.','Ajouter purée d\'amande, mixer 10 secondes pour l\'incorporer sans l\'homogénéiser complètement.','Ajouter la whey, mixer 15 secondes à vitesse réduite.'],
     tips:'Le trio chocolat blanc-myrtille-amande est un accord signature : la myrtille apporte acidité et couleur, l\'amande une note torréfiée qui rappelle le praliné blanc, le chocolat blanc arrondit l\'ensemble.' },
 
   // === PIÑA COLADA #2-3 ===
-  { id:'sm_pina_02', name:'Coco Express', flavors:['pina_colada'], goal:['muscle','performance'], timing:'post', cal:173, p:25, c:15, f:2, prep:'1min',
+  { id:'sm_pina_02', name:'Coco Express', nameEn:'Coco Express', flavors:['pina_colada'], goal:['muscle','performance'], timing:'post', cal:173, p:25, c:15, f:2, prep:'1min',
     ingredients:[{name:'Whey piña colada',qty:30,unit:'g'},{name:'Eau de coco',qty:250,unit:'ml'}],
     steps:['Utiliser de l\'eau de coco nature — non sucrée, non aromatisée, sortie du réfrigérateur.','Verser dans le shaker, ajouter la whey piña colada, shaker 20 secondes.','Servir dans un verre glacé pour une expérience tropicale rafraîchissante.'],
     tips:'Ce shake minimaliste repose entièrement sur la qualité de la whey — une eau de coco bien froide fait ressortir les notes d\'ananas et de noix de coco sans artifice.' },
-  { id:'sm_pina_03', name:'Tropicale Crémeuse', flavors:['pina_colada'], goal:['muscle','recovery'], timing:'post', cal:217, p:25, c:21, f:4, prep:'3min',
+  { id:'sm_pina_03', name:'Tropicale Crémeuse', nameEn:'Creamy Tropical', flavors:['pina_colada'], goal:['muscle','recovery'], timing:'post', cal:217, p:25, c:21, f:4, prep:'3min',
     ingredients:[{name:'Whey piña colada',qty:30,unit:'g'},{name:'Ananas',qty:100,unit:'g'},{name:'Eau de coco',qty:100,unit:'ml'},{name:'Lait de coco',qty:30,unit:'ml'},{name:'Glaçons',qty:100,unit:'g'}],
     steps:['Couper l\'ananas, mixer avec les glaçons 20 secondes — base granita d\'ananas.','Ajouter eau de coco + lait de coco, mixer 10 secondes.','Incorporer la whey, mixer 15 secondes, ajouter un trait de citron vert avant de servir.'],
     tips:'Le lait de coco est gras et crémeux, l\'eau de coco est légère et sucrée — les deux ensemble donnent exactement la texture d\'un vrai piña colada. Le citron vert est indispensable pour la finition.' },
 
   // === VANILLE CANNELLE #2-3 ===
-  { id:'sm_vanilla_cinn_02', name:'Lait Vanille Cannelle Flash', flavors:['vanilla_cinnamon'], goal:['muscle','recovery'], timing:'anytime', cal:253, p:31, c:13, f:9, prep:'1min',
+  { id:'sm_vanilla_cinn_02', name:'Lait Vanille Cannelle Flash', nameEn:'Vanilla Cinnamon Milk Flash', flavors:['vanilla_cinnamon'], goal:['muscle','recovery'], timing:'anytime', cal:253, p:31, c:13, f:9, prep:'1min',
     ingredients:[{name:'Whey vanille cannelle',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Cannelle',qty:2,unit:'g'}],
     steps:['Infuser la cannelle dans le lait entier froid 3 minutes avant de shaker.','Ajouter la whey vanille cannelle, shaker 25 secondes vigoureusement.','Servir dans un verre froid, saupoudrer une pincée de cannelle au service.'],
     tips:'Lait entier + cannelle infusée à froid : la texture est onctueuse, la cannelle est diffuse mais présente — jamais dominante. C\'est un lait de Noël protéiné.' },
-  { id:'sm_vanilla_cinn_03', name:'Banana Vanille Épicée', flavors:['vanilla_cinnamon'], goal:['muscle','performance'], timing:'pre', cal:333, p:44, c:32, f:3, prep:'4min',
+  { id:'sm_vanilla_cinn_03', name:'Banana Vanille Épicée', nameEn:'Spiced Banana Vanilla', flavors:['vanilla_cinnamon'], goal:['muscle','performance'], timing:'pre', cal:333, p:44, c:32, f:3, prep:'4min',
     ingredients:[{name:'Whey vanille cannelle',qty:30,unit:'g'},{name:'Yaourt grec 0%',qty:150,unit:'g'},{name:'Banane',qty:80,unit:'g'},{name:'Lait demi-écrémé',qty:100,unit:'ml'},{name:'Cannelle',qty:2,unit:'g'}],
     steps:['Congeler la banane à l\'avance — texture naturellement glacée et sucrosité concentrée.','Placer yaourt + banane congelée + lait dans le blender, mixer 20 secondes.','Ajouter whey + cannelle, mixer 15 secondes à vitesse modérée.'],
     tips:'Yaourt grec + vanille + cannelle + banane : c\'est l\'accord d\'un lassi indien raffiné. Riche en protéines, en glucides lents, parfait 45 minutes avant une séance longue durée.' },
 
   // === SPÉCULOOS #2-3 ===
-  { id:'sm_speculoos_02', name:'Shaker Biscuit Lacté', flavors:['speculoos'], goal:['muscle','fat_loss'], timing:'post', cal:237, p:32, c:16, f:5, prep:'1min',
+  { id:'sm_speculoos_02', name:'Shaker Biscuit Lacté', nameEn:'Milk Biscuit Shaker', flavors:['speculoos'], goal:['muscle','fat_loss'], timing:'post', cal:237, p:32, c:16, f:5, prep:'1min',
     ingredients:[{name:'Whey spéculoos',qty:30,unit:'g'},{name:'Lait demi-écrémé',qty:250,unit:'ml'},{name:'Cannelle',qty:2,unit:'g'}],
     steps:['Verser le lait froid dans le shaker, ajouter la cannelle en premier.','Ajouter la whey spéculoos, shaker 20 secondes à amplitude maximale.','Servir immédiatement pour profiter de la texture mousseuse et des arômes de biscuit.'],
     tips:'La cannelle dans un lait froid diffuse lentement ses arômes — si vous préparez ce shake 2 minutes avant de le boire, laissez la cannelle reposer dans le lait avant de fermer le shaker.' },
-  { id:'sm_speculoos_03', name:'Fromage Blanc Épice Dorée', flavors:['speculoos'], goal:['fat_loss','muscle'], timing:'anytime', cal:319, p:43, c:33, f:2, prep:'4min',
+  { id:'sm_speculoos_03', name:'Fromage Blanc Épice Dorée', nameEn:'Spiced Cream Cheese Bowl', flavors:['speculoos'], goal:['fat_loss','muscle'], timing:'anytime', cal:319, p:43, c:33, f:2, prep:'4min',
     ingredients:[{name:'Whey spéculoos',qty:30,unit:'g'},{name:'Fromage blanc 0%',qty:150,unit:'g'},{name:'Banane',qty:70,unit:'g'},{name:'Miel',qty:10,unit:'g'},{name:'Cannelle',qty:2,unit:'g'}],
     steps:['Couper la banane mûre, mixer avec fromage blanc + miel 20 secondes.','Ajouter whey + cannelle, mixer 15 secondes — s\'arrêter à texture de crème épaisse.','Servir en bol avec quelques éclats de spéculoos émiettés en surface si macro permettent.'],
     tips:'Ce bol protéiné rappelle un biscuit belge reconstitué à la cuillère : fromage blanc pour la fraîcheur, miel pour le caramel, cannelle pour la chaleur épicée — les trois piliers du spéculoos.' },
 
   // === CAPPUCCINO #2-3 ===
-  { id:'sm_cappuccino_02', name:'Expresso Lait Flash', flavors:['cappuccino'], goal:['performance','muscle'], timing:'pre', cal:253, p:31, c:13, f:9, prep:'1min',
+  { id:'sm_cappuccino_02', name:'Expresso Lait Flash', nameEn:'Espresso Milk Flash', flavors:['cappuccino'], goal:['performance','muscle'], timing:'pre', cal:253, p:31, c:13, f:9, prep:'1min',
     ingredients:[{name:'Whey cappuccino',qty:30,unit:'g'},{name:'Café expresso froid',qty:100,unit:'ml'},{name:'Lait entier',qty:200,unit:'ml'}],
     steps:['Préparer un double ristretto (pas un long expresso), laisser refroidir à température ambiante — jamais le mettre chaud au shaker.','Verser café refroidi + lait dans le shaker, ajouter la whey, shaker 20 secondes.','Servir dans un verre givre et déguster aussitôt.'],
     tips:'Un double ristretto concentre les arômes de café sans excès d\'eau — la caféine est identique mais le goût est deux fois plus intense. C\'est la base d\'un cappuccino digne d\'un bar milanais.' },
-  { id:'sm_cappuccino_03', name:'Frozen Cappuccino Banana', flavors:['cappuccino'], goal:['muscle','recovery'], timing:'post', cal:255, p:35, c:25, f:2, prep:'4min',
+  { id:'sm_cappuccino_03', name:'Frozen Cappuccino Banana', nameEn:'Frozen Cappuccino Banana', flavors:['cappuccino'], goal:['muscle','recovery'], timing:'post', cal:255, p:35, c:25, f:2, prep:'4min',
     ingredients:[{name:'Whey cappuccino',qty:30,unit:'g'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Café expresso froid',qty:50,unit:'ml'},{name:'Banane',qty:80,unit:'g'},{name:'Glaçons',qty:100,unit:'g'}],
     steps:['Préparer l\'expresso, laisser refroidir. Couper la banane en rondelles, congeler 20 minutes.','Mixer yaourt + café + banane congelée 30 secondes.','Ajouter whey + glaçons, mixer 15 secondes — texture semi-glacée.'],
     tips:'Banane mûre + café : le sucre naturel de la banane contrebalance l\'amertume de l\'expresso exactement comme le sucre dans un cappuccino traditionnel — mais avec des glucides de qualité.' },
 
   // === PAIN D'ÉPICES #2-3 ===
-  { id:'sm_gingerbread_02', name:"Shaker Pain d'Épices Lacté", flavors:['gingerbread'], goal:['muscle','recovery'], timing:'post', cal:233, p:32, c:15, f:5, prep:'1min',
+  { id:'sm_gingerbread_02', name:"Shaker Pain d'Épices Lacté", nameEn:'Milky Gingerbread Shaker', flavors:['gingerbread'], goal:['muscle','recovery'], timing:'post', cal:233, p:32, c:15, f:5, prep:'1min',
     ingredients:[{name:"Whey pain d'épices",qty:30,unit:'g'},{name:'Lait demi-écrémé',qty:250,unit:'ml'},{name:'Gingembre râpé',qty:5,unit:'g'}],
     steps:['Râper finement le gingembre frais, récupérer le jus en pressant la pulpe entre les doigts.','Verser lait froid + jus de gingembre dans le shaker, ajouter la whey, shaker 25 secondes.','Servir dans un verre froid et consommer dans les 5 minutes.'],
     tips:'Le jus de gingembre pressé se disperse mieux que la pulpe râpée — texture plus lisse, piquant mieux distribué. Ce shake est un digestif autant qu\'une récupération musculaire.' },
-  { id:'sm_gingerbread_03', name:'Bol Épicé Fromage Banane', flavors:['gingerbread'], goal:['fat_loss','muscle'], timing:'anytime', cal:315, p:43, c:32, f:2, prep:'4min',
+  { id:'sm_gingerbread_03', name:'Bol Épicé Fromage Banane', nameEn:'Spiced Cheese Banana Bowl', flavors:['gingerbread'], goal:['fat_loss','muscle'], timing:'anytime', cal:315, p:43, c:32, f:2, prep:'4min',
     ingredients:[{name:"Whey pain d'épices",qty:30,unit:'g'},{name:'Fromage blanc 0%',qty:150,unit:'g'},{name:'Banane',qty:70,unit:'g'},{name:'Gingembre râpé',qty:5,unit:'g'},{name:'Miel',qty:10,unit:'g'}],
     steps:['Couper la banane, l\'écraser avec le miel à la fourchette pour former une pâte homogène.','Mixer pâte banane-miel + fromage blanc 15 secondes.','Ajouter whey + gingembre très finement râpé, mixer 15 secondes — le gingembre en dernier pour préserver ses huiles essentielles.'],
     tips:'Gingembre + miel + cannelle : c\'est le trinôme du pain d\'épices alsacien. La finesse du râpage du gingembre est critique — trop grossier, il donne une texture fibreuse désagréable ; très fin, il se fond et parfume sans agresser.' },
 
   // === CHOCOLAT #5-11 ===
-  { id:'sm_choco_05', name:'Forêt Noire Express', flavors:['chocolate'], goal:['fat_loss'], timing:'post', cal:234, p:36, c:18, f:2, prep:'1min',
+  { id:'sm_choco_05', name:'Forêt Noire Express', nameEn:'Black Forest Express', flavors:['chocolate'], goal:['fat_loss'], timing:'post', cal:234, p:36, c:18, f:2, prep:'1min',
     ingredients:[{name:'Whey chocolat',qty:30,unit:'g'},{name:'Fraises congelées',qty:150,unit:'g'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Eau',qty:100,unit:'ml'}],
     steps:['Placer le yaourt grec au congélateur 15 minutes avant — légèrement pris, il donnera une texture quasi-glacée incomparable.','Verser l\'eau dans le blender, ajouter les fraises congelées puis le yaourt froid.','Incorporer la whey chocolat en dernier, mixer 40 secondes — la consistance doit évoquer un sorbet mousseux.'],
     tips:'Le yaourt grec légèrement congelé remplace avantageusement la crème dans une Forêt Noire : même onctuosité, acidité lactique en bonus, zéro culpabilité.' },
-  { id:'sm_choco_06', name:'Avocat Noir', flavors:['chocolate'], goal:['muscle'], timing:'anytime', cal:419, p:34, c:19, f:23, prep:'3min',
+  { id:'sm_choco_06', name:'Avocat Noir', nameEn:'Avocado Dark', flavors:['chocolate'], goal:['muscle'], timing:'anytime', cal:419, p:34, c:19, f:23, prep:'3min',
     ingredients:[{name:'Whey chocolat',qty:30,unit:'g'},{name:'Avocat',qty:75,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Cacao pur',qty:10,unit:'g'}],
     steps:['Utiliser un avocat à température ambiante (jamais réfrigéré) — ses graisses s\'émulsionnent deux fois mieux à 20 °C qu\'à 4 °C.','Mixer l\'avocat avec le lait entier 20 secondes seuls pour créer une crème de base parfaitement lisse.','Tamiser le cacao pur et ajouter la whey, mixer 60 secondes supplémentaires à haute vitesse.','Ajouter 1 pincée de piment d\'Espelette au service — elle amplifie les notes amères du cacao sans apporter de chaleur perceptible.'],
     tips:'L\'avocat est le beurre de cacao du monde végétal : même onctuosité, mêmes acides gras mono-insaturés. Avec du cacao pur, vous obtenez un smoothie dont la texture rappelle une ganache — luxueux, et pourtant sain.' },
-  { id:'sm_choco_07', name:'Jaffa Power', flavors:['chocolate'], goal:['performance'], timing:'pre', cal:266, p:26, c:36, f:2, prep:'1min',
+  { id:'sm_choco_07', name:'Jaffa Power', nameEn:'Jaffa Power', flavors:['chocolate'], goal:['performance'], timing:'pre', cal:266, p:26, c:36, f:2, prep:'1min',
     ingredients:[{name:'Whey chocolat',qty:30,unit:'g'},{name:"Jus d'orange",qty:150,unit:'ml'},{name:'Banane',qty:80,unit:'g'},{name:'Eau',qty:50,unit:'ml'}],
     steps:['Utiliser le jus d\'une orange pressée à la main plutôt qu\'un jus industriel — les huiles essentielles du zeste restent dans la pulpe pressée manuellement.','Verser l\'eau, puis le jus d\'orange dans le blender, ajouter la banane coupée.','Incorporer la whey en dernier, mixer 45 secondes. Râper légèrement le zeste d\'une demi-orange sur le dessus avant de servir.'],
     tips:'Le zeste d\'orange, même en quantité infinitésimale, contient dix fois plus d\'arôme que le jus. C\'est le secret des chocolatiers pour les ganaches à l\'orange : ce n\'est pas le sucre acide qui parle, c\'est l\'huile essentielle.' },
-  { id:'sm_choco_08', name:'After Eight Recovery', flavors:['chocolate'], goal:['recovery'], timing:'post', cal:218, p:42, c:8, f:2, prep:'3min',
+  { id:'sm_choco_08', name:'After Eight Recovery', nameEn:'After Eight Recovery', flavors:['chocolate'], goal:['recovery'], timing:'post', cal:218, p:42, c:8, f:2, prep:'3min',
     ingredients:[{name:'Whey chocolat',qty:30,unit:'g'},{name:'Fromage blanc 0%',qty:150,unit:'g'},{name:'Menthe fraîche',qty:8,unit:'g'},{name:'Glaçons',qty:100,unit:'g'},{name:'Eau',qty:80,unit:'ml'}],
     steps:['Blanchir les feuilles de menthe 10 secondes dans l\'eau bouillante, puis plonger immédiatement dans l\'eau glacée — la chlorophylle se fixe et la couleur reste vert vif.','Mixer menthe blanchie + eau froide + fromage blanc 30 secondes pour obtenir une base crème verte.','Ajouter la whey et les glaçons, mixer 60 secondes à puissance maximale jusqu\'à texture mousseuse et aérée.'],
     tips:'La technique de blanchiment de la menthe, empruntée à la cuisine fine, fixe les arômes volatils et donne une couleur émeraude spectaculaire — l\'After Eight devient une expérience visuelle avant même d\'être gustative.' },
-  { id:'sm_choco_09', name:'Dark Espresso Boost', flavors:['chocolate'], goal:['performance'], timing:'pre', cal:277, p:31, c:27, f:5, prep:'1min',
+  { id:'sm_choco_09', name:'Dark Espresso Boost', nameEn:'Dark Espresso Boost', flavors:['chocolate'], goal:['performance'], timing:'pre', cal:277, p:31, c:27, f:5, prep:'1min',
     ingredients:[{name:'Whey chocolat',qty:30,unit:'g'},{name:'Café expresso froid',qty:100,unit:'ml'},{name:'Lait demi-écrémé',qty:200,unit:'ml'},{name:'Banane',qty:60,unit:'g'}],
     steps:['Préparer le double expresso et le verser sur 2-3 glaçons — le choc thermique rapide préserve les arômes volatils du café et évite l\'oxydation.','Verser lait froid + café glacé dans le blender, ajouter la banane coupée (idéalement congelée la veille).','Incorporer la whey en dernier, mixer 50 secondes — la banane congelée crée une émulsion naturelle avec le café pour une texture de cold brew latte épais.'],
     tips:'Refroidir un expresso en choc thermique plutôt qu\'en le laissant reposer préserve ses arômes floraux et évite l\'amertume : le même principe que pour un café japonais iced — la technique fait toute la différence.' },
-  { id:'sm_choco_10', name:'Bounty Shake', flavors:['chocolate'], goal:['muscle'], timing:'anytime', cal:285, p:26, c:34, f:5, prep:'1min',
+  { id:'sm_choco_10', name:'Bounty Shake', nameEn:'Bounty Shake', flavors:['chocolate'], goal:['muscle'], timing:'anytime', cal:285, p:26, c:34, f:5, prep:'1min',
     ingredients:[{name:'Whey chocolat',qty:30,unit:'g'},{name:'Lait de coco',qty:50,unit:'ml'},{name:'Eau de coco',qty:150,unit:'ml'},{name:'Banane',qty:100,unit:'g'}],
     steps:['Congeler la banane en morceaux au moins 2 heures à l\'avance — elle deviendra le "cœur" crémeux du Bounty.','Verser l\'eau de coco puis le lait de coco dans le blender, ajouter la banane congelée.','Incorporer la whey en dernier, mixer 45 secondes. Servir dans un verre froid, éventuellement avec quelques copeaux de noix de coco grillée sur le dessus (0 impact macro).'],
     tips:'Faire griller 30 secondes à sec quelques flocons de noix de coco avant de les poser sur le smoothie libère les aldéhydes de noix de coco — un arôme dix fois plus puissant que cru, pour un effet Bounty absolument saisissant.' },
-  { id:'sm_choco_11', name:'Brownie Batter', flavors:['chocolate'], goal:['muscle'], timing:'anytime', cal:415, p:36, c:25, f:19, prep:'1min',
+  { id:'sm_choco_11', name:'Brownie Batter', nameEn:'Brownie Batter', flavors:['chocolate'], goal:['muscle'], timing:'anytime', cal:415, p:36, c:25, f:19, prep:'1min',
     ingredients:[{name:'Whey chocolat',qty:30,unit:'g'},{name:'Beurre de cacahuète',qty:20,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Miel',qty:10,unit:'g'}],
     steps:['Tiédir légèrement le lait entier (40 °C, jamais plus) — la chaleur douce fluidifie le beurre de cacahuète et favorise son émulsion homogène.','Verser le lait tiède dans le shaker, ajouter le beurre de cacahuète et le miel, agiter 20 secondes.','Incorporer la whey, ajouter 1 pincée généreuse de fleur de sel, shaker vigoureusement 60 secondes jusqu\'à texture crémeuse et légèrement mousseuse.'],
     tips:'La fleur de sel sur le chocolat-cacahuète n\'est pas un accessoire : c\'est le même principe que le macaron chocolat-caramel salé — le sel supprime l\'amertume, amplifie le sucré, et crée cette tension gustative qui rend le brownie inoubliable.' },
 
   // === VANILLE #5-11 ===
-  { id:'sm_van_05', name:'Tropical Sunrise', flavors:['vanilla'], goal:['performance'], timing:'post', cal:258, p:25, c:35, f:2, prep:'2min',
+  { id:'sm_van_05', name:'Tropical Sunrise', nameEn:'Tropical Sunrise', flavors:['vanilla'], goal:['performance'], timing:'post', cal:258, p:25, c:35, f:2, prep:'2min',
     ingredients:[{name:'Whey vanille',qty:30,unit:'g'},{name:'Mangue',qty:150,unit:'g'},{name:'Eau de coco',qty:200,unit:'ml'},{name:'Glaçons',qty:80,unit:'g'}],
     steps:['Utiliser de la mangue Alphonso congelée — sa chair fibreuse et ses notes de fleur d\'oranger magnifient la vanille mieux que toute autre variété.','Mixer l\'eau de coco avec la mangue et les glaçons 45 secondes à pleine puissance pour une émulsion dense.','Ajouter la whey vanille, mixer 10 secondes seulement — la protéine ne doit pas se réchauffer ni mousser excessivement.'],
     tips:'La mangue congelée remplace les glaçons et intensifie le fructose naturel : la vanille y trouve un contrepoint tropical qui la rend lumineuse.' },
-  { id:'sm_van_06', name:'Zen Matcha Latte', flavors:['vanilla'], goal:['fat_loss'], timing:'pre', cal:250, p:40, c:18, f:2, prep:'3min',
+  { id:'sm_van_06', name:'Zen Matcha Latte', nameEn:'Zen Matcha Latte', flavors:['vanilla'], goal:['fat_loss'], timing:'pre', cal:250, p:40, c:18, f:2, prep:'3min',
     ingredients:[{name:'Whey vanille',qty:30,unit:'g'},{name:'Yaourt grec 0%',qty:150,unit:'g'},{name:'Matcha',qty:5,unit:'g'},{name:'Miel',qty:10,unit:'g'},{name:'Eau',qty:100,unit:'ml'}],
     steps:['Tamiser le matcha dans l\'eau à 70 °C (jamais bouillante) et fouetter en zigzag jusqu\'à mousse verte homogène — la méthode chasen japonaise.','Laisser tiédir 5 minutes, puis mixer avec le yaourt grec et le miel.','Incorporer la whey vanille et mixer 20 secondes à basse vitesse pour ne pas dénaturer les catéchines du matcha.'],
     tips:'Vanille et matcha partagent les mêmes notes vertes et lactées — l\'un sublimant l\'amer de l\'autre : ensemble, ils créent une harmonie absolue, jamais une compétition.' },
-  { id:'sm_van_07', name:'Fraise Velvet', flavors:['vanilla'], goal:['recovery'], timing:'anytime', cal:269, p:32, c:24, f:5, prep:'2min',
+  { id:'sm_van_07', name:'Fraise Velvet', nameEn:'Strawberry Velvet', flavors:['vanilla'], goal:['recovery'], timing:'anytime', cal:269, p:32, c:24, f:5, prep:'2min',
     ingredients:[{name:'Whey vanille',qty:30,unit:'g'},{name:'Fraises congelées',qty:150,unit:'g'},{name:'Lait demi-écrémé',qty:200,unit:'ml'},{name:'Extrait vanille',qty:3,unit:'ml'}],
     steps:['Verser le lait et l\'extrait de vanille dans le blender, ajouter les fraises congelées directement — le choc thermique crée une mousse naturelle.','Mixer 45 secondes à puissance maximale pour une texture "velvet" : lisse, dense, sans fibres apparentes.','Ajouter la whey vanille, pulser 3 fois brièvement pour l\'incorporer sans détruire la mousse.'],
     tips:'L\'extrait de vanille pure amplifie les aldéhydes naturels des fraises congelées — choisissez un extrait bourbon Madagascar pour cet effet de confiture chaude servie froide.' },
-  { id:'sm_van_08', name:'Espresso Power', flavors:['vanilla'], goal:['performance'], timing:'pre', cal:333, p:31, c:32, f:9, prep:'1min',
+  { id:'sm_van_08', name:'Espresso Power', nameEn:'Espresso Power', flavors:['vanilla'], goal:['performance'], timing:'pre', cal:333, p:31, c:32, f:9, prep:'1min',
     ingredients:[{name:'Whey vanille',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Café expresso froid',qty:100,unit:'ml'},{name:'Banane',qty:80,unit:'g'}],
     steps:['Préparer un double ristretto (pas un expresso allongé) et le refroidir au réfrigérateur — la concentration maximise les notes de cacao qui dialoguent avec la vanille.','Verser lait entier, café froid et banane dans le blender, mixer 30 secondes.','Ajouter la whey vanille et shaker énergiquement 20 secondes — ne pas blender pour conserver la texture fluide du latte.'],
     tips:'Le ristretto froid + banane mûre crée un profil aromatique de banane flambée : la vanille agit comme un pont entre l\'amertume du café et la douceur du fruit.' },
-  { id:'sm_van_09', name:'Blueberry Storm', flavors:['vanilla'], goal:['recovery'], timing:'post', cal:287, p:39, c:26, f:3, prep:'3min',
+  { id:'sm_van_09', name:'Blueberry Storm', nameEn:'Blueberry Storm', flavors:['vanilla'], goal:['recovery'], timing:'post', cal:287, p:39, c:26, f:3, prep:'3min',
     ingredients:[{name:'Whey vanille',qty:30,unit:'g'},{name:'Myrtilles congelées',qty:120,unit:'g'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Lait demi-écrémé',qty:100,unit:'ml'}],
     steps:['Mixer les myrtilles congelées avec le lait à pleine puissance 45 secondes — le violet profond indique que les anthocyanes sont libérées.','Ajouter le yaourt grec, mixer 20 secondes pour une texture dense et crémeuse.','Incorporer la whey vanille en pulsant 5 fois : la vanille s\'intègre sans se dissoudre uniformément, créant des stries aromatiques.'],
     tips:'La vanille bourbon avec ses notes de fève tonka joue un rôle révélateur sur les myrtilles : elle atténue leur acidité et fait émerger leur côté confiture sauvage.' },
-  { id:'sm_van_10', name:'Coco Paradise', flavors:['vanilla'], goal:['muscle'], timing:'anytime', cal:354, p:38, c:37, f:6, prep:'3min',
+  { id:'sm_van_10', name:'Coco Paradise', nameEn:'Coco Paradise', flavors:['vanilla'], goal:['muscle'], timing:'anytime', cal:354, p:38, c:37, f:6, prep:'3min',
     ingredients:[{name:'Whey vanille',qty:30,unit:'g'},{name:'Fromage blanc 0%',qty:100,unit:'g'},{name:'Banane',qty:100,unit:'g'},{name:'Eau de coco',qty:150,unit:'ml'},{name:'Lait de coco',qty:60,unit:'ml'}],
     steps:['Mixer l\'eau de coco avec le lait de coco et la banane 30 secondes — cette base tropicale est l\'écrin parfait pour la vanille.','Ajouter le fromage blanc et mixer 20 secondes pour une émulsion dense et stable.','Incorporer la whey vanille, mixer 15 secondes à basse vitesse pour préserver les arômes délicats de la noix de coco.'],
     tips:'Le lait de coco apporte les triglycérides à chaîne moyenne qui transportent les molécules aromatiques de la vanille — la saveur s\'installe plus longtemps en bouche.' },
-  { id:'sm_van_11', name:'Vanille Absolue', flavors:['vanilla'], goal:['muscle'], timing:'anytime', cal:512, p:39, c:44, f:20, prep:'1min',
+  { id:'sm_van_11', name:'Vanille Absolue', nameEn:'Absolute Vanilla', flavors:['vanilla'], goal:['muscle'], timing:'anytime', cal:512, p:39, c:44, f:20, prep:'1min',
     ingredients:[{name:'Whey vanille',qty:30,unit:'g'},{name:'Lait entier',qty:300,unit:'ml'},{name:'Beurre de cacahuète',qty:15,unit:'g'},{name:'Banane',qty:100,unit:'g'}],
     steps:['Congeler la banane en rondelles la veille — elle devient crémeuse comme de la glace et concentre ses sucres naturels.','Mixer lait entier, beurre de cacahuète et banane congelée 1 minute à pleine puissance jusqu\'à texture parfaitement lisse.','Ajouter la whey vanille, pulser 5 secondes seulement — la vanille doit rester en suspension, perceptible à chaque gorgée.'],
     tips:'C\'est le smoothie de la vanille dans toute sa majesté : la cacahuète en apporte les notes grillées, la banane le velouté, et la whey vanille bourbon les conclut sur un accord lacté et floral inimitable.' }
@@ -5862,7 +5862,7 @@ function renderSmoothieBar(p) {
 
     // Ligne 2 : nom + chevron
     var nameRow = h('div', {style:'display:flex;align-items:center;justify-content:space-between;margin-bottom:6px'});
-    nameRow.appendChild(h('div', {style:'font-size:15px;font-weight:400;color:var(--text,#0A0A09);flex:1;line-height:1.3'}, sm.name));
+    nameRow.appendChild(h('div', {style:'font-size:15px;font-weight:400;color:var(--text,#0A0A09);flex:1;line-height:1.3'}, (window.isEnglish && window.isEnglish() && sm.nameEn ? sm.nameEn : sm.name)));
     nameRow.appendChild(h('span', {style:'font-size:18px;color:var(--green,#3E5C3A);font-weight:400;margin-left:8px;flex-shrink:0'}, '\u276F'));
     card.appendChild(nameRow);
 
@@ -5930,7 +5930,7 @@ function showSmoothieModal(sm) {
 
   // Titre
   var titleRow = h('div', {style:'display:flex;align-items:flex-start;justify-content:space-between;gap:12px'});
-  titleRow.appendChild(h('div', {style:'font-size:18px;font-weight:800;color:#fff;line-height:1.2;flex:1'}, '\uD83E\uDD5B ' + sm.name));
+  titleRow.appendChild(h('div', {style:'font-size:18px;font-weight:800;color:#fff;line-height:1.2;flex:1'}, '\uD83E\uDD5B ' + (window.isEnglish && window.isEnglish() && sm.nameEn ? sm.nameEn : sm.name)));
   titleRow.appendChild(h('button', {
     style:'flex-shrink:0;width:32px;height:32px;background:rgba(255,255,255,0.18);border:none;color:#fff;font-size:18px;cursor:pointer;border-radius:0;display:flex;align-items:center;justify-content:center;line-height:1;margin-top:-2px',
     onclick:function(){ var el=document.getElementById('_smoothie_modal_ov'); if(el&&el.parentNode) el.parentNode.removeChild(el); }
