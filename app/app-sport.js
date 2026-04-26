@@ -4274,7 +4274,7 @@ function renderCrossfitProgram(p) {
  if (S.crossfitWeek > 1) { S.crossfitWeek--; S.selectedCrossfitDay = 0; window.render(); }
  }}, '\u2190'));
  weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.crossfitWeek));
- weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine suivante', onclick: function() {
+ weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': (window.isEnglish && window.isEnglish() ? 'Next week' : 'Semaine suivante'), onclick: function() {
  var maxWeek = Math.ceil((window.CF_WODS || []).length / Math.max(1, daysPerWeek));
  if (S.crossfitWeek < maxWeek) { S.crossfitWeek++; S.selectedCrossfitDay = 0; window.render(); }
  }}, '\u2192'));
@@ -6573,7 +6573,7 @@ function renderMusculationProgram(p) {
  // Afficher le message d'erreur si la génération a échoué (évite l'écran blanc)
  if (S._programGenerationError) {
    p.appendChild(h('div', {style: 'text-align:center;padding:48px 24px;font-family:"Helvetica Neue",Arial,sans-serif;'}, [
-     h('div', {style: 'font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, (window.isEnglish && window.isEnglish() ? 'Program unavailable' : 'Programme indisponible')),
+     h('div', {style: 'font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, (window.isEnglish && window.isEnglish() ? 'Program unavailable' : (window.isEnglish && window.isEnglish() ? 'Program unavailable' : 'Programme indisponible'))),
      h('p', {style: 'font-size:14px;color:var(--text-secondary,#6B6B65);max-width:300px;margin:0 auto 24px;line-height:1.5;'}, S._programGenerationError),
      h('button', {'class': 'btn-primary', style: 'margin:0 auto;display:block;', onclick: function() {
        S._programGenerationError = null;
@@ -9910,9 +9910,9 @@ function renderRunningConfig(p) {
  oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 3 && v <= 6) { S.runningDays = v; window.render(); } },
  onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 3) { e.target.value = S.runningDays = 3; window.render(); } else if (v > 6) { e.target.value = S.runningDays = 6; window.render(); } }
  }));
- daysWrap.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
+ daysWrap.appendChild(h('span', {'class': 'num-unit'}, (window.isEnglish && window.isEnglish() ? 'days' : 'jours')));
  p.appendChild(daysWrap);
- p.appendChild(h('div', {'class': 'num-hint'}, (window.isEnglish && window.isEnglish() ? '3 to 6 days per week' : (window.isEnglish && window.isEnglish() ? '3 to 6 days per week' : '3 à 6 jours par semaine'))));
+ p.appendChild(h('div', {'class': 'num-hint'}, (window.isEnglish && window.isEnglish() ? '3 to 6 days per week' : '3 à 6 jours par semaine')));
 
  // Pace (optional)
  p.appendChild(h('div', {style: 'height:24px'}));
@@ -9957,7 +9957,7 @@ function renderRunningConfig(p) {
  p.appendChild(h('div', {style: 'height:16px'}));
  var ok = S.runningGoal !== null && S.runningLevel !== null;
  if (!ok) {
- p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Choisissez votre objectif et votre niveau pour continuer.'));
+ p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'Choose your goal and level to continue.' : 'Choisissez votre objectif et votre niveau pour continuer.')));
  }
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) {
@@ -9969,7 +9969,7 @@ function renderRunningConfig(p) {
  window.BLACKBOX && window.BLACKBOX.log('running_config', {goal: S.runningGoal, level: S.runningLevel, days: S.runningDays});
  window.render();
  }
- }}, (window.isEnglish && window.isEnglish() ? 'Generate my plan' : (window.isEnglish && window.isEnglish() ? 'Generate my plan' : 'Générer mon plan')));
+ }}, (window.isEnglish && window.isEnglish() ? 'Generate my plan' : 'Générer mon plan'));
  // 2026-04 PHASE 2 : offrir le mix pour running primaire aussi
  // sportDays utilisé par renderSportMixSection mappe vers runningDays ici
  var _prevSportDays = S.sportDays;
@@ -9988,7 +9988,7 @@ function renderRunningProgram(p) {
 
  var program = S.runningProgram;
  if (!program || !program.length) {
- p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey)'}, 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.'));
+ p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? 'Program unavailable. Reload the page or reconfigure your plan.' : 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.')));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 7; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
  return;
  }
@@ -10011,9 +10011,9 @@ function renderRunningProgram(p) {
  var goalObj2 = (window.RUNNING_GOALS || []).find(function(g){ return g.id === S.runningGoal; });
  var levelObj = (window.RUNNING_LEVELS || []).find(function(l){ return l.id === S.runningLevel; });
 
- p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
+ p.appendChild(h('div', {'class': 'eyebrow'}, (window.isEnglish && window.isEnglish() ? 'Program' : 'Programme')));
  p.appendChild(h('h1', {html: (goalObj2 ? goalObj2.name : 'Running') + '<br><em>Plan</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, totalWeeks + ' semaines · ' + S.runningDays + ' jours/semaine · Niveau ' + (levelObj ? levelObj.name : '')));
+ p.appendChild(h('p', {'class': 'subtitle'}, totalWeeks + (window.isEnglish && window.isEnglish() ? ' weeks · ' + S.runningDays + ' days/week · Level ' : ' semaines · ' + S.runningDays + ' jours/semaine · Niveau ') + (levelObj ? levelObj.name : '')));
 
  appendWellnessBanner(p);
 
@@ -10022,18 +10022,20 @@ function renderRunningProgram(p) {
  weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': (window.isEnglish && window.isEnglish() ? 'Previous week' : 'Semaine précédente'), onclick: function() {
  if (S.runningWeek > 1) { S.runningWeek--; S.selectedRunDay = 0; window.render(); }
  }}, '\u2190'));
- weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.runningWeek + ' / ' + totalWeeks));
- weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine suivante', onclick: function() {
+ weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + S.runningWeek + ' / ' + totalWeeks));
+ weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': (window.isEnglish && window.isEnglish() ? 'Next week' : 'Semaine suivante'), onclick: function() {
  if (S.runningWeek < totalWeeks) { S.runningWeek++; S.selectedRunDay = 0; window.render(); }
  }}, '\u2192'));
  p.appendChild(weekNav);
 
  // Phase + volume info
  var phaseColors = {Base: 'var(--blue,#1A3A6A)', 'Développement': 'var(--orange-ink,#7A3B0E)', 'Spécifique': 'var(--error,#7A1F1F)', 'Affûtage': 'var(--success,#3E5C3A)'};
+ var _phaseNamesEN = {Base: 'Base', 'Développement': 'Development', 'Spécifique': 'Specific', 'Affûtage': 'Taper'};
  var phaseColor = phaseColors[currentWeekData.phase] || '#0A0A09';
+ var _phaseDisp = (window.isEnglish && window.isEnglish() ? (_phaseNamesEN[currentWeekData.phase] || currentWeekData.phase) : currentWeekData.phase);
  var infoCard = h('div', {style: 'border-left:3px solid ' + phaseColor + ';padding:12px 16px;background:var(--ivory2);margin-bottom:16px'});
- infoCard.appendChild(h('div', {style: 'font-family:Georgia;font-size:16px;color:' + phaseColor + ';margin-bottom:4px'}, 'Phase : ' + currentWeekData.phase));
- infoCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;color:var(--grey)'}, 'Volume : ~' + currentWeekData.totalKm + ' km · Sortie longue : ' + currentWeekData.longRun + ' km'));
+ infoCard.appendChild(h('div', {style: 'font-family:Georgia;font-size:16px;color:' + phaseColor + ';margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? 'Phase: ' : 'Phase : ') + currentWeekData.phase));
+ infoCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? 'Volume: ~' + currentWeekData.totalKm + ' km · Long run: ' + currentWeekData.longRun + ' km' : 'Volume : ~' + currentWeekData.totalKm + ' km · Sortie longue : ' + currentWeekData.longRun + ' km')));
  if (currentWeekData.isDeload) {
  infoCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);margin-top:6px;font-weight:bold'}, (window.isEnglish && window.isEnglish() ? ' Recovery week' : ' Semaine de récupération')));
  }
@@ -10250,7 +10252,7 @@ function renderHyroxConfig(p) {
  oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 3 && v <= 6) { S.hyroxDays = v; window.render(); } },
  onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 3) { e.target.value = S.hyroxDays = 3; window.render(); } else if (v > 6) { e.target.value = S.hyroxDays = 6; window.render(); } }
  }));
- daysWrap.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
+ daysWrap.appendChild(h('span', {'class': 'num-unit'}, (window.isEnglish && window.isEnglish() ? 'days' : 'jours')));
  p.appendChild(daysWrap);
  p.appendChild(h('div', {'class': 'num-hint'}, (window.isEnglish && window.isEnglish() ? '3 to 6 days per week' : '3 à 6 jours par semaine')));
 
@@ -10305,7 +10307,7 @@ function renderHyroxConfig(p) {
  p.appendChild(h('div', {style: 'height:16px'}));
  var ok = S.hyroxGoal !== null && S.hyroxLevel !== null;
  if (!ok) {
- p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Choisissez votre objectif et votre niveau pour continuer.'));
+ p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'Choose your goal and level to continue.' : 'Choisissez votre objectif et votre niveau pour continuer.')));
  }
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) {
@@ -10340,7 +10342,7 @@ function renderHyroxProgram(p) {
 
  var program = S.hyroxProgram;
  if (!program || !program.length) {
- p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey)'}, 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.'));
+ p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? 'Program unavailable. Reload the page or reconfigure your plan.' : 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.')));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 9; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
  return;
  }
@@ -10354,9 +10356,9 @@ function renderHyroxProgram(p) {
  var goalObj = (window.HYROX_GOALS || []).find(function(g){ return g.id === S.hyroxGoal; });
  var levelObj = (window.HYROX_LEVELS || []).find(function(l){ return l.id === S.hyroxLevel; });
 
- p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme Hyrox'));
+ p.appendChild(h('div', {'class': 'eyebrow'}, (window.isEnglish && window.isEnglish() ? 'Program Hyrox' : 'Programme Hyrox')));
  p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? '12 Weeks<br><em>Preparation</em>' : 'Préparation<br><em>12 semaines</em>')}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Phase ' + currentWeekData.phase + ' · ' + (goalObj ? goalObj.name : '') + ' · ' + (levelObj ? levelObj.icon + ' ' + levelObj.name : '')));
+ p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Phase ' : 'Phase ') + currentWeekData.phase + ' · ' + (goalObj ? goalObj.name : '') + ' · ' + (levelObj ? levelObj.icon + ' ' + levelObj.name : '')));
 
  appendWellnessBanner(p);
  appendSportMedicalBanner(p, 'Hyrox');
@@ -10374,17 +10376,19 @@ function renderHyroxProgram(p) {
  weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': (window.isEnglish && window.isEnglish() ? 'Previous week' : 'Semaine précédente'), onclick: function() {
  if (S.hyroxWeek > 1) { S.hyroxWeek--; S.selectedHyroxDay = 0; window.render(); }
  }}, '\u2190'));
- weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.hyroxWeek + ' / ' + totalWeeks));
- weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine suivante', onclick: function() {
+ weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + S.hyroxWeek + ' / ' + totalWeeks));
+ weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': (window.isEnglish && window.isEnglish() ? 'Next week' : 'Semaine suivante'), onclick: function() {
  if (S.hyroxWeek < totalWeeks) { S.hyroxWeek++; S.selectedHyroxDay = 0; window.render(); }
  }}, '\u2192'));
  p.appendChild(weekNav);
 
  // Phase info
  var phaseColors = {Base: '#1A3A6A', Build: '#7A3B0E', Peak: '#7A1F1F', Taper: '#3E5C3A', 'Développement': '#7A3B0E', 'Compétition': '#7A1F1F'};
+ var _phaseNamesEN = {Base: 'Base', Build: 'Build', Peak: 'Peak', Taper: 'Taper', 'Développement': 'Development', 'Compétition': 'Competition'};
  var phaseColor = phaseColors[currentWeekData.phase] || '#0A0A09';
+ var _phaseDisp = (window.isEnglish && window.isEnglish() ? (_phaseNamesEN[currentWeekData.phase] || currentWeekData.phase) : currentWeekData.phase);
  var infoCard = h('div', {style: 'border-left:3px solid ' + phaseColor + ';padding:12px 16px;background:var(--ivory2);margin-bottom:16px'});
- infoCard.appendChild(h('div', {style: 'font-family:Georgia;font-size:16px;color:' + phaseColor + ';margin-bottom:4px'}, 'Phase : ' + currentWeekData.phase));
+ infoCard.appendChild(h('div', {style: 'font-family:Georgia;font-size:16px;color:' + phaseColor + ';margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? 'Phase: ' : 'Phase : ') + _phaseDisp));
  infoCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic'}, currentWeekData.notes || ''));
  if (currentWeekData.isDeload) {
  infoCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);margin-top:6px;font-weight:bold'}, (window.isEnglish && window.isEnglish() ? ' Deload week' : ' Semaine de décharge')));
@@ -10552,7 +10556,7 @@ function renderPadelConfig(p) {
  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.days')));
  var nw = h('div', {'class': 'num-input-wrap'});
  nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '5', value: String(S.padelDays), inputmode: 'numeric', oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 5) { S.padelDays = v; window.render(); } }, onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) { e.target.value = S.padelDays = 2; window.render(); } else if (v > 5) { e.target.value = S.padelDays = 5; window.render(); } } }));
- nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
+ nw.appendChild(h('span', {'class': 'num-unit'}, (window.isEnglish && window.isEnglish() ? 'days' : 'jours')));
  p.appendChild(nw);
 
  // Skill self-assessment
@@ -10582,7 +10586,7 @@ function renderPadelConfig(p) {
 function renderPadelProgram(p) {
  if (!S.padelProgram) { if (typeof window.generatePadelProgram !== 'function') { p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-size:13px;color:var(--grey)'}, 'Module Padel non disponible. Rechargez la page.')); return; } S.padelProgram = window.generatePadelProgram(S.padelDays, S.padelLevel, S.padelGoal); }
  if (!S.padelProgram || !S.padelProgram.length) {
- p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey)'}, 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.'));
+ p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? 'Program unavailable. Reload the page or reconfigure your plan.' : 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.')));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 11; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
  return;
  }
@@ -10591,18 +10595,18 @@ function renderPadelProgram(p) {
  var week = S.padelProgram[S.padelWeek - 1];
  if (!week) return;
 
- p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme Padel'));
- p.appendChild(h('h1', {html: 'Semaine ' + S.padelWeek + '<br><em>' + week.phase + '</em>'}));
+ p.appendChild(h('div', {'class': 'eyebrow'}, (window.isEnglish && window.isEnglish() ? 'Program Padel' : 'Programme Padel')));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + S.padelWeek + '<br><em>' + week.phase + '</em>'}));
  var goalName = ''; (window.PADEL_GOALS || []).forEach(function(g){ if(g.id===S.padelGoal) goalName=g.name; });
- p.appendChild(h('p', {'class': 'subtitle'}, S.padelDays + ' jours/semaine — ' + goalName));
+ p.appendChild(h('p', {'class': 'subtitle'}, S.padelDays + (window.isEnglish && window.isEnglish() ? ' days/week — ' : ' jours/semaine — ') + goalName));
  p.appendChild(h('div', {style: 'text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px'}, week.notes));
  appendSportMedicalBanner(p, 'Padel');
 
  // Week navigation
  var wn = h('div', {style: 'display:flex;align-items:center;justify-content:center;gap:16px;margin:12px 0'});
  wn.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;margin:0', 'aria-label': (window.isEnglish && window.isEnglish() ? 'Previous week' : 'Semaine précédente'), disabled: S.padelWeek <= 1, onclick: function(){ S.padelWeek--; S.selectedPadelDay = 0; window.render(); }}, '←'));
- wn.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.padelWeek + ' / ' + S.padelProgram.length));
- wn.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;margin:0', 'aria-label': 'Semaine suivante', disabled: S.padelWeek >= S.padelProgram.length, onclick: function(){ S.padelWeek++; S.selectedPadelDay = 0; window.render(); }}, '→'));
+ wn.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + S.padelWeek + ' / ' + S.padelProgram.length));
+ wn.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;margin:0', 'aria-label': (window.isEnglish && window.isEnglish() ? 'Next week' : 'Semaine suivante'), disabled: S.padelWeek >= S.padelProgram.length, onclick: function(){ S.padelWeek++; S.selectedPadelDay = 0; window.render(); }}, '→'));
  p.appendChild(wn);
 
  // Day tabs
@@ -10678,7 +10682,7 @@ function renderGolfConfig(p) {
  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.days')));
  var nw = h('div', {'class': 'num-input-wrap'});
  nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '5', value: String(S.golfDays), inputmode: 'numeric', oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 5) { S.golfDays = v; window.render(); } }, onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) { e.target.value = S.golfDays = 2; window.render(); } else if (v > 5) { e.target.value = S.golfDays = 5; window.render(); } } }));
- nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
+ nw.appendChild(h('span', {'class': 'num-unit'}, (window.isEnglish && window.isEnglish() ? 'days' : 'jours')));
  p.appendChild(nw);
 
  // Handicap
@@ -10717,7 +10721,7 @@ function renderGolfConfig(p) {
 function renderGolfProgram(p) {
  if (!S.golfProgram) { if (typeof window.generateGolfProgram !== 'function') { p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-size:13px;color:var(--grey)'}, 'Module Golf non disponible. Rechargez la page.')); return; } S.golfProgram = window.generateGolfProgram(S.golfDays, S.golfLevel, S.golfGoal); }
  if (!S.golfProgram || !S.golfProgram.length) {
- p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey)'}, 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.'));
+ p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? 'Program unavailable. Reload the page or reconfigure your plan.' : 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.')));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 13; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
  return;
  }
@@ -10726,10 +10730,10 @@ function renderGolfProgram(p) {
  var week = S.golfProgram[S.golfWeek - 1];
  if (!week) return;
 
- p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme Golf'));
- p.appendChild(h('h1', {html: 'Semaine ' + S.golfWeek + '<br><em>' + week.phase + '</em>'}));
+ p.appendChild(h('div', {'class': 'eyebrow'}, (window.isEnglish && window.isEnglish() ? 'Program Golf' : 'Programme Golf')));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + S.golfWeek + '<br><em>' + week.phase + '</em>'}));
  var goalName = ''; (window.GOLF_GOALS || []).forEach(function(g){ if(g.id===S.golfGoal) goalName=g.name; });
- p.appendChild(h('p', {'class': 'subtitle'}, S.golfDays + ' jours/semaine — ' + goalName + (S.golfHandicap ? ' — HC ' + S.golfHandicap : '')));
+ p.appendChild(h('p', {'class': 'subtitle'}, S.golfDays + (window.isEnglish && window.isEnglish() ? ' days/week — ' : ' jours/semaine — ') + goalName + (S.golfHandicap ? ' — HC ' + S.golfHandicap : '')));
  p.appendChild(h('div', {style: 'text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px'}, week.notes));
 
  // Rappel Dave Pelz
@@ -10739,8 +10743,8 @@ function renderGolfProgram(p) {
  // Week navigation
  var wn = h('div', {style: 'display:flex;align-items:center;justify-content:center;gap:16px;margin:12px 0'});
  wn.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;margin:0', 'aria-label': (window.isEnglish && window.isEnglish() ? 'Previous week' : 'Semaine précédente'), disabled: S.golfWeek <= 1, onclick: function(){ S.golfWeek--; S.selectedGolfDay = 0; window.render(); }}, '←'));
- wn.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.golfWeek + ' / ' + S.golfProgram.length));
- wn.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;margin:0', 'aria-label': 'Semaine suivante', disabled: S.golfWeek >= S.golfProgram.length, onclick: function(){ S.golfWeek++; S.selectedGolfDay = 0; window.render(); }}, '→'));
+ wn.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + S.golfWeek + ' / ' + S.golfProgram.length));
+ wn.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;margin:0', 'aria-label': (window.isEnglish && window.isEnglish() ? 'Next week' : 'Semaine suivante'), disabled: S.golfWeek >= S.golfProgram.length, onclick: function(){ S.golfWeek++; S.selectedGolfDay = 0; window.render(); }}, '→'));
  p.appendChild(wn);
 
  // Day tabs
@@ -10892,7 +10896,7 @@ function renderTriathlonConfig(p) {
    var nowMs2 = Date.now();
    var diffW = Math.floor((rdMs - nowMs2) / (7 * 24 * 3600 * 1000));
    if (diffW > 0) {
-    dateWrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;color:var(--grey);font-style:italic'}, diffW + ' semaines'));
+    dateWrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;color:var(--grey);font-style:italic'}, diffW + (window.isEnglish && window.isEnglish() ? ' weeks' : ' semaines')));
    } else if (diffW <= 0) {
     dateWrap.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#C0392B'}, (window.isEnglish && window.isEnglish() ? 'Past date' : 'Date passée')));
    }
@@ -10935,7 +10939,7 @@ function renderTriathlonConfig(p) {
  p.appendChild(h('div', {style: 'height:20px'}));
  var ok = S.triathlonGoal !== null && S.triathlonLevel !== null;
  if (!ok) {
- p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Choisissez votre objectif et votre niveau pour continuer.'));
+ p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'Choose your goal and level to continue.' : 'Choisissez votre objectif et votre niveau pour continuer.')));
  }
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() {
  if (!ok) return;
@@ -10981,7 +10985,7 @@ function renderTriathlonProgram(p) {
  var backArrow = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
  var program = S.triathlonProgram;
  if (!program || !program.length) {
- p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey)'}, 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.'));
+ p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? 'Program unavailable. Reload the page or reconfigure your plan.' : 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.')));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 17; window.render(); }, html: backArrow + 'Retour'}));
  return;
  }
@@ -11052,15 +11056,15 @@ function renderTriathlonProgram(p) {
  weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': (window.isEnglish && window.isEnglish() ? 'Previous week' : 'Semaine précédente'), onclick: function() {
  if (S.triathlonWeek > 1) { S.triathlonWeek--; S.selectedTriDay = 0; window.render(); }
  }}, '←'));
- weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.triathlonWeek + ' / ' + totalWeeks));
- weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine suivante', onclick: function() {
+ weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + S.triathlonWeek + ' / ' + totalWeeks));
+ weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': (window.isEnglish && window.isEnglish() ? 'Next week' : 'Semaine suivante'), onclick: function() {
  if (S.triathlonWeek < totalWeeks) { S.triathlonWeek++; S.selectedTriDay = 0; window.render(); }
  }}, '→'));
  p.appendChild(weekNav);
 
  // ── Info phase ──
  var phaseCard = h('div', {style: 'border-left:3px solid ' + (weekData.phaseColor || '#1A3A6A') + ';padding:12px 16px;background:var(--ivory2);margin-bottom:16px'});
- phaseCard.appendChild(h('div', {style: 'font-family:Georgia;font-size:16px;color:' + (weekData.phaseColor || '#1A3A6A') + ';margin-bottom:4px'}, 'Phase : ' + weekData.phase));
+ phaseCard.appendChild(h('div', {style: 'font-family:Georgia;font-size:16px;color:' + (weekData.phaseColor || '#1A3A6A') + ';margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? 'Phase: ' : 'Phase : ') + weekData.phase));
  phaseCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? '~' + weekData.totalHours + ' of training · 7 days' : '~' + weekData.totalHours + ' d\'entraînement · 7 jours')));
  if (weekData.isDeload) phaseCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);margin-top:6px;font-weight:bold'}, (window.isEnglish && window.isEnglish() ? ' Recovery week — reduced volume' : ' Semaine de récupération — volume réduit')));
  if (weekData.isTaper) phaseCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--success,#3E5C3A);margin-top:6px;font-weight:bold'}, (window.isEnglish && window.isEnglish() ? ' Taper — Volume reduced, intensity maintained' : ' Affûtage — Volume réduit, intensité maintenue')));
@@ -11219,7 +11223,7 @@ function renderYogaOnboarding(p) {
  oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) { S.yogaDays = v; } },
  onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) { e.target.value = '2'; S.yogaDays = 2; } else if (v > 6) { e.target.value = '6'; S.yogaDays = 6; } }
  }));
- nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
+ nw.appendChild(h('span', {'class': 'num-unit'}, (window.isEnglish && window.isEnglish() ? 'days' : 'jours')));
  p.appendChild(nw);
  p.appendChild(h('div', {'class': 'num-hint'}, (window.isEnglish && window.isEnglish() ? '2 to 6 days per week' : '2 \u00e0 6 jours par semaine')));
 
@@ -11329,17 +11333,17 @@ function renderYogaProgram(p) {
  p.appendChild(kw);
  }
 
- p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme Yoga'));
- p.appendChild(h('h1', {html: 'Semaine ' + S.yogaWeek + '<br><em>' + weekData.phase + '</em>'}));
+ p.appendChild(h('div', {'class': 'eyebrow'}, (window.isEnglish && window.isEnglish() ? 'Program Yoga' : 'Programme Yoga')));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + S.yogaWeek + '<br><em>' + weekData.phase + '</em>'}));
 
  var objNames = window.isEnglish && window.isEnglish() ? { flexibilite: 'Flexibility', stress: 'Stress & Sleep', force: 'Strength & Balance', recuperation: 'Active recovery' } : { flexibilite: 'Flexibilit\u00e9', stress: 'Stress & Sommeil', force: 'Force & \u00c9quilibre', recuperation: 'R\u00e9cup\u00e9ration active' };
  var styleNames = { hatha: 'Hatha', vinyasa: 'Vinyasa', yin: 'Yin', ashtanga: 'Ashtanga' };
- p.appendChild(h('p', {'class': 'subtitle'}, (S.yogaDays || '') + ' jours/semaine \u00b7 ' + (S.yogaDuration || '') + ' \u00b7 ' + (styleNames[S.yogaStyle] || S.yogaStyle || '') + ' \u00b7 ' + (objNames[S.yogaObjectif] || '')));
+ p.appendChild(h('p', {'class': 'subtitle'}, (S.yogaDays || '') + (window.isEnglish && window.isEnglish() ? ' days/week \u00b7 ' : ' jours/semaine \u00b7 ') + (S.yogaDuration || '') + ' \u00b7 ' + (styleNames[S.yogaStyle] || S.yogaStyle || '') + ' \u00b7 ' + (objNames[S.yogaObjectif] || '')));
 
  // Week navigation
  var wn = h('div', {style: 'display:flex;align-items:center;justify-content:center;gap:16px;margin:12px 0'});
  wn.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;margin:0', disabled: S.yogaWeek <= 1, onclick: function(){ if(S.yogaWeek > 1){ S.yogaWeek--; S.yogaDay = 0; window.render(); } }}, '\u2190'));
- wn.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.yogaWeek + ' / 4'));
+ wn.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + S.yogaWeek + ' / 4'));
  wn.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;margin:0', disabled: S.yogaWeek >= 4, onclick: function(){ if(S.yogaWeek < 4){ S.yogaWeek++; S.yogaDay = 0; window.render(); } }}, '\u2192'));
  p.appendChild(wn);
 
@@ -11532,7 +11536,7 @@ function renderCyclingOnboarding(p) {
  oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) S.cyclingDays = v; },
  onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) { e.target.value = S.cyclingDays = 2; window.render(); } else if (v > 6) { e.target.value = S.cyclingDays = 6; window.render(); } }
  }));
- daysWrap.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
+ daysWrap.appendChild(h('span', {'class': 'num-unit'}, (window.isEnglish && window.isEnglish() ? 'days' : 'jours')));
  p.appendChild(daysWrap);
  p.appendChild(h('div', {'class': 'num-hint'}, (window.isEnglish && window.isEnglish() ? '2 to 6 days per week' : '2 à 6 jours par semaine')));
 
@@ -11618,7 +11622,7 @@ function renderCyclingProgram(p) {
  var plan = S.cyclingProgram;
  if (!plan || !plan.length) {
  var backArrowCyc = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
- p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey)'}, 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.'));
+ p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? 'Program unavailable. Reload the page or reconfigure your plan.' : 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.')));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 22; window.render(); }, html: backArrowCyc + 'Retour'}));
  return;
  }
@@ -11674,14 +11678,14 @@ function renderCyclingProgram(p) {
  weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': (window.isEnglish && window.isEnglish() ? 'Previous week' : 'Semaine précédente'), onclick: function() {
  if (S.cyclingWeek > 1) { S.cyclingWeek--; S.selectedCyclingDay = 0; window.render(); }
  }}, '←'));
- weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.cyclingWeek + ' / ' + totalWeeks));
- weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine suivante', onclick: function() {
+ weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + S.cyclingWeek + ' / ' + totalWeeks));
+ weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': (window.isEnglish && window.isEnglish() ? 'Next week' : 'Semaine suivante'), onclick: function() {
  if (S.cyclingWeek < totalWeeks) { S.cyclingWeek++; S.selectedCyclingDay = 0; window.render(); }
  }}, '→'));
  p.appendChild(weekNav);
 
  var phaseCard = h('div', {style: 'border-left:3px solid ' + weekData.phaseColor + ';padding:12px 16px;background:var(--ivory2);margin-bottom:16px'});
- phaseCard.appendChild(h('div', {style: 'font-family:Georgia;font-size:16px;color:' + weekData.phaseColor + ';margin-bottom:4px'}, 'Phase : ' + weekData.phase));
+ phaseCard.appendChild(h('div', {style: 'font-family:Georgia;font-size:16px;color:' + weekData.phaseColor + ';margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? 'Phase: ' : 'Phase : ') + weekData.phase));
  phaseCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;color:var(--grey)'}, weekData.focus));
  if (weekData.isDeload) phaseCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);margin-top:6px;font-weight:bold'}, (window.isEnglish && window.isEnglish() ? ' Recovery week — volume reduced by 40%' : ' Semaine de récupération — volume réduit de 40%')));
  p.appendChild(phaseCard);
@@ -11689,7 +11693,7 @@ function renderCyclingProgram(p) {
  var zonesToggle = S._cyclingShowZones || false;
  p.appendChild(h('button', {'class': 'btn-back', style: 'font-size:11px;margin:0 0 12px 0', onclick: function(){
  S._cyclingShowZones = !S._cyclingShowZones; window.render();
- }}, zonesToggle ? '▲ Masquer les zones FTP' : '▼ Voir les zones FTP'));
+ }}, zonesToggle ? (window.isEnglish && window.isEnglish() ? '▲ Hide FTP zones' : '▲ Masquer les zones FTP') : (window.isEnglish && window.isEnglish() ? '▼ View FTP zones' : '▼ Voir les zones FTP')));
  if (zonesToggle) {
  var zonesRef = h('div', {style: 'border:1px solid var(--border);padding:12px 16px;background:var(--ivory2);margin-bottom:16px'});
  zonesRef.appendChild(h('div', {style: 'font-family:Georgia;font-size:13px;margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'FTP intensity zones (Coggan method)' : 'Zones d\'intensité FTP (méthode Coggan)')));
@@ -11810,7 +11814,7 @@ function renderCalisthenicsOnboarding(p) {
  p.appendChild(lvlList);
 
  // Equipement disponible
- p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Equipement disponible'));
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, (window.isEnglish && window.isEnglish() ? 'Available equipment' : 'Equipement disponible')));
  if (!Array.isArray(S.calisthenicsEquipment)) { S.calisthenicsEquipment = ['bar']; }
  var equipOptions = [
   { id: 'bar', label: 'Barre de traction' },
@@ -11919,14 +11923,14 @@ function renderCalisthenicsOnboarding(p) {
   oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 5) { S.calisthenicsdays = v; } },
   onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) { e.target.value = '2'; S.calisthenicsdays = 2; } else if (v > 5) { e.target.value = '5'; S.calisthenicsdays = 5; } }
  }));
- nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
+ nw.appendChild(h('span', {'class': 'num-unit'}, (window.isEnglish && window.isEnglish() ? 'days' : 'jours')));
  p.appendChild(nw);
- p.appendChild(h('div', {'class': 'num-hint'}, '2 a 5 jours par semaine'));
+ p.appendChild(h('div', {'class': 'num-hint'}, (window.isEnglish && window.isEnglish() ? '2 to 5 days per week' : '2 à 5 jours par semaine')));
 
  p.appendChild(h('div', {style: 'height:20px'}));
  var ok = S.calisthenicsLevel && Array.isArray(S.calisthenicsGoal) && S.calisthenicsGoal.length > 0;
  if (!ok) {
-  p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Choisissez un niveau et au moins un objectif pour continuer.'));
+  p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'Choose a level and at least one goal to continue.' : 'Choisissez un niveau et au moins un objectif pour continuer.')));
  }
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
   if (ok) {
@@ -11975,7 +11979,7 @@ function renderCalisthenicsProgram(content) {
 
  // State for current week display
  if (!planData || !Array.isArray(planData.plan) || planData.plan.length === 0) {
-  content.appendChild(h('div', {'class': 'card'}, h('div', {style: 'color:var(--grey);font-size:13px;text-align:center;padding:24px'}, 'Programme non disponible. Rechargez la page.')));
+  content.appendChild(h('div', {'class': 'card'}, h('div', {style: 'color:var(--grey);font-size:13px;text-align:center;padding:24px'}, (window.isEnglish && window.isEnglish() ? 'Program unavailable. Reload the page.' : 'Programme non disponible. Rechargez la page.'))));
   return;
  }
  if (!S.calisthCurrentWeek || S.calisthCurrentWeek < 1) { S.calisthCurrentWeek = 1; }
@@ -11989,11 +11993,11 @@ function renderCalisthenicsProgram(content) {
  appendSportMedicalBanner(content, 'Callisthénie');
  // ── HEADER ──
  var headerCard = h('div', {'class': 'card', style: 'margin-bottom:16px'});
- headerCard.appendChild(h('div', {'class': 'label-caps', style: 'margin-bottom:4px'}, 'CALLISTHENIE'));
- headerCard.appendChild(h('div', {style: 'font-weight:600;font-size:16px;margin-bottom:4px'}, 'Programme ' + level + ' — ' + days + ' j/sem'));
+ headerCard.appendChild(h('div', {'class': 'label-caps', style: 'margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? 'CALISTHENICS' : 'CALLISTHENIE')));
+ headerCard.appendChild(h('div', {style: 'font-weight:600;font-size:16px;margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? 'Program ' : 'Programme ') + level + ' — ' + days + (window.isEnglish && window.isEnglish() ? ' d/week' : ' j/sem')));
  var equipStr = equipment.join(', ');
- headerCard.appendChild(h('div', {style: 'font-size:12px;color:var(--grey3)'}, 'Equipement: ' + equipStr + ' | Pull-ups: ' + pullups + ' | Push-ups: ' + pushups + ' | Dips: ' + dips));
- headerCard.appendChild(h('div', {style: 'font-size:12px;color:var(--grey3);margin-top:2px'}, planData.totalWeeks + ' semaines de programme'));
+ headerCard.appendChild(h('div', {style: 'font-size:12px;color:var(--grey3)'}, (window.isEnglish && window.isEnglish() ? 'Equipment: ' : 'Equipement: ') + equipStr + ' | Pull-ups: ' + pullups + ' | Push-ups: ' + pushups + ' | Dips: ' + dips));
+ headerCard.appendChild(h('div', {style: 'font-size:12px;color:var(--grey3);margin-top:2px'}, planData.totalWeeks + (window.isEnglish && window.isEnglish() ? ' weeks of program' : ' semaines de programme')));
  content.appendChild(headerCard);
 
  appendWellnessBanner(content);
@@ -12087,12 +12091,12 @@ function renderCalisthenicsProgram(content) {
   }, '< Prev');
   var nextBtn = h('button', {style: 'background:none;border:1px solid var(--border);padding:6px 12px;border-radius:2px;cursor:pointer;font-size:12px',
    onclick: function(){ if (S.calisthCurrentWeek < planData.totalWeeks) { S.calisthCurrentWeek++; window.render(); } }
-  }, 'Suiv >');
+  }, (window.isEnglish && window.isEnglish() ? 'Next >' : 'Suiv >'));
   if (currentWeek <= 1) { prevBtn.disabled = true; }
   if (currentWeek >= planData.totalWeeks) { nextBtn.disabled = true; }
   navHeader.appendChild(prevBtn);
   var weekLabel = h('div', {style: 'text-align:center'}, [
-   h('div', {style: 'font-weight:600;font-size:14px'}, 'Semaine ' + currentWeek + ' / ' + planData.totalWeeks),
+   h('div', {style: 'font-weight:600;font-size:14px'}, (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + currentWeek + ' / ' + planData.totalWeeks),
    h('div', {style: 'font-size:11px;color:var(--grey3)'}, weekData.macroPhase)
   ]);
   navHeader.appendChild(weekLabel);
