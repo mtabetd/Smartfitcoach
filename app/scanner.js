@@ -101,7 +101,7 @@ if (!barcodeDetector && window.ZXing) {
             cv.getContext('2d').drawImage(source, 0, 0, w, h);
             var lum = new window.ZXing.HTMLCanvasElementLuminanceSource(cv);
             var bmp = new window.ZXing.BinaryBitmap(new window.ZXing.HybridBinarizer(lum));
-            resolve([{ rawValue: _zxingMFR.decode(bmp).getText() }]);
+            resolve([{ rawValue: _zxingMFR.decodeWithState(bmp).getText() }]);
           } catch(e) { resolve([]); }
         });
       }
