@@ -197,7 +197,7 @@ function renderResult(container, result) {
   if (analyse.pointsForts && analyse.pointsForts.length) {
     var h2pf = document.createElement('div');
     h2pf.className = 'ba-h2';
-    h2pf.textContent = 'Points forts';
+    h2pf.textContent = (window.isEnglish && window.isEnglish()) ? 'Strengths' : 'Points forts';
     container.appendChild(h2pf);
     analyse.pointsForts.forEach(function(pt) {
       var el = document.createElement('div');
@@ -211,7 +211,7 @@ function renderResult(container, result) {
     var h2ax = document.createElement('div');
     h2ax.className = 'ba-h2';
     h2ax.style.marginTop = '16px';
-    h2ax.textContent = 'Axes de développement';
+    h2ax.textContent = (window.isEnglish && window.isEnglish()) ? 'Areas for improvement' : 'Axes de développement';
     container.appendChild(h2ax);
     analyse.axesDeveloppement.forEach(function(ax) {
       var el = document.createElement('div');
@@ -233,7 +233,7 @@ function renderResult(container, result) {
   if (programme.titre) {
     var labelProg = document.createElement('div');
     labelProg.className = 'ba-section-label';
-    labelProg.textContent = 'Programme personnalisé';
+    labelProg.textContent = (window.isEnglish && window.isEnglish()) ? 'Personalized program' : 'Programme personnalisé';
     container.appendChild(labelProg);
 
     var titreProg = document.createElement('h2');
@@ -274,7 +274,7 @@ function renderResult(container, result) {
         weekHeader.className = 'ba-week-header';
         // XSS fix: sem.focus comes from AI JSON response — use DOM construction
         var _whSpan1 = document.createElement('span');
-        _whSpan1.textContent = 'Semaine ' + sem.numero + (sem.focus ? ' \u2014 ' + sem.focus : '');
+        _whSpan1.textContent = ((window.isEnglish && window.isEnglish()) ? 'Week ' : 'Semaine ') + sem.numero + (sem.focus ? ' \u2014 ' + sem.focus : '');
         var _whSpan2 = document.createElement('span');
         _whSpan2.textContent = '+';
         weekHeader.appendChild(_whSpan1);
@@ -344,7 +344,7 @@ function renderResult(container, result) {
     if (programme.conseilsNutrition) {
       var nutLabel = document.createElement('div');
       nutLabel.className = 'ba-section-label';
-      nutLabel.textContent = 'Conseils nutrition associés';
+      nutLabel.textContent = (window.isEnglish && window.isEnglish()) ? 'Associated nutrition tips' : 'Conseils nutrition associés';
       container.appendChild(nutLabel);
       var nutEl = document.createElement('div');
       nutEl.className = 'ba-list-item blue';
@@ -397,10 +397,10 @@ function shareBodyAnalysis() {
     });
   } else if (navigator.clipboard) {
     navigator.clipboard.writeText(shareData.title + '\n' + shareData.text + '\n' + shareData.url)
-      .then(function() { if (window.showToast) window.showToast('Lien copié', 'success', 2200); })
-      .catch(function() { if (window.showToast) window.showToast('Partage non disponible', 'error', 2800); });
+      .then(function() { if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Link copied' : 'Lien copié', 'success', 2200); })
+      .catch(function() { if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Sharing not available' : 'Partage non disponible', 'error', 2800); });
   } else {
-    if (window.showToast) window.showToast('Partage non disponible sur ce navigateur', 'error', 3000);
+    if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Sharing not available on this browser' : 'Partage non disponible sur ce navigateur', 'error', 3000);
   }
 }
 window.shareBodyAnalysis = shareBodyAnalysis;
@@ -421,13 +421,13 @@ function buildPanel() {
   _baHeaderTitle.textContent = (window.isEnglish && window.isEnglish()) ? 'AI Body Analysis' : 'Analyse corporelle IA';
   var _baHeaderSub = document.createElement('div');
   _baHeaderSub.id = 'ba-header-sub';
-  _baHeaderSub.textContent = 'Morphologie \u00b7 Programme sur mesure';
+  _baHeaderSub.textContent = (window.isEnglish && window.isEnglish()) ? 'Morphology \u00b7 Tailored program' : 'Morphologie \u00b7 Programme sur mesure';
   headerText.appendChild(_baHeaderTitle);
   headerText.appendChild(_baHeaderSub);
   var closeBtn = document.createElement('button');
   closeBtn.id = 'ba-close';
   closeBtn.textContent = '×';
-  closeBtn.setAttribute('aria-label', 'Fermer');
+  closeBtn.setAttribute('aria-label', (window.isEnglish && window.isEnglish()) ? 'Close' : 'Fermer');
   closeBtn.addEventListener('click', closePanel);
   header.appendChild(headerText);
   header.appendChild(closeBtn);
@@ -482,7 +482,7 @@ function buildPanel() {
         return;
       }
       if (file.size > 10 * 1024 * 1024) {
-        if (window.showToast) window.showToast('Image trop volumineuse (max 10\u00a0MB)', 'error', 3000);
+        if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Image too large (max 10\u00a0MB)' : 'Image trop volumineuse (max 10\u00a0MB)', 'error', 3000);
         return;
       }
       compressImage(file, function(b64) {
@@ -560,7 +560,7 @@ function buildPanel() {
   // Bouton recommencer (caché par défaut)
   var resetBtn = document.createElement('button');
   resetBtn.id = 'ba-reset';
-  resetBtn.textContent = 'Nouvelle analyse';
+  resetBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'New analysis' : 'Nouvelle analyse';
   resetBtn.style.display = 'none';
   resetBtn.addEventListener('click', resetAnalysis);
   content.appendChild(resetBtn);
@@ -694,7 +694,7 @@ async function runAnalysis() {
     if (!resp.ok) {
       if (resp.status === 401 || resp.status === 403) { if (window.showPaywall) window.showPaywall('body-analysis'); return; }
       var errBody = await resp.json().catch(function() { return {}; });
-      throw new Error(errBody.error || 'Erreur serveur HTTP ' + resp.status);
+      throw new Error(errBody.error || ((window.isEnglish && window.isEnglish()) ? 'Server error HTTP ' : 'Erreur serveur HTTP ') + resp.status);
     }
     var data = await resp.json();
 
@@ -727,7 +727,7 @@ async function runAnalysis() {
       errEl2.className = 'ba-error';
       errEl2.textContent = (err && err.name === 'AbortError')
         ? ((window.isEnglish && window.isEnglish()) ? 'Analysis is taking too long. Please try again in a moment.' : 'L\'analyse prend trop de temps. Réessaie dans quelques instants.')
-        : 'Erreur de connexion. Vérifiez votre réseau et réessayez.';
+        : ((window.isEnglish && window.isEnglish()) ? 'Connection error. Check your network and try again.' : 'Erreur de connexion. Vérifiez votre réseau et réessayez.');
       resultZone.appendChild(errEl2);
     }
     if (reset) reset.style.display = 'block';

@@ -339,29 +339,29 @@ function getSuggestions() {
   if (lsf) {
     if (lsf.pain) {
       // Douleur signalée → priorité absolue : adapter autour de la zone
-      suggestions.push('Adapter ma séance autour de ' + lsf.pain + ' ?');
+      suggestions.push((window.isEnglish && window.isEnglish() ? 'Adapt my session around ' : 'Adapter ma séance autour de ') + lsf.pain + ' ?');
     }
     if (typeof lsf.rpe === 'number') {
       if (lsf.rpe <= 6) {
-        suggestions.push('Je peux monter les charges pour la prochaine séance ?');
+        suggestions.push((window.isEnglish && window.isEnglish() ? 'Can I increase the weights for my next session?' : 'Je peux monter les charges pour la prochaine séance ?'));
       } else if (lsf.rpe >= 9) {
-        suggestions.push('Je propose un dé-load cette semaine ?');
+        suggestions.push((window.isEnglish && window.isEnglish() ? 'Suggest a deload week?' : 'Je propose un dé-load cette semaine ?'));
       } else {
-        suggestions.push('Comment progresser sans en faire trop ?');
+        suggestions.push((window.isEnglish && window.isEnglish() ? 'How to progress without overdoing it?' : 'Comment progresser sans en faire trop ?'));
       }
     }
   } else if (S.sessionHistory && Object.keys(S.sessionHistory).length > 0) {
     // Des séances existent mais pas de feedback → inviter à reporter
-    suggestions.push('Reporter ma dernière séance');
+    suggestions.push((window.isEnglish && window.isEnglish() ? 'Log my last session' : 'Reporter ma dernière séance'));
   }
 
   // ── 2. Cycle — si suivi activé ──
   try {
     var cp = typeof window.getCyclePhaseForAI === 'function' ? window.getCyclePhaseForAI() : null;
     if (cp && cp.phase) {
-      if (cp.phase === 'menstruation') suggestions.push('Séance adaptée à cette phase ?');
-      else if (cp.phase === 'folliculaire') suggestions.push('Profiter du pic de performance ?');
-      else if (cp.phase === 'lutéale') suggestions.push('Ajuster mon volume en phase lutéale ?');
+      if (cp.phase === 'menstruation') suggestions.push((window.isEnglish && window.isEnglish() ? 'Adapted session for this phase?' : 'Séance adaptée à cette phase ?'));
+      else if (cp.phase === 'folliculaire') suggestions.push((window.isEnglish && window.isEnglish() ? 'Take advantage of the performance peak?' : 'Profiter du pic de performance ?'));
+      else if (cp.phase === 'lutéale') suggestions.push((window.isEnglish && window.isEnglish() ? 'Adjust my volume in the luteal phase?' : 'Ajuster mon volume en phase lutéale ?'));
     }
   } catch(e) {}
 
@@ -369,13 +369,13 @@ function getSuggestions() {
   if (S.pregnant && S.pregnancyWeek) {
     var w2 = Number(S.pregnancyWeek);
     var trim = w2 <= 12 ? 'T1' : (w2 <= 26 ? 'T2' : 'T3');
-    suggestions.push('Conseils adaptés à ma grossesse (' + trim + ') ?');
+    suggestions.push((window.isEnglish && window.isEnglish() ? 'Tips adapted to my pregnancy (' + trim + ')?' : 'Conseils adaptés à ma grossesse (' + trim + ') ?'));
   }
 
   // ── 4. Wellness du jour ──
   var w = S.todayWellness || {};
-  if (w.sleep && w.sleep <= 2) suggestions.push('Je suis fatigué, que faire ?');
-  if (w.muscles === 'douleurs') suggestions.push('J\'ai des douleurs musculaires');
+  if (w.sleep && w.sleep <= 2) suggestions.push((window.isEnglish && window.isEnglish() ? 'I\'m tired, what should I do?' : 'Je suis fatigué, que faire ?'));
+  if (w.muscles === 'douleurs') suggestions.push((window.isEnglish && window.isEnglish() ? 'I have muscle soreness' : 'J\'ai des douleurs musculaires'));
 
   // ── 5. Streak ──
   try {
@@ -383,24 +383,24 @@ function getSuggestions() {
     var _sRaw2 = localStorage.getItem('mtd_streak_' + _uidS);
     if (_sRaw2) {
       var _so = JSON.parse(_sRaw2);
-      if (_so && _so.current >= 7) suggestions.push('Je tiens ' + _so.current + ' jours — comment garder la cadence ?');
+      if (_so && _so.current >= 7) suggestions.push((window.isEnglish && window.isEnglish() ? 'I\'m on a ' + _so.current + '-day streak — how to keep it up?' : 'Je tiens ' + _so.current + ' jours — comment garder la cadence ?'));
     }
   } catch(e) {}
 
   // ── 6. Nutrition ──
-  suggestions.push('Mon plan nutrition est-il adapté ?');
+  suggestions.push((window.isEnglish && window.isEnglish() ? 'Is my nutrition plan adapted?' : 'Mon plan nutrition est-il adapté ?'));
 
   // ── 7. Sport spécifique (fallback) ──
   if (S.sportType === 'crossfit') {
-    suggestions.push('Comment progresser en haltéro ?');
+    suggestions.push((window.isEnglish && window.isEnglish() ? 'How to progress in weightlifting?' : 'Comment progresser en haltéro ?'));
   } else if (S.sportType === 'triathlon') {
-    suggestions.push('Optimiser ma nutrition longue distance ?');
+    suggestions.push((window.isEnglish && window.isEnglish() ? 'Optimize my long-distance nutrition?' : 'Optimiser ma nutrition longue distance ?'));
   } else if (S.sportType === 'calisthenics') {
-    suggestions.push('Progresser vers le muscle-up ?');
+    suggestions.push((window.isEnglish && window.isEnglish() ? 'Progress towards the muscle-up?' : 'Progresser vers le muscle-up ?'));
   } else if (S.sportType === 'running') {
-    suggestions.push('Améliorer mon allure seuil ?');
+    suggestions.push((window.isEnglish && window.isEnglish() ? 'Improve my threshold pace?' : 'Améliorer mon allure seuil ?'));
   } else {
-    suggestions.push('Adapter ma séance du jour ?');
+    suggestions.push((window.isEnglish && window.isEnglish() ? 'Adapt my today\'s session?' : 'Adapter ma séance du jour ?'));
   }
 
   // Déduplication (au cas où un contexte produise la même phrase 2×)
@@ -428,7 +428,7 @@ function buildUI() {
     // Fallback legacy : bouton flottant cercle discret 48×48 (bible §8)
     var btn = document.createElement('button');
     btn.id = 'ai-coach-btn';
-    btn.setAttribute('aria-label', 'Ouvrir le coach IA');
+    btn.setAttribute('aria-label', (window.isEnglish && window.isEnglish() ? 'Open AI coach' : 'Ouvrir le coach IA'));
     btn.setAttribute('title', 'Smart Fit Coach');
     var _btnIcon = document.createElement('span');
     _btnIcon.style.cssText = 'font-size:18px;line-height:1;';
@@ -506,9 +506,9 @@ function buildUI() {
     micBtn = document.createElement('button');
     micBtn.id = 'ai-coach-mic';
     micBtn.type = 'button';
-    micBtn.title = 'Dictée vocale';
-    micBtn.setAttribute('aria-label', 'Dicter ma question au coach');
-    micBtn.setAttribute('data-tooltip', 'Dictée vocale');
+    micBtn.title = (window.isEnglish && window.isEnglish() ? 'Voice dictation' : 'Dictée vocale');
+    micBtn.setAttribute('aria-label', (window.isEnglish && window.isEnglish() ? 'Dictate my question to the coach' : 'Dicter ma question au coach'));
+    micBtn.setAttribute('data-tooltip', (window.isEnglish && window.isEnglish() ? 'Voice dictation' : 'Dictée vocale'));
     // SVG inline micro (cohérent design luxe — pas d'emoji)
     micBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
       + '<rect x="9" y="3" width="6" height="11" rx="3"/>'
@@ -602,7 +602,7 @@ function stripRegenerateButtonsFromPrevious(container) {
       var actions = m.querySelector('.ai-msg-actions');
       if (!actions) return;
       actions.querySelectorAll('button').forEach(function(b) {
-        if (b.getAttribute('title') === 'Régénérer') b.remove();
+        if (b.getAttribute('title') === 'Régénérer' || b.getAttribute('title') === 'Regenerate') b.remove();
       });
     });
   } catch(e) {}
@@ -616,8 +616,8 @@ function regenerateLastResponse() {
     if (_lastRemaining) {
       var _hr = typeof _lastRemaining.hourRemaining === 'number' ? _lastRemaining.hourRemaining : null;
       var _dy = typeof _lastRemaining.dayRemaining === 'number' ? _lastRemaining.dayRemaining : null;
-      if (_hr === 0) { showToast('Limite horaire atteinte — réessaie dans 1h'); return; }
-      if (_dy === 0) { showToast('Quota journalier atteint — retour demain'); return; }
+      if (_hr === 0) { showToast((window.isEnglish && window.isEnglish() ? 'Hourly limit reached — try again in 1h' : 'Limite horaire atteinte — réessaie dans 1h')); return; }
+      if (_dy === 0) { showToast((window.isEnglish && window.isEnglish() ? 'Daily quota reached — come back tomorrow' : 'Quota journalier atteint — retour demain')); return; }
     }
     var S = window.S || {};
     if (!Array.isArray(S.aiCoachHistory) || !S.aiCoachHistory.length) return;
@@ -638,7 +638,7 @@ function regenerateLastResponse() {
     }
     // Replayer le dernier message user via sendMessage (il va re-appender user, mais on veut éviter)
     // → On appelle directement la partie "api call" sans re-push user.
-    showToast('Régénération…');
+    showToast((window.isEnglish && window.isEnglish() ? 'Regenerating…' : 'Régénération…'));
     replayLastUserMessage(lastUserMsg);
   } catch(e) {}
 }
@@ -671,15 +671,15 @@ function replayLastUserMessage(_unused) {
     if (_tm) clearTimeout(_tm);
     if (!res.ok) {
       if (res.status === 401 || res.status === 403) { if (window.showPaywall) window.showPaywall('ai-coach'); var _pe = new Error('paywall'); _pe._paywall = true; throw _pe; }
-      return res.json().catch(function(){ return {}; }).then(function(e){ throw new Error(e.error || 'Erreur HTTP ' + res.status); });
+      return res.json().catch(function(){ return {}; }).then(function(e){ throw new Error(e.error || (window.isEnglish && window.isEnglish() ? 'HTTP Error ' : 'Erreur HTTP ') + res.status); });
     }
     return res.json();
   }).then(function(data) {
     if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
     if (data.error) {
-      appendError(messages, 'Erreur : ' + data.error);
+      appendError(messages, (window.isEnglish && window.isEnglish() ? 'Error: ' : 'Erreur : ') + data.error);
     } else {
-      var reply = data.reply || 'Pas de réponse.';
+      var reply = data.reply || (window.isEnglish && window.isEnglish() ? 'No response.' : 'Pas de réponse.');
       stripRegenerateButtonsFromPrevious(messages);
       appendCoachMessage(messages, reply, { canRegenerate: true, stream: true });
       if (Array.isArray(S.aiCoachHistory)) {
@@ -695,8 +695,8 @@ function replayLastUserMessage(_unused) {
     if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
     if (err && err._paywall) return;
     var errMsg = (err && err.name === 'AbortError')
-      ? 'Le coach met trop de temps à répondre. Réessaie dans quelques instants.'
-      : 'Impossible de régénérer. Vérifie ta connexion.';
+      ? (window.isEnglish && window.isEnglish() ? 'The coach is taking too long to respond. Try again in a moment.' : 'Le coach met trop de temps à répondre. Réessaie dans quelques instants.')
+      : (window.isEnglish && window.isEnglish() ? 'Unable to regenerate. Check your connection.' : 'Impossible de régénérer. Vérifie ta connexion.');
     appendError(messages, errMsg);
   }).finally(function() {
     _sending = false;
@@ -716,21 +716,21 @@ function updateRateLimitHint(remaining) {
     if (hr === null && dy === null) { el.textContent = ''; return; }
     // Cas limite : quota épuisé — on précise quel reset attendre (heure vs jour)
     if (hr === 0 && dy !== null && dy > 0) {
-      el.textContent = 'Limite horaire atteinte — réessaie dans 1h';
+      el.textContent = (window.isEnglish && window.isEnglish() ? 'Hourly limit reached — try again in 1h' : 'Limite horaire atteinte — réessaie dans 1h');
       return;
     }
     if (dy === 0) {
-      el.textContent = 'Quota journalier atteint — retour demain';
+      el.textContent = (window.isEnglish && window.isEnglish() ? 'Daily quota reached — come back tomorrow' : 'Quota journalier atteint — retour demain');
       return;
     }
     // Cas standard : on affiche le plus contraignant avec label clair
     if (hr !== null && dy !== null) {
       var limiting = (hr <= dy) ? hr : dy;
-      var label = (hr <= dy) ? 'cette heure' : 'aujourd\'hui';
+      var label = (hr <= dy) ? (window.isEnglish && window.isEnglish() ? 'this hour' : 'cette heure') : (window.isEnglish && window.isEnglish() ? 'today' : 'aujourd\'hui');
       el.textContent = limiting + ' ' + window.locPlural(limiting, {fr:{one:'question',other:'questions'},en:{one:'question',other:'questions'}}) + ' ' + label;
     } else {
       var v = hr !== null ? hr : dy;
-      var lbl = hr !== null ? 'cette heure' : 'aujourd\'hui';
+      var lbl = hr !== null ? (window.isEnglish && window.isEnglish() ? 'this hour' : 'cette heure') : (window.isEnglish && window.isEnglish() ? 'today' : 'aujourd\'hui');
       el.textContent = v + ' ' + window.locPlural(v, {fr:{one:'question',other:'questions'},en:{one:'question',other:'questions'}}) + ' ' + lbl;
     }
   } catch(e) {}
@@ -823,11 +823,11 @@ window.SpeechInput = (function() {
           // 'audio-capture' (pas de micro) / 'network' (offline)
           // FIX P1 audit : message permission plus explicite → guide user vers settings browser
           if (err === 'not-allowed' || err === 'service-not-allowed') {
-            if (typeof showToast === 'function') showToast('Micro refusé. Vérifie les paramètres du navigateur');
+            if (typeof showToast === 'function') showToast((window.isEnglish && window.isEnglish() ? 'Microphone denied. Check your browser settings' : 'Micro refusé. Vérifie les paramètres du navigateur'));
           } else if (err === 'audio-capture') {
-            if (typeof showToast === 'function') showToast('Aucun micro détecté');
+            if (typeof showToast === 'function') showToast((window.isEnglish && window.isEnglish() ? 'No microphone detected' : 'Aucun micro détecté'));
           } else if (err === 'network') {
-            if (typeof showToast === 'function') showToast('Réseau requis pour la dictée');
+            if (typeof showToast === 'function') showToast((window.isEnglish && window.isEnglish() ? 'Network required for dictation' : 'Réseau requis pour la dictée'));
           }
           // 'no-speech' et 'aborted' = silencieux (UX douce)
         } catch(e) {}
@@ -855,7 +855,7 @@ window.SpeechInput = (function() {
       // FIX P0 audit : bloquer double-toggle pendant init (race condition double append)
       if (_initializing) return;
       if (!supported) {
-        try { if (typeof showToast === 'function') showToast('Dictée vocale non supportée'); } catch(e) {}
+        try { if (typeof showToast === 'function') showToast((window.isEnglish && window.isEnglish() ? 'Voice dictation not supported' : 'Dictée vocale non supportée')); } catch(e) {}
         return;
       }
       _initializing = true;
@@ -874,7 +874,7 @@ window.SpeechInput = (function() {
           } catch(e) {
             recording = false;
             _updateBtn();
-            try { if (typeof showToast === 'function') showToast('Erreur démarrage micro'); } catch(_e) {}
+            try { if (typeof showToast === 'function') showToast((window.isEnglish && window.isEnglish() ? 'Error starting microphone' : 'Erreur démarrage micro')); } catch(_e) {}
           }
         }
       } finally {
@@ -1017,23 +1017,23 @@ function appendCoachMessage(container, text, opts) {
     // Copier
     var copyBtn = document.createElement('button');
     copyBtn.type = 'button';
-    copyBtn.title = 'Copier';
+    copyBtn.title = (window.isEnglish && window.isEnglish() ? 'Copy' : 'Copier');
     // POLISH 2026-04 (V3) : tooltip premium via [data-tooltip] (système global CSS)
-    copyBtn.setAttribute('data-tooltip', 'Copier');
-    copyBtn.setAttribute('aria-label', 'Copier la réponse');
+    copyBtn.setAttribute('data-tooltip', (window.isEnglish && window.isEnglish() ? 'Copy' : 'Copier'));
+    copyBtn.setAttribute('aria-label', (window.isEnglish && window.isEnglish() ? 'Copy the response' : 'Copier la réponse'));
     copyBtn.textContent = '\u2398'; // U+2398 next page icon — visible et sobre
     copyBtn.addEventListener('click', function() {
       try {
         if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(text).then(function() { showToast('Copié'); }, function() { showToast('\u00c9chec copie'); });
+          navigator.clipboard.writeText(text).then(function() { showToast((window.isEnglish && window.isEnglish() ? 'Copied' : 'Copié')); }, function() { showToast((window.isEnglish && window.isEnglish() ? 'Copy failed' : '\u00c9chec copie')); });
         } else {
           // Fallback vieux navigateurs : textarea temporaire
           var ta = document.createElement('textarea');
           ta.value = text; document.body.appendChild(ta); ta.select();
-          try { document.execCommand('copy'); showToast('Copié'); } catch(e) { showToast('\u00c9chec copie'); }
+          try { document.execCommand('copy'); showToast((window.isEnglish && window.isEnglish() ? 'Copied' : 'Copié')); } catch(e) { showToast((window.isEnglish && window.isEnglish() ? 'Copy failed' : '\u00c9chec copie')); }
           document.body.removeChild(ta);
         }
-      } catch(e) { showToast('\u00c9chec copie'); }
+      } catch(e) { showToast((window.isEnglish && window.isEnglish() ? 'Copy failed' : '\u00c9chec copie')); }
     });
     actions.appendChild(copyBtn);
 
@@ -1041,9 +1041,9 @@ function appendCoachMessage(container, text, opts) {
     if (opts.canRegenerate) {
       var regenBtn = document.createElement('button');
       regenBtn.type = 'button';
-      regenBtn.title = 'Régénérer';
-      regenBtn.setAttribute('data-tooltip', 'Régénérer');
-      regenBtn.setAttribute('aria-label', 'Régénérer la réponse');
+      regenBtn.title = (window.isEnglish && window.isEnglish() ? 'Regenerate' : 'Régénérer');
+      regenBtn.setAttribute('data-tooltip', (window.isEnglish && window.isEnglish() ? 'Regenerate' : 'Régénérer'));
+      regenBtn.setAttribute('aria-label', (window.isEnglish && window.isEnglish() ? 'Regenerate the response' : 'Régénérer la réponse'));
       regenBtn.textContent = '\u21BB'; // clockwise arrow
       regenBtn.addEventListener('click', function() { regenerateLastResponse(); });
       actions.appendChild(regenBtn);
@@ -1052,30 +1052,30 @@ function appendCoachMessage(container, text, opts) {
     // 👍
     var upBtn = document.createElement('button');
     upBtn.type = 'button';
-    upBtn.title = 'Utile';
-    upBtn.setAttribute('data-tooltip', 'Utile');
-    upBtn.setAttribute('aria-label', 'Marquer comme utile');
+    upBtn.title = (window.isEnglish && window.isEnglish() ? 'Helpful' : 'Utile');
+    upBtn.setAttribute('data-tooltip', (window.isEnglish && window.isEnglish() ? 'Helpful' : 'Utile'));
+    upBtn.setAttribute('aria-label', (window.isEnglish && window.isEnglish() ? 'Mark as helpful' : 'Marquer comme utile'));
     upBtn.textContent = '\u2713'; // check mark
     upBtn.addEventListener('click', function() {
       recordCoachFeedback(text, 'up');
       upBtn.classList.add('active-up');
       downBtn.classList.remove('active-down');
-      showToast('Merci pour ton retour');
+      showToast((window.isEnglish && window.isEnglish() ? 'Thanks for your feedback' : 'Merci pour ton retour'));
     });
     actions.appendChild(upBtn);
 
     // 👎
     var downBtn = document.createElement('button');
     downBtn.type = 'button';
-    downBtn.title = 'Peu utile';
-    downBtn.setAttribute('data-tooltip', 'Peu utile');
-    downBtn.setAttribute('aria-label', 'Marquer comme peu utile');
+    downBtn.title = (window.isEnglish && window.isEnglish() ? 'Not helpful' : 'Peu utile');
+    downBtn.setAttribute('data-tooltip', (window.isEnglish && window.isEnglish() ? 'Not helpful' : 'Peu utile'));
+    downBtn.setAttribute('aria-label', (window.isEnglish && window.isEnglish() ? 'Mark as not helpful' : 'Marquer comme peu utile'));
     downBtn.textContent = '\u2717'; // cross mark
     downBtn.addEventListener('click', function() {
       recordCoachFeedback(text, 'down');
       downBtn.classList.add('active-down');
       upBtn.classList.remove('active-up');
-      showToast('Retour enregistré');
+      showToast((window.isEnglish && window.isEnglish() ? 'Feedback recorded' : 'Retour enregistré'));
     });
     actions.appendChild(downBtn);
 
@@ -1239,7 +1239,7 @@ function sendMessage() {
     var _rawCount = (function() { try { return JSON.parse(localStorage.getItem('sfc_coach_count') || 'null'); } catch(e) { return null; } })();
     var _coachCount = (_rawCount && _rawCount.date === _today) ? (_rawCount.n || 0) : 0;
     if (_coachCount >= 3) {
-      appendError(messages, 'Limite atteinte (3 messages/jour en version d\u2019essai). Abonnez-vous pour un acc\u00e8s illimit\u00e9.');
+      appendError(messages, (window.isEnglish && window.isEnglish() ? 'Limit reached (3 messages/day in trial). Subscribe for unlimited access.' : 'Limite atteinte (3 messages/jour en version d\u2019essai). Abonnez-vous pour un acc\u00e8s illimit\u00e9.'));
       return;
     }
     try { localStorage.setItem('sfc_coach_count', JSON.stringify({ date: _today, n: _coachCount + 1 })); } catch(e) {}
@@ -1291,16 +1291,16 @@ function sendMessage() {
     if (_coachTimer) clearTimeout(_coachTimer);
     if (!res.ok) {
       if (res.status === 401 || res.status === 403) { if (window.showPaywall) window.showPaywall('ai-coach'); var _pe = new Error('paywall'); _pe._paywall = true; throw _pe; }
-      return res.json().catch(function(){ return {}; }).then(function(e){ throw new Error(e.error || 'Erreur HTTP ' + res.status); });
+      return res.json().catch(function(){ return {}; }).then(function(e){ throw new Error(e.error || (window.isEnglish && window.isEnglish() ? 'HTTP Error ' : 'Erreur HTTP ') + res.status); });
     }
     return res.json();
   }).then(function(data) {
     if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
 
     if (data.error) {
-      appendError(messages, 'Erreur : ' + data.error);
+      appendError(messages, (window.isEnglish && window.isEnglish() ? 'Error: ' : 'Erreur : ') + data.error);
     } else {
-      var reply = data.reply || 'Pas de réponse.';
+      var reply = data.reply || (window.isEnglish && window.isEnglish() ? 'No response.' : 'Pas de réponse.');
       // POLISH 2026-04 (V1.2) : dernier message a le bouton "Régénérer".
       // Les précédents (via stripActions) gardent copier + feedback mais pas regen.
       stripRegenerateButtonsFromPrevious(messages);
@@ -1327,10 +1327,10 @@ function sendMessage() {
     if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
     if (err && err._paywall) return;
     var errMsg = (err && err.name === 'AbortError')
-      ? 'Le coach met trop de temps \u00e0 r\u00e9pondre. R\u00e9essaie dans quelques instants.'
+      ? (window.isEnglish && window.isEnglish() ? 'The coach is taking too long to respond. Try again in a moment.' : 'Le coach met trop de temps \u00e0 r\u00e9pondre. R\u00e9essaie dans quelques instants.')
       : (err && err.message && err.message.indexOf('429') !== -1)
-      ? 'Trop de messages envoy\u00e9s. Attends quelques minutes avant de r\u00e9essayer.'
-      : 'Impossible de joindre le coach. V\u00e9rifiez votre connexion.';
+      ? (window.isEnglish && window.isEnglish() ? 'Too many messages sent. Wait a few minutes before retrying.' : 'Trop de messages envoy\u00e9s. Attends quelques minutes avant de r\u00e9essayer.')
+      : (window.isEnglish && window.isEnglish() ? 'Unable to reach the coach. Check your connection.' : 'Impossible de joindre le coach. V\u00e9rifiez votre connexion.');
     appendError(messages, errMsg);
     messages.scrollTop = messages.scrollHeight;
   }).finally(function() {

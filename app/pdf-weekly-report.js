@@ -108,7 +108,7 @@ window.exportWeeklyReportPDF = function() {
       return;
     }
     if (!window.jspdf || !window.jspdf.jsPDF) {
-      if (window.showToast) window.showToast('Chargement du PDF…', 'info', 2000);
+      if (window.showToast) window.showToast((window.isEnglish && window.isEnglish() ? 'Loading PDF…' : 'Chargement du PDF…'), 'info', 2000);
       if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', window.exportWeeklyReportPDF); }
       return;
     }
@@ -140,7 +140,7 @@ window.exportWeeklyReportPDF = function() {
 
     // Titre principal — Times 22pt italic (plus impact)
     doc.setFont('times', 'italic'); doc.setFontSize(22);
-    doc.text('Rapport hebdomadaire', M, 26);
+    doc.text((window.isEnglish && window.isEnglish() ? 'Weekly report' : 'Rapport hebdomadaire'), M, 26);
 
     // Filet d'accent vert sous titre (marque visuelle)
     color(doc, 'draw', green);
@@ -157,20 +157,20 @@ window.exportWeeklyReportPDF = function() {
     var y = 58;
 
     // ═══ 1. PROFIL ═══
-    y = sectionTitle(doc, y, 'Profil');
+    y = sectionTitle(doc, y, (_pdfEN ? 'Profile' : 'Profil'));
     var _pdfEN = S.lang === 'en';
     if (S.sex) y = kvLine(doc, y, _pdfEN ? 'Sex' : 'Sexe', window.isMale(S) ? (_pdfEN ? 'Male' : 'Homme') : (_pdfEN ? 'Female' : 'Femme'), { emphasis: false });
     if (S.age) y = kvLine(doc, y, _pdfEN ? 'Age' : 'Âge', S.age + (_pdfEN ? ' years' : ' ans'), { emphasis: false });
     if (S.weight) y = kvLine(doc, y, _pdfEN ? 'Current weight' : 'Poids actuel', S.weight + ' kg');
     if (S.height) y = kvLine(doc, y, _pdfEN ? 'Height' : 'Taille', S.height + ' cm', { emphasis: false });
     if (window.GOALS && typeof S.goal === 'number' && window.GOALS[S.goal]) {
-      y = kvLine(doc, y, 'Objectif', window.GOALS[S.goal].label || window.GOALS[S.goal].key || '—', { emphasis: false });
+      y = kvLine(doc, y, (_pdfEN ? 'Goal' : 'Objectif'), window.GOALS[S.goal].label || window.GOALS[S.goal].key || '—', { emphasis: false });
     }
     y += 5;
 
     // ═══ 2. OBJECTIFS SEMAINE ═══
     y = checkPage(doc, y);
-    y = sectionTitle(doc, y, 'Objectifs de la semaine');
+    y = sectionTitle(doc, y, (_pdfEN ? 'Weekly goals' : 'Objectifs de la semaine'));
     var goals = (typeof window.getWeeklyGoalsProgress === 'function') ? window.getWeeklyGoalsProgress() : null;
     if (goals) {
       function pctColor(pct, low, high) {
@@ -181,46 +181,46 @@ window.exportWeeklyReportPDF = function() {
       }
       if (goals.sessions) {
         var sessTxt = goals.sessions.done + ' / ' + (goals.sessions.planned || '—') + (goals.sessions.pct !== null ? '   ' + goals.sessions.pct + '%' : '');
-        y = kvLine(doc, y, 'Séances', sessTxt, { valueColor: pctColor(goals.sessions.pct, 50) });
+        y = kvLine(doc, y, (_pdfEN ? 'Sessions' : 'Séances'), sessTxt, { valueColor: pctColor(goals.sessions.pct, 50) });
       }
       if (goals.kcalAvg) {
         var kPct = goals.kcalAvg.pct;
         var kDiff = kPct !== null ? Math.abs(kPct - 100) : null;
         var kCol = kDiff === null ? black : (kDiff > 25 ? red : (kDiff > 10 ? orange : green));
         var kTxt = goals.kcalAvg.current + ' / ' + (goals.kcalAvg.target || '—') + ' kcal' + (kPct !== null ? '   ' + kPct + '%' : '');
-        y = kvLine(doc, y, 'Calories (moy. 7j)', kTxt, { valueColor: kCol });
+        y = kvLine(doc, y, (_pdfEN ? 'Calories (avg 7d)' : 'Calories (moy. 7j)'), kTxt, { valueColor: kCol });
       }
       if (goals.proteinAvg) {
         var pTxt = goals.proteinAvg.current + ' / ' + (goals.proteinAvg.target || '—') + ' g' + (goals.proteinAvg.pct !== null ? '   ' + goals.proteinAvg.pct + '%' : '');
-        y = kvLine(doc, y, 'Protéines (moy. 7j)', pTxt, { valueColor: pctColor(goals.proteinAvg.pct, 80) });
+        y = kvLine(doc, y, (_pdfEN ? 'Protein (avg 7d)' : 'Protéines (moy. 7j)'), pTxt, { valueColor: pctColor(goals.proteinAvg.pct, 80) });
       }
       if (goals.wellnessLogged) {
-        y = kvLine(doc, y, 'Bilan forme loggés', goals.wellnessLogged.count + ' / 7 j   ' + goals.wellnessLogged.pct + '%', { valueColor: pctColor(goals.wellnessLogged.pct, 50) });
+        y = kvLine(doc, y, (_pdfEN ? 'Wellness logged' : 'Bilan forme loggés'), goals.wellnessLogged.count + ' / 7 j   ' + goals.wellnessLogged.pct + '%', { valueColor: pctColor(goals.wellnessLogged.pct, 50) });
       }
     } else {
       color(doc, 'text', grey);
       doc.setFont('times', 'italic'); doc.setFontSize(10);
-      doc.text('Aucune donnée disponible pour cette semaine.', M, y);
+      doc.text((_pdfEN ? 'No data available for this week.' : 'Aucune donnée disponible pour cette semaine.'), M, y);
       y += 8;
     }
     y += 5;
 
     // ═══ 3. BILAN 7 JOURS ═══
     y = checkPage(doc, y);
-    y = sectionTitle(doc, y, 'Bilan 7 jours');
+    y = sectionTitle(doc, y, (_pdfEN ? '7-day summary' : 'Bilan 7 jours'));
     var ws = (typeof window.getWeekSessionsSummary === 'function') ? window.getWeekSessionsSummary() : null;
     var wAvg = (typeof window.getWellnessAvg === 'function') ? window.getWellnessAvg(7) : null;
     var wperf = (typeof window.getWeekPerformanceSummary === 'function') ? window.getWeekPerformanceSummary() : null;
     if (ws) {
-      y = kvLine(doc, y, 'Séances effectuées', ws.sessions + '   (' + ws.daysActive + ' jours actifs)');
-      if (ws.kcalTotal > 0) y = kvLine(doc, y, 'Kcal dépensées', window.formatNumber(ws.kcalTotal) + ' kcal');
-      if (ws.durationTotal > 0) y = kvLine(doc, y, 'Temps total', ws.durationTotal + ' min');
+      y = kvLine(doc, y, (_pdfEN ? 'Sessions completed' : 'Séances effectuées'), ws.sessions + '   (' + ws.daysActive + (_pdfEN ? ' active days)' : ' jours actifs)'));
+      if (ws.kcalTotal > 0) y = kvLine(doc, y, (_pdfEN ? 'Kcal burned' : 'Kcal dépensées'), window.formatNumber(ws.kcalTotal) + ' kcal');
+      if (ws.durationTotal > 0) y = kvLine(doc, y, (_pdfEN ? 'Total time' : 'Temps total'), ws.durationTotal + ' min');
     }
     if (wAvg && wAvg.sleepAvg !== null) {
-      y = kvLine(doc, y, 'Sommeil moyen', wAvg.sleepAvg + ' / 5');
+      y = kvLine(doc, y, (_pdfEN ? 'Average sleep' : 'Sommeil moyen'), wAvg.sleepAvg + ' / 5');
     }
     if (wperf && typeof wperf.rpeAvg === 'number') {
-      y = kvLine(doc, y, 'RPE moyen', wperf.rpeAvg + ' / 10');
+      y = kvLine(doc, y, (_pdfEN ? 'Average RPE' : 'RPE moyen'), wperf.rpeAvg + ' / 10');
     }
     y += 5;
 
@@ -228,7 +228,7 @@ window.exportWeeklyReportPDF = function() {
     y = checkPage(doc, y);
     var patterns = (typeof window.detectWeekPatterns === 'function') ? window.detectWeekPatterns() : [];
     if (Array.isArray(patterns) && patterns.length > 0) {
-      y = sectionTitle(doc, y, 'Signaux détectés');
+      y = sectionTitle(doc, y, (_pdfEN ? 'Detected signals' : 'Signaux détectés'));
       patterns.slice(0, 5).forEach(function(p) {
         y = checkPage(doc, y);
         var rgbMap = { info: green, warning: orange, alert: red };
@@ -256,7 +256,7 @@ window.exportWeeklyReportPDF = function() {
     y = checkPage(doc, y);
     var records = (typeof window.getPersonalRecords === 'function') ? window.getPersonalRecords() : null;
     if (records) {
-      y = sectionTitle(doc, y, 'Records personnels');
+      y = sectionTitle(doc, y, (_pdfEN ? 'Personal records' : 'Records personnels'));
       // Grille 2 colonnes — chaque cell 85mm (colWidth)
       var colWidth = (CW - 10) / 2; // 10mm gouttière
       var colX1 = M;
@@ -280,7 +280,7 @@ window.exportWeeklyReportPDF = function() {
         });
       } else if (records.weightRange) {
         cells.push({
-          label: 'Plage de poids',
+          label: (_pdfEN ? 'Weight range' : 'Plage de poids'),
           value: records.weightRange.min + '–' + records.weightRange.max + ' kg',
           detail: null
         });
@@ -290,16 +290,16 @@ window.exportWeeklyReportPDF = function() {
         if (records.longestSession.kcalTotal) lsD.push(records.longestSession.kcalTotal + ' kcal');
         if (records.longestSession.date) lsD.push(fmtDate(records.longestSession.date));
         cells.push({
-          label: 'Séance la plus longue',
+          label: (_pdfEN ? 'Longest session' : 'Séance la plus longue'),
           value: records.longestSession.duration + ' min',
           detail: lsD.join(' · ')
         });
       }
       if (typeof records.maxStreak === 'number' && records.maxStreak > 0) {
         cells.push({
-          label: 'Plus longue série',
+          label: (_pdfEN ? 'Longest streak' : 'Plus longue série'),
           value: records.maxStreak + ' ' + window.locPlural(records.maxStreak, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}),
-          detail: 'Jours consécutifs'
+          detail: (_pdfEN ? 'Consecutive days' : 'Jours consécutifs')
         });
       }
 
@@ -321,7 +321,7 @@ window.exportWeeklyReportPDF = function() {
     y = checkPage(doc, y);
     var nutTrend = (typeof window.getNutritionTrend === 'function') ? window.getNutritionTrend(30) : null;
     if (nutTrend && nutTrend.loggedDays >= 3) {
-      y = sectionTitle(doc, y, 'Nutrition 30 jours');
+      y = sectionTitle(doc, y, (_pdfEN ? 'Nutrition 30 days' : 'Nutrition 30 jours'));
       var kcalVals = (Array.isArray(nutTrend.kcal) ? nutTrend.kcal : []).filter(function(v) { return typeof v === 'number'; });
       var kcalAvg = kcalVals.length ? Math.round(kcalVals.reduce(function(a,b){return a+b;}, 0) / kcalVals.length) : null;
       var pVals = (Array.isArray(nutTrend.protein) ? nutTrend.protein : []).filter(function(v) { return typeof v === 'number'; });
@@ -329,14 +329,14 @@ window.exportWeeklyReportPDF = function() {
       var tgtKcal = (nutTrend.targets && nutTrend.targets.kcal) ? nutTrend.targets.kcal : null;
       var tgtP = (nutTrend.targets && nutTrend.targets.p) ? nutTrend.targets.p : null;
       if (kcalAvg !== null) {
-        y = kvLine(doc, y, 'Kcal moyennes (30j)',
+        y = kvLine(doc, y, (_pdfEN ? 'Avg Kcal (30d)' : 'Kcal moyennes (30j)'),
           window.formatNumber(kcalAvg) + (tgtKcal ? ' / ' + window.formatNumber(tgtKcal) + ' kcal' : ' kcal'));
       }
       if (pAvg !== null) {
-        y = kvLine(doc, y, 'Protéines moyennes (30j)',
+        y = kvLine(doc, y, (_pdfEN ? 'Avg Protein (30d)' : 'Protéines moyennes (30j)'),
           pAvg + ' g' + (tgtP ? ' / ' + tgtP + ' g' : ''));
       }
-      y = kvLine(doc, y, 'Jours loggés', nutTrend.loggedDays + ' / 30 j', { emphasis: false });
+      y = kvLine(doc, y, (_pdfEN ? 'Days logged' : 'Jours loggés'), nutTrend.loggedDays + ' / 30 j', { emphasis: false });
       y += 5;
     }
 
@@ -344,7 +344,7 @@ window.exportWeeklyReportPDF = function() {
     y = checkPage(doc, y);
     var strengthTrend = (typeof window.getStrengthTrend === 'function') ? window.getStrengthTrend(30) : null;
     if (strengthTrend && Array.isArray(strengthTrend.datasets) && strengthTrend.datasets.length > 0) {
-      y = sectionTitle(doc, y, 'Progression charges 30 jours');
+      y = sectionTitle(doc, y, (_pdfEN ? 'Weight progression 30 days' : 'Progression charges 30 jours'));
       strengthTrend.datasets.forEach(function(ds) {
         y = checkPage(doc, y);
         var deltaTxt = '—';
@@ -371,7 +371,7 @@ window.exportWeeklyReportPDF = function() {
         var lifts = window.CF_1RM_LIFTS || [];
         var levelLabel = _S.crossfitLevel === 'scaled' ? 'Scaled' : _S.crossfitLevel === 'inter' ? 'Intermediate'
                        : _S.crossfitLevel === 'rx' ? 'RX' : _S.crossfitLevel === 'rx_plus' ? 'RX+' : 'Intermediate';
-        y = kvLine(doc, y, 'Niveau', levelLabel);
+        y = kvLine(doc, y, (_pdfEN ? 'Level' : 'Niveau'), levelLabel);
         lifts.forEach(function(lift) {
           var v = _S.crossfit1RM[lift.key];
           if (typeof v === 'number' && v > 0) {
@@ -386,7 +386,7 @@ window.exportWeeklyReportPDF = function() {
         }
         if (_cycleWk) {
           y = checkPage(doc, y);
-          y = kvLine(doc, y, 'Cycle haltérophilie', 'Semaine ' + _cycleWk + ' / 6');
+          y = kvLine(doc, y, (_pdfEN ? 'Weightlifting cycle' : 'Cycle haltérophilie'), (_pdfEN ? 'Week ' : 'Semaine ') + _cycleWk + ' / 6');
         }
         y += 5;
       }
@@ -399,23 +399,23 @@ window.exportWeeklyReportPDF = function() {
       var isMuscuPure = _SM.sportType === 'muscu' || _SM.sportType === 'musculation';
       if (isMuscuPure && _SM.muscuStrengthProfile && Object.keys(_SM.muscuStrengthProfile).length > 0) {
         y = checkPage(doc, y);
-        y = sectionTitle(doc, y, 'Musculation — Records 1RM');
+        y = sectionTitle(doc, y, (_pdfEN ? 'Weight training — 1RM records' : 'Musculation — Records 1RM'));
         var KEY_LIFTS_PDF = [
-          { key: 'bench_press',     name: 'Développé couché' },
+          { key: 'bench_press',     name: (_pdfEN ? 'Bench press' : 'Développé couché') },
           { key: 'squat',           name: 'Squat' },
           { key: 'deadlift',        name: 'Deadlift' },
-          { key: 'overhead_press',  name: 'Développé militaire' },
-          { key: 'barbell_row',     name: 'Rowing barre' },
+          { key: 'overhead_press',  name: (_pdfEN ? 'Overhead press' : 'Développé militaire') },
+          { key: 'barbell_row',     name: (_pdfEN ? 'Barbell row' : 'Rowing barre') },
           { key: 'hip_thrust',      name: 'Hip thrust' }
         ];
-        var levelLabelM = _SM.sportLevel === 'beginner' ? 'Débutant'
-                        : _SM.sportLevel === 'intermediate' ? 'Intermédiaire'
-                        : _SM.sportLevel === 'advanced' ? 'Avancé'
-                        : _SM.sportLevel === 'pro' ? 'Pro' : 'Intermédiaire';
-        y = kvLine(doc, y, 'Niveau', levelLabelM);
+        var levelLabelM = _SM.sportLevel === 'beginner' ? (_pdfEN ? 'Beginner' : 'Débutant')
+                        : _SM.sportLevel === 'intermediate' ? (_pdfEN ? 'Intermediate' : 'Intermédiaire')
+                        : _SM.sportLevel === 'advanced' ? (_pdfEN ? 'Advanced' : 'Avancé')
+                        : _SM.sportLevel === 'pro' ? 'Pro' : (_pdfEN ? 'Intermediate' : 'Intermédiaire');
+        y = kvLine(doc, y, (_pdfEN ? 'Level' : 'Niveau'), levelLabelM);
         if (typeof _SM.muscuWeek === 'number') {
           y = checkPage(doc, y);
-          y = kvLine(doc, y, 'Semaine actuelle', 'Semaine ' + _SM.muscuWeek + ' / 12');
+          y = kvLine(doc, y, (_pdfEN ? 'Current week' : 'Semaine actuelle'), (_pdfEN ? 'Week ' : 'Semaine ') + _SM.muscuWeek + ' / 12');
         }
         KEY_LIFTS_PDF.forEach(function(lift) {
           var weight = _SM.muscuStrengthProfile[lift.key];
@@ -431,7 +431,7 @@ window.exportWeeklyReportPDF = function() {
           var wt = window.getWeeklyTonnage(7);
           if (wt && wt.tonnage > 0) {
             y = checkPage(doc, y);
-            y = kvLine(doc, y, 'Tonnage 7 jours', wt.tonnage + ' kg (' + wt.sets + ' séries)');
+            y = kvLine(doc, y, (_pdfEN ? 'Tonnage 7 days' : 'Tonnage 7 jours'), wt.tonnage + ' kg (' + wt.sets + (_pdfEN ? ' sets)' : ' séries)'));
           }
         }
         y += 5;
@@ -448,9 +448,9 @@ window.exportWeeklyReportPDF = function() {
     color(doc, 'text', grey);
     doc.setFont('times', 'italic'); doc.setFontSize(8);
     var disclaimerLines = doc.splitTextToSize(
-      'Ce rapport est généré à titre informatif et pédagogique. Il ne remplace pas l\'avis '
-      + 'd\'un médecin ou d\'un professionnel de santé qualifié. Consulte un pro en cas de '
-      + 'doute, de douleur persistante ou de pathologie.',
+      (_pdfEN
+        ? 'This report is generated for informational and educational purposes. It does not replace the advice of a doctor or qualified health professional. Consult a professional in case of doubt, persistent pain, or pathology.'
+        : 'Ce rapport est généré à titre informatif et pédagogique. Il ne remplace pas l\'avis d\'un médecin ou d\'un professionnel de santé qualifié. Consulte un pro en cas de doute, de douleur persistante ou de pathologie.'),
       CW
     );
     doc.text(disclaimerLines, M, y);
@@ -481,7 +481,7 @@ window.exportWeeklyReportPDF = function() {
     doc.save('smartfitcoach-rapport-hebdo-' + dateStrFile + '.pdf');
   } catch(e) {
     console.error('[exportWeeklyReportPDF] Erreur:', e);
-    if (window.showToast) window.showToast('Erreur lors de la g\u00e9n\u00e9ration du PDF. R\u00e9essayez ou contactez le support.', 'error', 4500);
+    if (window.showToast) window.showToast((window.isEnglish && window.isEnglish() ? 'Error generating the PDF. Please retry or contact support.' : 'Erreur lors de la g\u00e9n\u00e9ration du PDF. R\u00e9essayez ou contactez le support.'), 'error', 4500);
   }
 };
 

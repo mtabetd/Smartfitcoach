@@ -3836,7 +3836,7 @@ function renderCardSport() {
       var S2 = window.S;
       if (!S2) return;
       S2.view = 'sport';
-      S2.selectedSportDay = Math.min(idx, (Array.isArray(S2.sportProgram) ? S2.sportProgram.length - 1 : 0));
+      S2.selectedSportDay = Math.max(0, Math.min(idx, (Array.isArray(S2.sportProgram) ? S2.sportProgram.length - 1 : 0)));
       if (window.render) window.render();
     }
   }, btnLabel);

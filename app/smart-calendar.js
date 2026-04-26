@@ -452,7 +452,7 @@
     } else if (_hasWeekPlan) {
       _nutritionStatusText = _calLang === 'en'
         ? 'Partial nutrition plan (' + _weekPlanDaysWithMeals + '/7 days). Generate a full week from the Nutrition tab.'
-        : 'Plan nutrition partiel (' + _weekPlanDaysWithMeals + '/7 jours). Générez une semaine complète depuis l'onglet Nutrition.';
+        : 'Plan nutrition partiel (' + _weekPlanDaysWithMeals + '/7 jours). Générez une semaine complète depuis l\'onglet Nutrition.';
     } else {
       _nutritionStatusText = _calLang === 'en'
         ? 'On training days, your carbohydrates are automatically +20% to optimise performance and recovery.'
