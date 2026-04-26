@@ -9912,7 +9912,7 @@ function renderRunningConfig(p) {
  }));
  daysWrap.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
  p.appendChild(daysWrap);
- p.appendChild(h('div', {'class': 'num-hint'}, (window.isEnglish && window.isEnglish() ? '3 to 6 days per week' : '3 à 6 jours par semaine')));
+ p.appendChild(h('div', {'class': 'num-hint'}, (window.isEnglish && window.isEnglish() ? '3 to 6 days per week' : (window.isEnglish && window.isEnglish() ? '3 to 6 days per week' : '3 à 6 jours par semaine'))));
 
  // Pace (optional)
  p.appendChild(h('div', {style: 'height:24px'}));
@@ -9969,7 +9969,7 @@ function renderRunningConfig(p) {
  window.BLACKBOX && window.BLACKBOX.log('running_config', {goal: S.runningGoal, level: S.runningLevel, days: S.runningDays});
  window.render();
  }
- }}, (window.isEnglish && window.isEnglish() ? 'Generate my plan' : 'Générer mon plan'));
+ }}, (window.isEnglish && window.isEnglish() ? 'Generate my plan' : (window.isEnglish && window.isEnglish() ? 'Generate my plan' : 'Générer mon plan')));
  // 2026-04 PHASE 2 : offrir le mix pour running primaire aussi
  // sportDays utilisé par renderSportMixSection mappe vers runningDays ici
  var _prevSportDays = S.sportDays;
@@ -10107,7 +10107,7 @@ function renderRunningProgram(p) {
   }
 
   var _logPanel = h('div', {style: 'border:1px solid var(--border,#D8D8D0);padding:14px 16px;margin:12px 0;background:var(--ivory2,#F4F4F0)'});
-  _logPanel.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px'}, 'Logger cette séance'));
+  _logPanel.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px'}, (window.isEnglish && window.isEnglish() ? 'Log this session' : 'Logger cette séance')));
 
   if (_existing) {
     var _recapEl = h('div', {style: 'font-family:Georgia,serif;font-size:13px;color:var(--success,#3E5C3A);margin-bottom:8px'});
@@ -10119,7 +10119,7 @@ function renderRunningProgram(p) {
         try { localStorage.setItem(_runHistKey, JSON.stringify(_runHist)); } catch(e) {}
         window.render();
       }
-    }, 'Corriger'));
+    }, (window.isEnglish && window.isEnglish() ? 'Edit' : 'Corriger'));
   } else {
     var _distInp = h('input', {type: 'number', min: '0', max: '100', step: '0.1', placeholder: '0.0', inputmode: 'decimal',
       style: 'width:70px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia,serif;font-size:16px;text-align:center;background:var(--ivory);color:#0A0A09'});
@@ -10159,7 +10159,7 @@ function renderRunningProgram(p) {
         var _km = parseFloat(_distInp.value) || 0;
         var _min = parseFloat(_durInp.value) || 0;
         if (_km <= 0 || _min <= 0) {
-          if (window.showToast) window.showToast('Entrez une distance et une durée valides.', 'error', 2500);
+          if (window.showToast) window.showToast((window.isEnglish && window.isEnglish() ? 'Enter a valid distance and duration.' : 'Entrez une distance et une durée valides.'), 'error', 2500);
           return;
         }
         // Pace = min/km. _km > 0 guaranteed above — no division by zero.
@@ -10181,7 +10181,7 @@ function renderRunningProgram(p) {
         _runHist.push(_entry);
         if (_runHist.length > 500) _runHist = _runHist.slice(_runHist.length - 500);
         try { localStorage.setItem(_runHistKey, JSON.stringify(_runHist)); } catch(e) {
-          if (window.showToast) window.showToast('Stockage plein — séance non sauvegardée.', 'error', 3000);
+          if (window.showToast) window.showToast((window.isEnglish && window.isEnglish() ? 'Storage full — session not saved.' : 'Stockage plein — séance non sauvegardée.'), 'error', 3000);
           return;
         }
         // Also write to S.sessionHistory for analytics volume tracker
@@ -10191,10 +10191,10 @@ function renderRunningProgram(p) {
         S.sessionHistory[_sessKey] = {duration: Math.round(_min), kcalBase: _kcalEst ? _kcalEst.base : 0, kcalEpoc: _kcalEst ? _kcalEst.epoc : 0, kcalTotal: _kcalEst ? _kcalEst.total : 0, date: new Date().toISOString(), sport: 'running'};
         if (window.GAMIFICATION) { try { window.GAMIFICATION.updateStreak(); } catch(e) {} }
         window.BLACKBOX && window.BLACKBOX.log('run_logged', {distanceKm: _entry.distanceKm, durationMin: _entry.durationMin, pace: _paceStr});
-        if (window.showToast) window.showToast('✓ Course enregistrée — ' + _entry.distanceKm + ' km à ' + _paceStr + ' /km', 'success');
+        if (window.showToast) window.showToast((window.isEnglish && window.isEnglish() ? '✓ Run logged — ' + _entry.distanceKm + ' km at ' + _paceStr + ' /km' : '✓ Course enregistrée — ' + _entry.distanceKm + ' km à ' + _paceStr + ' /km'), 'success');
         window.render();
       }
-    }, '✓ Enregistrer la course');
+    }, (window.isEnglish && window.isEnglish() ? '✓ Log run' : '✓ Enregistrer la course'));
     _logPanel.appendChild(_saveRunBtn);
   }
   p.appendChild(_logPanel);
@@ -10209,8 +10209,8 @@ function renderRunningProgram(p) {
 function renderHyroxConfig(p) {
  if (!S.hyroxBenchmarks || typeof S.hyroxBenchmarks !== 'object' || Array.isArray(S.hyroxBenchmarks)) S.hyroxBenchmarks = {};
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Hyrox'));
- p.appendChild(h('h1', {html: 'Préparation<br><em>Hyrox</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, '12 semaines pour être prêt le jour J'));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Hyrox<br><em>Preparation</em>' : 'Préparation<br><em>Hyrox</em>')}));
+ p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? '12 weeks to be ready on race day' : '12 semaines pour être prêt le jour J')));
 
  // Goal selection (mandatory)
  p.appendChild(h('div', {'class': 'section-label'}, 'Objectif'));
@@ -10252,7 +10252,7 @@ function renderHyroxConfig(p) {
  }));
  daysWrap.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
  p.appendChild(daysWrap);
- p.appendChild(h('div', {'class': 'num-hint'}, '3 à 6 jours par semaine'));
+ p.appendChild(h('div', {'class': 'num-hint'}, (window.isEnglish && window.isEnglish() ? '3 to 6 days per week' : '3 à 6 jours par semaine')));
 
  // Benchmarks (optional)
  p.appendChild(h('div', {style: 'height:24px'}));
@@ -10326,7 +10326,7 @@ function renderHyroxConfig(p) {
  }
  window.render();
  }
- }}, 'Générer mon plan'));
+ }}, (window.isEnglish && window.isEnglish() ? 'Generate my plan' : 'Générer mon plan')));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
@@ -10355,7 +10355,7 @@ function renderHyroxProgram(p) {
  var levelObj = (window.HYROX_LEVELS || []).find(function(l){ return l.id === S.hyroxLevel; });
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme Hyrox'));
- p.appendChild(h('h1', {html: 'Préparation<br><em>12 semaines</em>'}));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? '12 Weeks<br><em>Preparation</em>' : 'Préparation<br><em>12 semaines</em>')}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Phase ' + currentWeekData.phase + ' · ' + (goalObj ? goalObj.name : '') + ' · ' + (levelObj ? levelObj.icon + ' ' + levelObj.name : '')));
 
  appendWellnessBanner(p);
@@ -10365,7 +10365,7 @@ function renderHyroxProgram(p) {
  if (S.hyroxWeek === 12) {
  var banner = h('div', {style: 'border:1px solid var(--error,#7A1F1F);padding:16px;background:rgba(122,31,31,0.04);margin-bottom:16px;text-align:center'});
  banner.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;color:var(--error,#7A1F1F);margin-bottom:4px'}, ' RACE WEEK — GO TIME'));
- banner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;color:var(--grey)'}, 'Activation légère. Visualisation. Repos maximal. Vous êtes prêt !'));
+ banner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? 'Light activation. Visualization. Maximum rest. You are ready!' : 'Activation légère. Visualisation. Repos maximal. Vous êtes prêt !')));
  p.appendChild(banner);
  }
 
@@ -10387,7 +10387,7 @@ function renderHyroxProgram(p) {
  infoCard.appendChild(h('div', {style: 'font-family:Georgia;font-size:16px;color:' + phaseColor + ';margin-bottom:4px'}, 'Phase : ' + currentWeekData.phase));
  infoCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic'}, currentWeekData.notes || ''));
  if (currentWeekData.isDeload) {
- infoCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);margin-top:6px;font-weight:bold'}, ' Semaine de décharge'));
+ infoCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);margin-top:6px;font-weight:bold'}, (window.isEnglish && window.isEnglish() ? ' Deload week' : ' Semaine de décharge')));
  }
  p.appendChild(infoCard);
 
@@ -10483,7 +10483,7 @@ function renderHyroxProgram(p) {
   _hxCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, 'SUIVI — ' + _hxDayKey));
   if (_hxDone) {
     var _doneEl = h('div', {style: 'font-family:Georgia,serif;font-size:13px;color:var(--success,#3E5C3A);margin-bottom:8px'});
-    _doneEl.textContent = '✓ Séance complétée le ' + (S.hyroxProgress[_hxDayKey].date || '');
+    _doneEl.textContent = (window.isEnglish && window.isEnglish() ? '✓ Session completed on ' : '✓ Séance complétée le ') + (S.hyroxProgress[_hxDayKey].date || '');
     _hxCard.appendChild(_doneEl);
     _hxCard.appendChild(h('button', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey);background:none;border:none;cursor:pointer;padding:0;letter-spacing:1px;text-transform:uppercase',
       onclick: function() { S.hyroxProgress[_hxDayKey] = null; window.render(); }
@@ -10505,9 +10505,9 @@ function renderHyroxProgram(p) {
       S.sessionHistory[_hxSessKey] = {duration: _hxDur, kcalBase: _hxKcal ? _hxKcal.base : 0, kcalEpoc: _hxKcal ? _hxKcal.epoc : 0, kcalTotal: _hxKcal ? _hxKcal.total : 0, date: new Date().toISOString(), sport: 'hyrox', hxDayKey: _hxDayKey};
       if (window.GAMIFICATION) { try { window.GAMIFICATION.updateStreak(); } catch(e) {} }
       window.BLACKBOX && window.BLACKBOX.log('hyrox_session_done', {week: S.hyroxWeek, day: S.selectedHyroxDay + 1, level: _hxLevel});
-      if (window.showToast) window.showToast('✓ Séance Hyrox validée — ' + _hxDayKey, 'success');
+      if (window.showToast) window.showToast((window.isEnglish && window.isEnglish() ? '✓ Hyrox session validated — ' : '✓ Séance Hyrox validée — ') + _hxDayKey, 'success');
       window.render();
-    }}, '✓ Séance terminée');
+    }}, (window.isEnglish && window.isEnglish() ? '✓ Session done' : '✓ Séance terminée'));
     _hxCard.appendChild(_hxDoneBtn);
   }
   p.appendChild(_hxCard);
@@ -10528,7 +10528,7 @@ function renderPadelConfig(p) {
  if (!S.padelDays || S.padelDays < 2) S.padelDays = 3;
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Padel'));
  p.appendChild(h('h1', {html: 'Votre programme<br><em>padel</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Technique, tactique et préparation physique.'));
+ p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Technique, tactics and physical preparation.' : 'Technique, tactique et préparation physique.')));
  if (window.TIPS) TIPS.renderTip(p, 'sportGoal');
 
  p.appendChild(h('div', {'class': 'section-label'}, 'Objectif'));
@@ -10556,7 +10556,7 @@ function renderPadelConfig(p) {
  p.appendChild(nw);
 
  // Skill self-assessment
- p.appendChild(h('div', {'class': 'divider'}, [h('span', {'class': 'divider-line'}), h('span', {'class': 'divider-text'}, 'Auto-évaluation (optionnel)'), h('span', {'class': 'divider-line'})]));
+ p.appendChild(h('div', {'class': 'divider'}, [h('span', {'class': 'divider-line'}), h('span', {'class': 'divider-text'}, (window.isEnglish && window.isEnglish() ? 'Self-assessment (optional)' : (window.isEnglish && window.isEnglish() ? 'Self-assessment (optional)' : 'Auto-évaluation (optionnel)'))), h('span', {'class': 'divider-line'})]));
  (window.PADEL_SKILLS || []).forEach(function(sk) {
  var row = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--ivory3,#EEEDE8)'});
  row.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px'}, sk.name));
@@ -10655,7 +10655,7 @@ function renderGolfConfig(p) {
  if (!S.golfDays || S.golfDays < 2) S.golfDays = 3;
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Golf'));
  p.appendChild(h('h1', {html: 'Votre programme<br><em>golf</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Basé sur les méthodes Dave Pelz & Butch Harmon.'));
+ p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Based on the methods of Dave Pelz & Butch Harmon.' : 'Basé sur les méthodes Dave Pelz & Butch Harmon.')));
 
  p.appendChild(h('div', {'class': 'section-label'}, 'Objectif'));
  var og = h('div', {'class': 'card-grid-2'});
@@ -10733,7 +10733,7 @@ function renderGolfProgram(p) {
  p.appendChild(h('div', {style: 'text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px'}, week.notes));
 
  // Rappel Dave Pelz
- p.appendChild(h('div', {style: 'text-align:center;font-family:Georgia;font-size:11px;font-style:italic;color:var(--grey2,#9A9A90);margin-bottom:12px'}, '"60% du score se joue à moins de 100m du green" — Dave Pelz'));
+ p.appendChild(h('div', {style: 'text-align:center;font-family:Georgia;font-size:11px;font-style:italic;color:var(--grey2,#9A9A90);margin-bottom:12px'}, (window.isEnglish && window.isEnglish() ? '"60% of the score is played within 100m of the green" — Dave Pelz' : '"60% du score se joue à moins de 100m du green" — Dave Pelz')));
  appendSportMedicalBanner(p, 'Golf');
 
  // Week navigation
@@ -10786,7 +10786,7 @@ function renderGolfProgram(p) {
 function renderTriathlonConfig(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Triathlon / IRONMAN'));
  p.appendChild(h('h1', {html: 'Votre programme<br><em>triathlon</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Méthode Jan Frodeno · Patrick Lange · Daniela Ryf · 80/20 Matt Fitzgerald · Joe Friel Training Bible'));
+ p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Method: Jan Frodeno · Patrick Lange · Daniela Ryf · 80/20 Matt Fitzgerald · Joe Friel Training Bible' : 'Méthode Jan Frodeno · Patrick Lange · Daniela Ryf · 80/20 Matt Fitzgerald · Joe Friel Training Bible')));
 
  if (window.TIPS) window.TIPS.renderTip(p, 'triathlon');
 
@@ -10828,10 +10828,10 @@ function renderTriathlonConfig(p) {
  // ── Discipline faible (optionnel) ──
  p.appendChild(h('div', {style: 'height:20px'}));
  p.appendChild(h('div', {style: 'width:100%;height:1px;background:var(--border);margin-bottom:16px'}));
- p.appendChild(h('div', {'class': 'section-label'}, 'Discipline à renforcer (optionnel)'));
- p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px'}, 'Une séance bonus sera ajoutée chaque semaine pour cette discipline'));
+ p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Discipline to strengthen (optional)' : 'Discipline à renforcer (optionnel)')));
+ p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px'}, (window.isEnglish && window.isEnglish() ? 'A bonus session will be added each week for this discipline' : 'Une séance bonus sera ajoutée chaque semaine pour cette discipline')));
  var discGrid = h('div', {style: 'display:flex;gap:10px;flex-wrap:wrap'});
- [{id: 'swim', name: ' Natation'}, {id: 'bike', name: ' Vélo'}, {id: 'run', name: ' Course à pied'}].forEach(function(d) {
+ [{id: 'swim', name: (window.isEnglish && window.isEnglish() ? ' Swimming' : ' Natation')}, {id: 'bike', name: (window.isEnglish && window.isEnglish() ? ' Cycling' : ' Vélo')}, {id: 'run', name: (window.isEnglish && window.isEnglish() ? ' Running' : ' Course à pied')}].forEach(function(d) {
  var isOn = S.triathlonWeak === d.id;
  discGrid.appendChild(h('span', {'class': 'chip' + (isOn ? ' on' : ''), onclick: function() {
  S.triathlonWeak = isOn ? null : d.id; window.render();
@@ -10854,7 +10854,7 @@ function renderTriathlonConfig(p) {
  paceGrid.appendChild(swimWrap);
 
  var bikeWrap = h('div', {style: 'display:flex;flex-direction:column;gap:4px'});
- bikeWrap.appendChild(h('div', {style: 'font-size:11px;color:var(--grey)'}, ' Vélo km/h'));
+ bikeWrap.appendChild(h('div', {style: 'font-size:11px;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? ' Cycling km/h' : ' Vélo km/h')));
  bikeWrap.appendChild(h('input', {'class': 'num-input', type: 'number', placeholder: '32', value: S.triathlonBikePace || '', style: 'width:100%;text-align:center',
  oninput: function(e) { S.triathlonBikePace = e.target.value; }
  }));
@@ -10880,7 +10880,7 @@ function renderTriathlonConfig(p) {
  p.appendChild(h('div', {style: 'height:16px'}));
  p.appendChild(h('div', {style: 'width:100%;height:1px;background:var(--border);margin-bottom:16px'}));
  p.appendChild(h('div', {'class': 'section-label'}, 'Date de course (optionnel)'));
- p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:10px'}, 'Le nombre de semaines sera adapté automatiquement à votre date de course'));
+ p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:10px'}, (window.isEnglish && window.isEnglish() ? 'The number of weeks will be automatically adjusted to your race date' : 'Le nombre de semaines sera adapté automatiquement à votre date de course')));
  var dateWrap = h('div', {style: 'display:flex;align-items:center;gap:12px'});
  var dateInput = h('input', {'class': 'num-input', type: 'date', value: S.triathlonRaceDate || '', style: 'flex:1',
  oninput: function(e) { S.triathlonRaceDate = e.target.value; }
@@ -10894,7 +10894,7 @@ function renderTriathlonConfig(p) {
    if (diffW > 0) {
     dateWrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;color:var(--grey);font-style:italic'}, diffW + ' semaines'));
    } else if (diffW <= 0) {
-    dateWrap.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#C0392B'}, 'Date passée'));
+    dateWrap.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#C0392B'}, (window.isEnglish && window.isEnglish() ? 'Past date' : 'Date passée')));
    }
   } catch(e2) {}
  }
@@ -10918,7 +10918,7 @@ function renderTriathlonConfig(p) {
  var totalH = Math.floor(totalMin / 60);
  var totalM = totalMin % 60;
  var estCard = h('div', {style: 'border:1px solid var(--border);padding:12px 16px;background:var(--ivory2);margin-top:8px'});
- estCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;margin-bottom:6px'}, '⏱ Temps de course estimé'));
+ estCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? '⏱ Estimated race time' : '⏱ Temps de course estimé')));
  estCard.appendChild(h('div', {style: 'font-size:18px;font-family:Georgia,serif;font-style:italic;color:var(--black)'},
  totalH + 'h' + (totalM < 10 ? '0' : '') + totalM));
  var detail = h('div', {style: 'font-size:11px;color:var(--grey);margin-top:4px;font-family:Helvetica Neue,Arial,sans-serif'});
@@ -10946,7 +10946,7 @@ function renderTriathlonConfig(p) {
   raceDate: S.triathlonRaceDate || null,
   ftp: S.triathlonFTP || null
  };
- if (typeof window.generateTriathlonProgram !== 'function') { p.appendChild(h('p', {style:'text-align:center;padding:24px;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px'}, 'Module triathlon non chargé. Rechargez la page.')); return; }
+ if (typeof window.generateTriathlonProgram !== 'function') { p.appendChild(h('p', {style:'text-align:center;padding:24px;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px'}, (window.isEnglish && window.isEnglish() ? 'Triathlon module not loaded. Reload the page.' : 'Module triathlon non chargé. Rechargez la page.'))); return; }
  S.triathlonProgram = window.generateTriathlonProgram(S.triathlonGoal, S.triathlonLevel, S.triathlonWeak || null, triopts);
  S.triathlonWeek = 1;
  S.selectedTriDay = 0;
@@ -10959,7 +10959,7 @@ function renderTriathlonConfig(p) {
  if (S.triathlonRunPace) PERF_HISTORY.recordTriathlonPace('run', S.triathlonRunPace, 'min/km');
  }
  window.render();
- }}, 'Générer mon programme →'));
+ }}, (window.isEnglish && window.isEnglish() ? 'Generate my program →' : 'Générer mon programme →'));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { S.sStep = 0; S.sportType = null; window.render(); }, html: backArrow + 'Retour'}));
 }
 
@@ -10997,7 +10997,7 @@ function renderTriathlonProgram(p) {
    var _tpw = window.getPregnancySportWarning ? window.getPregnancySportWarning() : null;
    var _tpwC = h('div', {style: 'border-left:3px solid #FF6B6B;background:#FFF3CD;padding:12px 16px;margin-bottom:16px'});
    _tpwC.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#C00;margin-bottom:6px'}, 'Grossesse \u2014 Adaptations obligatoires'));
-   _tpwC.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);line-height:1.6'}, _tpw ? _tpw.warning : 'R\u00e9duisez le volume et l\u2019intensit\u00e9. Natation recommand\u00e9e, v\u00e9lo station\u00e9 autoris\u00e9, course l\u00e9g\u00e8re Zone 1-2 uniquement. Consultez votre m\u00e9decin.'));
+   _tpwC.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);line-height:1.6'}, _tpw ? _tpw.warning : (window.isEnglish && window.isEnglish() ? 'Reduce volume and intensity. Swimming recommended, stationary cycling allowed, light running Zone 1-2 only. Consult your doctor.' : 'R\u00e9duisez le volume et l\u2019intensit\u00e9. Natation recommand\u00e9e, v\u00e9lo station\u00e9 autoris\u00e9, course l\u00e9g\u00e8re Zone 1-2 uniquement. Consultez votre m\u00e9decin.')));
    p.appendChild(_tpwC);
  }
  appendSportMedicalBanner(p, 'Triathlon');
@@ -11603,7 +11603,7 @@ function renderCyclingOnboarding(p) {
  S.sStep = 23;
  if (window.BLACKBOX) BLACKBOX.log('cycling_config', {level: S.cyclingLevel, goal: S.cyclingGoal, days: S.cyclingDays, ftp: S.cyclingFTP});
  window.render();
- }}, 'Générer mon plan'));
+ }}, (window.isEnglish && window.isEnglish() ? 'Generate my plan' : 'Générer mon plan')));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: backArrow + 'Retour'}));
 }
 
