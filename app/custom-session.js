@@ -158,7 +158,21 @@ window.EXERCISE_SEARCH = {
       }
     }
 
-    function byScore(a, b) { return b.score !== a.score ? b.score - a.score : a._alpha.localeCompare(b._alpha); }
+    function byScore(a, b) {
+      // 1. Score textuel décroissant (pertinence de la recherche)
+      if (b.score !== a.score) return b.score - a.score;
+      // 2. Non-bodyweight avant bodyweight (poids du corps en dernier)
+      var isBW = window.isBodyweightExercise || function(ex) {
+        return /^(poids du corps|bodyweight|aucun|none)$/i.test(ex.eq || '');
+      };
+      var abw = isBW(a.item) ? 1 : 0, bbw = isBW(b.item) ? 1 : 0;
+      if (abw !== bbw) return abw - bbw;
+      // 3. Score équipement croissant : barre(1) > haltères(2) > câble(3) > autre(4) > machine(5)
+      var aeq = _csEqScore(a.item.eq), beq = _csEqScore(b.item.eq);
+      if (aeq !== beq) return aeq - beq;
+      // 4. Tri alphabétique en dernier recours
+      return a._alpha.localeCompare(b._alpha);
+    }
     full.sort(byScore);
     partial.sort(byScore);
     return full.concat(partial).slice(0, 40).map(function(r) { return r.item; });
