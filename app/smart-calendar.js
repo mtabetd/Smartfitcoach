@@ -432,16 +432,43 @@
     if (initialConflictZone) conflictZoneWrapper.appendChild(initialConflictZone);
 
     // ── Section nutrition intelligente ──
+    // FIX COHÉRENCE CALENDRIER 2026-04 (Check 9) : afficher l'état du weekPlan nutrition.
+    // Si S.weekPlan existe (7 jours), indiquer combien de jours ont un plan repas validé
+    // et si le plan est synchronisé avec le calendrier sport actuel.
+    var _hasWeekPlan = Array.isArray(S.weekPlan) && S.weekPlan.length >= 7;
+    var _weekPlanDaysWithMeals = 0;
+    if (_hasWeekPlan) {
+      for (var _wpi = 0; _wpi < 7; _wpi++) {
+        var _wpDay = S.weekPlan[_wpi];
+        if (_wpDay && (_wpDay.breakfast || _wpDay.lunch || _wpDay.dinner)) _weekPlanDaysWithMeals++;
+      }
+    }
+    var _nutritionStatusText = '';
+    if (_hasWeekPlan && _weekPlanDaysWithMeals >= 5) {
+      var _planSyncStatus = S.weekPlanValidated
+        ? (_calLang === 'en' ? 'Plan validated — calories adapted per day type.' : 'Plan validé — calories adaptées par type de jour.')
+        : (_calLang === 'en' ? 'Plan pending validation — save calendar then re-validate.' : 'Plan en attente de validation — sauvegardez le calendrier puis revalidez.');
+      _nutritionStatusText = _planSyncStatus;
+    } else if (_hasWeekPlan) {
+      _nutritionStatusText = _calLang === 'en'
+        ? 'Partial nutrition plan (' + _weekPlanDaysWithMeals + '/7 days). Generate a full week from the Nutrition tab.'
+        : 'Plan nutrition partiel (' + _weekPlanDaysWithMeals + '/7 jours). Générez une semaine complète depuis l'onglet Nutrition.';
+    } else {
+      _nutritionStatusText = _calLang === 'en'
+        ? 'On training days, your carbohydrates are automatically +20% to optimise performance and recovery.'
+        : 'Les jours d\'entraînement, vos glucides sont automatiquement +20% pour optimiser les performances et la récupération.';
+    }
+
     var nutritionInfo = window.h('div', {
       style: 'background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;padding:14px;' +
              'margin-bottom:16px;border-left:2px solid var(--black,#0A0A09);'
     }, [
       window.h('div', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px;'
-      }, _calLang === 'en' ? 'Adapted nutrition' : 'Nutrition adaptée'),
+      }, _calLang === 'en' ? 'Nutrition & Calendar' : 'Nutrition & Calendrier'),
       window.h('div', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;'
-      }, _calLang === 'en' ? 'On training days, your carbohydrates are automatically +20% to optimise performance and recovery.' : 'Les jours d\'entraînement, vos glucides sont automatiquement +20% pour optimiser les performances et la récupération.')
+      }, _nutritionStatusText)
     ]);
 
     // ── Bouton sauvegarder ──

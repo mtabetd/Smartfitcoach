@@ -5296,10 +5296,22 @@ var protCat=getRecipeProtein(r);var diversityPenalty=0;
 if(protCat&&dayProteins&&dayProteins.indexOf(protCat)!==-1)diversityPenalty=80;
 // Pénaliser si catégorie protéique sur-représentée dans la semaine
 if(protCat&&weekProtBudget){var cnt=weekProtBudget[protCat]||0;var maxW={volaille:3,poisson:3,viande_rouge:2,oeufs:3,legumineuses:3,tofu_seitan:2};if(cnt>=(maxW[protCat]||3))diversityPenalty+=60;else if(cnt>=2)diversityPenalty+=20;}
+// BUG-6 FIX: sportType-aware scoring (musculation → high-protein; endurance sports training day → high-carb)
+// S._pickRecipeTrainingDay is set by generateWeek() just before calling pickRecipe (per-day flag).
+var sportTypeBonus=0;
+if(s.sportType&&totalMacroKcal>0){
+  var protPct2=(r.p||0)*4/totalMacroKcal;
+  var carbPct2=(r.g||0)*4/totalMacroKcal;
+  if(s.sportType==='musculation'&&protPct2>=0.35){sportTypeBonus=-120;} // high-protein bonus for strength
+  else if(s.sportType==='running'||s.sportType==='cycling'||s.sportType==='hyrox'||s.sportType==='triathlon'){
+    // high-carb bonus on training days for endurance sports
+    if(s._pickRecipeTrainingDay&&carbPct2>=0.50){sportTypeBonus=-120;}
+  }
+}
 // Bonus favori : 1⭐=-200, 2⭐=-400, 3⭐=-600 — domine calScore/macroScore/diversity
 var favStars=(r._id&&_favMap[r._id])?Math.max(1,Math.min(3,_favMap[r._id]|0)):0;
 var favBonus=favStars?-(favStars*200):0;
-return{recipe:r,score:calScore+macroScore+diversityPenalty+favBonus};});scored.sort(function(a,b){return a.score-b.score});var top=scored.slice(0,Math.min(5,scored.length));var picked=top[Math.floor(Math.random()*top.length)].recipe;if(picked){used.add(picked.n);var pc=getRecipeProtein(picked);if(pc){if(dayProteins)dayProteins.push(pc);if(weekProtBudget)weekProtBudget[pc]=(weekProtBudget[pc]||0)+1;}}return picked||{n:'Repas libre',k:targetK,p:Math.round(targetK*0.3/4),g:Math.round(targetK*0.4/4),l:Math.round(targetK*0.3/9),f:0,lv:1,i:'',st:[],w:0,tags:[]}}
+return{recipe:r,score:calScore+macroScore+diversityPenalty+sportTypeBonus+favBonus};};scored.sort(function(a,b){return a.score-b.score});var top=scored.slice(0,Math.min(5,scored.length));var picked=top[Math.floor(Math.random()*top.length)].recipe;if(picked){used.add(picked.n);var pc=getRecipeProtein(picked);if(pc){if(dayProteins)dayProteins.push(pc);if(weekProtBudget)weekProtBudget[pc]=(weekProtBudget[pc]||0)+1;}}return picked||{n:'Repas libre',k:targetK,p:Math.round(targetK*0.3/4),g:Math.round(targetK*0.4/4),l:Math.round(targetK*0.3/9),f:0,lv:1,i:'',st:[],w:0,tags:[]}}
 // Applique le scaling sur mesure pour les recettes R201+ (format riche) et L0XX-L3XX (format legacy)
 function enrichWithScaling(recipe, targetKcal) {
   if (!recipe) return recipe;
@@ -5435,6 +5447,8 @@ var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w&
 var _hasLaitAllergy=Array.isArray(s.allergies)&&(s.allergies.indexOf('Lait/Produits laitiers')!==-1||s.allergies.indexOf('Lactose')!==-1);
 var _canSmooth=!!(s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length&&s.regime!==3&&!_hasLaitAllergy);
 for(var d=0;d<7;d++){var dayProteins=[];var split=getAdaptedMealSplit(d);var c=Math.round(cBase*(split.calMultiplier||1));var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);
+// BUG-6 FIX: expose per-day training flag to pickRecipe for sportType-aware scoring
+s._pickRecipeTrainingDay=!!(split.dayInfo&&split.dayInfo.isTraining);
 // Déduplication intra-journée : éviter le même plat en déjeuner ET dîner (même recette dans les 2 pools)
 var bR=pickRecipe(pB,bT,uB,dayProteins,weekProtBudget);
 // Bloquer le petit-déj dans les pools déjeuner/dîner du même jour
@@ -5466,7 +5480,9 @@ if(nr&&nr.n){uL.add(nr.n);uS.add(nr.n);uD.add(nr.n);}}else if(w.key==='l'){lR=nr
 var _dP=Math.round((bR?bR.p||0:0)+(lR?lR.p||0:0)+(sR?sR.p||0:0)+(dR?dR.p||0:0));
 var _dG=Math.round((bR?bR.g||0:0)+(lR?lR.g||0:0)+(sR?sR.g||0:0)+(dR?dR.g||0:0));
 var _dL=Math.round((bR?bR.l||0:0)+(lR?lR.l||0:0)+(sR?sR.l||0:0)+(dR?dR.l||0:0));
-plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR,kcal:c,p:_dP,g:_dG,l:_dL})}if(window.validateWeekPlan){try{window.validateWeekPlan(plan);}catch(_ve){}}return plan}
+// BUG-7 FIX: use actual meal kcal sum (not planned target c) to keep day.kcal in sync with meals
+var _dK=Math.round((bR?bR.k||0:0)+(lR?lR.k||0:0)+(sR?sR.k||0:0)+(dR?dR.k||0:0));
+plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR,kcal:_dK,targetKcal:c,p:_dP,g:_dG,l:_dL})}if(window.validateWeekPlan){try{window.validateWeekPlan(plan);}catch(_ve){}}return plan}
 function swapMeal(di,slot){
   var s=window.S;
   if(!s.weekPlan||!s.weekPlan[di])return;
