@@ -184,9 +184,9 @@
     var entries = [];
     Object.keys(msp).forEach(function(k) {
       var e = msp[k];
-      if (e && e.weight && e.reps) {
-        // Epley : 1RM = w × (1 + r/30)
-        var oneRM = Math.round(e.weight * (1 + e.reps / 30) / 2.5) * 2.5;
+      if (e && e.weight && e.reps && e.reps > 0) {
+        // Epley : 1RM = w × (1 + r/30) — reps=1 means weight IS the 1RM (no inflation)
+        var oneRM = e.reps === 1 ? e.weight : Math.round(e.weight * (1 + e.reps / 30) / 2.5) * 2.5;
         entries.push({ name: k, est: oneRM, raw: e.weight + ' × ' + e.reps });
       }
     });
@@ -233,9 +233,16 @@
       totalMin += Number(r.durationMin) || 0;
     });
     var avgPace = totalKm > 0 ? (totalMin / totalKm) : 0;
-    var pMin = Math.floor(avgPace), pSec = Math.round((avgPace - pMin) * 60);
-    var paceStr = pMin + ':' + (pSec < 10 ? '0' : '') + pSec + ' /km';
-    s.appendChild(metricBig(_rEN ? 'Distance (' + (period || 4) + ' wks)' : 'Distance (' + (period || 4) + ' sem.)', totalKm.toFixed(1), ' km', null, recent.length + ' ' + window.locPlural(recent.length, {fr:{one:'course',other:'courses'},en:{one:'run',other:'runs'}})));
+    var paceStr;
+    if (totalKm > 0 && avgPace > 0) {
+      var pMin = Math.floor(avgPace), pSec = Math.round((avgPace - pMin) * 60);
+      if (pSec === 60) { pMin += 1; pSec = 0; }
+      paceStr = pMin + ':' + (pSec < 10 ? '0' : '') + pSec + ' /km';
+    } else {
+      paceStr = '—';
+    }
+    var _runPlural = window.locPlural ? window.locPlural(recent.length, {fr:{one:'course',other:'courses'},en:{one:'run',other:'runs'}}) : (_rEN ? (recent.length > 1 ? 'runs' : 'run') : (recent.length > 1 ? 'courses' : 'course'));
+    s.appendChild(metricBig(_rEN ? 'Distance (' + (period || 4) + ' wks)' : 'Distance (' + (period || 4) + ' sem.)', totalKm.toFixed(1), ' km', null, recent.length + ' ' + _runPlural));
     s.appendChild(h('div', { style: 'margin-top:12px;' }));
     s.appendChild(metricBig(_rEN ? 'Average pace' : 'Allure moyenne', paceStr, '', null, null));
     return s;
@@ -289,7 +296,8 @@
         h('div', { style: ST.value }, Math.round(totalL / n) + 'g')
       ])
     ]));
-    s.appendChild(h('div', { style: ST.sub + 'margin-top:10px;' }, (_nEN ? 'Average over ' + n + ' ' + window.locPlural(n, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + ' tracked · last ' + (period || 4) + ' weeks' : 'Moyenne sur ' + n + ' ' + window.locPlural(n, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + ' de suivi · ' + (period || 4) + ' dernières semaines')));
+    var _dayWord = window.locPlural ? window.locPlural(n, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) : (_nEN ? (n > 1 ? 'days' : 'day') : (n > 1 ? 'jours' : 'jour'));
+    s.appendChild(h('div', { style: ST.sub + 'margin-top:10px;' }, (_nEN ? 'Average over ' + n + ' ' + _dayWord + ' tracked · last ' + (period || 4) + ' weeks' : 'Moyenne sur ' + n + ' ' + _dayWord + ' de suivi · ' + (period || 4) + ' dernières semaines')));
     return s;
   }
 
@@ -339,7 +347,7 @@
       h('div', { style: 'flex:1;min-width:120px;' }, [
         h('div', { style: ST.sub + 'margin-bottom:2px;' }, _sEN ? 'Current streak' : 'Série en cours'),
         h('div', { style: ST.value }, streak),
-        h('div', { style: ST.sub }, window.locPlural(streak, {fr:{one:'jour consécutif',other:'jours consécutifs'},en:{one:'day in a row',other:'days in a row'}}))
+        h('div', { style: ST.sub }, window.locPlural ? window.locPlural(streak, {fr:{one:'jour consécutif',other:'jours consécutifs'},en:{one:'day in a row',other:'days in a row'}}) : (_sEN ? (streak > 1 ? 'days in a row' : 'day in a row') : (streak > 1 ? 'jours consécutifs' : 'jour consécutif')))
       ]),
       h('div', { style: 'flex:1;min-width:120px;' }, [
         h('div', { style: ST.sub + 'margin-bottom:2px;' }, _sEN ? 'Badges unlocked' : 'Badges débloqués'),
