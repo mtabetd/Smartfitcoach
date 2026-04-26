@@ -3955,63 +3955,64 @@ function appendSportMedicalBanner(p, sportName) {
   }
   // ── ZONES SPORT-SPÉCIFIQUES (depuis bilan santé step 27) ──
   if (Array.isArray(S.medical) && S.medical.length > 0 && S.sportType) {
+    var _tZwm = window.isEnglish && window.isEnglish();
     var _zwm = {
       genou: {
-        running:'Genoux : évitez les descentes et surfaces dures. Réduisez le volume de 20%. Natation comme cross-training (ACSM 2021).',
-        crossfit:'Genoux : pas de box jumps à impact maximal ni de squat snatches lourds. Substituez par step-ups et goblet squats (NSCA 2020).',
-        yoga:'Genoux : modifiez le pigeon pose et le lotus. Blocs sous les hanches. Évitez la flexion maximale.',
-        cycling:'Genoux : selle à bonne hauteur (genou légèrement fléchi en bas). Évitez les cadences < 60 RPM avec forte résistance.',
-        hyrox:'Genoux : remplacez les lunges par des step-ups. Réduisez les sauts.',
-        padel:'Genoux : chauffage prolongé obligatoire. Réduisez les pivots brusques. Genouillère recommandée.',
-        triathlon:'Genoux : vérifiez le fit vélo. Foulée plus courte en course. Évitez les longues descentes.',
-        calisthenics:'Genoux : pistol squats remplacés par chaise murale ou band-assisted. Pas de réception sur sol dur.'
+        running:(_tZwm ? 'Knees: avoid downhills and hard surfaces. Reduce volume by 20%. Swimming as cross-training (ACSM 2021).' : 'Genoux : évitez les descentes et surfaces dures. Réduisez le volume de 20%. Natation comme cross-training (ACSM 2021).'),
+        crossfit:(_tZwm ? 'Knees: no max-impact box jumps or heavy squat snatches. Substitute with step-ups and goblet squats (NSCA 2020).' : 'Genoux : pas de box jumps à impact maximal ni de squat snatches lourds. Substituez par step-ups et goblet squats (NSCA 2020).'),
+        yoga:(_tZwm ? 'Knees: modify pigeon pose and lotus. Blocks under hips. Avoid maximum flexion.' : 'Genoux : modifiez le pigeon pose et le lotus. Blocs sous les hanches. Évitez la flexion maximale.'),
+        cycling:(_tZwm ? 'Knees: saddle at correct height (knee slightly bent at bottom). Avoid cadences < 60 RPM with heavy resistance.' : 'Genoux : selle à bonne hauteur (genou légèrement fléchi en bas). Évitez les cadences < 60 RPM avec forte résistance.'),
+        hyrox:(_tZwm ? 'Knees: replace lunges with step-ups. Reduce jumping.' : 'Genoux : remplacez les lunges par des step-ups. Réduisez les sauts.'),
+        padel:(_tZwm ? 'Knees: extended warm-up mandatory. Reduce sharp pivots. Knee brace recommended.' : 'Genoux : chauffage prolongé obligatoire. Réduisez les pivots brusques. Genouillère recommandée.'),
+        triathlon:(_tZwm ? 'Knees: check bike fit. Shorter stride when running. Avoid long downhills.' : 'Genoux : vérifiez le fit vélo. Foulée plus courte en course. Évitez les longues descentes.'),
+        calisthenics:(_tZwm ? 'Knees: pistol squats replaced by wall sit or band-assisted. No landing on hard floors.' : 'Genoux : pistol squats remplacés par chaise murale ou band-assisted. Pas de réception sur sol dur.')
       },
       cheville: {
-        running:'Cheville / Tendon d\'Achille : échauffement strict (10 min). Pas de sprints ni de côtes raides. Kilométrage réduit de 30%.',
-        padel:'Cheville : chaussures à soutien latéral. Propioception hors du court. Cheillière recommandée.',
-        triathlon:'Cheville : protégez le tendon en dernière portion course. Évitez les sorties post-vélo sur dénivelé.',
-        calisthenics:'Cheville : pas de sauts avec réception unipodale. Substitut : step-ups et squats bilatéraux.'
+        running:(_tZwm ? 'Ankle / Achilles tendon: strict warm-up (10 min). No sprints or steep hills. Mileage reduced by 30%.' : 'Cheville / Tendon d\'Achille : échauffement strict (10 min). Pas de sprints ni de côtes raides. Kilométrage réduit de 30%.'),
+        padel:(_tZwm ? 'Ankle: lateral-support shoes. Proprioception off-court. Ankle brace recommended.' : 'Cheville : chaussures à soutien latéral. Propioception hors du court. Cheillière recommandée.'),
+        triathlon:(_tZwm ? 'Ankle: protect the tendon in the final run segment. Avoid post-bike sessions on elevation.' : 'Cheville : protégez le tendon en dernière portion course. Évitez les sorties post-vélo sur dénivelé.'),
+        calisthenics:(_tZwm ? 'Ankle: no single-leg landings. Substitute: step-ups and bilateral squats.' : 'Cheville : pas de sauts avec réception unipodale. Substitut : step-ups et squats bilatéraux.')
       },
       tibia: {
-        running:'Tibias (shin splints) : kilométrage réduit de 40%. Pas d\'interval training. Semelles de soutien d\'arche. Repos si douleur aiguë.'
+        running:(_tZwm ? 'Shins (shin splints): mileage reduced by 40%. No interval training. Arch support insoles. Rest if acute pain.' : 'Tibias (shin splints) : kilométrage réduit de 40%. Pas d\'interval training. Semelles de soutien d\'arche. Repos si douleur aiguë.')
       },
       lombaire: {
-        running:'Bas du dos : gainage avant chaque séance (planche, bird-dog). Évitez les longues sorties sans échauffement postural.',
-        crossfit:'Bas du dos : deadlifts plafonnés à 70% 1RM. Dos neutre strict. Pas de cleans lourds.',
-        yoga:'Bas du dos : backbends profonds évités (Camel pose). Twists sans forçage. Forward folds avec genoux légèrement fléchis.',
-        cycling:'Bas du dos : guidon plus haut. Échauffement postural avant sortie. Positions aéro prolongées déconseillées.',
-        hyrox:'Bas du dos : farmer carry léger, dos neutre sur sled push. Rowing machine : gainage obligatoire.',
-        golf:'Bas du dos : mobilité thoracique en préalable. Swing progressif. Renforcez les abdominaux profonds.',
-        triathlon:'Bas du dos : fit vélo professionnel. Étirements lombaires en transition T2.',
-        calisthenics:'Bas du dos : front lever à extension contrôlée uniquement. L-sit avec gainage strict.'
+        running:(_tZwm ? 'Lower back: core work before each session (plank, bird-dog). Avoid long runs without postural warm-up.' : 'Bas du dos : gainage avant chaque séance (planche, bird-dog). Évitez les longues sorties sans échauffement postural.'),
+        crossfit:(_tZwm ? 'Lower back: deadlifts capped at 70% 1RM. Strict neutral spine. No heavy cleans.' : 'Bas du dos : deadlifts plafonnés à 70% 1RM. Dos neutre strict. Pas de cleans lourds.'),
+        yoga:(_tZwm ? 'Lower back: deep backbends avoided (Camel pose). Twists without forcing. Forward folds with knees slightly bent.' : 'Bas du dos : backbends profonds évités (Camel pose). Twists sans forçage. Forward folds avec genoux légèrement fléchis.'),
+        cycling:(_tZwm ? 'Lower back: raise the handlebar. Postural warm-up before ride. Extended aero positions not recommended.' : 'Bas du dos : guidon plus haut. Échauffement postural avant sortie. Positions aéro prolongées déconseillées.'),
+        hyrox:(_tZwm ? 'Lower back: light farmer carry, neutral spine on sled push. Rowing machine: core bracing required.' : 'Bas du dos : farmer carry léger, dos neutre sur sled push. Rowing machine : gainage obligatoire.'),
+        golf:(_tZwm ? 'Lower back: thoracic mobility first. Progressive swing. Strengthen deep abdominals.' : 'Bas du dos : mobilité thoracique en préalable. Swing progressif. Renforcez les abdominaux profonds.'),
+        triathlon:(_tZwm ? 'Lower back: professional bike fit. Lumbar stretches in T2 transition.' : 'Bas du dos : fit vélo professionnel. Étirements lombaires en transition T2.'),
+        calisthenics:(_tZwm ? 'Lower back: front lever with controlled extension only. L-sit with strict core bracing.' : 'Bas du dos : front lever à extension contrôlée uniquement. L-sit avec gainage strict.')
       },
       epaule: {
-        crossfit:'Épaules : pas de snatch ni de clean & jerk overhead. Scale systématique. Mouvements sous la hauteur des épaules.',
-        yoga:'Épaules : inversions déconseillées (handstand, headstand). Chaturanga modifié sur les genoux.',
-        hyrox:'Épaules : sled push amplitude réduite. Wall balls à hauteur modérée.',
-        padel:'Épaule / Coiffe : pas de smash à pleine puissance. Service avec amplitude réduite. Kinésithérapie si douleur persistante.',
-        triathlon:'Épaules : overreach réduit en crawl. Brasse ou dos crawlé si douloureux. Volume natation réduit.',
-        calisthenics:'Épaules : pas de handstand ni muscle-up. Remplacez par dips (amplitude limitée) et rows.',
-        golf:'Épaule : finition du swing réduite. Compensez par la rotation thoracique.'
+        crossfit:(_tZwm ? 'Shoulders: no snatch or clean & jerk overhead. Systematic scaling. Movements below shoulder height.' : 'Épaules : pas de snatch ni de clean & jerk overhead. Scale systématique. Mouvements sous la hauteur des épaules.'),
+        yoga:(_tZwm ? 'Shoulders: inversions not recommended (handstand, headstand). Modified chaturanga on knees.' : 'Épaules : inversions déconseillées (handstand, headstand). Chaturanga modifié sur les genoux.'),
+        hyrox:(_tZwm ? 'Shoulders: reduced sled push range. Wall balls at moderate height.' : 'Épaules : sled push amplitude réduite. Wall balls à hauteur modérée.'),
+        padel:(_tZwm ? 'Shoulder / Rotator cuff: no full-power smash. Reduced service range. Physiotherapy if persistent pain.' : 'Épaule / Coiffe : pas de smash à pleine puissance. Service avec amplitude réduite. Kinésithérapie si douleur persistante.'),
+        triathlon:(_tZwm ? 'Shoulders: reduced overreach in crawl. Breaststroke or backstroke if painful. Reduced swim volume.' : 'Épaules : overreach réduit en crawl. Brasse ou dos crawlé si douloureux. Volume natation réduit.'),
+        calisthenics:(_tZwm ? 'Shoulders: no handstand or muscle-up. Replace with dips (limited range) and rows.' : 'Épaules : pas de handstand ni muscle-up. Remplacez par dips (amplitude limitée) et rows.'),
+        golf:(_tZwm ? 'Shoulder: reduced swing finish. Compensate with thoracic rotation.' : 'Épaule : finition du swing réduite. Compensez par la rotation thoracique.')
       },
       poignet: {
-        crossfit:'Poignets : wraps obligatoires. Pas de kipping pull-ups. Cleans remplacés par hex bar deadlifts si douloureux.',
-        yoga:'Poignets : planche sur les poings ou les coudes. Blocs sous les paumes pour réduire l\'extension.',
-        calisthenics:'Poignets : planche sur les poings. Évitez le L-sit en appui direct. Isométriques progressifs.',
-        golf:'Poignets : grip ferme mais non crispé. Antivibration sur le club.'
+        crossfit:(_tZwm ? 'Wrists: wraps required. No kipping pull-ups. Cleans replaced by hex bar deadlifts if painful.' : 'Poignets : wraps obligatoires. Pas de kipping pull-ups. Cleans remplacés par hex bar deadlifts si douloureux.'),
+        yoga:(_tZwm ? 'Wrists: plank on fists or elbows. Blocks under palms to reduce extension.' : 'Poignets : planche sur les poings ou les coudes. Blocs sous les paumes pour réduire l\'extension.'),
+        calisthenics:(_tZwm ? 'Wrists: plank on fists. Avoid L-sit with direct wrist support. Progressive isometrics.' : 'Poignets : planche sur les poings. Évitez le L-sit en appui direct. Isométriques progressifs.'),
+        golf:(_tZwm ? 'Wrists: firm but relaxed grip. Anti-vibration grip on club.' : 'Poignets : grip ferme mais non crispé. Antivibration sur le club.')
       },
       coude: {
-        padel:'Coude / Épicondylite : pas de coup droit avec spin excessif. Poignée plus épaisse. Strapping. Arrêtez si douleur irradie.',
-        golf:'Coude : swing raccourci en backswing. Grip plus léger. Manchon de compression.',
-        calisthenics:'Coudes : pas de muscle-ups ni tractions kippées. Renforcement excentrique progressif.'
+        padel:(_tZwm ? 'Elbow / Epicondylitis: no forehand with excessive spin. Thicker grip. Strapping. Stop if pain radiates.' : 'Coude / Épicondylite : pas de coup droit avec spin excessif. Poignée plus épaisse. Strapping. Arrêtez si douleur irradie.'),
+        golf:(_tZwm ? 'Elbow: shortened backswing. Lighter grip. Compression sleeve.' : 'Coude : swing raccourci en backswing. Grip plus léger. Manchon de compression.'),
+        calisthenics:(_tZwm ? 'Elbows: no muscle-ups or kipping pull-ups. Progressive eccentric strengthening.' : 'Coudes : pas de muscle-ups ni tractions kippées. Renforcement excentrique progressif.')
       },
       hanche: {
-        running:'Hanche / Ilio-psoas : étirements hip flexors après séance (2 × 90 sec/côté). Renforcement fessiers.',
-        yoga:'Hanches : pigeon pose avec bloc sous la hanche. Amplitude progressive. Surveillez tout pincement à l\'aine.'
+        running:(_tZwm ? 'Hip / Iliopsoas: hip flexor stretches after session (2 × 90 sec/side). Glute strengthening.' : 'Hanche / Ilio-psoas : étirements hip flexors après séance (2 × 90 sec/côté). Renforcement fessiers.'),
+        yoga:(_tZwm ? 'Hips: pigeon pose with block under hip. Progressive range. Watch for any groin pinching.' : 'Hanches : pigeon pose avec bloc sous la hanche. Amplitude progressive. Surveillez tout pincement à l\'aine.')
       },
       cervicale: {
-        crossfit:'Nuque : position overhead vérifiée. Soulévé de terre tête neutre obligatoire. Mobilité cervicale en échauffement.',
-        cycling:'Cervicales : guidon plus haut. Pauses mobilité cervicale toutes les 30 min sur les longues sorties.'
+        crossfit:(_tZwm ? 'Neck: overhead position checked. Deadlift neutral head required. Cervical mobility in warm-up.' : 'Nuque : position overhead vérifiée. Soulévé de terre tête neutre obligatoire. Mobilité cervicale en échauffement.'),
+        cycling:(_tZwm ? 'Cervical: raise the handlebar. Cervical mobility breaks every 30 min on long rides.' : 'Cervicales : guidon plus haut. Pauses mobilité cervicale toutes les 30 min sur les longues sorties.')
       }
     };
     var _szWarns = [];
@@ -6968,20 +6969,20 @@ function renderMusculationProgram(p) {
  var hasDiabProg = S.medical && (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1);
  if (hasDiabProg) {
  var _diabDiv = h('div', {style: 'background:rgba(232,111,30,0.06);border-left:3px solid var(--orange,#E86F1E);padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E)'});
- var _RPE_DEF = 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)';
+ var _RPE_DEF = (window.isEnglish && window.isEnglish() ? 'Rate of Perceived Exertion — perceived effort out of 10 (7/10 = moderate effort, last hard reps)' : 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)');
  if (S.medical.indexOf('diabete_t1') !== -1) {
-  _diabDiv.appendChild(document.createTextNode(' Diabète T1 : '));
+  _diabDiv.appendChild(document.createTextNode((window.isEnglish && window.isEnglish() ? ' Type 1 Diabetes: ' : ' Diabète T1 : ')));
   _diabDiv.appendChild(termTooltip('RPE', _RPE_DEF));
-  _diabDiv.appendChild(document.createTextNode(' plafonné à 7/10 (risque hypoglycémie à haute intensité). Glycémie cible avant séance : 7-10 mmol/L. Glucomètre obligatoire avant/après. Gardez 15-20g glucides rapides à portée.'));
+  _diabDiv.appendChild(document.createTextNode((window.isEnglish && window.isEnglish() ? ' capped at 7/10 (hypoglycemia risk at high intensity). Target blood glucose before session: 7-10 mmol/L. Glucometer required before/after. Keep 15-20g fast carbs nearby.' : ' plafonné à 7/10 (risque hypoglycémie à haute intensité). Glycémie cible avant séance : 7-10 mmol/L. Glucomètre obligatoire avant/après. Gardez 15-20g glucides rapides à portée.')));
  } else {
-  _diabDiv.appendChild(document.createTextNode(' Diabète : Vérifiez votre glycémie avant/après chaque séance. Gardez du sucre rapide à portée. Intensité maximale '));
+  _diabDiv.appendChild(document.createTextNode((window.isEnglish && window.isEnglish() ? ' Diabetes: Check your blood glucose before/after each session. Keep fast sugar nearby. Maximum intensity ' : ' Diabète : Vérifiez votre glycémie avant/après chaque séance. Gardez du sucre rapide à portée. Intensité maximale ')));
   _diabDiv.appendChild(termTooltip('RPE', _RPE_DEF));
-  _diabDiv.appendChild(document.createTextNode(' 8/10 — jamais à l\'échec. Hydratation ×1.5.'));
+  _diabDiv.appendChild(document.createTextNode((window.isEnglish && window.isEnglish() ? ' 8/10 — never to failure. Hydration ×1.5.' : ' 8/10 — jamais à l\'échec. Hydratation ×1.5.')));
  }
  _bannerTarget.appendChild(_diabDiv);
  }
  if (getAge() >= 50) {
- _bannerTarget.appendChild(h('div', {style: 'background:rgba(62,92,58,0.06);border-left:3px solid var(--ink-900,#0A0A09);padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--success,#3E5C3A)'}, ' 50+ : Échauffement 15-20 min obligatoire. Décharge toutes les 4-5 semaines. Favorisez les mouvements guidés pour protéger les articulations.'));
+ _bannerTarget.appendChild(h('div', {style: 'background:rgba(62,92,58,0.06);border-left:3px solid var(--ink-900,#0A0A09);padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--success,#3E5C3A)'}, (window.isEnglish && window.isEnglish() ? ' 50+: Mandatory 15-20 min warm-up. Deload every 4-5 weeks. Favour guided movements to protect joints.' : ' 50+ : Échauffement 15-20 min obligatoire. Décharge toutes les 4-5 semaines. Favorisez les mouvements guidés pour protéger les articulations.')));
  }
  // Cardiopathie : zones FC Karvonen + avertissement beta-bloquants (AHA 2018, ACSM 2021)
  if (S.medical && S.medical.indexOf('cardio') !== -1) {
@@ -6996,14 +6997,14 @@ function renderMusculationProgram(p) {
  var z3lo = Math.round((hrMax - hrRest) * 0.70 + hrRest);
  var z3hi = Math.round((hrMax - hrRest) * 0.80 + hrRest);
  var karvonenDiv = h('div', {style: 'border-left:2px solid var(--red);padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;background:rgba(122,31,31,0.06)'});
- karvonenDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--red);margin-bottom:8px'}, 'Cardiopathie — Zones FC Karvonen'));
- karvonenDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px'}, 'FC repos ' + hrRest + ' bpm · HRmax estimé ' + hrMax + ' bpm'));
+ karvonenDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--red);margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'Heart Disease — Karvonen HR Zones' : 'Cardiopathie — Zones FC Karvonen')));
+ karvonenDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'Resting HR ' + hrRest + ' bpm · Estimated HRmax ' + hrMax + ' bpm' : 'FC repos ' + hrRest + ' bpm · HRmax estimé ' + hrMax + ' bpm')));
  var zonesRow = h('div', {style: 'display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px'});
- zonesRow.appendChild(h('span', {'class': 'val-good'}, 'Z1 Récup ' + z1lo + '–' + z1hi + ' bpm'));
- zonesRow.appendChild(h('span', {'class': 'val-good'}, 'Z2 Aérobie ' + z2lo + '–' + z2hi + ' bpm'));
- zonesRow.appendChild(h('span', {'class': 'val-neutral'}, 'Z3 Seuil ' + z3lo + '–' + z3hi + ' bpm'));
+ zonesRow.appendChild(h('span', {'class': 'val-good'}, (window.isEnglish && window.isEnglish() ? 'Z1 Recovery ' + z1lo + '–' + z1hi + ' bpm' : 'Z1 Récup ' + z1lo + '–' + z1hi + ' bpm')));
+ zonesRow.appendChild(h('span', {'class': 'val-good'}, (window.isEnglish && window.isEnglish() ? 'Z2 Aerobic ' + z2lo + '–' + z2hi + ' bpm' : 'Z2 Aérobie ' + z2lo + '–' + z2hi + ' bpm')));
+ zonesRow.appendChild(h('span', {'class': 'val-neutral'}, (window.isEnglish && window.isEnglish() ? 'Z3 Threshold ' + z3lo + '–' + z3hi + ' bpm' : 'Z3 Seuil ' + z3lo + '–' + z3hi + ' bpm')));
  karvonenDiv.appendChild(zonesRow);
- karvonenDiv.appendChild(h('div', {style: 'margin-top:4px;font-style:italic;color:var(--grey)'}, ' Beta-bloquants : si prescrit, votre FC max réelle est plus basse (~10-20%). Consulter votre cardiologue pour ajuster les zones. Test d\'effort (VO2max) recommandé avant programme intensif.'));
+ karvonenDiv.appendChild(h('div', {style: 'margin-top:4px;font-style:italic;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? ' Beta-blockers: if prescribed, your actual max HR is lower (~10-20%). Consult your cardiologist to adjust zones. Stress test (VO2max) recommended before intensive programme.' : ' Beta-bloquants : si prescrit, votre FC max réelle est plus basse (~10-20%). Consulter votre cardiologue pour ajuster les zones. Test d\'effort (VO2max) recommandé avant programme intensif.')));
  _bannerTarget.appendChild(karvonenDiv);
  }
 
@@ -7011,11 +7012,11 @@ function renderMusculationProgram(p) {
  // HTA légère (140-159/90-99 mmHg) — effort modéré autorisé mais avec précautions
  if (S.medical && S.medical.indexOf('hta') !== -1 && S.medical.indexOf('hta_severe') === -1) {
  var htaLightDiv = h('div', {style: 'background:rgba(232,111,30,0.06);border-left:3px solid var(--orange,#E86F1E);padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E)'});
- htaLightDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);margin-bottom:6px'}, 'HTA — Précautions sport'));
- htaLightDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u26A0 HTA légère (140-159/90-99 mmHg) : l\'exercice régulier est bénéfique mais doit rester contrôlé (ESC/ESH 2018).'));
- htaLightDiv.appendChild((function(){ var _d = h('div', {style: 'margin-bottom:4px'}); _d.appendChild(document.createTextNode('\u2022 Intensité maximale recommandée : ')); _d.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _d.appendChild(document.createTextNode(' 8/10 — évitez les efforts maximaux')); return _d; })());
- htaLightDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u2022 Évitez le Valsalva (apnée en poussée lourde) — favorisez une respiration continue'));
- htaLightDiv.appendChild(h('div', {}, '\u2022 Contrôle tensionnel mensuel recommandé. Consultez votre médecin si PA > 160/100 mmHg à l\'effort.'));
+ htaLightDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Hypertension — Sport Precautions' : 'HTA — Précautions sport')));
+ htaLightDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? '\u26A0 Mild hypertension (140-159/90-99 mmHg): regular exercise is beneficial but must remain controlled (ESC/ESH 2018).' : '\u26A0 HTA légère (140-159/90-99 mmHg) : l\'exercice régulier est bénéfique mais doit rester contrôlé (ESC/ESH 2018).')));
+ htaLightDiv.appendChild((function(){ var _d = h('div', {style: 'margin-bottom:4px'}); _d.appendChild(document.createTextNode((window.isEnglish && window.isEnglish() ? '\u2022 Maximum recommended intensity: ' : '\u2022 Intensité maximale recommandée : '))); _d.appendChild(termTooltip('RPE', _RPE_DEF)); _d.appendChild(document.createTextNode((window.isEnglish && window.isEnglish() ? ' 8/10 — avoid maximal efforts' : ' 8/10 — évitez les efforts maximaux'))); return _d; })());
+ htaLightDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? '\u2022 Avoid Valsalva (breath-holding during heavy push) — favour continuous breathing' : '\u2022 Évitez le Valsalva (apnée en poussée lourde) — favorisez une respiration continue')));
+ htaLightDiv.appendChild(h('div', {}, (window.isEnglish && window.isEnglish() ? '\u2022 Monthly BP monitoring recommended. Consult your doctor if BP > 160/100 mmHg during exercise.' : '\u2022 Contrôle tensionnel mensuel recommandé. Consultez votre médecin si PA > 160/100 mmHg à l\'effort.')));
  _bannerTarget.appendChild(htaLightDiv);
  }
 
@@ -7023,20 +7024,20 @@ function renderMusculationProgram(p) {
  // hta_severe dans S.medical (onboarding nutrition) → bloquer HIIT/CrossFit + zones FC adaptées
  if (S.medical && S.medical.indexOf('hta_severe') !== -1) {
  var htaDiv = h('div', {style: 'background:rgba(122,31,31,0.06);border-left:3px solid var(--error,#7A1F1F);padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--error,#7A1F1F)'});
- htaDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--error,#7A1F1F);margin-bottom:6px'}, 'HTA Sévère — Restrictions sport obligatoires'));
- htaDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u26A0 HTA sévère (≥180/110 mmHg) : HIIT, CrossFit et efforts isométriques lourds sont contre-indiqués (ESC/ESH 2018). Risque de pic tensionnel >300/150 mmHg (ACC 2019).'));
- htaDiv.appendChild((function(){ var _d = h('div', {style: 'margin-bottom:4px'}); _d.appendChild(document.createTextNode('\u2022 Intensité maximale : ')); _d.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _d.appendChild(document.createTextNode(' 6/10 — cardio Z1-Z2 uniquement (<65% FCmax)')); return _d; })());
- htaDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u2022 Évitez le Valsalva (squat lourd, soulevé de terre, arraché) — Lamotte et al., Arch Cardiovasc Dis 2015'));
- htaDiv.appendChild(h('div', {}, '\u2022 Consultation cardiologique obligatoire avant tout programme. Test d\'effort recommandé.'));
+ htaDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--error,#7A1F1F);margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Severe Hypertension — Mandatory Sport Restrictions' : 'HTA Sévère — Restrictions sport obligatoires')));
+ htaDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? '\u26A0 Severe hypertension (≥180/110 mmHg): HIIT, CrossFit and heavy isometric exercises are contraindicated (ESC/ESH 2018). Risk of BP spike >300/150 mmHg (ACC 2019).' : '\u26A0 HTA sévère (≥180/110 mmHg) : HIIT, CrossFit et efforts isométriques lourds sont contre-indiqués (ESC/ESH 2018). Risque de pic tensionnel >300/150 mmHg (ACC 2019).')));
+ htaDiv.appendChild((function(){ var _d = h('div', {style: 'margin-bottom:4px'}); _d.appendChild(document.createTextNode((window.isEnglish && window.isEnglish() ? '\u2022 Maximum intensity: ' : '\u2022 Intensité maximale : '))); _d.appendChild(termTooltip('RPE', _RPE_DEF)); _d.appendChild(document.createTextNode((window.isEnglish && window.isEnglish() ? ' 6/10 — cardio Z1-Z2 only (<65% HRmax)' : ' 6/10 — cardio Z1-Z2 uniquement (<65% FCmax)'))); return _d; })());
+ htaDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? '\u2022 Avoid Valsalva (heavy squat, deadlift, snatch) — Lamotte et al., Arch Cardiovasc Dis 2015' : '\u2022 Évitez le Valsalva (squat lourd, soulevé de terre, arraché) — Lamotte et al., Arch Cardiovasc Dis 2015')));
+ htaDiv.appendChild(h('div', {}, (window.isEnglish && window.isEnglish() ? '\u2022 Mandatory cardiology consultation before any programme. Stress test recommended.' : '\u2022 Consultation cardiologique obligatoire avant tout programme. Test d\'effort recommandé.')));
  _bannerTarget.appendChild(htaDiv);
  }
 
  // IRC : avertissement intensité sport (KDOQI 2012 — intensité modérée, éviter Valsalva)
  if (S.medical && S.medical.indexOf('irc') !== -1) {
  var ircDiv = h('div', {style: 'background:rgba(62,92,58,0.06);border-left:3px solid var(--green,#3E5C3A);padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--green-ink,#2A4027)'});
- ircDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;margin-bottom:6px'}, 'IRC — Programme adapté'));
- ircDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '⚠ Insuffisance Rénale Chronique : exercices à forte pression intra-abdominale retirés (KDOQI 2012). Intensité modérée recommandée.'));
- ircDiv.appendChild(h('div', {}, '• Évitez le Valsalva : soulevé de terre, squat lourd, arraché — privilégiez machines et poids libres légers.'));
+ ircDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'CKD — Adapted Programme' : 'IRC — Programme adapté')));
+ ircDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? '⚠ Chronic Kidney Disease: exercises with high intra-abdominal pressure removed (KDOQI 2012). Moderate intensity recommended.' : '⚠ Insuffisance Rénale Chronique : exercices à forte pression intra-abdominale retirés (KDOQI 2012). Intensité modérée recommandée.')));
+ ircDiv.appendChild(h('div', {}, (window.isEnglish && window.isEnglish() ? '• Avoid Valsalva: deadlift, heavy squat, snatch — favour machines and light free weights.' : '• Évitez le Valsalva : soulevé de terre, squat lourd, arraché — privilégiez machines et poids libres légers.')));
  _bannerTarget.appendChild(ircDiv);
  }
 
@@ -7044,8 +7045,8 @@ function renderMusculationProgram(p) {
  if (S.sleep !== null && S.sleep !== undefined && S.sleep <= 1) {
  var sleepLabels = ['< 6h', '6-7h'];
  var sleepMsg = S.sleep === 0
- ? ' Sommeil < 6h/nuit — risque de surentraînement élevé. Performance -30%, récupération compromise (IOC 2018). Limitez les séances intenses à 2/semaine. Évitez les blocs HIIT consécutifs.'
- : ' Sommeil 6-7h/nuit — récupération partielle. Maintenez au maximum 4 séances/semaine. Évitez 2 jours intenses d\'affilée.';
+ ? (window.isEnglish && window.isEnglish() ? ' Sleep < 6h/night — high overtraining risk. Performance -30%, recovery compromised (IOC 2018). Limit intense sessions to 2/week. Avoid consecutive HIIT blocks.' : ' Sommeil < 6h/nuit — risque de surentraînement élevé. Performance -30%, récupération compromise (IOC 2018). Limitez les séances intenses à 2/semaine. Évitez les blocs HIIT consécutifs.')
+ : (window.isEnglish && window.isEnglish() ? ' Sleep 6-7h/night — partial recovery. Keep a maximum of 4 sessions/week. Avoid 2 consecutive intense days.' : ' Sommeil 6-7h/nuit — récupération partielle. Maintenez au maximum 4 séances/semaine. Évitez 2 jours intenses d\'affilée.');
  _bannerTarget.appendChild(h('div', {style: 'background:#FFF8E1;border-left:4px solid #F9A825;padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E)'}, sleepMsg));
  }
 
@@ -7061,19 +7062,19 @@ function renderMusculationProgram(p) {
    style: 'display:flex;justify-content:space-between;align-items:center;padding:10px 14px;cursor:pointer;background:var(--ivory2,#F5F4F0)',
    onclick: function() { S._rpeGuideExpanded = !S._rpeGuideExpanded; window.render(); }
   });
-  rpeHeader.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.5px;color:var(--black,#1A1A18)'}, 'C\'est quoi le RPE ? (taux d\'effort)'));
+  rpeHeader.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.5px;color:var(--black,#1A1A18)'}, (window.isEnglish && window.isEnglish() ? 'What is RPE? (effort rate)' : 'C\'est quoi le RPE ? (taux d\'effort)')));
   rpeHeader.appendChild(h('div', {style: 'font-size:12px;color:var(--grey)'}, S._rpeGuideExpanded ? '▲' : '▼'));
   rpeWrap.appendChild(rpeHeader);
 
   if (S._rpeGuideExpanded) {
    var rpeBody = h('div', {style: 'padding:12px 14px'});
-   rpeBody.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin-bottom:10px;line-height:1.6'}, 'Le RPE mesure votre effort sur 10. Simple : combien de reps auriez-vous pu faire en plus ?'));
+   rpeBody.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin-bottom:10px;line-height:1.6'}, (window.isEnglish && window.isEnglish() ? 'RPE measures your effort out of 10. Simple: how many more reps could you have done?' : 'Le RPE mesure votre effort sur 10. Simple : combien de reps auriez-vous pu faire en plus ?')));
    var rpeRows = [
-    ['RPE 5-6', '#3E5C3A', 'Facile — vous pourriez faire encore 4-5 reps. Échauffement.'],
-    ['RPE 7', '#7A3B0E', 'Modéré — vous pourriez faire encore 3 reps. Zone de progression.'],
-    ['RPE 8', '#7A3B0E', 'Dur — encore 2 reps possibles. Zone de hypertrophie.'],
-    ['RPE 9', '#7A1F1F', 'Très dur — encore 1 rep. Réservé aux avancés.'],
-    ['RPE 10', '#7A1F1F', 'Échec total — plus une seule rep possible. Déconseillé aux débutants.']
+    ['RPE 5-6', '#3E5C3A', (window.isEnglish && window.isEnglish() ? 'Easy — you could do 4-5 more reps. Warm-up.' : 'Facile — vous pourriez faire encore 4-5 reps. Échauffement.')],
+    ['RPE 7', '#7A3B0E', (window.isEnglish && window.isEnglish() ? 'Moderate — you could do 3 more reps. Progression zone.' : 'Modéré — vous pourriez faire encore 3 reps. Zone de progression.')],
+    ['RPE 8', '#7A3B0E', (window.isEnglish && window.isEnglish() ? 'Hard — 2 more reps possible. Hypertrophy zone.' : 'Dur — encore 2 reps possibles. Zone de hypertrophie.')],
+    ['RPE 9', '#7A1F1F', (window.isEnglish && window.isEnglish() ? 'Very hard — 1 more rep. Reserved for advanced.' : 'Très dur — encore 1 rep. Réservé aux avancés.')],
+    ['RPE 10', '#7A1F1F', (window.isEnglish && window.isEnglish() ? 'Total failure — not one more rep possible. Not recommended for beginners.' : 'Échec total — plus une seule rep possible. Déconseillé aux débutants.')]
    ];
    rpeRows.forEach(function(row) {
     var rpeRow = h('div', {style: 'display:flex;align-items:flex-start;gap:10px;margin-bottom:7px'});
@@ -7081,7 +7082,7 @@ function renderMusculationProgram(p) {
     rpeRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.5'}, row[2]));
     rpeBody.appendChild(rpeRow);
    });
-   rpeBody.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey);margin-top:8px;border-top:1px solid var(--border);padding-top:8px'}, 'En tant que débutant, visez RPE 7-8. Arrêtez si ça fait mal (≠ brûlure musculaire normale).'));
+   rpeBody.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey);margin-top:8px;border-top:1px solid var(--border);padding-top:8px'}, (window.isEnglish && window.isEnglish() ? 'As a beginner, aim for RPE 7-8. Stop if it hurts (≠ normal muscle burn).' : 'En tant que débutant, visez RPE 7-8. Arrêtez si ça fait mal (≠ brûlure musculaire normale).')));
    rpeWrap.appendChild(rpeBody);
   }
   p.appendChild(rpeWrap);
@@ -8088,10 +8089,10 @@ function renderMusculationProgram(p) {
  // "RIR 3 / modéré" pour la même semaine → contradiction. RPE 10 - RPE = RIR approximatif.
  if (isAdvancedRIR && exPhase) {
   var _rirTarget = Math.max(0, 10 - (exPhase.rpe || 8));
-  var _rirLabel = _rirTarget <= 1 ? 'quasi-échec' : _rirTarget === 2 ? 'effort intense' : _rirTarget === 3 ? 'modéré' : 'léger';
+  var _tRIR = window.isEnglish && window.isEnglish(); var _rirLabel = _rirTarget <= 1 ? (_tRIR ? 'near failure' : 'quasi-échec') : _rirTarget === 2 ? (_tRIR ? 'intense effort' : 'effort intense') : _rirTarget === 3 ? (_tRIR ? 'moderate' : 'modéré') : (_tRIR ? 'light' : 'léger');
   var _rirTargetDisplay = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--orange-ink,#7A3B0E);margin-bottom:6px;padding:4px 8px;background:rgba(232,111,30,0.06);border-radius:2px'});
   _rirTargetDisplay.appendChild(termTooltip('RIR', (window.isEnglish && window.isEnglish() ? 'Reps In Reserve — number of reps you could still do before muscular failure.' : 'Reps In Reserve — nombre de reps que vous pourriez encore faire avant l\'échec musculaire')));
-  _rirTargetDisplay.appendChild(h('span', {}, ' cible cette semaine : ' + _rirTarget + ' — ' + _rirLabel + ' (' + (exPhase.label || '') + ')'));
+  _rirTargetDisplay.appendChild(h('span', {}, (window.isEnglish && window.isEnglish() ? ' target this week: ' : ' cible cette semaine : ') + _rirTarget + ' — ' + _rirLabel + ' (' + (exPhase.label || '') + ')'));
   card.appendChild(_rirTargetDisplay);
  }
  // 2026-04 FIX UX : bandeau d'avertissement convention poids (anti-ambiguïté)
@@ -8100,13 +8101,13 @@ function renderMusculationProgram(p) {
      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:#1A3C5E;margin-bottom:6px;padding:6px 10px;background:rgba(26,60,94,0.06);border-left:2px solid #1A3C5E;border-radius:2px;line-height:1.5;'
    });
    if (_isHaltere) {
-     _convNotice.textContent = 'Convention : poids saisi = par haltère (prendre 2 haltères identiques). Ex : 20 kg = 2 × 20 kg.';
+     _convNotice.textContent = (window.isEnglish && window.isEnglish() ? 'Convention: entered weight = per dumbbell (use 2 identical). E.g. 20 kg = 2 × 20 kg.' : 'Convention : poids saisi = par haltère (prendre 2 haltères identiques). Ex : 20 kg = 2 × 20 kg.');
    } else if (_isKb) {
-     _convNotice.textContent = 'Convention : poids saisi = pour 1 kettlebell.';
+     _convNotice.textContent = (window.isEnglish && window.isEnglish() ? 'Convention: entered weight = for 1 kettlebell.' : 'Convention : poids saisi = pour 1 kettlebell.');
    } else if (_isUnilateral) {
-     _convNotice.textContent = 'Convention : poids saisi = par côté travaillant (jambe ou bras).';
+     _convNotice.textContent = (window.isEnglish && window.isEnglish() ? 'Convention: entered weight = per working side (leg or arm).' : 'Convention : poids saisi = par côté travaillant (jambe ou bras).');
    } else if (_isMachine) {
-     _convNotice.textContent = 'Convention : poids saisi = pile de la machine. Effort ressenti ≈ 70 % de l\'équivalent en charges libres.';
+     _convNotice.textContent = (window.isEnglish && window.isEnglish() ? 'Convention: entered weight = machine stack. Perceived effort ≈ 70% of free-weight equivalent.' : 'Convention : poids saisi = pile de la machine. Effort ressenti ≈ 70 % de l\'équivalent en charges libres.');
    }
    card.appendChild(_convNotice);
  }
@@ -8118,7 +8119,7 @@ function renderMusculationProgram(p) {
  setHeader.appendChild(h('div', {}, '#'));
  setHeader.appendChild(h('div', {}, 'Conseill\u00e9'));
  setHeaderWrap.appendChild(setHeader);
- var _serieProgressEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:700;white-space:nowrap;margin-left:8px;padding:2px 6px;border-radius:2px;' + (_doneCount === numSets ? 'background:var(--ink-900,#0A0A09);color:#fff' : 'background:var(--border);color:var(--grey)')}, _doneCount + '\u00a0/\u00a0' + numSets + ' s\u00e9ries');
+ var _serieProgressEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:700;white-space:nowrap;margin-left:8px;padding:2px 6px;border-radius:2px;' + (_doneCount === numSets ? 'background:var(--ink-900,#0A0A09);color:#fff' : 'background:var(--border);color:var(--grey)')}, _doneCount + '\u00a0/\u00a0' + numSets + (window.isEnglish && window.isEnglish() ? ' sets' : ' s\u00e9ries'));
  setHeaderWrap.appendChild(_serieProgressEl);
  setTable.appendChild(setHeaderWrap);
 
@@ -8648,11 +8649,11 @@ function renderMusculationProgram(p) {
   _arrowRow.appendChild(h('button', {
    style: 'padding:10px 16px;border:1px solid var(--border,#D8D8D0);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;color:var(--grey,#6B6B65);border-radius:2px;cursor:pointer;' + (S.currentExerciseIdx === 0 ? 'opacity:0.25;pointer-events:none' : ''),
    onclick: function(e) { e.stopPropagation(); if (S.currentExerciseIdx > 0) { S.currentExerciseIdx--; if (navigator.vibrate) navigator.vibrate(10); window.render(); } }
-  }, '‹ Précédent'));
+  }, (window.isEnglish && window.isEnglish() ? '‹ Previous' : '‹ Précédent')));
   _arrowRow.appendChild(h('button', {
    style: 'padding:10px 16px;border:1px solid var(--border,#D8D8D0);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;color:var(--grey,#6B6B65);border-radius:2px;cursor:pointer;' + (S.currentExerciseIdx >= _totalExercises - 1 ? 'opacity:0.25;pointer-events:none' : ''),
    onclick: function(e) { e.stopPropagation(); if (S.currentExerciseIdx < _totalExercises - 1) { S.currentExerciseIdx++; if (navigator.vibrate) navigator.vibrate(10); window.render(); } }
-  }, 'Suivant ›'));
+  }, (window.isEnglish && window.isEnglish() ? 'Next ›' : 'Suivant ›')));
   _swipeWrap.appendChild(_arrowRow);
  }
 
@@ -9038,10 +9039,10 @@ function renderMusculationProgram(p) {
  kr3.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;font-weight:bold'}, (window.isEnglish && window.isEnglish() ? 'Estimated total' : 'Total estim\u00e9')));
  kr3.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:17px;font-weight:bold;color:var(--green,#3E5C3A)'}, kcalRes.total + '\u00a0kcal'));
  kcalBox.appendChild(kr3);
- kcalBox.appendChild((function(){ var _d = h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);margin-top:6px;font-style:italic'}); _d.appendChild(document.createTextNode('FC estim\u00e9e\u00a0' + kcalRes.hr + '\u00a0bpm \u2014 ')); _d.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _d.appendChild(document.createTextNode('\u00a0' + kcalRes.rpe + '/10 \u2014 MET\u00a0Ainsworth\u00a02011 \u00b7 Tanaka\u00a02001')); return _d; })());
+ kcalBox.appendChild((function(){ var _d = h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);margin-top:6px;font-style:italic'}); _d.appendChild(document.createTextNode((window.isEnglish && window.isEnglish() ? 'Estimated HR\u00a0' + kcalRes.hr + '\u00a0bpm \u2014 ' : 'FC estim\u00e9e\u00a0' + kcalRes.hr + '\u00a0bpm \u2014 '))); _d.appendChild(termTooltip('RPE', _RPE_DEF)); _d.appendChild(document.createTextNode('\u00a0' + kcalRes.rpe + '/10 \u2014 MET\u00a0Ainsworth\u00a02011 \u00b7 Tanaka\u00a02001')); return _d; })());
  compPanel.appendChild(kcalBox);
  // Note TDEE — évite le double-comptage (audit interdépendance)
- compPanel.appendChild(h('div', {style: 'background:rgba(232,111,30,0.06);border-left:3px solid var(--orange,#E86F1E);padding:8px 12px;margin-bottom:14px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--text,#0A0A09);line-height:1.5'}, '\u26a0 Ces calories sont d\u00e9j\u00e0 int\u00e9gr\u00e9es dans votre TDEE via votre facteur d\'activit\u00e9. Ce bilan confirme votre d\u00e9pense r\u00e9elle — ne les d\u00e9duisez pas en plus de votre objectif calorique journalier.'));
+ compPanel.appendChild(h('div', {style: 'background:rgba(232,111,30,0.06);border-left:3px solid var(--orange,#E86F1E);padding:8px 12px;margin-bottom:14px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--text,#0A0A09);line-height:1.5'}, (window.isEnglish && window.isEnglish() ? '\u26a0 These calories are already included in your TDEE via your activity factor. This summary confirms your actual expenditure — do not deduct them on top of your daily calorie target.' : '\u26a0 Ces calories sont d\u00e9j\u00e0 int\u00e9gr\u00e9es dans votre TDEE via votre facteur d\'activit\u00e9. Ce bilan confirme votre d\u00e9pense r\u00e9elle — ne les d\u00e9duisez pas en plus de votre objectif calorique journalier.')));
  // Contexte nutritionnel : montre l'impact de la session sur le budget calorique
  var nc = getNutritionContext();
  // XSS fix: build nutrition context panel via DOM — values are numeric but use textContent for safety
@@ -9102,7 +9103,7 @@ function renderMusculationProgram(p) {
  // RPE 1-10 (slider)
  var rpeRow = h('div', {style: 'margin-bottom:14px'});
  var rpeLabel = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:6px'});
- rpeLabel.appendChild((function(){ var _s = h('span', {style: 'font-family:Georgia,serif;font-size:13px'}); _s.appendChild(document.createTextNode('Effort ressenti (')); _s.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _s.appendChild(document.createTextNode(')')); return _s; })());
+ rpeLabel.appendChild((function(){ var _s = h('span', {style: 'font-family:Georgia,serif;font-size:13px'}); _s.appendChild(document.createTextNode((window.isEnglish && window.isEnglish() ? 'Perceived effort (' : 'Effort ressenti ('))); _s.appendChild(termTooltip('RPE', _RPE_DEF)); _s.appendChild(document.createTextNode(')')); return _s; })());
  var rpeValSpan = h('span', {style: 'font-family:Georgia,serif;font-size:15px;font-weight:bold;color:var(--black,#0A0A09);min-width:42px;text-align:right'},
    fbDraft.rpe ? (fbDraft.rpe + '/10') : '—');
  rpeLabel.appendChild(rpeValSpan);
@@ -9122,7 +9123,7 @@ function renderMusculationProgram(p) {
  });
  rpeRow.appendChild(rpeSlider);
  var rpeHelp = h('div', {style: 'display:flex;justify-content:space-between;font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey,#6B6B65);margin-top:4px'});
- rpeHelp.appendChild(h('span', {}, '1 · très facile'));
+ rpeHelp.appendChild(h('span', {}, (window.isEnglish && window.isEnglish() ? '1 · very easy' : '1 · très facile')));
  rpeHelp.appendChild(h('span', {}, '10 · max effort'));
  rpeRow.appendChild(rpeHelp);
  fbPanel.appendChild(rpeRow);
@@ -9272,7 +9273,7 @@ function renderMusculationProgram(p) {
    streakVal.textContent = (_streak > 1 ? (_streak + ' ' + window.locPlural(_streak, {fr:{one:'jour consécutif',other:'jours consécutifs'},en:{one:'day in a row',other:'days in a row'}})) : (_total + ' ' + window.locPlural(_total, {fr:{one:'séance au total',other:'séances au total'},en:{one:'workout total',other:'workouts total'}})));
    streakLeft.appendChild(streakVal);
    streakRow.appendChild(streakLeft);
-   var nextMile = _streak < 7 ? (7 - _streak + ' j → badge') : _streak < 14 ? (14 - _streak + ' j → exercices avancés') : '';
+   var _tStreakNext = window.isEnglish && window.isEnglish(); var nextMile = _streak < 7 ? (7 - _streak + (_tStreakNext ? ' d → badge' : ' j → badge')) : _streak < 14 ? (14 - _streak + (_tStreakNext ? ' d → advanced exercises' : ' j → exercices avancés')) : '';
    if (nextMile) {
      var streakNext = document.createElement('div');
      streakNext.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--orange-ink,#7A3B0E);text-align:right;';
