@@ -196,9 +196,10 @@ window.CUSTOM_SESSION = {
     var now = new Date();
     var dd = String(now.getDate()).padStart(2, '0');
     var mm = String(now.getMonth() + 1).padStart(2, '0');
+    var _en = window.isEnglish && window.isEnglish();
     return {
       id:        'custom-' + now.toISOString().slice(0, 10),
-      title:     'Séance du ' + dd + '/' + mm,
+      title:     _en ? ('Workout ' + mm + '/' + dd) : ('Séance du ' + dd + '/' + mm),
       startTime: null,
       endTime:   null,
       durationMins: null,
@@ -228,7 +229,7 @@ window.CUSTOM_SESSION = {
     try {
       localStorage.setItem(this._draftKey(), JSON.stringify(S.customSessionDraft));
     } catch(e) {
-      if (window.showToast) window.showToast('Stockage plein — brouillon non sauvegardé.', 'error', 3000);
+      if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Storage full — draft not saved.' : 'Stockage plein — brouillon non sauvegardé.', 'error', 3000);
     }
   },
 
@@ -729,19 +730,22 @@ function _csRenderMuscleSelector(container, draft) {
   var S = window.S;
   if (!Array.isArray(S._csSelectedGroups)) S._csSelectedGroups = [];
 
+  var _msEN = window.isEnglish && window.isEnglish();
   container.appendChild(h('div', {
     style: 'font-family:Georgia,serif;font-size:18px;font-weight:normal;color:var(--black,#0A0A09);margin-bottom:6px;'
-  }, 'Quels muscles travailler ?'));
+  }, _msEN ? 'Which muscles to train?' : 'Quels muscles travailler ?'));
   container.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin-bottom:20px;line-height:1.5;'
-  }, 'Sélectionnez un ou plusieurs groupes. Nous générons une séance sur mesure que vous pourrez modifier librement.'));
+  }, _msEN ? 'Select one or more groups. We generate a tailored session you can edit freely.' : 'Sélectionnez un ou plusieurs groupes. Nous générons une séance sur mesure que vous pourrez modifier librement.'));
 
   var grid = h('div', {
     style: 'display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;'
   });
 
+  var _msLabelsEN = { glutes: 'Glutes', back: 'Back', chest: 'Chest', legs: 'Legs', shoulders: 'Shoulders', abs: 'Abs', arms: 'Arms', cardio: 'Cardio' };
   _CS_MUSCLE_GROUPS.forEach(function(grp) {
     var sel = S._csSelectedGroups.indexOf(grp.key) !== -1;
+    var _grpLabel = _msEN ? (_msLabelsEN[grp.key] || grp.label) : grp.label;
     var btn = h('button', {
       style: [
         'padding:18px 10px;',
@@ -763,7 +767,7 @@ function _csRenderMuscleSelector(container, draft) {
         };
       })(grp.key)
     });
-    btn.appendChild(h('div', {}, grp.label));
+    btn.appendChild(h('div', {}, _grpLabel));
     grid.appendChild(btn);
   });
 
@@ -790,7 +794,7 @@ function _csRenderMuscleSelector(container, draft) {
       S._csGenerating = false;
       if (window.render) window.render();
     }
-  }, hasSel ? '→ Générer ma séance' : 'Sélectionnez au moins un groupe'));
+  }, hasSel ? (_msEN ? '→ Generate my session' : '→ Générer ma séance') : (_msEN ? 'Select at least one group' : 'Sélectionnez au moins un groupe')));
 
   container.appendChild(h('button', {
     style: 'display:block;width:100%;padding:10px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);cursor:pointer;',
@@ -799,7 +803,7 @@ function _csRenderMuscleSelector(container, draft) {
       S._csSelectedGroups = [];
       if (window.render) window.render();
     }
-  }, 'Construire librement sans suggestion →'));
+  }, _msEN ? 'Build freely without suggestions →' : 'Construire librement sans suggestion →'));
 }
 
 // ─────────────────────────────────────────────
@@ -808,18 +812,19 @@ function _csRenderMuscleSelector(container, draft) {
 function _csRenderBuild(container, draft) {
   var h = window.h;
   var S = window.S;
+  var _bEN = window.isEnglish && window.isEnglish();
 
   // ── En-tête ──
   var hdr = h('div', { style: 'margin-bottom:16px;' });
   hdr.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px;'
-  }, 'SÉANCE LIBRE'));
+  }, _bEN ? 'FREE WORKOUT' : 'SÉANCE LIBRE'));
   hdr.appendChild(h('div', {
     style: 'font-family:Georgia,serif;font-size:22px;font-weight:normal;color:var(--black,#0A0A09);margin-bottom:4px;'
   }, draft.title));
   var _genGroups = (S._csSelectedGroups && S._csSelectedGroups.length && S._csSkipMuscleSelect);
   var _subtitleText = draft.blocks.length === 0
-    ? 'Recherchez un exercice ou ajoutez un bloc cardio.'
+    ? (_bEN ? 'Search for an exercise or add a cardio block.' : 'Recherchez un exercice ou ajoutez un bloc cardio.')
     : _genGroups
       ? draft.blocks.length + ' ' + window.locPlural(draft.blocks.length, {fr:{one:'exercice suggéré',other:'exercices suggérés'},en:{one:'suggested exercise',other:'suggested exercises'}}) + (window.isEnglish && window.isEnglish() ? ' · Edit freely before starting.' : ' · Modifiez librement avant de démarrer.')
       : draft.blocks.length + ' ' + window.locPlural(draft.blocks.length, {fr:{one:'bloc',other:'blocs'},en:{one:'block',other:'blocks'}}) + (window.isEnglish && window.isEnglish() ? ' · Tap Start when ready.' : ' · Appuyez sur Démarrer quand vous êtes prêt.');
@@ -843,7 +848,7 @@ function _csRenderBuild(container, draft) {
         S2.view = 'today';
         if (window.render) window.render();
       }
-    }, 'Annuler'));
+    }, _bEN ? 'Cancel' : 'Annuler'));
     return;
   }
 
@@ -851,14 +856,14 @@ function _csRenderBuild(container, draft) {
   if (S._csSkipMuscleSelect && S._csSelectedGroups && S._csSelectedGroups.length > 0 && draft.blocks.length === 0) {
     container.appendChild(h('div', {
       style: 'padding:10px 14px;margin-bottom:12px;background:rgba(10,10,9,0.04);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'
-    }, 'Aucun exercice trouvé pour ces groupes musculaires. Ajoutez vos exercices manuellement ci-dessous.'));
+    }, _bEN ? 'No exercises found for these muscle groups. Add exercises manually below.' : 'Aucun exercice trouvé pour ces groupes musculaires. Ajoutez vos exercices manuellement ci-dessous.'));
   }
 
   // ── Liste des blocs du brouillon (EN PREMIER — l'utilisateur voit sa séance immédiatement) ──
   if (draft.blocks.length > 0) {
     container.appendChild(h('div', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px;'
-    }, 'MA SÉANCE'));
+    }, _bEN ? 'MY WORKOUT' : 'MA SÉANCE'));
     draft.blocks.forEach(function(block) {
       container.appendChild(_csRenderDraftBlock(block));
     });
@@ -880,7 +885,7 @@ function _csRenderBuild(container, draft) {
       window.CUSTOM_SESSION.startSession();
       if (window.render) window.render();
     }
-  }, canStart ? '▶ Démarrer la séance' : 'Ajoutez au moins un exercice'));
+  }, canStart ? (_bEN ? '▶ Start workout' : '▶ Démarrer la séance') : (_bEN ? 'Add at least one exercise' : 'Ajoutez au moins un exercice')));
 
   // ── Sauvegarder comme template depuis BUILD (sans avoir besoin de finir la séance) ──
   if (canStart) {
@@ -888,11 +893,11 @@ function _csRenderBuild(container, draft) {
       container.appendChild(h('button', {
         style: 'display:block;width:100%;padding:9px;margin-top:6px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;color:var(--grey,#6B6B65);',
         onclick: function() { S._csBuildTplOpen = true; if (window.render) window.render(); }
-      }, '↗ Sauvegarder comme template'));
+      }, _bEN ? '↗ Save as template' : '↗ Sauvegarder comme template'));
     } else {
       var _bTplRow = h('div', { style: 'display:flex;gap:8px;align-items:center;margin-top:6px;padding:8px;border:1px solid var(--border,#D8D8D0);border-radius:2px;background:var(--ivory,#FAF9F6);' });
       var _bTplInput = h('input', {
-        type: 'text', placeholder: 'Nom de la séance…',
+        type: 'text', placeholder: _bEN ? 'Session name…' : 'Nom de la séance…',
         style: 'flex:1;padding:8px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;background:var(--ivory,#FAF9F6);min-width:0;'
       });
       _bTplRow.appendChild(_bTplInput);
@@ -902,11 +907,11 @@ function _csRenderBuild(container, draft) {
           var name = _bTplInput.value.trim();
           if (!name) return;
           window.CUSTOM_SESSION.saveAsTemplate(name);
-          if (window.showToast) window.showToast('« ' + name + ' » sauvegardé.', 'success', 2500);
+          if (window.showToast) window.showToast('« ' + name + ' » ' + (_bEN ? 'saved.' : 'sauvegardé.'), 'success', 2500);
           S._csBuildTplOpen = false;
           if (window.render) window.render();
         }
-      }, 'Sauvegarder'));
+      }, _bEN ? 'Save' : 'Sauvegarder'));
       _bTplRow.appendChild(h('button', {
         style: 'flex-shrink:0;padding:8px 10px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;cursor:pointer;font-size:14px;color:var(--grey,#6B6B65);',
         onclick: function() { S._csBuildTplOpen = false; if (window.render) window.render(); }
@@ -919,7 +924,7 @@ function _csRenderBuild(container, draft) {
   if (draft.blocks.length > 0) {
     var _sep = h('div', { style: 'display:flex;align-items:center;gap:10px;margin:22px 0 16px;' });
     _sep.appendChild(h('div', { style: 'flex:1;height:1px;background:var(--border,#D8D8D0);' }));
-    _sep.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);white-space:nowrap;flex-shrink:0;' }, 'Ajouter un exercice'));
+    _sep.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);white-space:nowrap;flex-shrink:0;' }, _bEN ? 'ADD AN EXERCISE' : 'Ajouter un exercice'));
     _sep.appendChild(h('div', { style: 'flex:1;height:1px;background:var(--border,#D8D8D0);' }));
     container.appendChild(_sep);
   }
@@ -931,7 +936,7 @@ function _csRenderBuild(container, draft) {
   }, '⌕'));
   var srchInput = h('input', {
     type: 'search', autocomplete: 'off', autocorrect: 'off', autocapitalize: 'off',
-    placeholder: 'Squat, fessiers, hip thrust…',
+    placeholder: _bEN ? 'Squat, glutes, hip thrust…' : 'Squat, fessiers, hip thrust…',
     value: S._csQuery || '',
     style: [
       'width:100%;box-sizing:border-box;',
@@ -968,9 +973,12 @@ function _csRenderBuild(container, draft) {
       style: 'border:1px solid var(--border,#D8D8D0);border-radius:2px;margin-bottom:14px;max-height:260px;overflow-y:auto;background:var(--ivory,#FAF9F6);'
     });
     if (results.length === 0) {
+      var _emptyMsg = (window.isEnglish && window.isEnglish())
+        ? 'No exercise found for "' + q + '"'
+        : 'Aucun exercice pour "' + q + '"';
       resBox.appendChild(h('div', {
         style: 'padding:14px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);'
-      }, 'Aucun exercice pour "' + q + '"'));
+      }, _emptyMsg));
     } else {
       results.forEach(function(ex) {
         var row = h('div', {
@@ -1013,9 +1021,15 @@ function _csRenderBuild(container, draft) {
   var cardioSect = h('div', { style: 'margin-bottom:18px;' });
   cardioSect.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px;'
-  }, 'AJOUTER UN BLOC CARDIO'));
+  }, _bEN ? 'ADD A CARDIO BLOCK' : 'AJOUTER UN BLOC CARDIO'));
   var cardioRow = h('div', { style: 'display:flex;flex-wrap:wrap;gap:8px;' });
-  var cardioTypes = [
+  var cardioTypes = _bEN ? [
+    { key: 'tapis',       label: 'Treadmill' },
+    { key: 'velo',        label: 'Bike' },
+    { key: 'rameur',      label: 'Rowing machine' },
+    { key: 'elliptique',  label: 'Elliptical' },
+    { key: 'corde',       label: 'Jump rope' }
+  ] : [
     { key: 'tapis',       label: 'Tapis de course' },
     { key: 'velo',        label: 'Vélo' },
     { key: 'rameur',      label: 'Rameur' },
@@ -1037,7 +1051,7 @@ function _csRenderBuild(container, draft) {
     if (tpls.length > 0) {
       container.appendChild(h('div', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px;margin-top:6px;'
-      }, 'MES SÉANCES SAUVEGARDÉES'));
+      }, _bEN ? 'MY SAVED WORKOUTS' : 'MES SÉANCES SAUVEGARDÉES'));
       tpls.forEach(function(tpl) {
         var tRow = h('div', {
           style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--border,#D8D8D0);margin-bottom:6px;background:var(--ivory,#FAF9F6);cursor:pointer;border-radius:2px;',
@@ -1051,9 +1065,9 @@ function _csRenderBuild(container, draft) {
         var tLeft = h('div', { style: 'flex:1;min-width:0;' });
         tLeft.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--black,#0A0A09);' }, tpl.name));
         tLeft.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:2px;' },
-          (tpl.blocks || []).filter(function(b) { return b.type === 'exercise'; }).length + ' exercices · ' + tpl.date));
+          (tpl.blocks || []).filter(function(b) { return b.type === 'exercise'; }).length + ' ' + (_bEN ? 'exercises' : 'exercices') + ' · ' + tpl.date));
         tRow.appendChild(tLeft);
-        tRow.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--green,#3E5C3A);margin-left:10px;' }, 'Charger →'));
+        tRow.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--green,#3E5C3A);margin-left:10px;' }, _bEN ? 'Load →' : 'Charger →'));
         container.appendChild(tRow);
       });
     }
@@ -1072,7 +1086,7 @@ function _csRenderBuild(container, draft) {
       S2.view = 'today';
       if (window.render) window.render();
     }
-  }, 'Annuler'));
+  }, _bEN ? 'Cancel' : 'Annuler'));
 }
 // ─────────────────────────────────────────────
 //  ÉTAPE 9a : vue ACTIVE
@@ -1080,6 +1094,7 @@ function _csRenderBuild(container, draft) {
 function _csRenderActive(container, draft) {
   var h = window.h;
   var S = window.S;
+  var _aEN = window.isEnglish && window.isEnglish();
 
   // Pré-calcul dates log (partagé entre tous les blocs pour éviter N tris)
   var _logToday = new Date().toISOString().slice(0, 10);
@@ -1108,7 +1123,7 @@ function _csRenderActive(container, draft) {
   var hdrTop = h('div', { style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;' });
   hdrTop.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);'
-  }, 'SÉANCE EN COURS'));
+  }, _aEN ? 'WORKOUT IN PROGRESS' : 'SÉANCE EN COURS'));
   var chronoSpan = h('span', {
     id: 'cs-elapsed-timer',
     style: 'font-family:Georgia,serif;font-size:13px;color:var(--grey,#6B6B65);letter-spacing:1px;'
@@ -1125,7 +1140,7 @@ function _csRenderActive(container, draft) {
     hdr.appendChild(pb);
     hdr.appendChild(h('div', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:4px;text-align:right;'
-    }, doneSets + '/' + totalSets + ' séries validées'));
+    }, doneSets + '/' + totalSets + ' ' + (_aEN ? 'sets done' : 'séries validées')));
   }
   container.appendChild(hdr);
 
@@ -1160,19 +1175,20 @@ function _csRenderActive(container, draft) {
       window.CUSTOM_SESSION.finishSession(elapsed);
       if (window.render) window.render();
     }
-  }, allDone ? '✓ Terminer la séance' : 'Terminer la séance →'));
+  }, allDone ? (_aEN ? '✓ Finish workout' : '✓ Terminer la séance') : (_aEN ? 'Finish workout →' : 'Terminer la séance →')));
 
   // Abandon
   container.appendChild(h('button', {
     style: 'display:block;width:100%;padding:10px;margin-top:8px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;color:var(--grey,#6B6B65);',
     onclick: function() {
-      if (!(window.sfcConfirm ? window.sfcConfirm('Abandonner la séance ? Les séries validées sont conservées.') : confirm('Abandonner la séance ? Les séries validées sont conservées.'))) return;
+      var _abandonMsg = _aEN ? 'Abandon workout? Validated sets are kept.' : 'Abandonner la séance ? Les séries validées sont conservées.';
+      if (!(window.sfcConfirm ? window.sfcConfirm(_abandonMsg) : confirm(_abandonMsg))) return;
       if (window._csChronoInterval) { clearInterval(window._csChronoInterval); window._csChronoInterval = null; }
       var elapsed2 = draft.startTime ? Math.max(1, Math.round((Date.now() - draft.startTime) / 60000)) : 5;
       window.CUSTOM_SESSION.finishSession(elapsed2);
       if (window.render) window.render();
     }
-  }, 'Abandonner'));
+  }, _aEN ? 'Abandon' : 'Abandonner'));
 }
 
 // ─────────────────────────────────────────────
@@ -1181,6 +1197,7 @@ function _csRenderActive(container, draft) {
 function _csRenderDone(container, draft) {
   var h = window.h;
   var S = window.S;
+  var _dEN = window.isEnglish && window.isEnglish();
   var kcal = window.CUSTOM_SESSION.calcKcal(draft);
 
   // Header succès
@@ -1188,7 +1205,7 @@ function _csRenderDone(container, draft) {
   hdrDone.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:28px;margin-bottom:8px;' }, '✓'));
   hdrDone.appendChild(h('div', {
     style: 'font-family:Georgia,serif;font-size:21px;font-weight:normal;color:var(--black,#0A0A09);margin-bottom:4px;'
-  }, 'Séance terminée'));
+  }, _dEN ? 'Workout complete' : 'Séance terminée'));
   hdrDone.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);'
   }, draft.title));
@@ -1205,9 +1222,9 @@ function _csRenderDone(container, draft) {
     c.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:4px;' }, lbl));
     return c;
   }
-  statsGrid.appendChild(_sc(exCount, 'Exercices', false));
-  statsGrid.appendChild(_sc((draft.durationMins || 0) + "'", 'Durée', false));
-  statsGrid.appendChild(_sc(kcal.total + ' kcal', 'Dépense', true));
+  statsGrid.appendChild(_sc(exCount, _dEN ? 'Exercises' : 'Exercices', false));
+  statsGrid.appendChild(_sc((draft.durationMins || 0) + "'", _dEN ? 'Duration' : 'Durée', false));
+  statsGrid.appendChild(_sc(kcal.total + ' kcal', _dEN ? 'Burned' : 'Dépense', true));
   container.appendChild(statsGrid);
 
   // Récap exercices
@@ -1216,7 +1233,7 @@ function _csRenderDone(container, draft) {
     var recapBox = h('div', { style: 'border:1px solid var(--border,#D8D8D0);margin-bottom:14px;background:var(--ivory,#FAF9F6);' });
     recapBox.appendChild(h('div', {
       style: 'padding:7px 12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);border-bottom:1px solid var(--border,#D8D8D0);'
-    }, 'Récap. des exercices'));
+    }, _dEN ? 'Exercise recap' : 'Récap. des exercices'));
     exBlocks.forEach(function(b) {
       var valid = b.loggedSets.filter(function(s) { return s.validated; });
       if (!valid.length) return;
@@ -1233,7 +1250,7 @@ function _csRenderDone(container, draft) {
       var _maxW = valid.reduce(function(m, s) { return Math.max(m, parseFloat(s.weight)||0); }, 0);
       var _wTxt = _maxW > 0 ? ' — ' + _maxW + ' kg' : '';
       _rTop.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-left:8px;white-space:nowrap;display:flex;align-items:center;gap:6px;' },
-        valid.length + ' séries' + _wTxt));
+        valid.length + ' ' + (_dEN ? 'sets' : 'séries') + _wTxt));
       _rTop.appendChild(h('span', { style: 'color:var(--green,#3E5C3A);font-size:14px;margin-left:6px;flex-shrink:0;' }, '✓'));
       r.appendChild(_rTop);
       // Note
@@ -1247,7 +1264,7 @@ function _csRenderDone(container, draft) {
 
   // Durée éditable
   var durRow = h('div', { style: 'display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--border,#D8D8D0);margin-bottom:12px;' });
-  durRow.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);flex:1;' }, 'Durée réelle'));
+  durRow.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);flex:1;' }, _dEN ? 'Actual duration' : 'Durée réelle'));
   var durInp = h('input', {
     type: 'number', min: '1', max: '300', inputmode: 'numeric',
     value: String(draft.durationMins || 30),
@@ -1270,10 +1287,10 @@ function _csRenderDone(container, draft) {
     row.appendChild(h('span', { style: 'font-family:Georgia,serif;font-size:' + (bold ? '17' : '15') + 'px;' + (col ? 'color:' + col + ';' : '') + (bold ? 'font-weight:bold;' : '') }, val));
     return row;
   }
-  kcalBox.appendChild(_kr('Dépense séance', kcal.base + ' kcal', false, null));
+  kcalBox.appendChild(_kr(_dEN ? 'Workout burn' : 'Dépense séance', kcal.base + ' kcal', false, null));
   kcalBox.appendChild(_kr('EPOC +24h', '+' + kcal.epoc + ' kcal', false, 'var(--orange,#E86F1E)'));
   var tot = h('div', { style: 'display:flex;justify-content:space-between;border-top:1px solid var(--border,#D8D8D0);padding-top:8px;' });
-  tot.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:bold;' }, 'Total estimé'));
+  tot.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:bold;' }, _dEN ? 'Estimated total' : 'Total estimé'));
   tot.appendChild(h('span', { style: 'font-family:Georgia,serif;font-size:17px;font-weight:bold;color:var(--green,#3E5C3A);' }, kcal.total + ' kcal'));
   kcalBox.appendChild(tot);
   container.appendChild(kcalBox);
@@ -1286,7 +1303,7 @@ function _csRenderDone(container, draft) {
       style: 'border:1px solid var(--border,#D8D8D0);padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;background:var(--ivory,#FAF9F6);'
     });
     var tplInp = h('input', {
-      type: 'text', placeholder: 'Nom du template…',
+      type: 'text', placeholder: _dEN ? 'Template name…' : 'Nom du template…',
       value: draft.title || '',
       style: 'flex:1;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;background:var(--ivory);min-width:0;',
       onclick: function(e) { e.stopPropagation(); }
@@ -1298,13 +1315,13 @@ function _csRenderDone(container, draft) {
         var name = tplInp.value.trim() || draft.title;
         if (!name) { tplInp.focus(); return; }
         window.CUSTOM_SESSION.saveAsTemplate(name);
-        if (window.showToast) window.showToast('Template « ' + name + ' » sauvegardé.', 'success', 2500);
+        if (window.showToast) window.showToast((_dEN ? 'Template «' : 'Template «') + ' ' + name + ' » ' + (_dEN ? 'saved.' : 'sauvegardé.'), 'success', 2500);
         if (window.render) window.render();
       }
-    }, 'Sauvegarder'));
+    }, _dEN ? 'Save' : 'Sauvegarder'));
     container.appendChild(h('div', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px;'
-    }, 'Refaire cette séance plus tard'));
+    }, _dEN ? 'REPEAT THIS WORKOUT LATER' : 'Refaire cette séance plus tard'));
     container.appendChild(tplRow);
   }
 
@@ -1320,7 +1337,7 @@ function _csRenderDone(container, draft) {
       S2.view = 'today';
       if (window.render) window.render();
     }
-  }, '← Retour au tableau de bord'));
+  }, _dEN ? '← Back to dashboard' : '← Retour au tableau de bord'));
 
   container.appendChild(h('button', {
     style: 'display:block;width:100%;padding:11px;margin-top:8px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;color:var(--black,#0A0A09);',
@@ -1333,7 +1350,7 @@ function _csRenderDone(container, draft) {
       window.CUSTOM_SESSION.ensureDraft();
       if (window.render) window.render();
     }
-  }, '+ Nouvelle séance libre'));
+  }, _dEN ? '+ New free workout' : '+ Nouvelle séance libre'));
 }
 
 // ─────────────────────────────────────────────
@@ -1352,10 +1369,11 @@ function _csShowUndo(removedIdx, removedBlock) {
     'display:flex;align-items:center;gap:14px;z-index:9999;' +
     'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;white-space:nowrap;' +
     'box-shadow:0 4px 16px rgba(0,0,0,0.25);';
-  bar.appendChild(document.createTextNode((removedBlock.n || removedBlock.label || 'Bloc') + ' retiré'));
+  var _undoEN = window.isEnglish && window.isEnglish();
+  bar.appendChild(document.createTextNode((removedBlock.n || removedBlock.label || (_undoEN ? 'Block' : 'Bloc')) + ' ' + (_undoEN ? 'removed' : 'retiré')));
 
   var btn = document.createElement('button');
-  btn.textContent = 'Annuler';
+  btn.textContent = _undoEN ? 'Undo' : 'Annuler';
   btn.style.cssText = 'background:none;border:1px solid rgba(250,249,246,0.4);color:#FAF9F6;' +
     'padding:4px 10px;border-radius:2px;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;';
   btn.onclick = function() {
@@ -1382,6 +1400,7 @@ function _csShowUndo(removedIdx, removedBlock) {
 function _csRenderDraftBlock(block) {
   var h = window.h;
   var S = window.S;
+  var _dbEN = window.isEnglish && window.isEnglish();
   var wrap = h('div', { style: 'border:1px solid var(--border,#D8D8D0);background:var(--ivory,#FAF9F6);margin-bottom:10px;border-radius:2px;overflow:hidden;' });
 
   if (block.type === 'exercise') {
@@ -1431,7 +1450,7 @@ function _csRenderDraftBlock(block) {
 
     // ── contrôles séries/reps ──
     var cfgRow = h('div', { style: 'padding:10px 12px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;' });
-    cfgRow.appendChild(_csNumCtrl('Séries', parseInt(block.sets) || 4, 1, 10, 1,
+    cfgRow.appendChild(_csNumCtrl(_dbEN ? 'Sets' : 'Séries', parseInt(block.sets) || 4, 1, 10, 1,
       function(v) { block.sets = v; window.CUSTOM_SESSION.saveDraft(); if (window.render) window.render(); }));
     cfgRow.appendChild(_csNumCtrl('Reps', parseInt(block.reps) || 10, 1, 50, 1,
       function(v) { block.reps = v; window.CUSTOM_SESSION.saveDraft(); if (window.render) window.render(); }));
@@ -1441,7 +1460,7 @@ function _csRenderDraftBlock(block) {
     var restRow = h('div', { style: 'padding:7px 12px;border-top:1px solid var(--border,#D8D8D0);display:flex;align-items:center;gap:8px;flex-wrap:wrap;' });
     restRow.appendChild(h('span', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);flex-shrink:0;'
-    }, 'Repos'));
+    }, _dbEN ? 'Rest' : 'Repos'));
     var restPresets = [
       { label: '1\'',    val: '60s'  },
       { label: '1\'30', val: '90s'  },
@@ -1487,22 +1506,22 @@ function _csRenderDraftBlock(block) {
       });
       sugRow.appendChild(h('div', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--green,#3E5C3A);'
-      }, 'Suggestion : ' + sugW + ' kg'));
+      }, (_dbEN ? 'Suggestion: ' : 'Suggestion : ') + sugW + ' kg'));
       sugRow.appendChild(h('button', {
         style: 'background:var(--green,#3E5C3A);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;padding:4px 10px;cursor:pointer;border-radius:2px;',
         onclick: (function(b, sw) { return function() { b.targetWeight = sw; window.CUSTOM_SESSION.saveDraft(); if (window.render) window.render(); }; })(block, sugW)
-      }, 'Utiliser ' + sugW + ' kg'));
+      }, (_dbEN ? 'Use ' : 'Utiliser ') + sugW + ' kg'));
       wrap.appendChild(sugRow);
     }
 
     // ── charge cible ──
     var _bwBlock = window.isBodyweightExercise ? window.isBodyweightExercise(block) : (block.eq === 'Poids du corps');
     var wtRow = h('div', { style: 'padding:9px 12px;border-top:1px solid var(--border,#D8D8D0);display:flex;align-items:center;gap:8px;' });
-    wtRow.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);min-width:80px;' }, _bwBlock ? 'Lest (opt.)' : 'Charge cible'));
+    wtRow.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);min-width:80px;' }, _bwBlock ? (_dbEN ? 'Weight (opt.)' : 'Lest (opt.)') : (_dbEN ? 'Target weight' : 'Charge cible')));
     var wInp = h('input', {
       type: 'number', step: '0.5', min: '0', max: '500', inputmode: 'decimal',
       value: block.targetWeight != null ? String(block.targetWeight) : '',
-      placeholder: _bwBlock ? 'lest' : 'kg',
+      placeholder: _bwBlock ? (_dbEN ? 'vest' : 'lest') : 'kg',
       style: 'width:68px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:16px;text-align:center;background:var(--ivory);-webkit-appearance:none;' + (_bwBlock ? 'opacity:0.7;' : ''),
       onclick: function(e) { e.stopPropagation(); },
       onchange: (function(b) { return function(e) { var v = parseFloat(e.target.value); if (!isNaN(v) && v >= 0) { b.targetWeight = v; window.CUSTOM_SESSION.saveDraft(); } }; })(block)
@@ -1523,10 +1542,10 @@ function _csRenderDraftBlock(block) {
 
     // ── Note optionnelle ──
     var _noteRow = h('div', { style: 'padding:7px 12px;border-top:1px solid var(--border,#D8D8D0);display:flex;align-items:center;gap:8px;' });
-    _noteRow.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);min-width:44px;flex-shrink:0;' }, 'Note'));
+    _noteRow.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);min-width:44px;flex-shrink:0;' }, _dbEN ? 'Note' : 'Note'));
     var _noteInp = h('input', {
       type: 'text', maxlength: '120',
-      placeholder: 'Ex: garder le dos plat, sentir les pecs…',
+      placeholder: _dbEN ? 'E.g. keep back flat, feel the chest…' : 'Ex: garder le dos plat, sentir les pecs…',
       value: block.notes || '',
       style: 'flex:1;padding:6px 8px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;background:var(--ivory,#FAF9F6);color:var(--black,#0A0A09);',
       onclick: function(e) { e.stopPropagation(); },
@@ -1539,7 +1558,7 @@ function _csRenderDraftBlock(block) {
     var chRow = h('div', { style: 'display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);' });
     var clft = h('div', {});
     clft.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);' }, block.label || block.subtype));
-    clft.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:2px;' }, 'Cardio'));
+    clft.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:2px;' }, 'Cardio')); // 'Cardio' is the same in both languages
     chRow.appendChild(clft);
     var _cDraft = window.CUSTOM_SESSION.ensureDraft();
     var _cIdx = _cDraft.blocks.findIndex(function(b) { return b.id === block.id; });
@@ -1556,14 +1575,14 @@ function _csRenderDraftBlock(block) {
     wrap.appendChild(chRow);
 
     var ccfgRow = h('div', { style: 'padding:10px 12px;display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;' });
-    ccfgRow.appendChild(_csNumCtrl('Durée (min)', block.duration || 20, 1, 120, 5,
+    ccfgRow.appendChild(_csNumCtrl(_dbEN ? 'Duration (min)' : 'Durée (min)', block.duration || 20, 1, 120, 5,
       function(v) { block.duration = v; window.CUSTOM_SESSION.saveDraft(); if (window.render) window.render(); }));
     if (block.subtype === 'tapis' || block.subtype === 'velo') {
-      ccfgRow.appendChild(_csNumCtrl('Vitesse (km/h)', block.speed || 6, 1, 30, 0.5,
+      ccfgRow.appendChild(_csNumCtrl(_dbEN ? 'Speed (km/h)' : 'Vitesse (km/h)', block.speed || 6, 1, 30, 0.5,
         function(v) { block.speed = v; window.CUSTOM_SESSION.saveDraft(); if (window.render) window.render(); }));
     }
     if (block.subtype === 'tapis') {
-      ccfgRow.appendChild(_csNumCtrl('Inclinaison (%)', block.incline || 0, 0, 30, 1,
+      ccfgRow.appendChild(_csNumCtrl(_dbEN ? 'Incline (%)' : 'Inclinaison (%)', block.incline || 0, 0, 30, 1,
         function(v) { block.incline = v; window.CUSTOM_SESSION.saveDraft(); if (window.render) window.render(); }));
     }
     wrap.appendChild(ccfgRow);
@@ -1605,7 +1624,7 @@ function _csRenderActiveExBlock(block) {
   if (block.targetWeight && block.targetWeight > 0) {
     wrap.appendChild(h('div', {
       style: 'padding:5px 12px;background:rgba(62,92,58,0.05);border-bottom:1px solid var(--border,#D8D8D0);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--green,#3E5C3A);'
-    }, 'Charge cible : ' + block.targetWeight + ' kg'));
+    }, ((window.isEnglish && window.isEnglish()) ? 'Target: ' : 'Charge cible : ') + block.targetWeight + ' kg'));
   }
 
   // Référence dernière session (dates pré-calculées par _csRenderActive)
@@ -1629,7 +1648,10 @@ function _csRenderActiveExBlock(block) {
     var refRow = window.h('div', {
       style: 'padding:5px 12px;background:rgba(10,10,9,0.03);border-bottom:1px solid var(--border,#D8D8D0);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);display:flex;justify-content:space-between;'
     });
-    refRow.appendChild(window.h('span', {}, 'Réf. (' + (_lref.days === 1 ? 'hier' : 'il y a ' + _lref.days + 'j') + ')'));
+    var _refEN = window.isEnglish && window.isEnglish();
+    refRow.appendChild(window.h('span', {}, _refEN
+      ? ('Ref. (' + (_lref.days === 1 ? 'yesterday' : _lref.days + 'd ago') + ')')
+      : ('Réf. (' + (_lref.days === 1 ? 'hier' : 'il y a ' + _lref.days + 'j') + ')')));
     refRow.appendChild(window.h('span', { style: 'font-family:Georgia,serif;' },
       _lref.weight + ' kg · ' + _lref.sets + '×' + _lref.reps + ' reps'));
     wrap.appendChild(refRow);
@@ -1659,7 +1681,9 @@ function _csRenderActiveExBlock(block) {
         }
         if (window.render) window.render();
       }; })(block.id)
-    }, '✓ Valider les ' + block.loggedSets.length + ' séries'));
+    }, (window.isEnglish && window.isEnglish())
+        ? ('✓ Validate all ' + block.loggedSets.length + ' sets')
+        : ('✓ Valider les ' + block.loggedSets.length + ' séries')));
     wrap.appendChild(_vtRow);
   }
 
@@ -1690,14 +1714,14 @@ function _csRenderActiveSet(block, set, si) {
   var wInp2 = h('input', {
     type: 'number', step: '0.5', min: '0', max: '500', inputmode: 'decimal',
     value: (set.weight !== null && set.weight !== undefined && set.weight !== '') ? String(set.weight) : (block.targetWeight != null ? String(block.targetWeight) : ''),
-    placeholder: _isBodyweight ? 'lest' : 'kg',
+    placeholder: _isBodyweight ? ((window.isEnglish && window.isEnglish()) ? 'vest' : 'lest') : 'kg',
     disabled: set.validated,
     style: 'width:62px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:14px;text-align:center;background:var(--ivory);-webkit-appearance:none;' + (_isBodyweight ? 'opacity:0.6;' : ''),
     onclick: function(e) { e.stopPropagation(); },
     oninput: (function(s2) { return function(e) { s2.weight = e.target.value; }; })(set)
   });
   row.appendChild(wInp2);
-  row.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);' }, _isBodyweight ? 'kg (opt.)' : 'kg'));
+  row.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);' }, _isBodyweight ? 'kg (opt.)' : 'kg')); // kg is the same in both languages
 
   var rInp2 = h('input', {
     type: 'number', min: '0', max: '100', inputmode: 'numeric',
@@ -1709,7 +1733,7 @@ function _csRenderActiveSet(block, set, si) {
     oninput: (function(s3) { return function(e) { s3.reps = e.target.value; }; })(set)
   });
   row.appendChild(rInp2);
-  row.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);' }, 'reps'));
+  row.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);' }, 'reps')); // 'reps' is the same in both languages
 
   row.appendChild(h('button', {
     style: 'flex-shrink:0;padding:7px 11px;min-width:54px;min-height:34px;border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;cursor:pointer;' +
@@ -1737,7 +1761,7 @@ function _csRenderActiveSet(block, set, si) {
       }
       if (window.render) window.render();
     }; })(block.id, si, wInp2, rInp2)
-  }, set.validated ? '✓ OK' : 'Valider'));
+  }, set.validated ? '✓ OK' : ((window.isEnglish && window.isEnglish()) ? 'Log' : 'Valider')));
 
   return row;
 }
@@ -1764,7 +1788,7 @@ function _csRenderActiveCardioBlock(block) {
   var kcalEst = Math.round((met2 * weight2 * 3.5 / 200) * (block.duration || 20));
   wrap.appendChild(h('div', {
     style: 'padding:8px 12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'
-  }, '≈ ' + kcalEst + ' kcal estimées'));
+  }, '≈ ' + kcalEst + ' ' + ((window.isEnglish && window.isEnglish()) ? 'kcal estimated' : 'kcal estimées')));
   return wrap;
 }
 

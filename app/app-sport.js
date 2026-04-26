@@ -7572,6 +7572,18 @@ function renderMusculationProgram(p) {
     p.appendChild(_chronoEl);
   }
 
+  // ── Indicateur séance libre en cours ──
+  if (S.customSessionDraft && S.customSessionDraft.view === 'active' && S.customSessionDraft.startTime) {
+    var _csElapsed = Math.floor((Date.now() - S.customSessionDraft.startTime) / 60000);
+    var _csIsEN = window.isEnglish && window.isEnglish();
+    var _csIndEl = document.createElement('div');
+    _csIndEl.id = 'cs-active-indicator';
+    _csIndEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--green,#3E5C3A);text-align:center;margin-bottom:8px;cursor:pointer;';
+    _csIndEl.textContent = (_csIsEN ? 'Free workout in progress — ' : 'Séance libre en cours — ') + _csElapsed + ' min';
+    _csIndEl.onclick = function() { S.sStep = 30; if (window.render) window.render(); };
+    p.appendChild(_csIndEl);
+  }
+
   // Progress bar séance (sets validés / sets totaux)
   (function() {
     var _day = (S.sportProgram || [])[S.selectedSportDay];
