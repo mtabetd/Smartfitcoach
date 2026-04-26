@@ -811,7 +811,7 @@ function renderStep3(p) {
   var hRange = window.UNITS ? window.UNITS.heightRange() : {min: 120, max: 250, step: 1};
   var hVal = window.UNITS ? (window.UNITS.displayHeightVal(S.height) || '') : (S.height || '');
   var hw = h('div', {'class': 'num-input-wrap'});
-  hw.appendChild(h('input', {'class': 'num-input', type: 'number', min: String(hRange.min), max: String(hRange.max), step: String(hRange.step), value: String(hVal), inputmode: window.UNITS && window.UNITS.height === 'ft' ? 'decimal' : 'numeric', 'aria-label': 'Taille en ' + (window.UNITS && window.UNITS.height === 'ft' ? 'pouces' : 'centimètres'), placeholder: window.UNITS && window.UNITS.height === 'ft' ? 'pouces (ex: 70.9)' : '175', oninput: function(e) {
+  hw.appendChild(h('input', {'class': 'num-input', type: 'number', min: String(hRange.min), max: String(hRange.max), step: String(hRange.step), value: String(hVal), inputmode: window.UNITS && window.UNITS.height === 'ft' ? 'decimal' : 'numeric', 'aria-label': (window.UNITS && window.UNITS.height === 'ft' ? (window.isEnglish && window.isEnglish() ? 'Height in inches' : 'Taille en pouces') : (window.isEnglish && window.isEnglish() ? 'Height in centimetres' : 'Taille en centim\u00e8tres')), placeholder: window.UNITS && window.UNITS.height === 'ft' ? 'inches (e.g. 70.9)' : '175', oninput: function(e) {
     var v = parseFloat(e.target.value);
     if (!isNaN(v)) S.height = window.UNITS ? window.UNITS.toCm(v) : v;
   }, onblur: function(e) {
@@ -2694,7 +2694,6 @@ function renderStep8(p) {
         }
         if (creatRec) {
           creatCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:4px'}, creatRec.icon + (window.isEnglish && window.isEnglish() ? ' Creatine \u2014 Your dose: ' : ' Cr\u00e9atine \u2014 Votre dose : ') + (S.creatineDose || '?') + (window.isEnglish && window.isEnglish() ? 'g/day' : 'g/jour')));
-          creatCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:4px'}, creatRec.icon + ' Cr\u00e9atine \u2014 Votre dose : ' + (S.creatineDose || '?') + 'g/jour'));
           if (S.creatineDose && creatRec.dosage && S.creatineDose !== creatRec.dosage.dose) {
             creatCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange);margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? '\u26A0 Recommended dose: ' + creatRec.dosage.dose + 'g/day (based on your weight)' : '\u26A0 Dose recommand\u00e9e : ' + creatRec.dosage.dose + 'g/jour (bas\u00e9 sur votre poids)')));
           }
@@ -2779,7 +2778,7 @@ function renderStep8(p) {
 // ─── WEIGHT CHART HELPER ───
 function renderWeightChart(p) {
   if (!S.weightHistory || S.weightHistory.length < 2) {
-    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;padding:20px;border:1px solid var(--border);background:var(--ivory2);margin-bottom:12px'}, 'Enregistrez au moins 2 pes\u00e9es pour voir votre courbe'));
+    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;padding:20px;border:1px solid var(--border);background:var(--ivory2);margin-bottom:12px'}, (window.isEnglish && window.isEnglish() ? 'Log at least 2 weigh-ins to see your curve' : 'Enregistrez au moins 2 pes\u00e9es pour voir votre courbe')));
     return;
   }
   var chartContainer = h('div', {'class': 'chart-container'});
@@ -2980,7 +2979,6 @@ function renderNutritionCompletion(p) {
   p.appendChild(h('button', {
     'class': 'btn-back',
     onclick: function() { S._showCompletionFirst = false; goStep(11); },
-    html: backArrowHtml() + 'Retour aux r\u00e9sultats'
     html: backArrowHtml() + (window.isEnglish && window.isEnglish() ? 'Back to results' : 'Retour aux r\u00e9sultats')
 }
 
@@ -2993,8 +2991,8 @@ function renderStep9(p) {
   }
   renderProgressBar(p, 12, 12);
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, 'Planning'));
-  p.appendChild(h('h1', {html: 'Votre<br><em>semaine</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
-  p.appendChild(h('p', {'class': 'subtitle'}, '7 jours \u00b7 ' + (S.mealsPerDay || 3) + ' repas/jour \u00b7 527 recettes'));
+  p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Your<br><em>week</em>' : 'Votre<br><em>semaine</em>'), style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
+  p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? '7 days \u00b7 ' + (S.mealsPerDay || 3) + ' meals/day \u00b7 527 recipes' : '7 jours \u00b7 ' + (S.mealsPerDay || 3) + ' repas/jour \u00b7 527 recettes')));
   if (window.TIPS) TIPS.renderTip(p, 'planning');
 
   // FIX 2026-04-16 — reset selectedDay à aujourd'hui AVANT tout calcul (sinon _nm est calculé pour hier)
