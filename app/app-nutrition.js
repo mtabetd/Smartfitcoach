@@ -741,9 +741,9 @@ function renderStep2b(p) {
 // ─── STEP 3 (N5): POIDS + TAILLE + ESTIMATION BMR ───
 function renderStep3(p) {
   renderProgressBar(p, 3, 12);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' III \u00b7 Corps'));
-  p.appendChild(h('h1', {html: 'Votre<br><em>morphologie</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
-  p.appendChild(h('p', {'class': 'subtitle'}, 'Poids et taille pour calculer votre m\u00e9tabolisme de base en temps r\u00e9el.'));
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + (window.isEnglish && window.isEnglish() ? ' III \u00b7 Body' : ' III \u00b7 Corps')));
+  p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Your<br><em>body type</em>' : 'Votre<br><em>morphologie</em>'), style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
+  p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Weight and height to calculate your basal metabolic rate in real time.' : 'Poids et taille pour calculer votre m\u00e9tabolisme de base en temps r\u00e9el.')));
   if (window.TIPS) TIPS.renderTip(p, 'morphology');
 
   // Weight (MANDATORY)
@@ -783,7 +783,7 @@ function renderStep3(p) {
   p.appendChild(ww);
   p.appendChild(h('div', {'class': 'num-hint'}, window.UNITS && window.UNITS.weight === 'lbs' ? 'Entre 66 et 660 lbs' : 'Entre 30 et 300 kg'));
   if (S.weight !== null && S.weight !== undefined && S.weight <= 0) {
-    p.appendChild(h('div', {'class': 'field-error', style: 'margin-top:4px'}, 'Le poids doit être supérieur à 0.'));
+    p.appendChild(h('div', {'class': 'field-error', style: 'margin-top:4px'}, (window.isEnglish && window.isEnglish() ? 'Weight must be greater than 0.' : 'Le poids doit être supérieur à 0.')));
   }
   p.appendChild(h('div', {style: 'height:16px'}));
 
@@ -824,7 +824,7 @@ function renderStep3(p) {
   p.appendChild(hw);
   p.appendChild(h('div', {'class': 'num-hint'}, window.UNITS && window.UNITS.height === 'ft' ? 'En pouces d\u00e9cimaux (ex: 70.9 = 5\'11")' : 'Entre 120 et 250 cm'));
   if (S.height !== null && S.height !== undefined && S.height > 0 && S.height < 100) {
-    p.appendChild(h('div', {'class': 'field-error', style: 'margin-top:4px'}, 'La taille semble incorrecte (minimum 100 cm).'));
+    p.appendChild(h('div', {'class': 'field-error', style: 'margin-top:4px'}, (window.isEnglish && window.isEnglish() ? 'Height seems incorrect (minimum 100 cm).' : 'La taille semble incorrecte (minimum 100 cm).')));
   }
 
   // BMI
@@ -844,26 +844,26 @@ function renderStep3(p) {
     var _bmrLive = typeof calcBMR === 'function' ? calcBMR() : 0;
     if (_bmrLive > 0) {
       var _bmrCard = h('div', {style: 'margin-top:16px;padding:14px 16px;background:var(--ivory2,#F5F4EF);border:1px solid var(--border,#E8E6DF);border-radius:2px'});
-      _bmrCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, 'M\u00c9TABOLISME DE BASE'));
+      _bmrCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'BASAL METABOLIC RATE' : 'M\u00c9TABOLISME DE BASE')));
       var _bmrRow = h('div', {style: 'display:flex;align-items:baseline;gap:8px'});
       _bmrRow.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:28px;color:var(--black,#0A0A09)'}, String(Math.round(_bmrLive))));
-      _bmrRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65)'}, 'kcal/jour au repos'));
+      _bmrRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65)'}, (window.isEnglish && window.isEnglish() ? 'kcal/day at rest' : 'kcal/jour au repos')));
       _bmrCard.appendChild(_bmrRow);
-      _bmrCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:4px;font-style:italic'}, 'Ce chiffre augmente avec votre niveau d\u2019activit\u00e9 (vous le d\u00e9finirez \u00e0 l\u2019\u00e9tape suivante).'));
+      _bmrCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:4px;font-style:italic'}, (window.isEnglish && window.isEnglish() ? 'This figure increases with your activity level (you will define it in the next step).' : 'Ce chiffre augmente avec votre niveau d\u2019activit\u00e9 (vous le d\u00e9finirez \u00e0 l\u2019\u00e9tape suivante).')));
       p.appendChild(_bmrCard);
     }
   }
 
   // ─── Note : waist + photos déférés ───
-  p.appendChild(h('div', {style: 'margin-top:16px;padding:10px 14px;background:var(--ivory3,#EEEDE8);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.5'},'Tour de taille, photos de progression \u2014 vous pourrez affiner votre profil une fois votre programme g\u00e9n\u00e9r\u00e9.'));
+  p.appendChild(h('div', {style: 'margin-top:16px;padding:10px 14px;background:var(--ivory3,#EEEDE8);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.5'}, (window.isEnglish && window.isEnglish() ? 'Waist circumference, progress photos \u2014 you can refine your profile once your program is generated.' : 'Tour de taille, photos de progression \u2014 vous pourrez affiner votre profil une fois votre programme g\u00e9n\u00e9r\u00e9.')));
 
   // ─── Tour de taille (optionnel — gardé mais discret) ───
   p.appendChild(h('div', {style: 'height:20px'}));
   var _waistLabelWrap = h('div', {'class': 'section-label', style: 'display:flex;align-items:center;gap:8px;'});
-  _waistLabelWrap.appendChild(txt('Tour de taille'));
+  _waistLabelWrap.appendChild(txt((window.isEnglish && window.isEnglish() ? 'Waist circumference' : 'Tour de taille')));
   _waistLabelWrap.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--grey);border:1px solid var(--border);padding:2px 6px;'}, 'Optionnel'));
   p.appendChild(_waistLabelWrap);
-  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px;line-height:1.5;'}, 'Permet un suivi de composition corporelle plus pr\u00e9cis que l\u2019IMC seul'));
+  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px;line-height:1.5;'}, (window.isEnglish && window.isEnglish() ? 'Enables more precise body composition tracking than BMI alone' : 'Permet un suivi de composition corporelle plus pr\u00e9cis que l\u2019IMC seul')));
   var _waistWrap = h('div', {'class': 'num-input-wrap'});
   _waistWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '50', max: '200', step: '1', value: S.waist ? String(S.waist) : '', inputmode: 'numeric', placeholder: 'ex: 85', oninput: function(e) {
     var v = parseFloat(e.target.value);
@@ -880,7 +880,7 @@ function renderStep3(p) {
   if (S.waist && S.height && S.height > 0) {
     var _whtr = S.waist / S.height;
     if (_whtr > 0.5) {
-      p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange,#E86F1E);background:rgba(232,111,30,0.06);border:1px solid var(--orange,#E86F1E);padding:8px 12px;margin-top:6px;line-height:1.5;border-radius:2px;'}, '\u26a0 Risque cardiom\u00e9tabolique accru (tour de taille > 50% de la taille)'));
+      p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange,#E86F1E);background:rgba(232,111,30,0.06);border:1px solid var(--orange,#E86F1E);padding:8px 12px;margin-top:6px;line-height:1.5;border-radius:2px;'}, (window.isEnglish && window.isEnglish() ? '\u26a0 Increased cardiometabolic risk (waist > 50% of height)' : '\u26a0 Risque cardiom\u00e9tabolique accru (tour de taille > 50% de la taille)')));
     }
   }
 
@@ -1026,7 +1026,7 @@ function renderStep3(p) {
       if (S.goal === null || S.goal === undefined) S.goal = 2;
       goStep(11);
     }
-  }, 'ou passer au résultat →'));
+  }, (window.isEnglish && window.isEnglish() ? 'or skip to results →' : 'ou passer au résultat →')));
   p.appendChild(_skip);
 }
 
@@ -1034,14 +1034,14 @@ function renderStep3(p) {
 function renderActiviteSommeil(p) {
   if (!Array.isArray(S.train)) S.train = [];
   renderProgressBar(p, 5, 12);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' V \u00b7 Activit\u00e9 & Sommeil'));
-  p.appendChild(h('h1', {html: 'Votre<br><em>activit\u00e9</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
-  p.appendChild(h('p', {'class': 'subtitle'}, 'D\u00e9crivez votre rythme pour adapter votre programme.'));
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + (window.isEnglish && window.isEnglish() ? ' V \u00b7 Activity & Sleep' : ' V \u00b7 Activit\u00e9 & Sommeil')));
+  p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Your<br><em>activity</em>' : 'Votre<br><em>activit\u00e9</em>'), style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
+  p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Describe your routine to adapt your program.' : 'D\u00e9crivez votre rythme pour adapter votre programme.')));
   if (window.TIPS) TIPS.renderTip(p, 'activity');
 
   // Frequency sport (MANDATORY)
   var actLabel = h('div', {'class': 'section-label'});
-  actLabel.appendChild(txt('Fr\u00e9quence sport'));
+  actLabel.appendChild(txt((window.isEnglish && window.isEnglish() ? 'Exercise frequency' : 'Fr\u00e9quence sport')));
   actLabel.appendChild(reqDot());
   p.appendChild(actLabel);
   var list = h('div', {'class': 'level-list'});
@@ -1055,7 +1055,7 @@ function renderActiviteSommeil(p) {
 
   // Training type (MANDATORY)
   var trainLabel = h('div', {'class': 'section-label'});
-  trainLabel.appendChild(txt('Type d\'entra\u00eenement'));
+  trainLabel.appendChild(txt((window.isEnglish && window.isEnglish() ? 'Training type' : 'Type d\'entra\u00eenement')));
   trainLabel.appendChild(reqDot());
   p.appendChild(trainLabel);
   var cw = h('div', {'class': 'chip-wrap'});
@@ -1078,8 +1078,8 @@ function renderActiviteSommeil(p) {
 
   // ─── JOURS D'ENTRAÎNEMENT ───
   p.appendChild(h('div', {style: 'height:20px'}));
-  p.appendChild(h('div', {'class': 'section-label'}, 'Vos jours d\u2019entra\u00eenement (optionnel)'));
-  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:10px;line-height:1.5;'}, 'Pr\u00e9cisez quels jours vous vous entra\u00eenez pour adapter vos macros (jours\u00a0entra\u00eenement vs repos).'));
+  p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Your training days (optional)' : 'Vos jours d\u2019entra\u00eenement (optionnel)')));
+  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:10px;line-height:1.5;'}, (window.isEnglish && window.isEnglish() ? 'Specify which days you train to adapt your macros (training vs rest days).' : 'Pr\u00e9cisez quels jours vous vous entra\u00eenez pour adapter vos macros (jours\u00a0entra\u00eenement vs repos).')));
   if (!Array.isArray(S.trainingDaysSelected)) S.trainingDaysSelected = [];
   var _dayLabels3 = ['L', 'Ma', 'Me', 'J', 'V', 'S', 'D'];
   var _dayBtns3 = h('div', {style: 'display:flex;gap:6px;justify-content:center;flex-wrap:nowrap;margin:0 0 8px'});
@@ -1118,12 +1118,12 @@ function renderActiviteSommeil(p) {
   // ─── HEURE D'ENTRAÎNEMENT (mode 'both' uniquement — l'utilisateur s'entraîne activement, le timing affecte la répartition des macros) ───
   if (S.appMode === 'both') {
     p.appendChild(h('div', {style: 'height:20px'}));
-    p.appendChild(h('div', {'class': 'section-label'}, '\u23F0 Heure d\u2019entra\u00eenement habituelle'));
-    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin:-4px 0 10px;line-height:1.5;'}, 'Permet d\u2019adapter la r\u00e9partition des repas (glucides + prot\u00e9ines au bon moment).\u00a0Optionnel.'));
+    p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? '⏰ Usual training time' : '⏰ Heure d’entraînement habituelle')));
+    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin:-4px 0 10px;line-height:1.5;'}, (window.isEnglish && window.isEnglish() ? 'Helps adapt meal distribution (carbs + proteins at the right time). Optional.' : 'Permet d’adapter la répartition des repas (glucides + protéines au bon moment). Optionnel.')));
     var _ttOpts = [
-      {id: 'morning', label: '\uD83C\uDF05 Matin', desc: 'Avant 12h — petit-d\u00e9j post-s\u00e9ance'},
-      {id: 'noon',    label: '\u2600\uFE0F Midi',  desc: '12h–15h — d\u00e9jeuner post-s\u00e9ance'},
-      {id: 'evening', label: '\uD83C\uDF19 Soir',  desc: 'Apr\u00e8s 17h — d\u00eener post-s\u00e9ance'}
+      {id: 'morning', label: '🌅 ' + (window.isEnglish && window.isEnglish() ? 'Morning' : 'Matin'), desc: (window.isEnglish && window.isEnglish() ? 'Before 12pm — post-workout breakfast' : 'Avant 12h — petit-déj post-séance')},
+      {id: 'noon',    label: '☀️ ' + (window.isEnglish && window.isEnglish() ? 'Noon' : 'Midi'),    desc: (window.isEnglish && window.isEnglish() ? '12pm–15pm — post-workout lunch' : '12h–15h — déjeuner post-séance')},
+      {id: 'evening', label: '🌙 ' + (window.isEnglish && window.isEnglish() ? 'Evening' : 'Soir'),  desc: (window.isEnglish && window.isEnglish() ? 'After 5pm — post-workout dinner' : 'Après 17h — dîner post-séance')}
     ];
     var _ttGrid = h('div', {'class': 'level-list'});
     _ttOpts.forEach(function(opt) {
@@ -1137,7 +1137,7 @@ function renderActiviteSommeil(p) {
       }}, [h('div', {}, [h('div', {'class': 'level-name'}, opt.label), h('div', {'class': 'level-desc'}, opt.desc)])]));
     });
     p.appendChild(_ttGrid);
-    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:4px;'}, 'Laissez vide si variable — le plan utilisera une r\u00e9partition standard.'));
+    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:4px;'}, (window.isEnglish && window.isEnglish() ? 'Leave empty if variable — the plan will use standard distribution.' : 'Laissez vide si variable — le plan utilisera une répartition standard.')));
   }
 
   p.appendChild(h('div', {style: 'height:24px'}));
@@ -1157,7 +1157,7 @@ function renderStep4(p) {
   if (window.S && window.S._switchedFromSport) {
     var _contextBanner = document.createElement('div');
     _contextBanner.style.cssText = 'margin-bottom:16px;padding:12px 14px;background:rgba(62,92,58,0.06);border:1px solid rgba(62,92,58,0.12);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--green,#3E5C3A);line-height:1.5;';
-    _contextBanner.textContent = 'Votre profil (sexe, poids, activité) a été importé depuis votre parcours sport. Complétez simplement vos préférences nutritionnelles ci-dessous.';
+    _contextBanner.textContent = (window.isEnglish && window.isEnglish() ? 'Your profile (sex, weight, activity) has been imported from your sport journey. Simply complete your nutritional preferences below.' : 'Votre profil (sexe, poids, activité) a été importé depuis votre parcours sport. Complétez simplement vos préférences nutritionnelles ci-dessous.');
     window.S._switchedFromSport = false; // Afficher une seule fois
     p.appendChild(_contextBanner);
   }
@@ -1173,22 +1173,22 @@ function renderStep4(p) {
       var _actSummary = (window.ACTIVITIES && window.ACTIVITIES[S.activity]) ? window.ACTIVITIES[S.activity].name : '';
       var _parts = [];
       if (S.prenom) _parts.push(S.prenom);
-      if (_ageSummary) _parts.push(_ageSummary + ' ans');
+      if (_ageSummary) _parts.push(_ageSummary + (window.isEnglish && window.isEnglish() ? ' years old' : ' ans'));
       if (_weightSummary) _parts.push(_weightSummary);
       if (_heightSummary) _parts.push(_heightSummary);
       if (_actSummary) _parts.push(_actSummary);
       var _summaryCard = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border:1px solid #D8D8D0;background:var(--ivory2,#F4F4F0);border-radius:2px;margin-bottom:16px;'});
       var _summaryText = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.5;'});
-      _summaryText.appendChild(h('div', {style: 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:3px'}, 'Profil repris'));
+      _summaryText.appendChild(h('div', {style: 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:3px'}, (window.isEnglish && window.isEnglish() ? 'Profile imported' : 'Profil repris')));
       _summaryText.appendChild(document.createTextNode(_parts.join(' \u00b7 ')));
       _summaryCard.appendChild(_summaryText);
-      _summaryCard.appendChild(h('a', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);text-decoration:underline;cursor:pointer;white-space:nowrap;margin-left:12px;', onclick: function(e) { e.preventDefault(); S.nStep = 1; window.render(); }}, 'Modifier'));
+      _summaryCard.appendChild(h('a', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);text-decoration:underline;cursor:pointer;white-space:nowrap;margin-left:12px;', onclick: function(e) { e.preventDefault(); S.nStep = 1; window.render(); }}, (window.isEnglish && window.isEnglish() ? 'Edit' : 'Modifier')));
       p.appendChild(_summaryCard);
     }
   })();
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' VIII'));
-  p.appendChild(h('h1', {html: 'Votre<br><em>sant\u00e9</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
-  p.appendChild(h('p', {'class': 'subtitle'}, 'Vos conditions de sant\u00e9 pour des recommandations s\u00fbres.'));
+  p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Your<br><em>health</em>' : 'Votre<br><em>sant\u00e9</em>'), style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
+  p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Your health conditions for safe recommendations.' : 'Vos conditions de sant\u00e9 pour des recommandations s\u00fbres.')));
   if (window.TIPS) TIPS.renderTip(p, 'health');
 
   // FIX edge audit : guard si S.medical n'est pas array (corruption ou onboarding partiel)
@@ -1204,18 +1204,24 @@ function renderStep4(p) {
     else window.render();
   }});
   nb.appendChild(h('div', {'class': 'card-name'}, window.t('onb.s4.none')));
-  nb.appendChild(h('div', {'class': 'card-sub'}, 'Je suis en bonne sant\u00e9 \u2014 passer \u00e0 l\'\u00e9tape suivante'));
-  nb.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:6px'}, 'Cliquer pour continuer \u2192'));
+  nb.appendChild(h('div', {'class': 'card-sub'}, (window.isEnglish && window.isEnglish() ? 'I am in good health \u2014 go to next step' : 'Je suis en bonne sant\u00e9 \u2014 passer \u00e0 l\'\u00e9tape suivante')));
+  nb.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:6px'}, (window.isEnglish && window.isEnglish() ? 'Click to continue \u2192' : 'Cliquer pour continuer \u2192')));
   p.appendChild(nb);
 
   var dvd = h('div', {'class': 'divider'});
   dvd.appendChild(h('div', {'class': 'divider-line'}));
-  dvd.appendChild(h('div', {'class': 'divider-text'}, 'ou s\u00e9lectionnez'));
+  dvd.appendChild(h('div', {'class': 'divider-text'}, (window.isEnglish && window.isEnglish() ? 'or select' : 'ou s\u00e9lectionnez')));
   dvd.appendChild(h('div', {'class': 'divider-line'}));
   p.appendChild(dvd);
 
   // UX FIX : sous-titres explicatifs pour les sigles médicaux peu connus
-  var _medicalHints = {
+  var _medicalHints = window.isEnglish && window.isEnglish() ? {
+    hta: 'Hypertension (high blood pressure)',
+    hta_severe: 'Severe hypertension (very high blood pressure)',
+    irc: 'Chronic kidney disease',
+    tca: 'Difficult relationship with food',
+    cardio: 'Heart disease'
+  } : {
     hta: 'Hypertension (tension élevée)',
     hta_severe: 'Hypertension sévère (tension très élevée)',
     irc: 'Insuffisance rénale chronique',
@@ -1283,7 +1289,7 @@ function renderStep4(p) {
 
   p.appendChild(h('div', {style: 'height:8px'}));
   var warn = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;color:var(--grey3);text-align:center;margin-bottom:16px'});
-  warn.textContent = '\u26a0 Ces informations ne remplacent pas un avis m\u00e9dical. Consultez votre m\u00e9decin.';
+  warn.textContent = (window.isEnglish && window.isEnglish() ? '\u26a0 This information does not replace medical advice. Consult your doctor.' : '\u26a0 Ces informations ne remplacent pas un avis m\u00e9dical. Consultez votre m\u00e9decin.');
   p.appendChild(warn);
 
   p.appendChild(h('button', {'class': 'btn-primary', onclick: function() { window._s5page = 0; goStep(9); }}, window.t('onb.next')));
