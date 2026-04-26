@@ -4848,14 +4848,14 @@ function renderCrossfitProgram(p) {
  if (_elapsed >= totalSeconds) {
  _timerRunning = false;
  clearInterval(_timerInterval);
- startBtn.textContent = 'Temps \u00e9coul\u00e9';
+ startBtn.textContent = (window.isEnglish && window.isEnglish() ? 'Time elapsed' : 'Temps \u00e9coul\u00e9');
  _wodPlayBeep('end');
  }
  }
  }, 250);
  startBtn.textContent = 'Pause';
  }
- }}, 'D\u00e9marrer');
+ }}, (window.isEnglish && window.isEnglish() ? 'Start' : 'D\u00e9marrer'));
 
  var resetBtn = h('button', {'class': 'btn-secondary', style: 'width:auto;padding:8px 16px;margin:0', onclick: function() {
  _timerRunning = false;
