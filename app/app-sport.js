@@ -1182,10 +1182,10 @@ function renderSportChoice(p) {
   wrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:10px;letter-spacing:7px;text-transform:uppercase;font-weight:300;margin-bottom:8px;color:var(--grey)'}, 'SMARTFITCOACH'));
   wrap.appendChild(h('div', {style: 'width:36px;height:1px;background:var(--black);margin:0 auto 28px'}));
   wrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:22px;font-weight:300;font-style:italic;line-height:1.45;margin-bottom:16px'},
-    prenom ? 'Votre protocole ' + sportLabel + '\nest actif, ' + prenom + '.' : 'Votre protocole ' + sportLabel + '\nest déjà établi.'
+    prenom ? (window.isEnglish && window.isEnglish() ? 'Your ' + sportLabel + ' protocol\nis active, ' + prenom + '.' : 'Votre protocole ' + sportLabel + '\nest actif, ' + prenom + '.') : (window.isEnglish && window.isEnglish() ? 'Your ' + sportLabel + ' protocol\nis already set up.' : 'Votre protocole ' + sportLabel + '\nest déjà établi.')
   ));
   wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;letter-spacing:0.5px;line-height:1.7;color:var(--grey,#6B6B65);max-width:300px;margin:0 auto 40px'},
-    'Souhaitez-vous poursuivre votre programme en cours,\nou en définir un entièrement nouveau\u00a0?'
+    (window.isEnglish && window.isEnglish() ? 'Would you like to continue your current program,\nor define a completely new one\u00a0?' : 'Souhaitez-vous poursuivre votre programme en cours,\nou en définir un entièrement nouveau\u00a0?')
   ));
 
   var targetStep = _SPORT_PROGRAM_STEP[S.sportType] || 4;
@@ -1193,7 +1193,7 @@ function renderSportChoice(p) {
   var btnContinue = h('button', {
     style: 'display:block;width:100%;max-width:300px;padding:16px 24px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;margin:0 auto 14px',
     onclick: function() { S.sStep = targetStep; window.render(); }
-  }, 'Poursuivre mon protocole');
+  }, (window.isEnglish && window.isEnglish() ? 'Continue my protocol' : 'Poursuivre mon protocole'));
 
   var btnNew = h('button', {
     style: 'display:block;width:100%;max-width:300px;padding:15px 24px;background:transparent;color:var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:1px solid var(--black,#0A0A09);cursor:pointer;margin:0 auto',
@@ -1212,7 +1212,7 @@ function renderSportChoice(p) {
       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       window.render();
     }
-  }, 'Définir un nouveau protocole');
+  }, (window.isEnglish && window.isEnglish() ? 'Define a new protocol' : 'Définir un nouveau protocole'));
 
   wrap.appendChild(btnContinue);
   wrap.appendChild(btnNew);
@@ -1226,15 +1226,15 @@ window.getPregnancySportWarning = getPregnancySportWarning;
 function renderSportQuickProfile(p) {
   var wrap = h('div', {style: 'max-width:420px;margin:0 auto;padding:48px 20px 40px'});
 
-  wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px'}, 'VOTRE PROFIL'));
+  wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'YOUR PROFILE' : 'VOTRE PROFIL')));
   wrap.appendChild(h('div', {style: 'width:36px;height:1px;background:var(--black,#1A1A18);margin-bottom:20px'}));
-  var titleEl = h('div', {style: 'font-family:Georgia,serif;font-size:22px;font-weight:normal;font-style:italic;line-height:1.45;margin-bottom:28px;color:var(--black,#1A1A18)'}, 'Quelques informations\npour personnaliser\nvotre programme.');
+  var titleEl = h('div', {style: 'font-family:Georgia,serif;font-size:22px;font-weight:normal;font-style:italic;line-height:1.45;margin-bottom:28px;color:var(--black,#1A1A18)'}, (window.isEnglish && window.isEnglish() ? 'A few details\npersonalize\nyour program.' : 'Quelques informations\npour personnaliser\nvotre programme.'));
   titleEl.style.whiteSpace = 'pre-line';
   wrap.appendChild(titleEl);
 
   if (!S.sex) {
     // ── Étape A : choix du sexe — toggle buttons ──
-    wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px'}, 'Votre sexe'));
+    wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px'}, (window.isEnglish && window.isEnglish() ? 'Your sex' : 'Votre sexe')));
     var sexRow = h('div', {style: 'display:flex;gap:8px'});
     [{label: 'Homme', val: 'homme'}, {label: 'Femme', val: 'femme'}].forEach(function(o) {
       var active = S.sex === o.val;
@@ -1250,7 +1250,7 @@ function renderSportQuickProfile(p) {
     // ── Étape B : prénom + âge + poids ──
     // Prénom (optionnel)
     var prenomWrap = h('div', {style: 'margin-bottom:16px'});
-    prenomWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, 'Votre prénom (optionnel)'));
+    prenomWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'Your first name (optional)' : 'Votre prénom (optionnel)')));
     var prenomInput = h('input', {
       type: 'text',
       value: S.prenom || '',
@@ -1261,7 +1261,7 @@ function renderSportQuickProfile(p) {
     prenomWrap.appendChild(prenomInput);
     wrap.appendChild(prenomWrap);
 
-    wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px'}, 'Votre \u00e2ge'));
+    wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'Your age' : 'Votre \u00e2ge')));
     var ageInput = h('input', {
       type: 'number', min: '13', max: '99', inputmode: 'numeric',
       style: 'width:100%;height:48px;border:1px solid var(--border,#E8E6DF);background:var(--ivory,#FAF9F6);font-family:Georgia,serif;font-size:16px;color:var(--black,#1A1A18);padding:0 16px;box-sizing:border-box;border-radius:2px;outline:none;-webkit-appearance:none;',
@@ -1286,13 +1286,13 @@ function renderSportQuickProfile(p) {
     ageInput.addEventListener('change', function() {
       var v = parseInt(this.value);
       if (!isNaN(v) && v >= 13 && v <= 99) { S.age = v; ageErr.style.display = 'none'; _syncBtn(); }
-      else { this.value = S.age ? String(S.age) : ''; ageErr.textContent = v < 13 ? '\u00c2ge entre 13 et 99 ans.' : 'Veuillez indiquer votre \u00e2ge.'; ageErr.style.display = 'block'; }
+      else { this.value = S.age ? String(S.age) : ''; ageErr.textContent = v < 13 ? (window.isEnglish && window.isEnglish() ? 'Age between 13 and 99.' : '\u00c2ge entre 13 et 99 ans.') : (window.isEnglish && window.isEnglish() ? 'Please enter your age.' : 'Veuillez indiquer votre \u00e2ge.'); ageErr.style.display = 'block'; }
     });
     ageInput.addEventListener('focus', function() { setTimeout(function() { ageInput.scrollIntoView({behavior:'smooth', block:'center'}); }, 300); });
     wrap.appendChild(ageInput);
     wrap.appendChild(ageErr);
 
-    wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin:16px 0 8px'}, 'Votre poids (kg)'));
+    wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin:16px 0 8px'}, (window.isEnglish && window.isEnglish() ? 'Your weight (kg)' : 'Votre poids (kg)')));
     var weightInput = h('input', {
       type: 'number', min: '30', max: '300', step: '0.5', inputmode: 'decimal',
       style: 'width:100%;height:48px;border:1px solid var(--border,#E8E6DF);background:var(--ivory,#FAF9F6);font-family:Georgia,serif;font-size:16px;color:var(--black,#1A1A18);padding:0 16px;box-sizing:border-box;border-radius:2px;outline:none;-webkit-appearance:none;',
@@ -1307,7 +1307,7 @@ function renderSportQuickProfile(p) {
     weightInput.addEventListener('change', function() {
       var v = parseFloat(this.value);
       if (!isNaN(v) && v >= 30 && v <= 300) { S.weight = v; S._nm = null; weightErr.style.display = 'none'; _syncBtn(); }
-      else { this.value = S.weight ? String(S.weight) : ''; weightErr.textContent = 'Entre 30 et 300 kg.'; weightErr.style.display = 'block'; }
+      else { this.value = S.weight ? String(S.weight) : ''; weightErr.textContent = (window.isEnglish && window.isEnglish() ? 'Between 30 and 300 kg.' : 'Entre 30 et 300 kg.'); weightErr.style.display = 'block'; }
     });
     weightInput.addEventListener('focus', function() { setTimeout(function() { weightInput.scrollIntoView({behavior:'smooth', block:'center'}); }, 300); });
     wrap.appendChild(weightInput);
@@ -1323,7 +1323,7 @@ function renderSportQuickProfile(p) {
         if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
         window.render();
       }
-    }, 'Commencer');
+    }, (window.isEnglish && window.isEnglish() ? 'Start' : 'Commencer'));
     wrap.appendChild(btnContinue);
   }
 
@@ -1371,7 +1371,7 @@ window.SPORT = {
      window.renderCustomSessionBuilder(content);
    } else {
      // fallback si script non chargé
-     content.appendChild(h('div', {style:'padding:24px;text-align:center;font-family:Georgia,serif;'}, 'Chargement...'));
+     content.appendChild(h('div', {style:'padding:24px;text-align:center;font-family:Georgia,serif;'}, (window.isEnglish && window.isEnglish() ? 'Loading...' : 'Chargement...')));
      S.sStep = 0;
    }
    p.appendChild(content);
@@ -1448,13 +1448,13 @@ window.SPORT = {
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        if (window.render) window.render();
      }
-   }, 'Changer de sport');
+   }, (window.isEnglish && window.isEnglish() ? 'Change sport' : 'Changer de sport'));
    hdr.appendChild(_changeLink);
  } else {
    // Hermès polish : clamp currentDisplay [1, totalSteps] — jamais d'étape négative/dépassée affichée
    var _clampedStep = Math.max(1, Math.min(totalSteps, currentDisplay));
    var _stepValid = (currentDisplay >= 1 && currentDisplay <= totalSteps);
-   var stepLabel = S.sStep === 26 ? 'Questionnaire sant\u00e9' : S.sStep === 27 ? 'Bilan m\u00e9dical' : S.sStep === 20 ? '\u00c9val. m\u00e9dicale' : S.sStep === 16 ? '\u00c9val. des charges' : S.sStep === 15 ? 'Programmes d\u00e9di\u00e9s' : (_stepValid ? ('\u00c9tape ' + _clampedStep + ' / ' + totalSteps) : '\u2014');
+   var stepLabel = S.sStep === 26 ? (window.isEnglish && window.isEnglish() ? 'Health questionnaire' : 'Questionnaire sant\u00e9') : S.sStep === 27 ? (window.isEnglish && window.isEnglish() ? 'Medical assessment' : 'Bilan m\u00e9dical') : S.sStep === 20 ? (window.isEnglish && window.isEnglish() ? 'Medical eval.' : '\u00c9val. m\u00e9dicale') : S.sStep === 16 ? (window.isEnglish && window.isEnglish() ? 'Load eval.' : '\u00c9val. des charges') : S.sStep === 15 ? (window.isEnglish && window.isEnglish() ? 'Dedicated programs' : 'Programmes d\u00e9di\u00e9s') : (_stepValid ? ((window.isEnglish && window.isEnglish() ? 'Step ' : '\u00c9tape ') + _clampedStep + ' / ' + totalSteps) : '\u2014');
    hdr.appendChild(h('div', {'class': 'step-indicator'}, stepLabel));
  }
  p.appendChild(hdr);
@@ -1525,9 +1525,9 @@ function renderSportGenericMedical(p) {
   var _zones = SPORT_MED_ZONES[S.sportType] || [];
   var _name  = SPORT_MED_NAME[S.sportType] || (S.sportType || '');
 
-  p.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:center;margin-bottom:16px;'}, 'Bilan Santé · ' + _name));
-  p.appendChild(h('h1', {style:'font-family:Georgia,serif;font-size:28px;font-weight:400;text-align:center;margin:0 0 8px;line-height:1.2;'}, 'Votre corps, notre priorité.'));
-  p.appendChild(h('p', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);text-align:center;margin:0 0 24px;max-width:320px;margin-left:auto;margin-right:auto;'}, 'Signalez toute zone sensible — votre programme sera adapté en conséquence. 30 secondes.'));
+  p.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:center;margin-bottom:16px;'}, (window.isEnglish && window.isEnglish() ? 'Health Assessment · ' : 'Bilan Santé · ') + _name));
+  p.appendChild(h('h1', {style:'font-family:Georgia,serif;font-size:28px;font-weight:400;text-align:center;margin:0 0 8px;line-height:1.2;'}, (window.isEnglish && window.isEnglish() ? 'Your body, our priority.' : 'Votre corps, notre priorité.')));
+  p.appendChild(h('p', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);text-align:center;margin:0 0 24px;max-width:320px;margin-left:auto;margin-right:auto;'}, (window.isEnglish && window.isEnglish() ? 'Flag any sensitive area — your program will be adapted accordingly. 30 seconds.' : 'Signalez toute zone sensible — votre programme sera adapté en conséquence. 30 secondes.')));
 
   // Fast track
   var _ftRow = h('div', {style:'text-align:center;margin-bottom:20px;'});
@@ -1539,7 +1539,7 @@ function renderSportGenericMedical(p) {
       S.sStep = S._sportMedNextStep || 0;
       if (window.render) window.render();
     }
-  }, 'Tout va bien — continuer →'));
+  }, (window.isEnglish && window.isEnglish() ? 'All good — continue →' : 'Tout va bien — continuer →')));
   p.appendChild(_ftRow);
 
   // Zone cards grid
@@ -1573,28 +1573,28 @@ function renderSportGenericMedical(p) {
       S.sStep = S._sportMedNextStep || 0;
       if (window.render) window.render();
     }
-  }, _hasSel ? 'Adapter mon programme →' : 'Continuer →'));
+  }, _hasSel ? (window.isEnglish && window.isEnglish() ? 'Adapt my program →' : 'Adapter mon programme →') : (window.isEnglish && window.isEnglish() ? 'Continue →' : 'Continuer →')));
 
-  p.appendChild(h('p', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey,#6B6B65);text-align:center;margin-top:16px;letter-spacing:1px;'}, 'Données 100% locales · Consultez un médecin en cas de doute'));
+  p.appendChild(h('p', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey,#6B6B65);text-align:center;margin-top:16px;letter-spacing:1px;'}, (window.isEnglish && window.isEnglish() ? '100% local data · Consult a doctor if in doubt' : 'Données 100% locales · Consultez un médecin en cas de doute')));
 
   var _backRow = h('div', {style:'text-align:center;margin-top:12px;'});
   _backRow.appendChild(h('button', {
     style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;background:none;border:none;color:var(--grey,#6B6B65);cursor:pointer;padding:8px;',
     onclick: function() { S.sStep = 0; S.sportType = null; if (window.render) window.render(); }
-  }, '← Changer de sport'));
+  }, (window.isEnglish && window.isEnglish() ? '← Change sport' : '← Changer de sport'));
   p.appendChild(_backRow);
 }
 
 function renderSportSplash(p) {
-  p.appendChild(h('div', {'class': 'eyebrow'}, 'Sport · Bilan initial'));
-  p.appendChild(h('h1', {html: 'Un programme<br><em>fait pour vous.</em>'}));
-  p.appendChild(h('p', {'class': 'subtitle'}, 'Quelques questions pour calibrer votre programme sur votre niveau, vos objectifs et votre santé.'));
+  p.appendChild(h('div', {'class': 'eyebrow'}, (window.isEnglish && window.isEnglish() ? 'Sport · Initial assessment' : 'Sport · Bilan initial')));
+  p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'A program<br><em>made for you.</em>' : 'Un programme<br><em>fait pour vous.</em>')}));
+  p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'A few questions to calibrate your program to your level, goals and health.' : 'Quelques questions pour calibrer votre programme sur votre niveau, vos objectifs et votre santé.')));
 
   var pills = h('div', {style: 'display:flex;flex-wrap:wrap;gap:8px;margin:20px 0;'});
   [
     '∼ 8 minutes',
-    'Évaluation médicale incluse',
-    'Programme sur-mesure'
+    (window.isEnglish && window.isEnglish() ? 'Medical evaluation included' : 'Évaluation médicale incluse'),
+    (window.isEnglish && window.isEnglish() ? 'Tailor-made program' : 'Programme sur-mesure')
   ].forEach(function(txt) {
     pills.appendChild(h('div', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);border:1px solid var(--line,#D8D8D0);padding:5px 10px;border-radius:2px;'
@@ -1603,9 +1603,9 @@ function renderSportSplash(p) {
   p.appendChild(pills);
 
   var benefits = [
-    {icon: '■', title: 'Programme scientifique', desc: 'Basé sur les recommandations ACSM, NSCA et Renaissance Periodization'},
-    {icon: '●', title: 'Sécurité d’abord', desc: 'Dépistage médical PAR-Q — 7 questions recommandées par l’ACSM (2018)'},
-    {icon: '◆', title: 'Adapté à votre vie', desc: 'Votre niveau, votre équipement, vos disponibilités, vos objectifs'}
+    {icon: '■', title: (window.isEnglish && window.isEnglish() ? 'Scientific program' : 'Programme scientifique'), desc: (window.isEnglish && window.isEnglish() ? 'Based on ACSM, NSCA and Renaissance Periodization guidelines' : 'Basé sur les recommandations ACSM, NSCA et Renaissance Periodization')},
+    {icon: '●', title: (window.isEnglish && window.isEnglish() ? 'Safety first' : 'Sécurité d’abord'), desc: (window.isEnglish && window.isEnglish() ? 'PAR-Q medical screening — 7 questions recommended by ACSM (2018)' : 'Dépistage médical PAR-Q — 7 questions recommandées par l’ACSM (2018)')},
+    {icon: '◆', title: (window.isEnglish && window.isEnglish() ? 'Adapted to your life' : 'Adapté à votre vie'), desc: (window.isEnglish && window.isEnglish() ? 'Your level, equipment, availability, goals' : 'Votre niveau, votre équipement, vos disponibilités, vos objectifs')}
   ];
   var benefitList = h('div', {style: 'display:flex;flex-direction:column;gap:12px;margin:24px 0 28px;'});
   benefits.forEach(function(b) {
@@ -1622,7 +1622,7 @@ function renderSportSplash(p) {
   p.appendChild(h('button', {'class': 'btn-primary', onclick: function() {
     S.sportSplashDone = true;
     if (window.render) window.render();
-  }}, 'Commencer mon bilan sportif'));
+  }}, (window.isEnglish && window.isEnglish() ? 'Start my sports assessment' : 'Commencer mon bilan sportif')));
 }
 
 // ─── STEP 0: TYPE SELECTION ONLY ───
