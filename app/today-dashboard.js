@@ -7115,6 +7115,7 @@ window.getWeeklyVolumeByMuscle = getWeeklyVolumeByMuscle;
 function getVolumeZone(muscle, sets, level) {
   var lm = MUSCLE_VOLUME_LANDMARKS[muscle];
   if (!lm) return { zone: 'unknown', target: '' };
+  if (!Array.isArray(lm.mav) || lm.mav.length < 2) return { zone: 'unknown', target: '' };
   // Scale landmarks par niveau (beginner plus bas, advanced plus haut).
   var scale = 1.0;
   if (level === 'beginner') scale = 0.75;
