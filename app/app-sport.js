@@ -1421,7 +1421,7 @@ window.SPORT = {
  // sStep 20 = medical questionnaire (muscu pre-step), include it in progress
  if (S.sStep > 0) {
  var hdr = h('header', {'class': 'header'});
- var sportLabel = S.sportType === 'crossfit' ? 'Cross Training' : S.sportType === 'running' ? 'Running' : S.sportType === 'hyrox' ? 'Hyrox' : S.sportType === 'padel' ? 'Padel' : S.sportType === 'golf' ? 'Golf' : S.sportType === 'triathlon' ? 'Triathlon / IRONMAN' : S.sportType === 'yoga' ? (window.isEnglish && window.isEnglish() ? 'Yoga & Mobility' : (window.isEnglish && window.isEnglish() ? 'Yoga & Mobility' : 'Yoga & Mobilit\u00e9')) : S.sportType === 'cycling' ? 'Cyclisme' : S.sportType === 'calisthenics' ? 'Callisth\u00e9nie' : 'Musculation';
+ var sportLabel = S.sportType === 'crossfit' ? 'Cross Training' : S.sportType === 'running' ? 'Running' : S.sportType === 'hyrox' ? 'Hyrox' : S.sportType === 'padel' ? 'Padel' : S.sportType === 'golf' ? 'Golf' : S.sportType === 'triathlon' ? 'Triathlon / IRONMAN' : S.sportType === 'yoga' ? (window.isEnglish && window.isEnglish() ? 'Yoga & Mobility' : 'Yoga & Mobilit\u00e9') : S.sportType === 'cycling' ? 'Cyclisme' : S.sportType === 'calisthenics' ? 'Callisth\u00e9nie' : 'Musculation';
  hdr.appendChild(h('div', {'class': 'logo', html: 'SMARTFITCOACH<span>' + sportLabel + '</span>'}));
  var totalSteps = S.sportType === 'crossfit' ? 2 : S.sportType === 'running' ? 2 : S.sportType === 'hyrox' ? 2 : S.sportType === 'padel' ? 2 : S.sportType === 'golf' ? 2 : S.sportType === 'triathlon' ? 2 : S.sportType === 'yoga' ? 2 : S.sportType === 'cycling' ? 2 : S.sportType === 'calisthenics' ? 2 : 4;
  // sStep 20 (medical) maps to display step 0 for musculation (shown as "Éval. médicale")
@@ -3927,7 +3927,8 @@ function appendSportMedicalBanner(p, sportName) {
     if (S.muscuMedical.feet) {
       _mw.push('\u26A0 Pieds / Fasciite : évitez les impacts répétés (course, sauts). Semelles adaptées obligatoires.');
     }
-    if (S.muscuMedical.hypertension && _ml.indexOf('hta') === -1 && _ml.indexOf('hta_severe') === -1 && _ml.indexOf('hypertension') === -1) {
+    var _mlMu = Array.isArray(S.medical) ? S.medical.map(function(m){return String(m).toLowerCase();}) : [];
+    if (S.muscuMedical.hypertension && _mlMu.indexOf('hta') === -1 && _mlMu.indexOf('hta_severe') === -1 && _mlMu.indexOf('hypertension') === -1) {
       _mw.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode('\u26A0 HTA (profil muscu) : pas d\u2019efforts isométriques maximaux. ')); _el.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _el.appendChild(document.createTextNode(' max 6/10. Restez en Zone 1-2.')); return _el; })());
     }
     if (_mw.length > 0) {

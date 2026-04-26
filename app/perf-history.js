@@ -182,7 +182,8 @@ function migrateExistingData() {
             var w = parseFloat(mStrength[ex.key]);
             var reps = parseInt(mStrength[ex.key + '_reps']) || 8;
             if (!isNaN(w) && w > 0) {
-              var rm1 = reps > 1 ? Math.round(w * (1 + reps / 30)) : w;
+              var _rc = Math.min(reps, 10);
+              var rm1 = reps > 1 ? Math.round(w * (1 + _rc / 30)) : w;
               sHistory.push({ date: today, ts: ts, key: ex.key, weight: w, reps: reps, estimated1RM: rm1 });
             }
           });
@@ -194,7 +195,8 @@ function migrateExistingData() {
               var w2 = parseFloat(mStrength[k]);
               var reps2 = parseInt(mStrength[k + '_reps']) || 8;
               if (!isNaN(w2) && w2 > 0) {
-                sHistory.push({ date: today, ts: ts, key: k, weight: w2, reps: reps2, estimated1RM: reps2 > 1 ? Math.round(w2 * (1 + reps2 / 30)) : w2 });
+                var _rc2 = Math.min(reps2, 10);
+                sHistory.push({ date: today, ts: ts, key: k, weight: w2, reps: reps2, estimated1RM: reps2 > 1 ? Math.round(w2 * (1 + _rc2 / 30)) : w2 });
               }
             }
           });

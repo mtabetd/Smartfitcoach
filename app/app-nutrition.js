@@ -2216,7 +2216,7 @@ function renderStep8(p) {
   if (!S.sex || !S.weight || !S.height) { goStep(1); return; }
   // CRITIQUE-5: garde S.activity null — calcTDEE retourne 0 sans niveau d'activité
   if (S.activity === null || S.activity === undefined) { goStep(5); return; }
-  var tdee = Math.round(calcTDEE()), tgt = calcTarget(), m = calcMacros(), bmi = calcBMI();
+  var tdee = Math.round(calcTDEE()), tgt = calcTarget(), m = calcMacros() || {g:0, p:0, l:0}, bmi = calcBMI();
     // Synchronise NutritionMaster (source de vérité pour RecipeEngine + Sport)
     if (window.computeNutritionState) { window.computeNutritionState(false); }
   var _hydInfo = window.calcHydration ? window.calcHydration() : null; // ÉLEVÉ-3: hydration fine
@@ -2441,7 +2441,6 @@ function renderStep8(p) {
       // Calorie info
       var tdeeRes = Math.round(calcTDEE());
       var extraRes = triRes.trimester.calorieExtra;
-      var tdeeRes = Math.round(calcTDEE());
 
       // Nutrition tips
       var pregNutList = h('div', {style: 'border-left:2px solid var(--ink-900,#0A0A09);padding:8px 12px;margin:10px 0'});
@@ -3850,7 +3849,7 @@ function renderStep9(p) {
   p.appendChild(total);
 
   // Target macros comparison
-  var targetMacros = calcMacros();
+  var targetMacros = calcMacros() || {g:0, p:0, l:0};
   var macroComparison = h('div', {style: 'display:flex;justify-content:space-between;padding:8px 16px;font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);border:1px solid var(--border);border-top:none;background:var(--ivory2)'});
   macroComparison.appendChild(h('span', {}, (window.isEnglish && window.isEnglish() ? 'Target: Carbs ' + targetMacros.g + 'g \u00b7 Protein ' + targetMacros.p + 'g \u00b7 Fat ' + targetMacros.l + 'g' : 'Objectif : Glucides ' + targetMacros.g + 'g \u00b7 Prot\u00e9ines ' + targetMacros.p + 'g \u00b7 Lipides ' + targetMacros.l + 'g')));
   var totalMacroKcal = dayTotalP * 4 + dayTotalG * 4 + dayTotalL * 9;
@@ -4226,7 +4225,7 @@ function exportDayPDF(dayIdx) {
   doc.setFontSize(16); doc.setFont('times', 'italic');
   doc.text((DAY_NAMES[dayIdx] || (window.isEnglish && window.isEnglish() ? 'Day' : 'Jour')) + ' \u2014 ' + (window.isEnglish && window.isEnglish() ? 'Daily Plan' : 'Plan du jour'), M, 26);
   doc.setFontSize(7); doc.setFont('helvetica', 'normal');
-  var tgt = calcTarget(), mc = calcMacros();
+  var tgt = calcTarget(), mc = calcMacros() || {g:0, p:0, l:0};
   doc.text(tgt + ' kcal  |  G ' + mc.g + 'g  |  P ' + mc.p + 'g  |  L ' + mc.l + 'g', M, 33);
   y = 46;
 

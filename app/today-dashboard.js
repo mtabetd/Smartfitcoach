@@ -1644,7 +1644,7 @@ function renderCardMacros() {
     // Bible Hermès §13.1 : pas d'emoji. Tiret typographique + tutoiement.
     var _burnEl = document.createElement('div');
     _burnEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-bottom:6px;font-weight:500;color:var(--success,#3E5C3A);';
-    _burnEl.textContent = _sportBurn + ((window.isEnglish && window.isEnglish()) ? ' kcal burned today · included in your target (calMultiplier: training day = 100%, rest day = −10%)' : ' kcal dépensées aujourd\'hui · incluses dans votre objectif (calMultiplier : jour sport = 100%, jour repos = −10%)');
+    _burnEl.textContent = _sportBurn + ((window.isEnglish && window.isEnglish()) ? ' kcal burned — included in your daily goal' : ' kcal dépensées — incluses dans votre objectif quotidien');
     c.appendChild(_burnEl);
   }
 

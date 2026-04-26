@@ -157,8 +157,8 @@ window.exportWeeklyReportPDF = function() {
     var y = 58;
 
     // ═══ 1. PROFIL ═══
-    y = sectionTitle(doc, y, (_pdfEN ? 'Profile' : 'Profil'));
     var _pdfEN = S.lang === 'en';
+    y = sectionTitle(doc, y, (_pdfEN ? 'Profile' : 'Profil'));
     if (S.sex) y = kvLine(doc, y, _pdfEN ? 'Sex' : 'Sexe', window.isMale(S) ? (_pdfEN ? 'Male' : 'Homme') : (_pdfEN ? 'Female' : 'Femme'), { emphasis: false });
     if (S.age) y = kvLine(doc, y, _pdfEN ? 'Age' : 'Âge', S.age + (_pdfEN ? ' years' : ' ans'), { emphasis: false });
     if (S.weight) y = kvLine(doc, y, _pdfEN ? 'Current weight' : 'Poids actuel', S.weight + ' kg');
