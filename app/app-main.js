@@ -1464,42 +1464,60 @@ function renderProfilePage(container) {
            card.appendChild(_priceWrap);
          }
 
-         // ── Ce qui est inclus — liste complète pour le tier sélectionné ──
+         // ── Ce qui est inclus — deux zones : inclus + à débloquer ──
          var _inclWrap = h('div', {style: 'margin:0 0 4px;padding:16px;background:var(--ivory2,#F5F4EF);border:1px solid var(--border,#E8E6DF);'});
          _inclWrap.appendChild(h('div', {style:
            'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;' +
            'text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:12px;'
          }, 'CE QUI EST INCLUS · ' + (_tierLabels[_ui.tier] || _ui.tier).toUpperCase()));
 
-         _allFeatures.forEach(function(f) {
-           var included = f.tiers.indexOf(_ui.tier) !== -1;
-           var exclusive = included && f.tiers.length < 3; // pas dans Athlete → exclusif tier supérieur
+         var _incl = _allFeatures.filter(function(f) { return f.tiers.indexOf(_ui.tier) !== -1; });
+         var _locked = _allFeatures.filter(function(f) { return f.tiers.indexOf(_ui.tier) === -1; });
+
+         // Zone 1 — features incluses : ✓ simple sans disque noir imposant
+         _incl.forEach(function(f) {
            var row = h('div', {style:
-             'display:flex;align-items:flex-start;gap:10px;padding:6px 0;' +
-             'border-bottom:1px solid var(--border,#E8E6DF);opacity:' + (included ? '1' : '0.35') + ';'
+             'display:flex;align-items:flex-start;gap:10px;padding:5px 0;' +
+             'border-bottom:1px solid var(--border,#E8E6DF);'
            });
-           // Icône ✓ / —
            row.appendChild(h('div', {style:
-             'flex-shrink:0;width:16px;height:16px;border-radius:50%;margin-top:1px;' +
-             'background:' + (included ? '#0A0A09' : 'transparent') + ';' +
-             'border:1px solid ' + (included ? '#0A0A09' : 'var(--grey,#6B6B65)') + ';' +
+             'flex-shrink:0;width:16px;height:16px;margin-top:1px;' +
              'display:flex;align-items:center;justify-content:center;' +
-             'font-size:9px;color:' + (included ? '#FAF9F6' : 'var(--grey,#6B6B65)') + ';'
-           }, included ? '✓' : '—'));
-           var labelWrap = h('div', {style: 'flex:1;'});
-           labelWrap.appendChild(h('div', {style:
-             'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;' +
-             'color:' + (included ? 'var(--black,#0A0A09)' : 'var(--grey,#6B6B65)') + ';line-height:1.4;'
+             'font-size:11px;color:var(--black,#0A0A09);'
+           }, '✓'));
+           row.appendChild(h('div', {style:
+             'flex:1;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;' +
+             'color:var(--black,#0A0A09);line-height:1.4;'
            }, f.label));
-           if (exclusive && included) {
-             labelWrap.appendChild(h('div', {style:
-               'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:1.5px;' +
-               'text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:1px;'
-             }, _ui.tier === 'legende' ? 'Exclusif Légende' : 'Exclusif Champion'));
-           }
-           row.appendChild(labelWrap);
            _inclWrap.appendChild(row);
          });
+
+         // Zone 2 — features à débloquer : bloc doré incitatif
+         if (_locked.length > 0) {
+           var _nextTier = _ui.tier === 'athlete' ? 'Champion' : 'Légende';
+           var _upgradeBlock = h('div', {style:
+             'margin-top:12px;padding:10px 10px 10px 14px;' +
+             'border-left:2px solid #C8A96E;background:#FAF7F0;'
+           });
+           _upgradeBlock.appendChild(h('div', {style:
+             'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:2px;' +
+             'text-transform:uppercase;color:#C8A96E;margin-bottom:8px;'
+           }, 'DÉBLOQUEZ AVEC ' + _nextTier.toUpperCase()));
+           _locked.forEach(function(f) {
+             var row = h('div', {style: 'display:flex;align-items:flex-start;gap:10px;padding:4px 0;'});
+             row.appendChild(h('div', {style:
+               'flex-shrink:0;width:16px;height:16px;margin-top:1px;' +
+               'display:flex;align-items:center;justify-content:center;' +
+               'font-size:14px;color:#C8A96E;line-height:1;font-weight:300;'
+             }, '+'));
+             row.appendChild(h('div', {style:
+               'flex:1;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;' +
+               'color:var(--black,#0A0A09);line-height:1.4;'
+             }, f.label));
+             _upgradeBlock.appendChild(row);
+           });
+           _inclWrap.appendChild(_upgradeBlock);
+         }
          card.appendChild(_inclWrap);
 
        } else {
