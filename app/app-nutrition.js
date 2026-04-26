@@ -1309,14 +1309,14 @@ function renderStep5(p) {
 
   if (_page === 0) {
     // ── 5a: Habitudes ──
-    p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' IX · a \u00b7 Habitudes'));
-    p.appendChild(h('h1', {html: (_prenomS5 ? _prenomS5 + ', quelles sont<br>' : 'Quelles sont<br>') + '<em>vos habitudes alimentaires\u00a0?</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
-    p.appendChild(h('p', {'class': 'subtitle'}, 'Vos habitudes au quotidien pour un plan r\u00e9aliste et tenable.'));
+    p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + (window.isEnglish && window.isEnglish() ? ' IX · a · Habits' : ' IX · a · Habitudes')));
+    p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? (_prenomS5 ? _prenomS5 + ', what are<br>' : 'What are<br>') + '<em>your eating habits?</em>' : (_prenomS5 ? _prenomS5 + ', quelles sont<br>' : 'Quelles sont<br>') + '<em>vos habitudes alimentaires ?</em>'), style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
+    p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Your daily habits for a realistic and sustainable plan.' : 'Vos habitudes au quotidien pour un plan réaliste et tenable.')));
     if (window.TIPS) TIPS.renderTip(p, 'habits');
 
   // Nombre de repas par jour (MANDATORY)
   var mealsLabel = h('div', {'class': 'section-label'});
-  mealsLabel.appendChild(txt('Nombre de repas par jour'));
+  mealsLabel.appendChild(txt((window.isEnglish && window.isEnglish() ? 'Number of meals per day' : 'Nombre de repas par jour')));
   mealsLabel.appendChild(reqDot());
   p.appendChild(mealsLabel);
   var mg = h('div', {'class': 'card-grid-4'});
@@ -1341,7 +1341,7 @@ function renderStep5(p) {
 
   // Lieu principal des repas (MANDATORY)
   var locLabel = h('div', {'class': 'section-label'});
-  locLabel.appendChild(txt('Lieu principal des repas'));
+  locLabel.appendChild(txt((window.isEnglish && window.isEnglish() ? 'Main meal location' : 'Lieu principal des repas')));
   locLabel.appendChild(reqDot());
   p.appendChild(locLabel);
   var lg = h('div', {'class': 'card-grid-3'});
@@ -1357,40 +1357,43 @@ function renderStep5(p) {
 
   // Temps de preparation (MANDATORY)
   var prepLabel = h('div', {'class': 'section-label'});
-  prepLabel.appendChild(txt('Temps de pr\u00e9paration'));
+  prepLabel.appendChild(txt((window.isEnglish && window.isEnglish() ? 'Prep time' : 'Temps de pr\u00e9paration')));
   prepLabel.appendChild(reqDot());
   p.appendChild(prepLabel);
   var prepOpts = ['Rapide (5-10min)', 'Moyen (15-25min)', '\u00c9labor\u00e9 (30min+)'];
+  var prepOptLabels = window.isEnglish && window.isEnglish() ? ['Quick (5-10min)', 'Medium (15-25min)', 'Elaborate (30min+)'] : prepOpts;
   var prepWrap = h('div', {'class': 'chip-wrap'});
-  prepOpts.forEach(function(opt) {
-    prepWrap.appendChild(h('span', {'class': 'chip' + (S.mealPrepTime === opt ? ' on' : ''), onclick: function() { S.mealPrepTime = opt; window.render(); }}, opt));
+  prepOpts.forEach(function(opt, idx) {
+    prepWrap.appendChild(h('span', {'class': 'chip' + (S.mealPrepTime === opt ? ' on' : ''), onclick: function() { S.mealPrepTime = opt; window.render(); }}, prepOptLabels[idx]));
   });
   p.appendChild(prepWrap);
   p.appendChild(h('div', {style: 'height:8px'}));
 
   // Grignotage
-  p.appendChild(h('div', {'class': 'section-label'}, 'Grignotage'));
+  p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Snacking' : 'Grignotage')));
   var snackOpts = ['Jamais', 'Parfois', 'Souvent'];
+  var snackOptLabels = window.isEnglish && window.isEnglish() ? ['Never', 'Sometimes', 'Often'] : snackOpts;
   var snackWrap = h('div', {'class': 'chip-wrap'});
-  snackOpts.forEach(function(opt) {
-    snackWrap.appendChild(h('span', {'class': 'chip' + (S.snacking === opt ? ' on' : ''), onclick: function() { S.snacking = opt; window.render(); }}, opt));
+  snackOpts.forEach(function(opt, idx) {
+    snackWrap.appendChild(h('span', {'class': 'chip' + (S.snacking === opt ? ' on' : ''), onclick: function() { S.snacking = opt; window.render(); }}, snackOptLabels[idx]));
   });
   p.appendChild(snackWrap);
   p.appendChild(h('div', {style: 'height:8px'}));
 
   // Desserts healthy
-  p.appendChild(h('div', {'class': 'section-label'}, 'Desserts healthy dans mon plan'));
+  p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Healthy desserts in my plan' : 'Desserts healthy dans mon plan')));
   var dessertWrap = h('div', {'class': 'chip-wrap'});
-  var dessertSub = h('div', {style: 'font-size:11px;color:var(--grey);margin-bottom:6px;font-family:"Helvetica Neue",Arial,sans-serif'}, '2-3 fois par semaine en collation' + ((S.mealsPerDay||3) < 4 ? ' (nécessite 4 repas/jour)' : ''));
+  var dessertSub = h('div', {style: 'font-size:11px;color:var(--grey);margin-bottom:6px;font-family:"Helvetica Neue",Arial,sans-serif'}, (window.isEnglish && window.isEnglish() ? '2-3 times per week as a snack' + ((S.mealsPerDay||3) < 4 ? ' (requires 4 meals/day)' : '') : '2-3 fois par semaine en collation' + ((S.mealsPerDay||3) < 4 ? ' (nécessite 4 repas/jour)' : '')));
   p.appendChild(dessertSub);
   var dessertDisabled = (S.mealsPerDay || 3) < 4;
   if (dessertDisabled && S.wantsDessert) { S.wantsDessert = false; }
-  ['Non merci', 'Oui, avec plaisir !'].forEach(function(opt) {
-    var isOn = opt.startsWith('Oui') ? S.wantsDessert : !S.wantsDessert;
+  var _dessertOpts = window.isEnglish && window.isEnglish() ? ['No thanks', 'Yes, please!'] : ['Non merci', 'Oui, avec plaisir !'];
+  _dessertOpts.forEach(function(opt) {
+    var isOn = opt.startsWith(window.isEnglish && window.isEnglish() ? 'Yes' : 'Oui') ? S.wantsDessert : !S.wantsDessert;
     var chipStyle = dessertDisabled ? 'opacity:0.4;pointer-events:none;cursor:not-allowed' : '';
     dessertWrap.appendChild(h('span', {'class': 'chip' + (isOn ? ' on' : ''), style: chipStyle, onclick: function() {
       if (dessertDisabled) return;
-      S.wantsDessert = opt.startsWith('Oui');
+      S.wantsDessert = opt.startsWith(window.isEnglish && window.isEnglish() ? 'Yes' : 'Oui');
       if (window.devalidateWeekPlan) window.devalidateWeekPlan('wantsDessert changed');
       window.render();
     }}, opt));
@@ -1399,11 +1402,12 @@ function renderStep5(p) {
   p.appendChild(h('div', {style: 'height:8px'}));
 
   // Hydratation quotidienne
-  p.appendChild(h('div', {'class': 'section-label'}, 'Hydratation quotidienne'));
+  p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Daily hydration' : 'Hydratation quotidienne')));
   var hydOpts = ['< 1L/jour', '1-2L/jour', '2L+/jour'];
+  var hydOptLabels = window.isEnglish && window.isEnglish() ? ['< 1L/day', '1-2L/day', '2L+/day'] : hydOpts;
   var hydWrap = h('div', {'class': 'chip-wrap'});
-  hydOpts.forEach(function(opt) {
-    hydWrap.appendChild(h('span', {'class': 'chip' + (S.hydration === opt ? ' on' : ''), onclick: function() { S.hydration = opt; window.render(); }}, opt));
+  hydOpts.forEach(function(opt, idx) {
+    hydWrap.appendChild(h('span', {'class': 'chip' + (S.hydration === opt ? ' on' : ''), onclick: function() { S.hydration = opt; window.render(); }}, hydOptLabels[idx]));
   });
   p.appendChild(hydWrap);
 
@@ -1412,26 +1416,26 @@ function renderStep5(p) {
   p.appendChild(h('div', {style: 'height:24px'}));
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !_canContinue5a, onclick: function() {
     if (_canContinue5a) { window._s5page = 1; window.render(); }
-  }}, 'Continuer \u2192 Suppl\u00e9ments & Alcool'));
+  }}, (window.isEnglish && window.isEnglish() ? 'Continue \u2192 Supplements & Alcohol' : 'Continuer \u2192 Suppl\u00e9ments & Alcool')));
   p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s5page = 0; goStep(8); }, html: backArrowHtml() + window.t('onb.back')}));
 
   } else {
     // ── 5b: Supplémentation + Alcool ──
-    p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' IX · b \u00b7 Suppl\u00e9ments'));
-    p.appendChild(h('h1', {html: 'Suppl\u00e9mentation<br><em>& consommation d\u2019alcool</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
-    p.appendChild(h('p', {'class': 'subtitle'}, 'Ces informations ajustent votre bilan calorique total.'));
+    p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + (window.isEnglish && window.isEnglish() ? ' IX · b · Supplements' : ' IX · b · Suppléments')));
+    p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Supplementation<br><em>& alcohol consumption</em>' : 'Supplémentation<br><em>& consommation d’alcool</em>'), style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
+    p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'This information adjusts your total caloric balance.' : 'Ces informations ajustent votre bilan calorique total.')));
 
   // Divider: Supplémentation
   var suppDiv = h('div', {'class': 'divider', style: 'margin:0 0 18px'});
   suppDiv.appendChild(h('div', {'class': 'divider-line'}));
-  suppDiv.appendChild(h('div', {'class': 'divider-text'}, 'Suppl\u00e9mentation'));
+  suppDiv.appendChild(h('div', {'class': 'divider-text'}, (window.isEnglish && window.isEnglish() ? 'Supplementation' : 'Suppl\u00e9mentation')));
   suppDiv.appendChild(h('div', {'class': 'divider-line'}));
   p.appendChild(suppDiv);
 
   // Créatine question
-  p.appendChild(h('div', {'class': 'section-label'}, 'Prenez-vous de la cr\u00e9atine ?'));
+  p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Are you taking creatine?' : 'Prenez-vous de la cr\u00e9atine ?')));
   var creatGrid = h('div', {'class': 'card-grid-2'});
-  [{name: 'Oui', val: true}, {name: 'Non', val: false}].forEach(function(o) {
+  [{name: (window.isEnglish && window.isEnglish() ? 'Yes' : 'Oui'), val: true}, {name: (window.isEnglish && window.isEnglish() ? 'No' : 'Non'), val: false}].forEach(function(o) {
     creatGrid.appendChild(h('div', {'class': 'sel-card' + (S.creatine === o.val ? ' on' : ''), onclick: function() { S.creatine = o.val; if (!o.val) S.creatineDose = 0; window.render(); }}, [
       h('div', {'class': 'card-name'}, o.name)
     ]));
@@ -1448,7 +1452,7 @@ function renderStep5(p) {
     }
     var recDose = creatineSupp ? creatineSupp.dosageCalc(S) : null;
 
-    p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:12px'}, 'Dose quotidienne'));
+    p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:12px'}, (window.isEnglish && window.isEnglish() ? 'Daily dose' : 'Dose quotidienne')));
     var cdWrap = h('div', {'class': 'num-input-wrap'});
     cdWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '1', max: '10', step: '0.5', value: S.creatineDose ? String(S.creatineDose) : '', inputmode: 'decimal', placeholder: recDose ? String(recDose.dose) : '5', oninput: function(e) {
       var v = parseFloat(e.target.value);
@@ -1459,16 +1463,16 @@ function renderStep5(p) {
       else if (v > 10) { e.target.value = S.creatineDose = 10; }
       window.render();
     }}));
-    cdWrap.appendChild(h('span', {'class': 'num-unit'}, 'g/jour'));
+    cdWrap.appendChild(h('span', {'class': 'num-unit'}, (window.isEnglish && window.isEnglish() ? 'g/day' : 'g/jour')));
     p.appendChild(cdWrap);
     if (recDose) {
-      p.appendChild(h('div', {'class': 'num-hint'}, 'Dose recommand\u00e9e : ' + recDose.dose + 'g/jour (bas\u00e9 sur votre poids de ' + S.weight + 'kg)'));
+      p.appendChild(h('div', {'class': 'num-hint'}, (window.isEnglish && window.isEnglish() ? 'Recommended dose: ' + recDose.dose + 'g/day (based on your weight of ' + S.weight + 'kg)' : 'Dose recommand\u00e9e : ' + recDose.dose + 'g/jour (bas\u00e9 sur votre poids de ' + S.weight + 'kg)')));
     }
   }
 
   // Other supplements
   if (window.TIPS) TIPS.renderTip(p, 'supplements');
-  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:16px'}, 'Autres compl\u00e9ments (optionnel)'));
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:16px'}, (window.isEnglish && window.isEnglish() ? 'Other supplements (optional)' : 'Autres compl\u00e9ments (optionnel)')));
   var suppChipWrap = h('div', {'class': 'chip-wrap'});
   var suppChipList = [
     {id: 'vitamine_d', name: 'Vitamine D'},
@@ -1494,7 +1498,7 @@ function renderStep5(p) {
   });
   p.appendChild(suppChipWrap);
   if (S.pregnant && window.isFemale(S)) {
-    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);margin-top:6px'}, '\u26A0 Caf\u00e9ine : max 200 mg/jour pendant la grossesse (environ 1 tasse de caf\u00e9)'));
+    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);margin-top:6px'}, (window.isEnglish && window.isEnglish() ? '\u26A0 Caffeine: max 200 mg/day during pregnancy (approx. 1 cup of coffee)' : '\u26A0 Caf\u00e9ine : max 200 mg/jour pendant la grossesse (environ 1 tasse de caf\u00e9)')));
   }
 
   // Divider: Consommation d'alcool
@@ -1502,26 +1506,26 @@ function renderStep5(p) {
     // Pregnancy: no alcohol
     var alcPregDiv = h('div', {'class': 'divider', style: 'margin:28px 0 18px'});
     alcPregDiv.appendChild(h('div', {'class': 'divider-line'}));
-    alcPregDiv.appendChild(h('div', {'class': 'divider-text'}, 'Consommation d\u2019alcool'));
+    alcPregDiv.appendChild(h('div', {'class': 'divider-text'}, (window.isEnglish && window.isEnglish() ? 'Alcohol consumption' : 'Consommation d\u2019alcool')));
     alcPregDiv.appendChild(h('div', {'class': 'divider-line'}));
     p.appendChild(alcPregDiv);
     var alcPregWarn = h('div', {style: 'border-left:3px solid var(--error,#7A1F1F);padding:14px 16px;background:rgba(122,31,31,0.06);margin-bottom:16px'});
-    alcPregWarn.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;color:var(--error,#7A1F1F);margin-bottom:4px'}, '\u26D4 Z\u00e9ro alcool pendant la grossesse'));
-    alcPregWarn.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--error,#7A1F1F)'}, 'Aucune quantit\u00e9 d\'alcool n\'est consid\u00e9r\u00e9e comme s\u00fbre pendant la grossesse. L\'alcool traverse le placenta et peut affecter le d\u00e9veloppement du b\u00e9b\u00e9.'));
+    alcPregWarn.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;color:var(--error,#7A1F1F);margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? '\u26D4 Zero alcohol during pregnancy' : '\u26D4 Z\u00e9ro alcool pendant la grossesse')));
+    alcPregWarn.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--error,#7A1F1F)'}, (window.isEnglish && window.isEnglish() ? 'No amount of alcohol is considered safe during pregnancy. Alcohol crosses the placenta and can affect the baby\'s development.' : 'Aucune quantit\u00e9 d\'alcool n\'est consid\u00e9r\u00e9e comme s\u00fbre pendant la grossesse. L\'alcool traverse le placenta et peut affecter le d\u00e9veloppement du b\u00e9b\u00e9.')));
     p.appendChild(alcPregWarn);
     S.alcoholFreq = 'never';
     S.alcoholTypes = [];
   } else {
   var alcDiv = h('div', {'class': 'divider', style: 'margin:28px 0 18px'});
   alcDiv.appendChild(h('div', {'class': 'divider-line'}));
-  alcDiv.appendChild(h('div', {'class': 'divider-text'}, 'Consommation d\u2019alcool'));
+  alcDiv.appendChild(h('div', {'class': 'divider-text'}, (window.isEnglish && window.isEnglish() ? 'Alcohol consumption' : 'Consommation d\u2019alcool')));
   alcDiv.appendChild(h('div', {'class': 'divider-line'}));
   p.appendChild(alcDiv);
   if (window.TIPS) TIPS.renderTip(p, 'alcohol');
 
   // Frequence alcool (MANDATORY)
   var freqLabel = h('div', {'class': 'section-label'});
-  freqLabel.appendChild(txt('Fr\u00e9quence'));
+  freqLabel.appendChild(txt((window.isEnglish && window.isEnglish() ? 'Frequency' : 'Fr\u00e9quence')));
   freqLabel.appendChild(reqDot());
   p.appendChild(freqLabel);
   var fg = h('div', {'class': 'card-grid-4'});
@@ -1537,7 +1541,7 @@ function renderStep5(p) {
 
   // Alcohol detail (if NOT 'never')
   if (S.alcoholFreq && S.alcoholFreq !== 'never') {
-    p.appendChild(h('div', {'class': 'section-label'}, 'D\u00e9tail de consommation'));
+    p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Consumption details' : 'D\u00e9tail de consommation')));
     if (!S.alcoholTypes) S.alcoholTypes = [];
 
     if (ALCOHOL_DB && ALCOHOL_DB.length) {
@@ -1575,7 +1579,7 @@ function renderStep5(p) {
             }, String(bv)));
           })(b);
         }
-        freqDiv.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);margin-left:4px'}, '/sem'));
+        freqDiv.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);margin-left:4px'}, (window.isEnglish && window.isEnglish() ? '/wk' : '/sem')));
         item.appendChild(freqDiv);
         p.appendChild(item);
       });
@@ -1595,11 +1599,11 @@ function renderStep5(p) {
         }
       });
     }
-    p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;text-align:center;padding:12px;margin-top:8px;border:1px solid var(--border);background:var(--ivory2)'}, 'Total : ' + totalAlcKcal + ' kcal/semaine d\u2019alcool'));
+    p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;text-align:center;padding:12px;margin-top:8px;border:1px solid var(--border);background:var(--ivory2)'}, (window.isEnglish && window.isEnglish() ? 'Total: ' + totalAlcKcal + ' kcal/week from alcohol' : 'Total : ' + totalAlcKcal + ' kcal/semaine d\u2019alcool')));
 
     if (totalAlcKcal > 500) {
       var alcWarn = h('div', {style: 'border-left:2px solid var(--orange);padding:12px 16px;background:rgba(232,111,30,0.06);margin-top:8px'});
-      alcWarn.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange)'}, '\u26a0 Consommation \u00e9lev\u00e9e : ' + totalAlcKcal + ' kcal/semaine repr\u00e9sente environ ' + Math.round(totalAlcKcal / 7) + ' kcal/jour suppl\u00e9mentaires. Cela peut freiner vos objectifs.'));
+      alcWarn.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange)'}, (window.isEnglish && window.isEnglish() ? '\u26a0 High consumption: ' + totalAlcKcal + ' kcal/week represents approx. ' + Math.round(totalAlcKcal / 7) + ' kcal/day extra. This may slow your goals.' : '\u26a0 Consommation \u00e9lev\u00e9e : ' + totalAlcKcal + ' kcal/semaine repr\u00e9sente environ ' + Math.round(totalAlcKcal / 7) + ' kcal/jour suppl\u00e9mentaires. Cela peut freiner vos objectifs.')));
       p.appendChild(alcWarn);
     }
   }
@@ -1609,7 +1613,7 @@ function renderStep5(p) {
   var canContinue5b = S.alcoholFreq != null;
   // Helper text quand fréquence non sélectionnée (évite impasse silencieuse)
   if (!canContinue5b) {
-    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:8px'}, '← Sélectionnez votre fréquence de consommation ci-dessus pour continuer'));
+    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? '← Select your consumption frequency above to continue' : '← S\u00e9lectionnez votre fr\u00e9quence de consommation ci-dessus pour continuer')));
   }
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !canContinue5b, onclick: function() {
     if (canContinue5b) {
