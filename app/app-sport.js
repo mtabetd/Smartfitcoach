@@ -1272,7 +1272,7 @@ function renderSportQuickProfile(p) {
     prenomWrap.appendChild(prenomInput);
     wrap.appendChild(prenomWrap);
 
-    wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px'}, 'Votre \u00e2ge'));
+    wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'Your age' : 'Votre \u00e2ge')));
     var ageInput = h('input', {
       type: 'number', min: '13', max: '99', inputmode: 'numeric',
       style: 'width:100%;height:48px;border:1px solid var(--border,#E8E6DF);background:var(--ivory,#FAF9F6);font-family:Georgia,serif;font-size:16px;color:var(--black,#1A1A18);padding:0 16px;box-sizing:border-box;border-radius:2px;outline:none;-webkit-appearance:none;',
@@ -1297,7 +1297,7 @@ function renderSportQuickProfile(p) {
     ageInput.addEventListener('change', function() {
       var v = parseInt(this.value);
       if (!isNaN(v) && v >= 13 && v <= 99) { S.age = v; ageErr.style.display = 'none'; _syncBtn(); }
-      else { this.value = S.age ? String(S.age) : ''; ageErr.textContent = v < 13 ? '\u00c2ge entre 13 et 99 ans.' : 'Veuillez indiquer votre \u00e2ge.'; ageErr.style.display = 'block'; }
+      else { this.value = S.age ? String(S.age) : ''; ageErr.textContent = v < 13 ? (window.isEnglish && window.isEnglish() ? 'Age between 13 and 99.' : '\u00c2ge entre 13 et 99 ans.') : (window.isEnglish && window.isEnglish() ? 'Please enter your age.' : 'Veuillez indiquer votre \u00e2ge.'); ageErr.style.display = 'block'; }
     });
     ageInput.addEventListener('focus', function() { setTimeout(function() { ageInput.scrollIntoView({behavior:'smooth', block:'center'}); }, 300); });
     wrap.appendChild(ageInput);
@@ -1432,7 +1432,7 @@ window.SPORT = {
  // sStep 20 = medical questionnaire (muscu pre-step), include it in progress
  if (S.sStep > 0) {
  var hdr = h('header', {'class': 'header'});
- var sportLabel = S.sportType === 'crossfit' ? 'Cross Training' : S.sportType === 'running' ? 'Running' : S.sportType === 'hyrox' ? 'Hyrox' : S.sportType === 'padel' ? 'Padel' : S.sportType === 'golf' ? 'Golf' : S.sportType === 'triathlon' ? 'Triathlon / IRONMAN' : S.sportType === 'yoga' ? 'Yoga & Mobilit\u00e9' : S.sportType === 'cycling' ? 'Cyclisme' : S.sportType === 'calisthenics' ? 'Callisth\u00e9nie' : 'Musculation';
+ var sportLabel = S.sportType === 'crossfit' ? 'Cross Training' : S.sportType === 'running' ? 'Running' : S.sportType === 'hyrox' ? 'Hyrox' : S.sportType === 'padel' ? 'Padel' : S.sportType === 'golf' ? 'Golf' : S.sportType === 'triathlon' ? 'Triathlon / IRONMAN' : S.sportType === 'yoga' ? (window.isEnglish && window.isEnglish() ? 'Yoga & Mobility' : 'Yoga & Mobilit\u00e9') : S.sportType === 'cycling' ? (window.isEnglish && window.isEnglish() ? 'Cycling' : 'Cyclisme') : S.sportType === 'calisthenics' ? (window.isEnglish && window.isEnglish() ? 'Calisthenics' : 'Callisth\u00e9nie') : (window.isEnglish && window.isEnglish() ? 'Weightlifting' : 'Musculation');
  hdr.appendChild(h('div', {'class': 'logo', html: 'SMARTFITCOACH<span>' + sportLabel + '</span>'}));
  var totalSteps = S.sportType === 'crossfit' ? 2 : S.sportType === 'running' ? 2 : S.sportType === 'hyrox' ? 2 : S.sportType === 'padel' ? 2 : S.sportType === 'golf' ? 2 : S.sportType === 'triathlon' ? 2 : S.sportType === 'yoga' ? 2 : S.sportType === 'cycling' ? 2 : S.sportType === 'calisthenics' ? 2 : 4;
  // sStep 20 (medical) maps to display step 0 for musculation (shown as "Éval. médicale")
@@ -1465,7 +1465,7 @@ window.SPORT = {
    // Hermès polish : clamp currentDisplay [1, totalSteps] — jamais d'étape négative/dépassée affichée
    var _clampedStep = Math.max(1, Math.min(totalSteps, currentDisplay));
    var _stepValid = (currentDisplay >= 1 && currentDisplay <= totalSteps);
-   var stepLabel = S.sStep === 26 ? 'Questionnaire sant\u00e9' : S.sStep === 27 ? 'Bilan m\u00e9dical' : S.sStep === 20 ? '\u00c9val. m\u00e9dicale' : S.sStep === 16 ? '\u00c9val. des charges' : S.sStep === 15 ? 'Programmes d\u00e9di\u00e9s' : (_stepValid ? ('\u00c9tape ' + _clampedStep + ' / ' + totalSteps) : '\u2014');
+   var stepLabel = (function(){ var _tsl = window.isEnglish && window.isEnglish(); return S.sStep === 26 ? (_tsl ? 'Health questionnaire' : 'Questionnaire sant\u00e9') : S.sStep === 27 ? (_tsl ? 'Medical check' : 'Bilan m\u00e9dical') : S.sStep === 20 ? (_tsl ? 'Medical eval.' : '\u00c9val. m\u00e9dicale') : S.sStep === 16 ? (_tsl ? 'Load eval.' : '\u00c9val. des charges') : S.sStep === 15 ? (_tsl ? 'Dedicated programs' : 'Programmes d\u00e9di\u00e9s') : (_stepValid ? ((_tsl ? 'Step ' : '\u00c9tape ') + _clampedStep + ' / ' + totalSteps) : '\u2014'); })();
    hdr.appendChild(h('div', {'class': 'step-indicator'}, stepLabel));
  }
  p.appendChild(hdr);
@@ -2834,7 +2834,7 @@ function renderMusculationGoals(p) {
  var _prenom1 = S.prenom || '';
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation \u00b7 \u00c9tape 1/3'));
  p.appendChild(h('h1', {html: (_prenom1 ? _prenom1 + ', quel est<br>' : 'Quel est<br>') + '<em>votre objectif\u00a0?</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Choisissez vos objectifs (1 \u00e0 3). Votre programme s\u2019adaptera en cons\u00e9quence.'));
+ p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Choose your goals (1 to 3). Your program will adapt accordingly.' : 'Choisissez vos objectifs (1 \u00e0 3). Votre programme s\u2019adaptera en cons\u00e9quence.')));
  if (window.TIPS) TIPS.renderTip(p, 'sportGoal');
 
  // ── INTERDÉPENDANCE NUTRITION ──────────────────────────────────────────
@@ -2843,7 +2843,7 @@ function renderMusculationGoals(p) {
  var nutName = (window.GOALS || [])[S.goal] ? window.GOALS[S.goal].name : '';
  var banner = h('div', {style: 'border:1px solid var(--border,#D8D8D0);padding:12px 16px;background:var(--ivory2,#F4F4F0);margin-bottom:16px;border-radius:2px'});
  banner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, 'Objectif Nutrition\u00a0: ' + nutName));
- banner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65)'}, 'Toute modification sera synchronis\u00e9e avec votre plan nutrition.'));
+ banner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65)'}, (window.isEnglish && window.isEnglish() ? 'All changes will be synced with your nutrition plan.' : 'Toute modification sera synchronis\u00e9e avec votre plan nutrition.')));
  p.appendChild(banner);
  }
  // ──────────────────────────────────────────────────────────────────────
@@ -3374,7 +3374,7 @@ function renderSportMixSection(p, primarySport) {
  if (!S.sportMixEnabled) return;
 
  // ─── CHOIX DU SPORT SECONDAIRE ───
- p.appendChild(h('div', { 'class': 'section-label', style: 'margin-top:16px' }, '2\u00e8me sport'));
+ p.appendChild(h('div', { 'class': 'section-label', style: 'margin-top:16px' }, (window.isEnglish && window.isEnglish() ? '2nd sport' : '2\u00e8me sport')));
  var _secList = h('div', { 'class': 'level-list' });
  secondaryOptions.forEach(function(sopt) {
   var _isSel = S.sportMixSecondary && S.sportMixSecondary.type === sopt.type;
@@ -3402,7 +3402,7 @@ function renderSportMixSection(p, primarySport) {
  var _secLabel = _LABELS[S.sportMixSecondary.type] || S.sportMixSecondary.type;
 
  // ─── RÉPARTITION DES JOURS ───
- p.appendChild(h('div', { 'class': 'section-label', style: 'margin-top:16px' }, 'R\u00e9partition des jours'));
+ p.appendChild(h('div', { 'class': 'section-label', style: 'margin-top:16px' }, (window.isEnglish && window.isEnglish() ? 'Day split' : 'R\u00e9partition des jours')));
 
  var _allocBox = h('div', { style: 'border:1px solid var(--border,#E8E6DF);padding:16px 12px;background:var(--ivory2,#F5F5F0);margin-bottom:8px' });
 
@@ -5078,10 +5078,10 @@ function renderMusculationLevel(p) {
    _daysImported = true;
  }
  var _sectionLabelDays = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-top:16px;margin-bottom:0'});
- _sectionLabelDays.appendChild(h('div', {'class': 'section-label', style: 'margin-top:0;margin-bottom:0'}, 'Quels jours vous entra\u00eenez-vous\u00a0? (optionnel)'));
- if (_daysImported) { _sectionLabelDays.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);font-style:italic'}, '(import\u00e9s depuis ton profil)')); }
+ _sectionLabelDays.appendChild(h('div', {'class': 'section-label', style: 'margin-top:0;margin-bottom:0'}, (window.isEnglish && window.isEnglish() ? 'Which days do you train? (optional)' : 'Quels jours vous entra\u00eenez-vous\u00a0? (optionnel)')));
+ if (_daysImported) { _sectionLabelDays.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);font-style:italic'}, (window.isEnglish && window.isEnglish() ? '(imported from your profile)' : '(import\u00e9s depuis ton profil)'))); }
  p.appendChild(_sectionLabelDays);
- p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:10px;line-height:1.5;'}, 'S\u00e9lectionnez vos jours pour adapter vos macros nutrition (entra\u00eenement vs repos).'));
+ p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:10px;line-height:1.5;'}, (window.isEnglish && window.isEnglish() ? 'Select your training days to adapt your nutrition macros (training vs rest).' : 'S\u00e9lectionnez vos jours pour adapter vos macros nutrition (entra\u00eenement vs repos).')));
  var _musDay = ['L', 'Ma', 'Me', 'J', 'V', 'S', 'D'];
  var _musDayWrap = h('div', {style: 'display:flex;gap:6px;justify-content:center;flex-wrap:nowrap;margin:0 0 6px'});
  var _musTarget = S.sportDays || 3;
@@ -5135,18 +5135,19 @@ function renderMusculationLevel(p) {
  var _mDiff = _mCount - _musTarget;
  var _mColor = _mDiff === 0 && _mCount > 0 ? 'var(--ink-500,#6B6B65)' : (_mDiff > 0 ? 'var(--error,#7A1F1F)' : 'var(--ink-500,#6B6B65)');
  var _mHint = _mCount === 0
-   ? 'Optionnel \u2014 laissez vide pour r\u00e9partition automatique'
+   ? (window.isEnglish && window.isEnglish() ? 'Optional — leave empty for automatic distribution' : 'Optionnel \u2014 laissez vide pour r\u00e9partition automatique')
    : _mDiff === 0 ? _mCount + '\u00a0/' + '\u00a0' + _musTarget + '\u00a0' + window.locPlural(_mCount, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + '\u00a0\u2014 parfait'
    : _mDiff > 0 ? _mCount + '\u00a0/\u00a0' + _musTarget + '\u00a0\u2014 retirez\u00a0' + _mDiff + '\u00a0' + window.locPlural(_mDiff, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}})
-   : _mCount + '\u00a0/\u00a0' + _musTarget + '\u00a0\u2014 s\u00e9lectionnez encore\u00a0' + Math.abs(_mDiff) + '\u00a0' + window.locPlural(Math.abs(_mDiff), {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}});
+   : _mCount + '\u00a0/\u00a0' + _musTarget + (window.isEnglish && window.isEnglish() ? '\u00a0\u2014 select\u00a0' : '\u00a0\u2014 s\u00e9lectionnez encore\u00a0') + Math.abs(_mDiff) + '\u00a0' + window.locPlural(Math.abs(_mDiff), {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}});
  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + _mColor + ';text-align:center;margin-bottom:4px;transition:color .2s;'}, _mHint));
 
  // Equipment selection
- p.appendChild(h('div', {'class': 'section-label'}, 'Mat\u00e9riel disponible'));
+ p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Available equipment' : 'Mat\u00e9riel disponible')));
+ var _teq = window.isEnglish && window.isEnglish();
  var equipOptions = [
- {id: 'gym', label: 'Salle compl\u00e8te', desc: 'Barres, machines, poulies'},
- {id: 'dumbbells', label: 'Halt\u00e8res + banc', desc: 'Home gym ou salle basique'},
- {id: 'home', label: 'Maison / PDC', desc: 'Sans mat\u00e9riel, poids du corps'}
+ {id: 'gym', label: _teq ? 'Full gym' : 'Salle compl\u00e8te', desc: _teq ? 'Bars, machines, cables' : 'Barres, machines, poulies'},
+ {id: 'dumbbells', label: _teq ? 'Dumbbells + bench' : 'Halt\u00e8res + banc', desc: _teq ? 'Home gym or basic gym' : 'Home gym ou salle basique'},
+ {id: 'home', label: _teq ? 'Home / BW' : 'Maison / PDC', desc: _teq ? 'No equipment, bodyweight' : 'Sans mat\u00e9riel, poids du corps'}
  ];
  var eqGrid = h('div', {'class': 'level-list'});
  equipOptions.forEach(function(eq) {
@@ -5170,10 +5171,11 @@ function renderMusculationLevel(p) {
  // Heure d'entraînement — pour le nutrient timing (Ivy 2004, ISSN 2017)
  p.appendChild(h('div', {'class': 'section-label'}, 'Heure d\'entra\u00eenement habituelle'));
  p.appendChild(h('div', {style: 'font-size:13px;color:var(--text-secondary);margin:-4px 0 10px'}, 'Permet d\'adapter la r\u00e9partition des repas (prot\u00e9ines + glucides au bon moment)'));
+ var _tto = window.isEnglish && window.isEnglish();
  var trainOptions = [
- {id: 'morning', label: 'Matin', desc: 'Avant 12h — petit-d\u00e9j post-s\u00e9ance'},
- {id: 'noon', label: 'Midi', desc: '12h–15h — d\u00e9jeuner post-s\u00e9ance'},
- {id: 'evening', label: 'Soir', desc: 'Apr\u00e8s 17h — d\u00eener post-s\u00e9ance'}
+ {id: 'morning', label: _tto ? 'Morning' : 'Matin', desc: _tto ? 'Before 12pm — post-workout breakfast' : 'Avant 12h — petit-d\u00e9j post-s\u00e9ance'},
+ {id: 'noon', label: _tto ? 'Noon' : 'Midi', desc: _tto ? '12pm–3pm — post-workout lunch' : '12h\u201315h — d\u00e9jeuner post-s\u00e9ance'},
+ {id: 'evening', label: _tto ? 'Evening' : 'Soir', desc: _tto ? 'After 5pm — post-workout dinner' : 'Apr\u00e8s 17h — d\u00eener post-s\u00e9ance'}
  ];
  var ttGrid = h('div', {'class': 'level-list'});
  trainOptions.forEach(function(opt) {
@@ -5189,10 +5191,10 @@ function renderMusculationLevel(p) {
  p.appendChild(h('div', {style: 'font-size:11px;color:var(--text-secondary);margin-top:4px'}, 'Optionnel — laissez vide si variable'));
 
  // ─── COMPÉTITION CIBLE (optionnel) ───
- p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:24px;'}, 'Comp\u00e9tition \u00e0 pr\u00e9parer\u00a0?'));
- p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey,#6B6B65);margin:-4px 0 10px;line-height:1.5;'}, 'Hyrox, powerlifting, marathon\u2026 l\u2019IA p\u00e9riodisera vers ta date cible. Optionnel.'));
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:24px;'}, (window.isEnglish && window.isEnglish() ? 'Competition to prepare for?' : 'Comp\u00e9tition \u00e0 pr\u00e9parer\u00a0?')));
+ p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey,#6B6B65);margin:-4px 0 10px;line-height:1.5;'}, (window.isEnglish && window.isEnglish() ? 'Hyrox, powerlifting, marathon\u2026 The AI will periodize toward your target date. Optional.' : 'Hyrox, powerlifting, marathon\u2026 l\u2019IA p\u00e9riodisera vers ta date cible. Optionnel.')));
  var _cGrid = h('div', {'class': 'level-list'});
- [{id: false, label: 'Non', desc: 'Programme standard 12 semaines'}, {id: true, label: 'Oui \u2014 j\u2019ai une date', desc: 'P\u00e9riodisation cibl\u00e9e'}].forEach(function(copt) {
+ (function(){ var _tc = window.isEnglish && window.isEnglish(); return [{id: false, label: _tc ? 'No' : 'Non', desc: _tc ? 'Standard 12-week program' : 'Programme standard 12 semaines'}, {id: true, label: _tc ? 'Yes \u2014 I have a date' : 'Oui \u2014 j\u2019ai une date', desc: _tc ? 'Targeted periodization' : 'P\u00e9riodisation cibl\u00e9e'}]; })().forEach(function(copt) {
    var _cSel = copt.id ? !!S.competitionGoal : !S.competitionGoal;
    _cGrid.appendChild(h('div', {'class': 'level-item' + (_cSel ? ' on' : ''), onclick: function() {
      S.competitionGoal = !!copt.id;
@@ -5209,7 +5211,7 @@ function renderMusculationLevel(p) {
    _dInp.value = S.competitionDate || '';
    _dInp.addEventListener('input', function(e) { S.competitionDate = e.target.value; });
    p.appendChild(_dInp);
-   p.appendChild(h('div', {'class': 'field-label'}, 'Type d\u2019\u00e9preuve (optionnel)'));
+   p.appendChild(h('div', {'class': 'field-label'}, (window.isEnglish && window.isEnglish() ? 'Event type (optional)' : 'Type d\u2019\u00e9preuve (optionnel)')));
    var _tInp = document.createElement('input');
    _tInp.type = 'text';
    _tInp.placeholder = 'ex\u00a0: Hyrox, Powerlifting, 10 km\u2026';
@@ -5220,11 +5222,11 @@ function renderMusculationLevel(p) {
  }
 
  // ─── SPORTS COMPLÉMENTAIRES (optionnel) ───
- p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:24px;'}, 'Sports pratiqu\u00e9s en parall\u00e8le\u00a0?'));
- p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey,#6B6B65);margin:-4px 0 10px;line-height:1.5;'}, 'Pour adapter la r\u00e9cup\u00e9ration et \u00e9viter les conflits de charge. Optionnel.'));
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:24px;'}, (window.isEnglish && window.isEnglish() ? 'Sports practiced alongside?' : 'Sports pratiqu\u00e9s en parall\u00e8le\u00a0?')));
+ p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey,#6B6B65);margin:-4px 0 10px;line-height:1.5;'}, (window.isEnglish && window.isEnglish() ? 'To adapt recovery and avoid scheduling conflicts. Optional.' : 'Pour adapter la r\u00e9cup\u00e9ration et \u00e9viter les conflits de charge. Optionnel.')));
  if (!Array.isArray(S.sportHobbies)) S.sportHobbies = [];
  var _hbWrap = h('div', {style: 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px;'});
- [{id:'running',lb:'Running'},{id:'cycling',lb:'V\u00e9lo'},{id:'swimming',lb:'Natation'},{id:'tennis',lb:'Tennis / Padel'},{id:'martialarts',lb:'Arts martiaux'},{id:'ski',lb:'Ski / Snow'},{id:'yoga',lb:'Yoga / Mob'},{id:'other',lb:'Autre'}].forEach(function(hobj) {
+ (function(){ var _th = window.isEnglish && window.isEnglish(); return [{id:'running',lb:'Running'},{id:'cycling',lb:(_th ? 'Cycling' : 'V\u00e9lo')},{id:'swimming',lb:(_th ? 'Swimming' : 'Natation')},{id:'tennis',lb:'Tennis / Padel'},{id:'martialarts',lb:(_th ? 'Martial arts' : 'Arts martiaux')},{id:'ski',lb:'Ski / Snow'},{id:'yoga',lb:'Yoga / Mob'},{id:'other',lb:(_th ? 'Other' : 'Autre')}]; })().forEach(function(hobj) {
    var _hSel = S.sportHobbies.indexOf(hobj.id) !== -1;
    _hbWrap.appendChild(h('button', {type: 'button', 'class': 'chip' + (_hSel ? ' on' : ''), onclick: function() {
      if (!Array.isArray(S.sportHobbies)) S.sportHobbies = [];
@@ -5234,7 +5236,7 @@ function renderMusculationLevel(p) {
    }}, hobj.lb));
  });
  p.appendChild(_hbWrap);
- p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey,#6B6B65);margin-top:4px;'}, 'Aucune s\u00e9lection = programme muscu pur'));
+ p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey,#6B6B65);margin-top:4px;'}, (window.isEnglish && window.isEnglish() ? 'No selection = pure weightlifting program' : 'Aucune s\u00e9lection = programme muscu pur')));
 
  // ─── SPORT MIX (Muscu + autre sport) ───
  renderSportMixSection(p, 'musculation');
@@ -5250,9 +5252,9 @@ function renderMusculationLevel(p) {
 // ─── STEP 3 (Muscu): ZONES CIBLES ───
 function renderMusculationZones(p) {
  var _prenom3 = S.prenom || '';
- p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation \u00b7 \u00c9tape 3/3'));
- p.appendChild(h('h1', {html: (_prenom3 ? _prenom3 + ', quelles zones<br>' : 'Quelles zones<br>') + '<em>voulez-vous travailler\u00a0?</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Attribuez une priorit\u00e9 \u00e0 chaque groupe musculaire. Votre programme s\u2019adaptera.'));
+ p.appendChild(h('div', {'class': 'eyebrow'}, (window.isEnglish && window.isEnglish() ? 'Weightlifting \u00b7 Step 3/3' : 'Musculation \u00b7 \u00c9tape 3/3')));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? (_prenom3 ? _prenom3 + ', which zones<br>' : 'Which zones<br>') + '<em>do you want to work\u00a0?</em>' : (_prenom3 ? _prenom3 + ', quelles zones<br>' : 'Quelles zones<br>') + '<em>voulez-vous travailler\u00a0?</em>')}));
+ p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Assign a priority to each muscle group. Your program will adapt.' : 'Attribuez une priorit\u00e9 \u00e0 chaque groupe musculaire. Votre programme s\u2019adaptera.')));
  if (window.TIPS) TIPS.renderTip(p, 'sportZones');
 
  // Show body photos if uploaded
@@ -5790,13 +5792,13 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  if (isUrgent) cardClass += ' rest-timer-urgent';
  if (isDone) cardClass += ' rest-timer-done';
 
- var labelText = isTrans ? 'Transition' : (_state.exerciseName || 'Repos');
+ var _trt = window.isEnglish && window.isEnglish(); var labelText = isTrans ? 'Transition' : (_state.exerciseName || (_trt ? 'Rest' : 'Repos'));
  var subText = isTrans
- ? (_state.exerciseName + ' \u2192 ' + (_state.nextExercise || 'Suivant'))
- : ('S\u00e9rie ' + _state.setNum + ' termin\u00e9e \u2014 repos');
+ ? (_state.exerciseName + ' \u2192 ' + (_state.nextExercise || (_trt ? 'Next' : 'Suivant')))
+ : ((_trt ? 'Set ' : 'S\u00e9rie ') + _state.setNum + (_trt ? ' done \u2014 rest' : ' termin\u00e9e \u2014 repos'));
 
  var goText = isTrans
- ? (_state.nextExercise || 'Exercice suivant')
+ ? (_state.nextExercise || (_trt ? 'Next exercise' : 'Exercice suivant'))
  : 'GO !';
 
  var totalMin = Math.floor(_state.total / 60);
@@ -5822,7 +5824,7 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  if (isTrans) {
  var reason = document.createElement('div');
  reason.className = 'rest-timer-reason';
- reason.textContent = 'Repos adapt\u00e9 : ' + totalStr + ' (profil + charge + objectif)';
+ reason.textContent = (window.isEnglish && window.isEnglish() ? 'Adapted rest: ' : 'Repos adapt\u00e9 : ') + totalStr + (window.isEnglish && window.isEnglish() ? ' (profile + load + goal)' : ' (profil + charge + objectif)');
  card.appendChild(reason);
  }
 
@@ -6553,7 +6555,7 @@ function renderMusculationProgram(p) {
    p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
    p.appendChild(h('h1', {html: 'Votre programme<br><em>sur mesure</em>'}));
    var _iaDateStr = S.muscuIAProgramDate ? window.formatDate(S.muscuIAProgramDate) : '';
-   if (_iaDateStr) p.appendChild(h('p', {'class': 'subtitle'}, 'G\u00e9n\u00e9r\u00e9 le ' + _iaDateStr));
+   if (_iaDateStr) p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Generated on ' : 'G\u00e9n\u00e9r\u00e9 le ') + _iaDateStr));
 
    // Conteneur du programme IA parsé
    var _iaContainer = h('div', {id: 'muscu-ia-program-container'});
@@ -6581,7 +6583,7 @@ function renderMusculationProgram(p) {
    if (window.MUSCU_PROGRAM && typeof window.MUSCU_PROGRAM.open === 'function') {
      p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:8px', onclick: function() {
        window.MUSCU_PROGRAM.open();
-     }}, 'G\u00e9n\u00e9rer un nouveau programme'));
+     }}, (window.isEnglish && window.isEnglish() ? 'Generate a new program' : 'G\u00e9n\u00e9rer un nouveau programme')));
    }
    return;
  }
@@ -6898,23 +6900,24 @@ function renderMusculationProgram(p) {
  // ─── BANNIÈRE ADAPTATIONS MÉDICALES ───
  if (S.muscuMedical && S.muscuMedical.done) {
  var med = S.muscuMedical;
+ var _tmed = window.isEnglish && window.isEnglish();
  var restrictions = [];
- if (med.shoulders || med.rotatorCuff) restrictions.push('\u26A0 \u00c9paules\u00a0: exercices overhead \u00e9vit\u00e9s');
- if (med.lowerBack || med.herniaDisc) restrictions.push('\u26A0 Dos\u00a0: soulev\u00e9 de terre et flexions lourdes retir\u00e9s');
- if (med.knees || med.acl) restrictions.push('\u26A0 Genoux\u00a0: squats profonds remplac\u00e9s');
- if (med.herniaInguinal) restrictions.push('\u26A0 Hernie inguinale\u00a0: exercices hyperpressifs retir\u00e9s');
+ if (med.shoulders || med.rotatorCuff) restrictions.push(_tmed ? '\u26A0 Shoulders\u00a0: overhead exercises avoided' : '\u26A0 \u00c9paules\u00a0: exercices overhead \u00e9vit\u00e9s');
+ if (med.lowerBack || med.herniaDisc) restrictions.push(_tmed ? '\u26A0 Back\u00a0: deadlifts and heavy bending removed' : '\u26A0 Dos\u00a0: soulev\u00e9 de terre et flexions lourdes retir\u00e9s');
+ if (med.knees || med.acl) restrictions.push(_tmed ? '\u26A0 Knees\u00a0: deep squats replaced' : '\u26A0 Genoux\u00a0: squats profonds remplac\u00e9s');
+ if (med.herniaInguinal) restrictions.push(_tmed ? '\u26A0 Inguinal hernia\u00a0: hyperpressure exercises removed' : '\u26A0 Hernie inguinale\u00a0: exercices hyperpressifs retir\u00e9s');
  if (med.hypertension) restrictions.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode('\u26A0 HTA\u00a0: intensit\u00e9 plafonn\u00e9e ')); _el.appendChild(termTooltip('RPE', (window.isEnglish && window.isEnglish() ? 'Rate of Perceived Exertion — perceived effort out of 10 (7/10 = moderate effort, last hard reps)' : 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)'))); _el.appendChild(document.createTextNode('\u00a07/10, Valsalva interdit')); return _el; })());
- if (med.osteoporosis) restrictions.push('\u26A0 Ost\u00e9oporose\u00a0: charges \u2264\u00a070\u00a0% 1RM, pas d\'impacts ni flexions vert\u00e9brales (Sinaki, Spine 2002)');
- if (med.rheumatoidArthritis) restrictions.push('\u26A0 Polyarthrite rhumato\u00efde\u00a0: charges l\u00e9g\u00e8res, exercices doux en r\u00e9mission uniquement \u2014 arr\u00eatez en cas de pouss\u00e9e (EULAR 2020)');
- if (med.fibromyalgia) restrictions.push('\u26A0 Fibromyalgie\u00a0: intensit\u00e9 mod\u00e9r\u00e9e max, pas de HIIT ni charges maximales \u2014 exercices a\u00e9robies doux recommand\u00e9s (Cochrane 2017)');
- if (med.meniscus) restrictions.push('\u26A0 M\u00e9nisque\u00a0: pas de flexion >90\u00b0 sous charge ni de cisaillement en rotation (leg extension, fentes)');
- if (med.feet) restrictions.push('\u26A0 Pieds/fasciite\u00a0: exercices \u00e0 impact retir\u00e9s (sauts, corde), privil\u00e9gier velo ou natation');
- if (med.spondylarthritis) restrictions.push('\u26A0 Spondylarthrite\u00a0: charges axiales lourdes retir\u00e9es (deadlift, squat barre, good morning) \u2014 natation, yoga et \u00e9tirements recommand\u00e9s (Sieper & Poddubnyy, Lancet 2017)');
- if (med.kneeOsteoarthritis) restrictions.push('\u26A0 Gonarthrose\u00a0: flexions profondes du genou et impacts retir\u00e9s \u2014 v\u00e9lo stationnaire et musculation en amplitude limit\u00e9e recommand\u00e9s (OARSI 2014)');
- if (med.epicondylitis || med.elbows) restrictions.push('\u26A0 \u00c9picondylite\u00a0: rowing barre pronation, pull-ups pronation, curl barre droite retir\u00e9s \u2014 favoriser prise supination ou neutre (Bisset & Vicenzino, JOSPT 2015)');
+ if (med.osteoporosis) restrictions.push(_tmed ? '\u26A0 Osteoporosis\u00a0: loads \u2264\u00a070\u00a0% 1RM, no impacts or spinal flexions (Sinaki, Spine 2002)' : '\u26A0 Ost\u00e9oporose\u00a0: charges \u2264\u00a070\u00a0% 1RM, pas d\'impacts ni flexions vert\u00e9brales (Sinaki, Spine 2002)');
+ if (med.rheumatoidArthritis) restrictions.push(_tmed ? '\u26A0 Rheumatoid arthritis\u00a0: light loads, gentle exercises in remission only \u2014 stop during flare-ups (EULAR 2020)' : '\u26A0 Polyarthrite rhumato\u00efde\u00a0: charges l\u00e9g\u00e8res, exercices doux en r\u00e9mission uniquement \u2014 arr\u00eatez en cas de pouss\u00e9e (EULAR 2020)');
+ if (med.fibromyalgia) restrictions.push(_tmed ? '\u26A0 Fibromyalgia\u00a0: moderate intensity max, no HIIT or max loads \u2014 gentle aerobic exercises recommended (Cochrane 2017)' : '\u26A0 Fibromyalgie\u00a0: intensit\u00e9 mod\u00e9r\u00e9e max, pas de HIIT ni charges maximales \u2014 exercices a\u00e9robies doux recommand\u00e9s (Cochrane 2017)');
+ if (med.meniscus) restrictions.push(_tmed ? '\u26A0 Meniscus\u00a0: no flexion >90\u00b0 under load or rotational shear (leg extension, lunges)' : '\u26A0 M\u00e9nisque\u00a0: pas de flexion >90\u00b0 sous charge ni de cisaillement en rotation (leg extension, fentes)');
+ if (med.feet) restrictions.push(_tmed ? '\u26A0 Feet/fasciitis\u00a0: impact exercises removed (jumps, rope), prefer cycling or swimming' : '\u26A0 Pieds/fasciite\u00a0: exercices \u00e0 impact retir\u00e9s (sauts, corde), privil\u00e9gier velo ou natation');
+ if (med.spondylarthritis) restrictions.push(_tmed ? '\u26A0 Ankylosing spondylitis\u00a0: heavy axial loads removed (deadlift, barbell squat, good morning) \u2014 swimming, yoga and stretching recommended (Sieper & Poddubnyy, Lancet 2017)' : '\u26A0 Spondylarthrite\u00a0: charges axiales lourdes retir\u00e9es (deadlift, squat barre, good morning) \u2014 natation, yoga et \u00e9tirements recommand\u00e9s (Sieper & Poddubnyy, Lancet 2017)');
+ if (med.kneeOsteoarthritis) restrictions.push(_tmed ? '\u26A0 Knee osteoarthritis\u00a0: deep knee bends and impacts removed \u2014 stationary bike and limited-range resistance training recommended (OARSI 2014)' : '\u26A0 Gonarthrose\u00a0: flexions profondes du genou et impacts retir\u00e9s \u2014 v\u00e9lo stationnaire et musculation en amplitude limit\u00e9e recommand\u00e9s (OARSI 2014)');
+ if (med.epicondylitis || med.elbows) restrictions.push(_tmed ? '\u26A0 Epicondylitis\u00a0: pronated barbell rows, pronated pull-ups, straight bar curls removed \u2014 prefer supinated or neutral grip (Bisset & Vicenzino, JOSPT 2015)' : '\u26A0 \u00c9picondylite\u00a0: rowing barre pronation, pull-ups pronation, curl barre droite retir\u00e9s \u2014 favoriser prise supination ou neutre (Bisset & Vicenzino, JOSPT 2015)');
  if (restrictions.length > 0) {
  var medBanner = h('div', {style: 'background:rgba(232,111,30,0.06);border-left:3px solid var(--orange,#E86F1E);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E)'});
- medBanner.appendChild(h('div', {style: 'font-weight:bold;margin-bottom:6px'}, 'Programme adapt\u00e9 \u00e0 votre bilan m\u00e9dical'));
+ medBanner.appendChild(h('div', {style: 'font-weight:bold;margin-bottom:6px'}, (_tmed ? 'Program adapted to your medical profile' : 'Programme adapt\u00e9 \u00e0 votre bilan m\u00e9dical')));
  restrictions.forEach(function(r) {
  medBanner.appendChild(h('div', {style: 'margin-bottom:3px'}, r));
  });
