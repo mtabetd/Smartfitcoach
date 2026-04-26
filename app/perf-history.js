@@ -317,7 +317,7 @@ function renderProgressionWidget(container) {
     container.innerHTML = '';
     var _pgErr = document.createElement('p');
     _pgErr.style.cssText = 'font-size:12px;color:var(--grey,#6B6B65);padding:8px';
-    _pgErr.textContent = 'Progression non disponible.';
+    _pgErr.textContent = (window.isEnglish && window.isEnglish() ? 'Progression not available.' : 'Progression non disponible.');
     container.appendChild(_pgErr);
   }
 }
@@ -342,11 +342,12 @@ function _renderProgressionWidget(container) {
 
   /* ── FORCE MUSCULAIRE ── */
   var strengthHistory = loadHistory('muscu_strength');
+  var _phEN = window.isEnglish && window.isEnglish();
   var keyExercises = (window.MUSCU_KEY_EXERCISES) || [
-    {key:'bench_press', name:'Développé couché', muscle:'Poitrine'},
-    {key:'squat', name:'Squat', muscle:'Jambes'},
-    {key:'deadlift', name:'Soulevé de terre', muscle:'Dos'},
-    {key:'overhead_press', name:'Développé militaire', muscle:'Épaules'}
+    {key:'bench_press', name:(_phEN ? 'Bench Press' : 'Développé couché'), muscle:(_phEN ? 'Chest' : 'Poitrine')},
+    {key:'squat', name:'Squat', muscle:(_phEN ? 'Legs' : 'Jambes')},
+    {key:'deadlift', name:(_phEN ? 'Deadlift' : 'Soulevé de terre'), muscle:(_phEN ? 'Back' : 'Dos')},
+    {key:'overhead_press', name:(_phEN ? 'Military Press' : 'Développé militaire'), muscle:(_phEN ? 'Shoulders' : 'Épaules')}
   ];
   var strengthRows = [];
   keyExercises.forEach(function(ex) {
@@ -355,13 +356,13 @@ function _renderProgressionWidget(container) {
   });
   var sec1 = document.createElement('div');
   sec1.className = 'ph-section';
-  sec1.appendChild(createLabel('Force — 1RM estimé'));
+  sec1.appendChild(createLabel(_phEN ? 'Strength — estimated 1RM' : 'Force — 1RM estimé'));
   if (strengthRows.length === 0) {
-    sec1.appendChild(createEmpty('Renseignez vos charges dans le module Sport pour voir votre progression.'));
+    sec1.appendChild(createEmpty(_phEN ? 'Enter your weights in the Sport module to see your progression.' : 'Renseignez vos charges dans le module Sport pour voir votre progression.'));
   } else {
     hasData = true;
     strengthRows.forEach(function(r) {
-      sec1.appendChild(createRow(r.ex.name, r.ex.muscle, r.delta, 'kg', '30 jours'));
+      sec1.appendChild(createRow(r.ex.name, r.ex.muscle, r.delta, 'kg', (_phEN ? '30 days' : '30 jours')));
     });
   }
   container.appendChild(sec1);
@@ -369,8 +370,8 @@ function _renderProgressionWidget(container) {
   /* ── 1RM CROSSFIT ── */
   var cfHistory = loadHistory('cf_1rm');
   var cfLifts = (window.CF_1RM_LIFTS) || [
-    {key:'clean', name:'Clean (Épaulé)'},
-    {key:'snatch', name:'Snatch (Arraché)'},
+    {key:'clean', name:(_phEN ? 'Clean' : 'Clean (Épaulé)')},
+    {key:'snatch', name:(_phEN ? 'Snatch' : 'Snatch (Arraché)')},
     {key:'deadlift', name:'Deadlift'},
     {key:'back_squat', name:'Back Squat'}
   ];
@@ -383,11 +384,11 @@ function _renderProgressionWidget(container) {
   sec2.className = 'ph-section';
   sec2.appendChild(createLabel('CrossFit — 1RM'));
   if (cfRows.length === 0) {
-    sec2.appendChild(createEmpty('Renseignez vos 1RM CrossFit pour voir votre progression.'));
+    sec2.appendChild(createEmpty(_phEN ? 'Enter your CrossFit 1RMs to see your progression.' : 'Renseignez vos 1RM CrossFit pour voir votre progression.'));
   } else {
     hasData = true;
     cfRows.forEach(function(r) {
-      sec2.appendChild(createRow(r.lift.name, 'CrossFit', r.delta, 'kg', '30 jours'));
+      sec2.appendChild(createRow(r.lift.name, 'CrossFit', r.delta, 'kg', (_phEN ? '30 days' : '30 jours')));
     });
   }
   container.appendChild(sec2);
@@ -414,7 +415,7 @@ function _renderProgressionWidget(container) {
       sec5.appendChild(createLabel('Hyrox — Benchmarks'));
       hyroxRows.forEach(function(r) {
         // For times, lower is better → pass invertColors=true
-        sec5.appendChild(createRowTime(r.station.name, 'Hyrox', r.delta, true, '30 jours'));
+        sec5.appendChild(createRowTime(r.station.name, 'Hyrox', r.delta, true, (_phEN ? '30 days' : '30 jours')));
       });
       container.appendChild(sec5);
     }
@@ -424,9 +425,9 @@ function _renderProgressionWidget(container) {
   var triHistory = loadHistory('triathlon');
   if (triHistory.length > 0) {
     var triDisciplines = [
-      {id:'swim', name:'Nage (allure /100m)', unit:'s', invertColors: true},
-      {id:'bike', name:'Vélo (vitesse)', unit:'km/h', invertColors: false},
-      {id:'run', name:'Course (allure /km)', unit:'s', invertColors: true}
+      {id:'swim', name:(_phEN ? 'Swim (pace /100m)' : 'Nage (allure /100m)'), unit:'s', invertColors: true},
+      {id:'bike', name:(_phEN ? 'Bike (speed)' : 'Vélo (vitesse)'), unit:'km/h', invertColors: false},
+      {id:'run', name:(_phEN ? 'Run (pace /km)' : 'Course (allure /km)'), unit:'s', invertColors: true}
     ];
     var triRows = [];
     triDisciplines.forEach(function(disc) {
@@ -437,12 +438,12 @@ function _renderProgressionWidget(container) {
       hasData = true;
       var sec6 = document.createElement('div');
       sec6.className = 'ph-section';
-      sec6.appendChild(createLabel('Triathlon — Allures'));
+      sec6.appendChild(createLabel(_phEN ? 'Triathlon — Paces' : 'Triathlon — Allures'));
       triRows.forEach(function(r) {
         if (r.disc.id === 'bike') {
-          sec6.appendChild(createRow(r.disc.name, 'Triathlon', r.delta, 'km/h', '30 jours'));
+          sec6.appendChild(createRow(r.disc.name, 'Triathlon', r.delta, 'km/h', (_phEN ? '30 days' : '30 jours')));
         } else {
-          sec6.appendChild(createRowTime(r.disc.name, 'Triathlon', r.delta, true, '30 jours'));
+          sec6.appendChild(createRowTime(r.disc.name, 'Triathlon', r.delta, true, (_phEN ? '30 days' : '30 jours')));
         }
       });
       container.appendChild(sec6);
@@ -457,7 +458,7 @@ function _renderProgressionWidget(container) {
     hasData = true;
     var sec3 = document.createElement('div');
     sec3.className = 'ph-section';
-    sec3.appendChild(createLabel('Poids corporel'));
+    sec3.appendChild(createLabel(_phEN ? 'Body weight' : 'Poids corporel'));
     var wHistSorted = weightHist.slice().sort(function(a,b){ return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
     var wLast = wHistSorted[wHistSorted.length - 1];
     var wPrev = null;
@@ -475,7 +476,7 @@ function _renderProgressionWidget(container) {
       trend: wLast.weight > wPrev.weight ? 'up' : wLast.weight < wPrev.weight ? 'down' : 'stable',
       currentDate: wLast.date
     } : null;
-    if (wDelta) sec3.appendChild(createRow('Poids', '', wDelta, 'kg', '30 jours'));
+    if (wDelta) sec3.appendChild(createRow((_phEN ? 'Weight' : 'Poids'), '', wDelta, 'kg', (_phEN ? '30 days' : '30 jours')));
     container.appendChild(sec3);
   }
 
@@ -486,8 +487,8 @@ function _renderProgressionWidget(container) {
     if (mLast && mPrev) {
       var sec4 = document.createElement('div');
       sec4.className = 'ph-section';
-      sec4.appendChild(createLabel('Mensurations'));
-      [{key:'waist',label:'Tour de taille'},{key:'chest',label:'Poitrine'},{key:'hips',label:'Hanches'},{key:'arms',label:'Bras'},{key:'thighs',label:'Cuisses'}].forEach(function(f) {
+      sec4.appendChild(createLabel(_phEN ? 'Measurements' : 'Mensurations'));
+      [{key:'waist',label:(_phEN?'Waist':'Tour de taille')},{key:'chest',label:(_phEN?'Chest':'Poitrine')},{key:'hips',label:(_phEN?'Hips':'Hanches')},{key:'arms',label:(_phEN?'Arms':'Bras')},{key:'thighs',label:(_phEN?'Thighs':'Cuisses')}].forEach(function(f) {
         if (mLast[f.key] && mPrev[f.key]) {
           var mDelta = {
             current: mLast[f.key],
@@ -510,7 +511,7 @@ function _renderProgressionWidget(container) {
     hasData = true;
     var secRun = document.createElement('div');
     secRun.className = 'ph-section';
-    secRun.appendChild(createLabel('Running — Séances'));
+    secRun.appendChild(createLabel(_phEN ? 'Running — Sessions' : 'Running — Séances'));
     var runSorted = runHistory.slice().sort(function(a, b) { return a.ts - b.ts; });
     // Show last 3 sessions
     var recentRuns = runSorted.slice(-3).reverse();
@@ -551,7 +552,7 @@ function _renderProgressionWidget(container) {
         summaryRow.className = 'ph-row';
         var sl = document.createElement('div');
         sl.className = 'ph-name';
-        sl.textContent = 'Distance (vs 30j)';
+        sl.textContent = (_phEN ? 'Distance (vs 30d)' : 'Distance (vs 30j)');
         summaryRow.appendChild(sl);
         var sr = document.createElement('div');
         var sign = distDelta >= 0 ? '+' : '';
@@ -573,14 +574,14 @@ function _renderProgressionWidget(container) {
     hasData = true;
     var sec7 = document.createElement('div');
     sec7.className = 'ph-section';
-    sec7.appendChild(createLabel('Nutrition journalière'));
+    sec7.appendChild(createLabel(_phEN ? 'Daily nutrition' : 'Nutrition journalière'));
     [{field:'kcal', label:'Calories', unit:'kcal'},
-     {field:'p', label:'Protéines', unit:'g'},
-     {field:'g', label:'Glucides', unit:'g'},
-     {field:'l', label:'Lipides', unit:'g'}].forEach(function(nf) {
+     {field:'p', label:(_phEN ? 'Proteins' : 'Protéines'), unit:'g'},
+     {field:'g', label:(_phEN ? 'Carbs' : 'Glucides'), unit:'g'},
+     {field:'l', label:(_phEN ? 'Fats' : 'Lipides'), unit:'g'}].forEach(function(nf) {
       var nd = getNutritionDelta(nf.field, 30);
       if (nd && nd.current) {
-        sec7.appendChild(createRow(nf.label, 'Nutrition', nd, nf.unit, '30 jours'));
+        sec7.appendChild(createRow(nf.label, 'Nutrition', nd, nf.unit, (_phEN ? '30 days' : '30 jours')));
       }
     });
     if (sec7.childElementCount > 1) container.appendChild(sec7);
@@ -589,7 +590,7 @@ function _renderProgressionWidget(container) {
   if (!hasData) {
     var emptyNote = document.createElement('p');
     emptyNote.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);text-align:center;padding:24px 0;font-style:italic';
-    emptyNote.textContent = 'Complétez quelques séances pour voir vos progressions apparaître ici.';
+    emptyNote.textContent = (window.isEnglish && window.isEnglish() ? 'Complete a few sessions to see your progression here.' : 'Complétez quelques séances pour voir vos progressions apparaître ici.');
     container.appendChild(emptyNote);
   }
 }
@@ -644,7 +645,7 @@ function createRow(name, sub, delta, unit, periodLabel) {
   } else {
     var newLabel = document.createElement('div');
     newLabel.style.cssText = 'font-size:10px;color:var(--grey,#6B6B65);font-family:Helvetica Neue,Arial,sans-serif';
-    newLabel.textContent = 'Première mesure';
+    newLabel.textContent = (window.isEnglish && window.isEnglish() ? 'First measure' : 'Première mesure');
     right.appendChild(newLabel);
   }
   row.appendChild(right);
@@ -689,7 +690,7 @@ function createRowTime(name, sub, delta, invertColors, periodLabel) {
   } else {
     var newLabel = document.createElement('div');
     newLabel.style.cssText = 'font-size:10px;color:var(--grey,#6B6B65);font-family:Helvetica Neue,Arial,sans-serif';
-    newLabel.textContent = 'Première mesure';
+    newLabel.textContent = (window.isEnglish && window.isEnglish() ? 'First measure' : 'Première mesure');
     right.appendChild(newLabel);
   }
   row.appendChild(right);
@@ -764,7 +765,7 @@ function renderMiniChart(exerciseName, container) {
   var centerLabel = document.createElement('span');
   centerLabel.style.textTransform = 'uppercase';
   centerLabel.style.letterSpacing = '1px';
-  centerLabel.textContent = exHistory.length + ' séances';
+  centerLabel.textContent = exHistory.length + (window.isEnglish && window.isEnglish() ? ' sessions' : ' séances');
   labelsRow.appendChild(centerLabel);
 
   var rightLabel = document.createElement('span');
