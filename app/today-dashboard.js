@@ -10,7 +10,75 @@
 'use strict';
 
 // ─── QUOTES LOCALES (sport/motivation) ───
-var TODAY_QUOTES = [
+var _isEN = window.isEnglish && window.isEnglish();
+var TODAY_QUOTES = _isEN ? [
+  { text: "Consistency is the key to all transformation.", author: "" },
+  { text: "The body knows things the mind refuses to admit.", author: "Paul Valéry" },
+  { text: "Discipline is remembering what you really want.", author: "David Campbell" },
+  { text: "Strength does not come from physical capacity. It comes from an indomitable will.", author: "Gandhi" },
+  { text: "Success is the sum of small efforts repeated day after day.", author: "Robert Collier" },
+  { text: "Don't quit. Suffer now and live the rest of your life as a champion.", author: "Muhammad Ali" },
+  { text: "Your body can withstand almost anything. It's your mind you have to convince.", author: "" },
+  { text: "Fatigue is temporary. The pride of effort lasts forever.", author: "" },
+  { text: "It is not the mountain we conquer, but ourselves.", author: "Edmund Hillary" },
+  { text: "Movement is life. Life is movement.", author: "Moshe Feldenkrais" },
+  { text: "The pain you feel today will be the strength you feel tomorrow.", author: "" },
+  { text: "A champion is someone who gets up when they can't.", author: "Jack Dempsey" },
+  { text: "Nobody remembers the training. Everybody remembers the result.", author: "" },
+  { text: "There are no shortcuts to any place worth going.", author: "Beverly Sills" },
+  { text: "The only bad workout is the one that didn't happen.", author: "" },
+  { text: "Take care of your body. It's the only place you have to live.", author: "Jim Rohn" },
+  { text: "Health is real wealth, not pieces of gold and silver.", author: "Gandhi" },
+  { text: "Eat to fuel your ambition, not to quiet your emotions.", author: "" },
+  { text: "Your body hears everything your mind says.", author: "" },
+  { text: "Consistency beats intensity over the long term.", author: "" },
+  { text: "Every session is a conversation with your future self.", author: "" },
+  { text: "Great things are never done by impulse, but by a series of small things brought together.", author: "Vincent van Gogh" },
+  { text: "The body adapts to what you demand of it. Demand greatness.", author: "" },
+  { text: "Will can do almost anything.", author: "Honoré de Balzac" },
+  { text: "The moment you want to stop is exactly the moment you need to keep going.", author: "" },
+  { text: "What doesn't kill you makes you stronger.", author: "Friedrich Nietzsche" },
+  { text: "Work hard in silence. Let success make the noise.", author: "" },
+  { text: "Muscles don't grow during training. They grow during recovery.", author: "" },
+  { text: "Rest is part of training.", author: "" },
+  { text: "Nutrition is 80% of the work. Training is 20%.", author: "" },
+  { text: "What you eat in private, you wear in public.", author: "" },
+  { text: "Don't count the days. Make the days count.", author: "Muhammad Ali" },
+  { text: "Suffering is temporary. Quitting lasts forever.", author: "Lance Armstrong" },
+  { text: "Performance is not an accident. It's the result of high commitment.", author: "" },
+  { text: "Train your mind as hard as you train your body.", author: "" },
+  { text: "Every rep counts. Every meal counts. Every night of sleep counts.", author: "" },
+  { text: "Consistency turns the ordinary into the extraordinary.", author: "" },
+  { text: "Your body is your most precious instrument. Tune it.", author: "" },
+  { text: "A good plan today is better than a perfect plan tomorrow.", author: "George Patton" },
+  { text: "You don't have to be extreme. Just consistent.", author: "" },
+  { text: "The standard doesn't exist.", author: "SmartFitCoach" },
+  { text: "Progress, not perfection.", author: "" },
+  { text: "You become what you do regularly.", author: "Aristotle" },
+  { text: "The best version of you comes from a thousand small decisions, not one single effort.", author: "" },
+  { text: "When you feel like quitting, remember why you started.", author: "" },
+  { text: "The true athlete is not the one who wins. It's the one who refuses to stop.", author: "" },
+  { text: "Excellence is not an isolated act. It's a habit.", author: "Aristotle" },
+  { text: "The difference between the impossible and the possible lies in determination.", author: "Tommy Lasorda" },
+  { text: "If it doesn't challenge you, it doesn't change you.", author: "" },
+  { text: "Your health is an investment, not an expense.", author: "" },
+  { text: "Don't aim to be the best. Aim to be better than yesterday.", author: "" },
+  { text: "Time spent taking care of yourself is never time wasted.", author: "" },
+  { text: "A body in motion stays in motion. Start.", author: "" },
+  { text: "Confidence comes from proof. Prove something to yourself every day.", author: "" },
+  { text: "Silent victories are the most beautiful.", author: "" },
+  { text: "Every hard session builds a stronger mind.", author: "" },
+  { text: "What you do today decides who you'll be tomorrow.", author: "" },
+  { text: "Sleep is performance. Recovery is a discipline.", author: "" },
+  { text: "Changing your body starts with changing your habits.", author: "" },
+  { text: "Nutrition is the invisible architecture of your performance.", author: "" },
+  { text: "The body always adapts. Don't give it time to get used to less.", author: "" },
+  { text: "Every morning is a new chance to become better.", author: "" },
+  { text: "Today's discipline is tomorrow's freedom.", author: "" },
+  { text: "Effort without direction is waste. Follow the plan.", author: "" },
+  { text: "Habits shape destiny, not intentions.", author: "" },
+  { text: "Make your ordinary days extraordinary.", author: "" }
+] : [
   { text: "La constance est la clé de toute transformation.", author: "" },
   { text: "Le corps sait des choses que l'esprit refuse d'admettre.", author: "Paul Valéry" },
   { text: "La discipline, c'est se souvenir de ce que l'on veut vraiment.", author: "David Campbell" },
@@ -170,13 +238,14 @@ function progressBar(val, max, color) {
 }
 
 // Tooltips pour les labels macros (title HTML natif — zero-JS, accessible)
+var _mtEN = window.isEnglish && window.isEnglish();
 var MACRO_TOOLTIPS = {
-  'Prot.':    'Protéines — construction et récupération musculaire',
-  'Gluc.':    'Glucides — énergie pour vos séances',
-  'Lip.':     'Lipides — hormones et absorption des vitamines',
-  'Protéines':'Protéines — construction et récupération musculaire',
-  'Glucides': 'Glucides — énergie pour vos séances',
-  'Lipides':  'Lipides — hormones et absorption des vitamines'
+  'Prot.':    _mtEN ? 'Protein — muscle building and recovery' : 'Protéines — construction et récupération musculaire',
+  'Gluc.':    _mtEN ? 'Carbs — energy for your sessions' : 'Glucides — énergie pour vos séances',
+  'Lip.':     _mtEN ? 'Fats — hormones and vitamin absorption' : 'Lipides — hormones et absorption des vitamines',
+  'Protéines': _mtEN ? 'Protein — muscle building and recovery' : 'Protéines — construction et récupération musculaire',
+  'Glucides': _mtEN ? 'Carbs — energy for your sessions' : 'Glucides — énergie pour vos séances',
+  'Lipides':  _mtEN ? 'Fats — hormones and vitamin absorption' : 'Lipides — hormones et absorption des vitamines'
 };
 
 function macroRow(label, val, max) {
@@ -215,60 +284,61 @@ function getStreakValue() {
 // ─── BADGE ICON MAP — Bible Hermès §13.1 : PAS d'emoji. ───
 // Remplacé par monogrammes Georgia (initiales typographiques).
 // `emoji` conservé pour backward compat mais ignoré côté rendu (voir badgeIcon()).
+var _beEN = window.isEnglish && window.isEnglish();
 var BADGE_EMOJI = {
   // Onboarding
-  'first_login':      { emoji: '\u25CB', label: 'Premier Pas',        desc: 'Première connexion' },
-  'profile_complete': { emoji: '\u25CE', label: 'Profil Complet',     desc: 'Toutes les infos renseignées' },
-  'first_plan':       { emoji: '\u25A3', label: 'Planificateur',      desc: 'Premier planning généré' },
+  'first_login':      { emoji: '\u25CB', label: _beEN ? 'First Step'       : 'Premier Pas',        desc: _beEN ? 'First login'                    : 'Première connexion' },
+  'profile_complete': { emoji: '\u25CE', label: _beEN ? 'Complete Profile'  : 'Profil Complet',     desc: _beEN ? 'All info filled in'             : 'Toutes les infos renseignées' },
+  'first_plan':       { emoji: '\u25A3', label: _beEN ? 'Planner'           : 'Planificateur',      desc: _beEN ? 'First plan generated'           : 'Premier planning généré' },
   // Streak
-  'streak_3':         { emoji: 'III',    label: '3 jours d\'affilée', desc: 'Connecté 3 jours de suite' },
-  'streak_7':         { emoji: 'VII',    label: 'Semaine Parfaite',   desc: '7 jours consécutifs' },
-  'streak_14':        { emoji: 'XIV',    label: 'Deux Semaines',      desc: '14 jours consécutifs' },
-  'streak_30':        { emoji: 'XXX',    label: 'Mois Complet',       desc: '30 jours consécutifs' },
-  'streak_90':        { emoji: 'XC',     label: 'Transformation',     desc: '90 jours consécutifs' },
+  'streak_3':         { emoji: 'III',    label: _beEN ? '3-day streak'      : '3 jours d\'affilée', desc: _beEN ? 'Logged in 3 days in a row'  : 'Connecté 3 jours de suite' },
+  'streak_7':         { emoji: 'VII',    label: _beEN ? 'Perfect Week'      : 'Semaine Parfaite',   desc: _beEN ? '7 consecutive days'             : '7 jours consécutifs' },
+  'streak_14':        { emoji: 'XIV',    label: _beEN ? 'Two Weeks'         : 'Deux Semaines',      desc: _beEN ? '14 consecutive days'            : '14 jours consécutifs' },
+  'streak_30':        { emoji: 'XXX',    label: _beEN ? 'Full Month'        : 'Mois Complet',       desc: _beEN ? '30 consecutive days'            : '30 jours consécutifs' },
+  'streak_90':        { emoji: 'XC',     label: _beEN ? 'Transformation'    : 'Transformation',     desc: _beEN ? '90 consecutive days'            : '90 jours consécutifs' },
   // Weight tracking
-  'first_weigh':      { emoji: 'W',      label: 'Suivi Lancé',        desc: 'Premier poids enregistré' },
-  'weight_10':        { emoji: 'W\u00b710', label: 'Régulier',        desc: '10 pesées enregistrées' },
-  'weight_goal':      { emoji: '\u25CE', label: 'Objectif Atteint',   desc: 'Poids objectif atteint.' },
-  'first_kg_lost':    { emoji: '-1',     label: 'Premier Kilo',       desc: 'Premier kg perdu' },
-  'five_kg':          { emoji: '-5',     label: '-5 kg',              desc: '5 kg perdus' },
+  'first_weigh':      { emoji: 'W',      label: _beEN ? 'Tracking Started'  : 'Suivi Lancé',        desc: _beEN ? 'First weight recorded'      : 'Premier poids enregistré' },
+  'weight_10':        { emoji: 'W\u00b710', label: _beEN ? 'Consistent'    : 'Régulier',        desc: _beEN ? '10 weigh-ins recorded'          : '10 pesées enregistrées' },
+  'weight_goal':      { emoji: '\u25CE', label: _beEN ? 'Goal Reached'     : 'Objectif Atteint',   desc: _beEN ? 'Target weight reached.'         : 'Poids objectif atteint.' },
+  'first_kg_lost':    { emoji: '-1',     label: _beEN ? 'First Kilo'        : 'Premier Kilo',       desc: _beEN ? 'First kg lost'                  : 'Premier kg perdu' },
+  'five_kg':          { emoji: '-5',     label: '-5 kg',                                             desc: _beEN ? '5 kg lost'                      : '5 kg perdus' },
   // Exploration
-  'recipes_10':       { emoji: 'R\u00b710', label: 'Curieux',         desc: '10 recettes consultées' },
-  'recipes_50':       { emoji: 'R\u00b750', label: 'Gastronome',      desc: '50 recettes consultées' },
-  'swap_master':      { emoji: '\u21C4', label: 'Swap Master',        desc: '20 repas échangés' },
-  'all_cuisines':     { emoji: 'W',      label: 'Tour du Monde',      desc: 'Toutes les cuisines goûtées' },
+  'recipes_10':       { emoji: 'R\u00b710', label: _beEN ? 'Curious'       : 'Curieux',         desc: _beEN ? '10 recipes viewed'              : '10 recettes consultées' },
+  'recipes_50':       { emoji: 'R\u00b750', label: _beEN ? 'Foodie'        : 'Gastronome',      desc: _beEN ? '50 recipes viewed'              : '50 recettes consultées' },
+  'swap_master':      { emoji: '\u21C4', label: 'Swap Master',                                     desc: _beEN ? '20 meals swapped'               : '20 repas échangés' },
+  'all_cuisines':     { emoji: 'W',      label: _beEN ? 'World Tour'        : 'Tour du Monde',      desc: _beEN ? 'All cuisines tried'             : 'Toutes les cuisines goûtées' },
   // Sport
-  'first_workout':    { emoji: 'S',      label: 'Sportif',            desc: 'Premier programme sport' },
-  'exercises_20':     { emoji: 'E\u00b720', label: 'Athlète',         desc: '20 exercices consultés' },
+  'first_workout':    { emoji: 'S',      label: _beEN ? 'Athlete'           : 'Sportif',            desc: _beEN ? 'First sport program'            : 'Premier programme sport' },
+  'exercises_20':     { emoji: 'E\u00b720', label: _beEN ? 'Athlete'       : 'Athlète',         desc: _beEN ? '20 exercises viewed'        : '20 exercices consultés' },
   // Calisthenics
-  'calisth_first_session': { emoji: 'C', label: 'Callisthéniste',      desc: 'Premier programme callisthénie' },
-  'calisth_week_4':        { emoji: 'IV', label: 'Mois Callisthénie',  desc: '4 semaines complétées' },
-  'calisth_week_12':       { emoji: 'XII', label: 'Trimestriel Calisth.', desc: '12 semaines complétées' },
-  'calisth_first_pullup':  { emoji: 'P', label: 'Première Traction',   desc: 'Première traction stricte' },
-  'calisth_muscle_up':     { emoji: 'M', label: 'Muscle-Up',           desc: 'Muscle-up strict maîtrisé' },
+  'calisth_first_session': { emoji: 'C', label: _beEN ? 'Calisthenist'      : 'Callisthéniste',      desc: _beEN ? 'First calisthenics program'     : 'Premier programme callisthénie' },
+  'calisth_week_4':        { emoji: 'IV', label: _beEN ? 'Calisthenics Month' : 'Mois Callisthénie',  desc: _beEN ? '4 weeks completed'          : '4 semaines complétées' },
+  'calisth_week_12':       { emoji: 'XII', label: _beEN ? 'Calisth. Quarter' : 'Trimestriel Calisth.', desc: _beEN ? '12 weeks completed'         : '12 semaines complétées' },
+  'calisth_first_pullup':  { emoji: 'P', label: _beEN ? 'First Pull-up'     : 'Première Traction',   desc: _beEN ? 'First strict pull-up'       : 'Première traction stricte' },
+  'calisth_muscle_up':     { emoji: 'M', label: 'Muscle-Up',                                         desc: _beEN ? 'Strict muscle-up mastered'      : 'Muscle-up strict maîtrisé' },
   // Muscu
-  'bench_100':    { emoji: '100',  label: 'Centenaire',     desc: 'Développé couché : 100 kg' },
-  'bench_120':    { emoji: '120',  label: 'Power Chest',    desc: 'Développé couché : 120 kg' },
-  'squat_100':    { emoji: 'S100', label: 'Squatteur',      desc: 'Squat : 100 kg' },
-  'squat_140':    { emoji: 'S140', label: 'Jambes de Fer',  desc: 'Squat : 140 kg' },
-  'deadlift_100': { emoji: 'D100', label: 'Terrasseur',     desc: 'Soulevé de terre : 100 kg' },
-  'deadlift_160': { emoji: 'D160', label: 'Force Brute',    desc: 'Soulevé de terre : 160 kg' },
-  'overhead_70':  { emoji: 'OHP',  label: 'Bras au Ciel',   desc: 'Développé militaire : 70 kg' },
-  'total_300':    { emoji: '300',  label: 'Powerlifter',    desc: 'Total bench+squat+dl ≥ 300 kg' },
-  'total_400':    { emoji: '400',  label: 'Elite Force',    desc: 'Total bench+squat+dl ≥ 400 kg' },
-  'muscu_sessions_10': { emoji: 'X',  label: 'Régularité Fer', desc: '10 séances muscu' },
-  'muscu_sessions_50': { emoji: 'L',  label: 'Dédicace',       desc: '50 séances muscu' },
-  'first_pr':          { emoji: 'PR', label: 'Premier PR',     desc: 'Premier record personnel' },
+  'bench_100':    { emoji: '100',  label: _beEN ? 'Centenarian'   : 'Centenaire',     desc: _beEN ? 'Bench press: 100 kg'                : 'Développé couché : 100 kg' },
+  'bench_120':    { emoji: '120',  label: 'Power Chest',                               desc: _beEN ? 'Bench press: 120 kg'                : 'Développé couché : 120 kg' },
+  'squat_100':    { emoji: 'S100', label: _beEN ? 'Squatter'      : 'Squatteur',       desc: 'Squat : 100 kg' },
+  'squat_140':    { emoji: 'S140', label: _beEN ? 'Iron Legs'     : 'Jambes de Fer',   desc: 'Squat : 140 kg' },
+  'deadlift_100': { emoji: 'D100', label: _beEN ? 'Ground Breaker': 'Terrasseur',      desc: _beEN ? 'Deadlift: 100 kg'                   : 'Soulevé de terre : 100 kg' },
+  'deadlift_160': { emoji: 'D160', label: _beEN ? 'Raw Force'     : 'Force Brute',     desc: _beEN ? 'Deadlift: 160 kg'                   : 'Soulevé de terre : 160 kg' },
+  'overhead_70':  { emoji: 'OHP',  label: _beEN ? 'Arms High'     : 'Bras au Ciel',    desc: _beEN ? 'Overhead press: 70 kg'              : 'Développé militaire : 70 kg' },
+  'total_300':    { emoji: '300',  label: 'Powerlifter',                                desc: _beEN ? 'Total bench+squat+dl ≥ 300 kg'  : 'Total bench+squat+dl ≥ 300 kg' },
+  'total_400':    { emoji: '400',  label: 'Elite Force',                                desc: _beEN ? 'Total bench+squat+dl ≥ 400 kg'  : 'Total bench+squat+dl ≥ 400 kg' },
+  'muscu_sessions_10': { emoji: 'X',  label: _beEN ? 'Iron Regularity' : 'Régularité Fer', desc: _beEN ? '10 strength sessions'     : '10 séances muscu' },
+  'muscu_sessions_50': { emoji: 'L',  label: _beEN ? 'Dedication'     : 'Dédicace',       desc: _beEN ? '50 strength sessions'           : '50 séances muscu' },
+  'first_pr':          { emoji: 'PR', label: _beEN ? 'First PR'       : 'Premier PR',     desc: _beEN ? 'First personal record'            : 'Premier record personnel' },
   // Photos
-  'first_photo':  { emoji: '\u25A1', label: 'Selfie',         desc: 'Première photo de progression' },
-  'both_photos':  { emoji: '\u25A3', label: 'Analyse Complète', desc: 'Photos face + dos' },
+  'first_photo':  { emoji: '\u25A1', label: 'Selfie',                                  desc: _beEN ? 'First progress photo'               : 'Première photo de progression' },
+  'both_photos':  { emoji: '\u25A3', label: _beEN ? 'Full Analysis'  : 'Analyse Complète', desc: _beEN ? 'Front + back photos'        : 'Photos face + dos' },
   // Hyrox
-  'hyrox_first_program': { emoji: 'H',   label: 'Hyrox Starter',  desc: 'Premier programme Hyrox' },
-  'hyrox_week_4':        { emoji: 'H4',  label: 'Mois Hyrox',     desc: '4 semaines de préparation' },
-  'hyrox_week_12':       { emoji: 'H12', label: 'Prépa Complète', desc: '12 semaines terminées' },
-  'hyrox_sub90':         { emoji: '90',  label: 'Sub 1h30',       desc: 'Objectif sub 1h30 atteint' },
-  'hyrox_sub60':         { emoji: '60',  label: 'Sub 1h00',       desc: 'Objectif sub 1h00 atteint' },
-  'hyrox_pro':           { emoji: 'PRO', label: 'Élite Hyrox',    desc: 'Programme niveau Pro/Élite' }
+  'hyrox_first_program': { emoji: 'H',   label: 'Hyrox Starter',                       desc: _beEN ? 'First Hyrox program'                : 'Premier programme Hyrox' },
+  'hyrox_week_4':        { emoji: 'H4',  label: _beEN ? 'Hyrox Month'  : 'Mois Hyrox',     desc: _beEN ? '4 weeks of prep'              : '4 semaines de préparation' },
+  'hyrox_week_12':       { emoji: 'H12', label: _beEN ? 'Full Prep'    : 'Prépa Complète', desc: _beEN ? '12 weeks completed'        : '12 semaines terminées' },
+  'hyrox_sub90':         { emoji: '90',  label: 'Sub 1h30',                             desc: _beEN ? 'Sub 1h30 goal reached'              : 'Objectif sub 1h30 atteint' },
+  'hyrox_sub60':         { emoji: '60',  label: 'Sub 1h00',                             desc: _beEN ? 'Sub 1h00 goal reached'              : 'Objectif sub 1h00 atteint' },
+  'hyrox_pro':           { emoji: 'PRO', label: _beEN ? 'Hyrox Elite'  : 'Élite Hyrox',    desc: _beEN ? 'Pro/Elite level program'       : 'Programme niveau Pro/Élite' }
 };
 
 // ─── GET LAST BADGE ───
@@ -465,7 +535,7 @@ function getNextSportDay() {
       };
     }
     // CF user but WODs not loaded yet — return placeholder
-    return { index: 0, day: { name: 'CrossFit — Jour ' + cfDay, exercises: [] }, kind: 'crossfit' };
+    return { index: 0, day: { name: (window.isEnglish && window.isEnglish() ? 'CrossFit — Day ' : 'CrossFit — Jour ') + cfDay, exercises: [] }, kind: 'crossfit' };
   }
 
   // FIX D1 COHÉRENCE MULTI-SPORTS 2026-04 : dispatcher par sportType
@@ -496,7 +566,7 @@ function getNextSportDay() {
             _weekLabel: 'Semaine ' + (S.runningWeek || 1) + ' / ' + _rProg.length
           };
         }
-        return { index: 0, day: { name: 'Running — Semaine ' + (S.runningWeek || 1), exercises: [] }, kind: 'running' };
+        return { index: 0, day: { name: (window.isEnglish && window.isEnglish() ? 'Running — Week ' : 'Running — Semaine ') + (S.runningWeek || 1), exercises: [] }, kind: 'running' };
       }
     } catch(_eRun) {}
   }
@@ -520,7 +590,7 @@ function getNextSportDay() {
           return {
             index: _hDayIdx,
             day: {
-              name: _hSess.name || ('Hyrox — Jour ' + (_hDayIdx + 1)),
+              name: _hSess.name || ('Hyrox — ' + (window.isEnglish && window.isEnglish() ? 'Day ' : 'Jour ') + (_hDayIdx + 1)),
               exercises: _hExos,
               _focus: _hSess.focus || ''
             },
@@ -528,7 +598,7 @@ function getNextSportDay() {
             _weekLabel: 'Semaine ' + (S.hyroxWeek || 1) + ' / ' + _hProg.length
           };
         }
-        return { index: 0, day: { name: 'Hyrox — Semaine ' + (S.hyroxWeek || 1), exercises: [] }, kind: 'hyrox' };
+        return { index: 0, day: { name: (window.isEnglish && window.isEnglish() ? 'Hyrox — Week ' : 'Hyrox — Semaine ') + (S.hyroxWeek || 1), exercises: [] }, kind: 'hyrox' };
       }
     } catch(_eHyrox) {}
   }
@@ -543,7 +613,8 @@ function getNextSportDay() {
         if (_tWeek && Array.isArray(_tWeek.sessions) && _tWeek.sessions.length > 0) {
           var _tDayIdx = Math.max(0, Math.min(S.selectedTriDay || 0, _tWeek.sessions.length - 1));
           var _tSess = _tWeek.sessions[_tDayIdx];
-          var _discLabel = { swim: 'Natation', bike: 'Vélo', run: 'Course', brick: 'Brick', rest: 'Repos' };
+          var _dtEN = window.isEnglish && window.isEnglish();
+          var _discLabel = { swim: _dtEN ? 'Swimming' : 'Natation', bike: _dtEN ? 'Cycling' : 'Vélo', run: _dtEN ? 'Running' : 'Course', brick: 'Brick', rest: _dtEN ? 'Rest' : 'Repos' };
           return {
             index: _tDayIdx,
             day: {
@@ -554,10 +625,10 @@ function getNextSportDay() {
               _discipline: _tSess.discipline || ''
             },
             kind: 'triathlon',
-            _weekLabel: 'Semaine ' + (S.triathlonWeek || 1) + ' / ' + _tProg.length
+            _weekLabel: (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + (S.triathlonWeek || 1) + ' / ' + _tProg.length
           };
         }
-        return { index: 0, day: { name: 'Triathlon — Semaine ' + (S.triathlonWeek || 1), exercises: [] }, kind: 'triathlon' };
+        return { index: 0, day: { name: (window.isEnglish && window.isEnglish() ? 'Triathlon — Week ' : 'Triathlon — Semaine ') + (S.triathlonWeek || 1), exercises: [] }, kind: 'triathlon' };
       }
     } catch(_eTri) {}
   }
@@ -582,10 +653,10 @@ function getNextSportDay() {
               _duration: _cSess.duration ? _cSess.duration + ' min' : ''
             },
             kind: 'cycling',
-            _weekLabel: 'Semaine ' + (S.cyclingWeek || 1) + ' / ' + _cProg.length
+            _weekLabel: (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + (S.cyclingWeek || 1) + ' / ' + _cProg.length
           };
         }
-        return { index: 0, day: { name: 'Cycling — Semaine ' + (S.cyclingWeek || 1), exercises: [] }, kind: 'cycling' };
+        return { index: 0, day: { name: (window.isEnglish && window.isEnglish() ? 'Cycling — Week ' : 'Cycling — Semaine ') + (S.cyclingWeek || 1), exercises: [] }, kind: 'cycling' };
       }
     } catch(_eCyc) {}
   }
@@ -608,12 +679,12 @@ function getNextSportDay() {
           }
           return {
             index: _pDayIdx,
-            day: { name: _pSess.name || ('Padel — Jour ' + (_pDayIdx + 1)), exercises: _pExos },
+            day: { name: _pSess.name || ((window.isEnglish && window.isEnglish() ? 'Padel — Day ' : 'Padel — Jour ') + (_pDayIdx + 1)), exercises: _pExos },
             kind: 'padel',
-            _weekLabel: 'Semaine ' + (S.padelWeek || 1) + ' / ' + _pProg.length
+            _weekLabel: (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + (S.padelWeek || 1) + ' / ' + _pProg.length
           };
         }
-        return { index: 0, day: { name: 'Padel — Semaine ' + (S.padelWeek || 1), exercises: [] }, kind: 'padel' };
+        return { index: 0, day: { name: (window.isEnglish && window.isEnglish() ? 'Padel — Week ' : 'Padel — Semaine ') + (S.padelWeek || 1), exercises: [] }, kind: 'padel' };
       }
     } catch(_ePadel) {}
   }
@@ -636,12 +707,12 @@ function getNextSportDay() {
           }
           return {
             index: _gDayIdx,
-            day: { name: _gSess.name || ('Golf — Jour ' + (_gDayIdx + 1)), exercises: _gExos },
+            day: { name: _gSess.name || ((window.isEnglish && window.isEnglish() ? 'Golf — Day ' : 'Golf — Jour ') + (_gDayIdx + 1)), exercises: _gExos },
             kind: 'golf',
-            _weekLabel: 'Semaine ' + (S.golfWeek || 1) + ' / ' + _gProg.length
+            _weekLabel: (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + (S.golfWeek || 1) + ' / ' + _gProg.length
           };
         }
-        return { index: 0, day: { name: 'Golf — Semaine ' + (S.golfWeek || 1), exercises: [] }, kind: 'golf' };
+        return { index: 0, day: { name: (window.isEnglish && window.isEnglish() ? 'Golf — Week ' : 'Golf — Semaine ') + (S.golfWeek || 1), exercises: [] }, kind: 'golf' };
       }
     } catch(_eGolf) {}
   }
@@ -679,7 +750,7 @@ function getNextSportDay() {
           return {
             index: _calDayIdx,
             day: {
-              name: (_calSessData && _calSessData.name) ? _calSessData.name : ('Calisthenics — Semaine ' + (S.calisthCurrentWeek || 1)),
+              name: (_calSessData && _calSessData.name) ? _calSessData.name : ('Calisthenics — ' + (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + (S.calisthCurrentWeek || 1)),
               exercises: _calExos
             },
             kind: 'calisthenics',
@@ -689,7 +760,7 @@ function getNextSportDay() {
       }
       // Fallback: config exists but generator not loaded
       if (S.calisthenicsLevel) {
-        return { index: 0, day: { name: 'Calisthenics — Semaine ' + (S.calisthCurrentWeek || 1), exercises: [] }, kind: 'calisthenics' };
+        return { index: 0, day: { name: 'Calisthenics — ' + (window.isEnglish && window.isEnglish() ? 'Week ' : 'Semaine ') + (S.calisthCurrentWeek || 1), exercises: [] }, kind: 'calisthenics' };
       }
     } catch(_eCal) {}
   }
@@ -702,7 +773,7 @@ function getNextSportDay() {
         var _yDayIdx = Math.max(0, Math.min(S.yogaDay || 0, (S.yogaDays || 3) - 1));
         var _yPhase = '';
         // YOGA_WEEKS is local to app-sport.js, we read the phase from a simple lookup
-        var _YOGA_PHASES = ['Fondations', '\u00c9quilibre et Force', 'Ouverture des Hanches & Torsions', 'Backbends & Inversions'];
+        var _YOGA_PHASES = (window.isEnglish && window.isEnglish()) ? ['Foundations', 'Balance & Strength', 'Hip Opening & Twists', 'Backbends & Inversions'] : ['Fondations', '\u00c9quilibre et Force', 'Ouverture des Hanches & Torsions', 'Backbends & Inversions'];
         _yPhase = _YOGA_PHASES[_yWeekIdx] || '';
         return {
           index: _yDayIdx,
@@ -786,9 +857,9 @@ function renderCardNextMeal() {
     if (!tomorrowMeal || !tomorrowMeal.n) return null;
 
     var c2 = card('background:var(--ivory,#FAF9F6);opacity:0.85;');
-    c2.appendChild(eyebrow('DEMAIN'));
+    c2.appendChild(eyebrow((window.isEnglish && window.isEnglish()) ? 'TOMORROW' : 'DEMAIN'));
     var t2Row = h('div', { style: 'display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px;' });
-    t2Row.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:18px;' }, 'Petit-déjeuner'));
+    t2Row.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:18px;' }, (window.isEnglish && window.isEnglish()) ? 'Breakfast' : 'Petit-déjeuner'));
     t2Row.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);' }, firstTime));
     c2.appendChild(t2Row);
     var n2 = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);' });
@@ -803,14 +874,15 @@ function renderCardNextMeal() {
 
   // Formater le temps restant
   var timeLabel;
+  var _tEN = window.isEnglish && window.isEnglish();
   if (minutesUntil <= 0) {
-    timeLabel = "maintenant";
+    timeLabel = _tEN ? "now" : "maintenant";
   } else if (minutesUntil < 60) {
-    timeLabel = "dans " + minutesUntil + "\u00a0min";
+    timeLabel = _tEN ? ("in " + minutesUntil + "\u00a0min") : ("dans " + minutesUntil + "\u00a0min");
   } else {
     var h2 = Math.floor(minutesUntil / 60);
     var m2 = minutesUntil % 60;
-    timeLabel = "dans " + h2 + "h" + (m2 > 0 ? String(m2).padStart(2, '0') : '');
+    timeLabel = _tEN ? ("in " + h2 + "h" + (m2 > 0 ? String(m2).padStart(2, '0') : '')) : ("dans " + h2 + "h" + (m2 > 0 ? String(m2).padStart(2, '0') : ''));
   }
 
   // COSMÉTIQUE 2026-04 : carte Prochain repas avec chip "dans Xh" premium
@@ -854,7 +926,7 @@ function renderCardNextMeal() {
       S2.view = 'nutrition'; S2.nStep = 12; S2.selectedDay = todayIdx;
       if (window.render) window.render();
     }
-  }, 'Voir le repas \u2192');
+  }, (window.isEnglish && window.isEnglish()) ? 'View meal \u2192' : 'Voir le repas \u2192');
   c.appendChild(btn);
 
   // Bouton scanner repas par IA
@@ -874,7 +946,7 @@ function renderCardNextMeal() {
     _scanSvg.setAttribute('stroke-linecap', 'round'); _scanSvg.setAttribute('stroke-linejoin', 'round');
     _scanSvg.innerHTML = '<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>';
     scanBtn.appendChild(_scanSvg);
-    scanBtn.appendChild(h('span', {}, 'Scanner mon repas'));
+    scanBtn.appendChild(h('span', {}, (window.isEnglish && window.isEnglish()) ? 'Scan my meal' : 'Scanner mon repas'));
     c.appendChild(scanBtn);
   }
 
@@ -892,8 +964,9 @@ function renderWelcomeBanner(S) {
   }
   var firstName = (window.getDisplayFirstName ? window.getDisplayFirstName() : (S.prenom || _userFirst || ''));
 
-  var days = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
-  var months = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  var _wbEN = window.isEnglish && window.isEnglish();
+  var days = _wbEN ? ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'] : ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+  var months = _wbEN ? ['January','February','March','April','May','June','July','August','September','October','November','December'] : ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
   var now = new Date();
   var dateStr = days[now.getDay()] + ' ' + now.getDate() + ' ' + months[now.getMonth()];
 
@@ -904,12 +977,12 @@ function renderWelcomeBanner(S) {
   var greeting = h('div', {
     style: 'font-family:Georgia,serif;font-style:italic;font-size:15px;color:var(--grey);line-height:1.5;'
   });
-  greeting.textContent = 'Bon retour parmi nous' + (firstName ? ', ' + firstName : '') + ' \u2726';
+  greeting.textContent = ((window.isEnglish && window.isEnglish()) ? 'Welcome back' : 'Bon retour parmi nous') + (firstName ? ', ' + firstName : '') + ' \u2726';
 
   var sub = h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);letter-spacing:1px;margin-top:4px;opacity:0.75;'
   });
-  sub.textContent = dateStr + ' \u00B7 Votre programme vous attend';
+  sub.textContent = dateStr + ' \u00B7 ' + ((window.isEnglish && window.isEnglish()) ? 'Your program is waiting' : 'Votre programme vous attend');
 
   banner.appendChild(greeting);
   banner.appendChild(sub);
@@ -1050,7 +1123,7 @@ function renderHeroContextuel() {
       _sparkRow.appendChild(_sparkSvg);
       var _sparkMeta = h('div', {});
       _sparkMeta.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;color:var(--ink-900,#0A0A09);line-height:1.2;' }, (window.UNITS ? window.UNITS.displayWeightVal(_lastW) : _lastW.toFixed(1)) + (window.UNITS ? ' ' + window.UNITS.weightLabel() : ' kg')));
-      _sparkMeta.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--ink-500,#6B6B65);margin-top:2px;' }, _wDeltaLabel + ' sur ' + _wVals.length + ' pesees'));
+      _sparkMeta.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--ink-500,#6B6B65);margin-top:2px;' }, _wDeltaLabel + ' ' + ((window.isEnglish && window.isEnglish()) ? 'over ' + _wVals.length + ' weigh-ins' : 'sur ' + _wVals.length + ' pesees')));
       _sparkRow.appendChild(_sparkMeta);
       inner.appendChild(_sparkRow);
     }
@@ -1117,41 +1190,41 @@ function buildContextualHero(moment, S) {
     var protTarget = (_bfProtReal && _bfProtReal > 0) ? Math.round(_bfProtReal) : Math.round((S.weight || 70) * 1.6 * 0.25);
 
     if (isPregnant) {
-      ctx.quote = 'Semaine ' + S.pregnancyWeek + '. Besoin +340 kcal/jour. Privilégie les oméga-3 au petit-déj.';
+      var _bhEN = window.isEnglish && window.isEnglish(); ctx.quote = _bhEN ? 'Week ' + S.pregnancyWeek + '. Need +340 kcal/day. Prioritize omega-3s at breakfast.' : 'Semaine ' + S.pregnancyWeek + '. Besoin +340 kcal/jour. Privilégie les oméga-3 au petit-déj.';
       ctx.stats = [
-        { value: fmtKcal(target) + '\u00a0kcal', label: 'Cible du jour' },
-        { value: 'S' + S.pregnancyWeek + ' \u00b7 T2', label: 'Trimestre' }
+        { value: fmtKcal(target) + '\u00a0kcal', label: _bhEN ? 'Daily target' : 'Cible du jour' },
+        { value: 'S' + S.pregnancyWeek + ' \u00b7 T2', label: _bhEN ? 'Trimester' : 'Trimestre' }
       ];
     } else if (hasMedical && S.medical.indexOf('irc') !== -1) {
       var kCap = 800;
-      ctx.quote = 'Rappel : ' + kCap + ' mg de potassium max aujourd\'hui. Évite la banane au petit-déj.';
+      ctx.quote = _bhEN ? 'Reminder: ' + kCap + ' mg potassium max today. Avoid banana at breakfast.' : 'Rappel : ' + kCap + ' mg de potassium max aujourd\'hui. Évite la banane au petit-déj.';
       ctx.stats = [
-        { value: fmtKcal(target) + '\u00a0kcal', label: 'Cible du jour' },
-        { value: kCap + '\u00a0mg K\u207a', label: 'Potassium max' }
+        { value: fmtKcal(target) + '\u00a0kcal', label: _bhEN ? 'Daily target' : 'Cible du jour' },
+        { value: kCap + '\u00a0mg K\u207a', label: _bhEN ? 'Max potassium' : 'Potassium max' }
       ];
     } else if (isCFUser) {
-      ctx.quote = 'Chargez-vous en glucides aujourd\'hui : 500 kcal au petit-déj dont 70 g glucides.';
+      ctx.quote = _bhEN ? 'Load up on carbs today: 500 kcal at breakfast including 70 g carbs.' : 'Chargez-vous en glucides aujourd\'hui : 500 kcal au petit-déj dont 70 g glucides.';
       ctx.stats = [
-        { value: fmtKcal(500), label: 'Kcal petit-déj' },
-        { value: '70\u00a0g', label: 'Glucides visés' }
+        { value: fmtKcal(500), label: _bhEN ? 'Breakfast kcal' : 'Kcal petit-déj' },
+        { value: '70\u00a0g', label: _bhEN ? 'Targeted carbs' : 'Glucides visés' }
       ];
     } else if (isMuscuUser && todaySportSession) {
       // FIX SPRINT P1.7 — Branche muscu avec nom de la séance prévue
-      ctx.quote = 'Aujourd\'hui : ' + todaySportSession.name + '. ' + todaySportSession.exoCount + ' exos. Vise ' + petitDejTarget + ' kcal au petit-déj pour bien charger.';
+      ctx.quote = _bhEN ? 'Today: ' + todaySportSession.name + '. ' + todaySportSession.exoCount + ' exercises. Aim for ' + petitDejTarget + ' kcal at breakfast to fuel up.' : 'Aujourd\'hui : ' + todaySportSession.name + '. ' + todaySportSession.exoCount + ' exos. Vise ' + petitDejTarget + ' kcal au petit-déj pour bien charger.';
       ctx.stats = [
-        { value: fmtKcal(petitDejTarget), label: 'Kcal petit-déj' },
-        { value: todaySportSession.name.split(/[—–-]/)[0].trim().slice(0, 12), label: 'Séance prévue' }
+        { value: fmtKcal(petitDejTarget), label: _bhEN ? 'Breakfast kcal' : 'Kcal petit-déj' },
+          { value: todaySportSession.name.split(/[—–-]/)[0].trim().slice(0, 12), label: _bhEN ? 'Planned session' : 'Séance prévue' }
       ];
     } else {
       var _citMatin = getDailyCitationObj(); ctx.quote = _citMatin.text; ctx.quoteAuthor = _citMatin.author;
       ctx.stats = [
-        { value: fmtKcal(petitDejTarget), label: 'Kcal petit-déj' },
-        { value: protTarget + '\u00a0g', label: 'Protéines visées' }
+        { value: fmtKcal(petitDejTarget), label: _bhEN ? 'Breakfast kcal' : 'Kcal petit-déj' },
+        { value: protTarget + '\u00a0g', label: _bhEN ? 'Target protein' : 'Protéines visées' }
       ];
     }
 
     ctx.action = {
-      labelLower: 'Voir mon petit-déjeuner proposé', label: 'VOIR MON PETIT-DÉJEUNER PROPOSÉ',
+      labelLower: _bhEN ? 'View my suggested breakfast' : 'Voir mon petit-déjeuner proposé', label: _bhEN ? 'VIEW MY SUGGESTED BREAKFAST' : 'VOIR MON PETIT-DÉJEUNER PROPOSÉ',
       onclick: function() {
         // HYPERSTAB 2026-04-17 — aligné sur l'action midi : cibler explicitement
         // la vue Planning semaine (nStep=12 → renderStep9) + jour courant.
@@ -1176,23 +1249,23 @@ function buildContextualHero(moment, S) {
     var hasSessionToday = !!(_dayTypeInfo && _dayTypeInfo.isTraining);
 
     if (isPregnant) {
-      ctx.quote = 'Déjeuner riche en fer recommandé. Lentilles ou épinards ?';
+      ctx.quote = _bhEN ? 'Iron-rich lunch recommended. Lentils or spinach?' : 'Déjeuner riche en fer recommandé. Lentilles ou épinards ?';
       ctx.stats = [
-        { value: fmtKcal(remaining) + '\u00a0kcal', label: 'Kcal disponibles' },
-        { value: '27\u00a0mg', label: 'Fer ciblé' }
+        { value: fmtKcal(remaining) + '\u00a0kcal', label: _bhEN ? 'Available kcal' : 'Kcal disponibles' },
+        { value: '27\u00a0mg', label: _bhEN ? 'Targeted iron' : 'Fer ciblé' }
       ];
     } else {
       var _citMidi = getDailyCitationObj(); ctx.quote = _citMidi.text; ctx.quoteAuthor = _citMidi.author;
       ctx.stats = [
-        { value: fmtKcal(remaining) + '\u00a0kcal', label: 'Kcal disponibles' },
+        { value: fmtKcal(remaining) + '\u00a0kcal', label: _bhEN ? 'Available kcal' : 'Kcal disponibles' },
         hasSessionToday
-          ? { value: '\u00c0 venir', label: 'Séance du jour' }
-          : { value: 'Repos', label: 'Jour de repos' }
+          ? { value: _bhEN ? 'Upcoming' : '\u00c0 venir', label: _bhEN ? 'Today\'s session' : 'Séance du jour' }
+          : { value: _bhEN ? 'Rest' : 'Repos', label: _bhEN ? 'Rest day' : 'Jour de repos' }
       ];
     }
 
     ctx.action = {
-      labelLower: 'Voir le déjeuner proposé', label: 'VOIR LE DÉJEUNER PROPOSÉ',
+      labelLower: _bhEN ? 'View the suggested lunch' : 'Voir le déjeuner proposé', label: _bhEN ? 'VIEW THE SUGGESTED LUNCH' : 'VOIR LE DÉJEUNER PROPOSÉ',
       onclick: function() {
         S.view = 'nutrition';
         S.nStep = 12;
@@ -1227,9 +1300,9 @@ function buildContextualHero(moment, S) {
     } catch(eM) {}
 
     if (overflow) {
-      ctx.quote = 'Dépassement de ' + fmtKcal(delta) + ' kcal. Rien de dramatique. Demain, pars sur ' + fmtKcal(target - 200) + '.';
+      ctx.quote = _bhEN ? 'Over by ' + fmtKcal(delta) + ' kcal. Nothing dramatic. Tomorrow, aim for ' + fmtKcal(target - 200) + '.' : 'Dépassement de ' + fmtKcal(delta) + ' kcal. Rien de dramatique. Demain, pars sur ' + fmtKcal(target - 200) + '.';
     } else if (muscuToday) {
-      ctx.quote = 'Vous avez soulevé ' + fmtKcal(muscuToday.tonnage) + ' kg sur ' + muscuToday.sets + ' séries. ' + fmtKcal(totals.kcal) + ' kcal, ' + Math.round(totals.p) + ' g de protéines.';
+      ctx.quote = _bhEN ? 'You lifted ' + fmtKcal(muscuToday.tonnage) + ' kg over ' + muscuToday.sets + ' sets. ' + fmtKcal(totals.kcal) + ' kcal, ' + Math.round(totals.p) + ' g protein.' : 'Vous avez soulevé ' + fmtKcal(muscuToday.tonnage) + ' kg sur ' + muscuToday.sets + ' séries. ' + fmtKcal(totals.kcal) + ' kcal, ' + Math.round(totals.p) + ' g de protéines.';
     } else if (totals.kcal >= target * 0.85) {
       var _citSoir1 = getDailyCitationObj(); ctx.quote = _citSoir1.text; ctx.quoteAuthor = _citSoir1.author;
     } else {
@@ -1238,22 +1311,22 @@ function buildContextualHero(moment, S) {
 
     ctx.stats = muscuToday
       ? [
-          { value: fmtKcal(muscuToday.tonnage) + '\u00a0kg', label: 'Tonnage soulevé' },
-          { value: fmtKcal(totals.kcal) + '\u00a0kcal', label: 'Kcal journée', highlight: overflow }
+          { value: fmtKcal(muscuToday.tonnage) + '\u00a0kg', label: _bhEN ? 'Tonnage lifted' : 'Tonnage soulevé' },
+          { value: fmtKcal(totals.kcal) + '\u00a0kcal', label: _bhEN ? 'Day kcal' : 'Kcal journée', highlight: overflow }
         ]
       : [
-          { value: fmtKcal(totals.kcal) + '\u00a0kcal', label: 'Kcal journée', highlight: overflow },
-          { value: Math.round(totals.p) + '\u00a0g', label: 'Protéines' }
+          { value: fmtKcal(totals.kcal) + '\u00a0kcal', label: _bhEN ? 'Day kcal' : 'Kcal journée', highlight: overflow },
+          { value: Math.round(totals.p) + '\u00a0g', label: _bhEN ? 'Protein' : 'Protéines' }
         ];
 
     ctx.action = {
-      labelLower: 'Voir le bilan détaillé', label: 'BILAN DÉTAILLÉ',
+      labelLower: _bhEN ? 'View detailed summary' : 'Voir le bilan détaillé', label: _bhEN ? 'DETAILED SUMMARY' : 'BILAN DÉTAILLÉ',
       onclick: function() { S._dashExtOpen = true; if (window.render) window.render(); }
     };
 
   } else {
     // Veille (nuit) — hero minimaliste, pas de proactivité
-    ctx.quote = 'Repos. Demain, on reprend.';
+    ctx.quote = _bhEN ? 'Rest. Tomorrow, we start again.' : 'Repos. Demain, on reprend.';
     ctx.stats = [];
   }
 
@@ -1280,22 +1353,23 @@ function renderCardBonjour(S) {
   var quoteText = typeof quote === 'string' ? quote : (quote && quote.text ? quote.text : '');
   var quoteAuthor = (quote && quote.author) ? quote.author : '';
 
-  var eyebrow_el = eyebrow('AUJOURD\'HUI');
+  var eyebrow_el = eyebrow((window.isEnglish && window.isEnglish()) ? 'TODAY' : 'AUJOURD\'HUI');
   c.appendChild(eyebrow_el);
 
   // Salutation selon l'heure de la journée
   var _hour = new Date().getHours();
-  var _greetWord = _hour >= 18 ? 'Bonsoir' : (_hour >= 12 ? 'Bon après-midi' : 'Bonjour');
+  var _greetWord = (window.isEnglish && window.isEnglish())
+    ? (_hour >= 18 ? 'Good evening' : (_hour >= 12 ? 'Good afternoon' : 'Good morning'))
+    : (_hour >= 18 ? 'Bonsoir' : (_hour >= 12 ? 'Bon après-midi' : 'Bonjour'));
   var title = h('div', { style: 'font-family:Georgia,serif;font-size:22px;font-weight:normal;margin-bottom:4px;' });
   title.textContent = _greetWord + (firstName ? ', ' + firstName : '') + '.';
   c.appendChild(title);
 
   // Date permanente sous le titre
   (function() {
-    var _days = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
-    var _months = ['janvier','f\u00e9vrier','mars','avril','mai','juin','juillet','ao\u00fbt','septembre','octobre','novembre','d\u00e9cembre'];
     var _now2 = new Date();
-    var _dateStr = _days[_now2.getDay()] + ' ' + _now2.getDate() + ' ' + _months[_now2.getMonth()];
+    var _localeCard = (window.isEnglish && window.isEnglish()) ? 'en-US' : 'fr-FR';
+    var _dateStr = _now2.toLocaleDateString(_localeCard, {weekday:'long', day:'numeric', month:'long'});
     var _dateEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);letter-spacing:0.5px;margin-bottom:12px;' });
     _dateEl.textContent = _dateStr;
     c.appendChild(_dateEl);
@@ -1313,14 +1387,15 @@ function renderCardBonjour(S) {
       else { S.view = 'profil'; if (window.render) window.render(); }
     };
     var _trialLeft = h('div', {style: 'flex:1;min-width:0;'});
-    _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);font-weight:400;margin-bottom:2px;'}, 'VERSION D\u2019ESSAI'));
-    var _trialCopy = _trialDays <= 0 ? 'Essai termin\u00e9 \u2014 D\u00e9bloquez l\u2019acc\u00e8s \u2192'
-      : _trialDays === 1 ? 'Dernier jour \u2014 Abonnez-vous pour continuer \u2192'
-      : _trialUrgent ? 'Plus que ' + _trialDays + ' jours \u2014 Continuez sans interruption \u2192'
-      : _trialDays + ' ' + window.locPlural(_trialDays, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + ((window.isEnglish && window.isEnglish()) ? ' to explore everything \u2014 Subscribe \u2192' : ' pour tout explorer \u2014 S\u2019abonner \u2192');
+    _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);font-weight:400;margin-bottom:2px;'}, (window.isEnglish && window.isEnglish()) ? 'TRIAL VERSION' : 'VERSION D\u2019ESSAI'));
+    var _trEN = window.isEnglish && window.isEnglish();
+    var _trialCopy = _trialDays <= 0 ? (_trEN ? 'Trial ended \u2014 Unlock access \u2192' : 'Essai termin\u00e9 \u2014 D\u00e9bloquez l\u2019acc\u00e8s \u2192')
+      : _trialDays === 1 ? (_trEN ? 'Last day \u2014 Subscribe to continue \u2192' : 'Dernier jour \u2014 Abonnez-vous pour continuer \u2192')
+      : _trialUrgent ? (_trEN ? 'Only ' + _trialDays + ' days left \u2014 Continue without interruption \u2192' : 'Plus que ' + _trialDays + ' jours \u2014 Continuez sans interruption \u2192')
+      : _trialDays + ' ' + window.locPlural(_trialDays, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}) + (_trEN ? ' to explore everything \u2014 Subscribe \u2192' : ' pour tout explorer \u2014 S\u2019abonner \u2192');
     _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + (_trialUrgent ? '#7A1F1F' : 'var(--grey,#6B6B65)') + ';'}, _trialCopy));
     _trialBanner.appendChild(_trialLeft);
-    _trialBanner.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;color:' + (_trialUrgent ? '#C0390E' : 'var(--orange,#E86F1E)') + ';'}, _trialDays > 0 ? _trialDays + 'j' : '!'));
+    _trialBanner.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;color:' + (_trialUrgent ? '#C0390E' : 'var(--orange,#E86F1E)') + ';'}, _trialDays > 0 ? _trialDays + ((window.isEnglish && window.isEnglish()) ? 'd' : 'j') : '!'));
     c.appendChild(_trialBanner);
   }
 
@@ -1375,7 +1450,7 @@ function renderCardHeroKcal() {
   var hero = h('div', {style: 'padding:24px 0 16px;margin-bottom:16px;text-align:center;border-bottom:1px solid var(--border,#D8D8D0);'});
 
   // Label top
-  hero.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:14px;'}, "Aujourd'hui"));
+  hero.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:14px;'}, (window.isEnglish && window.isEnglish()) ? 'Today' : "Aujourd'hui"));
 
   // Ring SVG XXL (120px)
   var ns = 'http://www.w3.org/2000/svg';
@@ -1438,31 +1513,31 @@ function renderCardHeroKcal() {
     } else {
       deltaText = kcalPct + '% · ' + kcalConsumed + '/' + Math.round(calorieTarget) + ' kcal';
     }
-    statusText = 'Objectif du jour atteint';
+    statusText = (window.isEnglish && window.isEnglish()) ? 'Daily goal reached' : 'Objectif du jour atteint';
   } else if (kcalPct < 70) {
     // Zone orange : sous-alimenté
     deltaColor = 'var(--orange,#E86F1E)';
     statusColor = 'var(--orange,#E86F1E)';
     deltaText = kcalPct + '% · ' + kcalConsumed + '/' + Math.round(calorieTarget) + ' kcal';
-    statusText = 'Pensez à ajouter une collation';
+    statusText = (window.isEnglish && window.isEnglish()) ? 'Consider adding a snack' : 'Pensez à ajouter une collation';
   } else if (kcalPct > 115) {
     // Zone rouge : dépassement
     deltaColor = 'var(--red,#C0392B)';
     statusColor = 'var(--red,#C0392B)';
     deltaText = kcalPct + '% · ' + kcalConsumed + '/' + Math.round(calorieTarget) + ' kcal';
-    statusText = 'Dépassement modéré';
+    statusText = (window.isEnglish && window.isEnglish()) ? 'Moderate overshoot' : 'Dépassement modéré';
   } else if (netRem > 0) {
     // Zone neutre : 70-84% (sous la cible mais pas critique)
     deltaColor = 'var(--grey,#6B6B65)';
     statusColor = 'var(--grey,#6B6B65)';
     deltaText = kcalPct + '% · ' + kcalConsumed + '/' + Math.round(calorieTarget) + ' kcal';
-    statusText = netRem + ' kcal restantes';
+    statusText = (window.isEnglish && window.isEnglish()) ? (netRem + ' kcal remaining') : (netRem + ' kcal restantes');
   } else {
     // Zone neutre : 106-115% (léger dépassement)
     deltaColor = 'var(--orange,#E86F1E)';
     statusColor = 'var(--orange,#E86F1E)';
     deltaText = kcalPct + '% · ' + kcalConsumed + '/' + Math.round(calorieTarget) + ' kcal';
-    statusText = 'Dépassement modéré';
+    statusText = (window.isEnglish && window.isEnglish()) ? 'Moderate overshoot' : 'Dépassement modéré';
   }
   hero.appendChild(h('div', {style: deltaStyle + 'color:' + deltaColor + ';'}, deltaText));
   hero.appendChild(h('div', {style: subStyle + 'color:' + statusColor + ';'}, statusText));
@@ -1494,7 +1569,7 @@ function renderCardHeroKcal() {
     _qaRow.appendChild(h('button', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);background:transparent;border:1px solid var(--line,#D8D8D0);padding:9px 24px;cursor:pointer;min-height:36px;',
       onclick: function() { var _S = window.S; if (!_S) return; _S._quickAddSlot = getDefaultMealSlot(); if (window.render) window.render(); }
-    }, '+ Ajouter un repas'));
+    }, (window.isEnglish && window.isEnglish()) ? '+ Add a meal' : '+ Ajouter un repas'));
     hero.appendChild(_qaRow);
   }
 
@@ -1529,12 +1604,12 @@ function renderCardMacros() {
   if (calorieTarget <= 0) {
     var emptyMacro = card();
     emptyMacro.appendChild(eyebrow('NUTRITION'));
-    emptyMacro.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:normal;margin-bottom:8px;color:var(--grey);'}, 'Aucun objectif défini'));
-    emptyMacro.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);line-height:1.6;margin-bottom:14px;'}, 'Définissez vos objectifs nutritionnels pour suivre vos macros quotidiens.'));
+    emptyMacro.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:normal;margin-bottom:8px;color:var(--grey);'}, (window.isEnglish && window.isEnglish()) ? 'No goal defined' : 'Aucun objectif défini'));
+    emptyMacro.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);line-height:1.6;margin-bottom:14px;'}, (window.isEnglish && window.isEnglish()) ? 'Define your nutritional goals to track your daily macros.' : 'Définissez vos objectifs nutritionnels pour suivre vos macros quotidiens.'));
     emptyMacro.appendChild(h('button', {
       style: 'padding:10px 16px;background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border:1px solid var(--ink-900,#0A0A09);border-radius:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;min-height:44px;',
       onclick: function() { if (!window.S) return; window.S.view = 'nutrition'; window.S.nStep = 1; if (window.render) window.render(); }
-    }, 'Configurer mon profil →'));
+    }, (window.isEnglish && window.isEnglish()) ? 'Configure my profile →' : 'Configurer mon profil →'));
     return emptyMacro;
   }
 
@@ -1551,7 +1626,7 @@ function renderCardMacros() {
 
   var c = card();
   c.appendChild(eyebrow('NUTRITION'));
-  c.appendChild(cardTitle('Macros du jour'));
+  c.appendChild(cardTitle((window.isEnglish && window.isEnglish()) ? "Today's macros" : 'Macros du jour'));
 
   // Calorie bar
   var kcalRow = h('div', { style: 'display:flex;align-items:center;gap:8px;margin-bottom:12px;' });
@@ -1569,7 +1644,7 @@ function renderCardMacros() {
     // Bible Hermès §13.1 : pas d'emoji. Tiret typographique + tutoiement.
     var _burnEl = document.createElement('div');
     _burnEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-bottom:6px;font-weight:500;color:var(--success,#3E5C3A);';
-    _burnEl.textContent = _sportBurn + ' kcal dépensées aujourd\'hui · incluses dans votre objectif (calMultiplier : jour sport = 100%, jour repos = −10%)';
+    _burnEl.textContent = _sportBurn + ((window.isEnglish && window.isEnglish()) ? ' kcal burned today · included in your target (calMultiplier: training day = 100%, rest day = −10%)' : ' kcal dépensées aujourd\'hui · incluses dans votre objectif (calMultiplier : jour sport = 100%, jour repos = −10%)');
     c.appendChild(_burnEl);
   }
 
@@ -1580,35 +1655,36 @@ function renderCardMacros() {
   // Bible Hermès §13.1 : pas d'emoji (⚡ ✓ ⚠). Typographie sobre.
   if (_netRemaining > 0) {
     _remEl.style.color = 'var(--success,#3E5C3A)';
-    _remEl.textContent = _netRemaining + ' kcal restantes';
+    _remEl.textContent = (window.isEnglish && window.isEnglish()) ? (_netRemaining + ' kcal remaining') : (_netRemaining + ' kcal restantes');
   } else if (_netRemaining === 0) {
     _remEl.style.color = 'var(--ink-500,#6B6B65)';
-    _remEl.textContent = 'Cible tenue.';
+    _remEl.textContent = (window.isEnglish && window.isEnglish()) ? 'Target met.' : 'Cible tenue.';
   } else {
     _remEl.style.color = 'var(--orange,#E86F1E)';
-    _remEl.textContent = 'Vous avez dépassé de ' + Math.abs(_netRemaining) + ' kcal.';
+    _remEl.textContent = (window.isEnglish && window.isEnglish()) ? ('You exceeded by ' + Math.abs(_netRemaining) + ' kcal.') : ('Vous avez dépassé de ' + Math.abs(_netRemaining) + ' kcal.');
   }
   c.appendChild(_remEl);
 
   if (macroTargets && (macroTargets.p > 0 || macroTargets.g > 0 || macroTargets.l > 0)) {
-    c.appendChild(macroRow('Protéines', Math.round(totals.p), Math.round(macroTargets.p)));
-    c.appendChild(macroRow('Glucides', Math.round(totals.g), Math.round(macroTargets.g)));
-    c.appendChild(macroRow('Lipides', Math.round(totals.l), Math.round(macroTargets.l)));
+    var _macEN = window.isEnglish && window.isEnglish();
+    c.appendChild(macroRow(_macEN ? 'Protein' : 'Protéines', Math.round(totals.p), Math.round(macroTargets.p)));
+    c.appendChild(macroRow(_macEN ? 'Carbs' : 'Glucides', Math.round(totals.g), Math.round(macroTargets.g)));
+    c.appendChild(macroRow(_macEN ? 'Fat' : 'Lipides', Math.round(totals.l), Math.round(macroTargets.l)));
 
     // Anneaux SVG — progression macros
     var ringsRow = document.createElement('div');
     ringsRow.style.cssText = 'display:flex;justify-content:space-around;align-items:flex-start;margin-top:16px;padding-top:12px;border-top:1px solid var(--border,#E8E6DF);flex-wrap:wrap;gap:8px;';
     if (macroTargets.p > 0 && window.svgRing) {
       var pPct = Math.min(100, totals.p > 0 ? Math.round(totals.p / macroTargets.p * 100) : 0);
-      ringsRow.appendChild(window.svgRing(72, 7, pPct, 'var(--green,#3E5C3A)', 'Protéines', Math.round(totals.p)));
+      ringsRow.appendChild(window.svgRing(72, 7, pPct, 'var(--green,#3E5C3A)', _macEN ? 'Protein' : 'Protéines', Math.round(totals.p)));
     }
     if (macroTargets.g > 0 && window.svgRing) {
       var gPct = Math.min(100, totals.g > 0 ? Math.round(totals.g / macroTargets.g * 100) : 0);
-      ringsRow.appendChild(window.svgRing(72, 7, gPct, 'var(--blue,#1A3A6A)', 'Glucides', Math.round(totals.g)));
+      ringsRow.appendChild(window.svgRing(72, 7, gPct, 'var(--blue,#1A3A6A)', _macEN ? 'Carbs' : 'Glucides', Math.round(totals.g)));
     }
     if (macroTargets.l > 0 && window.svgRing) {
       var lPct = Math.min(100, totals.l > 0 ? Math.round(totals.l / macroTargets.l * 100) : 0);
-      ringsRow.appendChild(window.svgRing(72, 7, lPct, 'var(--orange,#E86F1E)', 'Lipides', Math.round(totals.l)));
+      ringsRow.appendChild(window.svgRing(72, 7, lPct, 'var(--orange,#E86F1E)', _macEN ? 'Fat' : 'Lipides', Math.round(totals.l)));
     }
     if (ringsRow.children.length > 0) c.appendChild(ringsRow);
   }
@@ -1712,13 +1788,13 @@ function _fjLoadCustomFoods() {
 }
 
 function _fjOpenCreateFoodModal() {
-  todayModal('Créer un aliment', function(box) {
+  todayModal((window.isEnglish && window.isEnglish()) ? 'Create a food' : 'Créer un aliment', function(box) {
     var fields = [
-      { id: 'cf-name', label: 'Nom', placeholder: 'ex: Mon mélange maison', inputmode: 'text' },
+      { id: 'cf-name', label: (window.isEnglish && window.isEnglish()) ? 'Name' : 'Nom', placeholder: (window.isEnglish && window.isEnglish()) ? 'e.g. My home blend' : 'ex: Mon mélange maison', inputmode: 'text' },
       { id: 'cf-kcal', label: 'Kcal / 100g', placeholder: '0', inputmode: 'decimal' },
-      { id: 'cf-p',    label: 'Protéines / 100g (g)', placeholder: '0', inputmode: 'decimal' },
-      { id: 'cf-g',    label: 'Glucides / 100g (g)', placeholder: '0', inputmode: 'decimal' },
-      { id: 'cf-l',    label: 'Lipides / 100g (g)', placeholder: '0', inputmode: 'decimal' }
+      { id: 'cf-p',    label: (window.isEnglish && window.isEnglish()) ? 'Protein / 100g (g)' : 'Protéines / 100g (g)', placeholder: '0', inputmode: 'decimal' },
+      { id: 'cf-g',    label: (window.isEnglish && window.isEnglish()) ? 'Carbs / 100g (g)' : 'Glucides / 100g (g)', placeholder: '0', inputmode: 'decimal' },
+      { id: 'cf-l',    label: (window.isEnglish && window.isEnglish()) ? 'Fat / 100g (g)' : 'Lipides / 100g (g)', placeholder: '0', inputmode: 'decimal' }
     ];
     var inputs = {};
 
@@ -1744,7 +1820,7 @@ function _fjOpenCreateFoodModal() {
               if (inputs['cf-l'])    inputs['cf-l'].value    = (p.fat != null ? p.fat : '');
               try { if (window.SCANNER && window.SCANNER.stopCamera) window.SCANNER.stopCamera(); } catch(e) {}
               try { if (scanOverlay && scanOverlay.parentNode) scanOverlay.parentNode.removeChild(scanOverlay); } catch(e) {}
-              if (window.showToast) window.showToast('Valeurs pré-remplies — vérifiez avant d\'enregistrer.', 'success', 2500);
+              if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Pre-filled values — verify before saving.' : 'Valeurs pré-remplies — vérifiez avant d\'enregistrer.', 'success', 2500);
             } }); }
             catch(e) { scanContainer.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, 'Scanner indisponible sur ce navigateur.')); }
             scanBox.appendChild(scanContainer);
@@ -1780,7 +1856,7 @@ function _fjOpenCreateFoodModal() {
     var saveBtn = h('button', {
       style: 'width:100%;padding:12px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;cursor:pointer;'
         + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;min-height:44px;margin-top:4px;'
-    }, 'Créer l\'aliment');
+    }, (window.isEnglish && window.isEnglish()) ? 'Create food item' : 'Créer l\'aliment');
 
     saveBtn.addEventListener('click', function() {
       var name = (inputs['cf-name'].value || '').trim();
@@ -1796,7 +1872,7 @@ function _fjOpenCreateFoodModal() {
         return;
       }
       if (kcal < 0 || isNaN(kcal)) {
-        errEl.textContent = 'Valeur kcal invalide (doit être ≥ 0).';
+        errEl.textContent = (window.isEnglish && window.isEnglish()) ? 'Invalid kcal value (must be ≥ 0).' : 'Valeur kcal invalide (doit être ≥ 0).';
         errEl.style.display = '';
         return;
       }
@@ -1829,7 +1905,7 @@ function _fjOpenCreateFoodModal() {
       _fjState.query = name;
       _fjState.selectedFood = null;
       _fjRefreshResults();
-      if (window.showToast) window.showToast('\u00ab ' + name + ' \u00bb ajouté à votre base.', 'success', 2500);
+      if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? '\u00ab ' + name + ' \u00bb added to your database.' : '\u00ab ' + name + ' \u00bb ajouté à votre base.', 'success', 2500);
     });
 
     box.appendChild(saveBtn);
@@ -1848,7 +1924,7 @@ function renderFoodJournalCard() {
   c.id = 'fj-card-root'; // Phase 2 K: stable anchor for targeted re-render
 
   // Titre standard Georgia 20px (cohérent avec renderCardSport / renderCardRepas)
-  c.appendChild(cardTitle('Journal du jour'));
+  c.appendChild(cardTitle((window.isEnglish && window.isEnglish()) ? "Today's journal" : 'Journal du jour'));
 
   // ─── Totaux du jour ───
   var totals = (window.FOOD_JOURNAL && window.FOOD_JOURNAL.getDayTotal)
@@ -1893,15 +1969,15 @@ function renderFoodJournalCard() {
       var _msgUrgent = '';
       var _colUrgent = 'var(--grey,#6B6B65)';
       if (totals.kcal === 0) {
-        _msgUrgent = 'Commencez par logger votre premier repas du jour.';
+        _msgUrgent = (window.isEnglish && window.isEnglish()) ? 'Start by logging your first meal of the day.' : 'Commencez par logger votre premier repas du jour.';
       } else if (_kcalLeft > 200) {
-        _msgUrgent = 'Il vous reste  ' + _kcalLeft + ' kcal — ' + (_pLeft > 10 ? 'privilégiez les protéines (' + _pLeft + 'g restants).' : 'objectif presque atteint.');
+        _msgUrgent = (window.isEnglish && window.isEnglish()) ? (_kcalLeft + ' kcal remaining — ' + (_pLeft > 10 ? 'prioritize protein (' + _pLeft + 'g left).' : 'almost there.')) : ('Il vous reste  ' + _kcalLeft + ' kcal — ' + (_pLeft > 10 ? 'privilégiez les protéines (' + _pLeft + 'g restants).' : 'objectif presque atteint.'));
         _colUrgent = '#1A3A6A';
       } else if (_kcalLeft >= -100) {
-        _msgUrgent = 'Budget calorique atteint. Excellente journée.';
+        _msgUrgent = (window.isEnglish && window.isEnglish()) ? 'Calorie goal reached. Excellent day.' : 'Budget calorique atteint. Excellente journée.';
         _colUrgent = '#27AE60';
       } else {
-        _msgUrgent = 'Budget dépassé de ' + Math.abs(_kcalLeft) + ' kcal. Ajustez demain.';
+        _msgUrgent = (window.isEnglish && window.isEnglish()) ? ('Over by ' + Math.abs(_kcalLeft) + ' kcal. Adjust tomorrow.') : ('Budget dépassé de ' + Math.abs(_kcalLeft) + ' kcal. Ajustez demain.');
         _colUrgent = '#C0392B';
       }
       if (_msgUrgent) {
@@ -1914,13 +1990,16 @@ function renderFoodJournalCard() {
   } catch(_eUrgent) {}
 
   // ─── Tabs repas ───
+  var _fjEN = window.isEnglish && window.isEnglish();
   var MEALS = [
-    { key: 'breakfast', label: 'Petit-d\u00e9j' },
-    { key: 'lunch',     label: 'D\u00e9jeuner' },
-    { key: 'snack',     label: 'Collation' },
-    { key: 'dinner',    label: 'D\u00eener' }
+    { key: 'breakfast', label: _fjEN ? 'Breakfast' : 'Petit-d\u00e9j' },
+    { key: 'lunch',     label: _fjEN ? 'Lunch'     : 'D\u00e9jeuner' },
+    { key: 'snack',     label: _fjEN ? 'Snack'     : 'Collation' },
+    { key: 'dinner',    label: _fjEN ? 'Dinner'    : 'D\u00eener' }
   ];
-  var MEAL_LABELS_FULL = { breakfast: 'Petit-d\u00e9jeuner', lunch: 'D\u00e9jeuner', snack: 'Collation', dinner: 'D\u00eener' };
+  var MEAL_LABELS_FULL = _fjEN
+    ? { breakfast: 'Breakfast', lunch: 'Lunch', snack: 'Snack', dinner: 'Dinner' }
+    : { breakfast: 'Petit-d\u00e9jeuner', lunch: 'D\u00e9jeuner', snack: 'Collation', dinner: 'D\u00eener' };
 
   var tabs = h('div', { style: 'display:flex;gap:0;margin-bottom:0;border-bottom:1px solid var(--line,#D8D8D0);' });
   MEALS.forEach(function(m) {
@@ -1948,7 +2027,7 @@ function renderFoodJournalCard() {
   }, [
     h('span', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);'
-    }, 'Ajouter\u00a0\u00e0\u00a0:'),
+    }, (window.isEnglish && window.isEnglish()) ? 'Adding to:' : 'Ajouter\u00a0\u00e0\u00a0:'),
     h('span', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--black,#0A0A09);font-weight:400;'
     }, MEAL_LABELS_FULL[_fjState.meal])
@@ -2061,8 +2140,8 @@ function renderFoodJournalCard() {
   // Phase 2 L : bouton "Créer un aliment personnalisé"
   var createFoodBtn = h('button', {
     type: 'button',
-    'aria-label': 'Créer un aliment personnalisé',
-    title: 'Créer un aliment',
+    'aria-label': (window.isEnglish && window.isEnglish()) ? 'Create a custom food' : 'Créer un aliment personnalisé',
+    title: (window.isEnglish && window.isEnglish()) ? 'Create a food' : 'Créer un aliment',
     style: 'display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0;'
       + 'background:transparent;border:1px solid var(--black,#0A0A09);border-radius:2px;cursor:pointer;box-sizing:border-box;flex-shrink:0;'
   });
@@ -2081,7 +2160,7 @@ function renderFoodJournalCard() {
       + (_fjState.showSavedMeals
         ? 'background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border:1px solid var(--ink-900,#0A0A09);'
         : 'background:transparent;color:var(--ink-500,#6B6B65);border:1px solid var(--line,#D8D8D0);')
-  }, 'Mes repas');
+  }, (window.isEnglish && window.isEnglish()) ? 'My meals' : 'Mes repas');
   pillSaved.addEventListener('click', function() {
     _fjState.showSavedMeals = !_fjState.showSavedMeals;
     _fjState.showFavs = false;
@@ -2116,10 +2195,11 @@ function renderFoodJournalCard() {
           var loadedKey = 'mtd_journal_loaded_' + (user ? user.id : 'anon');
           localStorage.removeItem(loadedKey);
           window.FOOD_JOURNAL.loadFromPlan();
-          if (window.showToast) window.showToast('Plan du jour chargé dans le journal', 'success', 2200);
+          if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Today\'s plan loaded in the journal' : 'Plan du jour chargé dans le journal', 'success', 2200);
           _reRenderFJCard();
         };
-        if (hasEntries && (window.sfcConfirm ? window.sfcConfirm('Des repas sont déjà dans votre journal. Voulez-vous quand même ajouter le plan du jour ?') : window.confirm('Des repas sont déjà dans votre journal. Voulez-vous quand même ajouter le plan du jour ?'))) {
+        var _fjConfirmMsg = (window.isEnglish && window.isEnglish()) ? 'There are already meals in your journal. Do you still want to add today\'s plan?' : 'Des repas sont déjà dans votre journal. Voulez-vous quand même ajouter le plan du jour ?';
+        if (hasEntries && (window.sfcConfirm ? window.sfcConfirm(_fjConfirmMsg) : window.confirm(_fjConfirmMsg))) {
           doLoad();
         } else if (!hasEntries) {
           doLoad();
@@ -2196,7 +2276,10 @@ function _fjUpdateMultiCTA() {
   if (names.length === 0) { box.style.display = 'none'; return; }
   box.style.display = 'block';
 
-  var MEAL_FULL = { breakfast: 'Petit-déjeuner', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
+  var _mfEN = window.isEnglish && window.isEnglish();
+  var MEAL_FULL = _mfEN
+    ? { breakfast: 'Breakfast', lunch: 'Lunch', snack: 'Snack', dinner: 'Dinner' }
+    : { breakfast: 'Petit-déjeuner', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
   var ctaBtn = h('button', {
     style: 'width:100%;padding:12px 16px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;cursor:pointer;'
       + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;min-height:44px;margin-bottom:8px;'
@@ -2243,7 +2326,7 @@ function _fjRenderFoodRow(food, source) {
   // Phase 2 N : checkbox de sélection multi-ajout
   var chk = h('button', {
     type: 'button',
-    'aria-label': isChecked ? 'Déselectionner ' + food.name : 'Sélectionner ' + food.name,
+    'aria-label': (window.isEnglish && window.isEnglish()) ? (isChecked ? 'Deselect ' + food.name : 'Select ' + food.name) : (isChecked ? 'Déselectionner ' + food.name : 'Sélectionner ' + food.name),
     style: 'display:inline-flex;align-items:center;justify-content:center;min-width:32px;min-height:32px;width:32px;height:32px;flex-shrink:0;'
       + 'border-radius:2px;cursor:pointer;padding:0;box-sizing:border-box;margin-right:4px;'
       + (isChecked
@@ -2470,7 +2553,7 @@ function _fjAppendOFFResults() {
     if (filtered.length === 0) {
       sec.appendChild(h('div', {
         style: 'padding:8px 4px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'
-      }, _fjOFF.results.length > 0 ? 'D\u00e9j\u00e0 dans la base SmartFitCoach.' : 'Aucun produit correspondant en ligne.'));
+      }, _fjOFF.results.length > 0 ? ((window.isEnglish && window.isEnglish()) ? 'Already in SmartFitCoach database.' : 'D\u00e9j\u00e0 dans la base SmartFitCoach.') : ((window.isEnglish && window.isEnglish()) ? 'No matching product online.' : 'Aucun produit correspondant en ligne.')));
     } else {
       filtered.forEach(function(food) {
         sec.appendChild(_fjRenderFoodRow(food, 'off'));
@@ -2486,7 +2569,7 @@ function _fjRenderSavedMeals(box) {
   if (saved.length === 0) {
     box.appendChild(h('div', {
       style: 'padding:20px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.6;'
-    }, 'Aucun repas sauvegardé.\nLoggez un repas puis touchez « Sauvegarder ce repas ».'));
+    }, (window.isEnglish && window.isEnglish()) ? 'No saved meals.\nLog a meal and tap \u00ab Save this meal \u00bb.' : 'Aucun repas sauvegardé.\nLoggez un repas puis touchez « Sauvegarder ce repas ».'));
     return;
   }
   box.appendChild(h('div', {
@@ -2527,7 +2610,7 @@ function _fjRenderSavedMeals(box) {
       });
       _fjState.showSavedMeals = false;
       _reRenderFJCard();
-      if (window.showToast) window.showToast('\u00ab ' + meal.name + ' \u00bb ajouté !', 'success', 2000);
+      if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? '\u00ab ' + meal.name + ' \u00bb added!' : '\u00ab ' + meal.name + ' \u00bb ajouté !', 'success', 2000);
     });
     row.appendChild(logBtn);
 
@@ -2570,7 +2653,7 @@ function _fjRefreshResults() {
     if (list.length === 0) {
       box.appendChild(h('div', {
         style: 'padding:16px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);'
-      }, 'Aucun favori pour l\'instant. Touchez l\'\u00e9toile d\'un r\u00e9sultat pour en ajouter.'));
+      }, (window.isEnglish && window.isEnglish()) ? 'No favorites yet. Tap the star on a result to add one.' : 'Aucun favori pour l\'instant. Touchez l\'\u00e9toile d\'un r\u00e9sultat pour en ajouter.'));
       return;
     }
   } else if (_fjState.query && _fjState.query.length >= 2) {
@@ -2619,17 +2702,17 @@ function _fjRefreshResults() {
     if (recentFoods.length > 0) {
       box.appendChild(h('div', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);padding:4px 4px 6px;'
-      }, 'Récents · ajout rapide'));
+      }, (window.isEnglish && window.isEnglish()) ? 'Recent · quick add' : 'Récents · ajout rapide'));
       recentFoods.forEach(function(food) {
         box.appendChild(_fjRenderFoodRow(food, 'recent'));
       });
       box.appendChild(h('div', {
         style: 'padding:12px 4px 4px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);'
-      }, 'Ou saisissez 2+ caractères pour rechercher dans la base.'));
+      }, (window.isEnglish && window.isEnglish()) ? 'Or enter 2+ characters to search the database.' : 'Ou saisissez 2+ caractères pour rechercher dans la base.'));
     } else {
       box.appendChild(h('div', {
         style: 'padding:12px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);'
-      }, 'Saisissez au moins deux caractères pour chercher un aliment.'));
+      }, (window.isEnglish && window.isEnglish()) ? 'Enter at least two characters to search for a food.' : 'Saisissez au moins deux caractères pour chercher un aliment.'));
     }
     _fjOFF.results = null;
     return;
@@ -2643,7 +2726,7 @@ function _fjRefreshResults() {
   } else if (list.length === 0 && allowOFF) {
     box.appendChild(h('div', {
       style: 'padding:12px 4px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'
-    }, 'Aucun r\u00e9sultat dans la base cur\u00e9e. Recherche en ligne en cours\u2026'));
+    }, (window.isEnglish && window.isEnglish()) ? 'No result in curated database. Searching online\u2026' : 'Aucun r\u00e9sultat dans la base cur\u00e9e. Recherche en ligne en cours\u2026'));
   }
 
   list.forEach(function(food) {
@@ -2829,7 +2912,7 @@ function _fjShowSelection() {
     var qtyRow = h('div', { style: 'display:flex;align-items:center;gap:6px;margin-bottom:8px;' });
     qtyRow.appendChild(h('label', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);min-width:48px;'
-    }, 'Quantit\u00e9'));
+    }, (window.isEnglish && window.isEnglish()) ? 'Quantity' : 'Quantit\u00e9'));
     var minusG = h('button', { type: 'button', 'aria-label': '-10g',
       style: 'width:44px;height:40px;border:1px solid var(--line,#D8D8D0);background:transparent;cursor:pointer;border-radius:2px;font-size:18px;line-height:1;color:var(--black,#0A0A09);font-family:Georgia,serif;'
     }, '\u2212');
@@ -2838,7 +2921,7 @@ function _fjShowSelection() {
       type: 'text', inputmode: 'numeric',
       pattern: '[0-9]*',
       autocomplete: 'off', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'false',
-      'aria-label': 'Quantit\u00e9 en grammes',
+      'aria-label': (window.isEnglish && window.isEnglish()) ? 'Quantity in grams' : 'Quantit\u00e9 en grammes',
       value: String(qty),
       style: 'width:80px;padding:8px 6px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:var(--ivory,#FAF9F6);'
         + 'font-family:Georgia,serif;font-size:16px;text-align:center;outline:none;font-weight:500;'
@@ -2919,11 +3002,14 @@ function _fjShowSelection() {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--black,#0A0A09);margin-bottom:12px;line-height:1.6;font-weight:400;'
   }, kcal + ' kcal \u00b7 Prot ' + p + 'g \u00b7 Gluc ' + g + 'g \u00b7 Lip ' + l + 'g'));
 
-  var MEAL_FULL = { breakfast: 'Petit-d\u00e9jeuner', lunch: 'D\u00e9jeuner', snack: 'Collation', dinner: 'D\u00eener' };
+  var _sfEN = window.isEnglish && window.isEnglish();
+  var MEAL_FULL = _sfEN
+    ? { breakfast: 'Breakfast', lunch: 'Lunch', snack: 'Snack', dinner: 'Dinner' }
+    : { breakfast: 'Petit-d\u00e9jeuner', lunch: 'D\u00e9jeuner', snack: 'Collation', dinner: 'D\u00eener' };
   var addBtn = h('button', {
     style: 'width:100%;padding:12px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;cursor:pointer;'
       + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;min-height:44px;'
-  }, 'Ajouter \u00e0 ' + (MEAL_FULL[_fjState.meal] || 'ce repas'));
+  }, (_sfEN ? 'Add to ' : 'Ajouter \u00e0 ') + (MEAL_FULL[_fjState.meal] || (_sfEN ? 'this meal' : 'ce repas')));
   addBtn.addEventListener('click', function() {
     if (window.FOOD_JOURNAL && window.FOOD_JOURNAL.addEntry) {
       // 2026-04 R4-B2 : recompute LIVE au click (closure stale après refacto +/- sans rebuild)
@@ -2971,7 +3057,10 @@ function _fjBuildEntriesList(container) {
   var entries = (window.FOOD_JOURNAL && window.FOOD_JOURNAL.getToday) ? window.FOOD_JOURNAL.getToday() : [];
   var mealEntries = entries.filter(function(e) { return e && e.meal === _fjState.meal; });
 
-  var MEAL_LABELS = { breakfast: 'Petit-d\u00e9jeuner', lunch: 'D\u00e9jeuner', snack: 'Collation', dinner: 'D\u00eener' };
+  var _blEN = window.isEnglish && window.isEnglish();
+  var MEAL_LABELS = _blEN
+    ? { breakfast: 'Breakfast', lunch: 'Lunch', snack: 'Snack', dinner: 'Dinner' }
+    : { breakfast: 'Petit-d\u00e9jeuner', lunch: 'D\u00e9jeuner', snack: 'Collation', dinner: 'D\u00eener' };
   var header = h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px;padding-top:8px;border-top:1px solid var(--line,#D8D8D0);'
   }, MEAL_LABELS[_fjState.meal] + ' \u00b7 ' + mealEntries.length + ' ' + window.locPlural(mealEntries.length, {fr:{one:'aliment',other:'aliments'},en:{one:'item',other:'items'}}));
@@ -2980,7 +3069,7 @@ function _fjBuildEntriesList(container) {
   if (mealEntries.length === 0) {
     container.appendChild(h('div', {
       style: 'padding:8px 4px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);'
-    }, 'Aucun aliment consign\u00e9 pour ce repas.'));
+    }, (window.isEnglish && window.isEnglish()) ? 'No food logged for this meal.' : 'Aucun aliment consign\u00e9 pour ce repas.'));
     return;
   }
 
@@ -3032,7 +3121,7 @@ function _fjBuildEntriesList(container) {
       type: 'button',
       style: 'padding:6px 14px;min-height:36px;border:1px solid var(--line,#D8D8D0);border-radius:2px;cursor:pointer;background:transparent;'
         + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);'
-    }, 'Copier d\'hier (' + yesterdayItems.length + ')');
+    }, (window.isEnglish && window.isEnglish()) ? ('Copy from yesterday (' + yesterdayItems.length + ')') : ('Copier d\'hier (' + yesterdayItems.length + ')'));
     copyBtn.addEventListener('click', function() {
       if (!window.FOOD_JOURNAL || !window.FOOD_JOURNAL.addEntry) return;
       yesterdayItems.forEach(function(e) {
@@ -3053,11 +3142,15 @@ function _fjBuildEntriesList(container) {
     type: 'button',
     style: 'padding:6px 14px;min-height:36px;border:1px solid var(--line,#D8D8D0);border-radius:2px;cursor:pointer;background:transparent;'
       + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);'
-  }, 'Sauvegarder ce repas');
+  }, (window.isEnglish && window.isEnglish()) ? 'Save this meal' : 'Sauvegarder ce repas');
   saveBtn.addEventListener('click', function() {
-    todayModal('Sauvegarder ce repas', function(box, overlay) {
-      var MEAL_LABELS2 = { breakfast: 'Petit-déjeuner', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
-      var defaultName = MEAL_LABELS2[_fjState.meal] || 'Mon repas';
+    var _savTitle = (window.isEnglish && window.isEnglish()) ? 'Save this meal' : 'Sauvegarder ce repas';
+    todayModal(_savTitle, function(box, overlay) {
+      var _ml2EN = window.isEnglish && window.isEnglish();
+      var MEAL_LABELS2 = _ml2EN
+        ? { breakfast: 'Breakfast', lunch: 'Lunch', snack: 'Snack', dinner: 'Dinner' }
+        : { breakfast: 'Petit-déjeuner', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
+      var defaultName = MEAL_LABELS2[_fjState.meal] || (_ml2EN ? 'My meal' : 'Mon repas');
       box.appendChild(h('div', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin-bottom:10px;'
       }, mealEntries.length + ' ' + window.locPlural(mealEntries.length, {fr:{one:'aliment',other:'aliments'},en:{one:'item',other:'items'}}) + ((window.isEnglish && window.isEnglish()) ? ' — name this meal' : ' — donnez un nom à ce repas')));
@@ -3072,14 +3165,14 @@ function _fjBuildEntriesList(container) {
       var confirmBtn = h('button', {
         style: 'width:100%;padding:12px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;cursor:pointer;'
           + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;min-height:44px;'
-      }, 'Sauvegarder');
+      }, (window.isEnglish && window.isEnglish()) ? 'Save' : 'Sauvegarder');
       confirmBtn.addEventListener('click', function() {
         var name = (inp.value || '').trim() || defaultName;
         _fjSaveMeal(name, mealEntries.map(function(e) {
           return { name: e.name, kcal: e.kcal, p: e.p, g: e.g, l: e.l, qty: e.qty };
         }));
         document.body.removeChild(overlay);
-        if (window.showToast) window.showToast('\u00ab ' + name + ' \u00bb sauvegardé !', 'success', 2000);
+        if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? '\u00ab ' + name + ' \u00bb saved!' : '\u00ab ' + name + ' \u00bb sauvegardé !', 'success', 2000);
       });
       box.appendChild(confirmBtn);
       setTimeout(function() { try { inp.select(); } catch(e2) {} }, 80);
@@ -3104,13 +3197,13 @@ function renderCardRepas() {
     // No plan — empty state engageant (Hermès : vouvoiement, micro-caps, tap target ≥ 48px)
     var _emptyCard = h('div', {style: 'text-align:center;padding:36px 16px 28px;'});
     _emptyCard.appendChild(emptyIllu('nutrition'));
-    _emptyCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:20px;margin:4px 0 10px;font-weight:normal;color:var(--black,#0A0A09);line-height:1.3;max-width:240px;margin-left:auto;margin-right:auto;'}, 'Votre plan nutritionnel vous attend'));
-    _emptyCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);margin-bottom:20px;line-height:1.55;max-width:260px;margin-left:auto;margin-right:auto;'}, 'Calibré sur votre corps, vos objectifs et votre quotidien.'));
+    _emptyCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:20px;margin:4px 0 10px;font-weight:normal;color:var(--black,#0A0A09);line-height:1.3;max-width:240px;margin-left:auto;margin-right:auto;'}, (window.isEnglish && window.isEnglish()) ? 'Your nutrition plan awaits' : 'Votre plan nutritionnel vous attend'));
+    _emptyCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);margin-bottom:20px;line-height:1.55;max-width:260px;margin-left:auto;margin-right:auto;'}, (window.isEnglish && window.isEnglish()) ? 'Calibrated to your body, your goals, and your lifestyle.' : 'Calibré sur votre corps, vos objectifs et votre quotidien.'));
     _emptyCard.appendChild(h('button', {
       style: 'padding:14px 24px;min-height:48px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
       onclick: function() { if (!window.S) return; window.S.view = 'nutrition'; if (window.render) window.render(); }
-    }, 'Composer mon plan'));
-    _emptyCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:14px;'}, '5 min \u00b7 Gratuit \u00b7 Personnalis\u00e9'));
+    }, (window.isEnglish && window.isEnglish()) ? 'Build my plan' : 'Composer mon plan'));
+    _emptyCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:14px;'}, (window.isEnglish && window.isEnglish()) ? '5 min \u00b7 Free \u00b7 Personalized' : '5 min \u00b7 Gratuit \u00b7 Personnalis\u00e9'));
     c.appendChild(_emptyCard);
     return c;
   }
@@ -3120,11 +3213,12 @@ function renderCardRepas() {
   var dayData = S.weekPlan[todayIdx];
   if (!dayData) return null;
 
+  var _slotsEN = window.isEnglish && window.isEnglish();
   var SLOTS = [
-    { key: 'breakfast', label: 'Petit-déjeuner' },
-    { key: 'lunch', label: 'Déjeuner' },
-    { key: 'snack', label: 'Collation' },
-    { key: 'dinner', label: 'Dîner' }
+    { key: 'breakfast', label: _slotsEN ? 'Breakfast' : 'Petit-déjeuner' },
+    { key: 'lunch', label: _slotsEN ? 'Lunch' : 'Déjeuner' },
+    { key: 'snack', label: _slotsEN ? 'Snack' : 'Collation' },
+    { key: 'dinner', label: _slotsEN ? 'Dinner' : 'Dîner' }
   ];
 
   var _tlNow = new Date(); var todayKey = _tlNow.getFullYear() + '-' + String(_tlNow.getMonth()+1).padStart(2,'0') + '-' + String(_tlNow.getDate()).padStart(2,'0');
@@ -3174,7 +3268,7 @@ function renderCardRepas() {
       style: isLogged
         ? 'background:var(--green,#3E5C3A);border:1px solid var(--green,#3E5C3A);color:var(--ivory,#FAF9F6);font-size:10px;padding:6px 10px;min-height:44px;cursor:pointer;margin-left:8px;flex-shrink:0;font-family:"Helvetica Neue",Arial,sans-serif;border-radius:2px;'
         : 'background:transparent;border:1px solid var(--border);color:var(--grey);font-size:10px;padding:6px 10px;min-height:44px;cursor:pointer;margin-left:8px;flex-shrink:0;font-family:"Helvetica Neue",Arial,sans-serif;border-radius:2px;',
-      title: isLogged ? 'Cliquer pour d\u00e9cocher' : 'Marquer comme pris',
+      title: isLogged ? ((window.isEnglish && window.isEnglish()) ? 'Click to uncheck' : 'Cliquer pour d\u00e9cocher') : ((window.isEnglish && window.isEnglish()) ? 'Mark as taken' : 'Marquer comme pris'),
       onclick: function(e) {
         e.stopPropagation();
         S.mealsLogged = S.mealsLogged || {};
@@ -3210,7 +3304,7 @@ function renderCardRepas() {
         if (window.saveProfile) window.saveProfile();
         if (window.render) window.render();
       }
-    }, isLogged ? '\u2713 Pris' : 'Marquer pris');
+    }, isLogged ? ((window.isEnglish && window.isEnglish()) ? '\u2713 Taken' : '\u2713 Pris') : ((window.isEnglish && window.isEnglish()) ? 'Mark taken' : 'Marquer pris'));
 
     row.appendChild(left);
     row.appendChild(kcalEl);
@@ -3245,7 +3339,7 @@ function renderCardRepas() {
   var totalSlots = SLOTS.filter(function(slot) { return dayData[slot.key] && dayData[slot.key].n; }).length;
   var counterEl = h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:8px;'
-  }, loggedCount + '/' + totalSlots + ' repas aujourd\u2019hui');
+  }, loggedCount + '/' + totalSlots + ' ' + ((window.isEnglish && window.isEnglish()) ? 'meals today' : 'repas aujourd\u2019hui'));
   c.appendChild(counterEl);
 
   // Footer link
@@ -3257,7 +3351,7 @@ function renderCardRepas() {
       S.selectedDay = todayIdx;
       if (window.render) window.render();
     }
-  }, 'Voir mon programme →');
+  }, (window.isEnglish && window.isEnglish()) ? 'View my plan →' : 'Voir mon programme →');
   c.appendChild(link);
 
   return c;
@@ -3296,8 +3390,9 @@ function buildShareCanvas() {
   if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
 
   // ── Date (droite) — gris clair lisible sur fond noir ──
-  var _dn = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
-  var _mn = ['jan.','fév.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+  var _canEN = window.isEnglish && window.isEnglish();
+  var _dn = _canEN ? ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] : ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+  var _mn = _canEN ? ['Jan.','Feb.','Mar.','Apr.','May','Jun.','Jul.','Aug.','Sep.','Oct.','Nov.','Dec.'] : ['jan.','fév.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
   var _nd = new Date();
   ctx.fillStyle = '#9A9A94';
   ctx.font = '13px "Helvetica Neue", Helvetica, Arial, sans-serif';
@@ -3330,7 +3425,7 @@ function buildShareCanvas() {
   ctx.font = '11px "Helvetica Neue", Helvetica, Arial, sans-serif';
   if ('letterSpacing' in ctx) ctx.letterSpacing = '6px';
   ctx.textAlign = 'center';
-  ctx.fillText('JOURS  CONSÉCUTIFS', CX, 598);
+  ctx.fillText((window.isEnglish && window.isEnglish()) ? 'CONSECUTIVE  DAYS' : 'JOURS  CONSÉCUTIFS', CX, 598);
   if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
 
   // Filet séparateur bas
@@ -3349,15 +3444,15 @@ function buildShareCanvas() {
   } else if (window.GOALS && typeof S.goal === 'number' && window.GOALS[S.goal]) {
     goalLabel = window.GOALS[S.goal].name;
   } else if (S.appMode === 'sport') {
-    goalLabel = 'Programme sportif';
+    goalLabel = (window.isEnglish && window.isEnglish()) ? 'Sports program' : 'Programme sportif';
   } else if (S.appMode === 'nutrition') {
-    goalLabel = 'Nutrition personnalisée';
+    goalLabel = (window.isEnglish && window.isEnglish()) ? 'Custom nutrition' : 'Nutrition personnalisée';
   }
   if (goalLabel) {
     ctx.fillStyle = '#9A9A94';
     ctx.font = 'italic 24px Georgia, "Times New Roman", serif';
     ctx.textAlign = 'center';
-    ctx.fillText('Objectif \u00b7 ' + goalLabel, CX, 740);
+    ctx.fillText((window.isEnglish && window.isEnglish() ? 'Goal \u00b7 ' : 'Objectif \u00b7 ') + goalLabel, CX, 740);
   }
 
   // ── Delta poids (si disponible) ──
@@ -3375,7 +3470,7 @@ function buildShareCanvas() {
         ctx.fillStyle = _d < 0 ? '#4A8A5A' : '#C47A3A';
         ctx.font = '22px "Helvetica Neue", Helvetica, Arial, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText((_d > 0 ? '+' : '') + _d.toFixed(1) + ' kg depuis le départ', CX, 790);
+        ctx.fillText((_d > 0 ? '+' : '') + _d.toFixed(1) + (window.isEnglish && window.isEnglish() ? ' kg since start' : ' kg depuis le départ'), CX, 790);
       }
     }
   } catch(e3) {}
@@ -3473,7 +3568,7 @@ function renderCardStreak() {
     if (_sfS.streakFreezeAvailable !== false) {
       var _freezeTag = h('div', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);border:1px solid var(--border,#D8D8D0);background:transparent;padding:4px 10px;display:inline-block;margin-top:-4px;margin-bottom:8px;border-radius:2px;'
-      }, '\u2744 1 joker disponible');
+      }, (window.isEnglish && window.isEnglish()) ? '\u2744 1 freeze available' : '\u2744 1 joker disponible');
       c.appendChild(_freezeTag);
     }
   }
@@ -3488,7 +3583,7 @@ function renderCardStreak() {
     var badgeEyebrow = h('div', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px;'
     });
-    badgeEyebrow.textContent = 'DERNIER BADGE';
+    badgeEyebrow.textContent = (window.isEnglish && window.isEnglish()) ? 'LAST BADGE' : 'DERNIER BADGE';
     c.appendChild(badgeEyebrow);
 
     // Badge card — accent-tinted background, left accent border
@@ -3552,7 +3647,7 @@ function renderCardStreak() {
         'white-space:nowrap;'
       ].join('')
     });
-    tagEl.textContent = 'Débloqué';
+    tagEl.textContent = (window.isEnglish && window.isEnglish()) ? 'Unlocked' : 'Débloqué';
 
     badgeEl.appendChild(iconWrap);
     badgeEl.appendChild(textEl);
@@ -3565,7 +3660,7 @@ function renderCardStreak() {
     var shareBtn = h('button', {
       style: 'margin-top:16px;width:100%;padding:12px;border:1px solid var(--border,#E8E6DF);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);cursor:pointer;',
       onclick: function() { shareProgression(); }
-    }, '\u2197\u2003Partager ma progression');
+    }, (window.isEnglish && window.isEnglish()) ? '\u2197\u2003Share my progress' : '\u2197\u2003Partager ma progression');
     c.appendChild(shareBtn);
   }
 
@@ -3600,7 +3695,7 @@ function renderCardSport() {
     var _iaCard = card('border-left:4px solid var(--green,#3E5C3A);');
     _iaCard.appendChild(eyebrow('VOTRE PROGRAMME'));
     _iaCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:8px;'}, 'Programme sur mesure actif'));
-    var _iaDate = S.muscuIAProgramDate ? 'G\u00e9n\u00e9r\u00e9 le ' + window.formatDate(S.muscuIAProgramDate) : '';
+    var _iaDate = S.muscuIAProgramDate ? ((window.isEnglish && window.isEnglish() ? 'Generated on ' : 'G\u00e9n\u00e9r\u00e9 le ') + window.formatDate(S.muscuIAProgramDate)) : '';
     if (_iaDate) _iaCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px;'}, _iaDate));
     _iaCard.appendChild(h('button', {style: 'padding:10px 16px;background:var(--green,#3E5C3A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;', onclick: function() { S.view = 'sport'; S.sStep = 4; if (window.render) window.render(); }}, 'Voir mon programme \u2192'));
     return _iaCard;
@@ -3613,13 +3708,13 @@ function renderCardSport() {
     _sportEmptyCard.appendChild(eyebrow('SPORT'));
     var _sportEmpty = h('div', {style: 'text-align:center;padding:28px 0 16px;'});
     _sportEmpty.appendChild(emptyIllu('sport'));
-    _sportEmpty.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:20px;margin:4px 0 10px;font-weight:normal;color:var(--black,#0A0A09);line-height:1.3;max-width:240px;margin-left:auto;margin-right:auto;'}, 'Votre programme sur mesure vous attend'));
-    _sportEmpty.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);margin-bottom:20px;line-height:1.55;max-width:260px;margin-left:auto;margin-right:auto;'}, 'Choisissez votre sport, votre niveau et votre agenda.'));
+    _sportEmpty.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:20px;margin:4px 0 10px;font-weight:normal;color:var(--black,#0A0A09);line-height:1.3;max-width:240px;margin-left:auto;margin-right:auto;'}, (window.isEnglish && window.isEnglish()) ? 'Your tailor-made program awaits' : 'Votre programme sur mesure vous attend'));
+    _sportEmpty.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);margin-bottom:20px;line-height:1.55;max-width:260px;margin-left:auto;margin-right:auto;'}, (window.isEnglish && window.isEnglish()) ? 'Choose your sport, your level and your schedule.' : 'Choisissez votre sport, votre niveau et votre agenda.'));
     _sportEmpty.appendChild(h('button', {
       style: 'padding:14px 24px;min-height:48px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
       onclick: function() { if (!window.S) return; window.S.view = 'sport'; if (window.render) window.render(); }
-    }, 'Composer mon programme'));
-    _sportEmpty.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:14px;'}, '3 min \u00b7 Gratuit \u00b7 Personnalis\u00e9'));
+    }, (window.isEnglish && window.isEnglish()) ? 'Build my program' : 'Composer mon programme'));
+    _sportEmpty.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:14px;'}, (window.isEnglish && window.isEnglish()) ? '3 min \u00b7 Free \u00b7 Personalized' : '3 min \u00b7 Gratuit \u00b7 Personnalis\u00e9'));
     _sportEmptyCard.appendChild(_sportEmpty);
     return _sportEmptyCard;
   }
@@ -3646,7 +3741,7 @@ function renderCardSport() {
             'color:var(--orange-ink,#7A3B0E);',
             'line-height:1.5;'
           ].join('')
-        }, 'R\u00e9cup\u00e9ration insuffisante d\u00e9tect\u00e9e \u00b7 S\u00e9ance all\u00e9g\u00e9e recommand\u00e9e');
+        }, (window.isEnglish && window.isEnglish()) ? 'Insufficient recovery detected \u00b7 Lighter session recommended' : 'R\u00e9cup\u00e9ration insuffisante d\u00e9tect\u00e9e \u00b7 S\u00e9ance all\u00e9g\u00e9e recommand\u00e9e');
       }
     }
   } catch(e) {}
@@ -3662,13 +3757,13 @@ function renderCardSport() {
     'ppl_3':       ['Push','Pull','Legs'],
     'upper_lower': ['Upper A','Lower A','Upper B','Lower B'],
     'ppl_plus1':   ['Push','Pull','Legs','Upper'],
-    'bro_4':       ['Pecs + Triceps','Dos + Biceps','Épaules','Jambes'],
+    'bro_4':       (window.isEnglish && window.isEnglish()) ? ['Chest + Triceps','Back + Biceps','Shoulders','Legs'] : ['Pecs + Triceps','Dos + Biceps','Épaules','Jambes'],
     'ppl_5':       ['Push A','Pull A','Legs','Push B','Pull B'],
-    'bro_5':       ['Pecs','Dos','Épaules','Bras','Jambes'],
+    'bro_5':       (window.isEnglish && window.isEnglish()) ? ['Chest','Back','Shoulders','Arms','Legs'] : ['Pecs','Dos','Épaules','Bras','Jambes'],
     'ppl_6':       ['Push A','Pull A','Legs A','Push B','Pull B','Legs B']
   };
   var _dashLabels = (S._splitChoice && S.sportType === 'musculation') ? (_DASH_SPLIT_LABELS[S._splitChoice] || null) : null;
-  var dayName = (_dashLabels && _dashLabels[idx]) ? _dashLabels[idx] : (day.name || ('Séance ' + (idx + 1)));
+  var dayName = (_dashLabels && _dashLabels[idx]) ? _dashLabels[idx] : (day.name || ((window.isEnglish && window.isEnglish() ? 'Session ' : 'Séance ') + (idx + 1)));
   var exCount = Array.isArray(day.exercises) ? day.exercises.length : 0;
 
   // Estimated duration heuristic
@@ -3698,7 +3793,7 @@ function renderCardSport() {
   var c = card();
   if (_recoveryBanner) c.appendChild(_recoveryBanner);
   // Bible Hermès §13.2 : titre Georgia suffit, pas d'eyebrow "SÉANCE DU JOUR".
-  c.appendChild(cardTitle('Entraînement'));
+  c.appendChild(cardTitle((window.isEnglish && window.isEnglish()) ? 'Training' : 'Entraînement'));
 
   var nameEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-bottom:6px;' });
   var _dashDayAbbr = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
@@ -3767,14 +3862,14 @@ function renderCardSport() {
       // Endurance sports: show duration/distance, discipline, and week progress instead of exercise count
       var _endurDur = (day._duration || day._distance || '—');
       var _sportLabels = { running: 'Running', triathlon: 'Triathlon', cycling: 'Cycling', yoga: 'Yoga' };
-      _statsRow.appendChild(_statCell(_endurDur, 'Séance', false));
+      _statsRow.appendChild(_statCell(_endurDur, (window.isEnglish && window.isEnglish()) ? 'Session' : 'Séance', false));
       _statsRow.appendChild(_statCell(_sportLabels[next.kind] || next.kind, 'Sport', false));
-      _statsRow.appendChild(_statCell(_weekTarget > 0 ? (_weekDone + '/' + _weekTarget) : '—', 'Semaine', true));
+      _statsRow.appendChild(_statCell(_weekTarget > 0 ? (_weekDone + '/' + _weekTarget) : '—', (window.isEnglish && window.isEnglish()) ? 'Week' : 'Semaine', true));
     } else {
       // Bible Hermès §3.4 : accord singulier/pluriel correct ("1 EXERCICE" pas "1 EXERCICES")
       _statsRow.appendChild(_statCell(exCount || '—', window.locPlural(exCount, {fr:{one:'Exercice',other:'Exercices'},en:{one:'Exercise',other:'Exercises'}}), false));
-      _statsRow.appendChild(_statCell(_estMins ? ('~' + _estMins + "'") : '—', 'Durée', false));
-      _statsRow.appendChild(_statCell(_weekTarget > 0 ? (_weekDone + '/' + _weekTarget) : '—', 'Semaine', true));
+      _statsRow.appendChild(_statCell(_estMins ? ('~' + _estMins + "'") : '—', (window.isEnglish && window.isEnglish()) ? 'Duration' : 'Durée', false));
+      _statsRow.appendChild(_statCell(_weekTarget > 0 ? (_weekDone + '/' + _weekTarget) : '—', (window.isEnglish && window.isEnglish()) ? 'Week' : 'Semaine', true));
     }
     c.appendChild(_statsRow);
   }
@@ -3791,7 +3886,7 @@ function renderCardSport() {
       _exosPreview.appendChild(exRow);
     });
     if (day.exercises.length > 3) {
-      _exosPreview.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--ink-500,#6B6B65);text-align:center;margin-top:6px;letter-spacing:1px;' }, '+ ' + (day.exercises.length - 3) + ' autres exos'));
+      _exosPreview.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--ink-500,#6B6B65);text-align:center;margin-top:6px;letter-spacing:1px;' }, '+ ' + (day.exercises.length - 3) + ' ' + ((window.isEnglish && window.isEnglish()) ? 'more exercises' : 'autres exos')));
     }
     c.appendChild(_exosPreview);
   }
@@ -3822,9 +3917,10 @@ function renderCardSport() {
   // FIX SPRINT P1.3 + P1.9 — bouton "Commencer/Continuer" prominent
   // FIX MULTI-SPORTS : adapter le libellé pour les sports endurance
   // FIX COHÉRENCE 2026-04 : si séance déjà terminée → bouton "✔ Séance terminée" désactivé
+  var _bEN = window.isEnglish && window.isEnglish();
   var btnLabel = hasSessionDoneToday
-    ? '\u2714 S\u00e9ance termin\u00e9e'
-    : (hasInProgressSession ? '\u2192 Continuer la s\u00e9ance' : (_isEnduranceSport ? '\u2192 Voir mon programme' : '\u2192 Commencer la s\u00e9ance'));
+    ? '\u2714 ' + (_bEN ? 'Session complete' : 'S\u00e9ance termin\u00e9e')
+    : (hasInProgressSession ? '\u2192 ' + (_bEN ? 'Continue session' : 'Continuer la s\u00e9ance') : (_isEnduranceSport ? '\u2192 ' + (_bEN ? 'View my program' : 'Voir mon programme') : '\u2192 ' + (_bEN ? 'Start session' : 'Commencer la s\u00e9ance')));
   // FIX COHÉRENCE 2026-04 : style du bouton adapté selon l'état de la séance
   var _btnStyle = hasSessionDoneToday
     ? 'display:block;width:100%;padding:16px;background:rgba(62,92,58,0.08);color:var(--success,#3E5C3A);border:1px solid var(--success,#3E5C3A);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;cursor:default;border-radius:2px;min-height:52px;font-weight:500;'
@@ -3844,7 +3940,7 @@ function renderCardSport() {
   if (hasInProgressSession) {
     c.appendChild(h('div', {
       style: 'font-family:Georgia,serif;font-style:italic;font-size:12px;color:var(--ink-500,#6B6B65);text-align:center;margin-top:8px;'
-    }, 'Vous reprenez où vous en étiez.'));
+    }, '(window.isEnglish && window.isEnglish()) ? 'Pick up where you left off.' : 'Vous reprenez où vous en étiez.'));
   }
 
   // ── Séance Libre ──
@@ -3856,7 +3952,7 @@ function renderCardSport() {
       S2.sStep = 30;
       if (window.render) window.render();
     }
-  }, '+ Séance libre'));
+  }, (window.isEnglish && window.isEnglish()) ? '+ Free session' : '+ Séance libre'));
 
   return c;
 }
@@ -3870,10 +3966,11 @@ function renderCardRestDay(S) {
   var _lvl = S.sportLevel || 'beginner';
   if (_lvl !== 'intermediate' && _lvl !== 'advanced') _lvl = 'beginner';
 
+  var _rEN = window.isEnglish && window.isEnglish();
   var _restMsg = {
-    beginner:     'Les muscles se construisent au repos. Aujourd\u2019hui fait partie du plan.',
-    intermediate: 'La r\u00e9cup\u00e9ration est un entra\u00eenement. Vos fibres se reconstruisent plus fortes.',
-    advanced:     'La surcompensation se joue dans les 24\u201348h post-s\u00e9ance. Optimise ce repos.'
+    beginner:     _rEN ? 'Muscles are built at rest. Today is part of the plan.' : 'Les muscles se construisent au repos. Aujourd\u2019hui fait partie du plan.',
+    intermediate: _rEN ? 'Recovery is training. Your fibers rebuild stronger.' : 'La r\u00e9cup\u00e9ration est un entra\u00eenement. Vos fibres se reconstruisent plus fortes.',
+    advanced:     _rEN ? 'Supercompensation happens in the 24-48h post-session. Optimize this rest.' : 'La surcompensation se joue dans les 24\u201348h post-s\u00e9ance. Optimise ce repos.'
   }[_lvl];
 
   var weightKg = (S && S.weight) ? parseFloat(S.weight) : 70;
@@ -3881,18 +3978,31 @@ function renderCardRestDay(S) {
   var _efsa_floor = window.isMale(S) ? 2.5 : 2.0;
   var waterGoal = Math.max(_efsa_floor, Math.round(weightKg * 0.035 * 10) / 10);
 
+  var _rtEN = window.isEnglish && window.isEnglish();
   var _restTips = {
-    beginner: [
+    beginner: _rtEN ? [
+      '\u2014 Light walk or gentle stretching',
+      '\u2014 Hydration: goal ' + waterGoal + '\u00a0L',
+      '\u2014 Sleep 7-9h tonight'
+    ] : [
       '\u2014 Marche l\u00e9g\u00e8re ou \u00e9tirements doux',
       '\u2014 Hydratation\u00a0: objectif\u00a0' + waterGoal + '\u00a0L',
       '\u2014 Sommeil\u00a07\u20139h cette nuit'
     ],
-    intermediate: [
+    intermediate: _rtEN ? [
+      '\u2014 Foam roller \u00b7 10 min on worked muscle groups',
+      '\u2014 Hydration: ' + waterGoal + '\u00a0L + electrolytes',
+      '\u2014 Sleep 8h \u00b7 optimize deep sleep phases'
+    ] : [
       '\u2014 Foam roller \u00b7 10\u202fmin sur les groupes travaill\u00e9s',
       '\u2014 Hydratation\u00a0: ' + waterGoal + '\u00a0L + \u00e9lectrolytes',
       '\u2014 Sommeil\u00a08h \u00b7 optimisez les phases profondes'
     ],
-    advanced: [
+    advanced: _rtEN ? [
+      '\u2014 Hot/cold contrast \u00b7 3 cycles of 2 min',
+      '\u2014 Hydration: ' + waterGoal + '\u00a0L + sodium post-effort',
+      '\u2014 Sleep 8-9h \u00b7 avoid screens 1h before'
+    ] : [
       '\u2014 Contraste chaud\u2009/\u2009froid \u00b7 3 cycles de 2\u202fmin',
       '\u2014 Hydratation\u00a0: ' + waterGoal + '\u00a0L + sodium post-effort',
       '\u2014 Sommeil\u00a08\u20139h \u00b7 \u00e9vitez les \u00e9crans 1h avant'
@@ -3903,7 +4013,7 @@ function renderCardRestDay(S) {
 
   // Header
   // Bible Hermès §13.2 : pas d'eyebrow — titre Georgia suffit.
-  c.appendChild(cardTitle('Jour de repos'));
+  c.appendChild(cardTitle((window.isEnglish && window.isEnglish()) ? 'Rest day' : 'Jour de repos'));
 
   // Subtitle message
   var msgEl = h('div', { style: 'font-family:Georgia,serif;font-style:italic;font-size:13px;color:var(--grey);margin-bottom:16px;line-height:1.6;' });
@@ -3921,14 +4031,14 @@ function renderCardRestDay(S) {
 
   // Mood check-in
   var moodLabel = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px;' });
-  moodLabel.textContent = mood ? 'Votre ressenti aujourd\'hui' : 'Comment vous sentez-vous ?';
+  moodLabel.textContent = (window.isEnglish && window.isEnglish()) ? (mood ? 'How you feel today' : 'How are you feeling?') : (mood ? 'Votre ressenti aujourd\'hui' : 'Comment vous sentez-vous ?');
   c.appendChild(moodLabel);
 
   // Bible Hermès §13.1 : pas d'emoji. Labels typographiques à la place.
   var moods = [
-    { key: 'apathique', label: 'Apathique' },
-    { key: 'neutre',    label: 'Neutre' },
-    { key: 'energique', label: 'Énergique' }
+    { key: 'apathique', label: (window.isEnglish && window.isEnglish()) ? 'Apathetic' : 'Apathique' },
+    { key: 'neutre',    label: (window.isEnglish && window.isEnglish()) ? 'Neutral' : 'Neutre' },
+    { key: 'energique', label: (window.isEnglish && window.isEnglish()) ? 'Energetic' : 'Énergique' }
   ];
   var moodRow = h('div', { style: 'display:flex;gap:8px;flex-wrap:wrap;' });
   moods.forEach(function(m) {
@@ -3954,7 +4064,7 @@ function renderCardRestDay(S) {
       S2.sStep = 30;
       if (window.render) window.render();
     }
-  }, '+ Séance libre'));
+  }, (window.isEnglish && window.isEnglish()) ? '+ Free session' : '+ Séance libre'));
 
   return c;
 }
@@ -3972,10 +4082,10 @@ function renderCardWellness(S) {
 
   var c = card();
   // Bible Hermès §13.2 : pas d'eyebrow — "Comment vous sentez-vous ?" est le titre direct.
-  c.appendChild(cardTitle('Comment vous sentez-vous ?'));
+  c.appendChild(cardTitle((window.isEnglish && window.isEnglish()) ? 'How are you feeling?' : 'Comment vous sentez-vous ?'));
 
   var desc = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px;' });
-  desc.textContent = 'Sommeil \u00b7 Muscles \u00b7 \u00c9nergie';
+  desc.textContent = (window.isEnglish && window.isEnglish()) ? 'Sleep \u00b7 Muscles \u00b7 Energy' : 'Sommeil \u00b7 Muscles \u00b7 \u00c9nergie';
   c.appendChild(desc);
 
   var btn = h('button', {
@@ -3987,7 +4097,7 @@ function renderCardWellness(S) {
       // Ne pas forcer sStep=20 (musculation-only) — laisser le dispatcher sport gérer le bon step
       if (window.render) window.render();
     }
-  }, 'Faire le checkin rapide');
+  }, (window.isEnglish && window.isEnglish()) ? 'Quick check-in' : 'Faire le checkin rapide');
   c.appendChild(btn);
 
   return c;
@@ -3999,7 +4109,7 @@ function renderCardShortcuts() {
   // Bible Hermès §13.2 : titre Georgia 17px au lieu d'eyebrow uppercase.
   c.appendChild(h('div', {
     style: 'font-family:Georgia,serif;font-size:17px;font-weight:normal;color:var(--ink-900,#0A0A09);margin-bottom:14px;line-height:1.25;'
-  }, 'Actions rapides'));
+  }, (window.isEnglish && window.isEnglish()) ? 'Quick actions' : 'Actions rapides'));
 
   var row = h('div', { style: 'display:flex;gap:8px;margin-top:4px;' });
 
@@ -4012,7 +4122,7 @@ function renderCardShortcuts() {
       S.view = 'nutrition';
       if (window.render) window.render();
     }
-  }, '+ Ajouter un repas');
+  }, (window.isEnglish && window.isEnglish()) ? '+ Add a meal' : '+ Ajouter un repas');
 
   var btnSport = h('button', {
     style: 'flex:1;background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:14px 8px;border:1px solid var(--border);border-radius:2px;cursor:pointer;transition:all .2s;',
@@ -4023,7 +4133,7 @@ function renderCardShortcuts() {
       S.view = 'sport';
       if (window.render) window.render();
     }
-  }, 'Voir mon programme');
+  }, (window.isEnglish && window.isEnglish()) ? 'View my plan' : 'Voir mon programme');
 
   row.appendChild(btnMeal);
   row.appendChild(btnSport);
@@ -4072,7 +4182,7 @@ function todayModal(title, buildFn) {
 
 // ─── WEIGHT PROMPT ───
 function openTodayWeightPrompt() {
-  todayModal('Enregistrer mon poids', function(box, overlay) {
+  todayModal((window.isEnglish && window.isEnglish()) ? 'Record my weight' : 'Enregistrer mon poids', function(box, overlay) {
     var input = h('input', {
       type: 'number', step: '0.1',
       style: 'width:100%;padding:12px;font-family:Georgia,serif;font-size:18px;font-style:italic;border:1px solid var(--border);background:var(--ivory,#FAF9F6);color:var(--black);box-sizing:border-box;outline:none;margin-bottom:12px;',
@@ -4093,7 +4203,7 @@ function openTodayWeightPrompt() {
           // Toast explicite pour expliquer POURQUOI refusé
           if (window.showToast) {
             var unitTxt = window.UNITS ? window.UNITS.weightLabel() : 'kg';
-            window.showToast('Poids invalide. Entrez une valeur entre 20 et 300 kg (44-660 ' + (unitTxt === 'lbs' ? 'lbs' : 'kg') + ').', 'error', 4000);
+            window.showToast((window.isEnglish && window.isEnglish()) ? ('Invalid weight. Enter a value between 20 and 300 kg (44-660 ' + (unitTxt === 'lbs' ? 'lbs' : 'kg') + ').') : ('Poids invalide. Entrez une valeur entre 20 et 300 kg (44-660 ' + (unitTxt === 'lbs' ? 'lbs' : 'kg') + ').'), 'error', 4000);
           }
           return;
         }
@@ -4132,7 +4242,7 @@ function openTodayWeightPrompt() {
         if (window.S) window.S.weightHistory = wh;
         // Persister le nouveau poids dans le profil (évite la perte de données si l'utilisateur ferme l'app)
         if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
-        var _wLabel = 'Poids enregistré : ' + (window.UNITS ? window.UNITS.displayWeight(valKg) : valKg + ' kg');
+        var _wLabel = (window.isEnglish && window.isEnglish()) ? ('Weight saved: ' + (window.UNITS ? window.UNITS.displayWeight(valKg) : valKg + ' kg')) : ('Poids enregistré : ' + (window.UNITS ? window.UNITS.displayWeight(valKg) : valKg + ' kg'));
         if (window.GAMIFICATION) {
           try {
             window.GAMIFICATION.showToast(_wLabel);
@@ -4147,7 +4257,7 @@ function openTodayWeightPrompt() {
         document.body.removeChild(overlay);
         if (window.APP_RENDER) window.APP_RENDER();
       }
-    }, 'Enregistrer');
+    }, (window.isEnglish && window.isEnglish()) ? 'Save' : 'Enregistrer');
     box.appendChild(saveBtn);
     setTimeout(function() { input.focus(); }, 100);
   });
@@ -4162,7 +4272,7 @@ function openTodayMeasurementsModal() {
         formContainer.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, 'Module mensurations indisponible.'));
       }
     } else {
-      formContainer.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, 'Module mensurations non chargé.'));
+      formContainer.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, (window.isEnglish && window.isEnglish()) ? 'Measurements module not loaded.' : 'Module mensurations non chargé.'));
     }
     box.appendChild(formContainer);
   });
@@ -4225,7 +4335,7 @@ function openTodayKitchenTimer() {
       onclick: function() {
         if (running || totalSeconds <= 0) return;
         running = true;
-        startBtn.textContent = 'En cours...';
+        startBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Running...' : 'En cours...';
         interval = window._kitchenTimerInterval = setInterval(function() {
           // 2026-04 P1 FIX : suicide si l'overlay est detached du DOM (fermeture non-orthodoxe)
           if (!overlay || !overlay.parentNode || !document.body.contains(overlay)) {
@@ -4237,7 +4347,7 @@ function openTodayKitchenTimer() {
           if (totalSeconds <= 0) {
             clearInterval(interval); window._kitchenTimerInterval = null; running = false;
             startBtn.textContent = window.t ? window.t('extras.start') : 'Démarrer';
-            display.textContent = 'Terminé !';
+            display.textContent = (window.isEnglish && window.isEnglish()) ? 'Done!' : 'Terminé !';
             try { if (window.navigator && window.navigator.vibrate) window.navigator.vibrate([200,100,200]); } catch(e) {}
           }
         }, 1000);
@@ -4284,7 +4394,7 @@ function todayExportAllData() {
   a.download = 'mtd-backup-' + new Date().toISOString().split('T')[0] + '.json';
   a.click();
   URL.revokeObjectURL(url);
-  if (window.GAMIFICATION) window.GAMIFICATION.showToast('Données exportées !');
+  if (window.GAMIFICATION) window.GAMIFICATION.showToast((window.isEnglish && window.isEnglish()) ? 'Data exported!' : 'Données exportées !');
 }
 
 function todayImportData() {
@@ -4298,14 +4408,15 @@ function todayImportData() {
     reader.onload = function(ev) {
       try {
         var backup = JSON.parse(ev.target.result);
-        if (!backup.data || !backup.version) { if (window.showToast) window.showToast('Fichier invalide', 'error', 3000); return; }
-        if (!(window.sfcConfirm ? window.sfcConfirm('Cela remplacera vos données actuelles. Continuer ?') : window.confirm('Cela remplacera vos données actuelles. Continuer ?'))) return;
+        if (!backup.data || !backup.version) { if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Invalid file' : 'Fichier invalide', 'error', 3000); return; }
+        var _restoreMsg = (window.isEnglish && window.isEnglish()) ? 'This will replace your current data. Continue?' : 'Cela remplacera vos données actuelles. Continuer ?';
+        if (!(window.sfcConfirm ? window.sfcConfirm(_restoreMsg) : window.confirm(_restoreMsg))) return;
         Object.keys(backup.data).forEach(function(key) {
           localStorage.setItem(key, typeof backup.data[key] === 'string' ? backup.data[key] : JSON.stringify(backup.data[key]));
         });
-        if (window.GAMIFICATION) window.GAMIFICATION.showToast('Données restaurées !');
+        if (window.GAMIFICATION) window.GAMIFICATION.showToast((window.isEnglish && window.isEnglish()) ? 'Data restored!' : 'Données restaurées !');
         setTimeout(function() { location.reload(); }, 1000);
-      } catch(err) { if (window.showToast) window.showToast('Erreur de lecture : ' + err.message, 'error', 4000); }
+      } catch(err) { if (window.showToast) window.showToast((window.isEnglish && window.isEnglish() ? 'Read error: ' : 'Erreur de lecture : ') + err.message, 'error', 4000); }
     };
     reader.readAsText(file);
   };
@@ -4313,7 +4424,8 @@ function todayImportData() {
 }
 
 function todayDeleteAllData() {
-  if (!(window.sfcConfirm ? window.sfcConfirm('Action irr\u00e9versible. Toutes vos donn\u00e9es seront supprim\u00e9es d\u00e9finitivement. Continuer ?') : window.confirm('Action irr\u00e9versible. Toutes vos donn\u00e9es seront supprim\u00e9es d\u00e9finitivement. Continuer ?'))) return;
+  var _deleteMsg = (window.isEnglish && window.isEnglish()) ? 'Irreversible action. All your data will be permanently deleted. Continue?' : 'Action irr\u00e9versible. Toutes vos donn\u00e9es seront supprim\u00e9es d\u00e9finitivement. Continuer ?';
+  if (!(window.sfcConfirm ? window.sfcConfirm(_deleteMsg) : window.confirm(_deleteMsg))) return;
   var keysToRemove = [];
   for (var i = 0; i < localStorage.length; i++) {
     var key = localStorage.key(i);
@@ -4321,7 +4433,7 @@ function todayDeleteAllData() {
   }
   keysToRemove.forEach(function(key) { localStorage.removeItem(key); });
   if (window.AUTH && window.AUTH.logout) { try { window.AUTH.logout(); } catch(e) {} }
-  if (window.GAMIFICATION) window.GAMIFICATION.showToast('Données supprimées.');
+  if (window.GAMIFICATION) window.GAMIFICATION.showToast((window.isEnglish && window.isEnglish()) ? 'Data deleted.' : 'Données supprimées.');
   setTimeout(function() { location.reload(); }, 1000);
 }
 
@@ -4403,19 +4515,19 @@ function renderExtendedSections(wrapper, S) {
       sleepBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Suivi sommeil non disponible pour le moment.'));
     }
   } else {
-    sleepBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Enregistrez vos nuits pour suivre la qualit\u00e9 de votre sommeil.'));
+    sleepBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, (window.isEnglish && window.isEnglish()) ? 'Record your nights to track your sleep quality.' : 'Enregistrez vos nuits pour suivre la qualit\u00e9 de votre sommeil.'));
   }
   wrapper.appendChild(sleepBox);
 
   // Weekly Summary
-  wrapper.appendChild(sectionLabel('Résumé hebdomadaire'));
+  wrapper.appendChild(sectionLabel((window.isEnglish && window.isEnglish()) ? 'Weekly summary' : 'Résumé hebdomadaire'));
   var weeklyBox = card();
   if (window.WEEKLY_SUMMARY && window.WEEKLY_SUMMARY.renderWidget) {
     try { window.WEEKLY_SUMMARY.renderWidget(weeklyBox); } catch(e) {
-      weeklyBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'R\u00e9sum\u00e9 hebdomadaire non disponible pour le moment.'));
+      weeklyBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, (window.isEnglish && window.isEnglish()) ? 'Weekly summary not available at the moment.' : 'R\u00e9sum\u00e9 hebdomadaire non disponible pour le moment.'));
     }
   } else {
-    weeklyBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Le r\u00e9sum\u00e9 hebdomadaire apparaîtra après votre premi\u00e8re semaine compl\u00e8te.'));
+    weeklyBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, (window.isEnglish && window.isEnglish()) ? 'The weekly summary will appear after your first complete week.' : 'Le r\u00e9sum\u00e9 hebdomadaire apparaîtra après votre premi\u00e8re semaine compl\u00e8te.'));
   }
   wrapper.appendChild(weeklyBox);
 
@@ -4427,7 +4539,7 @@ function renderExtendedSections(wrapper, S) {
       perfBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Graphique de progression non disponible pour le moment.'));
     }
   } else {
-    perfBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Votre progression s\u2019affichera ici au fil de vos s\u00e9ances.'));
+    perfBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, (window.isEnglish && window.isEnglish()) ? 'Your progress will appear here as you complete sessions.' : 'Votre progression s\u2019affichera ici au fil de vos s\u00e9ances.'));
   }
   wrapper.appendChild(perfBox);
 
@@ -4454,12 +4566,12 @@ function renderExtendedSections(wrapper, S) {
       }
       var sessions = (insights.sessions || 0);
       var kcal = (insights.kcalTotal || 0);
-      statsGrid.appendChild(insightStat(sessions, 'Séances'));
-      statsGrid.appendChild(insightStat(kcal > 0 ? window.formatNumber(kcal) : '—', 'Kcal dépensées'));
+      statsGrid.appendChild(insightStat(sessions, (window.isEnglish && window.isEnglish()) ? 'Sessions' : 'Séances'));
+      statsGrid.appendChild(insightStat(kcal > 0 ? window.formatNumber(kcal) : '—', (window.isEnglish && window.isEnglish()) ? 'Kcal burned' : 'Kcal dépensées'));
       var sleep = (typeof insights.sleepAvg === 'number') ? insights.sleepAvg.toFixed(1) + '/5' : '—';
-      statsGrid.appendChild(insightStat(sleep, 'Sommeil moyen'));
+      statsGrid.appendChild(insightStat(sleep, (window.isEnglish && window.isEnglish()) ? 'Avg sleep' : 'Sommeil moyen'));
       var rpe = (typeof insights.rpeAvg === 'number') ? insights.rpeAvg.toFixed(1) + '/10' : '—';
-      statsGrid.appendChild(insightStat(rpe, 'RPE moyen'));
+      statsGrid.appendChild(insightStat(rpe, (window.isEnglish && window.isEnglish()) ? 'Avg RPE' : 'RPE moyen'));
       insightsBox.appendChild(statsGrid);
 
       // Bar chart jours actifs (micro, visuel minimaliste) — affiché UNIQUEMENT si
@@ -4554,7 +4666,7 @@ function renderExtendedSections(wrapper, S) {
           var sCol = 'var(--green,#3E5C3A)';
           if (goals.sessions.pct !== null && goals.sessions.pct < 50) sCol = 'var(--orange,#E86F1E)';
           goalsBox.appendChild(goalRow(
-            'Séances',
+            (window.isEnglish && window.isEnglish()) ? 'Sessions' : 'Séances',
             goals.sessions.done,
             goals.sessions.planned,
             goals.sessions.pct,
@@ -4574,7 +4686,7 @@ function renderExtendedSections(wrapper, S) {
             else if (kDiff > 10) kCol = 'var(--orange,#E86F1E)';
           }
           goalsBox.appendChild(goalRow(
-            'Calories (moy. 7j)',
+            (window.isEnglish && window.isEnglish()) ? 'Calories (7d avg)' : 'Calories (moy. 7j)',
             goals.kcalAvg.current,
             goals.kcalAvg.target,
             goals.kcalAvg.pct,
@@ -4589,7 +4701,7 @@ function renderExtendedSections(wrapper, S) {
           var pCol = 'var(--green,#3E5C3A)';
           if (goals.proteinAvg.pct !== null && goals.proteinAvg.pct < 80) pCol = 'var(--orange,#E86F1E)';
           goalsBox.appendChild(goalRow(
-            'Protéines (moy. 7j)',
+            (window.isEnglish && window.isEnglish()) ? 'Protein (7d avg)' : 'Protéines (moy. 7j)',
             goals.proteinAvg.current,
             goals.proteinAvg.target,
             goals.proteinAvg.pct,
@@ -4604,7 +4716,7 @@ function renderExtendedSections(wrapper, S) {
           var wCol = 'var(--green,#3E5C3A)';
           if (goals.wellnessLogged.pct < 50) wCol = 'var(--orange,#E86F1E)';
           goalsBox.appendChild(goalRow(
-            'Bilan forme',
+            (window.isEnglish && window.isEnglish()) ? 'Wellness log' : 'Bilan forme',
             goals.wellnessLogged.count,
             goals.wellnessLogged.target,
             goals.wellnessLogged.pct,
@@ -4633,7 +4745,7 @@ function renderExtendedSections(wrapper, S) {
     if (typeof window.getSleepEnergyTrend === 'function') {
       var trend = window.getSleepEnergyTrend(30);
       if (trend && trend.loggedDays >= 3) {
-        wrapper.appendChild(sectionLabel('Sommeil & énergie (30 jours)'));
+        wrapper.appendChild(sectionLabel((window.isEnglish && window.isEnglish()) ? 'Sleep & energy (30 days)' : 'Sommeil & énergie (30 jours)'));
         var trendBox = card();
 
         // Stats rapides au-dessus du graphique
@@ -4651,15 +4763,15 @@ function renderExtendedSections(wrapper, S) {
         }
         statsRow.appendChild(trendStat(
           _sleepAvg !== null ? _sleepAvg.toFixed(1) + '/5' : '—',
-          'Sommeil moyen'
+          (window.isEnglish && window.isEnglish()) ? 'Avg sleep' : 'Sommeil moyen'
         ));
         statsRow.appendChild(trendStat(
           _energyAvg !== null ? _energyAvg.toFixed(1) + '/3' : '—',
-          'Énergie moyenne'
+          (window.isEnglish && window.isEnglish()) ? 'Avg energy' : 'Énergie moyenne'
         ));
         statsRow.appendChild(trendStat(
           trend.loggedDays + '/30',
-          'Jours loggés'
+          ((window.isEnglish && window.isEnglish()) ? 'Logged days' : 'Jours loggés')
         ));
         trendBox.appendChild(statsRow);
 
@@ -4687,7 +4799,7 @@ function renderExtendedSections(wrapper, S) {
                 labels: shortLabels,
                 datasets: [
                   {
-                    label: 'Sommeil (1-5)',
+                    label: (window.isEnglish && window.isEnglish()) ? 'Sleep (1-5)' : 'Sommeil (1-5)',
                     data: trend.sleep,
                     borderColor: '#3E5C3A',
                     backgroundColor: 'rgba(62,92,58,0.08)',
@@ -4699,7 +4811,7 @@ function renderExtendedSections(wrapper, S) {
                     yAxisID: 'ySleep'
                   },
                   {
-                    label: 'Énergie (bas/moyen/haut)',
+                    label: (window.isEnglish && window.isEnglish()) ? 'Energy (low/medium/high)' : 'Énergie (bas/moyen/haut)',
                     data: trend.energyScore,
                     borderColor: '#E86F1E',
                     backgroundColor: 'rgba(232,111,30,0.06)',
@@ -4773,7 +4885,7 @@ function renderExtendedSections(wrapper, S) {
     if (typeof window.getStrengthTrend === 'function') {
       var strengthTrend = window.getStrengthTrend(30);
       if (strengthTrend && strengthTrend.datasets.length > 0) {
-        wrapper.appendChild(sectionLabel('Progression charges (30 jours)'));
+        wrapper.appendChild(sectionLabel((window.isEnglish && window.isEnglish()) ? 'Load progression (30 days)' : 'Progression charges (30 jours)'));
         var strengthBox = card();
 
         // Header : delta par exo (Georgia)
@@ -4901,7 +5013,7 @@ function renderExtendedSections(wrapper, S) {
     if (typeof window.getPersonalRecords === 'function') {
       var records = window.getPersonalRecords();
       if (records) {
-        wrapper.appendChild(sectionLabel('Records personnels'));
+        wrapper.appendChild(sectionLabel((window.isEnglish && window.isEnglish()) ? 'Personal records' : 'Records personnels'));
         var recordsBox = card();
 
         // Helper : ligne record (label gauche, valeur droite)
@@ -4957,7 +5069,7 @@ function renderExtendedSections(wrapper, S) {
         } else if (records.weightRange) {
           var wr = records.weightRange;
           recordsBox.appendChild(recordLine(
-            'Plage de poids',
+            (window.isEnglish && window.isEnglish()) ? 'Weight range' : 'Plage de poids',
             wr.min + '–' + wr.max + ' kg',
             null
           ));
@@ -4968,10 +5080,10 @@ function renderExtendedSections(wrapper, S) {
         if (records.longestSession) {
           var ls = records.longestSession;
           var lsDetail = [];
-          if (ls.kcalTotal) lsDetail.push(ls.kcalTotal + ' kcal brûlées');
+          if (ls.kcalTotal) lsDetail.push(ls.kcalTotal + ' ' + ((window.isEnglish && window.isEnglish()) ? 'kcal burned' : 'kcal brûlées'));
           if (ls.date) lsDetail.push(fmtDate(ls.date));
           recordsBox.appendChild(recordLine(
-            'Séance la plus longue',
+            (window.isEnglish && window.isEnglish()) ? 'Longest session' : 'Séance la plus longue',
             ls.duration + ' min',
             lsDetail.join(' · ')
           ));
@@ -4981,9 +5093,9 @@ function renderExtendedSections(wrapper, S) {
         // 4) Streak max
         if (typeof records.maxStreak === 'number' && records.maxStreak > 0) {
           recordsBox.appendChild(recordLine(
-            'Plus longue série',
+            (window.isEnglish && window.isEnglish()) ? 'Longest streak' : 'Plus longue série',
             records.maxStreak + ' ' + window.locPlural(records.maxStreak, {fr:{one:'jour',other:'jours'},en:{one:'day',other:'days'}}),
-            'Jours consécutifs'
+            (window.isEnglish && window.isEnglish()) ? 'Consecutive days' : 'Jours consécutifs'
           ));
           hasContent = true;
         }
@@ -5011,7 +5123,7 @@ function renderExtendedSections(wrapper, S) {
     if (typeof window.getNutritionTrend === 'function') {
       var nutTrend = window.getNutritionTrend(30);
       if (nutTrend && nutTrend.loggedDays >= 3) {
-        wrapper.appendChild(sectionLabel('Nutrition (30 jours)'));
+        wrapper.appendChild(sectionLabel((window.isEnglish && window.isEnglish()) ? 'Nutrition (30 days)' : 'Nutrition (30 jours)'));
         var nutBox = card();
 
         // Stats header : moyenne kcal + adhérence cible
@@ -5033,19 +5145,19 @@ function renderExtendedSections(wrapper, S) {
         }
         nStatsRow.appendChild(nutStat(
           kcalAvg !== null ? window.formatNumber(Math.round(kcalAvg)) : '—',
-          'Kcal moy.'
+          ((window.isEnglish && window.isEnglish()) ? 'Avg kcal' : 'Kcal moy.')
         ));
         nStatsRow.appendChild(nutStat(
           pAvg !== null ? pAvg + ' g' : '—',
-          'Protéines moy.'
+          ((window.isEnglish && window.isEnglish()) ? 'Avg protein' : 'Protéines moy.')
         ));
         nStatsRow.appendChild(nutStat(
           adherencePct !== null ? adherencePct + '%' : '—',
-          'Adhérence cible'
+          ((window.isEnglish && window.isEnglish()) ? 'Target adherence' : 'Adhérence cible')
         ));
         nStatsRow.appendChild(nutStat(
           nutTrend.loggedDays + '/30',
-          'Jours loggés'
+          (window.isEnglish && window.isEnglish()) ? 'Logged days' : 'Jours loggés'
         ));
         nutBox.appendChild(nStatsRow);
 
@@ -5067,7 +5179,7 @@ function renderExtendedSections(wrapper, S) {
             });
             var datasets = [
               {
-                label: 'Calories (kcal)',
+                label: (window.isEnglish && window.isEnglish()) ? 'Calories (kcal)' : 'Calories (kcal)',
                 data: nutTrend.kcal,
                 borderColor: '#3E5C3A',
                 backgroundColor: 'rgba(62,92,58,0.08)',
@@ -5079,7 +5191,7 @@ function renderExtendedSections(wrapper, S) {
                 yAxisID: 'yKcal'
               },
               {
-                label: 'Protéines (g)',
+                label: (window.isEnglish && window.isEnglish()) ? 'Protein (g)' : 'Protéines (g)',
                 data: nutTrend.protein,
                 borderColor: '#E86F1E',
                 backgroundColor: 'rgba(232,111,30,0.06)',
@@ -5095,7 +5207,7 @@ function renderExtendedSections(wrapper, S) {
             // Ligne pointillée de cible kcal si dispo
             if (nutTrend.targets && nutTrend.targets.kcal > 0) {
               datasets.push({
-                label: 'Cible kcal',
+                label: (window.isEnglish && window.isEnglish()) ? 'Target kcal' : 'Cible kcal',
                 data: nutTrend.labels.map(function() { return nutTrend.targets.kcal; }),
                 borderColor: 'rgba(10,10,9,0.35)',
                 backgroundColor: 'transparent',
@@ -5159,7 +5271,7 @@ function renderExtendedSections(wrapper, S) {
   }
 
   // Weight chart (Chart.js)
-  wrapper.appendChild(sectionLabel('Courbe de poids'));
+  wrapper.appendChild(sectionLabel((window.isEnglish && window.isEnglish()) ? 'Weight curve' : 'Courbe de poids'));
   var rawHistCheck = (S.weightHistory || []).filter(function(e) {
     if (!e) return false;
     var w = parseFloat(e.weight || e.w || e);
@@ -5179,8 +5291,8 @@ function renderExtendedSections(wrapper, S) {
     var _wSvgWrap = h('div', { style: 'display:flex;justify-content:center;margin-bottom:16px;opacity:0.6;' });
     _wSvgWrap.appendChild(_wSvg);
     _weightEmpty.appendChild(_wSvgWrap);
-    _weightEmpty.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:15px;color:var(--ink-900,#0A0A09);margin-bottom:8px;line-height:1.3;' }, 'Pas encore de courbe'));
-    _weightEmpty.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);line-height:1.6;max-width:220px;margin:0 auto;' }, 'Ajoutez au moins deux pes\u00e9es pour voir votre progression.'));
+    _weightEmpty.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:15px;color:var(--ink-900,#0A0A09);margin-bottom:8px;line-height:1.3;' }, (window.isEnglish && window.isEnglish()) ? 'No data yet' : 'Pas encore de courbe'));
+    _weightEmpty.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);line-height:1.6;max-width:220px;margin:0 auto;' }, (window.isEnglish && window.isEnglish()) ? 'Add at least two weigh-ins to see your progress.' : 'Ajoutez au moins deux pes\u00e9es pour voir votre progression.'));
     chartWrap.appendChild(_weightEmpty);
   } else {
     var canvas = document.createElement('canvas');
@@ -5213,7 +5325,7 @@ function renderExtendedSections(wrapper, S) {
 
   // Kcal chart (Chart.js)
   if (Array.isArray(S.weekPlan) && S.weekPlan.length === 7) {
-    wrapper.appendChild(sectionLabel('Calories par jour — plan semaine'));
+    wrapper.appendChild(sectionLabel((window.isEnglish && window.isEnglish()) ? 'Calories per day — weekly plan' : 'Calories par jour — plan semaine'));
     var kcalWrap = card();
     var kcalCanvas = document.createElement('canvas');
     kcalCanvas.id = 'today-kcal-chart';
@@ -5225,7 +5337,7 @@ function renderExtendedSections(wrapper, S) {
       var ctx2 = document.getElementById('today-kcal-chart');
       if (!ctx2 || !ctx2.getContext) return;
       if (!Array.isArray(S.weekPlan) || S.weekPlan.length !== 7) return;
-      var JOURS_CH = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+      var JOURS_CH = (window.isEnglish && window.isEnglish()) ? ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] : ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
       var target = (window.calcTarget ? window.calcTarget() : 0) || (S.calories && S.calories > 0 ? S.calories : 2000);
       var dayKcals = S.weekPlan.map(function(day) {
         if (!day) return 0;
@@ -5247,8 +5359,8 @@ function renderExtendedSections(wrapper, S) {
         var _kSvgWrap = h('div', { style: 'display:flex;justify-content:center;margin-bottom:14px;opacity:0.5;' });
         _kSvgWrap.appendChild(_kSvg);
         kcalEmpty.appendChild(_kSvgWrap);
-        kcalEmpty.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;color:var(--ink-900,#0A0A09);margin-bottom:6px;line-height:1.3;' }, 'Plan en attente'));
-        kcalEmpty.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);line-height:1.6;max-width:220px;margin:0 auto;' }, 'Les calories apparaitront ici lorsque le plan sera rempli.'));
+        kcalEmpty.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;color:var(--ink-900,#0A0A09);margin-bottom:6px;line-height:1.3;' }, (window.isEnglish && window.isEnglish()) ? 'Plan pending' : 'Plan en attente'));
+        kcalEmpty.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);line-height:1.6;max-width:220px;margin:0 auto;' }, (window.isEnglish && window.isEnglish()) ? 'Calories will appear here once the plan is filled.' : 'Les calories apparaitront ici lorsque le plan sera rempli.'));
         ctx2.style.display = 'none';
         ctx2.parentNode.appendChild(kcalEmpty);
         return;
@@ -5266,14 +5378,14 @@ function renderExtendedSections(wrapper, S) {
   }
 
   // Food Journal
-  wrapper.appendChild(sectionLabel('Journal alimentaire'));
+  wrapper.appendChild(sectionLabel((window.isEnglish && window.isEnglish()) ? 'Food journal' : 'Journal alimentaire'));
   var foodBox = card();
   if (window.FOOD_JOURNAL) {
     try { window.FOOD_JOURNAL.renderWidget(foodBox); } catch(e) {
-      foodBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Journal alimentaire non disponible pour le moment.'));
+      foodBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, (window.isEnglish && window.isEnglish()) ? 'Food journal unavailable at the moment.' : 'Journal alimentaire non disponible pour le moment.'));
     }
   } else {
-    foodBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Notez vos repas pour suivre vos apports nutritionnels au quotidien.'));
+    foodBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, (window.isEnglish && window.isEnglish()) ? 'Log your meals to track your daily nutritional intake.' : 'Notez vos repas pour suivre vos apports nutritionnels au quotidien.'));
   }
   wrapper.appendChild(foodBox);
 
@@ -5285,7 +5397,7 @@ function renderExtendedSections(wrapper, S) {
   }
 
   // Badges preview
-  wrapper.appendChild(sectionLabel('Badges'));
+  wrapper.appendChild(sectionLabel((window.isEnglish && window.isEnglish()) ? 'Badges' : 'Badges'));
   var badgesCard = card();
   var badgesRow = h('div', { style: 'display:flex;gap:10px;align-items:center;flex-wrap:wrap;' });
   var badgesData = (function() {
@@ -5325,18 +5437,18 @@ function renderExtendedSections(wrapper, S) {
       var mini = h('div', { style: 'width:40px;height:40px;border:1px dashed var(--line,#D8D8D0);background:transparent;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:13px;color:var(--ink-300,#A8A8A0);' }, txt);
       badgesRow.appendChild(mini);
     });
-    badgesCard.appendChild(h('p', { style: 'font-size:12px;color:var(--ink-500,#6B6B65);margin:12px 0 0;font-family:Georgia,serif;line-height:1.55;font-style:italic;' }, 'Vos premiers paliers vous attendent.'));
+    badgesCard.appendChild(h('p', { style: 'font-size:12px;color:var(--ink-500,#6B6B65);margin:12px 0 0;font-family:Georgia,serif;line-height:1.55;font-style:italic;' }, (window.isEnglish && window.isEnglish()) ? 'Your first milestones await.' : 'Vos premiers paliers vous attendent.'));
   }
   var badgeLink = h('span', {
     style: 'font-size:11px;color:var(--grey);cursor:pointer;margin-left:auto;',
     onclick: function() { if (window.GAMIFICATION && window.GAMIFICATION.renderBadgesPanel) openTodayBadgesModal(); }
-  }, 'Voir tous les badges \u2192');
+  }, (window.isEnglish && window.isEnglish()) ? 'See all badges \u2192' : 'Voir tous les badges \u2192');
   badgesRow.appendChild(badgeLink);
   badgesCard.insertBefore(badgesRow, badgesCard.firstChild);
   wrapper.appendChild(badgesCard);
 
   // Mes données
-  wrapper.appendChild(sectionLabel('Mes données'));
+  wrapper.appendChild(sectionLabel((window.isEnglish && window.isEnglish()) ? 'My data' : 'Mes données'));
   var dataCard = card();
   var dataBtns = h('div', { style: 'display:flex;flex-direction:column;gap:10px;' });
 
@@ -5350,28 +5462,28 @@ function renderExtendedSections(wrapper, S) {
       if (typeof window.exportWeeklyReportPDF === 'function') {
         window.exportWeeklyReportPDF();
       } else {
-        if (window.showToast) window.showToast('Export PDF indisponible. Rechargez la page.', 'error', 3500);
+        if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'PDF export unavailable. Reload the page.' : 'Export PDF indisponible. Rechargez la page.', 'error', 3500);
       }
     }
-  }, '\u2193 Télécharger mon rapport PDF');
+  }, (window.isEnglish && window.isEnglish()) ? '\u2193 Download my PDF report' : '\u2193 Télécharger mon rapport PDF');
   dataBtns.appendChild(pdfBtn);
 
   var exportBtn = h('button', {
     'class': 'sfc-data-btn sfc-data-btn-primary',
     onclick: function() { todayExportAllData(); }
-  }, '\u2B07 Exporter mes données');
+  }, (window.isEnglish && window.isEnglish()) ? '\u2B07 Export my data' : '\u2B07 Exporter mes données');
   dataBtns.appendChild(exportBtn);
 
   var importBtn = h('button', {
     'class': 'sfc-data-btn sfc-data-btn-outline',
     onclick: function() { todayImportData(); }
-  }, '\u2B06 Importer une sauvegarde');
+  }, (window.isEnglish && window.isEnglish()) ? '\u2B06 Import a backup' : '\u2B06 Importer une sauvegarde');
   dataBtns.appendChild(importBtn);
 
   var deleteBtn = h('button', {
     'class': 'sfc-data-btn sfc-data-btn-danger',
     onclick: function() { todayDeleteAllData(); }
-  }, 'Supprimer toutes mes données');
+  }, (window.isEnglish && window.isEnglish()) ? 'Delete all my data' : 'Supprimer toutes mes données');
   dataBtns.appendChild(deleteBtn);
 
   dataCard.appendChild(dataBtns);
@@ -5379,7 +5491,7 @@ function renderExtendedSections(wrapper, S) {
 
   // POLISH 2026-04 (NOTIFS) : toggle rappels push PWA
   if ('Notification' in window) {
-    wrapper.appendChild(sectionLabel('Rappels & notifications'));
+    wrapper.appendChild(sectionLabel((window.isEnglish && window.isEnglish()) ? 'Reminders & notifications' : 'Rappels & notifications'));
     var notifsCard = card();
     var currentEnabled = (typeof S.pushNotifsEnabled === 'boolean') ? S.pushNotifsEnabled : true;
     var permState = (typeof Notification !== 'undefined') ? Notification.permission : 'unknown';
@@ -5387,8 +5499,8 @@ function renderExtendedSections(wrapper, S) {
     // Ligne 1 : toggle principal
     var toggleRow = h('div', { style: 'display:flex;justify-content:space-between;align-items:center;padding:6px 0;' });
     var toggleLabel = h('div');
-    toggleLabel.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);' }, 'Activer les rappels'));
-    toggleLabel.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:3px;line-height:1.4;' }, 'Motivation quotidienne, repas, relance après inactivité'));
+    toggleLabel.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);' }, (window.isEnglish && window.isEnglish()) ? 'Enable reminders' : 'Activer les rappels'));
+    toggleLabel.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:3px;line-height:1.4;' }, (window.isEnglish && window.isEnglish()) ? 'Daily motivation, meals, re-engagement after inactivity' : 'Motivation quotidienne, repas, relance après inactivité'));
     toggleRow.appendChild(toggleLabel);
 
     // Switch visuel (track + thumb)
@@ -5421,9 +5533,9 @@ function renderExtendedSections(wrapper, S) {
     if (currentEnabled) {
       var stateText = '';
       var stateColor = 'var(--grey,#6B6B65)';
-      if (permState === 'granted') { stateText = 'Permission accordée ✓'; stateColor = 'var(--green,#3E5C3A)'; }
-      else if (permState === 'denied') { stateText = 'Permission refusée — autoriser dans les paramètres du navigateur'; stateColor = 'var(--error,#7A1F1F)'; }
-      else { stateText = 'Permission non demandée — demande apparaîtra au prochain usage'; }
+      if (permState === 'granted') { stateText = (window.isEnglish && window.isEnglish()) ? 'Permission granted ✓' : 'Permission accordée ✓'; stateColor = 'var(--green,#3E5C3A)'; }
+      else if (permState === 'denied') { stateText = (window.isEnglish && window.isEnglish()) ? 'Permission denied — enable in browser settings' : 'Permission refusée — autoriser dans les paramètres du navigateur'; stateColor = 'var(--error,#7A1F1F)'; }
+      else { stateText = (window.isEnglish && window.isEnglish()) ? 'Permission not requested — will be prompted on next use' : 'Permission non demandée — demande apparaîtra au prochain usage'; }
       notifsCard.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:' + stateColor + ';margin-top:10px;padding-top:10px;border-top:1px solid var(--border,#D8D8D0);letter-spacing:0.3px;' }, stateText));
     }
 
@@ -5500,30 +5612,32 @@ function renderCardTDEEAdaptatif(S) {
   if (diffKcal < 50) return null; // Ajustement trop faible, ignorer
 
   var c = card('border-left:3px solid var(--orange,#E86F1E);');
-  c.appendChild(eyebrow('Ajustement recommandé'));
+  c.appendChild(eyebrow((window.isEnglish && window.isEnglish()) ? 'Recommended adjustment' : 'Ajustement recommandé'));
 
+  var _tdeeEN = window.isEnglish && window.isEnglish();
   var title = delta > 0
-    ? 'Votre corps répond moins bien au déficit'
-    : 'Perte plus rapide que prévu';
+    ? (_tdeeEN ? 'Your body is responding less to the deficit' : 'Votre corps répond moins bien au déficit')
+    : (_tdeeEN ? 'Faster loss than expected' : 'Perte plus rapide que prévu');
   c.appendChild(cardTitle(title));
 
   var actualStr = (actualChange >= 0 ? '+' : '') + actualChange.toFixed(1) + ' kg';
   var expectedStr = (expectedChange >= 0 ? '+' : '') + expectedChange.toFixed(1) + ' kg';
 
   c.appendChild(h('p', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin:8px 0;line-height:1.5;' },
-    'Sur ' + daysDiff + ' jours\u00a0: vous avez perdu/pris ' + actualStr + ' (attendu\u00a0: ' + expectedStr + ').'
+    (_tdeeEN ? 'Over ' + daysDiff + ' days: you lost/gained ' + actualStr + ' (expected: ' + expectedStr + ').' : 'Sur ' + daysDiff + ' jours\u00a0: vous avez perdu/pris ' + actualStr + ' (attendu\u00a0: ' + expectedStr + ').')
   ));
 
+  var _adjEN = window.isEnglish && window.isEnglish();
   var adjustMsg = delta > 0
-    ? 'R\u00e9duisez vos apports de ' + diffKcal + '\u00a0kcal/jour (cible\u00a0: ' + newTDEE + '\u00a0kcal)'
-    : 'Vous pouvez augmenter vos apports de ' + diffKcal + '\u00a0kcal/jour (cible\u00a0: ' + newTDEE + '\u00a0kcal)';
+    ? (_adjEN ? 'Reduce your intake by ' + diffKcal + '\u00a0kcal/day (target: ' + newTDEE + '\u00a0kcal)' : 'R\u00e9duisez vos apports de ' + diffKcal + '\u00a0kcal/jour (cible\u00a0: ' + newTDEE + '\u00a0kcal)')
+    : (_adjEN ? 'You can increase your intake by ' + diffKcal + '\u00a0kcal/day (target: ' + newTDEE + '\u00a0kcal)' : 'Vous pouvez augmenter vos apports de ' + diffKcal + '\u00a0kcal/jour (cible\u00a0: ' + newTDEE + '\u00a0kcal)');
 
   c.appendChild(h('p', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:400;color:var(--orange-ink,#7A3B0E);margin:8px 0 0;line-height:1.5;' }, adjustMsg));
 
   // FIX FAIL-2 : avertissement explicite si on touche le plancher (perte trop rapide → médecin)
   if (newTDEE === _minSafe && delta < -1.5) {
     c.appendChild(h('p', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--error,#7A1F1F);margin:8px 0 0;line-height:1.5;' },
-      '⚠ Perte rapide détectée. Plancher kcal sécuritaire atteint. Consulte un médecin/diététicien avant de poursuivre.'
+      (window.isEnglish && window.isEnglish()) ? '⚠ Rapid loss detected. Safe kcal floor reached. Consult a doctor/dietitian before continuing.' : '⚠ Perte rapide détectée. Plancher kcal sécuritaire atteint. Consulte un médecin/diététicien avant de poursuivre.'
     ));
   }
 
@@ -5537,7 +5651,7 @@ function renderCardTDEEAdaptatif(S) {
       try { localStorage.setItem(dismissKey, '1'); } catch(e) {}
       if (window.render) window.render();
     }
-  }, 'OK, j\'ai compris');
+  }, (window.isEnglish && window.isEnglish()) ? 'Got it' : 'OK, j\'ai compris');
   c.appendChild(dismissBtn);
 
   return c;
@@ -5587,8 +5701,8 @@ function renderCardSundayReview(S) {
   var currentWeight = S.weight || 0;
 
   var c = card();
-  c.appendChild(eyebrow('Bilan de la semaine'));
-  c.appendChild(cardTitle('Votre semaine'));
+  c.appendChild(eyebrow((window.isEnglish && window.isEnglish()) ? 'WEEKLY REVIEW' : 'Bilan de la semaine'));
+  c.appendChild(cardTitle((window.isEnglish && window.isEnglish()) ? 'Your week' : 'Votre semaine'));
 
   // Stats row
   var statsRow = h('div', { style: 'display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;' });
@@ -5596,14 +5710,14 @@ function renderCardSundayReview(S) {
   // Séances
   var seancesBox = h('div', { style: 'flex:1;min-width:80px;padding:12px;background:var(--ivory2);border:1px solid var(--border);border-radius:2px;text-align:center;' });
   seancesBox.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:24px;color:var(--green,#3E5C3A);' }, String(seancesDone)));
-  seancesBox.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:4px;' }, 'Séances'));
+  seancesBox.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:4px;' }, (window.isEnglish && window.isEnglish()) ? 'Sessions' : 'Séances'));
   statsRow.appendChild(seancesBox);
 
   // Calories moyennes
   if (avgKcal > 0) {
     var kcalBox = h('div', { style: 'flex:1;min-width:80px;padding:12px;background:var(--ivory2);border:1px solid var(--border);border-radius:2px;text-align:center;' });
     kcalBox.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:24px;color:var(--blue,#1A3A6A);' }, String(avgKcal)));
-    kcalBox.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:4px;' }, 'Kcal moy.'));
+    kcalBox.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:4px;' }, (window.isEnglish && window.isEnglish()) ? 'Avg kcal' : 'Kcal moy.'));
     statsRow.appendChild(kcalBox);
   }
 
@@ -5611,7 +5725,7 @@ function renderCardSundayReview(S) {
   if (currentWeight > 0) {
     var weightBox = h('div', { style: 'flex:1;min-width:80px;padding:12px;background:var(--ivory2);border:1px solid var(--border);border-radius:2px;text-align:center;' });
     weightBox.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:24px;color:var(--orange,#E86F1E);' }, currentWeight + ' kg'));
-    weightBox.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:4px;' }, 'Poids'));
+    weightBox.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:4px;' }, (window.isEnglish && window.isEnglish()) ? 'Weight' : 'Poids'));
     statsRow.appendChild(weightBox);
   }
 
@@ -5619,10 +5733,11 @@ function renderCardSundayReview(S) {
 
   // Message de motivation — Bible Hermès §4 : tutoiement, pas de ponctuation émotionnelle.
   var motivMsg;
-  if (seancesDone >= 4) motivMsg = 'Semaine tenue. La régularité, c\'est la clé.';
-  else if (seancesDone >= 2) motivMsg = 'Bonne semaine. Vous continuez sur cette lancée.';
-  else if (seancesDone >= 1) motivMsg = 'Un début. La semaine prochaine, vise 3 séances.';
-  else motivMsg = 'Pas de séance cette semaine. Vous reprenez demain.';
+  var _sEN = window.isEnglish && window.isEnglish();
+  if (seancesDone >= 4) motivMsg = _sEN ? 'Strong week. Consistency is the key.' : 'Semaine tenue. La régularité, c\'est la clé.';
+  else if (seancesDone >= 2) motivMsg = _sEN ? 'Good week. Keep up the momentum.' : 'Bonne semaine. Vous continuez sur cette lancée.';
+  else if (seancesDone >= 1) motivMsg = _sEN ? 'A start. Next week, aim for 3 sessions.' : 'Un début. La semaine prochaine, vise 3 séances.';
+  else motivMsg = _sEN ? 'No session this week. Back at it tomorrow.' : 'Pas de séance cette semaine. Vous reprenez demain.';
 
   c.appendChild(h('p', { style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--grey);margin:12px 0 0;line-height:1.6;' }, motivMsg));
 
@@ -5636,7 +5751,7 @@ function renderCardSundayReview(S) {
       try { localStorage.setItem('mtd_weekly_review_dismissed_' + _dismissUid + '_' + new Date().toISOString().slice(0, 10), '1'); } catch(e) {}
       if (window.render) window.render();
     }
-  }, 'Fermer le bilan');
+  }, (window.isEnglish && window.isEnglish()) ? 'Close review' : 'Fermer le bilan');
   c.appendChild(dismissBtn);
 
   // Ne pas réafficher si déjà fermé aujourd'hui (isolation userId)
@@ -5740,10 +5855,11 @@ function renderTodayDashboard(p) {
       _tL.appendChild(h('div', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);font-weight:500;margin-bottom:3px;'
       }, 'VERSION D\u2019ESSAI'));
-      var _tCopy = _td <= 0 ? 'Essai terminé \u2014 Débloquez l\u2019accès \u2192'
-        : _td === 1 ? 'Dernier jour \u2014 Abonnez-vous pour continuer \u2192'
-        : _td <= 3 ? 'Plus que ' + _td + ' jours \u2014 Continuez sans interruption \u2192'
-        : _td + ' jours pour tout explorer \u2014 S\u2019abonner \u2192';
+      var _trEN = window.isEnglish && window.isEnglish();
+      var _tCopy = _td <= 0 ? (_trEN ? 'Trial ended \u2014 Unlock access \u2192' : 'Essai terminé \u2014 Débloquez l\u2019accès \u2192')
+        : _td === 1 ? (_trEN ? 'Last day \u2014 Subscribe to continue \u2192' : 'Dernier jour \u2014 Abonnez-vous pour continuer \u2192')
+        : _td <= 3 ? (_trEN ? 'Only ' + _td + ' days left \u2014 Continue without interruption \u2192' : 'Plus que ' + _td + ' jours \u2014 Continuez sans interruption \u2192')
+        : (_trEN ? _td + ' days to explore everything \u2014 Subscribe \u2192' : _td + ' jours pour tout explorer \u2014 S\u2019abonner \u2192');
       _tL.appendChild(h('div', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + (_tdUrgent ? '#7A1F1F' : 'var(--grey,#6B6B65)') + ';line-height:1.4;'
       }, _tCopy));
@@ -5783,11 +5899,11 @@ function renderTodayDashboard(p) {
       _miniStreak.appendChild(h('span', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;' +
                'letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);'
-      }, 'Séquence'));
+      }, (window.isEnglish && window.isEnglish()) ? 'Streak' : 'Séquence'));
       _miniStreak.appendChild(h('span', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;' +
                'text-transform:uppercase;color:' + (_actionDone ? '#27AE60' : 'var(--grey,#6B6B65)') + ';'
-      }, _actionDone ? '✓ validée' : '○ en attente'));
+      }, _actionDone ? ((window.isEnglish && window.isEnglish()) ? '✓ done' : '✓ validée') : ((window.isEnglish && window.isEnglish()) ? '○ pending' : '○ en attente')));
       var _mRight = h('div', { style: 'display:flex;align-items:baseline;gap:4px;' });
       _mRight.appendChild(h('span', {
         style: 'font-family:Georgia,serif;font-size:20px;font-style:italic;color:var(--black,#0A0A09);'
@@ -5814,7 +5930,7 @@ function renderTodayDashboard(p) {
       var _hmDow = _hmToday.getDay(); // 0=dim, 1=lun, ...
       var _hmMonday = new Date(_hmToday);
       _hmMonday.setDate(_hmToday.getDate() - ((_hmDow + 6) % 7));
-      var _hmDays = ['L','M','M','J','V','S','D'];
+      var _hmDays = (window.isEnglish && window.isEnglish()) ? ['M','T','W','T','F','S','S'] : ['L','M','M','J','V','S','D'];
       var _hmHasAny = false;
       var _hmDots = [];
       for (var _hi = 0; _hi < 7; _hi++) {
@@ -5834,7 +5950,7 @@ function renderTodayDashboard(p) {
         });
         _hmWrap.appendChild(h('span', {
           style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);'
-        }, 'Semaine'));
+        }, (window.isEnglish && window.isEnglish()) ? 'Week' : 'Semaine'));
         var _hmRow = h('div', { style: 'display:flex;gap:6px;align-items:center;' });
         _hmDots.forEach(function(_hd) {
           var _dot = h('div', { style: 'display:flex;flex-direction:column;align-items:center;gap:2px;' });
@@ -5862,17 +5978,18 @@ function renderTodayDashboard(p) {
     try {
       var _adapt = window.getWellnessAdaptation();
       if (_adapt && _adapt.level) {
+        var _afEN = window.isEnglish && window.isEnglish();
         var _adaptLabels = {
-          recovery: 'Séance de récupération conseillée',
-          reduced: 'Intensité réduite conseillée',
-          peak: 'Forme optimale',
-          normal: 'Forme du jour — correcte'
+          recovery: _afEN ? 'Recovery session recommended' : 'Séance de récupération conseillée',
+          reduced: _afEN ? 'Reduced intensity recommended' : 'Intensité réduite conseillée',
+          peak: _afEN ? 'Peak condition' : 'Forme optimale',
+          normal: _afEN ? 'Daily form — good' : 'Forme du jour — correcte'
         };
         var _adaptAdvice = {
-          recovery: 'Votre état de forme nécessite une séance légère. Intensité réduite de 40 %.',
-          reduced: 'Légère fatigue détectée. Intensité réduite de 20 %. Écoutez votre corps.',
-          peak: 'Excellent état de forme. Vous pouvez pousser sur les sets lourds.',
-          normal: 'Bonne séance en perspective. Respectez les temps de repos.'
+          recovery: _afEN ? 'Your condition requires a light session. Intensity reduced by 40%.' : 'Votre état de forme nécessite une séance légère. Intensité réduite de 40 %.',
+          reduced: _afEN ? 'Slight fatigue detected. Intensity reduced by 20%. Listen to your body.' : 'Légère fatigue détectée. Intensité réduite de 20 %. Écoutez votre corps.',
+          peak: _afEN ? 'Excellent form. You can push on the heavy sets.' : 'Excellent état de forme. Vous pouvez pousser sur les sets lourds.',
+          normal: _afEN ? 'Good session ahead. Respect the rest times.' : 'Bonne séance en perspective. Respectez les temps de repos.'
         };
         var _recCard = h('div', {
           style: 'max-width:560px;margin:6px auto 0;padding:10px 16px;' +
@@ -5884,7 +6001,7 @@ function renderTodayDashboard(p) {
         _recInner.appendChild(h('div', {
           style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;' +
                  'text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:3px;'
-        }, 'Forme du jour'));
+        }, _afEN ? 'Daily form' : 'Forme du jour'));
         _recInner.appendChild(h('div', {
           style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#0A0A09);'
         }, _adaptLabels[_adapt.level] || _adapt.label));
@@ -5951,7 +6068,7 @@ function renderTodayDashboard(p) {
       _qLabel.appendChild(h('span', {style:
         'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;' +
         'text-transform:uppercase;color:var(--ink-500,#6B6B65);font-weight:400;'
-      }, 'Pensée du jour'));
+      }, (window.isEnglish && window.isEnglish()) ? 'Thought of the day' : 'Pensée du jour'));
       _qLabel.appendChild(h('span', {style: 'flex:1;max-width:56px;height:1px;background:var(--line,#D8D8D0);'}));
       _qWrap.appendChild(_qLabel);
 
@@ -6061,7 +6178,7 @@ function renderTodayDashboard(p) {
     }
     if (_autoActivated) {
       setTimeout(function() {
-        if (window.showToast) window.showToast('Programmes activés pour la semaine', 'success', 1600);
+        if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Programs activated for the week' : 'Programmes activés pour la semaine', 'success', 1600);
       }, 300);
     }
   } catch(_eVal) { console.warn('[validation banners]', _eVal); }
@@ -6123,21 +6240,21 @@ function renderTodayDashboard(p) {
                         || (S.sportType === 'musculation' && !!S.sportType);
     if (!_hasNutritionPlan && !_hasSportPlan) {
       var _firstStepCard = card();
-      _firstStepCard.appendChild(eyebrow('COMMENCER'));
-      _firstStepCard.appendChild(h('div', {style:'font-family:Georgia,serif;font-size:22px;margin-bottom:12px;font-weight:normal;line-height:1.25;'}, 'Votre premier plan vous attend.'));
-      _firstStepCard.appendChild(h('div', {style:'font-family:Georgia,serif;font-style:italic;font-size:15px;color:var(--ink-700,#2B2B27);line-height:1.55;margin-bottom:24px;'}, 'Commencez votre bilan personnalis\u00e9 \u2014 nutrition, sport, sant\u00e9.'));
+      _firstStepCard.appendChild(eyebrow((window.isEnglish && window.isEnglish()) ? 'GET STARTED' : 'COMMENCER'));
+      _firstStepCard.appendChild(h('div', {style:'font-family:Georgia,serif;font-size:22px;margin-bottom:12px;font-weight:normal;line-height:1.25;'}, (window.isEnglish && window.isEnglish()) ? 'Your first plan awaits.' : 'Votre premier plan vous attend.'));
+      _firstStepCard.appendChild(h('div', {style:'font-family:Georgia,serif;font-style:italic;font-size:15px;color:var(--ink-700,#2B2B27);line-height:1.55;margin-bottom:24px;'}, (window.isEnglish && window.isEnglish()) ? 'Start your personalized assessment \u2014 nutrition, sport, health.' : 'Commencez votre bilan personnalis\u00e9 \u2014 nutrition, sport, sant\u00e9.'));
       var _btnRow = h('div', {style:'display:flex;gap:12px;flex-wrap:wrap;'});
       if (S.appMode !== 'nutrition') {
         _btnRow.appendChild(h('button', {
           'class': 'btn-primary',
           onclick: function() { S.view = 'sport'; if (window.render) window.render(); }
-        }, 'CR\u00c9ER MON PROGRAMME SPORT'));
+        }, (window.isEnglish && window.isEnglish()) ? 'CREATE MY SPORT PROGRAM' : 'CR\u00c9ER MON PROGRAMME SPORT'));
       }
       if (S.appMode !== 'sport') {
         _btnRow.appendChild(h('button', {
           'class': 'btn-secondary',
           onclick: function() { S.view = 'nutrition'; if (window.render) window.render(); }
-        }, 'CR\u00c9ER MON PLAN NUTRITION'));
+        }, (window.isEnglish && window.isEnglish()) ? 'CREATE MY NUTRITION PLAN' : 'CR\u00c9ER MON PLAN NUTRITION'));
       }
       _firstStepCard.appendChild(_btnRow);
       wrapper.appendChild(_firstStepCard);
@@ -6183,7 +6300,7 @@ function renderTodayDashboard(p) {
       S._dashExtOpen = true;
       if (window.render) window.render();
     }
-  }, 'Voir ma progression  \u2192');
+  }, (window.isEnglish && window.isEnglish()) ? 'View my progress  \u2192' : 'Voir ma progression  \u2192');
   wrapper.appendChild(drawerTrigger);
 
   p.appendChild(wrapper);
@@ -6225,49 +6342,84 @@ document.addEventListener('visibilitychange', function() {
 // FIX SPRINT P2.8 — Prompts du coach IA enrichis et muscu-aware.
 // Selon le profil (muscu vs nutrition) + moment + état (séance prévue, fatigue),
 // on propose un placeholder pertinent (pas du nutrition-centric pour user muscu).
+var _cpEN = window.isEnglish && window.isEnglish();
 var COACH_PROMPTS = {
-  matin: [
+  matin: _cpEN ? [
+    'Tell me what\'s holding you back today.',
+    'What do you want to eat for lunch?',
+    'How are you feeling this morning?'
+  ] : [
     'Dites-moi ce qui vous freine aujourd\'hui.',
     'Que voulez-vous manger ce midi ?',
     'Comment vous sentez-vous au réveil ?'
   ],
-  midi: [
+  midi: _cpEN ? [
+    'Your lunch, shall we talk about it?',
+    'Want to adjust your evening session?',
+    'What\'s your question right now?'
+  ] : [
     'Votre déjeuner, on en parle ?',
     'Voulez-vous adapter votre séance de ce soir ?',
     'Quelle est votre question du moment ?'
   ],
-  soir: [
+  soir: _cpEN ? [
+    'Day recap?',
+    'Want to plan tomorrow?',
+    'How did the session go?'
+  ] : [
     'Bilan de la journée ?',
     'Voulez-vous préparer demain ?',
     'Comment s\'est passée la séance ?'
   ],
-  veille: [
+  veille: _cpEN ? [
+    'Need advice before sleep?',
+    'A question about your recovery?'
+  ] : [
     'Besoin d\'un conseil avant de dormir ?',
     'Une question sur votre récupération ?'
   ]
 };
 var COACH_PROMPTS_MUSCU = {
-  matin: [
+  matin: _cpEN ? [
+    'Want to adjust today\'s session?',
+    'Which exercise do you want to prioritize?',
+    'Did you recover well?'
+  ] : [
     'Voulez-vous ajuster votre séance d\'aujourd\'hui ?',
     'Quel exo voulez-vous travailler en priorité ?',
     'Avez-vous bien récupéré ?'
   ],
-  midi: [
+  midi: _cpEN ? [
+    'How was your bench yesterday?',
+    'Do you feel ready for a squat PR?',
+    'Want to swap an exercise?'
+  ] : [
     'Comment était votre bench hier ?',
     'Vous sentez-vous prêt pour un PR au squat ?',
     'Voulez-vous remplacer un exo ?'
   ],
-  soir: [
+  soir: _cpEN ? [
+    'How did the session go?',
+    'Want to log a PR?',
+    'Tomorrow: rest or next session?'
+  ] : [
     'Comment s\'est passée la séance ?',
     'Voulez-vous logger un PR ?',
     'Demain : repos ou séance suivante ?'
   ],
-  veille: [
+  veille: _cpEN ? [
+    'Need a recovery tip?',
+    'Want to plan your next session?'
+  ] : [
     'Besoin d\'un conseil récup ?',
     'Voulez-vous préparer votre prochaine séance ?'
   ]
 };
-var COACH_PROMPTS_FATIGUE = [
+var COACH_PROMPTS_FATIGUE = _cpEN ? [
+  'You seem tired. Shall we lighten the session?',
+  'Rest or gentle mobility today?',
+  'Want me to suggest a shorter session?'
+] : [
   'Vous semblez fatigué. On allège la séance ?',
   'Repos ou mobilité douce aujourd\'hui ?',
   'Voulez-vous que je propose une séance plus courte ?'
@@ -6356,7 +6508,7 @@ function renderCoachBar() {
   // Bouton envoyer (flèche)
   var sendBtn = h('button', {
     style: 'width:36px;height:36px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink-900,#0A0A09);padding:0;flex-shrink:0;',
-    'aria-label': 'Envoyer au coach',
+    'aria-label': (window.isEnglish && window.isEnglish()) ? 'Send to coach' : 'Envoyer au coach',
     onclick: function() {
       var val = input.value.trim();
       // FIX 2026-04-16 : ouvrir le panel AI Coach overlay directement
@@ -6398,8 +6550,9 @@ function getDefaultMealSlot() {
 function renderQuickAddDrawer() {
   var S = window.S;
   var slot = S._quickAddSlot || getDefaultMealSlot();
-  var MEAL_LABELS = { breakfast: 'Petit-déj', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
-  var MEAL_FULL = { breakfast: 'Petit-déjeuner', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
+  var _qaEN = window.isEnglish && window.isEnglish();
+  var MEAL_LABELS = { breakfast: _qaEN ? 'Breakfast' : 'Petit-déj', lunch: _qaEN ? 'Lunch' : 'Déjeuner', snack: _qaEN ? 'Snack' : 'Collation', dinner: _qaEN ? 'Dinner' : 'Dîner' };
+  var MEAL_FULL = { breakfast: _qaEN ? 'Breakfast' : 'Petit-déjeuner', lunch: _qaEN ? 'Lunch' : 'Déjeuner', snack: _qaEN ? 'Snack' : 'Collation', dinner: _qaEN ? 'Dinner' : 'Dîner' };
 
   // Récupérer les aliments récents (même logique que le journal)
   var recentFoods = [];
@@ -6438,7 +6591,7 @@ function renderQuickAddDrawer() {
 
   // Handle bar
   var handle = h('div', { style: 'display:flex;align-items:center;justify-content:space-between;padding:14px 20px 10px;border-bottom:1px solid var(--line,#D8D8D0);' });
-  handle.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);' }, 'Ajouter un repas'));
+  handle.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);' }, (window.isEnglish && window.isEnglish()) ? 'Add a meal' : 'Ajouter un repas'));
   var closeBtn = h('button', {
     style: 'background:none;border:none;cursor:pointer;padding:4px;color:var(--grey,#6B6B65);font-size:18px;line-height:1;min-height:32px;min-width:32px;',
     onclick: function() { S._quickAddSlot = null; if (window.render) window.render(); }
@@ -6464,7 +6617,7 @@ function renderQuickAddDrawer() {
   if (recentFoods.length > 0) {
     panel.appendChild(h('div', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);padding:4px 20px 8px;'
-    }, 'Récents'));
+    }, (window.isEnglish && window.isEnglish()) ? 'Recent' : 'Récents'));
 
     recentFoods.forEach(function(food) {
       var defP = (window.FOOD_PORTIONS && window.FOOD_PORTIONS.getDefaultPortion) ? window.FOOD_PORTIONS.getDefaultPortion(food.name) : null;
@@ -6486,7 +6639,7 @@ function renderQuickAddDrawer() {
             portionLabel
           );
           S._quickAddSlot = null;
-          if (window.showToast) window.showToast('✓ ' + food.name + ' ajouté au ' + MEAL_FULL[slot].toLowerCase(), 'success', 2000);
+          if (window.showToast) window.showToast('✓ ' + food.name + ' ' + (_qaEN ? 'added to ' : 'ajouté au ') + MEAL_FULL[slot].toLowerCase(), 'success', 2000);
           if (window.render) window.render();
         }
       });
@@ -6506,7 +6659,7 @@ function renderQuickAddDrawer() {
   } else {
     panel.appendChild(h('div', {
       style: 'padding:20px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);'
-    }, 'Aucun aliment récent — utilisez la recherche ci-dessous.'));
+    }, (window.isEnglish && window.isEnglish()) ? 'No recent food — use the search below.' : 'Aucun aliment récent — utilisez la recherche ci-dessous.'));
   }
 
   // Bouton "Rechercher dans la base →"
@@ -6523,7 +6676,7 @@ function renderQuickAddDrawer() {
       }, 80);
       if (window.render) window.render();
     }
-  }, 'Rechercher dans la base →');
+  }, (window.isEnglish && window.isEnglish()) ? 'Search in the database →' : 'Rechercher dans la base →');
   panel.appendChild(searchBtn);
 
   wrapper.appendChild(panel);
@@ -6584,13 +6737,13 @@ function renderFabLogger() {
           S._fabOpen = false;
           if (window.WATER_TRACKER) {
             var _wd = WATER_TRACKER.addGlass();
-            if (_wd && window.showToast) window.showToast('+1 verre — ' + _wd.glasses + ' / ' + _wd.target, 'success', 1800);
+            if (_wd && window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? '+1 glass — ' + _wd.glasses + ' / ' + _wd.target : '+1 verre — ' + _wd.glasses + ' / ' + _wd.target, 'success', 1800);
           }
           if (window.render) window.render();
         } }
     ];
     if (S.appMode !== 'nutrition') {
-      items.push({ label: 'SÉANCE', icon: 'M2 8h2M12 8h2M5 5v6M11 5v6', action: function() {
+      items.push({ label: (window.isEnglish && window.isEnglish()) ? 'SESSION' : 'SÉANCE', icon: 'M2 8h2M12 8h2M5 5v6M11 5v6', action: function() {
           S.view = 'sport'; S._fabOpen = false;
           if (window.render) window.render();
         } });
@@ -6633,7 +6786,7 @@ function renderFabLogger() {
   // FAB central
   var fab = h('button', {
     style: 'position:relative;width:56px;height:56px;border-radius:0;background:var(--ink-900,#0A0A09);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform 120ms ease-out;transform:rotate(' + (isOpen ? '45deg' : '0deg') + ');',
-    'aria-label': isOpen ? 'Fermer le menu logger' : 'Ouvrir le menu logger',
+    'aria-label': (window.isEnglish && window.isEnglish()) ? (isOpen ? 'Close logger menu' : 'Open logger menu') : (isOpen ? 'Fermer le menu logger' : 'Ouvrir le menu logger'),
     onclick: function() { S._fabOpen = !S._fabOpen; if (window.render) window.render(); }
   });
   // Croix SVG stroke 1.5
@@ -6694,67 +6847,67 @@ function renderCardTodayForYou() {
 
   var content = { title: '', body: '', items: [], ctaLabel: '', ctaFn: null, critical: false };
   if (selectedCondition === 'pregnant') {
-    content.title = 'Semaine ' + S.pregnancyWeek + ' \u00b7 focus oméga-3';
-    content.body = 'Le cerveau de votre bébé construit ses synapses cette semaine. Visez 300 mg de DHA aujourd\'hui. Saumon, maquereau ou supplément recommandé.';
+    var _cEN = window.isEnglish && window.isEnglish(); content.title = _cEN ? 'Week ' + S.pregnancyWeek + ' \u00b7 omega-3 focus' : 'Semaine ' + S.pregnancyWeek + ' \u00b7 focus oméga-3';
+    content.body = _cEN ? 'Your baby\'s brain is building synapses this week. Aim for 300 mg of DHA today. Salmon, mackerel or supplement recommended.' : 'Le cerveau de votre bébé construit ses synapses cette semaine. Visez 300 mg de DHA aujourd\'hui. Saumon, maquereau ou supplément recommandé.';
     content.items = [
-      { name: 'Saumon frais (100 g)', detail: '1 500 mg DHA' },
+      { name: _cEN ? 'Fresh salmon (100 g)' : 'Saumon frais (100 g)', detail: '1 500 mg DHA' },
       { name: 'Maquereau (100 g)', detail: '2 000 mg DHA' },
-      { name: 'Supplément oméga-3', detail: '300 mg DHA' }
+      { name: _cEN ? 'Omega-3 supplement' : 'Supplément oméga-3', detail: '300 mg DHA' }
     ];
-    content.ctaLabel = 'VOIR LE PLAN GROSSESSE SEMAINE ' + S.pregnancyWeek;
+    content.ctaLabel = _cEN ? 'VIEW PREGNANCY PLAN WEEK ' + S.pregnancyWeek : 'VOIR LE PLAN GROSSESSE SEMAINE ' + S.pregnancyWeek;
     content.ctaFn = function() { S.view = 'nutrition'; if (window.render) window.render(); };
     content.critical = true;
   } else if (selectedCondition === 'irc') {
-    content.title = 'Rappel potassium';
-    content.body = 'Vos reins préfèrent rester sous 800 mg de potassium aujourd\'hui. La banane, l\'abricot sec et la pomme de terre sont à surveiller.';
+    content.title = _cEN ? 'Potassium reminder' : 'Rappel potassium';
+    content.body = _cEN ? 'Your kidneys prefer staying under 800 mg of potassium today. Banana, dried apricot and potato are to watch.' : 'Vos reins préfèrent rester sous 800 mg de potassium aujourd\'hui. La banane, l\'abricot sec et la pomme de terre sont à surveiller.';
     content.items = [
-      { name: 'Yaourt nature', detail: '120 mg K\u207a' },
-      { name: 'Riz basmati cuit', detail: '55 mg K\u207a' },
-      { name: 'Pomme (1)', detail: '107 mg K\u207a' }
+      { name: _cEN ? 'Plain yogurt' : 'Yaourt nature', detail: '120 mg K\u207a' },
+      { name: _cEN ? 'Cooked basmati rice' : 'Riz basmati cuit', detail: '55 mg K\u207a' },
+      { name: _cEN ? 'Apple (1)' : 'Pomme (1)', detail: '107 mg K\u207a' }
     ];
-    content.ctaLabel = 'VOIR MES ALIMENTS COMPATIBLES';
+    content.ctaLabel = _cEN ? 'VIEW MY COMPATIBLE FOODS' : 'VOIR MES ALIMENTS COMPATIBLES';
     content.ctaFn = function() { S.view = 'nutrition'; if (window.render) window.render(); };
     content.critical = true;
   } else if (selectedCondition === 'menopause') {
-    content.title = 'Calcium et magnésium';
-    content.body = 'Votre densité osseuse se joue chaque jour. Visez 1 200 mg de calcium et 320 mg de magnésium. Les amandes et le yaourt grec sont vos alliés.';
+    content.title = _cEN ? 'Calcium and magnesium' : 'Calcium et magnésium';
+    content.body = _cEN ? 'Your bone density is built every day. Aim for 1,200 mg of calcium and 320 mg of magnesium. Almonds and Greek yogurt are your allies.' : 'Votre densité osseuse se joue chaque jour. Visez 1 200 mg de calcium et 320 mg de magnésium. Les amandes et le yaourt grec sont vos alliés.';
     content.items = [
-      { name: 'Yaourt grec (200 g)', detail: '280 mg Ca' },
-      { name: 'Amandes (30 g)', detail: '75 mg Mg' },
-      { name: 'Épinards cuits', detail: '245 mg Mg' }
+      { name: _cEN ? 'Greek yogurt (200 g)' : 'Yaourt grec (200 g)', detail: '280 mg Ca' },
+      { name: _cEN ? 'Almonds (30 g)' : 'Amandes (30 g)', detail: '75 mg Mg' },
+      { name: _cEN ? 'Cooked spinach' : 'Épinards cuits', detail: '245 mg Mg' }
     ];
-    content.ctaLabel = 'VOIR LES RECETTES ADAPTÉES';
+    content.ctaLabel = _cEN ? 'VIEW ADAPTED RECIPES' : 'VOIR LES RECETTES ADAPTÉES';
     content.ctaFn = function() { S.view = 'nutrition'; if (window.render) window.render(); };
   } else if (selectedCondition === 'hta') {
-    content.title = 'Sodium sous contrôle';
-    content.body = 'Régime DASH : sodium ≤ 2,3 g/jour. Potassium 4 700 mg. Les légumes verts et les légumineuses sont prioritaires aujourd\'hui.';
+    content.title = _cEN ? 'Sodium under control' : 'Sodium sous contrôle';
+    content.body = _cEN ? 'DASH diet: sodium ≤ 2.3 g/day. Potassium 4,700 mg. Green vegetables and legumes are priorities today.' : 'Régime DASH : sodium ≤ 2,3 g/jour. Potassium 4 700 mg. Les légumes verts et les légumineuses sont prioritaires aujourd\'hui.';
     content.items = [
-      { name: 'Épinards cuits', detail: '800 mg K\u207a' },
-      { name: 'Haricots blancs', detail: '600 mg K\u207a' },
-      { name: 'Banane (1)', detail: '420 mg K\u207a' }
+      { name: _cEN ? 'Cooked spinach' : 'Épinards cuits', detail: '800 mg K\u207a' },
+      { name: _cEN ? 'White beans' : 'Haricots blancs', detail: '600 mg K\u207a' },
+      { name: _cEN ? 'Banana (1)' : 'Banane (1)', detail: '420 mg K\u207a' }
     ];
-    content.ctaLabel = 'VOIR MES CONSEILS HTA';
+    content.ctaLabel = _cEN ? 'VIEW MY HTA ADVICE' : 'VOIR MES CONSEILS HTA';
     content.ctaFn = function() { S.view = 'nutrition'; if (window.render) window.render(); };
   } else if (selectedCondition === 'diabete') {
-    content.title = 'Index glycémique bas';
-    content.body = 'Privilégiez les aliments IG bas aujourd\'hui : céréales complètes, légumineuses, légumes. Évitez les sucres rapides.';
+    content.title = _cEN ? 'Low glycemic index' : 'Index glycémique bas';
+    content.body = _cEN ? 'Prioritize low GI foods today: whole grains, legumes, vegetables. Avoid fast sugars.' : 'Privilégiez les aliments IG bas aujourd\'hui : céréales complètes, légumineuses, légumes. Évitez les sucres rapides.';
     content.items = [
-      { name: 'Flocons d\'avoine', detail: 'IG 55' },
-      { name: 'Quinoa cuit', detail: 'IG 53' },
-      { name: 'Lentilles vertes', detail: 'IG 30' }
+      { name: _cEN ? 'Oat flakes' : 'Flocons d\'avoine', detail: 'IG 55' },
+      { name: _cEN ? 'Cooked quinoa' : 'Quinoa cuit', detail: 'IG 53' },
+      { name: _cEN ? 'Green lentils' : 'Lentilles vertes', detail: 'IG 30' }
     ];
-    content.ctaLabel = 'VOIR LES RECETTES IG BAS';
+    content.ctaLabel = _cEN ? 'VIEW LOW GI RECIPES' : 'VOIR LES RECETTES IG BAS';
     content.ctaFn = function() { S.view = 'nutrition'; if (window.render) window.render(); };
   } else if (selectedCondition === 'muscu_deload') {
     // FIX SPRINT P2.9 — Branche muscu deload (semaine 4, 8, 12 du mésocycle)
-    content.title = 'Semaine de décharge';
-    content.body = 'Vous êtes en semaine ' + S.muscuWeek + ' — fin de mésocycle. Réduction volume −50%, intensité −15%. C\'est une vraie phase d\'entraînement, pas un repos. La super-compensation post-deload est votre moteur de progression.';
+    content.title = _cEN ? 'Deload week' : 'Semaine de décharge';
+    content.body = _cEN ? 'You are in week ' + S.muscuWeek + ' — end of mesocycle. Volume reduction −50%, intensity −15%. This is a real training phase, not rest. Post-deload supercompensation is your driver.' : 'Vous êtes en semaine ' + S.muscuWeek + ' — fin de mésocycle. Réduction volume −50%, intensité −15%. C\'est une vraie phase d\'entraînement, pas un repos. La super-compensation post-deload est votre moteur de progression.';
     content.items = [
       { name: 'Volume',    detail: '−50% sets' },
-      { name: 'Intensité', detail: '−15% charges (RIR 4)' },
-      { name: 'Sommeil',   detail: '8h+ recommandées' }
+      { name: _cEN ? 'Intensity' : 'Intensité', detail: '−15% ' + (_cEN ? 'weight (RIR 4)' : 'charges (RIR 4)') },
+      { name: _cEN ? 'Sleep' : 'Sommeil',   detail: '8h+ ' + (_cEN ? 'recommended' : 'recommandées') }
     ];
-    content.ctaLabel = 'VOIR MA SÉANCE ALLÉGÉE';
+    content.ctaLabel = _cEN ? 'VIEW MY LIGHT SESSION' : 'VOIR MA SÉANCE ALLÉGÉE';
     content.ctaFn = function() { S.view = 'sport'; if (window.render) window.render(); };
   }
 
@@ -6764,7 +6917,7 @@ function renderCardTodayForYou() {
 
   c.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-500,#6B6B65);font-weight:500;margin-bottom:16px;'
-  }, 'AUJOURD\'HUI POUR VOUS'));
+  }, (window.isEnglish && window.isEnglish()) ? 'TODAY FOR YOU' : 'AUJOURD\'HUI POUR VOUS'));
 
   c.appendChild(h('div', {
     style: 'font-family:Georgia,serif;font-size:22px;line-height:1.25;color:var(--ink-900,#0A0A09);margin-bottom:12px;'
@@ -6823,7 +6976,7 @@ function renderCardCrossfit1RM() {
   // Bible §13.2 : pas d'eyebrow redondant — le titre Georgia suffit.
   c.appendChild(h('div', {
     style: 'font-family:Georgia,serif;font-size:22px;line-height:1.25;color:var(--ink-900,#0A0A09);margin-bottom:20px;'
-  }, 'Tes charges CrossFit'));
+  }, (window.isEnglish && window.isEnglish()) ? 'Your CrossFit weights' : 'Tes charges CrossFit'));
 
   var levelLabel = S.crossfitLevel === 'scaled' ? 'Scaled'
                  : S.crossfitLevel === 'inter' ? 'Intermediate'
@@ -6832,7 +6985,7 @@ function renderCardCrossfit1RM() {
                  : 'Intermediate';
   c.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--ink-500,#6B6B65);letter-spacing:0.3px;margin-bottom:16px;'
-  }, 'Niveau : ' + levelLabel));
+  }, ((window.isEnglish && window.isEnglish()) ? 'Level: ' : 'Niveau : ') + levelLabel));
 
   // Liste des 1RM renseignés
   var liftsWithValues = lifts.filter(function(lift) {
@@ -6856,7 +7009,7 @@ function renderCardCrossfit1RM() {
     href: '#',
     style: 'font-family:Georgia,serif;font-style:italic;font-size:14px;color:var(--ink-900,#0A0A09);text-decoration:none;border-bottom:1px solid var(--ink-900,#0A0A09);padding-bottom:4px;cursor:pointer;display:inline-block;min-height:44px;line-height:44px;margin-top:16px;',
     onclick: function(e) { e.preventDefault(); S.view = 'sport'; if (window.render) window.render(); }
-  }, 'Mettre à jour mes charges  \u2192');
+  }, (window.isEnglish && window.isEnglish()) ? 'Update my weights  \u2192' : 'Mettre à jour mes charges  \u2192');
   c.appendChild(cta);
 
   return c;
@@ -6971,11 +7124,12 @@ function getVolumeZone(muscle, sets, level) {
   var mavHigh = Math.round(lm.mav[1] * scale);
   var mrv = Math.round(lm.mrv * scale);
   var zone, target;
-  if (sets < mev)       { zone = 'below-mev'; target = 'Vise ' + mev + ' sets (MEV)'; }
-  else if (sets < mavLow) { zone = 'mev-mav'; target = 'Zone productive — vise ' + mavLow + '-' + mavHigh + ' sets (MAV)'; }
-  else if (sets <= mavHigh) { zone = 'mev-mav-optimal'; target = 'Sweet spot — continue à ce rythme'; }
-  else if (sets <= mrv)  { zone = 'mav-mrv'; target = 'Volume limite — surveille la récupération (MRV ' + mrv + ')'; }
-  else                   { zone = 'above-mrv'; target = 'Au-dessus du MRV (' + mrv + ') — risque surentraînement'; }
+  if (sets < mvar _vzEN = window.isEnglish && window.isEnglish();
+  if (sets < mev)       { zone = 'below-mev'; target = _vzEN ? 'Aim for ' + mev + ' sets (MEV)' : 'Vise ' + mev + ' sets (MEV)'; }
+  else if (sets < mavLow) { zone = 'mev-mav'; target = _vzEN ? 'Productive zone — aim for ' + mavLow + '-' + mavHigh + ' sets (MAV)' : 'Zone productive — vise ' + mavLow + '-' + mavHigh + ' sets (MAV)'; }
+  else if (sets <= mavHigh) { zone = 'mev-mav-optimal'; target = _vzEN ? 'Sweet spot — keep up this pace' : 'Sweet spot — continue à ce rythme'; }
+  else if (sets <= mrv)  { zone = 'mav-mrv'; target = _vzEN ? 'Limit volume — watch your recovery (MRV ' + mrv + ')' : 'Volume limite — surveille la récupération (MRV ' + mrv + ')'; }
+  else                   { zone = 'above-mrv'; target = _vzEN ? 'Above MRV (' + mrv + ') — overtraining risk' : 'Au-dessus du MRV (' + mrv + ') — risque surentraînement'; }
   return { zone: zone, sets: sets, mev: mev, mavLow: mavLow, mavHigh: mavHigh, mrv: mrv, target: target };
 }
 window.getVolumeZone = getVolumeZone;
@@ -6988,9 +7142,10 @@ function renderCardVolumeTracking() {
   var level = S.sportLevel || 'intermediate';
 
   var muscleOrder = ['pectoraux', 'dos', 'epaules', 'jambes', 'fessiers', 'bras', 'abdos'];
+  var _mlEN = window.isEnglish && window.isEnglish();
   var muscleLabels = {
-    pectoraux: 'Pectoraux', dos: 'Dos', epaules: 'Épaules',
-    jambes: 'Jambes', fessiers: 'Fessiers', bras: 'Bras', abdos: 'Abdos'
+    pectoraux: _mlEN ? 'Chest' : 'Pectoraux', dos: _mlEN ? 'Back' : 'Dos', epaules: _mlEN ? 'Shoulders' : 'Épaules',
+    jambes: _mlEN ? 'Legs' : 'Jambes', fessiers: _mlEN ? 'Glutes' : 'Fessiers', bras: _mlEN ? 'Arms' : 'Bras', abdos: _mlEN ? 'Abs' : 'Abdos'
   };
 
   var rows = muscleOrder.map(function(m) {
@@ -7026,9 +7181,9 @@ function renderCardVolumeTracking() {
 
   var html = (
     '<div style="background:var(--paper,#FAF9F6);border:1px solid var(--line,#D8D8D0);border-radius:0;padding:20px;margin-bottom:16px;">' +
-      '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(10,10,9,0.45);margin-bottom:4px;">Volume hebdo</div>' +
-      '<div style="font-size:16px;font-weight:400;color:var(--ink-900,#0A0A09);margin-bottom:2px;">Charge par groupe musculaire</div>' +
-      '<div style="font-size:12px;color:rgba(10,10,9,0.55);margin-bottom:16px;">7 derniers jours · landmarks Renaissance Periodization (Dr Mike Israetel)</div>' +
+      '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(10,10,9,0.45);margin-bottom:4px;">' + ((window.isEnglish && window.isEnglish()) ? 'Weekly volume' : 'Volume hebdo') + '</div>' +
+      '<div style="font-size:16px;font-weight:400;color:var(--ink-900,#0A0A09);margin-bottom:2px;">' + ((window.isEnglish && window.isEnglish()) ? 'Load by muscle group' : 'Charge par groupe musculaire') + '</div>' +
+      '<div style="font-size:12px;color:rgba(10,10,9,0.55);margin-bottom:16px;">' + ((window.isEnglish && window.isEnglish()) ? 'Last 7 days \u00b7 Renaissance Periodization landmarks (Dr Mike Israetel)' : '7 derniers jours \u00b7 landmarks Renaissance Periodization (Dr Mike Israetel)') + '</div>' +
       rows +
     '</div>'
   );
@@ -7049,12 +7204,13 @@ function renderCardMuscu1RM() {
   var isMuscuPure = S.sportType === 'muscu' || S.sportType === 'musculation';
   if (!isMuscuPure) return null;
   var sp = S.muscuStrengthProfile || {};
+  var _kl2EN = window.isEnglish && window.isEnglish();
   var KEY_LIFTS = [
-    { key: 'bench_press',     name: 'Développé couché' },
+    { key: 'bench_press',     name: _kl2EN ? 'Bench press' : 'Développé couché' },
     { key: 'squat',           name: 'Squat' },
     { key: 'deadlift',        name: 'Deadlift' },
-    { key: 'overhead_press',  name: 'Développé militaire' },
-    { key: 'barbell_row',     name: 'Rowing barre' },
+    { key: 'overhead_press',  name: _kl2EN ? 'Overhead press' : 'Développé militaire' },
+    { key: 'barbell_row',     name: _kl2EN ? 'Barbell row' : 'Rowing barre' },
     { key: 'hip_thrust',      name: 'Hip thrust' }
   ];
   var liftsWithValues = KEY_LIFTS.filter(function(l) { return sp[l.key] && sp[l.key] > 0; });
@@ -7066,10 +7222,10 @@ function renderCardMuscu1RM() {
 
   c.appendChild(h('div', {
     style: 'font-family:Georgia,serif;font-size:22px;line-height:1.25;color:var(--ink-900,#0A0A09);margin-bottom:6px;'
-  }, 'Tes records'));
+  }, (window.isEnglish && window.isEnglish()) ? 'Your records' : 'Tes records'));
   c.appendChild(h('div', {
     style: 'font-family:Georgia,serif;font-style:italic;font-size:13px;color:var(--ink-500,#6B6B65);margin-bottom:18px;'
-  }, '1RM estimé selon Epley (charge × reps)'));
+  }, (window.isEnglish && window.isEnglish()) ? '1RM estimated using Epley (weight × reps)' : '1RM estimé selon Epley (charge × reps)'));
 
   // FIX SPRINT P2.7 — Tonnage hebdo affiché si user a entraîné cette semaine
   var weeklyTonnage = getWeeklyTonnage(7);
@@ -7080,7 +7236,7 @@ function renderCardMuscu1RM() {
     var tonnageLeft = h('div', {});
     tonnageLeft.appendChild(h('div', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink-500,#6B6B65);font-weight:500;margin-bottom:2px;'
-    }, 'Tonnage 7 jours'));
+    }, (window.isEnglish && window.isEnglish()) ? '7-day tonnage' : 'Tonnage 7 jours'));
     tonnageLeft.appendChild(h('div', {
       style: 'font-family:Georgia,serif;font-style:italic;font-size:11px;color:var(--ink-500,#6B6B65);'
     }, weeklyTonnage.sets + ' ' + window.locPlural(weeklyTonnage.sets, {fr:{one:'série',other:'séries'},en:{one:'set',other:'sets'}}) + ' · ' + weeklyTonnage.days + ' ' + window.locPlural(weeklyTonnage.days, {fr:{one:'jour actif',other:'jours actifs'},en:{one:'active day',other:'active days'}})));
@@ -7121,7 +7277,7 @@ function renderCardMuscu1RM() {
     href: '#',
     style: 'font-family:Georgia,serif;font-style:italic;font-size:14px;color:var(--ink-900,#0A0A09);text-decoration:none;border-bottom:1px solid var(--ink-900,#0A0A09);padding-bottom:4px;cursor:pointer;display:inline-block;min-height:44px;line-height:44px;margin-top:16px;',
     onclick: function(e) { e.preventDefault(); S.view = 'sport'; if (window.render) window.render(); }
-  }, 'Mettre à jour mes charges  \u2192');
+  }, (window.isEnglish && window.isEnglish()) ? 'Update my weights  \u2192' : 'Mettre à jour mes charges  \u2192');
   c.appendChild(cta);
 
   return c;
@@ -7172,19 +7328,21 @@ function renderProgressionDrawer() {
     style: 'background:transparent;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-900,#0A0A09);cursor:pointer;padding:10px 0;font-weight:500;min-height:44px;',
     'aria-label': 'Fermer',
     onclick: function() { S._dashExtOpen = false; if (window.render) window.render(); }
-  }, '\u2190 FERMER'));
+  }, (window.isEnglish && window.isEnglish()) ? '\u2190 CLOSE' : '\u2190 FERMER'));
   header.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-500,#6B6B65);font-weight:500;'
-  }, 'PROGRESSION'));
+  }, (window.isEnglish && window.isEnglish()) ? 'PROGRESSION' : 'PROGRESSION'));
   header.appendChild(h('div', { style: 'width:80px;' })); // spacer pour centrage
   sheet.appendChild(header);
 
   // Tabs scrollable
   var tabs = [
+    var _drEN = window.isEnglish && window.isEnglish();
+  var tabs = [
     { key: 'records',   label: 'Records' },
-    { key: 'tendances', label: 'Tendances \u00b7 30 j' },
-    { key: 'charges',   label: 'Charges \u00b7 30 j' },
-    { key: 'objectifs', label: 'Objectifs semaine' }
+    { key: 'tendances', label: _drEN ? 'Trends \u00b7 30 d' : 'Tendances \u00b7 30 j' },
+    { key: 'charges',   label: _drEN ? 'Load \u00b7 30 d' : 'Charges \u00b7 30 j' },
+    { key: 'objectifs', label: _drEN ? 'Weekly goals' : 'Objectifs semaine' }
   ];
   var tabsBar = h('div', {
     style: 'display:flex;overflow-x:auto;border-bottom:1px solid var(--line,#D8D8D0);padding:0 24px;gap:4px;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;scrollbar-width:none;'
@@ -7279,29 +7437,30 @@ if (!document.getElementById('hermes-drawer-styles')) {
 // TOOLTIP JARGON — Bible Hermès §4.2.6 + §13 (explication inline des termes techniques)
 // ═══════════════════════════════════════════════════════════════════════════
 // Usage : jargonTooltip('TDEE') → span avec (?) cliquable, tap ouvre un popover.
+var _jgEN = window.isEnglish && window.isEnglish();
 var JARGON_DEFS = {
-  'TDEE': { title: 'TDEE', text: 'Besoin calorique quotidien total. Calculé à partir de votre métabolisme de base (BMR) × un coefficient d\'activité physique. Unité : kcal/jour.' },
-  'BMR': { title: 'BMR', text: 'Métabolisme de base — énergie brûlée au repos pour maintenir vos fonctions vitales. Formule Mifflin-St Jeor.' },
-  '1RM': { title: '1RM', text: 'Charge maximale que vous pouvez soulever une seule fois sur un mouvement donné. Référence pour calculer vos charges de travail.' },
-  'RPE': { title: 'RPE', text: 'Rate of Perceived Exertion — effort ressenti de 1 à 10. 7 = dur mais contrôlé, 10 = impossible une rep de plus.' },
-  'RIR': { title: 'RIR', text: 'Reps In Reserve — combien de répétitions vous auriez pu faire en plus avant l\'échec. RIR 2 = il vous en restait 2.' },
-  'VO2max': { title: 'VO2 max', text: 'Capacité maximale d\'oxygène que votre corps utilise à l\'effort. Indicateur clé d\'endurance cardio.' },
-  'K⁺': { title: 'Potassium', text: 'Minéral essentiel. En cas d\'insuffisance rénale, votre apport doit être surveillé (≤ 2 000 mg/j selon stade).' },
-  'DASH': { title: 'DASH', text: 'Régime Dietary Approaches to Stop Hypertension. Réduit le sodium, augmente le potassium/magnésium/calcium. Baisse la PA de 5-8 mmHg.' },
-  'macros': { title: 'Macronutriments', text: 'Les 3 grandes familles caloriques : protéines (4 kcal/g), glucides (4 kcal/g), lipides (9 kcal/g).' },
+  'TDEE': { title: 'TDEE', text: _jgEN ? 'Total daily caloric need. Calculated from your basal metabolic rate (BMR) × a physical activity coefficient. Unit: kcal/day.' : 'Besoin calorique quotidien total. Calculé à partir de votre métabolisme de base (BMR) × un coefficient d\'activité physique. Unité : kcal/jour.' },
+  'BMR': { title: 'BMR', text: _jgEN ? 'Basal Metabolic Rate — energy burned at rest to maintain vital functions. Mifflin-St Jeor formula.' : 'Métabolisme de base — énergie brûlée au repos pour maintenir vos fonctions vitales. Formule Mifflin-St Jeor.' },
+  '1RM': { title: '1RM', text: _jgEN ? 'Maximum load you can lift once on a given movement. Reference for calculating working weights.' : 'Charge maximale que vous pouvez soulever une seule fois sur un mouvement donné. Référence pour calculer vos charges de travail.' },
+  'RPE': { title: 'RPE', text: _jgEN ? 'Rate of Perceived Exertion — felt effort from 1 to 10. 7 = hard but controlled, 10 = impossible one more rep.' : 'Rate of Perceived Exertion — effort ressenti de 1 à 10. 7 = dur mais contrôlé, 10 = impossible une rep de plus.' },
+  'RIR': { title: 'RIR', text: _jgEN ? 'Reps In Reserve — how many more reps you could have done before failure. RIR 2 = 2 reps left in the tank.' : 'Reps In Reserve — combien de répétitions vous auriez pu faire en plus avant l\'échec. RIR 2 = il vous en restait 2.' },
+  'VO2max': { title: 'VO2 max', text: _jgEN ? 'Maximum oxygen capacity your body uses during exercise. Key cardio endurance indicator.' : 'Capacité maximale d\'oxygène que votre corps utilise à l\'effort. Indicateur clé d\'endurance cardio.' },
+  'K⁺': { title: _jgEN ? 'Potassium' : 'Potassium', text: _jgEN ? 'Essential mineral. With kidney disease, intake must be monitored (≤ 2,000 mg/day depending on stage).' : 'Minéral essentiel. En cas d\'insuffisance rénale, votre apport doit être surveillé (≤ 2 000 mg/j selon stade).' },
+  'DASH': { title: 'DASH', text: _jgEN ? 'Dietary Approaches to Stop Hypertension diet. Reduces sodium, increases potassium/magnesium/calcium. Lowers BP by 5-8 mmHg.' : 'Régime Dietary Approaches to Stop Hypertension. Réduit le sodium, augmente le potassium/magnésium/calcium. Baisse la PA de 5-8 mmHg.' },
+  'macros': { title: _jgEN ? 'Macronutrients' : 'Macronutriments', text: _jgEN ? 'The 3 main caloric families: protein (4 kcal/g), carbohydrates (4 kcal/g), fats (9 kcal/g).' : 'Les 3 grandes familles caloriques : protéines (4 kcal/g), glucides (4 kcal/g), lipides (9 kcal/g).' },
   // 2026-04 UX-4 : compléter pour les termes CrossFit / cycling / training
-  'AMRAP': { title: 'AMRAP', text: 'As Many Rounds/Reps As Possible — faites le plus de tours/répétitions possible dans le temps imparti. Exemple : AMRAP 15 = 15 min d\'effort max.' },
-  'EMOM': { title: 'EMOM', text: 'Every Minute On the Minute — au début de chaque minute, vous faites une série prescrite, puis reposez jusqu\'à la minute suivante.' },
-  'WOD': { title: 'WOD', text: 'Workout of the Day — séance CrossFit du jour, combinant plusieurs mouvements en format chronométré (AMRAP, EMOM, For Time…).' },
-  'PAL': { title: 'PAL', text: 'Physical Activity Level — multiplicateur qui estime votre dépense énergétique selon votre activité physique. Sédentaire = 1.2, Très actif = 1.9.' },
-  'FTP': { title: 'FTP', text: 'Functional Threshold Power — puissance maximale que vous pouvez soutenir 1 heure en vélo (en watts). Base de calcul de vos zones cyclistes.' },
-  'Z1': { title: 'Zone 1', text: 'Zone de récupération active (56-75% FTP / 50-60% FCmax). Effort très léger, conversation aisée.' },
-  'Z2': { title: 'Zone 2', text: 'Zone d\'endurance aérobie (76-90% FTP / 60-70% FCmax). Effort modéré, conversation possible. Idéale pour le fond.' },
-  'Z3': { title: 'Zone 3', text: 'Zone seuil aérobie (91-105% FTP / 70-80% FCmax). Effort soutenu, phrases courtes seulement.' },
-  'Z4': { title: 'Zone 4', text: 'Zone seuil anaérobie (106-120% FTP / 80-90% FCmax). Effort intense, très peu de conversation.' },
-  'Z5': { title: 'Zone 5', text: 'Zone VO2 max (>120% FTP / >90% FCmax). Effort maximal, essoufflement total. Courtes durées uniquement.' },
-  'EPOC': { title: 'EPOC', text: 'Excess Post-exercise Oxygen Consumption — calories brûlées après l\'effort (effet « afterburn »). Plus l\'intensité est élevée, plus l\'EPOC est important.' },
-  'Atwater': { title: 'Atwater', text: 'Système de calcul des calories par macronutriment : 4 kcal/g pour protéines et glucides, 9 kcal/g pour lipides, 7 kcal/g pour alcool.' }
+  'AMRAP': { title: 'AMRAP', text: _jgEN ? 'As Many Rounds/Reps As Possible — do as many rounds/reps as possible in the allotted time. Example: AMRAP 15 = 15 min of max effort.' : 'As Many Rounds/Reps As Possible — faites le plus de tours/répétitions possible dans le temps imparti. Exemple : AMRAP 15 = 15 min d\'effort max.' },
+  'EMOM': { title: 'EMOM', text: _jgEN ? 'Every Minute On the Minute — at the start of each minute, perform a prescribed set, then rest until the next minute.' : 'Every Minute On the Minute — au début de chaque minute, vous faites une série prescrite, puis reposez jusqu\'à la minute suivante.' },
+  'WOD': { title: 'WOD', text: _jgEN ? 'Workout of the Day — the CrossFit session of the day, combining multiple movements in a timed format (AMRAP, EMOM, For Time…).' : 'Workout of the Day — séance CrossFit du jour, combinant plusieurs mouvements en format chronométré (AMRAP, EMOM, For Time…).' },
+  'PAL': { title: 'PAL', text: _jgEN ? 'Physical Activity Level — multiplier estimating your energy expenditure based on physical activity. Sedentary = 1.2, Very active = 1.9.' : 'Physical Activity Level — multiplicateur qui estime votre dépense énergétique selon votre activité physique. Sédentaire = 1.2, Très actif = 1.9.' },
+  'FTP': { title: 'FTP', text: _jgEN ? 'Functional Threshold Power — maximum power you can sustain for 1 hour on a bike (in watts). Basis for calculating cycling zones.' : 'Functional Threshold Power — puissance maximale que vous pouvez soutenir 1 heure en vélo (en watts). Base de calcul de vos zones cyclistes.' },
+  'Z1': { title: _jgEN ? 'Zone 1' : 'Zone 1', text: _jgEN ? 'Active recovery zone (56-75% FTP / 50-60% HRmax). Very light effort, easy conversation.' : 'Zone de récupération active (56-75% FTP / 50-60% FCmax). Effort très léger, conversation aisée.' },
+  'Z2': { title: _jgEN ? 'Zone 2' : 'Zone 2', text: _jgEN ? 'Aerobic endurance zone (76-90% FTP / 60-70% HRmax). Moderate effort, conversation possible. Ideal for base training.' : 'Zone d\'endurance aérobie (76-90% FTP / 60-70% FCmax). Effort modéré, conversation possible. Idéale pour le fond.' },
+  'Z3': { title: _jgEN ? 'Zone 3' : 'Zone 3', text: _jgEN ? 'Aerobic threshold zone (91-105% FTP / 70-80% HRmax). Sustained effort, short phrases only.' : 'Zone seuil aérobie (91-105% FTP / 70-80% FCmax). Effort soutenu, phrases courtes seulement.' },
+  'Z4': { title: _jgEN ? 'Zone 4' : 'Zone 4', text: _jgEN ? 'Anaerobic threshold zone (106-120% FTP / 80-90% HRmax). Intense effort, very little conversation.' : 'Zone seuil anaérobie (106-120% FTP / 80-90% FCmax). Effort intense, très peu de conversation.' },
+  'Z5': { title: _jgEN ? 'Zone 5' : 'Zone 5', text: _jgEN ? 'VO2 max zone (>120% FTP / >90% HRmax). Maximum effort, total breathlessness. Short durations only.' : 'Zone VO2 max (>120% FTP / >90% FCmax). Effort maximal, essoufflement total. Courtes durées uniquement.' },
+  'EPOC': { title: 'EPOC', text: _jgEN ? 'Excess Post-exercise Oxygen Consumption — calories burned after exercise (the “afterburn” effect). The higher the intensity, the greater the EPOC.' : 'Excess Post-exercise Oxygen Consumption — calories brûlées après l\'effort (effet « afterburn »). Plus l\'intensité est élevée, plus l\'EPOC est important.' },
+  'Atwater': { title: 'Atwater', text: _jgEN ? 'Calorie calculation system by macronutrient: 4 kcal/g for protein and carbs, 9 kcal/g for fats, 7 kcal/g for alcohol.' : 'Système de calcul des calories par macronutriment : 4 kcal/g pour protéines et glucides, 9 kcal/g pour lipides, 7 kcal/g pour alcool.' }
 };
 
 function jargonTooltip(term, displayText) {
@@ -7315,7 +7474,7 @@ function jargonTooltip(term, displayText) {
   var label = h('span', {}, displayText || term);
   var helper = h('button', {
     style: 'display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;margin-left:4px;border:1px solid var(--ink-500,#6B6B65);border-radius:0;background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--ink-500,#6B6B65);cursor:pointer;padding:0;line-height:1;vertical-align:middle;',
-    'aria-label': 'Définition : ' + def.title,
+    'aria-label': ((window.isEnglish && window.isEnglish()) ? 'Definition: ' : 'Définition : ') + def.title,
     'aria-describedby': id,
     onclick: function(e) {
       e.preventDefault(); e.stopPropagation();
