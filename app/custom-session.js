@@ -515,8 +515,8 @@ var _CS_MUSCLE_GROUPS = [
   { key: 'chest',     label: 'Pecs',      keywords: ['pectoraux', 'pectoral', 'pec'] },
   { key: 'legs',      label: 'Jambes',    keywords: ['quadriceps', 'ischio', 'mollet', 'femoral', 'solea', 'jumeau', 'jambe'] },
   { key: 'shoulders', label: 'Épaules',  keywords: ['epaule', 'deltoid'] },
-  { key: 'abs',       label: 'Abdos',     keywords: ['abdominaux', 'abdo', 'transverse', 'oblique'] },
-  { key: 'arms',      label: 'Bras',      keywords: ['biceps', 'triceps', 'avant-bras', 'brachialis'] },
+  { key: 'abs',       label: 'Abdos',     keywords: ['abdominaux', 'abdo', 'transverse', 'oblique', 'grand droit'] },
+  { key: 'arms',      label: 'Bras',      keywords: ['biceps', 'triceps', 'avant-bras', 'brachialis', 'brachial'] },
   { key: 'cardio',    label: 'Cardio',    keywords: [] }
 ];
 
