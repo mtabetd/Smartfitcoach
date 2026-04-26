@@ -96,15 +96,16 @@
   function getSportTypeName() {
     var s = window.S;
     if (!s || !s.sportType) return '';
+    var _sportEN = window.isEnglish && window.isEnglish();
     var MAP = {
-      'musculation': 'Musculation',
+      'musculation': (_sportEN ? 'Weight Training' : 'Musculation'),
       'crossfit':    'CrossFit',
       'running':     'Running',
       'hyrox':       'Hyrox',
       'padel':       'Padel',
       'golf':        'Golf',
       'triathlon':   'Triathlon',
-      'cycling':     'Cyclisme',
+      'cycling':     (_sportEN ? 'Cycling' : 'Cyclisme'),
       'calisthenics':'Calisthenics',
       'yoga':        'Yoga'
     };
@@ -178,7 +179,7 @@
 
     var progLines = [];
     if (kcal > 0) {
-      var nutritionLine = kcal + ' kcal/jour';
+      var nutritionLine = kcal + (_ocEN ? ' kcal/day' : ' kcal/jour');
       if (protein > 0) nutritionLine += ' · ' + protein + 'g ' + (_ocEN ? 'protein' : 'protéines');
       progLines.push((_ocEN ? 'Nutrition: ' : 'Nutrition : ') + nutritionLine);
     }
