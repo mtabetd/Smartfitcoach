@@ -6888,7 +6888,7 @@ function renderMusculationProgram(p) {
  if (med.lowerBack || med.herniaDisc) restrictions.push(_isENMed ? '\u26A0 Back : deadlifts and heavy bends removed' : '\u26A0 Dos\u00a0: soulev\u00e9 de terre et flexions lourdes retir\u00e9s');
  if (med.knees || med.acl) restrictions.push(_isENMed ? '\u26A0 Knees : deep squats replaced' : '\u26A0 Genoux\u00a0: squats profonds remplac\u00e9s');
  if (med.herniaInguinal) restrictions.push(_isENMed ? '\u26A0 Inguinal hernia : hyper-pressure exercises removed' : '\u26A0 Hernie inguinale\u00a0: exercices hyperpressifs retir\u00e9s');
- if (med.hypertension) restrictions.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode('\u26A0 HTA\u00a0: intensit\u00e9 plafonn\u00e9e ')); _el.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _el.appendChild(document.createTextNode('\u00a07/10, Valsalva interdit')); return _el; })());
+ if (med.hypertension) restrictions.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode((window.isEnglish && window.isEnglish() ? '\u26A0 HTN\u00a0: intensity capped ' : '\u26A0 HTA\u00a0: intensit\u00e9 plafonn\u00e9e '))); _el.appendChild(termTooltip('RPE', _RPE_DEF)); _el.appendChild(document.createTextNode(window.isEnglish && window.isEnglish() ? '\u00a07/10, Valsalva forbidden' : '\u00a07/10, Valsalva interdit'); return _el; })());
  if (med.osteoporosis) restrictions.push(_isENMed ? '\u26A0 Osteoporosis : loads \u2264 70 % 1RM, no impact or vertebral flexions (Sinaki, Spine 2002)' : '\u26A0 Ost\u00e9oporose\u00a0: charges \u2264\u00a070\u00a0% 1RM, pas d\'impacts ni flexions vert\u00e9brales (Sinaki, Spine 2002)');
  if (med.rheumatoidArthritis) restrictions.push(_isENMed ? '\u26A0 Rheumatoid arthritis : light loads, gentle exercises in remission only \u2014 stop during flare-ups (EULAR 2020)' : '\u26A0 Polyarthrite rhumato\u00efde\u00a0: charges l\u00e9g\u00e8res, exercices doux en r\u00e9mission uniquement \u2014 arr\u00eatez en cas de pouss\u00e9e (EULAR 2020)');
  if (med.fibromyalgia) restrictions.push(_isENMed ? '\u26A0 Fibromyalgia : moderate intensity max, no HIIT or maximal loads \u2014 gentle aerobic exercises recommended (Cochrane 2017)' : '\u26A0 Fibromyalgie\u00a0: intensit\u00e9 mod\u00e9r\u00e9e max, pas de HIIT ni charges maximales \u2014 exercices a\u00e9robies doux recommand\u00e9s (Cochrane 2017)');
@@ -8702,8 +8702,8 @@ function renderMusculationProgram(p) {
   var wu = day.warmup || {
    duration: 8,
    exercises: [
-    { name: 'Cardio léger (vélo/tapis)', duration: '5 min', intensity: 'Faible' },
-    { name: 'Mobilité articulaire', duration: '3 min', notes: 'Cercles épaules, hanches, chevilles' }
+    { name: (window.isEnglish && window.isEnglish() ? 'Light cardio (bike/treadmill)' : 'Cardio léger (vélo/tapis)'), duration: '5 min', intensity: (window.isEnglish && window.isEnglish() ? 'Low' : 'Faible') },
+    { name: (window.isEnglish && window.isEnglish() ? 'Joint mobility' : 'Mobilité articulaire'), duration: '3 min', notes: (window.isEnglish && window.isEnglish() ? 'Circles: shoulders, hips, ankles' : 'Cercles épaules, hanches, chevilles') }
    ]
   };
   var _wuOpen = !!S._wuOpen;
@@ -8732,8 +8732,8 @@ function renderMusculationProgram(p) {
   var cd = day.cooldown || {
    duration: 5,
    exercises: [
-    { name: 'Marche ou vélo léger', duration: '3 min', intensity: 'Très faible' },
-    { name: 'Étirements statiques', duration: '2 min', notes: 'Groupes musculaires travaillés' }
+    { name: (window.isEnglish && window.isEnglish() ? 'Walk or light cycling' : 'Marche ou vélo léger'), duration: '3 min', intensity: (window.isEnglish && window.isEnglish() ? 'Very low' : 'Très faible') },
+    { name: (window.isEnglish && window.isEnglish() ? 'Static stretching' : 'Étirements statiques'), duration: '2 min', notes: (window.isEnglish && window.isEnglish() ? 'Worked muscle groups' : 'Groupes musculaires travaillés') }
    ]
   };
   var _cdOpen = !!S._cdOpen;
@@ -11559,7 +11559,7 @@ function renderCyclingOnboarding(p) {
  var wLabel = i === 0 ? ('< ' + b[1] + 'W') : (b[0] + '-' + b[1] + 'W');
  zonesCard.appendChild(h('div', {style: 'display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-family:Helvetica Neue,Arial,sans-serif;font-size:13px'}, [
  h('span', {style: 'color:' + z.color + ';font-weight:bold'}, 'Z' + z.zone + ' ' + z.name),
- (function(){ var _s = h('span', {style: 'color:var(--grey)'}); _s.appendChild(document.createTextNode(wLabel + ' · ')); _s.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _s.appendChild(document.createTextNode(' ' + z.rpe)); return _s; })()
+ (function(){ var _s = h('span', {style: 'color:var(--grey)'}); _s.appendChild(document.createTextNode(wLabel + ' · '))); _s.appendChild(termTooltip('RPE', _RPE_DEF)); _s.appendChild(document.createTextNode(' ' + z.rpe)); return _s; })()
  ]));
  });
  p.appendChild(zonesCard);
@@ -11763,7 +11763,7 @@ function renderCyclingProgram(p) {
  sessCard.appendChild(metaRow);
 
  if (zoneData) {
- sessCard.appendChild((function(){ var _d = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-top:4px'}); _d.appendChild(document.createTextNode(zoneData.desc + ' — ')); _d.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _d.appendChild(document.createTextNode(' ' + zoneData.rpe)); return _d; })());
+ sessCard.appendChild((function(){ var _d = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-top:4px'}); _d.appendChild(document.createTextNode(zoneData.desc + ' — '))); _d.appendChild(termTooltip('RPE', _RPE_DEF)); _d.appendChild(document.createTextNode(' ' + zoneData.rpe)); return _d; })());
  }
  p.appendChild(sessCard);
  }
