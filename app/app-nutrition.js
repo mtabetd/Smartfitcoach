@@ -3407,6 +3407,8 @@ function renderStep9(p) {
                   if (!S.weekPlan) return;
                   if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
                   S.weekPlan[S.selectedDay][slotKey3c] = { n: rf.n, k: Math.max(0, rf.kcal || rf.k || 0), kcal: Math.max(0, rf.kcal || rf.k || 0), p: Math.max(0, rf.p || 0), g: Math.max(0, rf.g || 0), l: Math.max(0, rf.l || 0), f: '\u25CE', emoji: '\u25CE', custom: true };
+                  // BUG-1 FIX: recalculate day aggregate totals so dashboard/shopping-list stay in sync
+                  (function(_di3c) { var _d3c = S.weekPlan[_di3c]; if (!_d3c) return; var _t3c = {k:0,p:0,g:0,l:0}; ['breakfast','lunch','snack','dinner'].forEach(function(q){var m=_d3c[q];if(m){_t3c.k+=m.k||0;_t3c.p+=m.p||0;_t3c.g+=m.g||0;_t3c.l+=m.l||0;}}); _d3c.kcal=_t3c.k;_d3c.p=_t3c.p;_d3c.g=_t3c.g;_d3c.l=_t3c.l; })(S.selectedDay);
                   S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false;
                   try { if (window.saveProfile) window.saveProfile(); } catch(e) {}
                   if (window.incrementMealsLogged) window.incrementMealsLogged();
