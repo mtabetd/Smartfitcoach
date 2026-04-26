@@ -37,6 +37,12 @@ global.matchMedia = function() { return { matches: false, addEventListener: func
 
 // ─── 2. CHARGER LES MODULES ─────────────────────────────────────────────────
 
+// i18n-helpers.js (fournit isFemale, isMale, isEnglish)
+var i18nCode = fs.readFileSync(path.join(__dirname, '../app/i18n-helpers.js'), 'utf8');
+try { vm.runInThisContext(i18nCode, { filename: 'i18n-helpers.js' }); } catch(e) {
+  console.error('[FATAL] i18n-helpers.js:', e.message); process.exit(1);
+}
+
 // app-core.js (fournit helpers, BODY_ZONES, etc.)
 var coreCode = fs.readFileSync(path.join(__dirname, '../app/app-core.js'), 'utf8');
 try { vm.runInThisContext(coreCode, { filename: 'app-core.js' }); } catch(e) {

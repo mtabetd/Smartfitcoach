@@ -150,6 +150,7 @@ try {
   // Load app-core (overwrites window.S with defaults — set test state per-check)
   eval(fs.readFileSync(ROOT + '/app/food-db.js', 'utf8'));
   eval(fs.readFileSync(ROOT + '/app/extras.js', 'utf8'));
+  eval(fs.readFileSync(ROOT + '/app/i18n-helpers.js', 'utf8'));
   eval(fs.readFileSync(ROOT + '/app/app-core.js', 'utf8'));
 
   // GOALS is defined after app-core loads
@@ -345,6 +346,7 @@ try {
   // Load app-core (it initializes window.S with defaults, so we set our test state after)
   eval(fs.readFileSync(ROOT + '/app/food-db.js', 'utf8'));
   eval(fs.readFileSync(ROOT + '/app/extras.js', 'utf8'));
+  eval(fs.readFileSync(ROOT + '/app/i18n-helpers.js', 'utf8'));
   eval(fs.readFileSync(ROOT + '/app/app-core.js', 'utf8'));
   var GOALS2 = window.GOALS || [];
   var cutIdx2 = GOALS2.findIndex ? GOALS2.findIndex(function(g) { return g.key === 'cut'; }) : 0;
