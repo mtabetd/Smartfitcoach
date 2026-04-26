@@ -6597,7 +6597,7 @@ function renderMusculationProgram(p) {
        S.sportProgram = null;
        S._generatingProgram = false;
        if (window.render) window.render();
-     }}, 'Réessayer')
+     }}, (window.isEnglish && window.isEnglish() ? 'Retry' : 'Réessayer'))
    ]));
    return;
  }
@@ -6627,7 +6627,7 @@ function renderMusculationProgram(p) {
    if (!S._generatingProgram) {
      S._generatingProgram = true;
      p.appendChild(h('div', {style: 'text-align:center;padding:48px 24px;font-family:"Helvetica Neue",Arial,sans-serif;'},[
-       h('div', {style: 'font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, 'Génération de votre programme...'),
+       h('div', {style: 'font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, (window.isEnglish && window.isEnglish() ? 'Generating your program...' : 'Génération de votre programme...')),
        h('div', {style: 'width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--black);border-radius:0;animation:spin .7s linear infinite;margin:0 auto;'})
      ]));
      setTimeout(function() {
@@ -6642,7 +6642,7 @@ function renderMusculationProgram(p) {
          if (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0 || S.sportProgram.every(function(d){ return !d || !Array.isArray(d.exercises) || d.exercises.length === 0; })) {
            console.error('[sport] generateSportProgram returned empty program');
            S._generatingProgram = false;
-           S._programGenerationError = 'Aucun exercice disponible avec vos contraintes actuelles. Essayez d\'assouplir vos restrictions médicales ou d\'ajouter davantage d\'équipement.';
+           S._programGenerationError = (window.isEnglish && window.isEnglish() ? 'No exercises available with your current constraints. Try relaxing your medical restrictions or selecting more muscle groups.' : 'Aucun exercice disponible avec vos contraintes actuelles. Essayez d\'assouplir vos restrictions médicales ou d\'ajouter davantage d\'équipement.';
            if (window.render) window.render();
            return;
          }
@@ -6657,7 +6657,7 @@ function renderMusculationProgram(p) {
        } catch(e) {
          console.error('[sport] generateSportProgram error:', e);
          S._generatingProgram = false;
-         S._programGenerationError = 'Une erreur est survenue lors de la génération du programme. Veuillez réessayer.';
+         S._programGenerationError = (window.isEnglish && window.isEnglish() ? 'An error occurred while generating the program. Please try again.' : 'Une erreur est survenue lors de la génération du programme. Veuillez réessayer.');
          if (window.render) window.render();
        }
      }, 50);
@@ -6665,7 +6665,7 @@ function renderMusculationProgram(p) {
    } else {
      // setTimeout en attente — afficher le spinner et attendre, ne pas générer en doublon
      p.appendChild(h('div', {style: 'text-align:center;padding:48px 24px;font-family:"Helvetica Neue",Arial,sans-serif;'},[
-       h('div', {style: 'font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, 'Génération de votre programme...'),
+       h('div', {style: 'font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, (window.isEnglish && window.isEnglish() ? 'Generating your program...' : 'Génération de votre programme...')),
        h('div', {style: 'width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--black);border-radius:0;animation:spin .7s linear infinite;margin:0 auto;'})
      ]));
      return;
@@ -6811,7 +6811,7 @@ function renderMusculationProgram(p) {
  // Bandeau "mise à jour disponible" (version stale mais programme validé = on ne touche pas)
  if (S._sportUpdateAvailable) {
    var _updateBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border:1px solid var(--ink-900,#0A0A09);background:rgba(62,92,58,0.06);margin-bottom:12px;border-radius:2px'});
-   _updateBanner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--ink-900,#0A0A09)'}, 'Une mise à jour du programme est disponible.'));
+   _updateBanner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--ink-900,#0A0A09)'}, (window.isEnglish && window.isEnglish() ? 'A program update is available.' : 'Une mise à jour du programme est disponible.')));
    _updateBanner.appendChild(h('button', {
      style: 'padding:6px 12px;background:var(--ink-900,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;min-height:44px;white-space:nowrap;',
      onclick: function() {
@@ -6820,7 +6820,7 @@ function renderMusculationProgram(p) {
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        if (window.render) window.render();
      }
-   }, 'Mettre à jour'));
+   }, (window.isEnglish && window.isEnglish() ? 'Update' : 'Mettre à jour'));
    p.appendChild(_updateBanner);
  }
 
@@ -6829,7 +6829,7 @@ function renderMusculationProgram(p) {
    var _filterWarn = h('div', {style: 'background:rgba(180,130,0,0.08);border:1px solid rgba(180,130,0,0.3);padding:10px 14px;margin-bottom:12px;border-radius:2px;display:flex;align-items:flex-start;gap:8px;'});
    _filterWarn.appendChild(h('span', {style: 'flex-shrink:0;font-size:13px;'}, '\u26a0\ufe0f'));
    var _fwText = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#5A3A00;line-height:1.5;'});
-   _fwText.textContent = 'Certains groupes musculaires ont été filtrés en raison de vos conditions médicales. Le programme peut être incomplet. Consultez un coach ou réduisez vos restrictions dans le questionnaire médical.';
+   _fwText.textContent = (window.isEnglish && window.isEnglish() ? 'Some muscle groups have been filtered due to your medical conditions. The program may be incomplete. Consult a coach or reduce your restrictions in the medical questionnaire.' : 'Certains groupes musculaires ont été filtrés en raison de vos conditions médicales. Le programme peut être incomplet. Consultez un coach ou réduisez vos restrictions dans le questionnaire médical.');
    _filterWarn.appendChild(_fwText);
    p.appendChild(_filterWarn);
  }
@@ -6839,7 +6839,7 @@ function renderMusculationProgram(p) {
    var _htaProgAlert = h('div', {style: 'background:rgba(220,53,69,0.07);border:1px solid rgba(220,53,69,0.3);padding:10px 14px;margin-bottom:12px;border-radius:2px;display:flex;align-items:flex-start;gap:8px;'});
    _htaProgAlert.appendChild(h('span', {style: 'flex-shrink:0;font-size:13px;'}, '\u26a0\ufe0f'));
    var _htaProgText = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#8B0000;line-height:1.5;'});
-   _htaProgText.textContent = 'HTA sévère : limitez les charges à 40–60% du 1RM. Évitez la manœuvre de Valsalva, les exercices isométriques intenses et les charges au-dessus de la tête. — ESC/ESH 2018';
+   _htaProgText.textContent = (window.isEnglish && window.isEnglish() ? 'Severe HTN: limit loads to 40–60% of 1RM. Avoid Valsalva maneuver, intense isometric exercises and overhead loads. — ESC/ESH 2018' : 'HTA sévère : limitez les charges à 40–60% du 1RM. Évitez la manœuvre de Valsalva, les exercices isométriques intenses et les charges au-dessus de la tête. — ESC/ESH 2018');
    _htaProgAlert.appendChild(_htaProgText);
    p.appendChild(_htaProgAlert);
  }
@@ -6888,9 +6888,9 @@ function renderMusculationProgram(p) {
  // CS-01: Bannière charges estimées si profil de force non renseigné
  if (Object.keys(S.muscuStrengthProfile || {}).length === 0) {
  var estBanner = h('div', {style: 'border-left:3px solid var(--orange,#E86F1E);padding:10px 14px;background:rgba(232,111,30,0.06);margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E)'});
- estBanner.appendChild(h('div', {style: 'font-weight:bold;margin-bottom:3px'}, 'Charges estimées'));
- estBanner.appendChild(h('div', {}, 'Les poids affichés sont calculés d\'après votre poids de corps et niveau. Pour des charges personnalisées,\u00a0'));
- var goBack16 = h('span', {style: 'text-decoration:underline;cursor:pointer', onclick: function(){ S._chargesReturnToDashboard = true; S.sStep = 16; window.render(); }}, 'saisissez vos charges de référence');
+ estBanner.appendChild(h('div', {style: 'font-weight:bold;margin-bottom:3px'}, (window.isEnglish && window.isEnglish() ? 'Estimated loads' : 'Charges estimées')));
+ estBanner.appendChild(h('div', {}, (window.isEnglish && window.isEnglish() ? 'Displayed weights are calculated from your body weight and level. For personalized loads,\u00a0' : 'Les poids affichés sont calculés d\'après votre poids de corps et niveau. Pour des charges personnalisées,\u00a0')));
+ var goBack16 = h('span', {style: 'text-decoration:underline;cursor:pointer', onclick: function(){ S._chargesReturnToDashboard = true; S.sStep = 16; window.render(); }}, (window.isEnglish && window.isEnglish() ? 'enter your reference loads' : 'saisissez vos charges de référence'));
  estBanner.appendChild(goBack16);
  estBanner.appendChild(h('span', {}, '.'));
  _bannerTarget.appendChild(estBanner);
@@ -7202,10 +7202,10 @@ function renderMusculationProgram(p) {
     style: 'display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:8px 0;',
     onclick: function() { S._sfcExplorerOpen = !S._sfcExplorerOpen; window.render(); }
    });
-   _sfcHeader.appendChild(h('div', {'class':'section-label', style:'margin:0;border:none;padding:0'}, 'Bibliothèque scientifique'));
+   _sfcHeader.appendChild(h('div', {'class':'section-label', style:'margin:0;border:none;padding:0'}, (window.isEnglish && window.isEnglish() ? 'Scientific library' : 'Bibliothèque scientifique')));
    _sfcHeader.appendChild(h('div', {style:'font-size:12px;color:var(--grey);transition:transform 200ms'}, _sfcCollapsed ? '\u25BC' : '\u25B2'));
    _sfcSection.appendChild(_sfcHeader);
-   _sfcSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px;line-height:1.5'}, 'Programmes périodisés Schoenfeld / RP Hypertrophy. Sélectionnez un groupe musculaire puis adoptez-le pour bénéficier du tracking complet.'));
+   _sfcSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px;line-height:1.5'}, (window.isEnglish && window.isEnglish() ? 'Schoenfeld / RP Hypertrophy periodized programs. Select a muscle group and adopt it to benefit from full tracking.' : 'Programmes périodisés Schoenfeld / RP Hypertrophy. Sélectionnez un groupe musculaire puis adoptez-le pour bénéficier du tracking complet.')));
 
    if (!_sfcCollapsed) {
 
@@ -7437,11 +7437,11 @@ function renderMusculationProgram(p) {
   4: [
    {id:'upper_lower', label:'Upper/Lower', dayLabels:['Upper A','Lower A','Upper B','Lower B']},
    {id:'ppl_plus1', label:'PPL+1', dayLabels:['Push','Pull','Legs','Upper']},
-   {id:'bro_4', label:'Bro Split 4j', dayLabels:['Pecs + Triceps','Dos + Biceps','Épaules','Jambes']}
+   {id:'bro_4', label:(window.isEnglish && window.isEnglish() ? 'Bro Split 4d' : 'Bro Split 4j'), dayLabels:(window.isEnglish && window.isEnglish() ? ['Chest + Triceps','Back + Biceps','Shoulders','Legs'] : ['Pecs + Triceps','Dos + Biceps','Épaules','Jambes'])}
   ],
   5: [
    {id:'ppl_5', label:'PPL 5j', dayLabels:['Push A','Pull A','Legs','Push B','Pull B']},
-   {id:'bro_5', label:'Bro Split 5j', dayLabels:['Pecs','Dos','Épaules','Bras','Jambes']}
+   {id:'bro_5', label:(window.isEnglish && window.isEnglish() ? 'Bro Split 5d' : 'Bro Split 5j'), dayLabels:(window.isEnglish && window.isEnglish() ? ['Chest','Back','Shoulders','Arms','Legs'] : ['Pecs','Dos','Épaules','Bras','Jambes'])}
   ],
   6: [
    {id:'ppl_6', label:'PPL×2', dayLabels:['Push A','Pull A','Legs A','Push B','Pull B','Legs B']}
@@ -7458,7 +7458,7 @@ function renderMusculationProgram(p) {
   }
 
   var _splitSection = h('div', {style: 'margin-bottom:12px'});
-  _splitSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);margin-bottom:6px'}, 'Split d\'entraînement'));
+  _splitSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Training split' : 'Split d\'entraînement')));
   var _splitBtns = h('div', {style: 'display:flex;flex-wrap:wrap;gap:6px'});
   _splitOpts.forEach(function(opt) {
    var _isActive = S._splitChoice === opt.id;
@@ -7566,7 +7566,7 @@ function renderMusculationProgram(p) {
   _hdrWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);line-height:1.6;word-break:break-word;margin-bottom:4px'}, day.focus || ''));
   var _dayAbbr2 = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
   var _hdrDayStr = (Array.isArray(S.trainingDaysSelected) && S.trainingDaysSelected.length === S.sportProgram.length) ? _dayAbbr2[S.trainingDaysSelected[S.selectedSportDay]] : null;
-  var _metaParts = [_hdrDayStr ? _hdrDayStr + '\u00a0\u2014\u00a0Sém.\u00a0' + _hdrWeek : 'Sém.\u00a0' + _hdrWeek];
+  var _metaParts = [_hdrDayStr ? _hdrDayStr + '\u00a0\u2014\u00a0' + (window.isEnglish && window.isEnglish() ? 'Wk.\u00a0' : 'Sém.\u00a0') + _hdrWeek : (window.isEnglish && window.isEnglish() ? 'Wk.\u00a0' : 'Sém.\u00a0') + _hdrWeek];
   if (_hdrDur > 0) _metaParts.push('~' + _hdrDur + '\u00a0min');
   if (_hdrProgPct > 0) _metaParts.push('+' + _hdrProgPct + '%');
   _hdrWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65)'}, _metaParts.join('\u00a0·\u00a0')));
@@ -7579,12 +7579,12 @@ function renderMusculationProgram(p) {
     var _chronoEl = document.createElement('div');
     _chronoEl.id = 'session-chrono';
     _chronoEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:center;margin-bottom:8px;';
-    _chronoEl.textContent = 'Séance en cours — ' + _elapsed + ' min';
+    _chronoEl.textContent = (window.isEnglish && window.isEnglish() ? 'Session in progress — ' : 'Séance en cours — ') + _elapsed + ' min';
     window._chronoInterval = setInterval(function() {
       var el = document.getElementById('session-chrono');
       if (!el || !S._sessionStartTime) { clearInterval(window._chronoInterval); window._chronoInterval = null; return; }
       var _mins = Math.floor((Date.now() - S._sessionStartTime) / 60000);
-      el.textContent = 'Séance en cours — ' + _mins + ' min';
+      el.textContent = (window.isEnglish && window.isEnglish() ? 'Session in progress — ' : 'Séance en cours — ') + _mins + ' min';
     }, 30000);
     p.appendChild(_chronoEl);
   }
@@ -7718,19 +7718,20 @@ function renderMusculationProgram(p) {
    var _allReps = _last3.map(function(e) { return e.reps || 0; });
    var _repsPlat = _allReps.every(function(r) { return r === _allReps[0] && r > 0; });
    if (!_isPlat) return;
+   var _tPlat = window.isEnglish && window.isEnglish();
    var _platSuggestions = [
-     { icon: '▪', label: 'Tempo 3-1-3', desc: 'Ralentis : 3s descente, 1s pause bas, 3s montée' },
-     { icon: '▸', label: 'Prise variée', desc: 'Change la largeur ou le type de prise (pronation / supination)' },
-     { icon: '↓', label: 'Excentrique lent', desc: '4-5 secondes sur la phase de descente, même charge' },
-     { icon: '◂', label: 'Dropset', desc: 'Dernière série : -20 % de charge, continue jusqu\'à l\'échec' },
-     { icon: '‖', label: 'Pause reps', desc: '2s de pause en position basse avant de remonter' }
+     { icon: '▪', label: 'Tempo 3-1-3', desc: (_tPlat ? 'Slow down: 3s down, 1s pause at bottom, 3s up' : 'Ralentis : 3s descente, 1s pause bas, 3s montée') },
+     { icon: '▸', label: (_tPlat ? 'Varied grip' : 'Prise variée'), desc: (_tPlat ? 'Change grip width or type (pronation / supination)' : 'Change la largeur ou le type de prise (pronation / supination)') },
+     { icon: '↓', label: (_tPlat ? 'Slow eccentric' : 'Excentrique lent'), desc: (_tPlat ? '4-5 seconds on the lowering phase, same load' : '4-5 secondes sur la phase de descente, même charge') },
+     { icon: '◂', label: 'Dropset', desc: (_tPlat ? 'Last set: -20% load, continue to failure' : 'Dernière série : -20 % de charge, continue jusqu\'à l\'échec') },
+     { icon: '‖', label: (_tPlat ? 'Pause reps' : 'Pause reps'), desc: (_tPlat ? '2s pause at the bottom before going back up' : '2s de pause en position basse avant de remonter') }
    ];
    var _tipIdx = (new Date().getDate() + ex.n.length) % _platSuggestions.length;
    var _tip = _platSuggestions[_tipIdx];
    var platCard = h('div', { style: 'margin-top:8px;padding:10px 12px;background:#FFF8E7;border-left:3px solid #C8A84B;border-radius:0' });
    var platHeader = h('div', { style: 'display:flex;align-items:center;gap:6px;margin-bottom:4px;' });
-   platHeader.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);font-weight:700;' }, 'Plateau détecté'));
-   platHeader.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--orange-ink,#7A3B0E);' }, '— ' + _allWeights[0] + ' kg × 3 séances'));
+   platHeader.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);font-weight:700;' }, (window.isEnglish && window.isEnglish() ? 'Plateau detected' : 'Plateau détecté')));
+   platHeader.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--orange-ink,#7A3B0E);' }, '— ' + _allWeights[0] + (window.isEnglish && window.isEnglish() ? ' kg × 3 sessions' : ' kg × 3 séances')));
    platCard.appendChild(platHeader);
    var platTip = h('div', { style: 'display:flex;align-items:flex-start;gap:8px;' });
    platTip.appendChild(h('span', { style: 'font-size:11px;line-height:1.4;flex-shrink:0;color:var(--orange-ink,#7A3B0E);' }, _tip.icon));
@@ -8774,21 +8775,22 @@ function renderMusculationProgram(p) {
  // ─── BRIEF DÉBUTANT (collapsible, en bas) ───
  if (S.sportLevel === 'beginner') {
   (function() {
+   var _tBrief = window.isEnglish && window.isEnglish();
    var MUSCLE_BRIEFS_B = {
-    'poitrine':    { why: 'les pectoraux, c\'est la base du push — ça renforce tes bras et tes épaules en même temps', tip: 'Sens bien la contraction à chaque rep — la qualité prime sur le poids' },
-    'pectoral':    { why: 'les pectoraux, c\'est la base du push — ça renforce tes bras et tes épaules en même temps', tip: 'Sens bien la contraction à chaque rep — la qualité prime sur le poids' },
-    'dos':         { why: 'un dos fort = meilleure posture et moins de douleurs au quotidien', tip: 'Tire avec les coudes, pas avec les mains — c\'est là que le dos bosse vraiment' },
-    'dorsaux':     { why: 'un dos fort = meilleure posture et moins de douleurs au quotidien', tip: 'Tire avec les coudes, pas avec les mains — c\'est là que le dos bosse vraiment' },
-    'épaule':      { why: 'des épaules solides stabilisent tout ton upper body — indispensables pour pousser et tirer fort', tip: 'Commence léger — les épaules, ça se blesse vite' },
-    'jambe':       { why: 'tes jambes sont tes plus gros muscles — elles brûlent un max de calories et boostent toute ta force', tip: 'Garde le genou dans l\'axe du pied à chaque rep' },
-    'quadri':      { why: 'les quadriceps te propulsent à chaque pas, saut ou accélération — bosser les jambes, c\'est tout gagner', tip: 'Descends lentement (3s) — c\'est là que l\'essentiel se passe' },
-    'fessier':     { why: 'les fessiers = ton moteur de puissance et la meilleure protection de ton dos', tip: 'Serre bien en haut de chaque mouvement — c\'est là que ça travaille vraiment' },
-    'bras':        { why: 'biceps et triceps ensemble : tout pour tirer fort et pousser fort', tip: 'Contrôle la descente — c\'est la phase où le muscle grandit le plus' },
-    'biceps':      { why: 'les biceps te permettent de tirer — indispensables pour les tractions et un dos puissant', tip: 'Contrôle la descente — c\'est la phase où le muscle grandit le plus' },
-    'triceps':     { why: 'les triceps représentent 2/3 du volume du bras — si tu veux des bras, travaille-les !', tip: 'Extension complète à chaque rep — ne raccourcis pas le mouvement' },
-    'abdo':        { why: 'un core solide, c\'est chaque mouvement plus puissant et ton dos protégé', tip: 'Gainage plutôt que crunches — tiens la position, c\'est bien plus efficace' },
-    'abdominaux':  { why: 'un core solide, c\'est chaque mouvement plus puissant et ton dos protégé', tip: 'Gainage plutôt que crunches — tiens la position, c\'est bien plus efficace' },
-    'corps entier':{ why: 'séance complète = tu stimules tous les muscles et brûles un maximum de calories', tip: 'Récupère bien — t\'as beaucoup bossé aujourd\'hui !' }
+    'poitrine':    { why: (_tBrief ? 'chest is the foundation of push — it also strengthens your arms and shoulders' : 'les pectoraux, c\'est la base du push — ça renforce tes bras et tes épaules en même temps'), tip: (_tBrief ? 'Feel the contraction on each rep — quality beats weight' : 'Sens bien la contraction à chaque rep — la qualité prime sur le poids') },
+    'pectoral':    { why: (_tBrief ? 'chest is the foundation of push — it also strengthens your arms and shoulders' : 'les pectoraux, c\'est la base du push — ça renforce tes bras et tes épaules en même temps'), tip: (_tBrief ? 'Feel the contraction on each rep — quality beats weight' : 'Sens bien la contraction à chaque rep — la qualité prime sur le poids') },
+    'dos':         { why: (_tBrief ? 'a strong back = better posture and less daily pain' : 'un dos fort = meilleure posture et moins de douleurs au quotidien'), tip: (_tBrief ? 'Pull with your elbows, not your hands — that\'s where the back really works' : 'Tire avec les coudes, pas avec les mains — c\'est là que le dos bosse vraiment') },
+    'dorsaux':     { why: (_tBrief ? 'a strong back = better posture and less daily pain' : 'un dos fort = meilleure posture et moins de douleurs au quotidien'), tip: (_tBrief ? 'Pull with your elbows, not your hands — that\'s where the back really works' : 'Tire avec les coudes, pas avec les mains — c\'est là que le dos bosse vraiment') },
+    'épaule':      { why: (_tBrief ? 'strong shoulders stabilize your whole upper body — essential for pushing and pulling' : 'des épaules solides stabilisent tout ton upper body — indispensables pour pousser et tirer fort'), tip: (_tBrief ? 'Start light — shoulders get injured easily' : 'Commence léger — les épaules, ça se blesse vite') },
+    'jambe':       { why: (_tBrief ? 'your legs are your biggest muscles — they burn max calories and boost all your strength' : 'tes jambes sont tes plus gros muscles — elles brûlent un max de calories et boostent toute ta force'), tip: (_tBrief ? 'Keep your knee aligned with your foot on each rep' : 'Garde le genou dans l\'axe du pied à chaque rep') },
+    'quadri':      { why: (_tBrief ? 'quads propel you every step, jump or sprint — training legs is winning everything' : 'les quadriceps te propulsent à chaque pas, saut ou accélération — bosser les jambes, c\'est tout gagner'), tip: (_tBrief ? 'Lower slowly (3s) — that\'s where the magic happens' : 'Descends lentement (3s) — c\'est là que l\'essentiel se passe') },
+    'fessier':     { why: (_tBrief ? 'glutes = your power engine and best back protection' : 'les fessiers = ton moteur de puissance et la meilleure protection de ton dos'), tip: (_tBrief ? 'Squeeze hard at the top of each movement — that\'s where it works' : 'Serre bien en haut de chaque mouvement — c\'est là que ça travaille vraiment') },
+    'bras':        { why: (_tBrief ? 'biceps and triceps together: everything to pull and push hard' : 'biceps et triceps ensemble : tout pour tirer fort et pousser fort'), tip: (_tBrief ? 'Control the descent — that\'s the phase where muscle grows most' : 'Contrôle la descente — c\'est la phase où le muscle grandit le plus') },
+    'biceps':      { why: (_tBrief ? 'biceps let you pull — essential for pull-ups and a powerful back' : 'les biceps te permettent de tirer — indispensables pour les tractions et un dos puissant'), tip: (_tBrief ? 'Control the descent — that\'s the phase where muscle grows most' : 'Contrôle la descente — c\'est la phase où le muscle grandit le plus') },
+    'triceps':     { why: (_tBrief ? 'triceps make up 2/3 of arm volume — if you want arms, train them!' : 'les triceps représentent 2/3 du volume du bras — si tu veux des bras, travaille-les !'), tip: (_tBrief ? 'Full extension on every rep — don\'t shorten the movement' : 'Extension complète à chaque rep — ne raccourcis pas le mouvement') },
+    'abdo':        { why: (_tBrief ? 'a solid core makes every movement more powerful and protects your back' : 'un core solide, c\'est chaque mouvement plus puissant et ton dos protégé'), tip: (_tBrief ? 'Planks over crunches — hold the position, it\'s much more effective' : 'Gainage plutôt que crunches — tiens la position, c\'est bien plus efficace') },
+    'abdominaux':  { why: (_tBrief ? 'a solid core makes every movement more powerful and protects your back' : 'un core solide, c\'est chaque mouvement plus puissant et ton dos protégé'), tip: (_tBrief ? 'Planks over crunches — hold the position, it\'s much more effective' : 'Gainage plutôt que crunches — tiens la position, c\'est bien plus efficace') },
+    'corps entier':{ why: (_tBrief ? 'full session = you stimulate all muscles and burn maximum calories' : 'séance complète = tu stimules tous les muscles et brûles un maximum de calories'), tip: (_tBrief ? 'Rest well — you worked hard today!' : 'Récupère bien — t\'as beaucoup bossé aujourd\'hui !') }
    };
    var _focusLowB = (day.focus || '').toLowerCase();
    var _matchedBriefB = null;
@@ -8812,7 +8814,7 @@ function renderMusculationProgram(p) {
      briefContentB.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey,#6B6B65)'}, _matchedBriefB.tip));
     } else {
      briefContentB.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:8px'}, 'Aujourd\'hui tu travailles ' + day.focus));
-     briefContentB.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey,#6B6B65)'}, 'Chaque rep compte — concentre-toi sur la technique, pas sur le poids'));
+     briefContentB.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey,#6B6B65)'}, (window.isEnglish && window.isEnglish() ? 'Every rep counts — focus on technique, not weight' : 'Chaque rep compte — concentre-toi sur la technique, pas sur le poids')));
     }
     p.appendChild(briefContentB);
    }
@@ -8830,7 +8832,7 @@ function renderMusculationProgram(p) {
  bnRow.appendChild(h('span', {style: 'font-size:18px;color:var(--error,#7A1F1F);cursor:pointer;line-height:1;padding:0 4px', onclick: (function(idx) { return function(e) { e.stopPropagation(); if (!S.bonusExercises) S.bonusExercises = {}; var arr = S.bonusExercises[S.selectedSportDay] || []; arr.splice(idx, 1); S.bonusExercises[S.selectedSportDay] = arr; window.render(); }; })(bi)}, '\u00d7'));
  bc.appendChild(bnRow);
  bc.appendChild(h('div', {'class': 'exercise-name'}, bex.n || 'Exercice'));
- bc.appendChild(h('div', {'class': 'exercise-sets'}, bex.sets + ' \u2014 Repos ' + bex.rest));
+ bc.appendChild(h('div', {'class': 'exercise-sets'}, bex.sets + ' \u2014 ' + (window.isEnglish && window.isEnglish() ? 'Rest ' : 'Repos ') + bex.rest));
  if (bex.eq) bc.appendChild(h('div', {'class': 'exercise-detail'}, bex.eq));
  var _bexParts = String(bex.sets || '').split('\u00d7');
  var _bexReps = _bexParts.length > 1 ? _bexParts[1] : null;
