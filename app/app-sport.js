@@ -1633,8 +1633,8 @@ function renderObjectif(p) {
     return;
   }
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Sport'));
- p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Choisissez votre type de programme sportif.'));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Your<br><em>program</em>' : 'Votre<br><em>programme</em>')}));
+ p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Choose your sport program type.' : 'Choisissez votre type de programme sportif.')));
 
  // ─── RECOMMANDATION PROFIL ───
  // Affiché uniquement si l'utilisateur n'a encore aucun programme sport.
@@ -1647,49 +1647,49 @@ function renderObjectif(p) {
   // Matrice de recommandation
   var _rec = null;
   if (_rAge >= 50) {
-   var _50reason = 'Recommandé pour les 50+ — préserve les articulations et améliore la qualité de vie.';
-   if (_rGoalKey === 'cut' || _rGoalKey === 'shred') _50reason = 'Après 50 ans, le yoga actif favorise la perte de masse grasse douce sans stress articulaire — priorité à la longévité.';
-   else if (_rGoalKey === 'bulk' || _rGoalKey === 'lean_bulk') _50reason = 'Après 50 ans, la mobilité est la base — le yoga prépare les articulations avant d\'ajouter de la charge.';
+   var _50reason = (window.isEnglish && window.isEnglish() ? 'Recommended for 50+ — preserves joints and improves quality of life.' : 'Recommandé pour les 50+ — préserve les articulations et améliore la qualité de vie.');
+   if (_rGoalKey === 'cut' || _rGoalKey === 'shred') _50reason = (window.isEnglish && window.isEnglish() ? 'After 50, active yoga promotes gentle fat loss without joint stress — longevity first.' : 'Après 50 ans, le yoga actif favorise la perte de masse grasse douce sans stress articulaire — priorité à la longévité.');
+   else if (_rGoalKey === 'bulk' || _rGoalKey === 'lean_bulk') _50reason = (window.isEnglish && window.isEnglish() ? 'After 50, mobility is the foundation — yoga prepares your joints before adding load.' : 'Après 50 ans, la mobilité est la base — le yoga prépare les articulations avant d\'ajouter de la charge.');
    _rec = { type: 'yoga', label: 'Yoga & Mobilité', icon: '🧘',
-    sub: 'Mobilité · Souplesse · Récupération active',
+    sub: (window.isEnglish && window.isEnglish() ? 'Mobility · Flexibility · Active recovery' : 'Mobilité · Souplesse · Récupération active'),
     reason: _50reason,
     nextStep: 19 };
   } else if (_rGoalKey === 'bulk' || _rGoalKey === 'lean_bulk') {
    _rec = { type: 'musculation', label: 'Musculation', icon: '🏋️',
     sub: 'Progressive overload · Force · Masse',
-    reason: 'Programme optimal pour votre objectif prise de masse — progressive overload scientifique.',
+    reason: (window.isEnglish && window.isEnglish() ? 'Optimal program for your mass gain goal — scientific progressive overload.' : 'Programme optimal pour votre objectif prise de masse — progressive overload scientifique.'),
     nextStep: 20 };
   } else if (_rGoalKey === 'recomposition') {
    _rec = { type: 'musculation', label: 'Musculation', icon: '🏋️',
-    sub: 'Force · Composition · Recomposition',
-    reason: 'La recomposition corporelle répond le mieux à la musculation avec surcharge progressive.',
+    sub: (window.isEnglish && window.isEnglish() ? 'Strength · Composition · Recomposition' : 'Force · Composition · Recomposition'),
+    reason: (window.isEnglish && window.isEnglish() ? 'Body recomposition responds best to strength training with progressive overload.' : 'La recomposition corporelle répond le mieux à la musculation avec surcharge progressive.'),
     nextStep: 20 };
   } else if (_rGoalKey === 'cut' || _rGoalKey === 'shred') {
    _rec = { type: 'crossfit', label: 'Cross Training', icon: '🔥',
-    sub: 'HIIT · Force · Cardio fusionnés',
-    reason: 'HIIT + force = combo maximal pour une sèche efficace — calories brûlées 24h.',
+    sub: (window.isEnglish && window.isEnglish() ? 'HIIT · Strength · Cardio combined' : 'HIIT · Force · Cardio fusionnés'),
+    reason: (window.isEnglish && window.isEnglish() ? 'HIIT + strength = maximum combo for effective cutting — calories burned 24h.' : 'HIIT + force = combo maximal pour une sèche efficace — calories brûlées 24h.'),
     nextStep: 5 };
   } else if (_rGoalKey === 'endurance') {
    _rec = { type: 'running', label: 'Running', icon: '🏃',
     sub: '5K · 10K · Semi · Marathon',
-    reason: 'Programme running progressif — du 5K au marathon avec plans scientifiques.',
+    reason: (window.isEnglish && window.isEnglish() ? 'Progressive running program — from 5K to marathon with scientific plans.' : 'Programme running progressif — du 5K au marathon avec plans scientifiques.'),
     nextStep: 7 };
   } else if (_isFemale) {
    _rec = { type: 'musculation', label: 'Musculation', icon: '🏋️',
-    sub: 'Force · Fessiers · Ventre plat',
-    reason: 'Spécialement adapté femme — priorité fessiers et abdominaux, sans bulk excessif.',
+    sub: (window.isEnglish && window.isEnglish() ? 'Strength · Glutes · Flat stomach' : 'Force · Fessiers · Ventre plat'),
+    reason: (window.isEnglish && window.isEnglish() ? 'Specially adapted for women — glutes and abs priority, without excessive bulk.' : 'Spécialement adapté femme — priorité fessiers et abdominaux, sans bulk excessif.'),
     nextStep: 20 };
   } else {
    _rec = { type: 'musculation', label: 'Musculation', icon: '🏋️',
-    sub: 'Force · Volume · Performance',
-    reason: 'Le programme le plus complet pour transformer votre physique durablement.',
+    sub: (window.isEnglish && window.isEnglish() ? 'Strength · Volume · Performance' : 'Force · Volume · Performance'),
+    reason: (window.isEnglish && window.isEnglish() ? 'The most complete program to transform your physique sustainably.' : 'Le programme le plus complet pour transformer votre physique durablement.'),
     nextStep: 20 };
   }
 
   if (!_rec) return;
 
   var recWrap = h('div', {style: 'margin-bottom:28px;'});
-  recWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px'}, 'Recommandé pour votre profil'));
+  recWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px'}, (window.isEnglish && window.isEnglish() ? 'Recommended for your profile' : 'Recommandé pour votre profil')));
 
   var recCard = h('div', {
    style: 'border:1px solid var(--black,#0A0A09);padding:20px 20px 18px;background:var(--ivory,#FAF9F6);cursor:pointer;position:relative;overflow:hidden;',
@@ -1702,7 +1702,7 @@ function renderObjectif(p) {
    }
   });
 
-  var recBadge = h('div', {style: 'position:absolute;top:0;right:0;padding:4px 12px;background:var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ivory,#FAF9F6);line-height:18px'}, '★  Adapté à vous');
+  var recBadge = h('div', {style: 'position:absolute;top:0;right:0;padding:4px 12px;background:var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ivory,#FAF9F6);line-height:18px'}, (window.isEnglish && window.isEnglish() ? '★  Suited for you' : '★  Adapté à vous'));
   recCard.appendChild(recBadge);
 
   var recTop = h('div', {style: 'display:flex;align-items:flex-start;gap:0;margin-bottom:14px;margin-top:22px'});
@@ -1716,13 +1716,13 @@ function renderObjectif(p) {
 
   var recCta = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:16px'});
   recCta.appendChild(h('div', {style: 'width:24px;height:1px;background:var(--black,#0A0A09)'}));
-  recCta.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09)'}, 'Commencer ce programme  →'));
+  recCta.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09)'}, (window.isEnglish && window.isEnglish() ? 'Start this program  →' : 'Commencer ce programme  →')));
   recCard.appendChild(recCta);
   recWrap.appendChild(recCard);
 
   recWrap.appendChild(h('div', {style: 'display:flex;align-items:center;gap:16px;margin-top:20px;margin-bottom:4px'},[
    h('div', {style:'flex:1;height:1px;background:var(--border,#D8D8D0)'}),
-   h('span', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);white-space:nowrap'},'ou choisir manuellement'),
+   h('span', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);white-space:nowrap'},(window.isEnglish && window.isEnglish() ? 'or choose manually' : 'ou choisir manuellement')),
    h('div', {style:'flex:1;height:1px;background:var(--border,#D8D8D0)'})
   ]));
 
@@ -1733,7 +1733,7 @@ function renderObjectif(p) {
  if (window.S && window.S._switchedFromNutrition) {
    var _ctxBannerObj = document.createElement('div');
    _ctxBannerObj.style.cssText = 'margin-bottom:16px;padding:12px 14px;background:rgba(62,92,58,0.06);border:1px solid var(--line,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--green,#3E5C3A);line-height:1.5;';
-   _ctxBannerObj.textContent = 'Votre profil de base est déjà configuré. Complétez simplement vos informations sportives ci-dessous.';
+   _ctxBannerObj.textContent = (window.isEnglish && window.isEnglish() ? 'Your base profile is already set up. Simply complete your sport information below.' : 'Votre profil de base est déjà configuré. Complétez simplement vos informations sportives ci-dessous.');
    window.S._switchedFromNutrition = false; // Afficher une seule fois
    p.appendChild(_ctxBannerObj);
  }
@@ -1741,7 +1741,7 @@ function renderObjectif(p) {
  // FIX UX 2026-04-16 — Hero IA déplacé en bas (carte discrète), choix de sport en premier
  // L'user clique "Sport" pour VOIR son sport, pas pour ouvrir un modal générateur.
 
- p.appendChild(h('div', {'class': 'section-label'}, 'Type de programme'));
+ p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Program type' : 'Type de programme')));
  var typeGrid = h('div', {'class': 'card-grid-2'});
 
  // Musculation - clicking goes to PAR-Q first (if not already done), then medical questionnaire (step 20)
@@ -1754,15 +1754,15 @@ function renderObjectif(p) {
  window.render();
  }}, [
  h('div', {'class': 'card-name'}, _htaSevere ? 'Musculation \u26a0' : 'Musculation'),
- h('div', {'class': 'card-sub'}, _htaSevere ? 'Charges l\u00e9g\u00e8res uniquement \u2014 ESC/ESH 2018' : 'Programme cibl\u00e9 par groupes musculaires'),
- h('div', {'class': 'card-tag'}, _htaSevere ? '\u00c9viter >80% 1RM \u00b7 Pas de Valsalva \u00b7 Consulter un m\u00e9decin' : 'S\u00e8che \u00b7 Masse \u00b7 Force \u00b7 Endurance')
+ h('div', {'class': 'card-sub'}, _htaSevere ? (window.isEnglish && window.isEnglish() ? 'Light loads only \u2014 ESC/ESH 2018' : 'Charges l\u00e9g\u00e8res uniquement \u2014 ESC/ESH 2018') : (window.isEnglish && window.isEnglish() ? 'Targeted program by muscle groups' : 'Programme cibl\u00e9 par groupes musculaires')),
+ h('div', {'class': 'card-tag'}, _htaSevere ? (window.isEnglish && window.isEnglish() ? 'Avoid >80% 1RM \u00b7 No Valsalva \u00b7 Consult a doctor' : '\u00c9viter >80% 1RM \u00b7 Pas de Valsalva \u00b7 Consulter un m\u00e9decin') : (window.isEnglish && window.isEnglish() ? 'Cut \u00b7 Mass \u00b7 Strength \u00b7 Endurance' : 'S\u00e8che \u00b7 Masse \u00b7 Force \u00b7 Endurance'))
  ]));
 
  // Cross Training - clicking goes through PAR-Q (if not done), then CF level (step 5)
  // FIX SÉCURITÉ 2026-04 — Bloquer CrossFit pour HTA sévère, cardiopathie et grossesse T3
  var _cfCardio = Array.isArray(S.medical) && (S.medical.indexOf('cardio') !== -1 || S.medical.indexOf('insuffisance_card') !== -1);
  var _cfBlocked = (Array.isArray(S.medical) && S.medical.indexOf('hta_severe') !== -1) || _cfCardio || (S.pregnant && window.isFemale(S) && typeof S.pregnancyWeek === 'number' && S.pregnancyWeek >= 28);
- var _cfBlockReason = _cfBlocked ? (S.pregnant ? 'Contre-indiqué pendant le 3e trimestre (ACOG 2020)' : _cfCardio ? 'Contre-indiqué en cas de cardiopathie (AHA 2018)' : 'Contre-indiqué avec HTA sévère (ESC/ESH 2018)') : '';
+ var _cfBlockReason = _cfBlocked ? (S.pregnant ? (window.isEnglish && window.isEnglish() ? 'Contraindicated during the 3rd trimester (ACOG 2020)' : 'Contre-indiqué pendant le 3e trimestre (ACOG 2020)') : _cfCardio ? (window.isEnglish && window.isEnglish() ? 'Contraindicated with heart disease (AHA 2018)' : 'Contre-indiqué en cas de cardiopathie (AHA 2018)') : (window.isEnglish && window.isEnglish() ? 'Contraindicated with severe hypertension (ESC/ESH 2018)' : 'Contre-indiqué avec HTA sévère (ESC/ESH 2018)')) : '';
  typeGrid.appendChild(h('div', {'class': 'sel-card' + (_cfBlocked ? ' disabled' : ''), style:'cursor:' + (_cfBlocked ? 'not-allowed' : 'pointer') + ';' + (_cfBlocked ? 'opacity:0.35;pointer-events:none;' : ''), onclick: _cfBlocked ? null : function(){
  S.sportType = 'crossfit';
  S._sportMedNextStep = 5;
@@ -1772,8 +1772,8 @@ function renderObjectif(p) {
  _loadCFScripts(function() { if (window.render) window.render(); });
  window.render();
  }}, [
- h('div', {'class': 'card-name'}, 'Cross Training' + (_cfBlocked ? ' — Indisponible' : '')),
- h('div', {'class': 'card-sub'}, _cfBlocked ? _cfBlockReason : 'Halt\u00e9rophilie \u00b7 WOD \u00b7 Gymnastique'),
+ h('div', {'class': 'card-name'}, 'Cross Training' + (_cfBlocked ? (window.isEnglish && window.isEnglish() ? ' — Unavailable' : ' — Indisponible') : '')),
+ h('div', {'class': 'card-sub'}, _cfBlocked ? _cfBlockReason : (window.isEnglish && window.isEnglish() ? 'Weightlifting \u00b7 WOD \u00b7 Gymnastics' : 'Halt\u00e9rophilie \u00b7 WOD \u00b7 Gymnastique')),
  h('div', {'class': 'card-tag'}, '100 WODs \u00b7 Cycles 6 semaines \u00b7 Scaled/Inter/RX')
  ]));
 
@@ -1787,7 +1787,7 @@ function renderObjectif(p) {
  window.render();
  }}, [
  h('div', {'class': 'card-name'}, 'Running'),
- h('div', {'class': 'card-sub'}, 'Plan d\'entraînement course à pied'),
+ h('div', {'class': 'card-sub'}, (window.isEnglish && window.isEnglish() ? 'Running training plan' : 'Plan d\'entraînement course à pied')),
  h('div', {'class': 'card-tag'}, '5K · 10K · Semi · Marathon · Trail')
  ]));
 
@@ -1801,7 +1801,7 @@ function renderObjectif(p) {
  window.render();
  }}, [
  h('div', {'class': 'card-name'}, 'Hyrox'),
- h('div', {'class': 'card-sub'}, 'Préparation Hyrox complète'),
+ h('div', {'class': 'card-sub'}, (window.isEnglish && window.isEnglish() ? 'Complete Hyrox preparation' : 'Préparation Hyrox complète')),
  h('div', {'class': 'card-tag'}, '8 stations · Run · Simulation')
  ]));
 
@@ -1815,7 +1815,7 @@ function renderObjectif(p) {
  window.render();
  }}, [
  h('div', {'class': 'card-name'}, 'Padel'),
- h('div', {'class': 'card-sub'}, 'Programme technique et physique padel'),
+ h('div', {'class': 'card-sub'}, (window.isEnglish && window.isEnglish() ? 'Padel technique and physical program' : 'Programme technique et physique padel')),
  h('div', {'class': 'card-tag'}, 'Technique · Tactique · Match · Physique')
  ]));
 
@@ -1829,7 +1829,7 @@ function renderObjectif(p) {
  window.render();
  }}, [
  h('div', {'class': 'card-name'}, 'Golf'),
- h('div', {'class': 'card-sub'}, 'Progresser au golf — méthode Dave Pelz'),
+ h('div', {'class': 'card-sub'}, (window.isEnglish && window.isEnglish() ? 'Progress in golf — Dave Pelz method' : 'Progresser au golf — méthode Dave Pelz')),
  h('div', {'class': 'card-tag'}, 'Petit jeu · Long jeu · Parcours · Mental')
  ]));
 
@@ -1857,7 +1857,7 @@ function renderObjectif(p) {
  window.render();
  }}, [
  h('div', {'class': 'card-name'}, 'Yoga & Mobilit\u00e9'),
- h('div', {'class': 'card-sub'}, 'Flexibilit\u00e9, force, \u00e9quilibre, pleine conscience'),
+ h('div', {'class': 'card-sub'}, (window.isEnglish && window.isEnglish() ? 'Flexibility, strength, balance, mindfulness' : 'Flexibilit\u00e9, force, \u00e9quilibre, pleine conscience')),
  h('div', {'class': 'card-tag'}, 'Hatha \u00b7 Vinyasa \u00b7 Yin \u00b7 Ashtanga')
  ]));
 
@@ -1870,8 +1870,8 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'cycling'});
  window.render();
  }}, [
- h('div', {'class': 'card-name'}, 'Cyclisme'),
- h('div', {'class': 'card-sub'}, 'Route, VTT, indoor \u2014 am\u00e9liore l\'endurance et la puissance'),
+ h('div', {'class': 'card-name'}, (window.isEnglish && window.isEnglish() ? 'Cycling' : 'Cyclisme')),
+ h('div', {'class': 'card-sub'}, (window.isEnglish && window.isEnglish() ? 'Road, MTB, indoor \u2014 improves endurance and power' : 'Route, VTT, indoor \u2014 am\u00e9liore l\'endurance et la puissance')),
  h('div', {'class': 'card-tag'}, 'Route \u00b7 VTT \u00b7 Indoor \u00b7 Gravel \u00b7 FTP')
  ]));
 
@@ -1886,7 +1886,7 @@ function renderObjectif(p) {
  window.render();
  }}, [
  h('div', {'class': 'card-name'}, 'Callisth\u00e9nie'),
- h('div', {'class': 'card-sub'}, 'Street workout, mouvements au poids du corps'),
+ h('div', {'class': 'card-sub'}, (window.isEnglish && window.isEnglish() ? 'Street workout, bodyweight movements' : 'Street workout, mouvements au poids du corps')),
  h('div', {'class': 'card-tag'}, 'Muscle-up \u00b7 Handstand \u00b7 Planche \u00b7 Front Lever')
  ]));
 
@@ -1895,10 +1895,10 @@ function renderObjectif(p) {
  // ─── Module IA — carte discrète en bas ───
  // Accessible pour les utilisateurs qui veulent une programmation 100% sur-mesure par IA
  var _iaCard = h('div', {style: 'margin-top:28px;padding:18px 16px;border:1px solid var(--border,#E8E6DF);background:var(--ivory2,#F5F3EC);border-radius:2px'});
- _iaCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px'}, 'Option · Programmation assistée'));
- _iaCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;font-style:italic;color:var(--black,#0A0A09);line-height:1.4;margin-bottom:6px'}, 'Programmation de sport générée par votre assistant'));
- _iaCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:14px'}, 'Une alternative sur mesure, générée selon votre profil complet — limitée à 3 constructions par semaine.'));
- var _iaBtnOption = h('button', {style: 'display:inline-block;padding:10px 18px;background:transparent;color:var(--black,#0A0A09);border:1px solid var(--black,#0A0A09);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;min-height:44px'}, 'Activer l\'assistant');
+ _iaCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px'}, (window.isEnglish && window.isEnglish() ? 'Option · AI-assisted programming' : 'Option · Programmation assistée')));
+ _iaCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;font-style:italic;color:var(--black,#0A0A09);line-height:1.4;margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Sport programming generated by your assistant' : 'Programmation de sport générée par votre assistant')));
+ _iaCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:14px'}, (window.isEnglish && window.isEnglish() ? 'A tailor-made alternative, generated according to your full profile — limited to 3 builds per week.' : 'Une alternative sur mesure, générée selon votre profil complet — limitée à 3 constructions par semaine.')));
+ var _iaBtnOption = h('button', {style: 'display:inline-block;padding:10px 18px;background:transparent;color:var(--black,#0A0A09);border:1px solid var(--black,#0A0A09);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;min-height:44px'}, (window.isEnglish && window.isEnglish() ? 'Activate assistant' : 'Activer l\'assistant'));
  _iaBtnOption.addEventListener('click', function() {
    if (typeof window.openMuscuProgramGenerator === 'function') { window.openMuscuProgramGenerator(); }
  });
