@@ -1635,13 +1635,13 @@ function renderStep6(p) {
   if (!Array.isArray(S.shopStores)) S.shopStores = [];
   if (!Array.isArray(S.shopPrefs)) S.shopPrefs = [];
   renderProgressBar(p, 4, 12);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' IV \u00b7 Objectif'));
-  p.appendChild(h('h1', {html: 'Votre<br><em>objectif</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + (window.isEnglish && window.isEnglish() ? ' IV \u00b7 Goal' : ' IV \u00b7 Objectif')));
+  p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Your<br><em>goal</em>' : 'Votre<br><em>objectif</em>'), style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   if (window.TIPS) TIPS.renderTip(p, 'goal');
 
   // Pregnancy: override goal
   if (S.pregnant && window.isFemale(S)) {
-    p.appendChild(h('p', {'class': 'subtitle'}, 'Nutrition adapt\u00e9e \u00e0 chaque trimestre de votre grossesse.'));
+    p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Nutrition adapted to each trimester of your pregnancy.' : 'Nutrition adapt\u00e9e \u00e0 chaque trimestre de votre grossesse.')));
 
     // Auto-select maintain si objectif actuel est incompatible avec la grossesse (coupe/sèche/masse)
     if (S.goal === null || !GOALS[S.goal] || GOALS[S.goal].key === 'cut' || GOALS[S.goal].key === 'shred' || GOALS[S.goal].key === 'bulk' || GOALS[S.goal].key === 'lean_bulk') {
@@ -1654,15 +1654,15 @@ function renderStep6(p) {
     }
 
     var pregObjCard = h('div', {style: 'border-left:3px solid #E8A87C;padding:16px;background:var(--ivory2);margin-bottom:16px'});
-    pregObjCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:8px'}, '\uD83E\uDD30 ' + window.t('onb.s6.maintain') + ' + besoins grossesse'));
-    pregObjCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px'}, 'La perte de poids est d\u00e9conseill\u00e9e pendant la grossesse.'));
+    pregObjCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:8px'}, '\uD83E\uDD30 ' + window.t('onb.s6.maintain') + (window.isEnglish && window.isEnglish() ? ' + pregnancy needs' : ' + besoins grossesse')));
+    pregObjCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? 'Weight loss is not recommended during pregnancy.' : 'La perte de poids est d\u00e9conseill\u00e9e pendant la grossesse.')));
 
     var triPreg = window.getPregnancyTrimester ? window.getPregnancyTrimester() : null;
     if (triPreg) {
       var extraCal = triPreg.trimester.calorieExtra;
       var tdeeBase = Math.round(calcTDEE());
       var totalPreg = tdeeBase + extraCal;
-      pregObjCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-top:8px'}, 'Besoins de base : ' + tdeeBase + ' kcal + ' + extraCal + ' kcal (trimestre ' + triPreg.trimesterNumber + ') = ' + totalPreg + ' kcal/jour'));
+      pregObjCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-top:8px'}, (window.isEnglish && window.isEnglish() ? 'Base needs: ' + tdeeBase + ' kcal + ' + extraCal + ' kcal (trimester ' + triPreg.trimesterNumber + ') = ' + totalPreg + ' kcal/day' : 'Besoins de base : ' + tdeeBase + ' kcal + ' + extraCal + ' kcal (trimestre ' + triPreg.trimesterNumber + ') = ' + totalPreg + ' kcal/jour')));
     }
     p.appendChild(pregObjCard);
 
@@ -1671,7 +1671,7 @@ function renderStep6(p) {
       var wgObj = window.getPregnancyWeightGuideline ? window.getPregnancyWeightGuideline() : null;
       if (wgObj) {
         var curveCard = h('div', {style: 'border:1px solid var(--border);padding:16px;background:var(--ivory2);margin-bottom:16px'});
-        curveCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:10px'}, 'Courbe de poids grossesse'));
+        curveCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:10px'}, (window.isEnglish && window.isEnglish() ? 'Pregnancy weight curve' : 'Courbe de poids grossesse')));
         var curveCanvas = h('canvas', {width: '600', height: '220', style: 'width:100%;height:220px'});
         curveCard.appendChild(curveCanvas);
         p.appendChild(curveCard);
@@ -1691,14 +1691,14 @@ function renderStep6(p) {
             maxData.push(Math.round((baseW + t1g + t2t3w * wgObj.weeklyGainRange[1]) * 10) / 10);
           }
           var datasets = [
-            { label: 'Min recommand\u00e9', data: minData, borderColor: '#3E5C3A', borderWidth: 1, pointRadius: 0, fill: false },
-            { label: 'Max recommand\u00e9', data: maxData, borderColor: '#3E5C3A', borderWidth: 1, pointRadius: 0, fill: '-1', backgroundColor: 'rgba(62,92,58,0.08)' }
+            { label: (window.isEnglish && window.isEnglish() ? 'Min recommended' : 'Min recommand\u00e9'), data: minData, borderColor: '#3E5C3A', borderWidth: 1, pointRadius: 0, fill: false },
+            { label: (window.isEnglish && window.isEnglish() ? 'Max recommended' : 'Max recommand\u00e9'), data: maxData, borderColor: '#3E5C3A', borderWidth: 1, pointRadius: 0, fill: '-1', backgroundColor: 'rgba(62,92,58,0.08)' }
           ];
           if (S.weight) {
             var pointData = new Array(41).fill(null);
             var cw = S.pregnancyWeek || 0;
             if (cw >= 0 && cw <= 40) pointData[cw] = S.weight;
-            datasets.push({ label: 'Poids actuel', data: pointData, borderColor: '#E8A87C', pointRadius: 6, pointBackgroundColor: '#E8A87C', showLine: false });
+            datasets.push({ label: (window.isEnglish && window.isEnglish() ? 'Current weight' : 'Poids actuel'), data: pointData, borderColor: '#E8A87C', pointRadius: 6, pointBackgroundColor: '#E8A87C', showLine: false });
           }
           try { window.createChart(curveCanvas, {
             type: 'line', data: { labels: labels, datasets: datasets },
@@ -1717,7 +1717,7 @@ function renderStep6(p) {
     return;
   }
 
-  p.appendChild(h('p', {'class': 'subtitle'}, 'Choisissez l\u2019objectif qui guide votre programme.'));
+  p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Choose the goal that drives your programme.' : 'Choisissez l\u2019objectif qui guide votre programme.')));
 
   // ─── RED-S warning banner ───
   // Show BEFORE goal chips if conditions match
@@ -1737,7 +1737,7 @@ function renderStep6(p) {
     if (_showReds) {
       var _redsMsg = (_redsResult && _redsResult.message)
         ? _redsResult.message
-        : '\u26a0 Risque RED-S d\u00e9tect\u00e9 \u2014 La combinaison activit\u00e9 \u00e9lev\u00e9e + sommeil insuffisant + objectif s\u00e8che peut mener au syndrome de d\u00e9ficit \u00e9nerg\u00e9tique relatif (RED-S). Consultez un professionnel de sant\u00e9 avant de d\u00e9marrer cet objectif.';
+        : (window.isEnglish && window.isEnglish() ? '\u26a0 RED-S risk detected \u2014 The combination of high activity + insufficient sleep + cutting goal can lead to Relative Energy Deficiency in Sport (RED-S). Consult a healthcare professional before starting this goal.' : '\u26a0 Risque RED-S d\u00e9tect\u00e9 \u2014 La combinaison activit\u00e9 \u00e9lev\u00e9e + sommeil insuffisant + objectif s\u00e8che peut mener au syndrome de d\u00e9ficit \u00e9nerg\u00e9tique relatif (RED-S). Consultez un professionnel de sant\u00e9 avant de d\u00e9marrer cet objectif.');
       var _redsBanner = h('div', {style: 'background:rgba(232,111,30,0.06);border:1px solid var(--orange,#E86F1E);padding:12px 14px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange,#E86F1E);line-height:1.6;border-radius:2px;'}, _redsMsg);
       p.appendChild(_redsBanner);
     }
@@ -1745,7 +1745,7 @@ function renderStep6(p) {
 
   // Goal selection (MANDATORY)
   var goalLabel = h('div', {'class': 'section-label'});
-  goalLabel.appendChild(txt('Objectif principal'));
+  goalLabel.appendChild(txt((window.isEnglish && window.isEnglish() ? 'Main goal' : 'Objectif principal')));
   goalLabel.appendChild(reqDot());
   p.appendChild(goalLabel);
   // === GROSSESSE / ALLAITEMENT : bloquer sèche/coupe, auto-reset si incompatible, afficher bannière ===
@@ -1759,14 +1759,14 @@ function renderStep6(p) {
     }
     if (_isPreg) {
       var _pregGoalBanner = h('div', {style: 'background:rgba(232,111,30,0.06);border:1px solid var(--orange,#E86F1E);padding:14px 16px;margin-bottom:14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--orange-ink,#7A3B0E);line-height:1.7;border-radius:2px;'});
-      _pregGoalBanner.appendChild(h('div', {style: 'font-size:13px;font-weight:600;letter-spacing:0.03em;margin-bottom:5px;'}, 'Grossesse \u2014 objectifs restreints'));
-      _pregGoalBanner.appendChild(h('div', {}, 'La s\u00e8che et la perte de poids sont contre-indiqu\u00e9es pendant la grossesse\u00a0(OMS\u00a02016, ACOG\u00a02020). Votre plan nutritionnel est automatiquement adapt\u00e9 \u00e0 vos besoins.'));
+      _pregGoalBanner.appendChild(h('div', {style: 'font-size:13px;font-weight:600;letter-spacing:0.03em;margin-bottom:5px;'}, (window.isEnglish && window.isEnglish() ? 'Pregnancy \u2014 restricted goals' : 'Grossesse \u2014 objectifs restreints')));
+      _pregGoalBanner.appendChild(h('div', {}, (window.isEnglish && window.isEnglish() ? 'Cutting and weight loss are contraindicated during pregnancy\u00a0(WHO\u00a02016, ACOG\u00a02020). Your nutritional plan is automatically adapted to your needs.' : 'La s\u00e8che et la perte de poids sont contre-indiqu\u00e9es pendant la grossesse\u00a0(OMS\u00a02016, ACOG\u00a02020). Votre plan nutritionnel est automatiquement adapt\u00e9 \u00e0 vos besoins.')));
       p.appendChild(_pregGoalBanner);
     }
     if (_isAllait) {
       var _allaitGoalBanner = h('div', {style: 'background:rgba(232,111,30,0.06);border:1px solid var(--orange,#E86F1E);padding:14px 16px;margin-bottom:14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--orange-ink,#7A3B0E);line-height:1.7;border-radius:2px;'});
-      _allaitGoalBanner.appendChild(h('div', {style: 'font-size:13px;font-weight:600;letter-spacing:0.03em;margin-bottom:5px;'}, 'Allaitement \u2014 objectifs restreints'));
-      _allaitGoalBanner.appendChild(h('div', {}, 'La s\u00e8che et la perte de poids sont contre-indiqu\u00e9es pendant l\u2019allaitement\u00a0(ACOG\u00a02022). Un surplus de +500\u00a0kcal/j est n\u00e9cessaire pour maintenir la production lactiqu\u00e9e et prot\u00e9ger votre sant\u00e9.'));
+      _allaitGoalBanner.appendChild(h('div', {style: 'font-size:13px;font-weight:600;letter-spacing:0.03em;margin-bottom:5px;'}, (window.isEnglish && window.isEnglish() ? 'Breastfeeding \u2014 restricted goals' : 'Allaitement \u2014 objectifs restreints')));
+      _allaitGoalBanner.appendChild(h('div', {}, (window.isEnglish && window.isEnglish() ? 'Cutting and weight loss are contraindicated during breastfeeding\u00a0(ACOG\u00a02022). A surplus of +500\u00a0kcal/day is necessary to maintain milk production and protect your health.' : 'La s\u00e8che et la perte de poids sont contre-indiqu\u00e9es pendant l\u2019allaitement\u00a0(ACOG\u00a02022). Un surplus de +500\u00a0kcal/j est n\u00e9cessaire pour maintenir la production lactiqu\u00e9e et prot\u00e9ger votre sant\u00e9.')));
       p.appendChild(_allaitGoalBanner);
     }
   }
@@ -1774,8 +1774,8 @@ function renderStep6(p) {
   var _userAgeGoal = typeof window.getAge === 'function' ? window.getAge() : null;
   if (_userAgeGoal !== null && _userAgeGoal >= 13 && _userAgeGoal < 18) {
     var _teenGoalBanner = h('div', {style: 'background:rgba(232,111,30,0.06);border:1px solid var(--orange,#E86F1E);padding:14px 16px;margin-bottom:14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--orange,#E86F1E);line-height:1.7;border-radius:2px;'});
-    _teenGoalBanner.appendChild(h('div', {style: 'font-size:13px;font-weight:600;letter-spacing:0.03em;margin-bottom:5px;'}, 'Objectifs adapt\u00e9s pour les 13\u201317 ans'));
-    _teenGoalBanner.appendChild(h('div', {}, 'D\u00e9ficit max -300\u00a0kcal/j, surplus max +300\u00a0kcal/j (ACSM\u00a02007, IOC\u00a02018) pour pr\u00e9server la croissance et le pic de masse osseuse. Votre plan est automatiquement encadr\u00e9.'));
+    _teenGoalBanner.appendChild(h('div', {style: 'font-size:13px;font-weight:600;letter-spacing:0.03em;margin-bottom:5px;'}, (window.isEnglish && window.isEnglish() ? 'Adapted goals for ages 13\u201317' : 'Objectifs adapt\u00e9s pour les 13\u201317 ans')));
+    _teenGoalBanner.appendChild(h('div', {}, (window.isEnglish && window.isEnglish() ? 'Max deficit -300\u00a0kcal/day, max surplus +300\u00a0kcal/day (ACSM\u00a02007, IOC\u00a02018) to preserve growth and peak bone mass. Your plan is automatically capped.' : 'D\u00e9ficit max -300\u00a0kcal/j, surplus max +300\u00a0kcal/j (ACSM\u00a02007, IOC\u00a02018) pour pr\u00e9server la croissance et le pic de masse osseuse. Votre plan est automatiquement encadr\u00e9.')));
     p.appendChild(_teenGoalBanner);
   }
   var gg = h('div', {'class': 'card-grid-2'});
@@ -1808,8 +1808,8 @@ function renderStep6(p) {
         window.render();
       }
     }, [
-      h('div', {'class': 'card-name'}, _pregBlock ? gl.name + ' \u2014 non disponible' : gl.name),
-      h('div', {'class': 'card-sub'}, _pregBlock ? 'Contre-indiqu\u00e9 pendant la grossesse' : gl.desc)
+      h('div', {'class': 'card-name'}, _pregBlock ? gl.name + (window.isEnglish && window.isEnglish() ? ' \u2014 unavailable' : ' \u2014 non disponible') : gl.name),
+      h('div', {'class': 'card-sub'}, _pregBlock ? (window.isEnglish && window.isEnglish() ? 'Contraindicated during pregnancy' : 'Contre-indiqu\u00e9 pendant la grossesse') : gl.desc)
     ]));
   });
   p.appendChild(gg);
@@ -1826,7 +1826,7 @@ function renderStep6(p) {
     var goalKey = goalObj8 ? goalObj8.key : 'maintain';
     var needsTarget = goalKey === 'cut' || goalKey === 'shred' || goalKey === 'bulk' || goalKey === 'lean_bulk';
     var twLabel = h('div', {'class': 'section-label'});
-    twLabel.appendChild(txt('Poids objectif'));
+    twLabel.appendChild(txt((window.isEnglish && window.isEnglish() ? 'Target weight' : 'Poids objectif')));
     if (needsTarget) twLabel.appendChild(reqDot());
     p.appendChild(twLabel);
 
@@ -1850,12 +1850,12 @@ function renderStep6(p) {
       if (proj && proj.weeks) {
         p.appendChild(h('div', {style: 'height:16px'}));
         var projBox = h('div', {style: 'text-align:center;padding:16px;border:1px solid var(--border);background:var(--ivory2)'});
-        projBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, 'Projection'));
-        projBox.appendChild(h('div', {style: 'font-family:Georgia;font-size:24px;font-style:italic'}, '~' + proj.weeks + ' semaines'));
+        projBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'Projection' : 'Projection')));
+        projBox.appendChild(h('div', {style: 'font-family:Georgia;font-size:24px;font-style:italic'}, '~' + proj.weeks + (window.isEnglish && window.isEnglish() ? ' weeks' : ' semaines')));
         projBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);margin-top:4px'},
-          proj.months + ' mois \u2014 ' + window.formatDate(proj.targetDate, {day:'numeric',month:'long',year:'numeric'})));
+          (window.isEnglish && window.isEnglish() ? proj.months + ' months \u2014 ' : proj.months + ' mois \u2014 ') + window.formatDate(proj.targetDate, {day:'numeric',month:'long',year:'numeric'})));
         projBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--ink-300,#A8A8A0);margin-top:4px'},
-          (proj.weeklyChange > 0 ? '+' : '') + (proj.weeklyChange || 0).toFixed(2) + ' kg/semaine'));
+          (proj.weeklyChange > 0 ? '+' : '') + (proj.weeklyChange || 0).toFixed(2) + (window.isEnglish && window.isEnglish() ? ' kg/week' : ' kg/semaine')));
         p.appendChild(projBox);
       }
     }
@@ -1875,7 +1875,7 @@ function renderStep6(p) {
     }
   }
   if (_tcaConflict) {
-    p.appendChild(h('div', {style: 'background:rgba(122,31,31,0.06);border:1px solid var(--error,#7A1F1F);padding:10px 14px;border-radius:2px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--error,#7A1F1F);line-height:1.6'}, 'Historique de TCA d\u00e9tect\u00e9 \u2014 seuls le Maintien et la Recomposition sont compatibles. Les objectifs de s\u00e8che, coupe, prise de masse sont m\u00e9dicalement contre-indiqu\u00e9s (ANAD, IOC\u00a02018).'));
+    p.appendChild(h('div', {style: 'background:rgba(122,31,31,0.06);border:1px solid var(--error,#7A1F1F);padding:10px 14px;border-radius:2px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--error,#7A1F1F);line-height:1.6'}, (window.isEnglish && window.isEnglish() ? 'Eating disorder history detected \u2014 only Maintenance and Recomposition are compatible. Cutting, shred, and bulking goals are medically contraindicated (ANAD, IOC\u00a02018).' : 'Historique de TCA d\u00e9tect\u00e9 \u2014 seuls le Maintien et la Recomposition sont compatibles. Les objectifs de s\u00e8che, coupe, prise de masse sont m\u00e9dicalement contre-indiqu\u00e9s (ANAD, IOC\u00a02018).')));
   }
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !goalOk, onclick: function() {
     if (goalOk) {
