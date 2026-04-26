@@ -2249,6 +2249,15 @@ window.I18N = {
       'onb.s9.generate': 'Générer un nouveau plan',
       'onb.s9.shopping': 'Liste de courses',
 
+      // Nutrition — meal names
+      'nutrition.meal_breakfast': 'Petit-déjeuner',
+      'nutrition.meal_lunch': 'Déjeuner',
+      'nutrition.meal_snack': 'Collation',
+      'nutrition.meal_dinner': 'Dîner',
+      'nutrition.protein': 'Protéines',
+      'nutrition.carbs': 'Glucides',
+      'nutrition.fats': 'Lipides',
+
       // Dashboard
       'dash.greeting_morning': 'Bonjour',
       'dash.greeting_afternoon': 'Bon après-midi',
@@ -2549,6 +2558,15 @@ window.I18N = {
       'onb.s9.target': 'Target',
       'onb.s9.generate': 'Generate New Plan',
       'onb.s9.shopping': 'Shopping List',
+
+      // Nutrition — meal names
+      'nutrition.meal_breakfast': 'Breakfast',
+      'nutrition.meal_lunch': 'Lunch',
+      'nutrition.meal_snack': 'Snack',
+      'nutrition.meal_dinner': 'Dinner',
+      'nutrition.protein': 'Protein',
+      'nutrition.carbs': 'Carbs',
+      'nutrition.fats': 'Fat',
 
       // Dashboard
       'dash.greeting_morning': 'Good morning',
