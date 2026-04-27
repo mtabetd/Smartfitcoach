@@ -313,6 +313,279 @@ function deltaTag(delta, unit, invertColors) {
   return '<span style="font-size:11px;color:' + color + ';font-family:Helvetica Neue,Arial,sans-serif;margin-left:6px">' + valStr + pctStr + '</span>';
 }
 
+/* ─── P4.13 PROGRESS CHARTS ─── */
+// SAFETY: always use window.createChart(), never new Chart() directly.
+// canvas IDs are unique per metric to allow destroy-by-id on re-render.
+var _chartIdCounter = 0;
+function _uniqueCanvasId(prefix) {
+  return 'ph-chart-' + prefix + '-' + (++_chartIdCounter);
+}
+
+function _makeChartCanvas(id, heightPx) {
+  var wrapper = document.createElement('div');
+  wrapper.style.cssText = 'position:relative;height:' + (heightPx || 180) + 'px;width:100%;margin-top:8px;';
+  var canvas = document.createElement('canvas');
+  canvas.id = id;
+  canvas.style.cssText = 'display:block;width:100%;height:100%;';
+  wrapper.appendChild(canvas);
+  return { wrapper: wrapper, canvas: canvas };
+}
+
+function _baseChartConfig(labels, datasets, yLabel) {
+  return {
+    type: 'line',
+    data: { labels: labels, datasets: datasets },
+    options: {
+      animation: false,
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          display: datasets.length > 1,
+          labels: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 10 }, color: '#6B6B65', boxWidth: 12 }
+        },
+        tooltip: { enabled: true }
+      },
+      scales: {
+        x: {
+          ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 }, color: '#6B6B65', maxTicksLimit: 8, maxRotation: 0 },
+          grid: { color: 'rgba(0,0,0,0.06)' }
+        },
+        y: {
+          title: { display: !!yLabel, text: yLabel || '', font: { size: 9 }, color: '#6B6B65' },
+          ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 }, color: '#6B6B65' },
+          grid: { color: 'rgba(0,0,0,0.06)' }
+        }
+      }
+    }
+  };
+}
+
+function _safeCreateChart(canvas, config) {
+  if (typeof window.createChart !== 'function') return;
+  if (!canvas || !document.body.contains(canvas)) return;
+  try { window.createChart(canvas, config); } catch(e) { console.warn('[PERF_HISTORY chart]', e); }
+}
+
+// Slice last N unique dates from a history array
+function _lastNByDate(arr, n) {
+  var seen = {};
+  var result = [];
+  for (var i = arr.length - 1; i >= 0; i--) {
+    var d = arr[i].date;
+    if (d && !seen[d]) { seen[d] = true; result.unshift(arr[i]); }
+    if (result.length >= n) break;
+  }
+  return result;
+}
+
+function _shortDate(iso) {
+  if (!iso) return '';
+  var parts = iso.split('-');
+  return parts.length >= 3 ? parts[2] + '/' + parts[1] : iso;
+}
+
+function renderProgressionCharts(container) {
+  if (!container) return;
+  if (typeof Chart === 'undefined' && !(window.createChart)) {
+    var noChart = document.createElement('p');
+    noChart.style.cssText = 'font-size:11px;color:var(--grey,#6B6B65);text-align:center;padding:12px 0;';
+    noChart.textContent = (window.isEnglish && window.isEnglish()) ? 'Charts require chart.umd.min.js to be loaded.' : 'Les graphiques nécessitent chart.umd.min.js.';
+    container.appendChild(noChart);
+    return;
+  }
+
+  var _en = window.isEnglish && window.isEnglish();
+  var _dU = (window.UNITS && window.UNITS.displayWeight) ? window.UNITS.displayWeight : function(v) { return v + ' kg'; };
+
+  /* ── 1. STRENGTH 1RM CHART ── */
+  var strengthHistory = loadHistory('muscu_strength');
+  if (strengthHistory.length >= 2) {
+    var sLabel = document.createElement('div');
+    sLabel.className = 'ph-label';
+    sLabel.textContent = _en ? 'Strength — Estimated 1RM (30 days)' : 'Force — 1RM estimé (30 jours)';
+    container.appendChild(sLabel);
+
+    var keyLifts = [
+      { key: 'bench_press', name: _en ? 'Bench' : 'Développé couché', color: '#1A4A1A' },
+      { key: 'squat',       name: 'Squat',     color: '#6A4A1A' },
+      { key: 'deadlift',    name: _en ? 'Deadlift' : 'Soulevé de terre', color: '#4A1A1A' }
+    ];
+    var cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - 30);
+    var cutoffISO = cutoff.toISOString().split('T')[0];
+
+    var allDatesSet = {};
+    keyLifts.forEach(function(lift) {
+      strengthHistory.filter(function(e) { return e.key === lift.key && e.date >= cutoffISO; })
+        .forEach(function(e) { allDatesSet[e.date] = true; });
+    });
+    var allDates = Object.keys(allDatesSet).sort();
+
+    if (allDates.length >= 2) {
+      var sDs = keyLifts.map(function(lift) {
+        var liftPts = {};
+        strengthHistory.filter(function(e) { return e.key === lift.key && e.date >= cutoffISO; })
+          .forEach(function(e) {
+            if (!liftPts[e.date] || e.estimated1RM > liftPts[e.date]) liftPts[e.date] = e.estimated1RM;
+          });
+        return {
+          label: lift.name,
+          data: allDates.map(function(d) { return liftPts[d] || null; }),
+          borderColor: lift.color,
+          backgroundColor: lift.color + '22',
+          borderWidth: 1.5,
+          pointRadius: 3,
+          pointHoverRadius: 5,
+          tension: 0.3,
+          spanGaps: true
+        };
+      });
+      var sId = _uniqueCanvasId('strength');
+      var sCv = _makeChartCanvas(sId, 180);
+      container.appendChild(sCv.wrapper);
+      (function(cv) {
+        setTimeout(function() {
+          _safeCreateChart(cv.canvas, _baseChartConfig(allDates.map(_shortDate), sDs, 'kg'));
+        }, 0);
+      }(sCv));
+    }
+  }
+
+  /* ── 2. BODY WEIGHT CHART ── */
+  var weightHist = (window.S && Array.isArray(window.S.weightHistory)) ? window.S.weightHistory : [];
+  if (weightHist.length >= 2) {
+    var wLabel = document.createElement('div');
+    wLabel.className = 'ph-label';
+    wLabel.style.marginTop = '20px';
+    wLabel.textContent = _en ? 'Body weight (last 30 days)' : 'Poids corporel (30 derniers jours)';
+    container.appendChild(wLabel);
+
+    var wCutoff = new Date();
+    wCutoff.setDate(wCutoff.getDate() - 30);
+    var wCutoffISO = wCutoff.toISOString().split('T')[0];
+    var wFiltered = weightHist.filter(function(e) {
+      var d = e && (e.date || e.d || '');
+      var w = parseFloat(e && (e.weight || e.w || e));
+      return d >= wCutoffISO && !isNaN(w) && w > 0;
+    }).slice(-30);
+
+    if (wFiltered.length >= 2) {
+      var wDates = wFiltered.map(function(e) { return _shortDate(e.date || e.d || ''); });
+      var wVals  = wFiltered.map(function(e) { return parseFloat(e.weight || e.w || e); });
+      var wDs = [{
+        label: _en ? 'Weight (kg)' : 'Poids (kg)',
+        data: wVals,
+        borderColor: '#1A4A1A',
+        backgroundColor: 'rgba(26,74,26,0.08)',
+        borderWidth: 1.5,
+        pointRadius: 3,
+        fill: true,
+        tension: 0.3
+      }];
+      var wId = _uniqueCanvasId('weight');
+      var wCv = _makeChartCanvas(wId, 160);
+      container.appendChild(wCv.wrapper);
+      (function(cv) {
+        setTimeout(function() {
+          _safeCreateChart(cv.canvas, _baseChartConfig(wDates, wDs, 'kg'));
+        }, 0);
+      }(wCv));
+    }
+  }
+
+  /* ── 3. DAILY CALORIES CHART ── */
+  var nutHist = loadHistory('nutrition');
+  if (nutHist.length >= 2) {
+    var nLabel = document.createElement('div');
+    nLabel.className = 'ph-label';
+    nLabel.style.marginTop = '20px';
+    nLabel.textContent = _en ? 'Daily calories (last 14 days)' : 'Calories journalières (14 derniers jours)';
+    container.appendChild(nLabel);
+
+    var nLast = _lastNByDate(nutHist, 14);
+    if (nLast.length >= 2) {
+      var nDates = nLast.map(function(e) { return _shortDate(e.date); });
+      var nVals  = nLast.map(function(e) { return e.kcal || 0; });
+      var nTarget = (window.calcTarget && typeof window.calcTarget === 'function') ? window.calcTarget() : 0;
+      var nDs = [{
+        label: _en ? 'Calories (kcal)' : 'Calories (kcal)',
+        data: nVals,
+        borderColor: '#6A4A1A',
+        backgroundColor: 'rgba(106,74,26,0.08)',
+        borderWidth: 1.5,
+        pointRadius: 3,
+        fill: true,
+        tension: 0.2
+      }];
+      if (nTarget > 0) {
+        nDs.push({
+          label: _en ? 'Target' : 'Objectif',
+          data: nDates.map(function() { return nTarget; }),
+          borderColor: '#1A4A1A',
+          borderDash: [4, 4],
+          borderWidth: 1,
+          pointRadius: 0,
+          fill: false,
+          tension: 0
+        });
+      }
+      var nId = _uniqueCanvasId('nutrition');
+      var nCv = _makeChartCanvas(nId, 160);
+      container.appendChild(nCv.wrapper);
+      (function(cv) {
+        setTimeout(function() {
+          _safeCreateChart(cv.canvas, _baseChartConfig(nDates, nDs, 'kcal'));
+        }, 0);
+      }(nCv));
+    }
+  }
+
+  /* ── 4. RUNNING CHART (distance) ── */
+  var runHist = loadHistory('running');
+  if (runHist.length >= 2) {
+    var rLabel = document.createElement('div');
+    rLabel.className = 'ph-label';
+    rLabel.style.marginTop = '20px';
+    rLabel.textContent = _en ? 'Running — distance (last 10 sessions)' : 'Course — distance (10 dernières séances)';
+    container.appendChild(rLabel);
+
+    var rLast = runHist.slice(-10);
+    var rDates = rLast.map(function(e, i) { return _shortDate(e.date) || ('S' + (i + 1)); });
+    var rVals  = rLast.map(function(e) { return e.distanceKm || 0; });
+    var rDs = [{
+      label: _en ? 'Distance (km)' : 'Distance (km)',
+      data: rVals,
+      borderColor: '#4A1A1A',
+      backgroundColor: 'rgba(74,26,26,0.08)',
+      borderWidth: 1.5,
+      pointRadius: 3,
+      fill: true,
+      tension: 0.3
+    }];
+    var rId = _uniqueCanvasId('running');
+    var rCv = _makeChartCanvas(rId, 140);
+    container.appendChild(rCv.wrapper);
+    (function(cv) {
+      setTimeout(function() {
+        _safeCreateChart(cv.canvas, _baseChartConfig(rDates, rDs, 'km'));
+      }, 0);
+    }(rCv));
+  }
+
+  /* ── EMPTY STATE ── */
+  var _allEmpty = strengthHistory.length < 2 && weightHist.length < 2 && nutHist.length < 2 && runHist.length < 2;
+  if (_allEmpty) {
+    var emptyMsg = document.createElement('p');
+    emptyMsg.style.cssText = 'font-size:11px;color:var(--grey,#6B6B65);text-align:center;padding:20px 0;font-style:italic;font-family:Georgia,serif;';
+    emptyMsg.textContent = _en
+      ? 'Start recording your workouts and weight to see your progress charts here.'
+      : 'Commencez à enregistrer vos séances et votre poids pour voir vos courbes de progression ici.';
+    container.appendChild(emptyMsg);
+  }
+}
+
 function renderProgressionWidget(container) {
   if (!container) return;
   try { _renderProgressionWidget(container); } catch(e) {
@@ -589,6 +862,13 @@ function _renderProgressionWidget(container) {
     if (sec7.childElementCount > 1) container.appendChild(sec7);
   }
 
+  /* ── P4.13 CHARTS ── */
+  var chartsSection = document.createElement('div');
+  chartsSection.className = 'ph-section';
+  chartsSection.appendChild(createLabel(_phEN ? 'Progress charts' : 'Courbes de progression'));
+  renderProgressionCharts(chartsSection);
+  container.appendChild(chartsSection);
+
   if (!hasData) {
     var emptyNote = document.createElement('p');
     emptyNote.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);text-align:center;padding:24px 0;font-style:italic';
@@ -808,6 +1088,7 @@ window.PERF_HISTORY = {
   getNutritionDelta: getNutritionDelta,
   // Widget
   renderProgressionWidget: renderProgressionWidget,
+  renderProgressionCharts: renderProgressionCharts,
   renderMiniChart: renderMiniChart,
   // Nutrition history
   loadNutritionHistory: function() { return loadHistory('nutrition'); }

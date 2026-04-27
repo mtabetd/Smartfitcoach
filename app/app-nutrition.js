@@ -296,7 +296,11 @@ function renderSplash(app) {
   var ctaBtn = h('button', {style: 'display:block;width:100%;max-width:320px;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;min-height:56px;padding:0 24px;border:none;cursor:pointer;' + _anim(.9) + ';border-radius:2px', onclick: function() { goStep(1); }}, (window.isEnglish && window.isEnglish() ? "Let's start \u2192" : 'Je commence \u2192'));
   sp.appendChild(ctaBtn);
 
-  sp.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:16px;' + _anim(1.1,'.5s')}, (window.isEnglish && window.isEnglish() ? '5 minutes \u00b7 Free \u00b7 Your data stays on your device' : '5 minutes \u00b7 Gratuit \u00b7 Vos donn\u00e9es restent sur votre appareil')));
+  var _privacyRow = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:16px;' + _anim(1.1,'.5s')});
+  _privacyRow.appendChild(document.createTextNode(window.isEnglish && window.isEnglish() ? '5 minutes \u00b7 Free \u00b7 ' : '5 minutes \u00b7 Gratuit \u00b7 '));
+  var _privacyLink = h('a', {href: './privacy-policy' + (window.isEnglish && window.isEnglish() ? '-en' : '') + '.html', target: '_blank', rel: 'noopener', style: 'color:var(--grey);text-decoration:underline'}, (window.isEnglish && window.isEnglish() ? 'Your data stays on your device \u2014 Privacy Policy' : 'Vos donn\u00e9es restent sur votre appareil \u2014 Politique de confidentialit\u00e9'));
+  _privacyRow.appendChild(_privacyLink);
+  sp.appendChild(_privacyRow);
   // Bouton retour — évite que l'utilisateur soit piégé sur ce splash
   sp.appendChild(h('button', {style: 'display:block;margin:20px auto 0;background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;color:var(--grey);cursor:pointer;padding:8px 16px;min-height:44px;opacity:0;animation:splashFadeUp .5s ease 1.1s forwards', onclick: function() { S.view = 'today'; if (window.render) window.render(); }}, (window.isEnglish && window.isEnglish() ? '\u2190 Back' : '\u2190 Retour')));
   app.appendChild(sp);
@@ -2406,6 +2410,21 @@ function renderStep8(p) {
     obesityTip.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--fg2,#555);margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? 'Your calculation is adjusted using the corrected ideal weight (ASPEN 2016) to avoid overestimating protein needs. Deficit capped at \u2212500\u00a0kcal/day to preserve lean mass (Helms 2014).' : 'Votre calcul est ajust\u00e9 avec le poids id\u00e9al corrig\u00e9 (ASPEN 2016) pour \u00e9viter une surestimation des besoins prot\u00e9iques. D\u00e9ficit plafonn\u00e9 \u00e0 \u2212500\u00a0kcal/j pour pr\u00e9server la masse maigre (Helms 2014).')));
     obesityTip.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#7A3010;margin-top:4px'}, (window.isEnglish && window.isEnglish() ? 'Tip\u00a0: activate the \u00ab\u00a0Obesity (BMI\u00a0>\u00a030)\u00a0\u00bb condition in your medical conditions (Health checks) for specific nutritional recommendations.' : 'Conseil\u00a0: activez la condition \u00ab\u00a0Ob\u00e9sit\u00e9 (IMC\u00a0>\u00a030)\u00a0\u00bb dans vos conditions m\u00e9dicales (Contr\u00f4les sant\u00e9) pour des recommandations nutritionnelles sp\u00e9cifiques.')));
     p.appendChild(obesityTip);
+  }
+
+  // ─── PAR-Q mineur < 16 ans ───
+  // ACSM PAR-Q+ 2022 : tout mineur de moins de 16 ans doit obtenir l'accord d'un parent/tuteur
+  // et idéalement une autorisation médicale avant de suivre un programme de nutrition/sport
+  var _parqAge = window.getAge ? window.getAge() : null;
+  if (_parqAge !== null && _parqAge < 16) {
+    var parqBanner = h('div', {style: 'border-left:3px solid #1A4A1A;background:rgba(26,74,26,0.07);padding:12px 16px;margin:12px 0'});
+    parqBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#1A4A1A;margin-bottom:6px'},
+      (window.isEnglish && window.isEnglish() ? '⚠ Minor — Parental consent required (PAR-Q+ 2022)' : '⚠ Mineur — Accord parental requis (PAR-Q+ 2022)')));
+    parqBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--fg2,#555)'},
+      (window.isEnglish && window.isEnglish()
+        ? 'You are under 16. Before following any nutrition plan or sports programme, you must obtain parental or guardian consent and ideally a medical clearance (ACSM PAR-Q+ 2022). Caloric limits are automatically adapted to protect growth and bone peak mass development.'
+        : 'Vous avez moins de 16 ans. Avant de suivre tout plan nutritionnel ou programme sportif, vous devez obtenir l\'accord d\'un parent ou tuteur légal et idéalement une autorisation médicale (ACSM PAR-Q+ 2022). Les limites caloriques sont automatiquement adaptées pour protéger la croissance et le développement du pic de masse osseuse.')));
+    p.appendChild(parqBanner);
   }
 
   // Medical warnings
@@ -4656,7 +4675,7 @@ function renderSaladBar(p) {
   // Macro targets — calculés selon le slot via getMealSplit()
   var tgtMacros = { k: 600, p: 40, g: 65, l: 20 };
   if (window.calcMacros && window.calcTarget) {
-    var dm = window.calcMacros(), dk = window.calcTarget();
+    var dm = window.calcMacros() || {g:0, p:0, l:0}, dk = window.calcTarget();
     if (dk > 0) {
       var _split = window.getMealSplit ? window.getMealSplit() : null;
       var mealRatio;
@@ -5127,13 +5146,13 @@ var WHEY_SMOOTHIES = [
     ingredients:[{name:'Whey nature',qty:30,unit:'g'},{name:'Lait écrémé',qty:250,unit:'ml'},{name:'Flocons d\'avoine',qty:25,unit:'g'},{name:'Amandes effilées',qty:10,unit:'g'}],
     steps:['Mixer les flocons d\'avoine avec la moitié du lait écrémé 20 secondes à pleine puissance pour créer une base "lait d\'avoine maison" lisse — les flocons hydratés s\'intègrent parfaitement et épaississent sans morceaux.','Ajouter le reste du lait froid, la whey nature et les amandes effilées ; mixer 20 secondes à vitesse moyenne — les amandes doivent être réduites en micro-éclats qui apportent le croquant, pas en poudre uniforme.','Goûter avant de servir : sur une base neutre, l\'équilibre est tout. Ajuster avec une pincée de fleur de sel si la whey manque de relief — le sel est l\'exhausteur de goût le plus puissant sur les protéines.'],
     tips:'Une base neutre n\'est pas une base fade : c\'est une toile blanche. La fleur de sel est le geste du pâtissier — elle ne sale pas, elle révèle. Une pincée change tout ce que la whey nature a à dire.' },
-  { id:'sm_nature_02', name:'Athlete', nameEn:'Athlete\'s Functional Shake', flavors:['unflavored'], goal:['performance','recovery'], timing:'post', cal:360, p:38, c:38, f:7, prep:'3min',
+  { id:'sm_nature_02', name:'Shake Fonctionnel Athl\u00e8te', nameEn:'Athlete\'s Functional Shake', flavors:['unflavored'], goal:['performance','recovery'], timing:'post', cal:360, p:38, c:38, f:7, prep:'3min',
     ingredients:[{name:'Whey nature',qty:35,unit:'g'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Jus d\'orange frais',qty:150,unit:'ml'},{name:'Banane',qty:80,unit:'g'},{name:'Curcuma',qty:1,unit:'g'},{name:'Poivre noir',qty:0.5,unit:'g'}],
     steps:['Commencer par mixer banane + jus d\'orange + poivre noir fraîchement moulu ensemble 15 secondes : le poivre doit se disperser dans la matière sucrée acide pour que la pipérine s\'active au contact des lipides du yaourt qui suivent.','Ajouter le yaourt grec et le curcuma, mixer 20 secondes — le curcuma se fixe sur les matières grasses du yaourt pour une absorption optimale ; ne jamais le dissoudre dans le liquide seul.','Incorporer la whey nature en dernier, mixer 15 secondes à vitesse modérée. Consommer dans les 20 minutes post-séance : la fenêtre anabolique et anti-inflammatoire combinées est maximale à ce créneau.'],
     tips:'Curcuma + poivre + matière grasse : c\'est le trio de biodisponibilité. Changer l\'ordre d\'incorporation revient à ignorer la chimie — et perdre jusqu\'à 80 % de l\'effet anti-inflammatoire du curcuma.' },
 
   // === MULTI-PARFUMS ===
-  { id:'sm_multi_01', name:'Reese', nameEn:'Reese\'s Smoothie Bowl', flavors:['peanut','chocolate'], goal:['muscle'], timing:'anytime', cal:520, p:42, c:55, f:15, prep:'5min',
+  { id:'sm_multi_01', name:'Smoothie Bowl Cacahu\u00e8te-Chocolat', nameEn:'Peanut Chocolate Smoothie Bowl', flavors:['peanut','chocolate'], goal:['muscle'], timing:'anytime', cal:520, p:42, c:55, f:15, prep:'5min',
     ingredients:[{name:'Whey chocolat',qty:30,unit:'g'},{name:'Beurre de cacahuète',qty:20,unit:'g'},{name:'Banane congelée',qty:150,unit:'g'},{name:'Lait',qty:100,unit:'ml'},{name:'Granola',qty:30,unit:'g'}],
     steps:['Congeler la banane coupée en rondelles minimum 2 heures à l\'avance — c\'est l\'unique secret d\'un bowl dense et crémeux sans glace diluante.','Mixer banane congelée + lait à vitesse maximale 10 secondes seulement : stopper dès que la texture "nice cream" est atteinte, ne jamais sur-mixer ou elle devient liquide.','Ajouter le beurre de cacahuète et la whey chocolat, mixer 5 secondes en impulsions courtes pour marbrer sans homogénéiser complètement — les veines de cacahuète sont la signature visuelle.','Verser immédiatement dans un bol froid (passé 5 minutes au congélateur), déposer le granola en dernière seconde pour qu\'il reste croustillant — jamais dans le blender.'],
     tips:'La texture bowl ne se fabrique pas avec moins de liquide : elle se fabrique avec une banane congelée. C\'est la différence entre un shake raté et un vrai bowl ferme qui tient la cuillère à la verticale.' },
