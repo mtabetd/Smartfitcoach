@@ -1,6 +1,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 
 const APP_DIR = path.join(__dirname, '../app');
 
@@ -54,6 +55,8 @@ const DEFERRED_SCRIPTS = [
   './pwa-install.js',
 ];
 
+const bundlePath = path.join(APP_DIR, 'bundle.js');
+
 const parts = DEFERRED_SCRIPTS.map(function(file) {
   const fullPath = path.join(APP_DIR, file);
   if (!fs.existsSync(fullPath)) {
@@ -65,5 +68,22 @@ const parts = DEFERRED_SCRIPTS.map(function(file) {
 });
 
 const banner = '/* SmartFitCoach bundle — generated at build time. Do not edit. */\n';
-fs.writeFileSync(path.join(APP_DIR, 'bundle.js'), banner + parts.join('\n'));
-console.log('[build-bundle] bundle.js written (' + parts.length + ' scripts)');
+fs.writeFileSync(bundlePath, banner + parts.join('\n'));
+const rawSize = fs.statSync(bundlePath).size;
+console.log('[build-bundle] bundle.js written (' + parts.length + ' scripts, ' + Math.round(rawSize / 1024) + ' KB raw)');
+
+// Minify with terser — compress + syntax only, no identifier mangling to preserve
+// cross-IIFE window.X globals and pre-minified vendor code (Chart.js).
+try {
+  console.log('[build-bundle] Minifying with terser…');
+  execSync(
+    'npx terser ' + bundlePath + ' --compress --output ' + bundlePath,
+    { stdio: ['pipe', 'pipe', 'pipe'], cwd: path.join(__dirname, '..') }
+  );
+  const minSize = fs.statSync(bundlePath).size;
+  const saved = rawSize - minSize;
+  console.log('[build-bundle] Minified: ' + Math.round(minSize / 1024) + ' KB (saved ' + Math.round(saved / 1024) + ' KB, -' + Math.round(saved / rawSize * 100) + '%)');
+} catch (err) {
+  // Minification is best-effort — if terser is unavailable at build time, keep raw bundle.
+  console.warn('[build-bundle] terser minification failed (keeping raw bundle):', err.message);
+}
