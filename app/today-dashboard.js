@@ -5852,10 +5852,10 @@ function renderTodayDashboard(p) {
         else { S.view = 'profil'; if (window.render) window.render(); }
       });
       var _tL = h('div', {style: 'flex:1;min-width:0;'});
+      var _trEN = window.isEnglish && window.isEnglish();
       _tL.appendChild(h('div', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);font-weight:500;margin-bottom:3px;'
-      }, 'VERSION D\u2019ESSAI'));
-      var _trEN = window.isEnglish && window.isEnglish();
+      }, _trEN ? 'TRIAL VERSION' : 'VERSION D\u2019ESSAI'));
       var _tCopy = _td <= 0 ? (_trEN ? 'Trial ended \u2014 Unlock access \u2192' : 'Essai terminé \u2014 Débloquez l\u2019accès \u2192')
         : _td === 1 ? (_trEN ? 'Last day \u2014 Subscribe to continue \u2192' : 'Dernier jour \u2014 Abonnez-vous pour continuer \u2192')
         : _td <= 3 ? (_trEN ? 'Only ' + _td + ' days left \u2014 Continue without interruption \u2192' : 'Plus que ' + _td + ' jours \u2014 Continuez sans interruption \u2192')
@@ -5866,7 +5866,7 @@ function renderTodayDashboard(p) {
       _tBar.appendChild(_tL);
       var _tR = h('div', {
         style: 'font-family:Georgia,serif;font-size:22px;color:' + (_tdUrgent ? '#C0390E' : 'var(--orange-ink,#7A3B0E)') + ';flex-shrink:0;line-height:1;'
-      }, _td > 0 ? String(_td) + 'j' : '!');
+      }, _td > 0 ? String(_td) + (_trEN ? 'd' : 'j') : '!');
       _tBar.appendChild(_tR);
       wrapper.appendChild(_tBar);
     }

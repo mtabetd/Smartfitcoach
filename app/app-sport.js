@@ -836,12 +836,42 @@ function generateSportProgram() {
    var _others = available.filter(function(ex) { return !_fundSet[ex.n || ex.name]; });
    _others.sort(function(a, b) { return (a.lv || 1) - (b.lv || 1); }); // lv:1 avant lv:2
    available = _fundamentals.concat(_others);
+   // Beginner + gym: prefer machine/beginner-friendly exercises for safety (guidance, injury prevention)
+   // Débutant en salle → machines guidées en priorité, poids du corps pur en dernier
+   if (!S.sportEquipment || S.sportEquipment === 'gym') {
+     // 3 tiers : 0=machine/guidé, 1=poids libres/câble (non-poids-du-corps), 2=poids du corps pur
+     // CRITIQUE : si on ne sépare pas barre (lv:2) de poids-du-corps (lv:1), le tri lv asc
+     // met les pompes (lv:1) AVANT le développé couché (lv:2) → inverse de l'intention.
+     available.sort(function(a, b) {
+       var _gymTier = function(ex) {
+         var t = ex.tags || [], eq = (ex.eq||'').trim();
+         if (t.indexOf('machine') !== -1 || t.indexOf('beginner-friendly') !== -1) return 0;
+         if (/^poids du corps$/i.test(eq)) return 2; // pur bodyweight → dernier
+         return 1; // barre, haltère, câble, etc.
+       };
+       var _tA = _gymTier(a), _tB = _gymTier(b);
+       if (_tA !== _tB) return _tA - _tB;
+       var _cfA = (a.tags||[]).indexOf('compose') !== -1 ? 0 : 1;
+       var _cfB = (b.tags||[]).indexOf('compose') !== -1 ? 0 : 1;
+       return _cfA - _cfB || (a.lv||1) - (b.lv||1);
+     });
+   }
  } else if (pri >= 4) {
-   // Non-beginner, high priority: prefer compound exercises (sort by level desc within allowed range)
-   available.sort(function(a, b) { return b.lv - a.lv || (0.5 - Math.random()); });
+   // Non-beginner, high priority: weighted before pure bodyweight for gym users, then level desc
+   available.sort(function(a, b) {
+     var _bwA = (!S.sportEquipment || S.sportEquipment === 'gym') ? (/^poids du corps$/i.test((a.eq||'').trim()) ? 1 : 0) : 0;
+     var _bwB = (!S.sportEquipment || S.sportEquipment === 'gym') ? (/^poids du corps$/i.test((b.eq||'').trim()) ? 1 : 0) : 0;
+     if (_bwA !== _bwB) return _bwA - _bwB;
+     return (b.lv||1) - (a.lv||1) || (0.5 - Math.random());
+   });
  } else {
-   // Non-beginner, shuffle for variety
-   available.sort(function(){ return 0.5 - Math.random(); });
+   // Non-beginner, shuffle — but gym users: weighted before pure bodyweight
+   available.sort(function(a, b) {
+     var _bwA = (!S.sportEquipment || S.sportEquipment === 'gym') ? (/^poids du corps$/i.test((a.eq||'').trim()) ? 1 : 0) : 0;
+     var _bwB = (!S.sportEquipment || S.sportEquipment === 'gym') ? (/^poids du corps$/i.test((b.eq||'').trim()) ? 1 : 0) : 0;
+     if (_bwA !== _bwB) return _bwA - _bwB;
+     return (0.5 - Math.random());
+   });
  }
 
  var count = exerciseCountForPriority(pri);
@@ -973,17 +1003,23 @@ function generateSportProgram() {
  }
  });
 
- // FIX P0 2026-04-20: sort dayExercises — compound/polyarticulaire exercises BEFORE isolation.
- // Science rationale: CNS freshness = best compound performance (Kraemer & Ratamess, MSSE 2004).
- // Tag "compose" = compound; tag "isolation" = isolation; no tag = neutral (keep position).
+ // PRO session structure — 5 tiers (Kraemer & Ratamess MSSE 2004, NSCA CSCS §18):
+ // 0 = primary compound (force/powerlifting tag) — heaviest, CNS peak demand
+ // 1 = secondary compound (compose, no force/powerlifting) — still multi-joint
+ // 2 = neutral (no structural tag)
+ // 3 = isolation — single-joint, low neural demand
+ // 4 = finisher — metabolic/high-rep, end of session
  dayExercises.sort(function(a, b) {
-   var _score = function(ex) {
-     if (!ex.tags) return 1;
-     if (ex.tags.indexOf('compose') !== -1) return 0;
-     if (ex.tags.indexOf('isolation') !== -1) return 2;
-     return 1;
+   var _role = function(ex) {
+     var t = ex.tags || [];
+     if (t.indexOf('finisher') !== -1) return 4;
+     if (t.indexOf('isolation') !== -1) return 3;
+     if (t.indexOf('compose') !== -1) {
+       return (t.indexOf('force') !== -1 || t.indexOf('powerlifting') !== -1) ? 0 : 1;
+     }
+     return 2;
    };
-   return _score(a) - _score(b);
+   return _role(a) - _role(b);
  });
 
  // Deduplicate exercises within the same day (same name = same exercise from two pools)
@@ -1054,6 +1090,102 @@ function generateSportProgram() {
  dayExercises = dayExercises.slice(0, maxExercisesPerSession);
  }
 
+ // ─── PRO FIX: Duration fill — si moins d'exos que le budget temps, on complète ───
+ // Cause classique de "30 min au lieu de 1h15" : l'user a peu de zones sélectionnées
+ // (ex: 1 seule zone = 3 exos max) → durMax jamais atteint → séance trop courte.
+ // Fix : on pioche dans les pools du jour des exos non encore utilisés pour remplir.
+ (function() {
+   if (!S.sportSessionDuration || pregTri) return; // grossesse : ne pas gonfler volume
+   var _fillTarget = S.sportSessionDuration === '45min' ? 5
+     : S.sportSessionDuration === '1h' ? 6
+     : S.sportSessionDuration === '1h15' ? 7
+     : 8;
+   if (dayExercises.length >= _fillTarget) return;
+   var _dayUsed = {};
+   dayExercises.forEach(function(ex) { _dayUsed[(ex.n||'').toLowerCase().trim()] = true; });
+   var _supPool = [];
+   groups.forEach(function(grp) {
+     ((window.EXERCISES && window.EXERCISES[grp]) || []).forEach(function(ex) {
+       var _k = (ex.n||'').toLowerCase().trim();
+       if (!_dayUsed[_k] && !weekUsedNames[_k] && (ex.lv||1) <= maxLv) {
+         _supPool.push(ex);
+       }
+     });
+   });
+   if (!_supPool.length) return;
+   // Apply medical restrictions to supplemental pool — SAFETY CRITICAL
+   // Le fill court-circuiterait les filtres médicaux de la sélection principale si on ne les réapplique pas.
+   if (S.muscuMedical && S.muscuMedical.done && typeof filterExerciseByMedical === 'function') {
+     _supPool = _supPool.filter(function(ex) { return filterExerciseByMedical(ex, S.muscuMedical); });
+   }
+   if (Array.isArray(S.medical) && S.medical.length > 0) {
+     var _medList2 = S.medical.map(function(m) { return String(m).toLowerCase(); });
+     var _medR2 = [];
+     if (_medList2.indexOf('osteoporose') !== -1 || _medList2.indexOf('osteoporosis') !== -1)
+       _medR2.push(/squat\s+barre|soulev[eé]\s+de\s+terre|deadlift|good\s+morning|box\s+jump|power\s+clean|snatch|arrach[eé]|hack\s+squat/i);
+     if (_medList2.indexOf('hypertension') !== -1 || _medList2.indexOf('hta') !== -1 || _medList2.indexOf('hta_severe') !== -1)
+       _medR2.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre|d[eé]velopp[eé]\s+militaire\s+barre|snatch|arrach[eé]|clean|[eé]paul[eé]|jerk|thruster/i);
+     if (_medList2.indexOf('cardio') !== -1 || _medList2.indexOf('insuffisance_card') !== -1)
+       _medR2.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre\s+lourd|snatch|clean|burpee|box\s+jump/i);
+     if (_medList2.indexOf('polyarthrite') !== -1 || _medList2.indexOf('arthrite') !== -1)
+       _medR2.push(/soulev[eé]\s+de\s+terre|deadlift|arrach[eé]|snatch|clean|jump\s+squat|box\s+jump|burpee|squat\s+barre/i);
+     if (_medList2.indexOf('fibromyalgie') !== -1)
+       _medR2.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre|burpee|box\s+jump|jump\s+squat|pompes\s+plyo/i);
+     if (_medR2.length > 0) {
+       _supPool = _supPool.filter(function(ex) {
+         var _n2 = String(ex.n || ex.name || '').toLowerCase();
+         for (var _rj = 0; _rj < _medR2.length; _rj++) { if (_medR2[_rj].test(_n2)) return false; }
+         return true;
+       });
+     }
+   }
+   // Apply equipment filter to supplemental pool
+   if (S.sportEquipment && typeof S.sportEquipment === 'string' && S.sportEquipment !== 'gym') {
+     _supPool = _supPool.filter(function(ex) {
+       var _eq = (ex.eq||'').toLowerCase(), _nm = (ex.n||ex.name||'').toLowerCase();
+       if (S.sportEquipment === 'home') {
+         if (/machine|c[aâ]ble|poulie|presse|smith|station|pec deck|convergente|landmine|t-bar|hack squat/.test(_eq+' '+_nm)) return false;
+         return /poids du corps|poids de corps|sans mat|sol|élastique|elastique|halt[eè]re|kettlebell|\bkb\b|banc|barre fixe|barre de traction|aucun/.test(_eq+' '+_nm);
+       }
+       if (S.sportEquipment === 'dumbbells' || S.sportEquipment === 'home_dumbbells') {
+         if (/c[aâ]ble|poulie|machine|t-bar|landmine|convergente|pec deck|barre de traction/.test(_eq)) return false;
+         if (/^barre\b/.test(_eq) && !/ou halt|halt[eè]res ou barre/.test(_eq)) return false;
+         return true;
+       }
+       return true;
+     });
+   }
+   // For gym: prefer weighted, push pure bodyweight last
+   if (!S.sportEquipment || S.sportEquipment === 'gym') {
+     _supPool.sort(function(a, b) {
+       var _bwA = /^poids du corps$/i.test((a.eq||'').trim()) ? 1 : 0;
+       var _bwB = /^poids du corps$/i.test((b.eq||'').trim()) ? 1 : 0;
+       return _bwA - _bwB || (b.lv||1) - (a.lv||1);
+     });
+   } else {
+     _supPool.sort(function(){ return 0.5 - Math.random(); });
+   }
+   var _needed = _fillTarget - dayExercises.length;
+   for (var _si = 0; _si < Math.min(_needed, _supPool.length); _si++) {
+     var _sEx = Object.assign({}, _supPool[_si]);
+     if (restOverride) _sEx.rest = restOverride;
+     dayExercises.push(_sEx);
+     weekUsedNames[(_sEx.n||'').toLowerCase().trim()] = true;
+     _dayUsed[(_sEx.n||'').toLowerCase().trim()] = true;
+   }
+   // Re-apply PRO structure sort so supplemental exercises fit correctly
+   dayExercises.sort(function(a, b) {
+     var _r = function(ex) {
+       var t = ex.tags || [];
+       if (t.indexOf('finisher') !== -1) return 4;
+       if (t.indexOf('isolation') !== -1) return 3;
+       if (t.indexOf('compose') !== -1) return (t.indexOf('force') !== -1 || t.indexOf('powerlifting') !== -1) ? 0 : 1;
+       return 2;
+     };
+     return _r(a) - _r(b);
+   });
+ })();
+
  // ─── Duration-based exercise count cap and sets adjustment ───
  if (S.sportSessionDuration) {
  var durMax, durSetsTarget;
@@ -1067,12 +1199,22 @@ function generateSportProgram() {
  dayExercises = dayExercises.slice(0, durMax);
  }
 
- // Adjust sets to match duration target
+ // Adjust sets PER TIER — programmation élite (NSCA CSCS §18, Schoenfeld 2010)
+ // Composé primaire (force): durSetsTarget séries. Isolation: -1 série. Finisher: -2 séries.
+ // Un programme sérieux ne met PAS le même nombre de séries sur un squat barre et un leg curl.
  dayExercises.forEach(function(ex) {
- if (typeof ex.sets === 'string') {
- // sets format is e.g. "4×8-12" — replace the leading number
- ex.sets = ex.sets.replace(/^\d+/, String(durSetsTarget));
- }
+   if (typeof ex.sets === 'string') {
+     var _tgs = ex.tags || [];
+     var _isFinisher  = _tgs.indexOf('finisher')  !== -1;
+     var _isIsolation = _tgs.indexOf('isolation') !== -1;
+     // finisher: 2 séries max (haute rep, fin de séance)
+     // isolation: durSetsTarget - 1 (3 pour 1h15)
+     // composé et neutre: durSetsTarget complet (4 pour 1h15)
+     var _s = _isFinisher  ? Math.max(2, durSetsTarget - 2)
+            : _isIsolation ? Math.max(2, durSetsTarget - 1)
+            : durSetsTarget;
+     ex.sets = ex.sets.replace(/^\d+/, String(_s));
+   }
  });
  }
 
@@ -1087,11 +1229,41 @@ function generateSportProgram() {
      }
    });
    if (_wa.level === 'recovery') {
-     var _recoveryCap = Math.max(3, Math.floor(dayExercises.length * 0.6));
+     // 75% cap (was 60%) — recovery reduces volume but not below duration-based minimum.
+     // Ex: 1h15 recovery = max(5, floor(7×0.75)) = 5 exos × 3 séries ≈ 50 min (approprié)
+     // vs. ancienne formule : max(3, floor(7×0.6)) = 4 exos × 3 séries ≈ 30 min (trop court).
+     var _durMinBound = S.sportSessionDuration
+       ? ({'45min':3,'1h':4,'1h15':5,'1h30':6}[S.sportSessionDuration] || 3) : 3;
+     var _recoveryCap = Math.max(_durMinBound, Math.floor(dayExercises.length * 0.75));
      if (dayExercises.length > _recoveryCap) {
        dayExercises = dayExercises.slice(0, _recoveryCap);
      }
    }
+ }
+
+ // ─── Semaine de décharge automatique (NSCA, RP: deload en phase Transition) ───
+ // Le macrocycle suit 3 phases : Hypertrophie (c=0) → Force (c=1) → Transition (c=2).
+ // La phase Transition est naturellement la semaine de récupération (volume -40%).
+ // Cohérent avec getMacroCyclePhase() — toutes les 3 semaines (cycles 3, 6, 9...).
+ var _cyclePhaseIdx = ((S.muscuCycle || 1) - 1) % 3; // 0=Hypertrophie, 1=Force, 2=Transition
+ if (_cyclePhaseIdx === 2) {
+   var _dlCap = Math.max(3, Math.round(dayExercises.length * 0.6));
+   if (dayExercises.length > _dlCap) dayExercises = dayExercises.slice(0, _dlCap);
+   dayExercises.forEach(function(ex) {
+     if (typeof ex.sets === 'string') {
+       ex.sets = ex.sets.replace(/^(\d+)/, function(m, n) { return String(Math.max(1, parseInt(n) - 1)); });
+     }
+     // Intensité basse : reps hautes (endurance musculaire, pas de charge max pendant deload)
+     if (typeof ex.sets === 'string' && !ex._deloadRepsSet) {
+       ex.sets = ex.sets.replace(/(×|x)(\d+)-(\d+)/, function(_, sep, r1, r2) {
+         return sep + Math.max(parseInt(r1), 12) + '-' + Math.max(parseInt(r2), 15);
+       });
+       ex._deloadRepsSet = true;
+     }
+   });
+   S._currentDeloadWeek = true; // flag pour l'UI (afficher bandeau "Semaine de décharge")
+ } else {
+   S._currentDeloadWeek = false;
  }
 
  // Build focus label with star ratings (bilingual names, max 5 stars, deduplicated)
