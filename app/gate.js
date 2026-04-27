@@ -45,13 +45,14 @@
 
   // Capacitor bridge retry counter — the bridge initialises asynchronously when the
   // WebView loads from a remote server.url; window.Capacitor may not yet exist at
-  // DOMContentLoaded. We retry up to 10 × 50 ms (= 500 ms) before falling back to
-  // the normal web gate flow.
+  // DOMContentLoaded. We retry up to 4 × 50 ms (= 200 ms) before falling back to
+  // the normal web gate flow. 200 ms is imperceptible to the user yet sufficient
+  // for the Capacitor bridge to register window.Capacitor.
   var _capRetries = 0;
 
   function checkGate(){
-    // Capacitor bridge not yet ready — retry
-    if (typeof window.Capacitor === 'undefined' && _capRetries < 10) {
+    // Capacitor bridge not yet ready — retry briefly
+    if (typeof window.Capacitor === 'undefined' && _capRetries < 4) {
       _capRetries++;
       setTimeout(checkGate, 50);
       return;
