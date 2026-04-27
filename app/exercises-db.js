@@ -1830,7 +1830,7 @@ var EXERCISES = {
         desc: "Fente avec la barre en position basse dorsale et les pieds bloqués contre un rack, permettant un split profond et un genou très avancé.",
         tips: ["Positionner les pieds contre les montants du rack, légèrement en avant de l'axe de la barre", "Laisser le genou avant avancer au maximum au-dessus du pied — c'est l'objectif de cet exercice", "Maintenir le talon arrière au sol pendant toute la durée du mouvement", "Contrôler la descente sur 3 secondes pour maximiser le travail excentrique des quadriceps"],
         lv: 3,
-        tags: ["quadriceps", "fessiers", "unilateral", "mobilite"]
+        tags: ["quadriceps", "compose", "fessiers", "unilateral", "mobilite"]
     },
     {
         n: "Leg press prise étroite",
@@ -1866,7 +1866,7 @@ var EXERCISES = {
         desc: "Squat latéral profond alternant d'un côté à l'autre, développant la mobilité des hanches et l'étirement des adducteurs.",
         tips: ["Partir en position écartée large (environ 2x la largeur des épaules), orteils vers l'extérieur", "Descendre latéralement sur une jambe en fléchissant le genou, l'autre jambe reste tendue", "Le pied de la jambe tendue peut rester à plat ou pivoter sur le talon selon la mobilité", "Tenir un haltère devant vous pour contrebalancer et faciliter la descente"],
         lv: 2,
-        tags: ["adducteurs", "quadriceps", "mobilite", "poids du corps", "unilateral"]
+        tags: ["adducteurs", "compose", "quadriceps", "mobilite", "poids du corps", "unilateral"]
     },
     {
         n: "Reverse nordique",
