@@ -434,7 +434,29 @@ function getCalorieTarget() {
         try {
           var _splitCal = window.getAdaptedMealSplit(_todayIdxCal);
           if (_splitCal && typeof _splitCal.calMultiplier === 'number') {
-            return Math.round(t * _splitCal.calMultiplier);
+            // Intensity bonus: séances avec composés force (Squat/DL/Bench) consomment
+            // significativement plus qu'une séance d'isolation.
+            // Tier 0 (compose+force) = +5% par exercice lourd, max +10%
+            // Réf: Ainsworth MET tables — squat 5RM ≈ 8-10 MET vs curl ≈ 3-4 MET
+            var _intensityBonus = 1.0;
+            try {
+              var _Sp = window.S && window.S.sportProgram;
+              var _todayDayObj = null;
+              if (Array.isArray(_Sp) && _Sp.length > 0) {
+                var _sdIdx = window.S.selectedSportDay;
+                _todayDayObj = (_sdIdx != null && _Sp[_sdIdx]) ? _Sp[_sdIdx] : _Sp[0];
+              }
+              if (_todayDayObj && Array.isArray(_todayDayObj.exercises)) {
+                var _t0 = _todayDayObj.exercises.filter(function(ex) {
+                  var _tg = ex.tags || [];
+                  return _tg.indexOf('compose') !== -1 &&
+                    (_tg.indexOf('force') !== -1 || _tg.indexOf('powerlifting') !== -1);
+                }).length;
+                if (_t0 >= 2) _intensityBonus = 1.10; // Squat + DL = +10%
+                else if (_t0 === 1) _intensityBonus = 1.05; // 1 composé force = +5%
+              }
+            } catch(e2) {}
+            return Math.round(t * _splitCal.calMultiplier * _intensityBonus);
           }
         } catch(e) {}
       }
@@ -499,12 +521,18 @@ function getNextSportDay() {
   var S = window.S;
   if (!S) return null;
 
-  // FIX COHÉRENCE SPORT 2026-04 : bug #2 — si un programme IA muscu existe, il prévaut
-  // sur le sportProgram statique (vue sport l'affiche, dashboard doit l'afficher aussi).
-  // FIX 2026-04-16 : sauf si programme local VALIDÉ (user a confirmé son split) → local prime
-  if (S.sportType === 'musculation' && typeof S.muscuIAProgram === 'string' && S.muscuIAProgram.length > 100
-      && !(Array.isArray(S.sportProgram) && S.sportProgram.length > 0 && S.sportProgramValidated)) {
-    return { index: 0, day: { name: 'Programme sur mesure', exercises: [] }, kind: 'ia' };
+  // FIX DASHBOARD IA 2026-04 : si programme IA muscu existe MAIS sportProgram local aussi,
+  // utiliser le sportProgram pour l'aperçu exercices (premier 3 exos visibles sur dashboard).
+  // Ancien code retournait exercises:[] → dashboard montrait "Programme sur mesure" sans détail.
+  // Désormais : si sportProgram a des exercices, l'utiliser pour l'aperçu même sans validation.
+  // La validation reste requise pour les actions (démarrer séance, etc.), pas pour l'affichage.
+  if (S.sportType === 'musculation' && typeof S.muscuIAProgram === 'string' && S.muscuIAProgram.length > 100) {
+    var _hasLocalProg = Array.isArray(S.sportProgram) && S.sportProgram.length > 0;
+    if (!_hasLocalProg) {
+      // Aucun programme local : afficher nom générique sans exercices (comportement précédent)
+      return { index: 0, day: { name: 'Programme sur mesure', exercises: [] }, kind: 'ia' };
+    }
+    // Programme local disponible → utiliser pour l'aperçu (fall through au code normal)
   }
 
   // FIX 2026-04-16 : CrossFit WOD du jour — les WODs sont dans CF_WODS_FULL (global),
@@ -3697,6 +3725,25 @@ function renderCardSport() {
     _iaCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:8px;'}, 'Programme sur mesure actif'));
     var _iaDate = S.muscuIAProgramDate ? ((window.isEnglish && window.isEnglish() ? 'Generated on ' : 'G\u00e9n\u00e9r\u00e9 le ') + window.formatDate(S.muscuIAProgramDate)) : '';
     if (_iaDate) _iaCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px;'}, _iaDate));
+    // Aper\u00e7u exercices du jour si programme local disponible (m\u00eame non valid\u00e9)
+    try {
+      var _iaSp = S.sportProgram;
+      var _iaDayIdx = S.selectedSportDay || 0;
+      var _iaDayObj = Array.isArray(_iaSp) && _iaSp.length > 0 ? (_iaSp[_iaDayIdx] || _iaSp[0]) : null;
+      if (_iaDayObj && Array.isArray(_iaDayObj.exercises) && _iaDayObj.exercises.length > 0) {
+        var _iaExPrev = h('div', {style: 'margin:8px 0 12px;padding:10px 0;border-top:1px solid var(--line,#D8D8D0);'});
+        _iaDayObj.exercises.slice(0, 3).forEach(function(ex, _ei) {
+          var _r = h('div', {style: 'display:flex;justify-content:space-between;padding:5px 0;font-family:Georgia,serif;font-size:13px;'});
+          _r.appendChild(h('span', {style: 'flex:1;font-style:italic;'}, (_ei + 1) + '. ' + (ex.n || ex.name || '')));
+          _r.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--ink-500,#6B6B65);margin-left:8px;'}, ex.sets || ''));
+          _iaExPrev.appendChild(_r);
+        });
+        if (_iaDayObj.exercises.length > 3) {
+          _iaExPrev.appendChild(h('div', {style: 'font-size:10px;color:var(--ink-500,#6B6B65);text-align:center;margin-top:4px;letter-spacing:1px;'}, '+ ' + (_iaDayObj.exercises.length - 3) + ' ' + ((window.isEnglish && window.isEnglish()) ? 'more exercises' : 'autres exos')));
+        }
+        _iaCard.appendChild(_iaExPrev);
+      }
+    } catch(_e2) {}
     _iaCard.appendChild(h('button', {style: 'padding:10px 16px;background:var(--green,#3E5C3A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;', onclick: function() { S.view = 'sport'; S.sStep = 4; if (window.render) window.render(); }}, 'Voir mon programme \u2192'));
     return _iaCard;
   }
