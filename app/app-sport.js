@@ -502,6 +502,36 @@ function generateSportProgram() {
  });
  });
 
+ // ── Adjacency repair : même muscle 2 jours de suite → violation ACSM 48-72h ─
+ // Ex: legs J1+J2 → transfert legs vers J3+ si disponible.
+ // Ne tourne que si pas de split structuré (PPL/Upper-Lower gèrent déjà l'espacement).
+ if (!S._splitChoice) {
+   var _adjPasses = 2; // 2 passes suffisent pour les cas courants à 3-6 jours
+   for (var _ap = 0; _ap < _adjPasses; _ap++) {
+     for (var _ad = 0; _ad < days - 1; _ad++) {
+       for (var _ci = 0; _ci < daySplits[_ad].length; _ci++) {
+         var _cat = daySplits[_ad][_ci];
+         var _nextIdx = daySplits[_ad + 1].indexOf(_cat);
+         if (_nextIdx === -1) continue; // pas de conflit sur ce jour
+         // Cherche un jour alternatif (≥ _ad+2) sans conflit d'adjacence
+         for (var _alt = _ad + 2; _alt < days; _alt++) {
+           var _prevOk = (_alt === 0) || daySplits[_alt - 1].indexOf(_cat) === -1;
+           var _nextOk = (_alt >= days - 1) || daySplits[_alt + 1].indexOf(_cat) === -1;
+           if (_prevOk && _nextOk) {
+             daySplits[_ad + 1].splice(_nextIdx, 1);
+             daySplits[_alt].push(_cat);
+             // Re-sort jour de destination par priorité
+             daySplits[_alt].sort(function(a, b) {
+               return (categoryPriority[b] || 0) - (categoryPriority[a] || 0);
+             });
+             break;
+           }
+         }
+       }
+     }
+   }
+ }
+
  // ── Split-aware daySplits override ──────────────────────────────────────────
  // When a structured split is chosen (Upper/Lower, PPL, etc.), override daySplits
  // to enforce strict upper/lower/push/pull/legs boundaries.
@@ -857,20 +887,22 @@ function generateSportProgram() {
      });
    }
  } else if (pri >= 4) {
-   // Non-beginner, high priority: weighted before pure bodyweight for gym users, then level desc
+   // Non-beginner, high priority: gym users push bodyweight last, then level desc, then stable name sort
+   // Deterministic: variety comes from cycleOffset at selection (line ~924), not from Math.random()
    available.sort(function(a, b) {
      var _bwA = (!S.sportEquipment || S.sportEquipment === 'gym') ? (/^poids du corps$/i.test((a.eq||'').trim()) ? 1 : 0) : 0;
      var _bwB = (!S.sportEquipment || S.sportEquipment === 'gym') ? (/^poids du corps$/i.test((b.eq||'').trim()) ? 1 : 0) : 0;
      if (_bwA !== _bwB) return _bwA - _bwB;
-     return (b.lv||1) - (a.lv||1) || (0.5 - Math.random());
+     return (b.lv||1) - (a.lv||1) || (a.n||'').localeCompare(b.n||'');
    });
  } else {
-   // Non-beginner, shuffle — but gym users: weighted before pure bodyweight
+   // Non-beginner, lower priority: gym users push bodyweight last, then stable alpha sort
+   // Cycle offset (line ~924) provides week-to-week rotation without randomness
    available.sort(function(a, b) {
      var _bwA = (!S.sportEquipment || S.sportEquipment === 'gym') ? (/^poids du corps$/i.test((a.eq||'').trim()) ? 1 : 0) : 0;
      var _bwB = (!S.sportEquipment || S.sportEquipment === 'gym') ? (/^poids du corps$/i.test((b.eq||'').trim()) ? 1 : 0) : 0;
      if (_bwA !== _bwB) return _bwA - _bwB;
-     return (0.5 - Math.random());
+     return (a.n||'').localeCompare(b.n||'');
    });
  }
 
@@ -1163,7 +1195,16 @@ function generateSportProgram() {
        return _bwA - _bwB || (b.lv||1) - (a.lv||1);
      });
    } else {
-     _supPool.sort(function(){ return 0.5 - Math.random(); });
+     // Cycle offset provides session-to-session variety without Math.random()
+     var _fillCycleOff = (S.muscuCycle || 1);
+     _supPool.sort(function(a, b) {
+       return (b.lv||1) - (a.lv||1) || (a.n||'').localeCompare(b.n||'');
+     });
+     // Rotate pool by cycle so different exercises surface each week
+     if (_fillCycleOff > 1 && _supPool.length > 1) {
+       var _rot = (_fillCycleOff - 1) % _supPool.length;
+       _supPool = _supPool.slice(_rot).concat(_supPool.slice(0, _rot));
+     }
    }
    var _needed = _fillTarget - dayExercises.length;
    for (var _si = 0; _si < Math.min(_needed, _supPool.length); _si++) {
@@ -1246,6 +1287,32 @@ function generateSportProgram() {
  // La phase Transition est naturellement la semaine de récupération (volume -40%).
  // Cohérent avec getMacroCyclePhase() — toutes les 3 semaines (cycles 3, 6, 9...).
  var _cyclePhaseIdx = ((S.muscuCycle || 1) - 1) % 3; // 0=Hypertrophie, 1=Force, 2=Transition
+
+ // ─── Phase FORCE (c=1) : schéma de répétitions lourd sur les composés ────────
+ // Sans ce bloc, les phases Hypertrophie ET Force sont IDENTIQUES (même 8-12 reps).
+ // Un programme sérieux doit ajuster les reps selon la phase (NSCA §17 ; Prilepin).
+ // Tier 0 (composé+force) : 5 séries × 4-6 reps — charge proche 85-90% 1RM
+ // Tier 1 (composé seul)  : 4 séries × 5-8 reps — charge 75-80% 1RM
+ // Isolation              : inchangé (10-15 reps — récup active même en semaine Force)
+ if (_cyclePhaseIdx === 1) {
+   dayExercises.forEach(function(ex) {
+     if (typeof ex.sets !== 'string') return;
+     var _tgs = ex.tags || [];
+     var _hasCompose = _tgs.indexOf('compose') !== -1;
+     var _hasForce   = _tgs.indexOf('force') !== -1 || _tgs.indexOf('powerlifting') !== -1;
+     var _hasIso     = _tgs.indexOf('isolation') !== -1;
+     if (_hasIso) return; // isolation : garder reps hautes
+     if (_hasCompose && _hasForce) {
+       // Tier 0 : +1 série, reps 4-6 (force maximale)
+       ex.sets = ex.sets.replace(/^(\d+)/, function(m, n) { return String(Math.min(parseInt(n) + 1, 6)); });
+       ex.sets = ex.sets.replace(/([×x])\d+-\d+/, function(m, sep) { return (sep || '×') + '4-6'; });
+     } else if (_hasCompose) {
+       // Tier 1 : reps 5-8 (force-hypertrophie)
+       ex.sets = ex.sets.replace(/([×x])\d+-\d+/, function(m, sep) { return (sep || '×') + '5-8'; });
+     }
+   });
+ }
+
  if (_cyclePhaseIdx === 2) {
    var _dlCap = Math.max(3, Math.round(dayExercises.length * 0.6));
    if (dayExercises.length > _dlCap) dayExercises = dayExercises.slice(0, _dlCap);
