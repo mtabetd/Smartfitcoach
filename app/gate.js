@@ -43,7 +43,19 @@
   var _lockedUntil = (function(){ try { return parseInt(sessionStorage.getItem('_gateLockedUntil')||'0',10)||0; } catch(e){ return 0; } })();
   var _isEN = (function(){ try { var p = JSON.parse(localStorage.getItem('sfc_profile') || '{}'); return (p.lang || 'fr') === 'en'; } catch(e) { return false; } })();
 
+  // Capacitor bridge retry counter — the bridge initialises asynchronously when the
+  // WebView loads from a remote server.url; window.Capacitor may not yet exist at
+  // DOMContentLoaded. We retry up to 10 × 50 ms (= 500 ms) before falling back to
+  // the normal web gate flow.
+  var _capRetries = 0;
+
   function checkGate(){
+    // Capacitor bridge not yet ready — retry
+    if (typeof window.Capacitor === 'undefined' && _capRetries < 10) {
+      _capRetries++;
+      setTimeout(checkGate, 50);
+      return;
+    }
     // Skip beta gate entirely when running inside Capacitor (iOS/Android native app)
     if (window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform()) {
       unlock(); return;
