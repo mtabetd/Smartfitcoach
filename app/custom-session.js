@@ -950,6 +950,20 @@ function _csRenderBuild(container, draft) {
     }
   }
 
+  // ── Structure hint for empty free-build sessions ──
+  if (draft.blocks.length === 0 && S._csSkipMuscleSelect) {
+    var _hintCard = h('div', {
+      style: 'padding:12px 14px;margin-bottom:14px;border:1px solid var(--border,#D8D8D0);border-radius:2px;background:var(--ivory2,#F4F4F0);'
+    });
+    _hintCard.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:4px;'
+    }, _bEN ? 'SUGGESTED STRUCTURE' : 'STRUCTURE SUGGÉRÉE'));
+    _hintCard.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--black,#0A0A09);line-height:1.5;'
+    }, _bEN ? '3 compound movements (Squat, Bench press, Row...) + 2 isolation exercises.' : '3 mouvements composés (Squat, Développé couché, Rowing...) + 2 exercices d\'isolation.'));
+    container.appendChild(_hintCard);
+  }
+
   // ── Séparateur visuel "Ajouter" (uniquement si séance non vide) ──
   if (draft.blocks.length > 0) {
     var _sep = h('div', { style: 'display:flex;align-items:center;gap:10px;margin:22px 0 16px;' });
