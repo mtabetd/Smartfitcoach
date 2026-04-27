@@ -6966,7 +6966,13 @@ window.exportUserData = exportUserData;
   var banner = document.getElementById('offline-banner');
   if (!banner) return;
   function update() {
-    banner.style.display = navigator.onLine ? 'none' : 'block';
+    var isOffline = !navigator.onLine;
+    banner.style.display = isOffline ? 'block' : 'none';
+    if (isOffline) {
+      var lang = (typeof window.isEnglish === 'function' && window.isEnglish()) ? 'en' : 'fr';
+      var txt = banner.getAttribute('data-' + lang) || banner.getAttribute('data-fr') || banner.textContent;
+      banner.textContent = txt;
+    }
   }
   window.addEventListener('online', update);
   window.addEventListener('offline', update);
