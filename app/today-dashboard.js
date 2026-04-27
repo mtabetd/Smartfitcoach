@@ -1657,8 +1657,8 @@ function renderCardMacros() {
     _remEl.style.color = 'var(--success,#3E5C3A)';
     _remEl.textContent = (window.isEnglish && window.isEnglish()) ? (_netRemaining + ' kcal remaining') : (_netRemaining + ' kcal restantes');
   } else if (_netRemaining === 0) {
-    _remEl.style.color = 'var(--ink-500,#6B6B65)';
-    _remEl.textContent = (window.isEnglish && window.isEnglish()) ? 'Target met.' : 'Cible tenue.';
+    _remEl.style.color = 'var(--success,#3E5C3A)';
+    _remEl.textContent = (window.isEnglish && window.isEnglish()) ? 'Target reached. Well done.' : 'Objectif atteint. Bien joué.';
   } else {
     _remEl.style.color = 'var(--orange,#E86F1E)';
     _remEl.textContent = (window.isEnglish && window.isEnglish()) ? ('You exceeded by ' + Math.abs(_netRemaining) + ' kcal.') : ('Vous avez dépassé de ' + Math.abs(_netRemaining) + ' kcal.');

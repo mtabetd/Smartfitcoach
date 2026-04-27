@@ -303,6 +303,9 @@ function generateSportProgram() {
  var S = window.S; // always use current state (module-level S may be stale if replaced)
  // FIX 2026-04-16 : clamp days 2-6 — 1 jour/sem n'a pas de split muscu viable
  var days = Math.min(6, Math.max(2, S.sportDays || 3));
+ if (!S.sportDays && window.showToast) {
+   window.showToast((window.isEnglish && window.isEnglish()) ? 'No training days set — 3 days/week applied by default.' : 'Aucun jour saisi — programme sur 3 j/sem appliqué par défaut.', 'info', 3000);
+ }
  var level = (window.SPORT_LEVELS || []).find(function(l){ return l.id === S.sportLevel; });
  var program = [];
 
@@ -1071,6 +1074,24 @@ function generateSportProgram() {
  ex.sets = ex.sets.replace(/^\d+/, String(durSetsTarget));
  }
  });
+ }
+
+ // Wellness adaptation — fatigue modifies actual program (not just banner)
+ var _wa = (typeof getWellnessAdaptation === 'function') ? getWellnessAdaptation() : null;
+ if (_wa && (_wa.level === 'recovery' || _wa.level === 'reduced')) {
+   dayExercises.forEach(function(ex) {
+     if (typeof ex.sets === 'string') {
+       ex.sets = ex.sets.replace(/^(\d+)/, function(m, n) {
+         return String(Math.max(1, parseInt(n) - 1));
+       });
+     }
+   });
+   if (_wa.level === 'recovery') {
+     var _recoveryCap = Math.max(3, Math.floor(dayExercises.length * 0.6));
+     if (dayExercises.length > _recoveryCap) {
+       dayExercises = dayExercises.slice(0, _recoveryCap);
+     }
+   }
  }
 
  // Build focus label with star ratings (bilingual names, max 5 stars, deduplicated)
