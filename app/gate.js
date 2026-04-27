@@ -44,6 +44,10 @@
   var _isEN = (function(){ try { var p = JSON.parse(localStorage.getItem('sfc_profile') || '{}'); return (p.lang || 'fr') === 'en'; } catch(e) { return false; } })();
 
   function checkGate(){
+    // Skip beta gate entirely when running inside Capacitor (iOS/Android native app)
+    if (window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform()) {
+      unlock(); return;
+    }
     var stored;
     try { stored=sessionStorage.getItem(GATE_KEY); } catch(e) { stored=null; }
     if(stored===GATE_HASH){unlock();return;}
