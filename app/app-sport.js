@@ -1241,11 +1241,12 @@ function generateSportProgram() {
    }
  }
 
- // ─── Semaine de décharge automatique (NSCA, RP: deload toutes les 4-6 semaines) ───
- // muscuCycle compte les blocs complets de l'user (incrémenté manuellement à la fin de chaque bloc).
- // Toutes les 4 semaines (cycle 4, 8, 12...), on applique un deload :
- // -40% volume, -1 série sur tous les exos. Prévient le surentraînement, consolide les gains.
- if ((S.muscuCycle || 1) % 4 === 0) {
+ // ─── Semaine de décharge automatique (NSCA, RP: deload en phase Transition) ───
+ // Le macrocycle suit 3 phases : Hypertrophie (c=0) → Force (c=1) → Transition (c=2).
+ // La phase Transition est naturellement la semaine de récupération (volume -40%).
+ // Cohérent avec getMacroCyclePhase() — toutes les 3 semaines (cycles 3, 6, 9...).
+ var _cyclePhaseIdx = ((S.muscuCycle || 1) - 1) % 3; // 0=Hypertrophie, 1=Force, 2=Transition
+ if (_cyclePhaseIdx === 2) {
    var _dlCap = Math.max(3, Math.round(dayExercises.length * 0.6));
    if (dayExercises.length > _dlCap) dayExercises = dayExercises.slice(0, _dlCap);
    dayExercises.forEach(function(ex) {
