@@ -836,12 +836,34 @@ function generateSportProgram() {
    var _others = available.filter(function(ex) { return !_fundSet[ex.n || ex.name]; });
    _others.sort(function(a, b) { return (a.lv || 1) - (b.lv || 1); }); // lv:1 avant lv:2
    available = _fundamentals.concat(_others);
+   // Beginner + gym: prefer machine/beginner-friendly exercises for safety (guidance, injury prevention)
+   // Débutant en salle → machines guidées en priorité, poids du corps pur en dernier
+   if (!S.sportEquipment || S.sportEquipment === 'gym') {
+     available.sort(function(a, b) {
+       var _mA = ((a.tags||[]).indexOf('machine') !== -1 || (a.tags||[]).indexOf('beginner-friendly') !== -1) ? 0 : 1;
+       var _mB = ((b.tags||[]).indexOf('machine') !== -1 || (b.tags||[]).indexOf('beginner-friendly') !== -1) ? 0 : 1;
+       if (_mA !== _mB) return _mA - _mB;
+       var _cfA = (a.tags||[]).indexOf('compose') !== -1 ? 0 : 1;
+       var _cfB = (b.tags||[]).indexOf('compose') !== -1 ? 0 : 1;
+       return _cfA - _cfB || (a.lv||1) - (b.lv||1);
+     });
+   }
  } else if (pri >= 4) {
-   // Non-beginner, high priority: prefer compound exercises (sort by level desc within allowed range)
-   available.sort(function(a, b) { return b.lv - a.lv || (0.5 - Math.random()); });
+   // Non-beginner, high priority: weighted before pure bodyweight for gym users, then level desc
+   available.sort(function(a, b) {
+     var _bwA = (!S.sportEquipment || S.sportEquipment === 'gym') ? (/^poids du corps$/i.test((a.eq||'').trim()) ? 1 : 0) : 0;
+     var _bwB = (!S.sportEquipment || S.sportEquipment === 'gym') ? (/^poids du corps$/i.test((b.eq||'').trim()) ? 1 : 0) : 0;
+     if (_bwA !== _bwB) return _bwA - _bwB;
+     return (b.lv||1) - (a.lv||1) || (0.5 - Math.random());
+   });
  } else {
-   // Non-beginner, shuffle for variety
-   available.sort(function(){ return 0.5 - Math.random(); });
+   // Non-beginner, shuffle — but gym users: weighted before pure bodyweight
+   available.sort(function(a, b) {
+     var _bwA = (!S.sportEquipment || S.sportEquipment === 'gym') ? (/^poids du corps$/i.test((a.eq||'').trim()) ? 1 : 0) : 0;
+     var _bwB = (!S.sportEquipment || S.sportEquipment === 'gym') ? (/^poids du corps$/i.test((b.eq||'').trim()) ? 1 : 0) : 0;
+     if (_bwA !== _bwB) return _bwA - _bwB;
+     return (0.5 - Math.random());
+   });
  }
 
  var count = exerciseCountForPriority(pri);
@@ -973,17 +995,23 @@ function generateSportProgram() {
  }
  });
 
- // FIX P0 2026-04-20: sort dayExercises — compound/polyarticulaire exercises BEFORE isolation.
- // Science rationale: CNS freshness = best compound performance (Kraemer & Ratamess, MSSE 2004).
- // Tag "compose" = compound; tag "isolation" = isolation; no tag = neutral (keep position).
+ // PRO session structure — 5 tiers (Kraemer & Ratamess MSSE 2004, NSCA CSCS §18):
+ // 0 = primary compound (force/powerlifting tag) — heaviest, CNS peak demand
+ // 1 = secondary compound (compose, no force/powerlifting) — still multi-joint
+ // 2 = neutral (no structural tag)
+ // 3 = isolation — single-joint, low neural demand
+ // 4 = finisher — metabolic/high-rep, end of session
  dayExercises.sort(function(a, b) {
-   var _score = function(ex) {
-     if (!ex.tags) return 1;
-     if (ex.tags.indexOf('compose') !== -1) return 0;
-     if (ex.tags.indexOf('isolation') !== -1) return 2;
-     return 1;
+   var _role = function(ex) {
+     var t = ex.tags || [];
+     if (t.indexOf('finisher') !== -1) return 4;
+     if (t.indexOf('isolation') !== -1) return 3;
+     if (t.indexOf('compose') !== -1) {
+       return (t.indexOf('force') !== -1 || t.indexOf('powerlifting') !== -1) ? 0 : 1;
+     }
+     return 2;
    };
-   return _score(a) - _score(b);
+   return _role(a) - _role(b);
  });
 
  // Deduplicate exercises within the same day (same name = same exercise from two pools)
@@ -1054,6 +1082,76 @@ function generateSportProgram() {
  dayExercises = dayExercises.slice(0, maxExercisesPerSession);
  }
 
+ // ─── PRO FIX: Duration fill — si moins d'exos que le budget temps, on complète ───
+ // Cause classique de "30 min au lieu de 1h15" : l'user a peu de zones sélectionnées
+ // (ex: 1 seule zone = 3 exos max) → durMax jamais atteint → séance trop courte.
+ // Fix : on pioche dans les pools du jour des exos non encore utilisés pour remplir.
+ (function() {
+   if (!S.sportSessionDuration || pregTri) return; // grossesse : ne pas gonfler volume
+   var _fillTarget = S.sportSessionDuration === '45min' ? 5
+     : S.sportSessionDuration === '1h' ? 6
+     : S.sportSessionDuration === '1h15' ? 7
+     : 8;
+   if (dayExercises.length >= _fillTarget) return;
+   var _dayUsed = {};
+   dayExercises.forEach(function(ex) { _dayUsed[(ex.n||'').toLowerCase().trim()] = true; });
+   var _supPool = [];
+   groups.forEach(function(grp) {
+     ((window.EXERCISES && window.EXERCISES[grp]) || []).forEach(function(ex) {
+       var _k = (ex.n||'').toLowerCase().trim();
+       if (!_dayUsed[_k] && !weekUsedNames[_k] && (ex.lv||1) <= maxLv) {
+         _supPool.push(ex);
+       }
+     });
+   });
+   if (!_supPool.length) return;
+   // Apply equipment filter to supplemental pool
+   if (S.sportEquipment && typeof S.sportEquipment === 'string' && S.sportEquipment !== 'gym') {
+     _supPool = _supPool.filter(function(ex) {
+       var _eq = (ex.eq||'').toLowerCase(), _nm = (ex.n||ex.name||'').toLowerCase();
+       if (S.sportEquipment === 'home') {
+         if (/machine|c[aâ]ble|poulie|presse|smith|station|pec deck|convergente|landmine|t-bar|hack squat/.test(_eq+' '+_nm)) return false;
+         return /poids du corps|poids de corps|sans mat|sol|élastique|elastique|halt[eè]re|kettlebell|\bkb\b|banc|barre fixe|barre de traction|aucun/.test(_eq+' '+_nm);
+       }
+       if (S.sportEquipment === 'dumbbells' || S.sportEquipment === 'home_dumbbells') {
+         if (/c[aâ]ble|poulie|machine|t-bar|landmine|convergente|pec deck|barre de traction/.test(_eq)) return false;
+         if (/^barre\b/.test(_eq) && !/ou halt|halt[eè]res ou barre/.test(_eq)) return false;
+         return true;
+       }
+       return true;
+     });
+   }
+   // For gym: prefer weighted, push pure bodyweight last
+   if (!S.sportEquipment || S.sportEquipment === 'gym') {
+     _supPool.sort(function(a, b) {
+       var _bwA = /^poids du corps$/i.test((a.eq||'').trim()) ? 1 : 0;
+       var _bwB = /^poids du corps$/i.test((b.eq||'').trim()) ? 1 : 0;
+       return _bwA - _bwB || (b.lv||1) - (a.lv||1);
+     });
+   } else {
+     _supPool.sort(function(){ return 0.5 - Math.random(); });
+   }
+   var _needed = _fillTarget - dayExercises.length;
+   for (var _si = 0; _si < Math.min(_needed, _supPool.length); _si++) {
+     var _sEx = Object.assign({}, _supPool[_si]);
+     if (restOverride) _sEx.rest = restOverride;
+     dayExercises.push(_sEx);
+     weekUsedNames[(_sEx.n||'').toLowerCase().trim()] = true;
+     _dayUsed[(_sEx.n||'').toLowerCase().trim()] = true;
+   }
+   // Re-apply PRO structure sort so supplemental exercises fit correctly
+   dayExercises.sort(function(a, b) {
+     var _r = function(ex) {
+       var t = ex.tags || [];
+       if (t.indexOf('finisher') !== -1) return 4;
+       if (t.indexOf('isolation') !== -1) return 3;
+       if (t.indexOf('compose') !== -1) return (t.indexOf('force') !== -1 || t.indexOf('powerlifting') !== -1) ? 0 : 1;
+       return 2;
+     };
+     return _r(a) - _r(b);
+   });
+ })();
+
  // ─── Duration-based exercise count cap and sets adjustment ───
  if (S.sportSessionDuration) {
  var durMax, durSetsTarget;
@@ -1087,7 +1185,12 @@ function generateSportProgram() {
      }
    });
    if (_wa.level === 'recovery') {
-     var _recoveryCap = Math.max(3, Math.floor(dayExercises.length * 0.6));
+     // 75% cap (was 60%) — recovery reduces volume but not below duration-based minimum.
+     // Ex: 1h15 recovery = max(5, floor(7×0.75)) = 5 exos × 3 séries ≈ 50 min (approprié)
+     // vs. ancienne formule : max(3, floor(7×0.6)) = 4 exos × 3 séries ≈ 30 min (trop court).
+     var _durMinBound = S.sportSessionDuration
+       ? ({'45min':3,'1h':4,'1h15':5,'1h30':6}[S.sportSessionDuration] || 3) : 3;
+     var _recoveryCap = Math.max(_durMinBound, Math.floor(dayExercises.length * 0.75));
      if (dayExercises.length > _recoveryCap) {
        dayExercises = dayExercises.slice(0, _recoveryCap);
      }
