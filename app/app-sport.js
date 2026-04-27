@@ -1199,12 +1199,22 @@ function generateSportProgram() {
  dayExercises = dayExercises.slice(0, durMax);
  }
 
- // Adjust sets to match duration target
+ // Adjust sets PER TIER — programmation élite (NSCA CSCS §18, Schoenfeld 2010)
+ // Composé primaire (force): durSetsTarget séries. Isolation: -1 série. Finisher: -2 séries.
+ // Un programme sérieux ne met PAS le même nombre de séries sur un squat barre et un leg curl.
  dayExercises.forEach(function(ex) {
- if (typeof ex.sets === 'string') {
- // sets format is e.g. "4×8-12" — replace the leading number
- ex.sets = ex.sets.replace(/^\d+/, String(durSetsTarget));
- }
+   if (typeof ex.sets === 'string') {
+     var _tgs = ex.tags || [];
+     var _isFinisher  = _tgs.indexOf('finisher')  !== -1;
+     var _isIsolation = _tgs.indexOf('isolation') !== -1;
+     // finisher: 2 séries max (haute rep, fin de séance)
+     // isolation: durSetsTarget - 1 (3 pour 1h15)
+     // composé et neutre: durSetsTarget complet (4 pour 1h15)
+     var _s = _isFinisher  ? Math.max(2, durSetsTarget - 2)
+            : _isIsolation ? Math.max(2, durSetsTarget - 1)
+            : durSetsTarget;
+     ex.sets = ex.sets.replace(/^\d+/, String(_s));
+   }
  });
  }
 
@@ -1229,6 +1239,30 @@ function generateSportProgram() {
        dayExercises = dayExercises.slice(0, _recoveryCap);
      }
    }
+ }
+
+ // ─── Semaine de décharge automatique (NSCA, RP: deload toutes les 4-6 semaines) ───
+ // muscuCycle compte les blocs complets de l'user (incrémenté manuellement à la fin de chaque bloc).
+ // Toutes les 4 semaines (cycle 4, 8, 12...), on applique un deload :
+ // -40% volume, -1 série sur tous les exos. Prévient le surentraînement, consolide les gains.
+ if ((S.muscuCycle || 1) % 4 === 0) {
+   var _dlCap = Math.max(3, Math.round(dayExercises.length * 0.6));
+   if (dayExercises.length > _dlCap) dayExercises = dayExercises.slice(0, _dlCap);
+   dayExercises.forEach(function(ex) {
+     if (typeof ex.sets === 'string') {
+       ex.sets = ex.sets.replace(/^(\d+)/, function(m, n) { return String(Math.max(1, parseInt(n) - 1)); });
+     }
+     // Intensité basse : reps hautes (endurance musculaire, pas de charge max pendant deload)
+     if (typeof ex.sets === 'string' && !ex._deloadRepsSet) {
+       ex.sets = ex.sets.replace(/(×|x)(\d+)-(\d+)/, function(_, sep, r1, r2) {
+         return sep + Math.max(parseInt(r1), 12) + '-' + Math.max(parseInt(r2), 15);
+       });
+       ex._deloadRepsSet = true;
+     }
+   });
+   S._currentDeloadWeek = true; // flag pour l'UI (afficher bandeau "Semaine de décharge")
+ } else {
+   S._currentDeloadWeek = false;
  }
 
  // Build focus label with star ratings (bilingual names, max 5 stars, deduplicated)
