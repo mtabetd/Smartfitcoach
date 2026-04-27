@@ -839,10 +839,18 @@ function generateSportProgram() {
    // Beginner + gym: prefer machine/beginner-friendly exercises for safety (guidance, injury prevention)
    // Débutant en salle → machines guidées en priorité, poids du corps pur en dernier
    if (!S.sportEquipment || S.sportEquipment === 'gym') {
+     // 3 tiers : 0=machine/guidé, 1=poids libres/câble (non-poids-du-corps), 2=poids du corps pur
+     // CRITIQUE : si on ne sépare pas barre (lv:2) de poids-du-corps (lv:1), le tri lv asc
+     // met les pompes (lv:1) AVANT le développé couché (lv:2) → inverse de l'intention.
      available.sort(function(a, b) {
-       var _mA = ((a.tags||[]).indexOf('machine') !== -1 || (a.tags||[]).indexOf('beginner-friendly') !== -1) ? 0 : 1;
-       var _mB = ((b.tags||[]).indexOf('machine') !== -1 || (b.tags||[]).indexOf('beginner-friendly') !== -1) ? 0 : 1;
-       if (_mA !== _mB) return _mA - _mB;
+       var _gymTier = function(ex) {
+         var t = ex.tags || [], eq = (ex.eq||'').trim();
+         if (t.indexOf('machine') !== -1 || t.indexOf('beginner-friendly') !== -1) return 0;
+         if (/^poids du corps$/i.test(eq)) return 2; // pur bodyweight → dernier
+         return 1; // barre, haltère, câble, etc.
+       };
+       var _tA = _gymTier(a), _tB = _gymTier(b);
+       if (_tA !== _tB) return _tA - _tB;
        var _cfA = (a.tags||[]).indexOf('compose') !== -1 ? 0 : 1;
        var _cfB = (b.tags||[]).indexOf('compose') !== -1 ? 0 : 1;
        return _cfA - _cfB || (a.lv||1) - (b.lv||1);
@@ -1105,6 +1113,32 @@ function generateSportProgram() {
      });
    });
    if (!_supPool.length) return;
+   // Apply medical restrictions to supplemental pool — SAFETY CRITICAL
+   // Le fill court-circuiterait les filtres médicaux de la sélection principale si on ne les réapplique pas.
+   if (S.muscuMedical && S.muscuMedical.done && typeof filterExerciseByMedical === 'function') {
+     _supPool = _supPool.filter(function(ex) { return filterExerciseByMedical(ex, S.muscuMedical); });
+   }
+   if (Array.isArray(S.medical) && S.medical.length > 0) {
+     var _medList2 = S.medical.map(function(m) { return String(m).toLowerCase(); });
+     var _medR2 = [];
+     if (_medList2.indexOf('osteoporose') !== -1 || _medList2.indexOf('osteoporosis') !== -1)
+       _medR2.push(/squat\s+barre|soulev[eé]\s+de\s+terre|deadlift|good\s+morning|box\s+jump|power\s+clean|snatch|arrach[eé]|hack\s+squat/i);
+     if (_medList2.indexOf('hypertension') !== -1 || _medList2.indexOf('hta') !== -1 || _medList2.indexOf('hta_severe') !== -1)
+       _medR2.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre|d[eé]velopp[eé]\s+militaire\s+barre|snatch|arrach[eé]|clean|[eé]paul[eé]|jerk|thruster/i);
+     if (_medList2.indexOf('cardio') !== -1 || _medList2.indexOf('insuffisance_card') !== -1)
+       _medR2.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre\s+lourd|snatch|clean|burpee|box\s+jump/i);
+     if (_medList2.indexOf('polyarthrite') !== -1 || _medList2.indexOf('arthrite') !== -1)
+       _medR2.push(/soulev[eé]\s+de\s+terre|deadlift|arrach[eé]|snatch|clean|jump\s+squat|box\s+jump|burpee|squat\s+barre/i);
+     if (_medList2.indexOf('fibromyalgie') !== -1)
+       _medR2.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre|burpee|box\s+jump|jump\s+squat|pompes\s+plyo/i);
+     if (_medR2.length > 0) {
+       _supPool = _supPool.filter(function(ex) {
+         var _n2 = String(ex.n || ex.name || '').toLowerCase();
+         for (var _rj = 0; _rj < _medR2.length; _rj++) { if (_medR2[_rj].test(_n2)) return false; }
+         return true;
+       });
+     }
+   }
    // Apply equipment filter to supplemental pool
    if (S.sportEquipment && typeof S.sportEquipment === 'string' && S.sportEquipment !== 'gym') {
      _supPool = _supPool.filter(function(ex) {
