@@ -3973,7 +3973,6 @@ function renderWellnessBanner(p) {
  confirmBtn.addEventListener('click', function() {
   var today = new Date().toISOString().slice(0, 10);
   S.todayWellness = { date: today, sleep: wellnessState.sleep, muscles: wellnessState.muscles, energy: wellnessState.energy };
-  // POLISH 2026-04 : push dans wellness history multi-jours (90j glissants)
   try { if (window.pushWellnessHistory) window.pushWellnessHistory(S.todayWellness); } catch(e) {}
   S._wellnessReminder = false;
   banner.style.display = 'none';
@@ -3982,6 +3981,16 @@ function renderWellnessBanner(p) {
   if (window.render) { try { window.render(); } catch(e) {} }
  });
  banner.appendChild(confirmBtn);
+
+ // Bouton "Passer" — check bien-être optionnel, ne bloque pas l'utilisateur
+ var _skipBtn = h('button', {style: 'width:100%;margin-top:8px;padding:10px;background:transparent;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;color:var(--grey,#6B6B65);cursor:pointer;text-decoration:underline;'}, (window.isEnglish && window.isEnglish()) ? 'Skip for now' : 'Passer pour l\'instant');
+ _skipBtn.addEventListener('click', function() {
+  S._wellnessReminder = false;
+  banner.style.display = 'none';
+  if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+  if (window.render) { try { window.render(); } catch(e) {} }
+ });
+ banner.appendChild(_skipBtn);
 
  function checkWellnessBannerComplete() {
   if (wellnessState.sleep && wellnessState.muscles && wellnessState.energy) {
@@ -4081,13 +4090,18 @@ function renderWellnessCheckin(p, onComplete) {
   try { if (window.pushWellnessHistory) window.pushWellnessHistory(S.todayWellness); } catch(e) {}
   if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Morning recap saved' : 'Bilan du matin enregistré', 'success', 2000);
   if (onComplete) onComplete();
- }}, (window.isEnglish && window.isEnglish() ? 'Start session' : 'Commencer la seance'));
+ }}, (window.isEnglish && window.isEnglish() ? 'Start session' : 'Commencer la séance'));
  p.appendChild(startBtn);
+
+ // Message d'aide : visible tant que le bouton est grisé, disparaît quand tout est rempli
+ var _startHint = h('div', {style: 'text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:8px;letter-spacing:0.3px;'}, (window.isEnglish && window.isEnglish()) ? 'Answer the 3 questions above to start' : 'Réponds aux 3 questions ci-dessus pour commencer');
+ p.appendChild(_startHint);
 
  function updateStartBtn() {
   if (state.sleep && state.muscles && state.energy) {
    startBtn.style.opacity = '1';
    startBtn.style.pointerEvents = 'auto';
+   _startHint.style.display = 'none';
   }
  }
 }
@@ -5702,6 +5716,18 @@ function getSuggestedWeight(exerciseName, reps, phase) {
  var estLoad = Math.round(est1RM * pct / 2.5) * 2.5;
  return Math.max(estLoad, 2.5);
  }
+ }
+ // Priority 4: débutants sans 1RM ni historique — ratio poids-du-corps
+ if (S.sportLevel === 'beginner') {
+   var _bwFb = S.weight || 70;
+   var _sexFb = S.sex || 'homme';
+   var _nameFb = (exerciseName || '').toLowerCase();
+   var _ratioFb = /squat|fessier|cuisse|leg[\s-]press|rdl|deadlift|soulev/.test(_nameFb) ? (_sexFb === 'femme' ? 0.35 : 0.45)
+     : /bench|développé|d[eé]velopp[eé]|press|dips|pompes|push/.test(_nameFb) ? (_sexFb === 'femme' ? 0.20 : 0.35)
+     : /pull|traction|rowing|tirage|row/.test(_nameFb) ? (_sexFb === 'femme' ? 0.20 : 0.30)
+     : (_sexFb === 'femme' ? 0.08 : 0.12);
+   var _begLoad = Math.round(_bwFb * _ratioFb * pct / 2.5) * 2.5;
+   if (_begLoad > 0) return Math.max(_begLoad, 2.5);
  }
  return null;
 }
@@ -7838,6 +7864,26 @@ function renderMusculationProgram(p) {
       el.textContent = (window.isEnglish && window.isEnglish() ? 'Session in progress \u2014 ' : 'S\u00e9ance en cours \u2014 ') + _mins + ' min';
     }, 30000);
     p.appendChild(_chronoEl);
+    // FIX UX — Bouton Pause séance (visible quand session active)
+    p.appendChild(h('button', {
+      style: 'display:block;width:100%;background:transparent;border:none;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);padding:4px 0;text-align:center;',
+      onclick: function() {
+        S._sessionPaused = true;
+        if (window.saveProfile) { try { window.saveProfile(); } catch(_pe) {} }
+        if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? '⏸ Session saved — come back when ready' : '⏸ Séance sauvegardée — reviens quand tu veux', 'info', 3000);
+        if (window.render) window.render();
+      }
+    }, (window.isEnglish && window.isEnglish()) ? '⏸ Pause' : '⏸ Pause'));
+  }
+  // FIX UX — Bannière reprise séance en pause
+  if (S._sessionPaused) {
+    var _resumeBar = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border:1px solid var(--border,#D8D8D0);background:rgba(26,60,94,0.04);margin-bottom:12px;'});
+    _resumeBar.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'}, (window.isEnglish && window.isEnglish()) ? '⏸ Session paused' : '⏸ Séance en pause'));
+    _resumeBar.appendChild(h('button', {
+      style: 'padding:8px 16px;background:var(--black,#0A0A09);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
+      onclick: function() { S._sessionPaused = false; if (window.render) window.render(); }
+    }, (window.isEnglish && window.isEnglish()) ? '▶ Resume' : '▶ Reprendre'));
+    p.appendChild(_resumeBar);
   }
 
   // ── Indicateur séance libre en cours ──
@@ -7883,6 +7929,24 @@ function renderMusculationProgram(p) {
     p.appendChild(_progressWrap);
   })();
 
+ })();
+
+ // FIX UX — Raccourci Séance libre visible sans scroller jusqu'en bas
+ (function() {
+   var _flIsEN = window.isEnglish && window.isEnglish();
+   var _flWrap = h('div', {style: 'text-align:right;margin-bottom:4px;'});
+   _flWrap.appendChild(h('button', {
+     style: 'background:transparent;border:none;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);text-decoration:underline;padding:4px 0;min-height:44px;',
+     onclick: function() {
+       if (window.CUSTOM_SESSION && typeof window.CUSTOM_SESSION.open === 'function') {
+         window.CUSTOM_SESSION.open();
+       } else {
+         S.sStep = 30;
+         if (window.render) window.render();
+       }
+     }
+   }, _flIsEN ? '+ Free session' : '+ Séance libre'));
+   p.appendChild(_flWrap);
  })();
 
  // ─── BADGE SÉANCE VALIDÉE ───
@@ -8549,6 +8613,39 @@ function renderMusculationProgram(p) {
    }
  }
 
+ // FIX UX — Répéter la série précédente (1 tap = copier poids+reps de si3-1)
+ if (si3 > 0 && !setRow.validated) {
+   var _prevSr2 = setData[si3 - 1];
+   if (_prevSr2 && (_prevSr2.actualWeight > 0 || _prevSr2.actualReps !== null)) {
+     var _wRef2 = (!isBodyweight && weightInput) ? weightInput : (pcLabel || null);
+     inputZone.appendChild(h('button', {
+       'aria-label': (window.isEnglish && window.isEnglish() ? 'Repeat previous set' : 'Répéter la série précédente'),
+       style: 'margin-left:auto;min-width:44px;min-height:32px;padding:0 8px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--grey,#6B6B65);cursor:pointer;white-space:nowrap;flex-shrink:0;',
+       onclick: (function(_srR, _prev, _wI, _rI, _isBwR) { return function(e) {
+         e.stopPropagation();
+         if (!_isBwR && _wI && _prev.actualWeight !== null && _prev.actualWeight > 0) {
+           _wI.value = String(_prev.actualWeight);
+           _wI.style.color = 'var(--black,#0A0A09)';
+           _srR.actualWeight = _prev.actualWeight;
+         }
+         if (_prev.actualReps !== null && _prev.actualReps > 0) {
+           _rI.value = String(_prev.actualReps);
+           _rI.style.color = 'var(--black,#0A0A09)';
+           _srR.actualReps = _prev.actualReps;
+         }
+         saveMuscuSessionLog();
+         var _row2 = e.target.closest ? e.target.closest('.set-row') : null;
+         var _vb2 = _row2 ? _row2.querySelector('.set-validate-btn') : null;
+         if (_vb2) {
+           var _ok3 = (_srR.actualReps !== null || !!_srR.targetReps) && (_srR.actualWeight !== null || (_isBwR && !_srR.weighted) || _srR.targetWeight > 0);
+           _vb2.disabled = !_ok3; _vb2.className = 'set-validate-btn' + (_ok3 ? '' : ' set-validate-btn-disabled');
+         }
+         if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Previous set copied' : 'Série copiée', 'info', 1400);
+       }; })(setRow, _prevSr2, _wRef2, repsInput, isBodyweight)
+     }, '↩ ' + (window.isEnglish && window.isEnglish() ? 'Repeat' : 'Répéter')));
+   }
+ }
+
  // Verrouiller les inputs si la série est déjà validée
  if (setRow.validated === true) {
  if (typeof weightInput !== 'undefined' && weightInput) { weightInput.disabled = true; weightInput.style.opacity = '0.5'; }
@@ -8888,6 +8985,19 @@ function renderMusculationProgram(p) {
  card.appendChild(altPanel);
  }
  })(ex, S.selectedSportDay, exIdx);
+
+ // FIX UX — Passer cet exercice (visible sauf sur le dernier)
+ if (exIdx < _totalExercises - 1) {
+   card.appendChild(h('button', {
+     style: 'margin-top:4px;width:100%;padding:8px 0;border:none;background:transparent;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:right;',
+     onclick: (function(_ei) { return function(e) {
+       e.stopPropagation();
+       S.currentExerciseIdx = _ei + 1;
+       if (navigator.vibrate) { try { navigator.vibrate(10); } catch(_v) {} }
+       if (window.render) window.render();
+     }; })(exIdx)
+   }, (window.isEnglish && window.isEnglish() ? 'Skip this exercise →' : 'Passer cet exercice →')));
+ }
 
  _swipeWrap.appendChild(card);
  })(); // fin rendu exercice courant

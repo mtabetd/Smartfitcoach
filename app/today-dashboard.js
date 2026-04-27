@@ -3845,6 +3845,11 @@ function renderCardSport() {
   // Bible Hermès §13.2 : titre Georgia suffit, pas d'eyebrow "SÉANCE DU JOUR".
   c.appendChild(cardTitle((window.isEnglish && window.isEnglish()) ? 'Training' : 'Entraînement'));
 
+  // FIX UX — Badge "Actif" permanent : confirmation visuelle programme en cours
+  c.appendChild(h('div', {
+    style: 'display:inline-flex;align-items:center;gap:5px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--success,#3E5C3A);margin-bottom:8px;'
+  }, '● ' + ((window.isEnglish && window.isEnglish()) ? 'Active' : 'Actif')));
+
   var nameEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-bottom:6px;' });
   var _dashDayAbbr = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
   var _dashWeekday = (Array.isArray(S.trainingDaysSelected) && S.trainingDaysSelected.length > idx && typeof S.trainingDaysSelected[idx] === 'number') ? _dashDayAbbr[S.trainingDaysSelected[idx]] : ('Jour\u00a0' + (idx + 1));
@@ -6237,6 +6242,10 @@ function renderTodayDashboard(p) {
   var cardSport = renderCardSport();
   if (cardSport) wrapper.appendChild(cardSport);
 
+  // ── Streak inline — juste sous la séance pour la motivation immédiate ──
+  // UX fix: était après les cartes nutrition → invisible. Maintenant sous la séance.
+  if (_streakPill) wrapper.appendChild(_streakPill);
+
   // ── Card 2 — REPAS DU JOUR (juste après la séance) ──
   var cardRepas = renderCardRepas();
   if (cardRepas) wrapper.appendChild(cardRepas);
@@ -6249,7 +6258,6 @@ function renderTodayDashboard(p) {
 
   // ── Éléments secondaires différés — visibles après le contenu actionnable ──
   if (_formeCard) wrapper.appendChild(_formeCard);
-  if (_streakPill) wrapper.appendChild(_streakPill);
   if (_heatmap) wrapper.appendChild(_heatmap);
 
   // ── Pensée du jour (différée : après les cartes data, avant progression) ──
