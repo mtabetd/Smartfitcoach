@@ -8,7 +8,9 @@
 /* ── SECURITY: Production hardening ── */
 (function(){
   'use strict';
-  var isProd = (typeof location !== 'undefined' &&
+  // On Capacitor Android, hostname is 'localhost' (androidScheme: "https") — detect it via Capacitor API.
+  var _isCapacitorNative = !!(window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform());
+  var isProd = _isCapacitorNative || (typeof location !== 'undefined' &&
     location.hostname !== 'localhost' &&
     location.hostname !== '127.0.0.1' &&
     location.hostname !== '');
