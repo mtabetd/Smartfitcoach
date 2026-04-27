@@ -412,7 +412,7 @@ var EXERCISES = {
       desc: "Assis à la poulie haute, tirer la barre vers le haut de la poitrine.",
       tips: ["Ne pas tirer derrière la nuque — TOUJOURS devant la poitrine", "Garder le buste légèrement incline", "Sentir le dos travailler"],
       lv: 1,
-      tags: ["dos", "biceps", "machine"]
+      tags: ["dos", "compose", "biceps", "machine"]
     },
     {
       n: "Rowing haltère unilatéral",
@@ -448,7 +448,7 @@ var EXERCISES = {
       desc: "Assis à la poulie, tirer la poignee triangle vers la poitrine.",
       tips: ["Prise neutre pour cibler le grand dorsal", "Garder les coudes près du corps", "Étirer en haut"],
       lv: 1,
-      tags: ["dos", "biceps", "machine"]
+      tags: ["dos", "compose", "biceps", "machine"]
     },
     {
       n: "Rowing T-bar",
@@ -603,7 +603,7 @@ var EXERCISES = {
         desc: "Allongé face contre terre sur un banc surélevé (ou deux pliometrics boxes), haltères en main, tirer vers les hanches sans possibilité de tricher avec le bas du dos.",
         tips: ["La position allongée élimine toute énergie cinétique et tout rebond — isolation pure et concentration maximale", "Retract and depress les omoplates avant même d'initier la traction — préparer la « plateforme »", "Variation : barre olympique pour augmenter la charge — nécessite banc plus haut ou support spécifique", "Mouvement lent et contrôlé (2s montée / 2s descente) — priorité à la qualité sur la quantité"],
         lv: 2,
-        tags: ["dos", "hypertrophie", "isolation", "compose"]
+        tags: ["dos", "hypertrophie", "compose"]
     },
     {
         n: "Straight arm pulldown",
@@ -695,9 +695,9 @@ var EXERCISES = {
     // ─── SPRINT P3 #6 — Enrichissement biblio (+7 dos) ───
     { n: "Rowing machine assise", m: "Dos / Rhomboïdes", eq: "Machine tirage horizontal", sets: "4×10-12", rest: "75s", video: "https://www.youtube.com/watch?v=vwHG9Jfu4sw", desc: "Machine de tirage horizontal assise. Tirer les poignées vers l'abdomen en rapprochant les omoplates.", tips: ["Buste droit sans balancement", "Coudes proches du corps", "Pause contractée 1s", "Ne pas laisser les épaules remonter"], lv: 1, tags: ["dos", "compose", "machine", "beginner-friendly"] },
     { n: "Tirage bras tendus corde", m: "Grand dorsal / Triceps long", eq: "Poulie haute + corde", sets: "3×12-15", rest: "60s", video: "https://www.youtube.com/watch?v=qjBtTxkfZdg", desc: "Poulie haute, bras tendus, pousser la corde vers les cuisses en gardant les coudes verrouillés.", tips: ["Bras quasi tendus — légère flexion 10°", "Engage purement le grand dorsal (isolation)", "Buste légèrement incliné vers l'avant"], lv: 2, tags: ["dos", "cable", "isolation", "grand-dorsal"] },
-    { n: "Meadows row", m: "Dos / Épaules postérieures", eq: "Barre landmine", sets: "4×8-10 par côté", rest: "90s", video: "https://www.youtube.com/watch?v=g5Wlw-k8fek", desc: "Rowing unilatéral landmine popularisé par John Meadows. Prise pronation, travail postérieur + rhomboïdes.", tips: ["Pied avant côté opposé au bras de travail", "Tirer vers la hanche côté travail", "ROM large, squeeze 1s"], lv: 3, tags: ["dos", "landmine", "unilateral"] },
+    { n: "Meadows row", m: "Dos / Épaules postérieures", eq: "Barre landmine", sets: "4×8-10 par côté", rest: "90s", video: "https://www.youtube.com/watch?v=g5Wlw-k8fek", desc: "Rowing unilatéral landmine popularisé par John Meadows. Prise pronation, travail postérieur + rhomboïdes.", tips: ["Pied avant côté opposé au bras de travail", "Tirer vers la hanche côté travail", "ROM large, squeeze 1s"], lv: 3, tags: ["dos", "compose", "landmine", "unilateral"] },
     { n: "Rowing banc incliné haltères", m: "Dos / Rhomboïdes", eq: "Banc incliné + 2 haltères", sets: "4×10-12", rest: "75s", video: "https://www.youtube.com/watch?v=_b6ch2nIchk", desc: "Chest-supported row : torse contre banc incliné 30-45°, tire les haltères vers les hanches. Zéro triche lombaire.", tips: ["Front contre le banc", "Coudes tirent derrière", "Squeeze omoplates 1s", "Idéal anti-triche lombaire"], lv: 1, tags: ["dos", "compose", "halteres", "banc-incline", "beginner-friendly"] },
-    { n: "Rowing landmine unilatéral", m: "Dos / Obliques", eq: "Barre landmine", sets: "3×10 par côté", rest: "75s", video: "https://www.youtube.com/watch?v=s3Ye5n45-lQ", desc: "Fente haute, tirage d'une barre landmine vers la hanche. Cible dos + gainage rotationnel.", tips: ["Position solide, jambe avant côté barre", "Tire vers hanche opposée", "Pas de rotation buste"], lv: 2, tags: ["dos", "landmine", "unilateral", "core"] },
+    { n: "Rowing landmine unilatéral", m: "Dos / Obliques", eq: "Barre landmine", sets: "3×10 par côté", rest: "75s", video: "https://www.youtube.com/watch?v=s3Ye5n45-lQ", desc: "Fente haute, tirage d'une barre landmine vers la hanche. Cible dos + gainage rotationnel.", tips: ["Position solide, jambe avant côté barre", "Tire vers hanche opposée", "Pas de rotation buste"], lv: 2, tags: ["dos", "compose", "landmine", "unilateral", "core"] },
     // FIX BUG SPRINT 2026-04-22 — Suppression doublon "Rack pulls" (l.632 ancien) ;
     // exercice déjà défini plus haut en tant que "Rack pull" (l.552) avec la même vidéo
     // IZjW_8R9UYE. Les deux variantes (4×4-6 force vs 4×5-8) sont couvertes par l'entrée conservée.
@@ -1198,7 +1198,7 @@ var EXERCISES = {
       desc: "Allongé sur banc incliné à 60 degrés, bras pendant dans le vide. Curler les haltères.",
       tips: ["Étirement maximal du chef long", "Ne pas balancer les bras", "Tension des le départ de l'étirement"],
       lv: 2,
-      tags: ["biceps", "chef-long", "etirement"],
+      tags: ["biceps", "isolation", "chef-long", "etirement"],
     video: "https://www.youtube.com/watch?v=DCe8f6vMe9A"
     },
     {
@@ -1291,7 +1291,7 @@ var EXERCISES = {
     { n: "Spider curl", m: "Biceps", eq: "Banc incliné (face contre dossier) + haltères", sets: "3×10-12", rest: "60s", video: "https://www.youtube.com/watch?v=w5xTuSvjVG0", desc: "Torse contre banc incliné face au dossier, bras pendants verticalement — isole parfaitement le biceps.", tips: ["Bras complètement pendants", "Concentration pic du biceps", "Supination forte"], lv: 2, tags: ["bras", "biceps", "halteres", "isolation"] },
     // ─── Enrichissement biceps ───
     { n: "Curl concentration", m: "Pic du biceps", eq: "Haltère", sets: "3×12-15 par bras", rest: "45s", video: "", desc: "Assis, coude contre l'intérieur de la cuisse. Curl lent et contrôlé — isolation maximale du pic du biceps.", tips: ["Coude appuyé fermement sur la cuisse", "Supination complète en haut", "Contraction tenue 1s"], lv: 1, tags: ["bras", "isolation", "biceps", "haltere", "pic"] },
-    { n: "Curl câble barre droite", m: "Biceps", eq: "Câble poulie basse", sets: "3×12-15", rest: "60s", video: "", desc: "Barre droite ou EZ sur poulie basse. Tension constante sur toute l'amplitude — avantage mécanique supérieur aux haltères.", tips: ["Tension constante en bas", "Coudes fixes", "Contrôler la descente 2-3s"], lv: 1, tags: ["bras", "biceps", "cable", "tension-constante"] },
+    { n: "Curl câble barre droite", m: "Biceps", eq: "Câble poulie basse", sets: "3×12-15", rest: "60s", video: "", desc: "Barre droite ou EZ sur poulie basse. Tension constante sur toute l'amplitude — avantage mécanique supérieur aux haltères.", tips: ["Tension constante en bas", "Coudes fixes", "Contrôler la descente 2-3s"], lv: 1, tags: ["bras", "isolation", "biceps", "cable", "tension-constante"] },
     { n: "Curl inversé barre", m: "Brachioradial / Avant-bras", eq: "Barre ou haltères", sets: "3×10-12", rest: "60s", video: "", desc: "Curl en prise pronation (paumes vers le bas). Cible le brachioradial et les extenseurs de l'avant-bras.", tips: ["Prise légèrement plus large que les épaules", "Coudes fixes", "Poignets droits"], lv: 2, tags: ["bras", "avant-bras", "brachioradial", "prise-pronation"] },
     { n: "Chin-up (traction supination)", m: "Biceps / Dos", eq: "Barre de traction", sets: "4×AMRAP", rest: "120s", video: "", desc: "Traction prise supination (paumes vers soi) — recrute fortement les biceps en plus des lats.", tips: ["Prise plus étroite que les épaules", "Tirer les coudes vers les hanches", "Amplitude complète"], lv: 2, tags: ["bras", "compose", "biceps", "dos", "poids-du-corps", "compound"] },
     { n: "Curl haltère cross-body", m: "Brachial / Biceps", eq: "Haltères", sets: "3×12 par bras", rest: "45s", video: "", desc: "Curl haltère en diagonale vers l'épaule opposée — prise neutre, cible le brachial sous le biceps.", tips: ["Amener l'haltère vers l'épaule opposée", "Coude reste au corps", "Moins de supination que le curl classique"], lv: 1, tags: ["bras", "brachial", "halteres"] },
@@ -1464,7 +1464,7 @@ var EXERCISES = {
         desc: "Debout dos à la poulie haute, corde saisie derrière la tête. Étendre les bras vers l'avant-bas en gardant les coudes fixes et hauts.",
         tips: ["La position overhead étire la longue portion du triceps — étirement mécanique supérieur à l'extension en position verticale", "Pencher légèrement le buste vers l'avant pour aligner l'axe de force avec les fibres ciblées", "Coudes hauts et fixes pendant toute l'amplitude — seuls les avant-bras bougent", "Tension constante du câble en overhead — avantage vs extension overhead haltère"],
         lv: 2,
-        tags: ["triceps", "longue-portion", "cable", "hypertrophie", "etirement"]
+        tags: ["triceps", "isolation", "longue-portion", "cable", "hypertrophie", "etirement"]
     },
     {
         n: "Single-arm cable pushdown",
@@ -1532,7 +1532,7 @@ var EXERCISES = {
     { n: "Skull crusher barre EZ", m: "Triceps longs", eq: "Barre EZ + banc", sets: "4×10-12", rest: "75s", video: "", desc: "Couché, barre EZ vers le front en pliant uniquement les coudes. Stretch profond du triceps long.", tips: ["Coudes fixés au plafond", "Descente jusqu'à 1cm du front", "Extension explosive", "Ne pas verrouiller en haut"], lv: 2, tags: ["bras", "isolation", "triceps-long", "barre-ez", "stretch"] },
     { n: "Dips lesté (barres parallèles)", m: "Triceps / Pectoraux bas", eq: "Barres parallèles + ceinture lestée", sets: "4×8-12", rest: "90s", video: "", desc: "Dips aux barres parallèles avec lest supplémentaire. Exercice roi du triceps.", tips: ["Légère inclinaison avant = + pectoraux", "Vertical = + triceps", "Descente jusqu'à 90° coudes", "Ceinture lestée pour progression"], lv: 2, tags: ["bras", "triceps", "poids-du-corps", "compose", "lest"] },
     { n: "Rolling extension haltères", m: "Triceps longs", eq: "Haltères + banc", sets: "3×10-12", rest: "60s", video: "", desc: "Extension haltères au-dessus de la tête combinée à un léger rowing : haltères vers les épaules puis extension vers le plafond.", tips: ["Fluidité du mouvement", "Étirement maximal en bas", "Coudes proches des oreilles"], lv: 2, tags: ["bras", "triceps-long", "halteres", "stretch"] },
-    { n: "Pushdown barre droite", m: "Triceps (chefs latéral + médial)", eq: "Câble poulie haute", sets: "3×12-15", rest: "60s", video: "", desc: "Poulie haute, barre droite, coudes collés au corps. Pousser vers le bas en extension complète — exercise classique de finition.", tips: ["Coudes fixes au corps tout au long", "Extension complète avec serrage 1s", "Ne pas balancer le buste"], lv: 1, tags: ["bras", "triceps", "cable", "finisher"] }
+    { n: "Pushdown barre droite", m: "Triceps (chefs latéral + médial)", eq: "Câble poulie haute", sets: "3×12-15", rest: "60s", video: "", desc: "Poulie haute, barre droite, coudes collés au corps. Pousser vers le bas en extension complète — exercise classique de finition.", tips: ["Coudes fixes au corps tout au long", "Extension complète avec serrage 1s", "Ne pas balancer le buste"], lv: 1, tags: ["bras", "isolation", "triceps", "cable", "finisher"] }
   ],
 
   // ─── JAMBES ───
@@ -1741,7 +1741,7 @@ var EXERCISES = {
       desc: "Dos contre le dossier de la machine, descendre en squat guidé.",
       tips: ["Pieds bas sur la plateforme pour les quadriceps", "Pieds hauts pour les fessiers", "Mouvement guidé et sécurisé"],
       lv: 2,
-      tags: ["jambes", "quadriceps", "machine"]
+      tags: ["jambes", "compose", "quadriceps", "machine"]
     },
     {
       n: "Romanian deadlift (RDL)",
@@ -2016,8 +2016,8 @@ var EXERCISES = {
     // ─── SPRINT P3 #6 — Enrichissement biblio (+10 jambes) ───
     { n: "Fentes marchées", m: "Quadriceps / Fessiers", eq: "2 haltères", sets: "3×12 pas", rest: "90s", video: "https://www.youtube.com/watch?v=2MbSPOB24XQ", desc: "Fentes alternées en marchant — chaque pas = une fente. Stimulus unilatéral dynamique.", tips: ["Grand pas, genou ne dépasse pas orteil", "Descente 90°", "Buste vertical"], lv: 2, tags: ["jambes", "compose", "halteres", "unilateral", "fonctionnel"] },
     { n: "Squat talons surélevés (heel-elevated)", m: "Quadriceps", eq: "Haltère + cales/plaques", sets: "4×10-12", rest: "75s", video: "https://www.youtube.com/watch?v=7JWehDbcrnM", desc: "Goblet squat avec talons sur planches de 2-5 cm. Permet squat profond quad-focus pour mobilité cheville limitée.", tips: ["Talons bien à plat sur la cale", "Descente sous parallèle", "Buste vertical", "Idéal pour mobilité cheville limitée"], lv: 1, tags: ["jambes", "quadriceps", "home", "mobilite-cheville"] },
-    { n: "Leg extension unilatéral", m: "Quadriceps (Vaste interne)", eq: "Machine leg extension", sets: "3×12-15 par jambe", rest: "60s", video: "https://www.youtube.com/watch?v=nIyw7z2b8xw", desc: "Extension du genou une jambe à la fois. Isole chaque quadriceps et corrige asymétries.", tips: ["Pause 1s en haut", "Descente 3s", "Focus pic du vaste interne"], lv: 1, tags: ["jambes", "quadriceps", "machine", "unilateral"] },
-    { n: "Leg curl couché unilatéral", m: "Ischios-jambiers", eq: "Machine leg curl couché", sets: "3×12-15 par jambe", rest: "60s", video: "https://www.youtube.com/watch?v=L7eU0RhlXBs", desc: "Curl ischios allongé une jambe à la fois. Isole chaque ischio — corrige déséquilibres.", tips: ["Pointer la pointe de pied", "Pause contractée 1s", "Descente lente 3s"], lv: 1, tags: ["jambes", "ischios", "machine", "unilateral"] },
+    { n: "Leg extension unilatéral", m: "Quadriceps (Vaste interne)", eq: "Machine leg extension", sets: "3×12-15 par jambe", rest: "60s", video: "https://www.youtube.com/watch?v=nIyw7z2b8xw", desc: "Extension du genou une jambe à la fois. Isole chaque quadriceps et corrige asymétries.", tips: ["Pause 1s en haut", "Descente 3s", "Focus pic du vaste interne"], lv: 1, tags: ["jambes", "isolation", "quadriceps", "machine", "unilateral"] },
+    { n: "Leg curl couché unilatéral", m: "Ischios-jambiers", eq: "Machine leg curl couché", sets: "3×12-15 par jambe", rest: "60s", video: "https://www.youtube.com/watch?v=L7eU0RhlXBs", desc: "Curl ischios allongé une jambe à la fois. Isole chaque ischio — corrige déséquilibres.", tips: ["Pointer la pointe de pied", "Pause contractée 1s", "Descente lente 3s"], lv: 1, tags: ["jambes", "isolation", "ischios", "machine", "unilateral"] },
     { n: "Nordic curl", m: "Ischios-jambiers (excentrique max)", eq: "Partenaire ou barre fixée", sets: "3×5-8", rest: "120s", video: "https://www.youtube.com/watch?v=_e9vFU9-tkc", warn: "CONTRE-INDIQUÉ grossesse et lombalgie active. Excentrique maximal = risque claquage si non progressif.", desc: "Genoux au sol, chevilles bloquées, descente contrôlée excentrique vers le sol puis retour assisté. Prévention blessures ischios (élite).", tips: ["Descente 4-5 secondes", "Recul actif avec les mains au contact", "Top du RPE : excentrique max"], lv: 3, tags: ["jambes", "ischios", "excentrique", "prevention"] },
     { n: "Pendulum squat", m: "Quadriceps", eq: "Machine pendulum squat", sets: "4×10-12", rest: "90s", video: "https://www.youtube.com/watch?v=lYoYwBYU3tQ", desc: "Machine de squat à trajectoire pendulaire — dos protégé, quadriceps isolés. Permet ROM profonde sécurisée.", tips: ["Pieds largeur épaules", "Descente sous parallèle", "Pas de rebond"], lv: 2, tags: ["jambes", "quadriceps", "machine"] },
     { n: "Step-up haltères", m: "Quadriceps / Fessiers", eq: "Banc/plyobox + 2 haltères", sets: "3×10 par jambe", rest: "75s", video: "https://www.youtube.com/watch?v=aKj-6hgiViA", desc: "Monter sur un banc une jambe à la fois avec haltères. Unilatéral fonctionnel.", tips: ["Banc hauteur genou", "Poussée talon", "Ne pas prendre d'élan avec l'autre pied"], lv: 1, tags: ["jambes", "compose", "unilateral", "fonctionnel", "halteres"] },
