@@ -4544,6 +4544,9 @@ function renderCrossfitProgram(p) {
    if (!_cfSBlock && _cfSMedList.indexOf('irc') !== -1) {
      _cfSBlock = /snatch|clean|deadlift|thruster|burpee|box\s+jump|jump\s+squat/.test(_mn);
    }
+   if (!_cfSBlock && (_cfSMedList.indexOf('genou') !== -1 || _cfSMedList.indexOf('acl') !== -1 || _cfSMedList.indexOf('menisque') !== -1 || _cfSMedList.indexOf('meniscus') !== -1 || _cfSMedList.indexOf('knees') !== -1)) {
+     _cfSBlock = /box\s+jump|pistol|jump\s+squat|jumping\s+squat|squat\s+jump|double\s+under|burpee|lunge|walking\s+lunge/.test(_mn);
+   }
    if (_cfSBlock) { _cfMedFiltered++; return; }
  }
  var movText = formatCFMovement(mov);

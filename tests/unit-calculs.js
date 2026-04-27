@@ -468,6 +468,67 @@ test('Senior 65+ IRC : cap 0.6g/kg prend priorité sur plancher ESPEN 1.6g/kg', 
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
+// ─── SUITE 7 : P3.12 — Cas extrêmes spécifiques ─────────────────────────────
+
+suite('P3.12 — Cas extrêmes : poids 40 kg / âge 70 / BMI 45');
+
+test('poids 40 kg : BMR > 0, cible ≥ plancher femme 1400 kcal', function() {
+  setState({ sex: 'femme', age: 30, weight: 40, height: 158, activity: 1, goal: 2 });
+  var bmr = calcBMR();
+  var target = calcTarget();
+  assert(bmr > 0, 'BMR nul pour poids 40 kg');
+  assert(target >= 1400, 'Cible (' + target + ') < plancher femme 1400 kcal');
+  var m = calcMacros();
+  assert(!isNaN(m.p) && m.p >= 0, 'Macros NaN poids 40 kg');
+});
+
+test('âge 70 : BMR > 0, correction -5% appliquée, pas de NaN', function() {
+  setState({ sex: 'homme', age: 70, weight: 75, height: 172, activity: 1, goal: 2 });
+  var bmr70 = calcBMR();
+  setState({ sex: 'homme', age: 60, weight: 75, height: 172, activity: 1, goal: 2 });
+  var bmr60 = calcBMR();
+  assert(bmr70 > 0, 'BMR 70 ans nul');
+  assert(bmr70 < bmr60, 'BMR 70 ans (' + bmr70 + ') devrait être < BMR 60 ans (' + bmr60 + ')');
+  var m = calcMacros();
+  assert(!isNaN(m.p) && !isNaN(m.g) && !isNaN(m.l), 'Macros NaN âge 70');
+});
+
+test('BMI 45 (obésité sévère) : gate déficit ≤ 350 kcal/j', function() {
+  // BMI 45 : poids = 45 × (1.60)^2 = 115.2 kg, arrondi 115 kg pour 160 cm
+  setState({ sex: 'homme', age: 40, weight: 115, height: 160, activity: 1, goal: 3 });
+  var bmi = calcBMI();
+  assert(bmi !== null && bmi >= 30, 'BMI (' + (bmi || 0).toFixed(1) + ') pas ≥ 30 pour 115 kg / 160 cm');
+  var tdee = calcTDEE();
+  var target = calcTarget();
+  assert(tdee > 0, 'TDEE nul BMI 45');
+  assert(target >= tdee - 350 - 5, 'Gate BMI≥30 : déficit (' + Math.round(tdee - target) + ' kcal) > 350 kcal');
+});
+
+test('BMI 45 : macros cohérentes (pas de NaN, lipides ≥ 20%)', function() {
+  setState({ sex: 'homme', age: 40, weight: 115, height: 160, activity: 1, goal: 3 });
+  var m = calcMacros();
+  var target = calcTarget();
+  assert(!isNaN(m.p) && !isNaN(m.g) && !isNaN(m.l), 'Macros NaN BMI 45');
+  assert(m.p >= 0 && m.g >= 0 && m.l >= 0, 'Macro négative BMI 45');
+  if (target > 0) {
+    var fatPct = Math.round(m.l * 9 / target * 100);
+    assert(fatPct >= 20, 'Lipides (' + fatPct + '%) < 20% cibles BMI 45');
+  }
+});
+
+test('lean_bulk femme âge 70 : cap +300 kcal (Helms 2014), protéines ≥ 1.8 g/kg', function() {
+  setState({ sex: 'femme', age: 70, weight: 60, height: 165, activity: 2, goal: 1 });
+  var tdee = calcTDEE();
+  var target = calcTarget();
+  var m = calcMacros();
+  assert(target > 0, 'Cible lean_bulk femme 70 ans nulle');
+  if (tdee > 0) {
+    assert(target <= tdee + 305, 'lean_bulk cap +300 dépassé : target=' + target + ' tdee=' + tdee);
+  }
+  assert(m.p >= Math.round(60 * 1.8) - 2, 'Protéines lean_bulk femme 70 ans (' + m.p + 'g) < 1.8g/kg (' + Math.round(60*1.8) + 'g)');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 // ─── RÉSULTAT FINAL ──────────────────────────────────────────────────────────
 
 console.log('\n' + '─'.repeat(52));

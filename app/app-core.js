@@ -4746,9 +4746,13 @@ base=Math.round(tdeeVal)+pregExtra+allaitExtra;
 base=Math.max(base,1800);return base;}var goalKey=GOALS[s.goal].key;// Cap shred deficit to 500 kcal/day (Helms 2014, ACSM — RED-S + muscle loss risk above 500kcal deficit)
 // Cap déficit à -500 kcal/j pour shred ET cut (ACSM 2009, Helms 2014 — au-delà : perte musculaire + fatigue chronique)
 // IMPORTANT : sans ce cap, un athlète élite (TDEE 3500+) en "cut -15%" pouvait avoir un déficit de 525-700 kcal/j
-if((goalKey==='shred'||goalKey==='cut')&&tdeeVal>0){base=Math.max(base,Math.round(tdeeVal-500));}// Cap surplus à +500 kcal/j pour bulk/lean_bulk (ISSN 2017, ACSM — au-delà : accumulation graisseuse excessive)
-// IMPORTANT : sans ce cap, un athlète élite (TDEE 4000) en bulk recevait +600 kcal/j
-if((goalKey==='bulk'||goalKey==='lean_bulk')&&tdeeVal>0){base=Math.min(base,Math.round(tdeeVal+500));}
+if((goalKey==='shred'||goalKey==='cut')&&tdeeVal>0){base=Math.max(base,Math.round(tdeeVal-500));}
+// BMI≥30 safety gate: cap déficit à -350 kcal/j (Donnelly ACSM 2009 — déficit agressif chez obèse ↑ perte musculaire + risque métabolique)
+var _bmiGate=calcBMI();if(_bmiGate!==null&&_bmiGate>=30&&(goalKey==='shred'||goalKey==='cut')&&tdeeVal>0){base=Math.max(base,Math.round(tdeeVal-350));}
+// lean_bulk : cap surplus à +300 kcal/j (Helms 2014 — surplus minimal pour prise de masse douce, ↓ accumulation graisseuse vs. bulk)
+if(goalKey==='lean_bulk'&&tdeeVal>0){base=Math.min(base,Math.round(tdeeVal+300));}
+// bulk : cap surplus à +500 kcal/j (ISSN 2017, ACSM — au-delà : accumulation graisseuse excessive)
+if(goalKey==='bulk'&&tdeeVal>0){base=Math.min(base,Math.round(tdeeVal+500));}
 // Allaitement (non-enceinte) : +500 kcal/j (ACOG 2022) — appliqué dans le flow normal (pas de early return)
 // pour que les protections ado/diabète/ménopause/cycle/alcool soient respectées
 if(s.medical&&s.medical.indexOf('allaitement')!==-1&&window.isFemale(s)){base=Math.max(Math.round(tdeeVal)+500,base);base=Math.max(base,1800);}
@@ -4851,14 +4855,14 @@ function calcMacros(){
 
   } else if(goalKey==='bulk'||goalKey==='lean_bulk'){
     // ─── PRISE DE MASSE / PRISE DE MASSE DOUCE — ppk selon activité ET sexe ───
-    // Athlète élite : H=2.2g/kg, F=2.0g/kg (ISSN Position Stand 2023 upper — Morton 2018 BJSM)
-    // Base non-élite : H=1.8g/kg, F=1.6g/kg (ISSN 2017)
+    // lean_bulk femme : relevé à 1.8-2.0 g/kg (Morton 2018 BJSM meta — masse maigre nécessite haute protéine même chez femmes)
+    // bulk femme : 1.6-2.0 g/kg (ISSN 2017 / Tarnopolsky 2000)
     if(actFactor>=1.9){
-      ppk=isFemale?2.0:2.2;  // Élite bulk : H=2.2g/kg, F=2.0g/kg (ISSN 2023 upper / Morton 2018 BJSM)
+      ppk=isFemale?2.0:2.2;  // Élite : H=2.2g/kg, F=2.0g/kg (ISSN 2023 upper / Morton 2018 BJSM)
     } else if(actFactor>=1.7){
-      ppk=isFemale?1.8:2.0;  // Très actif bulk : H=2.0, F=1.8
+      ppk=isFemale?(goalKey==='lean_bulk'?2.0:1.8):(goalKey==='lean_bulk'?2.1:2.0);  // Très actif lean_bulk F=2.0 (vs bulk F=1.8)
     } else {
-      ppk=isFemale?1.6:1.8;  // Standard bulk : H=1.8, F=1.6 (ISSN 2017)
+      ppk=isFemale?(goalKey==='lean_bulk'?1.8:1.6):(goalKey==='lean_bulk'?2.0:1.8);  // Standard lean_bulk F=1.8 (vs bulk F=1.6)
     }
 
   } else {
@@ -6758,6 +6762,26 @@ function computeNutritionState(trainingDay) {
     result.caloriesCheck = Math.round(
       adjustedMacros.p * 4 + adjustedMacros.g * 4 + adjustedMacros.l * 9
     );
+  }
+
+  // ─── CARB CYCLING — +20% glucides jours entraînement, -10% jours repos ───
+  // Holland 2019 JISSN : modulation périodique des glucides → ↑ resynthèse glycogène musculaire
+  // Condition : jours d'entraînement explicitement sélectionnés (trainingDaysSelected) ET objectif sportif
+  var _hasSportDays = Array.isArray(window.S.trainingDaysSelected) && window.S.trainingDaysSelected.length > 0;
+  var _hasSportGoals = Array.isArray(window.S.sportGoals) && window.S.sportGoals.length > 0;
+  if (_hasSportDays && _hasSportGoals && result.carbsGrams > 0 && result.fatGrams > 0 && result.caloriesTarget > 0) {
+    var _fatFloor = Math.round(result.caloriesTarget * 0.15 / 9); // plancher 15% lipides (ACSM 2009)
+    if (trainingDay === true) {
+      var _carbExtra = Math.round(result.carbsGrams * 0.20);
+      var _fatCompens = Math.min(Math.round(_carbExtra * 4 / 9), result.fatGrams - _fatFloor);
+      result.carbsGrams += _carbExtra;
+      if (_fatCompens > 0) result.fatGrams -= _fatCompens;
+    } else {
+      var _carbRed = Math.round(result.carbsGrams * 0.10);
+      result.carbsGrams = Math.max(100, result.carbsGrams - _carbRed); // plancher 100g glucides (ISSN 2017 — cerveau)
+      result.fatGrams = Math.min(result.fatGrams + Math.round(_carbRed * 4 / 9), Math.round(result.caloriesTarget * 0.35 / 9));
+    }
+    result.caloriesCheck = Math.round(result.proteinGrams*4 + result.carbsGrams*4 + result.fatGrams*9);
   }
 
   // Détection conflit objectif nutrition ↔ sport (bulk + endurance = surplus inutile)
