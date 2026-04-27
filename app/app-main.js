@@ -3371,10 +3371,49 @@ document.addEventListener('keydown', function(e) {
  if (e.key !== 'Escape') return;
  var changed = false;
  try {
-   if (window.S && window.S.modalRecipe) { window.S.modalRecipe = null; changed = true; }
-   if (window.S && window.S.sportModalExercise) { window.S.sportModalExercise = null; changed = true; }
+   if (window.S) {
+     if (window.S.modalRecipe)        { window.S.modalRecipe = null;        changed = true; }
+     if (window.S.modalSmoothie)      { window.S.modalSmoothie = null;      changed = true; }
+     if (window.S.sportModalExercise) { window.S.sportModalExercise = null; changed = true; }
+     if (window.S._goalModal)         { window.S._goalModal = null;         changed = true; }
+     if (window.S.shopArMode)         { window.S.shopArMode = false;        changed = true; }
+   }
    if (changed) window.render();
  } catch(err) {}
 });
+
+// ─── ANDROID BACK BUTTON (Capacitor) ───
+// Mirrors the Escape handler: closes modals first, then navigates to 'today',
+// then minimizes the app. Never calls exitApp() — avoids accidental data loss.
+(function() {
+  if (!window.Capacitor || typeof window.Capacitor.isNativePlatform !== 'function' || !window.Capacitor.isNativePlatform()) return;
+  var _CapApp = window.Capacitor.Plugins && window.Capacitor.Plugins.App;
+  if (!_CapApp || typeof _CapApp.addListener !== 'function') return;
+  _CapApp.addListener('backButton', function() {
+    try {
+      var _changed = false;
+      // 1. Close any open modal
+      if (window.S) {
+        if (window.S.modalRecipe)        { window.S.modalRecipe = null;        _changed = true; }
+        if (window.S.modalSmoothie)      { window.S.modalSmoothie = null;      _changed = true; }
+        if (window.S.sportModalExercise) { window.S.sportModalExercise = null; _changed = true; }
+        if (window.S._goalModal)         { window.S._goalModal = null;         _changed = true; }
+        if (window.S.shopArMode)         { window.S.shopArMode = false;        _changed = true; }
+      }
+      if (_changed) { if (window.render) window.render(); return; }
+      // 2. If on a sub-view, go back to 'today'
+      var _rootViews = ['auth', 'today'];
+      if (window.S && window.S.view && _rootViews.indexOf(window.S.view) === -1) {
+        window.S.view = 'today';
+        if (window.render) window.render();
+        return;
+      }
+      // 3. On root view → minimize (never exit — avoids losing unsaved data)
+      if (typeof _CapApp.minimizeApp === 'function') { _CapApp.minimizeApp(); return; }
+      // 4. Final fallback: browser history
+      if (window.history && window.history.length > 1) window.history.back();
+    } catch(e) {}
+  });
+})();
 
 })();
