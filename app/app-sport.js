@@ -4079,6 +4079,13 @@ function computeAdvancedIntensity(wod, baseIntensity) {
  }
 }
 
+function computeFatigueFactor(durationMins) {
+ if (!durationMins || isNaN(durationMins)) return 0.9; // unknown duration → conservative default
+ if (durationMins <= 10) return 0.95; // short sprint — minimal fatigue decay
+ if (durationMins <= 20) return 0.90; // standard WOD — moderate decay
+ return 0.85;                          // long effort — significant output drop
+}
+
 function computeVolumeFactor(wod) {
  if (!wod) return 1.0;
  var t = (wod.type || '').toLowerCase();
@@ -4107,9 +4114,18 @@ function computeVolumeFactor(wod) {
  }
  // For Time (plain chipper): repSum is already the total
 
- if (repSum < 50)  return 0.9; // low volume
- if (repSum > 200) return 1.2; // high volume
- return 1.0;                   // normal
+ // ─── FATIGUE CORRECTION ───
+ // Reuse parsed duration from WOD format; fall back to cap for For Time
+ var _capM  = t.match(/cap\s+(\d+)/);
+ var _fatDur = amrapM  ? parseInt(amrapM[1], 10)
+             : emomM   ? parseInt(emomM[1], 10)
+             : _capM   ? parseInt(_capM[1],  10)
+             : null;
+ var repSumAdjusted = Math.round(repSum * computeFatigueFactor(_fatDur));
+
+ if (repSumAdjusted < 50)  return 0.9; // low volume
+ if (repSumAdjusted > 200) return 1.2; // high volume
+ return 1.0;                            // normal
 }
 
 // ─── STEP 6 (CrossFit): PROGRAMME CF ───
