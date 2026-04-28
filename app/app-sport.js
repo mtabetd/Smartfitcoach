@@ -3979,6 +3979,49 @@ function applyDeloadScaling(wod) {
  return out;
 }
 
+// ─── DAILY INTENSITY ENGINE ───
+var CF_INTENSITY_FACTORS = { low: 0.8, moderate: 1.0, high: 1.3, very_high: 1.6 };
+
+function computeSessionIntensity(wod) {
+ if (!wod || !wod.type) return 'moderate';
+ var t = (wod.type || '').toLowerCase();
+
+ // Zone 2 / recovery keywords
+ if (/zone\s*2|recovery|z2|aerobic base/.test(t)) return 'low';
+
+ // AMRAP: > 20 min → moderate (sustained aerobic); ≤ 20 → high (glycolytic)
+ var amrapM = t.match(/amrap\s+(\d+)/);
+ if (amrapM) {
+  var amrapMins = parseInt(amrapM[1], 10);
+  return amrapMins > 20 ? 'moderate' : 'high';
+ }
+
+ // EMOM: heavy/strength keywords → high; standard interval → moderate
+ if (/emom/.test(t)) {
+  return /force|heavy|lourd/.test(t) ? 'high' : 'moderate';
+ }
+
+ // For Time with time cap — cap ≤ 12 min = sprint benchmark; ≤ 20 = high; > 20 = long chipper
+ var capM = t.match(/cap\s+(\d+)/);
+ if (capM) {
+  var cap = parseInt(capM[1], 10);
+  if (cap <= 12) return 'very_high';
+  if (cap <= 20) return 'high';
+  return 'moderate';
+ }
+
+ // N Rounds For Time: ≥ 10 rounds = high repeated effort
+ var roundsM = t.match(/^(\d+)\s+rounds?/i);
+ if (roundsM) {
+  return parseInt(roundsM[1], 10) >= 10 ? 'high' : 'moderate';
+ }
+
+ // Plain For Time (no cap = long chipper → moderate)
+ if (/for time/.test(t)) return 'moderate';
+
+ return 'moderate';
+}
+
 // ─── STEP 6 (CrossFit): PROGRAMME CF ───
 function renderCrossfitProgram(p) {
  // Guard: ensure cfProgress is always an object (safe for null/undefined from storage)
@@ -4009,6 +4052,18 @@ function renderCrossfitProgram(p) {
  // Bridge nutrition — une fois par semaine (guard anti-double-render)
  if (S._cfLastNotifiedWeek !== S.crossfitWeek) {
   S._cfLastNotifiedWeek = S.crossfitWeek;
+  // ─── DAILY INTENSITY ENGINE: compute before bridge call ───
+  var _cfDayWod     = weekProgram[S.selectedCrossfitDay || 0];
+  var _cfInnerWod   = _cfDayWod && _cfDayWod.wod ? _cfDayWod.wod.wod : null;
+  var _cfIntensity  = computeSessionIntensity(_cfInnerWod);
+  var _cfDurBase    = { scaled: 60, inter: 65, rx: 75, rx_plus: 90 };
+  var _cfTypeStr    = _cfInnerWod ? (_cfInnerWod.type || '').toLowerCase() : '';
+  var _cfDurMatch   = _cfTypeStr.match(/amrap\s+(\d+)|emom\s+(\d+)|cap\s+(\d+)/);
+  var _cfDurMins    = _cfDurMatch
+   ? parseInt(_cfDurMatch[1] || _cfDurMatch[2] || _cfDurMatch[3], 10)
+   : (_cfDurBase[S.crossfitLevel] || 75);
+  S.crossfitIntensity    = _cfIntensity;
+  S.crossfitTrainingLoad = Math.round(_cfDurMins * CF_INTENSITY_FACTORS[_cfIntensity]);
   _sfcNotifySport('crossfit', S.crossfitLevel);
  }
 
