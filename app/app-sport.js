@@ -1776,7 +1776,8 @@ function _sfcNotifySport(sport, level) {
     groups    = [];
   }
   window.SFCSymbiosis.notifySession(exercises, groups);
-  // Restore MET-based value — SFCSymbiosis.notifySession may overwrite S.trainingLoad
+  // Re-apply aggregated load — notifySession uses MAX merge but _sfcAggregateLoad
+  // is the canonical source of truth (precision engines + multi-sport MAX).
   _sfcAggregateLoad(sport, _loadFromMet);
   console.log('[SFC] notifySession', sport, level, '->', window.S && window.S.trainingLoad);
 }

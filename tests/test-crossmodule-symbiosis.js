@@ -445,6 +445,119 @@ check('fat-loss user (shred) still benefits from carb boost while staying in cal
     'shred user on heavy training day → performance tag (carb boost for training)');
 });
 
+// ─── 12. notifySession merge strategy ────────────────────────────────────────
+console.log('\n=== 12. notifySession — merge strategy ===');
+
+// Helpers — build exercise lists with controlled tags and groups
+function makeExs(n, tags) {
+  var arr = [];
+  for (var i = 0; i < n; i++) arr.push({ n: 'Ex' + i, tags: tags || [] });
+  return arr;
+}
+// 6 compound exercises + heavy groups → computeTrainingLoad → 'heavy'
+var HEAVY_EXS  = makeExs(6, []);          // 6 non-isolation → heavy when hasHeavy
+var MOD_EXS    = makeExs(4, []);          // 4 exercises, no heavy group → moderate or light
+var LIGHT_EXS  = makeExs(2, ['isolation']); // 2 isolation → light
+var HEAVY_GRP  = ['legs', 'back'];
+var MOD_GRP    = ['back'];
+var LIGHT_GRP  = [];
+
+check('notifySession: heavy computed preserves existing heavy (no overwrite)', function() {
+  window.S = { trainingLoad: 'heavy', dailyTrainingLoad: 'heavy', lastSessionCount: 6, lastSessionGroups: ['legs'] };
+  SFCSymbiosis.notifySession(HEAVY_EXS, HEAVY_GRP);
+  assert(window.S.trainingLoad === 'heavy', 'heavy should remain heavy, got: ' + window.S.trainingLoad);
+  assert(window.S.lastSessionCount === 12, 'count should accumulate: 6+6=12, got: ' + window.S.lastSessionCount);
+});
+
+check('notifySession: light computed does NOT downgrade existing heavy', function() {
+  window.S = { trainingLoad: 'heavy', dailyTrainingLoad: 'heavy', lastSessionGroups: ['back'], lastSessionCount: 5 };
+  SFCSymbiosis.notifySession(LIGHT_EXS, LIGHT_GRP);
+  assert(window.S.trainingLoad === 'heavy',
+    'existing heavy should NOT be downgraded by light computed, got: ' + window.S.trainingLoad);
+});
+
+check('notifySession: moderate computed upgrades existing light', function() {
+  window.S = { trainingLoad: 'light', dailyTrainingLoad: 'light', lastSessionGroups: [], lastSessionCount: 0 };
+  // 5 non-isolation exercises + back group → computeTrainingLoad → moderate
+  SFCSymbiosis.notifySession(makeExs(5, []), ['back']);
+  assert(window.S.trainingLoad === 'moderate',
+    'light should be upgraded to moderate, got: ' + window.S.trainingLoad);
+});
+
+check('notifySession: heavy computed upgrades existing moderate', function() {
+  window.S = { trainingLoad: 'moderate', dailyTrainingLoad: 'moderate', lastSessionGroups: ['chest'], lastSessionCount: 3 };
+  SFCSymbiosis.notifySession(HEAVY_EXS, HEAVY_GRP);
+  assert(window.S.trainingLoad === 'heavy',
+    'moderate should be upgraded to heavy, got: ' + window.S.trainingLoad);
+  assert(window.S.dailyTrainingLoad === 'heavy',
+    'dailyTrainingLoad should be updated to heavy, got: ' + window.S.dailyTrainingLoad);
+});
+
+check('notifySession: lastSessionGroups merges (union) across two calls', function() {
+  window.S = { lastSessionGroups: ['chest', 'triceps'], lastSessionCount: 4 };
+  SFCSymbiosis.notifySession(makeExs(4, []), ['legs', 'glutes']);
+  var grps = window.S.lastSessionGroups;
+  assert(grps.indexOf('chest')   !== -1, 'chest should be preserved');
+  assert(grps.indexOf('triceps') !== -1, 'triceps should be preserved');
+  assert(grps.indexOf('legs')    !== -1, 'legs should be added');
+  assert(grps.indexOf('glutes')  !== -1, 'glutes should be added');
+  assert(grps.length === 4, 'no duplicates: expected 4 groups, got ' + grps.length);
+});
+
+check('notifySession: duplicate groups not added twice', function() {
+  window.S = { lastSessionGroups: ['back', 'legs'], lastSessionCount: 3 };
+  SFCSymbiosis.notifySession(makeExs(3, []), ['back']); // 'back' already present
+  var grps = window.S.lastSessionGroups;
+  assert(grps.filter(function(g){ return g === 'back'; }).length === 1,
+    'back should appear exactly once, got: ' + grps.join(','));
+});
+
+check('notifySession: lastSessionCount accumulates across calls', function() {
+  window.S = { lastSessionCount: 5, lastSessionGroups: [] };
+  SFCSymbiosis.notifySession(makeExs(4, []), []);
+  assert(window.S.lastSessionCount === 9, 'expected 5+4=9, got: ' + window.S.lastSessionCount);
+  SFCSymbiosis.notifySession(makeExs(3, []), []);
+  assert(window.S.lastSessionCount === 12, 'expected 9+3=12, got: ' + window.S.lastSessionCount);
+});
+
+check('notifySession: sportProgramStart preserved if already set', function() {
+  var existing = '2026-01-15';
+  window.S = { sportProgramStart: existing, lastSessionGroups: [] };
+  SFCSymbiosis.notifySession(makeExs(3, []), []);
+  assert(window.S.sportProgramStart === existing,
+    'sportProgramStart should not be overwritten: ' + window.S.sportProgramStart);
+});
+
+check('notifySession: sportProgramStart set if absent', function() {
+  window.S = { lastSessionGroups: [] };
+  SFCSymbiosis.notifySession(makeExs(3, []), []);
+  assert(typeof window.S.sportProgramStart === 'string' && window.S.sportProgramStart.length === 10,
+    'sportProgramStart should be set to YYYY-MM-DD, got: ' + window.S.sportProgramStart);
+});
+
+check('notifySession: first call with no prior data — sets all fields', function() {
+  window.S = {};
+  SFCSymbiosis.notifySession(HEAVY_EXS, HEAVY_GRP);
+  assert(window.S.trainingLoad !== undefined, 'trainingLoad should be set');
+  assert(Array.isArray(window.S.lastSessionGroups), 'lastSessionGroups should be array');
+  assert(typeof window.S.lastSessionCount === 'number', 'lastSessionCount should be number');
+});
+
+check('notifySession: no silent data loss — all existing fields intact', function() {
+  window.S = {
+    trainingLoad: 'heavy', dailyTrainingLoad: 'heavy',
+    lastSessionGroups: ['back'], lastSessionCount: 6,
+    sportProgramStart: '2026-03-01',
+    customField: 'untouched'
+  };
+  SFCSymbiosis.notifySession(LIGHT_EXS, LIGHT_GRP); // light should not downgrade heavy
+  // LIGHT_EXS = makeExs(2, ['isolation']) → length 2 → 6+2 = 8
+  assert(window.S.trainingLoad === 'heavy',       'trainingLoad preserved');
+  assert(window.S.lastSessionCount === 8,          'count accumulated: 6+2=8, got ' + window.S.lastSessionCount);
+  assert(window.S.sportProgramStart === '2026-03-01', 'sportProgramStart preserved');
+  assert(window.S.customField === 'untouched',    'unrelated field preserved');
+});
+
 // ─── Résumé ───────────────────────────────────────────────────────────────────
 console.log('\n' + '─'.repeat(50));
 console.log('Résultats : ' + pass + ' pass, ' + fail + ' fail');

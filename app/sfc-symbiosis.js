@@ -133,22 +133,65 @@
   // ── 5. Notification de session (appelé depuis app-sport.js) ───────────────
   /**
    * Met à jour S.trainingLoad et S.sportProgramStart après chaque génération.
-   * @param {Object[]} exercises  — résultat de sfcBuildMuscuDay
+   *
+   * Merge strategy — chaque champ obéit à une règle précise :
+   *   trainingLoad     → MAX(existant, calculé) — jamais de dégradation silencieuse
+   *   lastSessionGroups → union (accumulation) — plusieurs sports dans la même journée
+   *   lastSessionCount  → cumul              — idem
+   *   sportProgramStart → seulement si absent (inchangé)
+   *   trainingWeekContext → fusion par clé date (updateWeekContext)
+   *
+   * @param {Object[]} exercises  — exercices de la séance
    * @param {string[]} groups     — groupes musculaires du jour
    */
   function notifySession(exercises, groups) {
     var s = global.S;
     if (!s) return;
-    s.trainingLoad     = computeTrainingLoad(exercises, groups);
-    s.lastSessionGroups = (groups || []).slice();
-    s.lastSessionCount  = exercises ? exercises.length : 0;
-    // Initialiser la date de départ du programme si absente
+
+    // ── trainingLoad : MAX(existant, calculé) — jamais de dégradation ────────
+    var RANK = { light: 0, moderate: 1, heavy: 2 };
+    var computedLoad  = computeTrainingLoad(exercises, groups);
+    var existingLoad  = s.dailyTrainingLoad || s.trainingLoad;
+    var existingRank  = typeof RANK[existingLoad]  === 'number' ? RANK[existingLoad]  : -1;
+    var computedRank  = typeof RANK[computedLoad]  === 'number' ? RANK[computedLoad]  :  0;
+
+    if (existingRank === -1) {
+      // Rien de défini → utiliser la valeur calculée
+      s.trainingLoad = computedLoad;
+    } else if (computedRank > existingRank) {
+      // La nouvelle séance est plus intense → mettre à jour (max wins)
+      s.trainingLoad      = computedLoad;
+      s.dailyTrainingLoad = computedLoad;
+    }
+    // Sinon : valeur existante supérieure ou égale → pas de surécrasement
+
+    // ── lastSessionGroups : union (accumulation multi-sport) ─────────────────
+    var incomingGroups = (groups || []).slice();
+    if (Array.isArray(s.lastSessionGroups) && s.lastSessionGroups.length > 0) {
+      var mergedGroups = s.lastSessionGroups.slice();
+      incomingGroups.forEach(function(g) {
+        if (mergedGroups.indexOf(g) === -1) mergedGroups.push(g);
+      });
+      s.lastSessionGroups = mergedGroups;
+    } else {
+      s.lastSessionGroups = incomingGroups;
+    }
+
+    // ── lastSessionCount : cumul ──────────────────────────────────────────────
+    var incomingCount = exercises ? exercises.length : 0;
+    s.lastSessionCount = (typeof s.lastSessionCount === 'number' && s.lastSessionCount > 0)
+      ? s.lastSessionCount + incomingCount
+      : incomingCount;
+
+    // ── sportProgramStart : seulement si absent ───────────────────────────────
     if (!s.sportProgramStart) {
       s.sportProgramStart = new Date().toISOString().slice(0, 10);
     }
-    // Mettre à jour le contexte de la semaine (Problem 3)
+
+    // ── trainingWeekContext : fusion par date (updateWeekContext) ─────────────
+    // Passer lastSessionGroups (merged) pour refléter tous les sports du jour
     var today = new Date().toISOString().slice(0, 10);
-    updateWeekContext(today, groups, s.trainingLoad, exercises);
+    updateWeekContext(today, s.lastSessionGroups, s.trainingLoad, exercises);
   }
 
   // ── 6. Résumé périodisation (informatif pour l'UI) ────────────────────────
