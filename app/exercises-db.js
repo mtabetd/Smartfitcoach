@@ -1601,6 +1601,7 @@ var EXERCISES = {
       eq: "Barre + rack",
       sets: "4×6-10",
       rest: "150s",
+      lv: 3,
       video: "https://www.youtube.com/watch?v=v-mQm_droHg",
       desc: "Squat barre devant — barre sur les épaules en rack position. Pression antérieure = recrutement quad max + dos plus droit.",
       tips: ["Coudes hauts (barre stable)", "Buste vertical au max", "Descente contrôlée 2-3s", "Talon ancré", "Cible quad et tronc anti-flexion"],

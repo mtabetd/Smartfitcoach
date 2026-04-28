@@ -1052,41 +1052,48 @@ function generateSportProgram() {
   });
  })();
 
- // FIX 2026-04-22: Full Body days risk losing all lower-body exercises when the duration
- // cap slices after the compound sort. If the day covers legs/glutes but the first durMax
- // exercises are all upper-body compounds (bench/row/OHP/dips…), legs vanish entirely.
- // Guard: compare against the actual EXERCISES.legs / EXERCISES.glutes pools (by name)
- // so only genuine lower-body pool exercises are considered — not back compounds like
- // "Snatch grip deadlift" that share the keyword "deadlift".
+ // FIX 2026-04-28d : Group Coverage Guard (généralisé depuis le lower-body guard 2026-04-22)
+ // Problème : quand 3+ groupes musculaires sont combinés (ex: pecs+épaules+triceps), les composés
+ // force des 2 premiers groupes remplissent les 7 slots → le 3e groupe (triceps isolation) est
+ // entièrement éliminé par le slice. Résultat : une séance "triceps day" sans triceps.
+ // Fix : après le slice, pour chaque groupe sans aucun représentant, on swap le dernier exo
+ // avec le meilleur exo disponible de ce groupe (sans casser l'ordre tier du reste).
  (function() {
-   var _dayHasLower = groups.some(function(g) { return g === 'legs' || g === 'glutes'; });
-   if (!_dayHasLower || !S.sportSessionDuration) return;
+   if (!S.sportSessionDuration) return;
    var _durLookup = { '45min': 5, '1h': 6, '1h15': 7, '1h30': 8 };
    var _cap = _durLookup[S.sportSessionDuration] || 6;
-   // Build a set of lower-body exercise names from the actual pools
-   var _lowerNames = {};
-   ['legs', 'glutes'].forEach(function(cat) {
-     ((window.EXERCISES && window.EXERCISES[cat]) || []).forEach(function(ex) {
-       _lowerNames[(ex.n || '').toLowerCase().trim()] = true;
-     });
+   // Build per-group name sets
+   var _groupPools = {};
+   groups.forEach(function(g) {
+     var s = {};
+     ((window.EXERCISES && window.EXERCISES[g]) || []).forEach(function(ex) { s[(ex.n||'').toLowerCase().trim()] = true; });
+     _groupPools[g] = s;
    });
-   function _isLowerPoolEx(ex) {
-     return !!_lowerNames[(ex.n || '').toLowerCase().trim()];
-   }
-   // Check if a genuine lower-body exercise sits within the slice that survives the cap
-   var _slicedHasLegs = dayExercises.slice(0, _cap).some(_isLowerPoolEx);
-   if (!_slicedHasLegs) {
-     // Find the earliest genuine lower-body exercise beyond the cap boundary
-     var _legIdx = -1;
-     for (var _li = _cap; _li < dayExercises.length; _li++) {
-       if (_isLowerPoolEx(dayExercises[_li])) { _legIdx = _li; break; }
+   function _exInGroup(ex, g) { return !!_groupPools[g][(ex.n||'').toLowerCase().trim()]; }
+   // Check which groups are unrepresented in the surviving slice
+   var _covered = {};
+   groups.forEach(function(g) {
+     _covered[g] = dayExercises.slice(0, _cap).some(function(ex) { return _exInGroup(ex, g); });
+   });
+   var _missing = groups.filter(function(g) { return !_covered[g]; });
+   // For each missing group, find the best exercise beyond the cap and swap it in
+   _missing.forEach(function(g) {
+     var _candIdx = -1;
+     for (var _ci = _cap; _ci < dayExercises.length; _ci++) {
+       if (_exInGroup(dayExercises[_ci], g)) { _candIdx = _ci; break; }
      }
-     if (_legIdx !== -1 && _cap > 1) {
-       // Swap it into the last position of the surviving slice
-       var _legEx = dayExercises.splice(_legIdx, 1)[0];
-       dayExercises.splice(_cap - 1, 0, _legEx);
+     if (_candIdx === -1) {
+       // Try within cap as fallback (exercise shared between pools)
+       for (var _ci2 = 0; _ci2 < Math.min(_cap, dayExercises.length); _ci2++) {
+         if (_exInGroup(dayExercises[_ci2], g)) { _covered[g] = true; return; }
+       }
      }
-   }
+     if (_candIdx !== -1 && _cap > 1) {
+       var _cEx = dayExercises.splice(_candIdx, 1)[0];
+       // Insert before the last position (preserve at least 1 compound at start)
+       dayExercises.splice(Math.min(_cap - 1, dayExercises.length), 0, _cEx);
+     }
+   });
  })();
 
  // Pregnancy: add Kegel exercises to every day
@@ -1182,7 +1189,13 @@ function generateSportProgram() {
        return _bwA - _bwB || (b.lv||1) - (a.lv||1);
      });
    } else {
-     _supPool.sort(function(){ return 0.5 - Math.random(); });
+     // FIX 2026-04-28c : tri déterministe pour home/dumbbells — compose avant isolation, lv desc
+     // Avant : Math.random() → résultats différents à chaque régénération → non-reproductible
+     _supPool.sort(function(a, b) {
+       var _cA = (a.tags||[]).indexOf('compose') !== -1 ? 0 : 1;
+       var _cB = (b.tags||[]).indexOf('compose') !== -1 ? 0 : 1;
+       return _cA - _cB || (b.lv||1) - (a.lv||1) || (a.n||'').localeCompare(b.n||'');
+     });
    }
    var _needed = _fillTarget - dayExercises.length;
    for (var _si = 0; _si < Math.min(_needed, _supPool.length); _si++) {
@@ -1236,6 +1249,56 @@ function generateSportProgram() {
    }
  });
  }
+
+ // FIX 2026-04-28e : Group Coverage Guard POST-CAP — doit s'exécuter APRÈS le slice durée
+ // (le garde pré-cap aux lignes ~1065 couvre le cas lower-body avant fill, ce garde-ci couvre
+ // le cas 3+ groupes dont l'un est entièrement isolation et se retrouve éliminé par le slice).
+ (function() {
+   if (!S.sportSessionDuration || !groups || !groups.length) return;
+   var _durLookup = { '45min': 5, '1h': 6, '1h15': 7, '1h30': 8 };
+   var _cap = _durLookup[S.sportSessionDuration] || 6;
+   var _groupPools = {};
+   groups.forEach(function(g) {
+     var s = {};
+     ((window.EXERCISES && window.EXERCISES[g]) || []).forEach(function(ex) { s[(ex.n||'').toLowerCase().trim()] = true; });
+     _groupPools[g] = s;
+   });
+   var _inGroup = function(ex, g) { return !!_groupPools[g][(ex.n||'').toLowerCase().trim()]; };
+   var _uncovered = groups.filter(function(g) {
+     return !dayExercises.some(function(ex) { return _inGroup(ex, g); });
+   });
+   _uncovered.forEach(function(g) {
+     // Build a fresh candidate from the group pool not already in day
+     var _used = {};
+     dayExercises.forEach(function(ex) { _used[(ex.n||'').toLowerCase().trim()] = true; });
+     var _cands = ((window.EXERCISES && window.EXERCISES[g]) || []).filter(function(ex) {
+       return !_used[(ex.n||'').toLowerCase().trim()] && (ex.lv||1) <= maxLv;
+     });
+     if (!_cands.length) return; // pool exhausted, can't cover
+     // Sort: compose first, lv desc
+     _cands.sort(function(a, b) {
+       var cA=(a.tags||[]).indexOf('compose')!==-1?0:1, cB=(b.tags||[]).indexOf('compose')!==-1?0:1;
+       return cA-cB || (b.lv||1)-(a.lv||1);
+     });
+     var _newEx = Object.assign({}, _cands[0]);
+     // Swap last exercise (usually lowest tier) with this missing-group exercise
+     if (dayExercises.length >= _cap) dayExercises[_cap - 1] = _newEx;
+     else dayExercises.push(_newEx);
+   });
+   // Re-sort after injections to maintain tier order (compound→isolation)
+   if (_uncovered.length > 0) {
+     dayExercises.sort(function(a, b) {
+       var _r = function(ex) {
+         var t = ex.tags || [];
+         if (t.indexOf('finisher')  !== -1) return 4;
+         if (t.indexOf('isolation') !== -1) return 3;
+         if (t.indexOf('compose')   !== -1) return (t.indexOf('force') !== -1 || t.indexOf('powerlifting') !== -1) ? 0 : 1;
+         return 2;
+       };
+       return _r(a) - _r(b);
+     });
+   }
+ })();
 
  // Wellness adaptation — fatigue modifies actual program (not just banner)
  var _wa = (typeof getWellnessAdaptation === 'function') ? getWellnessAdaptation() : null;
@@ -1346,10 +1409,21 @@ function generateSportProgram() {
    dayExercises = _fbAvail.slice(0, 3);
    if (dayExercises.length === 0) continue; // groupe vraiment vide → on ignore ce jour
  }
+ // Score the session — stored on the day object for debug/QA, never shown in UI
+ var _dayScore = (typeof scoreSession === 'function') ? scoreSession(dayExercises, {
+   level: S.sportLevel || 'intermediate',
+   duration: S.sportSessionDuration || '1h',
+   equipment: S.sportEquipment || 'gym',
+   groups: groups
+ }) : null;
+ if (_dayScore && !_dayScore.pass) {
+   console.warn('[SFC] Session score below 85:', _dayScore.total, _dayScore.breakdown, _dayName);
+ }
  program.push({
  name: _dayName,
  focus: focusLabel,
  exercises: dayExercises,
+ score: _dayScore,
  warmup: {
   duration: 8,
   exercises: [
@@ -6681,6 +6755,133 @@ function calcSessionDuration(exercises) {
  totalSec += 300; // 5 min récupération
  return Math.max(20, Math.round(totalSec / 60));
 }
+
+// ─── SCORING MOTEUR MUSCULATION (100 pts) ───────────────────────────────────
+// Évalue chaque séance générée sur 10 critères. Seuil de passage : 85/100.
+// Utilisé en QA interne et exposé sur l'objet day pour le debug produit.
+function scoreSession(exercises, params) {
+  if (!exercises || !exercises.length) return { total: 0, breakdown: {}, pass: false };
+  var p = params || {};
+  var level    = p.level    || 'intermediate';
+  var duration = p.duration || '1h';
+  var equipment= p.equipment|| 'gym';
+  var groups   = p.groups   || [];
+  var breakdown = {};
+
+  var _getTier = function(ex) {
+    var t = ex.tags || [];
+    if (t.indexOf('finisher')  !== -1) return 4;
+    if (t.indexOf('isolation') !== -1) return 3;
+    if (t.indexOf('compose')   !== -1) return (t.indexOf('force') !== -1 || t.indexOf('powerlifting') !== -1) ? 0 : 1;
+    return 2;
+  };
+
+  // 1. Structure (20 pts) — composé en 1er, isolation après composés
+  (function() {
+    var pts = 20;
+    var tiers = exercises.map(_getTier);
+    if (tiers[0] >= 3) pts -= 10; // isolation/finisher en 1er
+    else if (tiers[0] === 2) pts -= 4; // neutre en 1er
+    var lastComp = -1, firstIso = exercises.length;
+    tiers.forEach(function(t, i) { if (t <= 1) lastComp = i; if (t >= 3 && i < firstIso) firstIso = i; });
+    if (firstIso < lastComp) pts -= 8; // isolation avant composé
+    breakdown.structure = Math.max(0, pts);
+  })();
+
+  // 2. Pertinence des exercices (15 pts) — % d'exos issus des groupes cibles
+  (function() {
+    if (!groups.length) { breakdown.pertinence = 15; return; }
+    var poolSet = {};
+    groups.forEach(function(g) {
+      ((window.EXERCISES && window.EXERCISES[g]) || []).forEach(function(ex) { poolSet[(ex.n||'').toLowerCase().trim()] = true; });
+    });
+    var matched = exercises.filter(function(ex) { return poolSet[(ex.n||'').toLowerCase().trim()]; }).length;
+    var r = matched / exercises.length;
+    breakdown.pertinence = r >= 0.85 ? 15 : r >= 0.7 ? 11 : r >= 0.5 ? 7 : 3;
+  })();
+
+  // 3. Respect du niveau (10 pts) — pas d'exo lv > niveau utilisateur
+  (function() {
+    var maxLvMap = { beginner: 2, intermediate: 3, advanced: 4, pro: 5 };
+    var maxLv = maxLvMap[level] || 3;
+    var hard = exercises.filter(function(ex) { return (ex.lv||1) > maxLv; }).length;
+    breakdown.niveau = hard === 0 ? 10 : hard === 1 ? 7 : hard === 2 ? 4 : 0;
+  })();
+
+  // 4. Respect des zones ciblées (10 pts) — chaque groupe représenté
+  (function() {
+    if (!groups.length) { breakdown.zones = 10; return; }
+    var covered = {}; groups.forEach(function(g) { covered[g] = false; });
+    var pools = {};
+    groups.forEach(function(g) {
+      var s = {}; ((window.EXERCISES && window.EXERCISES[g]) || []).forEach(function(ex) { s[(ex.n||'').toLowerCase().trim()] = true; }); pools[g] = s;
+    });
+    exercises.forEach(function(ex) {
+      var k = (ex.n||'').toLowerCase().trim();
+      groups.forEach(function(g) { if (pools[g][k]) covered[g] = true; });
+    });
+    var miss = Object.keys(covered).filter(function(g) { return !covered[g]; }).length;
+    breakdown.zones = miss === 0 ? 10 : miss === 1 ? 7 : miss <= 2 ? 4 : 0;
+  })();
+
+  // 5. Cohérence volume/intensité (10 pts) — total séries dans plage cible
+  (function() {
+    var ranges = { '45min':[9,16], '1h':[12,20], '1h15':[16,28], '1h30':[18,32] };
+    var r = ranges[duration] || [12, 24];
+    var tot = exercises.reduce(function(s, ex) { var m = String(ex.sets||'').match(/^(\d+)/); return s + (m ? parseInt(m[1]) : 3); }, 0);
+    breakdown.volume = (tot >= r[0] && tot <= r[1]) ? 10 : Math.abs(tot - (r[0]+r[1])/2) < 5 ? 6 : 3;
+  })();
+
+  // 6. Équilibre machines/poids libres/BW (10 pts)
+  (function() {
+    var pts = 10;
+    var bw = 0;
+    exercises.forEach(function(ex) {
+      var t = ex.tags||[], eq = (ex.eq||'').toLowerCase().trim();
+      if (/^poids du corps$/i.test(eq) || t.indexOf('poids-du-corps') !== -1) bw++;
+    });
+    if (equipment === 'gym' && bw / exercises.length > 0.4) pts -= 5;
+    var machineN = exercises.filter(function(ex) { return (ex.tags||[]).indexOf('machine') !== -1; }).length;
+    if (machineN / exercises.length > 0.8) pts -= 3;
+    breakdown.equilibre = Math.max(0, pts);
+  })();
+
+  // 7. Absence de doublons (5 pts)
+  (function() {
+    var seen = {}, dups = 0;
+    exercises.forEach(function(ex) { var k=(ex.n||'').toLowerCase().trim(); if (seen[k]) dups++; seen[k]=true; });
+    breakdown.doublons = dups === 0 ? 5 : 0;
+  })();
+
+  // 8. Respect de la durée (5 pts) — durée estimée ± tolérance
+  (function() {
+    var targets = { '45min':45, '1h':60, '1h15':75, '1h30':90 };
+    var target = targets[duration] || 60;
+    var est = (typeof calcSessionDuration === 'function') ? calcSessionDuration(exercises) : 0;
+    if (!est) { breakdown.duree = 3; return; }
+    var diff = Math.abs(est - target);
+    breakdown.duree = diff <= 12 ? 5 : diff <= 22 ? 3 : diff <= 35 ? 1 : 0;
+  })();
+
+  // 9. Progression logique intra-séance (10 pts) — tiers croissants
+  (function() {
+    var pts = 10;
+    var tiers = exercises.map(_getTier);
+    var regressions = 0;
+    for (var i = 1; i < tiers.length; i++) { if (tiers[i] < tiers[i-1] - 1) regressions++; }
+    breakdown.progression = regressions >= 2 ? 3 : regressions === 1 ? 7 : pts;
+  })();
+
+  // 10. Cohérence nutrition/sport (5 pts) — volume justifie apports
+  (function() {
+    var minEx = { '45min':3, '1h':4, '1h15':5, '1h30':6 }[duration] || 4;
+    breakdown.nutrition = exercises.length >= minEx ? 5 : 2;
+  })();
+
+  var total = Object.keys(breakdown).reduce(function(s, k) { return s + breakdown[k]; }, 0);
+  return { total: total, breakdown: breakdown, pass: total >= 85 };
+}
+window.scoreSession = scoreSession;
 
 // Dépense calorique personnalisée — MET (Ainsworth 2011) pour musculation + Keytel 2005 pour cardio
 // NOTE: La formule Keytel (FC-based) est valide pour exercice aérobique CONTINU.
