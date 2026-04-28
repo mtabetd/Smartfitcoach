@@ -146,6 +146,9 @@
     if (!s.sportProgramStart) {
       s.sportProgramStart = new Date().toISOString().slice(0, 10);
     }
+    // Mettre à jour le contexte de la semaine (Problem 3)
+    var today = new Date().toISOString().slice(0, 10);
+    updateWeekContext(today, groups, s.trainingLoad, exercises);
   }
 
   // ── 6. Résumé périodisation (informatif pour l'UI) ────────────────────────
@@ -165,15 +168,206 @@
     return MAP[wi] || MAP[1];
   }
 
+  // ── 7. Configuration de périodisation complète ───────────────────────────
+  /**
+   * Retourne les modificateurs complets pour chaque semaine du cycle 4 semaines.
+   * Utilisé par sfcBuildMuscuDay (via custom-session.js et app-sport.js)
+   * pour adapter durMax, durSets et restOverride selon la phase.
+   *
+   * S1 — Volume base    : durMax 6, durSets 4, repos standard
+   * S2 — Volume ↑       : durMax 6, durSets 4 (step 8 +1 série composés)
+   * S3 — Intensité ↑    : durMax 5, durSets 5, repos ↑ (plus lourd, moins d'exos)
+   * S4 — Deload actif   : durMax 4, durSets 3, repos court (récupération active)
+   *
+   * @param {number} weekIndex — 1, 2, 3 ou 4
+   * @returns {{ durMax, durSets, restOverride, note }}
+   */
+  var PERIODIZATION_CFG = {
+    1: { durMax: 6, durSets: 4, restOverride: null,      note: 'S1 — Volume base' },
+    2: { durMax: 6, durSets: 4, restOverride: null,      note: 'S2 — Volume ↑ (+1 série composés)' },
+    3: { durMax: 5, durSets: 5, restOverride: '120-180s', note: 'S3 — Intensité ↑ — charges lourdes' },
+    4: { durMax: 4, durSets: 3, restOverride: '60s',     note: 'S4 — Deload actif' }
+  };
+
+  function getPeriodizationCfg(weekIndex) {
+    var wi = ((weekIndex - 1) % 4) + 1;
+    return Object.assign({}, PERIODIZATION_CFG[wi] || PERIODIZATION_CFG[1]);
+  }
+
+  // ── 8. État nutritionnel → impact volume entraînement ────────────────────
+  /**
+   * Lit S.goal (objectif nutrition) et S._nm (macros calculées) pour
+   * déterminer si l'utilisateur est en déficit, surplus ou équilibre.
+   * Retourne un volumeFactor appliqué au durMax de la séance.
+   *
+   * Logique :
+   *   shred/cut fort → réduction volume (préserver masse musculaire en déficit)
+   *   bulk/lean_bulk → autoriser volume ↑ (surplus = récupération facilitée)
+   *   neutral/recompo → léger ajustement
+   *
+   * Sources : Helms 2014 (muscle retention in deficit) | Barakat 2020 (recomp)
+   *
+   * @returns {{ state: string, volumeFactor: number, note: string|null }}
+   */
+  function getNutritionState() {
+    var s = global.S;
+    var neutral = { state: 'neutral', volumeFactor: 1.0, note: null };
+    if (!s) return neutral;
+
+    var goalKey = '';
+    if (s.goal !== null && s.goal !== undefined) {
+      var GOALS = (global.window && global.window.GOALS) ? global.window.GOALS : (global.GOALS || null);
+      if (GOALS && GOALS[s.goal]) goalKey = GOALS[s.goal].key || '';
+    }
+
+    // Déficit fort (objectif shred = sèche agressive)
+    if (goalKey === 'shred') {
+      return {
+        state:        'deficit_strong',
+        volumeFactor: 0.80,
+        note:         'Sèche — volume réduit pour préserver la masse musculaire.'
+      };
+    }
+    // Déficit modéré (cut = perte de poids progressive)
+    if (goalKey === 'cut') {
+      return {
+        state:        'deficit',
+        volumeFactor: 0.88,
+        note:         'Déficit modéré — volume légèrement réduit.'
+      };
+    }
+    // Surplus calorique
+    if (goalKey === 'bulk' || goalKey === 'lean_bulk') {
+      return {
+        state:        'surplus',
+        volumeFactor: 1.08,
+        note:         'Surplus — volume et intensité maximisés pour la croissance musculaire.'
+      };
+    }
+    // Recomposition : légère réduction pour privilégier qualité sur quantité
+    if (goalKey === 'recomposition') {
+      return { state: 'neutral', volumeFactor: 0.95, note: null };
+    }
+
+    return neutral;
+  }
+
+  // ── 9. Score de fatigue accumulée ─────────────────────────────────────────
+  /**
+   * Évalue la fatigue à partir de :
+   *   - RPE moyen des 5 dernières séances (sessionFeedback)
+   *   - Fréquence d'entraînement sur 7 jours (muscuSessionLog + customSessionHistory)
+   *   - Recommandation deload existante (shouldRecommendMuscuDeload)
+   *
+   * Retourne un cycleFactor (0.6-1.0) et un niveau sémantique.
+   *
+   * Sources : Fry & Kraemer 1997 (overtraining markers) | Meeusen 2013 (ECSS)
+   *
+   * @returns {{ level: string, cycleFactor: number, restRecommended: boolean, note: string|null }}
+   */
+  function getFatigueScore() {
+    var s = global.S;
+    var fresh = { level: 'fresh', cycleFactor: 1.0, restRecommended: false, note: null };
+    if (!s) return fresh;
+
+    // 1. Fréquence : jours avec activité sur les 7 derniers
+    var trainingDays7 = 0;
+    var customH = Array.isArray(s.customSessionHistory) ? s.customSessionHistory : [];
+    for (var i = 1; i <= 7; i++) {
+      var dt = new Date(Date.now() - i * 86400000).toISOString().slice(0, 10);
+      var hasMuscu  = s.muscuSessionLog && s.muscuSessionLog[dt] && Object.keys(s.muscuSessionLog[dt]).length > 0;
+      var hasFree   = customH.some(function (h) { return h.date === dt; });
+      if (hasMuscu || hasFree) trainingDays7++;
+    }
+
+    // 2. RPE moyen — 5 dernières séances
+    var avgRpe = 5;
+    if (s.sessionFeedback && typeof s.sessionFeedback === 'object') {
+      var fbKeys = Object.keys(s.sessionFeedback).sort().slice(-5);
+      var rpeVals = fbKeys
+        .map(function (k) { return s.sessionFeedback[k].rpe; })
+        .filter(function (v) { return typeof v === 'number' && v >= 1 && v <= 10; });
+      if (rpeVals.length > 0) {
+        avgRpe = rpeVals.reduce(function (a, b) { return a + b; }, 0) / rpeVals.length;
+      }
+    }
+
+    // 3. Deload recommandé par l'algorithme existant
+    var deloadFn = global.window && typeof global.window.shouldRecommendMuscuDeload === 'function'
+      ? global.window.shouldRecommendMuscuDeload
+      : (typeof global.shouldRecommendMuscuDeload === 'function' ? global.shouldRecommendMuscuDeload : null);
+    var deloadNeeded = deloadFn ? deloadFn() : false;
+
+    // Surcharge : deload requis ou RPE très élevé ou >5j/semaine
+    if (deloadNeeded || avgRpe >= 8.5 || trainingDays7 >= 6) {
+      var overNote = deloadNeeded
+        ? 'Surcharge détectée — deload recommandé (RPE chronique élevé).'
+        : (avgRpe >= 8.5
+          ? 'RPE moyen ' + Math.round(avgRpe * 10) / 10 + ' — volume réduit pour récupérer.'
+          : trainingDays7 + ' séances cette semaine — récupération prioritaire.');
+      return { level: 'overtrained', cycleFactor: 0.60, restRecommended: true, note: overNote };
+    }
+    // Fatigue légère
+    if (avgRpe >= 7.5 || trainingDays7 >= 5) {
+      var tireNote = avgRpe >= 7.5
+        ? 'Fatigue légère (RPE moy. ' + Math.round(avgRpe * 10) / 10 + ') — volume modéré.'
+        : trainingDays7 + ' séances cette semaine — volume maintenu, attention au repos.';
+      return { level: 'tired', cycleFactor: 0.80, restRecommended: false, note: tireNote };
+    }
+    // Normal
+    if (trainingDays7 >= 3) {
+      return { level: 'normal', cycleFactor: 0.95, restRecommended: false, note: null };
+    }
+    // Frais : peu d'activité ou RPE bas
+    return fresh;
+  }
+
+  // ── 10. Contexte de la semaine ────────────────────────────────────────────
+  /**
+   * Enregistre la séance du jour dans S.trainingWeekContext.
+   * Permet aux séances libres de signaler leur activité aux modules voisins
+   * (programme structuré, recommandations, fatigue).
+   *
+   * @param {string}   date      — 'YYYY-MM-DD'
+   * @param {string[]} groups    — groupes musculaires entraînés
+   * @param {string}   load      — 'heavy'|'moderate'|'light'
+   * @param {Object[]} exercises — liste exercices (pour count)
+   */
+  function updateWeekContext(date, groups, load, exercises) {
+    var s = global.S;
+    if (!s) return;
+    if (!s.trainingWeekContext || typeof s.trainingWeekContext !== 'object') {
+      s.trainingWeekContext = {};
+    }
+    s.trainingWeekContext[date] = {
+      groups:   (groups || []).slice(),
+      load:     load || 'moderate',
+      exCount:  exercises ? exercises.length : 0,
+      updatedAt: new Date().toISOString()
+    };
+    // Conserver seulement les 14 derniers jours
+    var ctxKeys = Object.keys(s.trainingWeekContext).sort();
+    if (ctxKeys.length > 14) {
+      ctxKeys.slice(0, ctxKeys.length - 14).forEach(function (k) {
+        delete s.trainingWeekContext[k];
+      });
+    }
+  }
+
   // ── API publique ──────────────────────────────────────────────────────────
   global.SFCSymbiosis = {
-    computeTrainingLoad: computeTrainingLoad,
-    getWeekIndex:        getWeekIndex,
-    getLoadMultipliers:  getLoadMultipliers,
+    computeTrainingLoad:   computeTrainingLoad,
+    getWeekIndex:          getWeekIndex,
+    getLoadMultipliers:    getLoadMultipliers,
     getFeedbackAdjustment: getFeedbackAdjustment,
-    notifySession:       notifySession,
-    getPeriodizationInfo: getPeriodizationInfo,
-    LOAD_MULTIPLIERS:    LOAD_MULTIPLIERS
+    notifySession:         notifySession,
+    getPeriodizationInfo:  getPeriodizationInfo,
+    getPeriodizationCfg:   getPeriodizationCfg,
+    getNutritionState:     getNutritionState,
+    getFatigueScore:       getFatigueScore,
+    updateWeekContext:     updateWeekContext,
+    LOAD_MULTIPLIERS:      LOAD_MULTIPLIERS,
+    PERIODIZATION_CFG:     PERIODIZATION_CFG
   };
 
 })(typeof window !== 'undefined' ? window : this);

@@ -692,6 +692,17 @@ function generateSportProgram() {
  // Cap absolu par niveau
  _durMax = Math.min(_durMax, maxExercisesPerSession);
 
+ // ── Périodisation SFCSymbiosis : overlay durMax / durSets / repos ─────────
+ if (window.SFCSymbiosis && window.SFCSymbiosis.getPeriodizationCfg) {
+   var _perioCfg = window.SFCSymbiosis.getPeriodizationCfg(window.SFCSymbiosis.getWeekIndex());
+   _durMax  = Math.min(_durMax, _perioCfg.durMax);           // S4 deload plafonne le volume
+   _durSets = _perioCfg.durSets || _durSets;                  // S3 +1 série / S4 -1 série
+   // restOverride : périodisation n'écrase pas les objectifs shred/force (priorité goal)
+   if (_perioCfg.restOverride && !hasShred && !hasStrength) {
+     restOverride = _perioCfg.restOverride;
+   }
+ }
+
  // Construire les regexes médicales (pont S.medical) une seule fois par jour
  var _medRx = [];
  if (Array.isArray(S.medical) && S.medical.length > 0) {
