@@ -757,7 +757,7 @@ var EXERCISES = {
       desc: "Debout, lever les haltères sur les cotes jusqu'à hauteur d'épaules.",
       tips: ["Légère flexion des coudes", "Lever max 90 degrés — depasser la parallele = conflit sous-acromial", "Contrôler la descente"],
       lv: 1,
-      tags: ["epaules", "isolation"]
+      tags: ["epaules", "isolation", "beginner-friendly"]
     },
     {
       n: "Oiseau (rear delt fly)",
@@ -817,7 +817,7 @@ var EXERCISES = {
       desc: "Debout, lever les haltères devant soi jusqu'à hauteur d'épaules.",
       tips: ["Bras légèrement fléchis", "Alterner ou simultane", "Ne pas utiliser l'elan"],
       lv: 1,
-      tags: ["epaules", "isolation"]
+      tags: ["epaules", "isolation", "beginner-friendly"]
     },
     {
       n: "Upright row (tirage menton)",
@@ -1032,7 +1032,7 @@ var EXERCISES = {
       desc: "Sous une table, paumes vers le haut, fléchissez les coudes en tirant la poitrine vers le dessous de table. Variante biceps de l'inverted row.",
       tips: ["Paumes vers le haut (supination)", "Coudes fixes, ne pas balancer", "Table stable"],
       lv: 1,
-      tags: ["biceps", "compose", "poids_corps"]
+      tags: ["biceps", "isolation", "poids_corps", "beginner-friendly"]
     },
     {
       n: "Chin-up négatif (descente lente)",
@@ -1066,7 +1066,7 @@ var EXERCISES = {
       desc: "Debout, fléchir les coudes pour monter la barre vers les épaules.",
       tips: ["Coudes fixes le long du corps", "Ne pas balancer le buste", "Contrôler la descente"],
       lv: 1,
-      tags: ["biceps", "avant-bras", "force"]
+      tags: ["biceps", "avant-bras", "isolation", "beginner-friendly"]
     },
     {
       n: "Curl haltères alterne",
@@ -1150,7 +1150,7 @@ var EXERCISES = {
       desc: "Debout sur la bande, fléchir les coudes contre la résistance.",
       tips: ["Tension constante", "Parfait en finition ou en voyage", "Varier les résistances"],
       lv: 1,
-      tags: ["biceps", "élastique", "débutant"]
+      tags: ["biceps", "élastique", "isolation", "débutant", "beginner-friendly"]
     },
         {
       n: "Curl marteau câble",
@@ -1210,7 +1210,7 @@ var EXERCISES = {
         desc: "Curl avec supination en montée (classique) et rotation en pronation avant de descendre, combinant les avantages du curl standard et du reverse curl.",
         tips: ["Monter en supination pour maximiser l'activation du biceps en haut du mouvement", "Rotation lente en pronation au point haut avant de descendre — contrôler la rotation du poignet", "La descente en pronation cible le brachioradialis en excentrique — double stimulus par rep", "Charge modérée — le Zottman est plus difficile qu'il n'y paraît à cause de la composante excentrique"],
         lv: 2,
-        tags: ["biceps", "avant-bras", "brachioradialis", "compose"]
+        tags: ["biceps", "avant-bras", "brachioradialis", "isolation"]
     },
     {
         n: "Drag curl",
@@ -1998,7 +1998,7 @@ var EXERCISES = {
       desc: "Allongé au sol, pieds à plat, pousser les hanches vers le plafond.",
       tips: ["Serrer les fessiers en haut", "Pieds à largeur de hanches", "Idéal pour les débutants"],
       lv: 1,
-      tags: ["fessiers", "poids du corps", "débutant"]
+      tags: ["fessiers", "poids du corps", "débutant", "beginner-friendly"]
     },
     {
       n: "Donkey kick",
@@ -2409,7 +2409,7 @@ var EXERCISES = {
         desc: "Allongé sur le dos, bras tendus vers le plafond, genoux à 90°. Descendre simultanément le bras gauche et la jambe droite sans toucher le sol, revenir et alterner.",
         tips: ["Bas du dos PLAQUÉ au sol en permanence — ne pas laisser le lombaire se cambrer pendant le mouvement", "Expirer lentement pendant le mouvement pour activer le transverse de l'abdomen", "Mouvement lent et contrôlé (3 secondes par côté) — la lenteur est l'élément clé", "Réf : McGill, Ultimate Back Fitness — exercice fondamental de stabilisation lombaire sans flexion"],
         lv: 1,
-        tags: ["abdos", "core", "anti-extension", "prehab", "lombaires"]
+        tags: ["abdos", "core", "anti-extension", "prehab", "lombaires", "beginner-friendly"]
     },
     {
         n: "Bird dog",
@@ -2421,7 +2421,7 @@ var EXERCISES = {
         desc: "À quatre pattes, étendre simultanément le bras gauche et la jambe droite jusqu'à l'horizontal, maintenir 2 secondes, revenir et alterner.",
         tips: ["Colonne neutre en permanence — pas d'extension lombaire, pas de rotation du bassin", "Maintenir 2-3 secondes en position étendue avant de revenir — c'est la tension isométrique qui compte", "Le nombril reste pointé vers le sol tout au long — indicateur que le bassin ne tourne pas", "Exercice McGill fondamental pour la stabilisation multi-directionnelle du tronc"],
         lv: 1,
-        tags: ["abdos", "core", "anti-rotation", "prehab", "poids du corps"]
+        tags: ["abdos", "core", "anti-rotation", "prehab", "poids du corps", "beginner-friendly"]
     },
     {
         n: "Toes-to-bar",

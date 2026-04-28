@@ -381,35 +381,28 @@ function generateSportProgram() {
  //   - advanced pri 2 : ancien 2-3, médiane 2 (au lieu de 3)
  // Progression respectueuse ISSN 2017 + ACSM (≤10% hausse volume/semaine).
  // FIX DÉTERMINISME MUSCU 2026-04 : médianes déterministes (cf. bloc commenté ci-dessus).
+ // FIX 2026-04-28 : duration-aware — 1h15/1h30 génèrent plus d'exercices par groupe pour
+ // correspondre au volume demandé (NSCA CSCS §18 : volume = f(durée séance)).
  function exerciseCountForPriority(pri) {
  var lvl = S.sportLevel || 'intermediate';
+ // +1 pour 1h15, +2 pour 1h30 — plafonné par durMax à l'étape cap
+ var _dur = S.sportSessionDuration || '';
+ var _dAdd = _dur === '1h30' ? 2 : _dur === '1h15' ? 1 : 0;
  if (lvl === 'beginner') {
- if (pri >= 5) return 2;
- if (pri === 4) return 2;
- if (pri === 3) return 1;
- if (pri === 2) return 1;
- return 1;
+   var _b = pri >= 5 ? 2 : pri === 4 ? 2 : pri >= 3 ? 1 : 1;
+   return Math.min(4, _b + (_dAdd > 0 ? 1 : 0));
  } else if (lvl === 'pro') {
  // FIX 2026-04-16 : pro était traité comme intermediate (tombait dans else).
  // Pro = athlète confirmé, volume supérieur à advanced (NSCA CSCS guidelines).
- if (pri >= 5) return 5;
- if (pri === 4) return 4;
- if (pri === 3) return 3;
- if (pri === 2) return 3;
- return 2;
+   var _p = pri >= 5 ? 5 : pri === 4 ? 4 : pri >= 3 ? 3 : 3;
+   return _p + _dAdd;
  } else if (lvl === 'advanced') {
- if (pri >= 5) return 4;
- if (pri === 4) return 4;
- if (pri === 3) return 3;
- if (pri === 2) return 2;
- return 2;
+   var _a = pri >= 5 ? 4 : pri === 4 ? 4 : pri >= 3 ? 3 : 2;
+   return _a + _dAdd;
  } else {
  // intermediate
- if (pri >= 5) return 3;
- if (pri === 4) return 3;
- if (pri === 3) return 2;
- if (pri === 2) return 2;
- return 1;
+   var _i = pri >= 5 ? 3 : pri === 4 ? 3 : pri >= 3 ? 2 : 2;
+   return Math.min(5, _i + _dAdd);
  }
  }
 
@@ -501,6 +494,36 @@ function generateSportProgram() {
  return (categoryPriority[b] || 0) - (categoryPriority[a] || 0);
  });
  });
+
+ // ── Adjacency repair : même muscle 2 jours de suite → violation ACSM 48-72h ─
+ // Ex: legs J1+J2 → transfert legs vers J3+ si disponible.
+ // Ne tourne que si pas de split structuré (PPL/Upper-Lower gèrent déjà l'espacement).
+ if (!S._splitChoice) {
+   var _adjPasses = 2; // 2 passes suffisent pour les cas courants à 3-6 jours
+   for (var _ap = 0; _ap < _adjPasses; _ap++) {
+     for (var _ad = 0; _ad < days - 1; _ad++) {
+       for (var _ci = 0; _ci < daySplits[_ad].length; _ci++) {
+         var _cat = daySplits[_ad][_ci];
+         var _nextIdx = daySplits[_ad + 1].indexOf(_cat);
+         if (_nextIdx === -1) continue; // pas de conflit sur ce jour
+         // Cherche un jour alternatif (≥ _ad+2) sans conflit d'adjacence
+         for (var _alt = _ad + 2; _alt < days; _alt++) {
+           var _prevOk = (_alt === 0) || daySplits[_alt - 1].indexOf(_cat) === -1;
+           var _nextOk = (_alt >= days - 1) || daySplits[_alt + 1].indexOf(_cat) === -1;
+           if (_prevOk && _nextOk) {
+             daySplits[_ad + 1].splice(_nextIdx, 1);
+             daySplits[_alt].push(_cat);
+             // Re-sort jour de destination par priorité
+             daySplits[_alt].sort(function(a, b) {
+               return (categoryPriority[b] || 0) - (categoryPriority[a] || 0);
+             });
+             break;
+           }
+         }
+       }
+     }
+   }
+ }
 
  // ── Split-aware daySplits override ──────────────────────────────────────────
  // When a structured split is chosen (Upper/Lower, PPL, etc.), override daySplits
@@ -752,6 +775,32 @@ function generateSportProgram() {
  // La phase Transition est naturellement la semaine de récupération (volume -40%).
  // Cohérent avec getMacroCyclePhase() — toutes les 3 semaines (cycles 3, 6, 9...).
  var _cyclePhaseIdx = ((S.muscuCycle || 1) - 1) % 3; // 0=Hypertrophie, 1=Force, 2=Transition
+
+ // ─── Phase FORCE (c=1) : schéma de répétitions lourd sur les composés ────────
+ // Sans ce bloc, les phases Hypertrophie ET Force sont IDENTIQUES (même 8-12 reps).
+ // Un programme sérieux doit ajuster les reps selon la phase (NSCA §17 ; Prilepin).
+ // Tier 0 (composé+force) : 5 séries × 4-6 reps — charge proche 85-90% 1RM
+ // Tier 1 (composé seul)  : 4 séries × 5-8 reps — charge 75-80% 1RM
+ // Isolation              : inchangé (10-15 reps — récup active même en semaine Force)
+ if (_cyclePhaseIdx === 1) {
+   dayExercises.forEach(function(ex) {
+     if (typeof ex.sets !== 'string') return;
+     var _tgs = ex.tags || [];
+     var _hasCompose = _tgs.indexOf('compose') !== -1;
+     var _hasForce   = _tgs.indexOf('force') !== -1 || _tgs.indexOf('powerlifting') !== -1;
+     var _hasIso     = _tgs.indexOf('isolation') !== -1;
+     if (_hasIso) return; // isolation : garder reps hautes
+     if (_hasCompose && _hasForce) {
+       // Tier 0 : +1 série, reps 4-6 (force maximale)
+       ex.sets = ex.sets.replace(/^(\d+)/, function(m, n) { return String(Math.min(parseInt(n) + 1, 6)); });
+       ex.sets = ex.sets.replace(/([×x])\d+-\d+/, function(m, sep) { return (sep || '×') + '4-6'; });
+     } else if (_hasCompose) {
+       // Tier 1 : reps 5-8 (force-hypertrophie)
+       ex.sets = ex.sets.replace(/([×x])\d+-\d+/, function(m, sep) { return (sep || '×') + '5-8'; });
+     }
+   });
+ }
+
  if (_cyclePhaseIdx === 2) {
    var _dlCap = Math.max(3, Math.round(dayExercises.length * 0.6));
    if (dayExercises.length > _dlCap) dayExercises = dayExercises.slice(0, _dlCap);
@@ -1131,7 +1180,7 @@ window.SPORT = {
  // sStep 20 = medical questionnaire (muscu pre-step), include it in progress
  if (S.sStep > 0) {
  var hdr = h('header', {'class': 'header'});
- var sportLabel = S.sportType === 'crossfit' ? 'Cross Training' : S.sportType === 'running' ? 'Running' : S.sportType === 'hyrox' ? 'Hyrox' : S.sportType === 'padel' ? 'Padel' : S.sportType === 'golf' ? 'Golf' : S.sportType === 'triathlon' ? 'Triathlon / IRONMAN' : S.sportType === 'yoga' ? (window.isEnglish && window.isEnglish() ? 'Yoga & Mobility' : (window.isEnglish && window.isEnglish() ? 'Yoga & Mobility' : 'Yoga & Mobilit\u00e9')) : S.sportType === 'cycling' ? 'Cyclisme' : S.sportType === 'calisthenics' ? 'Callisth\u00e9nie' : 'Musculation';
+ var sportLabel = S.sportType === 'crossfit' ? 'Cross Training' : S.sportType === 'running' ? 'Running' : S.sportType === 'hyrox' ? 'Hyrox' : S.sportType === 'padel' ? 'Padel' : S.sportType === 'golf' ? 'Golf' : S.sportType === 'triathlon' ? 'Triathlon / IRONMAN' : S.sportType === 'yoga' ? (window.isEnglish && window.isEnglish() ? 'Yoga & Mobility' : 'Yoga & Mobilit\u00e9') : S.sportType === 'cycling' ? 'Cyclisme' : S.sportType === 'calisthenics' ? 'Callisth\u00e9nie' : 'Musculation';
  hdr.appendChild(h('div', {'class': 'logo', html: 'SMARTFITCOACH<span>' + sportLabel + '</span>'}));
  var totalSteps = S.sportType === 'crossfit' ? 2 : S.sportType === 'running' ? 2 : S.sportType === 'hyrox' ? 2 : S.sportType === 'padel' ? 2 : S.sportType === 'golf' ? 2 : S.sportType === 'triathlon' ? 2 : S.sportType === 'yoga' ? 2 : S.sportType === 'cycling' ? 2 : S.sportType === 'calisthenics' ? 2 : 4;
  // sStep 20 (medical) maps to display step 0 for musculation (shown as "Éval. médicale")
@@ -3423,7 +3472,6 @@ function renderWellnessBanner(p) {
  confirmBtn.addEventListener('click', function() {
   var today = new Date().toISOString().slice(0, 10);
   S.todayWellness = { date: today, sleep: wellnessState.sleep, muscles: wellnessState.muscles, energy: wellnessState.energy };
-  // POLISH 2026-04 : push dans wellness history multi-jours (90j glissants)
   try { if (window.pushWellnessHistory) window.pushWellnessHistory(S.todayWellness); } catch(e) {}
   S._wellnessReminder = false;
   banner.style.display = 'none';
@@ -3432,6 +3480,16 @@ function renderWellnessBanner(p) {
   if (window.render) { try { window.render(); } catch(e) {} }
  });
  banner.appendChild(confirmBtn);
+
+ // Bouton "Passer" — check bien-être optionnel, ne bloque pas l'utilisateur
+ var _skipBtn = h('button', {style: 'width:100%;margin-top:8px;padding:10px;background:transparent;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;color:var(--grey,#6B6B65);cursor:pointer;text-decoration:underline;'}, (window.isEnglish && window.isEnglish()) ? 'Skip for now' : 'Passer pour l\'instant');
+ _skipBtn.addEventListener('click', function() {
+  S._wellnessReminder = false;
+  banner.style.display = 'none';
+  if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+  if (window.render) { try { window.render(); } catch(e) {} }
+ });
+ banner.appendChild(_skipBtn);
 
  function checkWellnessBannerComplete() {
   if (wellnessState.sleep && wellnessState.muscles && wellnessState.energy) {
@@ -3531,13 +3589,18 @@ function renderWellnessCheckin(p, onComplete) {
   try { if (window.pushWellnessHistory) window.pushWellnessHistory(S.todayWellness); } catch(e) {}
   if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Morning recap saved' : 'Bilan du matin enregistré', 'success', 2000);
   if (onComplete) onComplete();
- }}, (window.isEnglish && window.isEnglish() ? 'Start session' : 'Commencer la seance'));
+ }}, (window.isEnglish && window.isEnglish() ? 'Start session' : 'Commencer la séance'));
  p.appendChild(startBtn);
+
+ // Message d'aide : visible tant que le bouton est grisé, disparaît quand tout est rempli
+ var _startHint = h('div', {style: 'text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:8px;letter-spacing:0.3px;'}, (window.isEnglish && window.isEnglish()) ? 'Answer the 3 questions above to start' : 'Réponds aux 3 questions ci-dessus pour commencer');
+ p.appendChild(_startHint);
 
  function updateStartBtn() {
   if (state.sleep && state.muscles && state.energy) {
    startBtn.style.opacity = '1';
    startBtn.style.pointerEvents = 'auto';
+   _startHint.style.display = 'none';
   }
  }
 }
@@ -3637,7 +3700,8 @@ function appendSportMedicalBanner(p, sportName) {
     if (S.muscuMedical.feet) {
       _mw.push('\u26A0 Pieds / Fasciite : évitez les impacts répétés (course, sauts). Semelles adaptées obligatoires.');
     }
-    if (S.muscuMedical.hypertension && _ml.indexOf('hta') === -1 && _ml.indexOf('hta_severe') === -1 && _ml.indexOf('hypertension') === -1) {
+    var _mlMu = Array.isArray(S.medical) ? S.medical.map(function(m){return String(m).toLowerCase();}) : [];
+    if (S.muscuMedical.hypertension && _mlMu.indexOf('hta') === -1 && _mlMu.indexOf('hta_severe') === -1 && _mlMu.indexOf('hypertension') === -1) {
       _mw.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode('\u26A0 HTA (profil muscu) : pas d\u2019efforts isométriques maximaux. ')); _el.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _el.appendChild(document.createTextNode(' max 6/10. Restez en Zone 1-2.')); return _el; })());
     }
     if (_mw.length > 0) {
@@ -5152,6 +5216,18 @@ function getSuggestedWeight(exerciseName, reps, phase) {
  return Math.max(estLoad, 2.5);
  }
  }
+ // Priority 4: débutants sans 1RM ni historique — ratio poids-du-corps
+ if (S.sportLevel === 'beginner') {
+   var _bwFb = S.weight || 70;
+   var _sexFb = S.sex || 'homme';
+   var _nameFb = (exerciseName || '').toLowerCase();
+   var _ratioFb = /squat|fessier|cuisse|leg[\s-]press|rdl|deadlift|soulev/.test(_nameFb) ? (_sexFb === 'femme' ? 0.35 : 0.45)
+     : /bench|développé|d[eé]velopp[eé]|press|dips|pompes|push/.test(_nameFb) ? (_sexFb === 'femme' ? 0.20 : 0.35)
+     : /pull|traction|rowing|tirage|row/.test(_nameFb) ? (_sexFb === 'femme' ? 0.20 : 0.30)
+     : (_sexFb === 'femme' ? 0.08 : 0.12);
+   var _begLoad = Math.round(_bwFb * _ratioFb * pct / 2.5) * 2.5;
+   if (_begLoad > 0) return Math.max(_begLoad, 2.5);
+ }
  return null;
 }
 
@@ -6169,7 +6245,9 @@ function calcSessionDuration(exercises) {
  if (sm) { sets = parseInt(sm[1]); reps = parseInt(sm[2]); }
  var isCompound = /(squat|soulevé|développé|rowing|presse|hip thrust|fente|deadlift|tirage|pull)/i.test(ex.n || '');
  var tSet = reps * (isCompound ? 3.5 : 2.5);
- var rest = 90;
+ // FIX 2026-04-28 : repos réaliste — composé 120s, isolation 60s (avant flat 90s → sous-estimait
+ // la durée réelle de 20-25%). NSCA CSCS §18 : repos inter-série composés = 2-3 min.
+ var rest = isCompound ? 120 : 60;
  var rm = String(ex.rest || '').match(/(\d+)\s*min/i);
  var rs = String(ex.rest || '').match(/^(\d+)\s*s/i);
  if (rm) rest = parseInt(rm[1]) * 60;
@@ -7414,6 +7492,26 @@ function renderMusculationProgram(p) {
       el.textContent = (window.isEnglish && window.isEnglish() ? 'Session in progress \u2014 ' : 'S\u00e9ance en cours \u2014 ') + _mins + ' min';
     }, 30000);
     p.appendChild(_chronoEl);
+    // FIX UX — Bouton Pause séance (visible quand session active)
+    p.appendChild(h('button', {
+      style: 'display:block;width:100%;background:transparent;border:none;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);padding:4px 0;text-align:center;',
+      onclick: function() {
+        S._sessionPaused = true;
+        if (window.saveProfile) { try { window.saveProfile(); } catch(_pe) {} }
+        if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? '⏸ Session saved — come back when ready' : '⏸ Séance sauvegardée — reviens quand tu veux', 'info', 3000);
+        if (window.render) window.render();
+      }
+    }, (window.isEnglish && window.isEnglish()) ? '⏸ Pause' : '⏸ Pause'));
+  }
+  // FIX UX — Bannière reprise séance en pause
+  if (S._sessionPaused) {
+    var _resumeBar = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border:1px solid var(--border,#D8D8D0);background:rgba(26,60,94,0.04);margin-bottom:12px;'});
+    _resumeBar.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'}, (window.isEnglish && window.isEnglish()) ? '⏸ Session paused' : '⏸ Séance en pause'));
+    _resumeBar.appendChild(h('button', {
+      style: 'padding:8px 16px;background:var(--black,#0A0A09);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
+      onclick: function() { S._sessionPaused = false; if (window.render) window.render(); }
+    }, (window.isEnglish && window.isEnglish()) ? '▶ Resume' : '▶ Reprendre'));
+    p.appendChild(_resumeBar);
   }
 
   // ── Indicateur séance libre en cours ──
@@ -7459,6 +7557,24 @@ function renderMusculationProgram(p) {
     p.appendChild(_progressWrap);
   })();
 
+ })();
+
+ // FIX UX — Raccourci Séance libre visible sans scroller jusqu'en bas
+ (function() {
+   var _flIsEN = window.isEnglish && window.isEnglish();
+   var _flWrap = h('div', {style: 'text-align:right;margin-bottom:4px;'});
+   _flWrap.appendChild(h('button', {
+     style: 'background:transparent;border:none;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);text-decoration:underline;padding:4px 0;min-height:44px;',
+     onclick: function() {
+       if (window.CUSTOM_SESSION && typeof window.CUSTOM_SESSION.open === 'function') {
+         window.CUSTOM_SESSION.open();
+       } else {
+         S.sStep = 30;
+         if (window.render) window.render();
+       }
+     }
+   }, _flIsEN ? '+ Free session' : '+ Séance libre'));
+   p.appendChild(_flWrap);
  })();
 
  // ─── BADGE SÉANCE VALIDÉE ───
@@ -8125,6 +8241,39 @@ function renderMusculationProgram(p) {
    }
  }
 
+ // FIX UX — Répéter la série précédente (1 tap = copier poids+reps de si3-1)
+ if (si3 > 0 && !setRow.validated) {
+   var _prevSr2 = setData[si3 - 1];
+   if (_prevSr2 && (_prevSr2.actualWeight > 0 || _prevSr2.actualReps !== null)) {
+     var _wRef2 = (!isBodyweight && weightInput) ? weightInput : (pcLabel || null);
+     inputZone.appendChild(h('button', {
+       'aria-label': (window.isEnglish && window.isEnglish() ? 'Repeat previous set' : 'Répéter la série précédente'),
+       style: 'margin-left:auto;min-width:44px;min-height:32px;padding:0 8px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--grey,#6B6B65);cursor:pointer;white-space:nowrap;flex-shrink:0;',
+       onclick: (function(_srR, _prev, _wI, _rI, _isBwR) { return function(e) {
+         e.stopPropagation();
+         if (!_isBwR && _wI && _prev.actualWeight !== null && _prev.actualWeight > 0) {
+           _wI.value = String(_prev.actualWeight);
+           _wI.style.color = 'var(--black,#0A0A09)';
+           _srR.actualWeight = _prev.actualWeight;
+         }
+         if (_prev.actualReps !== null && _prev.actualReps > 0) {
+           _rI.value = String(_prev.actualReps);
+           _rI.style.color = 'var(--black,#0A0A09)';
+           _srR.actualReps = _prev.actualReps;
+         }
+         saveMuscuSessionLog();
+         var _row2 = e.target.closest ? e.target.closest('.set-row') : null;
+         var _vb2 = _row2 ? _row2.querySelector('.set-validate-btn') : null;
+         if (_vb2) {
+           var _ok3 = (_srR.actualReps !== null || !!_srR.targetReps) && (_srR.actualWeight !== null || (_isBwR && !_srR.weighted) || _srR.targetWeight > 0);
+           _vb2.disabled = !_ok3; _vb2.className = 'set-validate-btn' + (_ok3 ? '' : ' set-validate-btn-disabled');
+         }
+         if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Previous set copied' : 'Série copiée', 'info', 1400);
+       }; })(setRow, _prevSr2, _wRef2, repsInput, isBodyweight)
+     }, '↩ ' + (window.isEnglish && window.isEnglish() ? 'Repeat' : 'Répéter')));
+   }
+ }
+
  // Verrouiller les inputs si la série est déjà validée
  if (setRow.validated === true) {
  if (typeof weightInput !== 'undefined' && weightInput) { weightInput.disabled = true; weightInput.style.opacity = '0.5'; }
@@ -8464,6 +8613,19 @@ function renderMusculationProgram(p) {
  card.appendChild(altPanel);
  }
  })(ex, S.selectedSportDay, exIdx);
+
+ // FIX UX — Passer cet exercice (visible sauf sur le dernier)
+ if (exIdx < _totalExercises - 1) {
+   card.appendChild(h('button', {
+     style: 'margin-top:4px;width:100%;padding:8px 0;border:none;background:transparent;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:right;',
+     onclick: (function(_ei) { return function(e) {
+       e.stopPropagation();
+       S.currentExerciseIdx = _ei + 1;
+       if (navigator.vibrate) { try { navigator.vibrate(10); } catch(_v) {} }
+       if (window.render) window.render();
+     }; })(exIdx)
+   }, (window.isEnglish && window.isEnglish() ? 'Skip this exercise →' : 'Passer cet exercice →')));
+ }
 
  _swipeWrap.appendChild(card);
  })(); // fin rendu exercice courant
