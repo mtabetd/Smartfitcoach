@@ -57,6 +57,7 @@ function assert(cond, msg) { if (!cond) throw new Error(msg || 'assertion failed
 eval(fs.readFileSync(ROOT + '/app/food-db.js', 'utf8'));
 eval(fs.readFileSync(ROOT + '/app/extras.js', 'utf8'));
 eval(fs.readFileSync(ROOT + '/app/app-core.js', 'utf8'));
+eval(fs.readFileSync(ROOT + '/app/i18n-helpers.js', 'utf8'));
 eval(fs.readFileSync(ROOT + '/app/exercises-db.js', 'utf8'));
 eval(fs.readFileSync(ROOT + '/app/muscu-programs.js', 'utf8'));
 eval(fs.readFileSync(ROOT + '/app/app-sport.js', 'utf8'));
@@ -463,6 +464,39 @@ check('Eau: percent toujours entre 0 et 100 (fuzzing cible)', function() {
   });
   wt._getTarget = origTarget;
   wt._loadAll = origLoad;
+});
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// SECTION 7 — generateSportProgram: sportEquipment normalization
+// ═══════════════════════════════════════════════════════════════════════════════
+console.log('\n=== 7. generateSportProgram — sportEquipment normalization ===');
+
+// Stub sfcBuildMuscuDay if muscu-engine.js is not loaded (returns empty day — enough to
+// reach the end of generateSportProgram without crashing on a missing function).
+if (typeof window.sfcBuildMuscuDay !== 'function') {
+  window.sfcBuildMuscuDay = function() { return []; };
+}
+
+function _getEquipAfterGenerate(equipInput) {
+  var s = buildMuscuS({ sportEquipment: equipInput });
+  window.S = s;
+  try { window.generateSportProgram(); } catch(_e) { /* may throw on missing render helpers */ }
+  return window.S.sportEquipment;
+}
+
+check('sportEquipment = null → normalisé en "gym"', function() {
+  var eq = _getEquipAfterGenerate(null);
+  assert(eq === 'gym', 'null should normalize to "gym", got: ' + JSON.stringify(eq));
+});
+
+check('sportEquipment = "gym" (string) → inchangé', function() {
+  var eq = _getEquipAfterGenerate('gym');
+  assert(eq === 'gym', 'string "gym" should stay "gym", got: ' + JSON.stringify(eq));
+});
+
+check('sportEquipment = ["home"] (array) → normalisé en "home"', function() {
+  var eq = _getEquipAfterGenerate(['home']);
+  assert(eq === 'home', 'array ["home"] should normalize to "home", got: ' + JSON.stringify(eq));
 });
 
 // ─── Résumé ───────────────────────────────────────────────────────────────────

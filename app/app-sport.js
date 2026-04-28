@@ -301,6 +301,13 @@ function getPregnancySportWarning() {
 
 function generateSportProgram() {
  var S = window.S; // always use current state (module-level S may be stale if replaced)
+ // Normalize S.sportEquipment — prevents crashes on null / array inputs.
+ // null  → 'gym' (safe default), array → first element or 'gym', string → unchanged.
+ if (!S.sportEquipment) {
+   S.sportEquipment = 'gym';
+ } else if (Array.isArray(S.sportEquipment)) {
+   S.sportEquipment = S.sportEquipment[0] || 'gym';
+ }
  // FIX 2026-04-16 : clamp days 2-6 — 1 jour/sem n'a pas de split muscu viable
  var days = Math.min(6, Math.max(2, S.sportDays || 3));
  if (!S.sportDays && window.showToast) {
