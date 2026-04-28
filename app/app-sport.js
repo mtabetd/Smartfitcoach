@@ -11336,6 +11336,136 @@ function renderYogaOnboarding(p) {
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
+// ─── Yoga Session Generator ───────────────────────────────────────────────────
+var _YOGA_POOLS = {
+ flexibilite: {
+  debutant: [
+   { name: 'Cat-Cow (Marjaryasana-Bitilasana)', duration: '3 min', desc: '10 cycles lents, articulation vertèbre par vertèbre', focus: 'Mobilité colonne' },
+   { name: 'Uttanasana (flexion avant)',         duration: '3 min', desc: 'Genoux légers fléchis, tête lourde',               focus: 'Ischio-jambiers' },
+   { name: 'Lézard (Anjaneyasana)',              duration: '4 min', desc: '2 min par côté, bassin bas',                      focus: 'Fléchisseurs hanche' },
+   { name: 'Pigeon préparatoire',                duration: '4 min', desc: '2 min par côté, option bolster',                   focus: 'Hanches externes' },
+   { name: 'Torsion couchée',                   duration: '3 min', desc: '90 sec par côté, épaule au sol',              focus: 'Colonne vertébrale' },
+   { name: 'Supta Baddha Konasana',             duration: '3 min', desc: 'Papillon couché, relâchement complet',              focus: 'Adducteurs / Bassin' },
+   { name: 'Savasana',                          duration: '5 min', desc: 'Scan corporel, relâchement progressif',              focus: 'Intégration' }
+  ],
+  intermediaire: [
+   { name: 'Salutation au soleil A+B',          duration: '7 min', desc: '3 rounds A + 2 rounds B, respiration Ujjayi',   focus: 'Échauffement vinyasa' },
+   { name: 'Prasarita Padottanasana',           duration: '4 min', desc: 'Jambes écartées, 3 variantes',                    focus: 'Ischio / Adducteurs' },
+   { name: 'Pigeon (Eka Pada Rajakapotasana)',  duration: '6 min', desc: '3 min par côté, relâchement profond',          focus: 'Hanches / Psoas' },
+   { name: 'Hanumanasana (préparation)',         duration: '5 min', desc: 'Fente basse avec blocs, progression douce',     focus: 'Flexibilité hanche' },
+   { name: 'Supta Padangusthasana',             duration: '4 min', desc: '2 min par côté, sangle si besoin',               focus: 'Chaîne postérieure' },
+   { name: 'Paschimottanasana',                 duration: '4 min', desc: 'Flexion assise, micro-flexion genoux',              focus: 'Dos / Ischio-jambiers' },
+   { name: 'Savasana',                          duration: '5 min', desc: 'Intégration des ouvertures, respiration libre',   focus: 'Intégration' }
+  ],
+  avance: [
+   { name: 'Surya Namaskar A+B enchâîné',      duration: '10 min', desc: '5 rounds fluides, Chaturanga contrôlé',   focus: 'Échauffement complet' },
+   { name: 'Hanumanasana',                      duration: '6 min',  desc: '3 min par côté, descente progressive',          focus: 'Grand écart / Psoas' },
+   { name: 'Kapotasana (pigeon roi)',            duration: '8 min',  desc: '4 min par côté, ouverture profonde',             focus: 'Flexibilité avancée' },
+   { name: 'Paschimottanasana tenu',            duration: '5 min',  desc: 'Genoux micro-fléchis, respiration dorsale',        focus: 'Chaîne postérieure' },
+   { name: 'Supta Virasana',                    duration: '5 min',  desc: 'Bolster sous le dos, respiration lente',             focus: 'Quadriceps / Flexion' },
+   { name: 'Parivritta Trikonasana',            duration: '4 min',  desc: '2 min par côté, torsion profonde',             focus: 'Rotation thoracique' },
+   { name: 'Savasana',                          duration: '8 min',  desc: 'Yoga Nidra léger, intégration profonde',         focus: 'Intégration' }
+  ]
+ },
+ stress: {
+  debutant: [
+   { name: 'Nadi Shodhana (pranayama)',         duration: '5 min', desc: 'Respiration alternante, 10 cycles lents',         focus: 'Système nerveux' },
+   { name: 'Balasana (enfant)',                 duration: '3 min', desc: 'Bras allongés, front au sol, relâchement',      focus: 'Récupération' },
+   { name: 'Supta Baddha Konasana',             duration: '5 min', desc: 'Papillon couché, bolster sous les genoux',       focus: 'Parasympathique' },
+   { name: 'Viparita Karani (jambes au mur)',   duration: '5 min', desc: 'Jambes verticales, yeux fermés',               focus: 'Relaxation profonde' },
+   { name: 'Torsion couchée douce',              duration: '4 min', desc: '2 min par côté, sans forcer',                  focus: 'Décompression spinale' },
+   { name: 'Yoga Nidra intro',                  duration: '3 min', desc: 'Scan corporel rapide, visualisation calme',        focus: 'Détente mentale' },
+   { name: 'Savasana guidée',                    duration: '6 min', desc: 'Cohérence cardiaque, relâchement complet',      focus: 'Intégration' }
+  ],
+  intermediaire: [
+   { name: 'Pranayama 4-7-8',                  duration: '5 min', desc: 'Inspire 4 s, retien 7 s, expire 8 s',             focus: 'Système nerveux' },
+   { name: 'Balasana + Rocking',               duration: '3 min', desc: 'Balancement doux, massage crâne',               focus: 'Récupération active' },
+   { name: 'Yin Pigeon',                        duration: '6 min', desc: '3 min par côté, tenu passif',                   focus: 'Relâchement fascias' },
+   { name: 'Viparita Karani',                   duration: '6 min', desc: 'Jambes au mur, couverture si froid',               focus: 'Parasympathique' },
+   { name: 'Ardha Matsyendrasana',              duration: '4 min', desc: '2 min par côté, torsion assise douce',        focus: 'Détox / Digestion' },
+   { name: 'Ananda Balasana (happy baby)',      duration: '3 min', desc: 'Balancement latéral, respiration profonde',      focus: 'Bas du dos / Hanches' },
+   { name: 'Savasana guidée longue',               duration: '8 min', desc: 'Visualisation positive, scan de détente',     focus: 'Intégration' }
+  ],
+  avance: [
+   { name: 'Kapalabhati + Bhramari',            duration: '6 min', desc: 'Kapala 2 min, Bhramari 4 min, vibration calme',   focus: 'Régulation neuro' },
+   { name: 'Yin Frog (Mandukasana)',            duration: '5 min', desc: 'Grenouille longue, tenu passif profond',           focus: 'Hanches / Adducteurs' },
+   { name: 'Melting Heart (Anahatasana)',       duration: '5 min', desc: 'Poitrine au sol, bras étendus, relâchement',    focus: 'Ouverture cœur' },
+   { name: 'Sleeping Swan (Yin Pigeon)',        duration: '8 min', desc: '4 min par côté, gravité seule',               focus: 'Relâchement profond' },
+   { name: 'Viparita Karani + bolster',         duration: '6 min', desc: 'Bassin surélevé, inversion douce',              focus: 'Parasympathique' },
+   { name: 'Yoga Nidra',                        duration: '5 min', desc: 'Rotation de conscience 61 points',                  focus: 'Sommeil profond' },
+   { name: 'Savasana + Nidra',                 duration: '10 min', desc: 'Nidra guidé, état hypnagogique',               focus: 'Intégration' }
+  ]
+ },
+ force: {
+  debutant: [
+   { name: 'Salutation au soleil A',            duration: '5 min', desc: '5 rounds dynamiques, pousser dans le sol',        focus: 'Échauffement' },
+   { name: 'Guerrier I + II',                   duration: '5 min', desc: '3 cycles chaque côté, cuisses actives',          focus: 'Jambes / Hanches' },
+   { name: 'Planche (Kumbhakasana)',             duration: '3 min', desc: '3 × 30 sec, corps aligné tête-talons',         focus: 'Gainage core' },
+   { name: 'Chaturanga (genoux)',                duration: '3 min', desc: '3 × 5 reps, coudes serrés corps',                focus: 'Triceps / Pectoraux' },
+   { name: 'Navasana demi (Ardha Navasana)',     duration: '3 min', desc: '3 × 15 sec, dos droit, respiration',             focus: 'Abdominaux profonds' },
+   { name: 'Balasana (récupération)',              duration: '2 min', desc: 'Relâchement actif post-effort',                 focus: 'Récupération' },
+   { name: 'Savasana',                          duration: '5 min', desc: 'Intégration neuromusculaire, scan corporel',     focus: 'Intégration' }
+  ],
+  intermediaire: [
+   { name: 'Salutation au soleil A+B',          duration: '8 min', desc: '3 rounds A + 3 rounds B, chaleur active',         focus: 'Échauffement' },
+   { name: 'Guerrier III',                      duration: '4 min', desc: '2 min par côté, Drishti fixe',                   focus: 'Équilibre / Gainage' },
+   { name: 'Crow pose (Bakasana)',              duration: '5 min', desc: '3 tentatives × 15 sec, engagement core',         focus: 'Force bras / Concentration' },
+   { name: 'Chaturanga série complète',         duration: '4 min', desc: '4 × 5 reps, transition fluide',                  focus: 'Chaîne antérieure' },
+   { name: 'Navasana + Ardha Navasana',         duration: '4 min', desc: '3 cycles, 20 sec chaque, respiration',             focus: 'Core profond' },
+   { name: 'Vasisthasana (planche latérale)',    duration: '3 min', desc: '3 × 20 sec par côté, hanches hautes',       focus: 'Obliques / Épaules' },
+   { name: 'Savasana',                          duration: '5 min', desc: 'Récupération neuromusculaire',                    focus: 'Intégration' }
+  ],
+  avance: [
+   { name: 'Surya Namaskar A+B × 5',              duration: '10 min', desc: 'Enchâîné, Chaturanga complet, chaleur max',  focus: 'Échauffement complet' },
+   { name: 'Handstand prep (Mukha Vrksasana)',  duration: '6 min',  desc: 'Kicks contre mur, alignement strict',             focus: 'Inversion / Force' },
+   { name: 'Crow → Tripod Headstand',            duration: '6 min',  desc: 'Transition bras plié, 3 essais × 20 sec',       focus: 'Équilibre / Inversion' },
+   { name: 'Warrior III + Demi-lune',          duration: '5 min',  desc: '2.5 min par côté, enchâîné sans pause',    focus: 'Équilibre dynamique' },
+   { name: 'Navasana avancé (full V)',            duration: '4 min',  desc: '4 × 30 sec, jambes tendues, respiration',        focus: 'Core avancé' },
+   { name: 'Pincha Mayurasana',                 duration: '5 min',  desc: 'Forearm stand, 3 essais × 20 sec',                focus: 'Force / Inversion' },
+   { name: 'Savasana',                          duration: '8 min',  desc: 'Récupération neuromusculaire profonde',           focus: 'Intégration' }
+  ]
+ }
+};
+
+function _yogaPosePools(objective, level) {
+ var obj = (objective === 'recuperation') ? 'stress' : (objective || 'flexibilite');
+ var lvl = (level === 'avance') ? 'avance' : (level === 'intermediaire') ? 'intermediaire' : 'debutant';
+ return (_YOGA_POOLS[obj] && _YOGA_POOLS[obj][lvl]) || _YOGA_POOLS.flexibilite.debutant;
+}
+
+function _yogaApplyStyle(poses, style) {
+ if (style === 'hatha' || !style) return poses;
+ return poses.map(function(p) {
+  var isSavasana = p.focus === 'Intégration';
+  var mins = parseInt(p.duration);
+  var p2 = { name: p.name, desc: p.desc, focus: p.focus, duration: p.duration };
+  if (style === 'yin' && !isSavasana && !isNaN(mins) && mins < 10) {
+   p2.duration = Math.min(mins * 2, 8) + ' min';
+   p2.desc = p.desc + ' — tenu passif, gravité seule';
+  } else if (style === 'vinyasa' && !isSavasana && !isNaN(mins) && mins > 2) {
+   p2.duration = Math.max(mins - 1, 2) + ' min';
+   p2.desc = p.desc + ' — enchâîné avec Ujjayi';
+  } else if (style === 'ashtanga' && !isSavasana) {
+   p2.desc = p.desc + ' — Ashtanga: souffle-mouvement synchronisés';
+  }
+  return p2;
+ });
+}
+
+function generateYogaSession(opts) {
+ if (!opts || typeof opts !== 'object') opts = {};
+ var objective = opts.objective || 'flexibilite';
+ var style     = opts.style || 'hatha';
+ var level     = opts.level || 'debutant';
+ var duration  = opts.duration || '30min';
+ var maxPoses  = duration === '20min' ? 4 : duration === '30min' ? 5 : duration === '45min' ? 6 : 7;
+ var pool      = _yogaPosePools(objective, level);
+ var styled    = _yogaApplyStyle(pool, style);
+ var savasana  = styled[styled.length - 1];
+ var body      = styled.slice(0, styled.length - 1).slice(0, maxPoses - 1);
+ return body.concat([savasana]);
+}
+
 // ─── STEP 21: YOGA PROGRAM ───
 function renderYogaProgram(p) {
  // FIX BUG 2026-04-26 : guard manquant sur yogaObjectif — config incomplète → session card vide
@@ -11353,15 +11483,7 @@ function renderYogaProgram(p) {
  if (S.yogaWeek < 1) S.yogaWeek = 1;
 
  var weekData = YOGA_WEEKS[S.yogaWeek - 1];
- var levelKey = S.yogaLevel === 'avance' ? 'avance' : S.yogaLevel === 'intermediaire' ? 'intermediaire' : 'debutant';
- var basePoses = YOGA_SESSIONS[levelKey] || YOGA_SESSIONS.debutant;
-
- // Filter poses by duration — Savasana TOUJOURS en dernière position (règle coach)
- var maxPoses = S.yogaDuration === '20min' ? 4 : S.yogaDuration === '30min' ? 5 : S.yogaDuration === '45min' ? 6 : 7;
- var savasana = basePoses[basePoses.length - 1]; // Dernier élément = Savasana (toujours inclus)
- var posePool = basePoses.slice(0, basePoses.length - 1); // Tout sauf Savasana
- var bodyPoses = posePool.slice(0, Math.min(maxPoses - 1, posePool.length)); // maxPoses - 1 pour réserver la place Savasana
- var poses = bodyPoses.concat([savasana]); // Savasana toujours en dernier
+ var poses = generateYogaSession({ objective: S.yogaObjectif, style: S.yogaStyle, level: S.yogaLevel, duration: S.yogaDuration });
 
  // Pregnancy warning
  var pregWarn = getPregnancySportWarning();
@@ -11374,7 +11496,11 @@ function renderYogaProgram(p) {
  }
  appendSportMedicalBanner(p, 'Yoga');
  // Bridge nutrition — guard première fois uniquement
- if (!S._yogaNotified) { S._yogaNotified = true; _sfcNotifySport('yoga', S.yogaLevel); }
+ if (!S._yogaNotified) {
+  S._yogaNotified = true;
+  var _yogaBridgeLv = S.yogaObjectif === 'force' ? 'avance' : S.yogaObjectif === 'flexibilite' ? 'intermediaire' : 'debutant';
+  _sfcNotifySport('yoga', _yogaBridgeLv);
+ }
 
  // Medical warnings
  var med = S.muscuMedical || {};
