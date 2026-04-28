@@ -1671,8 +1671,9 @@ function getAdaptedMealSplit(dayIndex) {
   // Sans SFCSymbiosis ou sans trainingLoad → calMultiplier=1.0 (comportement inchangé).
   var _trainMult  = 1.0;
   var _carbBoost  = 1.0;
-  if (window.SFCSymbiosis && window.S && window.S.trainingLoad) {
-    var _mults = window.SFCSymbiosis.getLoadMultipliers(true, window.S.trainingLoad);
+  var _tl4mults = window.S && (window.S.dailyTrainingLoad || window.S.trainingLoad);
+  if (window.SFCSymbiosis && _tl4mults) {
+    var _mults = window.SFCSymbiosis.getLoadMultipliers(true, _tl4mults);
     _trainMult = _mults.cal;
     _carbBoost = _mults.carbBoost;
     // Feedback loop (optionnel) — ajustements fatigue / récupération
@@ -6790,7 +6791,7 @@ function computeNutritionState(trainingDay) {
     var _fatFloor = Math.round(result.caloriesTarget * 0.15 / 9); // plancher 15% lipides (ACSM 2009)
     if (trainingDay === true) {
       // Load-dependent carb boost: heavy=+20%, moderate=+10%, light=base (0% boost)
-      var _tl = (window.S && window.S.trainingLoad) || 'moderate';
+      var _tl = (window.S && (window.S.dailyTrainingLoad || window.S.trainingLoad)) || 'moderate';
       var _carbRate = _tl === 'heavy' ? 0.20 : _tl === 'moderate' ? 0.10 : 0;
       if (_carbRate > 0) {
         var _carbExtra = Math.round(result.carbsGrams * _carbRate);

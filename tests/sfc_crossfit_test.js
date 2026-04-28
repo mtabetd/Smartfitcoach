@@ -652,6 +652,62 @@ assert('T53b multi-sport cyc z3 60min no-FTP → moderate', mapCycLoad(3, 60, fa
 // Confirms sport switch changes load: heavy → moderate (84 → 54)
 
 // ─────────────────────────────────────────────────────────────────────────────
+// T54 – T58 : Multi-sport dailyTrainingLoad aggregation (MAX rule)
+// ─────────────────────────────────────────────────────────────────────────────
+process.stdout.write('\nMulti-sport dailyTrainingLoad aggregation\n');
+
+// Mirror of _sfcAggregateLoad — takes a map of {sport: load} and returns MAX
+var _LOAD_RANK_T = { light: 0, moderate: 1, heavy: 2 };
+var _RANK_LOAD_T = ['light', 'moderate', 'heavy'];
+function aggregateLoads(loadsMap) {
+  var maxRank = 0;
+  Object.keys(loadsMap).forEach(function(k) {
+    var r = _LOAD_RANK_T[loadsMap[k]];
+    if (typeof r === 'number' && r > maxRank) maxRank = r;
+  });
+  return _RANK_LOAD_T[maxRank] || 'moderate';
+}
+
+// T54: CF heavy + running light → daily = heavy
+assert('T54 CF heavy + running light → daily = heavy',
+  aggregateLoads({ crossfit: 'heavy', running: 'light' }) === 'heavy');
+
+// T55: running moderate + cycling heavy → daily = heavy
+assert('T55 running moderate + cycling heavy → daily = heavy',
+  aggregateLoads({ running: 'moderate', cycling: 'heavy' }) === 'heavy');
+
+// T56: 3 sports mixed — CF moderate + running light + cycling heavy → heavy
+assert('T56 CF mod + run light + cyc heavy → daily = heavy',
+  aggregateLoads({ crossfit: 'moderate', running: 'light', cycling: 'heavy' }) === 'heavy');
+
+// T57: all sports light → daily = light
+assert('T57 all light → daily = light',
+  aggregateLoads({ crossfit: 'light', running: 'light', cycling: 'light' }) === 'light');
+
+// T58: single sport heavy → daily = heavy (no other sports)
+assert('T58 single sport heavy → daily = heavy',
+  aggregateLoads({ crossfit: 'heavy' }) === 'heavy');
+
+// T59: all moderate → daily = moderate
+assert('T59 all moderate → daily = moderate',
+  aggregateLoads({ crossfit: 'moderate', running: 'moderate' }) === 'moderate');
+
+// T60: verify with real computed loads — CF(90min×1.3=117→heavy) + run(Z1 45min→22→light)
+// CF crossfitTrainingLoad=117 → heavy; run runningTrainingLoad=22 → light → MAX = heavy
+assert('T60 CF heavy (117) + run light (22) → daily = heavy',
+  aggregateLoads({
+    crossfit: (function(){ var l=Math.round(90*1.3); return l>=90?'heavy':l>=60?'moderate':'light'; })(),
+    running:  (function(){ var l=Math.round(45*0.5); return l>=80?'heavy':l>=40?'moderate':'light'; })()
+  }) === 'heavy');
+
+// T61: run moderate (Z2 60min=48) + cyc heavy (z4 FTP 60min=81) → daily = heavy
+assert('T61 run moderate (48) + cyc heavy (81) → daily = heavy',
+  aggregateLoads({
+    running:  (function(){ var l=Math.round(60*0.8);    return l>=80?'heavy':l>=40?'moderate':'light'; })(),
+    cycling:  (function(){ var l=Math.round(60*1.35);   return l>=80?'heavy':l>=40?'moderate':'light'; })()
+  }) === 'heavy');
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Summary
 // ─────────────────────────────────────────────────────────────────────────────
 process.stdout.write('\n' + (failed === 0 ? '✔' : '✖') +

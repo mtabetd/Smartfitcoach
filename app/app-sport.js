@@ -1762,7 +1762,7 @@ function _sfcNotifySport(sport, level) {
   // even when SFCSymbiosis is not loaded. Precision engines (CF/running/cycling) override
   // this with their second assignment after _sfcNotifySport returns.
   var _loadFromMet = met >= 9 ? 'heavy' : met >= 5 ? 'moderate' : 'light';
-  if (window.S) window.S.trainingLoad = _loadFromMet;
+  _sfcAggregateLoad(sport, _loadFromMet);
   if (!window.SFCSymbiosis || !window.SFCSymbiosis.notifySession) return;
   var exercises, groups;
   if (met >= 9) {
@@ -1777,10 +1777,32 @@ function _sfcNotifySport(sport, level) {
   }
   window.SFCSymbiosis.notifySession(exercises, groups);
   // Restore MET-based value — SFCSymbiosis.notifySession may overwrite S.trainingLoad
-  if (window.S) window.S.trainingLoad = _loadFromMet;
+  _sfcAggregateLoad(sport, _loadFromMet);
   console.log('[SFC] notifySession', sport, level, '->', window.S && window.S.trainingLoad);
 }
 window._sfcNotifySport = _sfcNotifySport;
+
+// ─── MULTI-SPORT LOAD AGGREGATOR ───
+// Stores per-sport load in S.trainingLoads; computes S.dailyTrainingLoad = MAX across all
+// sports seen in the current session. Called by every sport engine so a lower-intensity
+// sport rendered after a heavier one does not silently overwrite S.trainingLoad.
+var _LOAD_RANK = { light: 0, moderate: 1, heavy: 2 };
+var _RANK_LOAD = ['light', 'moderate', 'heavy'];
+function _sfcAggregateLoad(sport, load) {
+  if (!window.S) return;
+  if (!window.S.trainingLoads) window.S.trainingLoads = {};
+  if (load) window.S.trainingLoads[sport] = load;
+  var maxRank = 0;
+  var loads = window.S.trainingLoads;
+  Object.keys(loads).forEach(function(k) {
+    var r = _LOAD_RANK[loads[k]];
+    if (typeof r === 'number' && r > maxRank) maxRank = r;
+  });
+  var maxLoad = _RANK_LOAD[maxRank] || 'moderate';
+  window.S.dailyTrainingLoad = maxLoad;
+  window.S.trainingLoad      = maxLoad;
+}
+window._sfcAggregateLoad = _sfcAggregateLoad;
 
 // Creer une carte estimation calorique pour les programmes sport
 function buildKcalCard(kcal, durationMins) {
@@ -4051,17 +4073,11 @@ function renderCrossfitProgram(p) {
   var _cfRestFactor = computeCrossfitRestFactor(_cfInnerWod, _cfTypeStr, _cfMovs);
   S.crossfitIntensity    = _cfFinalIntensity;
   S.crossfitTrainingLoad = Math.round(_cfDurMins * CF_INTENSITY_FACTORS[_cfFinalIntensity] * _cfVolFactor * _cfRestFactor);
-  // Map numeric crossfitTrainingLoad → S.trainingLoad before bridge call so the precision
-  // engine value is available immediately; set again after to override the coarse MET-based
-  // estimate that SFCSymbiosis.notifySession would otherwise leave as the final value.
-  S.trainingLoad = S.crossfitTrainingLoad >= 90 ? 'heavy'
-                 : S.crossfitTrainingLoad >= 60 ? 'moderate'
-                 : 'light';
+  var _cfLoad = S.crossfitTrainingLoad >= 90 ? 'heavy'
+              : S.crossfitTrainingLoad >= 60 ? 'moderate' : 'light';
+  _sfcAggregateLoad('crossfit', _cfLoad);
   _sfcNotifySport('crossfit', S.crossfitLevel);
-  // Restore precision-computed load (notifySession overwrites S.trainingLoad with MET map)
-  S.trainingLoad = S.crossfitTrainingLoad >= 90 ? 'heavy'
-                 : S.crossfitTrainingLoad >= 60 ? 'moderate'
-                 : 'light';
+  _sfcAggregateLoad('crossfit', _cfLoad);
  }
 
  // Guard: if no WODs available, show a message instead of a blank page
@@ -10205,14 +10221,11 @@ function renderRunningProgram(p) {
  var _runZone     = sess.zone || 'Z2';
  var _runFactor   = RUN_ZONE_FACTORS[_runZone] || 0.8;
  S.runningTrainingLoad = Math.round(_runDurMins * _runFactor);
- S.trainingLoad = S.runningTrainingLoad >= 80 ? 'heavy'
-                : S.runningTrainingLoad >= 40 ? 'moderate'
-                : 'light';
+ var _runLoad = S.runningTrainingLoad >= 80 ? 'heavy'
+              : S.runningTrainingLoad >= 40 ? 'moderate' : 'light';
+ _sfcAggregateLoad('running', _runLoad);
  _sfcNotifySport('running', S.runningLevel);
- // Restore precision-computed load (notifySession overwrites S.trainingLoad with MET map)
- S.trainingLoad = S.runningTrainingLoad >= 80 ? 'heavy'
-                : S.runningTrainingLoad >= 40 ? 'moderate'
-                : 'light';
+ _sfcAggregateLoad('running', _runLoad);
  var zoneColorMap = {'Z1': '#3E5C3A', 'Z2': '#1A3A6A', 'Z3': '#7A3B0E', 'Z4': '#7A3B0E', 'Z5': '#7A1F1F', 'Z1-Z2': '#3E5C3A', 'Z4-Z5': '#7A1F1F', 'Z3-Z4': '#7A3B0E'};
  var sessColor = zoneColorMap[sess.zone] || '#0A0A09';
 
@@ -11980,14 +11993,11 @@ function renderCyclingProgram(p) {
  var _cycFactors = _cycFTP ? CYCLING_ZONE_FACTORS_FTP : CYCLING_ZONE_FACTORS_NOFTP;
  var _cycFactor  = _cycFactors[zoneNum] || 1.0;
  S.cyclingTrainingLoad = Math.round(sess.duration * _cycFactor);
- S.trainingLoad = S.cyclingTrainingLoad >= 80 ? 'heavy'
-                : S.cyclingTrainingLoad >= 40 ? 'moderate'
-                : 'light';
+ var _cycLoad = S.cyclingTrainingLoad >= 80 ? 'heavy'
+              : S.cyclingTrainingLoad >= 40 ? 'moderate' : 'light';
+ _sfcAggregateLoad('cycling', _cycLoad);
  _sfcNotifySport('cycling', S.cyclingLevel || 'intermediaire');
- // Restore precision-computed load (notifySession overwrites S.trainingLoad with MET map)
- S.trainingLoad = S.cyclingTrainingLoad >= 80 ? 'heavy'
-                : S.cyclingTrainingLoad >= 40 ? 'moderate'
-                : 'light';
+ _sfcAggregateLoad('cycling', _cycLoad);
  var zoneData = CYCLING_ZONES[Math.max(0, Math.min(zoneNum - 1, 4))] || CYCLING_ZONES[1];
  var zoneColor = zoneData ? zoneData.color : '#1A3A6A';
  var kcal = cyclingKcal(sess.duration, zoneNum, weightKg);
