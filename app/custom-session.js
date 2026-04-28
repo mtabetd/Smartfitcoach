@@ -806,11 +806,33 @@ function _csGenerateSessionFromMuscles(groups) {
   var isBeginner = S.sportLevel === 'beginner' || !S.sportLevel;
   var maxLv      = isBeginner ? 2 : 3;
 
-  var restOverride = null, repSuffix = '';
-  if (hasShred)      { restOverride = '45-60s'; repSuffix = ' (haute intensité)'; }
-  else if (hasStr)   { restOverride = '180-240s'; }
+  // ── SFCSymbiosis : contexte périodisation + nutrition + fatigue ───────
+  var _weekIdx   = window.SFCSymbiosis ? window.SFCSymbiosis.getWeekIndex()      : 1;
+  var _perio     = window.SFCSymbiosis ? window.SFCSymbiosis.getPeriodizationCfg(_weekIdx) : null;
+  var _nutri     = window.SFCSymbiosis ? window.SFCSymbiosis.getNutritionState()  : null;
+  var _fatigue   = window.SFCSymbiosis ? window.SFCSymbiosis.getFatigueScore()    : null;
 
-  // weekUsed : exercices des 48h pour varier (plus léger que la semaine complète)
+  // durMax : base périodisation → ajustement nutrition → ajustement fatigue
+  var durMax = _perio ? _perio.durMax : 6;
+  if (_nutri  && _nutri.volumeFactor < 1.0)  durMax = Math.max(3, Math.round(durMax * _nutri.volumeFactor));
+  if (_nutri  && _nutri.volumeFactor > 1.0)  durMax = Math.min(8, Math.round(durMax * _nutri.volumeFactor));
+  if (_fatigue && _fatigue.restRecommended)  durMax = Math.max(3, Math.round(durMax * 0.75));
+  // Cap absolu séance libre : 6 exercices hors déload
+  durMax = Math.min(durMax, 6);
+
+  // durSets : périodisation en priorité, puis hasStr
+  var durSets = _perio ? _perio.durSets : (hasStr ? 5 : 4);
+
+  // restOverride : priorité objectif sport, puis périodisation (sauf S4 deload)
+  var restOverride = null, repSuffix = '';
+  if (hasShred)    { restOverride = '45-60s'; repSuffix = ' (haute intensité)'; }
+  else if (hasStr) { restOverride = '180-240s'; }
+  else if (_perio && _perio.restOverride) { restOverride = _perio.restOverride; }
+
+  // cycleFactor : fatigue → réduction de séries
+  var cycleFactor = _fatigue ? _fatigue.cycleFactor : 1.0;
+
+  // weekUsed : exercices des 48h + contexte semaine (Problem 3)
   var weekUsed = {};
   if (S.muscuSessionLog) {
     var _norm = window.EXERCISE_SEARCH._normalize || function(s){ return (s||'').toLowerCase(); };
@@ -828,8 +850,8 @@ function _csGenerateSessionFromMuscles(groups) {
     equipment:    S.sportEquipment || S.equipment || 'gym',
     isBeginner:   isBeginner,
     maxLv:        maxLv,
-    durMax:       6,
-    durSets:      hasStr ? 5 : 4,
+    durMax:       durMax,
+    durSets:      durSets,
     pregTri:      null,
     pregForbidden: [],
     pregnancyWeek: S.pregnancyWeek || 0,
@@ -841,8 +863,8 @@ function _csGenerateSessionFromMuscles(groups) {
     hasStrength:  hasStr,
     repSuffix:    repSuffix,
     supersetNote: '',
-    cycleFactor:  1.0,
-    weekIndex:    window.SFCSymbiosis ? window.SFCSymbiosis.getWeekIndex() : 0
+    cycleFactor:  cycleFactor,
+    weekIndex:    _weekIdx
   });
 
   // ── Ajout au draft ────────────────────────────────────────────────────
@@ -855,7 +877,13 @@ function _csGenerateSessionFromMuscles(groups) {
   var draft = window.CUSTOM_SESSION.ensureDraft();
   draft._groups         = engineGroups.slice();
   draft._engineExercises = exercises.slice();
-  draft._sessionLabel   = _csGetSessionLabel(groups.map(function(g){ return g.key; }), S);
+
+  // Label enrichi avec contexte périodisation / nutrition / fatigue
+  var _periLabel  = _perio  ? _perio.note  : null;
+  var _nutriLabel = _nutri  && _nutri.note ? _nutri.note   : null;
+  var _fatLabel   = _fatigue && _fatigue.note ? _fatigue.note : null;
+  draft._sessionLabel  = _csGetSessionLabel(groups.map(function(g){ return g.key; }), S);
+  draft._sessionCtxNotes = [_periLabel, _nutriLabel, _fatLabel].filter(Boolean);
   window.CUSTOM_SESSION.saveDraft();
 }
 
