@@ -383,6 +383,68 @@ check('multi-sport: heavy load carbs > rest day carbs (sport switch simulation)'
     'heavy training (' + carbsHeavyTrain + 'g) should exceed light rest day (' + carbsLightRest + 'g)');
 });
 
+// ─── 11. Carb cycling v2 — smoothing cap + nutritionTag ──────────────────────
+console.log('\n=== 11. Carb cycling v2 — smoothing cap + nutritionTag ===');
+
+// Helper: build profile with optional pre-seeded heavyDayStreak
+function computeCarbsFull(overrides, isTrainingDay) {
+  window.S = buildCarbProfile(overrides);
+  var nm = window.computeNutritionState ? window.computeNutritionState(isTrainingDay) : null;
+  return { carbs: nm ? nm.carbsGrams : null, tag: window.S.nutritionTag, streak: window.S.heavyDayStreak };
+}
+
+check('2nd consecutive heavy day (+25%) yields more carbs than 1st heavy day (+20%)', function() {
+  var first  = computeCarbsFull({ trainingLoad: 'heavy', heavyDayStreak: 0 }, true);
+  var second = computeCarbsFull({ trainingLoad: 'heavy', heavyDayStreak: 1 }, true);
+  assert(first.carbs !== null, 'computeNutritionState returned null');
+  assert(second.carbs > first.carbs,
+    '2nd heavy day (' + second.carbs + 'g) should exceed 1st heavy day (' + first.carbs + 'g) — +25% vs +20%');
+});
+
+check('S.nutritionTag = performance on single heavy training day', function() {
+  var r = computeCarbsFull({ trainingLoad: 'heavy', heavyDayStreak: 0 }, true);
+  assert(r.tag === 'performance', 'expected performance, got: ' + r.tag);
+});
+
+check('S.nutritionTag = recovery after 2 consecutive heavy days', function() {
+  var r = computeCarbsFull({ trainingLoad: 'heavy', heavyDayStreak: 1 }, true);
+  assert(r.tag === 'recovery', 'expected recovery, got: ' + r.tag);
+  assert(r.streak === 2, 'expected streak=2, got: ' + r.streak);
+});
+
+check('S.nutritionTag = fat-loss on rest day', function() {
+  var r = computeCarbsFull({ trainingLoad: 'moderate' }, false);
+  assert(r.tag === 'fat-loss', 'expected fat-loss, got: ' + r.tag);
+});
+
+check('S.nutritionTag = fat-loss on light training day', function() {
+  var r = computeCarbsFull({ trainingLoad: 'light' }, true);
+  assert(r.tag === 'fat-loss', 'expected fat-loss, got: ' + r.tag);
+});
+
+check('S.heavyDayStreak resets to 0 on moderate day after heavy', function() {
+  // First simulate a heavy day (streak becomes 1)
+  computeCarbsFull({ trainingLoad: 'heavy', heavyDayStreak: 0 }, true);
+  // Then a moderate day — creates fresh S so streak starts at 0, resets to 0
+  var r = computeCarbsFull({ trainingLoad: 'moderate', heavyDayStreak: 0 }, true);
+  assert(r.streak === 0, 'streak should reset to 0 on non-heavy day, got: ' + r.streak);
+});
+
+check('fat-loss user (shred) still benefits from carb boost while staying in calorie deficit', function() {
+  if (_shredIdx < 0) { console.log('  (skipped — shred goal not found)'); return; }
+  // Single heavy day (not capped) for a shred user
+  window.S = buildCarbProfile({ goal: _shredIdx, trainingLoad: 'heavy', heavyDayStreak: 0 });
+  var tdee  = window.calcTDEE ? Math.round(window.calcTDEE()) : 0;
+  var nm    = window.computeNutritionState ? window.computeNutritionState(true) : null;
+  assert(nm !== null, 'computeNutritionState returned null');
+  assert(tdee > 0, 'calcTDEE returned 0');
+  // Macro swap is calorie-neutral → deficit maintained even with +20% carb boost
+  assert(nm.caloriesTarget < tdee,
+    'shred user deficit maintained: target=' + nm.caloriesTarget + ' < tdee=' + tdee);
+  assert(window.S.nutritionTag === 'performance',
+    'shred user on heavy training day → performance tag (carb boost for training)');
+});
+
 // ─── Résumé ───────────────────────────────────────────────────────────────────
 console.log('\n' + '─'.repeat(50));
 console.log('Résultats : ' + pass + ' pass, ' + fail + ' fail');

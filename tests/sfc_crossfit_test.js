@@ -708,6 +708,80 @@ assert('T61 run moderate (48) + cyc heavy (81) → daily = heavy',
   }) === 'heavy');
 
 // ─────────────────────────────────────────────────────────────────────────────
+// T62 – T68 : Carb cycling v2 — rate logic, smoothing cap, nutritionTag
+// ─────────────────────────────────────────────────────────────────────────────
+process.stdout.write('\nCarb cycling v2 — rate, smoothing, nutritionTag\n');
+
+// Mirror of computeNutritionState carb cycling v2 block (app-core.js).
+// prevStreak = S.heavyDayStreak before this call (0 if not set).
+function carbCyclingV2(trainingLoad, trainingDay, prevStreak) {
+  prevStreak = typeof prevStreak === 'number' ? prevStreak : 0;
+  var _tl = trainingLoad || 'moderate';
+  var _heavyStreak = (_tl === 'heavy') ? prevStreak + 1 : 0;
+
+  var _carbRate;
+  if (!trainingDay) {
+    _carbRate = -0.10;
+  } else if (_tl === 'heavy') {
+    _carbRate = _heavyStreak >= 2 ? 0.25 : 0.20;
+  } else if (_tl === 'moderate') {
+    _carbRate = 0.10;
+  } else {
+    _carbRate = 0;
+  }
+
+  var _tag;
+  if (_heavyStreak >= 2) {
+    _tag = 'recovery';
+  } else if (!trainingDay || _tl === 'light') {
+    _tag = 'fat-loss';
+  } else {
+    _tag = 'performance';
+  }
+
+  return { rate: _carbRate, tag: _tag, streak: _heavyStreak };
+}
+
+// T62: first heavy training day → +20%, performance tag
+var _r62 = carbCyclingV2('heavy', true, 0);
+assert('T62 heavy day (first) → rate=0.20',        _r62.rate   === 0.20);
+assert('T62b heavy day → tag=performance',          _r62.tag    === 'performance');
+assert('T62c heavy day → streak=1',                 _r62.streak === 1);
+
+// T63: 2nd consecutive heavy day → cap +25%, recovery tag
+var _r63 = carbCyclingV2('heavy', true, 1);
+assert('T63 2 heavy days → rate=0.25 (cap)',        _r63.rate   === 0.25);
+assert('T63b 2 heavy days → tag=recovery',          _r63.tag    === 'recovery');
+assert('T63c 2 heavy days → streak=2',              _r63.streak === 2);
+
+// T64: rest day → -10%, fat-loss tag (even when dailyTrainingLoad is heavy)
+var _r64 = carbCyclingV2('heavy', false, 0);
+assert('T64 rest day → rate=-0.10',                 _r64.rate   === -0.10);
+assert('T64b rest day → tag=fat-loss',              _r64.tag    === 'fat-loss');
+
+// T65: moderate training → +10%, performance tag
+var _r65 = carbCyclingV2('moderate', true, 0);
+assert('T65 moderate training → rate=0.10',         _r65.rate   === 0.10);
+assert('T65b moderate training → tag=performance',  _r65.tag    === 'performance');
+
+// T66: light training day → 0% boost, fat-loss tag
+var _r66 = carbCyclingV2('light', true, 0);
+assert('T66 light training → rate=0',               _r66.rate   === 0);
+assert('T66b light training → tag=fat-loss',        _r66.tag    === 'fat-loss');
+
+// T67: streak resets on non-heavy day → next isolated heavy is not capped
+var _s67a = carbCyclingV2('heavy',    true, 0).streak;       // 1
+var _s67b = carbCyclingV2('moderate', true, _s67a).streak;   // resets to 0
+var _r67c = carbCyclingV2('heavy',    true, _s67b);          // streak=1 again
+assert('T67 heavy→moderate→heavy: streak resets to 0',          _s67b === 0);
+assert('T67b isolated heavy after reset → rate=0.20 (not capped)', _r67c.rate === 0.20);
+
+// T68: 3+ consecutive heavy days → still capped at +25% (cap does not grow further)
+var _r68 = carbCyclingV2('heavy', true, 2);
+assert('T68 3 heavy days → still capped at +25%',   _r68.rate === 0.25);
+assert('T68b 3 heavy days → tag=recovery',           _r68.tag  === 'recovery');
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Summary
 // ─────────────────────────────────────────────────────────────────────────────
 process.stdout.write('\n' + (failed === 0 ? '✔' : '✖') +
