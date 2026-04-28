@@ -1736,7 +1736,6 @@ window.estimateKcal = estimateKcal;
 // notifySession reste inchangé ; seule la forme des exercices change.
 // MET ≥ 9 → heavy | 5 ≤ MET < 9 → moderate | MET < 5 → light
 function _sfcNotifySport(sport, level) {
-  if (!window.SFCSymbiosis || !window.SFCSymbiosis.notifySession) return;
   var MET_MAP = {
     crossfit:    { scaled:7, inter:8, rx:9, rx_plus:12 },
     running:     { debutant:7, intermediaire:9, avance:11, beginner:7, intermediate:9, advanced:11 },
@@ -1749,21 +1748,26 @@ function _sfcNotifySport(sport, level) {
     yoga:        { debutant:2.5, intermediaire:3, avance:4, beginner:2.5, intermediate:3, advanced:4 }
   };
   var met = (MET_MAP[sport] && MET_MAP[sport][level]) || 6;
+  // Canonical trainingLoad from MET — set before bridge so all sports have S.trainingLoad
+  // even when SFCSymbiosis is not loaded. Precision engines (CF/running/cycling) override
+  // this with their second assignment after _sfcNotifySport returns.
+  var _loadFromMet = met >= 9 ? 'heavy' : met >= 5 ? 'moderate' : 'light';
+  if (window.S) window.S.trainingLoad = _loadFromMet;
+  if (!window.SFCSymbiosis || !window.SFCSymbiosis.notifySession) return;
   var exercises, groups;
   if (met >= 9) {
-    // heavy : 6 composés + groupes lourds → computeTrainingLoad → 'heavy'
     exercises = [{n:'A',tags:[]},{n:'B',tags:[]},{n:'C',tags:[]},{n:'D',tags:[]},{n:'E',tags:[]},{n:'F',tags:[]}];
     groups    = ['back', 'legs'];
   } else if (met >= 5) {
-    // moderate : 5 composés + 1 groupe lourd → 'moderate'
     exercises = [{n:'A',tags:[]},{n:'B',tags:[]},{n:'C',tags:[]},{n:'D',tags:[]},{n:'E',tags:[]}];
     groups    = ['back'];
   } else {
-    // light : 3 isolation, aucun groupe lourd → 'light'
     exercises = [{n:'A',tags:['isolation']},{n:'B',tags:['isolation']},{n:'C',tags:['isolation']}];
     groups    = [];
   }
   window.SFCSymbiosis.notifySession(exercises, groups);
+  // Restore MET-based value — SFCSymbiosis.notifySession may overwrite S.trainingLoad
+  if (window.S) window.S.trainingLoad = _loadFromMet;
   console.log('[SFC] notifySession', sport, level, '->', window.S && window.S.trainingLoad);
 }
 window._sfcNotifySport = _sfcNotifySport;

@@ -528,6 +528,39 @@ assert('T39b load=60  → moderate (boundary)', mapCFLoad(60)  === 'moderate');
 assert('T40b load=59  → light (boundary)',    mapCFLoad(59)  === 'light');
 
 // ─────────────────────────────────────────────────────────────────────────────
+// T46 – T48 : Unified trainingLoad — MET→load mapping for all sports
+// ─────────────────────────────────────────────────────────────────────────────
+process.stdout.write('\nUnified sport trainingLoad (MET map)\n');
+
+// Mirror of the MET_MAP / threshold logic in _sfcNotifySport
+var MET_MAP_T = {
+  crossfit:    { scaled:7, inter:8, rx:9, rx_plus:12 },
+  running:     { debutant:7, intermediaire:9, avance:11 },
+  hyrox:       { debutant:9, intermediaire:11, avance:13, pro:14 },
+  padel:       { debutant:6, intermediaire:8, avance:9, competition:10 },
+  golf:        { debutant:3.5, intermediaire:4, avance:4.5, scratch:5 },
+  triathlon:   { debutant:8, intermediaire:10, avance:12 },
+  cycling:     { debutant:6, intermediaire:8, avance:10 },
+  calisthenics:{ debutant:4, intermediaire:6, avance:8 },
+  yoga:        { debutant:2.5, intermediaire:3, avance:4 }
+};
+function metToLoad(sport, level) {
+  var met = (MET_MAP_T[sport] && MET_MAP_T[sport][level]) || 6;
+  return met >= 9 ? 'heavy' : met >= 5 ? 'moderate' : 'light';
+}
+
+assert('T46 hyrox intermediaire → heavy',        metToLoad('hyrox', 'intermediaire')    === 'heavy');
+assert('T46b hyrox debutant → heavy',            metToLoad('hyrox', 'debutant')         === 'heavy');
+assert('T47 yoga intermediaire → light',         metToLoad('yoga', 'intermediaire')     === 'light');
+assert('T47b yoga avance → light',               metToLoad('yoga', 'avance')            === 'light');
+assert('T48 calisthenics intermediaire → moderate', metToLoad('calisthenics', 'intermediaire') === 'moderate');
+assert('T48b calisthenics debutant → light',     metToLoad('calisthenics', 'debutant')  === 'light');
+assert('T48c triathlon debutant → moderate',     metToLoad('triathlon', 'debutant')     === 'moderate');
+assert('T48d triathlon intermediaire → heavy',   metToLoad('triathlon', 'intermediaire')  === 'heavy');
+assert('T48e padel intermediaire → moderate',    metToLoad('padel', 'intermediaire')    === 'moderate');
+assert('T48f golf avance → light',               metToLoad('golf', 'avance')            === 'light');
+
+// ─────────────────────────────────────────────────────────────────────────────
 // T44 – T45 : Cycling FTP-based intensity → S.trainingLoad mapping
 // ─────────────────────────────────────────────────────────────────────────────
 process.stdout.write('\nCycling FTP intensity → trainingLoad mapping\n');
