@@ -1724,6 +1724,43 @@ function estimateKcal(sportType, level, durationMins) {
 }
 window.estimateKcal = estimateKcal;
 
+// ── Bridge SFCSymbiosis universel — tous les sports hors musculation ──────────
+// Convertit (sport, level) → exercices synthétiques → notifySession.
+// notifySession reste inchangé ; seule la forme des exercices change.
+// MET ≥ 9 → heavy | 5 ≤ MET < 9 → moderate | MET < 5 → light
+function _sfcNotifySport(sport, level) {
+  if (!window.SFCSymbiosis || !window.SFCSymbiosis.notifySession) return;
+  var MET_MAP = {
+    crossfit:    { scaled:7, inter:8, rx:9, rx_plus:12 },
+    running:     { debutant:7, intermediaire:9, avance:11, beginner:7, intermediate:9, advanced:11 },
+    hyrox:       { debutant:9, intermediaire:11, avance:13, pro:14, beginner:9, intermediate:11, advanced:13 },
+    padel:       { debutant:6, intermediaire:8, avance:9, competition:10, beginner:6, intermediate:8, advanced:9 },
+    golf:        { debutant:3.5, intermediaire:4, avance:4.5, scratch:5, beginner:3.5, intermediate:4, advanced:4.5 },
+    triathlon:   { beginner:8, intermediate:10, advanced:12, elite:13, debutant:8, intermediaire:10, avance:12 },
+    cycling:     { debutant:6, intermediaire:8, avance:10, beginner:6, intermediate:8, advanced:10 },
+    calisthenics:{ debutant:4, intermediaire:6, avance:8, beginner:4, intermediate:6, advanced:8 },
+    yoga:        { debutant:2.5, intermediaire:3, avance:4, beginner:2.5, intermediate:3, advanced:4 }
+  };
+  var met = (MET_MAP[sport] && MET_MAP[sport][level]) || 6;
+  var exercises, groups;
+  if (met >= 9) {
+    // heavy : 6 composés + groupes lourds → computeTrainingLoad → 'heavy'
+    exercises = [{n:'A',tags:[]},{n:'B',tags:[]},{n:'C',tags:[]},{n:'D',tags:[]},{n:'E',tags:[]},{n:'F',tags:[]}];
+    groups    = ['back', 'legs'];
+  } else if (met >= 5) {
+    // moderate : 5 composés + 1 groupe lourd → 'moderate'
+    exercises = [{n:'A',tags:[]},{n:'B',tags:[]},{n:'C',tags:[]},{n:'D',tags:[]},{n:'E',tags:[]}];
+    groups    = ['back'];
+  } else {
+    // light : 3 isolation, aucun groupe lourd → 'light'
+    exercises = [{n:'A',tags:['isolation']},{n:'B',tags:['isolation']},{n:'C',tags:['isolation']}];
+    groups    = [];
+  }
+  window.SFCSymbiosis.notifySession(exercises, groups);
+  console.log('[SFC] notifySession', sport, level, '->', window.S && window.S.trainingLoad);
+}
+window._sfcNotifySport = _sfcNotifySport;
+
 // Creer une carte estimation calorique pour les programmes sport
 function buildKcalCard(kcal, durationMins) {
   var dureeStr = durationMins ? (durationMins + ' min') : '--';
@@ -3950,6 +3987,11 @@ function renderCrossfitProgram(p) {
  var template = CF_DAY_TEMPLATES[daysPerWeek] || CF_DAY_TEMPLATES[4];
  S.crossfitWeek = S.crossfitWeek || 1;
  var weekProgram = generateCrossfitWeek(S.crossfitWeek, daysPerWeek);
+ // Bridge nutrition — une fois par semaine (guard anti-double-render)
+ if (S._cfLastNotifiedWeek !== S.crossfitWeek) {
+  S._cfLastNotifiedWeek = S.crossfitWeek;
+  _sfcNotifySport('crossfit', S.crossfitLevel);
+ }
 
  // Guard: if no WODs available, show a message instead of a blank page
  if (!weekProgram || !weekProgram.length) {
@@ -9980,6 +10022,7 @@ function renderRunningConfig(p) {
  if (ok) {
  var goalObj = (window.RUNNING_GOALS || []).find(function(g){ return g.id === S.runningGoal; });
  if (typeof window.generateRunningProgram === 'function') S.runningProgram = window.generateRunningProgram(goalObj ? goalObj.weeks : 8, S.runningDays, S.runningLevel, S.runningGoal);
+ _sfcNotifySport('running', S.runningLevel);
  S.runningWeek = 1;
  S.selectedRunDay = 0;
  S.sStep = 8;
@@ -10330,6 +10373,7 @@ function renderHyroxConfig(p) {
  if (ok) {
  if (typeof window.generateHyroxProgram !== 'function') { console.error('[hyrox] generateHyroxProgram module not loaded'); return; }
  S.hyroxProgram = window.generateHyroxProgram(S.hyroxDays, S.hyroxLevel, S.hyroxGoal);
+ _sfcNotifySport('hyrox', S.hyroxLevel);
  S.hyroxWeek = 1;
  S.selectedHyroxDay = 0;
  S.sStep = 10;
@@ -10595,7 +10639,7 @@ function renderPadelConfig(p) {
  p.appendChild(h('div', {style: 'height:24px'}));
  var ok = S.padelGoal && S.padelLevel;
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
- if (ok) { if (typeof window.generatePadelProgram !== 'function') { console.error('[padel] generatePadelProgram module not loaded'); return; } S.padelProgram = window.generatePadelProgram(S.padelDays, S.padelLevel, S.padelGoal); S.padelWeek = 1; S.selectedPadelDay = 0; S.sStep = 12; window.render(); }
+ if (ok) { if (typeof window.generatePadelProgram !== 'function') { console.error('[padel] generatePadelProgram module not loaded'); return; } S.padelProgram = window.generatePadelProgram(S.padelDays, S.padelLevel, S.padelGoal); _sfcNotifySport('padel', S.padelLevel); S.padelWeek = 1; S.selectedPadelDay = 0; S.sStep = 12; window.render(); }
  }}, 'Concevoir mon programme'));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
 }
@@ -10730,7 +10774,7 @@ function renderGolfConfig(p) {
  p.appendChild(h('div', {style: 'height:24px'}));
  var ok = S.golfGoal && S.golfLevel;
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
- if (ok) { if (typeof window.generateGolfProgram !== 'function') { console.error('[golf] generateGolfProgram module not loaded'); return; } S.golfProgram = window.generateGolfProgram(S.golfDays, S.golfLevel, S.golfGoal); S.golfWeek = 1; S.selectedGolfDay = 0; S.sStep = 14; window.render(); }
+ if (ok) { if (typeof window.generateGolfProgram !== 'function') { console.error('[golf] generateGolfProgram module not loaded'); return; } S.golfProgram = window.generateGolfProgram(S.golfDays, S.golfLevel, S.golfGoal); _sfcNotifySport('golf', S.golfLevel); S.golfWeek = 1; S.selectedGolfDay = 0; S.sStep = 14; window.render(); }
  }}, 'Concevoir mon programme'));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
 }
@@ -10969,6 +11013,7 @@ function renderTriathlonConfig(p) {
  };
  if (typeof window.generateTriathlonProgram !== 'function') { p.appendChild(h('p', {style:'text-align:center;padding:24px;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px'}, (window.isEnglish && window.isEnglish() ? 'Triathlon module not loaded. Reload the page.' : 'Module triathlon non chargé. Rechargez la page.'))); return; }
  S.triathlonProgram = window.generateTriathlonProgram(S.triathlonGoal, S.triathlonLevel, S.triathlonWeak || null, triopts);
+ _sfcNotifySport('triathlon', S.triathlonLevel);
  S.triathlonWeek = 1;
  S.selectedTriDay = 0;
  S.sStep = 18;
@@ -11328,6 +11373,8 @@ function renderYogaProgram(p) {
  p.appendChild(pw);
  }
  appendSportMedicalBanner(p, 'Yoga');
+ // Bridge nutrition — guard première fois uniquement
+ if (!S._yogaNotified) { S._yogaNotified = true; _sfcNotifySport('yoga', S.yogaLevel); }
 
  // Medical warnings
  var med = S.muscuMedical || {};
@@ -11619,6 +11666,7 @@ function renderCyclingOnboarding(p) {
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (!ok) return;
  S.cyclingProgram = generateCyclingPlan(S.cyclingLevel, S.cyclingDays || 3);
+ _sfcNotifySport('cycling', S.cyclingLevel);
  S.cyclingWeek = 1;
  S.selectedCyclingDay = 0;
  S.sStep = 23;
@@ -11993,6 +12041,8 @@ function renderCalisthenicsProgram(content) {
   content.appendChild(h('div', {'class': 'card'}, h('div', {style: 'color:red;font-size:13px'}, (window.isEnglish && window.isEnglish() ? 'Unable to display the program — please retry or reload the page. (' + e.message + ')' : 'Impossible d\'afficher le programme — réessayez ou rechargez la page. (' + e.message + ')'))));
   return;
  }
+ // Bridge nutrition — guard première fois uniquement
+ if (!S._calisthNotified) { S._calisthNotified = true; _sfcNotifySport('calisthenics', level); }
 
  // State for current week display
  if (!planData || !Array.isArray(planData.plan) || planData.plan.length === 0) {
