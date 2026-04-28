@@ -4240,7 +4240,17 @@ function renderCrossfitProgram(p) {
   var _cfRestFactor = computeCrossfitRestFactor(_cfInnerWod, _cfTypeStr, _cfMovs);
   S.crossfitIntensity    = _cfFinalIntensity;
   S.crossfitTrainingLoad = Math.round(_cfDurMins * CF_INTENSITY_FACTORS[_cfFinalIntensity] * _cfVolFactor * _cfRestFactor);
+  // Map numeric crossfitTrainingLoad → S.trainingLoad before bridge call so the precision
+  // engine value is available immediately; set again after to override the coarse MET-based
+  // estimate that SFCSymbiosis.notifySession would otherwise leave as the final value.
+  S.trainingLoad = S.crossfitTrainingLoad >= 90 ? 'heavy'
+                 : S.crossfitTrainingLoad >= 60 ? 'moderate'
+                 : 'light';
   _sfcNotifySport('crossfit', S.crossfitLevel);
+  // Restore precision-computed load (notifySession overwrites S.trainingLoad with MET map)
+  S.trainingLoad = S.crossfitTrainingLoad >= 90 ? 'heavy'
+                 : S.crossfitTrainingLoad >= 60 ? 'moderate'
+                 : 'light';
  }
 
  // Guard: if no WODs available, show a message instead of a blank page

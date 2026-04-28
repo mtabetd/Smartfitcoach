@@ -509,6 +509,25 @@ var tl37 = Math.round(20 * CF_INTENSITY_FACTORS_T37['high'] * 1.0 * 0.85);
 assert('T37 trainingLoad 20×1.3×1.0×0.85 = 22', tl37 === 22);
 
 // ─────────────────────────────────────────────────────────────────────────────
+// T38 – T40 : crossfitTrainingLoad → S.trainingLoad mapping
+// ─────────────────────────────────────────────────────────────────────────────
+process.stdout.write('\ncrossfitTrainingLoad → trainingLoad mapping\n');
+
+// Inline mirror of the mapping used in renderCrossfitProgram.
+function mapCFLoad(n) {
+  return n >= 90 ? 'heavy' : n >= 60 ? 'moderate' : 'light';
+}
+
+assert('T38 load=100 → heavy',    mapCFLoad(100) === 'heavy');
+assert('T39 load=70  → moderate', mapCFLoad(70)  === 'moderate');
+assert('T40 load=40  → light',    mapCFLoad(40)  === 'light');
+
+// Boundary checks: thresholds are inclusive on the upper bound
+assert('T38b load=90  → heavy (boundary)',    mapCFLoad(90)  === 'heavy');
+assert('T39b load=60  → moderate (boundary)', mapCFLoad(60)  === 'moderate');
+assert('T40b load=59  → light (boundary)',    mapCFLoad(59)  === 'light');
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Summary
 // ─────────────────────────────────────────────────────────────────────────────
 process.stdout.write('\n' + (failed === 0 ? '✔' : '✖') +
