@@ -170,7 +170,7 @@ var EXERCISES = {
       desc: "Assis à la machine, pousser les poignées vers l'avant.",
       tips: ["Régler le siège à hauteur de poitrine", "Ne pas verrouiller les coudes", "Idéal pour les débutants"],
       lv: 1,
-      tags: ["pectoraux", "compose", "triceps", "machine"]
+      tags: ["pectoraux", "compose", "triceps", "machine"], f: "chest-machine"
     },
     {
       n: "Câble crossover bas",
@@ -345,7 +345,7 @@ var EXERCISES = {
     { n: "Développé décliné haltères", m: "Pectoraux inférieurs", eq: "Haltères + banc décliné", sets: "4×8-12", rest: "90s", video: "https://www.youtube.com/watch?v=KYJgQZPwGS8", warn: "CONTRE-INDIQUÉ grossesse T2/T3.", desc: "Banc décliné -15 à -30°. Ciblage pectoraux bas avec contrôle unilatéral des haltères.", tips: ["Pieds bien calés", "Descente jusqu'au bas du pec", "Pas de rebond"], lv: 2, tags: ["pectoraux", "compose", "pectoraux-inferieurs", "halteres"] },
     { n: "Svend press", m: "Pectoraux / Gainage", eq: "Disque (5-10 kg)", sets: "3×12-15", rest: "60s", video: "https://www.youtube.com/watch?v=vNxezQEqy6I", desc: "Pressing horizontal d'un disque tenu entre les paumes. Activation constante par isométrie d'adduction.", tips: ["Paumes pressent fort le disque", "Poussée linéaire devant le sternum", "Tension continue 15 reps"], lv: 1, tags: ["pectoraux", "adduction", "finisher"] },
     { n: "Pompes déficit", m: "Pectoraux / Triceps", eq: "Poids du corps + 2 surfaces élevées", sets: "3×10-15", rest: "60s", video: "https://www.youtube.com/watch?v=kdOh9nQmioQ", desc: "Pompes avec mains surélevées (parallettes/disques) pour augmenter l'amplitude d'étirement du pectoral.", tips: ["Descente poitrine en dessous des mains", "Coudes 45°", "Maîtrise excentrique 2-3s"], lv: 2, tags: ["pectoraux", "compose", "poids du corps", "home"] },
-    { n: "Développé machine convergent", m: "Pectoraux", eq: "Machine convergente", sets: "4×10-12", rest: "75s", video: "https://www.youtube.com/watch?v=rIbi0tHwwRY", desc: "Machine dont les bras convergent en fin de poussée — mime un mouvement d'adduction + pressing.", tips: ["Ajuster assise pour que les poignées soient à mi-poitrine", "Serrer les pecs en haut 1s", "Ne pas verrouiller coudes"], lv: 1, tags: ["pectoraux", "compose", "machine", "beginner-friendly"] },
+    { n: "Développé machine convergent", m: "Pectoraux", eq: "Machine convergente", sets: "4×10-12", rest: "75s", video: "https://www.youtube.com/watch?v=rIbi0tHwwRY", desc: "Machine dont les bras convergent en fin de poussée — mime un mouvement d'adduction + pressing.", tips: ["Ajuster assise pour que les poignées soient à mi-poitrine", "Serrer les pecs en haut 1s", "Ne pas verrouiller coudes"], lv: 1, tags: ["pectoraux", "compose", "machine", "beginner-friendly"], f: "chest-machine" },
     { n: "Cable crossover haut vers bas", m: "Pectoraux inférieurs", eq: "Poulie haute", sets: "3×12-15", rest: "60s", video: "https://www.youtube.com/watch?v=hhruLxo9yZU", desc: "Poulies hautes, trajectoire diagonale vers le bas devant le bassin. Cible les fibres basses du pectoral.", tips: ["Fente légère pour stabilité", "Coudes stables légèrement fléchis", "Croiser les mains en bas"], lv: 2, tags: ["pectoraux", "cable", "pectoraux-inferieurs", "isolation"] }
   ],
 
@@ -1592,7 +1592,7 @@ var EXERCISES = {
       desc: "Assis à la presse, pousser la plateforme avec les pieds.",
       tips: ["Pieds à largeur d'épaules", "Ne pas verrouiller les genoux", "Descendre à 90 degrés"],
       lv: 1,
-      tags: ["jambes", "compose", "fessiers", "machine"]
+      tags: ["jambes", "compose", "fessiers", "machine"], f: "leg-press"
     },
     {
       n: "Fentes avant",
@@ -1702,7 +1702,7 @@ var EXERCISES = {
       desc: "Pieds hauts sur la plateforme, descendre profondément. Variation fessier/ischios.",
       tips: ["Pieds à mi-hauteur de la plateforme", "Descente profonde", "Genoux dans l'axe des orteils"],
       lv: 1,
-      tags: ["jambes", "compose", "fessiers", "ischios", "machine"],
+      tags: ["jambes", "compose", "fessiers", "ischios", "machine"], f: "leg-press",
     video: "https://www.youtube.com/watch?v=slFRFu4Dkag"
     },
         {
@@ -1767,7 +1767,7 @@ var EXERCISES = {
         desc: "Leg press avec les pieds rapprochés et centrés bas sur la plateforme pour cibler le vaste interne et externe du quadriceps.",
         tips: ["Placer les pieds à largeur de hanches ou plus étroit, bas sur la plateforme", "Les orteils légèrement tournés vers l'extérieur (15-20°) pour protéger les genoux", "Descendre jusqu'à 90° de flexion sans décoller le dos du dossier", "Expirer et pousser fort en contractant le quadriceps en haut du mouvement"],
         lv: 1,
-        tags: ["quadriceps", "compose", "machine"]
+        tags: ["quadriceps", "compose", "machine"], f: "leg-press"
     },
     {
         n: "Leg press unilatéral",
@@ -1779,7 +1779,7 @@ var EXERCISES = {
         desc: "Leg press exécuté une jambe à la fois pour corriger les déséquilibres de force gauche/droite et renforcer la stabilité.",
         tips: ["Réduire la charge à 50-60% de la charge bilatérale habituelle", "Placer le pied au centre de la plateforme, aligné avec la hanche", "Garder la jambe inactive détendue hors de la plateforme sans appuyer dessus", "Compléter toutes les répétitions d'un côté avant de changer — noter l'écart de force entre les deux jambes"],
         lv: 2,
-        tags: ["quadriceps", "compose", "fessiers", "machine", "unilateral", "prevention"]
+        tags: ["quadriceps", "compose", "fessiers", "machine", "unilateral", "prevention"], f: "leg-press"
     },
     {
         n: "Squat Cossaque",
@@ -1864,7 +1864,7 @@ var EXERCISES = {
         desc: "Leg press avec les pieds placés bas et centrés sur la plateforme, ciblant spécifiquement les quadriceps en réduisant l'activation des fessiers et des ischios.",
         tips: ["Pieds centrés bas sur la plateforme — genoux descendent davantage et le genou dépasse plus les orteils", "Plus de flexion du genou en bas du mouvement = plus de quadriceps, moins de fessiers vs pieds hauts", "Amplitude complète si les genoux le permettent — sinon limiter selon le confort articulaire", "Variation essentielle pour cibler les quadriceps sans avoir à faire de hack squat"],
         lv: 1,
-        tags: ["quadriceps", "compose", "machine"]
+        tags: ["quadriceps", "compose", "machine"], f: "leg-press"
     },
     {
         n: "Seated calf raise",

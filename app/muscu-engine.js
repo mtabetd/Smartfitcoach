@@ -40,6 +40,40 @@ function () {
       .replace(/\s+/g,' ').trim();
   }
 
+  // ── Clé mouvement (dédup intra-séance) ──────────────────────────────────
+  // Plus agressive que normKey : strip aussi les qualificatifs positionnels
+  // pour que "Rowing T-bar" et "T-bar Row Machine" → même empreinte.
+  function _movKey(name) {
+    var STOP = /\b(seated|assis|standing|debout|couche[e]?|prone|incline[e]?|decline[e]?|haut|bas|avant|arriere|derriere|pieds|pied|large|serre[e]?|etroit[e]?|neutre|du|de|la|le|les|au|aux|par|sur|sous|poids|corps|supination|pronation|prise)\b/g;
+    return _normKey(name)
+      .replace(/ing\b/g, '')   // rowing→row, pressing→press
+      .replace(STOP, '')
+      .replace(/\s+/g, ' ').trim();
+  }
+
+  function _movTokens(mk) {
+    return mk.split(' ').filter(function(t){ return t.length > 2; }).sort();
+  }
+
+  // Renvoie true si le candidat duplique un exercice déjà dans selMKs :
+  // — via champ `f` (famille DB explicite)
+  // — OU via chevauchement de ≥2 tokens significatifs
+  function _isMovDup(cand, selMKs) {
+    var fam = cand.f || null;
+    var ct  = _movTokens(_movKey(cand.n));
+    for (var _mi = 0; _mi < selMKs.length; _mi++) {
+      if (fam && selMKs[_mi].f && fam === selMKs[_mi].f) return true;
+      if (ct.length < 2) continue;
+      var et = selMKs[_mi].toks;
+      var shorter = ct.length <= et.length ? ct : et;
+      if (shorter.length < 2) continue;
+      var ls = {};
+      (ct.length <= et.length ? et : ct).forEach(function(t){ ls[t] = true; });
+      if (shorter.every(function(t){ return !!ls[t]; })) return true;
+    }
+    return false;
+  }
+
   // ── Détection poids-du-corps ─────────────────────────────────────────────
   function _isBwEx(ex) {
     var eq = (ex.eq||'').toLowerCase().trim(), tg = ex.tags || [];
@@ -190,18 +224,21 @@ function () {
     });
 
     var _selComp = [], _selIso = [], _sn = {}, _cov = {};
+    var _selMKs = []; // [{toks, f}] — empreintes mouvements sélectionnés dans la séance
     grps.forEach(function(g){ _cov[g] = false; });
 
     // Passe 1 : composés
     for (var _i = 0; _i < _poolComp.length && _selComp.length < _compSlots; _i++) {
       var _e = _poolComp[_i], _k = _normKey(_e.n);
       if (_sn[_k]) continue;
+      if (_isMovDup(_e, _selMKs)) continue;
       var _slots = _compSlots - _selComp.length;
       var _unc   = grps.filter(function(g){ return !_cov[g]; }).length;
       if (_slots <= _unc && !_e._grps.some(function(g){ return !_cov[g]; })) continue;
       _selComp.push(_e); _sn[_k] = true;
       _e._grps.forEach(function(g){ _cov[g] = true; });
       _weekUsed[_k] = true;
+      _selMKs.push({ toks: _movTokens(_movKey(_e.n)), f: _e.f||null });
     }
 
     // Passe 2 : isolations
@@ -209,9 +246,11 @@ function () {
     for (var _j = 0; _j < _poolIso.length && _isoAdded < _minIso; _j++) {
       var _e2 = _poolIso[_j], _k2 = _normKey(_e2.n);
       if (_sn[_k2]) continue;
+      if (_isMovDup(_e2, _selMKs)) continue;
       _selIso.push(_e2); _sn[_k2] = true;
       _e2._grps.forEach(function(g){ _cov[g] = true; });
       _weekUsed[_k2] = true;
+      _selMKs.push({ toks: _movTokens(_movKey(_e2.n)), f: _e2.f||null });
       _isoAdded++;
     }
 
@@ -220,9 +259,11 @@ function () {
     for (var _fi = 0; _fi < _poolComp.length && _needed > 0; _fi++) {
       var _ef = _poolComp[_fi], _kf = _normKey(_ef.n);
       if (_sn[_kf]) continue;
+      if (_isMovDup(_ef, _selMKs)) continue;
       _selComp.push(_ef); _sn[_kf] = true;
       _ef._grps.forEach(function(g){ _cov[g] = true; });
       _weekUsed[_kf] = true;
+      _selMKs.push({ toks: _movTokens(_movKey(_ef.n)), f: _ef.f||null });
       _needed--;
     }
 
