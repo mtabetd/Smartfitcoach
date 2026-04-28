@@ -4174,7 +4174,20 @@ function renderCrossfitProgram(p) {
   var _cfMovs     = (_cfInnerWod && Array.isArray(_cfInnerWod.movements)) ? _cfInnerWod.movements : [];
   var _cfHasRest  = _cfMovs.some(function(m) { return /\brest\b/i.test(m.name || ''); })
                     || /\brest\b/.test(_cfTypeStr);
-  var _cfRestFactor = _cfHasRest ? 0.9 : 1.0;
+  // Extended: extract explicit rest duration (seconds) to graduate the factor
+  var _cfRestFactor;
+  if (!_cfHasRest) {
+   _cfRestFactor = 1.0;
+  } else {
+   var _cfRestText = _cfTypeStr
+    + ' ' + (_cfInnerWod ? (_cfInnerWod.notes || '') : '').toLowerCase()
+    + ' ' + _cfMovs.map(function(m) { return (m.name || '') + ' ' + (m.note || ''); }).join(' ').toLowerCase();
+   var _cfSecMatch = _cfRestText.match(/rest\s+(\d+)\s*s|(\d+)\s*s(?:ec)?\s+rest|repos\s+(\d+)\s*s/);
+   var _cfRestSecs = _cfSecMatch ? parseInt(_cfSecMatch[1] || _cfSecMatch[2] || _cfSecMatch[3], 10) : null;
+   if (_cfRestSecs && _cfRestSecs >= 90) _cfRestFactor = 0.80; // long rest → bigger load reduction
+   else if (_cfRestSecs && _cfRestSecs >= 60) _cfRestFactor = 0.85; // 60s rest
+   else _cfRestFactor = 0.90; // EMOM rest slot or unspecified duration (original behaviour)
+  }
   S.crossfitIntensity    = _cfFinalIntensity;
   S.crossfitTrainingLoad = Math.round(_cfDurMins * CF_INTENSITY_FACTORS[_cfFinalIntensity] * _cfVolFactor * _cfRestFactor);
   _sfcNotifySport('crossfit', S.crossfitLevel);
