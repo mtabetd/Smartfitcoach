@@ -528,6 +528,31 @@ assert('T39b load=60  → moderate (boundary)', mapCFLoad(60)  === 'moderate');
 assert('T40b load=59  → light (boundary)',    mapCFLoad(59)  === 'light');
 
 // ─────────────────────────────────────────────────────────────────────────────
+// T44 – T45 : Cycling FTP-based intensity → S.trainingLoad mapping
+// ─────────────────────────────────────────────────────────────────────────────
+process.stdout.write('\nCycling FTP intensity → trainingLoad mapping\n');
+
+// Mirrors CYCLING_ZONE_FACTORS_FTP / CYCLING_ZONE_FACTORS_NOFTP in app-sport.js
+var CYCLING_ZONE_FACTORS_FTP_T   = { 1: 0.5, 2: 0.75, 3: 1.0, 4: 1.35, 5: 1.6 };
+var CYCLING_ZONE_FACTORS_NOFTP_T = { 1: 0.5, 2: 0.7,  3: 0.9, 4: 1.25, 5: 1.5 };
+
+function mapCycLoad(zone, durMins, ftpPresent) {
+  var factors = ftpPresent ? CYCLING_ZONE_FACTORS_FTP_T : CYCLING_ZONE_FACTORS_NOFTP_T;
+  var load = Math.round(durMins * (factors[zone] || 1.0));
+  return load >= 80 ? 'heavy' : load >= 40 ? 'moderate' : 'light';
+}
+
+// FTP present path — z4=1.35, 65min → 87.75 → heavy
+assert('T44 FTP present, z4 65min → heavy',    mapCycLoad(4, 65, true)  === 'heavy');
+assert('T44b FTP present, z1 35min → light',   mapCycLoad(1, 35, true)  === 'light');
+assert('T44c FTP present, z2 75min → moderate',mapCycLoad(2, 75, true)  === 'moderate');
+
+// No-FTP fallback path — z2=0.7, 75min → 52.5 → moderate
+assert('T45 no FTP, z2 75min → moderate',      mapCycLoad(2, 75, false) === 'moderate');
+assert('T45b no FTP, z4 65min → heavy',        mapCycLoad(4, 65, false) === 'heavy');
+assert('T45c no FTP, z1 35min → light',        mapCycLoad(1, 35, false) === 'light');
+
+// ─────────────────────────────────────────────────────────────────────────────
 // T41 – T43 : Running zone → S.trainingLoad mapping
 // ─────────────────────────────────────────────────────────────────────────────
 process.stdout.write('\nRunning zone → trainingLoad mapping\n');

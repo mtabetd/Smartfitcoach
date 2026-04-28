@@ -3993,6 +3993,12 @@ var CF_INTENSITY_FACTORS = { low: 0.8, moderate: 1.0, high: 1.3, very_high: 1.6 
 // Z1 recovery · Z2 endurance · Z3 tempo · Z4 interval · Z5 max
 var RUN_ZONE_FACTORS = { 'Z1': 0.5, 'Z1-Z2': 0.65, 'Z2': 0.8, 'Z3': 1.0, 'Z3-Z4': 1.15, 'Z4': 1.3, 'Z4-Z5': 1.5, 'Z5': 1.6 };
 
+// ─── CYCLING ZONE INTENSITY FACTORS (Coggan) ───
+// FTP path: calibrated from Coggan zone midpoints (z1≈50% FTP, z4≈98% FTP)
+var CYCLING_ZONE_FACTORS_FTP   = { 1: 0.5, 2: 0.75, 3: 1.0, 4: 1.35, 5: 1.6 };
+// No-FTP fallback: conservative duration-based proxy
+var CYCLING_ZONE_FACTORS_NOFTP = { 1: 0.5, 2: 0.7,  3: 0.9, 4: 1.25, 5: 1.5 };
+
 function computeSessionIntensity(wod) {
  if (!wod || !wod.type) return 'moderate';
  var t = (wod.type || '').toLowerCase();
@@ -12320,6 +12326,19 @@ function renderCyclingProgram(p) {
  if (sess) {
  if (!sess.zone) sess.zone = 2; // Défaut Z2 si manquant
  var zoneNum = Array.isArray(sess.zone) ? sess.zone[sess.zone.length - 1] : sess.zone;
+ // ─── CYCLING INTENSITY ENGINE ─── cyclingLoad = duration × zone factor → S.trainingLoad
+ var _cycFTP     = (S.cyclingFTP && S.cyclingFTP > 75) ? S.cyclingFTP : null;
+ var _cycFactors = _cycFTP ? CYCLING_ZONE_FACTORS_FTP : CYCLING_ZONE_FACTORS_NOFTP;
+ var _cycFactor  = _cycFactors[zoneNum] || 1.0;
+ S.cyclingTrainingLoad = Math.round(sess.duration * _cycFactor);
+ S.trainingLoad = S.cyclingTrainingLoad >= 80 ? 'heavy'
+                : S.cyclingTrainingLoad >= 40 ? 'moderate'
+                : 'light';
+ _sfcNotifySport('cycling', S.cyclingLevel || 'intermediaire');
+ // Restore precision-computed load (notifySession overwrites S.trainingLoad with MET map)
+ S.trainingLoad = S.cyclingTrainingLoad >= 80 ? 'heavy'
+                : S.cyclingTrainingLoad >= 40 ? 'moderate'
+                : 'light';
  var zoneData = CYCLING_ZONES[Math.max(0, Math.min(zoneNum - 1, 4))] || CYCLING_ZONES[1];
  var zoneColor = zoneData ? zoneData.color : '#1A3A6A';
  var kcal = cyclingKcal(sess.duration, zoneNum, weightKg);
