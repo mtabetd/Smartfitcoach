@@ -229,6 +229,45 @@ function () {
     var _selMKs = []; // [{toks, f}] — empreintes mouvements sélectionnés dans la séance
     grps.forEach(function(g){ _cov[g] = false; });
 
+    // ── Pré-sélection fessiers/jambes (Fix #3) ────────────────────────────
+    // Garantit hip thrust + squat réel quand glutes/legs ciblés (hors profil force).
+    // Sans cette logique, les machines (tier 0 débutant) battent le hip thrust (tier 2).
+    var _hasGlutes = grps.indexOf('glutes') !== -1;
+    var _hasLegs   = grps.indexOf('legs')   !== -1;
+
+    function _preSelect(testFn) {
+      for (var _pi = 0; _pi < _poolComp.length && _selComp.length < _compSlots; _pi++) {
+        var _pc = _poolComp[_pi], _pk = _normKey(_pc.n);
+        if (_sn[_pk] || _isMovDup(_pc, _selMKs)) continue;
+        if (testFn(_pc)) {
+          _selComp.push(_pc); _sn[_pk] = true;
+          _pc._grps.forEach(function(g){ _cov[g] = true; });
+          _weekUsed[_pk] = true;
+          _selMKs.push({ toks: _movTokens(_movKey(_pc.n)), f: _pc.f||null });
+          return true;
+        }
+      }
+      return false;
+    }
+
+    if (_hasGlutes && !cfg.hasStrength) {
+      // Priorité : "Hip thrust" par nom exact, puis variantes reconnues
+      var _gotHip = _preSelect(function(ex) { return /^hip thrust$/i.test((ex.n||'').trim()); });
+      if (!_gotHip) {
+        _preSelect(function(ex) { return /hip thrust|glute bridge/i.test(ex.n); });
+      }
+    }
+
+    if (_hasLegs && !cfg.hasStrength) {
+      // Préférer squat libre/barre, fallback sur n'importe quel squat
+      var _sqOk = _preSelect(function(ex) {
+        return /\bsquat\b/i.test(ex.n) && !/machine|belt|pendulum|hack/i.test((ex.eq||'').toLowerCase());
+      });
+      if (!_sqOk) {
+        _preSelect(function(ex) { return /\bsquat\b/i.test(ex.n); });
+      }
+    }
+
     // Passe 1 : composés
     for (var _i = 0; _i < _poolComp.length && _selComp.length < _compSlots; _i++) {
       var _e = _poolComp[_i], _k = _normKey(_e.n);
