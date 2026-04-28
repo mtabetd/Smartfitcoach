@@ -1733,6 +1733,16 @@ window.estimateKcal = estimateKcal;
 
 // ── Bridge SFCSymbiosis universel — tous les sports hors musculation ──────────
 // Convertit (sport, level) → exercices synthétiques → notifySession.
+// Strip script tags, event-handler attributes, and javascript: protocols from HTML strings
+// produced by external sources (AI program output, third-party parsers).
+function _sfcSanitize(html) {
+  if (!html || typeof html !== 'string') return '';
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]*)/gi, '')
+    .replace(/href\s*=\s*["']?\s*javascript:[^"'\s>]*/gi, 'href="about:blank"');
+}
+
 // notifySession reste inchangé ; seule la forme des exercices change.
 // MET ≥ 9 → heavy | 5 ≤ MET < 9 → moderate | MET < 5 → light
 function _sfcNotifySport(sport, level) {
@@ -6789,7 +6799,7 @@ function renderMusculationProgram(p) {
    var _iaContainer = h('div', {id: 'muscu-ia-program-container'});
    try {
      if (window.MUSCU_PROGRAM && typeof window.MUSCU_PROGRAM.parseToHTML === 'function') {
-       _iaContainer.innerHTML = window.MUSCU_PROGRAM.parseToHTML(S.muscuIAProgram) || '';
+       _iaContainer.innerHTML = _sfcSanitize(window.MUSCU_PROGRAM.parseToHTML(S.muscuIAProgram) || '');
      }
      if (!_iaContainer.innerHTML) {
        var _escaped = S.muscuIAProgram.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
