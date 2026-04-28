@@ -4249,7 +4249,7 @@ function renderCrossfitProgram(p) {
   tabs.appendChild(h('button', {
    'class': 'day-tab' + (S.selectedCrossfitDay === i ? ' active' : ''),
    onclick: function() { S.selectedCrossfitDay = i; window.render(); }
-  }, day.label));
+  }, (window.isEnglish && window.isEnglish() ? day.label.en : day.label.fr)));
  });
  // Onglets supplémentaires pour les jours de musculation (sport mix)
  if (_mixSec && _mixSecDays > 0) {
@@ -4306,7 +4306,7 @@ function renderCrossfitProgram(p) {
  if (!wod) { p.appendChild(h('div', {style:'padding:16px;color:var(--grey);font-size:13px'}, (window.isEnglish && window.isEnglish() ? 'Session unavailable. Reload the page.' : 'Séance non disponible. Rechargez la page.'))); p.appendChild(h('button', {'class':'btn-back', onclick: function(){ S.sStep = 5; window.render(); }}, (window.isEnglish && window.isEnglish() ? '← Edit level' : '← Modifier le niveau'))); return; }
 
  // Day header
- p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:24px;text-align:center;margin:16px 0 4px'}, currentDay.dayLabel + ' \u2014 ' + wod.name));
+ p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:24px;text-align:center;margin:16px 0 4px'}, (window.isEnglish && window.isEnglish() ? currentDay.dayLabel.en : currentDay.dayLabel.fr) + ' \u2014 ' + wod.name));
  p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);text-align:center;margin-bottom:4px'}, currentDay.focus));
  p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);text-align:center;margin-bottom:20px'}, (window.isEnglish && window.isEnglish() ? 'Week ' + S.crossfitWeek + ' — Day ' + currentDay.dayNumber + ' / ' + daysPerWeek : 'Semaine ' + S.crossfitWeek + ' — Jour ' + currentDay.dayNumber + ' / ' + daysPerWeek)));
 
