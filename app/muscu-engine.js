@@ -135,7 +135,7 @@ function () {
           if (/machine|c[aâ]ble|poulie|presse|smith|station|pec deck|convergente|landmine|t-bar|hack squat/.test(eq+' '+nm)) return false;
           if (!/poids du corps|poids de corps|sans mat|sol|élastique|elastique|halt[eè]re|kettlebell|\bkb\b|banc|barre fixe|barre de traction|aucun/.test(eq+' '+nm)) return false;
         } else if (cfg.equipment === 'dumbbells' || cfg.equipment === 'home_dumbbells') {
-          if (/c[aâ]ble|poulie|machine|t-bar|landmine|convergente|pec deck|barre de traction/.test(eq)) return false;
+          if (/c[aâ]ble|poulie|machine|\bpresse\b|t-bar|landmine|convergente|pec deck|barre de traction/.test(eq)) return false;
           if (/^barre\b/.test(eq) && !/ou halt|halt[èe]res ou barre/.test(eq)) return false;
         } else if (cfg.equipment === 'none') {
           if (/\bbarre\s*\+|\bbanc\b|machine|smith|pec deck|convergente|landmine|\bt[-\s]?bar\b|c[âa]ble|poulie|hack squat|\brack\b|kettlebell|\bkb\b|halt[èe]res?|\bhaltere\b|\bdisque\b|gh[rd]|chaise romaine|roulette|swiss ball|ab\s+dolly|roue abdominale|trap bar|hex bar/i.test(eq)) return false;
