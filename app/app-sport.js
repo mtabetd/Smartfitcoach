@@ -3961,6 +3961,24 @@ function appendWellnessBanner(p) {
   }
 }
 
+function applyDeloadScaling(wod) {
+ var out = { name: wod.name, type: wod.type, notes: wod.notes };
+ out.movements = (wod.movements || []).map(function(m) {
+  var copy = {};
+  for (var k in m) copy[k] = m[k];
+  if (typeof m.reps === 'number') copy.reps = Math.max(1, Math.round(m.reps * 0.6));
+  return copy;
+ });
+ var t = wod.type || '';
+ t = t.replace(/(\bAMRAP\s+)(\d+)/, function(_, pre, n) { return pre + Math.max(1, Math.round(parseInt(n, 10) * 0.6)); });
+ t = t.replace(/(\bEMOM\s+)(\d+)/, function(_, pre, n) { return pre + Math.max(1, Math.round(parseInt(n, 10) * 0.6)); });
+ t = t.replace(/^(\d+)(\s+Rounds?\s+For Time)/i, function(_, n, suf) { return Math.max(1, Math.round(parseInt(n, 10) * 0.6)) + suf; });
+ t = t.replace(/\((\d+)\s+(rounds?\s+x)/i, function(_, n, suf) { return '(' + Math.max(1, Math.round(parseInt(n, 10) * 0.6)) + ' ' + suf; });
+ t = t.replace(/\(cap\s+(\d+)min\)/, function(_, n) { return '(cap ' + Math.max(1, Math.round(parseInt(n, 10) * 0.6)) + 'min)'; });
+ out.type = t;
+ return out;
+}
+
 // ─── STEP 6 (CrossFit): PROGRAMME CF ───
 function renderCrossfitProgram(p) {
  // Guard: ensure cfProgress is always an object (safe for null/undefined from storage)
@@ -4343,6 +4361,7 @@ function renderCrossfitProgram(p) {
  var wodCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid var(--error,#7A1F1F)'});
  wodCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--error,#7A1F1F);margin-bottom:6px'}, 'WOD'));
  var _wod = wod.wod || {};
+ if (isCFDeload) _wod = applyDeloadScaling(_wod);
  wodCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:4px'}, _wod.name || ''));
  wodCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;color:var(--error,#7A1F1F);margin-bottom:10px'}, _wod.type || ''));
 
