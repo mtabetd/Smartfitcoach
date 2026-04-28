@@ -558,6 +558,74 @@ check('notifySession: no silent data loss — all existing fields intact', funct
   assert(window.S.customField === 'untouched',    'unrelated field preserved');
 });
 
+// ─── 13. XSS protection — _sfcBlockDangerous + _sfcSanitize (loaded modules) ─
+console.log('\n=== 13. XSS protection — _sfcBlockDangerous + _sfcSanitize ===');
+
+check('_sfcBlockDangerous is exported on window', function() {
+  assert(typeof window._sfcBlockDangerous === 'function', '_sfcBlockDangerous missing');
+});
+
+check('_sfcSanitize is exported on window', function() {
+  assert(typeof window._sfcSanitize === 'function', '_sfcSanitize missing');
+});
+
+check('_sfcBlockDangerous blocks <script> injection', function() {
+  var result = window._sfcBlockDangerous('<script>alert(1)</script>');
+  assert(result === '', 'expected empty string, got: ' + result);
+});
+
+check('_sfcBlockDangerous blocks onerror= event handler', function() {
+  var result = window._sfcBlockDangerous('<img src="x" onerror="alert(1)">');
+  assert(result === '', 'expected empty string for onerror=, got: ' + result);
+});
+
+check('_sfcBlockDangerous blocks onclick= event handler', function() {
+  var result = window._sfcBlockDangerous('<div onclick="evil()">click</div>');
+  assert(result === '', 'expected empty string for onclick=, got: ' + result);
+});
+
+check('_sfcBlockDangerous blocks javascript: URI', function() {
+  var result = window._sfcBlockDangerous('<a href="javascript:alert(1)">x</a>');
+  assert(result === '', 'expected empty string for javascript:, got: ' + result);
+});
+
+check('_sfcBlockDangerous passes safe HTML unchanged', function() {
+  var safe = '<p class="text">Hello <strong>world</strong></p>';
+  var result = window._sfcBlockDangerous(safe);
+  assert(result === safe, 'safe HTML should pass through unchanged');
+});
+
+check('_sfcSanitize strips <script> while preserving surrounding content', function() {
+  var result = window._sfcSanitize('<p>ok</p><script>alert(1)</script><p>after</p>');
+  assert(result.indexOf('<script') === -1, 'script tag should be stripped');
+  assert(result.indexOf('<p>ok</p>') !== -1, 'surrounding content should be preserved');
+});
+
+check('_sfcSanitize strips on* event-handler attributes', function() {
+  var result = window._sfcSanitize('<img src="photo.jpg" onerror="steal()">');
+  assert(result.indexOf('onerror') === -1, 'onerror attribute should be stripped');
+  assert(result.indexOf('src=') !== -1, 'src attribute should be preserved');
+});
+
+check('_sfcSanitize neutralizes javascript: href', function() {
+  var result = window._sfcSanitize('<a href="javascript:void(0)">link</a>');
+  assert(result.indexOf('javascript:') === -1, 'javascript: should be replaced');
+  assert(result.indexOf('about:blank') !== -1, 'should be replaced with about:blank');
+});
+
+check('combined: _sfcBlockDangerous(_sfcSanitize()) rejects script-only input', function() {
+  var result = window._sfcBlockDangerous(window._sfcSanitize('<script>evil()</script>'));
+  assert(result === '', 'double-gate should produce empty string');
+});
+
+check('combined: double-gate passes clean HTML after stripping script', function() {
+  var input = '<p>Safe text</p><script>bad()</script>';
+  var cleaned = window._sfcSanitize(input);
+  var final = window._sfcBlockDangerous(cleaned);
+  // After sanitize: script is stripped. Block sees '<p>Safe text</p>' → should pass
+  assert(final.indexOf('<p>Safe text</p>') !== -1, 'clean content preserved after double-gate');
+});
+
 // ─── Résumé ───────────────────────────────────────────────────────────────────
 console.log('\n' + '─'.repeat(50));
 console.log('Résultats : ' + pass + ' pass, ' + fail + ' fail');

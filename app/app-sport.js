@@ -1733,15 +1733,33 @@ window.estimateKcal = estimateKcal;
 
 // ── Bridge SFCSymbiosis universel — tous les sports hors musculation ──────────
 // Convertit (sport, level) → exercices synthétiques → notifySession.
-// Strip script tags, event-handler attributes, and javascript: protocols from HTML strings
+// Strip script tags, event-handler attributes, and JS/data: URIs from HTML strings
 // produced by external sources (AI program output, third-party parsers).
 function _sfcSanitize(html) {
   if (!html || typeof html !== 'string') return '';
   return html
     .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
     .replace(/\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]*)/gi, '')
-    .replace(/href\s*=\s*["']?\s*javascript:[^"'\s>]*/gi, 'href="about:blank"');
+    .replace(/href\s*=\s*["']?\s*javascript:[^"'\s>]*/gi, 'href="about:blank"')
+    .replace(/src\s*=\s*["']?\s*javascript:[^"'\s>]*/gi, 'src=""')
+    .replace(/\bexpression\s*\(/gi, '')
+    .replace(/data\s*:\s*text\/html/gi, 'data-blocked:text/html');
 }
+window._sfcSanitize = _sfcSanitize;
+
+// Hard-blocks HTML containing any script-execution vector — returns '' immediately.
+// Used as a detection gate upstream of _sfcSanitize for high-risk external content.
+// If ANY of these patterns is present the entire string is rejected (never partial strip).
+function _sfcBlockDangerous(html) {
+  if (!html || typeof html !== 'string') return html || '';
+  if (/<script\b/i.test(html))             return '';
+  if (/\bon\w+\s*=/i.test(html))           return '';  // onerror=, onclick=, onload=, …
+  if (/javascript\s*:/i.test(html))        return '';
+  if (/vbscript\s*:/i.test(html))          return '';
+  if (/data\s*:\s*text\/html/i.test(html)) return '';  // data:text/html XSS
+  return html;
+}
+window._sfcBlockDangerous = _sfcBlockDangerous;
 
 // notifySession reste inchangé ; seule la forme des exercices change.
 // MET ≥ 9 → heavy | 5 ≤ MET < 9 → moderate | MET < 5 → light
@@ -3970,7 +3988,7 @@ function appendWellnessBanner(p) {
     normal:   '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#1A3A6A" stroke-width="1.5"/><path d="M8 5v4" stroke="#1A3A6A" stroke-width="1.5" stroke-linecap="round"/></svg>'
   };
   var iconWrap = h('div', {style: 'flex-shrink:0;margin-top:' + (isPeak ? '0' : '1px')});
-  iconWrap.innerHTML = svgIcons[adapt.level] || svgIcons.normal;
+  iconWrap.innerHTML = _sfcSanitize(svgIcons[adapt.level] || svgIcons.normal);
   fallbackBanner.appendChild(iconWrap);
 
   if (isPeak) {
@@ -6603,7 +6621,7 @@ function renderMusculationProgram(p) {
    var _iaContainer = h('div', {id: 'muscu-ia-program-container'});
    try {
      if (window.MUSCU_PROGRAM && typeof window.MUSCU_PROGRAM.parseToHTML === 'function') {
-       _iaContainer.innerHTML = _sfcSanitize(window.MUSCU_PROGRAM.parseToHTML(S.muscuIAProgram) || '');
+       _iaContainer.innerHTML = _sfcBlockDangerous(_sfcSanitize(window.MUSCU_PROGRAM.parseToHTML(S.muscuIAProgram) || ''));
      }
      if (!_iaContainer.innerHTML) {
        var _escaped = S.muscuIAProgram.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -8092,7 +8110,7 @@ function renderMusculationProgram(p) {
  // ─── CALCULATEUR DE PLAQUES (barre uniquement, si charge définie) ───
  if (eqType === 'barre' && currentWeight && currentWeight > 0) {
  var plateDiv = h('div', {});
- plateDiv.innerHTML = window.renderPlateCalculator(currentWeight, 20);
+ plateDiv.innerHTML = _sfcSanitize(window.renderPlateCalculator(currentWeight, 20) || '');
  card.appendChild(plateDiv);
  }
  } else {

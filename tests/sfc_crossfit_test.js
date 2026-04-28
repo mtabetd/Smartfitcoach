@@ -782,6 +782,86 @@ assert('T68 3 heavy days → still capped at +25%',   _r68.rate === 0.25);
 assert('T68b 3 heavy days → tag=recovery',           _r68.tag  === 'recovery');
 
 // ─────────────────────────────────────────────────────────────────────────────
+// T69 – T79 : XSS protection — _sfcBlockDangerous + _sfcSanitize
+// ─────────────────────────────────────────────────────────────────────────────
+process.stdout.write('\nXSS protection — block + sanitize\n');
+
+// Inline mirrors of _sfcBlockDangerous and _sfcSanitize (app-sport.js)
+function sfcBlockDangerous(html) {
+  if (!html || typeof html !== 'string') return html || '';
+  if (/<script\b/i.test(html))             return '';
+  if (/\bon\w+\s*=/i.test(html))           return '';
+  if (/javascript\s*:/i.test(html))        return '';
+  if (/vbscript\s*:/i.test(html))          return '';
+  if (/data\s*:\s*text\/html/i.test(html)) return '';
+  return html;
+}
+function sfcSanitize(html) {
+  if (!html || typeof html !== 'string') return '';
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]*)/gi, '')
+    .replace(/href\s*=\s*["']?\s*javascript:[^"'\s>]*/gi, 'href="about:blank"')
+    .replace(/src\s*=\s*["']?\s*javascript:[^"'\s>]*/gi, 'src=""')
+    .replace(/\bexpression\s*\(/gi, '')
+    .replace(/data\s*:\s*text\/html/gi, 'data-blocked:text/html');
+}
+
+// _sfcBlockDangerous — script injection blocked
+assert('T69 <script> tag → blocked (returns empty)',
+  sfcBlockDangerous('<script>alert(1)</script>') === '');
+assert('T70 <SCRIPT> uppercase → blocked',
+  sfcBlockDangerous('<SCRIPT>evil()</SCRIPT>') === '');
+assert('T71 <script src=...> → blocked',
+  sfcBlockDangerous('<script src="evil.js"></script>') === '');
+
+// _sfcBlockDangerous — inline JS event handlers blocked
+assert('T72 onerror= → blocked',
+  sfcBlockDangerous('<img onerror="alert(1)">') === '');
+assert('T73 onclick= → blocked',
+  sfcBlockDangerous('<div onclick="evil()">text</div>') === '');
+assert('T74 onload= → blocked',
+  sfcBlockDangerous('<body onload="steal()">') === '');
+
+// _sfcBlockDangerous — protocol injection blocked
+assert('T75 javascript: href → blocked',
+  sfcBlockDangerous('<a href="javascript:void(0)">link</a>') === '');
+assert('T75b vbscript: → blocked',
+  sfcBlockDangerous('<a href="vbscript:evil()">x</a>') === '');
+assert('T75c data:text/html → blocked',
+  sfcBlockDangerous('<iframe src="data:text/html,<h1>x</h1>">') === '');
+
+// _sfcBlockDangerous — clean HTML passes through unchanged
+assert('T76 safe <p> tag passes through',
+  sfcBlockDangerous('<p class="text">Hello <strong>world</strong></p>') !== '');
+assert('T76b safe SVG passes through',
+  sfcBlockDangerous('<svg width="16"><path d="M4 8h8"/></svg>') !== '');
+
+// _sfcSanitize — strips dangerous content, keeps clean HTML intact
+assert('T77 <script> stripped by sanitize',
+  sfcSanitize('<p>ok</p><script>alert(1)</script>') === '<p>ok</p>');
+assert('T77b on* attribute stripped',
+  sfcSanitize('<img src="x" onerror="alert(1)">').indexOf('onerror') === -1);
+assert('T77c javascript: href neutralized',
+  sfcSanitize('<a href="javascript:alert(1)">x</a>').indexOf('javascript:') === -1);
+assert('T77d expression() stripped',
+  sfcSanitize('<div style="width:expression(alert(1))">').indexOf('expression(') === -1);
+assert('T77e data:text/html neutralized',
+  sfcSanitize('<iframe src="data:text/html,x">').indexOf('data:text/html') === -1);
+
+// Combined: sanitize then block — double-gate for high-risk content
+// (simulate _sfcBlockDangerous(_sfcSanitize(input)) for AI-generated content)
+assert('T78 double-gate: sanitize strips onerror, block sees clean HTML',
+  (function() {
+    var cleaned = sfcSanitize('<p class="ok">text</p><script>evil()</script>');
+    var final = sfcBlockDangerous(cleaned);
+    // After sanitize: script is gone. Block sees '<p class="ok">text</p>' → passes
+    return final !== '' && final.indexOf('<p') !== -1;
+  })());
+assert('T79 double-gate: script-only input → empty after both layers',
+  sfcBlockDangerous(sfcSanitize('<script>evil()</script>')) === '');
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Summary
 // ─────────────────────────────────────────────────────────────────────────────
 process.stdout.write('\n' + (failed === 0 ? '✔' : '✖') +
