@@ -348,7 +348,45 @@ function () {
       ex.sets = ex.sets.replace(/^\d+/, String(s));
     });
 
-    // ── 8 Validation ──────────────────────────────────────────────────────
+    // ── 8 Périodisation 4 semaines (post-processing optionnel) ──────────────
+    // Activé UNIQUEMENT si cfg.weekIndex est passé — backward compatible.
+    // Semaine 1 : volume base (aucune modification, comportement identique)
+    // Semaine 2 : +1 série sur composés (surcharge progressive volume — ACSM 2009)
+    // Semaine 3 : reps -2 (intensité ↑, charge à augmenter côté utilisateur)
+    // Semaine 4 : deload — -1 série (récupération active — Haff & Triplett 2015)
+    // Guards : désactivé si force / grossesse / cycleFactor réduit (déjà modifié)
+    if (cfg.weekIndex && !cfg.hasStrength && !cfg.pregTri && !(cfg.cycleFactor && cfg.cycleFactor < 0.9)) {
+      var _wIdx = ((cfg.weekIndex - 1) % 4) + 1; // normalise → 1-4
+      if (_wIdx !== 1) {
+        _sel.forEach(function(ex) {
+          if (typeof ex.sets !== 'string') return;
+          var _tg  = ex.tags || [];
+          var _isComp = _tg.indexOf('isolation') === -1 && _tg.indexOf('finisher') === -1;
+          if (_wIdx === 2 && _isComp) {
+            // +1 série sur composés (plafond 6 pour éviter sur-volume)
+            ex.sets = ex.sets.replace(/^(\d+)/, function(m, n) {
+              return String(Math.min(parseInt(n) + 1, 6));
+            });
+          } else if (_wIdx === 3) {
+            // Intensité : reps -2 (floor : 3 reps min pour composés, 5 pour plage basse)
+            ex.sets = ex.sets
+              .replace(/(×|x)(\d+)-(\d+)/, function(_, sep, r1, r2) {
+                return sep + Math.max(3, parseInt(r1) - 2) + '-' + Math.max(5, parseInt(r2) - 2);
+              })
+              .replace(/(×|x)(\d+)(?![-\d])/, function(_, sep, r) {
+                return sep + Math.max(3, parseInt(r) - 2);
+              });
+          } else if (_wIdx === 4) {
+            // Deload : -1 série (min 2 — préserver le stimulus minimum)
+            ex.sets = ex.sets.replace(/^(\d+)/, function(m, n) {
+              return String(Math.max(2, parseInt(n) - 1));
+            });
+          }
+        });
+      }
+    }
+
+    // ── 9 Validation ──────────────────────────────────────────────────────
     var _dv = {};
     _sel.forEach(function(ex) {
       var k = (ex.n||'').toLowerCase().trim();

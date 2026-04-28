@@ -733,8 +733,11 @@ function generateSportProgram() {
    hasStrength:   hasStrength,
    repSuffix:     repSuffix,
    supersetNote:  supersetNote,
-   cycleFactor:   cycleIntensityFactor
+   cycleFactor:   cycleIntensityFactor,
+   weekIndex:     window.SFCSymbiosis ? window.SFCSymbiosis.getWeekIndex() : 0
  });
+ // SFC Symbiosis : bridge training → nutrition (trainingLoad + sportProgramStart)
+ if (window.SFCSymbiosis) window.SFCSymbiosis.notifySession(dayExercises, groups);
 
  // Grossesse : ajouter Kegel à chaque séance
  if (pregTri) {

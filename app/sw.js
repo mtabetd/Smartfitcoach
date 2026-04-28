@@ -24,6 +24,7 @@ const APP_SHELL = [
   './error-boundary.js',
   './tracker.js',
   './muscu-engine.js',
+  './sfc-symbiosis.js',
   './bundle.js',
   './jspdf.umd.min.js',
   './chart.umd.min.js',

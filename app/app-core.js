@@ -1665,10 +1665,24 @@ function getAdaptedMealSplit(dayIndex) {
   }
 
   // Jour d'entraînement : utilise la base + timing déjà calculé par getMealSplit()
+  // SFC Symbiosis : si SFCSymbiosis chargé et S.trainingLoad défini, on applique
+  // le calMultiplier par charge (heavy=1.10 / moderate=1.07 / light=1.03).
+  // Guard : activé UNIQUEMENT si le module symbiose est présent ET trainingLoad connu.
+  // Sans SFCSymbiosis ou sans trainingLoad → calMultiplier=1.0 (comportement inchangé).
+  var _trainMult  = 1.0;
+  var _carbBoost  = 1.0;
+  if (window.SFCSymbiosis && window.S && window.S.trainingLoad) {
+    var _mults = window.SFCSymbiosis.getLoadMultipliers(true, window.S.trainingLoad);
+    _trainMult = _mults.cal;
+    _carbBoost = _mults.carbBoost;
+    // Feedback loop (optionnel) — ajustements fatigue / récupération
+    var _fb = window.SFCSymbiosis.getFeedbackAdjustment();
+    if (_fb.calAdjust) _trainMult = Math.round(_trainMult * (1 + _fb.calAdjust) * 1000) / 1000;
+  }
   return { pctBreak: baseSplit.pctBreak, pctLunch: baseSplit.pctLunch,
            pctSnack: baseSplit.pctSnack, pctDinner: baseSplit.pctDinner,
-           restDay: false, calMultiplier: 1.0, dayInfo: dayInfo,
-           note: baseSplit.note, trainTimingNote: baseSplit.trainTimingNote };
+           restDay: false, calMultiplier: _trainMult, carbBoost: _carbBoost,
+           dayInfo: dayInfo, note: baseSplit.note, trainTimingNote: baseSplit.trainTimingNote };
 }
 window.getAdaptedMealSplit = getAdaptedMealSplit;
 var DAY_NAMES=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
@@ -5453,6 +5467,8 @@ var _canSmooth=!!(s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length&&s
 for(var d=0;d<7;d++){var dayProteins=[];var split=getAdaptedMealSplit(d);var c=Math.round(cBase*(split.calMultiplier||1));var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);
 // BUG-6 FIX: expose per-day training flag to pickRecipe for sportType-aware scoring
 s._pickRecipeTrainingDay=!!(split.dayInfo&&split.dayInfo.isTraining);
+// SFC Symbiosis : carbBoost propagé pour que pickRecipe favorise les recettes glucidiques les jours training
+s._pickRecipeCarbBoost = split.carbBoost || 1.0;
 // Déduplication intra-journée : éviter le même plat en déjeuner ET dîner (même recette dans les 2 pools)
 var bR=pickRecipe(pB,bT,uB,dayProteins,weekProtBudget);
 // Bloquer le petit-déj dans les pools déjeuner/dîner du même jour
