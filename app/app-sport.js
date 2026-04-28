@@ -3075,6 +3075,7 @@ function getMixSessionsForType(type, days) {
  else if (t === 'crossfit')     source = CROSSFIT_MIX_SESSIONS;
  else if (t === 'calisthenics') source = CALISTHENICS_MIX_SESSIONS;
  else                           source = MUSCU_MIX_SESSIONS; // défaut safe
+ if (!source || !source.length) source = MUSCU_MIX_SESSIONS; // guard: source vide → fallback safe
  // Toujours retourner exactement "d" sessions (rotation si moins de sessions disponibles)
  var out = [];
  for (var i = 0; i < d; i++) out.push(source[i % source.length]);
@@ -4093,7 +4094,7 @@ function renderCrossfitProgram(p) {
  // ─── ESTIMATION CALORIQUE CROSSFIT ───
  (function() {
   var cfLevel = S.crossfitLevel || 'rx';
-  var SESSION_DUR_CF = { scaled: 60, rx: 75, rx_plus: 90 };
+  var SESSION_DUR_CF = { scaled: 60, inter: 65, rx: 75, rx_plus: 90 };
   var cfDur = SESSION_DUR_CF[cfLevel] || 75;
   var cfKcal = estimateKcal('crossfit', cfLevel, cfDur);
   p.appendChild(buildKcalCard(cfKcal, cfDur));
