@@ -4022,6 +4022,63 @@ function computeSessionIntensity(wod) {
  return 'moderate';
 }
 
+function computeAdvancedIntensity(wod, baseIntensity) {
+ try {
+  var LEVELS = ['low', 'moderate', 'high', 'very_high'];
+  var idx = LEVELS.indexOf(baseIntensity);
+  if (idx === -1) idx = 2; // unknown base → default to 'high' position
+
+  var movements = (wod && Array.isArray(wod.movements)) ? wod.movements : [];
+  if (!movements.length) return baseIntensity; // no movements → nothing to refine
+
+  var combined = ((wod && wod.type) || '') + ' ' + ((wod && wod.notes) || '');
+  combined = combined.toLowerCase();
+
+  // ─── Signal extraction ───
+  var totalReps       = 0;
+  var heavyBarbellN   = 0;
+  var gymnasticN      = 0;
+  var cardioN         = 0;
+  var lowSkillN       = 0;
+
+  var _HEAVY_LIFTS = /deadlift|clean|snatch|thruster|squat|jerk/;
+  var _LOW_SKILL   = /air squat|sit.?up|push.?up|jumping jack|mountain climber|lunge/;
+  var _CARDIO_NAME = /\b(row|run|bike|ski erg|double under|single under)\b/;
+
+  movements.forEach(function(m) {
+   if (typeof m.reps === 'number') totalReps += m.reps;
+   var mn = (m.name || '').toLowerCase();
+   if (m.weight) {
+    if (_HEAVY_LIFTS.test(mn)) heavyBarbellN++;
+   }
+   if (m.gymnastics) gymnasticN++;
+   if (m.special || _CARDIO_NAME.test(mn)) cardioN++;
+   if (_LOW_SKILL.test(mn)) lowSkillN++;
+  });
+
+  // Heavy barbell keywords in type/notes also count
+  if (/heavy|lourd|\d+%\s*(1rm|max)/.test(combined)) heavyBarbellN++;
+
+  // ─── Adjustment rules ───
+  var delta = 0;
+
+  if (totalReps > 300)    delta += 1; // very high volume
+  if (heavyBarbellN > 0)  delta += 1; // loaded barbell elevates CNS demand
+
+  // Pure cardio: every movement is cardio and no barbell/gymnastics
+  var isPureCardio = cardioN > 0 && cardioN === movements.length && !heavyBarbellN && !gymnasticN;
+  if (isPureCardio) delta -= 1;
+
+  // All movements are low-skill (calisthenics, no technique demand)
+  if (lowSkillN > 0 && lowSkillN === movements.length) delta -= 1;
+
+  idx = Math.max(0, Math.min(LEVELS.length - 1, idx + delta));
+  return LEVELS[idx];
+ } catch(e) {
+  return baseIntensity; // safe fallback — never breaks the caller
+ }
+}
+
 // ─── STEP 6 (CrossFit): PROGRAMME CF ───
 function renderCrossfitProgram(p) {
  // Guard: ensure cfProgress is always an object (safe for null/undefined from storage)
@@ -4062,8 +4119,9 @@ function renderCrossfitProgram(p) {
   var _cfDurMins    = _cfDurMatch
    ? parseInt(_cfDurMatch[1] || _cfDurMatch[2] || _cfDurMatch[3], 10)
    : (_cfDurBase[S.crossfitLevel] || 75);
-  S.crossfitIntensity    = _cfIntensity;
-  S.crossfitTrainingLoad = Math.round(_cfDurMins * CF_INTENSITY_FACTORS[_cfIntensity]);
+  var _cfFinalIntensity  = computeAdvancedIntensity(_cfInnerWod, _cfIntensity);
+  S.crossfitIntensity    = _cfFinalIntensity;
+  S.crossfitTrainingLoad = Math.round(_cfDurMins * CF_INTENSITY_FACTORS[_cfFinalIntensity]);
   _sfcNotifySport('crossfit', S.crossfitLevel);
  }
 
