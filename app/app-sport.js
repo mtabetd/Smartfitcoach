@@ -4215,17 +4215,13 @@ function renderCrossfitProgram(p) {
 
  // ─── HALTERO CYCLE INFO ───
  if (window.HALTERO_CYCLES) {
- var cycleWeek = S.crossfitCycleWeek || 1;
+ var cycleWeek = (((S.crossfitWeek || 1) - 1) % 6) + 1;
+ S.crossfitCycleWeek = cycleWeek;
  HALTERO_CYCLES.renderCycleInfo(p, cycleWeek, S.sex, S.crossfitLevel);
 
- // Haltero cycle week selector (1-24)
  var haltWeekNav = h('div', {style: 'display:flex;align-items:center;gap:8px;margin:8px 0 16px;flex-wrap:wrap'});
  haltWeekNav.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-right:4px'}, (window.isEnglish && window.isEnglish() ? 'Weightlifting Cycle' : 'Cycle Haltéro')));
- var prevBtn = h('button', {'class': 'btn-secondary', style: 'width:auto;padding:6px 12px;margin:0;font-size:13px', disabled: cycleWeek <= 1 ? true : null, onclick: function(){ S.crossfitCycleWeek = Math.max(1, (S.crossfitCycleWeek || 1) - 1); window.render(); }}, '\u25C0');
- haltWeekNav.appendChild(prevBtn);
- haltWeekNav.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;min-width:60px;text-align:center'}, cycleWeek + ' / 24'));
- var nextBtn = h('button', {'class': 'btn-secondary', style: 'width:auto;padding:6px 12px;margin:0;font-size:13px', disabled: cycleWeek >= 24 ? true : null, onclick: function(){ S.crossfitCycleWeek = Math.min(24, (S.crossfitCycleWeek || 1) + 1); window.render(); }}, '\u25B6');
- haltWeekNav.appendChild(nextBtn);
+ haltWeekNav.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;min-width:60px;text-align:center'}, cycleWeek + ' / 6'));
  p.appendChild(haltWeekNav);
  }
 
