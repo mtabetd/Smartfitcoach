@@ -4170,8 +4170,13 @@ function renderCrossfitProgram(p) {
    : (_cfDurBase[S.crossfitLevel] || 75);
   var _cfFinalIntensity  = computeAdvancedIntensity(_cfInnerWod, _cfIntensity);
   var _cfVolFactor       = computeVolumeFactor(_cfInnerWod);
+  // ─── REST DETECTION ───
+  var _cfMovs     = (_cfInnerWod && Array.isArray(_cfInnerWod.movements)) ? _cfInnerWod.movements : [];
+  var _cfHasRest  = _cfMovs.some(function(m) { return /\brest\b/i.test(m.name || ''); })
+                    || /\brest\b/.test(_cfTypeStr);
+  var _cfRestFactor = _cfHasRest ? 0.9 : 1.0;
   S.crossfitIntensity    = _cfFinalIntensity;
-  S.crossfitTrainingLoad = Math.round(_cfDurMins * CF_INTENSITY_FACTORS[_cfFinalIntensity] * _cfVolFactor);
+  S.crossfitTrainingLoad = Math.round(_cfDurMins * CF_INTENSITY_FACTORS[_cfFinalIntensity] * _cfVolFactor * _cfRestFactor);
   _sfcNotifySport('crossfit', S.crossfitLevel);
  }
 
