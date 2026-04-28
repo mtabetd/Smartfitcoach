@@ -381,35 +381,28 @@ function generateSportProgram() {
  //   - advanced pri 2 : ancien 2-3, médiane 2 (au lieu de 3)
  // Progression respectueuse ISSN 2017 + ACSM (≤10% hausse volume/semaine).
  // FIX DÉTERMINISME MUSCU 2026-04 : médianes déterministes (cf. bloc commenté ci-dessus).
+ // FIX 2026-04-28 : duration-aware — 1h15/1h30 génèrent plus d'exercices par groupe pour
+ // correspondre au volume demandé (NSCA CSCS §18 : volume = f(durée séance)).
  function exerciseCountForPriority(pri) {
  var lvl = S.sportLevel || 'intermediate';
+ // +1 pour 1h15, +2 pour 1h30 — plafonné par durMax à l'étape cap
+ var _dur = S.sportSessionDuration || '';
+ var _dAdd = _dur === '1h30' ? 2 : _dur === '1h15' ? 1 : 0;
  if (lvl === 'beginner') {
- if (pri >= 5) return 2;
- if (pri === 4) return 2;
- if (pri === 3) return 1;
- if (pri === 2) return 1;
- return 1;
+   var _b = pri >= 5 ? 2 : pri === 4 ? 2 : pri >= 3 ? 1 : 1;
+   return Math.min(4, _b + (_dAdd > 0 ? 1 : 0));
  } else if (lvl === 'pro') {
  // FIX 2026-04-16 : pro était traité comme intermediate (tombait dans else).
  // Pro = athlète confirmé, volume supérieur à advanced (NSCA CSCS guidelines).
- if (pri >= 5) return 5;
- if (pri === 4) return 4;
- if (pri === 3) return 3;
- if (pri === 2) return 3;
- return 2;
+   var _p = pri >= 5 ? 5 : pri === 4 ? 4 : pri >= 3 ? 3 : 3;
+   return _p + _dAdd;
  } else if (lvl === 'advanced') {
- if (pri >= 5) return 4;
- if (pri === 4) return 4;
- if (pri === 3) return 3;
- if (pri === 2) return 2;
- return 2;
+   var _a = pri >= 5 ? 4 : pri === 4 ? 4 : pri >= 3 ? 3 : 2;
+   return _a + _dAdd;
  } else {
  // intermediate
- if (pri >= 5) return 3;
- if (pri === 4) return 3;
- if (pri === 3) return 2;
- if (pri === 2) return 2;
- return 1;
+   var _i = pri >= 5 ? 3 : pri === 4 ? 3 : pri >= 3 ? 2 : 2;
+   return Math.min(5, _i + _dAdd);
  }
  }
 
@@ -889,9 +882,18 @@ function generateSportProgram() {
  } else if (pri >= 4) {
    // Non-beginner, high priority: gym users push bodyweight last, then level desc, then stable name sort
    // Deterministic: variety comes from cycleOffset at selection (line ~924), not from Math.random()
+   // FIX 2026-04-28 : détection bodyweight étendue aux tags poids-du-corps ET à l'équipement
+   // "barre de traction" — avant, les tractions n'étaient pas détectées → passaient avant
+   // le lat pulldown et le rowing câble → 3 variantes de tractions pour une séance dos.
    available.sort(function(a, b) {
-     var _bwA = (!S.sportEquipment || S.sportEquipment === 'gym') ? (/^poids du corps$/i.test((a.eq||'').trim()) ? 1 : 0) : 0;
-     var _bwB = (!S.sportEquipment || S.sportEquipment === 'gym') ? (/^poids du corps$/i.test((b.eq||'').trim()) ? 1 : 0) : 0;
+     var _isBwEx = function(ex) {
+       var _eq = (ex.eq||'').toLowerCase().trim();
+       var _tg = ex.tags || [];
+       return /^poids du corps$/i.test(_eq) || _tg.indexOf('poids-du-corps') !== -1
+           || /barre de traction|barres?\s*parall[èe]les|barre fixe|barre ou poign/.test(_eq);
+     };
+     var _bwA = (!S.sportEquipment || S.sportEquipment === 'gym') ? (_isBwEx(a) ? 1 : 0) : 0;
+     var _bwB = (!S.sportEquipment || S.sportEquipment === 'gym') ? (_isBwEx(b) ? 1 : 0) : 0;
      if (_bwA !== _bwB) return _bwA - _bwB;
      return (b.lv||1) - (a.lv||1) || (a.n||'').localeCompare(b.n||'');
    });
@@ -899,8 +901,14 @@ function generateSportProgram() {
    // Non-beginner, lower priority: gym users push bodyweight last, then stable alpha sort
    // Cycle offset (line ~924) provides week-to-week rotation without randomness
    available.sort(function(a, b) {
-     var _bwA = (!S.sportEquipment || S.sportEquipment === 'gym') ? (/^poids du corps$/i.test((a.eq||'').trim()) ? 1 : 0) : 0;
-     var _bwB = (!S.sportEquipment || S.sportEquipment === 'gym') ? (/^poids du corps$/i.test((b.eq||'').trim()) ? 1 : 0) : 0;
+     var _isBwEx2 = function(ex) {
+       var _eq = (ex.eq||'').toLowerCase().trim();
+       var _tg = ex.tags || [];
+       return /^poids du corps$/i.test(_eq) || _tg.indexOf('poids-du-corps') !== -1
+           || /barre de traction|barres?\s*parall[èe]les|barre fixe|barre ou poign/.test(_eq);
+     };
+     var _bwA = (!S.sportEquipment || S.sportEquipment === 'gym') ? (_isBwEx2(a) ? 1 : 0) : 0;
+     var _bwB = (!S.sportEquipment || S.sportEquipment === 'gym') ? (_isBwEx2(b) ? 1 : 0) : 0;
      if (_bwA !== _bwB) return _bwA - _bwB;
      return (a.n||'').localeCompare(b.n||'');
    });
@@ -1144,6 +1152,16 @@ function generateSportProgram() {
        }
      });
    });
+   // FIX 2026-04-28 : fallback si weekUsedNames bloque tout (programme 5j/sem = beaucoup
+   // d'exercices déjà utilisés la semaine courante). On relaxe weekUsedNames mais garde _dayUsed.
+   if (!_supPool.length) {
+     groups.forEach(function(grp) {
+       ((window.EXERCISES && window.EXERCISES[grp]) || []).forEach(function(ex) {
+         var _k = (ex.n||'').toLowerCase().trim();
+         if (!_dayUsed[_k] && (ex.lv||1) <= maxLv) _supPool.push(ex);
+       });
+     });
+   }
    if (!_supPool.length) return;
    // Apply medical restrictions to supplemental pool — SAFETY CRITICAL
    // Le fill court-circuiterait les filtres médicaux de la sélection principale si on ne les réapplique pas.
@@ -1187,11 +1205,17 @@ function generateSportProgram() {
        return true;
      });
    }
-   // For gym: prefer weighted, push pure bodyweight last
+   // For gym: prefer weighted, push pure bodyweight (+ tractions) last
    if (!S.sportEquipment || S.sportEquipment === 'gym') {
      _supPool.sort(function(a, b) {
-       var _bwA = /^poids du corps$/i.test((a.eq||'').trim()) ? 1 : 0;
-       var _bwB = /^poids du corps$/i.test((b.eq||'').trim()) ? 1 : 0;
+       var _isBwFill = function(ex) {
+         var _eq = (ex.eq||'').toLowerCase().trim();
+         var _tg = ex.tags || [];
+         return /^poids du corps$/i.test(_eq) || _tg.indexOf('poids-du-corps') !== -1
+             || /barre de traction|barres?\s*parall[èe]les|barre fixe|barre ou poign/.test(_eq);
+       };
+       var _bwA = _isBwFill(a) ? 1 : 0;
+       var _bwB = _isBwFill(b) ? 1 : 0;
        return _bwA - _bwB || (b.lv||1) - (a.lv||1);
      });
    } else {
@@ -6746,7 +6770,9 @@ function calcSessionDuration(exercises) {
  if (sm) { sets = parseInt(sm[1]); reps = parseInt(sm[2]); }
  var isCompound = /(squat|soulevé|développé|rowing|presse|hip thrust|fente|deadlift|tirage|pull)/i.test(ex.n || '');
  var tSet = reps * (isCompound ? 3.5 : 2.5);
- var rest = 90;
+ // FIX 2026-04-28 : repos réaliste — composé 120s, isolation 60s (avant flat 90s → sous-estimait
+ // la durée réelle de 20-25%). NSCA CSCS §18 : repos inter-série composés = 2-3 min.
+ var rest = isCompound ? 120 : 60;
  var rm = String(ex.rest || '').match(/(\d+)\s*min/i);
  var rs = String(ex.rest || '').match(/^(\d+)\s*s/i);
  if (rm) rest = parseInt(rm[1]) * 60;
