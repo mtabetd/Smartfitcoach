@@ -4079,6 +4079,39 @@ function computeAdvancedIntensity(wod, baseIntensity) {
  }
 }
 
+function computeVolumeFactor(wod) {
+ if (!wod) return 1.0;
+ var t = (wod.type || '').toLowerCase();
+ var movements = Array.isArray(wod.movements) ? wod.movements : [];
+
+ var repSum = 0;
+ movements.forEach(function(m) {
+  if (typeof m.reps === 'number') repSum += m.reps;
+ });
+ if (!repSum) return 1.0; // no rep data → neutral factor
+
+ // Estimate total reps based on WOD format
+ var amrapM  = t.match(/amrap\s+(\d+)/);
+ var roundsM = t.match(/^(\d+)\s+rounds?/i);
+ var emomM   = t.match(/emom\s+(\d+)/);
+
+ if (amrapM) {
+  // 1 round ≈ 5 min is a conservative CrossFit estimate
+  repSum = repSum * Math.ceil(parseInt(amrapM[1], 10) / 5);
+ } else if (roundsM) {
+  repSum = repSum * parseInt(roundsM[1], 10);
+ } else if (emomM) {
+  // Active movements per cycle (exclude rest minutes)
+  var active = movements.filter(function(m) { return !/\brest\b/i.test(m.name || ''); }).length || 1;
+  repSum = repSum * Math.ceil(parseInt(emomM[1], 10) / active);
+ }
+ // For Time (plain chipper): repSum is already the total
+
+ if (repSum < 50)  return 0.9; // low volume
+ if (repSum > 200) return 1.2; // high volume
+ return 1.0;                   // normal
+}
+
 // ─── STEP 6 (CrossFit): PROGRAMME CF ───
 function renderCrossfitProgram(p) {
  // Guard: ensure cfProgress is always an object (safe for null/undefined from storage)
@@ -4120,8 +4153,9 @@ function renderCrossfitProgram(p) {
    ? parseInt(_cfDurMatch[1] || _cfDurMatch[2] || _cfDurMatch[3], 10)
    : (_cfDurBase[S.crossfitLevel] || 75);
   var _cfFinalIntensity  = computeAdvancedIntensity(_cfInnerWod, _cfIntensity);
+  var _cfVolFactor       = computeVolumeFactor(_cfInnerWod);
   S.crossfitIntensity    = _cfFinalIntensity;
-  S.crossfitTrainingLoad = Math.round(_cfDurMins * CF_INTENSITY_FACTORS[_cfFinalIntensity]);
+  S.crossfitTrainingLoad = Math.round(_cfDurMins * CF_INTENSITY_FACTORS[_cfFinalIntensity] * _cfVolFactor);
   _sfcNotifySport('crossfit', S.crossfitLevel);
  }
 
