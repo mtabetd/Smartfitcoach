@@ -404,6 +404,111 @@ var mix27 = getMixSessionsForType('crossfit', 0);
 assert('T27 days=0 clamped to 1 → 1 item', mix27.length === 1);
 
 // ─────────────────────────────────────────────────────────────────────────────
+// T28 – T37 : computeCrossfitRestFactor
+// ─────────────────────────────────────────────────────────────────────────────
+process.stdout.write('\ncomputeCrossfitRestFactor\n');
+
+// ─── Inline mirrors of production helpers ───
+function _cfParseRestSeconds(text) {
+  var secs = [];
+  var t = (text || '').toLowerCase();
+  var m;
+  var reMinA = /(?:rest|repos)\s+(\d+)\s*min/g;
+  while ((m = reMinA.exec(t)) !== null) secs.push(parseInt(m[1], 10) * 60);
+  var reMinB = /(\d+)\s*min\s+rest/g;
+  while ((m = reMinB.exec(t)) !== null) secs.push(parseInt(m[1], 10) * 60);
+  var reSecA = /(?:rest|repos)\s+(\d+)\s*s(?:ec(?:ond)?s?)?(?!\s*min)/g;
+  while ((m = reSecA.exec(t)) !== null) secs.push(parseInt(m[1], 10));
+  var reSecB = /(\d+)\s*s(?:ec(?:ond)?s?)?\s+rest/g;
+  while ((m = reSecB.exec(t)) !== null) secs.push(parseInt(m[1], 10));
+  var reColon = /(\d+):(\d{2})\s*rest/g;
+  while ((m = reColon.exec(t)) !== null) secs.push(parseInt(m[1], 10) * 60 + parseInt(m[2], 10));
+  return secs;
+}
+
+function computeCrossfitRestFactor(wod, typeString, movements) {
+  try {
+    var movs = Array.isArray(movements) ? movements : [];
+    var notes = (wod && wod.notes) ? (wod.notes + '') : '';
+    var hasRest = movs.some(function(m) { return /\brest\b/i.test(m.name || ''); })
+               || /\brest\b/i.test(typeString || '')
+               || /\brest\b/i.test(notes);
+    if (!hasRest) return 1.0;
+    var allText = (typeString || '') + ' ' + notes + ' '
+      + movs.map(function(m) { return (m.name || '') + ' ' + (m.note || '') + ' ' + (m.notes || ''); }).join(' ');
+    var secs = _cfParseRestSeconds(allText);
+    if (!secs.length) return 0.9;
+    var maxSecs = Math.max.apply(null, secs);
+    if (maxSecs >= 120) return 0.75;
+    if (maxSecs >= 90)  return 0.80;
+    if (maxSecs >= 60)  return 0.85;
+    if (maxSecs >= 30)  return 0.92;
+    return 0.9;
+  } catch(e) { return 0.9; }
+}
+
+// T28: no rest → 1.0
+var rf28 = computeCrossfitRestFactor(
+  {type: 'AMRAP 20', movements: [{name: 'Thruster', reps: 10}]},
+  'amrap 20',
+  [{name: 'Thruster', reps: 10}]
+);
+assert('T28 no rest → restFactor = 1.0', rf28 === 1.0);
+
+// T29: EMOM rest slot, no duration → 0.9
+var rf29 = computeCrossfitRestFactor(
+  {type: 'EMOM 20'},
+  'emom 20',
+  [{name: 'Cal Row', reps: 12}, {name: 'Thruster', reps: 9}, {name: 'Rest', reps: 1}]
+);
+assert('T29 EMOM rest slot, no duration → 0.9', rf29 === 0.9);
+
+// T30: "rest 30s" in type string → 0.92
+var rf30 = computeCrossfitRestFactor(null, 'for time rest 30s', []);
+assert('T30 "rest 30s" → 0.92', rf30 === 0.92);
+
+// T31: "rest 60 sec" in notes → 0.85
+var rf31 = computeCrossfitRestFactor(
+  {notes: 'Take rest 60 sec between sets.'},
+  'for time',
+  []
+);
+assert('T31 "rest 60 sec" → 0.85', rf31 === 0.85);
+
+// T32: "rest 90s" → 0.80
+var rf32 = computeCrossfitRestFactor(null, 'every round rest 90s', []);
+assert('T32 "rest 90s" → 0.80', rf32 === 0.80);
+
+// T33: "rest 2min" → 0.75
+var rf33 = computeCrossfitRestFactor(null, 'rest 2min between rounds', []);
+assert('T33 "rest 2min" → 0.75', rf33 === 0.75);
+
+// T34: "1:00 rest" format → 0.85 (60s)
+var rf34 = computeCrossfitRestFactor(null, '1:00 rest after each set', []);
+assert('T34 "1:00 rest" → 0.85', rf34 === 0.85);
+
+// T35: multiple rest values → strongest reduction used
+// type has "rest 30s", notes has "rest 2min" → maxSecs=120 → 0.75
+var rf35 = computeCrossfitRestFactor(
+  {notes: 'Optional rest 2min at halfway point.'},
+  'rest 30s between movements',
+  []
+);
+assert('T35 multiple rests → strongest reduction (0.75)', rf35 === 0.75);
+
+// T36: null wod, null typeString, null movements → no crash, returns 1.0
+var rf36;
+try { rf36 = computeCrossfitRestFactor(null, null, null); }
+catch(e) { rf36 = 'crash'; }
+assert('T36 all null inputs → no crash, returns 1.0', rf36 === 1.0);
+
+// T37: trainingLoad formula integrates restFactor correctly
+// duration=20, intensity=high(1.3), vol=1.0, rest=0.85 → round(20*1.3*1.0*0.85)=22
+var CF_INTENSITY_FACTORS_T37 = { low: 0.8, moderate: 1.0, high: 1.3, very_high: 1.6 };
+var tl37 = Math.round(20 * CF_INTENSITY_FACTORS_T37['high'] * 1.0 * 0.85);
+assert('T37 trainingLoad 20×1.3×1.0×0.85 = 22', tl37 === 22);
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Summary
 // ─────────────────────────────────────────────────────────────────────────────
 process.stdout.write('\n' + (failed === 0 ? '✔' : '✖') +

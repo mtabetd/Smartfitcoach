@@ -4128,6 +4128,64 @@ function computeVolumeFactor(wod) {
  return 1.0;                            // normal
 }
 
+// ─── CROSSFIT REST FACTOR ───
+function _cfParseRestSeconds(text) {
+ // Returns array of every rest duration (in seconds) found in text.
+ // Caller takes max → strongest reduction.
+ var secs = [];
+ var t = (text || '').toLowerCase();
+ var m;
+
+ // "rest 2min" / "rest 2 min" / "repos 2min"
+ var reMinA = /(?:rest|repos)\s+(\d+)\s*min/g;
+ while ((m = reMinA.exec(t)) !== null) secs.push(parseInt(m[1], 10) * 60);
+ // "2min rest" / "2 min rest"
+ var reMinB = /(\d+)\s*min\s+rest/g;
+ while ((m = reMinB.exec(t)) !== null) secs.push(parseInt(m[1], 10) * 60);
+
+ // "rest 30s" / "rest 60 sec" / "rest 60 seconds" / "repos 30s"
+ // (?!\s*min) prevents matching the leading digit of "2min" patterns above
+ var reSecA = /(?:rest|repos)\s+(\d+)\s*s(?:ec(?:ond)?s?)?(?!\s*min)/g;
+ while ((m = reSecA.exec(t)) !== null) secs.push(parseInt(m[1], 10));
+ // "30s rest" / "90 sec rest"
+ var reSecB = /(\d+)\s*s(?:ec(?:ond)?s?)?\s+rest/g;
+ while ((m = reSecB.exec(t)) !== null) secs.push(parseInt(m[1], 10));
+
+ // "1:00 rest" / "1:30 rest"
+ var reColon = /(\d+):(\d{2})\s*rest/g;
+ while ((m = reColon.exec(t)) !== null) secs.push(parseInt(m[1], 10) * 60 + parseInt(m[2], 10));
+
+ return secs;
+}
+
+function computeCrossfitRestFactor(wod, typeString, movements) {
+ try {
+  var movs = Array.isArray(movements) ? movements : [];
+  var notes = (wod && wod.notes) ? (wod.notes + '') : '';
+
+  var hasRest = movs.some(function(m) { return /\brest\b/i.test(m.name || ''); })
+             || /\brest\b/i.test(typeString || '')
+             || /\brest\b/i.test(notes);
+  if (!hasRest) return 1.0;
+
+  // Aggregate all text sources for duration parsing
+  var allText = (typeString || '') + ' ' + notes + ' '
+   + movs.map(function(m) { return (m.name || '') + ' ' + (m.note || '') + ' ' + (m.notes || ''); }).join(' ');
+
+  var secs = _cfParseRestSeconds(allText);
+  if (!secs.length) return 0.9; // rest present but no parseable duration → EMOM slot fallback
+
+  var maxSecs = Math.max.apply(null, secs);
+  if (maxSecs >= 120) return 0.75;
+  if (maxSecs >= 90)  return 0.80;
+  if (maxSecs >= 60)  return 0.85;
+  if (maxSecs >= 30)  return 0.92;
+  return 0.9; // < 30s — treat as EMOM rest slot
+ } catch(e) {
+  return 0.9; // safe fallback — never crashes
+ }
+}
+
 // ─── STEP 6 (CrossFit): PROGRAMME CF ───
 function renderCrossfitProgram(p) {
  // Guard: ensure cfProgress is always an object (safe for null/undefined from storage)
@@ -4170,24 +4228,9 @@ function renderCrossfitProgram(p) {
    : (_cfDurBase[S.crossfitLevel] || 75);
   var _cfFinalIntensity  = computeAdvancedIntensity(_cfInnerWod, _cfIntensity);
   var _cfVolFactor       = computeVolumeFactor(_cfInnerWod);
-  // ─── REST DETECTION ───
-  var _cfMovs     = (_cfInnerWod && Array.isArray(_cfInnerWod.movements)) ? _cfInnerWod.movements : [];
-  var _cfHasRest  = _cfMovs.some(function(m) { return /\brest\b/i.test(m.name || ''); })
-                    || /\brest\b/.test(_cfTypeStr);
-  // Extended: extract explicit rest duration (seconds) to graduate the factor
-  var _cfRestFactor;
-  if (!_cfHasRest) {
-   _cfRestFactor = 1.0;
-  } else {
-   var _cfRestText = _cfTypeStr
-    + ' ' + (_cfInnerWod ? (_cfInnerWod.notes || '') : '').toLowerCase()
-    + ' ' + _cfMovs.map(function(m) { return (m.name || '') + ' ' + (m.note || ''); }).join(' ').toLowerCase();
-   var _cfSecMatch = _cfRestText.match(/rest\s+(\d+)\s*s|(\d+)\s*s(?:ec)?\s+rest|repos\s+(\d+)\s*s/);
-   var _cfRestSecs = _cfSecMatch ? parseInt(_cfSecMatch[1] || _cfSecMatch[2] || _cfSecMatch[3], 10) : null;
-   if (_cfRestSecs && _cfRestSecs >= 90) _cfRestFactor = 0.80; // long rest → bigger load reduction
-   else if (_cfRestSecs && _cfRestSecs >= 60) _cfRestFactor = 0.85; // 60s rest
-   else _cfRestFactor = 0.90; // EMOM rest slot or unspecified duration (original behaviour)
-  }
+  // ─── REST FACTOR ───
+  var _cfMovs       = (_cfInnerWod && Array.isArray(_cfInnerWod.movements)) ? _cfInnerWod.movements : [];
+  var _cfRestFactor = computeCrossfitRestFactor(_cfInnerWod, _cfTypeStr, _cfMovs);
   S.crossfitIntensity    = _cfFinalIntensity;
   S.crossfitTrainingLoad = Math.round(_cfDurMins * CF_INTENSITY_FACTORS[_cfFinalIntensity] * _cfVolFactor * _cfRestFactor);
   _sfcNotifySport('crossfit', S.crossfitLevel);
