@@ -1733,15 +1733,33 @@ window.estimateKcal = estimateKcal;
 
 // ── Bridge SFCSymbiosis universel — tous les sports hors musculation ──────────
 // Convertit (sport, level) → exercices synthétiques → notifySession.
-// Strip script tags, event-handler attributes, and javascript: protocols from HTML strings
+// Strip script tags, event-handler attributes, and JS/data: URIs from HTML strings
 // produced by external sources (AI program output, third-party parsers).
 function _sfcSanitize(html) {
   if (!html || typeof html !== 'string') return '';
   return html
     .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
     .replace(/\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]*)/gi, '')
-    .replace(/href\s*=\s*["']?\s*javascript:[^"'\s>]*/gi, 'href="about:blank"');
+    .replace(/href\s*=\s*["']?\s*javascript:[^"'\s>]*/gi, 'href="about:blank"')
+    .replace(/src\s*=\s*["']?\s*javascript:[^"'\s>]*/gi, 'src=""')
+    .replace(/\bexpression\s*\(/gi, '')
+    .replace(/data\s*:\s*text\/html/gi, 'data-blocked:text/html');
 }
+window._sfcSanitize = _sfcSanitize;
+
+// Hard-blocks HTML containing any script-execution vector — returns '' immediately.
+// Used as a detection gate upstream of _sfcSanitize for high-risk external content.
+// If ANY of these patterns is present the entire string is rejected (never partial strip).
+function _sfcBlockDangerous(html) {
+  if (!html || typeof html !== 'string') return html || '';
+  if (/<script\b/i.test(html))             return '';
+  if (/\bon\w+\s*=/i.test(html))           return '';  // onerror=, onclick=, onload=, …
+  if (/javascript\s*:/i.test(html))        return '';
+  if (/vbscript\s*:/i.test(html))          return '';
+  if (/data\s*:\s*text\/html/i.test(html)) return '';  // data:text/html XSS
+  return html;
+}
+window._sfcBlockDangerous = _sfcBlockDangerous;
 
 // notifySession reste inchangé ; seule la forme des exercices change.
 // MET ≥ 9 → heavy | 5 ≤ MET < 9 → moderate | MET < 5 → light
@@ -1762,7 +1780,7 @@ function _sfcNotifySport(sport, level) {
   // even when SFCSymbiosis is not loaded. Precision engines (CF/running/cycling) override
   // this with their second assignment after _sfcNotifySport returns.
   var _loadFromMet = met >= 9 ? 'heavy' : met >= 5 ? 'moderate' : 'light';
-  if (window.S) window.S.trainingLoad = _loadFromMet;
+  _sfcAggregateLoad(sport, _loadFromMet);
   if (!window.SFCSymbiosis || !window.SFCSymbiosis.notifySession) return;
   var exercises, groups;
   if (met >= 9) {
@@ -1776,11 +1794,34 @@ function _sfcNotifySport(sport, level) {
     groups    = [];
   }
   window.SFCSymbiosis.notifySession(exercises, groups);
-  // Restore MET-based value — SFCSymbiosis.notifySession may overwrite S.trainingLoad
-  if (window.S) window.S.trainingLoad = _loadFromMet;
+  // Re-apply aggregated load — notifySession uses MAX merge but _sfcAggregateLoad
+  // is the canonical source of truth (precision engines + multi-sport MAX).
+  _sfcAggregateLoad(sport, _loadFromMet);
   console.log('[SFC] notifySession', sport, level, '->', window.S && window.S.trainingLoad);
 }
 window._sfcNotifySport = _sfcNotifySport;
+
+// ─── MULTI-SPORT LOAD AGGREGATOR ───
+// Stores per-sport load in S.trainingLoads; computes S.dailyTrainingLoad = MAX across all
+// sports seen in the current session. Called by every sport engine so a lower-intensity
+// sport rendered after a heavier one does not silently overwrite S.trainingLoad.
+var _LOAD_RANK = { light: 0, moderate: 1, heavy: 2 };
+var _RANK_LOAD = ['light', 'moderate', 'heavy'];
+function _sfcAggregateLoad(sport, load) {
+  if (!window.S) return;
+  if (!window.S.trainingLoads) window.S.trainingLoads = {};
+  if (load) window.S.trainingLoads[sport] = load;
+  var maxRank = 0;
+  var loads = window.S.trainingLoads;
+  Object.keys(loads).forEach(function(k) {
+    var r = _LOAD_RANK[loads[k]];
+    if (typeof r === 'number' && r > maxRank) maxRank = r;
+  });
+  var maxLoad = _RANK_LOAD[maxRank] || 'moderate';
+  window.S.dailyTrainingLoad = maxLoad;
+  window.S.trainingLoad      = maxLoad;
+}
+window._sfcAggregateLoad = _sfcAggregateLoad;
 
 // Creer une carte estimation calorique pour les programmes sport
 function buildKcalCard(kcal, durationMins) {
@@ -3947,7 +3988,7 @@ function appendWellnessBanner(p) {
     normal:   '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#1A3A6A" stroke-width="1.5"/><path d="M8 5v4" stroke="#1A3A6A" stroke-width="1.5" stroke-linecap="round"/></svg>'
   };
   var iconWrap = h('div', {style: 'flex-shrink:0;margin-top:' + (isPeak ? '0' : '1px')});
-  iconWrap.innerHTML = svgIcons[adapt.level] || svgIcons.normal;
+  iconWrap.innerHTML = _sfcSanitize(svgIcons[adapt.level] || svgIcons.normal);
   fallbackBanner.appendChild(iconWrap);
 
   if (isPeak) {
@@ -4000,222 +4041,9 @@ function applyDeloadScaling(wod) {
  return out;
 }
 
-// ─── DAILY INTENSITY ENGINE ───
-var CF_INTENSITY_FACTORS = { low: 0.8, moderate: 1.0, high: 1.3, very_high: 1.6 };
-
-// ─── RUNNING ZONE INTENSITY FACTORS ───
-// Z1 recovery · Z2 endurance · Z3 tempo · Z4 interval · Z5 max
-var RUN_ZONE_FACTORS = { 'Z1': 0.5, 'Z1-Z2': 0.65, 'Z2': 0.8, 'Z3': 1.0, 'Z3-Z4': 1.15, 'Z4': 1.3, 'Z4-Z5': 1.5, 'Z5': 1.6 };
-
-// ─── CYCLING ZONE INTENSITY FACTORS (Coggan) ───
-// FTP path: calibrated from Coggan zone midpoints (z1≈50% FTP, z4≈98% FTP)
-var CYCLING_ZONE_FACTORS_FTP   = { 1: 0.5, 2: 0.75, 3: 1.0, 4: 1.35, 5: 1.6 };
-// No-FTP fallback: conservative duration-based proxy
-var CYCLING_ZONE_FACTORS_NOFTP = { 1: 0.5, 2: 0.7,  3: 0.9, 4: 1.25, 5: 1.5 };
-
-function computeSessionIntensity(wod) {
- if (!wod || !wod.type) return 'moderate';
- var t = (wod.type || '').toLowerCase();
-
- // Zone 2 / recovery keywords
- if (/zone\s*2|recovery|z2|aerobic base/.test(t)) return 'low';
-
- // AMRAP: > 20 min → moderate (sustained aerobic); ≤ 20 → high (glycolytic)
- var amrapM = t.match(/amrap\s+(\d+)/);
- if (amrapM) {
-  var amrapMins = parseInt(amrapM[1], 10);
-  return amrapMins > 20 ? 'moderate' : 'high';
- }
-
- // EMOM: heavy/strength keywords → high; standard interval → moderate
- if (/emom/.test(t)) {
-  return /force|heavy|lourd/.test(t) ? 'high' : 'moderate';
- }
-
- // For Time with time cap — cap ≤ 12 min = sprint benchmark; ≤ 20 = high; > 20 = long chipper
- var capM = t.match(/cap\s+(\d+)/);
- if (capM) {
-  var cap = parseInt(capM[1], 10);
-  if (cap <= 12) return 'very_high';
-  if (cap <= 20) return 'high';
-  return 'moderate';
- }
-
- // N Rounds For Time: ≥ 10 rounds = high repeated effort
- var roundsM = t.match(/^(\d+)\s+rounds?/i);
- if (roundsM) {
-  return parseInt(roundsM[1], 10) >= 10 ? 'high' : 'moderate';
- }
-
- // Plain For Time (no cap = long chipper → moderate)
- if (/for time/.test(t)) return 'moderate';
-
- return 'moderate';
-}
-
-function computeAdvancedIntensity(wod, baseIntensity) {
- try {
-  var LEVELS = ['low', 'moderate', 'high', 'very_high'];
-  var idx = LEVELS.indexOf(baseIntensity);
-  if (idx === -1) idx = 2; // unknown base → default to 'high' position
-
-  var movements = (wod && Array.isArray(wod.movements)) ? wod.movements : [];
-  if (!movements.length) return baseIntensity; // no movements → nothing to refine
-
-  var combined = ((wod && wod.type) || '') + ' ' + ((wod && wod.notes) || '');
-  combined = combined.toLowerCase();
-
-  // ─── Signal extraction ───
-  var totalReps       = 0;
-  var heavyBarbellN   = 0;
-  var gymnasticN      = 0;
-  var cardioN         = 0;
-  var lowSkillN       = 0;
-
-  var _HEAVY_LIFTS = /deadlift|clean|snatch|thruster|squat|jerk/;
-  var _LOW_SKILL   = /air squat|sit.?up|push.?up|jumping jack|mountain climber|lunge/;
-  var _CARDIO_NAME = /\b(row|run|bike|ski erg|double under|single under)\b/;
-
-  movements.forEach(function(m) {
-   if (typeof m.reps === 'number') totalReps += m.reps;
-   var mn = (m.name || '').toLowerCase();
-   if (m.weight) {
-    if (_HEAVY_LIFTS.test(mn)) heavyBarbellN++;
-   }
-   if (m.gymnastics) gymnasticN++;
-   if (m.special || _CARDIO_NAME.test(mn)) cardioN++;
-   if (_LOW_SKILL.test(mn)) lowSkillN++;
-  });
-
-  // Heavy barbell keywords in type/notes also count
-  if (/heavy|lourd|\d+%\s*(1rm|max)/.test(combined)) heavyBarbellN++;
-
-  // ─── Adjustment rules ───
-  var delta = 0;
-
-  if (totalReps > 300)    delta += 1; // very high volume
-  if (heavyBarbellN > 0)  delta += 1; // loaded barbell elevates CNS demand
-
-  // Pure cardio: every movement is cardio and no barbell/gymnastics
-  var isPureCardio = cardioN > 0 && cardioN === movements.length && !heavyBarbellN && !gymnasticN;
-  if (isPureCardio) delta -= 1;
-
-  // All movements are low-skill (calisthenics, no technique demand)
-  if (lowSkillN > 0 && lowSkillN === movements.length) delta -= 1;
-
-  idx = Math.max(0, Math.min(LEVELS.length - 1, idx + delta));
-  return LEVELS[idx];
- } catch(e) {
-  return baseIntensity; // safe fallback — never breaks the caller
- }
-}
-
-function computeFatigueFactor(durationMins) {
- if (!durationMins || isNaN(durationMins)) return 0.9; // unknown duration → conservative default
- if (durationMins <= 10) return 0.95; // short sprint — minimal fatigue decay
- if (durationMins <= 20) return 0.90; // standard WOD — moderate decay
- return 0.85;                          // long effort — significant output drop
-}
-
-function computeVolumeFactor(wod) {
- if (!wod) return 1.0;
- var t = (wod.type || '').toLowerCase();
- var movements = Array.isArray(wod.movements) ? wod.movements : [];
-
- var repSum = 0;
- movements.forEach(function(m) {
-  if (typeof m.reps === 'number') repSum += m.reps;
- });
- if (!repSum) return 1.0; // no rep data → neutral factor
-
- // Estimate total reps based on WOD format
- var amrapM  = t.match(/amrap\s+(\d+)/);
- var roundsM = t.match(/^(\d+)\s+rounds?/i);
- var emomM   = t.match(/emom\s+(\d+)/);
-
- if (amrapM) {
-  // 1 round ≈ 5 min is a conservative CrossFit estimate
-  repSum = repSum * Math.ceil(parseInt(amrapM[1], 10) / 5);
- } else if (roundsM) {
-  repSum = repSum * parseInt(roundsM[1], 10);
- } else if (emomM) {
-  // Active movements per cycle (exclude rest minutes)
-  var active = movements.filter(function(m) { return !/\brest\b/i.test(m.name || ''); }).length || 1;
-  repSum = repSum * Math.ceil(parseInt(emomM[1], 10) / active);
- }
- // For Time (plain chipper): repSum is already the total
-
- // ─── FATIGUE CORRECTION ───
- // Reuse parsed duration from WOD format; fall back to cap for For Time
- var _capM  = t.match(/cap\s+(\d+)/);
- var _fatDur = amrapM  ? parseInt(amrapM[1], 10)
-             : emomM   ? parseInt(emomM[1], 10)
-             : _capM   ? parseInt(_capM[1],  10)
-             : null;
- var repSumAdjusted = Math.round(repSum * computeFatigueFactor(_fatDur));
-
- if (repSumAdjusted < 50)  return 0.9; // low volume
- if (repSumAdjusted > 200) return 1.2; // high volume
- return 1.0;                            // normal
-}
-
-// ─── CROSSFIT REST FACTOR ───
-function _cfParseRestSeconds(text) {
- // Returns array of every rest duration (in seconds) found in text.
- // Caller takes max → strongest reduction.
- var secs = [];
- var t = (text || '').toLowerCase();
- var m;
-
- // "rest 2min" / "rest 2 min" / "repos 2min"
- var reMinA = /(?:rest|repos)\s+(\d+)\s*min/g;
- while ((m = reMinA.exec(t)) !== null) secs.push(parseInt(m[1], 10) * 60);
- // "2min rest" / "2 min rest"
- var reMinB = /(\d+)\s*min\s+rest/g;
- while ((m = reMinB.exec(t)) !== null) secs.push(parseInt(m[1], 10) * 60);
-
- // "rest 30s" / "rest 60 sec" / "rest 60 seconds" / "repos 30s"
- // (?!\s*min) prevents matching the leading digit of "2min" patterns above
- var reSecA = /(?:rest|repos)\s+(\d+)\s*s(?:ec(?:ond)?s?)?(?!\s*min)/g;
- while ((m = reSecA.exec(t)) !== null) secs.push(parseInt(m[1], 10));
- // "30s rest" / "90 sec rest"
- var reSecB = /(\d+)\s*s(?:ec(?:ond)?s?)?\s+rest/g;
- while ((m = reSecB.exec(t)) !== null) secs.push(parseInt(m[1], 10));
-
- // "1:00 rest" / "1:30 rest"
- var reColon = /(\d+):(\d{2})\s*rest/g;
- while ((m = reColon.exec(t)) !== null) secs.push(parseInt(m[1], 10) * 60 + parseInt(m[2], 10));
-
- return secs;
-}
-
-function computeCrossfitRestFactor(wod, typeString, movements) {
- try {
-  var movs = Array.isArray(movements) ? movements : [];
-  var notes = (wod && wod.notes) ? (wod.notes + '') : '';
-
-  var hasRest = movs.some(function(m) { return /\brest\b/i.test(m.name || ''); })
-             || /\brest\b/i.test(typeString || '')
-             || /\brest\b/i.test(notes);
-  if (!hasRest) return 1.0;
-
-  // Aggregate all text sources for duration parsing
-  var allText = (typeString || '') + ' ' + notes + ' '
-   + movs.map(function(m) { return (m.name || '') + ' ' + (m.note || '') + ' ' + (m.notes || ''); }).join(' ');
-
-  var secs = _cfParseRestSeconds(allText);
-  if (!secs.length) return 0.9; // rest present but no parseable duration → EMOM slot fallback
-
-  var maxSecs = Math.max.apply(null, secs);
-  if (maxSecs >= 120) return 0.75;
-  if (maxSecs >= 90)  return 0.80;
-  if (maxSecs >= 60)  return 0.85;
-  if (maxSecs >= 30)  return 0.92;
-  return 0.9; // < 30s — treat as EMOM rest slot
- } catch(e) {
-  return 0.9; // safe fallback — never crashes
- }
-}
+// ─── INTENSITY ENGINE MODULES ───
+// CF_INTENSITY_FACTORS, RUN_ZONE_FACTORS, CYCLING_ZONE_FACTORS_* and all compute* functions
+// are defined in sport-crossfit.js, sport-running.js, sport-cycling.js (loaded before this file).
 
 // ─── STEP 6 (CrossFit): PROGRAMME CF ───
 function renderCrossfitProgram(p) {
@@ -4264,17 +4092,11 @@ function renderCrossfitProgram(p) {
   var _cfRestFactor = computeCrossfitRestFactor(_cfInnerWod, _cfTypeStr, _cfMovs);
   S.crossfitIntensity    = _cfFinalIntensity;
   S.crossfitTrainingLoad = Math.round(_cfDurMins * CF_INTENSITY_FACTORS[_cfFinalIntensity] * _cfVolFactor * _cfRestFactor);
-  // Map numeric crossfitTrainingLoad → S.trainingLoad before bridge call so the precision
-  // engine value is available immediately; set again after to override the coarse MET-based
-  // estimate that SFCSymbiosis.notifySession would otherwise leave as the final value.
-  S.trainingLoad = S.crossfitTrainingLoad >= 90 ? 'heavy'
-                 : S.crossfitTrainingLoad >= 60 ? 'moderate'
-                 : 'light';
+  var _cfLoad = S.crossfitTrainingLoad >= 90 ? 'heavy'
+              : S.crossfitTrainingLoad >= 60 ? 'moderate' : 'light';
+  _sfcAggregateLoad('crossfit', _cfLoad);
   _sfcNotifySport('crossfit', S.crossfitLevel);
-  // Restore precision-computed load (notifySession overwrites S.trainingLoad with MET map)
-  S.trainingLoad = S.crossfitTrainingLoad >= 90 ? 'heavy'
-                 : S.crossfitTrainingLoad >= 60 ? 'moderate'
-                 : 'light';
+  _sfcAggregateLoad('crossfit', _cfLoad);
  }
 
  // Guard: if no WODs available, show a message instead of a blank page
@@ -6799,7 +6621,7 @@ function renderMusculationProgram(p) {
    var _iaContainer = h('div', {id: 'muscu-ia-program-container'});
    try {
      if (window.MUSCU_PROGRAM && typeof window.MUSCU_PROGRAM.parseToHTML === 'function') {
-       _iaContainer.innerHTML = _sfcSanitize(window.MUSCU_PROGRAM.parseToHTML(S.muscuIAProgram) || '');
+       _iaContainer.innerHTML = _sfcBlockDangerous(_sfcSanitize(window.MUSCU_PROGRAM.parseToHTML(S.muscuIAProgram) || ''));
      }
      if (!_iaContainer.innerHTML) {
        var _escaped = S.muscuIAProgram.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -8288,7 +8110,7 @@ function renderMusculationProgram(p) {
  // ─── CALCULATEUR DE PLAQUES (barre uniquement, si charge définie) ───
  if (eqType === 'barre' && currentWeight && currentWeight > 0) {
  var plateDiv = h('div', {});
- plateDiv.innerHTML = window.renderPlateCalculator(currentWeight, 20);
+ plateDiv.innerHTML = _sfcSanitize(window.renderPlateCalculator(currentWeight, 20) || '');
  card.appendChild(plateDiv);
  }
  } else {
@@ -10418,14 +10240,11 @@ function renderRunningProgram(p) {
  var _runZone     = sess.zone || 'Z2';
  var _runFactor   = RUN_ZONE_FACTORS[_runZone] || 0.8;
  S.runningTrainingLoad = Math.round(_runDurMins * _runFactor);
- S.trainingLoad = S.runningTrainingLoad >= 80 ? 'heavy'
-                : S.runningTrainingLoad >= 40 ? 'moderate'
-                : 'light';
+ var _runLoad = S.runningTrainingLoad >= 80 ? 'heavy'
+              : S.runningTrainingLoad >= 40 ? 'moderate' : 'light';
+ _sfcAggregateLoad('running', _runLoad);
  _sfcNotifySport('running', S.runningLevel);
- // Restore precision-computed load (notifySession overwrites S.trainingLoad with MET map)
- S.trainingLoad = S.runningTrainingLoad >= 80 ? 'heavy'
-                : S.runningTrainingLoad >= 40 ? 'moderate'
-                : 'light';
+ _sfcAggregateLoad('running', _runLoad);
  var zoneColorMap = {'Z1': '#3E5C3A', 'Z2': '#1A3A6A', 'Z3': '#7A3B0E', 'Z4': '#7A3B0E', 'Z5': '#7A1F1F', 'Z1-Z2': '#3E5C3A', 'Z4-Z5': '#7A1F1F', 'Z3-Z4': '#7A3B0E'};
  var sessColor = zoneColorMap[sess.zone] || '#0A0A09';
 
@@ -11908,160 +11727,8 @@ function renderYogaProgram(p) {
 }
 
 // ═══════════════════════════════════════
-// CYCLISME MODULE
+// CYCLISME MODULE — moved to sport-cycling.js
 // ═══════════════════════════════════════
-
-
-function cyclingKcal(durationMin, zone, weightKg) {
- var met = CYCLING_MET[Math.min(zone - 1, 4)] || 7;
- return Math.round(met * weightKg * (durationMin / 60));
-}
-
-
-// ── Cyclisme v2 — plan personnalisé par objectif + FTP ────────────────────────
-function _cyclingFtpFallback(level) {
- return { debutant: 155, intermediaire: 205, avance: 265 }[level] || 200;
-}
-function _cyclingZoneWatts(ftp) {
- return {
-  z1: { min: Math.round(ftp * 0.45), max: Math.round(ftp * 0.55) },
-  z2: { min: Math.round(ftp * 0.56), max: Math.round(ftp * 0.75) },
-  z3: { min: Math.round(ftp * 0.76), max: Math.round(ftp * 0.90) },
-  z4: { min: Math.round(ftp * 0.91), max: Math.round(ftp * 1.05) },
-  z5: { min: Math.round(ftp * 1.06), max: Math.round(ftp * 1.20) }
- };
-}
-function _cyclingApplyVol(sessions, vf) {
- return sessions.map(function(s) {
-  return { day: s.day, type: s.type, duration: Math.max(15, Math.round(s.duration * vf)), zone: s.zone, desc: s.desc };
- });
-}
-function _cyclingPickSessions(templates, numDays) {
- return templates.slice(0, Math.min(numDays, templates.length));
-}
-function _cyclingBuildPlan(weekPhases, templates, numDays) {
- var plan = [];
- for (var w = 1; w <= 8; w++) {
-  var wp = weekPhases[w] || weekPhases[1];
-  plan.push({
-   week: w, phase: wp.name, phaseColor: wp.color,
-   focus: wp.focus, isDeload: !!wp.isDeload,
-   sessions: _cyclingApplyVol(_cyclingPickSessions(templates, numDays), wp.volFactor)
-  });
- }
- return plan;
-}
-function _cyclingPlanWeightloss(level, numDays, ftp, z) {
- var weekPhases = {
-  1: { name:'Adaptation métabolique', color:'#3E5C3A', focus:'Habituer le corps à puiser dans les graisses en Z2', volFactor:0.70, isDeload:false },
-  2: { name:'Adaptation métabolique', color:'#3E5C3A', focus:'Consolider base Z2 — rythme conversationnel', volFactor:0.75, isDeload:false },
-  3: { name:'Volume calorique', color:'#1A3A6A', focus:'Maximiser la dépense énergétique sur longues sorties Z2', volFactor:1.0, isDeload:false },
-  4: { name:'Volume calorique', color:'#1A3A6A', focus:'Décharge — volume ↓ 40%, maintien fréquence', volFactor:0.60, isDeload:true },
-  5: { name:'Volume calorique', color:'#1A3A6A', focus:'Consolidation Z2 + intro tempo Z3', volFactor:1.05, isDeload:false },
-  6: { name:'Pic de volume', color:'#7A3B0E', focus:'Sorties longues + tempo Z3 pour varier les substrats', volFactor:1.15, isDeload:false },
-  7: { name:'Pic de volume', color:'#7A3B0E', focus:'Volume élevé — objectif calorique hebdo maximal', volFactor:1.20, isDeload:false },
-  8: { name:'Récupération active', color:'#3E5C3A', focus:'Réduction volume — maintien fréquence', volFactor:0.65, isDeload:true }
- };
- var t = [
-  { day:'Mardi',    type:'Endurance Z2',    duration:70,  zone:2, desc:'Z2 ('+z.z2.min+'–'+z.z2.max+'W) — rythme conversationnel, brûleur de graisses principal' },
-  { day:'Jeudi',    type:'Tempo Z3',        duration:55,  zone:3, desc:'2×15min Z3 ('+z.z3.min+'–'+z.z3.max+'W) + 5min récup — métabolisme élevé post-effort' },
-  { day:'Samedi',   type:'Sortie longue Z2',duration:110, zone:2, desc:'Z2 ('+z.z2.min+'–'+z.z2.max+'W) — sortie principale, hydratation 500ml/h' },
-  { day:'Lundi',    type:'Récupération Z1', duration:35,  zone:1, desc:'Z1 ('+z.z1.min+'–'+z.z1.max+'W) — jambes légères, récupération active' },
-  { day:'Dimanche', type:'Endurance Z2',    duration:60,  zone:2, desc:'Z2 ('+z.z2.min+'–'+z.z2.max+'W) — volume additionnel, cadence libre' },
-  { day:'Mercredi', type:'Endurance Z2',    duration:50,  zone:2, desc:'Z2 ('+z.z2.min+'–'+z.z2.max+'W) — session intermédiaire' }
- ];
- return _cyclingBuildPlan(weekPhases, t, numDays);
-}
-function _cyclingPlanFitness(level, numDays, ftp, z) {
- var weekPhases = {
-  1: { name:'Base aérobie', color:'#1A3A6A', focus:'Développer le moteur Z2 — qualité > quantité', volFactor:0.75, isDeload:false },
-  2: { name:'Base aérobie', color:'#1A3A6A', focus:'Consolider la base aérobie', volFactor:0.80, isDeload:false },
-  3: { name:'Développement', color:'#7A3B0E', focus:'Introduire tempo et sweet spot Z3-Z4', volFactor:1.0, isDeload:false },
-  4: { name:'Développement', color:'#7A3B0E', focus:'Décharge — volume ↓ 40%', volFactor:0.60, isDeload:true },
-  5: { name:'Développement', color:'#7A3B0E', focus:'Consolidation tempo, charge progressive', volFactor:1.05, isDeload:false },
-  6: { name:'Spécifique', color:'#7A1F1F', focus:'Intervalles seuil et sweet spot FTP', volFactor:1.10, isDeload:false },
-  7: { name:'Spécifique', color:'#7A1F1F', focus:'Pic de charge — endurance + intensité', volFactor:1.15, isDeload:false },
-  8: { name:'Affûtage', color:'#3E5C3A', focus:'Réduction volume — maintien intensité', volFactor:0.60, isDeload:true }
- };
- var t = [
-  { day:'Mardi',    type:'Tempo',             duration:60,  zone:3, desc:'2×15min Z3 ('+z.z3.min+'–'+z.z3.max+'W) + 5min récup entre les blocs' },
-  { day:'Jeudi',    type:'Sweet Spot',         duration:70,  zone:4, desc:'3×10min à 88-93% FTP ('+z.z4.min+'–'+z.z4.max+'W) — zone ROI maximale' },
-  { day:'Samedi',   type:'Sortie longue',      duration:140, zone:2, desc:'Z2 ('+z.z2.min+'–'+z.z2.max+'W), 80% du temps — endurance fondamentale' },
-  { day:'Lundi',    type:'Récupération active',duration:30,  zone:1, desc:'Z1 ('+z.z1.min+'–'+z.z1.max+'W) — jambes légères, rotation hanches' },
-  { day:'Dimanche', type:'Endurance',          duration:60,  zone:2, desc:'Z2 ('+z.z2.min+'–'+z.z2.max+'W) — récupération active' },
-  { day:'Mercredi', type:'Endurance Z2',       duration:50,  zone:2, desc:'Z2 ('+z.z2.min+'–'+z.z2.max+'W) — volume mid-semaine' }
- ];
- return _cyclingBuildPlan(weekPhases, t, numDays);
-}
-function _cyclingPlanCompetitive(level, numDays, ftp, z, goal) {
- var isGF = (goal === 'granfondo');
- var weekPhases = {
-  1: { name:'Base aérobie', color:'#1A3A6A', focus:'Base aérobie — fondations avant intensité', volFactor:0.80, isDeload:false },
-  2: { name:'Base aérobie', color:'#1A3A6A', focus:'Consolider Z2, introduire tempo', volFactor:0.85, isDeload:false },
-  3: { name:'Développement seuil', color:'#7A3B0E', focus:'Intervalles FTP — amélioration du seuil', volFactor:1.0, isDeload:false },
-  4: { name:'Développement seuil', color:'#7A3B0E', focus:'Décharge — maintien stimuli neuromusculaires', volFactor:0.60, isDeload:true },
-  5: { name: isGF ? 'Endurance-puissance' : 'VO2max', color:'#7A1F1F',
-       focus: isGF ? 'Longues sorties + sweet spot — spécifique cyclosportive' : 'Intervalles VO2max — puissance aérobie max',
-       volFactor:1.05, isDeload:false },
-  6: { name: isGF ? 'Endurance-puissance' : 'VO2max', color:'#7A1F1F',
-       focus: isGF ? 'Volume élevé + intensité mesurée' : 'Pic VO2max + FTP — charge maximale',
-       volFactor:1.10, isDeload:false },
-  7: { name:'Affûtage', color:'#3E5C3A', focus:'Réduction volume — maintien intensité', volFactor:0.70, isDeload:false },
-  8: { name:'Affûtage compétition', color:'#3E5C3A', focus:'Fraîcheur maximale — jambes prêtes', volFactor:0.50, isDeload:true }
- };
- var t = isGF ? [
-  { day:'Mardi',    type:'Intervalles FTP',   duration:65,  zone:4, desc:'3×8min à 91-105% FTP ('+z.z4.min+'–'+z.z4.max+'W) + 5min récup — seuil lactate' },
-  { day:'Jeudi',    type:'Sweet Spot',         duration:75,  zone:4, desc:'2×20min à 88-93% FTP ('+z.z4.min+'–'+z.z4.max+'W) — rendement max' },
-  { day:'Samedi',   type:'Gran Fondo longue',  duration:180, zone:2, desc:'Z2 ('+z.z2.min+'–'+z.z2.max+'W) + Z3 sur ascensions — spécifique cyclosportive' },
-  { day:'Lundi',    type:'Récupération',       duration:30,  zone:1, desc:'Z1 ('+z.z1.min+'–'+z.z1.max+'W) — décharge CNS' },
-  { day:'Dimanche', type:'Endurance qualité',  duration:90,  zone:2, desc:'Z2 ('+z.z2.min+'–'+z.z2.max+'W) avec 15min Z3 — assimilation' },
-  { day:'Mercredi', type:'Tempo Z3',           duration:55,  zone:3, desc:'3×12min Z3 ('+z.z3.min+'–'+z.z3.max+'W) — économie d\'effort' }
- ] : [
-  { day:'Mardi',    type:'Intervalles FTP',    duration:65,  zone:4, desc:'3×8min à 91-105% FTP ('+z.z4.min+'–'+z.z4.max+'W) + 5min récup — élévation seuil' },
-  { day:'Jeudi',    type:'VO2max',             duration:60,  zone:5, desc:'6×4min à 106-120% FTP ('+z.z5.min+'–'+z.z5.max+'W) + 4min récup — puissance aérobie max' },
-  { day:'Samedi',   type:'Sortie longue qualité',duration:160,zone:2, desc:'Z2 ('+z.z2.min+'–'+z.z2.max+'W) + Z3 sur les côtes — endurance de base' },
-  { day:'Lundi',    type:'Récupération',       duration:30,  zone:1, desc:'Z1 ('+z.z1.min+'–'+z.z1.max+'W) — récupération CNS post-VO2max' },
-  { day:'Dimanche', type:'Sweet Spot',         duration:80,  zone:4, desc:'2×20min à 88-93% FTP ('+z.z4.min+'–'+z.z4.max+'W) — séance secondaire seuil' },
-  { day:'Mercredi', type:'Tempo Z3',           duration:55,  zone:3, desc:'3×12min Z3 ('+z.z3.min+'–'+z.z3.max+'W) + 3min récup' }
- ];
- return _cyclingBuildPlan(weekPhases, t, numDays);
-}
-function _cyclingPlanTriathlon(level, numDays, ftp, z) {
- var weekPhases = {
-  1: { name:'Base triathlon', color:'#1A3A6A', focus:'Efficacité pédalage Z2 — économie d\'énergie pour la course', volFactor:0.75, isDeload:false },
-  2: { name:'Base triathlon', color:'#1A3A6A', focus:'Consolider base, intro tempo', volFactor:0.80, isDeload:false },
-  3: { name:'Puissance FTP', color:'#7A3B0E', focus:'Intervalles FTP — améliorer le seuil segment vélo', volFactor:1.0, isDeload:false },
-  4: { name:'Puissance FTP', color:'#7A3B0E', focus:'Décharge — maintien stimuli neuromusculaires', volFactor:0.60, isDeload:true },
-  5: { name:'Spécifique triathlon', color:'#7A1F1F', focus:'Sweet spot + sorties brick vélo-course', volFactor:1.0, isDeload:false },
-  6: { name:'Spécifique triathlon', color:'#7A1F1F', focus:'Pics d\'intensité + simulation segment vélo', volFactor:1.05, isDeload:false },
-  7: { name:'Affûtage', color:'#3E5C3A', focus:'Réduction volume — maintien intensité', volFactor:0.70, isDeload:false },
-  8: { name:'Affûtage course', color:'#3E5C3A', focus:'Fraîcheur — jambes prêtes pour la transition', volFactor:0.50, isDeload:true }
- };
- var t = [
-  { day:'Mardi',    type:'Sweet Spot',       duration:60,  zone:4, desc:'2×15min à 88-93% FTP ('+z.z4.min+'–'+z.z4.max+'W) — économie pédalage triathlon' },
-  { day:'Jeudi',    type:'Intervalles FTP',  duration:55,  zone:4, desc:'3×6min à 95-105% FTP ('+z.z4.min+'–'+z.z4.max+'W) + 4min récup — seuil spécifique' },
-  { day:'Samedi',   type:'Sortie brick Z2',  duration:90,  zone:2, desc:'Z2 ('+z.z2.min+'–'+z.z2.max+'W) + 20min Z3 — simulation segment + transition optionnelle' },
-  { day:'Lundi',    type:'Récupération',     duration:30,  zone:1, desc:'Z1 ('+z.z1.min+'–'+z.z1.max+'W) — récupération active' },
-  { day:'Dimanche', type:'Endurance Z2',     duration:75,  zone:2, desc:'Z2 ('+z.z2.min+'–'+z.z2.max+'W) — assimilation semaine, brick optionnel' },
-  { day:'Mercredi', type:'Tempo Z3',         duration:45,  zone:3, desc:'3×10min Z3 ('+z.z3.min+'–'+z.z3.max+'W) — zone de course triathlon' }
- ];
- return _cyclingBuildPlan(weekPhases, t, numDays);
-}
-
-// Point d'entrée — supporte signature objet {level,days,goal,ftp} ET legacy (level, days)
-function generateCyclingPlan(levelOrOpts, daysLegacy) {
- var opts = (typeof levelOrOpts === 'object' && levelOrOpts !== null)
-  ? levelOrOpts : { level: levelOrOpts, days: daysLegacy };
- var level   = opts.level || 'intermediaire';
- var numDays = Math.max(2, Math.min(6, parseInt(opts.days) || 3));
- var goal    = opts.goal || 'fitness';
- var ftp     = (opts.ftp && opts.ftp > 75) ? opts.ftp : _cyclingFtpFallback(level);
- var z       = _cyclingZoneWatts(ftp);
- if (goal === 'weightloss') return _cyclingPlanWeightloss(level, numDays, ftp, z);
- if (goal === 'competitive' || goal === 'granfondo') return _cyclingPlanCompetitive(level, numDays, ftp, z, goal);
- if (goal === 'triathlon') return _cyclingPlanTriathlon(level, numDays, ftp, z);
- return _cyclingPlanFitness(level, numDays, ftp, z); // fitness + endurance
-}
 
 // ─── STEP 22: CYCLISME ONBOARDING ───
 function renderCyclingOnboarding(p) {
@@ -12345,14 +12012,11 @@ function renderCyclingProgram(p) {
  var _cycFactors = _cycFTP ? CYCLING_ZONE_FACTORS_FTP : CYCLING_ZONE_FACTORS_NOFTP;
  var _cycFactor  = _cycFactors[zoneNum] || 1.0;
  S.cyclingTrainingLoad = Math.round(sess.duration * _cycFactor);
- S.trainingLoad = S.cyclingTrainingLoad >= 80 ? 'heavy'
-                : S.cyclingTrainingLoad >= 40 ? 'moderate'
-                : 'light';
+ var _cycLoad = S.cyclingTrainingLoad >= 80 ? 'heavy'
+              : S.cyclingTrainingLoad >= 40 ? 'moderate' : 'light';
+ _sfcAggregateLoad('cycling', _cycLoad);
  _sfcNotifySport('cycling', S.cyclingLevel || 'intermediaire');
- // Restore precision-computed load (notifySession overwrites S.trainingLoad with MET map)
- S.trainingLoad = S.cyclingTrainingLoad >= 80 ? 'heavy'
-                : S.cyclingTrainingLoad >= 40 ? 'moderate'
-                : 'light';
+ _sfcAggregateLoad('cycling', _cycLoad);
  var zoneData = CYCLING_ZONES[Math.max(0, Math.min(zoneNum - 1, 4))] || CYCLING_ZONES[1];
  var zoneColor = zoneData ? zoneData.color : '#1A3A6A';
  var kcal = cyclingKcal(sess.duration, zoneNum, weightKg);

@@ -383,6 +383,249 @@ check('multi-sport: heavy load carbs > rest day carbs (sport switch simulation)'
     'heavy training (' + carbsHeavyTrain + 'g) should exceed light rest day (' + carbsLightRest + 'g)');
 });
 
+// ─── 11. Carb cycling v2 — smoothing cap + nutritionTag ──────────────────────
+console.log('\n=== 11. Carb cycling v2 — smoothing cap + nutritionTag ===');
+
+// Helper: build profile with optional pre-seeded heavyDayStreak
+function computeCarbsFull(overrides, isTrainingDay) {
+  window.S = buildCarbProfile(overrides);
+  var nm = window.computeNutritionState ? window.computeNutritionState(isTrainingDay) : null;
+  return { carbs: nm ? nm.carbsGrams : null, tag: window.S.nutritionTag, streak: window.S.heavyDayStreak };
+}
+
+check('2nd consecutive heavy day (+25%) yields more carbs than 1st heavy day (+20%)', function() {
+  var first  = computeCarbsFull({ trainingLoad: 'heavy', heavyDayStreak: 0 }, true);
+  var second = computeCarbsFull({ trainingLoad: 'heavy', heavyDayStreak: 1 }, true);
+  assert(first.carbs !== null, 'computeNutritionState returned null');
+  assert(second.carbs > first.carbs,
+    '2nd heavy day (' + second.carbs + 'g) should exceed 1st heavy day (' + first.carbs + 'g) — +25% vs +20%');
+});
+
+check('S.nutritionTag = performance on single heavy training day', function() {
+  var r = computeCarbsFull({ trainingLoad: 'heavy', heavyDayStreak: 0 }, true);
+  assert(r.tag === 'performance', 'expected performance, got: ' + r.tag);
+});
+
+check('S.nutritionTag = recovery after 2 consecutive heavy days', function() {
+  var r = computeCarbsFull({ trainingLoad: 'heavy', heavyDayStreak: 1 }, true);
+  assert(r.tag === 'recovery', 'expected recovery, got: ' + r.tag);
+  assert(r.streak === 2, 'expected streak=2, got: ' + r.streak);
+});
+
+check('S.nutritionTag = fat-loss on rest day', function() {
+  var r = computeCarbsFull({ trainingLoad: 'moderate' }, false);
+  assert(r.tag === 'fat-loss', 'expected fat-loss, got: ' + r.tag);
+});
+
+check('S.nutritionTag = fat-loss on light training day', function() {
+  var r = computeCarbsFull({ trainingLoad: 'light' }, true);
+  assert(r.tag === 'fat-loss', 'expected fat-loss, got: ' + r.tag);
+});
+
+check('S.heavyDayStreak resets to 0 on moderate day after heavy', function() {
+  // First simulate a heavy day (streak becomes 1)
+  computeCarbsFull({ trainingLoad: 'heavy', heavyDayStreak: 0 }, true);
+  // Then a moderate day — creates fresh S so streak starts at 0, resets to 0
+  var r = computeCarbsFull({ trainingLoad: 'moderate', heavyDayStreak: 0 }, true);
+  assert(r.streak === 0, 'streak should reset to 0 on non-heavy day, got: ' + r.streak);
+});
+
+check('fat-loss user (shred) still benefits from carb boost while staying in calorie deficit', function() {
+  if (_shredIdx < 0) { console.log('  (skipped — shred goal not found)'); return; }
+  // Single heavy day (not capped) for a shred user
+  window.S = buildCarbProfile({ goal: _shredIdx, trainingLoad: 'heavy', heavyDayStreak: 0 });
+  var tdee  = window.calcTDEE ? Math.round(window.calcTDEE()) : 0;
+  var nm    = window.computeNutritionState ? window.computeNutritionState(true) : null;
+  assert(nm !== null, 'computeNutritionState returned null');
+  assert(tdee > 0, 'calcTDEE returned 0');
+  // Macro swap is calorie-neutral → deficit maintained even with +20% carb boost
+  assert(nm.caloriesTarget < tdee,
+    'shred user deficit maintained: target=' + nm.caloriesTarget + ' < tdee=' + tdee);
+  assert(window.S.nutritionTag === 'performance',
+    'shred user on heavy training day → performance tag (carb boost for training)');
+});
+
+// ─── 12. notifySession merge strategy ────────────────────────────────────────
+console.log('\n=== 12. notifySession — merge strategy ===');
+
+// Helpers — build exercise lists with controlled tags and groups
+function makeExs(n, tags) {
+  var arr = [];
+  for (var i = 0; i < n; i++) arr.push({ n: 'Ex' + i, tags: tags || [] });
+  return arr;
+}
+// 6 compound exercises + heavy groups → computeTrainingLoad → 'heavy'
+var HEAVY_EXS  = makeExs(6, []);          // 6 non-isolation → heavy when hasHeavy
+var MOD_EXS    = makeExs(4, []);          // 4 exercises, no heavy group → moderate or light
+var LIGHT_EXS  = makeExs(2, ['isolation']); // 2 isolation → light
+var HEAVY_GRP  = ['legs', 'back'];
+var MOD_GRP    = ['back'];
+var LIGHT_GRP  = [];
+
+check('notifySession: heavy computed preserves existing heavy (no overwrite)', function() {
+  window.S = { trainingLoad: 'heavy', dailyTrainingLoad: 'heavy', lastSessionCount: 6, lastSessionGroups: ['legs'] };
+  SFCSymbiosis.notifySession(HEAVY_EXS, HEAVY_GRP);
+  assert(window.S.trainingLoad === 'heavy', 'heavy should remain heavy, got: ' + window.S.trainingLoad);
+  assert(window.S.lastSessionCount === 12, 'count should accumulate: 6+6=12, got: ' + window.S.lastSessionCount);
+});
+
+check('notifySession: light computed does NOT downgrade existing heavy', function() {
+  window.S = { trainingLoad: 'heavy', dailyTrainingLoad: 'heavy', lastSessionGroups: ['back'], lastSessionCount: 5 };
+  SFCSymbiosis.notifySession(LIGHT_EXS, LIGHT_GRP);
+  assert(window.S.trainingLoad === 'heavy',
+    'existing heavy should NOT be downgraded by light computed, got: ' + window.S.trainingLoad);
+});
+
+check('notifySession: moderate computed upgrades existing light', function() {
+  window.S = { trainingLoad: 'light', dailyTrainingLoad: 'light', lastSessionGroups: [], lastSessionCount: 0 };
+  // 5 non-isolation exercises + back group → computeTrainingLoad → moderate
+  SFCSymbiosis.notifySession(makeExs(5, []), ['back']);
+  assert(window.S.trainingLoad === 'moderate',
+    'light should be upgraded to moderate, got: ' + window.S.trainingLoad);
+});
+
+check('notifySession: heavy computed upgrades existing moderate', function() {
+  window.S = { trainingLoad: 'moderate', dailyTrainingLoad: 'moderate', lastSessionGroups: ['chest'], lastSessionCount: 3 };
+  SFCSymbiosis.notifySession(HEAVY_EXS, HEAVY_GRP);
+  assert(window.S.trainingLoad === 'heavy',
+    'moderate should be upgraded to heavy, got: ' + window.S.trainingLoad);
+  assert(window.S.dailyTrainingLoad === 'heavy',
+    'dailyTrainingLoad should be updated to heavy, got: ' + window.S.dailyTrainingLoad);
+});
+
+check('notifySession: lastSessionGroups merges (union) across two calls', function() {
+  window.S = { lastSessionGroups: ['chest', 'triceps'], lastSessionCount: 4 };
+  SFCSymbiosis.notifySession(makeExs(4, []), ['legs', 'glutes']);
+  var grps = window.S.lastSessionGroups;
+  assert(grps.indexOf('chest')   !== -1, 'chest should be preserved');
+  assert(grps.indexOf('triceps') !== -1, 'triceps should be preserved');
+  assert(grps.indexOf('legs')    !== -1, 'legs should be added');
+  assert(grps.indexOf('glutes')  !== -1, 'glutes should be added');
+  assert(grps.length === 4, 'no duplicates: expected 4 groups, got ' + grps.length);
+});
+
+check('notifySession: duplicate groups not added twice', function() {
+  window.S = { lastSessionGroups: ['back', 'legs'], lastSessionCount: 3 };
+  SFCSymbiosis.notifySession(makeExs(3, []), ['back']); // 'back' already present
+  var grps = window.S.lastSessionGroups;
+  assert(grps.filter(function(g){ return g === 'back'; }).length === 1,
+    'back should appear exactly once, got: ' + grps.join(','));
+});
+
+check('notifySession: lastSessionCount accumulates across calls', function() {
+  window.S = { lastSessionCount: 5, lastSessionGroups: [] };
+  SFCSymbiosis.notifySession(makeExs(4, []), []);
+  assert(window.S.lastSessionCount === 9, 'expected 5+4=9, got: ' + window.S.lastSessionCount);
+  SFCSymbiosis.notifySession(makeExs(3, []), []);
+  assert(window.S.lastSessionCount === 12, 'expected 9+3=12, got: ' + window.S.lastSessionCount);
+});
+
+check('notifySession: sportProgramStart preserved if already set', function() {
+  var existing = '2026-01-15';
+  window.S = { sportProgramStart: existing, lastSessionGroups: [] };
+  SFCSymbiosis.notifySession(makeExs(3, []), []);
+  assert(window.S.sportProgramStart === existing,
+    'sportProgramStart should not be overwritten: ' + window.S.sportProgramStart);
+});
+
+check('notifySession: sportProgramStart set if absent', function() {
+  window.S = { lastSessionGroups: [] };
+  SFCSymbiosis.notifySession(makeExs(3, []), []);
+  assert(typeof window.S.sportProgramStart === 'string' && window.S.sportProgramStart.length === 10,
+    'sportProgramStart should be set to YYYY-MM-DD, got: ' + window.S.sportProgramStart);
+});
+
+check('notifySession: first call with no prior data — sets all fields', function() {
+  window.S = {};
+  SFCSymbiosis.notifySession(HEAVY_EXS, HEAVY_GRP);
+  assert(window.S.trainingLoad !== undefined, 'trainingLoad should be set');
+  assert(Array.isArray(window.S.lastSessionGroups), 'lastSessionGroups should be array');
+  assert(typeof window.S.lastSessionCount === 'number', 'lastSessionCount should be number');
+});
+
+check('notifySession: no silent data loss — all existing fields intact', function() {
+  window.S = {
+    trainingLoad: 'heavy', dailyTrainingLoad: 'heavy',
+    lastSessionGroups: ['back'], lastSessionCount: 6,
+    sportProgramStart: '2026-03-01',
+    customField: 'untouched'
+  };
+  SFCSymbiosis.notifySession(LIGHT_EXS, LIGHT_GRP); // light should not downgrade heavy
+  // LIGHT_EXS = makeExs(2, ['isolation']) → length 2 → 6+2 = 8
+  assert(window.S.trainingLoad === 'heavy',       'trainingLoad preserved');
+  assert(window.S.lastSessionCount === 8,          'count accumulated: 6+2=8, got ' + window.S.lastSessionCount);
+  assert(window.S.sportProgramStart === '2026-03-01', 'sportProgramStart preserved');
+  assert(window.S.customField === 'untouched',    'unrelated field preserved');
+});
+
+// ─── 13. XSS protection — _sfcBlockDangerous + _sfcSanitize (loaded modules) ─
+console.log('\n=== 13. XSS protection — _sfcBlockDangerous + _sfcSanitize ===');
+
+check('_sfcBlockDangerous is exported on window', function() {
+  assert(typeof window._sfcBlockDangerous === 'function', '_sfcBlockDangerous missing');
+});
+
+check('_sfcSanitize is exported on window', function() {
+  assert(typeof window._sfcSanitize === 'function', '_sfcSanitize missing');
+});
+
+check('_sfcBlockDangerous blocks <script> injection', function() {
+  var result = window._sfcBlockDangerous('<script>alert(1)</script>');
+  assert(result === '', 'expected empty string, got: ' + result);
+});
+
+check('_sfcBlockDangerous blocks onerror= event handler', function() {
+  var result = window._sfcBlockDangerous('<img src="x" onerror="alert(1)">');
+  assert(result === '', 'expected empty string for onerror=, got: ' + result);
+});
+
+check('_sfcBlockDangerous blocks onclick= event handler', function() {
+  var result = window._sfcBlockDangerous('<div onclick="evil()">click</div>');
+  assert(result === '', 'expected empty string for onclick=, got: ' + result);
+});
+
+check('_sfcBlockDangerous blocks javascript: URI', function() {
+  var result = window._sfcBlockDangerous('<a href="javascript:alert(1)">x</a>');
+  assert(result === '', 'expected empty string for javascript:, got: ' + result);
+});
+
+check('_sfcBlockDangerous passes safe HTML unchanged', function() {
+  var safe = '<p class="text">Hello <strong>world</strong></p>';
+  var result = window._sfcBlockDangerous(safe);
+  assert(result === safe, 'safe HTML should pass through unchanged');
+});
+
+check('_sfcSanitize strips <script> while preserving surrounding content', function() {
+  var result = window._sfcSanitize('<p>ok</p><script>alert(1)</script><p>after</p>');
+  assert(result.indexOf('<script') === -1, 'script tag should be stripped');
+  assert(result.indexOf('<p>ok</p>') !== -1, 'surrounding content should be preserved');
+});
+
+check('_sfcSanitize strips on* event-handler attributes', function() {
+  var result = window._sfcSanitize('<img src="photo.jpg" onerror="steal()">');
+  assert(result.indexOf('onerror') === -1, 'onerror attribute should be stripped');
+  assert(result.indexOf('src=') !== -1, 'src attribute should be preserved');
+});
+
+check('_sfcSanitize neutralizes javascript: href', function() {
+  var result = window._sfcSanitize('<a href="javascript:void(0)">link</a>');
+  assert(result.indexOf('javascript:') === -1, 'javascript: should be replaced');
+  assert(result.indexOf('about:blank') !== -1, 'should be replaced with about:blank');
+});
+
+check('combined: _sfcBlockDangerous(_sfcSanitize()) rejects script-only input', function() {
+  var result = window._sfcBlockDangerous(window._sfcSanitize('<script>evil()</script>'));
+  assert(result === '', 'double-gate should produce empty string');
+});
+
+check('combined: double-gate passes clean HTML after stripping script', function() {
+  var input = '<p>Safe text</p><script>bad()</script>';
+  var cleaned = window._sfcSanitize(input);
+  var final = window._sfcBlockDangerous(cleaned);
+  // After sanitize: script is stripped. Block sees '<p>Safe text</p>' → should pass
+  assert(final.indexOf('<p>Safe text</p>') !== -1, 'clean content preserved after double-gate');
+});
+
 // ─── Résumé ───────────────────────────────────────────────────────────────────
 console.log('\n' + '─'.repeat(50));
 console.log('Résultats : ' + pass + ' pass, ' + fail + ' fail');

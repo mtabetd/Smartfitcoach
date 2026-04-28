@@ -14,7 +14,7 @@
 // The 'html' key in h() is ONLY for static strings authored in this codebase.
 // Never pass user-controlled data via the 'html' key. Use child text nodes instead.
 // All callers verified: only hardcoded SVG/HTML literals, no user data.
-function h(tag,attrs,ch){var el=document.createElement(tag);var _hasClick=false;if(attrs)for(var k in attrs){if(attrs[k]===null||attrs[k]===undefined)continue;if(k==='class')el.className=attrs[k];else if(k==='html'){var _hv=String(attrs[k]);el.innerHTML=_hv}else if(k==='disabled'){if(attrs[k]===true)el.setAttribute('disabled','');else el.removeAttribute('disabled')}else if(k.indexOf('on')===0){el.addEventListener(k.slice(2),attrs[k]);if(k==='onclick')_hasClick=true}else el.setAttribute(k,attrs[k])}/* FIX A11Y 2026-04-16: div/span avec onclick → role=button + tabindex + keydown Enter/Space */if(_hasClick&&(tag==='div'||tag==='span')&&!el.getAttribute('role')){el.setAttribute('role','button');el.setAttribute('tabindex','0');el.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click()}})}if(ch!=null){if(typeof ch==='string'||typeof ch==='number')el.textContent=ch;else if(Array.isArray(ch))for(var i=0;i<ch.length;i++){if(ch[i])el.appendChild(ch[i])}else if(ch.nodeType)el.appendChild(ch)}return el}
+function h(tag,attrs,ch){var el=document.createElement(tag);var _hasClick=false;if(attrs)for(var k in attrs){if(attrs[k]===null||attrs[k]===undefined)continue;if(k==='class')el.className=attrs[k];else if(k==='html'){var _hv=String(attrs[k]);el.innerHTML=(typeof _sfcSanitize==='function')?_sfcSanitize(_hv):_hv}else if(k==='disabled'){if(attrs[k]===true)el.setAttribute('disabled','');else el.removeAttribute('disabled')}else if(k.indexOf('on')===0){el.addEventListener(k.slice(2),attrs[k]);if(k==='onclick')_hasClick=true}else el.setAttribute(k,attrs[k])}/* FIX A11Y 2026-04-16: div/span avec onclick → role=button + tabindex + keydown Enter/Space */if(_hasClick&&(tag==='div'||tag==='span')&&!el.getAttribute('role')){el.setAttribute('role','button');el.setAttribute('tabindex','0');el.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click()}})}if(ch!=null){if(typeof ch==='string'||typeof ch==='number')el.textContent=ch;else if(Array.isArray(ch))for(var i=0;i<ch.length;i++){if(ch[i])el.appendChild(ch[i])}else if(ch.nodeType)el.appendChild(ch)}return el}
 function txt(s){return document.createTextNode(s)}
 
 // ─── TOAST NOTIFICATION SYSTEM 2026-04-19 ───
@@ -1671,8 +1671,9 @@ function getAdaptedMealSplit(dayIndex) {
   // Sans SFCSymbiosis ou sans trainingLoad → calMultiplier=1.0 (comportement inchangé).
   var _trainMult  = 1.0;
   var _carbBoost  = 1.0;
-  if (window.SFCSymbiosis && window.S && window.S.trainingLoad) {
-    var _mults = window.SFCSymbiosis.getLoadMultipliers(true, window.S.trainingLoad);
+  var _tl4mults = window.S && (window.S.dailyTrainingLoad || window.S.trainingLoad);
+  if (window.SFCSymbiosis && _tl4mults) {
+    var _mults = window.SFCSymbiosis.getLoadMultipliers(true, _tl4mults);
     _trainMult = _mults.cal;
     _carbBoost = _mults.carbBoost;
     // Feedback loop (optionnel) — ajustements fatigue / récupération
@@ -4504,10 +4505,11 @@ function showPaywall(feature) {
   ov.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,9,0.55);z-index:9500;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.25s ease;';
   var box = document.createElement('div');
   box.style.cssText = 'background:var(--ivory,#FAF9F6);max-width:380px;width:90%;padding:28px 24px;border-radius:2px;text-align:center;';
+  var _safeName = name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   box.innerHTML = '<div style="font-size:28px;margin-bottom:12px;">\u2B50</div>' +
     '<div style="font-family:Georgia,serif;font-size:20px;margin-bottom:8px;">Passez \u00e0 Premium</div>' +
     '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:#6B6B65;line-height:1.6;margin-bottom:20px;">' +
-    '<strong>' + name + '</strong> est r\u00e9serv\u00e9(e) aux abonn\u00e9s SmartFitCoach Premium. D\u00e9bloquez toutes les fonctionnalit\u00e9s avanc\u00e9es pour atteindre vos objectifs.</div>' +
+    '<strong>' + _safeName + '</strong> est r\u00e9serv\u00e9(e) aux abonn\u00e9s SmartFitCoach Premium. D\u00e9bloquez toutes les fonctionnalit\u00e9s avanc\u00e9es pour atteindre vos objectifs.</div>' +
     '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:#6B6B65;margin-bottom:12px;">' +
     'Scanner repas IA \u00b7 Coach IA illimit\u00e9 \u00b7 Export PDF \u00b7 Historique \u00b7 Analyse corporelle</div>' +
     '<div style="font-family:Georgia,serif;font-size:22px;color:#0A0A09;margin-bottom:4px;">' + (function() {
@@ -6780,28 +6782,58 @@ function computeNutritionState(trainingDay) {
     );
   }
 
-  // ─── CARB CYCLING — modulation glucides par charge du jour, -10% jours repos ───
-  // Holland 2019 JISSN : modulation périodique des glucides → ↑ resynthèse glycogène musculaire
-  // Charge-dependent rates (S.trainingLoad): heavy=+20%, moderate=+10%, light=base, rest=-10%
-  // Condition : jours d'entraînement explicitement sélectionnés (trainingDaysSelected) ET objectif sportif
-  var _hasSportDays = Array.isArray(window.S.trainingDaysSelected) && window.S.trainingDaysSelected.length > 0;
+  // ─── CARB CYCLING v2 — granular load-dependent modulation + consecutive-heavy smoothing ───
+  // Holland 2019 JISSN: periodic carb modulation → ↑ glycogen resynthesis
+  // Rates: heavy=+20%, moderate=+10%, light=baseline, rest=-10%
+  // Smoothing: 2+ consecutive heavy days → cap raised to +25% (accumulated glycogen depletion)
+  // Macro swap is always calorie-neutral (carbs ↑ = fat ↓) so caloriesTarget is preserved:
+  //   fat-loss users stay in their deficit; muscle users benefit from higher carb availability.
+  var _hasSportDays  = Array.isArray(window.S.trainingDaysSelected) && window.S.trainingDaysSelected.length > 0;
   var _hasSportGoals = Array.isArray(window.S.sportGoals) && window.S.sportGoals.length > 0;
   if (_hasSportDays && _hasSportGoals && result.carbsGrams > 0 && result.fatGrams > 0 && result.caloriesTarget > 0) {
-    var _fatFloor = Math.round(result.caloriesTarget * 0.15 / 9); // plancher 15% lipides (ACSM 2009)
+    var _fatFloor = Math.round(result.caloriesTarget * 0.15 / 9); // floor 15% fat (ACSM 2009)
+    var _tl = (window.S && (window.S.dailyTrainingLoad || window.S.trainingLoad)) || 'moderate';
+
+    // ── Consecutive heavy-day streak (smoothing) ──────────────────────────────────
+    var _prevStreak  = (typeof window.S.heavyDayStreak === 'number') ? window.S.heavyDayStreak : 0;
+    var _heavyStreak = (_tl === 'heavy') ? _prevStreak + 1 : 0;
+    window.S.heavyDayStreak = _heavyStreak;
+
+    // ── UX nutrition tag ──────────────────────────────────────────────────────────
+    // recovery   → 2+ consecutive heavy days; body needs active recovery nutrition
+    // performance → training day heavy/moderate; fuel for workout output
+    // fat-loss    → rest day or light training; deficit is the priority
+    if (_heavyStreak >= 2) {
+      window.S.nutritionTag = 'recovery';
+    } else if (!trainingDay || _tl === 'light') {
+      window.S.nutritionTag = 'fat-loss';
+    } else {
+      window.S.nutritionTag = 'performance';
+    }
+
+    // ── Macro modulation ──────────────────────────────────────────────────────────
     if (trainingDay === true) {
-      // Load-dependent carb boost: heavy=+20%, moderate=+10%, light=base (0% boost)
-      var _tl = (window.S && window.S.trainingLoad) || 'moderate';
-      var _carbRate = _tl === 'heavy' ? 0.20 : _tl === 'moderate' ? 0.10 : 0;
+      var _carbRate;
+      if (_tl === 'heavy') {
+        // 2+ consecutive heavy days → cap at +25% (more glycogen depletion, higher replenishment need)
+        // Single heavy day → standard +20%
+        _carbRate = _heavyStreak >= 2 ? 0.25 : 0.20;
+      } else if (_tl === 'moderate') {
+        _carbRate = 0.10;
+      } else {
+        _carbRate = 0; // light → baseline
+      }
       if (_carbRate > 0) {
-        var _carbExtra = Math.round(result.carbsGrams * _carbRate);
+        var _carbExtra  = Math.round(result.carbsGrams * _carbRate);
         var _fatCompens = Math.min(Math.round(_carbExtra * 4 / 9), result.fatGrams - _fatFloor);
         result.carbsGrams += _carbExtra;
         if (_fatCompens > 0) result.fatGrams -= _fatCompens;
       }
     } else {
+      // Rest day: -10% carbs, shift to fat (Helms 2014 calorie cycling)
       var _carbRed = Math.round(result.carbsGrams * 0.10);
-      result.carbsGrams = Math.max(100, result.carbsGrams - _carbRed); // plancher 100g glucides (ISSN 2017 — cerveau)
-      result.fatGrams = Math.min(result.fatGrams + Math.round(_carbRed * 4 / 9), Math.round(result.caloriesTarget * 0.35 / 9));
+      result.carbsGrams = Math.max(100, result.carbsGrams - _carbRed); // floor 100g (ISSN 2017 — brain)
+      result.fatGrams   = Math.min(result.fatGrams + Math.round(_carbRed * 4 / 9), Math.round(result.caloriesTarget * 0.35 / 9));
     }
     result.caloriesCheck = Math.round(result.proteinGrams*4 + result.carbsGrams*4 + result.fatGrams*9);
   }

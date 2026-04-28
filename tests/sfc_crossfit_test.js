@@ -652,6 +652,216 @@ assert('T53b multi-sport cyc z3 60min no-FTP → moderate', mapCycLoad(3, 60, fa
 // Confirms sport switch changes load: heavy → moderate (84 → 54)
 
 // ─────────────────────────────────────────────────────────────────────────────
+// T54 – T58 : Multi-sport dailyTrainingLoad aggregation (MAX rule)
+// ─────────────────────────────────────────────────────────────────────────────
+process.stdout.write('\nMulti-sport dailyTrainingLoad aggregation\n');
+
+// Mirror of _sfcAggregateLoad — takes a map of {sport: load} and returns MAX
+var _LOAD_RANK_T = { light: 0, moderate: 1, heavy: 2 };
+var _RANK_LOAD_T = ['light', 'moderate', 'heavy'];
+function aggregateLoads(loadsMap) {
+  var maxRank = 0;
+  Object.keys(loadsMap).forEach(function(k) {
+    var r = _LOAD_RANK_T[loadsMap[k]];
+    if (typeof r === 'number' && r > maxRank) maxRank = r;
+  });
+  return _RANK_LOAD_T[maxRank] || 'moderate';
+}
+
+// T54: CF heavy + running light → daily = heavy
+assert('T54 CF heavy + running light → daily = heavy',
+  aggregateLoads({ crossfit: 'heavy', running: 'light' }) === 'heavy');
+
+// T55: running moderate + cycling heavy → daily = heavy
+assert('T55 running moderate + cycling heavy → daily = heavy',
+  aggregateLoads({ running: 'moderate', cycling: 'heavy' }) === 'heavy');
+
+// T56: 3 sports mixed — CF moderate + running light + cycling heavy → heavy
+assert('T56 CF mod + run light + cyc heavy → daily = heavy',
+  aggregateLoads({ crossfit: 'moderate', running: 'light', cycling: 'heavy' }) === 'heavy');
+
+// T57: all sports light → daily = light
+assert('T57 all light → daily = light',
+  aggregateLoads({ crossfit: 'light', running: 'light', cycling: 'light' }) === 'light');
+
+// T58: single sport heavy → daily = heavy (no other sports)
+assert('T58 single sport heavy → daily = heavy',
+  aggregateLoads({ crossfit: 'heavy' }) === 'heavy');
+
+// T59: all moderate → daily = moderate
+assert('T59 all moderate → daily = moderate',
+  aggregateLoads({ crossfit: 'moderate', running: 'moderate' }) === 'moderate');
+
+// T60: verify with real computed loads — CF(90min×1.3=117→heavy) + run(Z1 45min→22→light)
+// CF crossfitTrainingLoad=117 → heavy; run runningTrainingLoad=22 → light → MAX = heavy
+assert('T60 CF heavy (117) + run light (22) → daily = heavy',
+  aggregateLoads({
+    crossfit: (function(){ var l=Math.round(90*1.3); return l>=90?'heavy':l>=60?'moderate':'light'; })(),
+    running:  (function(){ var l=Math.round(45*0.5); return l>=80?'heavy':l>=40?'moderate':'light'; })()
+  }) === 'heavy');
+
+// T61: run moderate (Z2 60min=48) + cyc heavy (z4 FTP 60min=81) → daily = heavy
+assert('T61 run moderate (48) + cyc heavy (81) → daily = heavy',
+  aggregateLoads({
+    running:  (function(){ var l=Math.round(60*0.8);    return l>=80?'heavy':l>=40?'moderate':'light'; })(),
+    cycling:  (function(){ var l=Math.round(60*1.35);   return l>=80?'heavy':l>=40?'moderate':'light'; })()
+  }) === 'heavy');
+
+// ─────────────────────────────────────────────────────────────────────────────
+// T62 – T68 : Carb cycling v2 — rate logic, smoothing cap, nutritionTag
+// ─────────────────────────────────────────────────────────────────────────────
+process.stdout.write('\nCarb cycling v2 — rate, smoothing, nutritionTag\n');
+
+// Mirror of computeNutritionState carb cycling v2 block (app-core.js).
+// prevStreak = S.heavyDayStreak before this call (0 if not set).
+function carbCyclingV2(trainingLoad, trainingDay, prevStreak) {
+  prevStreak = typeof prevStreak === 'number' ? prevStreak : 0;
+  var _tl = trainingLoad || 'moderate';
+  var _heavyStreak = (_tl === 'heavy') ? prevStreak + 1 : 0;
+
+  var _carbRate;
+  if (!trainingDay) {
+    _carbRate = -0.10;
+  } else if (_tl === 'heavy') {
+    _carbRate = _heavyStreak >= 2 ? 0.25 : 0.20;
+  } else if (_tl === 'moderate') {
+    _carbRate = 0.10;
+  } else {
+    _carbRate = 0;
+  }
+
+  var _tag;
+  if (_heavyStreak >= 2) {
+    _tag = 'recovery';
+  } else if (!trainingDay || _tl === 'light') {
+    _tag = 'fat-loss';
+  } else {
+    _tag = 'performance';
+  }
+
+  return { rate: _carbRate, tag: _tag, streak: _heavyStreak };
+}
+
+// T62: first heavy training day → +20%, performance tag
+var _r62 = carbCyclingV2('heavy', true, 0);
+assert('T62 heavy day (first) → rate=0.20',        _r62.rate   === 0.20);
+assert('T62b heavy day → tag=performance',          _r62.tag    === 'performance');
+assert('T62c heavy day → streak=1',                 _r62.streak === 1);
+
+// T63: 2nd consecutive heavy day → cap +25%, recovery tag
+var _r63 = carbCyclingV2('heavy', true, 1);
+assert('T63 2 heavy days → rate=0.25 (cap)',        _r63.rate   === 0.25);
+assert('T63b 2 heavy days → tag=recovery',          _r63.tag    === 'recovery');
+assert('T63c 2 heavy days → streak=2',              _r63.streak === 2);
+
+// T64: rest day → -10%, fat-loss tag (even when dailyTrainingLoad is heavy)
+var _r64 = carbCyclingV2('heavy', false, 0);
+assert('T64 rest day → rate=-0.10',                 _r64.rate   === -0.10);
+assert('T64b rest day → tag=fat-loss',              _r64.tag    === 'fat-loss');
+
+// T65: moderate training → +10%, performance tag
+var _r65 = carbCyclingV2('moderate', true, 0);
+assert('T65 moderate training → rate=0.10',         _r65.rate   === 0.10);
+assert('T65b moderate training → tag=performance',  _r65.tag    === 'performance');
+
+// T66: light training day → 0% boost, fat-loss tag
+var _r66 = carbCyclingV2('light', true, 0);
+assert('T66 light training → rate=0',               _r66.rate   === 0);
+assert('T66b light training → tag=fat-loss',        _r66.tag    === 'fat-loss');
+
+// T67: streak resets on non-heavy day → next isolated heavy is not capped
+var _s67a = carbCyclingV2('heavy',    true, 0).streak;       // 1
+var _s67b = carbCyclingV2('moderate', true, _s67a).streak;   // resets to 0
+var _r67c = carbCyclingV2('heavy',    true, _s67b);          // streak=1 again
+assert('T67 heavy→moderate→heavy: streak resets to 0',          _s67b === 0);
+assert('T67b isolated heavy after reset → rate=0.20 (not capped)', _r67c.rate === 0.20);
+
+// T68: 3+ consecutive heavy days → still capped at +25% (cap does not grow further)
+var _r68 = carbCyclingV2('heavy', true, 2);
+assert('T68 3 heavy days → still capped at +25%',   _r68.rate === 0.25);
+assert('T68b 3 heavy days → tag=recovery',           _r68.tag  === 'recovery');
+
+// ─────────────────────────────────────────────────────────────────────────────
+// T69 – T79 : XSS protection — _sfcBlockDangerous + _sfcSanitize
+// ─────────────────────────────────────────────────────────────────────────────
+process.stdout.write('\nXSS protection — block + sanitize\n');
+
+// Inline mirrors of _sfcBlockDangerous and _sfcSanitize (app-sport.js)
+function sfcBlockDangerous(html) {
+  if (!html || typeof html !== 'string') return html || '';
+  if (/<script\b/i.test(html))             return '';
+  if (/\bon\w+\s*=/i.test(html))           return '';
+  if (/javascript\s*:/i.test(html))        return '';
+  if (/vbscript\s*:/i.test(html))          return '';
+  if (/data\s*:\s*text\/html/i.test(html)) return '';
+  return html;
+}
+function sfcSanitize(html) {
+  if (!html || typeof html !== 'string') return '';
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]*)/gi, '')
+    .replace(/href\s*=\s*["']?\s*javascript:[^"'\s>]*/gi, 'href="about:blank"')
+    .replace(/src\s*=\s*["']?\s*javascript:[^"'\s>]*/gi, 'src=""')
+    .replace(/\bexpression\s*\(/gi, '')
+    .replace(/data\s*:\s*text\/html/gi, 'data-blocked:text/html');
+}
+
+// _sfcBlockDangerous — script injection blocked
+assert('T69 <script> tag → blocked (returns empty)',
+  sfcBlockDangerous('<script>alert(1)</script>') === '');
+assert('T70 <SCRIPT> uppercase → blocked',
+  sfcBlockDangerous('<SCRIPT>evil()</SCRIPT>') === '');
+assert('T71 <script src=...> → blocked',
+  sfcBlockDangerous('<script src="evil.js"></script>') === '');
+
+// _sfcBlockDangerous — inline JS event handlers blocked
+assert('T72 onerror= → blocked',
+  sfcBlockDangerous('<img onerror="alert(1)">') === '');
+assert('T73 onclick= → blocked',
+  sfcBlockDangerous('<div onclick="evil()">text</div>') === '');
+assert('T74 onload= → blocked',
+  sfcBlockDangerous('<body onload="steal()">') === '');
+
+// _sfcBlockDangerous — protocol injection blocked
+assert('T75 javascript: href → blocked',
+  sfcBlockDangerous('<a href="javascript:void(0)">link</a>') === '');
+assert('T75b vbscript: → blocked',
+  sfcBlockDangerous('<a href="vbscript:evil()">x</a>') === '');
+assert('T75c data:text/html → blocked',
+  sfcBlockDangerous('<iframe src="data:text/html,<h1>x</h1>">') === '');
+
+// _sfcBlockDangerous — clean HTML passes through unchanged
+assert('T76 safe <p> tag passes through',
+  sfcBlockDangerous('<p class="text">Hello <strong>world</strong></p>') !== '');
+assert('T76b safe SVG passes through',
+  sfcBlockDangerous('<svg width="16"><path d="M4 8h8"/></svg>') !== '');
+
+// _sfcSanitize — strips dangerous content, keeps clean HTML intact
+assert('T77 <script> stripped by sanitize',
+  sfcSanitize('<p>ok</p><script>alert(1)</script>') === '<p>ok</p>');
+assert('T77b on* attribute stripped',
+  sfcSanitize('<img src="x" onerror="alert(1)">').indexOf('onerror') === -1);
+assert('T77c javascript: href neutralized',
+  sfcSanitize('<a href="javascript:alert(1)">x</a>').indexOf('javascript:') === -1);
+assert('T77d expression() stripped',
+  sfcSanitize('<div style="width:expression(alert(1))">').indexOf('expression(') === -1);
+assert('T77e data:text/html neutralized',
+  sfcSanitize('<iframe src="data:text/html,x">').indexOf('data:text/html') === -1);
+
+// Combined: sanitize then block — double-gate for high-risk content
+// (simulate _sfcBlockDangerous(_sfcSanitize(input)) for AI-generated content)
+assert('T78 double-gate: sanitize strips onerror, block sees clean HTML',
+  (function() {
+    var cleaned = sfcSanitize('<p class="ok">text</p><script>evil()</script>');
+    var final = sfcBlockDangerous(cleaned);
+    // After sanitize: script is gone. Block sees '<p class="ok">text</p>' → passes
+    return final !== '' && final.indexOf('<p') !== -1;
+  })());
+assert('T79 double-gate: script-only input → empty after both layers',
+  sfcBlockDangerous(sfcSanitize('<script>evil()</script>')) === '');
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Summary
 // ─────────────────────────────────────────────────────────────────────────────
 process.stdout.write('\n' + (failed === 0 ? '✔' : '✖') +
