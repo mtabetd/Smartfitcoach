@@ -857,12 +857,31 @@ function generateSportProgram() {
      });
    }
  } else if (pri >= 4) {
-   // Non-beginner, high priority: weighted before pure bodyweight for gym users, then level desc
+   // Non-beginner, high priority: gym users push bodyweight last, then level desc, then stable name sort
+   // Deterministic: variety comes from cycleOffset at selection (line ~924), not from Math.random()
+   // FIX 2026-04-28 : détection bodyweight étendue aux tags poids-du-corps ET à l'équipement
+   // "barre de traction" — avant, les tractions n'étaient pas détectées → passaient avant
+   // le lat pulldown et le rowing câble → 3 variantes de tractions pour une séance dos.
+   // FIX 2026-04-28b : tag "fondamental" (tirage vertical, rowing machine) → tier 0 absolu
+   // Garantit que les exercices de base machine/câble (tirage vertical lv=1, rowing machine lv=1)
+   // sont TOUJOURS sélectionnés avant les variantes barbell avancées (Pendlay row lv=3, etc.)
+   // sans perturber chest/shoulder/legs où les fondamentaux barbell ont déjà lv=3 + tag force.
    available.sort(function(a, b) {
-     var _bwA = (!S.sportEquipment || S.sportEquipment === 'gym') ? (/^poids du corps$/i.test((a.eq||'').trim()) ? 1 : 0) : 0;
-     var _bwB = (!S.sportEquipment || S.sportEquipment === 'gym') ? (/^poids du corps$/i.test((b.eq||'').trim()) ? 1 : 0) : 0;
-     if (_bwA !== _bwB) return _bwA - _bwB;
-     return (b.lv||1) - (a.lv||1) || (0.5 - Math.random());
+     var _isBwEx = function(ex) {
+       var _eq = (ex.eq||'').toLowerCase().trim();
+       var _tg = ex.tags || [];
+       return /^poids du corps$/i.test(_eq) || _tg.indexOf('poids-du-corps') !== -1
+           || /barre de traction|barres?\s*parall[èe]les|barre fixe|barre ou poign/.test(_eq);
+     };
+     var _isGym = !S.sportEquipment || S.sportEquipment === 'gym';
+     var _tier = function(ex) {
+       if (_isGym && _isBwEx(ex)) return 2; // BW last for gym users
+       if ((ex.tags||[]).indexOf('fondamental') !== -1) return 0; // machine/cable fundamentals first
+       return 1;
+     };
+     var _tA = _tier(a), _tB = _tier(b);
+     if (_tA !== _tB) return _tA - _tB;
+     return (b.lv||1) - (a.lv||1) || (a.n||'').localeCompare(b.n||'');
    });
  } else {
    // Non-beginner, shuffle — but gym users: weighted before pure bodyweight
