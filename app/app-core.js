@@ -6780,18 +6780,24 @@ function computeNutritionState(trainingDay) {
     );
   }
 
-  // ─── CARB CYCLING — +20% glucides jours entraînement, -10% jours repos ───
+  // ─── CARB CYCLING — modulation glucides par charge du jour, -10% jours repos ───
   // Holland 2019 JISSN : modulation périodique des glucides → ↑ resynthèse glycogène musculaire
+  // Charge-dependent rates (S.trainingLoad): heavy=+20%, moderate=+10%, light=base, rest=-10%
   // Condition : jours d'entraînement explicitement sélectionnés (trainingDaysSelected) ET objectif sportif
   var _hasSportDays = Array.isArray(window.S.trainingDaysSelected) && window.S.trainingDaysSelected.length > 0;
   var _hasSportGoals = Array.isArray(window.S.sportGoals) && window.S.sportGoals.length > 0;
   if (_hasSportDays && _hasSportGoals && result.carbsGrams > 0 && result.fatGrams > 0 && result.caloriesTarget > 0) {
     var _fatFloor = Math.round(result.caloriesTarget * 0.15 / 9); // plancher 15% lipides (ACSM 2009)
     if (trainingDay === true) {
-      var _carbExtra = Math.round(result.carbsGrams * 0.20);
-      var _fatCompens = Math.min(Math.round(_carbExtra * 4 / 9), result.fatGrams - _fatFloor);
-      result.carbsGrams += _carbExtra;
-      if (_fatCompens > 0) result.fatGrams -= _fatCompens;
+      // Load-dependent carb boost: heavy=+20%, moderate=+10%, light=base (0% boost)
+      var _tl = (window.S && window.S.trainingLoad) || 'moderate';
+      var _carbRate = _tl === 'heavy' ? 0.20 : _tl === 'moderate' ? 0.10 : 0;
+      if (_carbRate > 0) {
+        var _carbExtra = Math.round(result.carbsGrams * _carbRate);
+        var _fatCompens = Math.min(Math.round(_carbExtra * 4 / 9), result.fatGrams - _fatFloor);
+        result.carbsGrams += _carbExtra;
+        if (_fatCompens > 0) result.fatGrams -= _fatCompens;
+      }
     } else {
       var _carbRed = Math.round(result.carbsGrams * 0.10);
       result.carbsGrams = Math.max(100, result.carbsGrams - _carbRed); // plancher 100g glucides (ISSN 2017 — cerveau)

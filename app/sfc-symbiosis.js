@@ -23,10 +23,10 @@
   // Multiplicateurs caloriques et glucides par charge d'entraînement
   // Sources : Helms 2014 (calorie cycling) | ISSN 2023 (carb timing) | Burke 2011
   var LOAD_MULTIPLIERS = {
-    heavy:    { cal: 1.10, carbBoost: 1.25, fatAdjust: 0.92 },   // +10% kcal, +25% glucides
-    moderate: { cal: 1.07, carbBoost: 1.15, fatAdjust: 0.96 },   // +7% kcal,  +15% glucides
-    light:    { cal: 1.03, carbBoost: 1.05, fatAdjust: 1.00 },   // +3% kcal,  +5%  glucides
-    rest:     { cal: 0.90, carbBoost: 0.85, fatAdjust: 1.08 }    // −10% kcal, −15% glucides
+    heavy:    { cal: 1.10, carbBoost: 1.20, fatAdjust: 0.92 },   // +10% kcal, +20% glucides
+    moderate: { cal: 1.07, carbBoost: 1.10, fatAdjust: 0.96 },   // +7% kcal,  +10% glucides
+    light:    { cal: 1.03, carbBoost: 1.00, fatAdjust: 1.00 },   // +3% kcal,  base glucides
+    rest:     { cal: 0.90, carbBoost: 0.90, fatAdjust: 1.08 }    // −10% kcal, −10% glucides
   };
 
   // Groupes musculaires "lourds" — mobilisent les grandes chaînes

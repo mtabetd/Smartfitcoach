@@ -40,6 +40,9 @@ function assert(cond, msg) { if (!cond) throw new Error(msg || 'assertion failed
 eval(fs.readFileSync(ROOT + '/app/food-db.js', 'utf8'));
 eval(fs.readFileSync(ROOT + '/app/extras.js', 'utf8'));
 eval(fs.readFileSync(ROOT + '/app/app-core.js', 'utf8'));  // sets window.S
+eval(fs.readFileSync(ROOT + '/app/i18n-helpers.js', 'utf8'));  // isFemale, isMale, isEnglish
+eval(fs.readFileSync(ROOT + '/app/nutrition-master.js', 'utf8'));  // NutritionMaster.compute
+eval(fs.readFileSync(ROOT + '/app/sfc-symbiosis.js', 'utf8'));  // SFCSymbiosis, LOAD_MULTIPLIERS
 eval(fs.readFileSync(ROOT + '/app/exercises-db.js', 'utf8'));
 eval(fs.readFileSync(ROOT + '/app/sport-data.js', 'utf8'));  // données statiques sport (Phase 2)
 eval(fs.readFileSync(ROOT + '/app/app-sport.js', 'utf8'));
@@ -283,6 +286,60 @@ check('getAge() date normale → âge positif', function() {
   window.S = { birthDate: '1990-06-15', age: null };
   var a = window.getAge ? window.getAge() : null;
   assert(a > 30 && a < 40, 'Expected ~35, got ' + a);
+});
+
+// ─── 9. Carb cycling — load-dependent daily adjustment ───────────────────────
+console.log('\n=== 9. Carb cycling — trainingLoad → glucides ===');
+
+// Base profile: 30yo male, 80kg, 180cm, moderately active, maintain goal
+var GOALS_LIST = window.GOALS || [];
+var _maintainIdx = GOALS_LIST.findIndex(function(g){ return g.key === 'maintain'; });
+var _shredIdx    = GOALS_LIST.findIndex(function(g){ return g.key === 'shred'; });
+
+function buildCarbProfile(overrides) {
+  var base = {
+    sex: 'homme', birthDate: '1994-04-28', weight: 80, height: 180,
+    activity: 2, goal: _maintainIdx >= 0 ? _maintainIdx : 0,
+    medical: [], pregnant: false, regime: 0,
+    trainingDaysSelected: [1, 3, 5],
+    sportGoals: ['muscle'],
+    trainingLoad: 'moderate'
+  };
+  var k; for (k in overrides) base[k] = overrides[k];
+  return base;
+}
+
+function computeCarbs(profileOverrides, isTrainingDay) {
+  window.S = buildCarbProfile(profileOverrides);
+  var nm = window.computeNutritionState ? window.computeNutritionState(isTrainingDay) : null;
+  return nm ? nm.carbsGrams : null;
+}
+
+check('heavy day → glucides augmentent vs base moderate', function() {
+  var carbsMod  = computeCarbs({ trainingLoad: 'moderate' }, true);
+  var carbsHvy  = computeCarbs({ trainingLoad: 'heavy'    }, true);
+  assert(carbsMod !== null, 'computeNutritionState returned null (NutritionMaster missing?)');
+  assert(carbsHvy > carbsMod,
+    'heavy day (' + carbsHvy + 'g) should exceed moderate day (' + carbsMod + 'g)');
+});
+
+check('rest day → glucides diminuent vs light training day', function() {
+  var carbsLight = computeCarbs({ trainingLoad: 'light' }, true);
+  var carbsRest  = computeCarbs({ trainingLoad: 'light' }, false); // rest day
+  assert(carbsLight !== null, 'computeNutritionState returned null');
+  assert(carbsRest < carbsLight,
+    'rest day (' + carbsRest + 'g) should be below light training day (' + carbsLight + 'g)');
+});
+
+check('fat loss (shred) user → reste en déficit malgré boost glucides heavy', function() {
+  if (_shredIdx < 0) { console.log('  (skipped — shred goal not found)'); return; }
+  window.S = buildCarbProfile({ goal: _shredIdx, trainingLoad: 'heavy' });
+  var tdee = window.calcTDEE ? Math.round(window.calcTDEE()) : 0;
+  var nm   = window.computeNutritionState ? window.computeNutritionState(true) : null;
+  assert(nm !== null, 'computeNutritionState returned null');
+  assert(tdee > 0, 'calcTDEE returned 0 — profile incomplete?');
+  assert(nm.caloriesTarget < tdee,
+    'shred user should stay in deficit: target=' + nm.caloriesTarget + ' tdee=' + tdee);
 });
 
 // ─── Résumé ───────────────────────────────────────────────────────────────────
