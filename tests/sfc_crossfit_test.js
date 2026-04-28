@@ -611,6 +611,47 @@ assert('T42b max Z5 60min → heavy',          mapRunLoad('Z5',   60) === 'heavy
 assert('T43b easy Z1-Z2 60min → light',      mapRunLoad('Z1-Z2', 60) === 'light');
 
 // ─────────────────────────────────────────────────────────────────────────────
+// T49 – T56 : Edge cases & multi-sport trainingLoad
+// ─────────────────────────────────────────────────────────────────────────────
+process.stdout.write('\nEdge cases & multi-sport trainingLoad\n');
+
+// Running: short Z3 (30min) → below moderate threshold
+assert('T49 Z3 30min → light (30*1.0=30 < 40)',   mapRunLoad('Z3', 30)    === 'light');
+// Running: Z4 at 50min stays moderate (50*1.3=65 < 80)
+assert('T49b Z4 50min → moderate (65 < 80)',       mapRunLoad('Z4', 50)    === 'moderate');
+// Running: null zone → fallback factor=0.8, 60min → 48 → moderate
+assert('T49c null zone → Z2 fallback → moderate',  mapRunLoad(null, 60)    === 'moderate');
+// Running: unknown zone → fallback factor=0.8, 60min → 48 → moderate
+assert('T49d unknown zone → Z2 fallback → moderate', mapRunLoad('ZX', 60) === 'moderate');
+// Running: zero duration → load=0 → light
+assert('T49e duration=0 → light',                 mapRunLoad('Z4', 0)     === 'light');
+
+// Cycling: FTP threshold boundary (> 75 → FTP path, else fallback)
+// FTP=76: 60 × 1.35 = 81 → heavy
+assert('T50 FTP=76 → FTP path, z4 60min → heavy', mapCycLoad(4, 60, 76 > 75) === 'heavy');
+// FTP=75: NOT > 75 → no-FTP path, z4 60min → 60*1.25=75 → moderate (< 80)
+assert('T50b FTP=75 → fallback, z4 60min → moderate', mapCycLoad(4, 60, 75 > 75) === 'moderate');
+// Cycling: null zone → factor=1.0, FTP path, 60min → 60 → moderate
+assert('T51 null zone cycling → factor=1.0 → moderate', mapCycLoad(null, 60, true)  === 'moderate');
+// Cycling: zero duration → load=0 → light
+assert('T51b duration=0 cycling → light',          mapCycLoad(4, 0, true)  === 'light');
+// Cycling: z5 no-FTP, 50min → 50*1.5=75 → moderate (boundary: 75 < 80)
+assert('T51c z5 no-FTP 50min → moderate (75 < 80)', mapCycLoad(5, 50, false) === 'moderate');
+// Cycling: z5 no-FTP, 55min → 55*1.5=82.5 → heavy
+assert('T51d z5 no-FTP 55min → heavy (82.5 >= 80)', mapCycLoad(5, 55, false) === 'heavy');
+
+// MET_MAP edge cases (unknown sport, null sport → default met=6 → moderate)
+assert('T52 unknown sport → met=6 → moderate',  metToLoad('parkour', 'inter') === 'moderate');
+assert('T52b null sport → met=6 → moderate',    metToLoad(null, 'inter')       === 'moderate');
+assert('T52c muscu not in MET_MAP → moderate',  metToLoad('muscu', 'inter')    === 'moderate');
+
+// Multi-sport: demonstrates S.trainingLoad changes per sport/session
+// running Z5 60min → heavy; same user cycling z3 no-FTP 60min → moderate
+assert('T53 multi-sport run Z5 60min → heavy',           mapRunLoad('Z5', 60)       === 'heavy');
+assert('T53b multi-sport cyc z3 60min no-FTP → moderate', mapCycLoad(3, 60, false) === 'moderate');
+// Confirms sport switch changes load: heavy → moderate (84 → 54)
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Summary
 // ─────────────────────────────────────────────────────────────────────────────
 process.stdout.write('\n' + (failed === 0 ? '✔' : '✖') +

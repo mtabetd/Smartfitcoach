@@ -342,6 +342,47 @@ check('fat loss (shred) user → reste en déficit malgré boost glucides heavy'
     'shred user should stay in deficit: target=' + nm.caloriesTarget + ' tdee=' + tdee);
 });
 
+// ─── 10. Edge cases: trainingLoad fallbacks & light-day behavior ─────────────
+console.log('\n=== 10. Edge cases — trainingLoad fallbacks ===');
+
+check('trainingLoad=null → fallback moderate (same carbs as moderate)', function() {
+  var carbsMod  = computeCarbs({ trainingLoad: 'moderate' }, true);
+  var carbsNull = computeCarbs({ trainingLoad: null      }, true);
+  assert(carbsMod !== null, 'computeNutritionState returned null');
+  // null → || 'moderate' in computeNutritionState → carbRate=0.10 same as 'moderate'
+  assert(carbsNull === carbsMod,
+    'null trainingLoad (' + carbsNull + 'g) should equal moderate (' + carbsMod + 'g)');
+});
+
+check("trainingLoad='light' on training day → no carb boost (below 'moderate')", function() {
+  var carbsLight = computeCarbs({ trainingLoad: 'light'    }, true);
+  var carbsMod   = computeCarbs({ trainingLoad: 'moderate' }, true);
+  assert(carbsLight !== null, 'computeNutritionState returned null');
+  // light: carbRate=0 (no boost); moderate: carbRate=0.10 (+10%)
+  assert(carbsLight < carbsMod,
+    "light day (" + carbsLight + "g) must be below moderate (" + carbsMod + "g) — carbRate=0 for light");
+});
+
+check("trainingLoad='heavy' > 'moderate' > 'light' strict ordering", function() {
+  var carbsL = computeCarbs({ trainingLoad: 'light'    }, true);
+  var carbsM = computeCarbs({ trainingLoad: 'moderate' }, true);
+  var carbsH = computeCarbs({ trainingLoad: 'heavy'    }, true);
+  assert(carbsL !== null && carbsM !== null && carbsH !== null, 'null result');
+  assert(carbsL < carbsM,
+    'light (' + carbsL + ') < moderate (' + carbsM + ')');
+  assert(carbsM < carbsH,
+    'moderate (' + carbsM + ') < heavy (' + carbsH + ')');
+});
+
+check('multi-sport: heavy load carbs > rest day carbs (sport switch simulation)', function() {
+  var carbsHeavyTrain = computeCarbs({ trainingLoad: 'heavy' }, true);
+  var carbsLightRest  = computeCarbs({ trainingLoad: 'light' }, false);
+  assert(carbsHeavyTrain !== null && carbsLightRest !== null, 'null result');
+  // Running Z5 (heavy) → more carbs; yoga (light) on rest day → fewest carbs
+  assert(carbsHeavyTrain > carbsLightRest,
+    'heavy training (' + carbsHeavyTrain + 'g) should exceed light rest day (' + carbsLightRest + 'g)');
+});
+
 // ─── Résumé ───────────────────────────────────────────────────────────────────
 console.log('\n' + '─'.repeat(50));
 console.log('Résultats : ' + pass + ' pass, ' + fail + ' fail');
