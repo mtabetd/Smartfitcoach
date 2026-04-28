@@ -212,10 +212,12 @@ function () {
     // ── 5 Sélection quota-aware + coverage-aware ──────────────────────────
     // Quota : hypertrophie/recomposition intermédiaire+ → réserver des slots isolation.
     // Invariant : composés TOUJOURS avant isolations dans la liste finale.
+    // Fix FORCE : profil force plafonné à 6 exercices (séance réaliste ~75-90 min).
+    var _durEff = (cfg.hasStrength && cfg.durMax > 6) ? 6 : cfg.durMax;
     var _minIso = (!cfg.isBeginner && !cfg.hasStrength)
-      ? (cfg.durMax >= 7 ? 2 : 1)
+      ? (_durEff >= 7 ? 2 : 1)
       : 0;
-    var _compSlots = cfg.durMax - _minIso;
+    var _compSlots = _durEff - _minIso;
 
     var _poolComp = [], _poolIso = [];
     _pool.forEach(function(ex) {
@@ -255,7 +257,7 @@ function () {
     }
 
     // Fallback composés (pool insuffisant) — toujours AVANT selIso dans le résultat
-    var _needed = cfg.durMax - _selComp.length - _selIso.length;
+    var _needed = _durEff - _selComp.length - _selIso.length;
     for (var _fi = 0; _fi < _poolComp.length && _needed > 0; _fi++) {
       var _ef = _poolComp[_fi], _kf = _normKey(_ef.n);
       if (_sn[_kf]) continue;
