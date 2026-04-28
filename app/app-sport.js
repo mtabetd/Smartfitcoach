@@ -3989,6 +3989,10 @@ function applyDeloadScaling(wod) {
 // ─── DAILY INTENSITY ENGINE ───
 var CF_INTENSITY_FACTORS = { low: 0.8, moderate: 1.0, high: 1.3, very_high: 1.6 };
 
+// ─── RUNNING ZONE INTENSITY FACTORS ───
+// Z1 recovery · Z2 endurance · Z3 tempo · Z4 interval · Z5 max
+var RUN_ZONE_FACTORS = { 'Z1': 0.5, 'Z1-Z2': 0.65, 'Z2': 0.8, 'Z3': 1.0, 'Z3-Z4': 1.15, 'Z4': 1.3, 'Z4-Z5': 1.5, 'Z5': 1.6 };
+
 function computeSessionIntensity(wod) {
  if (!wod || !wod.type) return 'moderate';
  var t = (wod.type || '').toLowerCase();
@@ -10388,6 +10392,20 @@ function renderRunningProgram(p) {
  // Current session
  var sess = sessions[S.selectedRunDay];
  if (sess) {
+ // ─── RUNNING INTENSITY ENGINE ─── runningLoad = duration × zone factor → S.trainingLoad
+ var _runDurTable = { debutant: 45, intermediaire: 60, avance: 75, elite: 90 };
+ var _runDurMins  = _runDurTable[S.runningLevel] || 60;
+ var _runZone     = sess.zone || 'Z2';
+ var _runFactor   = RUN_ZONE_FACTORS[_runZone] || 0.8;
+ S.runningTrainingLoad = Math.round(_runDurMins * _runFactor);
+ S.trainingLoad = S.runningTrainingLoad >= 80 ? 'heavy'
+                : S.runningTrainingLoad >= 40 ? 'moderate'
+                : 'light';
+ _sfcNotifySport('running', S.runningLevel);
+ // Restore precision-computed load (notifySession overwrites S.trainingLoad with MET map)
+ S.trainingLoad = S.runningTrainingLoad >= 80 ? 'heavy'
+                : S.runningTrainingLoad >= 40 ? 'moderate'
+                : 'light';
  var zoneColorMap = {'Z1': '#3E5C3A', 'Z2': '#1A3A6A', 'Z3': '#7A3B0E', 'Z4': '#7A3B0E', 'Z5': '#7A1F1F', 'Z1-Z2': '#3E5C3A', 'Z4-Z5': '#7A1F1F', 'Z3-Z4': '#7A3B0E'};
  var sessColor = zoneColorMap[sess.zone] || '#0A0A09';
 

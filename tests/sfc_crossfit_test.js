@@ -528,6 +528,31 @@ assert('T39b load=60  → moderate (boundary)', mapCFLoad(60)  === 'moderate');
 assert('T40b load=59  → light (boundary)',    mapCFLoad(59)  === 'light');
 
 // ─────────────────────────────────────────────────────────────────────────────
+// T41 – T43 : Running zone → S.trainingLoad mapping
+// ─────────────────────────────────────────────────────────────────────────────
+process.stdout.write('\nRunning zone → trainingLoad mapping\n');
+
+// Mirror of RUN_ZONE_FACTORS defined in app-sport.js
+var RUN_ZONE_FACTORS_T = { 'Z1': 0.5, 'Z1-Z2': 0.65, 'Z2': 0.8, 'Z3': 1.0, 'Z3-Z4': 1.15, 'Z4': 1.3, 'Z4-Z5': 1.5, 'Z5': 1.6 };
+
+// Mirrors the mapping in renderRunningProgram — thresholds: ≥80→heavy, ≥40→moderate, <40→light
+function mapRunLoad(zone, durMins) {
+  var f = RUN_ZONE_FACTORS_T[zone] || 0.8;
+  var load = Math.round(durMins * f);
+  return load >= 80 ? 'heavy' : load >= 40 ? 'moderate' : 'light';
+}
+
+// 60 min = intermediaire default (SESSION_DUR_RUN table)
+assert('T41 long run Z2 60min → moderate',   mapRunLoad('Z2',   60) === 'moderate');
+assert('T42 interval Z4-Z5 60min → heavy',   mapRunLoad('Z4-Z5', 60) === 'heavy');
+assert('T43 recovery Z1 60min → light',      mapRunLoad('Z1',   60) === 'light');
+
+// Zone boundaries
+assert('T41b tempo Z3 60min → moderate',     mapRunLoad('Z3',   60) === 'moderate');
+assert('T42b max Z5 60min → heavy',          mapRunLoad('Z5',   60) === 'heavy');
+assert('T43b easy Z1-Z2 60min → light',      mapRunLoad('Z1-Z2', 60) === 'light');
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Summary
 // ─────────────────────────────────────────────────────────────────────────────
 process.stdout.write('\n' + (failed === 0 ? '✔' : '✖') +
