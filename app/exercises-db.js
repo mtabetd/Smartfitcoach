@@ -170,7 +170,7 @@ var EXERCISES = {
       desc: "Assis à la machine, pousser les poignées vers l'avant.",
       tips: ["Régler le siège à hauteur de poitrine", "Ne pas verrouiller les coudes", "Idéal pour les débutants"],
       lv: 1,
-      tags: ["pectoraux", "compose", "triceps", "machine"]
+      tags: ["pectoraux", "compose", "triceps", "machine"], f: "chest-machine"
     },
     {
       n: "Câble crossover bas",
@@ -345,7 +345,7 @@ var EXERCISES = {
     { n: "Développé décliné haltères", m: "Pectoraux inférieurs", eq: "Haltères + banc décliné", sets: "4×8-12", rest: "90s", video: "https://www.youtube.com/watch?v=KYJgQZPwGS8", warn: "CONTRE-INDIQUÉ grossesse T2/T3.", desc: "Banc décliné -15 à -30°. Ciblage pectoraux bas avec contrôle unilatéral des haltères.", tips: ["Pieds bien calés", "Descente jusqu'au bas du pec", "Pas de rebond"], lv: 2, tags: ["pectoraux", "compose", "pectoraux-inferieurs", "halteres"] },
     { n: "Svend press", m: "Pectoraux / Gainage", eq: "Disque (5-10 kg)", sets: "3×12-15", rest: "60s", video: "https://www.youtube.com/watch?v=vNxezQEqy6I", desc: "Pressing horizontal d'un disque tenu entre les paumes. Activation constante par isométrie d'adduction.", tips: ["Paumes pressent fort le disque", "Poussée linéaire devant le sternum", "Tension continue 15 reps"], lv: 1, tags: ["pectoraux", "adduction", "finisher"] },
     { n: "Pompes déficit", m: "Pectoraux / Triceps", eq: "Poids du corps + 2 surfaces élevées", sets: "3×10-15", rest: "60s", video: "https://www.youtube.com/watch?v=kdOh9nQmioQ", desc: "Pompes avec mains surélevées (parallettes/disques) pour augmenter l'amplitude d'étirement du pectoral.", tips: ["Descente poitrine en dessous des mains", "Coudes 45°", "Maîtrise excentrique 2-3s"], lv: 2, tags: ["pectoraux", "compose", "poids du corps", "home"] },
-    { n: "Développé machine convergent", m: "Pectoraux", eq: "Machine convergente", sets: "4×10-12", rest: "75s", video: "https://www.youtube.com/watch?v=rIbi0tHwwRY", desc: "Machine dont les bras convergent en fin de poussée — mime un mouvement d'adduction + pressing.", tips: ["Ajuster assise pour que les poignées soient à mi-poitrine", "Serrer les pecs en haut 1s", "Ne pas verrouiller coudes"], lv: 1, tags: ["pectoraux", "compose", "machine", "beginner-friendly"] },
+    { n: "Développé machine convergent", m: "Pectoraux", eq: "Machine convergente", sets: "4×10-12", rest: "75s", video: "https://www.youtube.com/watch?v=rIbi0tHwwRY", desc: "Machine dont les bras convergent en fin de poussée — mime un mouvement d'adduction + pressing.", tips: ["Ajuster assise pour que les poignées soient à mi-poitrine", "Serrer les pecs en haut 1s", "Ne pas verrouiller coudes"], lv: 1, tags: ["pectoraux", "compose", "machine", "beginner-friendly"], f: "chest-machine" },
     { n: "Cable crossover haut vers bas", m: "Pectoraux inférieurs", eq: "Poulie haute", sets: "3×12-15", rest: "60s", video: "https://www.youtube.com/watch?v=hhruLxo9yZU", desc: "Poulies hautes, trajectoire diagonale vers le bas devant le bassin. Cible les fibres basses du pectoral.", tips: ["Fente légère pour stabilité", "Coudes stables légèrement fléchis", "Croiser les mains en bas"], lv: 2, tags: ["pectoraux", "cable", "pectoraux-inferieurs", "isolation"] }
   ],
 
@@ -412,7 +412,7 @@ var EXERCISES = {
       desc: "Assis à la poulie haute, tirer la barre vers le haut de la poitrine.",
       tips: ["Ne pas tirer derrière la nuque — TOUJOURS devant la poitrine", "Garder le buste légèrement incline", "Sentir le dos travailler"],
       lv: 1,
-      tags: ["dos", "compose", "biceps", "machine"]
+      tags: ["dos", "compose", "biceps", "machine", "fondamental"]
     },
     {
       n: "Rowing haltère unilatéral",
@@ -557,19 +557,7 @@ var EXERCISES = {
     video: "https://www.youtube.com/watch?v=SbZycT7Eq58"
     }
 ,
-    {
-        n: "Meadow row",
-        m: "Grand dorsal / Rhomboïdes",
-        eq: "Barre olympique + landmine ou coin",
-        sets: "4×8-12",
-        rest: "90s",
-        video: "https://www.youtube.com/watch?v=g5Wlw-k8fek",
-        desc: "Barre au sol dans un landmine. Stance en fente, main côté arrière saisit l'extrémité en prise surélevée, tirer vers la hanche ipsilatérale en rotation légère du tronc.",
-        tips: ["La prise surélevée (neutral-overhand) permet une amplitude d'extension plus grande qu'un rowing haltère classique", "Tirer le coude haut et en arrière — rétraction scapulaire complète en fin de mouvement", "Le pied avant peut s'appuyer sur un support pour maintenir l'équilibre et isoler le dos", "Exercice favorisé par John Meadows pour le développement des épaisseurs dorsales latérales"],
-        lv: 2,
-        tags: ["dos", "unilateral", "compose", "hypertrophie"]
-    },
-    {
+        {
         n: "Chest supported row machine",
         m: "Grand dorsal / Rhomboïdes",
         eq: "Machine rowing pectoraux appuyés",
@@ -605,19 +593,7 @@ var EXERCISES = {
         lv: 2,
         tags: ["dos", "hypertrophie", "compose"]
     },
-    {
-        n: "Straight arm pulldown",
-        m: "Grand dorsal",
-        eq: "Poulie haute + barre droite ou corde",
-        sets: "3×12-15",
-        rest: "60s",
-        video: "https://www.youtube.com/watch?v=vc7ZBleFaCQ",
-        desc: "Debout face à la poulie haute, légère flexion vers l'avant. Bras quasi tendus, descendre la barre en arc jusqu'aux cuisses par extension pure de l'épaule.",
-        tips: ["Mouvement d'extension d'épaule pur — les coudes ne fléchissent pas, biceps neutralisés", "Le grand dorsal est en isolation maximale — excellent pour établir la connexion neuromusculaire", "Placer consciemment les omoplates en légère dépression avant de tirer — activer le serratuer", "Idéal en échauffement dorsal ou en finition pour le pump du grand dorsal"],
-        lv: 2,
-        tags: ["dos", "cable", "isolation", "finition"]
-    },
-    {
+        {
         n: "Rack pull",
         m: "Grand dorsal / Trapèze / Ischios-jambiers",
         eq: "Barre + rack + bumper plates",
@@ -627,19 +603,6 @@ var EXERCISES = {
         warn: "Dos PLAT impératif — même logique que le soulevé de terre. Déconseillé si hernie discale active. Ne pas dépasser la capacité de préhension sans sangles.",
         desc: "Barre posée dans le rack à hauteur de genou ou mi-cuisse. Soulever la barre jusqu'à l'extension complète des hanches, maintenir 1 seconde, reposer.",
         tips: ["La position de départ haute réduit l'amplitude et permet de soulever des charges 20-40% supérieures au deadlift complet", "Focus sur la rétraction scapulaire et l'extension thoracique — c'est ce qui protège le dos sous charge maximale", "Idéal pour développer la force de poigne, des trapèzes épais et la force de fin de mouvement du deadlift", "Progresser par petits incréments — le rack pull permet rapidement de dépasser ses maxima habituels"],
-        lv: 3,
-        tags: ["dos", "force", "compose"]
-    },
-    {
-        n: "Pendlay row strict",
-        m: "Grand dorsal / Rhomboïdes / Biceps",
-        eq: "Barre olympique",
-        sets: "4×5-8",
-        rest: "120s",
-        video: "https://www.youtube.com/watch?v=C_p-s66KBpg",
-        warn: "Contre-indiqué si lombalgie active ou hernie discale L4/L5 — la position horizontale stricte maintient une tension lombaire continue. Dos plat obligatoire.",
-        desc: "Barre au sol, torse horizontal et dos plat. Tirer la barre de manière explosive jusqu'au sternum, la reposer complètement au sol entre chaque rep (dead stop).",
-        tips: ["La pause complète au sol élimine le stretch-reflex — chaque répétition repart de zéro, force de démarrage pure", "Torse strictement horizontal (parallèle au sol) — différence clé avec le rowing barre classique", "Tirer vers le bas-sternum, coudes dans l'axe ou légèrement au-dessus du dos", "Phase concentrique explosive, phase excentrique contrôlée — ne pas laisser tomber la barre"],
         lv: 3,
         tags: ["dos", "force", "compose"]
     },
@@ -665,7 +628,7 @@ var EXERCISES = {
         desc: "Rowing haltère unilatéral avec charge très lourde et légère triche de hanche, visant une surcharge maximale du grand dorsal et des rhomboïdes.",
         tips: ["Utiliser une charge suffisamment lourde pour nécessiter une légère rotation du tronc — c'est intentionnel dans le Kroc row", "Saisir la barre de façon ferme, s'appuyer sur un banc ou un rack pour stabiliser l'épaule opposée", "Tirer le coude le plus haut possible — amplitude maximale pour recruter la totalité du grand dorsal", "Popularisé par Matt Kroczaleski — excellent pour développer la masse et la force du dos en plateau"],
         lv: 3,
-        tags: ["dos", "compose", "haltere", "masse", "force", "unilateral"]
+        tags: ["dos", "compose", "haltere", "masse", "unilateral"]
     },
     {
         n: "Single arm cable row",
@@ -693,7 +656,7 @@ var EXERCISES = {
         tags: ["dos", "compose", "trapèzes", "chaine-posterieure", "force", "powerlifting"]
     },
     // ─── SPRINT P3 #6 — Enrichissement biblio (+7 dos) ───
-    { n: "Rowing machine assise", m: "Dos / Rhomboïdes", eq: "Machine tirage horizontal", sets: "4×10-12", rest: "75s", video: "https://www.youtube.com/watch?v=vwHG9Jfu4sw", desc: "Machine de tirage horizontal assise. Tirer les poignées vers l'abdomen en rapprochant les omoplates.", tips: ["Buste droit sans balancement", "Coudes proches du corps", "Pause contractée 1s", "Ne pas laisser les épaules remonter"], lv: 1, tags: ["dos", "compose", "machine", "beginner-friendly"] },
+    { n: "Rowing machine assise", m: "Dos / Rhomboïdes", eq: "Machine tirage horizontal", sets: "4×10-12", rest: "75s", video: "https://www.youtube.com/watch?v=vwHG9Jfu4sw", desc: "Machine de tirage horizontal assise. Tirer les poignées vers l'abdomen en rapprochant les omoplates.", tips: ["Buste droit sans balancement", "Coudes proches du corps", "Pause contractée 1s", "Ne pas laisser les épaules remonter"], lv: 1, tags: ["dos", "compose", "machine", "beginner-friendly", "fondamental"] },
     { n: "Tirage bras tendus corde", m: "Grand dorsal / Triceps long", eq: "Poulie haute + corde", sets: "3×12-15", rest: "60s", video: "https://www.youtube.com/watch?v=qjBtTxkfZdg", desc: "Poulie haute, bras tendus, pousser la corde vers les cuisses en gardant les coudes verrouillés.", tips: ["Bras quasi tendus — légère flexion 10°", "Engage purement le grand dorsal (isolation)", "Buste légèrement incliné vers l'avant"], lv: 2, tags: ["dos", "cable", "isolation", "grand-dorsal"] },
     { n: "Meadows row", m: "Dos / Épaules postérieures", eq: "Barre landmine", sets: "4×8-10 par côté", rest: "90s", video: "https://www.youtube.com/watch?v=g5Wlw-k8fek", desc: "Rowing unilatéral landmine popularisé par John Meadows. Prise pronation, travail postérieur + rhomboïdes.", tips: ["Pied avant côté opposé au bras de travail", "Tirer vers la hanche côté travail", "ROM large, squeeze 1s"], lv: 3, tags: ["dos", "compose", "landmine", "unilateral"] },
     { n: "Rowing banc incliné haltères", m: "Dos / Rhomboïdes", eq: "Banc incliné + 2 haltères", sets: "4×10-12", rest: "75s", video: "https://www.youtube.com/watch?v=_b6ch2nIchk", desc: "Chest-supported row : torse contre banc incliné 30-45°, tire les haltères vers les hanches. Zéro triche lombaire.", tips: ["Front contre le banc", "Coudes tirent derrière", "Squeeze omoplates 1s", "Idéal anti-triche lombaire"], lv: 1, tags: ["dos", "compose", "halteres", "banc-incline", "beginner-friendly"] },
@@ -703,7 +666,7 @@ var EXERCISES = {
     // IZjW_8R9UYE. Les deux variantes (4×4-6 force vs 4×5-8) sont couvertes par l'entrée conservée.
     { n: "Rowing inversé TRX/anneaux", m: "Dos / Biceps / Rhomboïdes", eq: "TRX ou anneaux", sets: "4×8-15", rest: "75s", video: "https://www.youtube.com/watch?v=iT_oaf3k0Xw", desc: "Corps sous les poignées, tirer la poitrine vers les mains. Progression tractions pour débutants.", tips: ["Plus horizontal = plus dur", "Corps aligné planche", "Squeeze omoplates en haut"], lv: 1, tags: ["dos", "compose", "poids du corps", "trx", "beginner-friendly", "home"] },
     // FIX 2026-04-16 — Good Morning déplacé depuis legs (c'est un exercice chaîne postérieure/dos, pas jambes)
-    { n: "Good morning", m: "Postérieurs / Lombaires / Fessiers", eq: "Barre", sets: "3×8-12", rest: "120s", video: "https://www.youtube.com/watch?v=f23vXjoG2e8", warn: "CONTRE-INDIQUÉ hernie discale, lombalgie chronique, ostéoporose. Exécution stricte indispensable.", desc: "Hip hinge avec barre haute trapèzes. Recrute lombaires + ischios + fessiers. Charge légère obligatoire.", tips: ["Barre légère (40-60% squat)", "Hip hinge pur (genoux peu fléchis)", "Dos absolument plat", "Stop si douleur lombaire"], lv: 3, tags: ["dos", "fessiers", "ischios", "compose", "force"] }
+    { n: "Good morning", m: "Postérieurs / Lombaires / Fessiers", eq: "Barre", sets: "3×8-12", rest: "120s", video: "https://www.youtube.com/watch?v=f23vXjoG2e8", warn: "CONTRE-INDIQUÉ hernie discale, lombalgie chronique, ostéoporose. Exécution stricte indispensable.", desc: "Hip hinge avec barre haute trapèzes. Recrute lombaires + ischios + fessiers. Charge légère obligatoire.", tips: ["Barre légère (40-60% squat)", "Hip hinge pur (genoux peu fléchis)", "Dos absolument plat", "Stop si douleur lombaire"], lv: 3, tags: ["dos", "fessiers", "ischios", "compose", "accessoire"] }
   ],
 
   // ─── EPAULES ───
@@ -830,7 +793,7 @@ var EXERCISES = {
       desc: "À la poulie, tirer la corde vers le visage, coudes hauts, rotation externe.",
       tips: ["Rotation externe en fin de mouvement", "Coudes au niveau des oreilles", "Excellent pour la santé des épaules"],
       lv: 1,
-      tags: ["epaules", "posture", "prevention"]
+      tags: ["epaules", "posture", "prevention", "isolation"]
     },
     {
       n: "Arnold press",
@@ -890,7 +853,7 @@ var EXERCISES = {
       desc: "Buste penche à 90 degrés, bras pendants, lever les haltères sur les cotes.",
       tips: ["Légère flexion des coudes", "Pointer les coudes vers le plafond", "Deltoïde postérieur  très souvent neglige"],
       lv: 2,
-      tags: ["epaules", "deltoides-posterieurs", "posture"],
+      tags: ["epaules", "deltoides-posterieurs", "posture", "isolation"],
     video: "https://www.youtube.com/watch?v=H9QQdMz2syA"
     },
     {
@@ -998,7 +961,7 @@ var EXERCISES = {
       desc: "Élastique ancré en hauteur, tirer les poignées vers le visage en écartant les coudes, en rotation externe des épaules.",
       tips: ["Tirer vers le nez/front, coudes hauts et écartés", "Rotation externe maximale en fin de mouvement", "Garder les omoplates rétractées", "Excellente prévention de l'instabilité d'épaule"],
       lv: 1,
-      tags: ["epaules", "deltoïdes postérieurs", "trapèzes", "prehab", "prevention", "débutant"]
+      tags: ["epaules", "deltoïdes postérieurs", "trapèzes", "prehab", "prevention", "débutant", "isolation"]
     },
     {
         n: "Leaning lateral raise",
@@ -1050,8 +1013,8 @@ var EXERCISES = {
     },
     // ─── FIX P0 2026-04-16 — Exos épaules déplacés depuis triceps (étaient mal catégorisés) ───
     { n: "Élévations latérales câble bras croisé", m: "Deltoïde moyen", eq: "Poulie basse", sets: "3×12-15 par côté", rest: "60s", video: "https://www.youtube.com/watch?v=Xk38B4zSu4Y", desc: "Poulie basse, câble passe devant le corps. Tension constante contre le deltoïde moyen.", tips: ["Bras opposé à la poulie", "Légère flexion coude", "Ne pas swinguer"], lv: 2, tags: ["epaules", "deltoide-moyen", "cable", "isolation"] },
-    { n: "Oiseau poulie haute (rear delt fly)", m: "Deltoïde postérieur", eq: "Poulie haute double", sets: "3×12-15", rest: "60s", video: "https://www.youtube.com/watch?v=pUB0-5KvcyI", desc: "Bras croisés en haut, écartement en tirage pour cibler l'arrière-épaule. Alternative supérieure au reverse fly.", tips: ["Coudes légèrement fléchis", "Tirer dans le plan scapulaire", "Squeeze omoplates 1s"], lv: 1, tags: ["epaules", "deltoide-posterieur", "cable"] },
-    { n: "Face pull corde inclinaison haute", m: "Deltoïde postérieur / Trapèzes moyens", eq: "Poulie haute + corde", sets: "4×15-20", rest: "45s", video: "https://www.youtube.com/watch?v=uqz1qBQ4q9E", desc: "Corde à hauteur front, tirer vers le visage avec rotation externe. Essentiel santé scapulaire.", tips: ["Coudes hauts au-dessus des mains", "Rotation externe au point final", "Squeeze 1s", "Idéal deload/échauffement"], lv: 1, tags: ["epaules", "prehab", "deltoide-posterieur", "cable"] },
+    { n: "Oiseau poulie haute (rear delt fly)", m: "Deltoïde postérieur", eq: "Poulie haute double", sets: "3×12-15", rest: "60s", video: "https://www.youtube.com/watch?v=pUB0-5KvcyI", desc: "Bras croisés en haut, écartement en tirage pour cibler l'arrière-épaule. Alternative supérieure au reverse fly.", tips: ["Coudes légèrement fléchis", "Tirer dans le plan scapulaire", "Squeeze omoplates 1s"], lv: 1, tags: ["epaules", "deltoide-posterieur", "cable", "isolation"] },
+    { n: "Face pull corde inclinaison haute", m: "Deltoïde postérieur / Trapèzes moyens", eq: "Poulie haute + corde", sets: "4×15-20", rest: "45s", video: "https://www.youtube.com/watch?v=uqz1qBQ4q9E", desc: "Corde à hauteur front, tirer vers le visage avec rotation externe. Essentiel santé scapulaire.", tips: ["Coudes hauts au-dessus des mains", "Rotation externe au point final", "Squeeze 1s", "Idéal deload/échauffement"], lv: 1, tags: ["epaules", "prehab", "deltoide-posterieur", "cable", "isolation"] },
     { n: "Z-press", m: "Deltoïdes / Core", eq: "Haltères ou barre + sol", sets: "3×6-10", rest: "90s", video: "https://www.youtube.com/watch?v=MaCwCxWoZ8Y", desc: "Développé épaules assis au sol, jambes tendues devant. Zéro triche de lombaires — gainage forcé.", tips: ["Assise bien droite", "Jambes tendues sur le sol", "Core activé", "Charges plus légères que seated press"], lv: 3, tags: ["epaules", "compose", "core", "gainage"] },
     { n: "Landmine press unilatéral", m: "Deltoïdes / Pectoraux sup", eq: "Barre landmine", sets: "3×8-10 par côté", rest: "90s", video: "https://www.youtube.com/watch?v=qPxvgth0dQQ", desc: "Pressing diagonal d'une barre landmine — trajectoire épaule-friendly (semi-horizontal).", tips: ["Pieds décalés opposés au bras", "Trajectoire diagonale naturelle", "Bon pour épaules sensibles"], lv: 2, tags: ["epaules", "compose", "landmine", "unilateral"] }
   ],
@@ -1189,19 +1152,7 @@ var EXERCISES = {
       lv: 1,
       tags: ["biceps", "élastique", "isolation", "débutant", "beginner-friendly"]
     },
-    {
-      n: "Curl incline halteres",
-      m: "Biceps (chef long)",
-      eq: "Haltères + banc incliné",
-      sets: "3\u00d710-12",
-      rest: "75s",
-      desc: "Allongé sur banc incliné à 60 degrés, bras pendant dans le vide. Curler les haltères.",
-      tips: ["Étirement maximal du chef long", "Ne pas balancer les bras", "Tension des le départ de l'étirement"],
-      lv: 2,
-      tags: ["biceps", "isolation", "chef-long", "etirement"],
-    video: "https://www.youtube.com/watch?v=DCe8f6vMe9A"
-    },
-    {
+        {
       n: "Curl marteau câble",
       m: "Brachial / Brachio-radial",
       eq: "Câble poulie basse + corde",
@@ -1288,14 +1239,12 @@ var EXERCISES = {
     // ─── FIX P0 2026-04-16 — Exos biceps déplacés depuis triceps (étaient mal catégorisés) ───
     { n: "Curl haltères incliné", m: "Biceps long", eq: "Haltères + banc incliné", sets: "4×10-12", rest: "75s", video: "https://www.youtube.com/watch?v=HhHHBj3qTJ4", desc: "Banc incliné 45°, bras pendants derrière le corps. Étirement maximal du chef long du biceps.", tips: ["Laisse bras bien pendants", "Coudes fixes ne dérivent pas devant", "Supination complète en haut"], lv: 1, tags: ["bras", "isolation", "biceps-long", "halteres", "stretch"] },
     { n: "Preacher curl", m: "Biceps court", eq: "Banc preacher + barre EZ", sets: "3×8-12", rest: "75s", video: "https://www.youtube.com/watch?v=VUxZuml-jNE", desc: "Curl barre EZ sur banc preacher — bras bloqués sur le coussinet, cible pic biceps.", tips: ["Descente contrôlée 3s", "Ne pas verrouiller coude en bas", "Coudes stables sur banc"], lv: 1, tags: ["bras", "isolation", "biceps-court", "banc-preacher"] },
-    { n: "Spider curl", m: "Biceps", eq: "Banc incliné (face contre dossier) + haltères", sets: "3×10-12", rest: "60s", video: "https://www.youtube.com/watch?v=w5xTuSvjVG0", desc: "Torse contre banc incliné face au dossier, bras pendants verticalement — isole parfaitement le biceps.", tips: ["Bras complètement pendants", "Concentration pic du biceps", "Supination forte"], lv: 2, tags: ["bras", "biceps", "halteres", "isolation"] },
     // ─── Enrichissement biceps ───
     { n: "Curl concentration", m: "Pic du biceps", eq: "Haltère", sets: "3×12-15 par bras", rest: "45s", video: "", desc: "Assis, coude contre l'intérieur de la cuisse. Curl lent et contrôlé — isolation maximale du pic du biceps.", tips: ["Coude appuyé fermement sur la cuisse", "Supination complète en haut", "Contraction tenue 1s"], lv: 1, tags: ["bras", "isolation", "biceps", "haltere", "pic"] },
     { n: "Curl câble barre droite", m: "Biceps", eq: "Câble poulie basse", sets: "3×12-15", rest: "60s", video: "", desc: "Barre droite ou EZ sur poulie basse. Tension constante sur toute l'amplitude — avantage mécanique supérieur aux haltères.", tips: ["Tension constante en bas", "Coudes fixes", "Contrôler la descente 2-3s"], lv: 1, tags: ["bras", "isolation", "biceps", "cable", "tension-constante"] },
     { n: "Curl inversé barre", m: "Brachioradial / Avant-bras", eq: "Barre ou haltères", sets: "3×10-12", rest: "60s", video: "", desc: "Curl en prise pronation (paumes vers le bas). Cible le brachioradial et les extenseurs de l'avant-bras.", tips: ["Prise légèrement plus large que les épaules", "Coudes fixes", "Poignets droits"], lv: 2, tags: ["bras", "avant-bras", "brachioradial", "prise-pronation"] },
     { n: "Chin-up (traction supination)", m: "Biceps / Dos", eq: "Barre de traction", sets: "4×AMRAP", rest: "120s", video: "", desc: "Traction prise supination (paumes vers soi) — recrute fortement les biceps en plus des lats.", tips: ["Prise plus étroite que les épaules", "Tirer les coudes vers les hanches", "Amplitude complète"], lv: 2, tags: ["bras", "compose", "biceps", "dos", "poids-du-corps", "compound"] },
-    { n: "Curl haltère cross-body", m: "Brachial / Biceps", eq: "Haltères", sets: "3×12 par bras", rest: "45s", video: "", desc: "Curl haltère en diagonale vers l'épaule opposée — prise neutre, cible le brachial sous le biceps.", tips: ["Amener l'haltère vers l'épaule opposée", "Coude reste au corps", "Moins de supination que le curl classique"], lv: 1, tags: ["bras", "brachial", "halteres"] },
-    { n: "21s curl barre", m: "Biceps (3 zones)", eq: "Barre ou haltères", sets: "3 séries de 21", rest: "90s", video: "", desc: "7 reps demi-bas (0°→90°), 7 reps demi-haut (90°→180°), 7 reps amplitude complète. Épuisement complet du biceps.", tips: ["7+7+7 sans pause entre les phases", "Charge légère (-30% habituel)", "Ne verrouille pas les coudes en bas"], lv: 2, tags: ["bras", "biceps", "technique-avancee", "pump"] }
+    { n: "Curl haltère cross-body", m: "Brachial / Biceps", eq: "Haltères", sets: "3×12 par bras", rest: "45s", video: "", desc: "Curl haltère en diagonale vers l'épaule opposée — prise neutre, cible le brachial sous le biceps.", tips: ["Amener l'haltère vers l'épaule opposée", "Coude reste au corps", "Moins de supination que le curl classique"], lv: 1, tags: ["bras", "brachial", "halteres"] }
   ],
 
   // ─── TRICEPS ───
@@ -1443,18 +1392,6 @@ var EXERCISES = {
     video: "https://www.youtube.com/watch?v=chga5H9EPe0"
     },
     {
-      n: "Barre au front skullcrusher",
-      m: "Triceps (chefs lateral et medial)",
-      eq: "Barre EZ + banc",
-      sets: "4\u00d710-12",
-      rest: "75s",
-      desc: "Allongé, descendre la barre vers le front en pliant les coudes.",
-      tips: ["Descendre jusqu'au front ou derrière la tête pour plus de stretch", "Coudes vers l'interieur", "Ne pas verrouiller complètement"],
-      lv: 3,
-      tags: ["triceps", "masse", "isolation"],
-    video: "https://www.youtube.com/watch?v=6XhWo0i3cdI"
-    },
-    {
         n: "Overhead tricep extension câble",
         m: "Triceps (longue portion)",
         eq: "Câble poulie haute + corde",
@@ -1530,7 +1467,6 @@ var EXERCISES = {
     // ─── SPRINT P3 #6 — Enrichissement triceps ───
     { n: "Extension triceps haltère unilatéral overhead", m: "Triceps long", eq: "1 haltère", sets: "3×10-12 par côté", rest: "60s", video: "https://www.youtube.com/watch?v=2jl4M0Dnq4c", desc: "Haltère au-dessus de la tête tenu à une main, flexion-extension. Stretch profond du triceps long.", tips: ["Coude près de l'oreille", "Bras fixe", "Étirement max en bas"], lv: 1, tags: ["bras", "isolation", "triceps-long", "halteres", "stretch"] },
     { n: "Skull crusher barre EZ", m: "Triceps longs", eq: "Barre EZ + banc", sets: "4×10-12", rest: "75s", video: "", desc: "Couché, barre EZ vers le front en pliant uniquement les coudes. Stretch profond du triceps long.", tips: ["Coudes fixés au plafond", "Descente jusqu'à 1cm du front", "Extension explosive", "Ne pas verrouiller en haut"], lv: 2, tags: ["bras", "isolation", "triceps-long", "barre-ez", "stretch"] },
-    { n: "Dips lesté (barres parallèles)", m: "Triceps / Pectoraux bas", eq: "Barres parallèles + ceinture lestée", sets: "4×8-12", rest: "90s", video: "", desc: "Dips aux barres parallèles avec lest supplémentaire. Exercice roi du triceps.", tips: ["Légère inclinaison avant = + pectoraux", "Vertical = + triceps", "Descente jusqu'à 90° coudes", "Ceinture lestée pour progression"], lv: 2, tags: ["bras", "triceps", "poids-du-corps", "compose", "lest"] },
     { n: "Rolling extension haltères", m: "Triceps longs", eq: "Haltères + banc", sets: "3×10-12", rest: "60s", video: "", desc: "Extension haltères au-dessus de la tête combinée à un léger rowing : haltères vers les épaules puis extension vers le plafond.", tips: ["Fluidité du mouvement", "Étirement maximal en bas", "Coudes proches des oreilles"], lv: 2, tags: ["bras", "triceps-long", "halteres", "stretch"] },
     { n: "Pushdown barre droite", m: "Triceps (chefs latéral + médial)", eq: "Câble poulie haute", sets: "3×12-15", rest: "60s", video: "", desc: "Poulie haute, barre droite, coudes collés au corps. Pousser vers le bas en extension complète — exercise classique de finition.", tips: ["Coudes fixes au corps tout au long", "Extension complète avec serrage 1s", "Ne pas balancer le buste"], lv: 1, tags: ["bras", "isolation", "triceps", "cable", "finisher"] }
   ],
@@ -1602,6 +1538,7 @@ var EXERCISES = {
       eq: "Barre + rack",
       sets: "4×6-10",
       rest: "150s",
+      lv: 3,
       video: "https://www.youtube.com/watch?v=v-mQm_droHg",
       desc: "Squat barre devant — barre sur les épaules en rack position. Pression antérieure = recrutement quad max + dos plus droit.",
       tips: ["Coudes hauts (barre stable)", "Buste vertical au max", "Descente contrôlée 2-3s", "Talon ancré", "Cible quad et tronc anti-flexion"],
@@ -1655,7 +1592,7 @@ var EXERCISES = {
       desc: "Assis à la presse, pousser la plateforme avec les pieds.",
       tips: ["Pieds à largeur d'épaules", "Ne pas verrouiller les genoux", "Descendre à 90 degrés"],
       lv: 1,
-      tags: ["jambes", "compose", "fessiers", "machine"]
+      tags: ["jambes", "compose", "fessiers", "machine"], f: "leg-press"
     },
     {
       n: "Fentes avant",
@@ -1765,22 +1702,10 @@ var EXERCISES = {
       desc: "Pieds hauts sur la plateforme, descendre profondément. Variation fessier/ischios.",
       tips: ["Pieds à mi-hauteur de la plateforme", "Descente profonde", "Genoux dans l'axe des orteils"],
       lv: 1,
-      tags: ["jambes", "compose", "fessiers", "ischios", "machine"],
+      tags: ["jambes", "compose", "fessiers", "ischios", "machine"], f: "leg-press",
     video: "https://www.youtube.com/watch?v=slFRFu4Dkag"
     },
-    {
-      n: "Step-up halteres",
-      m: "Quadriceps / Fessiers",
-      eq: "Haltères + banc/step",
-      sets: "3\u00d710-12 par jambe",
-      rest: "60s",
-      desc: "Monter sur le banc avec une jambe, amener l'autre genou en haut.",
-      tips: ["Pousser depuis le talon de la jambe qui monte", "Contrôler la descente", "Excellent pour équilibre et genoux"],
-      lv: 2,
-      tags: ["jambes", "compose", "fessiers", "unilateral", "fonctionnel"],
-    video: "https://www.youtube.com/watch?v=aKj-6hgiViA"
-    },
-    {
+        {
       n: "Sissy squat",
       m: "Quadriceps (isolation)",
       eq: "Poids du corps (support)",
@@ -1842,7 +1767,7 @@ var EXERCISES = {
         desc: "Leg press avec les pieds rapprochés et centrés bas sur la plateforme pour cibler le vaste interne et externe du quadriceps.",
         tips: ["Placer les pieds à largeur de hanches ou plus étroit, bas sur la plateforme", "Les orteils légèrement tournés vers l'extérieur (15-20°) pour protéger les genoux", "Descendre jusqu'à 90° de flexion sans décoller le dos du dossier", "Expirer et pousser fort en contractant le quadriceps en haut du mouvement"],
         lv: 1,
-        tags: ["quadriceps", "compose", "machine"]
+        tags: ["quadriceps", "compose", "machine"], f: "leg-press"
     },
     {
         n: "Leg press unilatéral",
@@ -1854,7 +1779,7 @@ var EXERCISES = {
         desc: "Leg press exécuté une jambe à la fois pour corriger les déséquilibres de force gauche/droite et renforcer la stabilité.",
         tips: ["Réduire la charge à 50-60% de la charge bilatérale habituelle", "Placer le pied au centre de la plateforme, aligné avec la hanche", "Garder la jambe inactive détendue hors de la plateforme sans appuyer dessus", "Compléter toutes les répétitions d'un côté avant de changer — noter l'écart de force entre les deux jambes"],
         lv: 2,
-        tags: ["quadriceps", "compose", "fessiers", "machine", "unilateral", "prevention"]
+        tags: ["quadriceps", "compose", "fessiers", "machine", "unilateral", "prevention"], f: "leg-press"
     },
     {
         n: "Squat Cossaque",
@@ -1881,19 +1806,7 @@ var EXERCISES = {
         lv: 3,
         tags: ["quadriceps", "excentrique", "prehab", "prevention", "poids du corps"]
     },
-    {
-        n: "Pendulum squat machine",
-        m: "Quadriceps",
-        eq: "Machine pendulum squat",
-        sets: "4×10-15",
-        rest: "90s",
-        video: "https://www.youtube.com/watch?v=QCLWnLNM35U",
-        desc: "Squat sur machine à pendule offrant une charge axiale quasi nulle sur la colonne, idéal pour cibler les quadriceps sans stress lombaire.",
-        tips: ["Positionner les épaules bien calées sous les épaulières, dos droit contre le dossier", "Placer les pieds légèrement en avant du centre de la plateforme pour maximiser le travail des quadriceps", "Descendre jusqu'à ce que les cuisses soient parallèles ou en dessous", "Pousser à travers tout le pied en remontant — ne pas décoller les talons"],
-        lv: 2,
-        tags: ["quadriceps", "machine", "prevention"]
-    },
-    {
+        {
         n: "Tibial raise",
         m: "Tibialis anterior",
         eq: "Poids du corps ou lest",
@@ -1951,7 +1864,7 @@ var EXERCISES = {
         desc: "Leg press avec les pieds placés bas et centrés sur la plateforme, ciblant spécifiquement les quadriceps en réduisant l'activation des fessiers et des ischios.",
         tips: ["Pieds centrés bas sur la plateforme — genoux descendent davantage et le genou dépasse plus les orteils", "Plus de flexion du genou en bas du mouvement = plus de quadriceps, moins de fessiers vs pieds hauts", "Amplitude complète si les genoux le permettent — sinon limiter selon le confort articulaire", "Variation essentielle pour cibler les quadriceps sans avoir à faire de hack squat"],
         lv: 1,
-        tags: ["quadriceps", "compose", "machine"]
+        tags: ["quadriceps", "compose", "machine"], f: "leg-press"
     },
     {
         n: "Seated calf raise",
@@ -2111,32 +2024,7 @@ var EXERCISES = {
       lv: 1,
       tags: ["fessiers", "isolation", "moyen fessier", "machine"]
     },
-    {
-      n: "Soulevé de terre roumain",
-      m: "Fessiers / Ischio-jambiers",
-      eq: "Barre ou halteres",
-      sets: "4\u00d78-12",
-      rest: "90s",
-      video: "https://www.youtube.com/watch?v=_oyxCn2iSjU",
-      warn: "Contre-indiqué si hernie discale L4/L5 ou L5/S1 — descente sous charge = compression posterolaterale du disque",
-      desc: "Debout, descendre la barre le long des cuisses en poussant les hanches en arrière.",
-      tips: ["Jambes quasi tendues", "Dos PLAT en permanence — ne jamais arrondir le lombaire", "Sentir l'étirement des ischio-jambiers", "Amplitude limitée : arreter quand le dos commence a s'arrondir"],
-      lv: 3,
-      tags: ["fessiers", "compose", "force", "ischio-jambiers", "chaine posterieure"]
-    },
-    {
-      n: "Hip thrust barre",
-      m: "Grand fessier",
-      eq: "Barre + banc",
-      sets: "4\u00d710-15",
-      rest: "90s",
-      desc: "Épaules sur le banc, barre sur les hanches, pousser vers le haut en contractant les fessiers.",
-      tips: ["L'exercice ROI pour les fessiers (EMG le plus eleve)", "Menton vers la poitrine — ne pas hyperetendre le cou", "Pause 2 secondes en haut"],
-      lv: 2,
-      tags: ["fessiers", "force", "compose", "roi-fessiers"],
-    video: "https://www.youtube.com/watch?v=lBZZFJ6Z3Dg"
-    },
-    {
+        {
       n: "Hip thrust unilatéral léger",
       m: "Grand fessier (unilateral)",
       eq: "Haltere ou barre + banc",
@@ -2160,19 +2048,7 @@ var EXERCISES = {
       tags: ["fessiers", "isolation", "cable", "finition"],
     video: "https://www.youtube.com/watch?v=5jJNfIlKTmg"
     },
-    {
-      n: "Sumo squat haltere",
-      m: "Fessiers / Adducteurs",
-      eq: "Haltere",
-      sets: "3\u00d712-15",
-      rest: "60s",
-      desc: "Pieds largement écartés, pointes vers l'extérieur, haltère entre les jambes.",
-      tips: ["Descendre profond entre les jambes", "Ciblage adducteurs et fessiers moyens", "Excellent pour les femmes"],
-      lv: 1,
-      tags: ["fessiers", "compose", "adducteurs", "débutant"],
-    video: "https://www.youtube.com/watch?v=Sq88Uw0roVU"
-    },
-    {
+        {
       n: "Fentes latérales",
       m: "Fessiers / Adducteurs",
       eq: "Haltères ou poids du corps",
@@ -2269,19 +2145,6 @@ var EXERCISES = {
         tips: ["Placer l'élastique autour des chevilles ou des genoux, se tenir sur une jambe d'appui", "Soulever la jambe libre sur le côté en maintenant le tronc droit — ne pas incliner le buste", "Contrôler le retour à la position initiale sans laisser l'élastique ramener brusquement la jambe", "Pour progresser, augmenter la résistance de l'élastique ou éloigner la jambe de 30 à 45°"],
         lv: 1,
         tags: ["fessiers", "poids du corps", "prehab", "prevention", "unilateral"]
-    },
-    {
-        n: "Nordic hamstring curl",
-        m: "Ischio-jambiers (excentrique)",
-        eq: "Partenaire ou fixation chevilles",
-        sets: "3×4-8",
-        rest: "120s",
-        video: "https://www.youtube.com/watch?v=F-AaE8mw_pY",
-        warn: "Exercice excentrique intense — risque de courbatures sévères les 2-3 premiers jours. Progresser très lentement. Déconseillé si ischio-jambier lésé récent.",
-        desc: "Agenouillé, chevilles bloquées, descendre le buste vers le sol en résistant avec les ischios (phase excentrique), se laisser tomber et remonter avec les bras.",
-        tips: ["Descendre le plus lentement possible (3-5 secondes) — la phase excentrique est l'objectif principal", "Utiliser les bras pour se pousser légèrement au sol en bas puis contrôler la remontée", "Commencer par des demi-descentes (45°) — progression vers la descente complète sur 4-6 semaines", "Réf : Petersen et al., AJSM 2011 — réduit l'incidence des blessures aux ischios de 51% chez les footballeurs"],
-        lv: 3,
-        tags: ["ischios", "excentrique", "prehab", "prevention", "poids du corps"]
     },
     {
         n: "Glute ham raise (GHR)",
@@ -2773,7 +2636,6 @@ var EXERCISES = {
     { n: "HIIT vélo stationnaire", m: "Cardio / Jambes", eq: "Velo d'assault ou velo stationnaire", sets: "8×20s sprint / 40s récup", rest: "2 min après le dernier", video: "", desc: "Protocole Tabata ou similaire sur vélo. 20s effort maximal, 40s récupération active. Brûle graisses post-session.", tips: ["Sprint à 100% des capacités", "Résistance élevée pendant le sprint", "8 rounds minimum"], lv: 2, tags: ["cardio", "hiit", "tabata", "jambes"] },
     { n: "Battle ropes (ondes)", m: "Épaules / Cardio / Bras", eq: "Battle ropes", sets: "8×30s", rest: "30s", video: "", desc: "Ondes alternées ou simultanées avec les cordes. Cardio + force-endurance épaules et bras.", tips: ["Genoux fléchis, ancrage au sol", "Ondes les plus grandes possible", "Alterne ondes alternées et simultanées"], lv: 1, tags: ["cardio", "hiit", "epaules", "endurance-musculaire"] },
     { n: "Sled push (poussée traîneau)", m: "Quadriceps / Fessiers / Cardio", eq: "Machine ou marche", sets: "6×20m", rest: "90s", video: "", desc: "Pousser un traîneau chargé sur 20m. Conditionnement des jambes et cardio sans stress lombaire.", tips: ["Angle du corps ~45°", "Pas courts et rapides", "Charge légère pour vitesse, lourde pour force"], lv: 2, tags: ["cardio", "jambes", "fessiers", "fonctionnel", "crossfit"] },
-    { n: "Marche rapide inclinée (treadmill)", m: "Cardio / Fessiers / Mollets", eq: "Tapis de course", sets: "30-60 min à 12-15% pente", rest: "N/A", video: "", desc: "Marche à 5-6 km/h, inclinaison 12-15% sur tapis. Zone cardio modérée + activation fessiers et mollets. Trend TikTok '12-3-30'.", tips: ["Pente élevée (12-15%)", "Vitesse marchée (pas courue)", "Ne pas s'appuyer sur les barres"], lv: 1, tags: ["cardio", "low-impact", "fessiers", "mollets", "zone2"] },
     { n: "Box step-up cardio", m: "Cardio / Jambes / Fessiers", eq: "Box ou banc", sets: "3×3 min continu", rest: "90s", video: "", desc: "Monter et descendre d'un box à rythme continu pour maintenir zone cardio. Accessible et efficace.", tips: ["Poser le pied entier sur le box", "Alterne les jambes de départ", "Cadence régulière 60-80 pas/min"], lv: 1, tags: ["cardio", "low-impact", "jambes", "fessiers", "accessible"] },
     { n: "Run fractionné (intervalles)", m: "Cardio / Endurance", eq: "Chaussures de running", sets: "6×400m ou 8×200m", rest: "90s entre les intervalles", video: "", desc: "Course à pied en intervalles courts à intensité élevée. Améliore VO2max et seuil lactique.", tips: ["Effort 80-90% de la VMA", "Récup trot lent entre les intervalles", "Préchauffage 10min obligatoire"], lv: 2, tags: ["cardio", "running", "fractionne", "vo2max", "endurance"] }
   ],
@@ -2950,9 +2812,9 @@ var EXERCISES = {
 
   // ─── MOLLETS ───
   calves: [
-    { n: "Calf raise debout (machine)", m: "Gastrocnémiens", eq: "Machine standing calf raise", sets: "4×12-15", rest: "60s", video: "", desc: "Machine debout, épaules sous les coussinets. Montée sur la pointe des pieds puis descente contrôlée en étirement.", tips: ["Amplitude complète — descendre sous la plateforme", "Pause 1s en haut (contraction max)", "Descente 2-3s (étirement)", "Ne pas rebondir"], lv: 1, tags: ["mollets", "gastrocnemiens", "machine"] },
-    { n: "Calf raise assis (machine)", m: "Soléaire", eq: "Machine seated calf raise", sets: "4×15-20", rest: "45s", video: "", desc: "Machine assise, genoux à 90°. Cible le soléaire (mollet profond) plutôt que les gastrocnémiens.", tips: ["Genoux à 90° isole le soléaire", "Reps plus élevées (15-20)", "Tempo contrôlé 2-0-2-1"], lv: 1, tags: ["mollets", "soleaire", "machine"] },
-    { n: "Calf raise debout barre", m: "Gastrocnémiens", eq: "Barre + rack", sets: "4×10-12", rest: "75s", video: "", desc: "Barre sur les trapèzes, pieds à largeur hanches. Montée sur pointes puis descente. Alternative home gym.", tips: ["Stabilité — possible contre un mur", "Amplitude complète", "Pointe des pieds droite"], lv: 2, tags: ["mollets", "gastrocnemiens", "barre", "isolation"] },
+    { n: "Calf raise debout (machine)", m: "Gastrocnémiens", eq: "Machine standing calf raise", sets: "4×12-15", rest: "60s", video: "", desc: "Machine debout, épaules sous les coussinets. Montée sur la pointe des pieds puis descente contrôlée en étirement.", tips: ["Amplitude complète — descendre sous la plateforme", "Pause 1s en haut (contraction max)", "Descente 2-3s (étirement)", "Ne pas rebondir"], lv: 1, tags: ["mollets", "gastrocnemiens", "machine", "isolation"] },
+    { n: "Calf raise assis (machine)", m: "Soléaire", eq: "Machine seated calf raise", sets: "4×15-20", rest: "45s", video: "", desc: "Machine assise, genoux à 90°. Cible le soléaire (mollet profond) plutôt que les gastrocnémiens.", tips: ["Genoux à 90° isole le soléaire", "Reps plus élevées (15-20)", "Tempo contrôlé 2-0-2-1"], lv: 1, tags: ["mollets", "soleaire", "machine", "isolation"] },
+    { n: "Calf raise debout barre", m: "Gastrocnémiens", eq: "Barre + rack", sets: "4×10-12", rest: "75s", video: "", desc: "Barre sur les trapèzes, pieds à largeur hanches. Montée sur pointes puis descente. Alternative home gym.", tips: ["Stabilité — possible contre un mur", "Amplitude complète", "Pointe des pieds droite"], lv: 2, tags: ["mollets", "gastrocnemiens", "barre", "compose"] },
     { n: "Calf raise poids du corps", m: "Gastrocnémiens", eq: "Poids du corps", sets: "4×20-30", rest: "45s", video: "", desc: "Debout, monter sur la pointe des pieds sans équipement. Idéal en échauffement ou pour débutants.", tips: ["Amplitude maximale", "Sur une marche pour + de stretch", "Progression : volume puis unilatéral"], lv: 1, tags: ["mollets", "poids-du-corps", "home"] },
     { n: "Calf raise unilatéral (haltère)", m: "Gastrocnémiens", eq: "1 haltère", sets: "3×12-15 par jambe", rest: "60s", video: "", desc: "Sur une jambe, haltère du même côté, main libre pour équilibre. Charge + amplitude grâce au stretch unilatéral.", tips: ["Appui sur marche pour plus de stretch", "Main libre au mur pour équilibre", "Concentration sur une jambe à la fois"], lv: 2, tags: ["mollets", "unilateral", "haltere"] },
     { n: "Calf raise leg press", m: "Gastrocnémiens", eq: "Machine leg press", sets: "4×12-15", rest: "75s", video: "", desc: "Sur la presse, pieds en bas de la plateforme, talons débordant. Pousser avec la pointe des pieds uniquement.", tips: ["Talons débordent pour amplitude max", "Ne pas verrouiller les genoux", "Descente 2s, pause 1s en haut"], lv: 1, tags: ["mollets", "gastrocnemiens", "machine", "leg-press"] },
@@ -2969,8 +2831,8 @@ var EXERCISES = {
 
   // ─── TRAPÈZES ───
   traps: [
-    { n: "Shrug barre", m: "Trapèzes supérieurs", eq: "Barre", sets: "4×10-12", rest: "75s", video: "", desc: "Barre tenue à largeur épaules, hausser les épaules vers les oreilles sans bouger les bras. Classique pour l'épaisseur du cou.", tips: ["Ne pas rouler les épaules (rotation = blessure)", "Montée verticale pure", "Pause 1s en haut (contraction)", "Pas de rebond"], lv: 1, tags: ["trapezes", "trapezes-superieurs", "barre"] },
-    { n: "Shrug haltères", m: "Trapèzes supérieurs", eq: "Haltères", sets: "4×10-12", rest: "60s", video: "", desc: "2 haltères le long du corps, hausser les épaules verticalement. Amplitude supérieure à la barre grâce au mouvement libre.", tips: ["Bras complètement relâchés", "Montée verticale — pas en cercle", "Pause 1s en haut"], lv: 1, tags: ["trapezes", "trapezes-superieurs", "halteres"] },
+    { n: "Shrug barre", m: "Trapèzes supérieurs", eq: "Barre", sets: "4×10-12", rest: "75s", video: "", desc: "Barre tenue à largeur épaules, hausser les épaules vers les oreilles sans bouger les bras. Classique pour l'épaisseur du cou.", tips: ["Ne pas rouler les épaules (rotation = blessure)", "Montée verticale pure", "Pause 1s en haut (contraction)", "Pas de rebond"], lv: 1, tags: ["trapezes", "trapezes-superieurs", "barre", "isolation"] },
+    { n: "Shrug haltères", m: "Trapèzes supérieurs", eq: "Haltères", sets: "4×10-12", rest: "60s", video: "", desc: "2 haltères le long du corps, hausser les épaules verticalement. Amplitude supérieure à la barre grâce au mouvement libre.", tips: ["Bras complètement relâchés", "Montée verticale — pas en cercle", "Pause 1s en haut"], lv: 1, tags: ["trapezes", "trapezes-superieurs", "halteres", "isolation"] },
     { n: "Shrug haltères assis", m: "Trapèzes supérieurs", eq: "Haltères + banc", sets: "3×12-15", rest: "60s", video: "", desc: "Assis sur un banc, haltères le long du corps. Position assise empêche la compensation par les jambes.", tips: ["Dos droit contre dossier", "Isole les trapèzes (pas de triche)", "Charge plus légère qu'en debout"], lv: 1, tags: ["trapezes", "halteres", "isolation"] },
     { n: "Reverse pec deck (arrière-épaule)", m: "Trapèzes moyens / Deltoïdes postérieurs", eq: "Machine pec deck", sets: "3×12-15", rest: "60s", video: "", desc: "Machine pec deck en mode inversé (dos au coussinet). Cible les trapèzes moyens + arrière-épaules avec amplitude guidée.", tips: ["Dos plaqué au coussinet", "Coudes hauts, poignets neutres", "Contraction scapulaire 1s en fin"], lv: 1, tags: ["trapezes", "trapezes-moyens", "machine", "posture"] },
     { n: "Upright row barre", m: "Trapèzes supérieurs / Deltoïdes", eq: "Barre", sets: "3×10-12", rest: "75s", video: "", desc: "Barre tenue en pronation, tirer verticalement jusqu'aux clavicules en gardant les coudes hauts. Attention technique.", tips: ["Coudes au-dessus des poignets", "Prise pas trop serrée (largeur épaules)", "S'arrêter si douleur épaule", "Descente contrôlée"], lv: 2, tags: ["trapezes", "epaules", "barre", "technique-avancee"], warn: "Peut irriter les épaules — stopper si gêne à la coiffe des rotateurs" },

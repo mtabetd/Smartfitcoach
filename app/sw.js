@@ -23,6 +23,7 @@ const APP_SHELL = [
   './gate.js',
   './error-boundary.js',
   './tracker.js',
+  './muscu-engine.js',
   './bundle.js',
   './jspdf.umd.min.js',
   './chart.umd.min.js',
