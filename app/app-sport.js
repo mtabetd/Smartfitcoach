@@ -3075,6 +3075,7 @@ function getMixSessionsForType(type, days) {
  else if (t === 'crossfit')     source = CROSSFIT_MIX_SESSIONS;
  else if (t === 'calisthenics') source = CALISTHENICS_MIX_SESSIONS;
  else                           source = MUSCU_MIX_SESSIONS; // défaut safe
+ if (!source || !source.length) source = MUSCU_MIX_SESSIONS; // guard: source vide → fallback safe
  // Toujours retourner exactement "d" sessions (rotation si moins de sessions disponibles)
  var out = [];
  for (var i = 0; i < d; i++) out.push(source[i % source.length]);
@@ -3960,6 +3961,231 @@ function appendWellnessBanner(p) {
   }
 }
 
+function applyDeloadScaling(wod) {
+ var out = { name: wod.name, type: wod.type, notes: wod.notes };
+ out.movements = (wod.movements || []).map(function(m) {
+  var copy = {};
+  for (var k in m) copy[k] = m[k];
+  if (typeof m.reps === 'number') copy.reps = Math.max(1, Math.round(m.reps * 0.6));
+  return copy;
+ });
+ var t = wod.type || '';
+ t = t.replace(/(\bAMRAP\s+)(\d+)/, function(_, pre, n) { return pre + Math.max(1, Math.round(parseInt(n, 10) * 0.6)); });
+ t = t.replace(/(\bEMOM\s+)(\d+)/, function(_, pre, n) { return pre + Math.max(1, Math.round(parseInt(n, 10) * 0.6)); });
+ t = t.replace(/^(\d+)(\s+Rounds?\s+For Time)/i, function(_, n, suf) { return Math.max(1, Math.round(parseInt(n, 10) * 0.6)) + suf; });
+ t = t.replace(/\((\d+)\s+(rounds?\s+x)/i, function(_, n, suf) { return '(' + Math.max(1, Math.round(parseInt(n, 10) * 0.6)) + ' ' + suf; });
+ t = t.replace(/\(cap\s+(\d+)min\)/, function(_, n) { return '(cap ' + Math.max(1, Math.round(parseInt(n, 10) * 0.6)) + 'min)'; });
+ out.type = t;
+ return out;
+}
+
+// ─── DAILY INTENSITY ENGINE ───
+var CF_INTENSITY_FACTORS = { low: 0.8, moderate: 1.0, high: 1.3, very_high: 1.6 };
+
+function computeSessionIntensity(wod) {
+ if (!wod || !wod.type) return 'moderate';
+ var t = (wod.type || '').toLowerCase();
+
+ // Zone 2 / recovery keywords
+ if (/zone\s*2|recovery|z2|aerobic base/.test(t)) return 'low';
+
+ // AMRAP: > 20 min → moderate (sustained aerobic); ≤ 20 → high (glycolytic)
+ var amrapM = t.match(/amrap\s+(\d+)/);
+ if (amrapM) {
+  var amrapMins = parseInt(amrapM[1], 10);
+  return amrapMins > 20 ? 'moderate' : 'high';
+ }
+
+ // EMOM: heavy/strength keywords → high; standard interval → moderate
+ if (/emom/.test(t)) {
+  return /force|heavy|lourd/.test(t) ? 'high' : 'moderate';
+ }
+
+ // For Time with time cap — cap ≤ 12 min = sprint benchmark; ≤ 20 = high; > 20 = long chipper
+ var capM = t.match(/cap\s+(\d+)/);
+ if (capM) {
+  var cap = parseInt(capM[1], 10);
+  if (cap <= 12) return 'very_high';
+  if (cap <= 20) return 'high';
+  return 'moderate';
+ }
+
+ // N Rounds For Time: ≥ 10 rounds = high repeated effort
+ var roundsM = t.match(/^(\d+)\s+rounds?/i);
+ if (roundsM) {
+  return parseInt(roundsM[1], 10) >= 10 ? 'high' : 'moderate';
+ }
+
+ // Plain For Time (no cap = long chipper → moderate)
+ if (/for time/.test(t)) return 'moderate';
+
+ return 'moderate';
+}
+
+function computeAdvancedIntensity(wod, baseIntensity) {
+ try {
+  var LEVELS = ['low', 'moderate', 'high', 'very_high'];
+  var idx = LEVELS.indexOf(baseIntensity);
+  if (idx === -1) idx = 2; // unknown base → default to 'high' position
+
+  var movements = (wod && Array.isArray(wod.movements)) ? wod.movements : [];
+  if (!movements.length) return baseIntensity; // no movements → nothing to refine
+
+  var combined = ((wod && wod.type) || '') + ' ' + ((wod && wod.notes) || '');
+  combined = combined.toLowerCase();
+
+  // ─── Signal extraction ───
+  var totalReps       = 0;
+  var heavyBarbellN   = 0;
+  var gymnasticN      = 0;
+  var cardioN         = 0;
+  var lowSkillN       = 0;
+
+  var _HEAVY_LIFTS = /deadlift|clean|snatch|thruster|squat|jerk/;
+  var _LOW_SKILL   = /air squat|sit.?up|push.?up|jumping jack|mountain climber|lunge/;
+  var _CARDIO_NAME = /\b(row|run|bike|ski erg|double under|single under)\b/;
+
+  movements.forEach(function(m) {
+   if (typeof m.reps === 'number') totalReps += m.reps;
+   var mn = (m.name || '').toLowerCase();
+   if (m.weight) {
+    if (_HEAVY_LIFTS.test(mn)) heavyBarbellN++;
+   }
+   if (m.gymnastics) gymnasticN++;
+   if (m.special || _CARDIO_NAME.test(mn)) cardioN++;
+   if (_LOW_SKILL.test(mn)) lowSkillN++;
+  });
+
+  // Heavy barbell keywords in type/notes also count
+  if (/heavy|lourd|\d+%\s*(1rm|max)/.test(combined)) heavyBarbellN++;
+
+  // ─── Adjustment rules ───
+  var delta = 0;
+
+  if (totalReps > 300)    delta += 1; // very high volume
+  if (heavyBarbellN > 0)  delta += 1; // loaded barbell elevates CNS demand
+
+  // Pure cardio: every movement is cardio and no barbell/gymnastics
+  var isPureCardio = cardioN > 0 && cardioN === movements.length && !heavyBarbellN && !gymnasticN;
+  if (isPureCardio) delta -= 1;
+
+  // All movements are low-skill (calisthenics, no technique demand)
+  if (lowSkillN > 0 && lowSkillN === movements.length) delta -= 1;
+
+  idx = Math.max(0, Math.min(LEVELS.length - 1, idx + delta));
+  return LEVELS[idx];
+ } catch(e) {
+  return baseIntensity; // safe fallback — never breaks the caller
+ }
+}
+
+function computeFatigueFactor(durationMins) {
+ if (!durationMins || isNaN(durationMins)) return 0.9; // unknown duration → conservative default
+ if (durationMins <= 10) return 0.95; // short sprint — minimal fatigue decay
+ if (durationMins <= 20) return 0.90; // standard WOD — moderate decay
+ return 0.85;                          // long effort — significant output drop
+}
+
+function computeVolumeFactor(wod) {
+ if (!wod) return 1.0;
+ var t = (wod.type || '').toLowerCase();
+ var movements = Array.isArray(wod.movements) ? wod.movements : [];
+
+ var repSum = 0;
+ movements.forEach(function(m) {
+  if (typeof m.reps === 'number') repSum += m.reps;
+ });
+ if (!repSum) return 1.0; // no rep data → neutral factor
+
+ // Estimate total reps based on WOD format
+ var amrapM  = t.match(/amrap\s+(\d+)/);
+ var roundsM = t.match(/^(\d+)\s+rounds?/i);
+ var emomM   = t.match(/emom\s+(\d+)/);
+
+ if (amrapM) {
+  // 1 round ≈ 5 min is a conservative CrossFit estimate
+  repSum = repSum * Math.ceil(parseInt(amrapM[1], 10) / 5);
+ } else if (roundsM) {
+  repSum = repSum * parseInt(roundsM[1], 10);
+ } else if (emomM) {
+  // Active movements per cycle (exclude rest minutes)
+  var active = movements.filter(function(m) { return !/\brest\b/i.test(m.name || ''); }).length || 1;
+  repSum = repSum * Math.ceil(parseInt(emomM[1], 10) / active);
+ }
+ // For Time (plain chipper): repSum is already the total
+
+ // ─── FATIGUE CORRECTION ───
+ // Reuse parsed duration from WOD format; fall back to cap for For Time
+ var _capM  = t.match(/cap\s+(\d+)/);
+ var _fatDur = amrapM  ? parseInt(amrapM[1], 10)
+             : emomM   ? parseInt(emomM[1], 10)
+             : _capM   ? parseInt(_capM[1],  10)
+             : null;
+ var repSumAdjusted = Math.round(repSum * computeFatigueFactor(_fatDur));
+
+ if (repSumAdjusted < 50)  return 0.9; // low volume
+ if (repSumAdjusted > 200) return 1.2; // high volume
+ return 1.0;                            // normal
+}
+
+// ─── CROSSFIT REST FACTOR ───
+function _cfParseRestSeconds(text) {
+ // Returns array of every rest duration (in seconds) found in text.
+ // Caller takes max → strongest reduction.
+ var secs = [];
+ var t = (text || '').toLowerCase();
+ var m;
+
+ // "rest 2min" / "rest 2 min" / "repos 2min"
+ var reMinA = /(?:rest|repos)\s+(\d+)\s*min/g;
+ while ((m = reMinA.exec(t)) !== null) secs.push(parseInt(m[1], 10) * 60);
+ // "2min rest" / "2 min rest"
+ var reMinB = /(\d+)\s*min\s+rest/g;
+ while ((m = reMinB.exec(t)) !== null) secs.push(parseInt(m[1], 10) * 60);
+
+ // "rest 30s" / "rest 60 sec" / "rest 60 seconds" / "repos 30s"
+ // (?!\s*min) prevents matching the leading digit of "2min" patterns above
+ var reSecA = /(?:rest|repos)\s+(\d+)\s*s(?:ec(?:ond)?s?)?(?!\s*min)/g;
+ while ((m = reSecA.exec(t)) !== null) secs.push(parseInt(m[1], 10));
+ // "30s rest" / "90 sec rest"
+ var reSecB = /(\d+)\s*s(?:ec(?:ond)?s?)?\s+rest/g;
+ while ((m = reSecB.exec(t)) !== null) secs.push(parseInt(m[1], 10));
+
+ // "1:00 rest" / "1:30 rest"
+ var reColon = /(\d+):(\d{2})\s*rest/g;
+ while ((m = reColon.exec(t)) !== null) secs.push(parseInt(m[1], 10) * 60 + parseInt(m[2], 10));
+
+ return secs;
+}
+
+function computeCrossfitRestFactor(wod, typeString, movements) {
+ try {
+  var movs = Array.isArray(movements) ? movements : [];
+  var notes = (wod && wod.notes) ? (wod.notes + '') : '';
+
+  var hasRest = movs.some(function(m) { return /\brest\b/i.test(m.name || ''); })
+             || /\brest\b/i.test(typeString || '')
+             || /\brest\b/i.test(notes);
+  if (!hasRest) return 1.0;
+
+  // Aggregate all text sources for duration parsing
+  var allText = (typeString || '') + ' ' + notes + ' '
+   + movs.map(function(m) { return (m.name || '') + ' ' + (m.note || '') + ' ' + (m.notes || ''); }).join(' ');
+
+  var secs = _cfParseRestSeconds(allText);
+  if (!secs.length) return 0.9; // rest present but no parseable duration → EMOM slot fallback
+
+  var maxSecs = Math.max.apply(null, secs);
+  if (maxSecs >= 120) return 0.75;
+  if (maxSecs >= 90)  return 0.80;
+  if (maxSecs >= 60)  return 0.85;
+  if (maxSecs >= 30)  return 0.92;
+  return 0.9; // < 30s — treat as EMOM rest slot
+ } catch(e) {
+  return 0.9; // safe fallback — never crashes
+ }
+}
+
 // ─── STEP 6 (CrossFit): PROGRAMME CF ───
 function renderCrossfitProgram(p) {
  // Guard: ensure cfProgress is always an object (safe for null/undefined from storage)
@@ -3990,6 +4216,23 @@ function renderCrossfitProgram(p) {
  // Bridge nutrition — une fois par semaine (guard anti-double-render)
  if (S._cfLastNotifiedWeek !== S.crossfitWeek) {
   S._cfLastNotifiedWeek = S.crossfitWeek;
+  // ─── DAILY INTENSITY ENGINE: compute before bridge call ───
+  var _cfDayWod     = weekProgram[S.selectedCrossfitDay || 0];
+  var _cfInnerWod   = _cfDayWod && _cfDayWod.wod ? _cfDayWod.wod.wod : null;
+  var _cfIntensity  = computeSessionIntensity(_cfInnerWod);
+  var _cfDurBase    = { scaled: 60, inter: 65, rx: 75, rx_plus: 90 };
+  var _cfTypeStr    = _cfInnerWod ? (_cfInnerWod.type || '').toLowerCase() : '';
+  var _cfDurMatch   = _cfTypeStr.match(/amrap\s+(\d+)|emom\s+(\d+)|cap\s+(\d+)/);
+  var _cfDurMins    = _cfDurMatch
+   ? parseInt(_cfDurMatch[1] || _cfDurMatch[2] || _cfDurMatch[3], 10)
+   : (_cfDurBase[S.crossfitLevel] || 75);
+  var _cfFinalIntensity  = computeAdvancedIntensity(_cfInnerWod, _cfIntensity);
+  var _cfVolFactor       = computeVolumeFactor(_cfInnerWod);
+  // ─── REST FACTOR ───
+  var _cfMovs       = (_cfInnerWod && Array.isArray(_cfInnerWod.movements)) ? _cfInnerWod.movements : [];
+  var _cfRestFactor = computeCrossfitRestFactor(_cfInnerWod, _cfTypeStr, _cfMovs);
+  S.crossfitIntensity    = _cfFinalIntensity;
+  S.crossfitTrainingLoad = Math.round(_cfDurMins * CF_INTENSITY_FACTORS[_cfFinalIntensity] * _cfVolFactor * _cfRestFactor);
   _sfcNotifySport('crossfit', S.crossfitLevel);
  }
 
@@ -4093,7 +4336,7 @@ function renderCrossfitProgram(p) {
  // ─── ESTIMATION CALORIQUE CROSSFIT ───
  (function() {
   var cfLevel = S.crossfitLevel || 'rx';
-  var SESSION_DUR_CF = { scaled: 60, rx: 75, rx_plus: 90 };
+  var SESSION_DUR_CF = { scaled: 60, inter: 65, rx: 75, rx_plus: 90 };
   var cfDur = SESSION_DUR_CF[cfLevel] || 75;
   var cfKcal = estimateKcal('crossfit', cfLevel, cfDur);
   p.appendChild(buildKcalCard(cfKcal, cfDur));
@@ -4214,17 +4457,13 @@ function renderCrossfitProgram(p) {
 
  // ─── HALTERO CYCLE INFO ───
  if (window.HALTERO_CYCLES) {
- var cycleWeek = S.crossfitCycleWeek || 1;
+ var cycleWeek = (((S.crossfitWeek || 1) - 1) % 6) + 1;
+ S.crossfitCycleWeek = cycleWeek;
  HALTERO_CYCLES.renderCycleInfo(p, cycleWeek, S.sex, S.crossfitLevel);
 
- // Haltero cycle week selector (1-24)
  var haltWeekNav = h('div', {style: 'display:flex;align-items:center;gap:8px;margin:8px 0 16px;flex-wrap:wrap'});
  haltWeekNav.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-right:4px'}, (window.isEnglish && window.isEnglish() ? 'Weightlifting Cycle' : 'Cycle Haltéro')));
- var prevBtn = h('button', {'class': 'btn-secondary', style: 'width:auto;padding:6px 12px;margin:0;font-size:13px', disabled: cycleWeek <= 1 ? true : null, onclick: function(){ S.crossfitCycleWeek = Math.max(1, (S.crossfitCycleWeek || 1) - 1); window.render(); }}, '\u25C0');
- haltWeekNav.appendChild(prevBtn);
- haltWeekNav.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;min-width:60px;text-align:center'}, cycleWeek + ' / 24'));
- var nextBtn = h('button', {'class': 'btn-secondary', style: 'width:auto;padding:6px 12px;margin:0;font-size:13px', disabled: cycleWeek >= 24 ? true : null, onclick: function(){ S.crossfitCycleWeek = Math.min(24, (S.crossfitCycleWeek || 1) + 1); window.render(); }}, '\u25B6');
- haltWeekNav.appendChild(nextBtn);
+ haltWeekNav.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;min-width:60px;text-align:center'}, cycleWeek + ' / 6'));
  p.appendChild(haltWeekNav);
  }
 
@@ -4234,7 +4473,7 @@ function renderCrossfitProgram(p) {
   tabs.appendChild(h('button', {
    'class': 'day-tab' + (S.selectedCrossfitDay === i ? ' active' : ''),
    onclick: function() { S.selectedCrossfitDay = i; window.render(); }
-  }, day.label));
+  }, (window.isEnglish && window.isEnglish() ? day.label.en : day.label.fr)));
  });
  // Onglets supplémentaires pour les jours de musculation (sport mix)
  if (_mixSec && _mixSecDays > 0) {
@@ -4291,7 +4530,7 @@ function renderCrossfitProgram(p) {
  if (!wod) { p.appendChild(h('div', {style:'padding:16px;color:var(--grey);font-size:13px'}, (window.isEnglish && window.isEnglish() ? 'Session unavailable. Reload the page.' : 'Séance non disponible. Rechargez la page.'))); p.appendChild(h('button', {'class':'btn-back', onclick: function(){ S.sStep = 5; window.render(); }}, (window.isEnglish && window.isEnglish() ? '← Edit level' : '← Modifier le niveau'))); return; }
 
  // Day header
- p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:24px;text-align:center;margin:16px 0 4px'}, currentDay.dayLabel + ' \u2014 ' + wod.name));
+ p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:24px;text-align:center;margin:16px 0 4px'}, (window.isEnglish && window.isEnglish() ? currentDay.dayLabel.en : currentDay.dayLabel.fr) + ' \u2014 ' + wod.name));
  p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);text-align:center;margin-bottom:4px'}, currentDay.focus));
  p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);text-align:center;margin-bottom:20px'}, (window.isEnglish && window.isEnglish() ? 'Week ' + S.crossfitWeek + ' — Day ' + currentDay.dayNumber + ' / ' + daysPerWeek : 'Semaine ' + S.crossfitWeek + ' — Jour ' + currentDay.dayNumber + ' / ' + daysPerWeek)));
 
@@ -4346,6 +4585,7 @@ function renderCrossfitProgram(p) {
  var wodCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid var(--error,#7A1F1F)'});
  wodCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--error,#7A1F1F);margin-bottom:6px'}, 'WOD'));
  var _wod = wod.wod || {};
+ if (isCFDeload) _wod = applyDeloadScaling(_wod);
  wodCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:4px'}, _wod.name || ''));
  wodCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;color:var(--error,#7A1F1F);margin-bottom:10px'}, _wod.type || ''));
 
@@ -11336,6 +11576,136 @@ function renderYogaOnboarding(p) {
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
+// ─── Yoga Session Generator ───────────────────────────────────────────────────
+var _YOGA_POOLS = {
+ flexibilite: {
+  debutant: [
+   { name: 'Cat-Cow (Marjaryasana-Bitilasana)', duration: '3 min', desc: '10 cycles lents, articulation vertèbre par vertèbre', focus: 'Mobilité colonne' },
+   { name: 'Uttanasana (flexion avant)',         duration: '3 min', desc: 'Genoux légers fléchis, tête lourde',               focus: 'Ischio-jambiers' },
+   { name: 'Lézard (Anjaneyasana)',              duration: '4 min', desc: '2 min par côté, bassin bas',                      focus: 'Fléchisseurs hanche' },
+   { name: 'Pigeon préparatoire',                duration: '4 min', desc: '2 min par côté, option bolster',                   focus: 'Hanches externes' },
+   { name: 'Torsion couchée',                   duration: '3 min', desc: '90 sec par côté, épaule au sol',              focus: 'Colonne vertébrale' },
+   { name: 'Supta Baddha Konasana',             duration: '3 min', desc: 'Papillon couché, relâchement complet',              focus: 'Adducteurs / Bassin' },
+   { name: 'Savasana',                          duration: '5 min', desc: 'Scan corporel, relâchement progressif',              focus: 'Intégration' }
+  ],
+  intermediaire: [
+   { name: 'Salutation au soleil A+B',          duration: '7 min', desc: '3 rounds A + 2 rounds B, respiration Ujjayi',   focus: 'Échauffement vinyasa' },
+   { name: 'Prasarita Padottanasana',           duration: '4 min', desc: 'Jambes écartées, 3 variantes',                    focus: 'Ischio / Adducteurs' },
+   { name: 'Pigeon (Eka Pada Rajakapotasana)',  duration: '6 min', desc: '3 min par côté, relâchement profond',          focus: 'Hanches / Psoas' },
+   { name: 'Hanumanasana (préparation)',         duration: '5 min', desc: 'Fente basse avec blocs, progression douce',     focus: 'Flexibilité hanche' },
+   { name: 'Supta Padangusthasana',             duration: '4 min', desc: '2 min par côté, sangle si besoin',               focus: 'Chaîne postérieure' },
+   { name: 'Paschimottanasana',                 duration: '4 min', desc: 'Flexion assise, micro-flexion genoux',              focus: 'Dos / Ischio-jambiers' },
+   { name: 'Savasana',                          duration: '5 min', desc: 'Intégration des ouvertures, respiration libre',   focus: 'Intégration' }
+  ],
+  avance: [
+   { name: 'Surya Namaskar A+B enchâîné',      duration: '10 min', desc: '5 rounds fluides, Chaturanga contrôlé',   focus: 'Échauffement complet' },
+   { name: 'Hanumanasana',                      duration: '6 min',  desc: '3 min par côté, descente progressive',          focus: 'Grand écart / Psoas' },
+   { name: 'Kapotasana (pigeon roi)',            duration: '8 min',  desc: '4 min par côté, ouverture profonde',             focus: 'Flexibilité avancée' },
+   { name: 'Paschimottanasana tenu',            duration: '5 min',  desc: 'Genoux micro-fléchis, respiration dorsale',        focus: 'Chaîne postérieure' },
+   { name: 'Supta Virasana',                    duration: '5 min',  desc: 'Bolster sous le dos, respiration lente',             focus: 'Quadriceps / Flexion' },
+   { name: 'Parivritta Trikonasana',            duration: '4 min',  desc: '2 min par côté, torsion profonde',             focus: 'Rotation thoracique' },
+   { name: 'Savasana',                          duration: '8 min',  desc: 'Yoga Nidra léger, intégration profonde',         focus: 'Intégration' }
+  ]
+ },
+ stress: {
+  debutant: [
+   { name: 'Nadi Shodhana (pranayama)',         duration: '5 min', desc: 'Respiration alternante, 10 cycles lents',         focus: 'Système nerveux' },
+   { name: 'Balasana (enfant)',                 duration: '3 min', desc: 'Bras allongés, front au sol, relâchement',      focus: 'Récupération' },
+   { name: 'Supta Baddha Konasana',             duration: '5 min', desc: 'Papillon couché, bolster sous les genoux',       focus: 'Parasympathique' },
+   { name: 'Viparita Karani (jambes au mur)',   duration: '5 min', desc: 'Jambes verticales, yeux fermés',               focus: 'Relaxation profonde' },
+   { name: 'Torsion couchée douce',              duration: '4 min', desc: '2 min par côté, sans forcer',                  focus: 'Décompression spinale' },
+   { name: 'Yoga Nidra intro',                  duration: '3 min', desc: 'Scan corporel rapide, visualisation calme',        focus: 'Détente mentale' },
+   { name: 'Savasana guidée',                    duration: '6 min', desc: 'Cohérence cardiaque, relâchement complet',      focus: 'Intégration' }
+  ],
+  intermediaire: [
+   { name: 'Pranayama 4-7-8',                  duration: '5 min', desc: 'Inspire 4 s, retien 7 s, expire 8 s',             focus: 'Système nerveux' },
+   { name: 'Balasana + Rocking',               duration: '3 min', desc: 'Balancement doux, massage crâne',               focus: 'Récupération active' },
+   { name: 'Yin Pigeon',                        duration: '6 min', desc: '3 min par côté, tenu passif',                   focus: 'Relâchement fascias' },
+   { name: 'Viparita Karani',                   duration: '6 min', desc: 'Jambes au mur, couverture si froid',               focus: 'Parasympathique' },
+   { name: 'Ardha Matsyendrasana',              duration: '4 min', desc: '2 min par côté, torsion assise douce',        focus: 'Détox / Digestion' },
+   { name: 'Ananda Balasana (happy baby)',      duration: '3 min', desc: 'Balancement latéral, respiration profonde',      focus: 'Bas du dos / Hanches' },
+   { name: 'Savasana guidée longue',               duration: '8 min', desc: 'Visualisation positive, scan de détente',     focus: 'Intégration' }
+  ],
+  avance: [
+   { name: 'Kapalabhati + Bhramari',            duration: '6 min', desc: 'Kapala 2 min, Bhramari 4 min, vibration calme',   focus: 'Régulation neuro' },
+   { name: 'Yin Frog (Mandukasana)',            duration: '5 min', desc: 'Grenouille longue, tenu passif profond',           focus: 'Hanches / Adducteurs' },
+   { name: 'Melting Heart (Anahatasana)',       duration: '5 min', desc: 'Poitrine au sol, bras étendus, relâchement',    focus: 'Ouverture cœur' },
+   { name: 'Sleeping Swan (Yin Pigeon)',        duration: '8 min', desc: '4 min par côté, gravité seule',               focus: 'Relâchement profond' },
+   { name: 'Viparita Karani + bolster',         duration: '6 min', desc: 'Bassin surélevé, inversion douce',              focus: 'Parasympathique' },
+   { name: 'Yoga Nidra',                        duration: '5 min', desc: 'Rotation de conscience 61 points',                  focus: 'Sommeil profond' },
+   { name: 'Savasana + Nidra',                 duration: '10 min', desc: 'Nidra guidé, état hypnagogique',               focus: 'Intégration' }
+  ]
+ },
+ force: {
+  debutant: [
+   { name: 'Salutation au soleil A',            duration: '5 min', desc: '5 rounds dynamiques, pousser dans le sol',        focus: 'Échauffement' },
+   { name: 'Guerrier I + II',                   duration: '5 min', desc: '3 cycles chaque côté, cuisses actives',          focus: 'Jambes / Hanches' },
+   { name: 'Planche (Kumbhakasana)',             duration: '3 min', desc: '3 × 30 sec, corps aligné tête-talons',         focus: 'Gainage core' },
+   { name: 'Chaturanga (genoux)',                duration: '3 min', desc: '3 × 5 reps, coudes serrés corps',                focus: 'Triceps / Pectoraux' },
+   { name: 'Navasana demi (Ardha Navasana)',     duration: '3 min', desc: '3 × 15 sec, dos droit, respiration',             focus: 'Abdominaux profonds' },
+   { name: 'Balasana (récupération)',              duration: '2 min', desc: 'Relâchement actif post-effort',                 focus: 'Récupération' },
+   { name: 'Savasana',                          duration: '5 min', desc: 'Intégration neuromusculaire, scan corporel',     focus: 'Intégration' }
+  ],
+  intermediaire: [
+   { name: 'Salutation au soleil A+B',          duration: '8 min', desc: '3 rounds A + 3 rounds B, chaleur active',         focus: 'Échauffement' },
+   { name: 'Guerrier III',                      duration: '4 min', desc: '2 min par côté, Drishti fixe',                   focus: 'Équilibre / Gainage' },
+   { name: 'Crow pose (Bakasana)',              duration: '5 min', desc: '3 tentatives × 15 sec, engagement core',         focus: 'Force bras / Concentration' },
+   { name: 'Chaturanga série complète',         duration: '4 min', desc: '4 × 5 reps, transition fluide',                  focus: 'Chaîne antérieure' },
+   { name: 'Navasana + Ardha Navasana',         duration: '4 min', desc: '3 cycles, 20 sec chaque, respiration',             focus: 'Core profond' },
+   { name: 'Vasisthasana (planche latérale)',    duration: '3 min', desc: '3 × 20 sec par côté, hanches hautes',       focus: 'Obliques / Épaules' },
+   { name: 'Savasana',                          duration: '5 min', desc: 'Récupération neuromusculaire',                    focus: 'Intégration' }
+  ],
+  avance: [
+   { name: 'Surya Namaskar A+B × 5',              duration: '10 min', desc: 'Enchâîné, Chaturanga complet, chaleur max',  focus: 'Échauffement complet' },
+   { name: 'Handstand prep (Mukha Vrksasana)',  duration: '6 min',  desc: 'Kicks contre mur, alignement strict',             focus: 'Inversion / Force' },
+   { name: 'Crow → Tripod Headstand',            duration: '6 min',  desc: 'Transition bras plié, 3 essais × 20 sec',       focus: 'Équilibre / Inversion' },
+   { name: 'Warrior III + Demi-lune',          duration: '5 min',  desc: '2.5 min par côté, enchâîné sans pause',    focus: 'Équilibre dynamique' },
+   { name: 'Navasana avancé (full V)',            duration: '4 min',  desc: '4 × 30 sec, jambes tendues, respiration',        focus: 'Core avancé' },
+   { name: 'Pincha Mayurasana',                 duration: '5 min',  desc: 'Forearm stand, 3 essais × 20 sec',                focus: 'Force / Inversion' },
+   { name: 'Savasana',                          duration: '8 min',  desc: 'Récupération neuromusculaire profonde',           focus: 'Intégration' }
+  ]
+ }
+};
+
+function _yogaPosePools(objective, level) {
+ var obj = (objective === 'recuperation') ? 'stress' : (objective || 'flexibilite');
+ var lvl = (level === 'avance') ? 'avance' : (level === 'intermediaire') ? 'intermediaire' : 'debutant';
+ return (_YOGA_POOLS[obj] && _YOGA_POOLS[obj][lvl]) || _YOGA_POOLS.flexibilite.debutant;
+}
+
+function _yogaApplyStyle(poses, style) {
+ if (style === 'hatha' || !style) return poses;
+ return poses.map(function(p) {
+  var isSavasana = p.focus === 'Intégration';
+  var mins = parseInt(p.duration);
+  var p2 = { name: p.name, desc: p.desc, focus: p.focus, duration: p.duration };
+  if (style === 'yin' && !isSavasana && !isNaN(mins) && mins < 10) {
+   p2.duration = Math.min(mins * 2, 8) + ' min';
+   p2.desc = p.desc + ' — tenu passif, gravité seule';
+  } else if (style === 'vinyasa' && !isSavasana && !isNaN(mins) && mins > 2) {
+   p2.duration = Math.max(mins - 1, 2) + ' min';
+   p2.desc = p.desc + ' — enchâîné avec Ujjayi';
+  } else if (style === 'ashtanga' && !isSavasana) {
+   p2.desc = p.desc + ' — Ashtanga: souffle-mouvement synchronisés';
+  }
+  return p2;
+ });
+}
+
+function generateYogaSession(opts) {
+ if (!opts || typeof opts !== 'object') opts = {};
+ var objective = opts.objective || 'flexibilite';
+ var style     = opts.style || 'hatha';
+ var level     = opts.level || 'debutant';
+ var duration  = opts.duration || '30min';
+ var maxPoses  = duration === '20min' ? 4 : duration === '30min' ? 5 : duration === '45min' ? 6 : 7;
+ var pool      = _yogaPosePools(objective, level);
+ var styled    = _yogaApplyStyle(pool, style);
+ var savasana  = styled[styled.length - 1];
+ var body      = styled.slice(0, styled.length - 1).slice(0, maxPoses - 1);
+ return body.concat([savasana]);
+}
+
 // ─── STEP 21: YOGA PROGRAM ───
 function renderYogaProgram(p) {
  // FIX BUG 2026-04-26 : guard manquant sur yogaObjectif — config incomplète → session card vide
@@ -11353,15 +11723,7 @@ function renderYogaProgram(p) {
  if (S.yogaWeek < 1) S.yogaWeek = 1;
 
  var weekData = YOGA_WEEKS[S.yogaWeek - 1];
- var levelKey = S.yogaLevel === 'avance' ? 'avance' : S.yogaLevel === 'intermediaire' ? 'intermediaire' : 'debutant';
- var basePoses = YOGA_SESSIONS[levelKey] || YOGA_SESSIONS.debutant;
-
- // Filter poses by duration — Savasana TOUJOURS en dernière position (règle coach)
- var maxPoses = S.yogaDuration === '20min' ? 4 : S.yogaDuration === '30min' ? 5 : S.yogaDuration === '45min' ? 6 : 7;
- var savasana = basePoses[basePoses.length - 1]; // Dernier élément = Savasana (toujours inclus)
- var posePool = basePoses.slice(0, basePoses.length - 1); // Tout sauf Savasana
- var bodyPoses = posePool.slice(0, Math.min(maxPoses - 1, posePool.length)); // maxPoses - 1 pour réserver la place Savasana
- var poses = bodyPoses.concat([savasana]); // Savasana toujours en dernier
+ var poses = generateYogaSession({ objective: S.yogaObjectif, style: S.yogaStyle, level: S.yogaLevel, duration: S.yogaDuration });
 
  // Pregnancy warning
  var pregWarn = getPregnancySportWarning();
@@ -11374,7 +11736,11 @@ function renderYogaProgram(p) {
  }
  appendSportMedicalBanner(p, 'Yoga');
  // Bridge nutrition — guard première fois uniquement
- if (!S._yogaNotified) { S._yogaNotified = true; _sfcNotifySport('yoga', S.yogaLevel); }
+ if (!S._yogaNotified) {
+  S._yogaNotified = true;
+  var _yogaBridgeLv = S.yogaObjectif === 'force' ? 'avance' : S.yogaObjectif === 'flexibilite' ? 'intermediaire' : 'debutant';
+  _sfcNotifySport('yoga', _yogaBridgeLv);
+ }
 
  // Medical warnings
  var med = S.muscuMedical || {};

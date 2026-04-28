@@ -130,30 +130,30 @@ window.SPORT_TO_NUTRITION_GOAL = { muscle: 0, weightloss: 3, shred: 4, endurance
 
 window.CF_DAY_TEMPLATES = {
  3: [
- {label: 'Lundi', focus: 'Halt\u00E9ro A + WOD + Gym', hasHaltero: true, halteroLift: 0},
- {label: 'Mercredi', focus: 'Halt\u00E9ro B + WOD + Gym', hasHaltero: true, halteroLift: 1},
- {label: 'Vendredi', focus: 'WOD Comp\u00E9tition + Gym', hasHaltero: false}
+ {label: {fr: 'Lundi',    en: 'Monday'},    focus: 'Halt\u00E9ro A + WOD + Gym', hasHaltero: true, halteroLift: 0},
+ {label: {fr: 'Mercredi', en: 'Wednesday'}, focus: 'Halt\u00E9ro B + WOD + Gym', hasHaltero: true, halteroLift: 1},
+ {label: {fr: 'Vendredi', en: 'Friday'},    focus: 'WOD Comp\u00E9tition + Gym', hasHaltero: false}
  ],
  4: [
- {label: 'Lundi', focus: 'Halt\u00E9ro A + WOD', hasHaltero: true, halteroLift: 0},
- {label: 'Mardi', focus: 'Gym + WOD Sprint', hasHaltero: false},
- {label: 'Jeudi', focus: 'Halt\u00E9ro B + WOD', hasHaltero: true, halteroLift: 1},
- {label: 'Samedi', focus: 'WOD Long + Gym', hasHaltero: false}
+ {label: {fr: 'Lundi',  en: 'Monday'},   focus: 'Halt\u00E9ro A + WOD', hasHaltero: true, halteroLift: 0},
+ {label: {fr: 'Mardi',  en: 'Tuesday'},  focus: 'Gym + WOD Sprint', hasHaltero: false},
+ {label: {fr: 'Jeudi',  en: 'Thursday'}, focus: 'Halt\u00E9ro B + WOD', hasHaltero: true, halteroLift: 1},
+ {label: {fr: 'Samedi', en: 'Saturday'}, focus: 'WOD Long + Gym', hasHaltero: false}
  ],
  5: [
- {label: 'Lundi', focus: 'Halt\u00E9ro A + WOD', hasHaltero: true, halteroLift: 0},
- {label: 'Mardi', focus: 'Gym + WOD Sprint', hasHaltero: false},
- {label: 'Mercredi', focus: 'Halt\u00E9ro B + WOD', hasHaltero: true, halteroLift: 1},
- {label: 'Vendredi', focus: 'Gym + WOD', hasHaltero: false},
- {label: 'Samedi', focus: 'WOD Comp\u00E9tition', hasHaltero: false}
+ {label: {fr: 'Lundi',    en: 'Monday'},    focus: 'Halt\u00E9ro A + WOD', hasHaltero: true, halteroLift: 0},
+ {label: {fr: 'Mardi',    en: 'Tuesday'},   focus: 'Gym + WOD Sprint', hasHaltero: false},
+ {label: {fr: 'Mercredi', en: 'Wednesday'}, focus: 'Halt\u00E9ro B + WOD', hasHaltero: true, halteroLift: 1},
+ {label: {fr: 'Vendredi', en: 'Friday'},    focus: 'Gym + WOD', hasHaltero: false},
+ {label: {fr: 'Samedi',   en: 'Saturday'},  focus: 'WOD Comp\u00E9tition', hasHaltero: false}
  ],
  6: [
- {label: 'Lundi', focus: 'Halt\u00E9ro A + WOD', hasHaltero: true, halteroLift: 0},
- {label: 'Mardi', focus: 'Gym + Conditioning', hasHaltero: false},
- {label: 'Mercredi', focus: 'Halt\u00E9ro B + WOD', hasHaltero: true, halteroLift: 1},
- {label: 'Jeudi', focus: 'Gym + Accessoires', hasHaltero: false},
- {label: 'Vendredi', focus: 'Halt\u00E9ro (variation) + WOD', hasHaltero: true, halteroLift: 0},
- {label: 'Samedi', focus: 'WOD Comp\u00E9tition + Test', hasHaltero: false}
+ {label: {fr: 'Lundi',    en: 'Monday'},    focus: 'Halt\u00E9ro A + WOD', hasHaltero: true, halteroLift: 0},
+ {label: {fr: 'Mardi',    en: 'Tuesday'},   focus: 'Gym + Conditioning', hasHaltero: false},
+ {label: {fr: 'Mercredi', en: 'Wednesday'}, focus: 'Halt\u00E9ro B + WOD', hasHaltero: true, halteroLift: 1},
+ {label: {fr: 'Jeudi',    en: 'Thursday'},  focus: 'Gym + Accessoires', hasHaltero: false},
+ {label: {fr: 'Vendredi', en: 'Friday'},    focus: 'Halt\u00E9ro (variation) + WOD', hasHaltero: true, halteroLift: 0},
+ {label: {fr: 'Samedi',   en: 'Saturday'},  focus: 'WOD Comp\u00E9tition + Test', hasHaltero: false}
  ]
 };
 
