@@ -693,6 +693,20 @@ function generateSportProgram() {
  // ════════════════════════════════════════════════════════════════════════════
  dayExercises = (function _buildMuscuDay(grps, cfg) {
    var _isGym = !cfg.equipment || cfg.equipment === 'gym';
+
+   // Clé de normalisation : insensible aux accents, équipement, modificateurs
+   var _normKey = function(name) {
+     return (name||'')
+       .toLowerCase()
+       .replace(/[àáâãäå]/g,'a').replace(/[èéêë]/g,'e')
+       .replace(/[ìíîï]/g,'i').replace(/[òóôõö]/g,'o')
+       .replace(/[ùúûü]/g,'u').replace(/[ç]/g,'c')
+       .replace(/\s*\(.*?\)\s*/g,' ')
+       .replace(/\b(machine|barre|halteres?|halteères?|c[aâ]ble|ez|unilateral|unilat[eé]ral|bilateral|lest[eé]|strict|inclin[eé])\b/gi,' ')
+       .replace(/[\-_\/]/g,' ')
+       .replace(/\s+/g,' ').trim();
+   };
+
    var _isBw  = function(ex) {
      var eq = (ex.eq||'').toLowerCase().trim(), tg = ex.tags || [];
      return /^poids du corps$/i.test(eq) || tg.indexOf('poids-du-corps') !== -1
@@ -703,7 +717,7 @@ function generateSportProgram() {
    var _flat = [], _pidx = {};
    grps.forEach(function(g) {
      ((window.EXERCISES && window.EXERCISES[g]) || []).forEach(function(ex) {
-       var k = (ex.n||'').toLowerCase().trim();
+       var k = _normKey(ex.n);
        if (_pidx[k]) {
          if (_pidx[k]._grps.indexOf(g) === -1) _pidx[k]._grps.push(g);
        } else {
@@ -773,8 +787,8 @@ function generateSportProgram() {
    }
 
    // Dédup cross-jour : exos frais d'abord, répétitions en dernier recours
-   var _fr = _f.filter(function(ex){ return !cfg.weekUsed[(ex.n||'').toLowerCase().trim()]; });
-   var _rp = _f.filter(function(ex){ return  cfg.weekUsed[(ex.n||'').toLowerCase().trim()]; });
+   var _fr = _f.filter(function(ex){ return !cfg.weekUsed[_normKey(ex.n)]; });
+   var _rp = _f.filter(function(ex){ return  cfg.weekUsed[_normKey(ex.n)]; });
    var _pool = _fr.length >= cfg.durMax ? _fr : (_fr.length > 0 ? _fr.concat(_rp) : _f);
 
    // ── 3 Classification — tierKey calculé une seule fois ────────────────────
@@ -814,7 +828,7 @@ function generateSportProgram() {
    grps.forEach(function(g){ _cov[g] = false; });
 
    for (var _i = 0; _i < _pool.length && _sel.length < cfg.durMax; _i++) {
-     var _e = _pool[_i], _k = (_e.n||'').toLowerCase().trim();
+     var _e = _pool[_i], _k = _normKey(_e.n);
      if (_sn[_k]) continue;
      var _slots = cfg.durMax - _sel.length;
      var _unc   = grps.filter(function(g){ return !_cov[g]; }).length;
