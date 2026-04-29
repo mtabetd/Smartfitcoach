@@ -1507,7 +1507,10 @@
           },
           "coaching_cue": "Keep moving between exercises; rest only after the full block.",
           "subtype": "mixed",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "recomposition",
+          "intent": "simultaneous aerobic and strength stimulus via circuit rotation",
+          "progression_hint": "Entry mixed session — repeat until all 3 rounds complete with full rep counts; advance to mix-b-02 when rest between rounds feels unnecessary"
         },
         {
           "id": "mix-b-02",
@@ -1552,7 +1555,10 @@
           },
           "coaching_cue": "Walk at a pace where talking is slightly effortful — Zone 2 effort.",
           "subtype": "mixed",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "recomposition",
+          "intent": "aerobic base building paired with compound strength movement",
+          "progression_hint": "Walk-strength pairing is the safest hybrid entry point; progress walk pace to brisk jog over 4 weeks before advancing to mix-b-07"
         },
         {
           "id": "mix-b-03",
@@ -1596,7 +1602,10 @@
           },
           "coaching_cue": "Explode up on the step; control the descent.",
           "subtype": "mixed",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "toning",
+          "intent": "lower-body power paired with compound pressing for concurrent stimulus",
+          "progression_hint": "Superset format builds work capacity efficiency; advance to mix-b-09 when both supersets complete with zero form breakdown"
         },
         {
           "id": "mix-b-04",
@@ -1638,7 +1647,10 @@
           },
           "coaching_cue": "Drive through the legs first, then lean back and pull — sequence matters.",
           "subtype": "mixed",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "conditioning",
+          "intent": "aerobic endurance via rowing paired with upper-body pulling volume",
+          "progression_hint": "Rowing sessions develop posterior chain and aerobic base simultaneously; increase row pace to 24 spm when 5 rounds feel controlled"
         },
         {
           "id": "mix-b-05",
@@ -1670,7 +1682,10 @@
           },
           "coaching_cue": "On bike minutes, push hard; bodyweight minutes are active recovery.",
           "subtype": "mixed",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "fat_loss",
+          "intent": "EMOM structure to develop cardio-strength alternation capacity",
+          "progression_hint": "EMOM discipline — if rest falls below 10s on any minute, reduce reps immediately; advance to mix-i-05 when 24 min completes with 15+ sec consistently"
         },
         {
           "id": "mix-b-06",
@@ -1715,7 +1730,10 @@
           },
           "coaching_cue": "Breathe out on exertion; never hold your breath on core work.",
           "subtype": "mixed",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "toning",
+          "intent": "metabolic conditioning via cardio burst and deep core stability pairing",
+          "progression_hint": "Core stability under cardiovascular fatigue is the key adaptation; advance when bird dog and dead bug maintain form through round 4"
         },
         {
           "id": "mix-b-07",
@@ -1764,7 +1782,10 @@
           },
           "coaching_cue": "Hinge at the hip for swings — it's not a squat.",
           "subtype": "mixed",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "conditioning",
+          "intent": "aerobic endurance fused with KB strength-endurance across five rounds",
+          "progression_hint": "Longest beginner mixed session — completing 5 rounds sub-35 min signals readiness for mix-i-01 tempo run complex"
         },
         {
           "id": "mix-b-08",
@@ -1814,7 +1835,10 @@
           },
           "coaching_cue": "Keep elbows slightly soft on lateral raises — avoid shrugging.",
           "subtype": "mixed",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "toning",
+          "intent": "upper-body isolation volume on an aerobic foundation",
+          "progression_hint": "Stair or step cardio elevates heart rate before isolation work — increases metabolic cost of lifting; progress to 4 rounds when upper-body form holds"
         },
         {
           "id": "mix-b-09",
@@ -1861,7 +1885,10 @@
           },
           "coaching_cue": "Start the Tabata with form — fatigue compounds so dial technique in early.",
           "subtype": "mixed",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "recomposition",
+          "intent": "strength base followed by high-intensity metabolic finisher",
+          "progression_hint": "Strength-then-HIIT sequencing mimics Hyrox event demands; advance to mix-i-08 density blocks when Tabata finisher is completed at consistent rep counts"
         },
         {
           "id": "mix-b-10",
@@ -1906,7 +1933,10 @@
           },
           "coaching_cue": "Mobility work is earned — use the elevated heart rate to access range of motion.",
           "subtype": "mixed",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "recomposition",
+          "intent": "aerobic base recovery session with active mobility integration",
+          "progression_hint": "Low-intensity recovery session — schedule 48h after HIIT or heavy days; progress to 6 rounds as aerobic capacity improves"
         }
       ],
       "intermediate": [
