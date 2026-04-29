@@ -43,6 +43,7 @@ const DEFERRED_SCRIPTS = [
   './today-dashboard.js',
   './pdf-weekly-report.js',
   './daily-decision-engine.js',
+  './daily-decision-engine-v2.js',
   './smart-calendar.js',
   './auth-banner.js',
   './onboarding-complete.js',
