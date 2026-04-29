@@ -105,7 +105,7 @@ function simulateArchetype(arch) {
   var sessions         = [];   // { day, intensity }  — only actual training days
   var rolling          = [];   // last 7 daily records { day, fatigue, decision, momentumScore }
   var results          = [];
-  var lastSessionTypes = [];   // rolling last-3 session types fed to diversity layer
+  var lastSessionTypes = [];   // rolling last-7 session types fed to variety target layer
   var lastSubTypes     = [];   // rolling last-3 session sub-types fed to variation layer
 
   // Last session date: walk backward through sessions, fallback to initialOffset
@@ -202,7 +202,7 @@ function simulateArchetype(arch) {
     var sessionType    = out.recommendedSessionType || null;
     var sessionSubType = out.sessionSubType         || null;
     lastSessionTypes.push(sessionType);
-    if (lastSessionTypes.length > 3) lastSessionTypes.shift();
+    if (lastSessionTypes.length > 7) lastSessionTypes.shift();
     lastSubTypes.push(sessionSubType);
     if (lastSubTypes.length > 3) lastSubTypes.shift();
     console.log('[DEBUG] Day', pad(day + 1, 2),
@@ -341,6 +341,11 @@ function analyze(results) {
   // Engine override rate
   var engineRestCount = results.filter(function(r) { return r.engineDecision === 'rest'; }).length;
 
+  // Session type distribution
+  var typeDist = {};
+  results.forEach(function(r) { if (r.sessionType) typeDist[r.sessionType] = (typeDist[r.sessionType] || 0) + 1; });
+  var uniqueTrainTypes = ['strength','hypertrophy','conditioning'].filter(function(t) { return typeDist[t] > 0; }).length;
+
   // Subtype distribution
   var subDist = {};
   results.forEach(function(r) { if (r.sessionSubType) subDist[r.sessionSubType] = (subDist[r.sessionSubType] || 0) + 1; });
@@ -373,8 +378,10 @@ function analyze(results) {
     fat3:           fat3,
     fatTrend:       fatTrend,
     profDist:       profDist,
-    subDist:        subDist,
-    maxConsecSub:   maxConsecSub
+    typeDist:         typeDist,
+    uniqueTrainTypes: uniqueTrainTypes,
+    subDist:          subDist,
+    maxConsecSub:     maxConsecSub
   };
 }
 
@@ -451,6 +458,13 @@ function printSummaryBlock(arch, results, a) {
   console.log('  Momentum swings     : ' + a.momSwings + '  (>= 3pt jump)');
   console.log('  Intensity dist.     : low=' + a.intDist.low + '  moderate=' + a.intDist.moderate + '  high=' + a.intDist.high);
   console.log('  Fatigue trajectory  : days 1-10 avg=' + a.fat1 + '  days 21-30 avg=' + a.fat3 + '  → ' + a.fatTrend);
+  // ── Session type variety report
+  var typeKeys = Object.keys(a.typeDist);
+  if (typeKeys.length > 0) {
+    console.log('  SessionType dist.   : ' + typeKeys.map(function(k) { return k + '=' + a.typeDist[k]; }).join('  '));
+    console.log('  Unique train types  : ' + a.uniqueTrainTypes + ' / 3  (strength / hypertrophy / conditioning)');
+    if (a.uniqueTrainTypes === 3) console.log('  CONTROLLED VARIETY — all 3 training types reached');
+  }
   // ── Subtype variation report
   var subKeys = Object.keys(a.subDist);
   if (subKeys.length > 0) {

@@ -31,6 +31,7 @@ var _buildSmartFitCoachCard          = DDEv3._buildSmartFitCoachCard;
 var _selectSessionTypeDiverse        = DDEv3._selectSessionTypeDiverse;
 var _applySessionTypeCap             = DDEv3._applySessionTypeCap;
 var _selectSessionSubType            = DDEv3._selectSessionSubType;
+var _selectSessionTypeByVariety      = DDEv3._selectSessionTypeByVariety;
 
 // ── Harness ───────────────────────────────────────────────────────────────────
 var passed = 0, failed = 0;
@@ -3610,6 +3611,162 @@ test('momentum cap: deterministic — 3 calls with cap active return same result
   var r3 = _selectSessionSubType('conditioning', 2, 8, ['hiit', 'zone2']);
   if (r1 !== r2 || r2 !== r3) throw new Error('non-deterministic: ' + r1 + ',' + r2 + ',' + r3);
   assertEqual(r1, 'mixed');
+});
+
+// Section 28 — Session variety target (_selectSessionTypeByVariety) + hypertrophy subtype
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('\n── Section 28 : Session variety target — controlled diversity ─────────────────');
+
+// ── Safety: rest/low always recovery ─────────────────────────────────────────
+test('variety: decision=rest → always recovery', function () {
+  assertEqual(
+    _selectSessionTypeByVariety('rest', 'moderate', 'muscle_gain', 7, ['strength','strength','strength']),
+    'recovery'
+  );
+});
+test('variety: intensity=low → always recovery', function () {
+  assertEqual(
+    _selectSessionTypeByVariety('train', 'low', 'muscle_gain', 7, ['strength','strength','strength']),
+    'recovery'
+  );
+});
+
+// ── No history → same as existing diversity/selectSessionType ─────────────────
+test('variety: null history → falls back to _selectSessionTypeDiverse', function () {
+  var expected = DDEv3._selectSessionType('train', 'high', 'muscle_gain');
+  assertEqual(_selectSessionTypeByVariety('train', 'high', 'muscle_gain', 7, null), expected);
+});
+test('variety: empty history → falls back to _selectSessionTypeDiverse', function () {
+  var expected = DDEv3._selectSessionType('train', 'moderate', 'muscle_gain');
+  assertEqual(_selectSessionTypeByVariety('train', 'moderate', 'muscle_gain', 5, []), expected);
+});
+
+// ── Deficit drives selection ──────────────────────────────────────────────────
+test('variety: hypertrophy preferred when never seen (high base)', function () {
+  // str=2, cond=2, hyp=0 → hyp has max deficit
+  var t = _selectSessionTypeByVariety('train', 'high', 'muscle_gain', 7,
+    ['strength', 'conditioning', 'strength', 'conditioning']);
+  assertEqual(t, 'hypertrophy');
+});
+test('variety: strength preferred when conditioning and hypertrophy dominate', function () {
+  // cond=3, hyp=3, str=0 → str has max deficit=2
+  var t = _selectSessionTypeByVariety('train', 'high', 'muscle_gain', 7,
+    ['conditioning', 'hypertrophy', 'conditioning', 'hypertrophy', 'conditioning', 'hypertrophy']);
+  assertEqual(t, 'strength');
+});
+test('variety: conditioning preferred when strength and hypertrophy dominate', function () {
+  // str=3, hyp=3, cond=0 → cond has max deficit=2
+  var t = _selectSessionTypeByVariety('train', 'high', 'muscle_gain', 7,
+    ['strength', 'hypertrophy', 'strength', 'hypertrophy', 'strength', 'hypertrophy']);
+  assertEqual(t, 'conditioning');
+});
+
+// ── Moderate intensity: only hypertrophy/conditioning in compatible set ───────
+test('variety: moderate — only hypertrophy/conditioning picked (not strength)', function () {
+  // str=0 → huge deficit, but not in COMPATIBLE(moderate) → must pick hyp or cond
+  var t = _selectSessionTypeByVariety('train', 'moderate', 'muscle_gain', 5,
+    ['conditioning', 'conditioning', 'conditioning']);
+  assert(['hypertrophy', 'conditioning'].indexOf(t) !== -1, 'unexpected type: ' + t);
+});
+test('variety: moderate — picks conditioning when hypertrophy is overrepresented', function () {
+  // hyp=2, cond=1 in 3-session window → cond has higher deficit
+  var t = _selectSessionTypeByVariety('train', 'moderate', 'muscle_gain', 5,
+    ['hypertrophy', 'conditioning', 'hypertrophy']);
+  assertEqual(t, 'conditioning');
+});
+
+// ── All at target → falls back to diversity ───────────────────────────────────
+test('variety: all types at target → falls back to _selectSessionTypeDiverse', function () {
+  // Exact target: str=2, hyp=2, cond=2, rec=1 → all deficits ≤ 0
+  var history = ['strength', 'strength', 'hypertrophy', 'hypertrophy', 'conditioning', 'conditioning', 'recovery'];
+  // diversity(last3=['conditioning','conditioning','recovery'], high, momentum=8)
+  // prev1='recovery', highMomentum → candidate=(prev1==='strength')?'conditioning':'strength' → 'strength'
+  var t = _selectSessionTypeByVariety('train', 'high', 'muscle_gain', 8, history);
+  assertEqual(t, 'strength');
+});
+
+// ── Tie resolved by diversity ─────────────────────────────────────────────────
+test('variety: tie resolved by diversity (hyp+cond tied → diversity picks conditioning)', function () {
+  // str=1 → deficit=1; hyp=0 → deficit=2; cond=0 → deficit=2  (tie: hyp,cond)
+  // diversity(['strength'], high, momentum=8): prev='strength', highMomentum → 'conditioning'
+  var t = _selectSessionTypeByVariety('train', 'high', 'muscle_gain', 8, ['strength']);
+  assertEqual(t, 'conditioning');
+});
+test('variety: tie resolved by first candidate when diversity picks outside tied set', function () {
+  // cond=1, hyp=1 → both deficit=1; str=0 → deficit=2 (single winner at high base)
+  var t = _selectSessionTypeByVariety('train', 'high', 'muscle_gain', 5,
+    ['conditioning', 'hypertrophy']);
+  assertEqual(t, 'strength');
+});
+
+// ── Deterministic ─────────────────────────────────────────────────────────────
+test('variety: deterministic — 3 identical calls return same result', function () {
+  var history = ['strength', 'conditioning', 'strength'];
+  var r1 = _selectSessionTypeByVariety('train', 'high', 'muscle_gain', 7, history);
+  var r2 = _selectSessionTypeByVariety('train', 'high', 'muscle_gain', 7, history);
+  var r3 = _selectSessionTypeByVariety('train', 'high', 'muscle_gain', 7, history);
+  if (r1 !== r2 || r2 !== r3) throw new Error('non-deterministic: ' + r1 + ',' + r2 + ',' + r3);
+});
+
+// ── Hypertrophy subtype ───────────────────────────────────────────────────────
+test('subtype: hypertrophy → volume | tempo (valid set)', function () {
+  var t = _selectSessionSubType('hypertrophy', 2, 5, null);
+  assert(['volume', 'tempo'].indexOf(t) !== -1, 'unexpected hyp subtype: ' + t);
+});
+test('subtype: hypertrophy — no history → volume (first in set)', function () {
+  assertEqual(_selectSessionSubType('hypertrophy', 2, 5, null), 'volume');
+});
+test('subtype: hypertrophy cycles volume → tempo', function () {
+  assertEqual(_selectSessionSubType('hypertrophy', 2, 5, ['volume']), 'tempo');
+});
+test('subtype: hypertrophy cycles tempo → volume', function () {
+  assertEqual(_selectSessionSubType('hypertrophy', 2, 5, ['tempo']), 'volume');
+});
+test('subtype: hypertrophy — high fatigue does not crash (hiit not in set)', function () {
+  // fatigue gate removes hiit, but hypertrophy has no hiit → candidates unchanged
+  var t = _selectSessionSubType('hypertrophy', 4, 8, null);
+  assert(['volume', 'tempo'].indexOf(t) !== -1, 'unexpected at fat=4: ' + t);
+});
+test('subtype: hypertrophy — high momentum has no preferred sub-type (falls through to cycle)', function () {
+  // momentum=8 checks for 'hiit' and 'heavy' in candidates — neither in hyp set
+  var t = _selectSessionSubType('hypertrophy', 2, 8, ['volume']);
+  assertEqual(t, 'tempo'); // cycle: after volume → tempo
+});
+test('subtype: hypertrophy anti-rep — no triple volume', function () {
+  // last2=['volume','volume'] → anti-rep removes volume → only 'tempo' left
+  var t = _selectSessionSubType('hypertrophy', 2, 5, ['volume', 'volume']);
+  assertEqual(t, 'tempo');
+});
+
+// ── Integration: decideV3 selects hypertrophy with correct subtype ────────────
+test('variety integration: hypertrophy selected when underrepresented', function () {
+  // str=2, cond=3 → hyp has max deficit=2; engine must pick hypertrophy
+  var out = decideV3(Object.assign(baseV2({
+    fatigueLevel: 2, last3SessionsIntensity: ['high'], lastSessionDate: daysAgo(4),
+    trainingPhase: 'build'
+  }), {
+    userProfile: { adherenceScore: 0.9, trainingFrequencyLast7Days: 5, avgFatigueLast7Days: 2,
+                   last7SessionsIntensity: ['high', 'high', 'high'] },
+    userHistory:  { last7Decisions: ['train', 'train', 'train'], last7Momentum: [8, 8, 8],
+                    lastSessionTypes: ['strength', 'strength', 'conditioning', 'conditioning', 'conditioning'],
+                    lastSubTypes: ['heavy', 'heavy', 'hiit', 'zone2', 'hiit'] }
+  }));
+  assertEqual(out.recommendedSessionType, 'hypertrophy');
+  assert(['volume', 'tempo'].indexOf(out.sessionSubType) !== -1,
+    'hypertrophy must have volume/tempo subtype, got: ' + out.sessionSubType);
+});
+test('variety integration: full 3-type variety visible over extended history', function () {
+  // Start fresh — after one strength and one conditioning session, engine picks hypertrophy
+  var out1 = decideV3(Object.assign(baseV2({
+    fatigueLevel: 2, last3SessionsIntensity: ['high'], lastSessionDate: daysAgo(4)
+  }), {
+    userProfile: { adherenceScore: 0.9, trainingFrequencyLast7Days: 4, avgFatigueLast7Days: 2,
+                   last7SessionsIntensity: ['high'] },
+    userHistory: { last7Decisions: ['train'], last7Momentum: [7],
+                   lastSessionTypes: ['strength', 'conditioning'] }
+  }));
+  // str=1, cond=1, hyp=0 → hyp has max deficit=2 at high intensity
+  assertEqual(out1.recommendedSessionType, 'hypertrophy');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

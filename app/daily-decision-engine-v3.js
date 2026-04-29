@@ -247,6 +247,77 @@
     return maxRank;
   }
 
+  // ── Session variety target layer (Module 5e) ─────────────────────────────
+  //
+  // Primary session type selector — replaces _selectSessionTypeDiverse in the
+  // pipeline. Uses a 7-session target distribution to produce coach-like variety:
+  //   strength: 2  |  hypertrophy: 2  |  conditioning: 2  (per 7-session window)
+  //
+  // Algorithm (deterministic, no randomness, no weights, no probabilities):
+  //   1. decision=rest OR intensity=low → recovery  (safety, non-negotiable)
+  //   2. No history                     → fall back to _selectSessionTypeDiverse
+  //   3. Compute deficit = target − actual for each compatible type
+  //   4. Pick the compatible type with highest deficit  (clear winner)
+  //   5. Tie                            → resolve via _selectSessionTypeDiverse
+  //   6. All at/above target            → fall back to _selectSessionTypeDiverse
+  //
+  // Compatible types per base intensity:
+  //   moderate → ['hypertrophy', 'conditioning']
+  //   high     → ['strength', 'hypertrophy', 'conditioning']
+  //
+  // Recovery is NOT in the target — it is managed by upstream safety rules.
+  //
+  // @param  {string}        decision
+  // @param  {string}        baseIntensity   'low' | 'moderate' | 'high'
+  // @param  {string}        goal
+  // @param  {number|null}   momentumScore
+  // @param  {string[]|null} lastSessionTypes last ≤7 session types (oldest first)
+  function _selectSessionTypeByVariety(decision, baseIntensity, goal, momentumScore, lastSessionTypes) {
+    if (decision === 'rest')     return 'recovery';
+    if (baseIntensity === 'low') return 'recovery';
+
+    var TARGETS = { strength: 2, hypertrophy: 2, conditioning: 2 };
+    var COMPATIBLE = {
+      moderate: ['hypertrophy', 'conditioning'],
+      high:     ['strength', 'hypertrophy', 'conditioning']
+    };
+    var allowed  = COMPATIBLE[baseIntensity] || COMPATIBLE.moderate;
+    var history  = Array.isArray(lastSessionTypes) ? lastSessionTypes.slice() : [];
+
+    if (history.length === 0) {
+      return _selectSessionTypeDiverse(decision, baseIntensity, goal, momentumScore, null);
+    }
+
+    // Actual counts over last 7 sessions
+    var counts = {};
+    history.slice(-7).forEach(function(t) { counts[t] = (counts[t] || 0) + 1; });
+
+    // Max deficit across allowed types
+    var maxDeficit = -Infinity;
+    allowed.forEach(function(t) {
+      var d = (TARGETS[t] || 0) - (counts[t] || 0);
+      if (d > maxDeficit) maxDeficit = d;
+    });
+
+    // All types at/above target → restore diversity-based rotation
+    if (maxDeficit <= 0) {
+      return _selectSessionTypeDiverse(decision, baseIntensity, goal, momentumScore,
+        history.slice(-3));
+    }
+
+    // Candidates = allowed types tied at highest deficit
+    var candidates = allowed.filter(function(t) {
+      return (TARGETS[t] || 0) - (counts[t] || 0) === maxDeficit;
+    });
+
+    if (candidates.length === 1) return candidates[0];
+
+    // Tie: use _selectSessionTypeDiverse as tiebreaker among tied candidates
+    var diversityPick = _selectSessionTypeDiverse(decision, baseIntensity, goal, momentumScore,
+      history.slice(-3));
+    return (candidates.indexOf(diversityPick) !== -1) ? diversityPick : candidates[0];
+  }
+
   // ── Session subtype variation layer (Module 5d) ───────────────────────────
   //
   // Adds variation INSIDE a sessionType without modifying sessionType, intensity,
@@ -255,6 +326,7 @@
   // Sub-type sets:
   //   conditioning → hiit | zone2 | mixed
   //   strength     → heavy | volume | explosive
+  //   hypertrophy  → volume | tempo
   //   other/recovery → null (no sub-type)
   //
   // Selection rules (priority order):
@@ -279,7 +351,8 @@
 
     var SUB_TYPES = {
       conditioning: ['hiit', 'zone2', 'mixed'],
-      strength:     ['heavy', 'volume', 'explosive']
+      strength:     ['heavy', 'volume', 'explosive'],
+      hypertrophy:  ['volume', 'tempo']
     };
     var allCandidates = SUB_TYPES[sessType];
     if (!allCandidates) return null;  // unknown sessType
@@ -1145,16 +1218,16 @@
     // ── Module 3 : profileType ────────────────────────────────────────────────
     var profile = _detectProfileType(inputs.userProfile || null, momentum);
 
-    // ── Base intensity (post-safety, pre-adaptive) — feeds diversity layer ─────
+    // ── Base intensity (post-safety, pre-adaptive) — feeds variety layer ──────
     var _lastSessTypes = (inputs.userHistory && Array.isArray(inputs.userHistory.lastSessionTypes))
-      ? inputs.userHistory.lastSessionTypes.slice(-3) : null;
+      ? inputs.userHistory.lastSessionTypes.slice(-7) : null;  // Module 5e: 7-entry window
     var baseIntensity = (decObj.decision === 'rest') ? 'low' : RANK_INTENSITY[ceiling.maxRank];
 
-    // ── Module 5b : session type diversity (runs on BASE intensity) ───────────
+    // ── Module 5e : session type variety target (runs on BASE intensity) ──────
     // Decided BEFORE adaptive caps so session type drives intensity, not the reverse.
     var sessType;
     if (_lastSessTypes) {
-      sessType = _selectSessionTypeDiverse(decObj.decision, baseIntensity, inputs.goal, momentum, _lastSessTypes);
+      sessType = _selectSessionTypeByVariety(decObj.decision, baseIntensity, inputs.goal, momentum, _lastSessTypes);
     }
 
     // ── Module 4 : adaptive caps ──────────────────────────────────────────────
@@ -1264,6 +1337,8 @@
     _applySessionTypeCap:             _applySessionTypeCap,
     // V3 Module 5d (session subtype variation)
     _selectSessionSubType:            _selectSessionSubType,
+    // V3 Module 5e (session variety target)
+    _selectSessionTypeByVariety:      _selectSessionTypeByVariety,
     // V3 Module 1
     _validateUserProfile:             _validateUserProfile,
     _normalizeLast7SessionsIntensity: _normalizeLast7SessionsIntensity,
