@@ -4012,6 +4012,222 @@ function renderCardSport() {
   return c;
 }
 
+// ─── V3 COACHING CARD — Intelligence quotidienne ─────────────────────────────
+// Collect available state and call the V3 engine + coaching layer.
+// Fully guarded: any error silently returns null (existing behavior preserved).
+function _v3GatherInputs(S) {
+  // ── Goal mapping (GOALS is integer index) ──
+  var GOALS = window.GOALS || [];
+  var goalKey = (S.goal !== null && S.goal !== undefined && GOALS[S.goal]) ? GOALS[S.goal].key : null;
+  var engineGoal = ({
+    bulk: 'muscle_gain', lean_bulk: 'muscle_gain',
+    maintain: 'maintenance', recomposition: 'maintenance',
+    cut: 'fat_loss', shred: 'fat_loss'
+  })[goalKey] || 'maintenance';
+
+  // ── trainingFrequency (integer 1-7) ──
+  var freq = 3;
+  if (Array.isArray(S.trainingDaysSelected) && S.trainingDaysSelected.length >= 1 && S.trainingDaysSelected.length <= 7) {
+    freq = S.trainingDaysSelected.length;
+  } else if (typeof S.sportDays === 'number' && S.sportDays >= 1 && S.sportDays <= 7) {
+    freq = Math.round(S.sportDays);
+  }
+
+  // ── Fatigue + sleep from today's wellness ──
+  var fatigueLevel = 3;
+  var sleepQuality = null;
+  var todayStr = new Date().toISOString().slice(0, 10);
+  var w = S.todayWellness;
+  if (w && w.date === todayStr && !w.dismissed) {
+    var eV = w.energy;
+    if (eV === 'haut' || eV === 'high') fatigueLevel = 2;
+    else if (eV === 'bas' || eV === 'low') fatigueLevel = 4;
+    var mV = w.muscles;
+    if (mV === 'douleurs' || mV === 'sore') fatigueLevel = Math.min(5, fatigueLevel + 1);
+    fatigueLevel = Math.max(1, Math.min(5, fatigueLevel));
+
+    var slRaw = w.sleep;
+    if (typeof slRaw === 'string') {
+      slRaw = ({ excellent: 5, bien: 4, good: 4, moyen: 3, average: 3, mauvais: 2, bad: 2, tres_mauvais: 1, very_bad: 1 })[slRaw] || null;
+    }
+    var slN = Number(slRaw);
+    if (!isNaN(slN) && slN >= 1 && slN <= 5) sleepQuality = Math.round(slN);
+  }
+
+  // ── lastSessionDate (most recent past date with a logged session) ──
+  var lastSessionDate = null;
+  try {
+    var dates = [];
+    Object.keys(S.sessionHistory || {}).forEach(function(k) {
+      var m = k.match(/(\d{4}-\d{2}-\d{2})/); if (m) dates.push(m[1]);
+    });
+    Object.keys(S.muscuSessionLog || {}).forEach(function(k) {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(k)) dates.push(k);
+    });
+    dates = dates.filter(function(d) { return d < todayStr; });
+    dates.sort();
+    if (dates.length) lastSessionDate = dates[dates.length - 1];
+  } catch(e) {}
+  if (!lastSessionDate) {
+    lastSessionDate = new Date(Date.now() - 2 * 86400000).toISOString().slice(0, 10);
+  }
+
+  // ── V3 userProfile (optional) ──
+  var userProfile = null;
+  try {
+    var cutoff7 = new Date(Date.now() - 7 * 86400000).toISOString().slice(0, 10);
+    var seen = {};
+    Object.keys(S.sessionHistory || {}).forEach(function(k) {
+      var m = k.match(/(\d{4}-\d{2}-\d{2})/);
+      if (m && m[1] >= cutoff7 && m[1] < todayStr) seen[m[1]] = 1;
+    });
+    Object.keys(S.muscuSessionLog || {}).forEach(function(k) {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(k) && k >= cutoff7 && k < todayStr) seen[k] = 1;
+    });
+    var freq7 = Object.keys(seen).length;
+
+    var prof = {};
+    if (freq7 >= 0 && freq7 <= 7) prof.trainingFrequencyLast7Days = freq7;
+
+    // avgFatigueLast7Days from wellness history
+    if (window.getWellnessHistory) {
+      var wHist = window.getWellnessHistory(7) || [];
+      var real = wHist.filter(function(e) { return e && !e.dismissed; });
+      if (real.length >= 1) {
+        var fatSum = 0;
+        real.forEach(function(e) {
+          var ef = e.energy;
+          var fs = (ef === 'haut' || ef === 'high') ? 2 : (ef === 'bas' || ef === 'low') ? 4 : 3;
+          if (e.muscles === 'douleurs' || e.muscles === 'sore') fs = Math.min(5, fs + 1);
+          fatSum += fs;
+        });
+        var avg = Math.round((fatSum / real.length) * 10) / 10;
+        prof.avgFatigueLast7Days = Math.max(1, Math.min(5, avg));
+      }
+    }
+
+    // sessionTypeHistory derived from sport type
+    var stMap = {
+      musculation: 'strength', calisthenics: 'strength',
+      running: 'cardio', cycling: 'cardio', triathlon: 'cardio',
+      crossfit: 'hiit', hyrox: 'hiit', yoga: 'mobility'
+    };
+    var stType = stMap[S.sportType] || null;
+    if (stType) prof.lastSessionTypeHistory = [stType, stType, stType];
+
+    if (Object.keys(prof).length > 0) userProfile = prof;
+  } catch(eUp) { userProfile = null; }
+
+  var inputs = {
+    goal:                     engineGoal,
+    fatigueLevel:             fatigueLevel,
+    trainingFrequency:        freq,
+    lastSessionDate:          lastSessionDate,
+    last3SessionsIntensity:   ['moderate', 'moderate', 'moderate']
+  };
+  if (sleepQuality) inputs.sleepQuality = sleepQuality;
+  if (userProfile)  inputs.userProfile  = userProfile;
+  return inputs;
+}
+
+function renderV3CoachingCard() {
+  var S = window.S;
+  if (!S || S.appMode === 'nutrition') return null;
+  var engine = window.DailyDecisionEngineV3;
+  if (!engine || typeof engine.decideDailyPlanV3 !== 'function') return null;
+
+  var result, coaching;
+  try {
+    result = engine.decideDailyPlanV3(_v3GatherInputs(S));
+  } catch(eEng) {
+    console.warn('[SFC V3 coaching] engine error:', eEng.message);
+    return null;
+  }
+  try {
+    coaching = engine._buildCoachingMessage(result);
+  } catch(eMsg) {
+    console.warn('[SFC V3 coaching] message error:', eMsg.message);
+    return null;
+  }
+  if (!coaching) return null;
+
+  var SESSION_FR = { strength: 'Musculation', cardio: 'Cardio', hiit: 'HIIT', mobility: 'Mobilité', recovery: 'Récupération' };
+  var INTENSITY_FR = { low: 'Faible', moderate: 'Modérée', high: 'Élevée' };
+  var PROFILE_FR = {
+    disciplined: 'Régulier', inconsistent: 'Rythme irrégulier',
+    overtraining: 'Fatigue accumulée', cautious: 'Progression prudente', beginner: 'Reprise progressive'
+  };
+
+  var c = card('');
+
+  // ── Block 1 : Daily coaching headline ──
+  c.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--ink-500,#6B6B65);margin-bottom:12px;font-weight:500;'
+  }, 'SMARTFITCOACH TODAY'));
+  c.appendChild(h('div', {
+    style: 'font-family:Georgia,serif;font-size:20px;font-weight:normal;line-height:1.2;margin-bottom:6px;letter-spacing:-0.2px;'
+  }, coaching.headline));
+  c.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--ink-500,#6B6B65);line-height:1.65;margin-bottom:16px;font-weight:300;'
+  }, coaching.shortMessage));
+
+  c.appendChild(h('div', { style: 'height:1px;background:var(--line,#D8D8D0);margin-bottom:14px;' }));
+
+  // ── Block 2 : Intelligence details ──
+  var rows = [
+    { label: 'Séance',    val: SESSION_FR[result.recommendedSessionType] || result.recommendedSessionType },
+    { label: 'Intensité', val: INTENSITY_FR[result.recommendedIntensity] || result.recommendedIntensity }
+  ];
+  if (result.momentumScore !== null && result.momentumScore !== undefined) {
+    rows.push({ label: 'Momentum', val: result.momentumScore + ' / 10' });
+  }
+  if (result.profileType) {
+    rows.push({ label: 'Profil', val: PROFILE_FR[result.profileType] || result.profileType });
+  }
+  var detWrap = h('div', { style: 'margin-bottom:14px;' });
+  rows.forEach(function(r, ri) {
+    var row = h('div', {
+      style: 'display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;' +
+             (ri < rows.length - 1 ? 'border-bottom:1px solid var(--paper-3,#EEEAE0);' : '')
+    });
+    row.appendChild(h('span', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-500,#6B6B65);'
+    }, r.label));
+    row.appendChild(h('span', {
+      style: 'font-family:Georgia,serif;font-size:14px;color:var(--ink-900,#0A0A09);'
+    }, r.val));
+    detWrap.appendChild(row);
+  });
+  c.appendChild(detWrap);
+
+  c.appendChild(h('div', { style: 'height:1px;background:var(--line,#D8D8D0);margin-bottom:14px;' }));
+
+  // ── Block 3 : Pourquoi ──
+  c.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--ink-500,#6B6B65);margin-bottom:8px;'
+  }, 'Pourquoi cette recommandation ?'));
+  c.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--ink-700,#2B2B27);line-height:1.7;margin-bottom:6px;font-weight:300;'
+  }, coaching.coachingExplanation));
+  if (result.adaptationReason) {
+    c.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--ink-500,#6B6B65);line-height:1.5;font-style:italic;margin-bottom:6px;'
+    }, result.adaptationReason));
+  }
+
+  c.appendChild(h('div', { style: 'height:1px;background:var(--line,#D8D8D0);margin-bottom:14px;' }));
+
+  // ── Block 4 : Action du jour ──
+  c.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--ink-500,#6B6B65);margin-bottom:8px;'
+  }, 'Action du jour'));
+  c.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--ink-700,#2B2B27);line-height:1.7;font-weight:300;'
+  }, coaching.userAction));
+
+  return c;
+}
+
 // ─── RENDER CARD — Jour de repos (premium) ───
 function renderCardRestDay(S) {
   var today = new Date().toISOString().slice(0, 10);
@@ -6241,6 +6457,12 @@ function renderTodayDashboard(p) {
   // ── Card 1 — SÉANCE DU JOUR (position prioritaire) ──
   var cardSport = renderCardSport();
   if (cardSport) wrapper.appendChild(cardSport);
+
+  // ── V3 Coaching Card — intelligence adaptative (après la séance) ──
+  try {
+    var _cardV3 = renderV3CoachingCard();
+    if (_cardV3) wrapper.appendChild(_cardV3);
+  } catch (_eV3) { console.warn('[SFC V3 coaching card]', _eV3); }
 
   // ── Streak inline — juste sous la séance pour la motivation immédiate ──
   // UX fix: était après les cartes nutrition → invisible. Maintenant sous la séance.
