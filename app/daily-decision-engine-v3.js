@@ -222,6 +222,7 @@
   // ═══════════════════════════════════════════════════════════════════════════
   // V3 MODULE 1 — userProfile : validation + normalisation
   // V3 MODULE 2 — momentumScore
+  // V3 MODULE 3 — behavior profile detection
   // ═══════════════════════════════════════════════════════════════════════════
 
   // ── Normalisation de last7SessionsIntensity ───────────────────────────────
@@ -276,6 +277,58 @@
     if (freq7     !== null && freq7 === 0)       score -= 2;
 
     return Math.max(0, Math.min(10, score));
+  }
+
+  // ── Module 3 : Détection du profil comportemental ───────────────────────────
+  //
+  // Retourne l'un des 5 profils selon les données des 7 derniers jours.
+  // Retourne 'beginner' si le profil est absent ou si aucune règle ne s'applique.
+  //
+  // Hiérarchie (ordre de priorité décroissant) :
+  //   overtraining > inconsistent > cautious > disciplined > beginner
+  //
+  // Règles :
+  //   overtraining : avgFatigueLast7Days >= 4  AND trainingFrequencyLast7Days >= 4
+  //   disciplined  : adherenceScore >= 0.8     AND trainingFrequencyLast7Days >= 3
+  //                  AND avgFatigueLast7Days < 4
+  //   inconsistent : adherenceScore < 0.5      OR  trainingFrequencyLast7Days <= 1
+  //   cautious     : avgFatigueLast7Days >= 3  AND trainingFrequencyLast7Days <= 2
+  //   beginner     : défaut (aucune règle satisfaite)
+  //
+  // Les champs manquants dans userProfile ne sont pas évalués (pas de crash).
+  // momentumScore est accepté pour signature cohérente (usage futur Module 4).
+  function _detectProfileType(userProfile, momentumScore) {
+    if (!userProfile) return 'beginner';
+
+    var freq7     = typeof userProfile.trainingFrequencyLast7Days === 'number'
+      ? userProfile.trainingFrequencyLast7Days : null;
+    var adherence = typeof userProfile.adherenceScore === 'number'
+      ? userProfile.adherenceScore : null;
+    var avgFat    = typeof userProfile.avgFatigueLast7Days === 'number'
+      ? userProfile.avgFatigueLast7Days : null;
+
+    // 1. overtraining (priorité maximale)
+    if (avgFat !== null && freq7 !== null && avgFat >= 4 && freq7 >= 4) {
+      return 'overtraining';
+    }
+
+    // 2. inconsistent (adhérence faible OU fréquence très basse)
+    var inconsistent = (adherence !== null && adherence < 0.5) ||
+                       (freq7     !== null && freq7 <= 1);
+    if (inconsistent) return 'inconsistent';
+
+    // 3. cautious (fatigue modérée + fréquence faible)
+    if (avgFat !== null && freq7 !== null && avgFat >= 3 && freq7 <= 2) {
+      return 'cautious';
+    }
+
+    // 4. disciplined (adhérence élevée + fréquence régulière + fatigue contrôlée)
+    if (adherence !== null && freq7 !== null && avgFat !== null &&
+        adherence >= 0.8 && freq7 >= 3 && avgFat < 4) {
+      return 'disciplined';
+    }
+
+    return 'beginner';
   }
 
   // ── Validation du profil utilisateur ────────────────────────────────────────
@@ -431,6 +484,9 @@
     // ── Module 2 : momentumScore ──────────────────────────────────────────────
     var momentum = _computeMomentumScore(inputs.userProfile || null);
 
+    // ── Module 3 : profileType ────────────────────────────────────────────────
+    var profile = _detectProfileType(inputs.userProfile || null, momentum);
+
     // ── Sortie V3 ─────────────────────────────────────────────────────────────
     return {
       // ── V2 fields (inchangés) ──────────────────────────────────────────────
@@ -443,7 +499,7 @@
       reason:                 reason,
       // ── V3 fields ─────────────────────────────────────────────────────────
       momentumScore:          momentum,           // Module 2 ✓
-      profileType:            'beginner',         // Module 3 (stub)
+      profileType:            profile,            // Module 3 ✓
       adaptationReason:       null,               // Module 4 (stub)
       _debug: {
         rawFatigue:          inputs.fatigueLevel,
@@ -474,7 +530,9 @@
     _normalizeLast7SessionsIntensity: _normalizeLast7SessionsIntensity,
     _normalizeLastSessionTypeHistory: _normalizeLastSessionTypeHistory,
     // V3 Module 2
-    _computeMomentumScore:            _computeMomentumScore
+    _computeMomentumScore:            _computeMomentumScore,
+    // V3 Module 3
+    _detectProfileType:               _detectProfileType
   };
 
   if (typeof module !== 'undefined' && module.exports) {

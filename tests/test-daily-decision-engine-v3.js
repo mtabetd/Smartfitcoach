@@ -21,6 +21,7 @@ var _validateUserProfile             = DDEv3._validateUserProfile;
 var _normalizeLast7SessionsIntensity = DDEv3._normalizeLast7SessionsIntensity;
 var _normalizeLastSessionTypeHistory = DDEv3._normalizeLastSessionTypeHistory;
 var _computeMomentumScore            = DDEv3._computeMomentumScore;
+var _detectProfileType               = DDEv3._detectProfileType;
 
 // ── Harness ───────────────────────────────────────────────────────────────────
 var passed = 0, failed = 0;
@@ -292,7 +293,7 @@ test('avec userProfile valide → momentumScore est un nombre 0–10', function 
   assert(typeof out.momentumScore === 'number', 'expected number, got ' + typeof out.momentumScore);
   assert(out.momentumScore >= 0 && out.momentumScore <= 10, 'out of range: ' + out.momentumScore);
 });
-test('avec userProfile valide → profileType toujours "beginner" (Module 3)', function () {
+test('profil de base (adherence=0.75, freq7=3, avgFat=2.5) → beginner (aucune règle forte)', function () {
   assertEqual(decideV3(baseV3()).profileType, 'beginner');
 });
 test('avec userProfile valide → adaptationReason toujours null (Module 4)', function () {
@@ -584,6 +585,185 @@ test('haute fatigue → momentum 4', function () {
     userProfile: { avgFatigueLast7Days: 4.5 }
   }));
   assertEqual(out.momentumScore, 4);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('\n── Section 11 : _detectProfileType — règles unitaires ───────\n');
+
+// ── Cas par défaut ────────────────────────────────────────────────────────────
+test('null → beginner', function () {
+  assertEqual(_detectProfileType(null), 'beginner');
+});
+test('undefined → beginner', function () {
+  assertEqual(_detectProfileType(undefined), 'beginner');
+});
+test('{} vide → beginner (aucune règle évaluable)', function () {
+  assertEqual(_detectProfileType({}), 'beginner');
+});
+test('momentumScore accepté sans crash (signature cohérente)', function () {
+  assertEqual(_detectProfileType(null, 5), 'beginner');
+  assertEqual(_detectProfileType({}, 8), 'beginner');
+});
+
+// ── overtraining ──────────────────────────────────────────────────────────────
+test('overtraining : avgFat=4 + freq7=4 → overtraining', function () {
+  assertEqual(_detectProfileType({ avgFatigueLast7Days: 4, trainingFrequencyLast7Days: 4 }), 'overtraining');
+});
+test('overtraining : avgFat=5 + freq7=7 → overtraining', function () {
+  assertEqual(_detectProfileType({ avgFatigueLast7Days: 5, trainingFrequencyLast7Days: 7 }), 'overtraining');
+});
+test('overtraining : boundary avgFat=4.0 exact → overtraining', function () {
+  assertEqual(_detectProfileType({ avgFatigueLast7Days: 4.0, trainingFrequencyLast7Days: 4 }), 'overtraining');
+});
+test('overtraining : avgFat=3.9 → pas overtraining (boundary)', function () {
+  var r = _detectProfileType({ avgFatigueLast7Days: 3.9, trainingFrequencyLast7Days: 4 });
+  assert(r !== 'overtraining', 'avgFat 3.9 must not trigger overtraining');
+});
+test('overtraining : freq7=3 → pas overtraining (boundary, besoin >=4)', function () {
+  var r = _detectProfileType({ avgFatigueLast7Days: 4.5, trainingFrequencyLast7Days: 3 });
+  assert(r !== 'overtraining', 'freq7=3 must not trigger overtraining');
+});
+
+// ── disciplined ───────────────────────────────────────────────────────────────
+test('disciplined : adherence=0.8 + freq7=3 + avgFat=2 → disciplined', function () {
+  assertEqual(_detectProfileType({ adherenceScore: 0.8, trainingFrequencyLast7Days: 3, avgFatigueLast7Days: 2 }), 'disciplined');
+});
+test('disciplined : boundary adherence=0.8 exact', function () {
+  assertEqual(_detectProfileType({ adherenceScore: 0.8, trainingFrequencyLast7Days: 3, avgFatigueLast7Days: 1 }), 'disciplined');
+  var r = _detectProfileType({ adherenceScore: 0.79, trainingFrequencyLast7Days: 3, avgFatigueLast7Days: 1 });
+  assert(r !== 'disciplined', 'adherence=0.79 must not trigger disciplined');
+});
+test('disciplined : avgFat champ absent → pas disciplined (condition non vérifiable)', function () {
+  var r = _detectProfileType({ adherenceScore: 0.9, trainingFrequencyLast7Days: 4 });
+  assert(r !== 'disciplined', 'missing avgFat must block disciplined');
+});
+
+// ── inconsistent ──────────────────────────────────────────────────────────────
+test('inconsistent : adherence=0.49 → inconsistent', function () {
+  assertEqual(_detectProfileType({ adherenceScore: 0.49 }), 'inconsistent');
+});
+test('inconsistent : adherence=0.5 → pas inconsistent (boundary)', function () {
+  var r = _detectProfileType({ adherenceScore: 0.5, trainingFrequencyLast7Days: 3, avgFatigueLast7Days: 2 });
+  assert(r !== 'inconsistent');
+});
+test('inconsistent : freq7=1 → inconsistent', function () {
+  assertEqual(_detectProfileType({ trainingFrequencyLast7Days: 1 }), 'inconsistent');
+});
+test('inconsistent : freq7=0 → inconsistent', function () {
+  assertEqual(_detectProfileType({ trainingFrequencyLast7Days: 0 }), 'inconsistent');
+});
+test('inconsistent : freq7=2 → pas inconsistent (boundary)', function () {
+  var r = _detectProfileType({ trainingFrequencyLast7Days: 2, avgFatigueLast7Days: 2, adherenceScore: 0.7 });
+  assert(r !== 'inconsistent', 'freq7=2 must not trigger inconsistent');
+});
+
+// ── cautious ─────────────────────────────────────────────────────────────────
+test('cautious : avgFat=3 + freq7=2 → cautious', function () {
+  assertEqual(_detectProfileType({ avgFatigueLast7Days: 3, trainingFrequencyLast7Days: 2 }), 'cautious');
+});
+test('cautious : boundary avgFat=3.0 exact', function () {
+  assertEqual(_detectProfileType({ avgFatigueLast7Days: 3.0, trainingFrequencyLast7Days: 2 }), 'cautious');
+});
+test('cautious : avgFat=2.9 → pas cautious (boundary)', function () {
+  var r = _detectProfileType({ avgFatigueLast7Days: 2.9, trainingFrequencyLast7Days: 2 });
+  assert(r !== 'cautious', 'avgFat=2.9 must not trigger cautious');
+});
+test('cautious : freq7=3 → pas cautious (boundary, besoin <=2)', function () {
+  var r = _detectProfileType({ avgFatigueLast7Days: 3.5, trainingFrequencyLast7Days: 3 });
+  assert(r !== 'cautious', 'freq7=3 must not trigger cautious');
+});
+
+// ── Priorités ─────────────────────────────────────────────────────────────────
+test('priorité : overtraining > disciplined', function () {
+  // avgFat=4.5(overtraining), freq7=5(overtraining + disciplined), adherence=0.9(disciplined)
+  assertEqual(_detectProfileType({
+    avgFatigueLast7Days: 4.5, trainingFrequencyLast7Days: 5, adherenceScore: 0.9
+  }), 'overtraining');
+});
+test('priorité : overtraining > inconsistent', function () {
+  // avgFat=4, freq7=4 (overtraining) ; adherence=0.3 (inconsistent)
+  assertEqual(_detectProfileType({
+    avgFatigueLast7Days: 4, trainingFrequencyLast7Days: 4, adherenceScore: 0.3
+  }), 'overtraining');
+});
+test('priorité : inconsistent > cautious', function () {
+  // adherence=0.3(inconsistent) + avgFat=3.5(cautious) + freq7=1(inconsistent+cautious)
+  assertEqual(_detectProfileType({
+    adherenceScore: 0.3, avgFatigueLast7Days: 3.5, trainingFrequencyLast7Days: 1
+  }), 'inconsistent');
+});
+test('priorité : inconsistent > disciplined (adherence<0.5 même si freq haute)', function () {
+  // adherence=0.3(inconsistent) — freq7=5 et avgFat=2 satisferaient disciplined mais l'adherence casse
+  assertEqual(_detectProfileType({
+    adherenceScore: 0.3, trainingFrequencyLast7Days: 5, avgFatigueLast7Days: 2
+  }), 'inconsistent');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('\n── Section 12 : Intégration — profileType dans le moteur ────\n');
+
+var V2_FIELDS_ALL = ['decision','recommendedIntensity','recommendedSessionType',
+                     'fatigueEffective','priorityApplied','progressionTriggered','reason'];
+
+test('sans userProfile → profileType = "beginner"', function () {
+  assertEqual(decideV3(baseV2()).profileType, 'beginner');
+});
+test('overtraining profile → moteur retourne "overtraining"', function () {
+  var out = decideV3(baseV2({
+    userProfile: { avgFatigueLast7Days: 4.5, trainingFrequencyLast7Days: 5 }
+  }));
+  assertEqual(out.profileType, 'overtraining');
+});
+test('disciplined profile → moteur retourne "disciplined"', function () {
+  var out = decideV3(baseV2({
+    userProfile: { adherenceScore: 0.9, trainingFrequencyLast7Days: 5, avgFatigueLast7Days: 2 }
+  }));
+  assertEqual(out.profileType, 'disciplined');
+});
+test('inconsistent profile → moteur retourne "inconsistent"', function () {
+  var out = decideV3(baseV2({
+    userProfile: { adherenceScore: 0.2 }
+  }));
+  assertEqual(out.profileType, 'inconsistent');
+});
+test('cautious profile → moteur retourne "cautious"', function () {
+  var out = decideV3(baseV2({
+    userProfile: { avgFatigueLast7Days: 3.5, trainingFrequencyLast7Days: 2 }
+  }));
+  assertEqual(out.profileType, 'cautious');
+});
+test('profileType ne modifie pas decision', function () {
+  var v2  = decideV2(baseV2());
+  var v3o = decideV3(baseV2({ userProfile: { avgFatigueLast7Days: 4.5, trainingFrequencyLast7Days: 5 } }));
+  assertEqual(v2.decision, v3o.decision);
+});
+test('profileType ne modifie pas recommendedIntensity', function () {
+  var v2  = decideV2(baseV2());
+  var v3d = decideV3(baseV2({ userProfile: { adherenceScore: 0.9, trainingFrequencyLast7Days: 5, avgFatigueLast7Days: 2 } }));
+  assertEqual(v2.recommendedIntensity, v3d.recommendedIntensity);
+});
+test('tous les champs V2 inchangés avec userProfile overtraining', function () {
+  var v2 = decideV2(baseV2());
+  var v3 = decideV3(baseV2({ userProfile: { avgFatigueLast7Days: 4.5, trainingFrequencyLast7Days: 5 } }));
+  V2_FIELDS_ALL.forEach(function (f) {
+    if (v2[f] !== v3[f]) throw new Error(f + ': V2=' + JSON.stringify(v2[f]) + ' V3=' + JSON.stringify(v3[f]));
+  });
+});
+test('momentumScore inchangé par Module 3', function () {
+  // Same userProfile before/after Module 3 change → same momentumScore
+  var out = decideV3(baseV2({ userProfile: { trainingFrequencyLast7Days: 5, adherenceScore: 0.9 } }));
+  // freq7=5(+1) + adherence=0.9(+1) = 5+2 = 7
+  assertEqual(out.momentumScore, 7);
+});
+test('adaptationReason toujours null (Module 4 non implémenté)', function () {
+  assertEqual(decideV3(baseV2({ userProfile: { avgFatigueLast7Days: 4.5, trainingFrequencyLast7Days: 5 } })).adaptationReason, null);
+});
+test('profileType valide dans l\'ensemble attendu', function () {
+  var valid = ['beginner','disciplined','inconsistent','overtraining','cautious'];
+  [null, baseProfile(), { adherenceScore: 0.2 }, { avgFatigueLast7Days: 4.5, trainingFrequencyLast7Days: 5 }].forEach(function (up) {
+    var out = decideV3(baseV2({ userProfile: up || undefined }));
+    assert(valid.indexOf(out.profileType) !== -1, 'invalid profileType: ' + out.profileType);
+  });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
