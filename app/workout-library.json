@@ -535,6 +535,177 @@
           "scaling": "30 min flat walk; add incline or time as fitness builds",
           "coaching_cue": "A power walk at 6 km/h with full arm drive is a legitimate aerobic training session — do not underestimate it."
         }
+      ],
+      "intermediate": [
+        {
+          "id": "z2-i-01",
+          "title": "45-Minute HR Discipline Run",
+          "format": "Continuous run with strict HR ceiling",
+          "structure": {
+            "duration": "45 min",
+            "hr_ceiling": "70% max HR",
+            "protocol": "Slow or walk immediately whenever HR exceeds ceiling — resume running once HR drops back below",
+            "target_rpe": "4–5/10",
+            "note": "Expect to walk on hills and in minutes 30–40 when fatigue accumulates — this is correct behaviour, not failure"
+          },
+          "duration_min": 45,
+          "equipment": ["HR monitor", "outdoor or treadmill"],
+          "scaling": "35 min, reduce HR ceiling to 68%",
+          "coaching_cue": "The walk breaks are the training — you are teaching your body to stay aerobic, not to survive anaerobically."
+        },
+        {
+          "id": "z2-i-02",
+          "title": "60-Minute Cadence Bike",
+          "format": "Structured cadence-progressive stationary bike",
+          "structure": {
+            "phases": [
+              { "label": "Block 1", "duration": "15 min", "cadence": "80 RPM", "rpe": "4/10" },
+              { "label": "Block 2", "duration": "15 min", "cadence": "85 RPM", "rpe": "4–5/10" },
+              { "label": "Block 3", "duration": "15 min", "cadence": "90 RPM", "rpe": "5/10" },
+              { "label": "Block 4", "duration": "15 min", "cadence": "85 RPM", "rpe": "4/10 — cool-down" }
+            ],
+            "rule": "Reduce resistance to maintain cadence target — do not drop cadence to manage load"
+          },
+          "duration_min": 60,
+          "equipment": ["stationary bike with cadence display"],
+          "scaling": "45 min total, 3 blocks of 15 min at 80/85/80 RPM",
+          "coaching_cue": "Higher cadence at the same HR means your aerobic system is running more efficiently — that is the adaptation you are chasing."
+        },
+        {
+          "id": "z2-i-03",
+          "title": "Steady Row — Split Lock",
+          "format": "Continuous rowing erg at fixed split target",
+          "structure": {
+            "duration": "40 min",
+            "stroke_rate": "20–24 spm",
+            "split_target": "Set a pace you can hold for 40 min — typically 15–25s per 500m slower than your 2k pace",
+            "hr_check": "Every 10 min — if HR climbs above 75% max, add 5s to your split",
+            "volume_target": "Approximately 8,000–10,000m depending on pace"
+          },
+          "duration_min": 40,
+          "equipment": ["rowing ergometer"],
+          "scaling": "30 min, stroke rate 18–22 spm, slower split",
+          "coaching_cue": "A split you can hold means you finish feeling like you could do 10 more minutes — if you feel relieved at the end, you went too hard."
+        },
+        {
+          "id": "z2-i-04",
+          "title": "Negative Split Run",
+          "format": "Single continuous run divided into slower-first / faster-second halves",
+          "structure": {
+            "total_duration": "50 min",
+            "half_1": { "duration": "25 min", "target": "RPE 3–4/10 — deliberately conservative" },
+            "half_2": { "duration": "25 min", "target": "RPE 4–5/10 — zone 2 ceiling, still conversational" },
+            "rule": "Half 2 pace must still allow full sentences — if it doesn't, you went too fast in the second half"
+          },
+          "duration_min": 50,
+          "equipment": ["outdoor or treadmill"],
+          "scaling": "40 min total — 20 min conservative / 20 min at ceiling",
+          "coaching_cue": "Most athletes run their easy runs positive-split without realising — this session corrects that pattern permanently."
+        },
+        {
+          "id": "z2-i-05",
+          "title": "Aerobic Cross-Train Block",
+          "format": "Consecutive dual-modality session with immediate transitions",
+          "structure": {
+            "blocks": [
+              { "modality": "Row", "duration": "20 min", "rpe": "4/10", "stroke_rate": "20 spm" },
+              { "modality": "Stationary Bike", "duration": "20 min", "rpe": "4–5/10", "cadence": "80–85 RPM" },
+              { "modality": "Brisk Walk or Easy Jog", "duration": "10 min", "rpe": "3/10 — active cool-down" }
+            ],
+            "rest_between_blocks": "none — immediate transition",
+            "note": "HR will spike briefly on each transition — wait 90s for it to restabilise before adjusting effort"
+          },
+          "duration_min": 50,
+          "equipment": ["rowing ergometer", "stationary bike"],
+          "scaling": "15 min row + 15 min bike + 5 min walk (35 min total)",
+          "coaching_cue": "Switching modality mid-session taxes your aerobic system in a different pattern — the brief HR spike is not a failure of pacing."
+        },
+        {
+          "id": "z2-i-06",
+          "title": "MAF Run",
+          "format": "Continuous run at MAF heart rate ceiling (180 − age)",
+          "structure": {
+            "duration": "45 min",
+            "hr_ceiling": "180 minus your age in beats per minute",
+            "protocol": "Never exceed ceiling — slow to a walk if needed",
+            "example": "Age 30 → ceiling 150 bpm; age 40 → ceiling 140 bpm",
+            "progression_signal": "After 4 weeks, you should be running faster at the same HR ceiling — that is the measurable adaptation"
+          },
+          "duration_min": 45,
+          "equipment": ["HR monitor", "outdoor or treadmill"],
+          "scaling": "30 min, same HR ceiling protocol",
+          "coaching_cue": "The MAF method works only if you respect the ceiling every single session — one anaerobic breach resets the signal."
+        },
+        {
+          "id": "z2-i-07",
+          "title": "Incline Run Protocol",
+          "format": "Structured treadmill run with programmed grade changes",
+          "structure": {
+            "phases": [
+              { "label": "Flat warm-up", "duration": "5 min", "incline": "1%", "rpe": "3/10" },
+              { "label": "Block A", "duration": "10 min", "incline": "3%", "rpe": "4/10" },
+              { "label": "Block B", "duration": "10 min", "incline": "5%", "rpe": "4–5/10" },
+              { "label": "Block C", "duration": "10 min", "incline": "3%", "rpe": "4/10" },
+              { "label": "Flat cool-down", "duration": "5 min", "incline": "1%", "rpe": "3/10" }
+            ],
+            "rule": "Reduce speed on each grade increase to keep HR in zone 2 — the grade is the load variable, not the speed"
+          },
+          "duration_min": 40,
+          "equipment": ["treadmill with incline"],
+          "scaling": "Cap at 4% incline, reduce block duration to 8 min each",
+          "coaching_cue": "Uphill zone 2 builds more aerobic strength per minute than flat zone 2 — the slower pace is the point, not the problem."
+        },
+        {
+          "id": "z2-i-08",
+          "title": "Cardiac Output Builder",
+          "format": "60-minute continuous low-intensity session targeting stroke volume adaptation",
+          "structure": {
+            "duration": "60 min",
+            "hr_target": "130–145 bpm (adjust to age — target is consistent, not high)",
+            "modality": "Any single modality: run, bike, row, or walk",
+            "rule": "Stay in the target HR band for the full 60 min — neither below (too easy to adapt) nor above (too hard to sustain)",
+            "note": "60-minute sessions at this HR are the primary stimulus for left ventricular chamber expansion"
+          },
+          "duration_min": 60,
+          "equipment": ["HR monitor", "any cardio equipment or outdoor"],
+          "scaling": "45 min, same HR band",
+          "coaching_cue": "60 minutes at a consistent HR is not a test of willpower — it is the minimum duration for a cardiac output adaptation to occur."
+        },
+        {
+          "id": "z2-i-09",
+          "title": "Surge-and-Settle Bike",
+          "format": "Continuous bike with repeated HR-spike recovery cycles",
+          "structure": {
+            "warm_up": "10 min easy at RPE 3/10",
+            "main_set": {
+              "description": "4 × 2-min moderate surge (RPE 6/10) followed by return to zone 2 (RPE 4/10) — hold zone 2 until HR fully settles before next surge",
+              "surge_duration": "2 min",
+              "recovery_target": "HR back below 70% max before next surge — typically 5–8 min",
+              "rounds": 4
+            },
+            "cool_down": "10 min easy at RPE 3/10"
+          },
+          "duration_min": 55,
+          "equipment": ["stationary bike or outdoor bike"],
+          "scaling": "2 surges only, 8-min recovery between, reduce surge to RPE 5.5/10",
+          "coaching_cue": "The quality of this session is measured by how fast your HR returns to zone 2 after each surge — track that number across weeks."
+        },
+        {
+          "id": "z2-i-10",
+          "title": "Fasted Long Aerobic",
+          "format": "60-minute zone 2 session performed in a fasted state (morning, before eating)",
+          "structure": {
+            "duration": "60 min",
+            "timing": "Perform first thing in the morning before any food — water only",
+            "modality": "Run, walk, or bike at RPE 3–4/10",
+            "hr_ceiling": "65% max HR — lower than normal because fasted state elevates perceived effort",
+            "rule": "If RPE rises above 5/10 at any point, slow down — fasted aerobic work is substrate training, not intensity training"
+          },
+          "duration_min": 60,
+          "equipment": ["none or any cardio equipment"],
+          "scaling": "45 min, HR ceiling 63% max",
+          "coaching_cue": "Fasted zone 2 trains your body to oxidise fat at low intensities — the adaptation is metabolic, not cardiovascular, and it takes 6–8 weeks to appear."
+        }
       ]
     }
   }
