@@ -3,7 +3,10 @@
 // Selects the optimal workout from workout-library.json for a given user state.
 //
 // API:
-//   selectWorkout(params, library) → { selected_workout_id, reasoning, adaptation }
+//   selectWorkout(params, library) → {
+//     selected_workout_id, reasoning, adaptation,
+//     session_focus, momentum_tag, coach_message
+//   }
 //
 // Guarantees:
 //   · Pure function — no side effects
@@ -215,6 +218,143 @@
              : 'Monitor form; stop 1-2 reps shy of failure on strength sets.');
   }
 
+  // ── Momentum tag ─────────────────────────────────────────────────────────
+
+  // Benchmark marker — workouts whose progression_hint signals a retest
+  var BENCHMARK_PATTERN = /benchmark|retest|sub-\d+|test/i;
+
+  function _buildMomentumTag(selected, params) {
+    var mode = _intensityMode(params.fatigue_level);
+    if (mode === 'reduce') return 'recover';
+    if (selected.progression_hint && BENCHMARK_PATTERN.test(selected.progression_hint)) return 'test';
+    if (mode === 'push') return 'push';
+    return 'build';
+  }
+
+  // ── Session focus ─────────────────────────────────────────────────────────
+
+  var SUBTYPE_FOCUS_LABEL = {
+    hiit:      'High-intensity metabolic conditioning',
+    zone2:     'Aerobic base — low intensity, high duration',
+    mixed:     'Concurrent strength and cardio stimulus',
+    heavy:     'Maximal strength — compound barbell focus',
+    explosive: 'Power and reactive strength development',
+    tempo:     'Time under tension — eccentric control',
+    volume:    'High-volume accumulation'
+  };
+
+  function _buildSessionFocus(selected) {
+    var label = SUBTYPE_FOCUS_LABEL[selected.subtype] || selected.subtype;
+    var intent = selected.intent
+      ? selected.intent.charAt(0).toUpperCase() + selected.intent.slice(1)
+      : null;
+    return intent ? label + ' — ' + intent : label;
+  }
+
+  // ── Coach message ─────────────────────────────────────────────────────────
+
+  // Messages are keyed by [mode][goal] with subtype as a secondary tiebreak.
+  // Each entry is an array — selector uses (subtype charCode % length) for
+  // deterministic variety without randomness.
+  var COACH_MESSAGES = {
+    push: {
+      fat_loss:      [
+        'You\'re fresh. This is when real change happens — don\'t leave anything on the table.',
+        'Low fatigue, high stakes. Hit every interval like it\'s the one that tips the scale.',
+        'Your body is ready to burn. Respect that window — push clean, push hard.'
+      ],
+      toning:        [
+        'Fresh legs, controlled tension. Every rep is a rep that counts — none are throwaways.',
+        'You\'re in the window where muscle responds. Execute with precision, not just effort.',
+        'Quality is the metric today. Move well, move fully, and let the work accumulate.'
+      ],
+      strength:      [
+        'This is a training day that will matter in six months. Load with intent.',
+        'You\'re recovered and the bar is ready. Don\'t negotiate with the weight — move it.',
+        'Fresh CNS, clear mind. Chase numbers today — this is what a strong day looks like.'
+      ],
+      conditioning:  [
+        'Engine is ready. Hold a pace that hurts just enough to matter — the whole time.',
+        'Low fatigue means no excuses on pacing. Find the edge and park there.',
+        'Your conditioning window is open. Fill it completely.'
+      ],
+      recomposition: [
+        'Today you build and burn in the same session. Both sides of recomposition get worked.',
+        'Lean and strong isn\'t a phase — it\'s built one session like this at a time.',
+        'Fresh and focused. Recomp demands you show up exactly like this.'
+      ]
+    },
+    normal: {
+      fat_loss:      [
+        'Steady state, real results. You don\'t have to destroy yourself to change your body.',
+        'Consistent effort today adds to a consistent week. That\'s where fat loss lives.',
+        'Hit your marks. Nothing spectacular, just the work done properly.'
+      ],
+      toning:        [
+        'Shape is built in sessions like this — not the dramatic ones. Do the work.',
+        'Every set is a deposit. Today is a normal training day — make it count anyway.',
+        'Technique and tension. That\'s all this session asks. Give it both.'
+      ],
+      strength:      [
+        'Not a max day, but not a filler day. Move serious weight with serious intent.',
+        'Strength is built in accumulation, not just peaks. Today matters.',
+        'Every working set at this intensity has a compounding return. Stay present.'
+      ],
+      conditioning:  [
+        'Aerobic capacity is built across hundreds of sessions like this one. Be consistent.',
+        'Hold your pace. Not heroic — just relentless.',
+        'Normal day, normal effort, extraordinary long-term outcome. Trust the process.'
+      ],
+      recomposition: [
+        'Recomp is a slow burn. Today\'s session is a link in a long chain — make it count.',
+        'Moderate day, full attention. Both the strength and cardio signals need to be there.',
+        'No shortcuts in recomp. Steady, complete effort across the full session.'
+      ]
+    },
+    reduce: {
+      fat_loss:      [
+        'Recovery is not lost time. An aerobic flush today protects three hard sessions this week.',
+        'The body recomposes during recovery, not despite it. This session is part of the plan.',
+        'Easy effort, maximum adherence. Showing up is the win today.'
+      ],
+      toning:        [
+        'Low load, high blood flow. Your muscles are repairing — help them, don\'t interrupt.',
+        'Tone is preserved in recovery, not lost. Move, breathe, and let the body catch up.',
+        'Fatigue is high. Today\'s value is in what you don\'t break — not what you push.'
+      ],
+      strength:      [
+        'Strength is not built today — it\'s protected. An aerobic session now means a stronger lift next session.',
+        'High fatigue and heavy iron is a bad combination. This session earns you tomorrow.',
+        'Smart athletes recover on purpose. This is the session that separates serious from reckless.'
+      ],
+      conditioning:  [
+        'Zone 2 at high fatigue flushes lactate and rebuilds the aerobic base. This is targeted recovery.',
+        'Conditioning athletes know: easy days make hard days possible. Own this session.',
+        'Low and slow today. Your cardiovascular system adapts during recovery, not just effort.'
+      ],
+      recomposition: [
+        'Recomp stalls when recovery is skipped. This session is doing exactly what the plan requires.',
+        'Fatigue is a signal. The body rebuilds lean tissue when you respect it — today, you do.',
+        'Active recovery is active investment. Your body composition improves here too.'
+      ]
+    }
+  };
+
+  function _buildCoachMessage(selected, params) {
+    var mode     = _intensityMode(params.fatigue_level);
+    var goal     = params.goal;
+    var messages = COACH_MESSAGES[mode] && COACH_MESSAGES[mode][goal];
+
+    // Deterministic selection using subtype charCode to vary across same mode/goal
+    if (messages && messages.length > 0) {
+      var subtypeCode = selected.subtype ? selected.subtype.charCodeAt(0) : 0;
+      return messages[subtypeCode % messages.length];
+    }
+
+    // Hard fallback — should never be reached with current constants
+    return 'Execute with precision. Every session is a deposit.';
+  }
+
   // ── Main selector ─────────────────────────────────────────────────────────
 
   function selectWorkout(params, library) {
@@ -256,7 +396,10 @@
     return {
       selected_workout_id: selected.id,
       reasoning:           _buildReasoning(selected, params, scored),
-      adaptation:          _buildAdaptation(selected, params)
+      adaptation:          _buildAdaptation(selected, params),
+      session_focus:       _buildSessionFocus(selected),
+      momentum_tag:        _buildMomentumTag(selected, params),
+      coach_message:       _buildCoachMessage(selected, params)
     };
   }
 
@@ -272,7 +415,10 @@
     _filterCandidates:   _filterCandidates,
     _scoreCandidates:    _scoreCandidates,
     _buildReasoning:     _buildReasoning,
-    _buildAdaptation:    _buildAdaptation
+    _buildAdaptation:    _buildAdaptation,
+    _buildMomentumTag:   _buildMomentumTag,
+    _buildSessionFocus:  _buildSessionFocus,
+    _buildCoachMessage:  _buildCoachMessage
   };
 
   if (typeof module !== 'undefined' && module.exports) {

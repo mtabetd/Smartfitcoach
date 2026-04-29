@@ -8,13 +8,16 @@ var fs   = require('fs');
 var WS      = require('../app/workout-selector.js');
 var library = JSON.parse(fs.readFileSync(path.join(__dirname, '../app/workout-library.json'), 'utf8')).library;
 
-var selectWorkout     = WS.selectWorkout;
-var _validateParams   = WS._validateParams;
-var _subtypeFromId    = WS._subtypeFromId;
-var _intensityMode    = WS._intensityMode;
-var _flattenLibrary   = WS._flattenLibrary;
-var _filterCandidates = WS._filterCandidates;
-var _scoreCandidates  = WS._scoreCandidates;
+var selectWorkout      = WS.selectWorkout;
+var _validateParams    = WS._validateParams;
+var _subtypeFromId     = WS._subtypeFromId;
+var _intensityMode     = WS._intensityMode;
+var _flattenLibrary    = WS._flattenLibrary;
+var _filterCandidates  = WS._filterCandidates;
+var _scoreCandidates   = WS._scoreCandidates;
+var _buildMomentumTag  = WS._buildMomentumTag;
+var _buildSessionFocus = WS._buildSessionFocus;
+var _buildCoachMessage = WS._buildCoachMessage;
 
 // ── Harness ───────────────────────────────────────────────────────────────────
 var passed = 0, failed = 0;
@@ -237,6 +240,147 @@ test('selected workout duration is within ±10 min of available_time', function 
   var all    = _flattenLibrary(library);
   var found  = all.find(function (w) { return w.id === result.selected_workout_id; });
   assert(Math.abs(found.duration - 50) <= 10, 'duration drift too large: ' + found.duration + ' vs 50 min');
+});
+
+// ── _buildMomentumTag ─────────────────────────────────────────────────────────
+console.log('\n_buildMomentumTag');
+
+var all = _flattenLibrary(library);
+
+test('fatigue 4 → recover', function () {
+  var w = all.find(function (w) { return w.subtype === 'zone2'; });
+  assertEqual(_buildMomentumTag(w, { fatigue_level: 4 }), 'recover');
+});
+
+test('fatigue 5 → recover', function () {
+  var w = all.find(function (w) { return w.subtype === 'tempo'; });
+  assertEqual(_buildMomentumTag(w, { fatigue_level: 5 }), 'recover');
+});
+
+test('fatigue 1 → push', function () {
+  var w = all.find(function (w) { return w.subtype === 'hiit'; });
+  assertEqual(_buildMomentumTag(w, { fatigue_level: 1 }), 'push');
+});
+
+test('fatigue 2 → push', function () {
+  var w = all.find(function (w) { return w.subtype === 'heavy'; });
+  assertEqual(_buildMomentumTag(w, { fatigue_level: 2 }), 'push');
+});
+
+test('fatigue 3 with benchmark workout → test', function () {
+  var benchmarkWorkout = all.find(function (w) {
+    return w.progression_hint && /benchmark|retest/i.test(w.progression_hint) && w.level === 'intermediate';
+  });
+  if (!benchmarkWorkout) return; // skip if none found
+  assertEqual(_buildMomentumTag(benchmarkWorkout, { fatigue_level: 3 }), 'test');
+});
+
+test('fatigue 3 non-benchmark → build', function () {
+  var w = all.find(function (w) {
+    return w.subtype === 'volume' && w.progression_hint && !/benchmark|retest/i.test(w.progression_hint);
+  });
+  if (!w) return;
+  assertEqual(_buildMomentumTag(w, { fatigue_level: 3 }), 'build');
+});
+
+// ── _buildSessionFocus ────────────────────────────────────────────────────────
+console.log('\n_buildSessionFocus');
+
+test('returns non-empty string for every subtype', function () {
+  var subtypes = ['hiit', 'zone2', 'mixed', 'heavy', 'explosive', 'tempo', 'volume'];
+  subtypes.forEach(function (st) {
+    var w = all.find(function (x) { return x.subtype === st; });
+    if (!w) return;
+    var focus = _buildSessionFocus(w);
+    assert(typeof focus === 'string' && focus.length > 5, 'empty focus for ' + st + ': ' + focus);
+  });
+});
+
+test('session_focus includes subtype label', function () {
+  var w = all.find(function (x) { return x.subtype === 'heavy'; });
+  var focus = _buildSessionFocus(w);
+  assert(focus.toLowerCase().includes('strength') || focus.toLowerCase().includes('maximal'),
+    'heavy focus should mention strength or maximal: ' + focus);
+});
+
+test('session_focus includes intent when present', function () {
+  var w = all.find(function (x) { return x.intent && x.subtype === 'tempo'; });
+  if (!w) return;
+  var focus = _buildSessionFocus(w);
+  // Intent is capitalised and appended after " — "
+  assert(focus.includes(' — '), 'session_focus should contain " — " separator: ' + focus);
+});
+
+// ── _buildCoachMessage ────────────────────────────────────────────────────────
+console.log('\n_buildCoachMessage');
+
+test('returns non-empty string for all mode × goal combos', function () {
+  var modes  = [1, 3, 5]; // push / normal / reduce
+  var goals  = ['fat_loss', 'toning', 'strength', 'conditioning', 'recomposition'];
+  var w      = all.find(function (x) { return x.subtype === 'hiit'; });
+  modes.forEach(function (fatigue) {
+    goals.forEach(function (goal) {
+      var msg = _buildCoachMessage(w, { fatigue_level: fatigue, goal: goal });
+      assert(typeof msg === 'string' && msg.length > 10,
+        'empty message for fatigue=' + fatigue + ' goal=' + goal);
+    });
+  });
+});
+
+test('recover message does not use push language', function () {
+  var w   = all.find(function (x) { return x.subtype === 'zone2'; });
+  var msg = _buildCoachMessage(w, { fatigue_level: 5, goal: 'fat_loss' });
+  assert(!msg.toLowerCase().includes('destroy') && !msg.toLowerCase().includes('all-out'),
+    'recover message should not use push language: ' + msg);
+});
+
+test('push message conveys high-output intent', function () {
+  var w   = all.find(function (x) { return x.subtype === 'hiit'; });
+  var msg = _buildCoachMessage(w, { fatigue_level: 1, goal: 'conditioning' });
+  assert(msg.length > 10, 'push message too short: ' + msg);
+});
+
+// ── selectWorkout — new output fields ────────────────────────────────────────
+console.log('\nselectWorkout — new fields');
+
+test('output includes session_focus, momentum_tag, coach_message', function () {
+  var result = selectWorkout({ user_level: 'beginner', goal: 'fat_loss', available_time: 20, fatigue_level: 3, last_workouts: [], preferred_subtypes: null }, library);
+  assert('session_focus'  in result, 'missing session_focus');
+  assert('momentum_tag'   in result, 'missing momentum_tag');
+  assert('coach_message'  in result, 'missing coach_message');
+});
+
+test('momentum_tag is one of valid values', function () {
+  var valid = ['build', 'push', 'recover', 'test'];
+  var result = selectWorkout({ user_level: 'intermediate', goal: 'strength', available_time: 45, fatigue_level: 2, last_workouts: [], preferred_subtypes: null }, library);
+  assert(valid.includes(result.momentum_tag), 'invalid momentum_tag: ' + result.momentum_tag);
+});
+
+test('fatigue 5 → momentum_tag recover', function () {
+  var result = selectWorkout({ user_level: 'beginner', goal: 'fat_loss', available_time: 25, fatigue_level: 5, last_workouts: [], preferred_subtypes: null }, library);
+  assertEqual(result.momentum_tag, 'recover');
+});
+
+test('fatigue 1 → momentum_tag push or test (test overrides when benchmark selected)', function () {
+  var result = selectWorkout({ user_level: 'intermediate', goal: 'conditioning', available_time: 22, fatigue_level: 1, last_workouts: [], preferred_subtypes: null }, library);
+  assert(['push', 'test'].includes(result.momentum_tag), 'fatigue 1 must yield push or test, got: ' + result.momentum_tag);
+});
+
+test('session_focus is non-empty string', function () {
+  var result = selectWorkout({ user_level: 'beginner', goal: 'toning', available_time: 35, fatigue_level: 3, last_workouts: [], preferred_subtypes: null }, library);
+  assert(typeof result.session_focus === 'string' && result.session_focus.length > 5, 'session_focus too short: ' + result.session_focus);
+});
+
+test('coach_message is non-empty string under 200 chars', function () {
+  var result = selectWorkout({ user_level: 'intermediate', goal: 'recomposition', available_time: 40, fatigue_level: 3, last_workouts: [], preferred_subtypes: null }, library);
+  assert(typeof result.coach_message === 'string' && result.coach_message.length > 10, 'coach_message too short');
+  assert(result.coach_message.length < 200, 'coach_message too long: ' + result.coach_message.length + ' chars');
+});
+
+test('all six output fields present simultaneously', function () {
+  var fields = ['selected_workout_id', 'reasoning', 'adaptation', 'session_focus', 'momentum_tag', 'coach_message'];
+  var result = selectWorkout({ user_level: 'beginner', goal: 'conditioning', available_time: 22, fatigue_level: 3, last_workouts: [], preferred_subtypes: null }, library);
+  fields.forEach(function (f) { assert(f in result, 'missing field: ' + f); });
 });
 
 // ── Summary ───────────────────────────────────────────────────────────────────
