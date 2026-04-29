@@ -15,10 +15,13 @@ var _intensityMode     = WS._intensityMode;
 var _flattenLibrary    = WS._flattenLibrary;
 var _filterCandidates  = WS._filterCandidates;
 var _scoreCandidates   = WS._scoreCandidates;
-var _buildMomentumTag  = WS._buildMomentumTag;
-var _buildSessionFocus = WS._buildSessionFocus;
-var _buildCoachMessage = WS._buildCoachMessage;
-var _idNumber          = WS._idNumber;
+var _buildMomentumTag        = WS._buildMomentumTag;
+var _buildMomentumScore      = WS._buildMomentumScore;
+var _buildPremiumMomentumTag = WS._buildPremiumMomentumTag;
+var _buildShareableOutput    = WS._buildShareableOutput;
+var _buildSessionFocus       = WS._buildSessionFocus;
+var _buildCoachMessage       = WS._buildCoachMessage;
+var _idNumber                = WS._idNumber;
 
 // ── Harness ───────────────────────────────────────────────────────────────────
 var passed = 0, failed = 0;
@@ -391,27 +394,29 @@ test('message under 180 chars for all combos', function () {
 // ── selectWorkout — new output fields ────────────────────────────────────────
 console.log('\nselectWorkout — new fields');
 
-test('output includes session_focus, momentum_tag, coach_message', function () {
+test('output includes session_focus, momentum_tag, momentum_score, shareable_output, coach_message', function () {
   var result = selectWorkout({ user_level: 'beginner', goal: 'fat_loss', available_time: 20, fatigue_level: 3, last_workouts: [], preferred_subtypes: null }, library);
-  assert('session_focus'  in result, 'missing session_focus');
-  assert('momentum_tag'   in result, 'missing momentum_tag');
-  assert('coach_message'  in result, 'missing coach_message');
+  assert('session_focus'    in result, 'missing session_focus');
+  assert('momentum_tag'     in result, 'missing momentum_tag');
+  assert('momentum_score'   in result, 'missing momentum_score');
+  assert('shareable_output' in result, 'missing shareable_output');
+  assert('coach_message'    in result, 'missing coach_message');
 });
 
-test('momentum_tag is one of valid values', function () {
-  var valid = ['build', 'push', 'recover', 'test'];
+test('momentum_tag is one of premium label values', function () {
+  var valid = ['Building', 'Locked In', 'Peak', 'Recovering'];
   var result = selectWorkout({ user_level: 'intermediate', goal: 'strength', available_time: 45, fatigue_level: 2, last_workouts: [], preferred_subtypes: null }, library);
   assert(valid.includes(result.momentum_tag), 'invalid momentum_tag: ' + result.momentum_tag);
 });
 
-test('fatigue 5 → momentum_tag recover', function () {
+test('fatigue 5 → momentum_tag Recovering', function () {
   var result = selectWorkout({ user_level: 'beginner', goal: 'fat_loss', available_time: 25, fatigue_level: 5, last_workouts: [], preferred_subtypes: null }, library);
-  assertEqual(result.momentum_tag, 'recover');
+  assertEqual(result.momentum_tag, 'Recovering');
 });
 
-test('fatigue 1 → momentum_tag push or test (test overrides when benchmark selected)', function () {
+test('fatigue 1 → momentum_tag Peak or Locked In', function () {
   var result = selectWorkout({ user_level: 'intermediate', goal: 'conditioning', available_time: 22, fatigue_level: 1, last_workouts: [], preferred_subtypes: null }, library);
-  assert(['push', 'test'].includes(result.momentum_tag), 'fatigue 1 must yield push or test, got: ' + result.momentum_tag);
+  assert(['Peak', 'Locked In'].includes(result.momentum_tag), 'fatigue 1 must yield Peak or Locked In, got: ' + result.momentum_tag);
 });
 
 test('session_focus is non-empty string', function () {
@@ -425,10 +430,105 @@ test('coach_message is non-empty string under 200 chars', function () {
   assert(result.coach_message.length < 200, 'coach_message too long: ' + result.coach_message.length + ' chars');
 });
 
-test('all six output fields present simultaneously', function () {
-  var fields = ['selected_workout_id', 'reasoning', 'adaptation', 'session_focus', 'momentum_tag', 'coach_message'];
+test('all eight output fields present simultaneously', function () {
+  var fields = ['selected_workout_id', 'reasoning', 'adaptation', 'session_focus',
+                'momentum_tag', 'momentum_score', 'shareable_output', 'coach_message'];
   var result = selectWorkout({ user_level: 'beginner', goal: 'conditioning', available_time: 22, fatigue_level: 3, last_workouts: [], preferred_subtypes: null }, library);
   fields.forEach(function (f) { assert(f in result, 'missing field: ' + f); });
+});
+
+// ── _buildMomentumScore ───────────────────────────────────────────────────────
+console.log('\n_buildMomentumScore');
+
+test('returns a number between 0 and 100 for every fatigue level', function () {
+  var w = all.find(function (x) { return x.subtype === 'hiit'; });
+  [1, 2, 3, 4, 5].forEach(function (f) {
+    var s = _buildMomentumScore(w, { fatigue_level: f, goal: 'conditioning' });
+    assert(typeof s === 'number' && s >= 0 && s <= 100,
+      'score out of range at fatigue ' + f + ': ' + s);
+  });
+});
+
+test('fatigue 1 high-intensity subtype scores higher than fatigue 5', function () {
+  var hiit  = all.find(function (x) { return x.subtype === 'hiit'; });
+  var zone2 = all.find(function (x) { return x.subtype === 'zone2'; });
+  var high  = _buildMomentumScore(hiit,  { fatigue_level: 1, goal: 'conditioning' });
+  var low   = _buildMomentumScore(zone2, { fatigue_level: 5, goal: 'fat_loss' });
+  assert(high > low, 'fatigue 1 hiit (' + high + ') should outscore fatigue 5 zone2 (' + low + ')');
+});
+
+test('benchmark workout scores higher than equivalent non-benchmark', function () {
+  var benchmarkW = all.find(function (x) {
+    return x.progression_hint && /benchmark|retest/i.test(x.progression_hint);
+  });
+  var normalW = all.find(function (x) {
+    return x.subtype === (benchmarkW ? benchmarkW.subtype : 'hiit') &&
+           (!x.progression_hint || !/benchmark|retest/i.test(x.progression_hint));
+  });
+  if (!benchmarkW || !normalW) return;
+  var params = { fatigue_level: 2, goal: benchmarkW.goal || 'conditioning' };
+  assert(_buildMomentumScore(benchmarkW, params) >= _buildMomentumScore(normalW, params),
+    'benchmark workout should score >= non-benchmark at same fatigue');
+});
+
+// ── _buildPremiumMomentumTag ──────────────────────────────────────────────────
+console.log('\n_buildPremiumMomentumTag');
+
+test('recover → Recovering', function () {
+  assertEqual(_buildPremiumMomentumTag('recover', 20), 'Recovering');
+});
+
+test('push at high score → Peak', function () {
+  assertEqual(_buildPremiumMomentumTag('push', 85), 'Peak');
+});
+
+test('push at moderate score → Locked In', function () {
+  assertEqual(_buildPremiumMomentumTag('push', 70), 'Locked In');
+});
+
+test('build at sufficient score → Locked In', function () {
+  assertEqual(_buildPremiumMomentumTag('build', 55), 'Locked In');
+});
+
+test('build at low score → Building', function () {
+  assertEqual(_buildPremiumMomentumTag('build', 40), 'Building');
+});
+
+test('test tag at high score → Peak', function () {
+  assertEqual(_buildPremiumMomentumTag('test', 90), 'Peak');
+});
+
+// ── shareable_output ──────────────────────────────────────────────────────────
+console.log('\nshareable_output');
+
+test('shareable_output has exactly 3 lines', function () {
+  var result = selectWorkout({ user_level: 'intermediate', goal: 'strength', available_time: 45, fatigue_level: 2, last_workouts: [], preferred_subtypes: null }, library);
+  var lines = result.shareable_output.split('\n');
+  assert(lines.length === 3, 'expected 3 lines, got ' + lines.length + ': ' + result.shareable_output);
+});
+
+test('shareable_output line 1 is workout title', function () {
+  var result = selectWorkout({ user_level: 'beginner', goal: 'fat_loss', available_time: 20, fatigue_level: 2, last_workouts: [], preferred_subtypes: null }, library);
+  var found  = _flattenLibrary(library).find(function (w) { return w.id === result.selected_workout_id; });
+  assert(result.shareable_output.startsWith(found.title), 'line 1 should be workout title');
+});
+
+test('shareable_output contains session_focus', function () {
+  var result = selectWorkout({ user_level: 'intermediate', goal: 'conditioning', available_time: 30, fatigue_level: 3, last_workouts: [], preferred_subtypes: null }, library);
+  assert(result.shareable_output.includes(result.session_focus),
+    'shareable_output must contain session_focus');
+});
+
+test('shareable_output line 3 contains momentum_tag and momentum_score', function () {
+  var result = selectWorkout({ user_level: 'beginner', goal: 'recomposition', available_time: 35, fatigue_level: 4, last_workouts: [], preferred_subtypes: null }, library);
+  var line3  = result.shareable_output.split('\n')[2];
+  assert(line3.includes(result.momentum_tag),  'line 3 missing momentum_tag: '  + line3);
+  assert(line3.includes(String(result.momentum_score)), 'line 3 missing momentum_score: ' + line3);
+});
+
+test('shareable_output contains no emoji characters', function () {
+  var result = selectWorkout({ user_level: 'intermediate', goal: 'strength', available_time: 50, fatigue_level: 1, last_workouts: [], preferred_subtypes: null }, library);
+  assert(!/[\u{1F000}-\u{1FFFF}]/u.test(result.shareable_output), 'shareable_output contains emoji');
 });
 
 // ── Summary ───────────────────────────────────────────────────────────────────

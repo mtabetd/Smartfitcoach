@@ -218,17 +218,65 @@
              : 'Monitor form; stop 1-2 reps shy of failure on strength sets.');
   }
 
-  // ── Momentum tag ─────────────────────────────────────────────────────────
+  // ── Momentum tag (internal) ───────────────────────────────────────────────
 
   // Benchmark marker — workouts whose progression_hint signals a retest
   var BENCHMARK_PATTERN = /benchmark|retest|sub-\d+|test/i;
 
+  // Returns internal tag: push / build / recover / test
   function _buildMomentumTag(selected, params) {
     var mode = _intensityMode(params.fatigue_level);
     if (mode === 'reduce') return 'recover';
     if (selected.progression_hint && BENCHMARK_PATTERN.test(selected.progression_hint)) return 'test';
     if (mode === 'push') return 'push';
     return 'build';
+  }
+
+  // ── Momentum score ────────────────────────────────────────────────────────
+
+  var HIGH_INTENSITY_SUBTYPES = ['hiit', 'heavy', 'explosive'];
+  var MED_INTENSITY_SUBTYPES  = ['mixed', 'volume'];
+
+  // Returns a deterministic 0–100 score based on fatigue, subtype intensity,
+  // benchmark signal, and goal alignment.
+  function _buildMomentumScore(selected, params) {
+    var fatigue = params.fatigue_level;
+    var mode    = _intensityMode(fatigue);
+    // Fatigue base (linear): fatigue 1 → 60, fatigue 5 → 12
+    var score   = (6 - fatigue) * 12;
+    if (mode !== 'reduce') {
+      if (HIGH_INTENSITY_SUBTYPES.includes(selected.subtype))     score += 25;
+      else if (MED_INTENSITY_SUBTYPES.includes(selected.subtype)) score += 15;
+      else                                                          score += 5;
+    } else {
+      score += 5; // recovery sessions earn a presence bonus
+    }
+    if (selected.progression_hint && BENCHMARK_PATTERN.test(selected.progression_hint)) score += 10;
+    if (selected.goal === params.goal) score += 5;
+    return Math.min(100, score);
+  }
+
+  // ── Premium momentum tag ──────────────────────────────────────────────────
+
+  // Maps internal tag + score to display-facing label.
+  // Peak: push/test mode at high score; Locked In: push at moderate score or
+  // build at high score; Building: build at moderate score; Recovering: reduce mode.
+  function _buildPremiumMomentumTag(internalTag, score) {
+    if (internalTag === 'recover') return 'Recovering';
+    if (internalTag === 'push' || internalTag === 'test') {
+      return score >= 80 ? 'Peak' : 'Locked In';
+    }
+    // 'build'
+    return score >= 50 ? 'Locked In' : 'Building';
+  }
+
+  // ── Shareable output ──────────────────────────────────────────────────────
+
+  // Three-line premium summary: title / session focus / momentum label + score.
+  function _buildShareableOutput(selected, sessionFocus, premiumTag, score) {
+    return selected.title + '\n' +
+           sessionFocus   + '\n' +
+           premiumTag     + '  ·  ' + score;
   }
 
   // ── Session focus ─────────────────────────────────────────────────────────
@@ -434,16 +482,20 @@
     var scored   = _scoreCandidates(candidates, params);
     scored.sort(function (a, b) { return b.score - a.score; });
 
-    var selected     = scored[0].workout;
-    var sessionFocus = _buildSessionFocus(selected);
-    var momentumTag  = _buildMomentumTag(selected, params);
+    var selected      = scored[0].workout;
+    var internalTag   = _buildMomentumTag(selected, params);
+    var momentumScore = _buildMomentumScore(selected, params);
+    var premiumTag    = _buildPremiumMomentumTag(internalTag, momentumScore);
+    var sessionFocus  = _buildSessionFocus(selected);
 
     return {
       selected_workout_id: selected.id,
       reasoning:           _buildReasoning(selected, params, scored),
       adaptation:          _buildAdaptation(selected, params),
       session_focus:       sessionFocus,
-      momentum_tag:        momentumTag,
+      momentum_tag:        premiumTag,
+      momentum_score:      momentumScore,
+      shareable_output:    _buildShareableOutput(selected, sessionFocus, premiumTag, momentumScore),
       coach_message:       _buildCoachMessage(selected, params)
     };
   }
@@ -451,20 +503,23 @@
   // ── Exports ───────────────────────────────────────────────────────────────
 
   var API = {
-    selectWorkout:       selectWorkout,
+    selectWorkout:            selectWorkout,
     // internals for tests
-    _validateParams:     _validateParams,
-    _flattenLibrary:     _flattenLibrary,
-    _subtypeFromId:      _subtypeFromId,
-    _intensityMode:      _intensityMode,
-    _filterCandidates:   _filterCandidates,
-    _scoreCandidates:    _scoreCandidates,
-    _buildReasoning:     _buildReasoning,
-    _buildAdaptation:    _buildAdaptation,
-    _buildMomentumTag:   _buildMomentumTag,
-    _buildSessionFocus:  _buildSessionFocus,
-    _buildCoachMessage:  _buildCoachMessage,
-    _idNumber:           _idNumber
+    _validateParams:          _validateParams,
+    _flattenLibrary:          _flattenLibrary,
+    _subtypeFromId:           _subtypeFromId,
+    _intensityMode:           _intensityMode,
+    _filterCandidates:        _filterCandidates,
+    _scoreCandidates:         _scoreCandidates,
+    _buildReasoning:          _buildReasoning,
+    _buildAdaptation:         _buildAdaptation,
+    _buildMomentumTag:        _buildMomentumTag,
+    _buildMomentumScore:      _buildMomentumScore,
+    _buildPremiumMomentumTag: _buildPremiumMomentumTag,
+    _buildShareableOutput:    _buildShareableOutput,
+    _buildSessionFocus:       _buildSessionFocus,
+    _buildCoachMessage:       _buildCoachMessage,
+    _idNumber:                _idNumber
   };
 
   if (typeof module !== 'undefined' && module.exports) {
