@@ -3481,7 +3481,10 @@
           },
           "coaching_cue": "Jump from a loaded position — dip and swing your arms for maximum power.",
           "subtype": "explosive",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "conditioning",
+          "intent": "introduce plyometric loading patterns through box jump and broad jump",
+          "progression_hint": "First plyometric session — prioritise landing mechanics over height; advance box height only when all 5 sets land silently with full hip absorption"
         },
         {
           "id": "exp-b-02",
@@ -3516,7 +3519,10 @@
           },
           "coaching_cue": "Land with soft knees — if your landing is loud, your landing is dangerous.",
           "subtype": "explosive",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "conditioning",
+          "intent": "develop lower-body reactive power through multi-directional jumping",
+          "progression_hint": "Multi-plane jump exposure prepares tendons for higher-intensity plyometrics; progress to exp-b-06 depth drops when lateral bound distance is consistent across all 4 rounds"
         },
         {
           "id": "exp-b-03",
@@ -3559,7 +3565,10 @@
           },
           "coaching_cue": "Throw with your whole body — hips first, then torso, then arms.",
           "subtype": "explosive",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "conditioning",
+          "intent": "rotational and vertical power development via medicine ball throws",
+          "progression_hint": "MB throws build triple extension and rotational power simultaneously; increase ball weight by 2 kg when all throw patterns maintain consistent velocity across 3 rounds"
         },
         {
           "id": "exp-b-04",
@@ -3582,7 +3591,10 @@
           },
           "coaching_cue": "Drive your arms like pistons — fast arms create fast legs.",
           "subtype": "explosive",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "conditioning",
+          "intent": "introduce maximum velocity sprint mechanics with full recovery",
+          "progression_hint": "Full recovery between sprints is non-negotiable at this stage — quality over quantity; advance to 10 sprints at 90% when all 8 produce consistent technique in final 10m"
         },
         {
           "id": "exp-b-05",
@@ -3616,7 +3628,10 @@
           },
           "coaching_cue": "Burpees are full-body power — push the ground away on the jump.",
           "subtype": "explosive",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "fat_loss",
+          "intent": "whole-body explosive output via burpee-jump complex under fatigue",
+          "progression_hint": "Burpee-jump pairing builds power endurance; when 5 rounds maintain tuck jump height through round 5, progress to exp-b-10 loaded plyometric finisher"
         },
         {
           "id": "exp-b-06",
@@ -3655,7 +3670,10 @@
           },
           "coaching_cue": "Your contact time with the ground should be milliseconds — think hot coals.",
           "subtype": "explosive",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "conditioning",
+          "intent": "develop reactive strength via depth drop and ground contact time reduction",
+          "progression_hint": "Depth drops are the foundation of shock method training; advance to exp-i-03 full shock protocol only when ground contact is visibly minimal and landings are silent"
         },
         {
           "id": "exp-b-07",
@@ -3693,7 +3711,10 @@
           },
           "coaching_cue": "In power skipping, drive your knee to 90° — height comes from leg drive.",
           "subtype": "explosive",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "conditioning",
+          "intent": "locomotion-based power development through bounding and skipping patterns",
+          "progression_hint": "Power skipping and bounding build elastic energy storage in tendons; 4 consistent rounds with full knee drive signals readiness for hurdle work in exp-i-10"
         },
         {
           "id": "exp-b-08",
@@ -3740,7 +3761,10 @@
           },
           "coaching_cue": "Rotation power starts from the ground up — drive through your feet.",
           "subtype": "explosive",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "toning",
+          "intent": "rotational power and anti-rotation core strength development",
+          "progression_hint": "Rotational power is the missing link in most beginners — this session directly improves sports performance and KB swing power; progress cable load when all 4 sets maintain hip initiation"
         },
         {
           "id": "exp-b-09",
@@ -3768,7 +3792,10 @@
           },
           "coaching_cue": "Eyes forward, not on the ladder — feel the pattern, don't look at your feet.",
           "subtype": "explosive",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "conditioning",
+          "intent": "agility and foot speed development through ladder pattern training",
+          "progression_hint": "Ladder work builds neuromuscular coordination before reactive agility drills; when all 6 patterns execute without looking down, progress to exp-i-05 cone and T-drill work"
         },
         {
           "id": "exp-b-10",
@@ -3813,7 +3840,10 @@
           },
           "coaching_cue": "Every rep should be max intent — never just 'go through the motions' on plyometrics.",
           "subtype": "explosive",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "conditioning",
+          "intent": "max-effort lower-body plyometric output across four jumping patterns",
+          "progression_hint": "Capstone beginner explosive session — single-leg box jump is the readiness marker for intermediate tier; advance to exp-i-01 Olympic lifting foundation when single-leg landing is stable"
         }
       ],
       "intermediate": [
