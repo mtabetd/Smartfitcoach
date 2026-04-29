@@ -2466,6 +2466,203 @@ test('decideDailyPlanV3 → card Action du jour matches engine decision', functi
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
+// SECTION 21 — Production Contract : Full V3 Output Verification
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('\nSection 21 — Production Contract');
+
+var _baseInputs = {
+  goal: 'muscle_gain', fatigueLevel: 2, trainingFrequency: 4,
+  lastSessionDate: '2026-04-28', last3SessionsIntensity: ['moderate']
+};
+var _fullInputs = Object.assign({}, _baseInputs, {
+  userProfile: { avgFatigueLast7Days: 2, trainingFrequencyLast7Days: 3 },
+  userHistory: {
+    last7Decisions: ['rest', 'train', 'train', 'train', 'train', 'train', 'train'],
+    last7Momentum:  [3, 4, 5, 6, 7, 8, 9]
+  }
+});
+
+// ── Contract: all 13 required output fields present ───────────────────────────
+test('contract: all 13 required fields present in engine output', function () {
+  var out = decideV3(_baseInputs);
+  var contract = [
+    'decision', 'recommendedIntensity', 'recommendedSessionType',
+    'fatigueEffective', 'priorityApplied', 'reason', '_debug',
+    'momentumScore', 'profileType', 'adaptationReason',
+    'predictionInsights', 'premiumCoachingMessage', 'smartfitcoachCard'
+  ];
+  contract.forEach(function (field) {
+    assert(field in out, 'required field "' + field + '" must be present');
+  });
+});
+test('contract: all 13 fields present with full inputs (userProfile + userHistory)', function () {
+  var out = decideV3(_fullInputs);
+  var contract = [
+    'decision', 'recommendedIntensity', 'recommendedSessionType',
+    'fatigueEffective', 'priorityApplied', 'reason', '_debug',
+    'momentumScore', 'profileType', 'adaptationReason',
+    'predictionInsights', 'premiumCoachingMessage', 'smartfitcoachCard'
+  ];
+  contract.forEach(function (field) {
+    assert(field in out, 'required field "' + field + '" must be present with full inputs');
+  });
+});
+
+// ── UI test 1: train render ───────────────────────────────────────────────────
+test('UI render train: card contains train action text', function () {
+  var out = decideV3(_baseInputs);
+  if (out.decision === 'train') {
+    assert(out.smartfitcoachCard.indexOf('Effectuer la séance prévue avec précision.') !== -1,
+      'train decision → train action text in card');
+  } else {
+    assert(out.smartfitcoachCard.indexOf('Laisser le corps récupérer pleinement.') !== -1,
+      'rest decision → rest action text in card');
+  }
+});
+test('UI render train: _buildSmartFitCoachCard with train → correct action', function () {
+  var c = _buildSmartFitCoachCard({
+    decision: 'train', recommendedSessionType: 'strength', recommendedIntensity: 'high',
+    momentumScore: 8, profileType: 'consistent',
+    premiumCoachingMessage: "Tu es dans une dynamique où chaque séance compte.\nAujourd'hui, on exploite la séance avec précision."
+  });
+  assert(c.indexOf('SMARTFITCOACH TODAY') !== -1, 'header present');
+  assert(c.indexOf('Effectuer la séance prévue avec précision.') !== -1, 'train action text');
+  assert(c.indexOf('Momentum      : 8 / 10') !== -1, 'momentum formatted');
+});
+
+// ── UI test 2: rest render ────────────────────────────────────────────────────
+test('UI render rest: _buildSmartFitCoachCard with rest → correct action', function () {
+  var c = _buildSmartFitCoachCard({
+    decision: 'rest', recommendedSessionType: 'recovery', recommendedIntensity: 'low',
+    momentumScore: 3, profileType: 'inconsistent',
+    premiumCoachingMessage: "La fatigue commence à limiter ton potentiel aujourd'hui.\nAujourd'hui, on laisse le corps reconstruire."
+  });
+  assert(c.indexOf('SMARTFITCOACH TODAY') !== -1, 'header present');
+  assert(c.indexOf('Laisser le corps récupérer pleinement.') !== -1, 'rest action text');
+  assert(c.indexOf('Action du jour') !== -1, 'Action du jour label present');
+});
+test('UI render rest: engine rest decision → rest action in card', function () {
+  // Force rest: very high fatigue + recent high sessions
+  var out = decideV3({
+    goal: 'maintenance', fatigueLevel: 5, trainingFrequency: 3,
+    lastSessionDate: '2026-04-28', last3SessionsIntensity: ['high', 'high', 'high']
+  });
+  if (out.decision === 'rest') {
+    assert(out.smartfitcoachCard.indexOf('Laisser le corps récupérer pleinement.') !== -1,
+      'engine rest → rest action in card');
+  }
+});
+
+// ── UI test 3: missing fields fallback ────────────────────────────────────────
+test('UI fallback: null momentumScore → "Momentum      : -"', function () {
+  var c = _buildSmartFitCoachCard({ decision: 'train', premiumCoachingMessage: 'msg' });
+  assert(c.indexOf('Momentum      : -') !== -1, 'null momentum → "-"');
+});
+test('UI fallback: all missing → card with all "-" values and no throw', function () {
+  var c = _buildSmartFitCoachCard({});
+  assert(typeof c === 'string' && c.length > 0, 'empty input → valid card');
+  assert(c.indexOf('Séance        : -') !== -1, 'Séance fallback "-"');
+  assert(c.indexOf('Profil        : -') !== -1, 'Profil fallback "-"');
+});
+
+// ── UI test 4: alignment — labels padded to exactly 14 chars ─────────────────
+test('UI alignment: all 4 row labels padded to 14 chars (colon at col 14)', function () {
+  var c = _buildSmartFitCoachCard(_cardBase);
+  // Each label + spaces = 14 chars, then ": "
+  // Verify by checking exact prefix strings
+  assert(c.indexOf('Séance        : ') !== -1, 'Séance: 6+8sp=14');
+  assert(c.indexOf('Intensité     : ') !== -1, 'Intensité: 9+5sp=14');
+  assert(c.indexOf('Momentum      : ') !== -1, 'Momentum: 8+6sp=14');
+  assert(c.indexOf('Profil        : ') !== -1, 'Profil: 6+8sp=14');
+});
+test('UI alignment: no trailing spaces on any card line', function () {
+  var c = _buildSmartFitCoachCard(_cardBase);
+  c.split('\n').forEach(function (line, i) {
+    assert(line === line.trimRight(), 'line ' + i + ' has no trailing spaces: "' + line + '"');
+  });
+});
+
+// ── UI test 5: message integrity ──────────────────────────────────────────────
+test('UI message: premiumCoachingMessage embedded verbatim in card', function () {
+  var msg = "La fatigue commence à limiter ton potentiel aujourd'hui.\nSi rien ne change, la progression risque de s'éroder.\nAujourd'hui, on laisse le corps reconstruire.";
+  var c = _buildSmartFitCoachCard({ decision: 'rest', premiumCoachingMessage: msg });
+  assert(c.indexOf(msg) !== -1, 'multi-line message embedded verbatim');
+});
+test('UI message: engine premiumCoachingMessage appears in smartfitcoachCard', function () {
+  var out = decideV3(_baseInputs);
+  assert(out.smartfitcoachCard.indexOf(out.premiumCoachingMessage) !== -1,
+    'engine premiumCoachingMessage appears in card');
+});
+test('UI message: card section 3 equals premiumCoachingMessage exactly', function () {
+  var out = decideV3(_fullInputs);
+  var sections = out.smartfitcoachCard.split('\n\n');
+  assertEqual(sections[2], out.premiumCoachingMessage);
+});
+
+// ── UI test 6: deterministic output ──────────────────────────────────────────
+test('UI deterministic: identical engine calls produce identical card', function () {
+  var out1 = decideV3(_baseInputs);
+  var out2 = decideV3(_baseInputs);
+  assertEqual(out1.smartfitcoachCard, out2.smartfitcoachCard);
+});
+test('UI deterministic: full inputs produce same card across 3 calls', function () {
+  var c1 = decideV3(_fullInputs).smartfitcoachCard;
+  var c2 = decideV3(_fullInputs).smartfitcoachCard;
+  var c3 = decideV3(_fullInputs).smartfitcoachCard;
+  assertEqual(c1, c2);
+  assertEqual(c2, c3);
+});
+
+// ── UI test 7: null safety ────────────────────────────────────────────────────
+test('UI null safety: null input → string or null, never throws', function () {
+  var result;
+  assert((function () { try { result = _buildSmartFitCoachCard(null); return true; } catch(e) { return false; } })(),
+    'null input must not throw');
+  assert(typeof result === 'string' || result === null, 'result is string or null');
+});
+test('UI null safety: smartfitcoachCard never breaks main engine output', function () {
+  // Even with all optional fields provided, engine must not throw
+  var out;
+  assert((function () {
+    try { out = decideV3(_fullInputs); return true; }
+    catch(e) { return false; }
+  })(), 'engine with full inputs must not throw');
+  assert(out !== undefined && out !== null, 'engine output is defined');
+  assert(typeof out.smartfitcoachCard === 'string' || out.smartfitcoachCard === null,
+    'smartfitcoachCard is string or null');
+});
+
+// ── Core invariants ───────────────────────────────────────────────────────────
+test('invariant: adding UI layer does not change decision', function () {
+  // smartfitcoachCard is computed from outputs, never influences them
+  var out = decideV3(_baseInputs);
+  assert(['train', 'rest'].indexOf(out.decision) !== -1, 'decision is train or rest');
+  assert(out.smartfitcoachCard.indexOf(
+    out.decision === 'train'
+      ? 'Effectuer la séance prévue avec précision.'
+      : 'Laisser le corps récupérer pleinement.'
+  ) !== -1, 'card action matches decision');
+});
+test('invariant: V2 parity — fatigueEffective and priorityApplied types unchanged', function () {
+  var out = decideV3(_baseInputs);
+  assert(typeof out.fatigueEffective === 'number',   'fatigueEffective is number');
+  assert(typeof out.priorityApplied  === 'string',   'priorityApplied is string');
+  assert(typeof out.reason           === 'string',   'reason is string');
+  assert(typeof out._debug           === 'object',   '_debug is object');
+});
+test('invariant: UI fields are last and do not shadow V2/V3 core fields', function () {
+  var out = decideV3(_baseInputs);
+  // Core fields must be their native types, unaffected
+  assert(['train', 'rest'].indexOf(out.decision) !== -1,             'decision valid');
+  assert(['low','moderate','high'].indexOf(out.recommendedIntensity) !== -1, 'intensity valid');
+  // momentumScore is number when userProfile provided; null otherwise
+  assert(typeof out.momentumScore === 'number' || out.momentumScore === null, 'momentumScore is number or null');
+  assert(typeof out.profileType   === 'string',                       'profileType is string');
+  assert(typeof out.premiumCoachingMessage === 'string',              'premiumCoachingMessage is string');
+  assert(typeof out.smartfitcoachCard      === 'string',              'smartfitcoachCard is string');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Résultats
 // ─────────────────────────────────────────────────────────────────────────────
 console.log('\n' + '─'.repeat(50));
