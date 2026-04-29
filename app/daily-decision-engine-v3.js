@@ -668,6 +668,77 @@
     };
   }
 
+  // ── Module 7 : Predictive Intelligence Layer ──────────────────────────────────
+  //
+  // Computes forward-looking predictions from userProfile and userHistory.
+  // ADDITIVE ONLY — pure function, no side effects, no impact on prior modules.
+  // Internally reuses _buildHistoryInsights to derive momentumTrend and streak.
+  //
+  // @param  {Object|null}  userProfile   Optional V3 userProfile
+  // @param  {Object|null}  userHistory   Optional V3 userHistory
+  // @return {{ next2Days, fatigueRisk, recommendation }}
+  function _buildPredictionInsights(userProfile, userHistory) {
+    var safeProfile = (userProfile && typeof userProfile === 'object') ? userProfile : null;
+    var safeHistory = (userHistory && typeof userHistory === 'object') ? userHistory : null;
+
+    // Reuse Module 6 internally for momentumTrend + streak
+    var histInsights  = _buildHistoryInsights(safeHistory);
+    var momentumTrend = histInsights.momentumTrend;
+    var streak        = histInsights.streak;
+
+    // ── 1. next2Days ──────────────────────────────────────────────────────────
+    // Requires both a valid history object AND a computable momentumTrend (≥2 entries)
+    var next2Days = null;
+    if (safeHistory !== null && momentumTrend !== null) {
+      var decisions    = Array.isArray(safeHistory.last7Decisions) ? safeHistory.last7Decisions : [];
+      var lastDecision = decisions.length > 0 ? decisions[decisions.length - 1] : null;
+      if (momentumTrend === 'up' && lastDecision === 'train') {
+        next2Days = 'increase';
+      } else if (momentumTrend === 'down') {
+        next2Days = 'decrease';
+      } else {
+        next2Days = 'stable';
+      }
+    }
+
+    // ── 2. fatigueRisk ────────────────────────────────────────────────────────
+    // null when no profile; null when profile has no relevant numeric fields
+    var fatigueRisk = null;
+    if (safeProfile !== null) {
+      var avgFatigue = typeof safeProfile.avgFatigueLast7Days        === 'number' ? safeProfile.avgFatigueLast7Days        : null;
+      var freq7      = typeof safeProfile.trainingFrequencyLast7Days === 'number' ? safeProfile.trainingFrequencyLast7Days : null;
+      if (avgFatigue !== null || freq7 !== null) {
+        if ((avgFatigue !== null && avgFatigue >= 6) ||
+            (freq7 !== null && freq7 >= 6 && streak !== null && streak >= 3)) {
+          fatigueRisk = 'high';
+        } else if ((avgFatigue !== null && avgFatigue >= 4) ||
+                   (freq7 !== null && freq7 >= 4)) {
+          fatigueRisk = 'moderate';
+        } else {
+          fatigueRisk = 'low';
+        }
+      }
+    }
+
+    // ── 3. recommendation (4 cases; fatigue priority > momentum) ─────────────
+    var recommendation;
+    if (fatigueRisk === 'high') {
+      recommendation = "Priorise la récupération ces deux prochains jours. Ton corps en a besoin.";
+    } else if (fatigueRisk === 'moderate') {
+      recommendation = "Maintiens un effort mesuré — ton corps gère une charge soutenue.";
+    } else if (next2Days === 'increase') {
+      recommendation = "Ta dynamique est favorable — profites-en pour élever l'intensité.";
+    } else {
+      recommendation = "Reste régulier. La constance est le fondement de tout progrès.";
+    }
+
+    return {
+      next2Days:      next2Days,
+      fatigueRisk:    fatigueRisk,
+      recommendation: recommendation
+    };
+  }
+
   // ── Validation globale (V2 core + userProfile optionnel) ─────────────────────
   function _validate(inputs) {
     if (!inputs || typeof inputs !== 'object') {
@@ -793,6 +864,9 @@
     // ── Module 6 : history insights ──────────────────────────────────────────
     var historyInsights = _buildHistoryInsights(inputs.userHistory || null);
 
+    // ── Module 7 : predictive intelligence ───────────────────────────────────
+    var predictionInsights = _buildPredictionInsights(inputs.userProfile || null, inputs.userHistory || null);
+
     // ── Sortie V3 ─────────────────────────────────────────────────────────────
     return {
       // ── V2 fields (priorityApplied/fatigueEffective/progressionTriggered
@@ -810,6 +884,7 @@
       profileType:            profile,                    // Module 3 ✓
       adaptationReason:       adaptive.adaptationReason, // Module 4 ✓
       historyInsights:        historyInsights,            // Module 6 ✓
+      predictionInsights:     predictionInsights,         // Module 7 ✓
       _debug: {
         rawFatigue:          inputs.fatigueLevel,
         effectiveFatigue:    effective,
@@ -847,7 +922,9 @@
     // V3 Module 5
     _buildCoachingMessage:            _buildCoachingMessage,
     // V3 Module 6
-    _buildHistoryInsights:            _buildHistoryInsights
+    _buildHistoryInsights:            _buildHistoryInsights,
+    // V3 Module 7
+    _buildPredictionInsights:         _buildPredictionInsights
   };
 
   if (typeof module !== 'undefined' && module.exports) {

@@ -25,6 +25,7 @@ var _detectProfileType               = DDEv3._detectProfileType;
 var _applyAdaptiveCaps               = DDEv3._applyAdaptiveCaps;
 var _buildCoachingMessage            = DDEv3._buildCoachingMessage;
 var _buildHistoryInsights            = DDEv3._buildHistoryInsights;
+var _buildPredictionInsights         = DDEv3._buildPredictionInsights;
 
 // ── Harness ───────────────────────────────────────────────────────────────────
 var passed = 0, failed = 0;
@@ -1743,6 +1744,282 @@ test('userHistory nu00e2ffecte pas decision/intensity/priorityApplied', function
   assertEqual(base.decision,             withHistory.decision);
   assertEqual(base.recommendedIntensity, withHistory.recommendedIntensity);
   assertEqual(base.priorityApplied,      withHistory.priorityApplied);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 18 — Module 7 : _buildPredictionInsights
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('\nSection 18 — Module 7 : _buildPredictionInsights');
+
+// ── 1. Null / invalid inputs ──────────────────────────────────────────────────
+test('null inputs → next2Days/fatigueRisk null + recommendation is string', function () {
+  var r = _buildPredictionInsights(null, null);
+  assertEqual(r.next2Days,   null);
+  assertEqual(r.fatigueRisk, null);
+  assert(typeof r.recommendation === 'string' && r.recommendation.length > 0, 'recommendation always string');
+});
+test('undefined inputs → next2Days/fatigueRisk null + recommendation is string', function () {
+  var r = _buildPredictionInsights(undefined, undefined);
+  assertEqual(r.next2Days,   null);
+  assertEqual(r.fatigueRisk, null);
+  assert(typeof r.recommendation === 'string', 'recommendation always string');
+});
+test('non-object inputs (string, number) → null fields + recommendation string', function () {
+  var r = _buildPredictionInsights('profile', 42);
+  assertEqual(r.next2Days,   null);
+  assertEqual(r.fatigueRisk, null);
+  assert(typeof r.recommendation === 'string', 'recommendation always string');
+});
+
+// ── 2. next2Days computation ──────────────────────────────────────────────────
+test("next2Days: up trend + last decision train → 'increase'", function () {
+  var r = _buildPredictionInsights(null, {
+    last7Decisions: ['rest', 'train', 'train', 'train', 'train', 'train', 'train'],
+    last7Momentum:  [3, 4, 5, 6, 7, 8, 9]
+  });
+  assertEqual(r.next2Days, 'increase');
+});
+test("next2Days: up trend + last decision rest → 'stable'", function () {
+  var r = _buildPredictionInsights(null, {
+    last7Decisions: ['train', 'train', 'train', 'train', 'train', 'train', 'rest'],
+    last7Momentum:  [3, 4, 5, 6, 7, 8, 9]
+  });
+  assertEqual(r.next2Days, 'stable');
+});
+test("next2Days: down trend → 'decrease'", function () {
+  var r = _buildPredictionInsights(null, {
+    last7Decisions: ['train', 'train', 'train', 'train', 'train', 'train', 'train'],
+    last7Momentum:  [9, 8, 7, 6, 5, 4, 3]
+  });
+  assertEqual(r.next2Days, 'decrease');
+});
+test("next2Days: stable trend → 'stable'", function () {
+  var r = _buildPredictionInsights(null, {
+    last7Decisions: ['train', 'train', 'train', 'train', 'train', 'train', 'train'],
+    last7Momentum:  [5, 5, 5, 5, 5, 5, 5]
+  });
+  assertEqual(r.next2Days, 'stable');
+});
+test('next2Days: no history → null', function () {
+  assertEqual(_buildPredictionInsights(null, null).next2Days, null);
+});
+test('next2Days: userHistory with no momentum array → null', function () {
+  var r = _buildPredictionInsights(null, { last7Decisions: ['train', 'train', 'train'] });
+  assertEqual(r.next2Days, null);
+});
+test('next2Days: single momentum entry (needs ≥2) → null', function () {
+  var r = _buildPredictionInsights(null, {
+    last7Decisions: ['train'],
+    last7Momentum:  [7]
+  });
+  assertEqual(r.next2Days, null);
+});
+
+// ── 3. fatigueRisk computation ────────────────────────────────────────────────
+test('fatigueRisk: null when no profile', function () {
+  assertEqual(_buildPredictionInsights(null, null).fatigueRisk, null);
+});
+test('fatigueRisk: null when profile has no relevant numeric fields', function () {
+  var r = _buildPredictionInsights({ lastSessionTypeHistory: ['strength'] }, null);
+  assertEqual(r.fatigueRisk, null);
+});
+test("fatigueRisk: high via avgFatigueLast7Days ≥ 6 (direct unit test)", function () {
+  var r = _buildPredictionInsights({ avgFatigueLast7Days: 6 }, null);
+  assertEqual(r.fatigueRisk, 'high');
+});
+test("fatigueRisk: high via freq≥6 + streak≥3 (all-train decisions)", function () {
+  var r = _buildPredictionInsights(
+    { trainingFrequencyLast7Days: 6 },
+    { last7Decisions: ['train','train','train','train','train','train','train'], last7Momentum: [5, 6, 7] }
+  );
+  assertEqual(r.fatigueRisk, 'high');
+});
+test("fatigueRisk: high via freq=7 + streak=4", function () {
+  var r = _buildPredictionInsights(
+    { trainingFrequencyLast7Days: 7 },
+    { last7Decisions: ['rest','rest','rest','train','train','train','train'], last7Momentum: [5, 6, 7] }
+  );
+  assertEqual(r.fatigueRisk, 'high');
+});
+test("fatigueRisk: NOT high when freq≥6 but streak<3", function () {
+  var r = _buildPredictionInsights(
+    { trainingFrequencyLast7Days: 6 },
+    { last7Decisions: ['train','train','rest','rest','rest','rest','rest'], last7Momentum: [5, 6, 7] }
+  );
+  assert(r.fatigueRisk !== 'high', 'should not be high when streak=2');
+});
+test("fatigueRisk: moderate via avgFatigueLast7Days=4", function () {
+  assertEqual(_buildPredictionInsights({ avgFatigueLast7Days: 4 }, null).fatigueRisk, 'moderate');
+});
+test("fatigueRisk: moderate via avgFatigueLast7Days=5", function () {
+  assertEqual(_buildPredictionInsights({ avgFatigueLast7Days: 5 }, null).fatigueRisk, 'moderate');
+});
+test("fatigueRisk: moderate via trainingFrequencyLast7Days=4", function () {
+  assertEqual(_buildPredictionInsights({ trainingFrequencyLast7Days: 4 }, null).fatigueRisk, 'moderate');
+});
+test("fatigueRisk: moderate via trainingFrequencyLast7Days=5", function () {
+  assertEqual(_buildPredictionInsights({ trainingFrequencyLast7Days: 5 }, null).fatigueRisk, 'moderate');
+});
+test("fatigueRisk: low when avgFatigue<4 and freq<4", function () {
+  assertEqual(_buildPredictionInsights({ avgFatigueLast7Days: 2, trainingFrequencyLast7Days: 3 }, null).fatigueRisk, 'low');
+});
+test("fatigueRisk: low via freq=1", function () {
+  assertEqual(_buildPredictionInsights({ trainingFrequencyLast7Days: 1 }, null).fatigueRisk, 'low');
+});
+
+// ── 4. fatigueRisk boundaries ─────────────────────────────────────────────────
+test('fatigueRisk boundary: avgFatigue=3.9 → low', function () {
+  assertEqual(_buildPredictionInsights({ avgFatigueLast7Days: 3.9 }, null).fatigueRisk, 'low');
+});
+test('fatigueRisk boundary: avgFatigue=4.0 → moderate', function () {
+  assertEqual(_buildPredictionInsights({ avgFatigueLast7Days: 4.0 }, null).fatigueRisk, 'moderate');
+});
+test('fatigueRisk boundary: freq=3 → low (not moderate)', function () {
+  assertEqual(_buildPredictionInsights({ trainingFrequencyLast7Days: 3 }, null).fatigueRisk, 'low');
+});
+test('fatigueRisk boundary: freq=4 → moderate', function () {
+  assertEqual(_buildPredictionInsights({ trainingFrequencyLast7Days: 4 }, null).fatigueRisk, 'moderate');
+});
+test('fatigueRisk boundary: freq=6 + streak=2 → moderate (not high, streak<3)', function () {
+  var r = _buildPredictionInsights(
+    { trainingFrequencyLast7Days: 6 },
+    { last7Decisions: ['rest','rest','rest','rest','rest','train','train'], last7Momentum: [5, 6, 7] }
+  );
+  assert(r.fatigueRisk !== 'high', 'not high when streak=2');
+  assertEqual(r.fatigueRisk, 'moderate'); // freq=6 ≥ 4 triggers moderate
+});
+
+// ── 5. recommendation — 4 cases ──────────────────────────────────────────────
+test('recommendation case 1: high fatigue → recovery message', function () {
+  var r = _buildPredictionInsights({ avgFatigueLast7Days: 6 }, null);
+  assertEqual(r.fatigueRisk, 'high');
+  assert(typeof r.recommendation === 'string' && r.recommendation.length > 0, 'recommendation is string');
+  assert(r.recommendation.indexOf('récupération') !== -1, 'high risk → recovery keyword');
+});
+test('recommendation case 2: moderate fatigue → measured effort message', function () {
+  var r = _buildPredictionInsights({ avgFatigueLast7Days: 4 }, null);
+  assertEqual(r.fatigueRisk, 'moderate');
+  assert(typeof r.recommendation === 'string' && r.recommendation.length > 0, 'recommendation is string');
+  assert(r.recommendation.indexOf('mesuré') !== -1, 'moderate risk → measured keyword');
+});
+test('recommendation case 3: low risk + increase → momentum message', function () {
+  var r = _buildPredictionInsights(
+    { avgFatigueLast7Days: 2 },
+    { last7Decisions: ['rest','train','train','train','train','train','train'], last7Momentum: [3, 4, 5, 6, 7, 8, 9] }
+  );
+  assertEqual(r.fatigueRisk,  'low');
+  assertEqual(r.next2Days,    'increase');
+  assert(typeof r.recommendation === 'string' && r.recommendation.length > 0, 'recommendation is string');
+  assert(r.recommendation.indexOf('intensité') !== -1 || r.recommendation.indexOf('dynamique') !== -1, 'increase → intensity/momentum keyword');
+});
+test('recommendation case 4: default (no data) → consistency message', function () {
+  var r = _buildPredictionInsights(null, null);
+  assert(typeof r.recommendation === 'string' && r.recommendation.length > 0, 'recommendation always string');
+  assert(r.recommendation.indexOf('régulier') !== -1 || r.recommendation.indexOf('constance') !== -1, 'default → consistency keyword');
+});
+test('recommendation: each call returns a non-empty string regardless of inputs', function () {
+  [
+    [null, null],
+    [{ avgFatigueLast7Days: 3 }, null],
+    [null, { last7Decisions: ['train'], last7Momentum: [5, 6] }],
+    [{ trainingFrequencyLast7Days: 4 }, { last7Decisions: ['train','train'], last7Momentum: [5, 7] }]
+  ].forEach(function (tc) {
+    var r = _buildPredictionInsights(tc[0], tc[1]);
+    assert(typeof r.recommendation === 'string' && r.recommendation.length > 0,
+      'non-empty string for inputs: ' + JSON.stringify(tc));
+  });
+});
+
+// ── 6. Output shape validity ──────────────────────────────────────────────────
+test('output always has exactly 3 fields with valid enum values', function () {
+  var validNext2Days   = ['increase', 'stable', 'decrease', null];
+  var validFatigueRisk = ['low', 'moderate', 'high', null];
+  [
+    [null, null],
+    [{ avgFatigueLast7Days: 3 }, null],
+    [null, { last7Decisions: ['train'], last7Momentum: [5, 6] }],
+    [{ trainingFrequencyLast7Days: 4 }, { last7Decisions: ['train','train'], last7Momentum: [5, 7] }],
+    [{ avgFatigueLast7Days: 2 }, { last7Decisions: ['train','train','train'], last7Momentum: [3,5,7,9] }]
+  ].forEach(function (tc) {
+    var r = _buildPredictionInsights(tc[0], tc[1]);
+    assert('next2Days'      in r, 'next2Days field present');
+    assert('fatigueRisk'    in r, 'fatigueRisk field present');
+    assert('recommendation' in r, 'recommendation field present');
+    assert(validNext2Days.indexOf(r.next2Days) !== -1,   'next2Days valid: ' + r.next2Days);
+    assert(validFatigueRisk.indexOf(r.fatigueRisk) !== -1, 'fatigueRisk valid: ' + r.fatigueRisk);
+    assert(typeof r.recommendation === 'string' && r.recommendation.length > 0, 'recommendation non-empty string');
+  });
+});
+
+// ── 7. Independence — prior module outputs unaffected ─────────────────────────
+test('predictionInsights does not affect decision/intensity/priorityApplied', function () {
+  // userHistory feeds only Module 6 + 7; adding it must not change prior outputs
+  var base = decideV3({
+    goal: 'muscle_gain', fatigueLevel: 2, trainingFrequency: 3,
+    lastSessionDate: '2026-04-28', last3SessionsIntensity: ['moderate']
+  });
+  var withHistory = decideV3({
+    goal: 'muscle_gain', fatigueLevel: 2, trainingFrequency: 3,
+    lastSessionDate: '2026-04-28', last3SessionsIntensity: ['moderate'],
+    userHistory: {
+      last7Decisions: ['train','train','train','train','train','train','train'],
+      last7Momentum:  [5, 6, 7, 8, 9, 10, 10]
+    }
+  });
+  assertEqual(base.decision,             withHistory.decision);
+  assertEqual(base.recommendedIntensity, withHistory.recommendedIntensity);
+  assertEqual(base.priorityApplied,      withHistory.priorityApplied);
+});
+test('historyInsights field is not affected by predictionInsights presence', function () {
+  var out = decideV3({
+    goal: 'muscle_gain', fatigueLevel: 2, trainingFrequency: 3,
+    lastSessionDate: '2026-04-28', last3SessionsIntensity: ['moderate'],
+    userHistory: {
+      last7Decisions: ['train','train','train','train','train','rest','rest'],
+      last7Momentum:  [5, 5, 6, 6, 7, 7, 6]
+    }
+  });
+  assert(out.historyInsights !== undefined,           'historyInsights still present');
+  assertEqual(out.historyInsights.streak,           0); // last 2 are 'rest'
+  assertEqual(out.historyInsights.consistencyScore, 6); // 5 trains → score 6
+  assert(out.historyInsights.momentumTrend !== undefined, 'momentumTrend computed');
+  assert(out.predictionInsights !== undefined,        'predictionInsights also present');
+});
+
+// ── 8. Integration with decideDailyPlanV3 ────────────────────────────────────
+test('decideDailyPlanV3 sans userProfile/userHistory → predictionInsights.next2Days/fatigueRisk null', function () {
+  var out = decideV3({
+    goal: 'muscle_gain', fatigueLevel: 2, trainingFrequency: 4,
+    lastSessionDate: '2026-04-28', last3SessionsIntensity: ['moderate']
+  });
+  assert(out.predictionInsights !== undefined, 'predictionInsights field must be present');
+  assertEqual(out.predictionInsights.next2Days,   null);
+  assertEqual(out.predictionInsights.fatigueRisk, null);
+  assert(typeof out.predictionInsights.recommendation === 'string', 'recommendation always string');
+});
+test('decideDailyPlanV3 avec userProfile + userHistory → predictionInsights fully computed', function () {
+  var out = decideV3({
+    goal: 'fat_loss', fatigueLevel: 3, trainingFrequency: 4,
+    lastSessionDate: '2026-04-28', last3SessionsIntensity: ['moderate'],
+    userProfile: { avgFatigueLast7Days: 2, trainingFrequencyLast7Days: 3 },
+    userHistory: {
+      last7Decisions: ['rest','train','train','train','train','train','train'],
+      last7Momentum:  [3, 4, 5, 6, 7, 8, 9]
+    }
+  });
+  assert(out.predictionInsights.next2Days   !== undefined, 'next2Days computed');
+  assert(out.predictionInsights.fatigueRisk !== undefined, 'fatigueRisk computed');
+  assertEqual(out.predictionInsights.fatigueRisk, 'low');
+  assertEqual(out.predictionInsights.next2Days,   'increase');
+  assert(typeof out.predictionInsights.recommendation === 'string', 'recommendation is string');
+});
+test('decideDailyPlanV3 avec profil haute fatigue → fatigueRisk high (direct unit)', function () {
+  var r = _buildPredictionInsights({ avgFatigueLast7Days: 6, trainingFrequencyLast7Days: 6 }, {
+    last7Decisions: ['train','train','train','train','train','train','train'],
+    last7Momentum:  [5, 6, 7, 8, 9, 10, 10]
+  });
+  assertEqual(r.fatigueRisk, 'high');
+  assert(r.recommendation.indexOf('récupération') !== -1, 'high risk → recovery recommendation');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
