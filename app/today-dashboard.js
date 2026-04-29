@@ -1354,7 +1354,7 @@ function buildContextualHero(moment, S) {
 
   } else {
     // Veille (nuit) — hero minimaliste, pas de proactivité
-    ctx.quote = _bhEN ? 'Rest. Tomorrow, we start again.' : 'Repos. Demain, on reprend.';
+    var _citLate = getDailyCitationObj(); ctx.quote = _citLate.text; ctx.quoteAuthor = _citLate.author;
     ctx.stats = [];
   }
 
@@ -4012,6 +4012,162 @@ function renderCardSport() {
   return c;
 }
 
+// ─── SMARTFITCOACH TODAY — Unified AI decision block ─────────────────────────
+// Single source of truth for the daily session recommendation.
+// Replaces renderCardSport() + renderV3CoachingCard() in the render pipeline.
+// Priority: AI recommendation (primary) → user's static program (secondary/override).
+function renderSmartFitCoachToday() {
+  var S   = window.S;
+  if (!S || S.appMode === 'nutrition') return null;
+
+  var EN     = window.isEnglish && window.isEnglish();
+  var selAPI = window.WorkoutSelector;
+  var wlData = window.WorkoutLibraryData;
+
+  // Fallback: selector not yet loaded → show existing sport card
+  if (!selAPI || !wlData) return renderCardSport();
+
+  // Rest day: keep dedicated rest card, AI overlay not needed
+  var todayIdx = (new Date().getDay() + 6) % 7;
+  var next     = getNextSportDay();
+  var hasProg  = next && next.day;
+
+  if (hasProg && window.getDayType) {
+    var _di = null;
+    try { _di = window.getDayType(todayIdx); } catch(e) {}
+    if (_di && !_di.isTraining) return renderCardRestDay(S);
+  }
+
+  // No program configured → empty state
+  if (!hasProg) return renderCardSport();
+
+  var todayStr = new Date().toISOString().slice(0, 10);
+
+  // Override mode: user chose to follow their static program today
+  if (S._sfcOverride && S._sfcOverrideDate === todayStr) {
+    var _ow = h('div', { style: 'display:flex;flex-direction:column;gap:12px;' });
+    _ow.appendChild(h('div', {
+      style: 'padding:12px 16px;border-left:2px solid #1A1A1A;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:#6B6B65;line-height:1.65;letter-spacing:0.2px;'
+    }, EN
+      ? 'You chose to follow your program. The system adapts the session accordingly.'
+      : 'Tu choisis de suivre ton programme. Le système adapte la séance en conséquence.'));
+    var _pc = renderCardSport();
+    if (_pc) _ow.appendChild(_pc);
+    return _ow;
+  }
+
+  // Gather V3 inputs (fatigue, goal, frequency)
+  var v3In;
+  try { v3In = _v3GatherInputs(S); } catch(e) { return renderCardSport(); }
+
+  // Run WorkoutSelector
+  var sel2;
+  try {
+    sel2 = selAPI.selectWorkout({
+      user_level: ({ beginner:'beginner', intermediate:'intermediate', advanced:'intermediate', pro:'intermediate', expert:'intermediate' })[S.sportLevel] || 'beginner',
+      goal:       ({ muscle_gain:'strength', maintenance:'conditioning', fat_loss:'fat_loss' })[v3In.goal] || 'conditioning',
+      available_time:    ({ '45min':45, '1h':60, '1h15':75, '1h30':90 })[S.sportSessionDuration] || 45,
+      fatigue_level:     v3In.fatigueLevel,
+      last_workouts:     [],
+      preferred_subtypes: null
+    }, wlData.library);
+  } catch(eSel) {
+    console.warn('[SmartFitCoachToday]', eSel.message);
+    return renderCardSport();
+  }
+
+  // Build secondary button label from split/day info
+  var day  = next.day;
+  var idx  = next.index;
+  var _SLABELS = {
+    fullbody_ab: ['Full Body A','Full Body B'],
+    fullbody_3:  ['Full Body A','Full Body B','Full Body C'],
+    ppl_3:       ['Push','Pull','Legs'],
+    upper_lower: ['Upper A','Lower A','Upper B','Lower B'],
+    ppl_plus1:   ['Push','Pull','Legs','Upper'],
+    bro_4:  EN ? ['Chest + Triceps','Back + Biceps','Shoulders','Legs'] : ['Pecs + Triceps','Dos + Biceps','Épaules','Jambes'],
+    ppl_5:       ['Push A','Pull A','Legs','Push B','Pull B'],
+    bro_5:  EN ? ['Chest','Back','Shoulders','Arms','Legs'] : ['Pecs','Dos','Épaules','Bras','Jambes'],
+    ppl_6:       ['Push A','Pull A','Legs A','Push B','Pull B','Legs B']
+  };
+  var _dl    = (S._splitChoice && S.sportType === 'musculation') ? (_SLABELS[S._splitChoice] || null) : null;
+  var _dname = (_dl && _dl[idx]) ? _dl[idx] : (day.name || (EN ? 'Session ' + (idx + 1) : 'Séance ' + (idx + 1)));
+  var _stl   = ({ musculation:'Muscu', crossfit:'CrossFit', running:'Running', cycling:'Cycling', triathlon:'Triathlon', yoga:'Yoga', hyrox:'Hyrox' })[S.sportType] || '';
+  var _secCtx   = [_stl, _dname].filter(Boolean).join(' — ');
+  var _secLabel = (EN ? '→ Follow my program' : '→ Suivre mon programme') + (_secCtx ? ' (' + _secCtx + ')' : '');
+
+  // Session already done today?
+  var _doneKey = idx + '_' + todayStr;
+  var _done    = !!(S.sessionHistory && S.sessionHistory[_doneKey]);
+
+  // Momentum tag fill style: Peak/Locked In → filled black; Building/Recovering → outlined
+  var _filled = sel2.momentum_tag === 'Peak' || sel2.momentum_tag === 'Locked In';
+  var _tagSt  = 'display:inline-block;font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:3px;text-transform:uppercase;padding:5px 10px;margin-bottom:24px;' +
+    (_filled ? 'background:#1A1A1A;color:#F5F3EF;' : 'background:transparent;color:#6B6B65;border:1px solid #6B6B65;');
+
+  // ── Render ──
+  var c = card('');
+
+  // Brand header
+  c.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#6B6B65;margin-bottom:20px;font-weight:500;'
+  }, 'SMARTFITCOACH TODAY'));
+
+  // Eyebrow
+  c.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:#6B6B65;margin-bottom:8px;opacity:0.7;'
+  }, EN ? 'Recommended today' : 'Recommandé aujourd’hui'));
+
+  // Session focus headline
+  c.appendChild(h('div', {
+    style: 'font-family:Georgia,serif;font-size:22px;font-weight:normal;line-height:1.2;letter-spacing:-0.3px;color:#1A1A1A;margin-bottom:12px;'
+  }, sel2.session_focus));
+
+  // Momentum tag badge
+  c.appendChild(h('span', { style: _tagSt }, sel2.momentum_tag.toUpperCase()));
+
+  c.appendChild(h('div', { style: 'height:1px;background:#D8D8D0;margin-bottom:18px;' }));
+
+  // WHY section
+  c.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#6B6B65;margin-bottom:10px;'
+  }, EN ? 'WHY THIS DECISION' : 'POURQUOI CETTE DÉCISION'));
+  c.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:#2B2B27;line-height:1.7;margin-bottom:24px;font-weight:300;'
+  }, sel2.coach_message));
+
+  c.appendChild(h('div', { style: 'height:1px;background:#D8D8D0;margin-bottom:20px;' }));
+
+  // Primary CTA
+  c.appendChild(h('button', {
+    style: _done
+      ? 'display:block;width:100%;padding:18px;background:rgba(62,92,58,0.08);color:#3E5C3A;border:1px solid #3E5C3A;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:default;margin-bottom:12px;min-height:52px;'
+      : 'display:block;width:100%;padding:18px;background:#1A1A1A;color:#F5F3EF;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;min-height:52px;',
+    onclick: _done ? null : function() {
+      var S2 = window.S;
+      if (!S2) return;
+      S2.view = 'sport';
+      S2.selectedSportDay = Math.max(0, Math.min(idx, (Array.isArray(S2.sportProgram) ? S2.sportProgram.length - 1 : 0)));
+      if (window.render) window.render();
+    }
+  }, _done ? ('✔ ' + (EN ? 'Session complete' : 'Séance terminée')) : (EN ? '→ Start session' : '→ Commencer la séance')));
+
+  // Secondary: follow static program (override)
+  c.appendChild(h('button', {
+    style: 'display:block;width:100%;padding:14px;background:transparent;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:0.5px;color:#8B8B85;cursor:pointer;text-align:left;min-height:44px;',
+    onclick: function() {
+      var S2 = window.S;
+      if (!S2) return;
+      S2._sfcOverride     = true;
+      S2._sfcOverrideDate = todayStr;
+      if (window.save) window.save();
+      if (window.render) window.render();
+    }
+  }, _secLabel));
+
+  return c;
+}
+
 // ─── V3 COACHING CARD — Intelligence quotidienne ─────────────────────────────
 // Collect available state and call the V3 engine + coaching layer.
 // Fully guarded: any error silently returns null (existing behavior preserved).
@@ -6490,15 +6646,11 @@ function renderTodayDashboard(p) {
     }
   } catch(_eVal) { console.warn('[validation banners]', _eVal); }
 
-  // ── Card 1 — SÉANCE DU JOUR (position prioritaire) ──
-  var cardSport = renderCardSport();
-  if (cardSport) wrapper.appendChild(cardSport);
-
-  // ── V3 Coaching Card — intelligence adaptative (après la séance) ──
+  // ── SmartFitCoach Today — unified AI decision block ──
   try {
-    var _cardV3 = renderV3CoachingCard();
-    if (_cardV3) wrapper.appendChild(_cardV3);
-  } catch (_eV3) { console.warn('[SFC V3 coaching card]', _eV3); }
+    var _cardToday = renderSmartFitCoachToday();
+    if (_cardToday) wrapper.appendChild(_cardToday);
+  } catch (_eSFC) { console.warn('[SmartFitCoachToday]', _eSFC); }
 
   // ── Streak inline — juste sous la séance pour la motivation immédiate ──
   // UX fix: était après les cartes nutrition → invisible. Maintenant sous la séance.
