@@ -286,7 +286,7 @@
     hiit: [
       '{duration}-min intervals — break the ceiling',
       '{duration}-min intervals — earn every second',
-      '{duration}-min intervals — all out, every round'
+      '{duration}-min intervals — no round wasted'
     ],
     zone2: [
       '{duration}-min zone 2 — patience is the method',
@@ -296,7 +296,7 @@
     mixed: [
       '{duration}-min hybrid — two signals, one standard',
       '{duration}-min mixed — no weak link',
-      '{duration}-min concurrent — earn both'
+      '{duration}-min concurrent — no half measures'
     ],
     heavy: [
       '{duration}-min strength — own the weight',
@@ -311,12 +311,12 @@
     tempo: [
       '{duration}-min tempo — precision wins',
       '{duration}-min tempo — control is the skill',
-      '{duration}-min precision — slow down, level up'
+      '{duration}-min precision — master the pace'
     ],
     volume: [
       '{duration}-min volume — reps reveal discipline',
       '{duration}-min accumulation — stack the work',
-      '{duration}-min volume — volume is the answer'
+      '{duration}-min volume — reps don\'t lie'
     ]
   };
 
