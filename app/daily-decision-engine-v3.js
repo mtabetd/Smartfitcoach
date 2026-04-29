@@ -289,7 +289,8 @@
   //   overtraining > inconsistent > cautious > disciplined > beginner
   //
   // Règles :
-  //   overtraining : avgFatigueLast7Days >= 4  AND trainingFrequencyLast7Days >= 4
+  //   overtraining : avgFatigueLast7Days >= 6
+  //                  OR (avgFatigueLast7Days >= 4 AND trainingFrequencyLast7Days >= 6)
   //   disciplined  : adherenceScore >= 0.8     AND trainingFrequencyLast7Days >= 3
   //                  AND avgFatigueLast7Days < 4
   //   inconsistent : adherenceScore < 0.5      OR  trainingFrequencyLast7Days <= 1
@@ -309,7 +310,9 @@
       ? userProfile.avgFatigueLast7Days : null;
 
     // 1. overtraining (priorité maximale)
-    if (avgFat !== null && freq7 !== null && avgFat >= 4 && freq7 >= 4) {
+    // Fix 2: raised threshold — avgFat>=4+freq>=4 classified too many disciplined athletes
+    if (avgFat !== null && freq7 !== null &&
+        (avgFat >= 6 || (avgFat >= 4 && freq7 >= 6))) {
       return 'overtraining';
     }
 
@@ -352,10 +355,18 @@
   // Retourne {maxRank, adaptationReason}.
   // Sans profil ou sur décision 'rest' → pas de changement, reason null.
   function _applyAdaptiveCaps(maxRank, priorityApplied, profileType, momentumScore, hasProfile, decision) {
-    if (!hasProfile) return { maxRank: maxRank, adaptationReason: null };
-
+    // Rest day: no intensity changes, reason depends only on profile presence
     if (decision === 'rest') {
-      return { maxRank: maxRank, adaptationReason: 'Rest day — recovery prioritized' };
+      return { maxRank: maxRank, adaptationReason: hasProfile ? 'Rest day — recovery prioritized' : null };
+    }
+
+    // Fix 1: no user profile → bootstrap safety cap (max moderate, unknown user treated as beginner-safe)
+    if (!hasProfile) {
+      var safeRank = Math.min(maxRank, 1);
+      return {
+        maxRank:          safeRank,
+        adaptationReason: (safeRank < maxRank) ? 'No user profile — beginner-safe cap applied' : null
+      };
     }
 
     var newRank  = maxRank;
@@ -929,6 +940,11 @@
     var effective = _computeFatigue(inputs.fatigueLevel, inputs.sleepQuality, days);
 
     var decObj = _computeDecision(effective, inputs.trainingFrequency, days);
+
+    // Fix 3: raw fatigueLevel at maximum (5/5) forces rest — no priority can override
+    if (inputs.fatigueLevel >= 5 && decObj.decision !== 'rest') {
+      decObj = { decision: 'rest', priority: 'safety', reason: 'Forced rest: raw fatigueLevel at maximum (5/5)' };
+    }
 
     var progression = { triggered: false, reason: null };
     if (decObj.decision === 'train') {
