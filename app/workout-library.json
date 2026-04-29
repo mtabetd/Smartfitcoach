@@ -420,7 +420,10 @@
           "coaching_cue": "KB swing: hips snap, arms follow — pulling with your arms kills the power before it starts.",
           "duration": 16,
           "subtype": "hiit",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "conditioning",
+          "intent": "Tabata intensity upgrade with loaded implements",
+          "progression_hint": "First intermediate Tabata — establishes KB and bike baseline; advance when all 3 stations maintain 8+ quality reps per round"
         },
         {
           "id": "hiit-i-02",
@@ -466,7 +469,10 @@
           "coaching_cue": "Rotate stations with zero dead time — the 1-min rest is the only full stop you get.",
           "duration": 23,
           "subtype": "hiit",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "conditioning",
+          "intent": "maximal work capacity across five modalities",
+          "progression_hint": "Benchmark session — retest every 6 weeks; a score above 300 total reps signals readiness for longer chipper formats"
         },
         {
           "id": "hiit-i-03",
@@ -500,7 +506,10 @@
           "coaching_cue": "Goblet squat: elbows inside knees, chest tall — the KB will pull you forward if your brace fails.",
           "duration": 26,
           "subtype": "hiit",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "fat_loss",
+          "intent": "sustained KB metabolic output across five rounds",
+          "progression_hint": "Mid-block KB density work; progress to heavier bell or 6 rounds when rest periods feel excessive between rounds"
         },
         {
           "id": "hiit-i-04",
@@ -547,7 +556,10 @@
           "coaching_cue": "The first 3 seconds of each max effort establish your power — don't ramp, explode from zero.",
           "duration": 21,
           "subtype": "hiit",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "conditioning",
+          "intent": "peak power development via short max-effort bike pyramids",
+          "progression_hint": "Teaches power curve management; precedes repeated sprint ability work — advance when watt output holds across all three rounds"
         },
         {
           "id": "hiit-i-05",
@@ -577,7 +589,10 @@
           "coaching_cue": "You should finish each minute with 8–10s spare — if you don't, drop the target by 2 immediately.",
           "duration": 20,
           "subtype": "hiit",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "conditioning",
+          "intent": "aerobic engine stress test under concurrent demands",
+          "progression_hint": "EMOM benchmark — if 10+ seconds rest per minute is achieved throughout, increase row target to 17 cal and jump-overs to 14"
         },
         {
           "id": "hiit-i-06",
@@ -608,7 +623,10 @@
           "coaching_cue": "8/10 effort means you can say one word but not a sentence — find that line and live there for 4 minutes.",
           "duration": 30,
           "subtype": "hiit",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "recomposition",
+          "intent": "lactate threshold development via sustained hard efforts",
+          "progression_hint": "Core threshold session for intermediate block; progress to 6 rounds or tighten rest to 90s when pace holds across all 5 efforts"
         },
         {
           "id": "hiit-i-07",
@@ -642,7 +660,10 @@
           "coaching_cue": "Clean-and-press: the press is strict — zero leg drive. If you push-press it, the clean weight is too heavy.",
           "duration": 25,
           "subtype": "hiit",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "KB strength-endurance complex under accumulated fatigue",
+          "progression_hint": "Bridges HIIT conditioning into loaded strength work; advance KB weight when all 5 rounds maintain strict press form"
         },
         {
           "id": "hiit-i-08",
@@ -677,7 +698,10 @@
           "coaching_cue": "Row: legs drive first, arms follow — pulling with your back before your legs extend loses 20% of every stroke.",
           "duration": 15,
           "subtype": "hiit",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "fat_loss",
+          "intent": "alternating max-effort intervals for high metabolic demand",
+          "progression_hint": "Density finisher — use at end of training week; progress to 12 rounds when row output stays above 300W for all intervals"
         },
         {
           "id": "hiit-i-09",
@@ -714,7 +738,10 @@
           "coaching_cue": "The 20s rest is not passive — controlled breathing only. Flopping on the floor costs the next round.",
           "duration": 15,
           "subtype": "hiit",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "conditioning",
+          "intent": "CNS-demanding sprint complex with compressed recovery",
+          "progression_hint": "High-intensity capstone session; add a 5th round only when rounds 1–4 produce equal bike output and box jump-over counts"
         },
         {
           "id": "hiit-i-10",
@@ -759,7 +786,10 @@
           "coaching_cue": "Break pull-ups into small sets from rep one — 5s of rest between sets costs nothing; sets of 1 after failure costs everything.",
           "duration": 25,
           "subtype": "hiit",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "conditioning",
+          "intent": "high-volume chipper to test aerobic and strength endurance",
+          "progression_hint": "Benchmark chipper — sub-20 min signals graduation to mixed-subtype programming; retest after 4-week block"
         }
       ]
     },
