@@ -284,39 +284,39 @@
   // {duration} is replaced with the workout's actual duration in minutes.
   var SESSION_FOCUS_TEMPLATES = {
     hiit: [
-      '{duration}-min intervals — push output ceiling',
-      '{duration}-min conditioning — max effort, full rounds',
-      '{duration}-min intervals — hold pace above threshold'
+      '{duration}-min intervals — push beyond your comfort ceiling',
+      '{duration}-min intervals — hold the pace, earn the session',
+      '{duration}-min intervals — every round counts'
     ],
     zone2: [
-      '{duration}-min zone 2 — controlled pace, full duration',
-      '{duration}-min aerobic base — conversational effort throughout',
-      '{duration}-min steady state — heart rate controlled, no variance'
+      '{duration}-min zone 2 — slow is how you get faster',
+      '{duration}-min base — build what effort alone can\'t buy',
+      '{duration}-min aerobic — consistency is the strategy'
     ],
     mixed: [
-      '{duration}-min hybrid — strength meets conditioning',
-      '{duration}-min concurrent — aerobic base, compound load',
-      '{duration}-min mixed — dual signal, full execution'
+      '{duration}-min hybrid — strong and conditioned, no compromise',
+      '{duration}-min mixed — two systems, one standard',
+      '{duration}-min concurrent — earn both adaptations'
     ],
     heavy: [
-      '{duration}-min strength — heavy compound, full recovery',
-      '{duration}-min barbell — load with intent, rest completely',
-      '{duration}-min max strength — bar speed is the metric'
+      '{duration}-min strength — own the weight',
+      '{duration}-min barbell — load up, lock in',
+      '{duration}-min heavy — strength is a long game'
     ],
     explosive: [
-      '{duration}-min power — reactive strength at full intent',
-      '{duration}-min explosive — force production, complete recovery',
-      '{duration}-min athletic — speed of movement is the variable'
+      '{duration}-min power — move fast, stay sharp',
+      '{duration}-min explosive — speed is the skill',
+      '{duration}-min athletic — be the fastest version of yourself'
     ],
     tempo: [
-      '{duration}-min tempo — controlled eccentric, full range',
-      '{duration}-min time under tension — slow the movement down',
-      '{duration}-min precision — cadence is the training variable'
+      '{duration}-min tempo — control every rep',
+      '{duration}-min tempo — slow down to level up',
+      '{duration}-min precision — the detail is the work'
     ],
     volume: [
-      '{duration}-min volume — accumulate reps, maintain form',
-      '{duration}-min hypertrophy — moderate load, high repetitions',
-      '{duration}-min accumulation — deliberate reps, full range'
+      '{duration}-min volume — reps build the body',
+      '{duration}-min accumulation — show up, stack the work',
+      '{duration}-min volume — more reps, stronger signal'
     ]
   };
 
