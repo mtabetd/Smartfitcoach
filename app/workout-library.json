@@ -1,0 +1,185 @@
+{
+  "library": {
+    "hiit": {
+      "beginner": [
+        {
+          "id": "hiit-b-01",
+          "title": "Tabata Foundation",
+          "structure": {
+            "format": "Tabata — 20s work / 10s rest × 8 rounds per station",
+            "stations": [
+              { "exercise": "Air Squat", "rounds": 8 },
+              { "exercise": "Push-Up", "rounds": 8 },
+              { "exercise": "Jumping Jack", "rounds": 8 },
+              { "exercise": "Mountain Climber", "rounds": 8 }
+            ],
+            "rest_between_stations": "60s"
+          },
+          "duration_min": 22,
+          "equipment": ["bodyweight"],
+          "scaling": "Step jacks instead of jumping, knee push-ups, reduce squat depth",
+          "coaching_cue": "Push the 20s — the 10s is yours, not a head start on the next round."
+        },
+        {
+          "id": "hiit-b-02",
+          "title": "Run The Clock",
+          "structure": {
+            "format": "8 rounds of sprint / walk",
+            "blocks": [
+              { "phase": "Sprint", "duration": "30s", "effort": "9/10 RPE" },
+              { "phase": "Walk", "duration": "90s", "effort": "2/10 RPE" }
+            ],
+            "rounds": 8
+          },
+          "duration_min": 16,
+          "equipment": ["none — outdoor or treadmill"],
+          "scaling": "Replace sprint with brisk walk, reduce rounds to 5",
+          "coaching_cue": "Sprint pace should be uncomfortable, not unsustainable — find the edge and hold it."
+        },
+        {
+          "id": "hiit-b-03",
+          "title": "The 12",
+          "structure": {
+            "format": "EMOM 12",
+            "blocks": [
+              { "minute": "Odd", "exercises": [{ "name": "Air Squat", "reps": 12 }, { "name": "Burpee", "reps": 4 }] },
+              { "minute": "Even", "exercises": [{ "name": "Push-Up", "reps": 10 }, { "name": "Sit-Up", "reps": 10 }] }
+            ]
+          },
+          "duration_min": 12,
+          "equipment": ["bodyweight"],
+          "scaling": "8 squats + 2 burpees, knee push-ups, reduce sit-up to crunch",
+          "coaching_cue": "Finish each minute with at least 10 seconds spare — if you can't, reduce the reps now."
+        },
+        {
+          "id": "hiit-b-04",
+          "title": "Step Up",
+          "structure": {
+            "format": "6 rounds of paired intervals",
+            "blocks": [
+              { "exercise": "Jump Squat", "work": "20s", "rest": "10s" },
+              { "exercise": "High Knees", "work": "20s", "rest": "10s" }
+            ],
+            "rounds": 6,
+            "rest_between_rounds": "2 min"
+          },
+          "duration_min": 22,
+          "equipment": ["bodyweight"],
+          "scaling": "Air squat instead of jump squat, march in place instead of high knees",
+          "coaching_cue": "Land every jump squat softly — flat-foot landings send the impact straight to your knees."
+        },
+        {
+          "id": "hiit-b-05",
+          "title": "Short Ladder",
+          "structure": {
+            "format": "Ascending rep ladder, for time",
+            "sequence": [2, 4, 6, 8, 10],
+            "exercises_per_rung": [
+              { "name": "Burpee" },
+              { "name": "Squat Jump" }
+            ],
+            "rest": "90s between rungs"
+          },
+          "duration_min": 22,
+          "equipment": ["bodyweight"],
+          "scaling": "Step burpee, air squat instead of squat jump, cap at rung 3 if needed",
+          "coaching_cue": "Breathe at the top of every burpee — it costs one second and saves the entire set."
+        },
+        {
+          "id": "hiit-b-06",
+          "title": "Station Break",
+          "structure": {
+            "format": "4 stations × 35s work / 25s rest × 4 rounds",
+            "stations": [
+              { "exercise": "Box or Chair Step-Up (alternating legs)" },
+              { "exercise": "Push-Up to Shoulder Tap" },
+              { "exercise": "Lateral Shuffle (4m width, touch line)" },
+              { "exercise": "Hollow Body Hold" }
+            ],
+            "rounds": 4,
+            "rest_between_rounds": "90s"
+          },
+          "duration_min": 26,
+          "equipment": ["box or sturdy chair"],
+          "scaling": "Knee push-up, reduce step height, plank instead of hollow body",
+          "coaching_cue": "Every station is a clean start — reset your breathing between stations, not mid-exercise."
+        },
+        {
+          "id": "hiit-b-07",
+          "title": "Double AMRAP",
+          "structure": {
+            "format": "AMRAP 10, rest 5 min, AMRAP 5",
+            "exercises": [
+              { "name": "Jumping Jack", "reps": 10 },
+              { "name": "Push-Up", "reps": 5 },
+              { "name": "Squat Hop", "reps": 10 }
+            ],
+            "goal": "Match or beat AMRAP 10 round count in AMRAP 5"
+          },
+          "duration_min": 20,
+          "equipment": ["bodyweight"],
+          "scaling": "Step jacks, knee push-ups, squat pulse instead of hop",
+          "coaching_cue": "Track your round count in AMRAP 10 — the AMRAP 5 score tells you how well you paced."
+        },
+        {
+          "id": "hiit-b-08",
+          "title": "Effort Ladder",
+          "structure": {
+            "format": "5 rounds with ascending effort",
+            "blocks": [
+              { "phase": "Moderate", "duration": "60s", "effort": "7/10 RPE — jog or fast march" },
+              { "phase": "Hard", "duration": "60s", "effort": "9/10 RPE — sprint or power walk" },
+              { "phase": "Rest", "duration": "60s", "effort": "walk" }
+            ],
+            "rounds": 5
+          },
+          "duration_min": 15,
+          "equipment": ["none — outdoor, treadmill, or open space"],
+          "scaling": "7/10 = brisk walk, 9/10 = fastest walk possible, reduce to 4 rounds",
+          "coaching_cue": "9/10 effort is the fastest you can sustain for 60 seconds — not a 5-second sprint."
+        },
+        {
+          "id": "hiit-b-09",
+          "title": "Push–Pull Tabata Pairs",
+          "structure": {
+            "format": "Tabata pairs — 20s on / 10s off × 8 rounds per pair",
+            "pairs": [
+              {
+                "pair": "A",
+                "exercises": ["Push-Up", "Air Squat"],
+                "format": "Alternate exercises each round × 8 total rounds",
+                "rest_after_pair": "90s"
+              },
+              {
+                "pair": "B",
+                "exercises": ["Chair Dip", "Reverse Lunge (alternating)"],
+                "format": "Alternate exercises each round × 8 total rounds"
+              }
+            ]
+          },
+          "duration_min": 22,
+          "equipment": ["bodyweight", "sturdy chair"],
+          "scaling": "Knee push-up, bench dip, static lunge",
+          "coaching_cue": "In Tabata, consistent reps across all 8 rounds beats blowing up in round 1 — start at 70%."
+        },
+        {
+          "id": "hiit-b-10",
+          "title": "Breathless 15",
+          "structure": {
+            "format": "Descending rep ladder, for time",
+            "sequence": [15, 12, 9, 6, 3],
+            "exercises_per_rung": [
+              { "name": "Air Squat" },
+              { "name": "Push-Up" }
+            ],
+            "rest": "Only when needed — rest as little as possible"
+          },
+          "duration_min": 18,
+          "equipment": ["bodyweight"],
+          "scaling": "Start at 12-9-6-4-2, knee push-ups",
+          "coaching_cue": "Breathe between movements, not mid-rep — broken rhythm costs more time than a 10-second breath."
+        }
+      ]
+    }
+  }
+}
