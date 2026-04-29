@@ -2967,7 +2967,10 @@
           },
           "coaching_cue": "Daily max is the heaviest you can lift with perfect form today — judge by bar speed.",
           "subtype": "heavy",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "max effort lower body to develop peak force output",
+          "progression_hint": "Core conjugate session — rotate squat and deadlift weekly; daily max should not exceed RPE 9; true 1RM testing reserved for competition or monthly testing day"
         },
         {
           "id": "hvy-i-02",
@@ -3016,7 +3019,10 @@
           },
           "coaching_cue": "Set your back arch before unracking — don't try to arch after you've taken the bar.",
           "subtype": "heavy",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "max effort upper body to build absolute pressing strength",
+          "progression_hint": "Pairs with hvy-i-01 in a two-day max effort split; rotate bench and OHP weekly; back-off volume accumulates hypertrophy under the strength stimulus"
         },
         {
           "id": "hvy-i-03",
@@ -3058,7 +3064,10 @@
           },
           "coaching_cue": "Bar speed IS the goal — think about pushing the earth away as fast as possible.",
           "subtype": "heavy",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "speed-strength development via submaximal squats with max intent",
+          "progression_hint": "Dynamic effort squat builds bar speed that transfers to heavier max effort days; run this 72h before or after hvy-i-01 to avoid CNS overlap"
         },
         {
           "id": "hvy-i-04",
@@ -3100,7 +3109,10 @@
           },
           "coaching_cue": "The touch on your chest should be controlled — don't bounce.",
           "subtype": "heavy",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "speed-strength development via submaximal bench with explosive concentric",
+          "progression_hint": "Dynamic effort upper pairs with hvy-i-02 max effort bench; 9×3 at 50% with max intent produces greater rate of force development than grinding heavy singles"
         },
         {
           "id": "hvy-i-05",
@@ -3154,7 +3166,10 @@
           },
           "coaching_cue": "Keep the bar close — it should drag your shins on the way up.",
           "subtype": "heavy",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "posterior chain overload via RDL wave loading plus speed conventional pulls",
+          "progression_hint": "Wave loading on RDL peaks hamstring tension progressively — top set at 90% followed by speed work cements neural efficiency; feeds directly into hvy-i-01 deadlift max effort"
         },
         {
           "id": "hvy-i-06",
@@ -3203,7 +3218,10 @@
           },
           "coaching_cue": "Elbows HIGH — if they drop, you'll tip forward and dump the bar.",
           "subtype": "heavy",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "front squat strength for quad dominance and upper back loading capacity",
+          "progression_hint": "Front squat 5RM is a reliable indicator of clean receiving position strength; when 5RM exceeds 80% of back squat 1RM, Olympic lifting technique will improve markedly"
         },
         {
           "id": "hvy-i-07",
@@ -3254,7 +3272,10 @@
           },
           "coaching_cue": "Supersets shorten total time without sacrificing load — keep transition under 15 seconds.",
           "subtype": "heavy",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "antagonist superset pairing for maximum pressing and pulling volume efficiency",
+          "progression_hint": "Push-pull superset allows higher frequency without extended session length; track both lifts independently — imbalance over 20% between bench and row signals a priority shift"
         },
         {
           "id": "hvy-i-08",
@@ -3305,7 +3326,10 @@
           },
           "coaching_cue": "Wave 2 should feel lighter than wave 1 at the same weight — that's post-activation potentiation working.",
           "subtype": "heavy",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "wave loading to exploit post-activation potentiation on back squat",
+          "progression_hint": "Two waves at escalating load teach the nervous system to recruit maximally — wave 2 should consistently outperform wave 1 at the same percentages; if not, fatigue is too high"
         },
         {
           "id": "hvy-i-09",
@@ -3349,7 +3373,10 @@
           },
           "coaching_cue": "Sumo demands hip mobility — warm up your hip flexors before loading.",
           "subtype": "heavy",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "multi-variation deadlift day to build positional strength across stances",
+          "progression_hint": "Sumo exposes hip mobility limits; conventional builds raw pulling strength; trap bar reduces spinal load — weakest variation identifies the priority for the next training block"
         },
         {
           "id": "hvy-i-10",
@@ -3403,7 +3430,10 @@
           },
           "coaching_cue": "Accessory work is where strength is built — don't treat it as second-class.",
           "subtype": "heavy",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "heavy accessory volume to reinforce weak points identified in primary lifts",
+          "progression_hint": "Accessory block runs alongside max effort days — programme once per week; address the lift where you fail first: incline for lockout, chin-up for lat drive off the floor"
         }
       ]
     },
