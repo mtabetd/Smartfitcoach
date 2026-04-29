@@ -5175,7 +5175,10 @@
           },
           "coaching_cue": "Volume beats intensity for beginners — get 30 quality reps at the same weight.",
           "subtype": "volume",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "strength",
+          "intent": "high-rep squat volume to build neurological efficiency and work capacity",
+          "progression_hint": "10×3 at 75% accumulates 30 quality reps — more total volume than any single heavy set; when all sets complete with consistent bar speed, increase load to 77.5% and reduce to 8 sets"
         },
         {
           "id": "vol-b-s02",
@@ -5212,7 +5215,10 @@
           },
           "coaching_cue": "You are accumulating pressing volume — keep every set crisp, even if the weight feels light.",
           "subtype": "volume",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "strength",
+          "intent": "pressing volume accumulation across bench and overhead to build upper-body strength base",
+          "progression_hint": "Paired pressing sessions build total pushing volume efficiently; add one set per lift per month; advance to vol-i-s03 wave loading when 8×4 bench exceeds 80% 1RM"
         },
         {
           "id": "vol-b-s03",
@@ -5248,7 +5254,10 @@
           },
           "coaching_cue": "Back-off volume builds the base — you'll feel this in 4 weeks, not today.",
           "subtype": "volume",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "strength",
+          "intent": "pulling volume accumulation via deadlift and row to build posterior chain strength",
+          "progression_hint": "High-volume deadlift at 70% builds connective tissue tolerance before heavier loading; when 8×4 is completed with grip intact and bar speed consistent, increase to 75% for 6×4"
         },
         {
           "id": "vol-b-s04",
@@ -5291,7 +5300,10 @@
           },
           "coaching_cue": "Hip thrust lockout — squeeze glutes for 1 full second at the top.",
           "subtype": "volume",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "strength",
+          "intent": "lower-body strength volume across three complementary movement patterns",
+          "progression_hint": "Front squat + RDL + hip thrust covers quad, hamstring, and glute strength comprehensively; advance front squat load when all 6 sets maintain upright torso throughout"
         },
         {
           "id": "vol-b-s05",
@@ -5338,7 +5350,10 @@
           },
           "coaching_cue": "This is the classic 5×5. When all 25 reps go up clean, add weight next session.",
           "subtype": "volume",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "strength",
+          "intent": "classic 5×5 full-body strength protocol for systematic linear progression",
+          "progression_hint": "Add 2.5 kg to each lift when all 25 reps complete — the simplest and most proven beginner strength rule; stalls signal the transition to vol-i-s01 or vol-i-s04 advanced protocols"
         },
         {
           "id": "vol-b-h01",
@@ -5377,7 +5392,10 @@
           },
           "coaching_cue": "Stop 1-2 reps before failure on every set — chase the pump, not the limit.",
           "subtype": "volume",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "toning",
+          "intent": "push day hypertrophy via moderate load and high volume across four pressing angles",
+          "progression_hint": "Four angles of push creates complete pectoral and deltoid development; stop 2 reps shy of failure every set; when all 4×12 complete with that buffer, increase load by 2.5 kg"
         },
         {
           "id": "vol-b-h02",
@@ -5415,7 +5433,10 @@
           },
           "coaching_cue": "Feel the lat stretch at the bottom of the pulldown — don't just yank.",
           "subtype": "volume",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "toning",
+          "intent": "pull day hypertrophy via vertical and horizontal pulling plus bicep isolation",
+          "progression_hint": "Lat pulldown + cable row + face pull + curl covers the full pulling chain; pair with vol-b-h01 push day in same week for balanced upper-body development"
         },
         {
           "id": "vol-b-h03",
@@ -5469,7 +5490,10 @@
           },
           "coaching_cue": "Leg hypertrophy requires high reps and short rest — you should want to stop before you do.",
           "subtype": "volume",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "toning",
+          "intent": "complete leg hypertrophy session targeting quad, hamstring, glute, and calf independently",
+          "progression_hint": "Machine-based leg session allows isolated volume without technical fatigue — ideal for hypertrophy focus; advance to 4 sets per exercise before increasing load; pairs with vol-b-s01 squat strength day"
         },
         {
           "id": "vol-b-h04",
@@ -5509,7 +5533,10 @@
           },
           "coaching_cue": "Shoulders respond well to high frequency — light weight, lots of reps, feel the burn.",
           "subtype": "volume",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "toning",
+          "intent": "shoulder hypertrophy specialisation across all three deltoid heads",
+          "progression_hint": "Shoulders require high frequency and high rep ranges — this session can be run twice per week; advance to giant set format in vol-i-h04 when all 5 exercises complete 4×15 with full ROM"
         },
         {
           "id": "vol-b-h05",
@@ -5552,7 +5579,10 @@
           },
           "coaching_cue": "Choose a weight you can complete all 12 reps with — reduce if form breaks after rep 8.",
           "subtype": "volume",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "recomposition",
+          "intent": "full-body hypertrophy circuit for maximum muscle stimulus with minimal equipment",
+          "progression_hint": "DB-only circuit is the most accessible hypertrophy session in the programme; increase load when all 3 rounds complete every exercise at 12 reps with 2 reps in reserve; advance to vol-i-h05 pyramid format"
         }
       ],
       "intermediate": [
