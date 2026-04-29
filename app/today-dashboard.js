@@ -4024,10 +4024,8 @@ function renderSmartFitCoachToday() {
   var selAPI = window.WorkoutSelector;
   var wlData = window.WorkoutLibraryData;
 
-  // Fallback: selector not yet loaded → show existing sport card
   if (!selAPI || !wlData) return renderCardSport();
 
-  // Rest day: keep dedicated rest card, AI overlay not needed
   var todayIdx = (new Date().getDay() + 6) % 7;
   var next     = getNextSportDay();
   var hasProg  = next && next.day;
@@ -4038,34 +4036,32 @@ function renderSmartFitCoachToday() {
     if (_di && !_di.isTraining) return renderCardRestDay(S);
   }
 
-  // No program configured → empty state
   if (!hasProg) return renderCardSport();
 
   var todayStr = new Date().toISOString().slice(0, 10);
 
-  // Override mode: user chose to follow their static program today
+  // Override mode: user chose their static program today
   if (S._sfcOverride && S._sfcOverrideDate === todayStr) {
     var _ow = h('div', { style: 'display:flex;flex-direction:column;gap:12px;' });
     _ow.appendChild(h('div', {
-      style: 'padding:12px 16px;border-left:2px solid #1A1A1A;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:#6B6B65;line-height:1.65;letter-spacing:0.2px;'
+      style: 'padding:12px 16px;border-left:2px solid #1A1A1A;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:#555;line-height:1.65;'
     }, EN
-      ? 'You chose to follow your program. The system adapts the session accordingly.'
-      : 'Tu choisis de suivre ton programme. Le système adapte la séance en conséquence.'));
+      ? 'You chose your original program. SmartFitCoach adapts the session accordingly.'
+      : 'Tu choisis ton programme initial. SmartFitCoach adapte la séance en conséquence.'));
     var _pc = renderCardSport();
     if (_pc) _ow.appendChild(_pc);
     return _ow;
   }
 
-  // Gather V3 inputs (fatigue, goal, frequency)
+  // Gather inputs
   var v3In;
   try { v3In = _v3GatherInputs(S); } catch(e) { return renderCardSport(); }
 
-  // Run WorkoutSelector
   var sel2;
   try {
     sel2 = selAPI.selectWorkout({
-      user_level: ({ beginner:'beginner', intermediate:'intermediate', advanced:'intermediate', pro:'intermediate', expert:'intermediate' })[S.sportLevel] || 'beginner',
-      goal:       ({ muscle_gain:'strength', maintenance:'conditioning', fat_loss:'fat_loss' })[v3In.goal] || 'conditioning',
+      user_level:        ({ beginner:'beginner', intermediate:'intermediate', advanced:'intermediate', pro:'intermediate', expert:'intermediate' })[S.sportLevel] || 'beginner',
+      goal:              ({ muscle_gain:'strength', maintenance:'conditioning', fat_loss:'fat_loss' })[v3In.goal] || 'conditioning',
       available_time:    ({ '45min':45, '1h':60, '1h15':75, '1h30':90 })[S.sportSessionDuration] || 45,
       fatigue_level:     v3In.fatigueLevel,
       last_workouts:     [],
@@ -4076,7 +4072,7 @@ function renderSmartFitCoachToday() {
     return renderCardSport();
   }
 
-  // Build secondary button label from split/day info
+  // Secondary label: "→ Suivre mon programme (Muscu — Épaules)"
   var day  = next.day;
   var idx  = next.index;
   var _SLABELS = {
@@ -4096,53 +4092,58 @@ function renderSmartFitCoachToday() {
   var _secCtx   = [_stl, _dname].filter(Boolean).join(' — ');
   var _secLabel = (EN ? '→ Follow my program' : '→ Suivre mon programme') + (_secCtx ? ' (' + _secCtx + ')' : '');
 
-  // Session already done today?
+  // Session done today?
   var _doneKey = idx + '_' + todayStr;
   var _done    = !!(S.sessionHistory && S.sessionHistory[_doneKey]);
 
-  // Momentum tag fill style: Peak/Locked In → filled black; Building/Recovering → outlined
+  // Badge style: PEAK/LOCKED IN = filled; BUILDING/RECOVERING = outlined
   var _filled = sel2.momentum_tag === 'Peak' || sel2.momentum_tag === 'Locked In';
-  var _tagSt  = 'display:inline-block;font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:3px;text-transform:uppercase;padding:5px 10px;margin-bottom:24px;' +
-    (_filled ? 'background:#1A1A1A;color:#F5F3EF;' : 'background:transparent;color:#6B6B65;border:1px solid #6B6B65;');
+  var _tagSt  = 'display:inline-block;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:400;letter-spacing:2px;text-transform:uppercase;padding:6px 12px;margin-bottom:24px;' +
+    (_filled
+      ? 'background:#1A1A1A;color:#F5F3EF;border:none;'
+      : 'background:transparent;color:#666;border:1px solid #9A9A9A;');
 
-  // ── Render ──
   var c = card('');
 
-  // Brand header
+  // SMARTFITCOACH TODAY
   c.appendChild(h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#6B6B65;margin-bottom:20px;font-weight:500;'
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#999;margin-bottom:18px;font-weight:500;'
   }, 'SMARTFITCOACH TODAY'));
 
-  // Eyebrow
+  // Recommandé aujourd’hui
   c.appendChild(h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:#6B6B65;margin-bottom:8px;opacity:0.7;'
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:10px;'
   }, EN ? 'Recommended today' : 'Recommandé aujourd’hui'));
 
-  // Session focus headline
+  // Session focus headline: Georgia 22px 400 1.25 #1A1A1A
   c.appendChild(h('div', {
-    style: 'font-family:Georgia,serif;font-size:22px;font-weight:normal;line-height:1.2;letter-spacing:-0.3px;color:#1A1A1A;margin-bottom:12px;'
+    style: 'font-family:Georgia,serif;font-size:22px;font-weight:400;line-height:1.25;color:#1A1A1A;margin-bottom:14px;'
   }, sel2.session_focus));
 
   // Momentum tag badge
   c.appendChild(h('span', { style: _tagSt }, sel2.momentum_tag.toUpperCase()));
 
-  c.appendChild(h('div', { style: 'height:1px;background:#D8D8D0;margin-bottom:18px;' }));
+  // Divider 1px solid #D8D6D0
+  c.appendChild(h('div', { style: 'height:1px;background:#D8D6D0;margin-bottom:20px;' }));
 
-  // WHY section
+  // POURQUOI CETTE DÉCISION: 11px, letter-spacing 5px, #777
   c.appendChild(h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#6B6B65;margin-bottom:10px;'
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:5px;text-transform:uppercase;color:#777;margin-bottom:12px;'
   }, EN ? 'WHY THIS DECISION' : 'POURQUOI CETTE DÉCISION'));
+
+  // coach_message: 13px, 300, 1.65, #333
   c.appendChild(h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:#2B2B27;line-height:1.7;margin-bottom:24px;font-weight:300;'
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:300;line-height:1.65;color:#333;margin-bottom:24px;'
   }, sel2.coach_message));
 
-  c.appendChild(h('div', { style: 'height:1px;background:#D8D8D0;margin-bottom:20px;' }));
+  // Divider
+  c.appendChild(h('div', { style: 'height:1px;background:#D8D6D0;margin-bottom:20px;' }));
 
-  // Primary CTA
+  // Primary CTA: full-width, #1A1A1A, #F5F3EF, 16px, 12px, uppercase, letter-spacing 3px
   c.appendChild(h('button', {
     style: _done
-      ? 'display:block;width:100%;padding:18px;background:rgba(62,92,58,0.08);color:#3E5C3A;border:1px solid #3E5C3A;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:default;margin-bottom:12px;min-height:52px;'
-      : 'display:block;width:100%;padding:18px;background:#1A1A1A;color:#F5F3EF;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;min-height:52px;',
+      ? 'display:block;width:100%;padding:16px;background:rgba(62,92,58,0.08);color:#3E5C3A;border:1px solid #3E5C3A;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:default;min-height:52px;box-sizing:border-box;'
+      : 'display:block;width:100%;padding:16px;background:#1A1A1A;color:#F5F3EF;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;min-height:52px;box-sizing:border-box;',
     onclick: _done ? null : function() {
       var S2 = window.S;
       if (!S2) return;
@@ -4150,11 +4151,14 @@ function renderSmartFitCoachToday() {
       S2.selectedSportDay = Math.max(0, Math.min(idx, (Array.isArray(S2.sportProgram) ? S2.sportProgram.length - 1 : 0)));
       if (window.render) window.render();
     }
-  }, _done ? ('✔ ' + (EN ? 'Session complete' : 'Séance terminée')) : (EN ? '→ Start session' : '→ Commencer la séance')));
+  }, _done
+    ? ('✔ ' + (EN ? 'Session complete' : 'Séance terminée'))
+    : (EN ? '→ Start session' : '→ Commencer la séance')
+  ));
 
-  // Secondary: follow static program (override)
+  // Secondary action: text button, #777, 13px, margin-top 14px
   c.appendChild(h('button', {
-    style: 'display:block;width:100%;padding:14px;background:transparent;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:0.5px;color:#8B8B85;cursor:pointer;text-align:left;min-height:44px;',
+    style: 'display:block;width:100%;padding:14px 0;margin-top:14px;background:transparent;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:#777;cursor:pointer;text-align:left;min-height:44px;',
     onclick: function() {
       var S2 = window.S;
       if (!S2) return;
