@@ -2481,7 +2481,10 @@
           },
           "coaching_cue": "Brace your belly before you unrack — tension is protection.",
           "subtype": "heavy",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "strength",
+          "intent": "introduce linear progression on the three primary barbell lifts",
+          "progression_hint": "The foundational beginner strength protocol — add weight every session until stalls occur; graduate to hvy-b-07 full-body day when squat exceeds 1× bodyweight"
         },
         {
           "id": "hvy-b-02",
@@ -2525,7 +2528,10 @@
           },
           "coaching_cue": "Choose a weight where the last 2 reps are hard but form stays crisp.",
           "subtype": "heavy",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "strength",
+          "intent": "full-body compound strength via dumbbell push-pull-hinge-squat pattern",
+          "progression_hint": "DB strength is the gateway before barbell loading; progress to hvy-b-01 barbell protocol when all 4 movements complete 3×8 with controlled tempo"
         },
         {
           "id": "hvy-b-03",
@@ -2566,7 +2572,10 @@
           },
           "coaching_cue": "Push the floor away — it's a leg press, not a back pull.",
           "subtype": "heavy",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "strength",
+          "intent": "posterior chain development via trap bar deadlift and loaded carry",
+          "progression_hint": "Trap bar reduces technical demand while building pulling strength; transition to conventional barbell deadlift in hvy-b-01 when trap bar exceeds 1.5× bodyweight"
         },
         {
           "id": "hvy-b-04",
@@ -2607,7 +2616,10 @@
           },
           "coaching_cue": "Retract and depress your scapulae before every pressing rep.",
           "subtype": "heavy",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "strength",
+          "intent": "horizontal and vertical pressing strength via three-movement push day",
+          "progression_hint": "Push day foundation — advance bench press load by 2.5 kg per session; pair with hvy-b-05 pull day in same training week"
         },
         {
           "id": "hvy-b-05",
@@ -2648,7 +2660,10 @@
           },
           "coaching_cue": "Pull to your sternum — not your chin — for full lat engagement.",
           "subtype": "heavy",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "strength",
+          "intent": "upper-body pulling strength and posterior shoulder resilience",
+          "progression_hint": "Pull day complement to hvy-b-04 — face pull volume protects shoulder health under increasing bench loads; advance to weighted pull-up when lat pulldown reaches bodyweight"
         },
         {
           "id": "hvy-b-06",
@@ -2688,7 +2703,10 @@
           },
           "coaching_cue": "Keep your chest up in the squat — think tall spine, not forward lean.",
           "subtype": "heavy",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "strength",
+          "intent": "lower-body strength across squat, hinge, and single-leg patterns",
+          "progression_hint": "Complete leg day — Bulgarian split squat exposes bilateral strength imbalances early; correct before advancing loads; pairs with hvy-b-04 and hvy-b-05 in a 3-day split"
         },
         {
           "id": "hvy-b-07",
@@ -2741,7 +2759,10 @@
           },
           "coaching_cue": "Full-body days require more warm-up time — budget 10 min before working sets.",
           "subtype": "heavy",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "strength",
+          "intent": "full-body barbell strength accumulation across five compound lifts",
+          "progression_hint": "Total-body strength day — use when training frequency is 2x per week; progress to 3-day push/pull/legs split (hvy-b-04/05/06) when schedule allows"
         },
         {
           "id": "hvy-b-08",
@@ -2801,7 +2822,10 @@
           },
           "coaching_cue": "Leave reps in the tank on the first two sets — it's a warm-up, not a max effort.",
           "subtype": "heavy",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "strength",
+          "intent": "introduce percentage-based loading via 5-3-1 week one protocol",
+          "progression_hint": "First exposure to auto-regulated programming — calculate training max at 90% of tested 1RM; cycle through weeks 1-3 before deload; builds toward hvy-i-01 max effort work"
         },
         {
           "id": "hvy-b-09",
@@ -2845,7 +2869,10 @@
           },
           "coaching_cue": "The bent press is a slow grind — do not rush; find the groove.",
           "subtype": "heavy",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "strength",
+          "intent": "KB-specific strength day targeting press, squat, hinge, and lateral patterns",
+          "progression_hint": "KB strength builds grip and unilateral stability before barbell loading; advance to double KB work in hvy-i tier when all 4 sets complete with strict form"
         },
         {
           "id": "hvy-b-10",
@@ -2887,7 +2914,10 @@
           },
           "coaching_cue": "Pause reps build positional strength — stay braced during the full pause.",
           "subtype": "heavy",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "strength",
+          "intent": "positional strength development via paused reps on three primary lifts",
+          "progression_hint": "Pause work identifies and fixes positional weaknesses — programme once every 3 weeks alongside regular strength days; directly feeds into hvy-i-01 max effort protocols"
         }
       ],
       "intermediate": [
