@@ -4277,7 +4277,10 @@
           },
           "coaching_cue": "Count out loud if you need to — most people cheat the tempo unconsciously.",
           "subtype": "tempo",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "toning",
+          "intent": "introduce tempo prescription to develop eccentric strength and muscle control",
+          "progression_hint": "First tempo session — use 65% 1RM; when all 4 sets maintain exact 3-1-1-0 count without rush, increase load by 5% and advance to tmp-b-10 slow eccentric leg day"
         },
         {
           "id": "tmp-b-02",
@@ -4315,7 +4318,10 @@
           },
           "coaching_cue": "The eccentric (lowering) phase is where muscle is built — don't let gravity do the work.",
           "subtype": "tempo",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "toning",
+          "intent": "build time under tension on push and pull patterns for hypertrophy stimulus",
+          "progression_hint": "Paired tempo push-pull builds balanced upper-body development; advance to tmp-i-03 contrast tempo bench when 4-2-1-0 is held consistently across all 3 sets at working weight"
         },
         {
           "id": "tmp-b-03",
@@ -4351,7 +4357,10 @@
           },
           "coaching_cue": "Maintain tension throughout — going slack at the bottom negates the stretch reflex benefit.",
           "subtype": "tempo",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "strength",
+          "intent": "eccentric hamstring loading via tempo RDL to build posterior chain resilience",
+          "progression_hint": "Tempo RDL is the safest entry to heavy hinge loading — builds connective tissue tolerance before heavier pulls; advance to tmp-i-04 Nordic curl progression after 4 weeks"
         },
         {
           "id": "tmp-b-04",
@@ -4387,7 +4396,10 @@
           },
           "coaching_cue": "Eccentric work produces more micro-trauma — you will be sore. Reduce frequency if needed.",
           "subtype": "tempo",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "toning",
+          "intent": "eccentric-only upper-body strength to rapidly build chin-up and dip capacity",
+          "progression_hint": "Eccentric-only work produces 20-40% more muscle damage per rep than concentric — expect significant DOMS; use once per week; advance to full weighted reps in tmp-i-06 when 8s lower is controlled"
         },
         {
           "id": "tmp-b-05",
@@ -4426,7 +4438,10 @@
           },
           "coaching_cue": "Front knee tracks over your second toe — don't let it cave inward.",
           "subtype": "tempo",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "toning",
+          "intent": "multi-planar lunge volume under tempo control for lower-body hypertrophy",
+          "progression_hint": "Four lunge variations build hip stability in all planes — identifies the weakest direction; add DB load to the easiest variations first; progress to tmp-b-06 when all 4 maintain 3s descent"
         },
         {
           "id": "tmp-b-06",
@@ -4462,7 +4477,10 @@
           },
           "coaching_cue": "The RKC plank should feel impossible after 10 seconds — you're squeezing, not resting.",
           "subtype": "tempo",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "strength",
+          "intent": "posterior chain tempo rowing paired with maximal core tension via RKC plank",
+          "progression_hint": "Tempo row builds lat strength under control; RKC plank teaches total-body irradiation — a neural skill that transfers to every heavy lift; advance plank to 30s when 20s is effortless"
         },
         {
           "id": "tmp-b-07",
@@ -4498,7 +4516,10 @@
           },
           "coaching_cue": "Lock your core before you press — the overhead is a full-body lift.",
           "subtype": "tempo",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "toning",
+          "intent": "overhead pressing strength under tempo control with rear delt health maintenance",
+          "progression_hint": "Face pull volume protects the rotator cuff as pressing loads increase; programme alongside every push day; advance OHP to 4 sets when all reps maintain strict 3-2-1-0 tempo"
         },
         {
           "id": "tmp-b-08",
@@ -4541,7 +4562,10 @@
           },
           "coaching_cue": "If you have to break tempo to finish a rep, the weight is too heavy.",
           "subtype": "tempo",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "recomposition",
+          "intent": "full-body time-under-tension circuit for metabolic and hypertrophic stimulus",
+          "progression_hint": "All-in-one tempo circuit — the 3-1-1-0 tempo turns light DB work into high-effort training; when weight feels too easy at correct tempo, increase load by 2.5 kg and retest form"
         },
         {
           "id": "tmp-b-09",
@@ -4599,7 +4623,10 @@
           },
           "coaching_cue": "Isometric force is neurologically intense — expect fatigue with no visible movement.",
           "subtype": "tempo",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "strength",
+          "intent": "isometric strength development at joint angles specific to primary lift sticking points",
+          "progression_hint": "Isometric holds target the exact angle where strength is lowest — identify your squat or press sticking point and hold there longest; advance hold durations by 5s per session"
         },
         {
           "id": "tmp-b-10",
@@ -4644,7 +4671,10 @@
           },
           "coaching_cue": "Slow eccentrics at 60% feel heavier than fast reps at 85% — respect the protocol.",
           "subtype": "tempo",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "toning",
+          "intent": "maximal eccentric stimulus on three primary lower-body lifts for hypertrophy",
+          "progression_hint": "Capstone beginner tempo session — 5s eccentric at 60% creates equivalent muscle damage to fast reps at 85%; advance to tmp-i-01 Hatfield protocol when all sets maintain full 5s count"
         }
       ],
       "intermediate": [
