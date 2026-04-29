@@ -24,6 +24,7 @@ var _computeMomentumScore            = DDEv3._computeMomentumScore;
 var _detectProfileType               = DDEv3._detectProfileType;
 var _applyAdaptiveCaps               = DDEv3._applyAdaptiveCaps;
 var _buildCoachingMessage            = DDEv3._buildCoachingMessage;
+var _buildHistoryInsights            = DDEv3._buildHistoryInsights;
 
 // ── Harness ───────────────────────────────────────────────────────────────────
 var passed = 0, failed = 0;
@@ -1445,6 +1446,303 @@ test('sessionType labels : strength → "musculation" dans userAction', function
   var r = _buildCoachingMessage({ decision: 'train', profileType: 'inconsistent',
     recommendedSessionType: 'strength', momentumScore: 3, priorityApplied: 'goal_alignment' });
   assert(r.userAction.indexOf('musculation') !== -1, 'should include musculation label');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 17 — Module 6 : _buildHistoryInsights
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('\nSection 17 — Module 6 : _buildHistoryInsights');
+
+// ── 1. Missing / null userHistory → safe null output ────────────────────────
+test('null userHistory → all nulls', function () {
+  var r = _buildHistoryInsights(null);
+  assertEqual(r.streak, null);
+  assertEqual(r.consistencyScore, null);
+  assertEqual(r.momentumTrend, null);
+  assertEqual(r.weeklySummary, null);
+});
+test('undefined userHistory → all nulls', function () {
+  var r = _buildHistoryInsights(undefined);
+  assertEqual(r.streak, null);
+  assertEqual(r.consistencyScore, null);
+  assertEqual(r.momentumTrend, null);
+  assertEqual(r.weeklySummary, null);
+});
+test('non-object userHistory → all nulls', function () {
+  var r = _buildHistoryInsights('bad');
+  assertEqual(r.streak, null); assertEqual(r.consistencyScore, null);
+});
+test('empty object {} → streak null (no decisions), momentumTrend null (no momentum)', function () {
+  var r = _buildHistoryInsights({});
+  assertEqual(r.streak, null);
+  assertEqual(r.consistencyScore, null);
+  assertEqual(r.momentumTrend, null);
+});
+
+// ── 2. Streak calculation ────────────────────────────────────────────────────
+test('streak : all train → streak = length', function () {
+  var r = _buildHistoryInsights({ last7Decisions: ['train','train','train','train','train','train','train'] });
+  assertEqual(r.streak, 7);
+});
+test('streak : trailing rest breaks count', function () {
+  var r = _buildHistoryInsights({ last7Decisions: ['train','train','rest','train'] });
+  assertEqual(r.streak, 1);
+});
+test('streak : spec example ["train","train","rest","train"] → 1', function () {
+  // most recent = last element = "train", but the one before is "rest" → streak = 1
+  var r = _buildHistoryInsights({ last7Decisions: ['train','train','rest','train'] });
+  assertEqual(r.streak, 1);
+});
+test('streak : last 2 train → streak = 2', function () {
+  var r = _buildHistoryInsights({ last7Decisions: ['rest','rest','rest','train','train'] });
+  assertEqual(r.streak, 2);
+});
+test('streak : last is rest → streak = 0', function () {
+  var r = _buildHistoryInsights({ last7Decisions: ['train','train','train','rest'] });
+  assertEqual(r.streak, 0);
+});
+test('streak : empty array → streak = 0', function () {
+  var r = _buildHistoryInsights({ last7Decisions: [] });
+  assertEqual(r.streak, 0);
+});
+test('streak : single train → streak = 1', function () {
+  var r = _buildHistoryInsights({ last7Decisions: ['train'] });
+  assertEqual(r.streak, 1);
+});
+test('streak : single rest → streak = 0', function () {
+  var r = _buildHistoryInsights({ last7Decisions: ['rest'] });
+  assertEqual(r.streak, 0);
+});
+
+// ── 3. Consistency score mapping ─────────────────────────────────────────────
+test('consistencyScore : 0 train → 2', function () {
+  var r = _buildHistoryInsights({ last7Decisions: ['rest','rest','rest','rest','rest','rest','rest'] });
+  assertEqual(r.consistencyScore, 2);
+});
+test('consistencyScore : 1 train → 2', function () {
+  var r = _buildHistoryInsights({ last7Decisions: ['rest','rest','rest','rest','rest','rest','train'] });
+  assertEqual(r.consistencyScore, 2);
+});
+test('consistencyScore : 2 train → 4', function () {
+  var r = _buildHistoryInsights({ last7Decisions: ['rest','rest','rest','rest','rest','train','train'] });
+  assertEqual(r.consistencyScore, 4);
+});
+test('consistencyScore : 3 train → 4', function () {
+  var r = _buildHistoryInsights({ last7Decisions: ['rest','rest','rest','rest','train','train','train'] });
+  assertEqual(r.consistencyScore, 4);
+});
+test('consistencyScore : 4 train → 6', function () {
+  var r = _buildHistoryInsights({ last7Decisions: ['rest','rest','rest','train','train','train','train'] });
+  assertEqual(r.consistencyScore, 6);
+});
+test('consistencyScore : 5 train → 6', function () {
+  var r = _buildHistoryInsights({ last7Decisions: ['rest','rest','train','train','train','train','train'] });
+  assertEqual(r.consistencyScore, 6);
+});
+test('consistencyScore : 6 train → 8', function () {
+  var r = _buildHistoryInsights({ last7Decisions: ['rest','train','train','train','train','train','train'] });
+  assertEqual(r.consistencyScore, 8);
+});
+test('consistencyScore : 7 train → 10', function () {
+  var r = _buildHistoryInsights({ last7Decisions: ['train','train','train','train','train','train','train'] });
+  assertEqual(r.consistencyScore, 10);
+});
+
+// ── 4. Momentum trend ────────────────────────────────────────────────────────
+test('momentumTrend : last >= avg+1 → "up"', function () {
+  // avg([5,5,5]) = 5, last = 7 → 7 >= 5+1 → up
+  var r = _buildHistoryInsights({ last7Momentum: [5, 5, 5, 7] });
+  assertEqual(r.momentumTrend, 'up');
+});
+test('momentumTrend : last <= avg-1 → "down"', function () {
+  // avg([7,7,7]) = 7, last = 5 → 5 <= 7-1 → down
+  var r = _buildHistoryInsights({ last7Momentum: [7, 7, 7, 5] });
+  assertEqual(r.momentumTrend, 'down');
+});
+test('momentumTrend : last within ±1 of avg → "stable"', function () {
+  // avg([5,6]) = 5.5, last = 6 → not >= 6.5, not <= 4.5 → stable
+  var r = _buildHistoryInsights({ last7Momentum: [5, 6, 6] });
+  assertEqual(r.momentumTrend, 'stable');
+});
+test('momentumTrend : exact boundary up (last = avg+1) → "up"', function () {
+  // avg([4,6]) = 5, last = 6 → 6 >= 5+1 → up
+  var r = _buildHistoryInsights({ last7Momentum: [4, 6, 6] });
+  assertEqual(r.momentumTrend, 'up');
+});
+test('momentumTrend : exact boundary down (last = avg-1) → "down"', function () {
+  // avg([6,4]) = 5, last = 4 → 4 <= 5-1 → down
+  var r = _buildHistoryInsights({ last7Momentum: [6, 4, 4] });
+  assertEqual(r.momentumTrend, 'down');
+});
+test('momentumTrend : single element → null (insufficient data)', function () {
+  var r = _buildHistoryInsights({ last7Momentum: [7] });
+  assertEqual(r.momentumTrend, null);
+});
+test('momentumTrend : empty array → null', function () {
+  var r = _buildHistoryInsights({ last7Momentum: [] });
+  assertEqual(r.momentumTrend, null);
+});
+test('momentumTrend : null array (not provided) → null', function () {
+  var r = _buildHistoryInsights({ last7Decisions: ['train'] });
+  assertEqual(r.momentumTrend, null);
+});
+
+// ── 5. Weekly summary rules ───────────────────────────────────────────────────
+test('weeklySummary : streak >= 4 → contains regularity phrase', function () {
+  var r = _buildHistoryInsights({
+    last7Decisions: ['train','train','train','train','train']
+  });
+  assert(typeof r.weeklySummary === 'string' && r.weeklySummary.length > 0,
+    'weeklySummary should be a non-empty string');
+  assert(r.weeklySummary.indexOf('régularité') !== -1,
+    'should mention régularité: ' + r.weeklySummary);
+});
+test('weeklySummary : consistencyScore >= 8 → "Ton rythme est solide et structuré."', function () {
+  // 6 trains → score 8
+  var r = _buildHistoryInsights({
+    last7Decisions: ['rest','train','train','train','train','train','train']
+  });
+  assert(r.weeklySummary.indexOf('solide') !== -1, 'should contain solide: ' + r.weeklySummary);
+});
+test('weeklySummary : consistencyScore <= 4 → "On relance progressivement la dynamique."', function () {
+  // 2 trains → score 4
+  var r = _buildHistoryInsights({
+    last7Decisions: ['rest','rest','rest','rest','rest','train','train']
+  });
+  assert(r.weeklySummary.indexOf('relance') !== -1, 'should contain relance: ' + r.weeklySummary);
+});
+test('weeklySummary : momentumTrend up → "Ta dynamique est en progression."', function () {
+  var r = _buildHistoryInsights({
+    last7Decisions: ['rest','rest','rest'],
+    last7Momentum: [4, 4, 4, 7]
+  });
+  assert(r.weeklySummary && r.weeklySummary.indexOf('progression') !== -1,
+    'should contain progression: ' + r.weeklySummary);
+});
+test('weeklySummary : momentumTrend down → "Légère baisse de rythme..."', function () {
+  var r = _buildHistoryInsights({
+    last7Decisions: ['rest','rest','rest'],
+    last7Momentum: [7, 7, 7, 3]
+  });
+  assert(r.weeklySummary && r.weeklySummary.indexOf('baisse') !== -1,
+    'should contain baisse: ' + r.weeklySummary);
+});
+test('weeklySummary : max 2 phrases combined (streak + momentum up)', function () {
+  var r = _buildHistoryInsights({
+    last7Decisions: ['train','train','train','train','train'],
+    last7Momentum:  [5, 5, 5, 5, 8]
+  });
+  // Two applicable: streak >= 4 + momentum up
+  var sentences = r.weeklySummary.split('. ').filter(function(s) { return s.length > 0; });
+  assert(sentences.length <= 2, 'max 2 phrases, got ' + sentences.length + ': ' + r.weeklySummary);
+});
+test('weeklySummary : no condition matches → null', function () {
+  // 3 trains = score 4... wait, score ≤ 4 triggers "relance". Let me use momentum=stable, score=6
+  // 4 trains → score 6 (no rule fires for 6), stable momentum
+  var r = _buildHistoryInsights({
+    last7Decisions: ['rest','rest','rest','train','train','train','train'],
+    last7Momentum:  [5, 5, 5, 5, 5, 5]
+  });
+  // score=6, streak=4 → streak triggers "régularité"
+  // actually streak=4 >= 4, so a phrase fires. Let me pick score=6, streak=3, stable trend
+  var r2 = _buildHistoryInsights({
+    last7Decisions: ['rest','rest','rest','rest','train','train','train'],
+    last7Momentum:  [5, 5, 5, 5, 5, 5]
+  });
+  // score=4 ≤ 4 → "relance" fires. So null case is actually impossible with decisions provided.
+  // With decisions present: score is always 2,4,6,8,10. Score<=4 fires, score>=8 fires, score=6 doesn't.
+  // So null weeklySummary happens when: decisions absent AND momentum absent.
+  var r3 = _buildHistoryInsights({ last7Decisions: null, last7Momentum: null });
+  assertEqual(r3.weeklySummary, null);
+});
+
+// ── 6. Partial arrays — no crash ──────────────────────────────────────────────
+test('partial : only last7Decisions provided → momentumTrend null, no crash', function () {
+  var r = _buildHistoryInsights({ last7Decisions: ['train','rest','train'] });
+  assert(r.streak !== undefined, 'streak should be defined');
+  assertEqual(r.momentumTrend, null);
+});
+test('partial : only last7Momentum provided → streak null, consistencyScore null, no crash', function () {
+  var r = _buildHistoryInsights({ last7Momentum: [5, 6, 7] });
+  assertEqual(r.streak, null);
+  assertEqual(r.consistencyScore, null);
+  assert(r.momentumTrend !== undefined, 'momentumTrend should be defined');
+});
+test('partial : last7Decisions not array → streak null', function () {
+  var r = _buildHistoryInsights({ last7Decisions: 'not-array', last7Momentum: [5, 7] });
+  assertEqual(r.streak, null);
+  assertEqual(r.consistencyScore, null);
+  assert(r.momentumTrend !== null, 'momentumTrend should still be computed');
+});
+test('partial : last7Momentum not array → momentumTrend null, decisions still processed', function () {
+  var r = _buildHistoryInsights({ last7Decisions: ['train','train'], last7Momentum: 'bad' });
+  assertEqual(r.streak, 2);
+  assertEqual(r.momentumTrend, null);
+});
+
+// ── 7. Output validity ────────────────────────────────────────────────────────
+test('streak always >= 0 when computed', function () {
+  var r = _buildHistoryInsights({ last7Decisions: ['rest','rest','rest'] });
+  assert(r.streak >= 0, 'streak should be >= 0, got: ' + r.streak);
+});
+test('consistencyScore always in {2,4,6,8,10} when computed', function () {
+  var valid = [2, 4, 6, 8, 10];
+  [0,1,2,3,4,5,6,7].forEach(function(trainN) {
+    var dec = [];
+    for (var t = 0; t < trainN; t++) dec.push('train');
+    for (var r2 = dec.length; r2 < 7; r2++) dec.push('rest');
+    var result = _buildHistoryInsights({ last7Decisions: dec });
+    assert(valid.indexOf(result.consistencyScore) !== -1,
+      trainN + ' trains → score ' + result.consistencyScore + ' not in valid set');
+  });
+});
+test('momentumTrend only in {"up","down","stable",null}', function () {
+  var valid = ['up', 'down', 'stable', null];
+  [[7,7,7,7], [7,7,3], [5,5,5], [5]].forEach(function(mom) {
+    var r = _buildHistoryInsights({ last7Momentum: mom });
+    assert(valid.indexOf(r.momentumTrend) !== -1, 'invalid trend: ' + r.momentumTrend);
+  });
+});
+
+// ── 8. Integration — historyInsights in engine output ─────────────────────────
+test('decideDailyPlanV3 sans userHistory → historyInsights all nulls', function () {
+  var out = decideV3({
+    goal: 'muscle_gain', fatigueLevel: 2, sleepQuality: 4, trainingFrequency: 4,
+    lastSessionDate: '2026-04-28', last3SessionsIntensity: ['moderate']
+  });
+  assert(out.historyInsights !== undefined, 'historyInsights field must be present');
+  assertEqual(out.historyInsights.streak, null);
+  assertEqual(out.historyInsights.consistencyScore, null);
+  assertEqual(out.historyInsights.momentumTrend, null);
+  assertEqual(out.historyInsights.weeklySummary, null);
+});
+test('decideDailyPlanV3 avec userHistory → historyInsights computed', function () {
+  var out = decideV3({
+    goal: 'muscle_gain', fatigueLevel: 2, sleepQuality: 4, trainingFrequency: 5,
+    lastSessionDate: '2026-04-28', last3SessionsIntensity: ['moderate'],
+    userHistory: {
+      last7Decisions: ['train','train','train','train','train','train','rest'],
+      last7Momentum:  [6, 6, 7, 7, 8, 8, 7]
+    }
+  });
+  assertEqual(out.historyInsights.streak, 0); // last is 'rest'
+  assertEqual(out.historyInsights.consistencyScore, 8); // 6 trains
+  assert(out.historyInsights.momentumTrend !== undefined, 'momentumTrend should be computed');
+  assert(typeof out.historyInsights.weeklySummary === 'string', 'weeklySummary should be a string');
+});
+test('userHistory nu00e2ffecte pas decision/intensity/priorityApplied', function () {
+  var base = decideV3({
+    goal: 'fat_loss', fatigueLevel: 3, trainingFrequency: 3,
+    lastSessionDate: '2026-04-27', last3SessionsIntensity: ['moderate']
+  });
+  var withHistory = decideV3({
+    goal: 'fat_loss', fatigueLevel: 3, trainingFrequency: 3,
+    lastSessionDate: '2026-04-27', last3SessionsIntensity: ['moderate'],
+    userHistory: { last7Decisions: ['train','rest','train'], last7Momentum: [4, 5, 6] }
+  });
+  assertEqual(base.decision,             withHistory.decision);
+  assertEqual(base.recommendedIntensity, withHistory.recommendedIntensity);
+  assertEqual(base.priorityApplied,      withHistory.priorityApplied);
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

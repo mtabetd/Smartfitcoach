@@ -589,6 +589,85 @@
     };
   }
 
+  // ═══════════════════════════════════════════════════════════════════════════
+  // V3 MODULE 6 — User Progress & Momentum History Layer
+  // ═══════════════════════════════════════════════════════════════════════════
+  //
+  // Input  : userHistory { last7Decisions: string[], last7Momentum: number[] }
+  // Output : historyInsights { streak, consistencyScore, momentumTrend, weeklySummary }
+  //
+  // Pure function — no side effects, deterministic, additive only.
+  // Feeds UX only — does NOT influence engine decisions.
+  //
+  // @param  {Object|null}  userHistory
+  // @return {{ streak, consistencyScore, momentumTrend, weeklySummary }}
+  function _buildHistoryInsights(userHistory) {
+    var NULL_RESULT = { streak: null, consistencyScore: null, momentumTrend: null, weeklySummary: null };
+    if (!userHistory || typeof userHistory !== 'object') return NULL_RESULT;
+
+    var decisions = Array.isArray(userHistory.last7Decisions) ? userHistory.last7Decisions : null;
+    var momentum  = Array.isArray(userHistory.last7Momentum)  ? userHistory.last7Momentum  : null;
+
+    // ── 1. Streak ─────────────────────────────────────────────────────────────
+    // Count consecutive "train" entries from most recent backward.
+    var streak = null;
+    if (decisions !== null) {
+      streak = 0;
+      for (var i = decisions.length - 1; i >= 0; i--) {
+        if (decisions[i] === 'train') streak++;
+        else break;
+      }
+    }
+
+    // ── 2. Consistency Score (0–10) ───────────────────────────────────────────
+    var consistencyScore = null;
+    if (decisions !== null) {
+      var trainCount = 0;
+      for (var j = 0; j < decisions.length; j++) {
+        if (decisions[j] === 'train') trainCount++;
+      }
+      if      (trainCount <= 1)  consistencyScore = 2;
+      else if (trainCount <= 3)  consistencyScore = 4;
+      else if (trainCount <= 5)  consistencyScore = 6;
+      else if (trainCount === 6) consistencyScore = 8;
+      else                       consistencyScore = 10; // 7
+    }
+
+    // ── 3. Momentum Trend ─────────────────────────────────────────────────────
+    var momentumTrend = null;
+    if (momentum !== null && momentum.length >= 2) {
+      var last = momentum[momentum.length - 1];
+      var prev = momentum.slice(0, momentum.length - 1);
+      var sum = 0;
+      for (var k = 0; k < prev.length; k++) sum += prev[k];
+      var avg = sum / prev.length;
+      if      (last >= avg + 1) momentumTrend = 'up';
+      else if (last <= avg - 1) momentumTrend = 'down';
+      else                      momentumTrend = 'stable';
+    }
+
+    // ── 4. Weekly Summary (max 2 sentences, French, premium) ─────────────────
+    var phrases = [];
+    if (streak !== null && streak >= 4)
+      phrases.push('Très bonne régularité ces derniers jours.');
+    if (consistencyScore !== null && consistencyScore >= 8)
+      phrases.push('Ton rythme est solide et structuré.');
+    if (consistencyScore !== null && consistencyScore <= 4)
+      phrases.push('On relance progressivement la dynamique.');
+    if (momentumTrend === 'up')
+      phrases.push('Ta dynamique est en progression.');
+    if (momentumTrend === 'down')
+      phrases.push('Légère baisse de rythme, on ajuste intelligemment.');
+    var weeklySummary = phrases.length > 0 ? phrases.slice(0, 2).join(' ') : null;
+
+    return {
+      streak:           streak,
+      consistencyScore: consistencyScore,
+      momentumTrend:    momentumTrend,
+      weeklySummary:    weeklySummary
+    };
+  }
+
   // ── Validation globale (V2 core + userProfile optionnel) ─────────────────────
   function _validate(inputs) {
     if (!inputs || typeof inputs !== 'object') {
@@ -711,6 +790,9 @@
       ceiling.capReason, inputs
     );
 
+    // ── Module 6 : history insights ──────────────────────────────────────────
+    var historyInsights = _buildHistoryInsights(inputs.userHistory || null);
+
     // ── Sortie V3 ─────────────────────────────────────────────────────────────
     return {
       // ── V2 fields (priorityApplied/fatigueEffective/progressionTriggered
@@ -727,6 +809,7 @@
       momentumScore:          momentum,                   // Module 2 ✓
       profileType:            profile,                    // Module 3 ✓
       adaptationReason:       adaptive.adaptationReason, // Module 4 ✓
+      historyInsights:        historyInsights,            // Module 6 ✓
       _debug: {
         rawFatigue:          inputs.fatigueLevel,
         effectiveFatigue:    effective,
@@ -762,7 +845,9 @@
     // V3 Module 4
     _applyAdaptiveCaps:               _applyAdaptiveCaps,
     // V3 Module 5
-    _buildCoachingMessage:            _buildCoachingMessage
+    _buildCoachingMessage:            _buildCoachingMessage,
+    // V3 Module 6
+    _buildHistoryInsights:            _buildHistoryInsights
   };
 
   if (typeof module !== 'undefined' && module.exports) {
