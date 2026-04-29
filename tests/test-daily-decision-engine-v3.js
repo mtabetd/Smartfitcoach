@@ -2029,83 +2029,83 @@ test('decideDailyPlanV3 avec profil haute fatigue → fatigueRisk high (direct u
 console.log('\nSection 19 — Module 8 : _buildPremiumCoachingMessage');
 
 // ── 1. Current State — fatigueRisk high ──────────────────────────────────────
-test('currentState: fatigueRisk high → saturation message', function () {
+test('currentState: fatigueRisk high → freiner message', function () {
   var r = _buildPremiumCoachingMessage({
     decision: 'rest', momentumScore: 3, profileType: 'consistent',
     predictionInsights: { fatigueRisk: 'high', next2Days: null }, historyInsights: {}
   });
   assert(typeof r === 'string' && r.length > 0, 'returns non-empty string');
-  assert(r.indexOf('saturation') !== -1, 'high fatigue → "saturation"');
+  assert(r.indexOf('freiner') !== -1, 'high fatigue → "freiner"');
 });
 test('currentState: fatigueRisk high takes priority over high momentum', function () {
   var r = _buildPremiumCoachingMessage({
     decision: 'train', momentumScore: 9, profileType: 'consistent',
     predictionInsights: { fatigueRisk: 'high', next2Days: null }, historyInsights: {}
   });
-  assert(r.indexOf('saturation') !== -1, 'high fatigue still wins over high momentum');
+  assert(r.indexOf('freiner') !== -1, 'high fatigue still wins over high momentum');
 });
 
 // ── 2. Current State — momentum high ─────────────────────────────────────────
-test('currentState: momentumScore ≥ 7 → progression solide message', function () {
+test('currentState: momentumScore ≥ 7 → dynamique de progression message', function () {
   var r = _buildPremiumCoachingMessage({
     decision: 'train', momentumScore: 8, profileType: 'consistent',
     predictionInsights: { fatigueRisk: null, next2Days: null }, historyInsights: {}
   });
-  assert(r.indexOf('solide') !== -1, 'momentum ≥ 7 → "solide"');
+  assert(r.indexOf('dynamique') !== -1, 'momentum ≥ 7 → "dynamique"');
 });
-test('currentState: momentumScore=7 (boundary) → progression message', function () {
+test('currentState: momentumScore=7 (boundary) → dynamique message', function () {
   var r = _buildPremiumCoachingMessage({
     decision: 'train', momentumScore: 7, profileType: 'consistent',
     predictionInsights: { fatigueRisk: null, next2Days: null }, historyInsights: {}
   });
-  assert(r.indexOf('solide') !== -1, 'score=7 boundary triggers progression');
+  assert(r.indexOf('dynamique') !== -1, 'score=7 boundary triggers dynamique');
 });
-test('currentState: momentumScore=6 → NOT progression message', function () {
+test('currentState: momentumScore=6 → NOT dynamique message', function () {
   var r = _buildPremiumCoachingMessage({
     decision: 'train', momentumScore: 6, profileType: 'consistent',
     predictionInsights: { fatigueRisk: null, next2Days: null }, historyInsights: {}
   });
-  assert(r.indexOf('solide') === -1, 'score<7 → no progression line');
+  assert(r.indexOf('dynamique') === -1, 'score<7 → no dynamique line');
 });
 
 // ── 3. Current State — profile inconsistent ───────────────────────────────────
-test('currentState: profileType inconsistent → irregular message', function () {
+test('currentState: profileType inconsistent → constance message', function () {
   var r = _buildPremiumCoachingMessage({
     decision: 'train', momentumScore: 4, profileType: 'inconsistent',
     predictionInsights: { fatigueRisk: null, next2Days: null }, historyInsights: {}
   });
-  assert(r.indexOf('irrégulier') !== -1, 'inconsistent → "irrégulier"');
+  assert(r.indexOf('constance') !== -1, 'inconsistent → "constance"');
 });
 test('currentState: profileType inconsistent yields to high momentum', function () {
   var r = _buildPremiumCoachingMessage({
     decision: 'train', momentumScore: 8, profileType: 'inconsistent',
     predictionInsights: { fatigueRisk: null, next2Days: null }, historyInsights: {}
   });
-  assert(r.indexOf('solide') !== -1, 'momentum ≥ 7 wins over inconsistent profile');
-  assert(r.indexOf('irrégulier') === -1, 'inconsistent message not present');
+  assert(r.indexOf('dynamique') !== -1, 'momentum ≥ 7 wins over inconsistent profile');
+  assert(r.indexOf('constance') === -1, 'inconsistent message not present');
 });
 
 // ── 4. Trajectory — all 3 cases ──────────────────────────────────────────────
-test('trajectory: next2Days increase → continuation message', function () {
+test('trajectory: next2Days increase → monter en intensité message', function () {
   var r = _buildPremiumCoachingMessage({
     decision: 'train', momentumScore: 5, profileType: 'consistent',
     predictionInsights: { fatigueRisk: null, next2Days: 'increase' }, historyInsights: {}
   });
-  assert(r.indexOf('progression va continuer') !== -1, 'increase → continuation');
+  assert(r.indexOf('monter en intensité') !== -1, 'increase → "monter en intensité"');
 });
-test('trajectory: next2Days decrease → regression message', function () {
+test('trajectory: next2Days decrease → ralentir message', function () {
   var r = _buildPremiumCoachingMessage({
     decision: 'train', momentumScore: 5, profileType: 'consistent',
     predictionInsights: { fatigueRisk: null, next2Days: 'decrease' }, historyInsights: {}
   });
-  assert(r.indexOf('reculer') !== -1, 'decrease → "reculer"');
+  assert(r.indexOf('ralentir') !== -1, 'decrease → "ralentir"');
 });
-test('trajectory: next2Days stable → stabilization message', function () {
+test('trajectory: next2Days stable → consolides message', function () {
   var r = _buildPremiumCoachingMessage({
     decision: 'train', momentumScore: 5, profileType: 'consistent',
     predictionInsights: { fatigueRisk: null, next2Days: 'stable' }, historyInsights: {}
   });
-  assert(r.indexOf('stabilisation') !== -1, 'stable → "stabilisation"');
+  assert(r.indexOf('consolides') !== -1, 'stable → "consolides"');
 });
 test('trajectory: next2Days null → trajectory line omitted (2 lines)', function () {
   var r = _buildPremiumCoachingMessage({
@@ -2120,26 +2120,26 @@ test('trajectory: no predictionInsights → trajectory line omitted', function (
 });
 
 // ── 5. Action — train vs rest wording ────────────────────────────────────────
-test('action: decision train → optimise message', function () {
+test('action: decision train → exploite message', function () {
   var r = _buildPremiumCoachingMessage({
     decision: 'train', momentumScore: 4, profileType: 'consistent',
     predictionInsights: { fatigueRisk: null, next2Days: null }, historyInsights: {}
   });
-  assert(r.indexOf('optimise') !== -1, 'train → "optimise"');
+  assert(r.indexOf('exploite') !== -1, 'train → "exploite"');
 });
-test('action: decision rest → récupération message', function () {
+test('action: decision rest → assimiler message', function () {
   var r = _buildPremiumCoachingMessage({
     decision: 'rest', momentumScore: 4, profileType: 'consistent',
     predictionInsights: { fatigueRisk: null, next2Days: null }, historyInsights: {}
   });
-  assert(r.indexOf('récupération') !== -1, 'rest → "récupération"');
+  assert(r.indexOf('assimiler') !== -1, 'rest → "assimiler"');
 });
 test('action: unknown decision defaults to train wording', function () {
   var r = _buildPremiumCoachingMessage({
     decision: undefined, momentumScore: 4,
     predictionInsights: { fatigueRisk: null, next2Days: null }
   });
-  assert(r.indexOf('optimise') !== -1, 'undefined decision → train default');
+  assert(r.indexOf('exploite') !== -1, 'undefined decision → train default');
 });
 
 // ── 6. Max 3 lines enforced ───────────────────────────────────────────────────

@@ -758,29 +758,29 @@
     // ── 1. Current State (1 line, priority: fatigue > momentum > profile > default) ─
     var stateLine;
     if (fatigueRisk === 'high') {
-      stateLine = "Ton système montre des signes clairs de saturation.";
+      stateLine = "La fatigue commence à freiner ta progression.";
     } else if (momentum !== null && momentum >= 7) {
-      stateLine = "Tu es dans une phase de progression solide.";
+      stateLine = "Tu es clairement dans une dynamique de progression.";
     } else if (profileType === 'inconsistent') {
-      stateLine = "Ton rythme reste encore irrégulier.";
+      stateLine = "Ton rythme manque encore de constance.";
     } else {
-      stateLine = "Ta condition du jour est stable.";
+      stateLine = "L'équilibre est maintenu.";
     }
 
     // ── 2. Trajectory (1 line; omitted when next2Days is null) ───────────────────
     var trajectoryLine = null;
     if (next2Days === 'increase') {
-      trajectoryLine = "Si tu maintiens ce rythme, la progression va continuer.";
+      trajectoryLine = "Tu peux encore monter en intensité.";
     } else if (next2Days === 'decrease') {
-      trajectoryLine = "Si rien ne change, la performance va légèrement reculer.";
+      trajectoryLine = "Si tu continues ainsi, la performance risque de ralentir.";
     } else if (next2Days === 'stable') {
-      trajectoryLine = "Tu es actuellement dans une phase de stabilisation.";
+      trajectoryLine = "Tu consolides ton niveau actuel.";
     }
 
     // ── 3. Action (1 line) ────────────────────────────────────────────────────────
     var actionLine = (decision === 'rest')
-      ? "Aujourd'hui, priorité à la récupération."
-      : "Aujourd'hui, on optimise sans surcharger.";
+      ? "Aujourd'hui, on laisse le corps assimiler."
+      : "Aujourd'hui, on exploite la séance sans excès.";
 
     // ── Assembly (2–3 lines max, no null) ─────────────────────────────────────────
     var lines = [stateLine];
