@@ -45,6 +45,8 @@ const DEFERRED_SCRIPTS = [
   './daily-decision-engine.js',
   './daily-decision-engine-v2.js',
   './daily-decision-engine-v3.js',
+  './workout-library-data.js',
+  './workout-selector.js',
   './smart-calendar.js',
   './auth-banner.js',
   './onboarding-complete.js',

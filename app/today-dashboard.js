@@ -4136,9 +4136,10 @@ function renderV3CoachingCard() {
   var engine = window.DailyDecisionEngineV3;
   if (!engine || typeof engine.decideDailyPlanV3 !== 'function') return null;
 
+  var v3Inputs = _v3GatherInputs(S);
   var result, coaching;
   try {
-    result = engine.decideDailyPlanV3(_v3GatherInputs(S));
+    result = engine.decideDailyPlanV3(v3Inputs);
   } catch(eEng) {
     console.warn('[SFC V3 coaching] engine error:', eEng.message);
     return null;
@@ -4224,6 +4225,41 @@ function renderV3CoachingCard() {
   c.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--ink-700,#2B2B27);line-height:1.7;font-weight:300;'
   }, coaching.userAction));
+
+  // ── Block 5 : WorkoutSelector — Séance du jour ──
+  var _selector = window.WorkoutSelector;
+  var _wlData   = window.WorkoutLibraryData;
+  if (_selector && _wlData) {
+    try {
+      var _lvlMap  = { beginner: 'beginner', intermediate: 'intermediate', advanced: 'intermediate', pro: 'intermediate', expert: 'intermediate' };
+      var _goalMap = { muscle_gain: 'strength', maintenance: 'conditioning', fat_loss: 'fat_loss' };
+      var _durMap  = { '45min': 45, '1h': 60, '1h15': 75, '1h30': 90 };
+      var _sParams = {
+        user_level:        _lvlMap[S.sportLevel] || 'beginner',
+        goal:              _goalMap[v3Inputs.goal] || 'conditioning',
+        available_time:    _durMap[S.sportSessionDuration] || 45,
+        fatigue_level:     v3Inputs.fatigueLevel,
+        last_workouts:     [],
+        preferred_subtypes: null
+      };
+      var _sel = _selector.selectWorkout(_sParams, _wlData.library);
+      c.appendChild(h('div', { style: 'height:1px;background:var(--line,#D8D8D0);margin:14px 0;' }));
+      c.appendChild(h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--ink-500,#6B6B65);margin-bottom:8px;'
+      }, (window.isEnglish && window.isEnglish()) ? 'Session of the day' : 'Séance du jour'));
+      c.appendChild(h('div', {
+        style: 'font-family:Georgia,serif;font-size:15px;font-weight:normal;line-height:1.3;margin-bottom:6px;letter-spacing:-0.2px;'
+      }, _sel.session_focus));
+      c.appendChild(h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--ink-700,#2B2B27);line-height:1.65;margin-bottom:10px;font-weight:300;'
+      }, _sel.coach_message));
+      c.appendChild(h('div', {
+        style: 'display:inline-block;font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-500,#6B6B65);padding:4px 8px;border:1px solid var(--border,#D8D8D0);'
+      }, _sel.momentum_tag));
+    } catch(eSel) {
+      console.warn('[WorkoutSelector]', eSel.message);
+    }
+  }
 
   return c;
 }
