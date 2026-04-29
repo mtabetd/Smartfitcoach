@@ -221,6 +221,32 @@
     return candidate;
   }
 
+  // ── Session type intensity cap (Module 5c) ─────────────────────────────────
+  //
+  // Clamps the adaptive-boosted intensity rank so it stays consistent with the
+  // session type chosen by the diversity layer.  Only called when diversity is
+  // active (lastSessionTypes history present).
+  //
+  // Rules:
+  //   recovery     → rank 0 (low intensity always)
+  //   conditioning → no restriction (moderate or high allowed)
+  //   strength     → high only when effective fatigue ≤ 2
+  //   hypertrophy  → high only when effective fatigue ≤ 2
+  //   other/legacy → no restriction (passthrough)
+  //
+  // @param  {string}  sessType          session type chosen by diversity layer
+  // @param  {number}  maxRank           adaptive rank (0=low, 1=moderate, 2=high)
+  // @param  {number}  effectiveFatigue  1–5
+  // @return {number}  clamped rank
+  function _applySessionTypeCap(sessType, maxRank, effectiveFatigue) {
+    if (sessType === 'recovery')     return 0;
+    if (sessType === 'conditioning') return maxRank;
+    if (sessType === 'strength' || sessType === 'hypertrophy') {
+      return effectiveFatigue <= 2 ? maxRank : Math.min(maxRank, 1);
+    }
+    return maxRank;
+  }
+
   function _buildReason(decObj, intensity, sessionType, effectiveFatigue, rawFatigue, daysSince, priorityApplied, progressionTriggered, capReason, inputs) {
     var parts = [];
     var phase = inputs.trainingPhase || 'build';
@@ -1031,17 +1057,36 @@
     // ── Module 3 : profileType ────────────────────────────────────────────────
     var profile = _detectProfileType(inputs.userProfile || null, momentum);
 
+    // ── Base intensity (post-safety, pre-adaptive) — feeds diversity layer ─────
+    var _lastSessTypes = (inputs.userHistory && Array.isArray(inputs.userHistory.lastSessionTypes))
+      ? inputs.userHistory.lastSessionTypes.slice(-3) : null;
+    var baseIntensity = (decObj.decision === 'rest') ? 'low' : RANK_INTENSITY[ceiling.maxRank];
+
+    // ── Module 5b : session type diversity (runs on BASE intensity) ───────────
+    // Decided BEFORE adaptive caps so session type drives intensity, not the reverse.
+    var sessType;
+    if (_lastSessTypes) {
+      sessType = _selectSessionTypeDiverse(decObj.decision, baseIntensity, inputs.goal, momentum, _lastSessTypes);
+    }
+
     // ── Module 4 : adaptive caps ──────────────────────────────────────────────
     var hasProfile = (inputs.userProfile !== undefined && inputs.userProfile !== null);
     var adaptive   = _applyAdaptiveCaps(
       ceiling.maxRank, priorityApplied, profile, momentum, hasProfile, decObj.decision
     );
 
-    // ── Intensity / session type / reason (plafond adaptatif) ─────────────────
-    var intensity = (decObj.decision === 'rest') ? 'low' : RANK_INTENSITY[adaptive.maxRank];
-    var _lastSessTypes = (inputs.userHistory && Array.isArray(inputs.userHistory.lastSessionTypes))
-      ? inputs.userHistory.lastSessionTypes.slice(-3) : null;
-    var sessType  = _selectSessionTypeDiverse(decObj.decision, intensity, inputs.goal, momentum, _lastSessTypes);
+    // ── Module 5c : session type intensity cap (diversity active only) ─────────
+    // Clamps the adaptive rank so final intensity is consistent with the chosen type.
+    var finalRank = adaptive.maxRank;
+    if (_lastSessTypes && sessType) {
+      finalRank = _applySessionTypeCap(sessType, finalRank, effective);
+    }
+    var intensity = (decObj.decision === 'rest') ? 'low' : RANK_INTENSITY[finalRank];
+
+    // ── Session type fallback (no history — original logic on final intensity) ─
+    if (!_lastSessTypes) {
+      sessType = _selectSessionType(decObj.decision, intensity, inputs.goal);
+    }
     var reason    = _buildReason(
       decObj, intensity, sessType,
       effective, inputs.fatigueLevel,
@@ -1120,6 +1165,8 @@
     _selectSessionType:               _selectSessionType,
     // V3 Module 5b (diversity layer)
     _selectSessionTypeDiverse:        _selectSessionTypeDiverse,
+    // V3 Module 5c (session type intensity cap)
+    _applySessionTypeCap:             _applySessionTypeCap,
     // V3 Module 1
     _validateUserProfile:             _validateUserProfile,
     _normalizeLast7SessionsIntensity: _normalizeLast7SessionsIntensity,

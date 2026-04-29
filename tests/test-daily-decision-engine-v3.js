@@ -29,6 +29,7 @@ var _buildPredictionInsights         = DDEv3._buildPredictionInsights;
 var _buildPremiumCoachingMessage     = DDEv3._buildPremiumCoachingMessage;
 var _buildSmartFitCoachCard          = DDEv3._buildSmartFitCoachCard;
 var _selectSessionTypeDiverse        = DDEv3._selectSessionTypeDiverse;
+var _applySessionTypeCap             = DDEv3._applySessionTypeCap;
 
 // ── Harness ───────────────────────────────────────────────────────────────────
 var passed = 0, failed = 0;
@@ -3222,6 +3223,116 @@ test('diversity: decideV3 — moderate (rule A cap) + last=conditioning → hype
   }));
   assertEqual(out.recommendedIntensity, 'moderate');
   assertEqual(out.recommendedSessionType, 'hypertrophy');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Section 25 — Pipeline order: sessionType before final intensity
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('\n── Section 25 : Pipeline order — sessType before final intensity ────────────');
+
+// ── _applySessionTypeCap unit tests ──────────────────────────────────────────
+test('sessionTypeCap: recovery → always rank 0 regardless of adaptive rank', function () {
+  assertEqual(_applySessionTypeCap('recovery', 2, 1), 0);
+  assertEqual(_applySessionTypeCap('recovery', 1, 3), 0);
+});
+test('sessionTypeCap: conditioning → no restriction (passthrough)', function () {
+  assertEqual(_applySessionTypeCap('conditioning', 2, 4), 2);
+  assertEqual(_applySessionTypeCap('conditioning', 1, 1), 1);
+});
+test('sessionTypeCap: strength → high allowed only at low fatigue (≤2)', function () {
+  assertEqual(_applySessionTypeCap('strength', 2, 2), 2); // fatigue=2 → high OK
+  assertEqual(_applySessionTypeCap('strength', 2, 3), 1); // fatigue=3 → cap to moderate
+  assertEqual(_applySessionTypeCap('strength', 2, 4), 1); // fatigue=4 → cap to moderate
+});
+test('sessionTypeCap: hypertrophy → high allowed only at low fatigue (≤2)', function () {
+  assertEqual(_applySessionTypeCap('hypertrophy', 2, 1), 2); // fatigue=1 → high OK
+  assertEqual(_applySessionTypeCap('hypertrophy', 2, 3), 1); // fatigue=3 → cap to moderate
+});
+test('sessionTypeCap: unknown/legacy type → passthrough', function () {
+  assertEqual(_applySessionTypeCap('cardio',    2, 3), 2);
+  assertEqual(_applySessionTypeCap('mobility',  1, 4), 1);
+});
+
+// ── Test 1: diversity works even when final intensity = high ──────────────────
+test('pipeline: diversity sessType preserved when adaptive boost raises intensity to high', function () {
+  // taper phase caps base intensity at moderate (priority='goal_alignment').
+  // disciplined profile + momentum>=7 + !safety → adaptive boost to high.
+  // diversity layer runs on BASE=moderate → picks 'hypertrophy' (last was conditioning).
+  // session type cap: hypertrophy + fatigue=1 → allows high.
+  // Result: sessType=hypertrophy at intensity=high.
+  // Without diversity: high+muscle_gain would give 'strength'.
+  var out = decideV3(Object.assign(baseV2({
+    fatigueLevel: 1, last3SessionsIntensity: ['moderate'], lastSessionDate: daysAgo(2),
+    trainingPhase: 'taper'
+  }), {
+    userProfile: { adherenceScore: 0.9, trainingFrequencyLast7Days: 5, avgFatigueLast7Days: 2,
+                   last7SessionsIntensity: ['high', 'moderate', 'high'] },
+    userHistory:  { last7Decisions: ['train'], last7Momentum: [8],
+                    lastSessionTypes: ['conditioning'] }
+  }));
+  assertEqual(out.recommendedIntensity,   'high');       // adaptive boost fired
+  assertEqual(out.recommendedSessionType, 'hypertrophy'); // diversity from base=moderate preserved
+  assert(out.recommendedSessionType !== 'strength',
+    'sessType must not be overridden to strength by high intensity');
+});
+
+// ── Test 2: no triple repetition through full pipeline ───────────────────────
+test('pipeline: diversity guard prevents triple strength (last 2 = strength)', function () {
+  // base=high, last 2 sessions both strength → diversity guard fires → conditioning
+  var out = decideV3(Object.assign(baseV2({
+    fatigueLevel: 1, last3SessionsIntensity: ['moderate'], lastSessionDate: daysAgo(4),
+    trainingPhase: 'build'
+  }), {
+    userProfile: { adherenceScore: 0.9, trainingFrequencyLast7Days: 5, avgFatigueLast7Days: 2,
+                   last7SessionsIntensity: ['high', 'moderate', 'high'] },
+    userHistory:  { last7Decisions: ['train', 'train'], last7Momentum: [7, 7],
+                    lastSessionTypes: ['strength', 'strength'] }
+  }));
+  assert(out.recommendedSessionType !== 'strength',
+    'third strength in a row must be prevented, got: ' + out.recommendedSessionType);
+  assertEqual(out.recommendedSessionType, 'conditioning');
+});
+
+// ── Test 3: sessionType is NOT dictated by intensity ─────────────────────────
+test('pipeline: high intensity does not force strength when diversity says conditioning', function () {
+  // Without diversity: high + muscle_gain = strength.
+  // With diversity (last=strength, highMomentum): should be conditioning.
+  // The session type is chosen first; intensity then adapts.
+  var out = decideV3(Object.assign(baseV2({
+    fatigueLevel: 1, last3SessionsIntensity: ['moderate'], lastSessionDate: daysAgo(4),
+    trainingPhase: 'build'
+  }), {
+    userProfile: { adherenceScore: 0.9, trainingFrequencyLast7Days: 5, avgFatigueLast7Days: 2,
+                   last7SessionsIntensity: ['high', 'high'] },
+    userHistory:  { last7Decisions: ['train'], last7Momentum: [8],
+                    lastSessionTypes: ['strength'] }
+  }));
+  assertEqual(out.recommendedIntensity,   'high');
+  assertEqual(out.recommendedSessionType, 'conditioning'); // NOT strength despite high intensity
+});
+
+// ── Test 4: deterministic — same inputs produce identical output ──────────────
+test('pipeline: deterministic — 3 identical decideV3 calls return same output', function () {
+  var inp = Object.assign(baseV2({
+    fatigueLevel: 2, last3SessionsIntensity: ['moderate'], lastSessionDate: daysAgo(1),
+    trainingPhase: 'build'
+  }), {
+    userProfile: { adherenceScore: 0.8, trainingFrequencyLast7Days: 4, avgFatigueLast7Days: 2,
+                   last7SessionsIntensity: ['moderate', 'high'] },
+    userHistory:  { last7Decisions: ['train', 'train'], last7Momentum: [6, 7],
+                    lastSessionTypes: ['hypertrophy', 'conditioning'] }
+  });
+  var r1 = decideV3(inp);
+  var r2 = decideV3(inp);
+  var r3 = decideV3(inp);
+  var fields = ['decision', 'recommendedIntensity', 'recommendedSessionType',
+                'fatigueEffective', 'priorityApplied', 'progressionTriggered',
+                'momentumScore', 'profileType', 'adaptationReason'];
+  fields.forEach(function (f) {
+    if (r1[f] !== r2[f] || r2[f] !== r3[f]) {
+      throw new Error('non-deterministic field "' + f + '": ' + r1[f] + ' / ' + r2[f] + ' / ' + r3[f]);
+    }
+  });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
