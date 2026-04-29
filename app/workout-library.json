@@ -37,7 +37,10 @@
           "format": "Tabata — 20s work / 10s rest × 8 rounds per station",
           "duration": 20,
           "subtype": "hiit",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "conditioning",
+          "intent": "introduce Tabata protocol via bodyweight",
+          "progression_hint": "Week 1 foundation — repeat until all 4 stations complete with consistent rep counts before advancing to hiit-b-06"
         },
         {
           "id": "hiit-b-02",
@@ -68,7 +71,10 @@
           "format": "8 rounds of sprint / walk",
           "duration": 16,
           "subtype": "hiit",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "fat_loss",
+          "intent": "sprint interval adaptation for beginners",
+          "progression_hint": "Use in week 1-2 as first sprint exposure; progress to hiit-b-08 when all 8 rounds feel controlled"
         },
         {
           "id": "hiit-b-03",
@@ -114,7 +120,10 @@
           "format": "EMOM 12",
           "duration": 12,
           "subtype": "hiit",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "conditioning",
+          "intent": "aerobic + muscular endurance via EMOM pacing",
+          "progression_hint": "Entry EMOM — if 10+ seconds rest per minute achieved consistently, progress rep count or advance to hiit-b-07"
         },
         {
           "id": "hiit-b-04",
@@ -146,7 +155,10 @@
           "format": "6 rounds of paired intervals",
           "duration": 16,
           "subtype": "hiit",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "fat_loss",
+          "intent": "lower-body power and metabolic output",
+          "progression_hint": "Introduce plyometric loading in week 2-3; leads into hiit-b-05 when jump squat landings are controlled"
         },
         {
           "id": "hiit-b-05",
@@ -180,7 +192,10 @@
           "format": "Ascending rep ladder, for time",
           "duration": 22,
           "subtype": "hiit",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "conditioning",
+          "intent": "ascending volume tolerance under fatigue",
+          "progression_hint": "Use mid-block after sprint and Tabata exposure; precedes chipper-style work in intermediate tier"
         },
         {
           "id": "hiit-b-06",
@@ -214,7 +229,10 @@
           "format": "4 stations × 35s work / 25s rest × 4 rounds",
           "duration": 26,
           "subtype": "hiit",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "toning",
+          "intent": "full-body circuit with multi-planar movement",
+          "progression_hint": "Station format builds circuit fluency; advance to hiit-b-09 when all 4 rounds are completed with 15+ seconds per station to spare"
         },
         {
           "id": "hiit-b-07",
@@ -247,7 +265,10 @@
           "format": "AMRAP 10, rest 5 min, AMRAP 5",
           "duration": 20,
           "subtype": "hiit",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "conditioning",
+          "intent": "pacing strategy development via dual AMRAP",
+          "progression_hint": "Teaches effort management — a key skill before progressing to threshold intervals; use in week 3-4"
         },
         {
           "id": "hiit-b-08",
@@ -283,7 +304,10 @@
           "format": "5 rounds with ascending effort",
           "duration": 15,
           "subtype": "hiit",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "fat_loss",
+          "intent": "progressive effort ramp for aerobic threshold development",
+          "progression_hint": "Bridges beginner sprint work to sustained-effort intervals; prepares athlete for hiit-i-06 threshold protocol"
         },
         {
           "id": "hiit-b-09",
@@ -319,7 +343,10 @@
           "format": "Tabata pairs — 20s on / 10s off × 8 rounds per pair",
           "duration": 10,
           "subtype": "hiit",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "toning",
+          "intent": "push-pull Tabata pairing for balanced upper-body stimulus",
+          "progression_hint": "Second Tabata exposure with movement variety; graduate to hiit-i-01 when pair B rep counts match pair A"
         },
         {
           "id": "hiit-b-10",
@@ -353,7 +380,10 @@
           "format": "Descending rep ladder, for time",
           "duration": 18,
           "subtype": "hiit",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "fat_loss",
+          "intent": "descending ladder to build glycolytic finishing capacity",
+          "progression_hint": "Final beginner HIIT session — benchmark for entry into intermediate tier when completed sub-12 min"
         }
       ],
       "intermediate": [
