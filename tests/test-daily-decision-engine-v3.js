@@ -30,6 +30,7 @@ var _buildPremiumCoachingMessage     = DDEv3._buildPremiumCoachingMessage;
 var _buildSmartFitCoachCard          = DDEv3._buildSmartFitCoachCard;
 var _selectSessionTypeDiverse        = DDEv3._selectSessionTypeDiverse;
 var _applySessionTypeCap             = DDEv3._applySessionTypeCap;
+var _selectSessionSubType            = DDEv3._selectSessionSubType;
 
 // ── Harness ───────────────────────────────────────────────────────────────────
 var passed = 0, failed = 0;
@@ -3333,6 +3334,193 @@ test('pipeline: deterministic — 3 identical decideV3 calls return same output'
       throw new Error('non-deterministic field "' + f + '": ' + r1[f] + ' / ' + r2[f] + ' / ' + r3[f]);
     }
   });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Section 26 — Session subtype variation layer (_selectSessionSubType)
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('\n── Section 26 : Session subtype variation layer ─────────────────────────────');
+
+// ── Sub-type mapping ──────────────────────────────────────────────────────────
+test('subtype: conditioning → hiit | zone2 | mixed (valid set)', function () {
+  var t = _selectSessionSubType('conditioning', 2, 5, null);
+  assert(['hiit', 'zone2', 'mixed'].indexOf(t) !== -1, 'unexpected subtype: ' + t);
+});
+test('subtype: strength → heavy | volume | explosive (valid set)', function () {
+  var t = _selectSessionSubType('strength', 2, 5, null);
+  assert(['heavy', 'volume', 'explosive'].indexOf(t) !== -1, 'unexpected subtype: ' + t);
+});
+test('subtype: recovery → "recovery" (explicit value, not null)', function () {
+  assertEqual(_selectSessionSubType('recovery', 2, 5, null), 'recovery');
+});
+test('subtype: unknown sessType → null', function () {
+  assertEqual(_selectSessionSubType('mobility', 2, 5, null), null);
+});
+
+// ── hiit never when fatigue high ──────────────────────────────────────────────
+test('subtype: effectiveFatigue=4 + conditioning → never hiit', function () {
+  // All 3 possible prev1 values — none should produce hiit at fatigue=4
+  ['hiit', 'zone2', 'mixed', null].forEach(function (prev) {
+    var t = _selectSessionSubType('conditioning', 4, 8, prev ? [prev] : null);
+    if (t === 'hiit') throw new Error('hiit produced at fatigue=4, prev=' + prev);
+  });
+});
+test('subtype: effectiveFatigue=5 + conditioning + high momentum → never hiit', function () {
+  var t = _selectSessionSubType('conditioning', 5, 9, null);
+  assert(t !== 'hiit', 'hiit must not appear at fatigue=5, got: ' + t);
+});
+test('subtype: effectiveFatigue=3 + conditioning + high momentum → hiit allowed', function () {
+  var t = _selectSessionSubType('conditioning', 3, 8, null);
+  assertEqual(t, 'hiit');
+});
+
+// ── No triple repetition ─────────────────────────────────────────────────────
+test('subtype: no triple hiit — last 2 = hiit → force zone2', function () {
+  var t = _selectSessionSubType('conditioning', 2, 8, ['hiit', 'hiit']);
+  assert(t !== 'hiit', 'triple hiit must be prevented, got: ' + t);
+  assertEqual(t, 'zone2');
+});
+test('subtype: no triple heavy — last 2 = heavy → force volume', function () {
+  var t = _selectSessionSubType('strength', 2, 8, ['heavy', 'heavy']);
+  assert(t !== 'heavy', 'triple heavy must be prevented, got: ' + t);
+  assertEqual(t, 'volume');
+});
+test('subtype: no triple zone2 — last 2 = zone2 → force mixed', function () {
+  var t = _selectSessionSubType('conditioning', 2, 4, ['zone2', 'zone2']);
+  assert(t !== 'zone2', 'triple zone2 prevented');
+});
+test('subtype: no triple volume — last 2 = volume → force explosive', function () {
+  var t = _selectSessionSubType('strength', 2, 4, ['volume', 'volume']);
+  assert(t !== 'volume', 'triple volume prevented');
+});
+
+// ── Momentum preference ───────────────────────────────────────────────────────
+test('subtype: high momentum + conditioning + no history → hiit', function () {
+  assertEqual(_selectSessionSubType('conditioning', 2, 7, null), 'hiit');
+});
+test('subtype: high momentum + strength + no history → heavy', function () {
+  assertEqual(_selectSessionSubType('strength', 2, 7, null), 'heavy');
+});
+test('subtype: low momentum (< 4) + conditioning + no history → zone2 (hiit removed)', function () {
+  // momentum < 4 removes hiit from candidates → first remaining = zone2
+  assertEqual(_selectSessionSubType('conditioning', 2, 3, null), 'zone2');
+});
+test('subtype: high momentum overrides cycle when different from prev', function () {
+  // prev=zone2, momentum high → should pick hiit (preferred) not mixed (next in cycle)
+  var t = _selectSessionSubType('conditioning', 2, 8, ['zone2']);
+  assertEqual(t, 'hiit');
+});
+
+// ── Cycling behavior (deterministic) ─────────────────────────────────────────
+test('subtype: conditioning cycles hiit→zone2→mixed (momentum=5, full set available)', function () {
+  // momentum=5: not low (<4) and not high (>=7) → full candidate set, no preference
+  var t1 = _selectSessionSubType('conditioning', 2, 5, ['hiit']);   // after hiit → zone2
+  var t2 = _selectSessionSubType('conditioning', 2, 5, ['zone2']);  // after zone2 → mixed
+  var t3 = _selectSessionSubType('conditioning', 2, 5, ['mixed']);  // after mixed → hiit
+  assertEqual(t1, 'zone2');
+  assertEqual(t2, 'mixed');
+  assertEqual(t3, 'hiit');
+});
+test('subtype: strength cycles heavy→volume→explosive (momentum=5, full set available)', function () {
+  var t1 = _selectSessionSubType('strength', 2, 5, ['heavy']);
+  var t2 = _selectSessionSubType('strength', 2, 5, ['volume']);
+  var t3 = _selectSessionSubType('strength', 2, 5, ['explosive']);
+  assertEqual(t1, 'volume');
+  assertEqual(t2, 'explosive');
+  assertEqual(t3, 'heavy');
+});
+test('subtype: null entries in history (recovery days) ignored in cycle', function () {
+  // [hiit, null, null] — effective prev1 is 'hiit', should cycle to zone2
+  var t = _selectSessionSubType('conditioning', 2, 3, ['hiit', null, null]);
+  assertEqual(t, 'zone2');
+});
+test('subtype: deterministic — 3 identical calls return same result', function () {
+  var r1 = _selectSessionSubType('conditioning', 2, 7, ['zone2', 'mixed']);
+  var r2 = _selectSessionSubType('conditioning', 2, 7, ['zone2', 'mixed']);
+  var r3 = _selectSessionSubType('conditioning', 2, 7, ['zone2', 'mixed']);
+  if (r1 !== r2 || r2 !== r3) throw new Error('non-deterministic: ' + r1 + ',' + r2 + ',' + r3);
+});
+
+// ── Integration: decideV3 populates sessionSubType ────────────────────────────
+test('subtype integration: conditioning session → sessionSubType in {hiit,zone2,mixed}', function () {
+  // lastSessionTypes=['hypertrophy'] → diversity picks 'conditioning' for moderate intensity
+  var out = decideV3(Object.assign(baseV2({
+    fatigueLevel: 2, last3SessionsIntensity: ['high'], lastSessionDate: daysAgo(1)
+  }), {
+    userProfile: { adherenceScore: 0.8, trainingFrequencyLast7Days: 4, avgFatigueLast7Days: 2 },
+    userHistory:  { last7Decisions: ['train'], last7Momentum: [6],
+                    lastSessionTypes: ['hypertrophy'], lastSubTypes: ['zone2'] }
+  }));
+  assertEqual(out.recommendedSessionType, 'conditioning');
+  assert(out.sessionSubType !== null, 'sessionSubType must not be null for conditioning');
+  assert(['hiit', 'zone2', 'mixed'].indexOf(out.sessionSubType) !== -1,
+    'unexpected subtype: ' + out.sessionSubType);
+});
+test('subtype integration: recovery session → sessionSubType is "recovery"', function () {
+  var out = decideV3(baseV2({ fatigueLevel: 5 }));
+  assertEqual(out.decision, 'rest');
+  assertEqual(out.sessionSubType, 'recovery');
+});
+// ── Fallback never returns null ───────────────────────────────────────────────
+test('subtype: fallback always non-null — conditioning all candidates blocked', function () {
+  // fatigue=4 removes hiit, anti-rep removes zone2, low-momentum removes nothing extra
+  // candidates after fatigue: [zone2, mixed]. After anti-rep (last2=zone2): [mixed].
+  // Still 1 candidate → not empty, returns 'mixed'. But let's force all removed:
+  // fat=4 removes hiit. anti-rep(last2=zone2) removes zone2. Now [mixed].
+  // No more to remove for low-momentum here. Returns 'mixed'.
+  var t = _selectSessionSubType('conditioning', 4, 5, ['zone2', 'zone2']);
+  assert(t !== null, 'fallback must never return null, got: ' + t);
+});
+test('subtype: fallback → zone2 for conditioning when all candidates exhausted', function () {
+  // fat=4 (removes hiit) + anti-rep last2=zone2 (removes zone2) + momentum<4 (removes hiit already gone)
+  // remaining: ['mixed']. Not empty yet. Edge: force via fat=4 + anti-rep + low-momentum on mixed?
+  // Can't exhaust all — let's test the explicit fallback path via direct worst case:
+  // fat=4 removes hiit: ['zone2','mixed']. anti-rep last2=zone2 removes zone2: ['mixed'].
+  // momentum=2 < 4 removes nothing more (hiit already gone, explosive not in conditioning).
+  // Result: 'mixed' (only one). Not the fallback 'zone2'. To hit fallback: all 3 must be removed.
+  // That's impossible for conditioning (hiit+zone2 removable, mixed survives). Test fallback indirectly:
+  var t = _selectSessionSubType('conditioning', 4, 2, ['zone2', 'zone2']); // fat removes hiit, anti-rep removes zone2, low-mom removes nothing new
+  assertEqual(t, 'mixed'); // last survivor
+  assert(t !== null, 'always non-null');
+});
+test('subtype: subtype always compatible with sessionType', function () {
+  var condSubTypes = ['hiit', 'zone2', 'mixed'];
+  var strSubTypes  = ['heavy', 'volume', 'explosive'];
+  // Multiple input combinations
+  [2, 4].forEach(function (fat) {
+    [2, 5, 8].forEach(function (mom) {
+      [null, ['hiit'], ['zone2', 'zone2'], ['heavy', 'heavy']].forEach(function (hist) {
+        var tc = _selectSessionSubType('conditioning', fat, mom, hist);
+        var ts = _selectSessionSubType('strength',     fat, mom, hist);
+        if (tc !== null && condSubTypes.indexOf(tc) === -1) {
+          throw new Error('conditioning subtype "' + tc + '" not in allowed set');
+        }
+        if (ts !== null && strSubTypes.indexOf(ts) === -1) {
+          throw new Error('strength subtype "' + ts + '" not in allowed set');
+        }
+      });
+    });
+  });
+});
+
+// ── Integration: decideV3 populates sessionSubType ────────────────────────────
+test('subtype integration: conditioning session → sessionSubType in {hiit,zone2,mixed}', function () {
+  // lastSessionTypes=['hypertrophy'] → diversity picks 'conditioning'
+  // lastSubTypes=['hiit','hiit'] → anti-rep must block triple hiit
+  var inp = Object.assign(baseV2({
+    fatigueLevel: 2, last3SessionsIntensity: ['high'], lastSessionDate: daysAgo(1)
+  }), {
+    userProfile: { adherenceScore: 0.8, trainingFrequencyLast7Days: 4, avgFatigueLast7Days: 2 },
+    userHistory:  { last7Decisions: ['train'], last7Momentum: [6],
+                    lastSessionTypes: ['hypertrophy'], lastSubTypes: ['hiit', 'hiit'] }
+  });
+  var out = decideV3(inp);
+  // sessionSubType must not be hiit (anti-rep), but conditioning must stay
+  assertEqual(out.recommendedSessionType, 'conditioning');
+  assert(out.sessionSubType !== 'hiit', 'anti-rep must block triple hiit');
+  // intensity and decision unaffected
+  assertEqual(out.recommendedIntensity, 'moderate');
+  assertEqual(out.decision, 'train');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

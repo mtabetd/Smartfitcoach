@@ -247,6 +247,81 @@
     return maxRank;
   }
 
+  // ── Session subtype variation layer (Module 5d) ───────────────────────────
+  //
+  // Adds variation INSIDE a sessionType without modifying sessionType, intensity,
+  // or any safety rule.  Pure additive layer — only populates sessionSubType.
+  //
+  // Sub-type sets:
+  //   conditioning → hiit | zone2 | mixed
+  //   strength     → heavy | volume | explosive
+  //   other/recovery → null (no sub-type)
+  //
+  // Selection rules (priority order):
+  //   1. effectiveFatigue ≥ 4 → remove 'hiit' from candidates (safety)
+  //   2. Anti-repetition: last 2 identical → force a different candidate
+  //   3. momentumScore ≥ 6 → prefer 'hiit' (conditioning) or 'heavy' (strength)
+  //   4. Default: cycle forward from prev sub-type (deterministic, no randomness)
+  //
+  // null entries in lastSubTypes (recovery days) are filtered before computing
+  // prev1/prev2 so they do not break the alternating cadence.
+  //
+  // No history → defaults to first allowed candidate (momentum-preferred if eligible).
+  //
+  // @param  {string}       sessType
+  // @param  {number}       effectiveFatigue   1–5
+  // @param  {number|null}  momentumScore      0–10 or null
+  // @param  {string[]|null} lastSubTypes      last ≤3 sub-types (may contain nulls)
+  // @return {string|null}
+  function _selectSessionSubType(sessType, effectiveFatigue, momentumScore, lastSubTypes) {
+    // Recovery always returns 'recovery' — no sub-type variation for rest days
+    if (sessType === 'recovery') return 'recovery';
+
+    var SUB_TYPES = {
+      conditioning: ['hiit', 'zone2', 'mixed'],
+      strength:     ['heavy', 'volume', 'explosive']
+    };
+    var allCandidates = SUB_TYPES[sessType];
+    if (!allCandidates) return null;  // unknown sessType
+
+    var candidates = allCandidates.slice();
+
+    // Gate 1: high fatigue → block hiit
+    if (effectiveFatigue >= 4) {
+      candidates = candidates.filter(function(c) { return c !== 'hiit'; });
+    }
+
+    // Gate 2: anti-repetition — if last 2 entries identical, remove that sub-type
+    var history = Array.isArray(lastSubTypes)
+      ? lastSubTypes.filter(function(s) { return s !== null && s !== undefined && s !== 'recovery'; })
+      : [];
+    var prev1 = history.length >= 1 ? history[history.length - 1] : null;
+    var prev2 = history.length >= 2 ? history[history.length - 2] : null;
+    if (prev1 !== null && prev1 === prev2) {
+      candidates = candidates.filter(function(c) { return c !== prev1; });
+    }
+
+    // Gate 3: low momentum → remove hiit and explosive
+    if (typeof momentumScore === 'number' && momentumScore < 4) {
+      candidates = candidates.filter(function(c) { return c !== 'hiit' && c !== 'explosive'; });
+    }
+
+    // Fallback: if all candidates filtered out, return safe default
+    if (!candidates.length) {
+      return sessType === 'conditioning' ? 'zone2' : 'volume';
+    }
+
+    // High momentum preference: prefer hiit (conditioning) or heavy (strength)
+    if (typeof momentumScore === 'number' && momentumScore >= 7) {
+      if (candidates.indexOf('hiit')  !== -1) return 'hiit';
+      if (candidates.indexOf('heavy') !== -1) return 'heavy';
+    }
+
+    // Default: cycle forward from prev1 (deterministic, no randomness)
+    if (prev1 === null || candidates.indexOf(prev1) === -1) return candidates[0];
+    return candidates[(candidates.indexOf(prev1) + 1) % candidates.length];
+  }
+
   function _buildReason(decObj, intensity, sessionType, effectiveFatigue, rawFatigue, daysSince, priorityApplied, progressionTriggered, capReason, inputs) {
     var parts = [];
     var phase = inputs.trainingPhase || 'build';
@@ -1087,6 +1162,12 @@
     if (!_lastSessTypes) {
       sessType = _selectSessionType(decObj.decision, intensity, inputs.goal);
     }
+
+    // ── Module 5d : session subtype variation layer ──────────────────────────
+    var _lastSubTypes = (inputs.userHistory && Array.isArray(inputs.userHistory.lastSubTypes))
+      ? inputs.userHistory.lastSubTypes.slice(-3) : null;
+    var sessionSubType = _selectSessionSubType(sessType, effective, momentum, _lastSubTypes);
+
     var reason    = _buildReason(
       decObj, intensity, sessType,
       effective, inputs.fatigueLevel,
@@ -1127,6 +1208,7 @@
       decision:               decObj.decision,
       recommendedIntensity:   intensity,
       recommendedSessionType: sessType,
+      sessionSubType:         sessionSubType,             // Module 5d ✓
       fatigueEffective:       effective,
       priorityApplied:        priorityApplied,
       progressionTriggered:   progression.triggered,
@@ -1167,6 +1249,8 @@
     _selectSessionTypeDiverse:        _selectSessionTypeDiverse,
     // V3 Module 5c (session type intensity cap)
     _applySessionTypeCap:             _applySessionTypeCap,
+    // V3 Module 5d (session subtype variation)
+    _selectSessionSubType:            _selectSessionSubType,
     // V3 Module 1
     _validateUserProfile:             _validateUserProfile,
     _normalizeLast7SessionsIntensity: _normalizeLast7SessionsIntensity,
