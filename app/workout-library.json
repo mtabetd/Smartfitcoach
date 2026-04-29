@@ -1981,7 +1981,10 @@
           },
           "coaching_cue": "Drive through your legs on the clean — don't muscle it up.",
           "subtype": "mixed",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "conditioning",
+          "intent": "tempo run fused with barbell complex for concurrent strength-endurance",
+          "progression_hint": "Olympic lifting under cardiovascular fatigue is a direct Hyrox/hybrid sport skill; advance to 6 rounds when complex maintains bar speed through round 5"
         },
         {
           "id": "mix-i-02",
@@ -2035,7 +2038,10 @@
           },
           "coaching_cue": "The assault bike is metabolic debt — the strength work after is the interest payment.",
           "subtype": "mixed",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "fat_loss",
+          "intent": "maximal metabolic output via bike sprint and heavy DB compound pairing",
+          "progression_hint": "Assault bike pre-fatigues the system before loaded work — mimics competition demands; increase DB weight when form holds through all 6 rounds"
         },
         {
           "id": "mix-i-03",
@@ -2083,7 +2089,10 @@
           },
           "coaching_cue": "You are pre-fatigued by the run — brace harder before each lift.",
           "subtype": "mixed",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "maintain strength output under aerobic pre-fatigue",
+          "progression_hint": "Pre-fatigued lifting is a key adaptation for hybrid athletes; progress to 5 rounds at 90% working weight when form is consistent across all 4 rounds"
         },
         {
           "id": "mix-i-04",
@@ -2131,7 +2140,10 @@
           },
           "coaching_cue": "Stay consistent on row splits — go out too hot and you'll blow up on the 750.",
           "subtype": "mixed",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "conditioning",
+          "intent": "rowing pyramid fused with KB complex for full-body endurance",
+          "progression_hint": "Pyramid structure tests pacing discipline; advance to full 7-segment pyramid when 5-segment is completed with even KB form throughout"
         },
         {
           "id": "mix-i-05",
@@ -2179,7 +2191,10 @@
           },
           "coaching_cue": "Use the first few minutes to gauge effort — find the pace you can sustain for 30 minutes.",
           "subtype": "mixed",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "recomposition",
+          "intent": "concurrent cardio-strength-core EMOM to maximise training density",
+          "progression_hint": "30-min EMOM is a significant volume marker; advance rep counts by 1 per exercise per month when all minutes maintain 15+ sec rest"
         },
         {
           "id": "mix-i-06",
@@ -2223,7 +2238,10 @@
           },
           "coaching_cue": "Grip is the limiting factor — chalk up and keep shoulders packed.",
           "subtype": "mixed",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "strongman conditioning for grip, posterior chain, and cardiovascular capacity",
+          "progression_hint": "Strongman modalities transfer directly to functional fitness competition; increase all weights 5% when 5 rounds complete with under 90s rest"
         },
         {
           "id": "mix-i-07",
@@ -2272,7 +2290,10 @@
           },
           "coaching_cue": "Brick legs are real — expect your run to feel heavy for the first 90 seconds.",
           "subtype": "mixed",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "conditioning",
+          "intent": "triathlon-style brick to develop multi-sport aerobic and strength capacity",
+          "progression_hint": "Brick training eliminates the transition shock between modalities; extend bike to 30 min and run to 10 min before adding strength finisher load"
         },
         {
           "id": "mix-i-08",
@@ -2334,7 +2355,10 @@
           },
           "coaching_cue": "Track your rounds each block — beat your score next session.",
           "subtype": "mixed",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "recomposition",
+          "intent": "density block training for total-body volume accumulation",
+          "progression_hint": "Track rounds per block each session — a 10% improvement in any block over 4 weeks indicates readiness to increase load or block duration"
         },
         {
           "id": "mix-i-09",
@@ -2367,7 +2391,10 @@
           },
           "coaching_cue": "Pull the bar close — wide arc means you're using arms, not hips.",
           "subtype": "mixed",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "Olympic lifting technique under aerobic fatigue via ski erg pairing",
+          "progression_hint": "Snatch technique degrades under fatigue before any other lift — use this session to identify technique breakdown points; add 2 rounds when form holds through 6"
         },
         {
           "id": "mix-i-10",
@@ -2406,7 +2433,10 @@
           },
           "coaching_cue": "Zone 2 is your aerobic base — protect it by staying disciplined on intensity.",
           "subtype": "mixed",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "recomposition",
+          "intent": "Zone 2 aerobic base alternated with heavy compound strength for dual adaptation",
+          "progression_hint": "Concurrent training at elite level — completing 5 rounds without HR exceeding Zone 2 ceiling during cardio blocks signals strong aerobic-strength integration"
         }
       ]
     },
