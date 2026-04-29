@@ -179,6 +179,189 @@
           "scaling": "Start at 12-9-6-4-2, knee push-ups",
           "coaching_cue": "Breathe between movements, not mid-rep — broken rhythm costs more time than a 10-second breath."
         }
+      ],
+      "intermediate": [
+        {
+          "id": "hiit-i-01",
+          "title": "Tabata Complex",
+          "format": "Tabata — 20s work / 10s rest × 8 rounds per station, 3 stations",
+          "structure": {
+            "stations": [
+              { "exercise": "KB Swing (24/16 kg)", "rounds": 8 },
+              { "exercise": "Box Jump (50 cm)", "rounds": 8 },
+              { "exercise": "Assault Bike — max RPM", "rounds": 8 }
+            ],
+            "rest_between_stations": "2 min"
+          },
+          "duration_min": 22,
+          "equipment": ["kettlebell", "box", "assault bike"],
+          "scaling": "Lighter KB, step-up box, rower or ski erg instead of bike",
+          "coaching_cue": "KB swing: hips snap, arms follow — pulling with your arms kills the power before it starts."
+        },
+        {
+          "id": "hiit-i-02",
+          "title": "Fight Gone Bad",
+          "format": "3 rounds × 5 stations × 1 min each, 1 min rest between rounds",
+          "structure": {
+            "stations": [
+              { "exercise": "Wall Ball (9/6 kg)", "score": "reps" },
+              { "exercise": "Sumo Deadlift High Pull (35/25 kg)", "score": "reps" },
+              { "exercise": "Box Jump (50 cm)", "score": "reps" },
+              { "exercise": "Push Press (35/25 kg)", "score": "reps" },
+              { "exercise": "Row", "score": "calories" }
+            ],
+            "rounds": 3,
+            "rest_between_rounds": "1 min",
+            "score": "total reps + calories across all rounds"
+          },
+          "duration_min": 23,
+          "equipment": ["wall ball", "barbell", "box", "rower"],
+          "scaling": "Lighter loads, step-ups, DB push press",
+          "coaching_cue": "Rotate stations with zero dead time — the 1-min rest is the only full stop you get."
+        },
+        {
+          "id": "hiit-i-03",
+          "title": "KB Gauntlet",
+          "format": "6 rounds × 4 stations × 40s work / 20s rest",
+          "structure": {
+            "stations": [
+              { "exercise": "KB Swing (24/20 kg)" },
+              { "exercise": "KB Goblet Squat (24/20 kg)" },
+              { "exercise": "KB Clean — alternating arms (24/20 kg)" },
+              { "exercise": "KB Lateral Hop over KB" }
+            ],
+            "rounds": 6,
+            "rest_between_rounds": "90s"
+          },
+          "duration_min": 26,
+          "equipment": ["1 kettlebell (24 or 20 kg)"],
+          "scaling": "Lighter KB, two-hand clean, step hop",
+          "coaching_cue": "Goblet squat: elbows inside knees, chest tall — the KB will pull you forward if your brace fails."
+        },
+        {
+          "id": "hiit-i-04",
+          "title": "Bike Pyramid",
+          "format": "3 rounds of ascending/descending max effort intervals",
+          "structure": {
+            "interval_sequence_per_round": [
+              { "work": "10s", "rest": "10s", "effort": "max" },
+              { "work": "20s", "rest": "20s", "effort": "max" },
+              { "work": "30s", "rest": "30s", "effort": "max" },
+              { "work": "20s", "rest": "20s", "effort": "max" },
+              { "work": "10s", "rest": "10s", "effort": "max" }
+            ],
+            "rounds": 3,
+            "rest_between_rounds": "3 min"
+          },
+          "duration_min": 21,
+          "equipment": ["assault bike or echo bike"],
+          "scaling": "Rower, reduce top-end effort to 85%",
+          "coaching_cue": "The first 3 seconds of each max effort establish your power — don't ramp, explode from zero."
+        },
+        {
+          "id": "hiit-i-05",
+          "title": "Engine Test",
+          "format": "EMOM 20",
+          "structure": {
+            "blocks": [
+              { "minute": "Odd", "task": "15 cal row" },
+              { "minute": "Even", "task": "12 burpee box jump-overs (50 cm)" }
+            ],
+            "note": "Reduce target if less than 10s rest remains in any minute"
+          },
+          "duration_min": 20,
+          "equipment": ["rower", "box (50 cm)"],
+          "scaling": "10 cal row, step-overs instead of jump-overs",
+          "coaching_cue": "You should finish each minute with 8–10s spare — if you don't, drop the target by 2 immediately."
+        },
+        {
+          "id": "hiit-i-06",
+          "title": "Threshold Intervals",
+          "format": "5 rounds of sustained effort / active recovery",
+          "structure": {
+            "blocks": [
+              { "phase": "Work", "duration": "4 min", "effort": "8/10 RPE — run, row, or bike" },
+              { "phase": "Recovery", "duration": "2 min", "effort": "easy walk or slow row" }
+            ],
+            "rounds": 5
+          },
+          "duration_min": 30,
+          "equipment": ["treadmill, rower, or assault bike"],
+          "scaling": "3 min at 7/10 RPE / 3 min easy, 4 rounds",
+          "coaching_cue": "8/10 effort means you can say one word but not a sentence — find that line and live there for 4 minutes."
+        },
+        {
+          "id": "hiit-i-07",
+          "title": "KB Total",
+          "format": "5 rounds for quality",
+          "structure": {
+            "exercises": [
+              { "name": "KB Clean and Press — each arm (20/16 kg)", "reps": 6 },
+              { "name": "KB Swing (24/20 kg)", "reps": 12 },
+              { "name": "KB Goblet Squat (24/20 kg)", "reps": 8 }
+            ],
+            "rounds": 5,
+            "rest_between_rounds": "90s"
+          },
+          "duration_min": 25,
+          "equipment": ["1–2 kettlebells (20–24 kg)"],
+          "scaling": "Lighter KB, two-hand swing, separate clean and press",
+          "coaching_cue": "Clean-and-press: the press is strict — zero leg drive. If you push-press it, the clean weight is too heavy."
+        },
+        {
+          "id": "hiit-i-08",
+          "title": "Row and Burn",
+          "format": "10 rounds of alternating max-effort intervals",
+          "structure": {
+            "blocks": [
+              { "phase": "Row", "duration": "30s", "effort": "max" },
+              { "phase": "Burpees", "duration": "30s", "effort": "max" },
+              { "phase": "Rest", "duration": "30s" }
+            ],
+            "rounds": 10
+          },
+          "duration_min": 15,
+          "equipment": ["rower"],
+          "scaling": "45s rest per round, step burpees",
+          "coaching_cue": "Row: legs drive first, arms follow — pulling with your back before your legs extend loses 20% of every stroke."
+        },
+        {
+          "id": "hiit-i-09",
+          "title": "20-20-20",
+          "format": "4 rounds of 3-movement sprint complex with full rest",
+          "structure": {
+            "blocks": [
+              { "exercise": "Assault Bike", "work": "20s", "effort": "max" },
+              { "exercise": "Burpee Box Jump-Over (50 cm)", "work": "20s", "effort": "max" },
+              { "exercise": "Rest", "duration": "20s" }
+            ],
+            "rounds": 4,
+            "rest_between_rounds": "3 min"
+          },
+          "duration_min": 22,
+          "equipment": ["assault bike", "box (50 cm)"],
+          "scaling": "Rower instead of bike, step-overs, reduce to 3 rounds",
+          "coaching_cue": "The 20s rest is not passive — controlled breathing only. Flopping on the floor costs the next round."
+        },
+        {
+          "id": "hiit-i-10",
+          "title": "Run and Pull Chipper",
+          "format": "For time — 25-min cap",
+          "structure": {
+            "sequence": [
+              { "exercise": "Run", "distance": "800m" },
+              { "exercise": "Pull-Up", "reps": 40 },
+              { "exercise": "Run", "distance": "800m" },
+              { "exercise": "Pull-Up", "reps": 30 },
+              { "exercise": "Run", "distance": "400m" },
+              { "exercise": "Pull-Up", "reps": 20 }
+            ]
+          },
+          "duration_min": 25,
+          "equipment": ["pull-up bar", "outdoor space or treadmill"],
+          "scaling": "Banded pull-ups or ring rows, halve run distances",
+          "coaching_cue": "Break pull-ups into small sets from rep one — 5s of rest between sets costs nothing; sets of 1 after failure costs everything."
+        }
       ]
     }
   }
