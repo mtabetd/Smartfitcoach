@@ -4072,7 +4072,7 @@ function renderSmartFitCoachToday() {
     return renderCardSport();
   }
 
-  // Secondary label: "→ Suivre mon programme (Muscu — Épaules)"
+  // Secondary label
   var day  = next.day;
   var idx  = next.index;
   var _SLABELS = {
@@ -4096,50 +4096,74 @@ function renderSmartFitCoachToday() {
   var _doneKey = idx + '_' + todayStr;
   var _done    = !!(S.sessionHistory && S.sessionHistory[_doneKey]);
 
-  // Badge style: PEAK/LOCKED IN = filled; BUILDING/RECOVERING = outlined
+  // Badge style: PEAK/LOCKED IN filled; BUILDING/RECOVERING outlined
   var _filled = sel2.momentum_tag === 'Peak' || sel2.momentum_tag === 'Locked In';
-  var _tagSt  = 'display:inline-block;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:400;letter-spacing:2px;text-transform:uppercase;padding:6px 12px;margin-bottom:24px;' +
+  var _tagSt  = 'display:inline-block;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:400;letter-spacing:2px;text-transform:uppercase;padding:6px 12px;' +
     (_filled
       ? 'background:#1A1A1A;color:#F5F3EF;border:none;'
       : 'background:transparent;color:#666;border:1px solid #9A9A9A;');
 
+  // Nutrition guidance mapped to momentum tag
+  var _nutMap = {
+    'Peak':       EN ? 'Increase your intake slightly today. Prioritise protein and clean carbs.'
+                     : 'Augmente légèrement tes apports aujourd’hui. Priorité aux protéines et aux glucides propres.',
+    'Locked In':  EN ? 'Keep your nutrition clean and consistent. Support the effort without excess.'
+                     : 'Garde une alimentation propre et régulière. L’objectif est de soutenir l’effort sans excès.',
+    'Building':   EN ? 'Stay consistent. Structure your meals and avoid unnecessary gaps.'
+                     : 'Reste constant. Structure tes repas et évite les écarts inutiles.',
+    'Recovering': EN ? 'Eat lighter today. Hydration, protein, and rest come first.'
+                     : 'Allège légèrement. Hydratation, protéines et récupération d’abord.'
+  };
+  var _nutGuidance = _nutMap[sel2.momentum_tag] || _nutMap['Building'];
+
   var c = card('');
 
-  // SMARTFITCOACH TODAY
+  // ── Brand header ──
   c.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#999;margin-bottom:18px;font-weight:500;'
   }, 'SMARTFITCOACH TODAY'));
 
-  // Recommandé aujourd’hui
+  // ── Recommandé aujourd'hui ──
   c.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:10px;'
   }, EN ? 'Recommended today' : 'Recommandé aujourd’hui'));
 
-  // Session focus headline: Georgia 22px 400 1.25 #1A1A1A
+  // ── Session focus: Georgia 22px 400 lh1.25 #1A1A1A ──
   c.appendChild(h('div', {
     style: 'font-family:Georgia,serif;font-size:22px;font-weight:400;line-height:1.25;color:#1A1A1A;margin-bottom:14px;'
   }, sel2.session_focus));
 
-  // Momentum tag badge
-  c.appendChild(h('span', { style: _tagSt }, sel2.momentum_tag.toUpperCase()));
+  // ── Momentum badge ──
+  c.appendChild(h('div', { style: 'margin-bottom:24px;' },
+    h('span', { style: _tagSt }, sel2.momentum_tag.toUpperCase())
+  ));
 
-  // Divider 1px solid #D8D6D0
+  // ── Divider ──
   c.appendChild(h('div', { style: 'height:1px;background:#D8D6D0;margin-bottom:20px;' }));
 
-  // POURQUOI CETTE DÉCISION: 11px, letter-spacing 5px, #777
+  // ── POURQUOI CETTE DÉCISION ──
   c.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:5px;text-transform:uppercase;color:#777;margin-bottom:12px;'
   }, EN ? 'WHY THIS DECISION' : 'POURQUOI CETTE DÉCISION'));
-
-  // coach_message: 13px, 300, 1.65, #333
   c.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:300;line-height:1.65;color:#333;margin-bottom:24px;'
   }, sel2.coach_message));
 
-  // Divider
+  // ── Divider ──
   c.appendChild(h('div', { style: 'height:1px;background:#D8D6D0;margin-bottom:20px;' }));
 
-  // Primary CTA: full-width, #1A1A1A, #F5F3EF, 16px, 12px, uppercase, letter-spacing 3px
+  // ── NUTRITION DU JOUR (supportive, visually lighter) ──
+  c.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#999;margin-bottom:10px;'
+  }, EN ? 'NUTRITION TODAY' : 'NUTRITION DU JOUR'));
+  c.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.6;color:#666;font-style:italic;margin-bottom:24px;'
+  }, _nutGuidance));
+
+  // ── Divider ──
+  c.appendChild(h('div', { style: 'height:1px;background:#D8D6D0;margin-bottom:20px;' }));
+
+  // ── Primary CTA ──
   c.appendChild(h('button', {
     style: _done
       ? 'display:block;width:100%;padding:16px;background:rgba(62,92,58,0.08);color:#3E5C3A;border:1px solid #3E5C3A;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:default;min-height:52px;box-sizing:border-box;'
@@ -4156,7 +4180,7 @@ function renderSmartFitCoachToday() {
     : (EN ? '→ Start session' : '→ Commencer la séance')
   ));
 
-  // Secondary action: text button, #777, 13px, margin-top 14px
+  // ── Secondary: follow static program ──
   c.appendChild(h('button', {
     style: 'display:block;width:100%;padding:14px 0;margin-top:14px;background:transparent;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:#777;cursor:pointer;text-align:left;min-height:44px;',
     onclick: function() {
@@ -4168,258 +4192,6 @@ function renderSmartFitCoachToday() {
       if (window.render) window.render();
     }
   }, _secLabel));
-
-  return c;
-}
-
-// ─── V3 COACHING CARD — Intelligence quotidienne ─────────────────────────────
-// Collect available state and call the V3 engine + coaching layer.
-// Fully guarded: any error silently returns null (existing behavior preserved).
-function _v3GatherInputs(S) {
-  // ── Goal mapping (GOALS is integer index) ──
-  var GOALS = window.GOALS || [];
-  var goalKey = (S.goal !== null && S.goal !== undefined && GOALS[S.goal]) ? GOALS[S.goal].key : null;
-  var engineGoal = ({
-    bulk: 'muscle_gain', lean_bulk: 'muscle_gain',
-    maintain: 'maintenance', recomposition: 'maintenance',
-    cut: 'fat_loss', shred: 'fat_loss'
-  })[goalKey] || 'maintenance';
-
-  // ── trainingFrequency (integer 1-7) ──
-  var freq = 3;
-  if (Array.isArray(S.trainingDaysSelected) && S.trainingDaysSelected.length >= 1 && S.trainingDaysSelected.length <= 7) {
-    freq = S.trainingDaysSelected.length;
-  } else if (typeof S.sportDays === 'number' && S.sportDays >= 1 && S.sportDays <= 7) {
-    freq = Math.round(S.sportDays);
-  }
-
-  // ── Fatigue + sleep from today's wellness ──
-  var fatigueLevel = 3;
-  var sleepQuality = null;
-  var todayStr = new Date().toISOString().slice(0, 10);
-  var w = S.todayWellness;
-  if (w && w.date === todayStr && !w.dismissed) {
-    var eV = w.energy;
-    if (eV === 'haut' || eV === 'high') fatigueLevel = 2;
-    else if (eV === 'bas' || eV === 'low') fatigueLevel = 4;
-    var mV = w.muscles;
-    if (mV === 'douleurs' || mV === 'sore') fatigueLevel = Math.min(5, fatigueLevel + 1);
-    fatigueLevel = Math.max(1, Math.min(5, fatigueLevel));
-
-    var slRaw = w.sleep;
-    if (typeof slRaw === 'string') {
-      slRaw = ({ excellent: 5, bien: 4, good: 4, moyen: 3, average: 3, mauvais: 2, bad: 2, tres_mauvais: 1, very_bad: 1 })[slRaw] || null;
-    }
-    var slN = Number(slRaw);
-    if (!isNaN(slN) && slN >= 1 && slN <= 5) sleepQuality = Math.round(slN);
-  }
-
-  // ── lastSessionDate (most recent past date with a logged session) ──
-  var lastSessionDate = null;
-  try {
-    var dates = [];
-    Object.keys(S.sessionHistory || {}).forEach(function(k) {
-      var m = k.match(/(\d{4}-\d{2}-\d{2})/); if (m) dates.push(m[1]);
-    });
-    Object.keys(S.muscuSessionLog || {}).forEach(function(k) {
-      if (/^\d{4}-\d{2}-\d{2}$/.test(k)) dates.push(k);
-    });
-    dates = dates.filter(function(d) { return d < todayStr; });
-    dates.sort();
-    if (dates.length) lastSessionDate = dates[dates.length - 1];
-  } catch(e) {}
-  if (!lastSessionDate) {
-    lastSessionDate = new Date(Date.now() - 2 * 86400000).toISOString().slice(0, 10);
-  }
-
-  // ── V3 userProfile (optional) ──
-  var userProfile = null;
-  try {
-    var cutoff7 = new Date(Date.now() - 7 * 86400000).toISOString().slice(0, 10);
-    var seen = {};
-    Object.keys(S.sessionHistory || {}).forEach(function(k) {
-      var m = k.match(/(\d{4}-\d{2}-\d{2})/);
-      if (m && m[1] >= cutoff7 && m[1] < todayStr) seen[m[1]] = 1;
-    });
-    Object.keys(S.muscuSessionLog || {}).forEach(function(k) {
-      if (/^\d{4}-\d{2}-\d{2}$/.test(k) && k >= cutoff7 && k < todayStr) seen[k] = 1;
-    });
-    var freq7 = Object.keys(seen).length;
-
-    var prof = {};
-    if (freq7 >= 0 && freq7 <= 7) prof.trainingFrequencyLast7Days = freq7;
-
-    // avgFatigueLast7Days from wellness history
-    if (window.getWellnessHistory) {
-      var wHist = window.getWellnessHistory(7) || [];
-      var real = wHist.filter(function(e) { return e && !e.dismissed; });
-      if (real.length >= 1) {
-        var fatSum = 0;
-        real.forEach(function(e) {
-          var ef = e.energy;
-          var fs = (ef === 'haut' || ef === 'high') ? 2 : (ef === 'bas' || ef === 'low') ? 4 : 3;
-          if (e.muscles === 'douleurs' || e.muscles === 'sore') fs = Math.min(5, fs + 1);
-          fatSum += fs;
-        });
-        var avg = Math.round((fatSum / real.length) * 10) / 10;
-        prof.avgFatigueLast7Days = Math.max(1, Math.min(5, avg));
-      }
-    }
-
-    // sessionTypeHistory derived from sport type
-    var stMap = {
-      musculation: 'strength', calisthenics: 'strength',
-      running: 'cardio', cycling: 'cardio', triathlon: 'cardio',
-      crossfit: 'hiit', hyrox: 'hiit', yoga: 'mobility'
-    };
-    var stType = stMap[S.sportType] || null;
-    if (stType) prof.lastSessionTypeHistory = [stType, stType, stType];
-
-    if (Object.keys(prof).length > 0) userProfile = prof;
-  } catch(eUp) { userProfile = null; }
-
-  var inputs = {
-    goal:                     engineGoal,
-    fatigueLevel:             fatigueLevel,
-    trainingFrequency:        freq,
-    lastSessionDate:          lastSessionDate,
-    last3SessionsIntensity:   ['moderate', 'moderate', 'moderate']
-  };
-  if (sleepQuality) inputs.sleepQuality = sleepQuality;
-  if (userProfile)  inputs.userProfile  = userProfile;
-  return inputs;
-}
-
-function renderV3CoachingCard() {
-  var S = window.S;
-  if (!S || S.appMode === 'nutrition') return null;
-  var engine = window.DailyDecisionEngineV3;
-  if (!engine || typeof engine.decideDailyPlanV3 !== 'function') return null;
-
-  var v3Inputs = _v3GatherInputs(S);
-  var result, coaching;
-  try {
-    result = engine.decideDailyPlanV3(v3Inputs);
-  } catch(eEng) {
-    console.warn('[SFC V3 coaching] engine error:', eEng.message);
-    return null;
-  }
-  try {
-    coaching = engine._buildCoachingMessage(result);
-  } catch(eMsg) {
-    console.warn('[SFC V3 coaching] message error:', eMsg.message);
-    return null;
-  }
-  if (!coaching) return null;
-
-  var SESSION_FR = { strength: 'Musculation', cardio: 'Cardio', hiit: 'HIIT', mobility: 'Mobilité', recovery: 'Récupération' };
-  var INTENSITY_FR = { low: 'Faible', moderate: 'Modérée', high: 'Élevée' };
-  var PROFILE_FR = {
-    disciplined: 'Régulier', inconsistent: 'Rythme irrégulier',
-    overtraining: 'Fatigue accumulée', cautious: 'Progression prudente', beginner: 'Reprise progressive'
-  };
-
-  var c = card('');
-
-  // ── Block 1 : Daily coaching headline ──
-  c.appendChild(h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--ink-500,#6B6B65);margin-bottom:12px;font-weight:500;'
-  }, 'SMARTFITCOACH TODAY'));
-  c.appendChild(h('div', {
-    style: 'font-family:Georgia,serif;font-size:20px;font-weight:normal;line-height:1.2;margin-bottom:6px;letter-spacing:-0.2px;'
-  }, coaching.headline));
-  c.appendChild(h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--ink-500,#6B6B65);line-height:1.65;margin-bottom:16px;font-weight:300;'
-  }, coaching.shortMessage));
-
-  c.appendChild(h('div', { style: 'height:1px;background:var(--line,#D8D8D0);margin-bottom:14px;' }));
-
-  // ── Block 2 : Intelligence details ──
-  var rows = [
-    { label: 'Séance',    val: SESSION_FR[result.recommendedSessionType] || result.recommendedSessionType },
-    { label: 'Intensité', val: INTENSITY_FR[result.recommendedIntensity] || result.recommendedIntensity }
-  ];
-  if (result.momentumScore !== null && result.momentumScore !== undefined) {
-    rows.push({ label: 'Momentum', val: result.momentumScore + ' / 10' });
-  }
-  if (result.profileType) {
-    rows.push({ label: 'Profil', val: PROFILE_FR[result.profileType] || result.profileType });
-  }
-  var detWrap = h('div', { style: 'margin-bottom:14px;' });
-  rows.forEach(function(r, ri) {
-    var row = h('div', {
-      style: 'display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;' +
-             (ri < rows.length - 1 ? 'border-bottom:1px solid var(--paper-3,#EEEAE0);' : '')
-    });
-    row.appendChild(h('span', {
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-500,#6B6B65);'
-    }, r.label));
-    row.appendChild(h('span', {
-      style: 'font-family:Georgia,serif;font-size:14px;color:var(--ink-900,#0A0A09);'
-    }, r.val));
-    detWrap.appendChild(row);
-  });
-  c.appendChild(detWrap);
-
-  c.appendChild(h('div', { style: 'height:1px;background:var(--line,#D8D8D0);margin-bottom:14px;' }));
-
-  // ── Block 3 : Pourquoi ──
-  c.appendChild(h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--ink-500,#6B6B65);margin-bottom:8px;'
-  }, 'Pourquoi cette recommandation ?'));
-  c.appendChild(h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--ink-700,#2B2B27);line-height:1.7;margin-bottom:6px;font-weight:300;'
-  }, coaching.coachingExplanation));
-  if (result.adaptationReason) {
-    c.appendChild(h('div', {
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--ink-500,#6B6B65);line-height:1.5;font-style:italic;margin-bottom:6px;'
-    }, result.adaptationReason));
-  }
-
-  c.appendChild(h('div', { style: 'height:1px;background:var(--line,#D8D8D0);margin-bottom:14px;' }));
-
-  // ── Block 4 : Action du jour ──
-  c.appendChild(h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--ink-500,#6B6B65);margin-bottom:8px;'
-  }, 'Action du jour'));
-  c.appendChild(h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--ink-700,#2B2B27);line-height:1.7;font-weight:300;'
-  }, coaching.userAction));
-
-  // ── Block 5 : WorkoutSelector — Séance du jour ──
-  var _selector = window.WorkoutSelector;
-  var _wlData   = window.WorkoutLibraryData;
-  if (_selector && _wlData) {
-    try {
-      var _lvlMap  = { beginner: 'beginner', intermediate: 'intermediate', advanced: 'intermediate', pro: 'intermediate', expert: 'intermediate' };
-      var _goalMap = { muscle_gain: 'strength', maintenance: 'conditioning', fat_loss: 'fat_loss' };
-      var _durMap  = { '45min': 45, '1h': 60, '1h15': 75, '1h30': 90 };
-      var _sParams = {
-        user_level:        _lvlMap[S.sportLevel] || 'beginner',
-        goal:              _goalMap[v3Inputs.goal] || 'conditioning',
-        available_time:    _durMap[S.sportSessionDuration] || 45,
-        fatigue_level:     v3Inputs.fatigueLevel,
-        last_workouts:     [],
-        preferred_subtypes: null
-      };
-      var _sel = _selector.selectWorkout(_sParams, _wlData.library);
-      c.appendChild(h('div', { style: 'height:1px;background:var(--line,#D8D8D0);margin:14px 0;' }));
-      c.appendChild(h('div', {
-        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--ink-500,#6B6B65);margin-bottom:8px;'
-      }, (window.isEnglish && window.isEnglish()) ? 'Session of the day' : 'Séance du jour'));
-      c.appendChild(h('div', {
-        style: 'font-family:Georgia,serif;font-size:15px;font-weight:normal;line-height:1.3;margin-bottom:6px;letter-spacing:-0.2px;'
-      }, _sel.session_focus));
-      c.appendChild(h('div', {
-        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--ink-700,#2B2B27);line-height:1.65;margin-bottom:10px;font-weight:300;'
-      }, _sel.coach_message));
-      c.appendChild(h('div', {
-        style: 'display:inline-block;font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-500,#6B6B65);padding:4px 8px;border:1px solid var(--border,#D8D8D0);'
-      }, _sel.momentum_tag));
-    } catch(eSel) {
-      console.warn('[WorkoutSelector]', eSel.message);
-    }
-  }
 
   return c;
 }
