@@ -1119,53 +1119,54 @@
     if (decision === 'rest') {
       return {
         coachingMessage: highFatigue
-          ? 'Ton corps a besoin de récupérer pleinement. Repose-toi, hydrate-toi et laisse la régénération faire son travail.'
-          : 'Aujourd\'hui, le repos est la séance. Profite de cette journée pour récupérer et revenir plus fort demain.'
+          ? 'Repos total. Le corps impose une pause — respecte-la sans négocier.\nIgnorer un signal de fatigue élevé prolonge le délai de récupération de façon exponentielle.\nLa décision la plus intelligente aujourd\'hui est de ne pas s\'entraîner.'
+          : 'Repos complet. Aucune charge, aucune contrainte.\nL\'adaptation physiologique se produit pendant la récupération, pas pendant l\'effort.\nLe repos n\'est pas une faiblesse — c\'est la partie du plan que la plupart des gens ignorent.'
       };
     }
 
     // Volume disambiguation: same subtype name, different session types.
     var isHypertrophyVolume = (subtype === 'volume' && sessType === 'hypertrophy');
 
+    // Each template: 3 lines joined by \n — ACTION / INTENTION / IDENTITY
     var messages = {
       hiit: {
-        normal:  'Séance HIIT explosive au programme. Donne tout sur chaque intervalle, récupère activement entre les efforts — c\'est l\'intensité qui forge l\'adaptation.',
-        fatigue: 'Tu es un peu fatigué, mais le HIIT reste au menu. Réduis l\'amplitude si nécessaire et concentre-toi sur la qualité des efforts plutôt que la vitesse maximale.'
+        normal:  'Intervalles explosifs — donne tout sur chaque effort, récupère activement entre.\nL\'intensité maximale déclenche l\'adaptation anaérobie que l\'entraînement modéré ne peut pas produire.\nTu forges la résistance à l\'inconfort. C\'est ça, l\'avantage compétitif.',
+        fatigue: 'HIIT adapté. Qualité des efforts, volume contrôlé.\nMême à intensité réduite, les intervalles courts maintiennent ta filière anaérobie.\nTravailler intelligent sous contrainte est une discipline plus rare que la puissance brute.'
       },
       zone2: {
-        normal:  'Travail aérobie en zone 2 aujourd\'hui. Maintiens une allure conversationnelle et stable — c\'est à cette intensité que tu construis ton moteur d\'endurance.',
-        fatigue: 'Séance zone 2 au rythme doux. Garde le souffle facile, l\'objectif est de circuler sans te vider — l\'endurance se bâtit dans la continuité.'
+        normal:  'Allure conversationnelle, stable, sans variation pendant toute la séance.\nLa zone 2 développe le moteur aérobie — la base sur laquelle tout le reste repose.\nLa régularité à faible intensité te sépare de ceux qui cherchent l\'effort à chaque séance.',
+        fatigue: 'Zone 2 douce. Réduis l\'allure si la fréquence cardiaque monte.\nLe flux sanguin soutenu accélère la récupération sans aggraver le déficit.\nSavoir préserver l\'effort, c\'est ce qui construit une longévité athlétique réelle.'
       },
       mixed: {
-        normal:  'Séance conditionnement mixte : alterne phases intenses et phases modérées pour développer les deux filières énergétiques. Reste attentif aux transitions.',
-        fatigue: 'Conditionnement mixte à intensité ajustée. Réduis les phases intenses et prolonge les phases modérées — l\'adaptation se fait même à volume réduit.'
+        normal:  'Alterne phases intenses et phases modérées. Reste attentif aux transitions.\nLe conditionnement mixte développe les deux filières — une capacité que les mono-séances ignorent.\nTu construis un athlète complet, pas un spécialiste d\'une seule zone.',
+        fatigue: 'Mixte à volume réduit. Priorité aux phases modérées.\nL\'adaptation persiste même à intensité réduite — ce qui compte, c\'est la continuité.\nChaque séance maintenue sous contrainte renforce autant la tête que le corps.'
       },
       heavy: {
-        normal:  'Force lourde au programme. Concentre-toi sur chaque répétition, respecte tes temps de repos complets et attaque les barres avec précision.',
-        fatigue: 'Charges lourdes mais intensité gérée. Privilégie la technique sur le tonnage et n\'hésite pas à baisser de 10 % pour rester propre sous la barre.'
+        normal:  'Charges lourdes. Temps de repos complets entre chaque série, sans exception.\nLe système nerveux central s\'adapte sous charge maximale — pas dans la zone de confort.\nTu développes la force absolue — la qualité la plus lente à acquérir et la plus durable.',
+        fatigue: 'Force à charge ajustée — retire 10 %, maintiens une technique impeccable.\nLa précision technique sous fatigue est le marqueur du niveau réel.\nL\'athlète fort maintient la maîtrise quand les conditions ne sont pas optimales.'
       },
       explosive: {
-        normal:  'Séance puissance explosive aujourd\'hui. Chaque geste doit être rapide et intentionnel — l\'explosivité se développe dans la qualité, pas la fatigue.',
-        fatigue: 'Puissance au programme, mais fatigue présente. Limite le nombre de séries maximales et priorise la vitesse d\'exécution sur le volume total.'
+        normal:  'Mouvements puissants. Chaque répétition doit être intentionnellement maximale.\nL\'explosivité ne se développe que lorsque l\'intention de vitesse est totale.\nTu entraînes ton système nerveux à recruter plus de fibres en moins de temps.',
+        fatigue: 'Puissance à volume réduit. Stoppe les séries où la vitesse chute.\nRépéter des gestes lents quand l\'objectif est la puissance renforce de mauvais patterns.\nLa qualité du signal nerveux prime sur la quantité — même discipline, exécution préservée.'
       },
       tempo: {
-        normal:  'Travail en tempo avec excentrique lent. Contrôle chaque descente sur 3 à 4 secondes — c\'est sous tension que le muscle se restructure.',
-        fatigue: 'Séance tempo à vitesse réduite. L\'excentrique lent reste ta priorité ; si les sensations sont lourdes, raccourcis les séries mais garde le tempo.'
+        normal:  'Excentrique sur 4 secondes. Concentrique contrôlé. Aucun élan.\nLe temps sous tension déclenche l\'hypertrophie que les mouvements rapides ne provoquent pas.\nTu apprends à contrôler le poids, pas à le lancer — c\'est là que le muscle se construit.',
+        fatigue: 'Tempo ralenti. Excentrique long, charge réduite, séries raccourcies si nécessaire.\nSous fatigue, le tempo préserve l\'intégrité là où l\'exécution balistique devient risquée.\nMaîtriser la descente quand c\'est difficile, c\'est ce qui sépare la précision de la blessure.'
       },
       recovery: {
-        normal:  'Séance de récupération active au programme. Mobilité, étirements doux ou marche légère — l\'objectif est de circuler sans contraindre.',
-        fatigue: 'Ton corps réclame de la douceur. Quelques minutes de mobilité ou de respiration profonde suffisent — ne force rien aujourd\'hui.'
+        normal:  'Mobilité, flux sanguin, mouvement sans contrainte ni charge.\nLa récupération active accélère l\'élimination des déchets métaboliques.\nLe repos structuré fait partie du plan — c\'est une décision d\'athlète, pas une pause.',
+        fatigue: 'Douceur totale. Respiration, étirements légers, marche si motivé.\nTon système nerveux a besoin de décharger avant que le corps puisse reconstruire.\nÉcouter le signal de fatigue et y répondre est la compétence la plus sous-estimée.'
       }
     };
 
     // Volume: different messages depending on session type
     var volumeStr = {
-      normal:  'Séance volume en accumulation. Enchaîne les séries avec rigueur, le tonnage total est ton indicateur de progression — régularité avant intensité.',
-      fatigue: 'Volume du jour à charge allégée. Maintiens la densité des séries sans aller chercher l\'échec — l\'accumulation reste productive même à intensité réduite.'
+      normal:  'Séries d\'accumulation. Tonnage élevé, charge modérée, densité maximale.\nLe volume total hebdomadaire est le principal driver de la progression en force.\nTu poses les fondations — chaque kilo de tonnage est un investissement à long terme.',
+      fatigue: 'Volume allégé. Densité maintenue, charge réduite, évite l\'échec musculaire.\nL\'accumulation productive ne nécessite pas l\'épuisement — elle nécessite la régularité.\nLa constance sous contrainte définit le niveau réel mieux que les bonnes journées.'
     };
     var volumeHyp = {
-      normal:  'Séance hypertrophie en volume. Cherche la congestion musculaire, maintiens les temps sous tension et accumule les répétitions dans la plage 8–15.',
-      fatigue: 'Volume hypertrophie à intensité modérée. Réduis la charge, garde les répétitions élevées et reste à l\'écoute de la brûlure — le pompage reste l\'objectif.'
+      normal:  'Séries dans la plage 10–15. Cherche la congestion, pas l\'épuisement.\nL\'occlusion vasculaire et le stress métabolique sont les mécanismes de l\'hypertrophie en volume.\nTu construis le muscle par accumulation — la base avant toute spécialisation.',
+      fatigue: 'Volume hypertrophie allégé. Garde les répétitions, baisse la charge.\nLe pompage reste accessible même fatigué — c\'est le stimulus qui compte, pas le poids.\nLe muscle répond au volume cumulé — un fait indépendant de ta forme du jour.'
     };
 
     // Primary routing by subtype
