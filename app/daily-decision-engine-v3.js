@@ -157,6 +157,70 @@
     return intensity === 'high' ? 'strength' : 'cardio';
   }
 
+  // ── Session type diversity layer (Module 5b) ───────────────────────────────
+  //
+  // Replaces _selectSessionType when lastSessionTypes history is present.
+  // Prevents monotony: session type alternates intelligently by fatigue level.
+  //
+  // Mapping (when history present):
+  //   rest            → recovery  (always)
+  //   intensity=low   → recovery  (high fatigue — safety, cannot be overridden)
+  //   intensity=mod   → hypertrophy / conditioning  (alternate on prev session)
+  //   intensity=high + momentum>=6 → strength / conditioning  (alternate)
+  //   intensity=high + momentum<6  → goal-based fallback (_selectSessionType)
+  //
+  // Diversity guard: if last 2 sessions identical and candidate would repeat → force alternate.
+  // No history → falls through to _selectSessionType (backward safety).
+  //
+  // @param  {string}       decision
+  // @param  {string}       intensity        'low' | 'moderate' | 'high'
+  // @param  {string}       goal
+  // @param  {number|null}  momentumScore    0–10 or null
+  // @param  {string[]|null} lastSessionTypes last ≤3 session types, oldest first
+  function _selectSessionTypeDiverse(decision, intensity, goal, momentumScore, lastSessionTypes) {
+    if (decision === 'rest') return 'recovery';
+
+    var last = (Array.isArray(lastSessionTypes) && lastSessionTypes.length > 0)
+      ? lastSessionTypes : null;
+
+    // No history → preserve existing logic
+    if (!last) return _selectSessionType(decision, intensity, goal);
+
+    // Fatigue safety: low intensity always recovery, diversity cannot override this
+    if (intensity === 'low') return 'recovery';
+
+    var prev1 = last[last.length - 1];
+    var prev2 = last.length >= 2 ? last[last.length - 2] : null;
+    var candidate;
+
+    if (intensity === 'moderate') {
+      candidate = (prev1 === 'hypertrophy') ? 'conditioning' : 'hypertrophy';
+    } else {
+      // intensity === 'high'
+      var highMomentum = typeof momentumScore === 'number' && momentumScore >= 6;
+      if (highMomentum) {
+        candidate = (prev1 === 'strength') ? 'conditioning' : 'strength';
+      } else {
+        candidate = _selectSessionType(decision, intensity, goal);
+      }
+    }
+
+    // Diversity guard: last 2 identical and candidate would create triple → force alternate
+    if (prev2 !== null && prev1 === prev2 && candidate === prev1) {
+      var altMap = {
+        hypertrophy:  'conditioning',
+        conditioning: (intensity === 'high') ? 'strength' : 'hypertrophy',
+        strength:     'conditioning',
+        hiit:         'conditioning',
+        cardio:       'conditioning',
+        mobility:     'recovery'
+      };
+      candidate = altMap[candidate] || 'conditioning';
+    }
+
+    return candidate;
+  }
+
   function _buildReason(decObj, intensity, sessionType, effectiveFatigue, rawFatigue, daysSince, priorityApplied, progressionTriggered, capReason, inputs) {
     var parts = [];
     var phase = inputs.trainingPhase || 'build';
@@ -208,11 +272,13 @@
     }
 
     var typeLabel = {
-      strength: 'Strength session',
-      cardio:   'Cardio session',
-      hiit:     'HIIT session',
-      mobility: 'Mobility/active recovery session',
-      recovery: 'Rest day'
+      strength:     'Strength session',
+      hypertrophy:  'Hypertrophy session',
+      conditioning: 'Conditioning session',
+      cardio:       'Cardio session',
+      hiit:         'HIIT session',
+      mobility:     'Mobility/active recovery session',
+      recovery:     'Rest day'
     };
     parts.push((typeLabel[sessionType] || sessionType) + ' at ' + intensity + ' intensity');
 
@@ -472,11 +538,13 @@
     var profile     = out.profileType             || 'beginner';
 
     var sessLabel = ({
-      strength: 'musculation',
-      cardio:   'cardio',
-      hiit:     'HIIT',
-      mobility: 'mobilité',
-      recovery: 'récupération'
+      strength:     'musculation',
+      hypertrophy:  'hypertrophie',
+      conditioning: 'conditionnement',
+      cardio:       'cardio',
+      hiit:         'HIIT',
+      mobility:     'mobilité',
+      recovery:     'récupération'
     })[sessionType] || sessionType;
 
     var intLabel = ({
@@ -971,7 +1039,9 @@
 
     // ── Intensity / session type / reason (plafond adaptatif) ─────────────────
     var intensity = (decObj.decision === 'rest') ? 'low' : RANK_INTENSITY[adaptive.maxRank];
-    var sessType  = _selectSessionType(decObj.decision, intensity, inputs.goal);
+    var _lastSessTypes = (inputs.userHistory && Array.isArray(inputs.userHistory.lastSessionTypes))
+      ? inputs.userHistory.lastSessionTypes.slice(-3) : null;
+    var sessType  = _selectSessionTypeDiverse(decObj.decision, intensity, inputs.goal, momentum, _lastSessTypes);
     var reason    = _buildReason(
       decObj, intensity, sessType,
       effective, inputs.fatigueLevel,
@@ -1048,6 +1118,8 @@
     _applyProgressionRules:           _applyProgressionRules,
     _applySafetyRules:                _applySafetyRules,
     _selectSessionType:               _selectSessionType,
+    // V3 Module 5b (diversity layer)
+    _selectSessionTypeDiverse:        _selectSessionTypeDiverse,
     // V3 Module 1
     _validateUserProfile:             _validateUserProfile,
     _normalizeLast7SessionsIntensity: _normalizeLast7SessionsIntensity,
