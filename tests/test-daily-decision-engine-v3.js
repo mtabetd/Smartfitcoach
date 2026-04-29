@@ -20,6 +20,7 @@ var decideV3 = DDEv3.decideDailyPlanV3;
 var _validateUserProfile             = DDEv3._validateUserProfile;
 var _normalizeLast7SessionsIntensity = DDEv3._normalizeLast7SessionsIntensity;
 var _normalizeLastSessionTypeHistory = DDEv3._normalizeLastSessionTypeHistory;
+var _computeMomentumScore            = DDEv3._computeMomentumScore;
 
 // ── Harness ───────────────────────────────────────────────────────────────────
 var passed = 0, failed = 0;
@@ -286,8 +287,10 @@ test('userProfile null explicite → mêmes valeurs par défaut', function () {
   assertEqual(out.profileType, 'beginner');
   assertEqual(out.adaptationReason, null);
 });
-test('avec userProfile valide → momentumScore toujours null (Module 2)', function () {
-  assertEqual(decideV3(baseV3()).momentumScore, null);
+test('avec userProfile valide → momentumScore est un nombre 0–10', function () {
+  var out = decideV3(baseV3());
+  assert(typeof out.momentumScore === 'number', 'expected number, got ' + typeof out.momentumScore);
+  assert(out.momentumScore >= 0 && out.momentumScore <= 10, 'out of range: ' + out.momentumScore);
 });
 test('avec userProfile valide → profileType toujours "beginner" (Module 3)', function () {
   assertEqual(decideV3(baseV3()).profileType, 'beginner');
@@ -403,6 +406,184 @@ test('userProfile valide → profil stocké sans modifier la décision', functio
   var v3 = decideV3(baseV3());
   assertEqual(v2.decision,             v3.decision);
   assertEqual(v2.recommendedIntensity, v3.recommendedIntensity);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('\n── Section 9 : _computeMomentumScore — règles unitaires ─────\n');
+
+test('null → null', function () {
+  assertEqual(_computeMomentumScore(null), null);
+});
+test('undefined → null', function () {
+  assertEqual(_computeMomentumScore(undefined), null);
+});
+test('profil vide {} → baseline 5 (aucun champ, aucun delta)', function () {
+  assertEqual(_computeMomentumScore({}), 5);
+});
+
+// ── Bonifications ────────────────────────────────────────────────────────────
+test('+1 si trainingFrequencyLast7Days >= 3', function () {
+  var with3 = _computeMomentumScore({ trainingFrequencyLast7Days: 3 });
+  var with2 = _computeMomentumScore({ trainingFrequencyLast7Days: 2 });
+  assertEqual(with3, 6);
+  assertEqual(with2, 5);
+});
+test('+1 : boundary exacte freq=3 (pas freq=2)', function () {
+  assertEqual(_computeMomentumScore({ trainingFrequencyLast7Days: 3 }), 6);
+  assertEqual(_computeMomentumScore({ trainingFrequencyLast7Days: 2 }), 5);
+});
+test('+1 si adherenceScore >= 0.8', function () {
+  assertEqual(_computeMomentumScore({ adherenceScore: 0.8 }), 6);
+  assertEqual(_computeMomentumScore({ adherenceScore: 0.79 }), 5);
+});
+test('+1 : boundary exacte adherence=0.8', function () {
+  assertEqual(_computeMomentumScore({ adherenceScore: 0.8  }), 6);
+  assertEqual(_computeMomentumScore({ adherenceScore: 0.799 }), 5);
+});
+test('+1 si last7SessionsIntensity contient au moins un "high"', function () {
+  assertEqual(_computeMomentumScore({ last7SessionsIntensity: ['moderate', 'high', 'low'] }), 6);
+  assertEqual(_computeMomentumScore({ last7SessionsIntensity: ['moderate', 'low'] }), 5);
+});
+test('+1 high : un seul high suffit', function () {
+  assertEqual(_computeMomentumScore({ last7SessionsIntensity: ['low', 'low', 'low', 'low', 'low', 'low', 'high'] }), 6);
+});
+
+// ── Pénalités ────────────────────────────────────────────────────────────────
+test('-1 si adherenceScore < 0.5', function () {
+  assertEqual(_computeMomentumScore({ adherenceScore: 0.49 }), 4);
+  assertEqual(_computeMomentumScore({ adherenceScore: 0.5  }), 5); // boundary: no penalty
+});
+test('-1 si avgFatigueLast7Days >= 4', function () {
+  assertEqual(_computeMomentumScore({ avgFatigueLast7Days: 4   }), 4);
+  assertEqual(_computeMomentumScore({ avgFatigueLast7Days: 3.9 }), 5);
+});
+test('-1 avgFat : boundary exacte 4.0', function () {
+  assertEqual(_computeMomentumScore({ avgFatigueLast7Days: 4.0 }), 4);
+  assertEqual(_computeMomentumScore({ avgFatigueLast7Days: 3.99 }), 5);
+});
+test('-2 si trainingFrequencyLast7Days === 0', function () {
+  assertEqual(_computeMomentumScore({ trainingFrequencyLast7Days: 0 }), 3);
+  assertEqual(_computeMomentumScore({ trainingFrequencyLast7Days: 1 }), 5); // freq=1: no +1, no -2
+});
+test('-2 freq=0 et +1 freq>=3 ne s\'appliquent pas simultanément', function () {
+  // freq=0 → -2 mais pas de +1 (0 < 3) → 5 - 2 = 3
+  assertEqual(_computeMomentumScore({ trainingFrequencyLast7Days: 0 }), 3);
+});
+
+// ── Combinaisons et bornes ────────────────────────────────────────────────────
+test('profil discipliné → score élevé (8)', function () {
+  // freq=5(+1) + adherence=0.9(+1) + has high(+1) → 5+3 = 8
+  var score = _computeMomentumScore({
+    trainingFrequencyLast7Days: 5,
+    adherenceScore:             0.9,
+    last7SessionsIntensity:     ['high', 'moderate', 'high']
+  });
+  assertEqual(score, 8);
+});
+test('profil inconstant → score bas (2)', function () {
+  // freq=0(-2) + adherence=0.3(-1) → 5-3 = 2
+  var score = _computeMomentumScore({
+    trainingFrequencyLast7Days: 0,
+    adherenceScore:             0.3
+  });
+  assertEqual(score, 2);
+});
+test('profil haute fatigue → score réduit (4)', function () {
+  // avgFat=4.5(-1) → 5-1 = 4
+  var score = _computeMomentumScore({
+    avgFatigueLast7Days: 4.5
+  });
+  assertEqual(score, 4);
+});
+test('pire cas possible → score ≥ 0 (jamais négatif)', function () {
+  // freq=0(-2) + adherence=0.1(-1) + avgFat=5(-1) → 5-4 = 1 (min sans high)
+  var score = _computeMomentumScore({
+    trainingFrequencyLast7Days: 0,
+    adherenceScore:             0.1,
+    avgFatigueLast7Days:        5
+  });
+  assert(score >= 0, 'score must be ≥ 0, got: ' + score);
+  assertEqual(score, 1);
+});
+test('meilleur cas possible → score ≤ 10 (jamais au-dessus)', function () {
+  // freq=7(+1) + adherence=1.0(+1) + has high(+1) → 5+3 = 8 (max théorique)
+  var score = _computeMomentumScore({
+    trainingFrequencyLast7Days: 7,
+    adherenceScore:             1.0,
+    last7SessionsIntensity:     ['high', 'high', 'high']
+  });
+  assert(score <= 10, 'score must be ≤ 10, got: ' + score);
+  assertEqual(score, 8);
+});
+test('champs absents ignorés — pas de crash', function () {
+  // adherenceScore absent → pas de +1, pas de -1
+  var score = _computeMomentumScore({ trainingFrequencyLast7Days: 3 });
+  assertEqual(score, 6); // only freq bonus
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('\n── Section 10 : Intégration — momentum dans le moteur ───────\n');
+
+var V2_FIELDS = ['decision','recommendedIntensity','recommendedSessionType',
+                 'fatigueEffective','priorityApplied','progressionTriggered','reason'];
+
+test('sans userProfile → momentumScore null', function () {
+  assertEqual(decideV3(baseV2()).momentumScore, null);
+});
+test('userProfile null explicite → momentumScore null', function () {
+  assertEqual(decideV3(baseV2({ userProfile: null })).momentumScore, null);
+});
+test('avec userProfile valide → momentumScore est un entier 0–10', function () {
+  var score = decideV3(baseV3()).momentumScore;
+  assert(typeof score === 'number' && score === Math.floor(score), 'should be integer');
+  assert(score >= 0 && score <= 10);
+});
+test('momentum ne modifie pas decision', function () {
+  var v2 = decideV2(baseV2());
+  var v3 = decideV3(baseV3()); // same inputs + userProfile
+  assertEqual(v2.decision, v3.decision);
+});
+test('momentum ne modifie pas recommendedIntensity', function () {
+  var v2 = decideV2(baseV2());
+  var v3 = decideV3(baseV3());
+  assertEqual(v2.recommendedIntensity, v3.recommendedIntensity);
+});
+test('momentum ne modifie pas recommendedSessionType', function () {
+  var v2 = decideV2(baseV2());
+  var v3 = decideV3(baseV3());
+  assertEqual(v2.recommendedSessionType, v3.recommendedSessionType);
+});
+test('tous les champs V2 inchangés même avec userProfile (parity check)', function () {
+  var v2 = decideV2(baseV2());
+  var v3 = decideV3(baseV3());
+  V2_FIELDS.forEach(function (f) {
+    if (v2[f] !== v3[f]) throw new Error(f + ': V2=' + JSON.stringify(v2[f]) + ' V3=' + JSON.stringify(v3[f]));
+  });
+});
+test('profil discipliné → momentum 8', function () {
+  var out = decideV3(baseV2({
+    userProfile: {
+      trainingFrequencyLast7Days: 5,
+      adherenceScore:             0.9,
+      last7SessionsIntensity:     ['high', 'moderate', 'high']
+    }
+  }));
+  assertEqual(out.momentumScore, 8);
+});
+test('profil inconstant → momentum 2', function () {
+  var out = decideV3(baseV2({
+    userProfile: {
+      trainingFrequencyLast7Days: 0,
+      adherenceScore:             0.3
+    }
+  }));
+  assertEqual(out.momentumScore, 2);
+});
+test('haute fatigue → momentum 4', function () {
+  var out = decideV3(baseV2({
+    userProfile: { avgFatigueLast7Days: 4.5 }
+  }));
+  assertEqual(out.momentumScore, 4);
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

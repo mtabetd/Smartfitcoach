@@ -221,6 +221,7 @@
 
   // ═══════════════════════════════════════════════════════════════════════════
   // V3 MODULE 1 — userProfile : validation + normalisation
+  // V3 MODULE 2 — momentumScore
   // ═══════════════════════════════════════════════════════════════════════════
 
   // ── Normalisation de last7SessionsIntensity ───────────────────────────────
@@ -235,6 +236,46 @@
   function _normalizeLastSessionTypeHistory(val) {
     if (!Array.isArray(val)) return [];
     return val.slice(0, 7);
+  }
+
+  // ── Module 2 : Momentum Score (0–10) ────────────────────────────────────────
+  //
+  // Mesure la dynamique d'entraînement à partir de l'historique des 7 derniers jours.
+  // Retourne null si aucun profil utilisateur n'est fourni.
+  //
+  // Règles (baseline = 5) :
+  //   +1  trainingFrequencyLast7Days ≥ 3
+  //   +1  adherenceScore ≥ 0.8
+  //   +1  last7SessionsIntensity contient au moins un 'high'
+  //   −1  adherenceScore < 0.5
+  //   −1  avgFatigueLast7Days ≥ 4
+  //   −2  trainingFrequencyLast7Days === 0
+  //   Résultat clampé entre 0 et 10.
+  //
+  // Les champs manquants dans userProfile sont ignorés (pas de crash).
+  function _computeMomentumScore(userProfile) {
+    if (!userProfile) return null;
+
+    var score = 5;
+
+    var freq7     = typeof userProfile.trainingFrequencyLast7Days === 'number'
+      ? userProfile.trainingFrequencyLast7Days : null;
+    var adherence = typeof userProfile.adherenceScore === 'number'
+      ? userProfile.adherenceScore : null;
+    var avgFat    = typeof userProfile.avgFatigueLast7Days === 'number'
+      ? userProfile.avgFatigueLast7Days : null;
+    var last7     = Array.isArray(userProfile.last7SessionsIntensity)
+      ? userProfile.last7SessionsIntensity : [];
+
+    if (freq7 !== null && freq7 >= 3)       score += 1;
+    if (adherence !== null && adherence >= 0.8) score += 1;
+    if (last7.indexOf('high') !== -1)       score += 1;
+
+    if (adherence !== null && adherence < 0.5)  score -= 1;
+    if (avgFat    !== null && avgFat >= 4)       score -= 1;
+    if (freq7     !== null && freq7 === 0)       score -= 2;
+
+    return Math.max(0, Math.min(10, score));
   }
 
   // ── Validation du profil utilisateur ────────────────────────────────────────
@@ -351,9 +392,9 @@
    * @param {Array}   [inputs.userProfile.lastSessionTypeHistory]      optionnel
    *
    * Champs V3 ajoutés en sortie :
-   *   momentumScore    {null}     (Module 2)
-   *   profileType      {'beginner'} (Module 3)
-   *   adaptationReason {null}     (Module 4)
+   *   momentumScore    {number|null}  0–10 (null si pas de userProfile)
+   *   profileType      {'beginner'}   (Module 3)
+   *   adaptationReason {null}         (Module 4)
    */
   function decideDailyPlanV3(inputs) {
     _validate(inputs);
@@ -387,9 +428,10 @@
       ceiling.capReason, inputs
     );
 
+    // ── Module 2 : momentumScore ──────────────────────────────────────────────
+    var momentum = _computeMomentumScore(inputs.userProfile || null);
+
     // ── Sortie V3 ─────────────────────────────────────────────────────────────
-    // Les 7 champs V2 sont strictement identiques.
-    // Les 3 champs V3 sont des stubs (Modules 2–4 les remplaceront).
     return {
       // ── V2 fields (inchangés) ──────────────────────────────────────────────
       decision:               decObj.decision,
@@ -399,10 +441,10 @@
       priorityApplied:        priorityApplied,
       progressionTriggered:   progression.triggered,
       reason:                 reason,
-      // ── V3 stubs (Module 1) ────────────────────────────────────────────────
-      momentumScore:          null,     // Module 2
-      profileType:            'beginner', // Module 3
-      adaptationReason:       null,     // Module 4
+      // ── V3 fields ─────────────────────────────────────────────────────────
+      momentumScore:          momentum,           // Module 2 ✓
+      profileType:            'beginner',         // Module 3 (stub)
+      adaptationReason:       null,               // Module 4 (stub)
       _debug: {
         rawFatigue:          inputs.fatigueLevel,
         effectiveFatigue:    effective,
@@ -430,7 +472,9 @@
     // V3 Module 1
     _validateUserProfile:             _validateUserProfile,
     _normalizeLast7SessionsIntensity: _normalizeLast7SessionsIntensity,
-    _normalizeLastSessionTypeHistory: _normalizeLastSessionTypeHistory
+    _normalizeLastSessionTypeHistory: _normalizeLastSessionTypeHistory,
+    // V3 Module 2
+    _computeMomentumScore:            _computeMomentumScore
   };
 
   if (typeof module !== 'undefined' && module.exports) {
