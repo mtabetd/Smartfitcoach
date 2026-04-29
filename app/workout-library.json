@@ -29,10 +29,15 @@
           "equipment": [
             "bodyweight"
           ],
-          "scaling": "Step jacks instead of jumping, knee push-ups, reduce squat depth",
+          "scaling": {
+            "easier": "Step jacks instead of jumping jacks; knee push-ups; reduce squat depth",
+            "harder": "Add 3rd station; reduce rest between stations to 30s"
+          },
           "coaching_cue": "Push the 20s — the 10s is yours, not a head start on the next round.",
           "format": "Tabata — 20s work / 10s rest × 8 rounds per station",
-          "duration": 22
+          "duration": 20,
+          "subtype": "hiit",
+          "level": "beginner"
         },
         {
           "id": "hiit-b-02",
@@ -53,16 +58,21 @@
             "rounds": 8
           },
           "equipment": [
-            "none — outdoor or treadmill"
+            "none"
           ],
-          "scaling": "Replace sprint with brisk walk, reduce rounds to 5",
+          "scaling": {
+            "easier": "Replace sprint with brisk walk; reduce to 5 rounds",
+            "harder": "45s sprint / 75s walk; add 2 rounds"
+          },
           "coaching_cue": "Sprint pace should be uncomfortable, not unsustainable — find the edge and hold it.",
           "format": "8 rounds of sprint / walk",
-          "duration": 16
+          "duration": 16,
+          "subtype": "hiit",
+          "level": "beginner"
         },
         {
           "id": "hiit-b-03",
-          "title": "The 12",
+          "title": "EMOM The 12 — Air Squat + Burpee",
           "structure": {
             "blocks": [
               {
@@ -96,14 +106,19 @@
           "equipment": [
             "bodyweight"
           ],
-          "scaling": "8 squats + 2 burpees, knee push-ups, reduce sit-up to crunch",
+          "scaling": {
+            "easier": "8 squats + 2 burpees; knee push-ups; reduce sit-up to crunch",
+            "harder": "Add 2 reps per exercise per round (progressive EMOM)"
+          },
           "coaching_cue": "Finish each minute with at least 10 seconds spare — if you can't, reduce the reps now.",
           "format": "EMOM 12",
-          "duration": 12
+          "duration": 12,
+          "subtype": "hiit",
+          "level": "beginner"
         },
         {
           "id": "hiit-b-04",
-          "title": "Step Up",
+          "title": "Step-Up Interval Pairs",
           "structure": {
             "blocks": [
               {
@@ -123,10 +138,15 @@
           "equipment": [
             "bodyweight"
           ],
-          "scaling": "Air squat instead of jump squat, march in place instead of high knees",
+          "scaling": {
+            "easier": "Air squat instead of jump squat; march in place instead of high knees",
+            "harder": "Add third block: lateral hop 20s / 10s rest"
+          },
           "coaching_cue": "Land every jump squat softly — flat-foot landings send the impact straight to your knees.",
           "format": "6 rounds of paired intervals",
-          "duration": 16
+          "duration": 16,
+          "subtype": "hiit",
+          "level": "beginner"
         },
         {
           "id": "hiit-b-05",
@@ -152,10 +172,15 @@
           "equipment": [
             "bodyweight"
           ],
-          "scaling": "Step burpee, air squat instead of squat jump, cap at rung 3 if needed",
+          "scaling": {
+            "easier": "Step burpee; air squat instead of squat jump; cap at rung 3",
+            "harder": "Add a 6th rung (12 reps); reduce rest to 60s"
+          },
           "coaching_cue": "Breathe at the top of every burpee — it costs one second and saves the entire set.",
           "format": "Ascending rep ladder, for time",
-          "duration": 22
+          "duration": 22,
+          "subtype": "hiit",
+          "level": "beginner"
         },
         {
           "id": "hiit-b-06",
@@ -181,10 +206,15 @@
           "equipment": [
             "box or sturdy chair"
           ],
-          "scaling": "Knee push-up, reduce step height, plank instead of hollow body",
+          "scaling": {
+            "easier": "Knee push-up; reduce step height; plank instead of hollow body",
+            "harder": "Increase to 5 rounds; reduce station rest to 15s"
+          },
           "coaching_cue": "Every station is a clean start — reset your breathing between stations, not mid-exercise.",
           "format": "4 stations × 35s work / 25s rest × 4 rounds",
-          "duration": 26
+          "duration": 26,
+          "subtype": "hiit",
+          "level": "beginner"
         },
         {
           "id": "hiit-b-07",
@@ -204,15 +234,20 @@
                 "reps": 10
               }
             ],
-            "goal": "Match or beat AMRAP 10 round count in AMRAP 5"
+            "note": "Match or beat AMRAP 10 round count in AMRAP 5"
           },
           "equipment": [
             "bodyweight"
           ],
-          "scaling": "Step jacks, knee push-ups, squat pulse instead of hop",
+          "scaling": {
+            "easier": "Step jacks; knee push-ups; squat pulse instead of hop",
+            "harder": "Reduce AMRAP 10 rest to 3 min; target +2 rounds in AMRAP 5"
+          },
           "coaching_cue": "Track your round count in AMRAP 10 — the AMRAP 5 score tells you how well you paced.",
           "format": "AMRAP 10, rest 5 min, AMRAP 5",
-          "duration": 20
+          "duration": 20,
+          "subtype": "hiit",
+          "level": "beginner"
         },
         {
           "id": "hiit-b-08",
@@ -238,12 +273,17 @@
             "rounds": 5
           },
           "equipment": [
-            "none — outdoor, treadmill, or open space"
+            "none"
           ],
-          "scaling": "7/10 = brisk walk, 9/10 = fastest walk possible, reduce to 4 rounds",
+          "scaling": {
+            "easier": "7/10 = brisk walk; 9/10 = fastest walk possible; reduce to 4 rounds",
+            "harder": "6 rounds; extend hard phase to 90s"
+          },
           "coaching_cue": "9/10 effort is the fastest you can sustain for 60 seconds — not a 5-second sprint.",
           "format": "5 rounds with ascending effort",
-          "duration": 15
+          "duration": 15,
+          "subtype": "hiit",
+          "level": "beginner"
         },
         {
           "id": "hiit-b-09",
@@ -271,10 +311,15 @@
             "bodyweight",
             "sturdy chair"
           ],
-          "scaling": "Knee push-up, bench dip, static lunge",
+          "scaling": {
+            "easier": "Knee push-up; bench dip; static lunge",
+            "harder": "Add pair C: DB thruster + sit-up"
+          },
           "coaching_cue": "In Tabata, consistent reps across all 8 rounds beats blowing up in round 1 — start at 70%.",
           "format": "Tabata pairs — 20s on / 10s off × 8 rounds per pair",
-          "duration": 10
+          "duration": 10,
+          "subtype": "hiit",
+          "level": "beginner"
         },
         {
           "id": "hiit-b-10",
@@ -300,10 +345,15 @@
           "equipment": [
             "bodyweight"
           ],
-          "scaling": "Start at 12-9-6-4-2, knee push-ups",
+          "scaling": {
+            "easier": "Start at 12-9-6-4-2; knee push-ups",
+            "harder": "Add tuck jumps to the squat; no rest at all"
+          },
           "coaching_cue": "Breathe between movements, not mid-rep — broken rhythm costs more time than a 10-second breath.",
           "format": "Descending rep ladder, for time",
-          "duration": 18
+          "duration": 18,
+          "subtype": "hiit",
+          "level": "beginner"
         }
       ],
       "intermediate": [
@@ -333,9 +383,14 @@
             "box",
             "assault bike"
           ],
-          "scaling": "Lighter KB, step-up box, rower or ski erg instead of bike",
+          "scaling": {
+            "easier": "Lighter KB (16/12 kg); step-up instead of box jump; rower or ski erg",
+            "harder": "Heavier KB (28/24 kg); 30-inch box; reduce rest to 90s"
+          },
           "coaching_cue": "KB swing: hips snap, arms follow — pulling with your arms kills the power before it starts.",
-          "duration": 22
+          "duration": 16,
+          "subtype": "hiit",
+          "level": "intermediate"
         },
         {
           "id": "hiit-i-02",
@@ -374,14 +429,19 @@
             "box",
             "rower"
           ],
-          "scaling": "Lighter loads, step-ups, DB push press",
+          "scaling": {
+            "easier": "Lighter loads (20/15 kg); step-ups; DB push press",
+            "harder": "Increase to 4 rounds; chase a score above 300 reps"
+          },
           "coaching_cue": "Rotate stations with zero dead time — the 1-min rest is the only full stop you get.",
-          "duration": 23
+          "duration": 23,
+          "subtype": "hiit",
+          "level": "intermediate"
         },
         {
           "id": "hiit-i-03",
           "title": "KB Gauntlet",
-          "format": "6 rounds × 4 stations × 40s work / 20s rest",
+          "format": "5 rounds × 4 stations × 40s work / 20s rest",
           "structure": {
             "stations": [
               {
@@ -401,11 +461,16 @@
             "rest_between_rounds": "90s"
           },
           "equipment": [
-            "1 kettlebell (24 or 20 kg)"
+            "1 kettlebell"
           ],
-          "scaling": "Lighter KB, two-hand clean, step hop",
+          "scaling": {
+            "easier": "Lighter KB (20/16 kg); two-hand clean; step hop over KB",
+            "harder": "Heavier KB (28/24 kg); increase rounds to 6"
+          },
           "coaching_cue": "Goblet squat: elbows inside knees, chest tall — the KB will pull you forward if your brace fails.",
-          "duration": 26
+          "duration": 26,
+          "subtype": "hiit",
+          "level": "intermediate"
         },
         {
           "id": "hiit-i-04",
@@ -445,9 +510,14 @@
           "equipment": [
             "assault bike or echo bike"
           ],
-          "scaling": "Rower, reduce top-end effort to 85%",
+          "scaling": {
+            "easier": "Rower substitute; reduce top-end effort to 85%; 2 rounds",
+            "harder": "Full 4 rounds; hold same watt target across all intervals"
+          },
           "coaching_cue": "The first 3 seconds of each max effort establish your power — don't ramp, explode from zero.",
-          "duration": 21
+          "duration": 21,
+          "subtype": "hiit",
+          "level": "intermediate"
         },
         {
           "id": "hiit-i-05",
@@ -468,11 +538,16 @@
           },
           "equipment": [
             "rower",
-            "box (50 cm)"
+            "box"
           ],
-          "scaling": "10 cal row, step-overs instead of jump-overs",
+          "scaling": {
+            "easier": "10 cal row; step-overs instead of jump-overs; 18-min EMOM",
+            "harder": "18 cal row; 15 burpee box jump-overs; hold 8-10s rest throughout"
+          },
           "coaching_cue": "You should finish each minute with 8–10s spare — if you don't, drop the target by 2 immediately.",
-          "duration": 20
+          "duration": 20,
+          "subtype": "hiit",
+          "level": "intermediate"
         },
         {
           "id": "hiit-i-06",
@@ -496,13 +571,18 @@
           "equipment": [
             "treadmill, rower, or assault bike"
           ],
-          "scaling": "3 min at 7/10 RPE / 3 min easy, 4 rounds",
+          "scaling": {
+            "easier": "3 min at 7/10 RPE / 3 min easy; 4 rounds",
+            "harder": "6 rounds; target the same split/pace each 4-min block"
+          },
           "coaching_cue": "8/10 effort means you can say one word but not a sentence — find that line and live there for 4 minutes.",
-          "duration": 30
+          "duration": 30,
+          "subtype": "hiit",
+          "level": "intermediate"
         },
         {
           "id": "hiit-i-07",
-          "title": "KB Total",
+          "title": "KB Clean-Press-Swing Total",
           "format": "5 rounds for quality",
           "structure": {
             "exercises": [
@@ -523,11 +603,16 @@
             "rest_between_rounds": "90s"
           },
           "equipment": [
-            "1–2 kettlebells (20–24 kg)"
+            "1–2 kettlebells"
           ],
-          "scaling": "Lighter KB, two-hand swing, separate clean and press",
+          "scaling": {
+            "easier": "Lighter KB (16/12 kg); two-hand swing; separate clean and press",
+            "harder": "Increase rounds to 6; add Turkish get-up 2 per side each round"
+          },
           "coaching_cue": "Clean-and-press: the press is strict — zero leg drive. If you push-press it, the clean weight is too heavy.",
-          "duration": 25
+          "duration": 25,
+          "subtype": "hiit",
+          "level": "intermediate"
         },
         {
           "id": "hiit-i-08",
@@ -555,13 +640,18 @@
           "equipment": [
             "rower"
           ],
-          "scaling": "45s rest per round, step burpees",
+          "scaling": {
+            "easier": "45s rest per round; step burpees; reduce to 7 rounds",
+            "harder": "12 rounds; hold row output above 350W each interval"
+          },
           "coaching_cue": "Row: legs drive first, arms follow — pulling with your back before your legs extend loses 20% of every stroke.",
-          "duration": 15
+          "duration": 15,
+          "subtype": "hiit",
+          "level": "intermediate"
         },
         {
           "id": "hiit-i-09",
-          "title": "20-20-20",
+          "title": "20-20-20 Sprint Complex",
           "format": "4 rounds of 3-movement sprint complex with full rest",
           "structure": {
             "blocks": [
@@ -585,11 +675,16 @@
           },
           "equipment": [
             "assault bike",
-            "box (50 cm)"
+            "box"
           ],
-          "scaling": "Rower instead of bike, step-overs, reduce to 3 rounds",
+          "scaling": {
+            "easier": "Rower instead of bike; step-overs; reduce to 3 rounds",
+            "harder": "5 rounds; target minimum 10 box jump-overs per 20s"
+          },
           "coaching_cue": "The 20s rest is not passive — controlled breathing only. Flopping on the floor costs the next round.",
-          "duration": 15
+          "duration": 15,
+          "subtype": "hiit",
+          "level": "intermediate"
         },
         {
           "id": "hiit-i-10",
@@ -627,9 +722,14 @@
             "pull-up bar",
             "outdoor space or treadmill"
           ],
-          "scaling": "Banded pull-ups or ring rows, halve run distances",
+          "scaling": {
+            "easier": "30-rep chipper: 200m run / 20 pull-ups / 15 push press / 10 deadlifts",
+            "harder": "Scale up load 10%; target under 18 min"
+          },
           "coaching_cue": "Break pull-ups into small sets from rep one — 5s of rest between sets costs nothing; sets of 1 after failure costs everything.",
-          "duration": 25
+          "duration": 25,
+          "subtype": "hiit",
+          "level": "intermediate"
         }
       ]
     },
@@ -637,7 +737,7 @@
       "beginner": [
         {
           "id": "z2-b-01",
-          "title": "First 25",
+          "title": "First Zone 2 Run — 25 Min",
           "format": "Continuous steady-state run or jog",
           "structure": {
             "duration": "25 min",
@@ -646,11 +746,16 @@
             "rule": "Maintain a pace where you can speak in full sentences without pausing to breathe"
           },
           "equipment": [
-            "none — outdoor or treadmill"
+            "none"
           ],
-          "scaling": "Walk the full 25 min; introduce 30s jogs every 3 min once breathing stays easy",
+          "scaling": {
+            "easier": "Walk the full 25 min; introduce 30s jogs every 3 min once breathing stays easy",
+            "harder": "Extend to 35 min at same Zone 2 effort; add 5 min per week"
+          },
           "coaching_cue": "If you have to open your mouth to breathe, you are already out of zone 2 — slow down.",
-          "duration": 25
+          "duration": 25,
+          "subtype": "zone2",
+          "level": "beginner"
         },
         {
           "id": "z2-b-02",
@@ -680,13 +785,18 @@
           "equipment": [
             "stationary bike or spin bike"
           ],
-          "scaling": "Reduce to 15-min zone 2 block; extend by 5 min per session over 4 weeks",
+          "scaling": {
+            "easier": "Reduce to 15-min Zone 2 block; extend by 5 min per session over 4 weeks",
+            "harder": "Extend to 45 min; add light hill walking to elevate Zone 2 challenge"
+          },
           "coaching_cue": "Cadence over resistance — spinning at 85 RPM is aerobic work; grinding at 60 RPM is not.",
-          "duration": 30
+          "duration": 30,
+          "subtype": "zone2",
+          "level": "beginner"
         },
         {
           "id": "z2-b-03",
-          "title": "Easy Row",
+          "title": "Easy Row Session",
           "format": "Continuous steady-state rowing erg",
           "structure": {
             "duration": "20 min",
@@ -700,9 +810,14 @@
           "equipment": [
             "rowing ergometer"
           ],
-          "scaling": "15 min with a 30s standing rest every 5 min; progress to continuous over 2 weeks",
+          "scaling": {
+            "easier": "15 min with a 30s standing rest every 5 min; progress to continuous over 2 weeks",
+            "harder": "Increase to 35 min steady; focus on holding heart rate in lower half of Zone 2"
+          },
           "coaching_cue": "At zone 2 pace, your catch angle and finish position should be clean every stroke — if they're not, you've gone too fast.",
-          "duration": 20
+          "duration": 20,
+          "subtype": "zone2",
+          "level": "beginner"
         },
         {
           "id": "z2-b-04",
@@ -729,11 +844,16 @@
             "rule": "Jog pace must allow nasal breathing throughout — mouth breathing = too fast"
           },
           "equipment": [
-            "none — outdoor or treadmill"
+            "none"
           ],
-          "scaling": "Replace jog with brisk walk and walk with slow walk; same time structure",
+          "scaling": {
+            "easier": "Cycle at easy pace (flat ground); reduce to 20 min",
+            "harder": "Extend to 50 min; add 3 × 5-min moderate climbs within ride"
+          },
           "coaching_cue": "Each jog interval ends before you are breathing hard — that restraint is exactly what builds your aerobic base.",
-          "duration": 24
+          "duration": 24,
+          "subtype": "zone2",
+          "level": "beginner"
         },
         {
           "id": "z2-b-05",
@@ -748,9 +868,14 @@
           "equipment": [
             "treadmill"
           ],
-          "scaling": "4% incline for 20 min; increase incline by 1% per session",
+          "scaling": {
+            "easier": "Reduce to 3 blocks; skip the final brisk block",
+            "harder": "5 blocks; extend each zone 2 segment to 8 min"
+          },
           "coaching_cue": "Hold the handrails only for balance, not for support — offloading your bodyweight removes the aerobic stimulus entirely.",
-          "duration": 30
+          "duration": 30,
+          "subtype": "zone2",
+          "level": "beginner"
         },
         {
           "id": "z2-b-06",
@@ -762,11 +887,16 @@
             "expected_pace": "likely 30–90s per km slower than normal easy pace"
           },
           "equipment": [
-            "none — outdoor or treadmill"
+            "none"
           ],
-          "scaling": "Walk with nasal breathing if pace drops to near-walk — the constraint is the session, not the speed",
+          "scaling": {
+            "easier": "10-min swim; rest every 2 laps; kick board for leg laps",
+            "harder": "35-min swim; alternate freestyle and backstroke every 50m"
+          },
           "coaching_cue": "This will feel embarrassingly slow the first time — that gap between your current pace and your aerobic capacity is exactly what you're here to close.",
-          "duration": 25
+          "duration": 25,
+          "subtype": "zone2",
+          "level": "beginner"
         },
         {
           "id": "z2-b-07",
@@ -795,9 +925,14 @@
           "equipment": [
             "none, stationary bike, or rowing ergometer"
           ],
-          "scaling": "Shorten each phase to 7 min (21 min total); reduce Phase 3 RPE to 4/10",
+          "scaling": {
+            "easier": "Use flat trail; reduce to 25 min; pause every 10 min",
+            "harder": "Increase to 50 min; include 2 moderate hill segments"
+          },
           "coaching_cue": "Phase 3 at 5/10 RPE should still allow full sentences — if you're cutting words, dial it back.",
-          "duration": 30
+          "duration": 30,
+          "subtype": "zone2",
+          "level": "beginner"
         },
         {
           "id": "z2-b-08",
@@ -821,9 +956,14 @@
             "rowing ergometer",
             "treadmill or indoor walking space"
           ],
-          "scaling": "3 rounds (30 min total); reduce row to 3 min if stroke mechanics break down",
+          "scaling": {
+            "easier": "Reduce run-walk ratio to 1:2 (1 min jog / 2 min walk)",
+            "harder": "Extend total time to 40 min; progress toward continuous run"
+          },
           "coaching_cue": "The walk after rowing lets your HR settle while staying aerobically active — don't sit down between blocks.",
-          "duration": 40
+          "duration": 40,
+          "subtype": "zone2",
+          "level": "beginner"
         },
         {
           "id": "z2-b-09",
@@ -847,9 +987,14 @@
           "equipment": [
             "stationary bike"
           ],
-          "scaling": "20 min total, single check-point at 10 min",
+          "scaling": {
+            "easier": "Reduce to 25 min; skip the tempo block",
+            "harder": "Extend Zone 2 to 30 min; increase tempo block to 10 min"
+          },
           "coaching_cue": "Talking aloud to yourself is not optional here — it's the only accurate zone 2 gauge you have without a heart rate monitor.",
-          "duration": 30
+          "duration": 30,
+          "subtype": "zone2",
+          "level": "beginner"
         },
         {
           "id": "z2-b-10",
@@ -866,11 +1011,16 @@
             "hr_target": "60–70% max HR"
           },
           "equipment": [
-            "none — outdoor or treadmill"
+            "none"
           ],
-          "scaling": "30 min flat walk; add incline or time as fitness builds",
+          "scaling": {
+            "easier": "3 stations only; reduce to 8 min per station",
+            "harder": "5 stations; 15 min each; choose 5 different cardio modalities"
+          },
           "coaching_cue": "A power walk at 6 km/h with full arm drive is a legitimate aerobic training session — do not underestimate it.",
-          "duration": 40
+          "duration": 40,
+          "subtype": "zone2",
+          "level": "beginner"
         }
       ],
       "intermediate": [
@@ -889,9 +1039,14 @@
             "HR monitor",
             "outdoor or treadmill"
           ],
-          "scaling": "35 min, reduce HR ceiling to 68%",
+          "scaling": {
+            "easier": "Reduce to 45 min; drop MAF heart rate by 5 bpm",
+            "harder": "70-min MAF run; log pace every 10 min to track aerobic development"
+          },
           "coaching_cue": "The walk breaks are the training — you are teaching your body to stay aerobic, not to survive anaerobically.",
-          "duration": 45
+          "duration": 45,
+          "subtype": "zone2",
+          "level": "intermediate"
         },
         {
           "id": "z2-i-02",
@@ -929,9 +1084,14 @@
           "equipment": [
             "stationary bike with cadence display"
           ],
-          "scaling": "45 min total, 3 blocks of 15 min at 80/85/80 RPM",
+          "scaling": {
+            "easier": "Reduce ride to 60 min; lower watt target by 10%",
+            "harder": "100-min ride; include 3 × 10-min aerobic intervals at Zone 2 ceiling"
+          },
           "coaching_cue": "Higher cadence at the same HR means your aerobic system is running more efficiently — that is the adaptation you are chasing.",
-          "duration": 60
+          "duration": 60,
+          "subtype": "zone2",
+          "level": "intermediate"
         },
         {
           "id": "z2-i-03",
@@ -947,9 +1107,14 @@
           "equipment": [
             "rowing ergometer"
           ],
-          "scaling": "30 min, stroke rate 18–22 spm, slower split",
+          "scaling": {
+            "easier": "4 × 15 min; 3 min active rest",
+            "harder": "6 × 15 min; reduce rest to 90s; record HR at end of each block"
+          },
           "coaching_cue": "A split you can hold means you finish feeling like you could do 10 more minutes — if you feel relieved at the end, you went too hard.",
-          "duration": 40
+          "duration": 40,
+          "subtype": "zone2",
+          "level": "intermediate"
         },
         {
           "id": "z2-i-04",
@@ -970,9 +1135,14 @@
           "equipment": [
             "outdoor or treadmill"
           ],
-          "scaling": "40 min total — 20 min conservative / 20 min at ceiling",
+          "scaling": {
+            "easier": "2 rounds only; walk recovery between rounds",
+            "harder": "4 rounds; reduce walk recovery to 3 min"
+          },
           "coaching_cue": "Most athletes run their easy runs positive-split without realising — this session corrects that pattern permanently.",
-          "duration": 50
+          "duration": 50,
+          "subtype": "zone2",
+          "level": "intermediate"
         },
         {
           "id": "z2-i-05",
@@ -1005,13 +1175,18 @@
             "rowing ergometer",
             "stationary bike"
           ],
-          "scaling": "15 min row + 15 min bike + 5 min walk (35 min total)",
+          "scaling": {
+            "easier": "Reduce to 40 min total; slow all segments by 15 sec/km",
+            "harder": "70-min total; tighten threshold segment pacing by 5 sec/km"
+          },
           "coaching_cue": "Switching modality mid-session taxes your aerobic system in a different pattern — the brief HR spike is not a failure of pacing.",
-          "duration": 50
+          "duration": 50,
+          "subtype": "zone2",
+          "level": "intermediate"
         },
         {
           "id": "z2-i-06",
-          "title": "MAF Run",
+          "title": "MAF Heart Rate Long Run",
           "format": "Continuous run at MAF heart rate ceiling (180 − age)",
           "structure": {
             "duration": "45 min",
@@ -1024,9 +1199,14 @@
             "HR monitor",
             "outdoor or treadmill"
           ],
-          "scaling": "30 min, same HR ceiling protocol",
+          "scaling": {
+            "easier": "Drop MAF target by 10 bpm; run/walk intervals",
+            "harder": "90-min MAF run; log each 10-min split for pace drift analysis"
+          },
           "coaching_cue": "The MAF method works only if you respect the ceiling every single session — one anaerobic breach resets the signal.",
-          "duration": 45
+          "duration": 45,
+          "subtype": "zone2",
+          "level": "intermediate"
         },
         {
           "id": "z2-i-07",
@@ -1070,9 +1250,14 @@
           "equipment": [
             "treadmill with incline"
           ],
-          "scaling": "Cap at 4% incline, reduce block duration to 8 min each",
+          "scaling": {
+            "easier": "60-min ride; reduce ladder top to 90 min effort",
+            "harder": "Full 90-min ride; hold power within 5% throughout"
+          },
           "coaching_cue": "Uphill zone 2 builds more aerobic strength per minute than flat zone 2 — the slower pace is the point, not the problem.",
-          "duration": 40
+          "duration": 40,
+          "subtype": "zone2",
+          "level": "intermediate"
         },
         {
           "id": "z2-i-08",
@@ -1089,9 +1274,14 @@
             "HR monitor",
             "any cardio equipment or outdoor"
           ],
-          "scaling": "45 min, same HR band",
+          "scaling": {
+            "easier": "3 modalities; reduce each to 15 min",
+            "harder": "5 modalities; increase to 20 min each (100-min session)"
+          },
           "coaching_cue": "60 minutes at a consistent HR is not a test of willpower — it is the minimum duration for a cardiac output adaptation to occur.",
-          "duration": 60
+          "duration": 60,
+          "subtype": "zone2",
+          "level": "intermediate"
         },
         {
           "id": "z2-i-09",
@@ -1110,9 +1300,14 @@
           "equipment": [
             "stationary bike or outdoor bike"
           ],
-          "scaling": "2 surges only, 8-min recovery between, reduce surge to RPE 5.5/10",
+          "scaling": {
+            "easier": "Reduce base to 20 min; 1 surge block only",
+            "harder": "45-min base + 4 surge blocks; target 10-bpm surge above Zone 2 ceiling"
+          },
           "coaching_cue": "The quality of this session is measured by how fast your HR returns to zone 2 after each surge — track that number across weeks.",
-          "duration": 55
+          "duration": 55,
+          "subtype": "zone2",
+          "level": "intermediate"
         },
         {
           "id": "z2-i-10",
@@ -1128,9 +1323,14 @@
           "equipment": [
             "none or any cardio equipment"
           ],
-          "scaling": "45 min, HR ceiling 63% max",
+          "scaling": {
+            "easier": "40-min endurance brick; skip strength finisher",
+            "harder": "60-min bike + 20-min run + 3 × 8 heavy compound strength finisher"
+          },
           "coaching_cue": "Fasted zone 2 trains your body to oxidise fat at low intensities — the adaptation is metabolic, not cardiovascular, and it takes 6–8 weeks to appear.",
-          "duration": 60
+          "duration": 60,
+          "subtype": "zone2",
+          "level": "intermediate"
         }
       ]
     },
@@ -1185,7 +1385,9 @@
             "easier": "Step instead of jog; all reps reduced by 2",
             "harder": "Add 2 reps per set; reduce rest to 90s"
           },
-          "coaching_cue": "Keep moving between exercises; rest only after the full block."
+          "coaching_cue": "Keep moving between exercises; rest only after the full block.",
+          "subtype": "mixed",
+          "level": "beginner"
         },
         {
           "id": "mix-b-02",
@@ -1228,7 +1430,9 @@
             "easier": "2 rounds; reduce to 6 reps each",
             "harder": "5 rounds; increase DB weight"
           },
-          "coaching_cue": "Walk at a pace where talking is slightly effortful — Zone 2 effort."
+          "coaching_cue": "Walk at a pace where talking is slightly effortful — Zone 2 effort.",
+          "subtype": "mixed",
+          "level": "beginner"
         },
         {
           "id": "mix-b-03",
@@ -1270,7 +1474,9 @@
             "easier": "Remove jump; replace with step-out jacks",
             "harder": "Add weighted vest; 4 rounds"
           },
-          "coaching_cue": "Explode up on the step; control the descent."
+          "coaching_cue": "Explode up on the step; control the descent.",
+          "subtype": "mixed",
+          "level": "beginner"
         },
         {
           "id": "mix-b-04",
@@ -1310,7 +1516,9 @@
             "easier": "3 rounds; 2 min row",
             "harder": "Increase row pace to 24 spm; heavier band"
           },
-          "coaching_cue": "Drive through the legs first, then lean back and pull — sequence matters."
+          "coaching_cue": "Drive through the legs first, then lean back and pull — sequence matters.",
+          "subtype": "mixed",
+          "level": "beginner"
         },
         {
           "id": "mix-b-05",
@@ -1340,7 +1548,9 @@
             "easier": "Reduce sprint to 25s; 8 squats / 4 push-ups",
             "harder": "45s sprint; 12 squats / 8 push-ups / 8 sit-ups"
           },
-          "coaching_cue": "On bike minutes, push hard; bodyweight minutes are active recovery."
+          "coaching_cue": "On bike minutes, push hard; bodyweight minutes are active recovery.",
+          "subtype": "mixed",
+          "level": "beginner"
         },
         {
           "id": "mix-b-06",
@@ -1383,7 +1593,9 @@
             "easier": "March instead of high knees; 3 rounds",
             "harder": "Add 30s mountain climbers after core block"
           },
-          "coaching_cue": "Breathe out on exertion; never hold your breath on core work."
+          "coaching_cue": "Breathe out on exertion; never hold your breath on core work.",
+          "subtype": "mixed",
+          "level": "beginner"
         },
         {
           "id": "mix-b-07",
@@ -1430,7 +1642,9 @@
             "easier": "3 rounds; reduce to 8 KB swings",
             "harder": "Increase KB weight; run at moderate pace"
           },
-          "coaching_cue": "Hinge at the hip for swings — it's not a squat."
+          "coaching_cue": "Hinge at the hip for swings — it's not a squat.",
+          "subtype": "mixed",
+          "level": "beginner"
         },
         {
           "id": "mix-b-08",
@@ -1478,7 +1692,9 @@
             "easier": "2 rounds; bodyweight rows instead of DB flies",
             "harder": "4 rounds; increase DB weight"
           },
-          "coaching_cue": "Keep elbows slightly soft on lateral raises — avoid shrugging."
+          "coaching_cue": "Keep elbows slightly soft on lateral raises — avoid shrugging.",
+          "subtype": "mixed",
+          "level": "beginner"
         },
         {
           "id": "mix-b-09",
@@ -1523,7 +1739,9 @@
             "easier": "Skip Tabata finisher; do 2 sets in part 1",
             "harder": "Add mountain climbers as 3rd Tabata exercise"
           },
-          "coaching_cue": "Start the Tabata with form — fatigue compounds so dial technique in early."
+          "coaching_cue": "Start the Tabata with form — fatigue compounds so dial technique in early.",
+          "subtype": "mixed",
+          "level": "beginner"
         },
         {
           "id": "mix-b-10",
@@ -1566,7 +1784,9 @@
             "easier": "2 rounds (20 min)",
             "harder": "6 rounds (60 min)"
           },
-          "coaching_cue": "Mobility work is earned — use the elevated heart rate to access range of motion."
+          "coaching_cue": "Mobility work is earned — use the elevated heart rate to access range of motion.",
+          "subtype": "mixed",
+          "level": "beginner"
         }
       ],
       "intermediate": [
@@ -1609,7 +1829,9 @@
             "easier": "4 rounds; 400m run; reduce weight 20%",
             "harder": "6 rounds; 1000m; increase weight 10%"
           },
-          "coaching_cue": "Drive through your legs on the clean — don't muscle it up."
+          "coaching_cue": "Drive through your legs on the clean — don't muscle it up.",
+          "subtype": "mixed",
+          "level": "intermediate"
         },
         {
           "id": "mix-i-02",
@@ -1661,7 +1883,9 @@
             "easier": "4 rounds; 60s bike",
             "harder": "Increase DB weight; 2 min bike"
           },
-          "coaching_cue": "The assault bike is metabolic debt — the strength work after is the interest payment."
+          "coaching_cue": "The assault bike is metabolic debt — the strength work after is the interest payment.",
+          "subtype": "mixed",
+          "level": "intermediate"
         },
         {
           "id": "mix-i-03",
@@ -1707,7 +1931,9 @@
             "easier": "3 rounds; 75% of normal working weight",
             "harder": "5 rounds; 90% working weight"
           },
-          "coaching_cue": "You are pre-fatigued by the run — brace harder before each lift."
+          "coaching_cue": "You are pre-fatigued by the run — brace harder before each lift.",
+          "subtype": "mixed",
+          "level": "intermediate"
         },
         {
           "id": "mix-i-04",
@@ -1753,7 +1979,9 @@
             "easier": "250/500/250 pyramid; lighter KB",
             "harder": "250/500/750/1000/750/500/250 full pyramid"
           },
-          "coaching_cue": "Stay consistent on row splits — go out too hot and you'll blow up on the 750."
+          "coaching_cue": "Stay consistent on row splits — go out too hot and you'll blow up on the 750.",
+          "subtype": "mixed",
+          "level": "intermediate"
         },
         {
           "id": "mix-i-05",
@@ -1799,7 +2027,9 @@
             "easier": "20 min EMOM (reduce to 7 rounds)",
             "harder": "Add 2 reps per set each round (progressive overload)"
           },
-          "coaching_cue": "Use the first few minutes to gauge effort — find the pace you can sustain for 30 minutes."
+          "coaching_cue": "Use the first few minutes to gauge effort — find the pace you can sustain for 30 minutes.",
+          "subtype": "mixed",
+          "level": "intermediate"
         },
         {
           "id": "mix-i-06",
@@ -1841,7 +2071,9 @@
             "easier": "3 rounds; 100m farmer carry",
             "harder": "Increase all weights 10%; reduce rest to 90s"
           },
-          "coaching_cue": "Grip is the limiting factor — chalk up and keep shoulders packed."
+          "coaching_cue": "Grip is the limiting factor — chalk up and keep shoulders packed.",
+          "subtype": "mixed",
+          "level": "intermediate"
         },
         {
           "id": "mix-i-07",
@@ -1888,7 +2120,9 @@
             "easier": "10 min bike; 2 min run; 2 sets",
             "harder": "30 min bike; 10 min run; add weight to lifts"
           },
-          "coaching_cue": "Brick legs are real — expect your run to feel heavy for the first 90 seconds."
+          "coaching_cue": "Brick legs are real — expect your run to feel heavy for the first 90 seconds.",
+          "subtype": "mixed",
+          "level": "intermediate"
         },
         {
           "id": "mix-i-08",
@@ -1948,7 +2182,9 @@
             "easier": "5 min AMRAPs; reduce weight",
             "harder": "10 min AMRAPs; increase weight"
           },
-          "coaching_cue": "Track your rounds each block — beat your score next session."
+          "coaching_cue": "Track your rounds each block — beat your score next session.",
+          "subtype": "mixed",
+          "level": "intermediate"
         },
         {
           "id": "mix-i-09",
@@ -1979,7 +2215,9 @@
             "easier": "4 rounds; dumbbell hang snatch substitute",
             "harder": "8 rounds; increase snatch weight"
           },
-          "coaching_cue": "Pull the bar close — wide arc means you're using arms, not hips."
+          "coaching_cue": "Pull the bar close — wide arc means you're using arms, not hips.",
+          "subtype": "mixed",
+          "level": "intermediate"
         },
         {
           "id": "mix-i-10",
@@ -2016,7 +2254,9 @@
             "easier": "3 rounds (36 min); bodyweight pull-up",
             "harder": "Add 5% load each round; 6 rounds"
           },
-          "coaching_cue": "Zone 2 is your aerobic base — protect it by staying disciplined on intensity."
+          "coaching_cue": "Zone 2 is your aerobic base — protect it by staying disciplined on intensity.",
+          "subtype": "mixed",
+          "level": "intermediate"
         }
       ]
     },
@@ -2059,7 +2299,9 @@
             "easier": "Use empty bar or PVC to learn movement pattern",
             "harder": "Add 2.5 lb per exercise per session instead of 5 lb"
           },
-          "coaching_cue": "Brace your belly before you unrack — tension is protection."
+          "coaching_cue": "Brace your belly before you unrack — tension is protection.",
+          "subtype": "heavy",
+          "level": "beginner"
         },
         {
           "id": "hvy-b-02",
@@ -2101,7 +2343,9 @@
             "easier": "Start with a weight you can do 12 reps with; add weight when 8 reps feel easy",
             "harder": "Increase to 4 sets; add slow eccentric (3-count down)"
           },
-          "coaching_cue": "Choose a weight where the last 2 reps are hard but form stays crisp."
+          "coaching_cue": "Choose a weight where the last 2 reps are hard but form stays crisp.",
+          "subtype": "heavy",
+          "level": "beginner"
         },
         {
           "id": "hvy-b-03",
@@ -2140,7 +2384,9 @@
             "easier": "DB deadlift substitute; reduce to 3 sets",
             "harder": "Add deficit (stand on plates) for trap bar sets"
           },
-          "coaching_cue": "Push the floor away — it's a leg press, not a back pull."
+          "coaching_cue": "Push the floor away — it's a leg press, not a back pull.",
+          "subtype": "heavy",
+          "level": "beginner"
         },
         {
           "id": "hvy-b-04",
@@ -2179,7 +2425,9 @@
             "easier": "Incline DB press instead of bench; knee push-up",
             "harder": "Increase weight 5 lb each session; add band-resisted push-up"
           },
-          "coaching_cue": "Retract and depress your scapulae before every pressing rep."
+          "coaching_cue": "Retract and depress your scapulae before every pressing rep.",
+          "subtype": "heavy",
+          "level": "beginner"
         },
         {
           "id": "hvy-b-05",
@@ -2218,7 +2466,9 @@
             "easier": "DB row only; band pull-apart instead of face pull",
             "harder": "Replace lat pulldown with weighted pull-up"
           },
-          "coaching_cue": "Pull to your sternum — not your chin — for full lat engagement."
+          "coaching_cue": "Pull to your sternum — not your chin — for full lat engagement.",
+          "subtype": "heavy",
+          "level": "beginner"
         },
         {
           "id": "hvy-b-06",
@@ -2256,7 +2506,9 @@
             "easier": "Goblet squat; DB RDL; reverse lunge instead of Bulgarian",
             "harder": "Add 5 lb per session; tempo squat (3-0-1)"
           },
-          "coaching_cue": "Keep your chest up in the squat — think tall spine, not forward lean."
+          "coaching_cue": "Keep your chest up in the squat — think tall spine, not forward lean.",
+          "subtype": "heavy",
+          "level": "beginner"
         },
         {
           "id": "hvy-b-07",
@@ -2307,7 +2559,9 @@
             "easier": "Reduce to 3 exercises; 2 sets each",
             "harder": "Work up to heavy triple on each lift"
           },
-          "coaching_cue": "Full-body days require more warm-up time — budget 10 min before working sets."
+          "coaching_cue": "Full-body days require more warm-up time — budget 10 min before working sets.",
+          "subtype": "heavy",
+          "level": "beginner"
         },
         {
           "id": "hvy-b-08",
@@ -2365,7 +2619,9 @@
             "easier": "Calculate training max at 80% of 1RM instead of 90%",
             "harder": "Run the program as written — resist the urge to go heavier"
           },
-          "coaching_cue": "Leave reps in the tank on the first two sets — it's a warm-up, not a max effort."
+          "coaching_cue": "Leave reps in the tank on the first two sets — it's a warm-up, not a max effort.",
+          "subtype": "heavy",
+          "level": "beginner"
         },
         {
           "id": "hvy-b-09",
@@ -2401,13 +2657,15 @@
           },
           "duration": 40,
           "equipment": [
-            "kettlebells (pair)"
+            "kettlebells"
           ],
           "scaling": {
             "easier": "Single KB for all movements; reduce to 3 sets",
             "harder": "Heavier bell; add Turkish get-up 3 per side as finisher"
           },
-          "coaching_cue": "The bent press is a slow grind — do not rush; find the groove."
+          "coaching_cue": "The bent press is a slow grind — do not rush; find the groove.",
+          "subtype": "heavy",
+          "level": "beginner"
         },
         {
           "id": "hvy-b-10",
@@ -2447,7 +2705,9 @@
             "easier": "1s pause; reduce weight to 75%",
             "harder": "3s pause; work up to normal working weight"
           },
-          "coaching_cue": "Pause reps build positional strength — stay braced during the full pause."
+          "coaching_cue": "Pause reps build positional strength — stay braced during the full pause.",
+          "subtype": "heavy",
+          "level": "beginner"
         }
       ],
       "intermediate": [
@@ -2495,7 +2755,9 @@
             "easier": "Cap at 90% of 1RM; reduce back-off to 2 sets",
             "harder": "True 1RM attempt once per month — not weekly"
           },
-          "coaching_cue": "Daily max is the heaviest you can lift with perfect form today — judge by bar speed."
+          "coaching_cue": "Daily max is the heaviest you can lift with perfect form today — judge by bar speed.",
+          "subtype": "heavy",
+          "level": "intermediate"
         },
         {
           "id": "hvy-i-02",
@@ -2542,7 +2804,9 @@
             "easier": "3-rep max instead of 1-rep max",
             "harder": "Board press variation to overload lockout"
           },
-          "coaching_cue": "Set your back arch before unracking — don't try to arch after you've taken the bar."
+          "coaching_cue": "Set your back arch before unracking — don't try to arch after you've taken the bar.",
+          "subtype": "heavy",
+          "level": "intermediate"
         },
         {
           "id": "hvy-i-03",
@@ -2582,7 +2846,9 @@
             "easier": "60-65% with bands for accommodating resistance",
             "harder": "Add chains; increase to 10×2"
           },
-          "coaching_cue": "Bar speed IS the goal — think about pushing the earth away as fast as possible."
+          "coaching_cue": "Bar speed IS the goal — think about pushing the earth away as fast as possible.",
+          "subtype": "heavy",
+          "level": "intermediate"
         },
         {
           "id": "hvy-i-04",
@@ -2622,7 +2888,9 @@
             "easier": "6×3; slightly higher weight (55%)",
             "harder": "Use bands for accommodating resistance"
           },
-          "coaching_cue": "The touch on your chest should be controlled — don't bounce."
+          "coaching_cue": "The touch on your chest should be controlled — don't bounce.",
+          "subtype": "heavy",
+          "level": "intermediate"
         },
         {
           "id": "hvy-i-05",
@@ -2674,7 +2942,9 @@
             "easier": "Reduce top set to 85%; 4 speed sets",
             "harder": "Add bands to speed sets"
           },
-          "coaching_cue": "Keep the bar close — it should drag your shins on the way up."
+          "coaching_cue": "Keep the bar close — it should drag your shins on the way up.",
+          "subtype": "heavy",
+          "level": "intermediate"
         },
         {
           "id": "hvy-i-06",
@@ -2721,7 +2991,9 @@
             "easier": "Goblet squat as front squat substitute",
             "harder": "3RM front squat; add pause at bottom"
           },
-          "coaching_cue": "Elbows HIGH — if they drop, you'll tip forward and dump the bar."
+          "coaching_cue": "Elbows HIGH — if they drop, you'll tip forward and dump the bar.",
+          "subtype": "heavy",
+          "level": "intermediate"
         },
         {
           "id": "hvy-i-07",
@@ -2770,7 +3042,9 @@
             "easier": "Reduce to 3 sets per superset; lighter weight",
             "harder": "Add 5 lb each superset across the 4 sets (ascending)"
           },
-          "coaching_cue": "Supersets shorten total time without sacrificing load — keep transition under 15 seconds."
+          "coaching_cue": "Supersets shorten total time without sacrificing load — keep transition under 15 seconds.",
+          "subtype": "heavy",
+          "level": "intermediate"
         },
         {
           "id": "hvy-i-08",
@@ -2819,7 +3093,9 @@
             "easier": "One wave only; reduce loads 10%",
             "harder": "3 waves; increase load 3-5% per wave"
           },
-          "coaching_cue": "Wave 2 should feel lighter than wave 1 at the same weight — that's post-activation potentiation working."
+          "coaching_cue": "Wave 2 should feel lighter than wave 1 at the same weight — that's post-activation potentiation working.",
+          "subtype": "heavy",
+          "level": "intermediate"
         },
         {
           "id": "hvy-i-09",
@@ -2861,7 +3137,9 @@
             "easier": "Choose one variation only; 3 sets",
             "harder": "Add a 4th variation: deficit deadlift"
           },
-          "coaching_cue": "Sumo demands hip mobility — warm up your hip flexors before loading."
+          "coaching_cue": "Sumo demands hip mobility — warm up your hip flexors before loading.",
+          "subtype": "heavy",
+          "level": "intermediate"
         },
         {
           "id": "hvy-i-10",
@@ -2913,7 +3191,9 @@
             "easier": "3 sets each; reduce weight to 3 reps shy of failure",
             "harder": "Rest-pause technique: hit reps, rest 20s, squeeze out 2-3 more"
           },
-          "coaching_cue": "Accessory work is where strength is built — don't treat it as second-class."
+          "coaching_cue": "Accessory work is where strength is built — don't treat it as second-class.",
+          "subtype": "heavy",
+          "level": "intermediate"
         }
       ]
     },
@@ -2959,7 +3239,9 @@
             "easier": "Step-up practice before first jump; reduce height",
             "harder": "Increase box height; depth drop into jump"
           },
-          "coaching_cue": "Jump from a loaded position — dip and swing your arms for maximum power."
+          "coaching_cue": "Jump from a loaded position — dip and swing your arms for maximum power.",
+          "subtype": "explosive",
+          "level": "beginner"
         },
         {
           "id": "exp-b-02",
@@ -2992,7 +3274,9 @@
             "easier": "Bodyweight reverse lunge instead of jumping lunge; remove jump from squat jump",
             "harder": "Add 5 lb vest; increase to 10 reps"
           },
-          "coaching_cue": "Land with soft knees — if your landing is loud, your landing is dangerous."
+          "coaching_cue": "Land with soft knees — if your landing is loud, your landing is dangerous.",
+          "subtype": "explosive",
+          "level": "beginner"
         },
         {
           "id": "exp-b-03",
@@ -3033,7 +3317,9 @@
             "easier": "4 kg ball; 6 reps per exercise",
             "harder": "8 kg ball; 10 reps; 4 rounds"
           },
-          "coaching_cue": "Throw with your whole body — hips first, then torso, then arms."
+          "coaching_cue": "Throw with your whole body — hips first, then torso, then arms.",
+          "subtype": "explosive",
+          "level": "beginner"
         },
         {
           "id": "exp-b-04",
@@ -3054,7 +3340,9 @@
             "easier": "6 sprints at 75% effort",
             "harder": "10 sprints at 90% effort; reduce recovery to 60s"
           },
-          "coaching_cue": "Drive your arms like pistons — fast arms create fast legs."
+          "coaching_cue": "Drive your arms like pistons — fast arms create fast legs.",
+          "subtype": "explosive",
+          "level": "beginner"
         },
         {
           "id": "exp-b-05",
@@ -3086,7 +3374,9 @@
             "easier": "Standard burpee (no tuck jump); regular push-up",
             "harder": "Add 10s sprint after each round"
           },
-          "coaching_cue": "Burpees are full-body power — push the ground away on the jump."
+          "coaching_cue": "Burpees are full-body power — push the ground away on the jump.",
+          "subtype": "explosive",
+          "level": "beginner"
         },
         {
           "id": "exp-b-06",
@@ -3123,7 +3413,9 @@
             "easier": "Skip depth drop; practice landing from small hops first",
             "harder": "Increase box height; double depth drop"
           },
-          "coaching_cue": "Your contact time with the ground should be milliseconds — think hot coals."
+          "coaching_cue": "Your contact time with the ground should be milliseconds — think hot coals.",
+          "subtype": "explosive",
+          "level": "beginner"
         },
         {
           "id": "exp-b-07",
@@ -3159,7 +3451,9 @@
             "easier": "Focus on form; reduce to 2 rounds",
             "harder": "Add weighted vest; 5 rounds"
           },
-          "coaching_cue": "In power skipping, drive your knee to 90° — height comes from leg drive."
+          "coaching_cue": "In power skipping, drive your knee to 90° — height comes from leg drive.",
+          "subtype": "explosive",
+          "level": "beginner"
         },
         {
           "id": "exp-b-08",
@@ -3204,7 +3498,9 @@
             "easier": "Bodyweight rotation; reduce cable weight",
             "harder": "Add band resistance to MB throws"
           },
-          "coaching_cue": "Rotation power starts from the ground up — drive through your feet."
+          "coaching_cue": "Rotation power starts from the ground up — drive through your feet.",
+          "subtype": "explosive",
+          "level": "beginner"
         },
         {
           "id": "exp-b-09",
@@ -3230,7 +3526,9 @@
             "easier": "Walk through pattern first; 2 passes per pattern",
             "harder": "Max speed; add reaction drill at end of each pattern"
           },
-          "coaching_cue": "Eyes forward, not on the ladder — feel the pattern, don't look at your feet."
+          "coaching_cue": "Eyes forward, not on the ladder — feel the pattern, don't look at your feet.",
+          "subtype": "explosive",
+          "level": "beginner"
         },
         {
           "id": "exp-b-10",
@@ -3273,7 +3571,9 @@
             "easier": "Bodyweight only; reduce reps to 4",
             "harder": "Increase box height; add heavy band resistance to squat jumps"
           },
-          "coaching_cue": "Every rep should be max intent — never just 'go through the motions' on plyometrics."
+          "coaching_cue": "Every rep should be max intent — never just 'go through the motions' on plyometrics.",
+          "subtype": "explosive",
+          "level": "beginner"
         }
       ],
       "intermediate": [
@@ -3313,7 +3613,9 @@
             "easier": "DB hang clean/snatch; reduce load to 65%",
             "harder": "Full clean and full snatch from floor"
           },
-          "coaching_cue": "The bar should feel weightless at the top — that's the double-knee bend doing its job."
+          "coaching_cue": "The bar should feel weightless at the top — that's the double-knee bend doing its job.",
+          "subtype": "explosive",
+          "level": "intermediate"
         },
         {
           "id": "exp-i-02",
@@ -3334,7 +3636,9 @@
             "easier": "8 sprints; 95% effort",
             "harder": "Timed flying 20s; track improvement per session"
           },
-          "coaching_cue": "Max velocity demands max warm-up — do not skip the acceleration drills."
+          "coaching_cue": "Max velocity demands max warm-up — do not skip the acceleration drills.",
+          "subtype": "explosive",
+          "level": "intermediate"
         },
         {
           "id": "exp-i-03",
@@ -3360,13 +3664,15 @@
           },
           "duration": 35,
           "equipment": [
-            "plyo box (24-30 inch)"
+            "plyo box"
           ],
           "scaling": {
             "easier": "20-inch box; standard depth drop without performance tracking",
             "harder": "32-inch box; add a second box to land on"
           },
-          "coaching_cue": "Your Achilles tendon is the spring — land on your forefoot, not flat-footed."
+          "coaching_cue": "Your Achilles tendon is the spring — land on your forefoot, not flat-footed.",
+          "subtype": "explosive",
+          "level": "intermediate"
         },
         {
           "id": "exp-i-04",
@@ -3397,7 +3703,9 @@
             "easier": "Trap bar deadlift instead of clean pull; 24-inch box",
             "harder": "Heavy snatch pull; increase box to 36 inches"
           },
-          "coaching_cue": "Box jump after the pull should feel easier — that's PAP in action."
+          "coaching_cue": "Box jump after the pull should feel easier — that's PAP in action.",
+          "subtype": "explosive",
+          "level": "intermediate"
         },
         {
           "id": "exp-i-05",
@@ -3432,7 +3740,9 @@
             "easier": "Walk through patterns; focus on footwork not time",
             "harder": "Add reaction component: coach calls direction at setup"
           },
-          "coaching_cue": "Change of direction speed is 60% deceleration — load your outside leg before you cut."
+          "coaching_cue": "Change of direction speed is 60% deceleration — load your outside leg before you cut.",
+          "subtype": "explosive",
+          "level": "intermediate"
         },
         {
           "id": "exp-i-06",
@@ -3472,7 +3782,9 @@
             "easier": "DB substitute for all movements; reduce load",
             "harder": "Full versions from floor; increase load 2.5% each session"
           },
-          "coaching_cue": "Triple extension: ankle, knee, hip — all three fire simultaneously."
+          "coaching_cue": "Triple extension: ankle, knee, hip — all three fire simultaneously.",
+          "subtype": "explosive",
+          "level": "intermediate"
         },
         {
           "id": "exp-i-07",
@@ -3494,7 +3806,9 @@
             "easier": "4 sets; 5 sprints per set",
             "harder": "8 sets; reduce inter-set rest to 2 min"
           },
-          "coaching_cue": "RSA drops fast — if you can't maintain 90% of your first sprint, the set is done."
+          "coaching_cue": "RSA drops fast — if you can't maintain 90% of your first sprint, the set is done.",
+          "subtype": "explosive",
+          "level": "intermediate"
         },
         {
           "id": "exp-i-08",
@@ -3538,7 +3852,9 @@
             "easier": "Regular push-up; reduce MB weight",
             "harder": "Single-arm MB pass; band-resisted plyo push-up"
           },
-          "coaching_cue": "The plyo push-up is not a regular push-up done fast — it's a loaded jump."
+          "coaching_cue": "The plyo push-up is not a regular push-up done fast — it's a loaded jump.",
+          "subtype": "explosive",
+          "level": "intermediate"
         },
         {
           "id": "exp-i-09",
@@ -3567,7 +3883,9 @@
             "easier": "Behind-neck press instead of snatch balance",
             "harder": "Heavy snatch balance + unweighted depth jump to box"
           },
-          "coaching_cue": "Punch yourself under the bar on the snatch balance — don't press it down."
+          "coaching_cue": "Punch yourself under the bar on the snatch balance — don't press it down.",
+          "subtype": "explosive",
+          "level": "intermediate"
         },
         {
           "id": "exp-i-10",
@@ -3602,14 +3920,16 @@
           },
           "duration": 40,
           "equipment": [
-            "hurdles (24-30 inch)",
+            "hurdles",
             "open space"
           ],
           "scaling": {
             "easier": "18-inch hurdles; focus on clearance not speed",
             "harder": "36-inch hurdles; timed drills"
           },
-          "coaching_cue": "Cycle your trail leg fast — don't drag it over, snap it through."
+          "coaching_cue": "Cycle your trail leg fast — don't drag it over, snap it through.",
+          "subtype": "explosive",
+          "level": "intermediate"
         }
       ]
     },
@@ -3655,7 +3975,9 @@
             "easier": "Goblet squat; reduce to 4 reps per set",
             "harder": "4s eccentric; 2s pause; increase to 8 reps"
           },
-          "coaching_cue": "Count out loud if you need to — most people cheat the tempo unconsciously."
+          "coaching_cue": "Count out loud if you need to — most people cheat the tempo unconsciously.",
+          "subtype": "tempo",
+          "level": "beginner"
         },
         {
           "id": "tmp-b-02",
@@ -3691,7 +4013,9 @@
             "easier": "Floor press instead of bench; reduce weight 20%",
             "harder": "5s eccentric on both movements; 4 sets"
           },
-          "coaching_cue": "The eccentric (lowering) phase is where muscle is built — don't let gravity do the work."
+          "coaching_cue": "The eccentric (lowering) phase is where muscle is built — don't let gravity do the work.",
+          "subtype": "tempo",
+          "level": "beginner"
         },
         {
           "id": "tmp-b-03",
@@ -3725,7 +4049,9 @@
             "easier": "Single-leg RDL with DB; 4-rep sets",
             "harder": "Conventional deadlift with 3s lower; increase load"
           },
-          "coaching_cue": "Maintain tension throughout — going slack at the bottom negates the stretch reflex benefit."
+          "coaching_cue": "Maintain tension throughout — going slack at the bottom negates the stretch reflex benefit.",
+          "subtype": "tempo",
+          "level": "beginner"
         },
         {
           "id": "tmp-b-04",
@@ -3759,7 +4085,9 @@
             "easier": "Band-assisted; 5s eccentric",
             "harder": "Weighted vest; 10s eccentric; pause at midpoint"
           },
-          "coaching_cue": "Eccentric work produces more micro-trauma — you will be sore. Reduce frequency if needed."
+          "coaching_cue": "Eccentric work produces more micro-trauma — you will be sore. Reduce frequency if needed.",
+          "subtype": "tempo",
+          "level": "beginner"
         },
         {
           "id": "tmp-b-05",
@@ -3790,13 +4118,15 @@
           },
           "duration": 35,
           "equipment": [
-            "dumbbells (optional)"
+            "dumbbells"
           ],
           "scaling": {
             "easier": "Bodyweight only; 4s descent",
             "harder": "Hold dumbbells; 4s descent; 2s pause at bottom"
           },
-          "coaching_cue": "Front knee tracks over your second toe — don't let it cave inward."
+          "coaching_cue": "Front knee tracks over your second toe — don't let it cave inward.",
+          "subtype": "tempo",
+          "level": "beginner"
         },
         {
           "id": "tmp-b-06",
@@ -3830,7 +4160,9 @@
             "easier": "DB row; 2s lower",
             "harder": "5-count pause at top; longer plank"
           },
-          "coaching_cue": "The RKC plank should feel impossible after 10 seconds — you're squeezing, not resting."
+          "coaching_cue": "The RKC plank should feel impossible after 10 seconds — you're squeezing, not resting.",
+          "subtype": "tempo",
+          "level": "beginner"
         },
         {
           "id": "tmp-b-07",
@@ -3864,7 +4196,9 @@
             "easier": "DB press seated; reduce to 5 reps",
             "harder": "Pause at forehead level on the way up; 5 sets"
           },
-          "coaching_cue": "Lock your core before you press — the overhead is a full-body lift."
+          "coaching_cue": "Lock your core before you press — the overhead is a full-body lift.",
+          "subtype": "tempo",
+          "level": "beginner"
         },
         {
           "id": "tmp-b-08",
@@ -3905,7 +4239,9 @@
             "easier": "4-second count down; 4 reps each",
             "harder": "4 sets; increase weight when tempo is consistently maintained"
           },
-          "coaching_cue": "If you have to break tempo to finish a rep, the weight is too heavy."
+          "coaching_cue": "If you have to break tempo to finish a rep, the weight is too heavy.",
+          "subtype": "tempo",
+          "level": "beginner"
         },
         {
           "id": "tmp-b-09",
@@ -3961,7 +4297,9 @@
             "easier": "Reduce hold times by 50%",
             "harder": "Add 10s to each hold; weighted vest for push-up hold"
           },
-          "coaching_cue": "Isometric force is neurologically intense — expect fatigue with no visible movement."
+          "coaching_cue": "Isometric force is neurologically intense — expect fatigue with no visible movement.",
+          "subtype": "tempo",
+          "level": "beginner"
         },
         {
           "id": "tmp-b-10",
@@ -4004,7 +4342,9 @@
             "easier": "3s eccentric; reduce to 4 reps",
             "harder": "6s eccentric; pause at 90° on squat"
           },
-          "coaching_cue": "Slow eccentrics at 60% feel heavier than fast reps at 85% — respect the protocol."
+          "coaching_cue": "Slow eccentrics at 60% feel heavier than fast reps at 85% — respect the protocol.",
+          "subtype": "tempo",
+          "level": "beginner"
         }
       ],
       "intermediate": [
@@ -4043,7 +4383,9 @@
             "easier": "3-sec descent; drop load to 65%",
             "harder": "5-sec descent; 80% load; supramaximal eccentric on leg press"
           },
-          "coaching_cue": "The 2s pause in the hole is the hardest part — breathe into your belly before you sit into it."
+          "coaching_cue": "The 2s pause in the hole is the hardest part — breathe into your belly before you sit into it.",
+          "subtype": "tempo",
+          "level": "intermediate"
         },
         {
           "id": "tmp-i-02",
@@ -4079,7 +4421,9 @@
             "easier": "100% 1RM; 4s eccentric",
             "harder": "115% load; 6s eccentric with training partner or safeties"
           },
-          "coaching_cue": "You need a spotter or safeties — this is beyond normal working weight."
+          "coaching_cue": "You need a spotter or safeties — this is beyond normal working weight.",
+          "subtype": "tempo",
+          "level": "intermediate"
         },
         {
           "id": "tmp-i-03",
@@ -4114,7 +4458,9 @@
             "easier": "3 contrast pairs; reduce slow-set load",
             "harder": "Resistance bands for accommodating resistance on fast sets"
           },
-          "coaching_cue": "The contrast primes your motor units — the fast set should feel brutally powerful."
+          "coaching_cue": "The contrast primes your motor units — the fast set should feel brutally powerful.",
+          "subtype": "tempo",
+          "level": "intermediate"
         },
         {
           "id": "tmp-i-04",
@@ -4141,13 +4487,15 @@
           },
           "duration": 35,
           "equipment": [
-            "GHD or Nordic curl anchor (partner/strap)"
+            "GHD or Nordic curl anchor"
           ],
           "scaling": {
             "easier": "Band-assisted Nordic; 3s descent",
             "harder": "Weighted Nordic (hold plate); 6s descent"
           },
-          "coaching_cue": "The Nordic curl is the most effective hamstring injury prevention exercise — earn the full ROM."
+          "coaching_cue": "The Nordic curl is the most effective hamstring injury prevention exercise — earn the full ROM.",
+          "subtype": "tempo",
+          "level": "intermediate"
         },
         {
           "id": "tmp-i-05",
@@ -4186,7 +4534,9 @@
             "easier": "3s eccentric; 5 reps; reduce weight",
             "harder": "5s eccentric; 7 reps; add load"
           },
-          "coaching_cue": "Single-leg tempo exposes all bilateral compensations — your weak side will humiliate you."
+          "coaching_cue": "Single-leg tempo exposes all bilateral compensations — your weak side will humiliate you.",
+          "subtype": "tempo",
+          "level": "intermediate"
         },
         {
           "id": "tmp-i-06",
@@ -4221,7 +4571,9 @@
             "easier": "Bodyweight; 2s up / 4s lower",
             "harder": "Supramaximal eccentric: one arm lower (each side)"
           },
-          "coaching_cue": "The dead hang pause increases the difficulty — maintain shoulder packed position."
+          "coaching_cue": "The dead hang pause increases the difficulty — maintain shoulder packed position.",
+          "subtype": "tempo",
+          "level": "intermediate"
         },
         {
           "id": "tmp-i-07",
@@ -4261,7 +4613,9 @@
             "easier": "Drop to 2 movements; reduce tempo to 2s",
             "harder": "Z-press (seated on floor) for all movements"
           },
-          "coaching_cue": "Behind-neck press requires adequate shoulder mobility — test before loading."
+          "coaching_cue": "Behind-neck press requires adequate shoulder mobility — test before loading.",
+          "subtype": "tempo",
+          "level": "intermediate"
         },
         {
           "id": "tmp-i-08",
@@ -4304,7 +4658,9 @@
             "easier": "Light bands only; reduce bar weight",
             "harder": "Chains plus bands — maximum accommodating resistance"
           },
-          "coaching_cue": "With bands, the top is the hardest — use that to your advantage on the descent."
+          "coaching_cue": "With bands, the top is the hardest — use that to your advantage on the descent.",
+          "subtype": "tempo",
+          "level": "intermediate"
         },
         {
           "id": "tmp-i-09",
@@ -4363,7 +4719,9 @@
             "easier": "5 exercises; 3s eccentric only",
             "harder": "4 sets per exercise; 5s eccentric"
           },
-          "coaching_cue": "This session will feel light but you'll be sore for 3 days — that's metabolic stress at work."
+          "coaching_cue": "This session will feel light but you'll be sore for 3 days — that's metabolic stress at work.",
+          "subtype": "tempo",
+          "level": "intermediate"
         },
         {
           "id": "tmp-i-10",
@@ -4425,7 +4783,9 @@
             "easier": "Reduce reps to 6 for all; target 42s TUT",
             "harder": "Increase reps to 10; target 70s TUT"
           },
-          "coaching_cue": "TUT is a training metric — film yourself to ensure you're hitting the counts."
+          "coaching_cue": "TUT is a training metric — film yourself to ensure you're hitting the counts.",
+          "subtype": "tempo",
+          "level": "intermediate"
         }
       ]
     },
@@ -4453,7 +4813,9 @@
             "easier": "8×3 at 70%; goblet squat substitute",
             "harder": "12×3; build to 80% on final sets"
           },
-          "coaching_cue": "Volume beats intensity for beginners — get 30 quality reps at the same weight."
+          "coaching_cue": "Volume beats intensity for beginners — get 30 quality reps at the same weight.",
+          "subtype": "volume",
+          "level": "beginner"
         },
         {
           "id": "vol-b-s02",
@@ -4488,7 +4850,9 @@
             "easier": "5×4 on each; DB substitute",
             "harder": "10×4 bench; 8×4 OHP"
           },
-          "coaching_cue": "You are accumulating pressing volume — keep every set crisp, even if the weight feels light."
+          "coaching_cue": "You are accumulating pressing volume — keep every set crisp, even if the weight feels light.",
+          "subtype": "volume",
+          "level": "beginner"
         },
         {
           "id": "vol-b-s03",
@@ -4522,7 +4886,9 @@
             "easier": "6×4 deadlift; DB row substitute",
             "harder": "10×4 deadlift with stiff rest periods"
           },
-          "coaching_cue": "Back-off volume builds the base — you'll feel this in 4 weeks, not today."
+          "coaching_cue": "Back-off volume builds the base — you'll feel this in 4 weeks, not today.",
+          "subtype": "volume",
+          "level": "beginner"
         },
         {
           "id": "vol-b-s04",
@@ -4563,7 +4929,9 @@
             "easier": "Goblet squat + DB RDL; 4 sets each",
             "harder": "Increase to 8 sets on both; add pause"
           },
-          "coaching_cue": "Hip thrust lockout — squeeze glutes for 1 full second at the top."
+          "coaching_cue": "Hip thrust lockout — squeeze glutes for 1 full second at the top.",
+          "subtype": "volume",
+          "level": "beginner"
         },
         {
           "id": "vol-b-s05",
@@ -4608,7 +4976,9 @@
             "easier": "3×5; drop deadlift from session",
             "harder": "5×5 at 75%; add 2.5 lb per session"
           },
-          "coaching_cue": "This is the classic 5×5. When all 25 reps go up clean, add weight next session."
+          "coaching_cue": "This is the classic 5×5. When all 25 reps go up clean, add weight next session.",
+          "subtype": "volume",
+          "level": "beginner"
         },
         {
           "id": "vol-b-h01",
@@ -4645,7 +5015,9 @@
             "easier": "3 sets; reduce to 8 reps; lighter weight",
             "harder": "5 sets; drop set on final set of each exercise"
           },
-          "coaching_cue": "Stop 1-2 reps before failure on every set — chase the pump, not the limit."
+          "coaching_cue": "Stop 1-2 reps before failure on every set — chase the pump, not the limit.",
+          "subtype": "volume",
+          "level": "beginner"
         },
         {
           "id": "vol-b-h02",
@@ -4681,7 +5053,9 @@
             "easier": "3 sets; reduce reps to 8",
             "harder": "Add 1 set; slow eccentric (3s lower)"
           },
-          "coaching_cue": "Feel the lat stretch at the bottom of the pulldown — don't just yank."
+          "coaching_cue": "Feel the lat stretch at the bottom of the pulldown — don't just yank.",
+          "subtype": "volume",
+          "level": "beginner"
         },
         {
           "id": "vol-b-h03",
@@ -4733,7 +5107,9 @@
             "easier": "Reduce to 3 sets per exercise",
             "harder": "Superset leg curl + extension; 5 sets"
           },
-          "coaching_cue": "Leg hypertrophy requires high reps and short rest — you should want to stop before you do."
+          "coaching_cue": "Leg hypertrophy requires high reps and short rest — you should want to stop before you do.",
+          "subtype": "volume",
+          "level": "beginner"
         },
         {
           "id": "vol-b-h04",
@@ -4771,7 +5147,9 @@
             "easier": "3 sets; 10 reps; lighter weight",
             "harder": "Giant set: all 5 exercises back-to-back with minimal rest"
           },
-          "coaching_cue": "Shoulders respond well to high frequency — light weight, lots of reps, feel the burn."
+          "coaching_cue": "Shoulders respond well to high frequency — light weight, lots of reps, feel the burn.",
+          "subtype": "volume",
+          "level": "beginner"
         },
         {
           "id": "vol-b-h05",
@@ -4812,7 +5190,9 @@
             "easier": "2 sets; 10 reps; rest 90s",
             "harder": "4 sets; drop-set on final round"
           },
-          "coaching_cue": "Choose a weight you can complete all 12 reps with — reduce if form breaks after rep 8."
+          "coaching_cue": "Choose a weight you can complete all 12 reps with — reduce if form breaks after rep 8.",
+          "subtype": "volume",
+          "level": "beginner"
         }
       ],
       "intermediate": [
@@ -4849,7 +5229,9 @@
             "easier": "4×5 back squat; drop front squat",
             "harder": "8×5 at 80%; add chains for final 2 sets"
           },
-          "coaching_cue": "Front squats are humbling — your back squat weight won't transfer directly."
+          "coaching_cue": "Front squats are humbling — your back squat weight won't transfer directly.",
+          "subtype": "volume",
+          "level": "intermediate"
         },
         {
           "id": "vol-i-s02",
@@ -4883,7 +5265,9 @@
             "easier": "4×5 at 75%; drop RDL",
             "harder": "6×5 at 82%; deficit conventional for last 2 sets"
           },
-          "coaching_cue": "Volume deadlifts test grip as much as back — use chalk, not straps."
+          "coaching_cue": "Volume deadlifts test grip as much as back — use chalk, not straps.",
+          "subtype": "volume",
+          "level": "intermediate"
         },
         {
           "id": "vol-i-s03",
@@ -4929,7 +5313,9 @@
             "easier": "One wave; reduce loads 5%",
             "harder": "Three waves; increase load 2% between each wave"
           },
-          "coaching_cue": "Wave 2 at the same percentages feels lighter — let it, and milk the extra output."
+          "coaching_cue": "Wave 2 at the same percentages feels lighter — let it, and milk the extra output.",
+          "subtype": "volume",
+          "level": "intermediate"
         },
         {
           "id": "vol-i-s04",
@@ -4953,7 +5339,9 @@
             "easier": "3+1+1 clusters at 82%",
             "harder": "Add one more cluster; reduce intra-rest to 15s"
           },
-          "coaching_cue": "Cluster sets let you handle near-maximal weight for more total reps — the pause is the tool."
+          "coaching_cue": "Cluster sets let you handle near-maximal weight for more total reps — the pause is the tool.",
+          "subtype": "volume",
+          "level": "intermediate"
         },
         {
           "id": "vol-i-s05",
@@ -5005,7 +5393,9 @@
             "easier": "5 movements; 3 sets",
             "harder": "5 sets per movement; 85% load"
           },
-          "coaching_cue": "This is a 128-rep session at 80% — pacing and recovery between sets is everything."
+          "coaching_cue": "This is a 128-rep session at 80% — pacing and recovery between sets is everything.",
+          "subtype": "volume",
+          "level": "intermediate"
         },
         {
           "id": "vol-i-h01",
@@ -5045,7 +5435,9 @@
             "easier": "6×10; 90s rest; reduce to 55%",
             "harder": "10×10 + single-leg accessory work"
           },
-          "coaching_cue": "Sets 7-10 will feel impossible — that's the stimulus. Stay in the game."
+          "coaching_cue": "Sets 7-10 will feel impossible — that's the stimulus. Stay in the game.",
+          "subtype": "volume",
+          "level": "intermediate"
         },
         {
           "id": "vol-i-h02",
@@ -5087,7 +5479,9 @@
             "easier": "6×10; add rest to 120s",
             "harder": "Superset bench with DB row for all 10 sets"
           },
-          "coaching_cue": "GVT produces massive pump — stay focused on rep quality as fatigue accumulates."
+          "coaching_cue": "GVT produces massive pump — stay focused on rep quality as fatigue accumulates.",
+          "subtype": "volume",
+          "level": "intermediate"
         },
         {
           "id": "vol-i-h03",
@@ -5127,7 +5521,9 @@
             "easier": "3 sets; 12 reps; machine-only",
             "harder": "Drop set on final set; 5 sets"
           },
-          "coaching_cue": "15 reps at moderate load builds more muscle than 5 heavy reps — research supports this."
+          "coaching_cue": "15 reps at moderate load builds more muscle than 5 heavy reps — research supports this.",
+          "subtype": "volume",
+          "level": "intermediate"
         },
         {
           "id": "vol-i-h04",
@@ -5171,7 +5567,9 @@
             "easier": "2-exercise superset instead of 4-exercise giant set",
             "harder": "5 giant sets; add bicep curl and tricep extension as A5/A6"
           },
-          "coaching_cue": "Giant sets maximize mechanical tension and metabolic stress simultaneously."
+          "coaching_cue": "Giant sets maximize mechanical tension and metabolic stress simultaneously.",
+          "subtype": "volume",
+          "level": "intermediate"
         },
         {
           "id": "vol-i-h05",
@@ -5266,7 +5664,9 @@
             "easier": "3-step pyramid: 15/12/10",
             "harder": "Descending pyramid after ascending: 8/10/12/15"
           },
-          "coaching_cue": "Each set should take you to within 2 reps of failure — track your weight progressions."
+          "coaching_cue": "Each set should take you to within 2 reps of failure — track your weight progressions.",
+          "subtype": "volume",
+          "level": "intermediate"
         }
       ]
     }
