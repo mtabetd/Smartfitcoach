@@ -739,6 +739,57 @@
     };
   }
 
+  // ── Module 8 : Perceived Intelligence Layer ───────────────────────────────────
+  //
+  // Transforms raw engine signals into a high-end personalized coaching message.
+  // UX only — pure, additive, deterministic, no side effects.
+  //
+  // @param  {Object}  engineOutput  Partial or full engine output object
+  // @return {string}  premiumCoachingMessage (2–3 lines, French, premium tone)
+  function _buildPremiumCoachingMessage(engineOutput) {
+    var out         = (engineOutput && typeof engineOutput === 'object') ? engineOutput : {};
+    var decision    = out.decision    || 'train';
+    var momentum    = (typeof out.momentumScore === 'number') ? out.momentumScore : null;
+    var profileType = out.profileType || null;
+    var pred        = (out.predictionInsights && typeof out.predictionInsights === 'object') ? out.predictionInsights : {};
+    var fatigueRisk = pred.fatigueRisk || null;
+    var next2Days   = pred.next2Days   || null;
+
+    // ── 1. Current State (1 line, priority: fatigue > momentum > profile > default) ─
+    var stateLine;
+    if (fatigueRisk === 'high') {
+      stateLine = "Ton système montre des signes clairs de saturation.";
+    } else if (momentum !== null && momentum >= 7) {
+      stateLine = "Tu es dans une phase de progression solide.";
+    } else if (profileType === 'inconsistent') {
+      stateLine = "Ton rythme reste encore irrégulier.";
+    } else {
+      stateLine = "Ta condition du jour est stable.";
+    }
+
+    // ── 2. Trajectory (1 line; omitted when next2Days is null) ───────────────────
+    var trajectoryLine = null;
+    if (next2Days === 'increase') {
+      trajectoryLine = "Si tu maintiens ce rythme, la progression va continuer.";
+    } else if (next2Days === 'decrease') {
+      trajectoryLine = "Si rien ne change, la performance va légèrement reculer.";
+    } else if (next2Days === 'stable') {
+      trajectoryLine = "Tu es actuellement dans une phase de stabilisation.";
+    }
+
+    // ── 3. Action (1 line) ────────────────────────────────────────────────────────
+    var actionLine = (decision === 'rest')
+      ? "Aujourd'hui, priorité à la récupération."
+      : "Aujourd'hui, on optimise sans surcharger.";
+
+    // ── Assembly (2–3 lines max, no null) ─────────────────────────────────────────
+    var lines = [stateLine];
+    if (trajectoryLine !== null) lines.push(trajectoryLine);
+    lines.push(actionLine);
+
+    return lines.join('\n');
+  }
+
   // ── Validation globale (V2 core + userProfile optionnel) ─────────────────────
   function _validate(inputs) {
     if (!inputs || typeof inputs !== 'object') {
@@ -867,6 +918,15 @@
     // ── Module 7 : predictive intelligence ───────────────────────────────────
     var predictionInsights = _buildPredictionInsights(inputs.userProfile || null, inputs.userHistory || null);
 
+    // ── Module 8 : perceived intelligence ────────────────────────────────────
+    var premiumCoachingMessage = _buildPremiumCoachingMessage({
+      decision:           decObj.decision,
+      momentumScore:      momentum,
+      profileType:        profile,
+      predictionInsights: predictionInsights,
+      historyInsights:    historyInsights
+    });
+
     // ── Sortie V3 ─────────────────────────────────────────────────────────────
     return {
       // ── V2 fields (priorityApplied/fatigueEffective/progressionTriggered
@@ -885,6 +945,7 @@
       adaptationReason:       adaptive.adaptationReason, // Module 4 ✓
       historyInsights:        historyInsights,            // Module 6 ✓
       predictionInsights:     predictionInsights,         // Module 7 ✓
+      premiumCoachingMessage: premiumCoachingMessage,     // Module 8 ✓
       _debug: {
         rawFatigue:          inputs.fatigueLevel,
         effectiveFatigue:    effective,
@@ -924,7 +985,9 @@
     // V3 Module 6
     _buildHistoryInsights:            _buildHistoryInsights,
     // V3 Module 7
-    _buildPredictionInsights:         _buildPredictionInsights
+    _buildPredictionInsights:         _buildPredictionInsights,
+    // V3 Module 8
+    _buildPremiumCoachingMessage:     _buildPremiumCoachingMessage
   };
 
   if (typeof module !== 'undefined' && module.exports) {
