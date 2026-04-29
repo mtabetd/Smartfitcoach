@@ -4715,7 +4715,10 @@
           },
           "coaching_cue": "The 2s pause in the hole is the hardest part — breathe into your belly before you sit into it.",
           "subtype": "tempo",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "maximum time under tension on squat to drive hypertrophy and positional strength",
+          "progression_hint": "Hatfield protocol is the gold standard for squat hypertrophy — the 2s pause in the hole eliminates stretch reflex; advance load by 2.5 kg when all 5 sets hold exact tempo without tempo creep"
         },
         {
           "id": "tmp-i-02",
@@ -4753,7 +4756,10 @@
           },
           "coaching_cue": "You need a spotter or safeties — this is beyond normal working weight.",
           "subtype": "tempo",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "supramaximal eccentric deadlift to overload the nervous system beyond concentric capacity",
+          "progression_hint": "Supramaximal loading is reserved for athletes with 18+ months of consistent deadlift training; run once every 3 weeks maximum; directly elevates concentric 1RM when paired with standard heavy pulls"
         },
         {
           "id": "tmp-i-03",
@@ -4790,7 +4796,10 @@
           },
           "coaching_cue": "The contrast primes your motor units — the fast set should feel brutally powerful.",
           "subtype": "tempo",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "contrast tempo bench to develop both slow-twitch endurance and fast-twitch power simultaneously",
+          "progression_hint": "Contrast sets exploit post-tetanic potentiation — the fast set after a slow set recruits more motor units; track bar speed subjectively on fast sets; advance when slow-set form holds at 70% for all 5 sets"
         },
         {
           "id": "tmp-i-04",
@@ -4825,7 +4834,10 @@
           },
           "coaching_cue": "The Nordic curl is the most effective hamstring injury prevention exercise — earn the full ROM.",
           "subtype": "tempo",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "toning",
+          "intent": "maximal eccentric hamstring loading via Nordic curl for injury resilience and posterior chain hypertrophy",
+          "progression_hint": "Nordic curl is the highest-dose hamstring stimulus available without equipment; advance to weighted Nordic when 5s descent is fully controlled for all 4 sets with zero hip hike"
         },
         {
           "id": "tmp-i-05",
@@ -4866,7 +4878,10 @@
           },
           "coaching_cue": "Single-leg tempo exposes all bilateral compensations — your weak side will humiliate you.",
           "subtype": "tempo",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "toning",
+          "intent": "single-leg tempo training to eliminate bilateral strength imbalances",
+          "progression_hint": "Unilateral tempo work exposes asymmetries invisible in bilateral lifting; log left vs right rep quality; do not increase load until weaker side matches stronger side across all 4 sets"
         },
         {
           "id": "tmp-i-06",
@@ -4903,7 +4918,10 @@
           },
           "coaching_cue": "The dead hang pause increases the difficulty — maintain shoulder packed position.",
           "subtype": "tempo",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "weighted pull-up under full tempo control to build maximum lat and bicep strength",
+          "progression_hint": "Tempo pull-up with added load is among the most effective upper-body strength tools; advance weight by 2.5 kg when all 5 sets complete with strict 3-1-3-1 tempo and dead hang pause maintained"
         },
         {
           "id": "tmp-i-07",
@@ -4945,7 +4963,10 @@
           },
           "coaching_cue": "Behind-neck press requires adequate shoulder mobility — test before loading.",
           "subtype": "tempo",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "overhead pressing complex under tempo to build vertical push strength across three grip widths",
+          "progression_hint": "Wide-grip snatch press taxes external rotation range — identify the limiting factor; when all three movements complete at prescribed tempo with consistent depth, increase push press load by 5%"
         },
         {
           "id": "tmp-i-08",
@@ -4990,7 +5011,10 @@
           },
           "coaching_cue": "With bands, the top is the hardest — use that to your advantage on the descent.",
           "subtype": "tempo",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "accommodating resistance via bands to maximise eccentric overload across three primary lifts",
+          "progression_hint": "Band tension peaks at lockout, creating maximum eccentric stress on the descent — the bar feels heaviest where you are strongest; progress band thickness before increasing bar weight"
         },
         {
           "id": "tmp-i-09",
@@ -5051,7 +5075,10 @@
           },
           "coaching_cue": "This session will feel light but you'll be sore for 3 days — that's metabolic stress at work.",
           "subtype": "tempo",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "recomposition",
+          "intent": "high time-under-tension full-body session for maximum metabolic and hypertrophic stimulus",
+          "progression_hint": "This session accumulates the highest total TUT in the programme — expect significant DOMS 48h later; schedule before a rest day; advance load only when all 8 exercises maintain 4-2-2-0 without tempo drift"
         },
         {
           "id": "tmp-i-10",
@@ -5115,7 +5142,10 @@
           },
           "coaching_cue": "TUT is a training metric — film yourself to ensure you're hitting the counts.",
           "subtype": "tempo",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "toning",
+          "intent": "TUT benchmark session to quantify and track time under tension as a training metric",
+          "progression_hint": "Retest this session every 6 weeks with the same loads — improving TUT at the same weight or same TUT at heavier weight both indicate adaptation; use results to calibrate tempo prescription across all other sessions"
         }
       ]
     },
