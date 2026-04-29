@@ -233,43 +233,43 @@
 
   // ── Session focus ─────────────────────────────────────────────────────────
 
-  // Natural, outcome-focused templates per subtype — varied by workout ID number.
+  // Outcome-focused descriptors per subtype — varied by workout ID number.
   // {duration} is replaced with the workout's actual duration in minutes.
   var SESSION_FOCUS_TEMPLATES = {
     hiit: [
-      '{duration}-min high-intensity intervals — drive output above your comfort ceiling',
-      'Short explosive conditioning — {duration} min at maximum sustainable effort',
-      'Metabolic conditioning — {duration} min of quality intervals at the edge'
+      '{duration}-min high-intensity interval session — sustain output in each work block, recover fully in each rest period',
+      'Short explosive conditioning — {duration} min at maximum sustainable effort across all rounds',
+      'Metabolic conditioning — {duration} min of quality intervals executed at prescribed intensity'
     ],
     zone2: [
-      '{duration}-min aerobic base session — conversational pace, sustained adaptation',
-      'Steady zone 2 work — {duration} min to build fat-burning efficiency',
-      'Low-intensity endurance — {duration} min at controlled heart rate for base development'
+      '{duration}-min aerobic base session — conversational pace, sustained output, full duration',
+      'Steady zone 2 work — {duration} min building fat-oxidation efficiency at controlled intensity',
+      'Low-intensity endurance — {duration} min at controlled heart rate for long-term base development'
     ],
     mixed: [
-      'Concurrent training — {duration} min combining cardio and strength in the same session',
-      '{duration}-min hybrid session — aerobic base paired with loaded compound work',
-      'Strength meets conditioning — {duration} min of dual-signal training'
+      'Concurrent training — {duration} min of aerobic and strength work executed in sequence',
+      '{duration}-min hybrid session — aerobic base paired with loaded compound movement',
+      'Strength and conditioning in one session — {duration} min of dual-signal training'
     ],
     heavy: [
-      'Maximum strength — {duration} min of heavy compound barbell work',
-      '{duration}-min strength session — load with intent, move with precision',
-      'Heavy loading block — {duration} min focused on absolute strength development'
+      'Maximum strength session — {duration} min of heavy compound work with full recovery between sets',
+      '{duration}-min strength block — load with intent, execute with precision, rest completely',
+      'Heavy loading — {duration} min focused on absolute strength through progressive loading'
     ],
     explosive: [
-      'Power development — {duration} min training the nervous system to produce force fast',
-      '{duration}-min reactive strength session — every rep at full intent',
-      'Athletic power work — {duration} min of explosive movement with full recovery'
+      'Power development — {duration} min training the nervous system to produce force at maximum speed',
+      '{duration}-min reactive strength session — every rep at full intent with complete recovery',
+      'Athletic power — {duration} min of explosive movement and full inter-set recovery'
     ],
     tempo: [
-      'Time under tension — {duration} min of controlled, eccentric-focused loading',
-      '{duration}-min tempo session — slow the movement down, multiply the stimulus',
-      'Precision loading — {duration} min where the tempo is the training variable'
+      'Time under tension — {duration} min of controlled loading with prescribed eccentric tempo',
+      '{duration}-min tempo session — decelerate the movement to multiply the stimulus',
+      'Tempo-controlled loading — {duration} min where cadence is the primary training variable'
     ],
     volume: [
-      'Accumulation session — {duration} min of systematic high-rep work for hypertrophy',
-      '{duration}-min volume block — compound lifts at moderate load for muscle growth',
-      'High-volume loading — {duration} min of deliberate reps to drive size and strength'
+      'Accumulation session — {duration} min of systematic volume for hypertrophy and strength development',
+      '{duration}-min volume block — moderate load, high rep quality, full range of motion',
+      'High-volume loading — {duration} min of deliberate repetition to drive structural adaptation'
     ]
   };
 
@@ -290,102 +290,102 @@
 
   // Contextual message pools keyed by [mode][goal].
   // 4 variants per combo — variant index: (idNumber + fatigue_level) % 4
-  // Each message is specific to the user's state and goal, not a category.
+  // Voice: calm authority — each message states intention, gives a directive, sets a psychological anchor.
   var COACH_MSG = {
     push: {
       fat_loss: [
-        'You\'re recovered. Push the intervals hard — don\'t pace for comfort.',
-        'Low fatigue means one thing: maximum metabolic output. No sandbagging today.',
-        'Fresh and ready. The only variable now is how hard you\'re willing to push.',
-        'This is the session that moves the number. Don\'t leave anything on the floor.'
+        'Peak metabolic window. Drive each interval to the upper edge of the prescribed range — pace for completion, not comfort. Consistency of effort is the variable.',
+        'Low fatigue clears the path for full output. Work intervals at maximum sustainable intensity — rest only as prescribed. Discipline holds the pace.',
+        'Fresh state, no ceiling. Execute each round at target effort without negotiation — the structure is designed for this condition. Trust it and work.',
+        'Recovered and ready for high output. Maintain the target intensity across all rounds — every interval counts equally. That\'s where the adaptation lives.'
       ],
       toning: [
-        'Recovered muscles are responsive muscles. Control every eccentric — let the stimulus land.',
-        'Fresh state, full tension. Every rep should feel deliberate, not automatic.',
-        'You have the capacity to go heavy and controlled today. Use both qualities.',
-        'Low fatigue, high tension. This is exactly the condition muscle responds to.'
+        'Fresh muscles carry full tension capacity today. Control every eccentric deliberately — that\'s where the hypertrophic signal originates. Let precision do the work.',
+        'Low fatigue means you can manage both load and control simultaneously. Use both — don\'t sacrifice one for the other. Tempo and tension over speed.',
+        'Full capacity for quality repetition. Slow the movement and keep the muscle engaged at end range. The stimulus is in the detail, not the speed.',
+        'Recovered state, high responsiveness. Move deliberately through each rep with no momentum and no shortcuts. Control is the primary directive.'
       ],
       strength: [
-        'CNS is clear. Load the bar and move it with intent — bar speed tells you everything.',
-        'Fresh and ready to pull. Don\'t negotiate with the weight — move it.',
-        'Today is a day to set a mark. Full output, clean execution.',
-        'Recovered and loaded. The platform is ready. So are you.'
+        'CNS is clear. Load the bar with intent and move it with authority — bar speed is the most honest indicator of effort quality.',
+        'Fresh and prepared for heavy work. Commit to the lift before you unrack it — mental preparation precedes physical execution.',
+        'Low fatigue means full strength expression is available today. Approach the bar without hesitation and move it. Doubt has no place here.',
+        'Peak condition for maximum output. Focus on bar path and bracing throughout every set — the body is ready; execution is the variable.'
       ],
       conditioning: [
-        'Engine is primed. Hold a pace that costs you something — the whole time.',
-        'Fresh legs should push harder. Don\'t waste the advantage.',
-        'Low fatigue means no excuses on pacing. Find the edge and park there.',
-        'This is a full-output conditioning session. Give it exactly that.'
+        'Engine is primed for full output. Settle into the target pace in the first interval — don\'t chase effort, maintain it. Pacing is a discipline.',
+        'Fresh capacity means you can hold a pace that costs you. Find it early and sustain it across every work interval without deceleration.',
+        'Low fatigue authorises full output. Commit to the prescribed work-to-rest ratio and hold it — the adaptation is in the sustained effort.',
+        'Recovered aerobic system, top-end session. Stay in the upper zone across all intervals. The only target is a consistent, high-quality effort.'
       ],
       recomposition: [
-        'Recovered and dual-targeting. Both the strength and cardio components get full effort today.',
-        'Best recomp sessions happen when you\'re fresh. This is one of them — don\'t waste it.',
-        'Fresh body, complex demand. Feed both adaptation signals completely.',
-        'Recomp requires precision, not just effort. Today you have both.'
+        'Both adaptation signals firing today — strength and cardio each get full effort. Execute every component as a separate priority. Complete the dual stimulus.',
+        'Fresh state for a complex session. Don\'t let one block compromise the other — quality in both is the standard, not a stretch goal.',
+        'Low fatigue means the full session design is accessible. Each block has a purpose — move through all of them with the same level of precision.',
+        'Peak condition for a demanding mixed stimulus. The body adapts to exactly what you provide. Provide the full session — nothing abbreviated.'
       ]
     },
     normal: {
       fat_loss: [
-        'Standard session, deliberate effort. Fat loss is built in the unremarkable days.',
-        'Hit your marks. Nothing spectacular — just the work done properly.',
-        'Consistent effort today adds to a consistent week. That\'s where the change lives.',
-        'Moderate state, clear task. Complete the session and move on.'
+        'Moderate state, clear task. Hit the prescribed intervals at target intensity — not exceptional, just consistent. Fat loss is built in sessions exactly like this.',
+        'Standard session. Execute each round at the marked effort level and complete the full duration — the compound effect of ordinary sessions is real.',
+        'Fat loss is a product of accumulated correct sessions. Today is one of them — full structure, full attention, nothing omitted.',
+        'Moderate fatigue, full function. Complete the session as prescribed with nothing modified. Results follow disciplined consistency, not peak moments.'
       ],
       toning: [
-        'Shape isn\'t built in the dramatic sessions — it\'s built in sessions exactly like this one.',
-        'Every set is a deposit. Today is a normal training day — make it count anyway.',
-        'Technique and tension. That\'s all today asks. Give it both.',
-        'Moderate day. Move with precision and let the work accumulate.'
+        'Moderate state. Keep the load honest and the execution precise — technique and tension are the two variables that matter today.',
+        'Shape is built across accumulated sessions exactly like this one. Make each set deliberate and each rep controlled — the stimulus compounds.',
+        'Normal training day. Load and form both need to be present — don\'t sacrifice one for the other. Move with full attention through every set.',
+        'Steady state, quality movement. Control the tempo, maintain full range of motion, and let the session accumulate. Nothing more is needed.'
       ],
       strength: [
-        'Not a max day, but not a filler day. Move serious weight with serious intent.',
-        'Strength is accumulated, not just peaked. Today matters more than it looks.',
-        'Every working set at this intensity has a compounding return. Stay present.',
-        'Moderate state, heavy work. Execute cleanly and trust the volume.'
+        'Not a maximum day, but not a maintenance day either. Move serious weight with precise execution — intent matters more than peak intensity.',
+        'Moderate fatigue for a strength session. Warm up methodically, then give each working set full attention on bar path and bracing.',
+        'Consistent strength development happens in sessions exactly like this one. Show up, load with intent, and execute cleanly across every set.',
+        'The weight won\'t move itself. Approach each set with full preparation — positioning, breath, focus — then commit without reservation.'
       ],
       conditioning: [
-        'Hold your pace. Not heroic — just relentless.',
-        'Aerobic capacity is built across hundreds of sessions like this one. Be consistent.',
-        'Normal day, normal effort, extraordinary long-term adaptation. Trust it.',
-        'Moderate state for a conditioning session. Find your rhythm early and hold it.'
+        'Moderate state for an aerobic session. Settle into a sustainable pace and hold it — rhythm is the training variable, not peak effort.',
+        'Aerobic capacity accumulates across sessions exactly like this one. Find your pace and maintain it precisely. Consistency is the method.',
+        'Normal conditioning session. Find a pace you can sustain for the full duration and hold it without deviation. Pacing is a technical skill.',
+        'Hold your pace. Moderate state, full function — sustain the output and let the session produce the adaptation it was designed for.'
       ],
       recomposition: [
-        'Recomp is a slow burn. Today\'s session is a link in a long chain — make it count.',
-        'Moderate day, full attention. Both signals — strength and cardio — need to fire.',
-        'No shortcuts in recomposition. Complete effort across the full session.',
-        'Steady, complete, and deliberate. That\'s what today requires.'
+        'Both adaptation signals need full execution today. Moderate fatigue doesn\'t lower the standard — it adjusts the ceiling slightly. Honour the design.',
+        'Recomp sessions require complete effort across both components. Don\'t abbreviate the strength block or the cardio block. Both are required.',
+        'Moderate state — precision over aggression. Move well through both blocks and complete the full session structure without improvisation.',
+        'Steady effort across a complex session. Recomposition is a long process — show up, complete the full work, and trust the accumulation.'
       ]
     },
     reduce: {
       fat_loss: [
-        'Fatigue is high. An aerobic flush still burns — and it protects tomorrow\'s session.',
-        'Recovery is not lost time. This session preserves your ability to work hard all week.',
-        'High fatigue and hard intervals don\'t mix. Today you move smart, not hard.',
-        'Showing up at ' + 'high fatigue is the win. Effort matches energy — no more.'
+        'Fatigue is elevated. An aerobic session at prescribed low intensity still contributes — and it protects tomorrow\'s session from being compromised. That\'s the objective.',
+        'High fatigue changes the prescription, not the discipline. Move at the assigned low intensity and complete the full duration without escalating effort.',
+        'Recovery is not passive — this session maintains function and positions you for harder work ahead. Execute it with the same attention as any session.',
+        'Fatigue this high means recovery is the priority. Stay in the prescribed zone, hold the pace down. This session is an investment in what follows.'
       ],
       toning: [
-        'Fatigued muscle needs blood flow, not more damage. Move with purpose, not aggression.',
-        'Tone is preserved in recovery, not lost. Today you protect the work already done.',
-        'Low load, high intention. The body is repairing — support it, don\'t interrupt it.',
-        'High fatigue day. The only metric is: did you move well?'
+        'Fatigued muscle needs circulation, not additional stimulus. Move with full control at low load — blood flow is today\'s objective, not tension.',
+        'High fatigue day. The directive is to move well, not hard. Protect the adaptation already accumulated and restore function for the sessions ahead.',
+        'Movement quality doesn\'t drop when intensity does. Today\'s session preserves what you\'ve built — execute it with the same focus as a hard day.',
+        'Low load, full intention. The body is in repair mode — support the process with quality movement at reduced intensity. That\'s the prescription.'
       ],
       strength: [
-        'Heavy iron at high fatigue is how injuries happen. Today you protect tomorrow\'s lift.',
-        'The bar is too heavy today — and that\'s a fact, not an excuse. Aerobic work instead.',
-        'Smart athletes recover on purpose. This session earns you three harder ones ahead.',
-        'Strength is protected in recovery. Show up, move easy, come back stronger.'
+        'Heavy work at high fatigue is where injuries occur. Today you protect tomorrow\'s lift with deliberate, low-intensity aerobic work. This is the smart decision.',
+        'The platform can wait. Fatigue this high removes heavy work from the schedule — aerobic recovery takes priority. Return to the bar when you\'re ready.',
+        'Reading the body correctly is part of good training. Today it signals recovery — respect that and come back to the bar with full capacity.',
+        'Fatigue under heavy load is a liability, not a challenge to push through. This session earns you the capacity to lift hard in the sessions ahead.'
       ],
       conditioning: [
-        'Aerobic recovery at high fatigue is still productive. Zone 2 flushes and rebuilds.',
-        'Conditioning athletes know: easy days make hard days possible. Own this session.',
-        'Low and slow today. Your cardiovascular system adapts during recovery too.',
-        'High fatigue and sustained hard effort is a liability. Today you invest in tomorrow.'
+        'Aerobic recovery at high fatigue is still productive work. Zone 2 flushes metabolic waste and drives aerobic adaptation — two outcomes from one controlled session.',
+        'Easy sessions make hard sessions possible. Today builds the recovery base for the intensity you\'ll access later in the training week.',
+        'Stay in the low zone — not because it\'s easier, but because aerobic recovery is today\'s precise adaptation target. Discipline means matching effort to intent.',
+        'High fatigue and sustained hard effort produce breakdown, not adaptation. Today you manage load intelligently. That restraint is the discipline.'
       ],
       recomposition: [
-        'Recomp stalls when recovery is skipped. This session is exactly what the plan requires.',
-        'Fatigue is a signal. The body rebuilds lean tissue when you respect it — today, you do.',
-        'Active recovery is active investment. Body composition shifts here too.',
-        'High fatigue in a recomp block. Protect the adaptation by not overreaching.'
+        'Recomp stalls when recovery is skipped. This session is the correct prescription at this point in the cycle — follow it without modification.',
+        'Fatigue is a signal from the system. The body rebuilds lean tissue under proper recovery conditions — this session creates those conditions.',
+        'Protect the adaptation by not overreaching. Active recovery at high fatigue keeps the recomposition process on track and positions you for the next hard block.',
+        'High fatigue in a recomp cycle requires disciplined recovery. Reduce intensity, complete the full session, and preserve the progress already made.'
       ]
     }
   };
