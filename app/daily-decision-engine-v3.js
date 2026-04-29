@@ -352,8 +352,10 @@
   // Retourne {maxRank, adaptationReason}.
   // Sans profil ou sur décision 'rest' → pas de changement, reason null.
   function _applyAdaptiveCaps(maxRank, priorityApplied, profileType, momentumScore, hasProfile, decision) {
-    if (!hasProfile || decision === 'rest') {
-      return { maxRank: maxRank, adaptationReason: null };
+    if (!hasProfile) return { maxRank: maxRank, adaptationReason: null };
+
+    if (decision === 'rest') {
+      return { maxRank: maxRank, adaptationReason: 'Rest day — recovery prioritized' };
     }
 
     var newRank  = maxRank;
@@ -361,38 +363,31 @@
     var isSafety = (priorityApplied === 'safety');
 
     if (profileType === 'overtraining') {
-      var reduced = Math.max(0, newRank - 1);
-      if (reduced !== newRank) {
-        reason  = 'Fatigue accumulation detected. Intensity reduced to protect recovery.';
-        newRank = reduced;
-      }
+      newRank = Math.max(0, newRank - 1);
+      reason  = 'Intensity reduced due to overtraining risk';
 
     } else if (profileType === 'inconsistent') {
-      if (newRank > 1) {
-        newRank = 1;
-        reason  = 'Consistency is being rebuilt. Session intensity adjusted to improve adherence.';
-      }
+      if (newRank > 1) newRank = 1;
+      reason = 'Conservative intensity due to inconsistent training pattern';
 
     } else if (profileType === 'cautious') {
-      if (newRank > 1) {
-        newRank = 1;
-        reason  = 'Training load adjusted because fatigue is elevated relative to recent frequency.';
-      }
+      if (newRank > 1) newRank = 1;
+      reason = 'Moderate intensity for safe progression';
 
     } else if (profileType === 'disciplined') {
       if (!isSafety && momentumScore !== null && momentumScore >= 7 && newRank >= 1) {
         var boosted = Math.min(newRank + 1, 2);
         if (boosted !== newRank) {
           newRank = boosted;
-          reason  = 'Strong consistency detected. Higher intensity unlocked.';
+          reason  = 'Intensity increased due to strong momentum';
         }
       }
 
     } else if (profileType === 'beginner') {
       if (momentumScore !== null && momentumScore < 4 && newRank > 1) {
         newRank = 1;
-        reason  = 'Low momentum detected. Intensity moderated to build consistency.';
       }
+      reason = 'Beginner-friendly intensity applied';
     }
 
     return { maxRank: newRank, adaptationReason: reason };

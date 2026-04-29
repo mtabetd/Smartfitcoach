@@ -297,16 +297,19 @@ test('avec userProfile valide → momentumScore est un nombre 0–10', function 
 test('profil de base (adherence=0.75, freq7=3, avgFat=2.5) → beginner (aucune règle forte)', function () {
   assertEqual(decideV3(baseV3()).profileType, 'beginner');
 });
-test('avec userProfile beginner + momentum suffisant → adaptationReason null (pas de cap)', function () {
-  // baseProfile = beginner, momentum = 6 (≥ 4) → pas de cap → null
-  assertEqual(decideV3(baseV3()).adaptationReason, null);
+test('avec userProfile beginner → adaptationReason non-null (Beginner-friendly)', function () {
+  // baseProfile = beginner, momentum = 6 → pas de cap de rang, mais profil beginner → reason toujours set
+  var out = decideV3(baseV3());
+  assert(out.adaptationReason !== null, 'beginner must always set adaptationReason');
+  assertEqual(out.adaptationReason, 'Beginner-friendly intensity applied');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
 console.log('\n── Section 6 : userProfile valide — décisions inchangées ────\n');
 //
-// Quand userProfile est fourni mais que Module 2–4 ne sont pas encore actifs,
-// la décision doit rester IDENTIQUE à V2.
+// Modules 2–4 actifs — la couche adaptative s'applique après les règles de sécurité V2.
+// baseProfile() produit profil 'beginner' + momentum=6 → pas de changement de rang adaptatif
+// → recommendedIntensity identique à V2 (seul adaptationReason diffère).
 
 function assertV2ParityWithProfile(label, v2inputs) {
   test(label, function () {
@@ -782,28 +785,27 @@ test('hasProfile=false → maxRank inchangé, reason null', function () {
   assertEqual(r.maxRank, 2);
   assertEqual(r.adaptationReason, null);
 });
-test('decision=rest → maxRank inchangé, reason null', function () {
+test('decision=rest + profil → reason = "Rest day — recovery prioritized"', function () {
   var r = _applyAdaptiveCaps(2, 'safety', 'overtraining', 5, true, 'rest');
   assertEqual(r.maxRank, 2);
-  assertEqual(r.adaptationReason, null);
+  assertEqual(r.adaptationReason, 'Rest day — recovery prioritized');
 });
 
 // ── overtraining ──────────────────────────────────────────────────────────────
 test('overtraining : maxRank=2 → réduit à 1 (high→moderate)', function () {
   var r = _applyAdaptiveCaps(2, 'goal_alignment', 'overtraining', 5, true, 'train');
   assertEqual(r.maxRank, 1);
-  assert(r.adaptationReason !== null, 'must set reason');
-  assert(r.adaptationReason.indexOf('Fatigue') === 0, 'reason starts with Fatigue');
+  assertEqual(r.adaptationReason, 'Intensity reduced due to overtraining risk');
 });
 test('overtraining : maxRank=1 → réduit à 0 (moderate→low)', function () {
   var r = _applyAdaptiveCaps(1, 'goal_alignment', 'overtraining', 5, true, 'train');
   assertEqual(r.maxRank, 0);
   assert(r.adaptationReason !== null);
 });
-test('overtraining : maxRank=0 → inchangé (déjà au minimum), reason null', function () {
+test('overtraining : maxRank=0 → inchangé (clampe à 0), reason non-null', function () {
   var r = _applyAdaptiveCaps(0, 'goal_alignment', 'overtraining', 5, true, 'train');
   assertEqual(r.maxRank, 0);
-  assertEqual(r.adaptationReason, null);
+  assertEqual(r.adaptationReason, 'Intensity reduced due to overtraining risk');
 });
 test('overtraining + safety priority → réduction toujours appliquée', function () {
   var r = _applyAdaptiveCaps(2, 'safety', 'overtraining', 5, true, 'train');
@@ -821,39 +823,36 @@ test('overtraining : résultat jamais high (maxRank ≤ 1)', function () {
 test('inconsistent : maxRank=2 → cap à 1 (high→moderate)', function () {
   var r = _applyAdaptiveCaps(2, 'goal_alignment', 'inconsistent', 3, true, 'train');
   assertEqual(r.maxRank, 1);
-  assert(r.adaptationReason !== null);
-  assert(r.adaptationReason.indexOf('Consistency') === 0);
+  assertEqual(r.adaptationReason, 'Conservative intensity due to inconsistent training pattern');
 });
-test('inconsistent : maxRank=1 → inchangé, reason null (déjà moderate)', function () {
+test('inconsistent : maxRank=1 → inchangé, reason non-null (profil actif)', function () {
   var r = _applyAdaptiveCaps(1, 'goal_alignment', 'inconsistent', 3, true, 'train');
   assertEqual(r.maxRank, 1);
-  assertEqual(r.adaptationReason, null);
+  assertEqual(r.adaptationReason, 'Conservative intensity due to inconsistent training pattern');
 });
-test('inconsistent : maxRank=0 → inchangé, reason null', function () {
+test('inconsistent : maxRank=0 → inchangé, reason non-null (profil actif)', function () {
   var r = _applyAdaptiveCaps(0, 'goal_alignment', 'inconsistent', 3, true, 'train');
   assertEqual(r.maxRank, 0);
-  assertEqual(r.adaptationReason, null);
+  assertEqual(r.adaptationReason, 'Conservative intensity due to inconsistent training pattern');
 });
 
 // ── cautious ─────────────────────────────────────────────────────────────────
 test('cautious : maxRank=2 → cap à 1 (high→moderate)', function () {
   var r = _applyAdaptiveCaps(2, 'goal_alignment', 'cautious', 5, true, 'train');
   assertEqual(r.maxRank, 1);
-  assert(r.adaptationReason !== null);
-  assert(r.adaptationReason.indexOf('Training load') === 0);
+  assertEqual(r.adaptationReason, 'Moderate intensity for safe progression');
 });
-test('cautious : maxRank=1 → inchangé, reason null', function () {
+test('cautious : maxRank=1 → inchangé, reason non-null (profil actif)', function () {
   var r = _applyAdaptiveCaps(1, 'goal_alignment', 'cautious', 5, true, 'train');
   assertEqual(r.maxRank, 1);
-  assertEqual(r.adaptationReason, null);
+  assertEqual(r.adaptationReason, 'Moderate intensity for safe progression');
 });
 
 // ── disciplined ───────────────────────────────────────────────────────────────
 test('disciplined : momentum=7, rank=1, !safety → boost à 2', function () {
   var r = _applyAdaptiveCaps(1, 'goal_alignment', 'disciplined', 7, true, 'train');
   assertEqual(r.maxRank, 2);
-  assert(r.adaptationReason !== null);
-  assert(r.adaptationReason.indexOf('Strong consistency') === 0);
+  assertEqual(r.adaptationReason, 'Intensity increased due to strong momentum');
 });
 test('disciplined : momentum=7, rank=2, !safety → inchangé (déjà high), reason null', function () {
   var r = _applyAdaptiveCaps(2, 'goal_alignment', 'disciplined', 7, true, 'train');
@@ -885,23 +884,22 @@ test('disciplined : momentumScore=null → pas de boost', function () {
 test('beginner : momentum=3, rank=2 → cap à 1', function () {
   var r = _applyAdaptiveCaps(2, 'goal_alignment', 'beginner', 3, true, 'train');
   assertEqual(r.maxRank, 1);
-  assert(r.adaptationReason !== null);
-  assert(r.adaptationReason.indexOf('Low momentum') === 0);
+  assertEqual(r.adaptationReason, 'Beginner-friendly intensity applied');
 });
-test('beginner : momentum=4 → pas de cap (boundary, seuil < 4)', function () {
+test('beginner : momentum=4 → pas de cap (boundary), reason non-null', function () {
   var r = _applyAdaptiveCaps(2, 'goal_alignment', 'beginner', 4, true, 'train');
   assertEqual(r.maxRank, 2);
-  assertEqual(r.adaptationReason, null);
+  assertEqual(r.adaptationReason, 'Beginner-friendly intensity applied');
 });
-test('beginner : momentum=3, rank=1 → pas de cap (rank pas > 1)', function () {
+test('beginner : momentum=3, rank=1 → pas de cap (rank pas > 1), reason non-null', function () {
   var r = _applyAdaptiveCaps(1, 'goal_alignment', 'beginner', 3, true, 'train');
   assertEqual(r.maxRank, 1);
-  assertEqual(r.adaptationReason, null);
+  assertEqual(r.adaptationReason, 'Beginner-friendly intensity applied');
 });
-test('beginner : momentum=null → pas de cap', function () {
+test('beginner : momentum=null → pas de cap, reason non-null', function () {
   var r = _applyAdaptiveCaps(2, 'goal_alignment', 'beginner', null, true, 'train');
   assertEqual(r.maxRank, 2);
-  assertEqual(r.adaptationReason, null);
+  assertEqual(r.adaptationReason, 'Beginner-friendly intensity applied');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -943,12 +941,11 @@ test('overtraining : recommendedIntensity jamais "high"', function () {
 });
 
 // ── Test 4 : overtraining adaptationReason non-null ──────────────────────────
-test('overtraining → adaptationReason contient "Fatigue"', function () {
+test('overtraining → adaptationReason = "Intensity reduced due to overtraining risk"', function () {
   var v3 = decideV3(highBaseV2({
     userProfile: { avgFatigueLast7Days: 4.5, trainingFrequencyLast7Days: 5 }
   }));
-  assert(typeof v3.adaptationReason === 'string' && v3.adaptationReason.indexOf('Fatigue') === 0,
-    'got: ' + v3.adaptationReason);
+  assertEqual(v3.adaptationReason, 'Intensity reduced due to overtraining risk');
 });
 
 // ── Test 5 : inconsistent caps high→moderate ──────────────────────────────────
@@ -960,10 +957,9 @@ test('inconsistent : high cappé à moderate', function () {
 });
 
 // ── Test 6 : inconsistent adaptationReason ────────────────────────────────────
-test('inconsistent → adaptationReason contient "Consistency"', function () {
+test('inconsistent → adaptationReason = "Conservative intensity due to inconsistent training pattern"', function () {
   var v3 = decideV3(highBaseV2({ userProfile: { adherenceScore: 0.3 } }));
-  assert(typeof v3.adaptationReason === 'string' && v3.adaptationReason.indexOf('Consistency') === 0,
-    'got: ' + v3.adaptationReason);
+  assertEqual(v3.adaptationReason, 'Conservative intensity due to inconsistent training pattern');
 });
 
 // ── Test 7 : cautious caps high→moderate ──────────────────────────────────────
@@ -1055,10 +1051,10 @@ test('disciplined + momentum=6 → pas de boost, adaptationReason=null', functio
   assertEqual(r.maxRank, 1);
   assertEqual(r.adaptationReason, null);
 });
-test('beginner + momentum=5 → pas de cap, adaptationReason=null', function () {
+test('beginner + momentum=5 → pas de cap, adaptationReason="Beginner-friendly intensity applied"', function () {
   var r = _applyAdaptiveCaps(2, 'goal_alignment', 'beginner', 5, true, 'train');
   assertEqual(r.maxRank, 2);
-  assertEqual(r.adaptationReason, null);
+  assertEqual(r.adaptationReason, 'Beginner-friendly intensity applied');
 });
 test('sans userProfile → adaptationReason=null', function () {
   assertEqual(decideV3(baseV2()).adaptationReason, null);
@@ -1083,6 +1079,156 @@ test('disciplined boost : decision/fatigueEffective/priorityApplied/progressionT
   ['decision', 'fatigueEffective', 'priorityApplied', 'progressionTriggered'].forEach(function (f) {
     if (v2[f] !== v3[f]) throw new Error(f + ': V2=' + JSON.stringify(v2[f]) + ' V3=' + JSON.stringify(v3[f]));
   });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('\n── Section 15 : Couverture complète — warnings résiduels ────\n');
+
+// ── Test 1 : rest + profile → adaptationReason = "Rest day — recovery prioritized" ──
+test('rest + profil overtraining → adaptationReason="Rest day — recovery prioritized"', function () {
+  // fatigueLevel=5 → effectiveFatigue=5 → decision='rest'
+  var inp = baseV2({
+    fatigueLevel: 5,
+    last3SessionsIntensity: ['high'],
+    userProfile: { avgFatigueLast7Days: 4.5, trainingFrequencyLast7Days: 5 }
+  });
+  var out = decideV3(inp);
+  assertEqual(out.decision,             'rest');
+  assertEqual(out.recommendedIntensity, 'low');
+  assertEqual(out.priorityApplied,      'safety');
+  assertEqual(out.adaptationReason,     'Rest day — recovery prioritized');
+});
+test('rest + profil inconsistent → adaptationReason="Rest day — recovery prioritized"', function () {
+  var inp = baseV2({
+    fatigueLevel: 5,
+    last3SessionsIntensity: ['moderate'],
+    userProfile: { adherenceScore: 0.3 }
+  });
+  var out = decideV3(inp);
+  assertEqual(out.decision,         'rest');
+  assertEqual(out.adaptationReason, 'Rest day — recovery prioritized');
+});
+test('rest sans userProfile → adaptationReason=null', function () {
+  var out = decideV3(baseV2({ fatigueLevel: 5, last3SessionsIntensity: ['moderate'] }));
+  assertEqual(out.decision,         'rest');
+  assertEqual(out.adaptationReason, null);
+});
+
+// ── Test 2 : overtraining + progression triggered → overtraining wins ─────────
+test('overtraining + progression triggered → intensity=moderate, progression_logic priority', function () {
+  // progression: 2 moderate → triggered, maxRank=2 (override soft cap)
+  // overtraining: reduces maxRank 2→1
+  var inp = baseV2({
+    fatigueLevel:           3,
+    last3SessionsIntensity: ['moderate', 'moderate'],
+    lastSessionDate:        daysAgo(1),
+    userProfile:            { avgFatigueLast7Days: 4.5, trainingFrequencyLast7Days: 5 }
+  });
+  var out = decideV3(inp);
+  assertEqual(out.decision,             'train');
+  assertEqual(out.recommendedIntensity, 'moderate');
+  assertEqual(out.priorityApplied,      'progression_logic');
+  assertEqual(out.adaptationReason,     'Intensity reduced due to overtraining risk');
+});
+
+// ── Test 3 : disciplined + high momentum → intensity increases ────────────────
+test('disciplined + momentum=7 (taper) → intensity=high, adaptationReason set', function () {
+  var inp = Object.assign(baseV2({
+    fatigueLevel:           1,
+    last3SessionsIntensity: ['low'],
+    lastSessionDate:        daysAgo(2),
+    trainingPhase:          'taper'
+  }), {
+    userProfile: { adherenceScore: 0.9, trainingFrequencyLast7Days: 5, avgFatigueLast7Days: 2 }
+  });
+  var out = decideV3(inp);
+  assertEqual(out.decision,             'train');
+  assertEqual(out.recommendedIntensity, 'high');
+  assertEqual(out.priorityApplied,      'goal_alignment');
+  assertEqual(out.adaptationReason,     'Intensity increased due to strong momentum');
+});
+
+// ── Test 4 : beginner + low momentum → cap applies, adaptationReason set ──────
+test('beginner + momentum=3, rank=2 → cap à moderate, Beginner-friendly reason', function () {
+  var r = _applyAdaptiveCaps(2, 'goal_alignment', 'beginner', 3, true, 'train');
+  assertEqual(r.maxRank, 1);
+  assertEqual(r.adaptationReason, 'Beginner-friendly intensity applied');
+});
+test('beginner + momentum=6, rank=2 → pas de cap, reason toujours set', function () {
+  var r = _applyAdaptiveCaps(2, 'goal_alignment', 'beginner', 6, true, 'train');
+  assertEqual(r.maxRank, 2);
+  assertEqual(r.adaptationReason, 'Beginner-friendly intensity applied');
+});
+
+// ── Test 5 : missing fields → no crash, stable output ────────────────────────
+test('userProfile vide {} → no crash, profileType=beginner, adaptationReason set', function () {
+  var out = decideV3(baseV2({ userProfile: {} }));
+  assertEqual(out.decision,         'train');
+  assert(out.recommendedIntensity   !== undefined, 'missing recommendedIntensity');
+  assertEqual(out.profileType,      'beginner');
+  assertEqual(out.adaptationReason, 'Beginner-friendly intensity applied');
+});
+test('userProfile partiel {adherenceScore:0.7} → no crash, stable output', function () {
+  var out = decideV3(baseV2({ userProfile: { adherenceScore: 0.7 } }));
+  assert(out.recommendedIntensity !== undefined, 'missing recommendedIntensity');
+  assert(out.priorityApplied      !== undefined, 'missing priorityApplied');
+  assert(out.adaptationReason     !== undefined, 'missing adaptationReason');
+});
+test('userProfile {trainingFrequencyLast7Days:3} → no crash', function () {
+  var out = decideV3(baseV2({ userProfile: { trainingFrequencyLast7Days: 3 } }));
+  assert(out.decision !== undefined);
+});
+
+// ── Test 6 : adaptationReason exact strings (critical) ───────────────────────
+test('strings exactes : overtraining', function () {
+  var r = _applyAdaptiveCaps(2, 'goal_alignment', 'overtraining', 5, true, 'train');
+  assertEqual(r.adaptationReason, 'Intensity reduced due to overtraining risk');
+});
+test('strings exactes : inconsistent', function () {
+  var r = _applyAdaptiveCaps(2, 'goal_alignment', 'inconsistent', 3, true, 'train');
+  assertEqual(r.adaptationReason, 'Conservative intensity due to inconsistent training pattern');
+});
+test('strings exactes : cautious', function () {
+  var r = _applyAdaptiveCaps(2, 'goal_alignment', 'cautious', 5, true, 'train');
+  assertEqual(r.adaptationReason, 'Moderate intensity for safe progression');
+});
+test('strings exactes : disciplined + momentum=7 boost', function () {
+  var r = _applyAdaptiveCaps(1, 'goal_alignment', 'disciplined', 7, true, 'train');
+  assertEqual(r.adaptationReason, 'Intensity increased due to strong momentum');
+});
+test('strings exactes : disciplined + safety blocked → null', function () {
+  var r = _applyAdaptiveCaps(1, 'safety', 'disciplined', 7, true, 'train');
+  assertEqual(r.adaptationReason, null);
+});
+test('strings exactes : beginner', function () {
+  var r = _applyAdaptiveCaps(2, 'goal_alignment', 'beginner', 5, true, 'train');
+  assertEqual(r.adaptationReason, 'Beginner-friendly intensity applied');
+});
+test('strings exactes : rest + profil', function () {
+  var r = _applyAdaptiveCaps(2, 'safety', 'overtraining', 5, true, 'rest');
+  assertEqual(r.adaptationReason, 'Rest day — recovery prioritized');
+});
+test('strings exactes : no userProfile → null', function () {
+  var r = _applyAdaptiveCaps(2, 'goal_alignment', 'overtraining', 5, false, 'train');
+  assertEqual(r.adaptationReason, null);
+});
+
+// ── Guards : clamp, missing fields, no double-stack ──────────────────────────
+test('momentumScore clamp : toujours 0–10', function () {
+  // Direct score computation uses clamp
+  var score = _computeMomentumScore({ trainingFrequencyLast7Days: 7, adherenceScore: 1.0,
+    last7SessionsIntensity: ['high','high','high'] });
+  assert(score >= 0 && score <= 10, 'out of range: ' + score);
+});
+test('missing userProfile fields → no crash, momentum not penalized', function () {
+  // Only avgFatigueLast7Days provided: no freq penalty/bonus, no adherence penalty
+  var score = _computeMomentumScore({ avgFatigueLast7Days: 2 });
+  assertEqual(score, 5); // baseline only — no bonuses, no penalties (avgFat < 4)
+});
+test('progression + adaptive : plafond max = high (pas de double-stack)', function () {
+  // disciplined boost: min(rank+1, 2) → jamais > 2 (high)
+  var r = _applyAdaptiveCaps(2, 'goal_alignment', 'disciplined', 7, true, 'train');
+  assertEqual(r.maxRank, 2); // déjà high → boost n'empile pas au-delà
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
