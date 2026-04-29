@@ -1136,7 +1136,10 @@
           "coaching_cue": "The walk breaks are the training — you are teaching your body to stay aerobic, not to survive anaerobically.",
           "duration": 45,
           "subtype": "zone2",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "conditioning",
+          "intent": "build sustained aerobic output at MAF heart rate",
+          "progression_hint": "Core long-run session — log pace every 10 min; when drift is under 15 sec/km over 60 min, extend to 75 min"
         },
         {
           "id": "z2-i-02",
@@ -1181,7 +1184,10 @@
           "coaching_cue": "Higher cadence at the same HR means your aerobic system is running more efficiently — that is the adaptation you are chasing.",
           "duration": 60,
           "subtype": "zone2",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "recomposition",
+          "intent": "high-volume aerobic work via extended cycling",
+          "progression_hint": "Weekly long ride — extend by 10 min per week toward 90 min; pairs with a 30-min Zone 2 run later in the same week"
         },
         {
           "id": "z2-i-03",
@@ -1204,7 +1210,10 @@
           "coaching_cue": "A split you can hold means you finish feeling like you could do 10 more minutes — if you feel relieved at the end, you went too hard.",
           "duration": 40,
           "subtype": "zone2",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "conditioning",
+          "intent": "aerobic interval blocks to raise lactate threshold floor",
+          "progression_hint": "Structured Zone 2 intervals build base faster than continuous effort — advance to 6 × 15 min when HR stabilises in lower Zone 2 by minute 10"
         },
         {
           "id": "z2-i-04",
@@ -1232,7 +1241,10 @@
           "coaching_cue": "Most athletes run their easy runs positive-split without realising — this session corrects that pattern permanently.",
           "duration": 50,
           "subtype": "zone2",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "conditioning",
+          "intent": "run-walk pyramid to extend aerobic endurance range",
+          "progression_hint": "Progressive overload model — add one round per week; graduate to continuous 60-min run when 3 rounds feel comfortable"
         },
         {
           "id": "z2-i-05",
@@ -1272,7 +1284,10 @@
           "coaching_cue": "Switching modality mid-session taxes your aerobic system in a different pattern — the brief HR spike is not a failure of pacing.",
           "duration": 50,
           "subtype": "zone2",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "recomposition",
+          "intent": "aerobic volume with embedded tempo work for cardiac output",
+          "progression_hint": "Threshold embedded in Zone 2 session mirrors race-pace demands; progress tempo segment by 2 min per block cycle"
         },
         {
           "id": "z2-i-06",
@@ -1296,7 +1311,10 @@
           "coaching_cue": "The MAF method works only if you respect the ceiling every single session — one anaerobic breach resets the signal.",
           "duration": 45,
           "subtype": "zone2",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "conditioning",
+          "intent": "MAF protocol long run for aerobic efficiency development",
+          "progression_hint": "Log pace splits every 10 min — improvement in pace at same HR over 8 weeks is the primary adaptation marker"
         },
         {
           "id": "z2-i-07",
@@ -1347,7 +1365,10 @@
           "coaching_cue": "Uphill zone 2 builds more aerobic strength per minute than flat zone 2 — the slower pace is the point, not the problem.",
           "duration": 40,
           "subtype": "zone2",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "conditioning",
+          "intent": "extended cycling volume to build fat-oxidation capacity",
+          "progression_hint": "Longest aerobic session in the intermediate block — completing 90 min at stable HR signals readiness for mixed-modality endurance work"
         },
         {
           "id": "z2-i-08",
@@ -1371,7 +1392,10 @@
           "coaching_cue": "60 minutes at a consistent HR is not a test of willpower — it is the minimum duration for a cardiac output adaptation to occur.",
           "duration": 60,
           "subtype": "zone2",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "recomposition",
+          "intent": "cross-modality endurance to prevent adaptation and boost overall aerobic capacity",
+          "progression_hint": "Rotate modality order each session to avoid skill-specific fatigue; progress each segment to 20 min before adding a 5th modality"
         },
         {
           "id": "z2-i-09",
@@ -1397,7 +1421,10 @@
           "coaching_cue": "The quality of this session is measured by how fast your HR returns to zone 2 after each surge — track that number across weeks.",
           "duration": 55,
           "subtype": "zone2",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "conditioning",
+          "intent": "Zone 2 base with surge blocks to stress cardiac recovery",
+          "progression_hint": "Surge-recovery pattern trains the heart to return to Zone 2 quickly — a key predictor of aerobic fitness; add one surge block per month"
         },
         {
           "id": "z2-i-10",
@@ -1420,7 +1447,10 @@
           "coaching_cue": "Fasted zone 2 trains your body to oxidise fat at low intensities — the adaptation is metabolic, not cardiovascular, and it takes 6–8 weeks to appear.",
           "duration": 60,
           "subtype": "zone2",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "recomposition",
+          "intent": "endurance brick combining aerobic capacity and strength retention",
+          "progression_hint": "Prepares the body for mixed-subtype weeks — use as a weekly anchor session; advance to mix-i-07 triathlon brick when 50-min bike + 10-min run feels easy"
         }
       ]
     },
