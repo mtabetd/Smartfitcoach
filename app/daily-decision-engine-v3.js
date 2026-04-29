@@ -1119,8 +1119,8 @@
     if (decision === 'rest') {
       return {
         coachingMessage: highFatigue
-          ? 'Repos total. Aucune exception.\nTon corps a dit stop — respecte-le.\nRépondre juste, c\'est déjà s\'entraîner.'
-          : 'Repos complet.\nC\'est là que le travail se fixe.\nTu seras plus fort demain.'
+          ? 'Repos total. Aucune exception.\nTon corps a dit stop. Respecte-le.\nTu sais t\'arrêter.'
+          : 'Repos complet.\nC\'est là que le travail se fixe.\nTu reviens plus fort.'
       };
     }
 
@@ -1130,43 +1130,43 @@
     // Each template: 3 lines joined by \n — ACTION / MEANING / IDENTITY
     var messages = {
       hiit: {
-        normal:  'Intervalles à fond. Récupère entre chaque effort.\nL\'inconfort d\'aujourd\'hui crée l\'avantage de demain.\nTu deviens quelqu\'un qui tient.',
-        fatigue: 'HIIT allégé. Qualité sur quantité.\nL\'effort juste vaut plus que l\'effort forcé.\nTu apprends à gérer, pas juste à pousser.'
+        normal:  'Intervalles à fond. Récupère entre chaque.\nL\'inconfort crée l\'avantage.\nTu ne cèdes pas.',
+        fatigue: 'HIIT allégé. Qualité sur quantité.\nL\'effort juste vaut plus que l\'effort forcé.\nTu gères l\'effort.'
       },
       zone2: {
-        normal:  'Séance zone 2. Rythme stable, souffle facile.\nC\'est ici que tu construis ta base.\nTu deviens l\'athlète qui dure.',
-        fatigue: 'Zone 2 douce. Réduis si besoin.\nLe mouvement suffit aujourd\'hui.\nTu choisis la continuité.'
+        normal:  'Séance zone 2. Rythme stable, souffle facile.\nC\'est ici que tu construis ta base.\nTu tiens sur la durée.',
+        fatigue: 'Zone 2 douce. Réduis si besoin.\nLe mouvement suffit aujourd\'hui.\nTu restes en mouvement.'
       },
       mixed: {
-        normal:  'Alterne phases intenses et phases calmes.\nLes deux registres ensemble, c\'est ce que les autres évitent.\nTu deviens polyvalent.',
-        fatigue: 'Mixte allégé. Priorité aux phases calmes.\nContinuer sous contrainte, c\'est une victoire.\nTu restes dans le jeu.'
+        normal:  'Alterne phases intenses et phases calmes.\nLes deux registres. C\'est rare.\nTu es complet.',
+        fatigue: 'Mixte allégé. Priorité aux phases calmes.\nContinuer sous contrainte. C\'est une victoire.\nTu restes présent.'
       },
       heavy: {
-        normal:  'Charges lourdes. Temps de repos complets.\nSous la barre, tout compte.\nTu construis une force qui reste.',
-        fatigue: 'Force ajustée. Technique avant le tonnage.\nMoins de charge, même exigence.\nL\'athlète solide performe même fatigué.'
+        normal:  'Charges lourdes. Temps de repos complets.\nSous la barre, tout compte.\nTu es solide.',
+        fatigue: 'Force ajustée. Technique avant le tonnage.\nMoins de charge. Même exigence.\nTu restes exigeant.'
       },
       explosive: {
-        normal:  'Chaque répétition intentionnellement maximale.\nLa vitesse d\'exécution, c\'est le but.\nTu entraînes la rapidité du geste.',
-        fatigue: 'Puissance réduite. Stoppe si la vitesse chute.\nUn mauvais geste rapide ne vaut rien.\nTu gardes la qualité — c\'est tout.'
+        normal:  'Chaque répétition intentionnellement maximale.\nLa vitesse d\'exécution, c\'est le but.\nTu ne ralentis pas.',
+        fatigue: 'Puissance réduite. Stoppe si la vitesse chute.\nUn mauvais geste rapide ne vaut rien.\nTu restes propre.'
       },
       tempo: {
-        normal:  'Excentrique sur 4 secondes. Aucun élan.\nSous tension, le muscle travaille vraiment.\nTu apprends à contrôler, pas à lancer.',
-        fatigue: 'Tempo maintenu. Charge réduite si besoin.\nLe contrôle prime sur le tonnage.\nTu construis la maîtrise, pas juste la masse.'
+        normal:  'Excentrique sur 4 secondes. Aucun élan.\nSous tension, le muscle travaille vraiment.\nTu ne lances pas.',
+        fatigue: 'Tempo maintenu. Charge réduite si besoin.\nLe contrôle prime sur le tonnage.\nTu choisis la précision.'
       },
       recovery: {
-        normal:  'Mobilité. Marche légère. Aucune charge.\nBouger sans forcer, c\'est récupérer.\nTu prends soin de ce que tu as construit.',
-        fatigue: 'Douceur totale. Respiration, étirements légers.\nTon corps a besoin de calme, pas d\'effort.\nÉcouter ça, c\'est une compétence.'
+        normal:  'Mobilité. Marche légère. Aucune charge.\nBouger sans forcer, c\'est récupérer.\nTu prends soin.',
+        fatigue: 'Douceur totale. Respiration, étirements légers.\nTon corps a besoin de calme, pas d\'effort.\nTu sais écouter.'
       }
     };
 
     // Volume: different messages depending on session type
     var volumeStr = {
       normal:  'Séries en accumulation. Tonnage élevé, charge modérée.\nC\'est le volume de la semaine qui compte.\nTu poses les fondations.',
-      fatigue: 'Volume allégé. Densité maintenue, évite l\'échec.\nContinue à construire, même à dose réduite.\nLa régularité bat l\'intensité.'
+      fatigue: 'Volume allégé. Densité maintenue, évite l\'échec.\nContinue à construire même à dose réduite.\nTu restes constant.'
     };
     var volumeHyp = {
-      normal:  'Plage 10–15 répétitions. Cherche la congestion.\nLa brûlure, c\'est le signal.\nTu construis le volume, rep après rep.',
-      fatigue: 'Volume allégé. Garde les répétitions, baisse la charge.\nLe pompage reste là même fatigué.\nTu continues — c\'est tout ce qui compte.'
+      normal:  'Plage 10–15 répétitions. Cherche la congestion.\nLa brûlure, c\'est le signal.\nTu construis rep après rep.',
+      fatigue: 'Volume allégé. Garde les répétitions, baisse la charge.\nLe pompage reste là même fatigué.\nTu avances toujours.'
     };
 
     // Primary routing by subtype
