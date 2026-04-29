@@ -272,11 +272,10 @@
 
   // ── Shareable output ──────────────────────────────────────────────────────
 
-  // Three-line premium summary: title / session focus / momentum label + score.
   function _buildShareableOutput(selected, sessionFocus, premiumTag, score) {
-    return selected.title + '\n' +
-           sessionFocus   + '\n' +
-           premiumTag     + '  ·  ' + score;
+    return 'SMARTFITCOACH\n' +
+           sessionFocus + '\n' +
+           premiumTag.toUpperCase();
   }
 
   // ── Session focus ─────────────────────────────────────────────────────────
@@ -285,39 +284,39 @@
   // {duration} is replaced with the workout's actual duration in minutes.
   var SESSION_FOCUS_TEMPLATES = {
     hiit: [
-      '{duration}-min high-intensity interval session — sustain output in each work block, recover fully in each rest period',
-      'Short explosive conditioning — {duration} min at maximum sustainable effort across all rounds',
-      'Metabolic conditioning — {duration} min of quality intervals executed at prescribed intensity'
+      '{duration}-min intervals — push output ceiling',
+      '{duration}-min conditioning — max effort, full rounds',
+      '{duration}-min intervals — hold pace above threshold'
     ],
     zone2: [
-      '{duration}-min aerobic base session — conversational pace, sustained output, full duration',
-      'Steady zone 2 work — {duration} min building fat-oxidation efficiency at controlled intensity',
-      'Low-intensity endurance — {duration} min at controlled heart rate for long-term base development'
+      '{duration}-min zone 2 — controlled pace, full duration',
+      '{duration}-min aerobic base — conversational effort throughout',
+      '{duration}-min steady state — heart rate controlled, no variance'
     ],
     mixed: [
-      'Concurrent training — {duration} min of aerobic and strength work executed in sequence',
-      '{duration}-min hybrid session — aerobic base paired with loaded compound movement',
-      'Strength and conditioning in one session — {duration} min of dual-signal training'
+      '{duration}-min hybrid — strength meets conditioning',
+      '{duration}-min concurrent — aerobic base, compound load',
+      '{duration}-min mixed — dual signal, full execution'
     ],
     heavy: [
-      'Maximum strength session — {duration} min of heavy compound work with full recovery between sets',
-      '{duration}-min strength block — load with intent, execute with precision, rest completely',
-      'Heavy loading — {duration} min focused on absolute strength through progressive loading'
+      '{duration}-min strength — heavy compound, full recovery',
+      '{duration}-min barbell — load with intent, rest completely',
+      '{duration}-min max strength — bar speed is the metric'
     ],
     explosive: [
-      'Power development — {duration} min training the nervous system to produce force at maximum speed',
-      '{duration}-min reactive strength session — every rep at full intent with complete recovery',
-      'Athletic power — {duration} min of explosive movement and full inter-set recovery'
+      '{duration}-min power — reactive strength at full intent',
+      '{duration}-min explosive — force production, complete recovery',
+      '{duration}-min athletic — speed of movement is the variable'
     ],
     tempo: [
-      'Time under tension — {duration} min of controlled loading with prescribed eccentric tempo',
-      '{duration}-min tempo session — decelerate the movement to multiply the stimulus',
-      'Tempo-controlled loading — {duration} min where cadence is the primary training variable'
+      '{duration}-min tempo — controlled eccentric, full range',
+      '{duration}-min time under tension — slow the movement down',
+      '{duration}-min precision — cadence is the training variable'
     ],
     volume: [
-      'Accumulation session — {duration} min of systematic volume for hypertrophy and strength development',
-      '{duration}-min volume block — moderate load, high rep quality, full range of motion',
-      'High-volume loading — {duration} min of deliberate repetition to drive structural adaptation'
+      '{duration}-min volume — accumulate reps, maintain form',
+      '{duration}-min hypertrophy — moderate load, high repetitions',
+      '{duration}-min accumulation — deliberate reps, full range'
     ]
   };
 

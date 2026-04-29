@@ -507,10 +507,10 @@ test('shareable_output has exactly 3 lines', function () {
   assert(lines.length === 3, 'expected 3 lines, got ' + lines.length + ': ' + result.shareable_output);
 });
 
-test('shareable_output line 1 is workout title', function () {
+test('shareable_output line 1 is SMARTFITCOACH', function () {
   var result = selectWorkout({ user_level: 'beginner', goal: 'fat_loss', available_time: 20, fatigue_level: 2, last_workouts: [], preferred_subtypes: null }, library);
-  var found  = _flattenLibrary(library).find(function (w) { return w.id === result.selected_workout_id; });
-  assert(result.shareable_output.startsWith(found.title), 'line 1 should be workout title');
+  var line1  = result.shareable_output.split('\n')[0];
+  assertEqual(line1, 'SMARTFITCOACH');
 });
 
 test('shareable_output contains session_focus', function () {
@@ -519,11 +519,10 @@ test('shareable_output contains session_focus', function () {
     'shareable_output must contain session_focus');
 });
 
-test('shareable_output line 3 contains momentum_tag and momentum_score', function () {
+test('shareable_output line 3 is momentum_tag uppercased', function () {
   var result = selectWorkout({ user_level: 'beginner', goal: 'recomposition', available_time: 35, fatigue_level: 4, last_workouts: [], preferred_subtypes: null }, library);
   var line3  = result.shareable_output.split('\n')[2];
-  assert(line3.includes(result.momentum_tag),  'line 3 missing momentum_tag: '  + line3);
-  assert(line3.includes(String(result.momentum_score)), 'line 3 missing momentum_score: ' + line3);
+  assertEqual(line3, result.momentum_tag.toUpperCase());
 });
 
 test('shareable_output contains no emoji characters', function () {
