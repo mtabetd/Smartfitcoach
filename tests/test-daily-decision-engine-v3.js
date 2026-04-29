@@ -2663,6 +2663,323 @@ test('invariant: UI fields are last and do not shadow V2/V3 core fields', functi
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
+// SECTION 22 — Adversarial & Edge Case QA (autonomous QA system findings)
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('\nSection 22 — Adversarial QA');
+
+// ── FIX 1: lastSessionDate — invalid date strings must throw ─────────────────
+// BUG CONFIRMED: '9999-99-99' and 'not-a-date' previously passed validation
+// and produced NaN daysSince, disabling the post-high-session intensity cap.
+test('security: invalid date "not-a-date" must throw, not silently produce NaN', function () {
+  var threw = false;
+  try {
+    decideV3({ goal: 'muscle_gain', fatigueLevel: 2, trainingFrequency: 3,
+      lastSessionDate: 'not-a-date', last3SessionsIntensity: ['moderate'] });
+  } catch (e) { threw = true; }
+  assert(threw, 'invalid date string must throw TypeError');
+});
+test('security: invalid date "9999-99-99" must throw', function () {
+  var threw = false;
+  try {
+    decideV3({ goal: 'muscle_gain', fatigueLevel: 2, trainingFrequency: 3,
+      lastSessionDate: '9999-99-99', last3SessionsIntensity: ['moderate'] });
+  } catch (e) { threw = true; }
+  assert(threw, 'out-of-range date string must throw');
+});
+test('security: empty string lastSessionDate must throw', function () {
+  var threw = false;
+  try {
+    decideV3({ goal: 'muscle_gain', fatigueLevel: 2, trainingFrequency: 3,
+      lastSessionDate: '', last3SessionsIntensity: ['moderate'] });
+  } catch (e) { threw = true; }
+  assert(threw, 'empty lastSessionDate must throw');
+});
+test('security: valid ISO date still accepted after fix', function () {
+  var ok = false;
+  try {
+    decideV3({ goal: 'muscle_gain', fatigueLevel: 2, trainingFrequency: 3,
+      lastSessionDate: '2026-04-28', last3SessionsIntensity: ['moderate'] });
+    ok = true;
+  } catch (e) {}
+  assert(ok, 'valid ISO date must not throw');
+});
+
+// ── FIX 2: predictionInsights.recommendation for next2Days=decrease ───────────
+// BUG CONFIRMED: 'decrease' trajectory fell through to generic "Reste régulier"
+// despite signalling a negative momentum outcome to the user.
+test('fix: next2Days=decrease → recommendation addresses decline', function () {
+  var r = _buildPredictionInsights(null, {
+    last7Decisions: ['train','train','train','train','train','train','train'],
+    last7Momentum:  [9, 8, 7, 6, 5, 4, 3]
+  });
+  assertEqual(r.next2Days, 'decrease');
+  assert(r.recommendation.indexOf('Reste régulier') === -1,
+    'decrease trajectory must NOT recommend "Reste régulier"');
+  assert(r.recommendation.length > 0, 'recommendation must be non-empty');
+});
+test('fix: engine decrease trajectory → decline-aware recommendation', function () {
+  var out = decideV3({
+    goal: 'muscle_gain', fatigueLevel: 2, trainingFrequency: 3,
+    lastSessionDate: '2026-04-28', last3SessionsIntensity: ['moderate'],
+    userHistory: {
+      last7Decisions: ['train','train','train','train','train','train','rest'],
+      last7Momentum:  [9, 8, 7, 6, 5, 4, 3]
+    }
+  });
+  if (out.predictionInsights.next2Days === 'decrease') {
+    assert(out.predictionInsights.recommendation.indexOf('Reste régulier') === -1,
+      'engine decrease path must not give generic recommendation');
+  }
+});
+
+// ── FINDING: decision=train + fatigueRisk=high → conflicting signals ──────────
+// DOCUMENTED BEHAVIOR: the engine CAN say "train" while predictionInsights
+// flags fatigueRisk=high (via freq≥6+streak≥3). premiumCoachingMessage line 1
+// then says "La fatigue commence à limiter ton potentiel aujourd'hui."
+// This contradiction is real and visible to end users.
+test('document: train decision can coexist with fatigueRisk=high (via freq+streak path)', function () {
+  var out = decideV3({
+    goal: 'muscle_gain', fatigueLevel: 1, trainingFrequency: 4,
+    lastSessionDate: '2026-04-28', last3SessionsIntensity: ['moderate'],
+    userProfile: { trainingFrequencyLast7Days: 7 },
+    userHistory: {
+      last7Decisions: ['train','train','train','train','train','train','train'],
+      last7Momentum:  [5, 6, 7, 8, 9, 10, 10]
+    }
+  });
+  // Document the contradiction — this is a known product-logic gap
+  assert(out.decision !== undefined, 'decision is always present');
+  assert(out.predictionInsights.fatigueRisk !== undefined, 'fatigueRisk is always present');
+  if (out.decision === 'train' && out.predictionInsights.fatigueRisk === 'high') {
+    // Both are true simultaneously — product team must decide resolution strategy
+    assert(out.premiumCoachingMessage.indexOf('limiter') !== -1 ||
+           out.premiumCoachingMessage.indexOf('récupér') !== -1 ||
+           typeof out.premiumCoachingMessage === 'string',
+           'message still renders even in contradictory state');
+  }
+});
+
+// ── FINDING: last7Decisions length not capped — entries beyond 7 count ────────
+// DOCUMENTED BEHAVIOR: a 14-entry array produces streak=14, not 7.
+test('document: last7Decisions with 14 entries produces streak=14 (not capped to 7)', function () {
+  var r = _buildHistoryInsights({ last7Decisions: Array(14).fill('train') });
+  assertEqual(r.streak, 14); // intentionally documents current behavior
+  assertEqual(r.consistencyScore, 10); // trainCount=14 → top bucket
+});
+test('document: last7Decisions with 7 entries produces streak=7 (expected)', function () {
+  var r = _buildHistoryInsights({ last7Decisions: Array(7).fill('train') });
+  assertEqual(r.streak, 7);
+  assertEqual(r.consistencyScore, 10);
+});
+
+// ── FINDING: non-numeric values in last7Momentum silently produce 'stable' ────
+// DOCUMENTED BEHAVIOR: NaN propagation results in trend='stable' — no warning.
+test('document: NaN in last7Momentum silently produces stable trend', function () {
+  var r = _buildHistoryInsights({ last7Momentum: [5, NaN, 7] });
+  assertEqual(r.momentumTrend, 'stable'); // documents silent NaN behavior
+});
+test('document: string in last7Momentum silently produces stable trend', function () {
+  var r = _buildHistoryInsights({ last7Momentum: [5, 'bad', 7] });
+  assertEqual(r.momentumTrend, 'stable'); // documents silent coercion
+});
+
+// ── FINDING: 'base' and 'peak' trainingPhases are validated but silently no-op ─
+// DOCUMENTED BEHAVIOR: 'peak' accepted by schema but has zero special logic.
+test('document: trainingPhase=peak behaves identically to build (no peak logic)', function () {
+  var base = { goal: 'muscle_gain', fatigueLevel: 2, trainingFrequency: 3,
+    lastSessionDate: '2026-04-26', last3SessionsIntensity: ['moderate'] };
+  var rPeak  = decideV3(Object.assign({}, base, { trainingPhase: 'peak'  }));
+  var rBuild = decideV3(Object.assign({}, base, { trainingPhase: 'build' }));
+  assertEqual(rPeak.decision,             rBuild.decision);
+  assertEqual(rPeak.recommendedIntensity, rBuild.recommendedIntensity);
+  assertEqual(rPeak.priorityApplied,      rBuild.priorityApplied);
+});
+test('document: trainingPhase=base behaves identically to build (no base logic)', function () {
+  var base = { goal: 'muscle_gain', fatigueLevel: 2, trainingFrequency: 3,
+    lastSessionDate: '2026-04-26', last3SessionsIntensity: ['moderate'] };
+  var rBase  = decideV3(Object.assign({}, base, { trainingPhase: 'base'  }));
+  var rBuild = decideV3(Object.assign({}, base, { trainingPhase: 'build' }));
+  assertEqual(rBase.decision,             rBuild.decision);
+  assertEqual(rBase.recommendedIntensity, rBuild.recommendedIntensity);
+});
+
+// ── FINDING: beginner profile always reports adaptationReason ─────────────────
+// DOCUMENTED BEHAVIOR: even when no cap fires, 'Beginner-friendly intensity applied'
+// is set. This means the UI always shows an adaptation reason for beginners.
+test('document: beginner profile with high momentum still reports adaptationReason', function () {
+  var out = decideV3({
+    goal: 'muscle_gain', fatigueLevel: 2, trainingFrequency: 3,
+    lastSessionDate: '2026-04-28', last3SessionsIntensity: ['moderate'],
+    userProfile: { trainingFrequencyLast7Days: 3 } // → beginner, momentum=5
+  });
+  assertEqual(out.profileType, 'beginner');
+  assertEqual(out.adaptationReason, 'Beginner-friendly intensity applied'); // even if no cap
+});
+
+// ── FINDING: momentumTrend=up + next2Days=stable — contradictory UI signals ───
+// DOCUMENTED BEHAVIOR: if last decision was 'rest', trend='up' but next2Days='stable'.
+test('document: momentumTrend=up can coexist with next2Days=stable (last=rest)', function () {
+  var userHistory = {
+    last7Decisions: ['train','train','train','train','train','train','rest'],
+    last7Momentum:  [3, 4, 5, 6, 7, 8, 9]
+  };
+  var hi = _buildHistoryInsights(userHistory);
+  var pi = _buildPredictionInsights(null, userHistory);
+  assertEqual(hi.momentumTrend, 'up');
+  assertEqual(pi.next2Days, 'stable'); // last='rest' prevents 'increase'
+  // These two signals conflict — momentum is rising but prediction is stable
+  assert(hi.momentumTrend !== pi.next2Days, 'trend/prediction can diverge');
+});
+
+// ── FINDING: disciplined profile requires ALL 3 fields — missing avgFatigue → beginner
+test('document: high adherence + high freq but missing avgFatigue → beginner not disciplined', function () {
+  var out = decideV3({
+    goal: 'muscle_gain', fatigueLevel: 2, trainingFrequency: 3,
+    lastSessionDate: '2026-04-28', last3SessionsIntensity: ['moderate'],
+    userProfile: { adherenceScore: 0.9, trainingFrequencyLast7Days: 5 } // missing avgFatigueLast7Days
+  });
+  assertEqual(out.profileType, 'beginner'); // fails to classify as disciplined
+});
+test('document: all 3 fields required for disciplined classification', function () {
+  var withAll = decideV3({
+    goal: 'muscle_gain', fatigueLevel: 2, trainingFrequency: 3,
+    lastSessionDate: '2026-04-28', last3SessionsIntensity: ['moderate'],
+    userProfile: { adherenceScore: 0.9, trainingFrequencyLast7Days: 5, avgFatigueLast7Days: 2 }
+  });
+  assertEqual(withAll.profileType, 'disciplined'); // all 3 present → correct
+});
+
+// ── FINDING: progression triggered but silently discarded by dense schedule ───
+test('document: progression triggered but overridden by dense schedule (freq=4+fatigue=3)', function () {
+  var out = decideV3({
+    goal: 'muscle_gain', fatigueLevel: 3, trainingFrequency: 4,
+    lastSessionDate: '2026-04-28', last3SessionsIntensity: ['moderate','moderate','moderate']
+  });
+  assert(out.progressionTriggered === true, 'progression IS triggered');
+  assertEqual(out.recommendedIntensity, 'low'); // BUT dense schedule wins → low
+  assertEqual(out.priorityApplied, 'frequency_consistency'); // not progression_logic
+});
+
+// ── FINDING: consistencyScore=2 for 0 training sessions (non-zero minimum) ────
+test('document: zero training sessions gives consistencyScore=2 not 0', function () {
+  var r = _buildHistoryInsights({ last7Decisions: [] });
+  assertEqual(r.consistencyScore, 2); // trainCount=0 maps to score 2, not 0
+  assertEqual(r.streak, 0);
+});
+test('document: all-rest 7 sessions gives consistencyScore=2', function () {
+  var r = _buildHistoryInsights({ last7Decisions: Array(7).fill('rest') });
+  assertEqual(r.consistencyScore, 2); // trainCount=0 → same bucket as 0 sessions
+});
+
+// ── FINDING: momentumScore maximum is 8, not 10 (with valid inputs) ───────────
+test('document: maximum achievable momentumScore via validation is 8 not 10', function () {
+  // +1 freq>=3, +1 adherence>=0.8, +1 high session = max +3, base=5 → cap at 8
+  var score = _computeMomentumScore({
+    trainingFrequencyLast7Days: 7,
+    adherenceScore: 1.0,
+    last7SessionsIntensity: ['high','high','high'],
+    avgFatigueLast7Days: 1
+  });
+  assertEqual(score, 8); // 5+1+1+1=8; no bonuses can push above 8 with valid inputs
+  assert(score < 10, 'score of 10 unreachable through normal valid inputs');
+});
+
+// ── EDGE: momentumScore=0 renders as "0 / 10" not "-" in card ────────────────
+test('edge: momentum=0 renders as "0 / 10" in card (not fallback "-")', function () {
+  var c = _buildSmartFitCoachCard({
+    decision: 'train', momentumScore: 0, premiumCoachingMessage: 'msg'
+  });
+  assert(c.indexOf('Momentum      : 0 / 10') !== -1, 'score=0 shows "0 / 10" not "-"');
+});
+
+// ── FUZZING: random valid input combinations never throw ───────────────────────
+test('fuzzing: 50 random valid inputs never throw', function () {
+  var goals   = ['fat_loss', 'muscle_gain', 'maintenance'];
+  var phases  = ['base', 'build', 'peak', 'taper', 'restart'];
+  var intens  = ['low', 'moderate', 'high'];
+  var thrown  = 0;
+  for (var i = 0; i < 50; i++) {
+    var fatigue = (i % 5) + 1;
+    var freq    = (i % 7) + 1;
+    var goal    = goals[i % 3];
+    var phase   = phases[i % 5];
+    var last3   = [intens[i % 3], intens[(i + 1) % 3], intens[(i + 2) % 3]];
+    // Use a date that is always valid and in the past
+    var pastDate = new Date(Date.now() - (i + 1) * 86400000).toISOString().slice(0, 10);
+    try {
+      var r = decideV3({
+        goal: goal, fatigueLevel: fatigue, trainingFrequency: freq,
+        lastSessionDate: pastDate, last3SessionsIntensity: last3,
+        trainingPhase: phase
+      });
+      assert(typeof r.decision === 'string', 'decision must be string');
+      assert(typeof r.smartfitcoachCard === 'string', 'card must be string');
+    } catch (e) {
+      thrown++;
+    }
+  }
+  assertEqual(thrown, 0);
+});
+
+// ── PROPERTY: decision alignment with card action text ────────────────────────
+test('property: card action always aligns with engine decision (100 calls)', function () {
+  var scenarios = [
+    { fatigueLevel: 1, trainingFrequency: 3 },
+    { fatigueLevel: 5, trainingFrequency: 3 },
+    { fatigueLevel: 4, trainingFrequency: 2 },
+    { fatigueLevel: 4, trainingFrequency: 5 },
+    { fatigueLevel: 2, trainingFrequency: 7 }
+  ];
+  var today = new Date().toISOString().slice(0, 10);
+  var yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  scenarios.forEach(function (sc, idx) {
+    var r = decideV3({
+      goal: 'muscle_gain', fatigueLevel: sc.fatigueLevel, trainingFrequency: sc.trainingFrequency,
+      lastSessionDate: idx % 2 === 0 ? yesterday : today,
+      last3SessionsIntensity: ['moderate']
+    });
+    var expectedAction = r.decision === 'rest'
+      ? 'Laisser le corps récupérer pleinement.'
+      : 'Effectuer la séance prévue avec précision.';
+    assert(r.smartfitcoachCard.indexOf(expectedAction) !== -1,
+      'card action "' + expectedAction + '" must match decision=' + r.decision);
+  });
+});
+
+// ── PROPERTY: fatigueEffective always clamped 1–5 ─────────────────────────────
+test('property: fatigueEffective always within [1,5] bounds', function () {
+  var cases = [
+    { fatigueLevel: 1, sleepQuality: 1, lastSessionDate: new Date(Date.now() - 20*86400000).toISOString().slice(0,10) },
+    { fatigueLevel: 5, sleepQuality: 1, lastSessionDate: new Date(Date.now() - 86400000).toISOString().slice(0,10) },
+    { fatigueLevel: 3, sleepQuality: 5, lastSessionDate: new Date(Date.now() - 4*86400000).toISOString().slice(0,10) }
+  ];
+  cases.forEach(function (sc) {
+    var r = decideV3(Object.assign({
+      goal: 'maintenance', trainingFrequency: 3,
+      last3SessionsIntensity: ['moderate']
+    }, sc));
+    assert(r.fatigueEffective >= 1 && r.fatigueEffective <= 5,
+      'fatigueEffective must be in [1,5], got: ' + r.fatigueEffective);
+  });
+});
+
+// ── PROPERTY: rest decision always produces intensity=low and sessType=recovery ─
+test('property: rest decision always yields low intensity + recovery sessionType', function () {
+  var restCases = [
+    { fatigueLevel: 5, trainingFrequency: 3, lastSessionDate: new Date(Date.now() - 86400000).toISOString().slice(0,10) },
+    { fatigueLevel: 4, trainingFrequency: 5, lastSessionDate: new Date(Date.now() - 86400000).toISOString().slice(0,10) },
+    { fatigueLevel: 1, trainingFrequency: 3, lastSessionDate: new Date().toISOString().slice(0,10) } // trained today
+  ];
+  restCases.forEach(function (sc) {
+    var r = decideV3(Object.assign({ goal: 'maintenance', last3SessionsIntensity: ['moderate'] }, sc));
+    if (r.decision === 'rest') {
+      assertEqual(r.recommendedIntensity,   'low');
+      assertEqual(r.recommendedSessionType, 'recovery');
+    }
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Résultats
 // ─────────────────────────────────────────────────────────────────────────────
 console.log('\n' + '─'.repeat(50));

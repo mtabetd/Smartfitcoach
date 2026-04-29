@@ -720,7 +720,7 @@
       }
     }
 
-    // ── 3. recommendation (4 cases; fatigue priority > momentum) ─────────────
+    // ── 3. recommendation (5 cases; fatigue priority > momentum) ─────────────
     var recommendation;
     if (fatigueRisk === 'high') {
       recommendation = "Priorise la récupération ces deux prochains jours. Ton corps en a besoin.";
@@ -728,6 +728,8 @@
       recommendation = "Maintiens un effort mesuré — ton corps gère une charge soutenue.";
     } else if (next2Days === 'increase') {
       recommendation = "Ta dynamique est favorable — profites-en pour élever l'intensité.";
+    } else if (next2Days === 'decrease') {
+      recommendation = "Le rythme tend à fléchir. Consolide la régularité avant d'accélérer.";
     } else {
       recommendation = "Reste régulier. La constance est le fondement de tout progrès.";
     }
@@ -865,8 +867,8 @@
       throw new TypeError('DDEv3: last3SessionsIntensity must be a string or array');
     }
 
-    if (!inputs.lastSessionDate) {
-      throw new TypeError('DDEv3: lastSessionDate is required');
+    if (!inputs.lastSessionDate || isNaN(new Date(inputs.lastSessionDate).getTime())) {
+      throw new TypeError('DDEv3: lastSessionDate must be a valid date string, got: ' + inputs.lastSessionDate);
     }
     if (VALID_GOALS.indexOf(inputs.goal) === -1) {
       throw new RangeError('DDEv3: goal must be fat_loss|muscle_gain|maintenance');
