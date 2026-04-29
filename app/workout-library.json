@@ -363,6 +363,179 @@
           "coaching_cue": "Break pull-ups into small sets from rep one — 5s of rest between sets costs nothing; sets of 1 after failure costs everything."
         }
       ]
+    },
+    "zone2": {
+      "beginner": [
+        {
+          "id": "z2-b-01",
+          "title": "First 25",
+          "format": "Continuous steady-state run or jog",
+          "structure": {
+            "duration": "25 min",
+            "target_rpe": "4/10",
+            "target_hr": "60–65% max HR",
+            "rule": "Maintain a pace where you can speak in full sentences without pausing to breathe"
+          },
+          "duration_min": 25,
+          "equipment": ["none — outdoor or treadmill"],
+          "scaling": "Walk the full 25 min; introduce 30s jogs every 3 min once breathing stays easy",
+          "coaching_cue": "If you have to open your mouth to breathe, you are already out of zone 2 — slow down."
+        },
+        {
+          "id": "z2-b-02",
+          "title": "Flat Bike Hold",
+          "format": "Continuous stationary bike at fixed resistance",
+          "structure": {
+            "phases": [
+              { "label": "Warm-up", "duration": "5 min", "rpe": "3/10" },
+              { "label": "Zone 2 block", "duration": "20 min", "rpe": "4–5/10" },
+              { "label": "Cool-down", "duration": "5 min", "rpe": "3/10" }
+            ],
+            "cadence_target": "80–90 RPM",
+            "rule": "If cadence drops below 70 RPM, reduce resistance instead of grinding"
+          },
+          "duration_min": 30,
+          "equipment": ["stationary bike or spin bike"],
+          "scaling": "Reduce to 15-min zone 2 block; extend by 5 min per session over 4 weeks",
+          "coaching_cue": "Cadence over resistance — spinning at 85 RPM is aerobic work; grinding at 60 RPM is not."
+        },
+        {
+          "id": "z2-b-03",
+          "title": "Easy Row",
+          "format": "Continuous steady-state rowing erg",
+          "structure": {
+            "duration": "20 min",
+            "stroke_rate": "18–22 spm",
+            "target_rpe": "4/10",
+            "focus_cues": [
+              "Legs drive first — feel the hamstrings load before the arms begin to pull",
+              "Full slide on recovery — don't rush the return"
+            ]
+          },
+          "duration_min": 20,
+          "equipment": ["rowing ergometer"],
+          "scaling": "15 min with a 30s standing rest every 5 min; progress to continuous over 2 weeks",
+          "coaching_cue": "At zone 2 pace, your catch angle and finish position should be clean every stroke — if they're not, you've gone too fast."
+        },
+        {
+          "id": "z2-b-04",
+          "title": "Walk-to-Jog Builder",
+          "format": "Progressive run/walk intervals building toward continuous jog",
+          "structure": {
+            "blocks": [
+              { "jog": "2 min", "walk": "2 min", "rounds": 3 },
+              { "jog": "3 min", "walk": "1 min", "rounds": 2 },
+              { "jog": "4 min continuous", "note": "finish" }
+            ],
+            "total_work": "20 min moving",
+            "rule": "Jog pace must allow nasal breathing throughout — mouth breathing = too fast"
+          },
+          "duration_min": 24,
+          "equipment": ["none — outdoor or treadmill"],
+          "scaling": "Replace jog with brisk walk and walk with slow walk; same time structure",
+          "coaching_cue": "Each jog interval ends before you are breathing hard — that restraint is exactly what builds your aerobic base."
+        },
+        {
+          "id": "z2-b-05",
+          "title": "Incline Walk",
+          "format": "Sustained incline treadmill walk at fixed pace",
+          "structure": {
+            "incline": "6–8%",
+            "speed": "4.5–5.5 km/h",
+            "duration": "30 min",
+            "hr_check": "every 10 min — reduce incline 1% if HR exceeds 70% max"
+          },
+          "duration_min": 30,
+          "equipment": ["treadmill"],
+          "scaling": "4% incline for 20 min; increase incline by 1% per session",
+          "coaching_cue": "Hold the handrails only for balance, not for support — offloading your bodyweight removes the aerobic stimulus entirely."
+        },
+        {
+          "id": "z2-b-06",
+          "title": "Nasal Breathing Run",
+          "format": "Continuous run gated by breathing quality",
+          "structure": {
+            "duration": "25 min",
+            "rule": "Nose-breathe exclusively — the moment you need to open your mouth, reduce pace until nasal breathing is restored",
+            "expected_pace": "likely 30–90s per km slower than normal easy pace"
+          },
+          "duration_min": 25,
+          "equipment": ["none — outdoor or treadmill"],
+          "scaling": "Walk with nasal breathing if pace drops to near-walk — the constraint is the session, not the speed",
+          "coaching_cue": "This will feel embarrassingly slow the first time — that gap between your current pace and your aerobic capacity is exactly what you're here to close."
+        },
+        {
+          "id": "z2-b-07",
+          "title": "3-Phase Aerobic Build",
+          "format": "Single continuous session divided into 3 ascending RPE thirds",
+          "structure": {
+            "phases": [
+              { "label": "Phase 1", "duration": "10 min", "rpe": "3/10 — feels like a warm-up" },
+              { "label": "Phase 2", "duration": "10 min", "rpe": "4/10 — comfortable but present" },
+              { "label": "Phase 3", "duration": "10 min", "rpe": "5/10 — top of zone 2, still conversational" }
+            ],
+            "modality": "Run, bike, or row — your choice, keep it consistent"
+          },
+          "duration_min": 30,
+          "equipment": ["none, stationary bike, or rowing ergometer"],
+          "scaling": "Shorten each phase to 7 min (21 min total); reduce Phase 3 RPE to 4/10",
+          "coaching_cue": "Phase 3 at 5/10 RPE should still allow full sentences — if you're cutting words, dial it back."
+        },
+        {
+          "id": "z2-b-08",
+          "title": "Row–Walk Alternation",
+          "format": "Cross-modality aerobic session — alternating rowing erg and brisk walk",
+          "structure": {
+            "blocks": [
+              { "exercise": "Row (easy pace, 20 spm)", "duration": "5 min" },
+              { "exercise": "Brisk Walk (outdoors or treadmill)", "duration": "5 min" }
+            ],
+            "rounds": 4,
+            "rest_between_blocks": "none — immediate transition"
+          },
+          "duration_min": 40,
+          "equipment": ["rowing ergometer", "treadmill or indoor walking space"],
+          "scaling": "3 rounds (30 min total); reduce row to 3 min if stroke mechanics break down",
+          "coaching_cue": "The walk after rowing lets your HR settle while staying aerobically active — don't sit down between blocks."
+        },
+        {
+          "id": "z2-b-09",
+          "title": "Steady Bike — Perceived Effort Lock",
+          "format": "Continuous bike session with mid-session RPE self-assessment",
+          "structure": {
+            "duration": "30 min",
+            "check_points": [
+              { "at": "10 min", "action": "Speak 10 words aloud — adjust resistance if breathless" },
+              { "at": "20 min", "action": "Speak 10 words aloud — if still easy, increase cadence by 5 RPM" }
+            ],
+            "target": "RPE 4–5/10 for the full 30 min",
+            "rule": "No HR monitor required — effort perception is the training tool here"
+          },
+          "duration_min": 30,
+          "equipment": ["stationary bike"],
+          "scaling": "20 min total, single check-point at 10 min",
+          "coaching_cue": "Talking aloud to yourself is not optional here — it's the only accurate zone 2 gauge you have without a heart rate monitor."
+        },
+        {
+          "id": "z2-b-10",
+          "title": "Long Walk with Intention",
+          "format": "Power walk — structured pacing with arm drive",
+          "structure": {
+            "duration": "40 min",
+            "speed": "5–6 km/h on flat or 4–5 km/h on 4% incline",
+            "technique_cues": [
+              "Strong arm drive — elbows at 90°, forward-back motion",
+              "Heel strike to toe push-off — full stride length",
+              "Upright posture — no forward lean"
+            ],
+            "hr_target": "60–70% max HR"
+          },
+          "duration_min": 40,
+          "equipment": ["none — outdoor or treadmill"],
+          "scaling": "30 min flat walk; add incline or time as fitness builds",
+          "coaching_cue": "A power walk at 6 km/h with full arm drive is a legitimate aerobic training session — do not underestimate it."
+        }
+      ]
     }
   }
 }
