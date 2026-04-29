@@ -223,6 +223,7 @@
   // V3 MODULE 1 — userProfile : validation + normalisation
   // V3 MODULE 2 — momentumScore
   // V3 MODULE 3 — behavior profile detection
+  // V3 MODULE 4 — adaptive caps (intensity ceiling adjusted by profile+momentum)
   // ═══════════════════════════════════════════════════════════════════════════
 
   // ── Normalisation de last7SessionsIntensity ───────────────────────────────
@@ -331,6 +332,72 @@
     return 'beginner';
   }
 
+  // ── Module 4 : Adaptive Caps ────────────────────────────────────────────────
+  //
+  // Ajuste le plafond d'intensité calculé par V2 en fonction du profileType
+  // et du momentumScore. Appelé APRÈS _applySafetyRules, AVANT le calcul
+  // de l'intensité finale.
+  //
+  // Règles (reductions autorisées même si priorityApplied === 'safety' ;
+  //         boosts interdits si priorityApplied === 'safety') :
+  //
+  //   overtraining  → maxRank - 1 (jamais high)
+  //   inconsistent  → cap à moderate (maxRank ≤ 1)
+  //   cautious      → cap à moderate (maxRank ≤ 1)
+  //   disciplined   → +1 rank (max high) si momentum ≥ 7, rank ≥ 1, !safety
+  //   beginner      → cap à moderate si momentum < 4 ET rank > 1
+  //
+  // adaptationReason est non-null seulement si le rang a réellement changé
+  // (ou si boost/cap s'est appliqué).
+  // Retourne {maxRank, adaptationReason}.
+  // Sans profil ou sur décision 'rest' → pas de changement, reason null.
+  function _applyAdaptiveCaps(maxRank, priorityApplied, profileType, momentumScore, hasProfile, decision) {
+    if (!hasProfile || decision === 'rest') {
+      return { maxRank: maxRank, adaptationReason: null };
+    }
+
+    var newRank  = maxRank;
+    var reason   = null;
+    var isSafety = (priorityApplied === 'safety');
+
+    if (profileType === 'overtraining') {
+      var reduced = Math.max(0, newRank - 1);
+      if (reduced !== newRank) {
+        reason  = 'Fatigue accumulation detected. Intensity reduced to protect recovery.';
+        newRank = reduced;
+      }
+
+    } else if (profileType === 'inconsistent') {
+      if (newRank > 1) {
+        newRank = 1;
+        reason  = 'Consistency is being rebuilt. Session intensity adjusted to improve adherence.';
+      }
+
+    } else if (profileType === 'cautious') {
+      if (newRank > 1) {
+        newRank = 1;
+        reason  = 'Training load adjusted because fatigue is elevated relative to recent frequency.';
+      }
+
+    } else if (profileType === 'disciplined') {
+      if (!isSafety && momentumScore !== null && momentumScore >= 7 && newRank >= 1) {
+        var boosted = Math.min(newRank + 1, 2);
+        if (boosted !== newRank) {
+          newRank = boosted;
+          reason  = 'Strong consistency detected. Higher intensity unlocked.';
+        }
+      }
+
+    } else if (profileType === 'beginner') {
+      if (momentumScore !== null && momentumScore < 4 && newRank > 1) {
+        newRank = 1;
+        reason  = 'Low momentum detected. Intensity moderated to build consistency.';
+      }
+    }
+
+    return { maxRank: newRank, adaptationReason: reason };
+  }
+
   // ── Validation du profil utilisateur ────────────────────────────────────────
   function _validateUserProfile(profile) {
     if (typeof profile !== 'object' || profile === null) {
@@ -434,20 +501,24 @@
   // ═══════════════════════════════════════════════════════════════════════════
 
   /**
-   * decideDailyPlanV3 — Daily Decision Engine v3 (Module 1)
+   * decideDailyPlanV3 — Daily Decision Engine v3
    *
    * Tous les inputs V2 sont acceptés, plus :
    * @param {Object}  [inputs.userProfile]
-   * @param {number}  [inputs.userProfile.avgFatigueLast7Days]        1.0–5.0
-   * @param {number}  [inputs.userProfile.trainingFrequencyLast7Days]  0–7 (entier)
-   * @param {Array}   [inputs.userProfile.last7SessionsIntensity]      max 7 éléments
-   * @param {number}  [inputs.userProfile.adherenceScore]              0.0–1.0
-   * @param {Array}   [inputs.userProfile.lastSessionTypeHistory]      optionnel
+   * @param {number}  [inputs.userProfile.avgFatigueLast7Days]          1.0–5.0
+   * @param {number}  [inputs.userProfile.trainingFrequencyLast7Days]    0–7 (entier)
+   * @param {Array}   [inputs.userProfile.last7SessionsIntensity]        max 7 éléments
+   * @param {number}  [inputs.userProfile.adherenceScore]                0.0–1.0
+   * @param {Array}   [inputs.userProfile.lastSessionTypeHistory]        optionnel
    *
    * Champs V3 ajoutés en sortie :
-   *   momentumScore    {number|null}  0–10 (null si pas de userProfile)
-   *   profileType      {'beginner'}   (Module 3)
-   *   adaptationReason {null}         (Module 4)
+   *   momentumScore    {number|null}   0–10  (null si pas de userProfile)
+   *   profileType      {string}        profil comportemental détecté
+   *   adaptationReason {string|null}   explication de l'ajustement adaptatif
+   *
+   * Note : recommendedIntensity peut différer de V2 quand Module 4 s'active.
+   *        priorityApplied reflète toujours la logique V2 (inchangé).
+   *        _debug.maxAllowedIntensity = plafond V2 pré-adaptatif.
    */
   function decideDailyPlanV3(inputs) {
     _validate(inputs);
@@ -465,21 +536,11 @@
       progression = _applyProgressionRules(last3, effective, phase);
     }
 
-    var ceiling = _applySafetyRules(
+    var ceiling         = _applySafetyRules(
       effective, days, last3[0],
       inputs.trainingFrequency, phase, progression.triggered
     );
-
-    var intensity       = (decObj.decision === 'rest') ? 'low' : RANK_INTENSITY[ceiling.maxRank];
-    var sessType        = _selectSessionType(decObj.decision, intensity, inputs.goal);
     var priorityApplied = decObj.priority || ceiling.priorityApplied;
-
-    var reason = _buildReason(
-      decObj, intensity, sessType,
-      effective, inputs.fatigueLevel,
-      days, priorityApplied, progression.triggered,
-      ceiling.capReason, inputs
-    );
 
     // ── Module 2 : momentumScore ──────────────────────────────────────────────
     var momentum = _computeMomentumScore(inputs.userProfile || null);
@@ -487,9 +548,27 @@
     // ── Module 3 : profileType ────────────────────────────────────────────────
     var profile = _detectProfileType(inputs.userProfile || null, momentum);
 
+    // ── Module 4 : adaptive caps ──────────────────────────────────────────────
+    var hasProfile = (inputs.userProfile !== undefined && inputs.userProfile !== null);
+    var adaptive   = _applyAdaptiveCaps(
+      ceiling.maxRank, priorityApplied, profile, momentum, hasProfile, decObj.decision
+    );
+
+    // ── Intensity / session type / reason (plafond adaptatif) ─────────────────
+    var intensity = (decObj.decision === 'rest') ? 'low' : RANK_INTENSITY[adaptive.maxRank];
+    var sessType  = _selectSessionType(decObj.decision, intensity, inputs.goal);
+    var reason    = _buildReason(
+      decObj, intensity, sessType,
+      effective, inputs.fatigueLevel,
+      days, priorityApplied, progression.triggered,
+      ceiling.capReason, inputs
+    );
+
     // ── Sortie V3 ─────────────────────────────────────────────────────────────
     return {
-      // ── V2 fields (inchangés) ──────────────────────────────────────────────
+      // ── V2 fields (priorityApplied/fatigueEffective/progressionTriggered
+      //    toujours identiques à V2 ; intensity/sessionType/reason peuvent
+      //    différer si Module 4 ajuste le plafond) ──────────────────────────
       decision:               decObj.decision,
       recommendedIntensity:   intensity,
       recommendedSessionType: sessType,
@@ -498,16 +577,16 @@
       progressionTriggered:   progression.triggered,
       reason:                 reason,
       // ── V3 fields ─────────────────────────────────────────────────────────
-      momentumScore:          momentum,           // Module 2 ✓
-      profileType:            profile,            // Module 3 ✓
-      adaptationReason:       null,               // Module 4 (stub)
+      momentumScore:          momentum,                   // Module 2 ✓
+      profileType:            profile,                    // Module 3 ✓
+      adaptationReason:       adaptive.adaptationReason, // Module 4 ✓
       _debug: {
         rawFatigue:          inputs.fatigueLevel,
         effectiveFatigue:    effective,
         daysSince:           days,
         last3:               last3,
         phase:               phase,
-        maxAllowedIntensity: RANK_INTENSITY[ceiling.maxRank],
+        maxAllowedIntensity: RANK_INTENSITY[ceiling.maxRank], // plafond V2 pré-adaptatif
         capReason:           ceiling.capReason,
         progressionSignal:   progression.reason
       }
@@ -532,7 +611,9 @@
     // V3 Module 2
     _computeMomentumScore:            _computeMomentumScore,
     // V3 Module 3
-    _detectProfileType:               _detectProfileType
+    _detectProfileType:               _detectProfileType,
+    // V3 Module 4
+    _applyAdaptiveCaps:               _applyAdaptiveCaps
   };
 
   if (typeof module !== 'undefined' && module.exports) {
