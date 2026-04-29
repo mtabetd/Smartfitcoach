@@ -3885,7 +3885,10 @@
           },
           "coaching_cue": "The bar should feel weightless at the top — that's the double-knee bend doing its job.",
           "subtype": "explosive",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "power clean and hang snatch foundation for Olympic lifting force development",
+          "progression_hint": "First structured Olympic lifting session — bar speed is the quality marker, not load; increase weight only when triple extension is complete on every rep across all 6 sets"
         },
         {
           "id": "exp-i-02",
@@ -3908,7 +3911,10 @@
           },
           "coaching_cue": "Max velocity demands max warm-up — do not skip the acceleration drills.",
           "subtype": "explosive",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "conditioning",
+          "intent": "maximum velocity sprint development via fly sprint protocol",
+          "progression_hint": "Flying 20s isolate the top-speed phase — the highest-intensity sprint stimulus possible; advance volume to 12 sprints only after 8 weeks of consistent technique at 98% effort"
         },
         {
           "id": "exp-i-03",
@@ -3942,7 +3948,10 @@
           },
           "coaching_cue": "Your Achilles tendon is the spring — land on your forefoot, not flat-footed.",
           "subtype": "explosive",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "conditioning",
+          "intent": "reactive strength development via depth drop shock method",
+          "progression_hint": "Shock method is the most CNS-demanding plyometric stimulus — limit to once per week; advance box height by 2 inches only when amortisation phase is visibly instant"
         },
         {
           "id": "exp-i-04",
@@ -3975,7 +3984,10 @@
           },
           "coaching_cue": "Box jump after the pull should feel easier — that's PAP in action.",
           "subtype": "explosive",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "contrast training to exploit post-activation potentiation for peak power output",
+          "progression_hint": "PAP contrast sets require 90% clean pull to maximally prime fast-twitch fibres; if box jump height does not improve vs standalone, reduce clean pull load to 85% and retest"
         },
         {
           "id": "exp-i-05",
@@ -4012,7 +4024,10 @@
           },
           "coaching_cue": "Change of direction speed is 60% deceleration — load your outside leg before you cut.",
           "subtype": "explosive",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "conditioning",
+          "intent": "reactive agility development under time pressure via cone drills",
+          "progression_hint": "Timed agility drills build sport-specific change-of-direction speed; when 5-10-5 is consistently sub-4.5s, introduce a reactive component — coach calls direction at the set position"
         },
         {
           "id": "exp-i-06",
@@ -4054,7 +4069,10 @@
           },
           "coaching_cue": "Triple extension: ankle, knee, hip — all three fire simultaneously.",
           "subtype": "explosive",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "triple extension power development across clean, press, and snatch derivatives",
+          "progression_hint": "Triple extension complex builds explosive hip drive that transfers to every athletic movement; track bar speed subjectively — a slow rep means terminate the set, not grind through it"
         },
         {
           "id": "exp-i-07",
@@ -4078,7 +4096,10 @@
           },
           "coaching_cue": "RSA drops fast — if you can't maintain 90% of your first sprint, the set is done.",
           "subtype": "explosive",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "conditioning",
+          "intent": "repeated sprint ability training to maintain power output under accumulating fatigue",
+          "progression_hint": "RSA is the most sport-specific conditioning quality — monitor sprint 6 vs sprint 1 output; if drop-off exceeds 10%, the set ends; advance to 8 sets only when 6 sets maintain 90% throughout"
         },
         {
           "id": "exp-i-08",
@@ -4124,7 +4145,10 @@
           },
           "coaching_cue": "The plyo push-up is not a regular push-up done fast — it's a loaded jump.",
           "subtype": "explosive",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "conditioning",
+          "intent": "upper-body plyometric power development via ballistic push and throw patterns",
+          "progression_hint": "Plyo push-ups and MB throws build rate of force development in the upper body; advance to single-arm MB pass and band-resisted plyo push-up when all sets maintain airborne hand clearance"
         },
         {
           "id": "exp-i-09",
@@ -4155,7 +4179,10 @@
           },
           "coaching_cue": "Punch yourself under the bar on the snatch balance — don't press it down.",
           "subtype": "explosive",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "contrast training pairing snatch balance with loaded jump squat for lower-body peak power",
+          "progression_hint": "Snatch balance demands overhead stability under rapid descent — a direct test of receiving position; when snatch balance exceeds 90% of back squat 1RM, full snatch from floor is achievable"
         },
         {
           "id": "exp-i-10",
@@ -4199,7 +4226,10 @@
           },
           "coaching_cue": "Cycle your trail leg fast — don't drag it over, snap it through.",
           "subtype": "explosive",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "conditioning",
+          "intent": "hurdle clearance and horizontal bounding for elastic power development",
+          "progression_hint": "Hurdle series develops reactive strength across both vertical and horizontal planes; timed hurdle passes signal readiness for sprint competition or advanced plyometric blocks"
         }
       ]
     },
