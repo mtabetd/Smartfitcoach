@@ -815,7 +815,10 @@
           "coaching_cue": "If you have to open your mouth to breathe, you are already out of zone 2 — slow down.",
           "duration": 25,
           "subtype": "zone2",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "conditioning",
+          "intent": "establish aerobic base through first continuous Zone 2 effort",
+          "progression_hint": "Week 1 aerobic primer — repeat until nasal breathing holds for full 25 min, then advance to z2-b-02"
         },
         {
           "id": "z2-b-02",
@@ -852,7 +855,10 @@
           "coaching_cue": "Cadence over resistance — spinning at 85 RPM is aerobic work; grinding at 60 RPM is not.",
           "duration": 30,
           "subtype": "zone2",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "recomposition",
+          "intent": "build uninterrupted Zone 2 duration on low-impact modality",
+          "progression_hint": "Add 5 min each session until 45 min is sustainable; gateway to z2-b-04 cycling block"
         },
         {
           "id": "z2-b-03",
@@ -877,7 +883,10 @@
           "coaching_cue": "At zone 2 pace, your catch angle and finish position should be clean every stroke — if they're not, you've gone too fast.",
           "duration": 20,
           "subtype": "zone2",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "conditioning",
+          "intent": "aerobic base via steady-state rowing at conversational pace",
+          "progression_hint": "Use as Zone 2 variety in week 2-3; advance to z2-i-02 when 30 min continuous row feels controlled"
         },
         {
           "id": "z2-b-04",
@@ -913,7 +922,10 @@
           "coaching_cue": "Each jog interval ends before you are breathing hard — that restraint is exactly what builds your aerobic base.",
           "duration": 24,
           "subtype": "zone2",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "recomposition",
+          "intent": "low-impact aerobic development through extended cycling",
+          "progression_hint": "Cycling builds volume without joint stress — extend by 5 min per session; pairs with z2-b-01 run sessions in same week"
         },
         {
           "id": "z2-b-05",
@@ -935,7 +947,10 @@
           "coaching_cue": "Hold the handrails only for balance, not for support — offloading your bodyweight removes the aerobic stimulus entirely.",
           "duration": 30,
           "subtype": "zone2",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "conditioning",
+          "intent": "modality mixing to build aerobic breadth across effort zones",
+          "progression_hint": "Prepares cardiovascular system for mixed-format training; use when single-modality sessions feel stale"
         },
         {
           "id": "z2-b-06",
@@ -956,7 +971,10 @@
           "coaching_cue": "This will feel embarrassingly slow the first time — that gap between your current pace and your aerobic capacity is exactly what you're here to close.",
           "duration": 25,
           "subtype": "zone2",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "recomposition",
+          "intent": "aerobic capacity via low-impact swim — full-body demand",
+          "progression_hint": "Swim sessions accelerate recovery while building aerobic base; advance to 30 min when 20 min is completed without rest"
         },
         {
           "id": "z2-b-07",
@@ -992,7 +1010,10 @@
           "coaching_cue": "Phase 3 at 5/10 RPE should still allow full sentences — if you're cutting words, dial it back.",
           "duration": 30,
           "subtype": "zone2",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "conditioning",
+          "intent": "natural terrain aerobic development with variable gradient",
+          "progression_hint": "Trail walking builds proprioception and aerobic base simultaneously; progress to z2-b-01 jogging format after 4 weeks"
         },
         {
           "id": "z2-b-08",
@@ -1023,7 +1044,10 @@
           "coaching_cue": "The walk after rowing lets your HR settle while staying aerobically active — don't sit down between blocks.",
           "duration": 40,
           "subtype": "zone2",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "fat_loss",
+          "intent": "run-walk protocol to develop continuous aerobic capacity",
+          "progression_hint": "Classic Galloway bridge — progress run-walk ratio from 1:1 toward continuous running over 4-6 weeks"
         },
         {
           "id": "z2-b-09",
@@ -1054,7 +1078,10 @@
           "coaching_cue": "Talking aloud to yourself is not optional here — it's the only accurate zone 2 gauge you have without a heart rate monitor.",
           "duration": 30,
           "subtype": "zone2",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "conditioning",
+          "intent": "aerobic volume with brief tempo exposure for cardiac development",
+          "progression_hint": "Introduces tempo pacing before full threshold work; advance tempo block to 10 min before entering z2-i tier"
         },
         {
           "id": "z2-b-10",
@@ -1080,7 +1107,10 @@
           "coaching_cue": "A power walk at 6 km/h with full arm drive is a legitimate aerobic training session — do not underestimate it.",
           "duration": 40,
           "subtype": "zone2",
-          "level": "beginner"
+          "level": "beginner",
+          "goal": "recomposition",
+          "intent": "cross-training aerobic session across multiple modalities",
+          "progression_hint": "Rotation format prevents adaptation plateau; use as weekly variety session alongside primary Zone 2 modality"
         }
       ],
       "intermediate": [
