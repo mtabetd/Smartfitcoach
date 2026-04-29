@@ -244,9 +244,15 @@
     var mode    = _intensityMode(fatigue);
     // Fatigue base (linear): fatigue 1 → 60, fatigue 5 → 12
     var score   = (6 - fatigue) * 12;
-    if (mode !== 'reduce') {
+    // Push mode gets full intensity bonus; normal mode uses reduced bonus so
+    // mid-range fatigue-3 sessions land in the Building band rather than Locked In.
+    if (mode === 'push') {
       if (HIGH_INTENSITY_SUBTYPES.includes(selected.subtype))     score += 25;
       else if (MED_INTENSITY_SUBTYPES.includes(selected.subtype)) score += 15;
+      else                                                          score += 5;
+    } else if (mode === 'normal') {
+      if (HIGH_INTENSITY_SUBTYPES.includes(selected.subtype))     score += 18;
+      else if (MED_INTENSITY_SUBTYPES.includes(selected.subtype)) score += 10;
       else                                                          score += 5;
     } else {
       score += 5; // recovery sessions earn a presence bonus
@@ -266,8 +272,8 @@
     if (internalTag === 'push' || internalTag === 'test') {
       return score >= 80 ? 'Peak' : 'Locked In';
     }
-    // 'build'
-    return score >= 50 ? 'Locked In' : 'Building';
+    // 'build' — threshold raised to 60 to widen the Building band
+    return score >= 60 ? 'Locked In' : 'Building';
   }
 
   // ── Shareable output ──────────────────────────────────────────────────────

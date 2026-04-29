@@ -487,7 +487,7 @@ test('push at moderate score → Locked In', function () {
 });
 
 test('build at sufficient score → Locked In', function () {
-  assertEqual(_buildPremiumMomentumTag('build', 55), 'Locked In');
+  assertEqual(_buildPremiumMomentumTag('build', 65), 'Locked In');
 });
 
 test('build at low score → Building', function () {
