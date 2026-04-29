@@ -5621,7 +5621,10 @@
           },
           "coaching_cue": "Front squats are humbling — your back squat weight won't transfer directly.",
           "subtype": "volume",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "squat strength accumulation at high intensity to peak force production",
+          "progression_hint": "6×5 at 80% is a proven peaking protocol — when all sets complete with bar speed above 70% of max, increase to 82.5%; front squat back-off builds positional resilience under fatigue"
         },
         {
           "id": "vol-i-s02",
@@ -5657,7 +5660,10 @@
           },
           "coaching_cue": "Volume deadlifts test grip as much as back — use chalk, not straps.",
           "subtype": "volume",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "deadlift volume accumulation to build pulling strength and connective tissue capacity",
+          "progression_hint": "5×5 at 80% on conventional with RDL back-off is a full posterior chain overload day; grip is the limiting factor at this intensity — when it fails before the legs, switch to chalk only, never straps"
         },
         {
           "id": "vol-i-s03",
@@ -5705,7 +5711,10 @@
           },
           "coaching_cue": "Wave 2 at the same percentages feels lighter — let it, and milk the extra output.",
           "subtype": "volume",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "wave loading on bench press to exploit post-activation potentiation for strength peaks",
+          "progression_hint": "Wave 2 outperforming wave 1 at the same percentages is the adaptation marker; if wave 2 feels harder than wave 1, recovery is insufficient — add a rest day before this session"
         },
         {
           "id": "vol-i-s04",
@@ -5731,7 +5740,10 @@
           },
           "coaching_cue": "Cluster sets let you handle near-maximal weight for more total reps — the pause is the tool.",
           "subtype": "volume",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "cluster set protocol to accumulate high-intensity volume beyond standard set capacity",
+          "progression_hint": "Cluster sets at 85% produce significantly more total reps than standard 5×5 — the intra-set rest is the tool, not a shortcut; advance to 6 clusters when all 5 complete 3+2+2 without missed reps"
         },
         {
           "id": "vol-i-s05",
@@ -5785,7 +5797,10 @@
           },
           "coaching_cue": "This is a 128-rep session at 80% — pacing and recovery between sets is everything.",
           "subtype": "volume",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "strength",
+          "intent": "full-body strength accumulation across eight compound lifts for peak total-body output",
+          "progression_hint": "128 total reps at 80% is a maximum-volume strength session — schedule only once per week with 72h recovery on each side; this session signals readiness for competition-prep loading when completed consistently"
         },
         {
           "id": "vol-i-h01",
@@ -5827,7 +5842,10 @@
           },
           "coaching_cue": "Sets 7-10 will feel impossible — that's the stimulus. Stay in the game.",
           "subtype": "volume",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "toning",
+          "intent": "German Volume Training on squat for maximum quad and glute hypertrophy stimulus",
+          "progression_hint": "GVT at 60% feels easy for sets 1-4 and brutal by sets 7-10 — that is the design; do not increase weight until all 10×10 complete with 90s rest; after 4 weeks of GVT, expect 2-4% lean mass gain"
         },
         {
           "id": "vol-i-h02",
@@ -5871,7 +5889,10 @@
           },
           "coaching_cue": "GVT produces massive pump — stay focused on rep quality as fatigue accumulates.",
           "subtype": "volume",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "toning",
+          "intent": "German Volume Training on bench for maximum chest and tricep hypertrophy stimulus",
+          "progression_hint": "Pairs with vol-i-h01 GVT squat in a twice-weekly GVT block; run for 4-6 weeks then deload — GVT produces significant fatigue accumulation that requires planned recovery"
         },
         {
           "id": "vol-i-h03",
@@ -5913,7 +5934,10 @@
           },
           "coaching_cue": "15 reps at moderate load builds more muscle than 5 heavy reps — research supports this.",
           "subtype": "volume",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "toning",
+          "intent": "high-rep machine-based leg hypertrophy for maximum quad, hamstring, and calf volume",
+          "progression_hint": "15-rep sets maximise metabolic stress — the primary hypertrophy driver at this rep range; advance to drop sets on final set of each exercise before adding a 5th exercise to the circuit"
         },
         {
           "id": "vol-i-h04",
@@ -5959,7 +5983,10 @@
           },
           "coaching_cue": "Giant sets maximize mechanical tension and metabolic stress simultaneously.",
           "subtype": "volume",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "toning",
+          "intent": "giant set upper-body hypertrophy for maximum time under tension and pump stimulus",
+          "progression_hint": "Four-exercise giant sets create the highest upper-body metabolic stress in the programme; when all 4 giant sets complete with under 10s transition between exercises, add bicep curl and tricep extension as A5/A6"
         },
         {
           "id": "vol-i-h05",
@@ -6056,7 +6083,10 @@
           },
           "coaching_cue": "Each set should take you to within 2 reps of failure — track your weight progressions.",
           "subtype": "volume",
-          "level": "intermediate"
+          "level": "intermediate",
+          "goal": "recomposition",
+          "intent": "ascending pyramid loading to build strength-hypertrophy bridge across four compound movements",
+          "progression_hint": "Pyramid training develops both strength and hypertrophy simultaneously — the heaviest set at 8 reps is a near-strength stimulus; log the 8-rep load each session; when it matches your previous 10-rep load, the block is complete"
         }
       ]
     }
