@@ -18,6 +18,7 @@ var _scoreCandidates   = WS._scoreCandidates;
 var _buildMomentumTag  = WS._buildMomentumTag;
 var _buildSessionFocus = WS._buildSessionFocus;
 var _buildCoachMessage = WS._buildCoachMessage;
+var _idNumber          = WS._idNumber;
 
 // ── Harness ───────────────────────────────────────────────────────────────────
 var passed = 0, failed = 0;
@@ -283,6 +284,22 @@ test('fatigue 3 non-benchmark → build', function () {
   assertEqual(_buildMomentumTag(w, { fatigue_level: 3 }), 'build');
 });
 
+// ── _idNumber ─────────────────────────────────────────────────────────────────
+console.log('\n_idNumber');
+
+test('extracts trailing number from workout id', function () {
+  assertEqual(_idNumber('hiit-b-01'), 1);
+  assertEqual(_idNumber('z2-i-10'),   10);
+  assertEqual(_idNumber('vol-b-s02'), 2);
+  assertEqual(_idNumber('hvy-i-09'),  9);
+});
+
+test('returns 0 for null or unknown id', function () {
+  assertEqual(_idNumber(null),  0);
+  assertEqual(_idNumber(''),    0);
+  assertEqual(_idNumber('abc'), 0);
+});
+
 // ── _buildSessionFocus ────────────────────────────────────────────────────────
 console.log('\n_buildSessionFocus');
 
@@ -296,26 +313,36 @@ test('returns non-empty string for every subtype', function () {
   });
 });
 
-test('session_focus includes subtype label', function () {
-  var w = all.find(function (x) { return x.subtype === 'heavy'; });
-  var focus = _buildSessionFocus(w);
-  assert(focus.toLowerCase().includes('strength') || focus.toLowerCase().includes('maximal'),
-    'heavy focus should mention strength or maximal: ' + focus);
+test('session_focus embeds workout duration', function () {
+  var subtypes = ['hiit', 'zone2', 'mixed', 'heavy', 'explosive', 'tempo', 'volume'];
+  subtypes.forEach(function (st) {
+    var w = all.find(function (x) { return x.subtype === st; });
+    if (!w) return;
+    var focus = _buildSessionFocus(w);
+    assert(focus.includes(String(w.duration)), 'focus should contain duration for ' + st + ': ' + focus);
+  });
 });
 
-test('session_focus includes intent when present', function () {
-  var w = all.find(function (x) { return x.intent && x.subtype === 'tempo'; });
-  if (!w) return;
+test('session_focus contains " — " separator', function () {
+  var w = all.find(function (x) { return x.subtype === 'tempo'; });
   var focus = _buildSessionFocus(w);
-  // Intent is capitalised and appended after " — "
   assert(focus.includes(' — '), 'session_focus should contain " — " separator: ' + focus);
+});
+
+test('different workout IDs within same subtype produce different focus strings', function () {
+  var hiitWorkouts = all.filter(function (x) { return x.subtype === 'hiit' && x.level === 'beginner'; });
+  if (hiitWorkouts.length < 3) return;
+  var focuses = hiitWorkouts.slice(0, 3).map(_buildSessionFocus);
+  // At least two of the three should differ (pool size = 3, IDs 01/02/03 all produce different index)
+  var unique = focuses.filter(function (f, i) { return focuses.indexOf(f) === i; });
+  assert(unique.length > 1, 'all three HIIT focus strings are identical: ' + focuses.join(' | '));
 });
 
 // ── _buildCoachMessage ────────────────────────────────────────────────────────
 console.log('\n_buildCoachMessage');
 
 test('returns non-empty string for all mode × goal combos', function () {
-  var modes  = [1, 3, 5]; // push / normal / reduce
+  var modes  = [1, 3, 5];
   var goals  = ['fat_loss', 'toning', 'strength', 'conditioning', 'recomposition'];
   var w      = all.find(function (x) { return x.subtype === 'hiit'; });
   modes.forEach(function (fatigue) {
@@ -327,17 +354,38 @@ test('returns non-empty string for all mode × goal combos', function () {
   });
 });
 
-test('recover message does not use push language', function () {
-  var w   = all.find(function (x) { return x.subtype === 'zone2'; });
-  var msg = _buildCoachMessage(w, { fatigue_level: 5, goal: 'fat_loss' });
-  assert(!msg.toLowerCase().includes('destroy') && !msg.toLowerCase().includes('all-out'),
-    'recover message should not use push language: ' + msg);
+test('recover messages do not use all-out push language', function () {
+  var w    = all.find(function (x) { return x.subtype === 'zone2'; });
+  var goals = ['fat_loss', 'toning', 'strength', 'conditioning', 'recomposition'];
+  goals.forEach(function (goal) {
+    // Check all 4 variants for this goal at reduce-mode fatigue
+    [4, 5].forEach(function (fatigue) {
+      var msg = _buildCoachMessage(w, { fatigue_level: fatigue, goal: goal });
+      assert(!msg.toLowerCase().includes('all-out') && !msg.toLowerCase().includes('destroy'),
+        'recover message for goal=' + goal + ' has push language: ' + msg);
+    });
+  });
 });
 
-test('push message conveys high-output intent', function () {
-  var w   = all.find(function (x) { return x.subtype === 'hiit'; });
-  var msg = _buildCoachMessage(w, { fatigue_level: 1, goal: 'conditioning' });
-  assert(msg.length > 10, 'push message too short: ' + msg);
+test('different workout IDs within same mode/goal produce different messages', function () {
+  var hiitWorkouts = all.filter(function (x) { return x.subtype === 'hiit' && x.level === 'beginner'; });
+  var msgs = hiitWorkouts.slice(0, 4).map(function (w) {
+    return _buildCoachMessage(w, { fatigue_level: 2, goal: 'conditioning' });
+  });
+  var unique = msgs.filter(function (m, i) { return msgs.indexOf(m) === i; });
+  assert(unique.length > 1, 'all messages identical across 4 workouts: ' + msgs.join(' | '));
+});
+
+test('message under 180 chars for all combos', function () {
+  var modes = [1, 3, 5];
+  var goals = ['fat_loss', 'toning', 'strength', 'conditioning', 'recomposition'];
+  var w     = all.find(function (x) { return x.subtype === 'heavy'; });
+  modes.forEach(function (fatigue) {
+    goals.forEach(function (goal) {
+      var msg = _buildCoachMessage(w, { fatigue_level: fatigue, goal: goal });
+      assert(msg.length <= 180, 'message too long (' + msg.length + ') for fatigue=' + fatigue + ' goal=' + goal);
+    });
+  });
 });
 
 // ── selectWorkout — new output fields ────────────────────────────────────────

@@ -233,126 +233,169 @@
 
   // ── Session focus ─────────────────────────────────────────────────────────
 
-  var SUBTYPE_FOCUS_LABEL = {
-    hiit:      'High-intensity metabolic conditioning',
-    zone2:     'Aerobic base — low intensity, high duration',
-    mixed:     'Concurrent strength and cardio stimulus',
-    heavy:     'Maximal strength — compound barbell focus',
-    explosive: 'Power and reactive strength development',
-    tempo:     'Time under tension — eccentric control',
-    volume:    'High-volume accumulation'
+  // Natural, outcome-focused templates per subtype — varied by workout ID number.
+  // {duration} is replaced with the workout's actual duration in minutes.
+  var SESSION_FOCUS_TEMPLATES = {
+    hiit: [
+      '{duration}-min high-intensity intervals — drive output above your comfort ceiling',
+      'Short explosive conditioning — {duration} min at maximum sustainable effort',
+      'Metabolic conditioning — {duration} min of quality intervals at the edge'
+    ],
+    zone2: [
+      '{duration}-min aerobic base session — conversational pace, sustained adaptation',
+      'Steady zone 2 work — {duration} min to build fat-burning efficiency',
+      'Low-intensity endurance — {duration} min at controlled heart rate for base development'
+    ],
+    mixed: [
+      'Concurrent training — {duration} min combining cardio and strength in the same session',
+      '{duration}-min hybrid session — aerobic base paired with loaded compound work',
+      'Strength meets conditioning — {duration} min of dual-signal training'
+    ],
+    heavy: [
+      'Maximum strength — {duration} min of heavy compound barbell work',
+      '{duration}-min strength session — load with intent, move with precision',
+      'Heavy loading block — {duration} min focused on absolute strength development'
+    ],
+    explosive: [
+      'Power development — {duration} min training the nervous system to produce force fast',
+      '{duration}-min reactive strength session — every rep at full intent',
+      'Athletic power work — {duration} min of explosive movement with full recovery'
+    ],
+    tempo: [
+      'Time under tension — {duration} min of controlled, eccentric-focused loading',
+      '{duration}-min tempo session — slow the movement down, multiply the stimulus',
+      'Precision loading — {duration} min where the tempo is the training variable'
+    ],
+    volume: [
+      'Accumulation session — {duration} min of systematic high-rep work for hypertrophy',
+      '{duration}-min volume block — compound lifts at moderate load for muscle growth',
+      'High-volume loading — {duration} min of deliberate reps to drive size and strength'
+    ]
   };
 
+  // Extract trailing number from workout ID for deterministic variant selection
+  function _idNumber(id) {
+    var m = id && id.match(/(\d+)$/);
+    return m ? parseInt(m[1], 10) : 0;
+  }
+
   function _buildSessionFocus(selected) {
-    var label = SUBTYPE_FOCUS_LABEL[selected.subtype] || selected.subtype;
-    var intent = selected.intent
-      ? selected.intent.charAt(0).toUpperCase() + selected.intent.slice(1)
-      : null;
-    return intent ? label + ' — ' + intent : label;
+    var templates = SESSION_FOCUS_TEMPLATES[selected.subtype];
+    if (!templates) return selected.intent || selected.subtype;
+    var template = templates[_idNumber(selected.id) % templates.length];
+    return template.replace('{duration}', String(selected.duration));
   }
 
   // ── Coach message ─────────────────────────────────────────────────────────
 
-  // Messages are keyed by [mode][goal] with subtype as a secondary tiebreak.
-  // Each entry is an array — selector uses (subtype charCode % length) for
-  // deterministic variety without randomness.
-  var COACH_MESSAGES = {
+  // Contextual message pools keyed by [mode][goal].
+  // 4 variants per combo — variant index: (idNumber + fatigue_level) % 4
+  // Each message is specific to the user's state and goal, not a category.
+  var COACH_MSG = {
     push: {
-      fat_loss:      [
-        'You\'re fresh. This is when real change happens — don\'t leave anything on the table.',
-        'Low fatigue, high stakes. Hit every interval like it\'s the one that tips the scale.',
-        'Your body is ready to burn. Respect that window — push clean, push hard.'
+      fat_loss: [
+        'You\'re recovered. Push the intervals hard — don\'t pace for comfort.',
+        'Low fatigue means one thing: maximum metabolic output. No sandbagging today.',
+        'Fresh and ready. The only variable now is how hard you\'re willing to push.',
+        'This is the session that moves the number. Don\'t leave anything on the floor.'
       ],
-      toning:        [
-        'Fresh legs, controlled tension. Every rep is a rep that counts — none are throwaways.',
-        'You\'re in the window where muscle responds. Execute with precision, not just effort.',
-        'Quality is the metric today. Move well, move fully, and let the work accumulate.'
+      toning: [
+        'Recovered muscles are responsive muscles. Control every eccentric — let the stimulus land.',
+        'Fresh state, full tension. Every rep should feel deliberate, not automatic.',
+        'You have the capacity to go heavy and controlled today. Use both qualities.',
+        'Low fatigue, high tension. This is exactly the condition muscle responds to.'
       ],
-      strength:      [
-        'This is a training day that will matter in six months. Load with intent.',
-        'You\'re recovered and the bar is ready. Don\'t negotiate with the weight — move it.',
-        'Fresh CNS, clear mind. Chase numbers today — this is what a strong day looks like.'
+      strength: [
+        'CNS is clear. Load the bar and move it with intent — bar speed tells you everything.',
+        'Fresh and ready to pull. Don\'t negotiate with the weight — move it.',
+        'Today is a day to set a mark. Full output, clean execution.',
+        'Recovered and loaded. The platform is ready. So are you.'
       ],
-      conditioning:  [
-        'Engine is ready. Hold a pace that hurts just enough to matter — the whole time.',
+      conditioning: [
+        'Engine is primed. Hold a pace that costs you something — the whole time.',
+        'Fresh legs should push harder. Don\'t waste the advantage.',
         'Low fatigue means no excuses on pacing. Find the edge and park there.',
-        'Your conditioning window is open. Fill it completely.'
+        'This is a full-output conditioning session. Give it exactly that.'
       ],
       recomposition: [
-        'Today you build and burn in the same session. Both sides of recomposition get worked.',
-        'Lean and strong isn\'t a phase — it\'s built one session like this at a time.',
-        'Fresh and focused. Recomp demands you show up exactly like this.'
+        'Recovered and dual-targeting. Both the strength and cardio components get full effort today.',
+        'Best recomp sessions happen when you\'re fresh. This is one of them — don\'t waste it.',
+        'Fresh body, complex demand. Feed both adaptation signals completely.',
+        'Recomp requires precision, not just effort. Today you have both.'
       ]
     },
     normal: {
-      fat_loss:      [
-        'Steady state, real results. You don\'t have to destroy yourself to change your body.',
-        'Consistent effort today adds to a consistent week. That\'s where fat loss lives.',
-        'Hit your marks. Nothing spectacular, just the work done properly.'
+      fat_loss: [
+        'Standard session, deliberate effort. Fat loss is built in the unremarkable days.',
+        'Hit your marks. Nothing spectacular — just the work done properly.',
+        'Consistent effort today adds to a consistent week. That\'s where the change lives.',
+        'Moderate state, clear task. Complete the session and move on.'
       ],
-      toning:        [
-        'Shape is built in sessions like this — not the dramatic ones. Do the work.',
+      toning: [
+        'Shape isn\'t built in the dramatic sessions — it\'s built in sessions exactly like this one.',
         'Every set is a deposit. Today is a normal training day — make it count anyway.',
-        'Technique and tension. That\'s all this session asks. Give it both.'
+        'Technique and tension. That\'s all today asks. Give it both.',
+        'Moderate day. Move with precision and let the work accumulate.'
       ],
-      strength:      [
+      strength: [
         'Not a max day, but not a filler day. Move serious weight with serious intent.',
-        'Strength is built in accumulation, not just peaks. Today matters.',
-        'Every working set at this intensity has a compounding return. Stay present.'
+        'Strength is accumulated, not just peaked. Today matters more than it looks.',
+        'Every working set at this intensity has a compounding return. Stay present.',
+        'Moderate state, heavy work. Execute cleanly and trust the volume.'
       ],
-      conditioning:  [
-        'Aerobic capacity is built across hundreds of sessions like this one. Be consistent.',
+      conditioning: [
         'Hold your pace. Not heroic — just relentless.',
-        'Normal day, normal effort, extraordinary long-term outcome. Trust the process.'
+        'Aerobic capacity is built across hundreds of sessions like this one. Be consistent.',
+        'Normal day, normal effort, extraordinary long-term adaptation. Trust it.',
+        'Moderate state for a conditioning session. Find your rhythm early and hold it.'
       ],
       recomposition: [
         'Recomp is a slow burn. Today\'s session is a link in a long chain — make it count.',
-        'Moderate day, full attention. Both the strength and cardio signals need to be there.',
-        'No shortcuts in recomp. Steady, complete effort across the full session.'
+        'Moderate day, full attention. Both signals — strength and cardio — need to fire.',
+        'No shortcuts in recomposition. Complete effort across the full session.',
+        'Steady, complete, and deliberate. That\'s what today requires.'
       ]
     },
     reduce: {
-      fat_loss:      [
-        'Recovery is not lost time. An aerobic flush today protects three hard sessions this week.',
-        'The body recomposes during recovery, not despite it. This session is part of the plan.',
-        'Easy effort, maximum adherence. Showing up is the win today.'
+      fat_loss: [
+        'Fatigue is high. An aerobic flush still burns — and it protects tomorrow\'s session.',
+        'Recovery is not lost time. This session preserves your ability to work hard all week.',
+        'High fatigue and hard intervals don\'t mix. Today you move smart, not hard.',
+        'Showing up at ' + 'high fatigue is the win. Effort matches energy — no more.'
       ],
-      toning:        [
-        'Low load, high blood flow. Your muscles are repairing — help them, don\'t interrupt.',
-        'Tone is preserved in recovery, not lost. Move, breathe, and let the body catch up.',
-        'Fatigue is high. Today\'s value is in what you don\'t break — not what you push.'
+      toning: [
+        'Fatigued muscle needs blood flow, not more damage. Move with purpose, not aggression.',
+        'Tone is preserved in recovery, not lost. Today you protect the work already done.',
+        'Low load, high intention. The body is repairing — support it, don\'t interrupt it.',
+        'High fatigue day. The only metric is: did you move well?'
       ],
-      strength:      [
-        'Strength is not built today — it\'s protected. An aerobic session now means a stronger lift next session.',
-        'High fatigue and heavy iron is a bad combination. This session earns you tomorrow.',
-        'Smart athletes recover on purpose. This is the session that separates serious from reckless.'
+      strength: [
+        'Heavy iron at high fatigue is how injuries happen. Today you protect tomorrow\'s lift.',
+        'The bar is too heavy today — and that\'s a fact, not an excuse. Aerobic work instead.',
+        'Smart athletes recover on purpose. This session earns you three harder ones ahead.',
+        'Strength is protected in recovery. Show up, move easy, come back stronger.'
       ],
-      conditioning:  [
-        'Zone 2 at high fatigue flushes lactate and rebuilds the aerobic base. This is targeted recovery.',
+      conditioning: [
+        'Aerobic recovery at high fatigue is still productive. Zone 2 flushes and rebuilds.',
         'Conditioning athletes know: easy days make hard days possible. Own this session.',
-        'Low and slow today. Your cardiovascular system adapts during recovery, not just effort.'
+        'Low and slow today. Your cardiovascular system adapts during recovery too.',
+        'High fatigue and sustained hard effort is a liability. Today you invest in tomorrow.'
       ],
       recomposition: [
-        'Recomp stalls when recovery is skipped. This session is doing exactly what the plan requires.',
+        'Recomp stalls when recovery is skipped. This session is exactly what the plan requires.',
         'Fatigue is a signal. The body rebuilds lean tissue when you respect it — today, you do.',
-        'Active recovery is active investment. Your body composition improves here too.'
+        'Active recovery is active investment. Body composition shifts here too.',
+        'High fatigue in a recomp block. Protect the adaptation by not overreaching.'
       ]
     }
   };
 
   function _buildCoachMessage(selected, params) {
-    var mode     = _intensityMode(params.fatigue_level);
-    var goal     = params.goal;
-    var messages = COACH_MESSAGES[mode] && COACH_MESSAGES[mode][goal];
-
-    // Deterministic selection using subtype charCode to vary across same mode/goal
-    if (messages && messages.length > 0) {
-      var subtypeCode = selected.subtype ? selected.subtype.charCodeAt(0) : 0;
-      return messages[subtypeCode % messages.length];
-    }
-
-    // Hard fallback — should never be reached with current constants
-    return 'Execute with precision. Every session is a deposit.';
+    var mode = _intensityMode(params.fatigue_level);
+    var pool = COACH_MSG[mode] && COACH_MSG[mode][params.goal];
+    if (!pool || pool.length === 0) return 'Execute with precision. Every session is a deposit.';
+    // Vary by workout ID number + fatigue so adjacent workouts in same goal/mode feel different
+    return pool[(_idNumber(selected.id) + params.fatigue_level) % pool.length];
   }
 
   // ── Main selector ─────────────────────────────────────────────────────────
@@ -391,14 +434,16 @@
     var scored   = _scoreCandidates(candidates, params);
     scored.sort(function (a, b) { return b.score - a.score; });
 
-    var selected = scored[0].workout;
+    var selected     = scored[0].workout;
+    var sessionFocus = _buildSessionFocus(selected);
+    var momentumTag  = _buildMomentumTag(selected, params);
 
     return {
       selected_workout_id: selected.id,
       reasoning:           _buildReasoning(selected, params, scored),
       adaptation:          _buildAdaptation(selected, params),
-      session_focus:       _buildSessionFocus(selected),
-      momentum_tag:        _buildMomentumTag(selected, params),
+      session_focus:       sessionFocus,
+      momentum_tag:        momentumTag,
       coach_message:       _buildCoachMessage(selected, params)
     };
   }
@@ -418,7 +463,8 @@
     _buildAdaptation:    _buildAdaptation,
     _buildMomentumTag:   _buildMomentumTag,
     _buildSessionFocus:  _buildSessionFocus,
-    _buildCoachMessage:  _buildCoachMessage
+    _buildCoachMessage:  _buildCoachMessage,
+    _idNumber:           _idNumber
   };
 
   if (typeof module !== 'undefined' && module.exports) {
