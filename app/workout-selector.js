@@ -284,39 +284,39 @@
   // {duration} is replaced with the workout's actual duration in minutes.
   var SESSION_FOCUS_TEMPLATES = {
     hiit: [
-      '{duration}-min intervals — push beyond your comfort ceiling',
-      '{duration}-min intervals — hold the pace, earn the session',
-      '{duration}-min intervals — every round counts'
+      '{duration}-min intervals — break the ceiling',
+      '{duration}-min intervals — earn every second',
+      '{duration}-min intervals — all out, every round'
     ],
     zone2: [
-      '{duration}-min zone 2 — slow is how you get faster',
-      '{duration}-min base — build what effort alone can\'t buy',
-      '{duration}-min aerobic — consistency is the strategy'
+      '{duration}-min zone 2 — patience is the method',
+      '{duration}-min base — slow builds strength',
+      '{duration}-min aerobic — consistency compounds'
     ],
     mixed: [
-      '{duration}-min hybrid — strong and conditioned, no compromise',
-      '{duration}-min mixed — two systems, one standard',
-      '{duration}-min concurrent — earn both adaptations'
+      '{duration}-min hybrid — two signals, one standard',
+      '{duration}-min mixed — no weak link',
+      '{duration}-min concurrent — earn both'
     ],
     heavy: [
       '{duration}-min strength — own the weight',
       '{duration}-min barbell — load up, lock in',
-      '{duration}-min heavy — strength is a long game'
+      '{duration}-min heavy — strength is earned'
     ],
     explosive: [
       '{duration}-min power — move fast, stay sharp',
       '{duration}-min explosive — speed is the skill',
-      '{duration}-min athletic — be the fastest version of yourself'
+      '{duration}-min athletic — fast is a choice'
     ],
     tempo: [
-      '{duration}-min tempo — control every rep',
-      '{duration}-min tempo — slow down to level up',
-      '{duration}-min precision — the detail is the work'
+      '{duration}-min tempo — precision wins',
+      '{duration}-min tempo — control is the skill',
+      '{duration}-min precision — slow down, level up'
     ],
     volume: [
-      '{duration}-min volume — reps build the body',
-      '{duration}-min accumulation — show up, stack the work',
-      '{duration}-min volume — more reps, stronger signal'
+      '{duration}-min volume — reps reveal discipline',
+      '{duration}-min accumulation — stack the work',
+      '{duration}-min volume — volume is the answer'
     ]
   };
 
