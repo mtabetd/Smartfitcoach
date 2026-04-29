@@ -23,6 +23,7 @@ var _normalizeLastSessionTypeHistory = DDEv3._normalizeLastSessionTypeHistory;
 var _computeMomentumScore            = DDEv3._computeMomentumScore;
 var _detectProfileType               = DDEv3._detectProfileType;
 var _applyAdaptiveCaps               = DDEv3._applyAdaptiveCaps;
+var _buildCoachingMessage            = DDEv3._buildCoachingMessage;
 
 // ── Harness ───────────────────────────────────────────────────────────────────
 var passed = 0, failed = 0;
@@ -1229,6 +1230,221 @@ test('progression + adaptive : plafond max = high (pas de double-stack)', functi
   // disciplined boost: min(rank+1, 2) → jamais > 2 (high)
   var r = _applyAdaptiveCaps(2, 'goal_alignment', 'disciplined', 7, true, 'train');
   assertEqual(r.maxRank, 2); // déjà high → boost n'empile pas au-delà
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 16 — Module 5 : _buildCoachingMessage
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('\nSection 16 — Module 5 : _buildCoachingMessage');
+
+var VALID_TONES = ['reassuring', 'motivating', 'protective', 'performance'];
+var BANNED_PHRASES = ['crush it', 'beast mode', 'no pain no gain', 'grind', 'hustle',
+  'warrior', 'epic', 'absolutely', 'definitely', 'great job', 'amazing'];
+
+function assertHasCoachingFields(result, label) {
+  ['headline', 'shortMessage', 'coachingExplanation', 'userAction', 'tone'].forEach(function (k) {
+    assert(Object.prototype.hasOwnProperty.call(result, k), label + ': missing field ' + k);
+    assert(result[k] !== undefined && result[k] !== null && result[k] !== '',
+      label + ': field ' + k + ' is empty');
+  });
+}
+
+function assertNoBannedPhrases(result, label) {
+  var combined = [result.headline, result.shortMessage, result.coachingExplanation,
+    result.userAction].join(' ').toLowerCase();
+  BANNED_PHRASES.forEach(function (phrase) {
+    assert(combined.indexOf(phrase) === -1, label + ': banned phrase found: "' + phrase + '"');
+  });
+}
+
+// 1. Rest day → protective tone, all 5 fields present, no banned phrases
+test('rest day : tone protective, tous les champs présents', function () {
+  var r = _buildCoachingMessage({ decision: 'rest', fatigueEffective: 5,
+    priorityApplied: 'goal_alignment', momentumScore: 5, profileType: 'disciplined' });
+  assertHasCoachingFields(r, 'rest/fatigue5');
+  assertEqual(r.tone, 'protective');
+  assertNoBannedPhrases(r, 'rest/fatigue5');
+});
+
+// 2. Rest day variants : fatigue branching (≥5, ≥4, <4)
+test('rest day : fatigue >= 5 → explication fatigue élevée', function () {
+  var r = _buildCoachingMessage({ decision: 'rest', fatigueEffective: 5 });
+  assert(r.coachingExplanation.indexOf('élevé') !== -1, 'should mention fatigue élevée');
+});
+test('rest day : fatigue = 4 → explication seuil sécurisé', function () {
+  var r = _buildCoachingMessage({ decision: 'rest', fatigueEffective: 4 });
+  assert(r.coachingExplanation.indexOf('seuil') !== -1 || r.coachingExplanation.indexOf('sécurisé') !== -1,
+    'should mention seuil or sécurisé');
+});
+test('rest day : fatigue < 4 → explication récupération stratégique', function () {
+  var r = _buildCoachingMessage({ decision: 'rest', fatigueEffective: 2 });
+  assert(r.coachingExplanation.indexOf('stratégique') !== -1 ||
+    r.coachingExplanation.indexOf('récupération') !== -1, 'should mention strategic recovery');
+});
+
+// 3. Overtraining → recovery-focused, protective
+test('overtraining : tone protective', function () {
+  var r = _buildCoachingMessage({ decision: 'train', profileType: 'overtraining',
+    recommendedIntensity: 'moderate', recommendedSessionType: 'cardio',
+    momentumScore: 5, priorityApplied: 'goal_alignment' });
+  assertEqual(r.tone, 'protective');
+  assertHasCoachingFields(r, 'overtraining');
+  assertNoBannedPhrases(r, 'overtraining');
+});
+test('overtraining : contenu axé récupération / adaptation', function () {
+  var r = _buildCoachingMessage({ decision: 'train', profileType: 'overtraining',
+    recommendedIntensity: 'moderate', recommendedSessionType: 'cardio',
+    momentumScore: 5, priorityApplied: 'goal_alignment' });
+  var combined = r.coachingExplanation + ' ' + r.headline;
+  assert(combined.indexOf('protéger') !== -1 || combined.indexOf('protég') !== -1 ||
+    combined.indexOf('adapt') !== -1, 'should mention protection/adaptation');
+});
+
+// 4. Inconsistent profile → reassuring tone, restart-friendly
+test('inconsistent : tone reassuring', function () {
+  var r = _buildCoachingMessage({ decision: 'train', profileType: 'inconsistent',
+    recommendedIntensity: 'low', recommendedSessionType: 'cardio',
+    momentumScore: 3, priorityApplied: 'goal_alignment' });
+  assertEqual(r.tone, 'reassuring');
+  assertHasCoachingFields(r, 'inconsistent');
+  assertNoBannedPhrases(r, 'inconsistent');
+});
+test('inconsistent : message de relance sans pression de performance', function () {
+  var r = _buildCoachingMessage({ decision: 'train', profileType: 'inconsistent',
+    recommendedIntensity: 'low', recommendedSessionType: 'cardio',
+    momentumScore: 3, priorityApplied: 'goal_alignment' });
+  var combined = (r.headline + ' ' + r.shortMessage + ' ' + r.coachingExplanation).toLowerCase();
+  assert(combined.indexOf('régularité') !== -1 || combined.indexOf('reprise') !== -1 ||
+    combined.indexOf('dynamique') !== -1, 'should mention regularity/restart');
+});
+
+// 5. Cautious profile → protective tone
+test('cautious : tone protective', function () {
+  var r = _buildCoachingMessage({ decision: 'train', profileType: 'cautious',
+    recommendedIntensity: 'moderate', recommendedSessionType: 'strength',
+    momentumScore: 5, priorityApplied: 'goal_alignment' });
+  assertEqual(r.tone, 'protective');
+  assertHasCoachingFields(r, 'cautious');
+  assertNoBannedPhrases(r, 'cautious');
+});
+
+// 6. Disciplined + high momentum → performance tone
+test('disciplined + momentum >= 7 : tone performance', function () {
+  var r = _buildCoachingMessage({ decision: 'train', profileType: 'disciplined',
+    recommendedIntensity: 'high', recommendedSessionType: 'strength',
+    momentumScore: 8, priorityApplied: 'goal_alignment' });
+  assertEqual(r.tone, 'performance');
+  assertHasCoachingFields(r, 'disciplined/momentum8');
+  assertNoBannedPhrases(r, 'disciplined/momentum8');
+});
+test('disciplined + momentum < 7 : tone performance (séance solide)', function () {
+  var r = _buildCoachingMessage({ decision: 'train', profileType: 'disciplined',
+    recommendedIntensity: 'moderate', recommendedSessionType: 'strength',
+    momentumScore: 5, priorityApplied: 'goal_alignment' });
+  assertEqual(r.tone, 'performance');
+  assertHasCoachingFields(r, 'disciplined/momentum5');
+});
+
+// 7. Low momentum → no blame, reassuring
+test('momentum <= 3 : tone reassuring, sans culpabilisation', function () {
+  var r = _buildCoachingMessage({ decision: 'train', profileType: 'beginner',
+    recommendedIntensity: 'low', recommendedSessionType: 'cardio',
+    momentumScore: 2, priorityApplied: 'goal_alignment' });
+  assertEqual(r.tone, 'reassuring');
+  assertHasCoachingFields(r, 'low-momentum');
+  assertNoBannedPhrases(r, 'low-momentum');
+  var combined = (r.coachingExplanation + ' ' + r.headline + ' ' + r.shortMessage).toLowerCase();
+  assert(combined.indexOf('faute') === -1 && combined.indexOf('honte') === -1,
+    'should not blame user');
+});
+
+// 8. High momentum (non-disciplined) → motivating tone
+test('momentum >= 7 (non disciplined) : tone motivating', function () {
+  var r = _buildCoachingMessage({ decision: 'train', profileType: 'beginner',
+    recommendedIntensity: 'moderate', recommendedSessionType: 'cardio',
+    momentumScore: 9, priorityApplied: 'goal_alignment' });
+  assertEqual(r.tone, 'motivating');
+  assertHasCoachingFields(r, 'high-momentum/non-disciplined');
+  assertNoBannedPhrases(r, 'high-momentum/non-disciplined');
+});
+
+// 9. Safety priority → protective tone, never aggressive
+test('safety priority : tone protective', function () {
+  var r = _buildCoachingMessage({ decision: 'train', profileType: 'beginner',
+    recommendedIntensity: 'moderate', recommendedSessionType: 'cardio',
+    momentumScore: 5, priorityApplied: 'safety' });
+  assertEqual(r.tone, 'protective');
+  assertHasCoachingFields(r, 'safety-priority');
+  assertNoBannedPhrases(r, 'safety-priority');
+});
+
+// 10. Missing optional fields → no crash, all 5 fields present
+test('champs optionnels manquants : pas de crash', function () {
+  var r = _buildCoachingMessage({});
+  assertHasCoachingFields(r, 'empty-input');
+  assert(VALID_TONES.indexOf(r.tone) !== -1, 'tone must be valid enum: ' + r.tone);
+});
+test('input undefined → pas de crash', function () {
+  var r = _buildCoachingMessage(undefined);
+  assertHasCoachingFields(r, 'undefined-input');
+});
+test('input null → pas de crash', function () {
+  var r = _buildCoachingMessage(null);
+  assertHasCoachingFields(r, 'null-input');
+});
+
+// 11. Output always has all 5 fields with valid tone enum
+test('tone toujours dans l\'enum valide (rest)', function () {
+  var r = _buildCoachingMessage({ decision: 'rest', fatigueEffective: 3 });
+  assert(VALID_TONES.indexOf(r.tone) !== -1, 'invalid tone: ' + r.tone);
+});
+test('tone toujours dans l\'enum valide (default path)', function () {
+  var r = _buildCoachingMessage({ decision: 'train', momentumScore: 5,
+    profileType: 'beginner', priorityApplied: 'goal_alignment' });
+  assert(VALID_TONES.indexOf(r.tone) !== -1, 'invalid tone: ' + r.tone);
+});
+
+// 12. V3 engine outputs remain unchanged — _buildCoachingMessage does not modify engineOutput
+test('V3 outputs inchangés : _buildCoachingMessage est une fonction pure', function () {
+  var engineOut = decideV3({
+    goal: 'muscle_gain', fatigueLevel: 2, sleepQuality: 4, trainingFrequency: 5,
+    lastSessionDate: '2026-04-28', last3SessionsIntensity: ['moderate', 'moderate', 'high'],
+    userProfile: { trainingFrequencyLast7Days: 5, adherenceScore: 0.85,
+      avgFatigueLast7Days: 2, last7SessionsIntensity: ['moderate','high','moderate','high','moderate','high','moderate'],
+      lastSessionTypeHistory: ['strength','cardio','strength'] }
+  });
+  var before = JSON.stringify(engineOut);
+  _buildCoachingMessage(engineOut);
+  var after = JSON.stringify(engineOut);
+  assertEqual(before, after, 'engineOutput was mutated by _buildCoachingMessage');
+});
+test('V3 champs décision inchangés après coaching message', function () {
+  var engineOut = decideV3({
+    goal: 'fat_loss', fatigueLevel: 3, sleepQuality: 3, trainingFrequency: 3,
+    lastSessionDate: '2026-04-27', last3SessionsIntensity: ['low', 'moderate'],
+    userProfile: { trainingFrequencyLast7Days: 3, adherenceScore: 0.6,
+      avgFatigueLast7Days: 3, last7SessionsIntensity: ['low','moderate','low'],
+      lastSessionTypeHistory: ['cardio'] }
+  });
+  var decisionBefore  = engineOut.decision;
+  var intensityBefore = engineOut.recommendedIntensity;
+  var priorityBefore  = engineOut.priorityApplied;
+  _buildCoachingMessage(engineOut);
+  assertEqual(engineOut.decision,             decisionBefore,  'decision mutated');
+  assertEqual(engineOut.recommendedIntensity, intensityBefore, 'recommendedIntensity mutated');
+  assertEqual(engineOut.priorityApplied,      priorityBefore,  'priorityApplied mutated');
+});
+
+// 13. sessionType label mapping
+test('sessionType labels : cardio → "cardio" dans userAction', function () {
+  var r = _buildCoachingMessage({ decision: 'train', profileType: 'inconsistent',
+    recommendedSessionType: 'cardio', momentumScore: 3, priorityApplied: 'goal_alignment' });
+  assert(r.userAction.indexOf('cardio') !== -1, 'should include session type label');
+});
+test('sessionType labels : strength → "musculation" dans userAction', function () {
+  var r = _buildCoachingMessage({ decision: 'train', profileType: 'inconsistent',
+    recommendedSessionType: 'strength', momentumScore: 3, priorityApplied: 'goal_alignment' });
+  assert(r.userAction.indexOf('musculation') !== -1, 'should include musculation label');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

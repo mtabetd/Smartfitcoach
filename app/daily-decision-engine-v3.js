@@ -437,6 +437,158 @@
     }
   }
 
+  // ═══════════════════════════════════════════════════════════════════════════
+  // V3 MODULE 5 — Coaching Message Layer
+  // ═══════════════════════════════════════════════════════════════════════════
+  //
+  // Traduit les sorties du moteur en messages UX premium.
+  // Fonction pure — ne modifie aucun champ moteur.
+  // Déterministe, aucun appel IA, aucun effet de bord.
+  // Strings isolées par cas pour traduction FR/EN future.
+  //
+  // @param  {Object} engineOutput  Sortie complète de decideDailyPlanV3
+  // @return {{ headline, shortMessage, coachingExplanation, userAction, tone }}
+  //   tone : "reassuring" | "motivating" | "protective" | "performance"
+  function _buildCoachingMessage(engineOutput) {
+    var out         = engineOutput || {};
+    var decision    = out.decision                || 'train';
+    var intensity   = out.recommendedIntensity    || 'moderate';
+    var sessionType = out.recommendedSessionType  || 'cardio';
+    var fatigue     = typeof out.fatigueEffective === 'number' ? out.fatigueEffective : 3;
+    var priority    = out.priorityApplied         || 'goal_alignment';
+    var momentum    = (out.momentumScore !== undefined && out.momentumScore !== null)
+                      ? out.momentumScore : null;
+    var profile     = out.profileType             || 'beginner';
+
+    var sessLabel = ({
+      strength: 'musculation',
+      cardio:   'cardio',
+      hiit:     'HIIT',
+      mobility: 'mobilité',
+      recovery: 'récupération'
+    })[sessionType] || sessionType;
+
+    var intLabel = ({
+      low:      'faible',
+      moderate: 'modérée',
+      high:     'élevée'
+    })[intensity] || intensity;
+
+    // ── Repos ───────────────────────────────────────────────────────────────
+    if (decision === 'rest') {
+      var restExpl;
+      if (fatigue >= 5) {
+        restExpl = 'Ton niveau de fatigue est élevé. Forcer une séance aujourd\'hui ralentirait ta progression sur les semaines à venir.';
+      } else if (fatigue >= 4) {
+        restExpl = 'Ta fatigue actuelle dépasse le seuil sécurisé pour l\'entraînement. Une journée de repos préserve ta capacité à performer demain.';
+      } else {
+        restExpl = 'Ton programme inclut une récupération aujourd\'hui. C\'est un choix stratégique — pas un recul.';
+      }
+      return {
+        headline:            'Séance de récupération au programme',
+        shortMessage:        'Ton corps consolide les progrès. Aujourd\'hui, le repos fait partie du plan.',
+        coachingExplanation: restExpl,
+        userAction:          'Hydrate-toi, étire-toi légèrement, et prépare mentalement ta prochaine séance.',
+        tone:                'protective'
+      };
+    }
+
+    // ── Overtraining ────────────────────────────────────────────────────────
+    if (profile === 'overtraining') {
+      return {
+        headline:            'Intensité adaptée pour protéger tes résultats',
+        shortMessage:        'On réduit l\'intensité pour protéger ta progression, pas pour ralentir tes résultats.',
+        coachingExplanation: 'Ton historique récent indique une accumulation de fatigue. Une séance de ' + sessLabel + ' à intensité ' + intLabel + ' aujourd\'hui permet à ton corps de consolider les adaptations en cours — sans sacrifier les prochaines semaines.',
+        userAction:          'Concentre-toi sur la qualité d\'exécution plutôt que sur l\'effort. Intensité ' + intLabel + ', durée réduite si besoin.',
+        tone:                'protective'
+      };
+    }
+
+    // ── Inconsistant ────────────────────────────────────────────────────────
+    if (profile === 'inconsistent') {
+      return {
+        headline:            'Reprise en douceur',
+        shortMessage:        'Une séance aujourd\'hui, même courte, relance ta dynamique.',
+        coachingExplanation: 'La régularité se construit une séance à la fois. L\'objectif aujourd\'hui n\'est pas la performance — c\'est simplement d\'y aller. Chaque présence compte.',
+        userAction:          'Lance-toi pour une séance de ' + sessLabel + '. La durée importe moins que le fait de commencer.',
+        tone:                'reassuring'
+      };
+    }
+
+    // ── Cautious ────────────────────────────────────────────────────────────
+    if (profile === 'cautious') {
+      return {
+        headline:            'Progression graduelle',
+        shortMessage:        'Une intensité maîtrisée aujourd\'hui, pour mieux performer demain.',
+        coachingExplanation: 'Ton niveau de fatigue récent invite à la progressivité. Cette séance de ' + sessLabel + ' est conçue pour maintenir l\'élan sans créer de surcharge.',
+        userAction:          'Réalise la séance en écoutant tes sensations. L\'écoute de ton corps est une compétence d\'athlète.',
+        tone:                'protective'
+      };
+    }
+
+    // ── Disciplined ─────────────────────────────────────────────────────────
+    if (profile === 'disciplined') {
+      if (momentum !== null && momentum >= 7) {
+        return {
+          headline:            'Ta régularité ouvre une séance ambitieuse',
+          shortMessage:        'Ta régularité ouvre une séance plus ambitieuse aujourd\'hui.',
+          coachingExplanation: 'Ton niveau de constance et ton élan ces 7 derniers jours sont excellents. Les conditions sont réunies pour une séance de ' + sessLabel + ' à intensité ' + intLabel + '.',
+          userAction:          'Exploite cette séance pleinement. C\'est le bon moment pour progresser.',
+          tone:                'performance'
+        };
+      }
+      return {
+        headline:            'Séance solide — tu as le niveau',
+        shortMessage:        'Ta régularité porte ses fruits. Continue sur cette lancée.',
+        coachingExplanation: 'Ton engagement régulier se reflète dans tes données. Aujourd\'hui est une bonne occasion de consolider cette progression avec une séance de ' + sessLabel + '.',
+        userAction:          'Réalise ta séance avec concentration et précision.',
+        tone:                'performance'
+      };
+    }
+
+    // ── Momentum élevé (profil non spécifique) ───────────────────────────────
+    if (momentum !== null && momentum >= 7) {
+      return {
+        headline:            'Élan fort — séance de qualité',
+        shortMessage:        'Ton dynamisme récent soutient une séance productive.',
+        coachingExplanation: 'Tes indicateurs des 7 derniers jours montrent un bon rythme. Profite de cet élan pour une séance de ' + sessLabel + ' à intensité ' + intLabel + '.',
+        userAction:          'Capitalise sur cet élan. Cette séance est une opportunité de progression.',
+        tone:                'motivating'
+      };
+    }
+
+    // ── Momentum faible ──────────────────────────────────────────────────────
+    if (momentum !== null && momentum <= 3) {
+      return {
+        headline:            'Reprise simple et sans pression',
+        shortMessage:        'Aujourd\'hui, l\'essentiel est de bouger. Rien de plus.',
+        coachingExplanation: 'Le rythme d\'entraînement récent a été limité. Cette séance de ' + sessLabel + ' est conçue pour relancer la dynamique, sans objectif de performance.',
+        userAction:          'Démarre simplement. Une séance courte et légère suffit à réenclencher l\'élan.',
+        tone:                'reassuring'
+      };
+    }
+
+    // ── Sécurité ─────────────────────────────────────────────────────────────
+    if (priority === 'safety') {
+      return {
+        headline:            'Séance adaptée — progression protégée',
+        shortMessage:        'L\'intensité a été ajustée pour préserver ta progression sur la durée.',
+        coachingExplanation: 'Une contrainte de sécurité a encadré l\'intensité d\'aujourd\'hui. C\'est une décision qui protège ta capacité à t\'entraîner régulièrement sur les semaines à venir.',
+        userAction:          'Réalise cette séance de ' + sessLabel + ' en te concentrant sur la qualité plutôt que l\'effort.',
+        tone:                'protective'
+      };
+    }
+
+    // ── Défaut ───────────────────────────────────────────────────────────────
+    return {
+      headline:            'Séance du jour',
+      shortMessage:        'Séance de ' + sessLabel + ' à intensité ' + intLabel + ' au programme.',
+      coachingExplanation: 'Les conditions sont réunies pour une bonne séance aujourd\'hui. Tes indicateurs sont dans la norme.',
+      userAction:          'Donne le meilleur de toi, à ton rythme.',
+      tone:                'motivating'
+    };
+  }
+
   // ── Validation globale (V2 core + userProfile optionnel) ─────────────────────
   function _validate(inputs) {
     if (!inputs || typeof inputs !== 'object') {
@@ -608,7 +760,9 @@
     // V3 Module 3
     _detectProfileType:               _detectProfileType,
     // V3 Module 4
-    _applyAdaptiveCaps:               _applyAdaptiveCaps
+    _applyAdaptiveCaps:               _applyAdaptiveCaps,
+    // V3 Module 5
+    _buildCoachingMessage:            _buildCoachingMessage
   };
 
   if (typeof module !== 'undefined' && module.exports) {
