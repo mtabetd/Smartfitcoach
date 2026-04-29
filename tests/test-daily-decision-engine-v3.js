@@ -32,6 +32,7 @@ var _selectSessionTypeDiverse        = DDEv3._selectSessionTypeDiverse;
 var _applySessionTypeCap             = DDEv3._applySessionTypeCap;
 var _selectSessionSubType            = DDEv3._selectSessionSubType;
 var _selectSessionTypeByVariety      = DDEv3._selectSessionTypeByVariety;
+var _generateCoachingMessage         = DDEv3._generateCoachingMessage;
 
 // ── Harness ───────────────────────────────────────────────────────────────────
 var passed = 0, failed = 0;
@@ -3767,6 +3768,188 @@ test('variety integration: full 3-type variety visible over extended history', f
   }));
   // str=1, cond=1, hyp=0 → hyp has max deficit=2 at high intensity
   assertEqual(out1.recommendedSessionType, 'hypertrophy');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Section 29 — Module 10 : subtype-aware coaching message (_generateCoachingMessage)
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('\n── Section 29 : Subtype-aware coaching message ─────────────────────────────');
+
+test('s29-01 rest decision returns non-empty calm message', function () {
+  var r = _generateCoachingMessage({ decision: 'rest', sessionSubType: null, recommendedSessionType: null, fatigueEffective: 2 });
+  assert(typeof r.coachingMessage === 'string' && r.coachingMessage.length > 0, 'must return non-empty string');
+});
+
+test('s29-02 rest + high fatigue returns different message than rest normal', function () {
+  var normal = _generateCoachingMessage({ decision: 'rest', sessionSubType: null, recommendedSessionType: null, fatigueEffective: 2 }).coachingMessage;
+  var tired  = _generateCoachingMessage({ decision: 'rest', sessionSubType: null, recommendedSessionType: null, fatigueEffective: 4 }).coachingMessage;
+  assert(normal !== tired, 'high-fatigue rest message must differ from normal rest message');
+});
+
+test('s29-03 hiit produces explosive/interval wording', function () {
+  var r = _generateCoachingMessage({ decision: 'train', sessionSubType: 'hiit', recommendedSessionType: 'conditioning', fatigueEffective: 2 });
+  assert(r.coachingMessage.toLowerCase().indexOf('hiit') !== -1 || r.coachingMessage.toLowerCase().indexOf('intervalle') !== -1,
+    'hiit message must mention HIIT or intervalle, got: ' + r.coachingMessage);
+});
+
+test('s29-04 hiit high fatigue is different from hiit normal', function () {
+  var normal = _generateCoachingMessage({ decision: 'train', sessionSubType: 'hiit', recommendedSessionType: 'conditioning', fatigueEffective: 2 }).coachingMessage;
+  var tired  = _generateCoachingMessage({ decision: 'train', sessionSubType: 'hiit', recommendedSessionType: 'conditioning', fatigueEffective: 4 }).coachingMessage;
+  assert(normal !== tired, 'hiit fatigue message must differ from hiit normal message');
+});
+
+test('s29-05 zone2 message is distinct from hiit message', function () {
+  var hiit  = _generateCoachingMessage({ decision: 'train', sessionSubType: 'hiit',  recommendedSessionType: 'conditioning', fatigueEffective: 2 }).coachingMessage;
+  var zone2 = _generateCoachingMessage({ decision: 'train', sessionSubType: 'zone2', recommendedSessionType: 'conditioning', fatigueEffective: 2 }).coachingMessage;
+  assert(hiit !== zone2, 'zone2 message must differ from hiit message');
+});
+
+test('s29-06 zone2 message contains aerobic/zone wording', function () {
+  var r = _generateCoachingMessage({ decision: 'train', sessionSubType: 'zone2', recommendedSessionType: 'conditioning', fatigueEffective: 2 });
+  var msg = r.coachingMessage.toLowerCase();
+  assert(msg.indexOf('zone') !== -1 || msg.indexOf('aérobi') !== -1 || msg.indexOf('endurance') !== -1,
+    'zone2 message must contain aerobic wording, got: ' + r.coachingMessage);
+});
+
+test('s29-07 mixed message is distinct from hiit and zone2', function () {
+  var hiit  = _generateCoachingMessage({ decision: 'train', sessionSubType: 'hiit',  recommendedSessionType: 'conditioning', fatigueEffective: 2 }).coachingMessage;
+  var zone2 = _generateCoachingMessage({ decision: 'train', sessionSubType: 'zone2', recommendedSessionType: 'conditioning', fatigueEffective: 2 }).coachingMessage;
+  var mixed = _generateCoachingMessage({ decision: 'train', sessionSubType: 'mixed', recommendedSessionType: 'conditioning', fatigueEffective: 2 }).coachingMessage;
+  assert(mixed !== hiit,  'mixed must differ from hiit');
+  assert(mixed !== zone2, 'mixed must differ from zone2');
+});
+
+test('s29-08 heavy message contains force/charge wording', function () {
+  var r = _generateCoachingMessage({ decision: 'train', sessionSubType: 'heavy', recommendedSessionType: 'strength', fatigueEffective: 2 });
+  var msg = r.coachingMessage.toLowerCase();
+  assert(msg.indexOf('force') !== -1 || msg.indexOf('lourd') !== -1 || msg.indexOf('barre') !== -1,
+    'heavy message must contain force/charge wording, got: ' + r.coachingMessage);
+});
+
+test('s29-09 volume/strength contains accumulation wording', function () {
+  var r = _generateCoachingMessage({ decision: 'train', sessionSubType: 'volume', recommendedSessionType: 'strength', fatigueEffective: 2 });
+  var msg = r.coachingMessage.toLowerCase();
+  assert(msg.indexOf('accumulation') !== -1 || msg.indexOf('tonnage') !== -1,
+    'volume/strength must contain accumulation/tonnage, got: ' + r.coachingMessage);
+});
+
+test('s29-10 volume/hypertrophy distinct from volume/strength and contains pump wording', function () {
+  var volStr = _generateCoachingMessage({ decision: 'train', sessionSubType: 'volume', recommendedSessionType: 'strength',    fatigueEffective: 2 }).coachingMessage;
+  var volHyp = _generateCoachingMessage({ decision: 'train', sessionSubType: 'volume', recommendedSessionType: 'hypertrophy', fatigueEffective: 2 }).coachingMessage;
+  assert(volStr !== volHyp, 'volume/hypertrophy must differ from volume/strength');
+  var msg = volHyp.toLowerCase();
+  assert(msg.indexOf('congestion') !== -1 || msg.indexOf('pompage') !== -1 || msg.indexOf('pump') !== -1,
+    'volume/hypertrophy must contain pump/congestion wording, got: ' + volHyp);
+});
+
+test('s29-11 explosive message is distinct from heavy', function () {
+  var heavy = _generateCoachingMessage({ decision: 'train', sessionSubType: 'heavy',     recommendedSessionType: 'strength', fatigueEffective: 2 }).coachingMessage;
+  var expl  = _generateCoachingMessage({ decision: 'train', sessionSubType: 'explosive', recommendedSessionType: 'strength', fatigueEffective: 2 }).coachingMessage;
+  assert(heavy !== expl, 'explosive message must differ from heavy message');
+});
+
+test('s29-12 tempo message contains TUT/eccentric wording', function () {
+  var r = _generateCoachingMessage({ decision: 'train', sessionSubType: 'tempo', recommendedSessionType: 'hypertrophy', fatigueEffective: 2 });
+  var msg = r.coachingMessage.toLowerCase();
+  assert(msg.indexOf('tempo') !== -1 || msg.indexOf('excentrique') !== -1 || msg.indexOf('tension') !== -1,
+    'tempo message must contain tempo/eccentric wording, got: ' + r.coachingMessage);
+});
+
+test('s29-13 recovery subtype is distinct from hiit', function () {
+  var hiit = _generateCoachingMessage({ decision: 'train', sessionSubType: 'hiit',     recommendedSessionType: 'conditioning', fatigueEffective: 2 }).coachingMessage;
+  var rec  = _generateCoachingMessage({ decision: 'train', sessionSubType: 'recovery', recommendedSessionType: 'recovery',     fatigueEffective: 2 }).coachingMessage;
+  assert(hiit !== rec, 'recovery message must differ from hiit message');
+});
+
+test('s29-14 unknown subtype falls back to sessionType without crash', function () {
+  var r = _generateCoachingMessage({ decision: 'train', sessionSubType: 'unknown_xyz', recommendedSessionType: 'conditioning', fatigueEffective: 2 });
+  assert(typeof r.coachingMessage === 'string' && r.coachingMessage.length > 0, 'unknown subtype must return fallback string, not crash');
+});
+
+test('s29-15 null subtype + null sessionType falls back without crash', function () {
+  var r = _generateCoachingMessage({ decision: 'train', sessionSubType: null, recommendedSessionType: null, fatigueEffective: 2 });
+  assert(typeof r.coachingMessage === 'string' && r.coachingMessage.length > 0, 'null subtype/sessType must return fallback string, not crash');
+});
+
+test('s29-16 all 7 named subtypes produce distinct messages', function () {
+  var subtypes = [
+    { subtype: 'hiit',      sessType: 'conditioning' },
+    { subtype: 'zone2',     sessType: 'conditioning' },
+    { subtype: 'mixed',     sessType: 'conditioning' },
+    { subtype: 'heavy',     sessType: 'strength'     },
+    { subtype: 'explosive', sessType: 'strength'     },
+    { subtype: 'tempo',     sessType: 'hypertrophy'  },
+    { subtype: 'recovery',  sessType: 'recovery'     }
+  ];
+  var messages = subtypes.map(function(s) {
+    return _generateCoachingMessage({ decision: 'train', sessionSubType: s.subtype, recommendedSessionType: s.sessType, fatigueEffective: 2 }).coachingMessage;
+  });
+  var unique = messages.filter(function(m, i) { return messages.indexOf(m) === i; });
+  assertEqual(unique.length, messages.length, '7 subtypes must produce 7 distinct messages, got ' + unique.length + ' unique');
+});
+
+test('s29-17 deterministic: same input returns identical message twice', function () {
+  var input = { decision: 'train', sessionSubType: 'hiit', recommendedSessionType: 'conditioning', fatigueEffective: 2 };
+  var r1 = _generateCoachingMessage(input).coachingMessage;
+  var r2 = _generateCoachingMessage(input).coachingMessage;
+  assertEqual(r1, r2, 'coaching message must be deterministic');
+});
+
+test('s29-18 fatigueEffective 3 vs 4 threshold switches message variant', function () {
+  var input3 = { decision: 'train', sessionSubType: 'hiit', recommendedSessionType: 'conditioning', fatigueEffective: 3 };
+  var input4 = { decision: 'train', sessionSubType: 'hiit', recommendedSessionType: 'conditioning', fatigueEffective: 4 };
+  var r3 = _generateCoachingMessage(input3).coachingMessage;
+  var r4 = _generateCoachingMessage(input4).coachingMessage;
+  assert(r3 !== r4, 'fatigueEffective 3 and 4 must produce different messages (threshold at 4)');
+});
+
+test('s29-19 fatigueEffective 5 still uses fatigue variant (boundary)', function () {
+  var r4 = _generateCoachingMessage({ decision: 'train', sessionSubType: 'zone2', recommendedSessionType: 'conditioning', fatigueEffective: 4 }).coachingMessage;
+  var r5 = _generateCoachingMessage({ decision: 'train', sessionSubType: 'zone2', recommendedSessionType: 'conditioning', fatigueEffective: 5 }).coachingMessage;
+  assertEqual(r4, r5, 'fatigueEffective 4 and 5 must produce same (fatigue) variant');
+});
+
+test('s29-20 integration: decideDailyPlanV3 output has subtypeCoachingMessage field', function () {
+  var out = decideV3(Object.assign(baseV2({
+    fatigueLevel: 2, last3SessionsIntensity: ['high'], lastSessionDate: daysAgo(2)
+  }), {
+    userProfile: { adherenceScore: 0.85, trainingFrequencyLast7Days: 4, avgFatigueLast7Days: 2,
+                   last7SessionsIntensity: ['high'] },
+    userHistory: { last7Decisions: ['train', 'train'], last7Momentum: [7, 7],
+                   lastSessionTypes: ['strength', 'conditioning'] }
+  }));
+  assert(typeof out.subtypeCoachingMessage === 'string' && out.subtypeCoachingMessage.length > 0,
+    'subtypeCoachingMessage must be a non-empty string in decideDailyPlanV3 output');
+});
+
+test('s29-21 integration: HIIT message distinct from zone2 message in real engine output', function () {
+  var baseInputs = Object.assign(baseV2({
+    fatigueLevel: 2, last3SessionsIntensity: ['high'], lastSessionDate: daysAgo(2)
+  }), {
+    userProfile: { adherenceScore: 0.9, trainingFrequencyLast7Days: 5, avgFatigueLast7Days: 2,
+                   last7SessionsIntensity: ['high', 'high', 'high'] },
+    userHistory: { last7Decisions: ['train', 'train', 'train'], last7Momentum: [8, 8, 8],
+                   lastSessionTypes: ['conditioning', 'conditioning', 'conditioning'] }
+  });
+  // Force HIIT: lastSubTypes ending in zone2 so next is mixed or hiit depending on cycle
+  var outHiit  = decideV3(Object.assign({}, baseInputs, {
+    userHistory: { last7Decisions: ['train', 'train', 'train'], last7Momentum: [8, 8, 8],
+                   lastSessionTypes: ['conditioning', 'conditioning', 'conditioning'],
+                   lastSubTypes: ['zone2', 'mixed'] }
+  }));
+  var outZone2 = decideV3(Object.assign({}, baseInputs, {
+    userHistory: { last7Decisions: ['train', 'train', 'train'], last7Momentum: [8, 8, 8],
+                   lastSessionTypes: ['conditioning', 'conditioning', 'conditioning'],
+                   lastSubTypes: ['hiit', 'mixed'] }
+  }));
+  // Both must be conditioning; messages must differ if subtypes differ
+  if (outHiit.sessionSubType !== outZone2.sessionSubType) {
+    assert(outHiit.subtypeCoachingMessage !== outZone2.subtypeCoachingMessage,
+      'different conditioning subtypes must produce different coaching messages');
+  } else {
+    // Subtypes happened to be the same — just verify field exists
+    assert(typeof outHiit.subtypeCoachingMessage === 'string', 'subtypeCoachingMessage must be a string');
+  }
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
