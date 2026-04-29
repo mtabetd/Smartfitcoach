@@ -101,10 +101,11 @@ var ARCHETYPES = [
 // ─────────────────────────────────────────────────────────────
 
 function simulateArchetype(arch) {
-  var fatigue  = arch.baseFatigue;
-  var sessions = [];   // { day, intensity }  — only actual training days
-  var rolling  = [];   // last 7 daily records { day, fatigue, decision, momentumScore }
-  var results  = [];
+  var fatigue          = arch.baseFatigue;
+  var sessions         = [];   // { day, intensity }  — only actual training days
+  var rolling          = [];   // last 7 daily records { day, fatigue, decision, momentumScore }
+  var results          = [];
+  var lastSessionTypes = [];   // rolling last-3 session types fed to diversity layer
 
   // Last session date: walk backward through sessions, fallback to initialOffset
   function lastSessionDate(currentDay) {
@@ -173,7 +174,12 @@ function simulateArchetype(arch) {
     var up = buildUserProfile(day);
     if (up) inputs.userProfile = up;
     var uh = buildUserHistory();
-    if (uh) inputs.userHistory = uh;
+    if (uh) {
+      uh.lastSessionTypes = lastSessionTypes.slice();
+      inputs.userHistory = uh;
+    } else if (lastSessionTypes.length > 0) {
+      inputs.userHistory = { lastSessionTypes: lastSessionTypes.slice() };
+    }
 
     var out;
     try {
@@ -186,6 +192,12 @@ function simulateArchetype(arch) {
         premiumCoachingMessage: null, error: e.message
       };
     }
+
+    // Update session type history (feeds diversity layer on next iteration)
+    var sessionType = out.recommendedSessionType || null;
+    lastSessionTypes.push(sessionType);
+    if (lastSessionTypes.length > 3) lastSessionTypes.shift();
+    console.log('[DEBUG] Day', pad(day + 1, 2), '| sessType:', pad(String(sessionType), 12), '| history:', JSON.stringify(lastSessionTypes));
 
     // Actual behavior: overtraining user ignores engine rest; others comply
     var actualDecision;
