@@ -27,6 +27,7 @@ var _buildCoachingMessage            = DDEv3._buildCoachingMessage;
 var _buildHistoryInsights            = DDEv3._buildHistoryInsights;
 var _buildPredictionInsights         = DDEv3._buildPredictionInsights;
 var _buildPremiumCoachingMessage     = DDEv3._buildPremiumCoachingMessage;
+var _buildSmartFitCoachCard          = DDEv3._buildSmartFitCoachCard;
 
 // ── Harness ───────────────────────────────────────────────────────────────────
 var passed = 0, failed = 0;
@@ -2259,6 +2260,209 @@ test('premiumCoachingMessage and predictionInsights both present in engine outpu
   assert(typeof out.premiumCoachingMessage === 'string', 'premiumCoachingMessage is string');
   // With increase momentum and low fatigue → should mention progression
   assert(out.premiumCoachingMessage.indexOf('progression') !== -1 || out.premiumCoachingMessage.indexOf('solide') !== -1 || out.premiumCoachingMessage.length > 10, 'message is meaningful');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 20 — Module 9 (UI) : _buildSmartFitCoachCard
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('\nSection 20 — Module 9 (UI) : _buildSmartFitCoachCard');
+
+var _cardBase = {
+  decision: 'train', recommendedSessionType: 'strength', recommendedIntensity: 'moderate',
+  momentumScore: 7, profileType: 'consistent',
+  premiumCoachingMessage: "Tu es dans une dynamique où chaque séance compte.\nTu peux te permettre d'aller plus loin.\nAujourd'hui, on exploite la séance avec précision."
+};
+
+// ── 1. Global structure ───────────────────────────────────────────────────────
+test('card: returns non-empty string', function () {
+  var c = _buildSmartFitCoachCard(_cardBase);
+  assert(typeof c === 'string' && c.length > 0, 'returns non-empty string');
+});
+test('card: header SMARTFITCOACH TODAY is first line', function () {
+  var c = _buildSmartFitCoachCard(_cardBase);
+  assertEqual(c.split('\n')[0], 'SMARTFITCOACH TODAY');
+});
+test('card: exactly 4 sections separated by empty lines', function () {
+  var c = _buildSmartFitCoachCard(_cardBase);
+  var sections = c.split('\n\n');
+  assertEqual(sections.length, 4);
+  assertEqual(sections[0], 'SMARTFITCOACH TODAY');
+});
+test('card: section 2 contains all 4 intelligence rows', function () {
+  var c = _buildSmartFitCoachCard(_cardBase);
+  var sections = c.split('\n\n');
+  var rows = sections[1].split('\n');
+  assertEqual(rows.length, 4);
+});
+test('card: section 3 is the premiumCoachingMessage', function () {
+  var c = _buildSmartFitCoachCard(_cardBase);
+  var sections = c.split('\n\n');
+  assertEqual(sections[2], _cardBase.premiumCoachingMessage);
+});
+test('card: section 4 starts with Action du jour', function () {
+  var c = _buildSmartFitCoachCard(_cardBase);
+  var sections = c.split('\n\n');
+  var actionLines = sections[3].split('\n');
+  assertEqual(actionLines[0], 'Action du jour');
+  assert(actionLines[1].length > 0, 'action text is non-empty');
+});
+
+// ── 2. Intelligence rows — format and alignment ───────────────────────────────
+test('rows: Séance label aligned at column 14', function () {
+  var c = _buildSmartFitCoachCard(_cardBase);
+  assert(c.indexOf('Séance        : ') !== -1, 'Séance row has correct 14-char label');
+});
+test('rows: Intensité label aligned at column 14', function () {
+  var c = _buildSmartFitCoachCard(_cardBase);
+  assert(c.indexOf('Intensité     : ') !== -1, 'Intensité row has correct 14-char label');
+});
+test('rows: Momentum label aligned at column 14', function () {
+  var c = _buildSmartFitCoachCard(_cardBase);
+  assert(c.indexOf('Momentum      : ') !== -1, 'Momentum row has correct 14-char label');
+});
+test('rows: Profil label aligned at column 14', function () {
+  var c = _buildSmartFitCoachCard(_cardBase);
+  assert(c.indexOf('Profil        : ') !== -1, 'Profil row has correct 14-char label');
+});
+test('rows: Séance value matches input', function () {
+  var c = _buildSmartFitCoachCard(_cardBase);
+  assert(c.indexOf('Séance        : strength') !== -1, 'Séance value is "strength"');
+});
+test('rows: Intensité value matches input', function () {
+  var c = _buildSmartFitCoachCard(_cardBase);
+  assert(c.indexOf('Intensité     : moderate') !== -1, 'Intensité value is "moderate"');
+});
+test('rows: Momentum formatted as "{score} / 10"', function () {
+  var c = _buildSmartFitCoachCard(_cardBase);
+  assert(c.indexOf('Momentum      : 7 / 10') !== -1, 'Momentum formatted as "7 / 10"');
+});
+test('rows: Profil value matches input', function () {
+  var c = _buildSmartFitCoachCard(_cardBase);
+  assert(c.indexOf('Profil        : consistent') !== -1, 'Profil value is "consistent"');
+});
+
+// ── 3. premiumCoachingMessage — newlines preserved ────────────────────────────
+test('message: multi-line coaching message preserved with \\n', function () {
+  var multiLine = "Ligne un.\nLigne deux.\nLigne trois.";
+  var c = _buildSmartFitCoachCard({ decision: 'train', momentumScore: 5, premiumCoachingMessage: multiLine });
+  assert(c.indexOf('Ligne un.\nLigne deux.\nLigne trois.') !== -1, 'newlines preserved');
+});
+test('message: single-line coaching message also preserved', function () {
+  var single = "L'équilibre est bon, mais encore perfectible.";
+  var c = _buildSmartFitCoachCard({ decision: 'train', momentumScore: 5, premiumCoachingMessage: single });
+  assert(c.indexOf(single) !== -1, 'single-line message preserved');
+});
+
+// ── 4. Action text — train vs rest ───────────────────────────────────────────
+test('action: decision train → Effectuer la séance prévue avec précision.', function () {
+  var c = _buildSmartFitCoachCard(Object.assign({}, _cardBase, { decision: 'train' }));
+  assert(c.indexOf('Effectuer la séance prévue avec précision.') !== -1, 'train action text correct');
+});
+test('action: decision rest → Laisser le corps récupérer pleinement.', function () {
+  var c = _buildSmartFitCoachCard(Object.assign({}, _cardBase, { decision: 'rest' }));
+  assert(c.indexOf('Laisser le corps récupérer pleinement.') !== -1, 'rest action text correct');
+});
+test('action: undefined decision defaults to train text', function () {
+  var c = _buildSmartFitCoachCard({ momentumScore: 5, premiumCoachingMessage: 'msg' });
+  assert(c.indexOf('Effectuer la séance prévue avec précision.') !== -1, 'default → train action');
+});
+
+// ── 5. Fallback "-" for missing fields ────────────────────────────────────────
+test('fallback: missing recommendedSessionType → "-"', function () {
+  var c = _buildSmartFitCoachCard({ decision: 'train', momentumScore: 5, premiumCoachingMessage: 'msg' });
+  assert(c.indexOf('Séance        : -') !== -1, 'missing sessType → "-"');
+});
+test('fallback: missing momentumScore → "-"', function () {
+  var c = _buildSmartFitCoachCard({ decision: 'train', recommendedSessionType: 'cardio', premiumCoachingMessage: 'msg' });
+  assert(c.indexOf('Momentum      : -') !== -1, 'missing momentum → "-"');
+});
+test('fallback: null momentumScore → "-"', function () {
+  var c = _buildSmartFitCoachCard({ decision: 'train', momentumScore: null, premiumCoachingMessage: 'msg' });
+  assert(c.indexOf('Momentum      : -') !== -1, 'null momentum → "-"');
+});
+test('fallback: empty object → card with all "-" fields', function () {
+  var c = _buildSmartFitCoachCard({});
+  assert(typeof c === 'string' && c.length > 0, 'empty object → valid string card');
+  assert(c.indexOf('Séance        : -') !== -1, 'all fields default to "-"');
+});
+
+// ── 6. Fail-safe — no throw on invalid input ──────────────────────────────────
+test('fail-safe: null input → returns string (graceful fallback)', function () {
+  var c = _buildSmartFitCoachCard(null);
+  assert(typeof c === 'string' || c === null, 'null input → string or null, never throws');
+});
+test('fail-safe: undefined input → returns string (graceful fallback)', function () {
+  var c = _buildSmartFitCoachCard(undefined);
+  assert(typeof c === 'string' || c === null, 'undefined input → string or null, never throws');
+});
+
+// ── 7. Deterministic output ───────────────────────────────────────────────────
+test('deterministic: identical inputs always produce identical output', function () {
+  var c1 = _buildSmartFitCoachCard(_cardBase);
+  var c2 = _buildSmartFitCoachCard(_cardBase);
+  var c3 = _buildSmartFitCoachCard(_cardBase);
+  assertEqual(c1, c2);
+  assertEqual(c2, c3);
+});
+test('deterministic: rest decision always same', function () {
+  var inp = Object.assign({}, _cardBase, { decision: 'rest' });
+  assertEqual(_buildSmartFitCoachCard(inp), _buildSmartFitCoachCard(inp));
+});
+
+// ── 8. Integration with decideDailyPlanV3 ────────────────────────────────────
+test('decideDailyPlanV3 → smartfitcoachCard field present and non-empty', function () {
+  var out = decideV3({
+    goal: 'muscle_gain', fatigueLevel: 2, trainingFrequency: 3,
+    lastSessionDate: '2026-04-28', last3SessionsIntensity: ['moderate']
+  });
+  assert(out.smartfitcoachCard !== undefined, 'smartfitcoachCard field must be present');
+  assert(typeof out.smartfitcoachCard === 'string' && out.smartfitcoachCard.length > 0, 'non-empty string');
+});
+test('decideDailyPlanV3 → card header is "SMARTFITCOACH TODAY"', function () {
+  var out = decideV3({
+    goal: 'muscle_gain', fatigueLevel: 2, trainingFrequency: 3,
+    lastSessionDate: '2026-04-28', last3SessionsIntensity: ['moderate']
+  });
+  assertEqual(out.smartfitcoachCard.split('\n')[0], 'SMARTFITCOACH TODAY');
+});
+test('decideDailyPlanV3 → card has all 4 intelligence row labels', function () {
+  var out = decideV3({
+    goal: 'fat_loss', fatigueLevel: 3, trainingFrequency: 4,
+    lastSessionDate: '2026-04-28', last3SessionsIntensity: ['moderate']
+  });
+  var c = out.smartfitcoachCard;
+  assert(c.indexOf('Séance        : ') !== -1, 'Séance row present');
+  assert(c.indexOf('Intensité     : ') !== -1, 'Intensité row present');
+  assert(c.indexOf('Momentum      : ') !== -1, 'Momentum row present');
+  assert(c.indexOf('Profil        : ') !== -1, 'Profil row present');
+});
+test('decideDailyPlanV3 → smartfitcoachCard does not affect prior outputs', function () {
+  var base = decideV3({
+    goal: 'muscle_gain', fatigueLevel: 2, trainingFrequency: 3,
+    lastSessionDate: '2026-04-28', last3SessionsIntensity: ['moderate']
+  });
+  assert(base.decision                !== undefined, 'decision present');
+  assert(base.recommendedIntensity    !== undefined, 'recommendedIntensity present');
+  assert(base.historyInsights         !== undefined, 'historyInsights present');
+  assert(base.predictionInsights      !== undefined, 'predictionInsights present');
+  assert(base.premiumCoachingMessage  !== undefined, 'premiumCoachingMessage present');
+  assert(base.smartfitcoachCard       !== undefined, 'smartfitcoachCard present');
+});
+test('decideDailyPlanV3 → card Action du jour matches engine decision', function () {
+  var trainOut = decideV3({
+    goal: 'muscle_gain', fatigueLevel: 2, trainingFrequency: 3,
+    lastSessionDate: '2026-04-28', last3SessionsIntensity: ['moderate']
+  });
+  var restOut = decideV3({
+    goal: 'muscle_gain', fatigueLevel: 5, trainingFrequency: 3,
+    lastSessionDate: '2026-04-28', last3SessionsIntensity: ['high', 'high', 'high']
+  });
+  if (trainOut.decision === 'train') {
+    assert(trainOut.smartfitcoachCard.indexOf('Effectuer la séance') !== -1, 'train decision → train action');
+  }
+  if (restOut.decision === 'rest') {
+    assert(restOut.smartfitcoachCard.indexOf('Laisser le corps') !== -1, 'rest decision → rest action');
+  }
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

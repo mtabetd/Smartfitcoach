@@ -790,6 +790,55 @@
     return lines.join('\n');
   }
 
+  // ── Module 9 (UI) : SmartFitCoach Card ───────────────────────────────────────
+  //
+  // Renders a premium text card from V3 engine output.
+  // Pure rendering — no logic, additive only, deterministic, fail-safe.
+  //
+  // @param  {Object}       engineOutput  Partial or full V3 output object
+  // @return {string|null}  Formatted card string; null if any error occurs
+  function _buildSmartFitCoachCard(engineOutput) {
+    try {
+      var out         = (engineOutput && typeof engineOutput === 'object') ? engineOutput : {};
+      var decision    = out.decision               || 'train';
+      var sessType    = out.recommendedSessionType || '-';
+      var intensity   = out.recommendedIntensity   || '-';
+      var momentum    = (typeof out.momentumScore === 'number') ? out.momentumScore : null;
+      var profileType = out.profileType            || '-';
+      var coachMsg    = (typeof out.premiumCoachingMessage === 'string' && out.premiumCoachingMessage.length > 0)
+                        ? out.premiumCoachingMessage : '-';
+
+      var momentumStr = (momentum !== null) ? (momentum + ' / 10') : '-';
+      var actionText  = (decision === 'rest')
+        ? "Laisser le corps récupérer pleinement."
+        : "Effectuer la séance prévue avec précision.";
+
+      // ── Intelligence rows (labels padded to 14 chars, colon-aligned) ──────────
+      // Séance(6)+8sp=14 | Intensité(9)+5sp=14 | Momentum(8)+6sp=14 | Profil(6)+8sp=14
+      var rows = [
+        'Séance        : ' + sessType,
+        'Intensité     : ' + intensity,
+        'Momentum      : ' + momentumStr,
+        'Profil        : ' + profileType
+      ].join('\n');
+
+      // ── Assembly — one empty line between each of the 4 sections ─────────────
+      return [
+        'SMARTFITCOACH TODAY',
+        '',
+        rows,
+        '',
+        coachMsg,
+        '',
+        'Action du jour',
+        actionText
+      ].join('\n');
+
+    } catch (e) {
+      return null;
+    }
+  }
+
   // ── Validation globale (V2 core + userProfile optionnel) ─────────────────────
   function _validate(inputs) {
     if (!inputs || typeof inputs !== 'object') {
@@ -927,6 +976,16 @@
       historyInsights:    historyInsights
     });
 
+    // ── Module 9 (UI) : SmartFitCoach card ───────────────────────────────────
+    var smartfitcoachCard = _buildSmartFitCoachCard({
+      decision:               decObj.decision,
+      recommendedIntensity:   intensity,
+      recommendedSessionType: sessType,
+      momentumScore:          momentum,
+      profileType:            profile,
+      premiumCoachingMessage: premiumCoachingMessage
+    });
+
     // ── Sortie V3 ─────────────────────────────────────────────────────────────
     return {
       // ── V2 fields (priorityApplied/fatigueEffective/progressionTriggered
@@ -946,6 +1005,7 @@
       historyInsights:        historyInsights,            // Module 6 ✓
       predictionInsights:     predictionInsights,         // Module 7 ✓
       premiumCoachingMessage: premiumCoachingMessage,     // Module 8 ✓
+      smartfitcoachCard:      smartfitcoachCard,          // Module 9 (UI) ✓
       _debug: {
         rawFatigue:          inputs.fatigueLevel,
         effectiveFatigue:    effective,
@@ -987,7 +1047,9 @@
     // V3 Module 7
     _buildPredictionInsights:         _buildPredictionInsights,
     // V3 Module 8
-    _buildPremiumCoachingMessage:     _buildPremiumCoachingMessage
+    _buildPremiumCoachingMessage:     _buildPremiumCoachingMessage,
+    // V3 Module 9 (UI)
+    _buildSmartFitCoachCard:          _buildSmartFitCoachCard
   };
 
   if (typeof module !== 'undefined' && module.exports) {
