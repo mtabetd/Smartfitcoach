@@ -311,15 +311,28 @@
       return sessType === 'conditioning' ? 'zone2' : 'volume';
     }
 
-    // High momentum preference: prefer hiit (conditioning) or heavy (strength)
+    // Same-type history: subtypes belonging to the current session type only.
+    // Prevents cross-type interference (e.g. 'heavy' from a strength day disrupting
+    // the conditioning cycle) in both the momentum cap and the cycling logic.
+    var sameTypeHistory = history.filter(function(s) { return allCandidates.indexOf(s) !== -1; });
+    var sameTypePrev1   = sameTypeHistory.length >= 1 ? sameTypeHistory[sameTypeHistory.length - 1] : null;
+
+    // High momentum preference: prefer hiit (conditioning) or heavy (strength).
+    // Momentum cap: skip preference if the preferred sub-type already appears in the
+    // last 2 same-type entries — prevents the hiit/heavy two-type lock when session
+    // types alternate at consistently high momentum.
     if (typeof momentumScore === 'number' && momentumScore >= 7) {
-      if (candidates.indexOf('hiit')  !== -1) return 'hiit';
-      if (candidates.indexOf('heavy') !== -1) return 'heavy';
+      var preferred     = (sessType === 'conditioning') ? 'hiit' : 'heavy';
+      var sameTypeLast2 = sameTypeHistory.slice(-2);
+      if (sameTypeLast2.indexOf(preferred) === -1) {
+        if (candidates.indexOf('hiit')  !== -1) return 'hiit';
+        if (candidates.indexOf('heavy') !== -1) return 'heavy';
+      }
     }
 
-    // Default: cycle forward from prev1 (deterministic, no randomness)
-    if (prev1 === null || candidates.indexOf(prev1) === -1) return candidates[0];
-    return candidates[(candidates.indexOf(prev1) + 1) % candidates.length];
+    // Default: cycle forward from same-type prev1 (deterministic, no randomness)
+    if (sameTypePrev1 === null || candidates.indexOf(sameTypePrev1) === -1) return candidates[0];
+    return candidates[(candidates.indexOf(sameTypePrev1) + 1) % candidates.length];
   }
 
   function _buildReason(decObj, intensity, sessionType, effectiveFatigue, rawFatigue, daysSince, priorityApplied, progressionTriggered, capReason, inputs) {

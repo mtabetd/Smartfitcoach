@@ -3523,6 +3523,95 @@ test('subtype integration: conditioning session → sessionSubType in {hiit,zone
   assertEqual(out.decision, 'train');
 });
 
+// Section 27 — Momentum cap: two-type lock prevention (Module 5d fix)
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('\n── Section 27 : Momentum cap — two-type lock prevention ─────────────────────');
+
+// Preference blocked when preferred appears in same-type last2
+test('momentum cap: conditioning — preferred (hiit) in same-type last2 → blocked, cycle to mixed', function () {
+  // sameType=['hiit','zone2'], preferred='hiit', blocked → cycle: sameTypePrev1='zone2' → mixed
+  var t = _selectSessionSubType('conditioning', 2, 8, ['hiit', 'zone2']);
+  assertEqual(t, 'mixed');
+});
+test('momentum cap: conditioning — preferred (hiit) is last same-type → blocked, cycle to zone2', function () {
+  // sameType=['zone2','hiit'], preferred='hiit', blocked → cycle: sameTypePrev1='hiit' → zone2
+  var t = _selectSessionSubType('conditioning', 2, 8, ['zone2', 'hiit']);
+  assertEqual(t, 'zone2');
+});
+test('momentum cap: strength — preferred (heavy) in same-type last2 → blocked, cycle to explosive', function () {
+  // sameType=['heavy','volume'], preferred='heavy', blocked → cycle: sameTypePrev1='volume' → explosive
+  var t = _selectSessionSubType('strength', 2, 8, ['heavy', 'volume']);
+  assertEqual(t, 'explosive');
+});
+test('momentum cap: strength — preferred (heavy) is last same-type → blocked, cycle to volume', function () {
+  // sameType=['volume','heavy'], preferred='heavy', blocked → cycle: sameTypePrev1='heavy' → volume
+  var t = _selectSessionSubType('strength', 2, 8, ['volume', 'heavy']);
+  assertEqual(t, 'volume');
+});
+
+// Cross-type entries in history are ignored for cap and cycle
+test('momentum cap: cross-type history ignored for conditioning', function () {
+  // history=['heavy','hiit']. sameType(cond)=['hiit']. preferred='hiit', blocked → cycle → zone2
+  var t = _selectSessionSubType('conditioning', 2, 8, ['heavy', 'hiit']);
+  assertEqual(t, 'zone2');
+});
+test('momentum cap: cross-type history ignored for strength', function () {
+  // history=['hiit','heavy']. sameType(str)=['heavy']. preferred='heavy', blocked → cycle → volume
+  var t = _selectSessionSubType('strength', 2, 8, ['hiit', 'heavy']);
+  assertEqual(t, 'volume');
+});
+
+// Preference still fires when preferred is absent from same-type last2
+test('momentum cap: preference fires when preferred absent from same-type last2', function () {
+  // sameType=['zone2','mixed'], preferred='hiit', not blocked → hiit
+  var t = _selectSessionSubType('conditioning', 2, 8, ['zone2', 'mixed']);
+  assertEqual(t, 'hiit');
+});
+test('momentum cap: preference fires when no same-type history at all', function () {
+  // only cross-type in history; sameType=[], preferred='hiit', not blocked → hiit
+  var t = _selectSessionSubType('conditioning', 2, 8, ['heavy', 'volume']);
+  assertEqual(t, 'hiit');
+});
+
+// Subtype diversity > 2 over 10 alternating sessions at high momentum
+test('momentum cap: subtype diversity > 2 over 10 sessions at momentum=8', function () {
+  var history  = [];
+  var subTypes = [];
+  var sessions = [
+    'conditioning','strength','conditioning','strength','conditioning',
+    'strength','conditioning','strength','conditioning','strength'
+  ];
+  sessions.forEach(function(sessType) {
+    var sub = _selectSessionSubType(sessType, 2, 8, history.slice(-3));
+    subTypes.push(sub);
+    history.push(sub);
+    if (history.length > 3) history.shift();
+  });
+  var unique = subTypes.filter(function(v, i) { return subTypes.indexOf(v) === i; });
+  assert(unique.length > 2,
+    'expected > 2 unique subtypes over 10 sessions, got ' + unique.length + ': ' + subTypes.join(','));
+});
+
+// Fatigue gate holds regardless of momentum cap state
+test('momentum cap: fatigue gate still blocks hiit regardless of cap state', function () {
+  // preferred='hiit' not in sameType history → not blocked by cap, but fatigue=4 already removed hiit
+  var t = _selectSessionSubType('conditioning', 4, 8, null);
+  assert(t !== 'hiit', 'hiit must never appear at fat=4, got: ' + t);
+});
+test('momentum cap: fatigue gate holds even when preferred not in last2', function () {
+  var t = _selectSessionSubType('conditioning', 5, 9, ['zone2']);
+  assert(t !== 'hiit', 'hiit blocked by fatigue gate, got: ' + t);
+});
+
+// Determinism with cap active
+test('momentum cap: deterministic — 3 calls with cap active return same result', function () {
+  var r1 = _selectSessionSubType('conditioning', 2, 8, ['hiit', 'zone2']);
+  var r2 = _selectSessionSubType('conditioning', 2, 8, ['hiit', 'zone2']);
+  var r3 = _selectSessionSubType('conditioning', 2, 8, ['hiit', 'zone2']);
+  if (r1 !== r2 || r2 !== r3) throw new Error('non-deterministic: ' + r1 + ',' + r2 + ',' + r3);
+  assertEqual(r1, 'mixed');
+});
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Résultats
 // ─────────────────────────────────────────────────────────────────────────────
