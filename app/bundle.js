@@ -79404,6 +79404,19 @@ function renderMusculationProgram(p) {
  var doneBadge = h('div', {style: 'border:1px solid var(--line,#D8D8D0);background:rgba(62,92,58,0.06);padding:12px 16px;margin-top:8px'});
  doneBadge.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;font-weight:bold;color:var(--success,#3E5C3A)'}, (window.isEnglish && window.isEnglish() ? '\u2714 Goal achieved \u2014 Session validated' : '\u2714 Objectif accompli \u2014 S\u00e9ance valid\u00e9e')));
  doneBadge.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--success,#3E5C3A);margin-top:4px'}, doneSess.duration + '\u00a0min \u2014 ' + doneSess.kcalTotal + (window.isEnglish && window.isEnglish() ? '\u00a0kcal burned (incl. +' + doneSess.kcalEpoc + '\u00a0kcal EPOC)' : '\u00a0kcal brul\u00e9es (dont +' + doneSess.kcalEpoc + '\u00a0kcal EPOC)')));
+ (function() {
+   var _prog = Array.isArray(S.sportProgram) ? S.sportProgram : [];
+   if (_prog.length > 1) {
+     var _nxi = (S.selectedSportDay + 1) % _prog.length;
+     var _nxd = _prog[_nxi];
+     var _nxFocus = (_nxd && (_nxd.session_focus || _nxd.name)) || null;
+     if (_nxFocus) {
+       var _nxEl = h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:10px;padding-top:10px;border-top:1px solid rgba(0,0,0,0.07);letter-spacing:0.3px;'});
+       _nxEl.textContent = (window.isEnglish && window.isEnglish() ? 'Next \u00b7 ' : 'Prochaine \u00b7 ') + _nxFocus;
+       doneBadge.appendChild(_nxEl);
+     }
+   }
+ })();
  doneBadge.appendChild(h('button', {style: 'margin-top:8px;font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);background:none;border:none;cursor:pointer;padding:0', onclick: function() {
    // 2026-04 NIVEAU 1 : confirmation avant d'annuler une séance validée (1 clic accidentel = journée perdue)
    var _cancelMsg = (window.isEnglish && window.isEnglish())
@@ -87804,7 +87817,7 @@ function renderCardMacros() {
     // Bible Hermès §13.1 : pas d'emoji. Tiret typographique + tutoiement.
     var _burnEl = document.createElement('div');
     _burnEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-bottom:6px;font-weight:500;color:var(--success,#3E5C3A);';
-    _burnEl.textContent = _sportBurn + ((window.isEnglish && window.isEnglish()) ? ' kcal burned — included in your daily goal' : ' kcal dépensées — incluses dans votre objectif quotidien');
+    _burnEl.textContent = (window.isEnglish && window.isEnglish()) ? ('Sport · ' + _sportBurn + ' kcal — factored into your plan') : ('Sport · ' + _sportBurn + ' kcal — intégrées dans ton plan');
     c.appendChild(_burnEl);
   }
 
@@ -93680,7 +93693,7 @@ function buildSmartInsight() {
     var _ms1 = lastMusMuscles.slice(0, 2).map(function(m) { return muscShort[m] || m; }).join(' + ');
     insights.push({ icon: '✦', text: (_ms1 ? (EN ? _ms1 + ' session · ' : 'Séance ' + _ms1 + ' · ') : '') + _ton + (EN ? ' moved · ' : ' soulevés · ') + lastMusSets + (EN ? ' sets' : ' sets validés') });
   } else if (doneToday) {
-    insights.push({ icon: ‘✦’, text: EN ? ‘Session complete today · Rest and recover well’ : ‘Séance validée aujourd\’hui · Récupère bien’ });
+    insights.push({ icon: ‘✦’, text: EN ? ‘Session complete · Protein and hydration lock it in · Back stronger’ : ‘Séance validée · Protéines et hydratation ce soir · Tu reviens plus fort’ });
   }
 
   if (!doneToday && lastMusDate && daysSinceLast !== null) {
