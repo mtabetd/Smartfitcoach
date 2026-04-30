@@ -8192,7 +8192,8 @@ function renderMusculationProgram(p) {
  _setScheme = window.getSetScheme(exRef.n, S.weight || 70, S.sex || 'homme', S.sportLevel || 'intermediate', _cycleKey, numSets, _knownOneRM);
  }
 
- var today = new Date().toISOString().slice(0, 10);
+ var today = (window.sfcLocalDateStr && window.sfcLocalDateStr()) || new Date().toISOString().slice(0, 10);
+ if (!exRef.n || typeof exRef.n !== 'string' || !exRef.n.trim()) return;
  if (!S.muscuSessionLog[today]) S.muscuSessionLog[today] = {};
  if (!S.muscuSessionLog[today][exRef.n]) {
  S.muscuSessionLog[today][exRef.n] = [];
@@ -10311,7 +10312,7 @@ function renderRunningProgram(p) {
   var _runHist = [];
   try { var _raw = localStorage.getItem(_runHistKey); if (_raw) _runHist = JSON.parse(_raw) || []; } catch(e) {}
   if (!Array.isArray(_runHist)) _runHist = [];
-  var _todayDate = new Date().toISOString().slice(0, 10);
+  var _todayDate = (window.sfcLocalDateStr && window.sfcLocalDateStr()) || new Date().toISOString().slice(0, 10);
   var _existing = null;
   for (var _ri = 0; _ri < _runHist.length; _ri++) {
     if (_runHist[_ri] && _runHist[_ri].runKey === _runKey) { _existing = _runHist[_ri]; break; }

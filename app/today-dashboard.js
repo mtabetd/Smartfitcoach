@@ -1374,8 +1374,9 @@ function buildContextualHero(moment, S) {
     // FIX SPRINT P1.7 — Récap muscu si user a fait sa séance aujourd'hui
     var muscuToday = null;
     try {
-      if (isMuscuUser && S.muscuSessionLog && S.muscuSessionLog[(new Date()).toISOString().slice(0,10)]) {
-        var todayLog = S.muscuSessionLog[(new Date()).toISOString().slice(0,10)];
+      var _mRecapToday = (window.sfcLocalDateStr && window.sfcLocalDateStr()) || new Date().toISOString().slice(0, 10);
+      if (isMuscuUser && S.muscuSessionLog && S.muscuSessionLog[_mRecapToday]) {
+        var todayLog = S.muscuSessionLog[_mRecapToday];
         var totalTonnage = 0;
         var setsValidated = 0;
         Object.keys(todayLog).forEach(function(exName) {
@@ -3631,7 +3632,7 @@ function renderCardStreak() {
   // (s'affichait dès le 1er render avant que l'user ait fait quoi que ce soit).
   // On n'affiche le streak qu'à partir de J+1 (firstLoginDate < today) OU si streak >= 2.
   var _S = window.S || {};
-  var _todayStr = new Date().toISOString().slice(0, 10);
+  var _todayStr = (window.sfcLocalDateStr && window.sfcLocalDateStr()) || new Date().toISOString().slice(0, 10);
   var _isFirstDay = !_S.firstLoginDate || _S.firstLoginDate === _todayStr;
   if (streak === 1 && _isFirstDay && !lastBadge) return null;
 

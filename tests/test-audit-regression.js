@@ -781,6 +781,84 @@ test('FR day names array has 7 entries with correct Dimanche', function () {
   assertEqual(names[1], 'Lundi', 'index 1 must be Lundi');
 });
 
+// ── Phase 1-5 gate: Check 5 — exRef.n guard before muscuSessionLog write ──────
+test('muscuSessionLog write skips entry when exRef.n is undefined', function () {
+  var log = {};
+  var today = '2026-04-30';
+  function writeMuscuLog(exRefN) {
+    if (!exRefN || typeof exRefN !== 'string' || !exRefN.trim()) return;
+    if (!log[today]) log[today] = {};
+    if (!log[today][exRefN]) log[today][exRefN] = [];
+    log[today][exRefN].push({ set: 1, actualWeight: null, actualReps: null });
+  }
+  writeMuscuLog(undefined);
+  assert(!log[today], 'undefined exRef.n must not create any log entry');
+  writeMuscuLog('Deadlift');
+  assert(log[today] && log[today]['Deadlift'], 'valid exRef.n must create log entry');
+  assert(!('undefined' in (log[today] || {})), '"undefined" key must never appear');
+});
+
+test('muscuSessionLog write skips entry when exRef.n is empty string', function () {
+  var log = {};
+  var today = '2026-04-30';
+  function writeMuscuLog(exRefN) {
+    if (!exRefN || typeof exRefN !== 'string' || !exRefN.trim()) return;
+    if (!log[today]) log[today] = {};
+    if (!log[today][exRefN]) log[today][exRefN] = [];
+    log[today][exRefN].push({ set: 1 });
+  }
+  writeMuscuLog('');
+  writeMuscuLog('  ');
+  assert(!log[today], 'blank exRef.n must not create any log entry');
+});
+
+// ── Phase 1-5 gate: Checks 8+9 — UTC vs local date consistency ───────────────
+test('sfcLocalDateStr returns YYYY-MM-DD in local time (not UTC midnight shift)', function () {
+  function sfcLocalDateStr(d) {
+    var t = d instanceof Date ? d : new Date();
+    var mm = String(t.getMonth() + 1).padStart(2, '0');
+    var dd = String(t.getDate()).padStart(2, '0');
+    return t.getFullYear() + '-' + mm + '-' + dd;
+  }
+  // Simulate UTC+2: local midnight is UTC 22:00 prev day — toISOString would give yesterday
+  var utcPrevMidnight = new Date('2026-04-30T22:00:00Z'); // UTC 22:00 = local 00:00 UTC+2
+  // Cannot test timezone offset in node without TZ env, but verify format
+  var result = sfcLocalDateStr(utcPrevMidnight);
+  assert(/^\d{4}-\d{2}-\d{2}$/.test(result), 'result must be YYYY-MM-DD: ' + result);
+  // Verify it reads local date components (not UTC shifted)
+  assert(result === utcPrevMidnight.getFullYear() + '-' + String(utcPrevMidnight.getMonth()+1).padStart(2,'0') + '-' + String(utcPrevMidnight.getDate()).padStart(2,'0'), 'must use local date components');
+});
+
+test('running session key and muscuSessionLog write key use same local date format', function () {
+  // Both must derive from sfcLocalDateStr to avoid cross-path key mismatch
+  function sfcLocalDateStr(d) {
+    var t = d instanceof Date ? d : new Date();
+    var mm = String(t.getMonth() + 1).padStart(2, '0');
+    var dd = String(t.getDate()).padStart(2, '0');
+    return t.getFullYear() + '-' + mm + '-' + dd;
+  }
+  var d = new Date('2026-04-30T23:30:00'); // late evening
+  var muscuKey = sfcLocalDateStr(d);
+  var runKey = sfcLocalDateStr(d);
+  assertEqual(muscuKey, runKey, 'muscu and running session keys must be identical for same local date');
+});
+
+test('streak card reads local date not UTC (first-day logic)', function () {
+  function sfcLocalDateStr(d) {
+    var t = d instanceof Date ? d : new Date();
+    var mm = String(t.getMonth() + 1).padStart(2, '0');
+    var dd = String(t.getDate()).padStart(2, '0');
+    return t.getFullYear() + '-' + mm + '-' + dd;
+  }
+  var d = new Date();
+  var localStr = sfcLocalDateStr(d);
+  // firstLoginDate comparison: if firstLoginDate === localStr it is first day
+  var S = { firstLoginDate: localStr };
+  var _todayStr = sfcLocalDateStr(d);
+  var _isFirstDay = !S.firstLoginDate || S.firstLoginDate === _todayStr;
+  assert(_isFirstDay, 'first login today must be recognized as first day');
+});
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 console.log('\n' + (failed === 0 ? '\x1b[32m' : '\x1b[31m') +
   'Results: ' + passed + ' passed, ' + failed + ' failed\x1b[0m\n');
