@@ -373,6 +373,110 @@ test('splitLabels EN mode returns English names for bro_5', function () {
   assertEqual(labels.bro_5[2], 'Shoulders', 'EN mode bro_5[2] = Shoulders');
 });
 
+// ── Audit fix: _done detection via muscuSessionLog ────────────────────────────
+function simulateDoneDetection(S, idx, todayStr) {
+  var _doneKey = idx + '_' + todayStr;
+  var _done = !!(S.sessionHistory && S.sessionHistory[_doneKey]);
+  if (!_done && S.muscuSessionLog && S.muscuSessionLog[todayStr]) {
+    var _mLogD = S.muscuSessionLog[todayStr];
+    if (_mLogD && Object.keys(_mLogD).length > 0) {
+      _done = Object.keys(_mLogD).some(function(ex) {
+        return (_mLogD[ex] || []).some(function(set) { return set.validated; });
+      });
+    }
+  }
+  return _done;
+}
+
+test('_done is false when no session data exists', function () {
+  var S = { sessionHistory: {}, muscuSessionLog: {} };
+  assert(simulateDoneDetection(S, 0, '2026-04-30') === false, '_done must be false with empty data');
+});
+test('_done is true when sessionHistory has the key', function () {
+  var S = { sessionHistory: { '0_2026-04-30': { sets: 5 } }, muscuSessionLog: {} };
+  assert(simulateDoneDetection(S, 0, '2026-04-30') === true, '_done must be true via sessionHistory');
+});
+test('_done is true when muscuSessionLog has validated sets today', function () {
+  var S = {
+    sessionHistory: {},
+    muscuSessionLog: {
+      '2026-04-30': {
+        'Squat': [{ validated: true, actualWeight: 80, actualReps: 5 }]
+      }
+    }
+  };
+  assert(simulateDoneDetection(S, 0, '2026-04-30') === true, '_done must be true via muscuSessionLog');
+});
+test('_done is false when muscuSessionLog has only unvalidated sets', function () {
+  var S = {
+    sessionHistory: {},
+    muscuSessionLog: {
+      '2026-04-30': {
+        'Squat': [{ validated: false, actualWeight: 80, actualReps: 5 }]
+      }
+    }
+  };
+  assert(simulateDoneDetection(S, 0, '2026-04-30') === false, '_done must be false with no validated sets');
+});
+
+// ── Audit fix: parseFloat for S.weight ────────────────────────────────────────
+function calcProtTarget(weight) {
+  return Math.round((parseFloat(weight) || 70) * 1.6 * 0.30);
+}
+
+test('_protTgt uses numeric string weight correctly', function () {
+  var result = calcProtTarget('80');
+  assertEqual(result, Math.round(80 * 1.6 * 0.30), 'numeric string "80" must produce correct target');
+});
+test('_protTgt falls back to 70 for non-numeric string weight', function () {
+  var result = calcProtTarget('abc');
+  assertEqual(result, Math.round(70 * 1.6 * 0.30), 'non-numeric string must fall back to 70 kg');
+});
+test('_protTgt falls back to 70 for undefined weight', function () {
+  var result = calcProtTarget(undefined);
+  assertEqual(result, Math.round(70 * 1.6 * 0.30), 'undefined weight must fall back to 70 kg');
+});
+test('_protTgt uses numeric weight correctly', function () {
+  var result = calcProtTarget(75);
+  assertEqual(result, Math.round(75 * 1.6 * 0.30), 'numeric weight 75 must produce correct target');
+});
+
+// ── Audit fix: buildSmartInsight tonnage guard (lastMusDate === todayStr) ──────
+function simulateTonnageInsight(doneToday, lastMusDate, todayStr, lastMusTonnage) {
+  return doneToday && lastMusDate === todayStr && lastMusTonnage > 0;
+}
+
+test('tonnage insight shown only when muscu session is today', function () {
+  assert(simulateTonnageInsight(true, '2026-04-30', '2026-04-30', 1500), 'must show when done today with tonnage');
+});
+test('tonnage insight not shown when doneToday is from non-muscu session', function () {
+  assert(!simulateTonnageInsight(true, '2026-04-29', '2026-04-30', 1500), 'must not show when lastMusDate is yesterday');
+});
+test('tonnage insight not shown when tonnage is zero', function () {
+  assert(!simulateTonnageInsight(true, '2026-04-30', '2026-04-30', 0), 'must not show with zero tonnage');
+});
+
+// ── Audit fix: app-sport.js i18n strings ─────────────────────────────────────
+function resolveFreeSectionLabel(isEnglish) {
+  return isEnglish ? 'CUSTOM SESSION' : 'SÉANCE PERSONNALISÉE';
+}
+function resolveEditZonesLabel(isEnglish) {
+  return isEnglish ? 'Edit muscle groups' : 'Modifier les zones';
+}
+
+test('free section label is EN when isEnglish=true', function () {
+  assertEqual(resolveFreeSectionLabel(true), 'CUSTOM SESSION', 'EN label must be CUSTOM SESSION');
+});
+test('free section label is FR when isEnglish=false', function () {
+  assertEqual(resolveFreeSectionLabel(false), 'SÉANCE PERSONNALISÉE', 'FR label must be SÉANCE PERSONNALISÉE');
+});
+test('edit zones label is EN when isEnglish=true', function () {
+  assertEqual(resolveEditZonesLabel(true), 'Edit muscle groups', 'EN label must be Edit muscle groups');
+});
+test('edit zones label is FR when isEnglish=false', function () {
+  assertEqual(resolveEditZonesLabel(false), 'Modifier les zones', 'FR label must be Modifier les zones');
+});
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 console.log('\n' + (failed === 0 ? '\x1b[32m' : '\x1b[31m') +
   'Results: ' + passed + ' passed, ' + failed + ' failed\x1b[0m\n');

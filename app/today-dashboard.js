@@ -1274,7 +1274,7 @@ function buildContextualHero(moment, S) {
       var _isPushDay = /push|pec|chest|tricep|press/i.test(_sNameLow);
       var _isPullDay = /pull|dos|back|bicep|tirage/i.test(_sNameLow);
       var _carbTgt   = _isLegDay ? Math.round(petitDejTarget * 1.1) : petitDejTarget;
-      var _protTgt   = Math.round((S.weight || 70) * 1.6 * 0.30);
+      var _protTgt   = Math.round((parseFloat(S.weight) || 70) * 1.6 * 0.30);
       if (_isLegDay) {
         ctx.isDirective = true; ctx.quote = _bhEN
           ? 'Leg day · Prioritise carbs at breakfast. Aim for ' + fmtKcal(_carbTgt) + ' kcal and ' + _protTgt + ' g protein to maximise the session.'
@@ -1337,7 +1337,7 @@ function buildContextualHero(moment, S) {
       ];
     } else if (isMuscuUser && hasSessionToday && todaySportSession && remaining > 100) {
       var _mLunch = Math.round(remaining * 0.55);
-      var _mProt  = Math.round((S.weight || 70) * 1.6 * 0.30);
+      var _mProt  = Math.round((parseFloat(S.weight) || 70) * 1.6 * 0.30);
       ctx.isDirective = true; ctx.quote = _bhEN
         ? todaySportSession.name + ' session ahead \u00b7 Last meal before effort. Aim for ' + fmtKcal(_mLunch) + ' kcal now, save the rest post-workout.'
         : 'Séance ' + todaySportSession.name + ' à venir \u00b7 Dernier repas avant l\'effort. Vise ' + fmtKcal(_mLunch) + ' kcal maintenant, garde le reste pour après.';
@@ -4181,6 +4181,15 @@ function renderSmartFitCoachToday() {
   // Session done today?
   var _doneKey = idx + '_' + todayStr;
   var _done    = !!(S.sessionHistory && S.sessionHistory[_doneKey]);
+  // Muscu sessions may be written to muscuSessionLog without a sessionHistory entry
+  if (!_done && S.muscuSessionLog && S.muscuSessionLog[todayStr]) {
+    var _mLogD = S.muscuSessionLog[todayStr];
+    if (_mLogD && Object.keys(_mLogD).length > 0) {
+      _done = Object.keys(_mLogD).some(function(ex) {
+        return (_mLogD[ex] || []).some(function(set) { return set.validated; });
+      });
+    }
+  }
 
   // Badge style: PEAK/LOCKED IN filled; BUILDING/RECOVERING outlined
   var _filled = sel2.momentum_tag === 'Peak' || sel2.momentum_tag === 'Locked In';
@@ -7582,7 +7591,7 @@ function buildSmartInsight() {
     fessiers: 'Glutes', bras: EN ? 'Arms' : 'Bras', abdos: 'Abs'
   };
 
-  if (doneToday && lastMusTonnage > 0) {
+  if (doneToday && lastMusDate === todayStr && lastMusTonnage > 0) {
     var _ton = lastMusTonnage >= 1000
       ? (Math.round(lastMusTonnage / 100) / 10).toFixed(1) + ' t'
       : Math.round(lastMusTonnage) + ' kg';

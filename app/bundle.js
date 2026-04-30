@@ -80023,7 +80023,7 @@ function renderMusculationProgram(p) {
 
  // Bouton "Séance libre" — visible et accessible depuis le programme
  var _freeSection = h('div', {style: 'margin-top:32px;padding-top:24px;border-top:1px solid var(--border,#E8E6DF);text-align:center;'});
- _freeSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:14px;'}, 'SÉANCE PERSONNALISÉE'));
+ _freeSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:14px;'}, (window.isEnglish && window.isEnglish() ? 'CUSTOM SESSION' : 'SÉANCE PERSONNALISÉE')));
  _freeSection.appendChild(h('button', {
    style: 'display:block;width:100%;max-width:300px;padding:15px 24px;background:transparent;color:var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:1px solid var(--black,#0A0A09);cursor:pointer;margin:0 auto;min-height:44px;',
    onclick: function() {
@@ -80038,7 +80038,7 @@ function renderMusculationProgram(p) {
  p.appendChild(_freeSection);
 
  p.appendChild(h('div', {style: 'height:12px'}));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 3; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier les zones'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 3; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Edit muscle groups' : 'Modifier les zones')}));
  appendNutritionModeCTA(p);
 }
 
@@ -87274,7 +87274,7 @@ function buildContextualHero(moment, S) {
       var _isPushDay = /push|pec|chest|tricep|press/i.test(_sNameLow);
       var _isPullDay = /pull|dos|back|bicep|tirage/i.test(_sNameLow);
       var _carbTgt   = _isLegDay ? Math.round(petitDejTarget * 1.1) : petitDejTarget;
-      var _protTgt   = Math.round((S.weight || 70) * 1.6 * 0.30);
+      var _protTgt   = Math.round((parseFloat(S.weight) || 70) * 1.6 * 0.30);
       if (_isLegDay) {
         ctx.isDirective = true; ctx.quote = _bhEN
           ? 'Leg day · Prioritise carbs at breakfast. Aim for ' + fmtKcal(_carbTgt) + ' kcal and ' + _protTgt + ' g protein to maximise the session.'
@@ -87337,7 +87337,7 @@ function buildContextualHero(moment, S) {
       ];
     } else if (isMuscuUser && hasSessionToday && todaySportSession && remaining > 100) {
       var _mLunch = Math.round(remaining * 0.55);
-      var _mProt  = Math.round((S.weight || 70) * 1.6 * 0.30);
+      var _mProt  = Math.round((parseFloat(S.weight) || 70) * 1.6 * 0.30);
       ctx.isDirective = true; ctx.quote = _bhEN
         ? todaySportSession.name + ' session ahead \u00b7 Last meal before effort. Aim for ' + fmtKcal(_mLunch) + ' kcal now, save the rest post-workout.'
         : 'Séance ' + todaySportSession.name + ' à venir \u00b7 Dernier repas avant l\'effort. Vise ' + fmtKcal(_mLunch) + ' kcal maintenant, garde le reste pour après.';
@@ -90181,6 +90181,15 @@ function renderSmartFitCoachToday() {
   // Session done today?
   var _doneKey = idx + '_' + todayStr;
   var _done    = !!(S.sessionHistory && S.sessionHistory[_doneKey]);
+  // Muscu sessions may be written to muscuSessionLog without a sessionHistory entry
+  if (!_done && S.muscuSessionLog && S.muscuSessionLog[todayStr]) {
+    var _mLogD = S.muscuSessionLog[todayStr];
+    if (_mLogD && Object.keys(_mLogD).length > 0) {
+      _done = Object.keys(_mLogD).some(function(ex) {
+        return (_mLogD[ex] || []).some(function(set) { return set.validated; });
+      });
+    }
+  }
 
   // Badge style: PEAK/LOCKED IN filled; BUILDING/RECOVERING outlined
   var _filled = sel2.momentum_tag === 'Peak' || sel2.momentum_tag === 'Locked In';
@@ -93582,7 +93591,7 @@ function buildSmartInsight() {
     fessiers: 'Glutes', bras: EN ? 'Arms' : 'Bras', abdos: 'Abs'
   };
 
-  if (doneToday && lastMusTonnage > 0) {
+  if (doneToday && lastMusDate === todayStr && lastMusTonnage > 0) {
     var _ton = lastMusTonnage >= 1000
       ? (Math.round(lastMusTonnage / 100) / 10).toFixed(1) + ' t'
       : Math.round(lastMusTonnage) + ' kg';
