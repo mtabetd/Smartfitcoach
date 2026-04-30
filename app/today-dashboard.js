@@ -3813,7 +3813,10 @@ function renderCardSport() {
     'ppl_6':       ['Push A','Pull A','Legs A','Push B','Pull B','Legs B']
   };
   var _dashLabels = (S._splitChoice && S.sportType === 'musculation') ? (_DASH_SPLIT_LABELS[S._splitChoice] || null) : null;
-  var dayName = (_dashLabels && _dashLabels[idx]) ? _dashLabels[idx] : (day.name || ((window.isEnglish && window.isEnglish() ? 'Session ' : 'Séance ') + (idx + 1)));
+  var _isGenericDayName = !day.name || /^(Jour|Session|S\u00e9ance)\s+\d+$/i.test(day.name);
+  var dayName = (!_isGenericDayName) ? day.name
+              : (_dashLabels && _dashLabels[idx]) ? _dashLabels[idx]
+              : (day.name || ((window.isEnglish && window.isEnglish() ? 'Session ' : 'S\u00e9ance ') + (idx + 1)));
   var exCount = Array.isArray(day.exercises) ? day.exercises.length : 0;
 
   // Estimated duration heuristic
@@ -4087,7 +4090,10 @@ function renderSmartFitCoachToday() {
     ppl_6:       ['Push A','Pull A','Legs A','Push B','Pull B','Legs B']
   };
   var _dl    = (S._splitChoice && S.sportType === 'musculation') ? (_SLABELS[S._splitChoice] || null) : null;
-  var _dname = (_dl && _dl[idx]) ? _dl[idx] : (day.name || (EN ? 'Session ' + (idx + 1) : 'Séance ' + (idx + 1)));
+  var _isGenericDN = !day.name || /^(Jour|Session|S\u00e9ance)\s+\d+$/i.test(day.name);
+  var _dname = (!_isGenericDN) ? day.name
+             : (_dl && _dl[idx]) ? _dl[idx]
+             : (day.name || (EN ? 'Session ' + (idx + 1) : 'S\u00e9ance ' + (idx + 1)));
   var _stl   = ({ musculation:'Muscu', crossfit:'CrossFit', running:'Running', cycling:'Cycling', triathlon:'Triathlon', yoga:'Yoga', hyrox:'Hyrox' })[S.sportType] || '';
   var _secCtx   = [_stl, _dname].filter(Boolean).join(' — ');
   var _secLabel = (EN ? '→ Follow my program' : '→ Suivre mon programme') + (_secCtx ? ' (' + _secCtx + ')' : '');

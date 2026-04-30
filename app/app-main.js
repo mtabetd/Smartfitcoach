@@ -2207,8 +2207,10 @@ function render() {
  wrap.appendChild(ub);
 
  // Main navigation (tabs adaptés selon S.appMode, masquée pendant l'onboarding)
+ var _SPORT_PROG_STEP = { musculation:4, crossfit:6, running:8, hyrox:10, padel:12, golf:14, triathlon:18, yoga:21, cycling:23, calisthenics:25 };
+ var _isOnProg = S.sStep === 30 || (S.sportType && S.sStep === (_SPORT_PROG_STEP[S.sportType] || 4));
  var _navInOnboarding = (S.view === 'nutrition' && S.nStep > 0 && S.nStep < 12) ||
-                        (S.view === 'sport' && S.sStep > 0);
+                        (S.view === 'sport' && S.sStep > 0 && !_isOnProg);
  var nav = h('nav', {'class': 'main-nav', role: 'navigation', 'aria-label': 'Navigation principale'});
  var _navIcons = {
    today: '<svg class="main-nav-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 3v2 M12 19v2 M3 12h2 M19 12h2 M5.6 5.6l1.4 1.4 M17 17l1.4 1.4 M5.6 18.4l1.4-1.4 M17 7l1.4-1.4"/></svg>',
