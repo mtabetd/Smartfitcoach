@@ -915,6 +915,8 @@ function generateSportProgram() {
  }
  program.push({
  name: _dayName,
+ splitKey: S._splitChoice || null,
+ splitDayIdx: d,
  focus: focusLabel,
  exercises: dayExercises,
  score: _dayScore,
@@ -7594,18 +7596,18 @@ function renderMusculationProgram(p) {
  var _hasDayMap = Array.isArray(S.trainingDaysSelected) && S.trainingDaysSelected.length === S.sportProgram.length;
  function _shortFocus(focus) {
   if (!focus) return '';
-  var f = String(focus).toLowerCase();
-  if (/push|pectoral|poitrine|pecs/.test(f)) return 'Push';
-  if (/pull|dos|dorsaux/.test(f)) return 'Pull';
-  if (/leg|jambe|quadri|fessier|ischio|mollet/.test(f)) return 'Legs';
-  if (/upper|haut/.test(f)) return 'Upper';
-  if (/lower|bas/.test(f)) return 'Lower';
+  var trimmed = String(focus).trim();
+  if (trimmed.length <= 9) return trimmed;
+  var f = trimmed.toLowerCase();
   if (/full[\s-]?body|tout/.test(f)) return 'Full Body';
-  if (/bras|biceps|triceps/.test(f)) return 'Bras';
-  if (/\bcore\b|abdo|gain/.test(f)) return 'Core';
+  if (/push|pectoral|poitrine/.test(f)) return 'Push';
+  if (/pull|dorsaux/.test(f)) return 'Pull';
+  if (/upper|haut du corps/.test(f)) return 'Upper';
+  if (/lower|bas du corps/.test(f)) return 'Lower';
+  if (/\bcore\b|abdo/.test(f)) return 'Core';
   if (/cardio|hiit/.test(f)) return 'Cardio';
   if (/repos|rest/.test(f)) return 'Repos';
-  var first = focus.split(/[\s,·\-]/)[0];
+  var first = trimmed.split(/[\s,·\-]/)[0];
   return first.length > 10 ? first.slice(0, 10) : first;
  }
  S.sportProgram.forEach(function(day, i) {

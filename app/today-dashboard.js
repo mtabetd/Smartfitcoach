@@ -8,6 +8,22 @@
 // today-dashboard.js — Vue "Aujourd'hui" : landing page quotidienne
 (function() {
 'use strict';
+// Module-level split label lookup — language-aware, single source of truth.
+// Used by renderCardSport and renderSmartFitCoachToday.
+function _getSplitLabels() {
+  var EN = window.isEnglish && window.isEnglish();
+  return {
+    fullbody_ab: ['Full Body A','Full Body B'],
+    fullbody_3:  ['Full Body A','Full Body B','Full Body C'],
+    ppl_3:       ['Push','Pull','Legs'],
+    upper_lower: ['Upper A','Lower A','Upper B','Lower B'],
+    ppl_plus1:   ['Push','Pull','Legs','Upper'],
+    bro_4:  EN ? ['Chest + Triceps','Back + Biceps','Shoulders','Legs'] : ['Pecs + Triceps','Dos + Bicéps','Épaules','Jambes'],
+    ppl_5:       ['Push A','Pull A','Legs','Push B','Pull B'],
+    bro_5:  EN ? ['Chest','Back','Shoulders','Arms','Legs'] : ['Pecs','Dos','Épaules','Bras','Jambes'],
+    ppl_6:       ['Push A','Pull A','Legs A','Push B','Pull B','Legs B']
+  };
+}
 
 // ─── QUOTES LOCALES (sport/motivation) ───
 var _isEN = window.isEnglish && window.isEnglish();
@@ -3747,7 +3763,7 @@ function renderCardSport() {
         _iaCard.appendChild(_iaExPrev);
       }
     } catch(_e2) {}
-    _iaCard.appendChild(h('button', {style: 'padding:10px 16px;background:var(--green,#3E5C3A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;', onclick: function() { S.view = 'sport'; S.sStep = 4; if (window.render) window.render(); }}, 'Voir mon programme \u2192'));
+    _iaCard.appendChild(h('button', {style: 'padding:10px 16px;background:var(--green,#3E5C3A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;', onclick: function() { S.view = 'sport'; S.sStep = 4; if (window.render) window.render(); }}, (window.isEnglish && window.isEnglish() ? 'View my program \u2192' : 'Voir mon programme \u2192')));
     return _iaCard;
   }
 
@@ -3812,11 +3828,14 @@ function renderCardSport() {
     'bro_5':       (window.isEnglish && window.isEnglish()) ? ['Chest','Back','Shoulders','Arms','Legs'] : ['Pecs','Dos','Épaules','Bras','Jambes'],
     'ppl_6':       ['Push A','Pull A','Legs A','Push B','Pull B','Legs B']
   };
-  var _dashLabels = (S._splitChoice && S.sportType === 'musculation') ? (_DASH_SPLIT_LABELS[S._splitChoice] || null) : null;
+  var _splitLabelMap = _getSplitLabels();
+  var _storedKeyA = day.splitKey || (S._splitChoice && S.sportType === 'musculation' ? S._splitChoice : null);
+  var _storedIdxA = (typeof day.splitDayIdx === 'number') ? day.splitDayIdx : idx;
+  var _storedLabelsA = _storedKeyA ? (_splitLabelMap[_storedKeyA] || null) : null;
   var _isGenericDayName = !day.name || /^(Jour|Session|S\u00e9ance)\s+\d+$/i.test(day.name);
-  var dayName = (!_isGenericDayName) ? day.name
-              : (_dashLabels && _dashLabels[idx]) ? _dashLabels[idx]
-              : (day.name || ((window.isEnglish && window.isEnglish() ? 'Session ' : 'S\u00e9ance ') + (idx + 1)));
+  var dayName = (_storedLabelsA && _storedLabelsA[_storedIdxA]) ? _storedLabelsA[_storedIdxA]
+              : (!_isGenericDayName ? day.name
+              : ((window.isEnglish && window.isEnglish() ? 'Session ' : 'S\u00e9ance ') + (idx + 1)));
   var exCount = Array.isArray(day.exercises) ? day.exercises.length : 0;
 
   // Estimated duration heuristic
@@ -4006,6 +4025,7 @@ function renderCardSport() {
     style: 'display:block;width:100%;padding:12px;margin-top:10px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;color:var(--ink-900,#0A0A09);min-height:44px;',
     onclick: function() {
       var S2 = window.S;
+      if (!S2) return;
       S2.view = 'sport';
       S2.sStep = 30;
       if (window.render) window.render();
@@ -4089,11 +4109,14 @@ function renderSmartFitCoachToday() {
     bro_5:  EN ? ['Chest','Back','Shoulders','Arms','Legs'] : ['Pecs','Dos','Épaules','Bras','Jambes'],
     ppl_6:       ['Push A','Pull A','Legs A','Push B','Pull B','Legs B']
   };
-  var _dl    = (S._splitChoice && S.sportType === 'musculation') ? (_SLABELS[S._splitChoice] || null) : null;
+  var _splitLabelMap2 = _getSplitLabels();
+  var _storedKeyB = day.splitKey || (S._splitChoice && S.sportType === 'musculation' ? S._splitChoice : null);
+  var _storedIdxB = (typeof day.splitDayIdx === 'number') ? day.splitDayIdx : idx;
+  var _storedLabelsB = _storedKeyB ? (_splitLabelMap2[_storedKeyB] || null) : null;
   var _isGenericDN = !day.name || /^(Jour|Session|S\u00e9ance)\s+\d+$/i.test(day.name);
-  var _dname = (!_isGenericDN) ? day.name
-             : (_dl && _dl[idx]) ? _dl[idx]
-             : (day.name || (EN ? 'Session ' + (idx + 1) : 'S\u00e9ance ' + (idx + 1)));
+  var _dname = (_storedLabelsB && _storedLabelsB[_storedIdxB]) ? _storedLabelsB[_storedIdxB]
+             : (!_isGenericDN ? day.name
+             : (EN ? 'Session ' + (idx + 1) : 'S\u00e9ance ' + (idx + 1)));
   var _stl   = ({ musculation:'Muscu', crossfit:'CrossFit', running:'Running', cycling:'Cycling', triathlon:'Triathlon', yoga:'Yoga', hyrox:'Hyrox' })[S.sportType] || '';
   var _secCtx   = [_stl, _dname].filter(Boolean).join(' — ');
   var _secLabel = (EN ? '→ Follow my program' : '→ Suivre mon programme') + (_secCtx ? ' (' + _secCtx + ')' : '');
@@ -4303,6 +4326,7 @@ function renderCardRestDay(S) {
     style: 'display:block;width:100%;padding:12px;margin-top:14px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;color:var(--ink-900,#0A0A09);min-height:44px;',
     onclick: function() {
       var S2 = window.S;
+      if (!S2) return;
       S2.view = 'sport';
       S2.sStep = 30;
       if (window.render) window.render();
