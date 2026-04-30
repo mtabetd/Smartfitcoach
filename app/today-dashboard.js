@@ -4064,7 +4064,7 @@ function renderSmartFitCoachToday() {
       goal:              ({ muscle_gain:'strength', maintenance:'conditioning', fat_loss:'fat_loss' })[v3In.goal] || 'conditioning',
       available_time:    ({ '45min':45, '1h':60, '1h15':75, '1h30':90 })[S.sportSessionDuration] || 45,
       fatigue_level:     v3In.fatigueLevel,
-      last_workouts:     [],
+      last_workouts:     (window.SFCSessionHistory ? window.SFCSessionHistory.getSessionHistory() : []),
       preferred_subtypes: null
     }, wlData.library);
   } catch(eSel) {
@@ -4168,6 +4168,7 @@ function renderSmartFitCoachToday() {
     onclick: _done ? null : function() {
       var S2 = window.S;
       if (!S2) return;
+      if (window.SFCSessionHistory) window.SFCSessionHistory.saveSession(sel2.selected_workout_id);
       S2.view = 'sport';
       S2.selectedSportDay = Math.max(0, Math.min(idx, (Array.isArray(S2.sportProgram) ? S2.sportProgram.length - 1 : 0)));
       if (window.render) window.render();

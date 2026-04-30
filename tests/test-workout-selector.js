@@ -530,6 +530,75 @@ test('shareable_output contains no emoji characters', function () {
   assert(!/[\u{1F000}-\u{1FFFF}]/u.test(result.shareable_output), 'shareable_output contains emoji');
 });
 
+// ── Variety / recency scoring ─────────────────────────────────────────────────
+console.log('\nVariety and recency scoring');
+
+test('immediate last session same subtype penalised more than session two back', function () {
+  var hiit1 = all.find(function (x) { return x.subtype === 'hiit' && x.level === 'beginner'; });
+  var hiit2 = all.filter(function (x) { return x.subtype === 'hiit' && x.level === 'beginner'; })[1] || hiit1;
+  var params_last  = { user_level: 'beginner', goal: 'conditioning', available_time: 20, fatigue_level: 3,
+                       last_workouts: [hiit1.id],           preferred_subtypes: null };
+  var params_older = { user_level: 'beginner', goal: 'conditioning', available_time: 20, fatigue_level: 3,
+                       last_workouts: ['z2-b-01', hiit1.id], preferred_subtypes: null };
+  var cands = _filterCandidates(all, params_last);
+  var hiit_cand = cands.find(function (w) { return w.subtype === 'hiit'; });
+  if (!hiit_cand) return; // nothing to compare
+  var scored_last  = _scoreCandidates([hiit_cand], params_last)[0].score;
+  var scored_older = _scoreCandidates([hiit_cand], params_older)[0].score;
+  assert(scored_older > scored_last,
+    'hiit at position 1 should score higher than hiit at position 0 — got last=' + scored_last + ' older=' + scored_older);
+});
+
+test('three consecutive same subtype → different subtype scores higher', function () {
+  // Simulate: last 3 sessions were all hiit. A zone2 candidate should outscore hiit.
+  var hiit  = all.find(function (x) { return x.subtype === 'hiit'  && x.level === 'beginner' && Math.abs(x.duration - 20) <= 5; });
+  var zone2 = all.find(function (x) { return x.subtype === 'zone2' && x.level === 'beginner' && Math.abs(x.duration - 20) <= 5; });
+  if (!hiit || !zone2) return;
+  var params = { user_level: 'beginner', goal: 'conditioning', available_time: 20, fatigue_level: 3,
+                 last_workouts: ['hiit-b-01', 'hiit-b-02', 'hiit-b-03'], preferred_subtypes: null };
+  var scored = _scoreCandidates([hiit, zone2], params);
+  var hiitScore  = scored.find(function (s) { return s.workout.subtype === 'hiit'; }).score;
+  var zone2Score = scored.find(function (s) { return s.workout.subtype === 'zone2'; }).score;
+  assert(zone2Score > hiitScore,
+    'zone2 should outscore hiit after 3 consecutive hiit sessions — hiit=' + hiitScore + ' zone2=' + zone2Score);
+});
+
+test('high-intensity last session → low-intensity candidate gets complementary bonus', function () {
+  var zone2 = all.find(function (x) { return x.subtype === 'zone2' && x.level === 'beginner'; });
+  var mixed = all.find(function (x) { return x.subtype === 'mixed' && x.level === 'beginner'; });
+  if (!zone2 || !mixed) return;
+  var params_after_hiit  = { user_level: 'beginner', goal: 'fat_loss', available_time: 20, fatigue_level: 3,
+                              last_workouts: ['hiit-b-01'], preferred_subtypes: null };
+  var params_after_zone2 = { user_level: 'beginner', goal: 'fat_loss', available_time: 20, fatigue_level: 3,
+                              last_workouts: ['z2-b-01'],  preferred_subtypes: null };
+  var z2_after_hiit  = _scoreCandidates([zone2], params_after_hiit)[0].score;
+  var z2_after_zone2 = _scoreCandidates([zone2], params_after_zone2)[0].score;
+  assert(z2_after_hiit > z2_after_zone2,
+    'zone2 should score higher after hiit than after zone2 (complementary bonus) — after_hiit=' + z2_after_hiit + ' after_zone2=' + z2_after_zone2);
+});
+
+test('five consecutive hiit → selector picks non-hiit workout for conditioning goal', function () {
+  var result = selectWorkout({
+    user_level: 'beginner', goal: 'conditioning', available_time: 20, fatigue_level: 3,
+    last_workouts: ['hiit-b-01', 'hiit-b-02', 'hiit-b-03', 'hiit-b-04', 'hiit-b-05'],
+    preferred_subtypes: null
+  }, library);
+  var chosen = all.find(function (w) { return w.id === result.selected_workout_id; });
+  assert(chosen && chosen.subtype !== 'hiit',
+    'after 5 consecutive hiit sessions selector must avoid hiit, got: ' + (chosen ? chosen.subtype : 'unknown'));
+});
+
+test('fresh user (empty history) returns valid result without crash', function () {
+  var result = selectWorkout({
+    user_level: 'beginner', goal: 'conditioning', available_time: 20, fatigue_level: 3,
+    last_workouts: [], preferred_subtypes: null
+  }, library);
+  assert(typeof result.selected_workout_id === 'string' && result.selected_workout_id.length > 0,
+    'fresh user must get a valid workout');
+  assert(['Peak', 'Locked In', 'Building', 'Recovering'].includes(result.momentum_tag),
+    'fresh user must get valid momentum_tag');
+});
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 console.log('\n' + (failed === 0 ? '\x1b[32m' : '\x1b[31m') +
   'Results: ' + passed + ' passed, ' + failed + ' failed\x1b[0m\n');

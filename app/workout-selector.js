@@ -141,12 +141,23 @@
       // User preferred subtypes
       if (preferredSubtypes.includes(w.subtype)) score += 20;
 
-      // Variety: penalise recently used subtypes
-      var subtypeRepeatCount = lastSubtypes.filter(function (s) { return s === w.subtype; }).length;
-      score -= subtypeRepeatCount * 12;
+      // Variety: position-aware recency penalty — most recent session penalises hardest.
+      // Flat -12/repeat was too weak to prevent adjacent same-subtype sessions.
+      lastSubtypes.forEach(function (s, i) {
+        if (s === w.subtype) score -= (i === 0 ? 30 : i === 1 ? 15 : 6);
+      });
 
-      // Exact ID already used recently
+      // Exact ID already used: flat penalty independent of position
       if (lastIds.includes(w.id)) score -= 40;
+
+      // Complementary variety bonus: contrast after intensity (and vice versa)
+      // improves training stimulus without random chaos.
+      if (lastSubtypes.length > 0) {
+        var HIGH_S = ['hiit', 'heavy', 'explosive'];
+        var LOW_S  = ['zone2', 'tempo'];
+        if (HIGH_S.includes(lastSubtypes[0]) && LOW_S.includes(w.subtype))  score += 12;
+        else if (LOW_S.includes(lastSubtypes[0]) && HIGH_S.includes(w.subtype)) score += 8;
+      }
 
       // Duration precision bonus (closer = better)
       var drift = Math.abs(w.duration - params.available_time);
