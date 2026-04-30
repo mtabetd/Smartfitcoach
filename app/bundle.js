@@ -90189,18 +90189,18 @@ function renderSmartFitCoachToday() {
       ? 'background:#1A1A1A;color:#F5F3EF;border:none;'
       : 'background:transparent;color:#666;border:1px solid #9A9A9A;');
 
-  // Nutrition guidance mapped to momentum tag
+  // Nutrition guidance: short, forward-looking, projection
   var _nutMap = {
-    'Peak':       EN ? 'Increase your intake slightly today. Prioritise protein and clean carbs.'
-                     : 'Augmente légèrement tes apports aujourd’hui. Priorité aux protéines et aux glucides propres.',
-    'Locked In':  EN ? 'Keep your nutrition clean and consistent. Support the effort without excess.'
-                     : 'Garde une alimentation propre et régulière. L’objectif est de soutenir l’effort sans excès.',
-    'Building':   EN ? 'Stay consistent. Structure your meals and avoid unnecessary gaps.'
-                     : 'Reste constant. Structure tes repas et évite les écarts inutiles.',
-    'Recovering': EN ? 'Eat lighter today. Hydration, protein, and rest come first.'
-                     : 'Allège légèrement. Hydratation, protéines et récupération d’abord.'
+    'Peak':       EN ? 'Protein and clean carbs now. Your body is asking for it.'
+                     : 'Protéines et glucides propres · Le corps est en demande.',
+    'Locked In':  EN ? 'Eat clean and consistent. Stability builds the gains.'
+                     : 'Alimentation stable · La constance accumule les gains.',
+    'Building':   EN ? 'Structure your meals. Every one prepares the next session.'
+                     : 'Structure tes repas · Chaque repas prépare la prochaine séance.',
+    'Recovering': EN ? 'Protein and hydration. Recovery is built tonight.'
+                     : 'Protéines et hydratation · La récupération se construit ce soir.'
   };
-  var _nutGuidance = _nutMap[sel2.momentum_tag] || _nutMap['Building'];
+    var _nutGuidance = _nutMap[sel2.momentum_tag] || _nutMap['Building'];
 
   // ── Contextual hook: references history + momentum for pre-session narrative ──
   var _hookMsg = null;
@@ -90229,29 +90229,48 @@ function renderSmartFitCoachToday() {
     }
     var _dslH = _lastDateH ? Math.floor((new Date(todayStr) - new Date(_lastDateH)) / 86400000) : null;
     var _wktH = (Array.isArray(S.trainingDaysSelected) && S.trainingDaysSelected.length) ? S.trainingDaysSelected.length : (S.sportDays || 3);
+    // Last week session count — enables "best week" progress signal
+    var _lwCountH = 0;
+    try {
+      var _lwMonH = new Date(_monH); _lwMonH.setDate(_monH.getDate() - 7);
+      for (var _lwI = 0; _lwI < 7; _lwI++) {
+        var _lwD = new Date(_lwMonH); _lwD.setDate(_lwMonH.getDate() + _lwI);
+        var _lwS = _lwD.toISOString().slice(0, 10);
+        if ((_mLogH[_lwS] && Object.keys(_mLogH[_lwS]).length > 0) ||
+            Object.keys(_sHistH).some(function(k) { return k.indexOf('_' + _lwS) !== -1; })) {
+          _lwCountH++;
+        }
+      }
+    } catch(e) {}
     if (sel2.momentum_tag === 'Peak' && _wkCountH >= 3) {
-      _hookMsg = EN ? _wkCountH + ' sessions this week · You\'re firing on all cylinders' : _wkCountH + ' séances cette semaine · Tu es en pleine forme';
+      _hookMsg = _wkCountH > _lwCountH
+        ? (EN ? _wkCountH + ' sessions · Your best week so far' : _wkCountH + ' séances · Ta meilleure semaine')
+        : (EN ? _wkCountH + ' sessions · On pace' : _wkCountH + ' séances · Rythme maintenu');
     } else if (sel2.momentum_tag === 'Peak') {
-      _hookMsg = EN ? 'Full recovery confirmed · Optimal conditions today' : 'Récupération complète · Conditions optimales aujourd\'hui';
+      _hookMsg = EN ? 'Full recovery · Best conditions of the week' : 'Récupération complète · Meilleure condition du moment';
     } else if (sel2.momentum_tag === 'Locked In' && _wkCountH >= 2) {
-      _hookMsg = EN ? 'Consistent week · ' + _wkCountH + ' / ' + _wktH + ' sessions validated' : 'Semaine régulière · ' + _wkCountH + ' / ' + _wktH + ' séances validées';
+      _hookMsg = EN ? _wkCountH + ' / ' + _wktH + ' this week · Consistency confirmed' : _wkCountH + ' / ' + _wktH + ' cette semaine · Régularité confirmée';
     } else if (sel2.momentum_tag === 'Recovering' && _dslH === 1) {
-      _hookMsg = EN ? 'Supercompensation window active · Volume adjusted' : 'Fenêtre de surcompensation active · Volume ajusté';
+      _hookMsg = EN ? 'Supercompensation window active · Load adjusted for today' : 'Surcompensation active · Charge ajustée pour aujourd\'hui';
     } else if (_dslH !== null && _dslH >= 5) {
-      _hookMsg = EN ? _dslH + ' days of rest · Your body is fully primed' : _dslH + ' jours de repos · Ton corps est pleinement prêt';
+      _hookMsg = EN ? _dslH + ' days off · You come back stronger' : _dslH + ' jours de repos · Tu reviens plus fort';
     } else if (_wkCountH === 0) {
-      _hookMsg = EN ? 'First session of the week · Set the tone' : 'Première séance de ta semaine · Lance le ton';
+      _hookMsg = EN ? 'First session · The week starts now' : 'Première séance · La semaine commence maintenant';
     } else if (_dslH !== null && _dslH >= 2) {
-      _hookMsg = EN ? 'Good recovery since your last session · Ready to go' : 'Bonne récupération depuis ta dernière séance · Prêt pour la suite';
+      _hookMsg = EN ? _dslH + ' days recovery · Peak form' : _dslH + ' jours de récupération · Forme au pic';
     }
   } catch(e) {}
 
-  // ── Smart adjustment: load/volume cue mapped to momentum tag ──
+  // ── Smart adjustment: instruction + micro-dopamine projection in one line ──
   var _adjMap = {
-    'Peak':       EN ? 'Add 2.5 kg on compound lifts if form holds' : 'Ajoute 2,5 kg sur tes exercices polyarticulaires si la forme le permet',
-    'Locked In':  EN ? 'Hold the load. Focus on execution quality' : 'Maintiens les charges. Focus total sur la qualité d\'exécution',
-    'Building':   EN ? 'Aim for 1 extra rep per set on your main lift' : 'Vise 1 répétition de plus par série sur ton exercice principal',
-    'Recovering': EN ? 'Drop 1 set per exercise. Sensation over load' : 'Retire 1 série par exercice. Prioritise les sensations'
+    'Peak':       EN ? 'Add 2.5 kg · Volume is up this week'
+                     : 'Ajoute 2,5 kg · Volume en hausse cette semaine',
+    'Locked In':  EN ? 'Hold the load · Consistency compounds'
+                     : 'Maintiens les charges · La régularité paie',
+    'Building':   EN ? '+1 rep per set · Progress shows session after session'
+                     : '+1 répétition · La progression se voit séance après séance',
+    'Recovering': EN ? 'Drop 1 set · Load harder tomorrow'
+                     : 'Retire 1 série · Pour charger plus fort demain'
   };
   var _adj = _adjMap[sel2.momentum_tag] || _adjMap['Building'];
 
@@ -93182,7 +93201,7 @@ function renderFabLogger() {
           S._fabOpen = false;
           if (window.WATER_TRACKER) {
             var _wd = WATER_TRACKER.addGlass();
-            if (_wd && window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? '+1 glass — ' + _wd.glasses + ' / ' + _wd.target : '+1 verre — ' + _wd.glasses + ' / ' + _wd.target, 'success', 1800);
+            if (_wd && window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? '+1 glass — ' + _wd.glasses + ' / ' + _wd.target : '+1 verre — ' + _wd.glasses + ' / ' + _wd.target, 'success', 1800);
           }
           if (window.render) window.render();
         } }
