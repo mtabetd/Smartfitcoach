@@ -2131,7 +2131,7 @@ function _csRound25(w) {
 
 // 1RM estimation: Brzycki (≤6 reps) + Epley (>10 reps), average for 7–10
 function _csEstimate1RM(weight, reps) {
-  var w = parseFloat(weight) || 0, r = parseInt(reps) || 1;
+  var w = parseFloat(weight) || 0, r = Math.min(parseInt(reps) || 1, 36);
   if (w <= 0) return 0;
   if (r === 1) return w;
   var brzycki = w * 36 / (37 - r);

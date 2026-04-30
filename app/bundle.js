@@ -71179,6 +71179,7 @@ function renderSportChoice(p) {
       S.bonusExercises = {}; S._splitChoice = null; S.cfCalendarOpen = false;
       S.trainingDaysSelected = [];
       S.sportMixEnabled = false; S.sportMixSecondary = null;
+      S._sfcOverride = false; S._sfcOverrideDate = null;
       // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (plan reste visible + bandeau Revalider)
       if (window.devalidateWeekPlan) window.devalidateWeekPlan('changement sport');
       else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
@@ -71415,6 +71416,7 @@ window.SPORT = {
        S.bonusExercises = {}; S._splitChoice = null; S.cfCalendarOpen = false;
        S.trainingDaysSelected = [];
        S.sportMixEnabled = false; S.sportMixSecondary = null;
+       S._sfcOverride = false; S._sfcOverrideDate = null;
        // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (plan reste visible)
        if (window.devalidateWeekPlan) window.devalidateWeekPlan('changement sport');
        else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
@@ -79554,6 +79556,7 @@ function renderMusculationProgram(p) {
 
  var saveBtn = h('button', {style: 'width:100%;padding:12px;background:var(--black);color:#fff;border:none;font-family:"Helvetica Neue",sans-serif;font-size:13px;cursor:pointer', onclick: function() {
  if (!S.sessionHistory) S.sessionHistory = {};
+ if (S.sessionHistory[todayKey]) return;
  S.sessionHistory[todayKey] = {duration: realDur, kcalBase: kcalRes.base, kcalEpoc: kcalRes.epoc, kcalTotal: kcalRes.total, date: new Date().toISOString()};
  // Pruning : garder les 365 dernières sessions max
  var _shKeys = Object.keys(S.sessionHistory || {}).sort();
@@ -84913,7 +84916,7 @@ function _csRound25(w) {
 
 // 1RM estimation: Brzycki (≤6 reps) + Epley (>10 reps), average for 7–10
 function _csEstimate1RM(weight, reps) {
-  var w = parseFloat(weight) || 0, r = parseInt(reps) || 1;
+  var w = parseFloat(weight) || 0, r = Math.min(parseInt(reps) || 1, 36);
   if (w <= 0) return 0;
   if (r === 1) return w;
   var brzycki = w * 36 / (37 - r);
@@ -87249,8 +87252,9 @@ function buildContextualHero(moment, S) {
     var petitDejTarget = (_bfKcalReal && _bfKcalReal > 0) ? Math.round(_bfKcalReal) : Math.round(target * 0.22);
     var protTarget = (_bfProtReal && _bfProtReal > 0) ? Math.round(_bfProtReal) : Math.round((S.weight || 70) * 1.6 * 0.25);
 
+    var _bhEN = window.isEnglish && window.isEnglish();
     if (isPregnant) {
-      var _bhEN = window.isEnglish && window.isEnglish(); ctx.quote = _bhEN ? 'Week ' + S.pregnancyWeek + '. Need +340 kcal/day. Prioritize omega-3s at breakfast.' : 'Semaine ' + S.pregnancyWeek + '. Besoin +340 kcal/jour. Privilégie les oméga-3 au petit-déj.';
+      ctx.quote = _bhEN ? 'Week ' + S.pregnancyWeek + '. Need +340 kcal/day. Prioritize omega-3s at breakfast.' : 'Semaine ' + S.pregnancyWeek + '. Besoin +340 kcal/jour. Privilégie les oméga-3 au petit-déj.';
       ctx.stats = [
         { value: fmtKcal(target) + '\u00a0kcal', label: _bhEN ? 'Daily target' : 'Cible du jour' },
         { value: 'S' + S.pregnancyWeek + ' \u00b7 T2', label: _bhEN ? 'Trimester' : 'Trimestre' }
@@ -87708,11 +87712,18 @@ function renderCardMacros() {
   var macroTargets = macroTargetsOverride || getMacroTargets();
 
   // ── Sport burn du jour ──
+  // Sessions are keyed as "<dayIdx>_<date>" (regular) or "<date>" (free sessions).
+  // Scan all keys ending with today's date to catch both formats.
   var _todayKey = new Date().toISOString().slice(0, 10);
   var _S = window.S || {};
   var _sportBurn = 0;
-  if (_S.sessionHistory && _S.sessionHistory[_todayKey] && _S.sessionHistory[_todayKey].kcalTotal > 0) {
-    _sportBurn = Math.round(_S.sessionHistory[_todayKey].kcalTotal);
+  if (_S.sessionHistory) {
+    Object.keys(_S.sessionHistory).forEach(function(k) {
+      if (k === _todayKey || k.slice(-10) === _todayKey) {
+        var _e = _S.sessionHistory[k];
+        if (_e && _e.kcalTotal > 0) _sportBurn = Math.max(_sportBurn, Math.round(_e.kcalTotal));
+      }
+    });
   }
 
   var c = card();
@@ -90084,6 +90095,9 @@ function renderCardSport() {
       if (!S2) return;
       S2.view = 'sport';
       S2.sStep = 30;
+      S2._csSkipMuscleSelect = false;
+      S2._csSelectedGroups = null;
+      S2._csGenerating = false;
       if (window.render) window.render();
     }
   }, (window.isEnglish && window.isEnglish()) ? '+ Free session' : '+ Séance libre'));
@@ -92356,6 +92370,7 @@ function renderTodayDashboard(p) {
   if (hero) wrapper.appendChild(hero);
 
   // ── Mini-pill Séquence (streak) — visible immédiatement sous le hero ──
+  var _streakPill = null; var _heatmap = null; var _formeCard = null;
   try {
     var _muid = (window.AUTH && window.AUTH.getUser) ? ((window.AUTH.getUser()) || {}).id : null;
     var _msd = _muid ? JSON.parse(localStorage.getItem('mtd_streak_' + _muid) || '{}') : {};
@@ -92494,7 +92509,6 @@ function renderTodayDashboard(p) {
   // MOTIVATION_LIBRARY (300+ phrases, rotation déterministe jour/weekday/streak).
   // FIX UX 2026-04-17 : la Pensée du Jour est construite ici mais appendChild() est
   // reporté après les cartes Séance + Repas (data first, motivation ensuite — UX audit).
-  var _streakPill = null; var _heatmap = null; var _formeCard = null;
   var _pensee = null;
   try {
     var _dailyQuote = null;
@@ -93788,7 +93802,7 @@ window.getVolumeZone = getVolumeZone;
 
 function renderCardVolumeTracking() {
   var S = window.S;
-  if (!S || !S.muscuSessionLog || S.sportType !== 'muscu') return null;
+  if (!S || !S.muscuSessionLog || (S.sportType !== 'muscu' && S.sportType !== 'musculation')) return null;
   var volumes = getWeeklyVolumeByMuscle(7);
   if (!volumes || Object.keys(volumes).length === 0) return null;
   var level = S.sportLevel || 'intermediate';
@@ -96832,7 +96846,7 @@ window.exportWeeklyReportPDF = function() {
   function saveSession(workoutId) {
     if (!workoutId || typeof workoutId !== 'string') return;
     var history = _load();
-    // Prepend most recent; cap at MAX_HISTORY
+    if (history.indexOf(workoutId) !== -1) history.splice(history.indexOf(workoutId), 1);
     history.unshift(workoutId);
     if (history.length > MAX_HISTORY) history = history.slice(0, MAX_HISTORY);
     _persist(history);
@@ -102175,6 +102189,7 @@ var NUTRITION_PLAN_KEYS = [
  'regime', 'allowPork', 'allowAlcohol', 'excluded', 'cookLevel', 'wantsDessert',
  'allergies', 'intolerances', 'cuisines', 'whey', 'sportDays', 'trainTime', 'medical',
  'trainingDaysSelected',
+ 'sportType', // sport type affects calorie multiplier and macros split
  'pregnant', // grossesse modifie calcTarget() et filterRecipes() — plan doit être régénéré
  'cycleTracking', 'lastPeriodDate', 'cycleLength' // cycle menstruel affecte calcTarget() via calorieAdjust
 ];

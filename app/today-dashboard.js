@@ -1249,8 +1249,9 @@ function buildContextualHero(moment, S) {
     var petitDejTarget = (_bfKcalReal && _bfKcalReal > 0) ? Math.round(_bfKcalReal) : Math.round(target * 0.22);
     var protTarget = (_bfProtReal && _bfProtReal > 0) ? Math.round(_bfProtReal) : Math.round((S.weight || 70) * 1.6 * 0.25);
 
+    var _bhEN = window.isEnglish && window.isEnglish();
     if (isPregnant) {
-      var _bhEN = window.isEnglish && window.isEnglish(); ctx.quote = _bhEN ? 'Week ' + S.pregnancyWeek + '. Need +340 kcal/day. Prioritize omega-3s at breakfast.' : 'Semaine ' + S.pregnancyWeek + '. Besoin +340 kcal/jour. Privilégie les oméga-3 au petit-déj.';
+      ctx.quote = _bhEN ? 'Week ' + S.pregnancyWeek + '. Need +340 kcal/day. Prioritize omega-3s at breakfast.' : 'Semaine ' + S.pregnancyWeek + '. Besoin +340 kcal/jour. Privilégie les oméga-3 au petit-déj.';
       ctx.stats = [
         { value: fmtKcal(target) + '\u00a0kcal', label: _bhEN ? 'Daily target' : 'Cible du jour' },
         { value: 'S' + S.pregnancyWeek + ' \u00b7 T2', label: _bhEN ? 'Trimester' : 'Trimestre' }
@@ -1708,11 +1709,18 @@ function renderCardMacros() {
   var macroTargets = macroTargetsOverride || getMacroTargets();
 
   // ── Sport burn du jour ──
+  // Sessions are keyed as "<dayIdx>_<date>" (regular) or "<date>" (free sessions).
+  // Scan all keys ending with today's date to catch both formats.
   var _todayKey = new Date().toISOString().slice(0, 10);
   var _S = window.S || {};
   var _sportBurn = 0;
-  if (_S.sessionHistory && _S.sessionHistory[_todayKey] && _S.sessionHistory[_todayKey].kcalTotal > 0) {
-    _sportBurn = Math.round(_S.sessionHistory[_todayKey].kcalTotal);
+  if (_S.sessionHistory) {
+    Object.keys(_S.sessionHistory).forEach(function(k) {
+      if (k === _todayKey || k.slice(-10) === _todayKey) {
+        var _e = _S.sessionHistory[k];
+        if (_e && _e.kcalTotal > 0) _sportBurn = Math.max(_sportBurn, Math.round(_e.kcalTotal));
+      }
+    });
   }
 
   var c = card();
@@ -4084,6 +4092,9 @@ function renderCardSport() {
       if (!S2) return;
       S2.view = 'sport';
       S2.sStep = 30;
+      S2._csSkipMuscleSelect = false;
+      S2._csSelectedGroups = null;
+      S2._csGenerating = false;
       if (window.render) window.render();
     }
   }, (window.isEnglish && window.isEnglish()) ? '+ Free session' : '+ Séance libre'));
@@ -6356,6 +6367,7 @@ function renderTodayDashboard(p) {
   if (hero) wrapper.appendChild(hero);
 
   // ── Mini-pill Séquence (streak) — visible immédiatement sous le hero ──
+  var _streakPill = null; var _heatmap = null; var _formeCard = null;
   try {
     var _muid = (window.AUTH && window.AUTH.getUser) ? ((window.AUTH.getUser()) || {}).id : null;
     var _msd = _muid ? JSON.parse(localStorage.getItem('mtd_streak_' + _muid) || '{}') : {};
@@ -6494,7 +6506,6 @@ function renderTodayDashboard(p) {
   // MOTIVATION_LIBRARY (300+ phrases, rotation déterministe jour/weekday/streak).
   // FIX UX 2026-04-17 : la Pensée du Jour est construite ici mais appendChild() est
   // reporté après les cartes Séance + Repas (data first, motivation ensuite — UX audit).
-  var _streakPill = null; var _heatmap = null; var _formeCard = null;
   var _pensee = null;
   try {
     var _dailyQuote = null;
@@ -7788,7 +7799,7 @@ window.getVolumeZone = getVolumeZone;
 
 function renderCardVolumeTracking() {
   var S = window.S;
-  if (!S || !S.muscuSessionLog || S.sportType !== 'muscu') return null;
+  if (!S || !S.muscuSessionLog || (S.sportType !== 'muscu' && S.sportType !== 'musculation')) return null;
   var volumes = getWeeklyVolumeByMuscle(7);
   if (!volumes || Object.keys(volumes).length === 0) return null;
   var level = S.sportLevel || 'intermediate';

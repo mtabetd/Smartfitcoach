@@ -162,6 +162,7 @@ var NUTRITION_PLAN_KEYS = [
  'regime', 'allowPork', 'allowAlcohol', 'excluded', 'cookLevel', 'wantsDessert',
  'allergies', 'intolerances', 'cuisines', 'whey', 'sportDays', 'trainTime', 'medical',
  'trainingDaysSelected',
+ 'sportType', // sport type affects calorie multiplier and macros split
  'pregnant', // grossesse modifie calcTarget() et filterRecipes() — plan doit être régénéré
  'cycleTracking', 'lastPeriodDate', 'cycleLength' // cycle menstruel affecte calcTarget() via calorieAdjust
 ];

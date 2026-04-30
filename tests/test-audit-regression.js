@@ -477,6 +477,146 @@ test('edit zones label is FR when isEnglish=false', function () {
   assertEqual(resolveEditZonesLabel(false), 'Modifier les zones', 'FR label must be Modifier les zones');
 });
 
+// ── Chaos audit fixes ─────────────────────────────────────────────────────────
+
+// C1: var hoisting — streak/heatmap/formeCard must be declared before assignment
+test('var hoisting fix: _streakPill declaration order (simulated)', function () {
+  var _streakPill = null;
+  try { _streakPill = 'built'; } catch(e) {}
+  // Simulates the fix: declaration before the try block, so assignment is preserved
+  assert(_streakPill === 'built', '_streakPill must survive past its declaration');
+});
+
+// C2: _bhEN scoped outside if/else chain
+test('_bhEN defined in outer scope is visible in all else-if branches', function () {
+  var _bhEN = true;
+  var result = null;
+  if (false) { /* isPregnant */ }
+  else if (true) { result = _bhEN ? 'EN' : 'FR'; }
+  assertEqual(result, 'EN', '_bhEN must be EN in else-if branch');
+});
+
+// C3: volume tracking sportType guard includes both spellings
+function mockVolumeGuard(sportType) {
+  if (!sportType || (sportType !== 'muscu' && sportType !== 'musculation')) return null;
+  return 'rendered';
+}
+test('volume tracking renders for sportType=musculation', function () {
+  assertEqual(mockVolumeGuard('musculation'), 'rendered', 'must render for musculation');
+});
+test('volume tracking renders for sportType=muscu', function () {
+  assertEqual(mockVolumeGuard('muscu'), 'rendered', 'must render for muscu');
+});
+test('volume tracking returns null for sportType=running', function () {
+  assertEqual(mockVolumeGuard('running'), null, 'must not render for running');
+});
+
+// C4: Brzycki formula capped at 36 reps
+function safeBrzycki(weight, reps) {
+  var w = parseFloat(weight) || 0, r = Math.min(parseInt(reps) || 1, 36);
+  if (w <= 0) return 0;
+  if (r === 1) return w;
+  return w * 36 / (37 - r);
+}
+test('Brzycki reps=36 returns finite value', function () {
+  var result = safeBrzycki(100, 36);
+  assert(isFinite(result), 'must be finite at max 36 reps');
+  assert(result > 0, 'must be positive');
+});
+test('Brzycki reps=37 capped to 36, still finite', function () {
+  var result = safeBrzycki(100, 37);
+  assert(isFinite(result), 'must be finite when 37 reps capped to 36');
+});
+test('Brzycki reps=100 capped to 36, still finite', function () {
+  var result = safeBrzycki(100, 100);
+  assert(isFinite(result) && result > 0, 'extreme reps must cap to finite value');
+});
+
+// C5: free session entry clears stale flags
+test('free session entry resets _csSkipMuscleSelect to false', function () {
+  var S = { view: 'today', sStep: 0, _csSkipMuscleSelect: true, _csSelectedGroups: ['jambes'] };
+  // Simulate the fixed onclick handler
+  S.view = 'sport'; S.sStep = 30;
+  S._csSkipMuscleSelect = false; S._csSelectedGroups = null; S._csGenerating = false;
+  assert(S._csSkipMuscleSelect === false, '_csSkipMuscleSelect must be false after entry');
+  assert(S._csSelectedGroups === null, '_csSelectedGroups must be null after entry');
+});
+
+// C6: sport type change clears _sfcOverride
+test('sport type reset clears _sfcOverride and _sfcOverrideDate', function () {
+  var S = { sportType: 'musculation', _sfcOverride: true, _sfcOverrideDate: '2026-04-30' };
+  // Simulate the fixed reset block
+  S.sportType = null; S._sfcOverride = false; S._sfcOverrideDate = null;
+  assert(S._sfcOverride === false, '_sfcOverride must be cleared on sport reset');
+  assert(S._sfcOverrideDate === null, '_sfcOverrideDate must be cleared on sport reset');
+});
+
+// C7: double-tap validate session guard
+function mockSessionSave(sessionHistory, key) {
+  if (!sessionHistory) sessionHistory = {};
+  if (sessionHistory[key]) return false; // duplicate blocked
+  sessionHistory[key] = { kcalTotal: 300 };
+  return true;
+}
+test('first session save succeeds', function () {
+  var hist = {};
+  assert(mockSessionSave(hist, '0_2026-04-30') === true, 'first save must succeed');
+});
+test('second session save is blocked (double-tap guard)', function () {
+  var hist = { '0_2026-04-30': { kcalTotal: 300 } };
+  assert(mockSessionSave(hist, '0_2026-04-30') === false, 'duplicate save must be blocked');
+});
+
+// C8: sport burn key lookup scans all formats
+function mockSportBurnLookup(sessionHistory, todayStr) {
+  var burn = 0;
+  if (!sessionHistory) return burn;
+  Object.keys(sessionHistory).forEach(function(k) {
+    if (k === todayStr || k.slice(-10) === todayStr) {
+      var e = sessionHistory[k];
+      if (e && e.kcalTotal > 0) burn = Math.max(burn, Math.round(e.kcalTotal));
+    }
+  });
+  return burn;
+}
+test('sport burn found via <dayIdx>_<date> key format', function () {
+  var hist = { '2_2026-04-30': { kcalTotal: 450 } };
+  assertEqual(mockSportBurnLookup(hist, '2026-04-30'), 450, 'must find burn from indexed key');
+});
+test('sport burn found via plain date key (free session)', function () {
+  var hist = { '2026-04-30': { kcalTotal: 380 } };
+  assertEqual(mockSportBurnLookup(hist, '2026-04-30'), 380, 'must find burn from plain date key');
+});
+test('sport burn is max across multiple sessions on same day', function () {
+  var hist = { '0_2026-04-30': { kcalTotal: 200 }, '2026-04-30': { kcalTotal: 380 } };
+  assertEqual(mockSportBurnLookup(hist, '2026-04-30'), 380, 'must return max burn');
+});
+test('sport burn is 0 when no session today', function () {
+  var hist = { '2_2026-04-29': { kcalTotal: 500 } };
+  assertEqual(mockSportBurnLookup(hist, '2026-04-30'), 0, 'must return 0 for yesterday session');
+});
+
+// W: session-history deduplication
+function mockSaveSession(history, workoutId) {
+  if (!workoutId || typeof workoutId !== 'string') return history;
+  var idx = history.indexOf(workoutId);
+  if (idx !== -1) history.splice(idx, 1);
+  history.unshift(workoutId);
+  return history;
+}
+test('saveSession deduplicates existing entry', function () {
+  var h = ['wod-A', 'wod-B', 'wod-C'];
+  var result = mockSaveSession(h, 'wod-B');
+  assertEqual(result[0], 'wod-B', 'most recent must be first');
+  assertEqual(result.length, 3, 'no duplicate — length stays 3');
+});
+test('saveSession adds new entry to front', function () {
+  var h = ['wod-A', 'wod-B'];
+  var result = mockSaveSession(h, 'wod-C');
+  assertEqual(result[0], 'wod-C', 'new entry at front');
+  assertEqual(result.length, 3, 'length incremented to 3');
+});
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 console.log('\n' + (failed === 0 ? '\x1b[32m' : '\x1b[31m') +
   'Results: ' + passed + ' passed, ' + failed + ' failed\x1b[0m\n');

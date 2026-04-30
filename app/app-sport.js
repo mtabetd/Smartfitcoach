@@ -988,6 +988,7 @@ function renderSportChoice(p) {
       S.bonusExercises = {}; S._splitChoice = null; S.cfCalendarOpen = false;
       S.trainingDaysSelected = [];
       S.sportMixEnabled = false; S.sportMixSecondary = null;
+      S._sfcOverride = false; S._sfcOverrideDate = null;
       // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (plan reste visible + bandeau Revalider)
       if (window.devalidateWeekPlan) window.devalidateWeekPlan('changement sport');
       else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
@@ -1224,6 +1225,7 @@ window.SPORT = {
        S.bonusExercises = {}; S._splitChoice = null; S.cfCalendarOpen = false;
        S.trainingDaysSelected = [];
        S.sportMixEnabled = false; S.sportMixSecondary = null;
+       S._sfcOverride = false; S._sfcOverrideDate = null;
        // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (plan reste visible)
        if (window.devalidateWeekPlan) window.devalidateWeekPlan('changement sport');
        else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
@@ -9363,6 +9365,7 @@ function renderMusculationProgram(p) {
 
  var saveBtn = h('button', {style: 'width:100%;padding:12px;background:var(--black);color:#fff;border:none;font-family:"Helvetica Neue",sans-serif;font-size:13px;cursor:pointer', onclick: function() {
  if (!S.sessionHistory) S.sessionHistory = {};
+ if (S.sessionHistory[todayKey]) return;
  S.sessionHistory[todayKey] = {duration: realDur, kcalBase: kcalRes.base, kcalEpoc: kcalRes.epoc, kcalTotal: kcalRes.total, date: new Date().toISOString()};
  // Pruning : garder les 365 dernières sessions max
  var _shKeys = Object.keys(S.sessionHistory || {}).sort();
