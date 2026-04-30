@@ -87468,7 +87468,7 @@ function buildContextualHero(moment, S) {
     if (overflow) {
       ctx.quote = _bhEN ? 'Over by ' + fmtKcal(delta) + ' kcal. Nothing dramatic. Tomorrow, aim for ' + fmtKcal(target - 200) + '.' : 'Dépassement de ' + fmtKcal(delta) + ' kcal. Rien de dramatique. Demain, pars sur ' + fmtKcal(target - 200) + '.';
     } else if (muscuToday) {
-      ctx.isDirective = true; ctx.quote = _bhEN ? 'You moved ' + fmtKcal(muscuToday.tonnage) + ' kg across ' + muscuToday.sets + ' sets today. ' + fmtKcal(totals.kcal) + ' kcal · ' + Math.round(totals.p) + ' g protein. Recovery starts now.' : 'Tu as soulevé ' + fmtKcal(muscuToday.tonnage) + ' kg en ' + muscuToday.sets + ' séries. ' + fmtKcal(totals.kcal) + ' kcal · ' + Math.round(totals.p) + ' g protéines. La récupération commence maintenant.';
+      ctx.isDirective = true; ctx.quote = _bhEN ? 'You moved ' + fmtKcal(muscuToday.tonnage) + ' kg across ' + muscuToday.sets + ' sets today. ' + fmtKcal(totals.kcal) + ' kcal · ' + Math.round(totals.p) + ' g protein. Tomorrow, we build on it.' : 'Tu as soulevé ' + fmtKcal(muscuToday.tonnage) + ' kg en ' + muscuToday.sets + ' séries. ' + fmtKcal(totals.kcal) + ' kcal · ' + Math.round(totals.p) + ' g protéines. Demain, on construit dessus.';
     } else if (totals.kcal >= target * 0.85) {
       var _citSoir1 = getDailyCitationObj(); ctx.quote = _citSoir1.text; ctx.quoteAuthor = _citSoir1.author;
     } else {
@@ -93700,7 +93700,14 @@ function buildSmartInsight() {
     var _ms1 = lastMusMuscles.slice(0, 2).map(function(m) { return muscShort[m] || m; }).join(' + ');
     insights.push({ icon: '✦', text: (_ms1 ? (EN ? _ms1 + ' session · ' : 'Séance ' + _ms1 + ' · ') : '') + _ton + (EN ? ' moved · ' : ' soulevés · ') + lastMusSets + (EN ? ' sets' : ' sets validés') });
   } else if (doneToday) {
-    insights.push({ icon: ‘✦’, text: EN ? ‘Session complete · Protein and hydration lock it in · Back stronger’ : ‘Séance validée · Protéines et hydratation ce soir · Tu reviens plus fort’ });
+    var _trajMsg = mKeys.length >= 10
+      ? (EN ? ‘Session complete · Consistency confirmed · Progression on track’ : ‘Séance validée · Régularité confirmée · Ta progression est en marche’)
+      : mKeys.length >= 4
+      ? (EN ? ‘Session complete · Your base is building · Keep going’ : ‘Séance validée · Ta base est en train de se construire’)
+      : mKeys.length >= 2
+      ? (EN ? ‘Session complete · You\’re on the right track’ : ‘Séance validée · Tu continues sur la bonne trajectoire’)
+      : (EN ? ‘Session complete · Protein and hydration lock it in · Back stronger’ : ‘Séance validée · Protéines et hydratation ce soir · Tu reviens plus fort’);
+    insights.push({ icon: ‘✦’, text: _trajMsg });
   }
 
   if (!doneToday && lastMusDate && daysSinceLast !== null) {
@@ -93751,7 +93758,14 @@ function buildSmartInsight() {
       }
     } catch(e) {}
     if (_wkCount >= 2) {
-      insights.push({ icon: ‘✦’, text: EN ? _wkCount + (_wkCount === 1 ? ‘ session’ : ‘ sessions’) + ‘ this week · Keep the momentum’ : _wkCount + ‘ séance’ + (_wkCount > 1 ? ‘s’ : ‘’) + ‘ cette semaine · Garde l\’élan’ });
+      var _wkTraj = _wkCount >= 5
+        ? (EN ? _wkCount + ‘ sessions this week · Exceptional · Keep it.’ : _wkCount + ‘ séances cette semaine · Semaine exceptionnelle · Continue.’)
+        : _wkCount >= 4
+        ? (EN ? _wkCount + ‘ sessions this week · Solid · Build on it.’ : _wkCount + ‘ séances cette semaine · Solide · On construit dessus.’)
+        : _wkCount >= 3
+        ? (EN ? _wkCount + ‘ sessions this week · Consistency confirmed.’ : _wkCount + ‘ séances cette semaine · Régularité confirmée.’)
+        : (EN ? _wkCount + ‘ sessions this week · The habit is forming.’ : _wkCount + ‘ séances cette semaine · L\’habitude se construit.’);
+      insights.push({ icon: ‘✦’, text: _wkTraj });
     }
   }
 
