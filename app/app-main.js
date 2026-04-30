@@ -2044,6 +2044,8 @@ function _showMedicalDisclaimer() {
 function render() {
  if (render._lock) return;
  render._lock = true;
+ // State integrity firewall — repair known corruption before any view renders
+ try { if (window.sfcRepairState) window.sfcRepairState(window.S); } catch(_eRep) {}
  // Clean any stale tooltips left over from previous view
  try { document.querySelectorAll('.sfc-tooltip-pop').forEach(function(el){ el.remove(); }); } catch(_eTp) {}
  try { if (S._quickAddSlot && S.view !== 'today') { S._quickAddSlot = null; } } catch(_eQa) {}

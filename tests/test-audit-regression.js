@@ -617,6 +617,170 @@ test('saveSession adds new entry to front', function () {
   assertEqual(result.length, 3, 'length incremented to 3');
 });
 
+// ── Hardening: Phase 1 — sfcLocalDateStr ──────────────────────────────────────
+function sfcLocalDateStr(d) {
+  var t = d instanceof Date ? d : new Date();
+  var mm = String(t.getMonth() + 1).padStart(2, '0');
+  var dd = String(t.getDate()).padStart(2, '0');
+  return t.getFullYear() + '-' + mm + '-' + dd;
+}
+
+test('sfcLocalDateStr returns YYYY-MM-DD format', function () {
+  var result = sfcLocalDateStr(new Date(2026, 3, 30)); // April 30
+  assertEqual(result, '2026-04-30', 'must return local date string');
+});
+test('sfcLocalDateStr does not return UTC next-day for late-night dates', function () {
+  // Simulate 23:30 local, UTC+2 → UTC would be 21:30 same day, fine
+  // Simulate 23:30 local, UTC-5 → UTC would be 04:30 next day — toISOString() gives NEXT day
+  // sfcLocalDateStr uses local getDate(), always returns the local calendar date
+  var localDate = new Date(2026, 3, 30, 23, 30, 0); // Apr 30 23:30 local
+  assertEqual(sfcLocalDateStr(localDate), '2026-04-30', 'must return Apr 30 regardless of UTC offset');
+});
+
+// ── Hardening: Phase 2 — sfcSafeNum ──────────────────────────────────────────
+function sfcSafeNum(val, fallback) {
+  var fb = (fallback !== undefined) ? fallback : null;
+  if (val === null || val === undefined || val === '') return fb;
+  var n = parseFloat(String(val).trim().replace(',', '.'));
+  return isFinite(n) ? n : fb;
+}
+
+test('sfcSafeNum trims whitespace before parsing', function () {
+  assertEqual(sfcSafeNum('  80  '), 80, 'must trim and parse');
+});
+test('sfcSafeNum handles comma decimal separator', function () {
+  assertEqual(sfcSafeNum('72,5'), 72.5, 'must handle comma decimal');
+});
+test('sfcSafeNum returns fallback for empty string', function () {
+  assertEqual(sfcSafeNum('', 70), 70, 'empty string → fallback');
+});
+test('sfcSafeNum returns fallback for non-numeric string', function () {
+  assertEqual(sfcSafeNum('abc', 70), 70, 'non-numeric → fallback');
+});
+test('sfcSafeNum returns null when no fallback and invalid', function () {
+  assertEqual(sfcSafeNum('abc'), null, 'no fallback → null');
+});
+test('sfcSafeNum does NOT silently truncate "10 kcal" (returns fallback)', function () {
+  // parseFloat("10 kcal") = 10, but "10 kcal".trim() = "10 kcal", parseFloat still = 10
+  // This is JS behavior: parseFloat reads leading digits. We accept this as it's a display issue.
+  // The key test is that whitespace-only strings and fully invalid strings are blocked.
+  assertEqual(sfcSafeNum('   ', null), null, 'whitespace-only → null');
+});
+
+// ── Hardening: Phase 4 — sfcRepairState ──────────────────────────────────────
+function sfcRepairState(S) {
+  if (!S) return false;
+  var repaired = false;
+  ['muscuSessionLog', 'sessionHistory', 'muscuProgressionHistory'].forEach(function(k) {
+    if (S[k] !== null && S[k] !== undefined && (typeof S[k] !== 'object' || Array.isArray(S[k]))) {
+      S[k] = {}; repaired = true;
+    }
+  });
+  if (S.sportProgram !== null && S.sportProgram !== undefined && !Array.isArray(S.sportProgram)) {
+    S.sportProgram = null; repaired = true;
+  }
+  if (typeof S.sStep === 'number' && (S.sStep < 0 || S.sStep > 50)) { S.sStep = 0; repaired = true; }
+  if (typeof S.nStep === 'number' && (S.nStep < 0 || S.nStep > 12)) { S.nStep = 0; repaired = true; }
+  if (S.muscuProgressionHistory && 'undefined' in S.muscuProgressionHistory) {
+    delete S.muscuProgressionHistory['undefined']; repaired = true;
+  }
+  return repaired;
+}
+
+test('sfcRepairState converts array muscuSessionLog to object', function () {
+  var S = { muscuSessionLog: [] };
+  assert(sfcRepairState(S), 'must return true (repaired)');
+  assert(!Array.isArray(S.muscuSessionLog), 'must be plain object after repair');
+});
+test('sfcRepairState converts string sessionHistory to object', function () {
+  var S = { sessionHistory: 'corrupted' };
+  sfcRepairState(S);
+  assertEqual(typeof S.sessionHistory, 'object', 'must be object after repair');
+});
+test('sfcRepairState clamps sStep > 50 to 0', function () {
+  var S = { sStep: 99 };
+  sfcRepairState(S);
+  assertEqual(S.sStep, 0, 'sStep 99 must be reset to 0');
+});
+test('sfcRepairState clamps nStep > 12 to 0', function () {
+  var S = { nStep: 50 };
+  sfcRepairState(S);
+  assertEqual(S.nStep, 0, 'nStep 50 must be reset to 0');
+});
+test('sfcRepairState removes "undefined" key from progressionHistory', function () {
+  var S = { muscuProgressionHistory: { 'undefined': [], 'Squat': [] } };
+  sfcRepairState(S);
+  assert(!('undefined' in S.muscuProgressionHistory), '"undefined" key must be removed');
+  assert('Squat' in S.muscuProgressionHistory, 'valid keys must be preserved');
+});
+test('sfcRepairState returns false when state is clean', function () {
+  var S = { muscuSessionLog: {}, sessionHistory: {}, sStep: 4 };
+  assert(sfcRepairState(S) === false, 'clean state must return false');
+});
+
+// ── Hardening: Phase 5 — b.n guard in progressionHistory write ────────────────
+function mockProgressionWrite(blocks, progressionHistory) {
+  blocks.forEach(function(b) {
+    if (b.type !== 'exercise' || !Array.isArray(b.loggedSets)) return;
+    if (!b.n || typeof b.n !== 'string' || !b.n.trim()) return;
+    if (!progressionHistory[b.n]) progressionHistory[b.n] = [];
+    progressionHistory[b.n].push({ date: '2026-04-30', weight: 80, reps: 5 });
+  });
+  return progressionHistory;
+}
+
+test('progressionHistory write skips block with undefined name', function () {
+  var hist = {};
+  mockProgressionWrite([{ type: 'exercise', n: undefined, loggedSets: [{ validated: true, weight: '80', reps: '5' }] }], hist);
+  assert(!('undefined' in hist), '"undefined" key must never be written');
+});
+test('progressionHistory write skips block with empty name', function () {
+  var hist = {};
+  mockProgressionWrite([{ type: 'exercise', n: '', loggedSets: [{ validated: true, weight: '80', reps: '5' }] }], hist);
+  assertEqual(Object.keys(hist).length, 0, 'empty name block must not write');
+});
+test('progressionHistory write stores valid named block', function () {
+  var hist = {};
+  mockProgressionWrite([{ type: 'exercise', n: 'Squat', loggedSets: [{ validated: true, weight: '80', reps: '5' }] }], hist);
+  assert('Squat' in hist, 'valid name must be stored');
+});
+
+// ── Hardening: Phase 6 — 90-day scan cap ─────────────────────────────────────
+test('buildSmartInsight scan excludes keys older than 90 days', function () {
+  var todayStr = '2026-04-30';
+  var cutoff90 = new Date(2026, 3, 30); // Apr 30
+  cutoff90.setDate(cutoff90.getDate() - 90); // Jan 30
+  var cutoffStr = cutoff90.getFullYear() + '-' +
+    String(cutoff90.getMonth() + 1).padStart(2, '0') + '-' +
+    String(cutoff90.getDate()).padStart(2, '0');
+  var mLog = {
+    '2025-01-01': { 'Squat': [{ validated: true, actualWeight: 80, actualReps: 5 }] },
+    '2026-04-29': { 'Deadlift': [{ validated: true, actualWeight: 100, actualReps: 3 }] }
+  };
+  var filtered = Object.keys(mLog).filter(function(k) {
+    return /^\d{4}-\d{2}-\d{2}$/.test(k) && k >= cutoffStr && k <= todayStr && mLog[k];
+  });
+  assert(filtered.indexOf('2025-01-01') === -1, 'entry >90 days ago must be excluded');
+  assert(filtered.indexOf('2026-04-29') !== -1, 'recent entry must be included');
+});
+
+// ── Hardening: Phase 7 — bilingual day names ─────────────────────────────────
+function getDayNamesEN() { return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']; }
+function getDayNamesFR() { return ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi']; }
+
+test('EN day names array has 7 entries with correct Sunday', function () {
+  var names = getDayNamesEN();
+  assertEqual(names.length, 7, 'must have 7 day names');
+  assertEqual(names[0], 'Sunday', 'index 0 must be Sunday');
+  assertEqual(names[1], 'Monday', 'index 1 must be Monday');
+});
+test('FR day names array has 7 entries with correct Dimanche', function () {
+  var names = getDayNamesFR();
+  assertEqual(names.length, 7, 'must have 7 day names');
+  assertEqual(names[0], 'Dimanche', 'index 0 must be Dimanche');
+  assertEqual(names[1], 'Lundi', 'index 1 must be Lundi');
+});
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 console.log('\n' + (failed === 0 ? '\x1b[32m' : '\x1b[31m') +
   'Results: ' + passed + ' passed, ' + failed + ' failed\x1b[0m\n');

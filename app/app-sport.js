@@ -9151,7 +9151,7 @@ function renderMusculationProgram(p) {
  })();
 
  // ─── SÉANCE TERMINÉE + BILAN CALORIQUE ───
- var todayKey = S.selectedSportDay + '_' + new Date().toISOString().slice(0, 10);
+ var todayKey = S.selectedSportDay + '_' + ((window.sfcLocalDateStr && window.sfcLocalDateStr()) || new Date().toISOString().slice(0, 10));
  var doneSess = S.sessionHistory && S.sessionHistory[todayKey];
  if (doneSess) {
  var doneBadge = h('div', {style: 'border:1px solid var(--line,#D8D8D0);background:rgba(62,92,58,0.06);padding:12px 16px;margin-top:8px'});

@@ -51735,6 +51735,56 @@ window.todayIdxMonStart = function() {
   return (new Date().getDay() + 6) % 7;
 };
 
+// HARDENING P1 — Local date string (YYYY-MM-DD using device timezone, not UTC).
+// toISOString() returns UTC, which is "wrong" for users in UTC+ timezones training
+// at 23:xx local time — their session key would be the next UTC day.
+// All session writes and "today" lookups must use this function.
+window.sfcLocalDateStr = function(d) {
+  var t = d instanceof Date ? d : new Date();
+  var mm = String(t.getMonth() + 1).padStart(2, '0');
+  var dd = String(t.getDate()).padStart(2, '0');
+  return t.getFullYear() + '-' + mm + '-' + dd;
+};
+
+// HARDENING P2 — Safe numeric conversion: trim → parse → validate.
+// Returns the number, or `fallback` (default null) when the value is not numeric.
+// Prevents "80 " (trailing space) producing NaN in arithmetic.
+window.sfcSafeNum = function(val, fallback) {
+  var fb = (fallback !== undefined) ? fallback : null;
+  if (val === null || val === undefined || val === '') return fb;
+  var n = parseFloat(String(val).trim().replace(',', '.'));
+  return isFinite(n) ? n : fb;
+};
+
+// HARDENING P4 — State integrity firewall.
+// Called at render time to silently repair well-known corruption patterns.
+// Returns true if any repair was performed (caller may choose to re-render).
+window.sfcRepairState = function(S) {
+  if (!S) return false;
+  var repaired = false;
+  // Ensure log/history fields are plain objects, not arrays or primitives
+  ['muscuSessionLog', 'sessionHistory', 'muscuProgressionHistory'].forEach(function(k) {
+    if (S[k] !== null && S[k] !== undefined && (typeof S[k] !== 'object' || Array.isArray(S[k]))) {
+      S[k] = {};
+      repaired = true;
+    }
+  });
+  // Ensure sportProgram is an array or null (never a primitive)
+  if (S.sportProgram !== null && S.sportProgram !== undefined && !Array.isArray(S.sportProgram)) {
+    S.sportProgram = null;
+    repaired = true;
+  }
+  // Clamp sStep / nStep to valid ranges
+  if (typeof S.sStep === 'number' && (S.sStep < 0 || S.sStep > 50)) { S.sStep = 0; repaired = true; }
+  if (typeof S.nStep === 'number' && (S.nStep < 0 || S.nStep > 12)) { S.nStep = 0; repaired = true; }
+  // Remove the poisoned "undefined" key if it crept into progressionHistory
+  if (S.muscuProgressionHistory && 'undefined' in S.muscuProgressionHistory) {
+    delete S.muscuProgressionHistory['undefined'];
+    repaired = true;
+  }
+  return repaired;
+};
+
 // FIX VALIDATION WEEKPLAN 2026-04 : dévalider le plan sans le supprimer.
 // Appelé quand un paramètre critique change (regime, allergies, mealsPerDay, etc.)
 // → le plan reste visible mais le bandeau "Revalider" s'affiche à l'user.
@@ -51904,7 +51954,10 @@ window.getNextScheduledSession = function() {
   try {
     var S = window.S;
     if (!S) return null;
-    var dayNames = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+    var _isEN = window.isEnglish && window.isEnglish();
+    var dayNames = _isEN
+      ? ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+      : ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
     // trainingDaysSelected = array de 0-6 (Lun=0, Dim=6)
     var days = Array.isArray(S.trainingDaysSelected) ? S.trainingDaysSelected : null;
     if (!days || !days.length) return null;
@@ -53210,7 +53263,9 @@ function getAdaptedMealSplit(dayIndex) {
            dayInfo: dayInfo, note: baseSplit.note, trainTimingNote: baseSplit.trainTimingNote };
 }
 window.getAdaptedMealSplit = getAdaptedMealSplit;
-var DAY_NAMES=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+var DAY_NAMES = (window.isEnglish && window.isEnglish())
+  ? ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+  : ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
 var SHOPPING=[
   {cat:'FRÉQUENCE',items:[
     {id:'daily',name:'Tous les jours',desc:'Produits frais quotidiens'},
@@ -79342,7 +79397,7 @@ function renderMusculationProgram(p) {
  })();
 
  // ─── SÉANCE TERMINÉE + BILAN CALORIQUE ───
- var todayKey = S.selectedSportDay + '_' + new Date().toISOString().slice(0, 10);
+ var todayKey = S.selectedSportDay + '_' + ((window.sfcLocalDateStr && window.sfcLocalDateStr()) || new Date().toISOString().slice(0, 10));
  var doneSess = S.sessionHistory && S.sessionHistory[todayKey];
  if (doneSess) {
  var doneBadge = h('div', {style: 'border:1px solid var(--line,#D8D8D0);background:rgba(62,92,58,0.06);padding:12px 16px;margin-top:8px'});
@@ -83196,7 +83251,7 @@ window.CUSTOM_SESSION = {
     try { localStorage.setItem(this._histKey(), JSON.stringify(S.customSessionHistory)); } catch(e) {}
 
     // compte aussi dans sessionHistory pour le widget "semaine" + brûlé du dashboard
-    var todayStr = new Date().toISOString().slice(0, 10);
+    var todayStr = (window.sfcLocalDateStr && window.sfcLocalDateStr()) || new Date().toISOString().slice(0, 10);
     if (!S.sessionHistory) S.sessionHistory = {};
     var _kcal = this.calcKcal(draft);
     S.sessionHistory[todayStr] = {
@@ -83208,10 +83263,11 @@ window.CUSTOM_SESSION = {
     } catch(e) {}
 
     // Mise à jour muscuProgressionHistory (alimente sparklines + suggestions futures)
-    var _today3 = new Date().toISOString().slice(0, 10);
+    var _today3 = (window.sfcLocalDateStr && window.sfcLocalDateStr()) || new Date().toISOString().slice(0, 10);
     if (!S.muscuProgressionHistory) S.muscuProgressionHistory = {};
     draft.blocks.forEach(function(b) {
       if (b.type !== 'exercise' || !Array.isArray(b.loggedSets)) return;
+      if (!b.n || typeof b.n !== 'string' || !b.n.trim()) return;
       var vs3 = b.loggedSets.filter(function(s) { return s.validated && s.weight && s.reps; });
       if (!vs3.length) return;
       var avgW3 = vs3.reduce(function(sum3, s) { return sum3 + (parseFloat(s.weight) || 0); }, 0) / vs3.length;
@@ -87250,7 +87306,7 @@ function buildContextualHero(moment, S) {
     var _bfKcalReal = _bf && (typeof _bf.k === 'number' ? _bf.k : (typeof _bf.kcal === 'number' ? _bf.kcal : null));
     var _bfProtReal = _bf && (typeof _bf.p === 'number' ? _bf.p : (typeof _bf.protein === 'number' ? _bf.protein : null));
     var petitDejTarget = (_bfKcalReal && _bfKcalReal > 0) ? Math.round(_bfKcalReal) : Math.round(target * 0.22);
-    var protTarget = (_bfProtReal && _bfProtReal > 0) ? Math.round(_bfProtReal) : Math.round((S.weight || 70) * 1.6 * 0.25);
+    var protTarget = (_bfProtReal && _bfProtReal > 0) ? Math.round(_bfProtReal) : Math.round((parseFloat(S.weight) || 70) * 1.6 * 0.25);
 
     var _bhEN = window.isEnglish && window.isEnglish();
     if (isPregnant) {
@@ -87714,7 +87770,7 @@ function renderCardMacros() {
   // ── Sport burn du jour ──
   // Sessions are keyed as "<dayIdx>_<date>" (regular) or "<date>" (free sessions).
   // Scan all keys ending with today's date to catch both formats.
-  var _todayKey = new Date().toISOString().slice(0, 10);
+  var _todayKey = (window.sfcLocalDateStr && window.sfcLocalDateStr()) || new Date().toISOString().slice(0, 10);
   var _S = window.S || {};
   var _sportBurn = 0;
   if (_S.sessionHistory) {
@@ -87961,23 +88017,31 @@ function _fjOpenCreateFoodModal() {
     }, (window.isEnglish && window.isEnglish()) ? 'Create food item' : 'Créer l\'aliment');
 
     saveBtn.addEventListener('click', function() {
+      var _sfn = window.sfcSafeNum || function(v, fb) { var n = parseFloat(String(v||'').trim().replace(',','.')); return isFinite(n) ? n : (fb !== undefined ? fb : null); };
+      var EN2 = window.isEnglish && window.isEnglish();
       var name = (inputs['cf-name'].value || '').trim();
-      var kcal  = parseFloat(String(inputs['cf-kcal'].value || '0').replace(',', '.')) || 0;
-      var prot  = parseFloat(String(inputs['cf-p'].value   || '0').replace(',', '.')) || 0;
-      var carbs = parseFloat(String(inputs['cf-g'].value   || '0').replace(',', '.')) || 0;
-      var fat   = parseFloat(String(inputs['cf-l'].value   || '0').replace(',', '.')) || 0;
+      var kcal  = _sfn(inputs['cf-kcal'].value, null);
+      var prot  = _sfn(inputs['cf-p'].value,   null);
+      var carbs = _sfn(inputs['cf-g'].value,   null);
+      var fat   = _sfn(inputs['cf-l'].value,   null);
 
       if (!name) {
-        errEl.textContent = 'Le nom est obligatoire.';
+        errEl.textContent = EN2 ? 'Name is required.' : 'Le nom est obligatoire.';
         errEl.style.display = '';
         inputs['cf-name'].focus();
         return;
       }
-      if (kcal < 0 || isNaN(kcal)) {
-        errEl.textContent = (window.isEnglish && window.isEnglish()) ? 'Invalid kcal value (must be ≥ 0).' : 'Valeur kcal invalide (doit être ≥ 0).';
+      if (kcal === null || kcal < 0) {
+        errEl.textContent = EN2 ? 'Invalid kcal value (must be ≥ 0).' : 'Valeur kcal invalide (doit être ≥ 0).';
         errEl.style.display = '';
         return;
       }
+      if (prot === null || prot < 0 || carbs === null || carbs < 0 || fat === null || fat < 0) {
+        errEl.textContent = EN2 ? 'Macro values must be numbers ≥ 0.' : 'Les macros doivent être des nombres ≥ 0.';
+        errEl.style.display = '';
+        return;
+      }
+      kcal = kcal; prot = prot; carbs = carbs; fat = fat;
 
       // Persist
       var uid = _fjGetUid();
@@ -90036,7 +90100,7 @@ function renderCardSport() {
   }
 
   // FIX SPRINT P1.9 — Détecter séance interrompue (au moins 1 set validé aujourd'hui)
-  var todayKey = new Date().toISOString().slice(0, 10);
+  var todayKey = (window.sfcLocalDateStr && window.sfcLocalDateStr()) || new Date().toISOString().slice(0, 10);
   var hasInProgressSession = false;
   // FIX COHÉRENCE CALENDRIER 2026-04 : détecter aussi séance 100% terminée.
   // sessionHistory est keyed par "<dayIdx>_<date>" (format app-sport.js ligne 8886).
@@ -90133,7 +90197,7 @@ function renderSmartFitCoachToday() {
 
   if (S.sportType === 'musculation' && _isLegacySportProgram()) return renderCardSport();
 
-  var todayStr = new Date().toISOString().slice(0, 10);
+  var todayStr = (window.sfcLocalDateStr && window.sfcLocalDateStr()) || new Date().toISOString().slice(0, 10);
 
   // Override mode: user chose their static program today
   if (S._sfcOverride && S._sfcOverrideDate === todayStr) {
@@ -92375,7 +92439,7 @@ function renderTodayDashboard(p) {
     var _muid = (window.AUTH && window.AUTH.getUser) ? ((window.AUTH.getUser()) || {}).id : null;
     var _msd = _muid ? JSON.parse(localStorage.getItem('mtd_streak_' + _muid) || '{}') : {};
     var _msc = (typeof _msd.current === 'number') ? _msd.current : 0;
-    var _todayStr2 = new Date().toISOString().slice(0, 10);
+    var _todayStr2 = (window.sfcLocalDateStr && window.sfcLocalDateStr()) || new Date().toISOString().slice(0, 10);
     var _isFirstDay2 = !S.firstLoginDate || S.firstLoginDate === _todayStr2;
     if (_msc >= 1 && !_isFirstDay2) {
       var _jTotals = (window.FOOD_JOURNAL && window.FOOD_JOURNAL.getDayTotal) ? window.FOOD_JOURNAL.getDayTotal() : { kcal: 0, count: 0 };
@@ -93510,14 +93574,16 @@ function buildSmartInsight() {
   var S = window.S;
   if (!S || S.appMode === 'nutrition') return null;
   var EN = window.isEnglish && window.isEnglish();
-  var todayStr = new Date().toISOString().slice(0, 10);
+  var todayStr = (window.sfcLocalDateStr && window.sfcLocalDateStr()) || new Date().toISOString().slice(0, 10);
   var insights = [];
 
   var lastMusDate = null, lastMusMuscles = [], lastMusTonnage = 0, lastMusSets = 0;
   try {
     var mLog = S.muscuSessionLog || {};
+    var _cutoff90 = new Date(); _cutoff90.setDate(_cutoff90.getDate() - 90);
+    var _cutoffStr = (window.sfcLocalDateStr && window.sfcLocalDateStr(_cutoff90)) || _cutoff90.toISOString().slice(0, 10);
     var mKeys = Object.keys(mLog).filter(function(k) {
-      return /^\d{4}-\d{2}-\d{2}$/.test(k) && k <= todayStr && mLog[k] && Object.keys(mLog[k]).length > 0;
+      return /^\d{4}-\d{2}-\d{2}$/.test(k) && k >= _cutoffStr && k <= todayStr && mLog[k] && Object.keys(mLog[k]).length > 0;
     }).sort();
     if (mKeys.length > 0) {
       lastMusDate = mKeys[mKeys.length - 1];
@@ -93543,12 +93609,12 @@ function buildSmartInsight() {
     var allDates = [];
     var _mL2 = S.muscuSessionLog || {};
     Object.keys(_mL2).forEach(function(k) {
-      if (/^\d{4}-\d{2}-\d{2}$/.test(k) && _mL2[k] && Object.keys(_mL2[k]).length > 0) allDates.push(k);
+      if (/^\d{4}-\d{2}-\d{2}$/.test(k) && k >= _cutoffStr && _mL2[k] && Object.keys(_mL2[k]).length > 0) allDates.push(k);
     });
     var _sH2 = S.sessionHistory || {};
     Object.keys(_sH2).forEach(function(k) {
       var m = k.match(/^(\d+)_(\d{4}-\d{2}-\d{2})$/);
-      if (m && m[2]) allDates.push(m[2]);
+      if (m && m[2] >= _cutoffStr) allDates.push(m[2]);
     });
     if (allDates.length > 0) {
       allDates.sort();
@@ -104071,6 +104137,8 @@ function _showMedicalDisclaimer() {
 function render() {
  if (render._lock) return;
  render._lock = true;
+ // State integrity firewall — repair known corruption before any view renders
+ try { if (window.sfcRepairState) window.sfcRepairState(window.S); } catch(_eRep) {}
  // Clean any stale tooltips left over from previous view
  try { document.querySelectorAll('.sfc-tooltip-pop').forEach(function(el){ el.remove(); }); } catch(_eTp) {}
  try { if (S._quickAddSlot && S.view !== 'today') { S._quickAddSlot = null; } } catch(_eQa) {}
