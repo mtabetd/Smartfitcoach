@@ -1102,8 +1102,8 @@ function renderHeroContextuel() {
   if (context.quote) {
     var _qBlock = h('div', { style: 'margin:0 0 32px;' });
     _qBlock.appendChild(h('p', {
-      style: 'font-family:Georgia,serif;font-style:italic;font-size:15px;line-height:1.55;color:var(--ink-700,#2B2B27);margin:0;font-weight:normal;'
-    }, '\u00AB ' + context.quote + ' \u00BB'));
+      style: 'font-family:Georgia,serif;' + (context.isDirective ? 'font-style:normal;font-size:14px;' : 'font-style:italic;font-size:15px;') + 'line-height:1.6;color:var(--ink-700,#2B2B27);margin:0;font-weight:normal;'
+    }, context.isDirective ? context.quote : ('\u00AB ' + context.quote + ' \u00BB')));
     if (context.quoteAuthor) {
       _qBlock.appendChild(h('div', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink-500,#6B6B65);margin-top:8px;'
@@ -1263,7 +1263,7 @@ function buildContextualHero(moment, S) {
         { value: kCap + '\u00a0mg K\u207a', label: _bhEN ? 'Max potassium' : 'Potassium max' }
       ];
     } else if (isCFUser) {
-      ctx.quote = _bhEN ? 'Load up on carbs today: 500 kcal at breakfast including 70 g carbs.' : 'Chargez-vous en glucides aujourd\'hui : 500 kcal au petit-déj dont 70 g glucides.';
+      ctx.isDirective = true; ctx.quote = _bhEN ? 'Load up on carbs today: 500 kcal at breakfast including 70 g carbs.' : 'Chargez-vous en glucides aujourd\'hui : 500 kcal au petit-déj dont 70 g glucides.';
       ctx.stats = [
         { value: fmtKcal(500), label: _bhEN ? 'Breakfast kcal' : 'Kcal petit-déj' },
         { value: '70\u00a0g', label: _bhEN ? 'Targeted carbs' : 'Glucides visés' }
@@ -1276,19 +1276,19 @@ function buildContextualHero(moment, S) {
       var _carbTgt   = _isLegDay ? Math.round(petitDejTarget * 1.1) : petitDejTarget;
       var _protTgt   = Math.round((S.weight || 70) * 1.6 * 0.30);
       if (_isLegDay) {
-        ctx.quote = _bhEN
+        ctx.isDirective = true; ctx.quote = _bhEN
           ? 'Leg day · Prioritise carbs at breakfast. Aim for ' + fmtKcal(_carbTgt) + ' kcal and ' + _protTgt + ' g protein to maximise the session.'
           : 'Séance Jambes · Priorité glucides au petit-déj. Vise ' + fmtKcal(_carbTgt) + ' kcal et ' + _protTgt + ' g protéines pour charger les muscles.';
       } else if (_isPushDay) {
-        ctx.quote = _bhEN
+        ctx.isDirective = true; ctx.quote = _bhEN
           ? todaySportSession.name + ' · ' + todaySportSession.exoCount + ' exercises. Fuel with ' + fmtKcal(petitDejTarget) + ' kcal and ' + _protTgt + ' g protein at breakfast.'
           : 'Séance ' + todaySportSession.name + ' · ' + todaySportSession.exoCount + ' exercices. Vise ' + fmtKcal(petitDejTarget) + ' kcal et ' + _protTgt + ' g protéines au petit-déj.';
       } else if (_isPullDay) {
-        ctx.quote = _bhEN
+        ctx.isDirective = true; ctx.quote = _bhEN
           ? todaySportSession.name + ' · Hydration and protein first. Aim for ' + fmtKcal(petitDejTarget) + ' kcal and ' + _protTgt + ' g protein.'
           : 'Séance ' + todaySportSession.name + ' · Hydratation et protéines en priorité. Vise ' + fmtKcal(petitDejTarget) + ' kcal et ' + _protTgt + ' g protéines.';
       } else {
-        ctx.quote = _bhEN
+        ctx.isDirective = true; ctx.quote = _bhEN
           ? 'Today: ' + todaySportSession.name + '. ' + todaySportSession.exoCount + ' exercises. Aim for ' + fmtKcal(petitDejTarget) + ' kcal at breakfast to fuel up.'
           : 'Aujourd\'hui : ' + todaySportSession.name + '. ' + todaySportSession.exoCount + ' exos. Vise ' + fmtKcal(petitDejTarget) + ' kcal au petit-déj pour bien charger.';
       }
@@ -1338,7 +1338,7 @@ function buildContextualHero(moment, S) {
     } else if (isMuscuUser && hasSessionToday && todaySportSession && remaining > 100) {
       var _mLunch = Math.round(remaining * 0.55);
       var _mProt  = Math.round((S.weight || 70) * 1.6 * 0.30);
-      ctx.quote = _bhEN
+      ctx.isDirective = true; ctx.quote = _bhEN
         ? todaySportSession.name + ' session ahead \u00b7 Last meal before effort. Aim for ' + fmtKcal(_mLunch) + ' kcal now, save the rest post-workout.'
         : 'Séance ' + todaySportSession.name + ' à venir \u00b7 Dernier repas avant l\'effort. Vise ' + fmtKcal(_mLunch) + ' kcal maintenant, garde le reste pour après.';
       ctx.stats = [
@@ -1393,7 +1393,7 @@ function buildContextualHero(moment, S) {
     if (overflow) {
       ctx.quote = _bhEN ? 'Over by ' + fmtKcal(delta) + ' kcal. Nothing dramatic. Tomorrow, aim for ' + fmtKcal(target - 200) + '.' : 'Dépassement de ' + fmtKcal(delta) + ' kcal. Rien de dramatique. Demain, pars sur ' + fmtKcal(target - 200) + '.';
     } else if (muscuToday) {
-      ctx.quote = _bhEN ? 'You moved ' + fmtKcal(muscuToday.tonnage) + ' kg across ' + muscuToday.sets + ' sets today. ' + fmtKcal(totals.kcal) + ' kcal · ' + Math.round(totals.p) + ' g protein. Recovery starts now.' : 'Tu as soulevé ' + fmtKcal(muscuToday.tonnage) + ' kg en ' + muscuToday.sets + ' séries. ' + fmtKcal(totals.kcal) + ' kcal · ' + Math.round(totals.p) + ' g protéines. La récupération commence maintenant.';
+      ctx.isDirective = true; ctx.quote = _bhEN ? 'You moved ' + fmtKcal(muscuToday.tonnage) + ' kg across ' + muscuToday.sets + ' sets today. ' + fmtKcal(totals.kcal) + ' kcal · ' + Math.round(totals.p) + ' g protein. Recovery starts now.' : 'Tu as soulevé ' + fmtKcal(muscuToday.tonnage) + ' kg en ' + muscuToday.sets + ' séries. ' + fmtKcal(totals.kcal) + ' kcal · ' + Math.round(totals.p) + ' g protéines. La récupération commence maintenant.';
     } else if (totals.kcal >= target * 0.85) {
       var _citSoir1 = getDailyCitationObj(); ctx.quote = _citSoir1.text; ctx.quoteAuthor = _citSoir1.author;
     } else {
@@ -4176,8 +4176,7 @@ function renderSmartFitCoachToday() {
              : (!_isGenericDN ? day.name
              : (EN ? 'Session ' + (idx + 1) : 'S\u00e9ance ' + (idx + 1)));
   var _stl   = ({ musculation:'Muscu', crossfit:'CrossFit', running:'Running', cycling:'Cycling', triathlon:'Triathlon', yoga:'Yoga', hyrox:'Hyrox' })[S.sportType] || '';
-  var _secCtx   = [_stl, _dname].filter(Boolean).join(' — ');
-  var _secLabel = (EN ? '→ Follow my program' : '→ Suivre mon programme') + (_secCtx ? ' (' + _secCtx + ')' : '');
+  var _secCtx   = [_stl, _dname].filter(Boolean).join(' — '); // kept for potential tooltip use
 
   // Session done today?
   var _doneKey = idx + '_' + todayStr;
@@ -4290,39 +4289,39 @@ function renderSmartFitCoachToday() {
 
   var c = card('');
 
-  // ── Brand header ──
+  // Brand mark: quiet watermark, not a banner
   c.appendChild(h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#999;margin-bottom:18px;font-weight:500;'
-  }, 'SMARTFITCOACH TODAY'));
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:#C0BDB8;margin-bottom:20px;font-weight:400;'
+  }, 'SMARTFITCOACH'));
 
   if (_done) {
-    // ─────────── POST-SESSION STATE ───────────
+    // ─── POST-SESSION ───
     c.appendChild(h('div', {
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#3E5C3A;margin-bottom:8px;'
-    }, EN ? '✔ Session validated' : '✔ Séance validée'));
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#3E5C3A;margin-bottom:10px;'
+    }, EN ? '✔ Session complete' : '✔ Séance terminée'));
     if (_todayTon > 0) {
       var _tonFmt = _todayTon >= 1000 ? (Math.round(_todayTon / 100) / 10).toFixed(1) + ' t' : Math.round(_todayTon) + ' kg';
       c.appendChild(h('div', {
-        style: 'font-family:Georgia,serif;font-size:26px;font-weight:400;line-height:1.2;color:#1A1A1A;margin-bottom:4px;'
+        style: 'font-family:Georgia,serif;font-size:28px;font-weight:400;line-height:1.15;color:#1A1A1A;margin-bottom:4px;'
       }, _tonFmt));
       c.appendChild(h('div', {
-        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:#999;margin-bottom:20px;font-weight:300;letter-spacing:0.5px;'
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:#AAA;margin-bottom:22px;font-weight:300;'
       }, _todaySets + ' sets · ' + _dname));
     } else {
       c.appendChild(h('div', {
-        style: 'font-family:Georgia,serif;font-size:20px;font-weight:400;line-height:1.3;color:#1A1A1A;margin-bottom:20px;'
+        style: 'font-family:Georgia,serif;font-size:22px;font-weight:400;line-height:1.3;color:#1A1A1A;margin-bottom:22px;'
       }, _dname));
     }
     if (_nextSessName) {
-      c.appendChild(h('div', { style: 'height:1px;background:#D8D6D0;margin-bottom:16px;' }));
+      c.appendChild(h('div', { style: 'height:1px;background:#E8E6E0;margin-bottom:16px;' }));
       c.appendChild(h('div', {
-        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#999;margin-bottom:8px;'
-      }, EN ? 'NEXT SESSION' : 'PROCHAINE SÉANCE'));
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#AAA;margin-bottom:6px;letter-spacing:0.5px;'
+      }, EN ? 'Next' : 'Ensuite'));
       c.appendChild(h('div', {
-        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:300;color:#333;margin-bottom:20px;line-height:1.5;'
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;font-weight:400;color:#333;margin-bottom:16px;'
       }, _nextSessName));
       c.appendChild(h('button', {
-        style: 'display:block;width:100%;padding:14px 0;margin-bottom:8px;background:transparent;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:#1A1A1A;cursor:pointer;text-align:left;min-height:44px;text-decoration:underline;text-underline-offset:3px;',
+        style: 'padding:0;background:transparent;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:#999;cursor:pointer;min-height:36px;text-decoration:underline;text-underline-offset:3px;',
         onclick: function() {
           var S2 = window.S;
           if (!S2) return;
@@ -4330,47 +4329,40 @@ function renderSmartFitCoachToday() {
           S2.selectedSportDay = Math.max(0, Math.min((idx + 1) % (Array.isArray(S2.sportProgram) ? S2.sportProgram.length : 1), (Array.isArray(S2.sportProgram) ? S2.sportProgram.length - 1 : 0)));
           if (window.render) window.render();
         }
-      }, EN ? '→ Preview next session' : '→ Voir la prochaine séance'));
+      }, EN ? '→ Preview' : '→ Voir'));
     }
-    c.appendChild(h('button', {
-      style: 'display:block;width:100%;padding:16px;background:rgba(62,92,58,0.08);color:#3E5C3A;border:1px solid #3E5C3A;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:default;min-height:52px;box-sizing:border-box;'
-    }, '✔ ' + (EN ? 'Session complete' : 'Séance terminée')));
+    c.appendChild(h('div', {
+      style: 'margin-top:20px;padding:14px 0;border-top:1px solid #E8E6E0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#3E5C3A;letter-spacing:1px;'
+    }, EN ? 'Recovery starts now.' : 'La récupération commence maintenant.'));
   } else {
-    // ─────────── PRE-SESSION STATE ───────────
+    // ─── PRE-SESSION ───
+    // Hook: context without a label — the text IS the label
     if (_hookMsg) {
       c.appendChild(h('div', {
-        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.55;color:#666;padding-bottom:14px;border-bottom:1px solid #E8E6E0;margin-bottom:14px;font-style:italic;'
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.55;color:#888;margin-bottom:18px;'
       }, _hookMsg));
     }
+    // Session name: the single headline — get full attention
     c.appendChild(h('div', {
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:10px;'
-    }, EN ? 'Recommended today' : 'Recommandé aujourd\'hui'));
-    c.appendChild(h('div', {
-      style: 'font-family:Georgia,serif;font-size:22px;font-weight:400;line-height:1.25;color:#1A1A1A;margin-bottom:14px;'
+      style: 'font-family:Georgia,serif;font-size:24px;font-weight:400;line-height:1.2;color:#1A1A1A;margin-bottom:12px;'
     }, sel2.session_focus));
     c.appendChild(h('div', { style: 'margin-bottom:24px;' },
       h('span', { style: _tagSt }, sel2.momentum_tag.toUpperCase())
     ));
-    c.appendChild(h('div', { style: 'height:1px;background:#D8D6D0;margin-bottom:20px;' }));
+    c.appendChild(h('div', { style: 'height:1px;background:#E8E6E0;margin-bottom:20px;' }));
+    // Coach message: no section header — the text speaks for itself
     c.appendChild(h('div', {
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#777;margin-bottom:12px;'
-    }, EN ? 'WHY THIS DECISION' : 'POURQUOI CETTE DÉCISION'));
-    c.appendChild(h('div', {
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:300;line-height:1.65;color:#333;margin-bottom:20px;'
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:300;line-height:1.7;color:#444;margin-bottom:14px;'
     }, sel2.coach_message));
+    // Adjustment: left-border note — visually subordinate, no header needed
     c.appendChild(h('div', {
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#999;margin-bottom:8px;'
-    }, EN ? 'SMART ADJUSTMENT' : 'AJUSTEMENT SUGGÉRÉ'));
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.5;color:#777;margin-bottom:22px;padding-left:12px;border-left:2px solid #D8D6D0;'
+    }, _adj));
+    // Nutrition: supporting context, whisper weight
     c.appendChild(h('div', {
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.55;color:#333;margin-bottom:24px;'
-    }, '→ ' + _adj));
-    c.appendChild(h('div', { style: 'height:1px;background:#D8D6D0;margin-bottom:20px;' }));
-    c.appendChild(h('div', {
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#999;margin-bottom:10px;'
-    }, EN ? 'NUTRITION TODAY' : 'NUTRITION DU JOUR'));
-    c.appendChild(h('div', {
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.6;color:#666;font-style:italic;margin-bottom:24px;'
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:300;line-height:1.6;color:#AAA;margin-bottom:26px;'
     }, _nutGuidance));
+    // CTA: shorter verb = more decisive
     c.appendChild(h('button', {
       style: 'display:block;width:100%;padding:16px;background:#1A1A1A;color:#F5F3EF;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;min-height:52px;box-sizing:border-box;',
       onclick: function() {
@@ -4381,9 +4373,10 @@ function renderSmartFitCoachToday() {
         S2.selectedSportDay = Math.max(0, Math.min(idx, (Array.isArray(S2.sportProgram) ? S2.sportProgram.length - 1 : 0)));
         if (window.render) window.render();
       }
-    }, EN ? '→ Start session' : '→ Commencer la séance'));
+    }, EN ? '→ START' : '→ COMMENCER'));
+    // Secondary: no parenthetical, just a clean link
     c.appendChild(h('button', {
-      style: 'display:block;width:100%;padding:14px 0;margin-top:14px;background:transparent;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:#777;cursor:pointer;text-align:left;min-height:44px;',
+      style: 'display:block;width:100%;padding:12px 0;margin-top:10px;background:transparent;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:#AAA;cursor:pointer;text-align:left;min-height:44px;',
       onclick: function() {
         var S2 = window.S;
         if (!S2) return;
@@ -4392,7 +4385,7 @@ function renderSmartFitCoachToday() {
         if (window.save) window.save();
         if (window.render) window.render();
       }
-    }, _secLabel));
+    }, EN ? '→ Follow my program' : '→ Suivre mon programme'));
   }
 
   return c;
@@ -7637,20 +7630,10 @@ function buildSmartInsight() {
   var _ic = h('div', {
     style: 'max-width:560px;margin:0 auto;padding:14px 16px;background:var(--paper,#FAF9F6);border:1px solid var(--line,#D8D8D0);border-top:2px solid var(--black,#1A1A1A);'
   });
-  _ic.appendChild(h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#999;margin-bottom:10px;font-weight:500;'
-  }, EN ? 'AI INSIGHT' : 'IA · INSIGHT'));
   insights.slice(0, 2).forEach(function(ins, i) {
-    var row = h('div', {
-      style: 'display:flex;align-items:flex-start;gap:10px;' + (i > 0 ? 'margin-top:8px;padding-top:8px;border-top:1px solid rgba(10,10,9,0.08);' : '')
-    });
-    row.appendChild(h('span', {
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#aaa;flex-shrink:0;line-height:1.55;'
-    }, ins.icon));
-    row.appendChild(h('div', {
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.55;color:#333;'
+    _ic.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.6;color:#555;' + (i > 0 ? 'margin-top:10px;padding-top:10px;border-top:1px solid rgba(10,10,9,0.07);' : '')
     }, ins.text));
-    _ic.appendChild(row);
   });
   return _ic;
 }
