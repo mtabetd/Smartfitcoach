@@ -6735,6 +6735,33 @@ function renderMusculationProgram(p) {
    }
  }
 
+ // LEGACY PROGRAM SAFETY — block any program missing generation-time splitKey
+ if (S._splitChoice && Array.isArray(S.sportProgram) && S.sportProgram.length > 0) {
+   var _pd0 = S.sportProgram[0];
+   var _isLegacyProg = !_pd0 || typeof _pd0.splitKey === 'undefined';
+   var _isSplitMismatch = _pd0 && _pd0.splitKey && _pd0.splitKey !== S._splitChoice;
+   if (_isLegacyProg || _isSplitMismatch) {
+     p.appendChild(h('div', {style: 'text-align:center;padding:48px 24px;font-family:"Helvetica Neue",Arial,sans-serif;'}, [
+       h('div', {style: 'font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;'}, (window.isEnglish && window.isEnglish() ? 'PROGRAM' : 'PROGRAMME')),
+       h('h2', {style: 'font-family:Georgia,serif;font-size:22px;font-weight:normal;margin:0 0 14px;color:var(--black,#0A0A09);'}, (window.isEnglish && window.isEnglish() ? 'Program needs updating' : 'Programme \u00e0 mettre \u00e0 jour')),
+       h('p', {style: 'font-size:13px;color:var(--ink-500,#6B6B65);max-width:280px;margin:0 auto 28px;line-height:1.6;'}, (window.isEnglish && window.isEnglish()
+         ? 'This program was generated with an older version. To guarantee consistent results, it must be regenerated.'
+         : 'Ce programme a \u00e9t\u00e9 g\u00e9n\u00e9r\u00e9 avec une ancienne version.\nPour garantir des r\u00e9sultats coh\u00e9rents, il doit \u00eatre r\u00e9g\u00e9n\u00e9r\u00e9.')),
+       h('button', {'class': 'btn-primary', style: 'margin:0 auto;display:block;', onclick: function() {
+         try {
+           S.sportProgram = generateSportProgram();
+           S.sportProgramValidated = true;
+           S.sportProgramValidatedAt = new Date().toISOString();
+           S._programGenerationError = null;
+           if (window.saveProfile) { try { window.saveProfile(); } catch(e2) {} }
+           if (window.render) window.render();
+         } catch(e) { console.error('[sport] legacy regen error:', e); }
+       }}, (window.isEnglish && window.isEnglish() ? '\u21bb Regenerate my program' : '\u21bb R\u00e9g\u00e9n\u00e9rer mon programme'))
+     ]));
+     return;
+   }
+ }
+
  // Load saved musculation weights from localStorage
  if (Object.keys(S.musculationWeights || {}).length === 0) {
  var userId = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';

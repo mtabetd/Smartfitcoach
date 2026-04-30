@@ -25,6 +25,16 @@ function _getSplitLabels() {
   };
 }
 
+// Returns true when S.sportProgram cannot guarantee correct labels or exercise selection.
+function _isLegacySportProgram() {
+  var S = window.S;
+  if (!S || S.sportType !== 'musculation' || !S._splitChoice) return false;
+  if (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) return false;
+  var d = S.sportProgram[0];
+  if (!d) return false;
+  return typeof d.splitKey === 'undefined' || (d.splitKey && d.splitKey !== S._splitChoice);
+}
+
 // ─── QUOTES LOCALES (sport/motivation) ───
 var _isEN = window.isEnglish && window.isEnglish();
 var TODAY_QUOTES = _isEN ? [
@@ -1213,8 +1223,14 @@ function buildContextualHero(moment, S) {
   try {
     if (window.getNextSportDay) {
       var nxt = window.getNextSportDay();
-      if (nxt && nxt.day) todaySportSession = { name: nxt.day.label || nxt.day.name || ('Jour ' + (nxt.index + 1)),
-        exoCount: Array.isArray(nxt.day.exercises) ? nxt.day.exercises.length : 0 };
+      if (nxt && nxt.day) {
+        var _nk = nxt.day.splitKey || (S._splitChoice && S.sportType === 'musculation' ? S._splitChoice : null);
+        var _nl = _nk ? (_getSplitLabels()[_nk] || null) : null;
+        var _ni = typeof nxt.day.splitDayIdx === 'number' ? nxt.day.splitDayIdx : nxt.index;
+        var _ng = !nxt.day.name || /^(Jour|Session|S\u00e9ance)\s+\d+$/i.test(nxt.day.name);
+        var _nn = (_nl && _nl[_ni]) ? _nl[_ni] : (!_ng ? nxt.day.name : ((window.isEnglish && window.isEnglish() ? 'Session ' : 'S\u00e9ance ') + (nxt.index + 1)));
+        todaySportSession = { name: nxt.day.label || _nn, exoCount: Array.isArray(nxt.day.exercises) ? nxt.day.exercises.length : 0 };
+      }
     }
   } catch(eS) {}
 
@@ -3812,6 +3828,15 @@ function renderCardSport() {
     }
   } catch(e) {}
 
+  if (S.sportType === 'musculation' && _isLegacySportProgram()) {
+    var _lgCard = card('');
+    _lgCard.appendChild(eyebrow(window.isEnglish && window.isEnglish() ? 'PROGRAM' : 'PROGRAMME'));
+    _lgCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:8px;font-weight:normal;color:var(--black,#0A0A09);'}, (window.isEnglish && window.isEnglish() ? 'Program needs updating' : 'Programme \u00e0 mettre \u00e0 jour')));
+    _lgCard.appendChild(h('p', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin-bottom:16px;line-height:1.55;'}, (window.isEnglish && window.isEnglish() ? 'This program was generated with an older version. It must be regenerated for accurate results.' : 'Ce programme a \u00e9t\u00e9 g\u00e9n\u00e9r\u00e9 avec une ancienne version. Il doit \u00eatre r\u00e9g\u00e9n\u00e9r\u00e9 pour garantir des r\u00e9sultats coh\u00e9rents.')));
+    _lgCard.appendChild(h('button', {style: 'padding:12px 20px;min-height:48px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;', onclick: function() { if (!window.S) return; window.S.view = 'sport'; window.S.sStep = 4; if (window.render) window.render(); }}, (window.isEnglish && window.isEnglish() ? '\u21bb REGENERATE MY PROGRAM' : '\u21bb R\u00c9G\u00c9N\u00c9RER MON PROGRAMME')));
+    return _lgCard;
+  }
+
   var day = next.day;
   var idx = next.index;
   // ═══ FIX P0 SPRINT 2026-04-16 — NOMS JOURS DASHBOARD BASÉS SUR LE SPLIT RÉEL ═══
@@ -4060,6 +4085,8 @@ function renderSmartFitCoachToday() {
   }
 
   if (!hasProg) return renderCardSport();
+
+  if (S.sportType === 'musculation' && _isLegacySportProgram()) return renderCardSport();
 
   var todayStr = new Date().toISOString().slice(0, 10);
 
