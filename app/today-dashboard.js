@@ -1744,7 +1744,7 @@ function renderCardMacros() {
     // Bible Hermès §13.1 : pas d'emoji. Tiret typographique + tutoiement.
     var _burnEl = document.createElement('div');
     _burnEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-bottom:6px;font-weight:500;color:var(--success,#3E5C3A);';
-    _burnEl.textContent = _sportBurn + ((window.isEnglish && window.isEnglish()) ? ' kcal burned — included in your daily goal' : ' kcal dépensées — incluses dans votre objectif quotidien');
+    _burnEl.textContent = (window.isEnglish && window.isEnglish()) ? ('Sport · ' + _sportBurn + ' kcal — factored into your plan') : ('Sport · ' + _sportBurn + ' kcal — intégrées dans ton plan');
     c.appendChild(_burnEl);
   }
 
@@ -7620,7 +7620,7 @@ function buildSmartInsight() {
     var _ms1 = lastMusMuscles.slice(0, 2).map(function(m) { return muscShort[m] || m; }).join(' + ');
     insights.push({ icon: '✦', text: (_ms1 ? (EN ? _ms1 + ' session · ' : 'Séance ' + _ms1 + ' · ') : '') + _ton + (EN ? ' moved · ' : ' soulevés · ') + lastMusSets + (EN ? ' sets' : ' sets validés') });
   } else if (doneToday) {
-    insights.push({ icon: ‘✦’, text: EN ? ‘Session complete today · Rest and recover well’ : ‘Séance validée aujourd\’hui · Récupère bien’ });
+    insights.push({ icon: ‘✦’, text: EN ? ‘Session complete · Protein and hydration lock it in · Back stronger’ : ‘Séance validée · Protéines et hydratation ce soir · Tu reviens plus fort’ });
   }
 
   if (!doneToday && lastMusDate && daysSinceLast !== null) {
