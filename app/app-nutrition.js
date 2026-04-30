@@ -6072,7 +6072,7 @@ function showSmoothieModal(sm) {
         lv: 1, _id: sm.id, _smoothie: true
       };
       var split = window.getMealSplit ? window.getMealSplit() : null;
-      var totalTarget = (typeof calcTarget === 'function' ? calcTarget() : 0) || window.S.caloriesTarget || (window.isFemale(window.S) ? 1500 : 1800);
+      var totalTarget = (typeof calcTarget === 'function' ? calcTarget() : 0) || window.S.caloriesTarget || (window.isFemale(window.S) ? 1800 : 2000);
       var snackTargetBefore = split ? Math.round(totalTarget * split.pctSnack) : Math.round(totalTarget * 0.15);
       var delta = sm.cal - snackTargetBefore;
       var dayPlan = S.weekPlan[S.selectedDay];
@@ -6283,6 +6283,7 @@ function renderShoppingList(p) {
         'class': 'shop-item-row',
         onclick: function() {
           s.shopChecked[item.name] = !s.shopChecked[item.name];
+          if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
           if(window.render) window.render();
         }
       });
