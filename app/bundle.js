@@ -87269,11 +87269,32 @@ function buildContextualHero(moment, S) {
         { value: '70\u00a0g', label: _bhEN ? 'Targeted carbs' : 'Glucides visés' }
       ];
     } else if (isMuscuUser && todaySportSession) {
-      // FIX SPRINT P1.7 — Branche muscu avec nom de la séance prévue
-      ctx.quote = _bhEN ? 'Today: ' + todaySportSession.name + '. ' + todaySportSession.exoCount + ' exercises. Aim for ' + petitDejTarget + ' kcal at breakfast to fuel up.' : 'Aujourd\'hui : ' + todaySportSession.name + '. ' + todaySportSession.exoCount + ' exos. Vise ' + petitDejTarget + ' kcal au petit-déj pour bien charger.';
+      var _sNameLow = todaySportSession.name.toLowerCase();
+      var _isLegDay  = /jamb|legs?|lower|squat|quad|hamstr|fessier|glut/i.test(_sNameLow);
+      var _isPushDay = /push|pec|chest|tricep|press/i.test(_sNameLow);
+      var _isPullDay = /pull|dos|back|bicep|tirage/i.test(_sNameLow);
+      var _carbTgt   = _isLegDay ? Math.round(petitDejTarget * 1.1) : petitDejTarget;
+      var _protTgt   = Math.round((S.weight || 70) * 1.6 * 0.30);
+      if (_isLegDay) {
+        ctx.quote = _bhEN
+          ? 'Leg day · Prioritise carbs at breakfast. Aim for ' + fmtKcal(_carbTgt) + ' kcal and ' + _protTgt + ' g protein to maximise the session.'
+          : 'Séance Jambes · Priorité glucides au petit-déj. Vise ' + fmtKcal(_carbTgt) + ' kcal et ' + _protTgt + ' g protéines pour charger les muscles.';
+      } else if (_isPushDay) {
+        ctx.quote = _bhEN
+          ? todaySportSession.name + ' · ' + todaySportSession.exoCount + ' exercises. Fuel with ' + fmtKcal(petitDejTarget) + ' kcal and ' + _protTgt + ' g protein at breakfast.'
+          : 'Séance ' + todaySportSession.name + ' · ' + todaySportSession.exoCount + ' exercices. Vise ' + fmtKcal(petitDejTarget) + ' kcal et ' + _protTgt + ' g protéines au petit-déj.';
+      } else if (_isPullDay) {
+        ctx.quote = _bhEN
+          ? todaySportSession.name + ' · Hydration and protein first. Aim for ' + fmtKcal(petitDejTarget) + ' kcal and ' + _protTgt + ' g protein.'
+          : 'Séance ' + todaySportSession.name + ' · Hydratation et protéines en priorité. Vise ' + fmtKcal(petitDejTarget) + ' kcal et ' + _protTgt + ' g protéines.';
+      } else {
+        ctx.quote = _bhEN
+          ? 'Today: ' + todaySportSession.name + '. ' + todaySportSession.exoCount + ' exercises. Aim for ' + fmtKcal(petitDejTarget) + ' kcal at breakfast to fuel up.'
+          : 'Aujourd\'hui : ' + todaySportSession.name + '. ' + todaySportSession.exoCount + ' exos. Vise ' + fmtKcal(petitDejTarget) + ' kcal au petit-déj pour bien charger.';
+      }
       ctx.stats = [
-        { value: fmtKcal(petitDejTarget), label: _bhEN ? 'Breakfast kcal' : 'Kcal petit-déj' },
-          { value: todaySportSession.name.split(/[—–-]/)[0].trim().slice(0, 12), label: _bhEN ? 'Planned session' : 'Séance prévue' }
+        { value: fmtKcal(_isLegDay ? _carbTgt : petitDejTarget), label: _bhEN ? 'Breakfast kcal' : 'Kcal petit-déj' },
+        { value: _protTgt + ' g', label: _bhEN ? 'Target protein' : 'Protéines ciblées' }
       ];
     } else {
       var _citMatin = getDailyCitationObj(); ctx.quote = _citMatin.text; ctx.quoteAuthor = _citMatin.author;
@@ -87313,6 +87334,16 @@ function buildContextualHero(moment, S) {
       ctx.stats = [
         { value: fmtKcal(remaining) + '\u00a0kcal', label: _bhEN ? 'Available kcal' : 'Kcal disponibles' },
         { value: '27\u00a0mg', label: _bhEN ? 'Targeted iron' : 'Fer ciblé' }
+      ];
+    } else if (isMuscuUser && hasSessionToday && todaySportSession && remaining > 100) {
+      var _mLunch = Math.round(remaining * 0.55);
+      var _mProt  = Math.round((S.weight || 70) * 1.6 * 0.30);
+      ctx.quote = _bhEN
+        ? todaySportSession.name + ' session ahead \u00b7 Last meal before effort. Aim for ' + fmtKcal(_mLunch) + ' kcal now, save the rest post-workout.'
+        : 'Séance ' + todaySportSession.name + ' à venir \u00b7 Dernier repas avant l\'effort. Vise ' + fmtKcal(_mLunch) + ' kcal maintenant, garde le reste pour après.';
+      ctx.stats = [
+        { value: fmtKcal(_mLunch) + '\u00a0kcal', label: _bhEN ? 'Lunch target' : 'Cible déjeuner' },
+        { value: _mProt + '\u00a0g', label: _bhEN ? 'Protein target' : 'Protéines ciblées' }
       ];
     } else {
       var _citMidi = getDailyCitationObj(); ctx.quote = _citMidi.text; ctx.quoteAuthor = _citMidi.author;
@@ -87362,7 +87393,7 @@ function buildContextualHero(moment, S) {
     if (overflow) {
       ctx.quote = _bhEN ? 'Over by ' + fmtKcal(delta) + ' kcal. Nothing dramatic. Tomorrow, aim for ' + fmtKcal(target - 200) + '.' : 'Dépassement de ' + fmtKcal(delta) + ' kcal. Rien de dramatique. Demain, pars sur ' + fmtKcal(target - 200) + '.';
     } else if (muscuToday) {
-      ctx.quote = _bhEN ? 'You lifted ' + fmtKcal(muscuToday.tonnage) + ' kg over ' + muscuToday.sets + ' sets. ' + fmtKcal(totals.kcal) + ' kcal, ' + Math.round(totals.p) + ' g protein.' : 'Vous avez soulevé ' + fmtKcal(muscuToday.tonnage) + ' kg sur ' + muscuToday.sets + ' séries. ' + fmtKcal(totals.kcal) + ' kcal, ' + Math.round(totals.p) + ' g de protéines.';
+      ctx.quote = _bhEN ? 'You moved ' + fmtKcal(muscuToday.tonnage) + ' kg across ' + muscuToday.sets + ' sets today. ' + fmtKcal(totals.kcal) + ' kcal · ' + Math.round(totals.p) + ' g protein. Recovery starts now.' : 'Tu as soulevé ' + fmtKcal(muscuToday.tonnage) + ' kg en ' + muscuToday.sets + ' séries. ' + fmtKcal(totals.kcal) + ' kcal · ' + Math.round(totals.p) + ' g protéines. La récupération commence maintenant.';
     } else if (totals.kcal >= target * 0.85) {
       var _citSoir1 = getDailyCitationObj(); ctx.quote = _citSoir1.text; ctx.quoteAuthor = _citSoir1.author;
     } else {
@@ -90172,6 +90203,91 @@ function renderSmartFitCoachToday() {
   };
   var _nutGuidance = _nutMap[sel2.momentum_tag] || _nutMap['Building'];
 
+  // ── Contextual hook: references history + momentum for pre-session narrative ──
+  var _hookMsg = null;
+  try {
+    var _wkCountH = 0, _lastDateH = null;
+    var _mLogH = S.muscuSessionLog || {};
+    var _sHistH = S.sessionHistory || {};
+    var _nowH = new Date();
+    var _dowH = (_nowH.getDay() + 6) % 7;
+    var _monH = new Date(_nowH); _monH.setDate(_nowH.getDate() - _dowH);
+    for (var _diH = 0; _diH <= _dowH; _diH++) {
+      var _dH = new Date(_monH); _dH.setDate(_monH.getDate() + _diH);
+      var _dsH = _dH.toISOString().slice(0, 10);
+      var _hMH = _mLogH[_dsH] && Object.keys(_mLogH[_dsH]).length > 0;
+      var _hSH = Object.keys(_sHistH).some(function(k) { return k.indexOf('_' + _dsH) !== -1; });
+      if (_hMH || _hSH) { _wkCountH++; if (!_lastDateH || _dsH > _lastDateH) _lastDateH = _dsH; }
+    }
+    if (!_lastDateH) {
+      var _allDH = Object.keys(_mLogH).filter(function(k) {
+        return /^\d{4}-\d{2}-\d{2}$/.test(k) && _mLogH[k] && Object.keys(_mLogH[k]).length > 0;
+      });
+      Object.keys(_sHistH).forEach(function(k) {
+        var _mH = k.match(/^(\d+)_(\d{4}-\d{2}-\d{2})$/); if (_mH) _allDH.push(_mH[2]);
+      });
+      if (_allDH.length) { _allDH.sort(); _lastDateH = _allDH[_allDH.length - 1]; }
+    }
+    var _dslH = _lastDateH ? Math.floor((new Date(todayStr) - new Date(_lastDateH)) / 86400000) : null;
+    var _wktH = (Array.isArray(S.trainingDaysSelected) && S.trainingDaysSelected.length) ? S.trainingDaysSelected.length : (S.sportDays || 3);
+    if (sel2.momentum_tag === 'Peak' && _wkCountH >= 3) {
+      _hookMsg = EN ? _wkCountH + ' sessions this week · You\'re firing on all cylinders' : _wkCountH + ' séances cette semaine · Tu es en pleine forme';
+    } else if (sel2.momentum_tag === 'Peak') {
+      _hookMsg = EN ? 'Full recovery confirmed · Optimal conditions today' : 'Récupération complète · Conditions optimales aujourd\'hui';
+    } else if (sel2.momentum_tag === 'Locked In' && _wkCountH >= 2) {
+      _hookMsg = EN ? 'Consistent week · ' + _wkCountH + ' / ' + _wktH + ' sessions validated' : 'Semaine régulière · ' + _wkCountH + ' / ' + _wktH + ' séances validées';
+    } else if (sel2.momentum_tag === 'Recovering' && _dslH === 1) {
+      _hookMsg = EN ? 'Supercompensation window active · Volume adjusted' : 'Fenêtre de surcompensation active · Volume ajusté';
+    } else if (_dslH !== null && _dslH >= 5) {
+      _hookMsg = EN ? _dslH + ' days of rest · Your body is fully primed' : _dslH + ' jours de repos · Ton corps est pleinement prêt';
+    } else if (_wkCountH === 0) {
+      _hookMsg = EN ? 'First session of the week · Set the tone' : 'Première séance de ta semaine · Lance le ton';
+    } else if (_dslH !== null && _dslH >= 2) {
+      _hookMsg = EN ? 'Good recovery since your last session · Ready to go' : 'Bonne récupération depuis ta dernière séance · Prêt pour la suite';
+    }
+  } catch(e) {}
+
+  // ── Smart adjustment: load/volume cue mapped to momentum tag ──
+  var _adjMap = {
+    'Peak':       EN ? 'Add 2.5 kg on compound lifts if form holds' : 'Ajoute 2,5 kg sur tes exercices polyarticulaires si la forme le permet',
+    'Locked In':  EN ? 'Hold the load. Focus on execution quality' : 'Maintiens les charges. Focus total sur la qualité d\'exécution',
+    'Building':   EN ? 'Aim for 1 extra rep per set on your main lift' : 'Vise 1 répétition de plus par série sur ton exercice principal',
+    'Recovering': EN ? 'Drop 1 set per exercise. Sensation over load' : 'Retire 1 série par exercice. Prioritise les sensations'
+  };
+  var _adj = _adjMap[sel2.momentum_tag] || _adjMap['Building'];
+
+  // ── Today's logged tonnage (for post-session display) ──
+  var _todayTon = 0, _todaySets = 0;
+  try {
+    var _todayLog = S.muscuSessionLog && S.muscuSessionLog[todayStr];
+    if (_todayLog) {
+      Object.keys(_todayLog).forEach(function(ex) {
+        (_todayLog[ex] || []).forEach(function(set) {
+          if (set.validated && typeof set.actualWeight === 'number' && set.actualWeight > 0
+              && typeof set.actualReps === 'number' && set.actualReps > 0) {
+            _todayTon += set.actualWeight * set.actualReps;
+            _todaySets++;
+          }
+        });
+      });
+    }
+  } catch(e) {}
+
+  // ── Next session name (for post-session preview) ──
+  var _nextSessName = null;
+  try {
+    if (Array.isArray(S.sportProgram) && S.sportProgram.length > 1) {
+      var _niNext = (idx + 1) % S.sportProgram.length;
+      var _ndNext = S.sportProgram[_niNext];
+      var _nkNext = _ndNext.splitKey || (S._splitChoice && S.sportType === 'musculation' ? S._splitChoice : null);
+      var _nlNext = _nkNext ? (_getSplitLabels()[_nkNext] || null) : null;
+      var _nxIdx  = (typeof _ndNext.splitDayIdx === 'number') ? _ndNext.splitDayIdx : _niNext;
+      var _nxGen  = !_ndNext.name || /^(Jour|Session|Séance)\s+\d+$/i.test(_ndNext.name);
+      _nextSessName = (_nlNext && _nlNext[_nxIdx]) ? _nlNext[_nxIdx]
+        : (!_nxGen ? _ndNext.name : (EN ? 'Session ' + (_niNext + 1) : 'Séance ' + (_niNext + 1)));
+    }
+  } catch(e) {}
+
   var c = card('');
 
   // ── Brand header ──
@@ -90179,73 +90295,105 @@ function renderSmartFitCoachToday() {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#999;margin-bottom:18px;font-weight:500;'
   }, 'SMARTFITCOACH TODAY'));
 
-  // ── Recommandé aujourd'hui ──
-  c.appendChild(h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:10px;'
-  }, EN ? 'Recommended today' : 'Recommandé aujourd’hui'));
-
-  // ── Session focus: Georgia 22px 400 lh1.25 #1A1A1A ──
-  c.appendChild(h('div', {
-    style: 'font-family:Georgia,serif;font-size:22px;font-weight:400;line-height:1.25;color:#1A1A1A;margin-bottom:14px;'
-  }, sel2.session_focus));
-
-  // ── Momentum badge ──
-  c.appendChild(h('div', { style: 'margin-bottom:24px;' },
-    h('span', { style: _tagSt }, sel2.momentum_tag.toUpperCase())
-  ));
-
-  // ── Divider ──
-  c.appendChild(h('div', { style: 'height:1px;background:#D8D6D0;margin-bottom:20px;' }));
-
-  // ── POURQUOI CETTE DÉCISION ──
-  c.appendChild(h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#777;margin-bottom:12px;'
-  }, EN ? 'WHY THIS DECISION' : 'POURQUOI CETTE DÉCISION'));
-  c.appendChild(h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:300;line-height:1.65;color:#333;margin-bottom:24px;'
-  }, sel2.coach_message));
-
-  // ── Divider ──
-  c.appendChild(h('div', { style: 'height:1px;background:#D8D6D0;margin-bottom:20px;' }));
-
-  // ── NUTRITION DU JOUR (supportive, visually lighter) ──
-  c.appendChild(h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#999;margin-bottom:10px;'
-  }, EN ? 'NUTRITION TODAY' : 'NUTRITION DU JOUR'));
-  c.appendChild(h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.6;color:#666;font-style:italic;margin-bottom:24px;'
-  }, _nutGuidance));
-
-  // ── Primary CTA ──
-  c.appendChild(h('button', {
-    style: _done
-      ? 'display:block;width:100%;padding:16px;background:rgba(62,92,58,0.08);color:#3E5C3A;border:1px solid #3E5C3A;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:default;min-height:52px;box-sizing:border-box;'
-      : 'display:block;width:100%;padding:16px;background:#1A1A1A;color:#F5F3EF;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;min-height:52px;box-sizing:border-box;',
-    onclick: _done ? null : function() {
-      var S2 = window.S;
-      if (!S2) return;
-      if (window.SFCSessionHistory) window.SFCSessionHistory.saveSession(sel2.selected_workout_id);
-      S2.view = 'sport';
-      S2.selectedSportDay = Math.max(0, Math.min(idx, (Array.isArray(S2.sportProgram) ? S2.sportProgram.length - 1 : 0)));
-      if (window.render) window.render();
+  if (_done) {
+    // ─────────── POST-SESSION STATE ───────────
+    c.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#3E5C3A;margin-bottom:8px;'
+    }, EN ? '✔ Session validated' : '✔ Séance validée'));
+    if (_todayTon > 0) {
+      var _tonFmt = _todayTon >= 1000 ? (Math.round(_todayTon / 100) / 10).toFixed(1) + ' t' : Math.round(_todayTon) + ' kg';
+      c.appendChild(h('div', {
+        style: 'font-family:Georgia,serif;font-size:26px;font-weight:400;line-height:1.2;color:#1A1A1A;margin-bottom:4px;'
+      }, _tonFmt));
+      c.appendChild(h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:#999;margin-bottom:20px;font-weight:300;letter-spacing:0.5px;'
+      }, _todaySets + ' sets · ' + _dname));
+    } else {
+      c.appendChild(h('div', {
+        style: 'font-family:Georgia,serif;font-size:20px;font-weight:400;line-height:1.3;color:#1A1A1A;margin-bottom:20px;'
+      }, _dname));
     }
-  }, _done
-    ? ('✔ ' + (EN ? 'Session complete' : 'Séance terminée'))
-    : (EN ? '→ Start session' : '→ Commencer la séance')
-  ));
-
-  // ── Secondary: follow static program ──
-  c.appendChild(h('button', {
-    style: 'display:block;width:100%;padding:14px 0;margin-top:14px;background:transparent;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:#777;cursor:pointer;text-align:left;min-height:44px;',
-    onclick: function() {
-      var S2 = window.S;
-      if (!S2) return;
-      S2._sfcOverride     = true;
-      S2._sfcOverrideDate = todayStr;
-      if (window.save) window.save();
-      if (window.render) window.render();
+    if (_nextSessName) {
+      c.appendChild(h('div', { style: 'height:1px;background:#D8D6D0;margin-bottom:16px;' }));
+      c.appendChild(h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#999;margin-bottom:8px;'
+      }, EN ? 'NEXT SESSION' : 'PROCHAINE SÉANCE'));
+      c.appendChild(h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:300;color:#333;margin-bottom:20px;line-height:1.5;'
+      }, _nextSessName));
+      c.appendChild(h('button', {
+        style: 'display:block;width:100%;padding:14px 0;margin-bottom:8px;background:transparent;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:#1A1A1A;cursor:pointer;text-align:left;min-height:44px;text-decoration:underline;text-underline-offset:3px;',
+        onclick: function() {
+          var S2 = window.S;
+          if (!S2) return;
+          S2.view = 'sport';
+          S2.selectedSportDay = Math.max(0, Math.min((idx + 1) % (Array.isArray(S2.sportProgram) ? S2.sportProgram.length : 1), (Array.isArray(S2.sportProgram) ? S2.sportProgram.length - 1 : 0)));
+          if (window.render) window.render();
+        }
+      }, EN ? '→ Preview next session' : '→ Voir la prochaine séance'));
     }
-  }, _secLabel));
+    c.appendChild(h('button', {
+      style: 'display:block;width:100%;padding:16px;background:rgba(62,92,58,0.08);color:#3E5C3A;border:1px solid #3E5C3A;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:default;min-height:52px;box-sizing:border-box;'
+    }, '✔ ' + (EN ? 'Session complete' : 'Séance terminée')));
+  } else {
+    // ─────────── PRE-SESSION STATE ───────────
+    if (_hookMsg) {
+      c.appendChild(h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.55;color:#666;padding-bottom:14px;border-bottom:1px solid #E8E6E0;margin-bottom:14px;font-style:italic;'
+      }, _hookMsg));
+    }
+    c.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:10px;'
+    }, EN ? 'Recommended today' : 'Recommandé aujourd\'hui'));
+    c.appendChild(h('div', {
+      style: 'font-family:Georgia,serif;font-size:22px;font-weight:400;line-height:1.25;color:#1A1A1A;margin-bottom:14px;'
+    }, sel2.session_focus));
+    c.appendChild(h('div', { style: 'margin-bottom:24px;' },
+      h('span', { style: _tagSt }, sel2.momentum_tag.toUpperCase())
+    ));
+    c.appendChild(h('div', { style: 'height:1px;background:#D8D6D0;margin-bottom:20px;' }));
+    c.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#777;margin-bottom:12px;'
+    }, EN ? 'WHY THIS DECISION' : 'POURQUOI CETTE DÉCISION'));
+    c.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:300;line-height:1.65;color:#333;margin-bottom:20px;'
+    }, sel2.coach_message));
+    c.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#999;margin-bottom:8px;'
+    }, EN ? 'SMART ADJUSTMENT' : 'AJUSTEMENT SUGGÉRÉ'));
+    c.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.55;color:#333;margin-bottom:24px;'
+    }, '→ ' + _adj));
+    c.appendChild(h('div', { style: 'height:1px;background:#D8D6D0;margin-bottom:20px;' }));
+    c.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#999;margin-bottom:10px;'
+    }, EN ? 'NUTRITION TODAY' : 'NUTRITION DU JOUR'));
+    c.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.6;color:#666;font-style:italic;margin-bottom:24px;'
+    }, _nutGuidance));
+    c.appendChild(h('button', {
+      style: 'display:block;width:100%;padding:16px;background:#1A1A1A;color:#F5F3EF;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;min-height:52px;box-sizing:border-box;',
+      onclick: function() {
+        var S2 = window.S;
+        if (!S2) return;
+        if (window.SFCSessionHistory) window.SFCSessionHistory.saveSession(sel2.selected_workout_id);
+        S2.view = 'sport';
+        S2.selectedSportDay = Math.max(0, Math.min(idx, (Array.isArray(S2.sportProgram) ? S2.sportProgram.length - 1 : 0)));
+        if (window.render) window.render();
+      }
+    }, EN ? '→ Start session' : '→ Commencer la séance'));
+    c.appendChild(h('button', {
+      style: 'display:block;width:100%;padding:14px 0;margin-top:14px;background:transparent;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:#777;cursor:pointer;text-align:left;min-height:44px;',
+      onclick: function() {
+        var S2 = window.S;
+        if (!S2) return;
+        S2._sfcOverride     = true;
+        S2._sfcOverrideDate = todayStr;
+        if (window.save) window.save();
+        if (window.render) window.render();
+      }
+    }, _secLabel));
+  }
 
   return c;
 }
