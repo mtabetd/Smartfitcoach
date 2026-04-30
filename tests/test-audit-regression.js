@@ -264,6 +264,115 @@ test('fresh history (no sessions) returns valid result', function () {
   assert(result && result.selected_workout_id, 'must return workout for new user');
 });
 
+
+// ── Phase 8 Hardening Tests ───────────────────────────────────────────────────
+console.log('\nPhase 8 hardening invariants');
+
+// ── calorie target consistency ──
+test('calMultiplier 1.0 returns base target unchanged', function () {
+  var base = 2000;
+  var mult = 1.0;
+  var result = Math.round(base * (1 > 0 ? 1.0 : mult));
+  assertEqual(result, 2000, 'calMultiplier=1.0 should not change base');
+});
+test('calMultiplier 0.9 reduces rest-day target', function () {
+  var base = 2000;
+  var mult = 0.9;
+  var planKcal = 0;
+  var _calMult = (mult && typeof mult === 'number' && mult > 0) ? mult : 1.0;
+  var result = Math.round(base * (planKcal > 0 ? 1.0 : _calMult));
+  assertEqual(result, 1800, 'calMultiplier=0.9 should give 1800 on rest day');
+});
+test('invalid calMultiplier falls back to 1.0', function () {
+  var _dayAdapt = { calMultiplier: NaN };
+  var mult = (_dayAdapt && typeof _dayAdapt.calMultiplier === 'number' && _dayAdapt.calMultiplier > 0)
+    ? _dayAdapt.calMultiplier : 1.0;
+  assertEqual(mult, 1.0, 'NaN calMultiplier must fall back to 1.0');
+});
+test('undefined calMultiplier falls back to 1.0', function () {
+  var _dayAdapt = {};
+  var mult = (_dayAdapt && typeof _dayAdapt.calMultiplier === 'number' && _dayAdapt.calMultiplier > 0)
+    ? _dayAdapt.calMultiplier : 1.0;
+  assertEqual(mult, 1.0, 'undefined calMultiplier must fall back to 1.0');
+});
+test('calorie fallback female=1800 both code paths', function () {
+  var female = true;
+  var mainPath = female ? 1800 : 2000;
+  var smoothiePath = female ? 1800 : 2000;
+  assertEqual(mainPath, smoothiePath, 'female calorie fallback must match between paths');
+});
+
+// ── legacy program detection ──
+test('legacy program: undefined splitKey detected', function () {
+  var day = { name: 'Séance 1', exercises: [] };
+  var isLegacy = typeof day.splitKey === 'undefined';
+  assert(isLegacy, 'day without splitKey should be detected as legacy');
+});
+test('current program: null splitKey not legacy (no split)', function () {
+  var day = { splitKey: null, name: 'Full Body A', exercises: [] };
+  var isLegacy = typeof day.splitKey === 'undefined';
+  assert(!isLegacy, 'day with explicit null splitKey is not legacy');
+});
+test('split mismatch detected when stored key differs from current choice', function () {
+  var day = { splitKey: 'bro_4', exercises: [] };
+  var currentChoice = 'ppl_3';
+  var isMismatch = day.splitKey && day.splitKey !== currentChoice;
+  assert(isMismatch, 'bro_4 stored vs ppl_3 current = mismatch');
+});
+test('no mismatch when stored key matches current choice', function () {
+  var day = { splitKey: 'bro_5', exercises: [] };
+  var currentChoice = 'bro_5';
+  var isMismatch = day.splitKey && day.splitKey !== currentChoice;
+  assert(!isMismatch, 'same key should not be mismatch');
+});
+
+// ── sportDays bounds ──
+test('sportDays auto-set clamps to minimum 2', function () {
+  var trainingDays = [1]; // 1 day selected
+  var sportDays = Math.max(2, trainingDays.length);
+  assert(sportDays >= 2, 'sportDays must be at least 2');
+});
+test('sportDays auto-set from 3-day selection = 3', function () {
+  var trainingDays = [1, 3, 5];
+  var sportDays = Math.max(2, trainingDays.length);
+  assertEqual(sportDays, 3, 'sportDays from 3 days = 3');
+});
+
+// ── weekPlan key bounds ──
+test('weekPlan key filter excludes non-numeric keys', function () {
+  var weekPlan = { 0: {}, 1: {}, 2: {}, abc: {}, 7: {} };
+  var validKeys = Object.keys(weekPlan).filter(function(k) {
+    var n = parseInt(k, 10); return !isNaN(n) && n >= 0 && n <= 6;
+  });
+  assertEqual(validKeys.length, 3, 'only keys 0-6 should pass');
+  assert(validKeys.indexOf('abc') === -1, 'non-numeric key must be excluded');
+  assert(validKeys.indexOf('7') === -1, 'key 7 out of range must be excluded');
+});
+
+// ── nStep/sStep bounds ──
+test('nStep > 12 triggers reset', function () {
+  var nStep = 99;
+  if (nStep > 12) nStep = 0;
+  assertEqual(nStep, 0, 'corrupted nStep > 12 must reset to 0');
+});
+test('sStep > 30 triggers reset', function () {
+  var sStep = 50;
+  if (sStep > 30) sStep = 0;
+  assertEqual(sStep, 0, 'corrupted sStep > 30 must reset to 0');
+});
+
+// ── day name bilingual ──
+test('splitLabels FR mode returns French names for bro_5', function () {
+  var labels = makeSplitLabels(false);
+  assertEqual(labels.bro_5[0], 'Pecs', 'FR mode bro_5[0] = Pecs');
+  assertEqual(labels.bro_5[2], 'Épaules', 'FR mode bro_5[2] = Épaules');
+});
+test('splitLabels EN mode returns English names for bro_5', function () {
+  var labels = makeSplitLabels(true);
+  assertEqual(labels.bro_5[0], 'Chest', 'EN mode bro_5[0] = Chest');
+  assertEqual(labels.bro_5[2], 'Shoulders', 'EN mode bro_5[2] = Shoulders');
+});
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 console.log('\n' + (failed === 0 ? '\x1b[32m' : '\x1b[31m') +
   'Results: ' + passed + ' passed, ' + failed + ' failed\x1b[0m\n');

@@ -1090,21 +1090,21 @@ function renderProfilePage(container) {
  if (S._profileEdit) {
    // In-place edit form
    var editForm = h('div', {style: 'margin-bottom:28px;padding:20px;border:1px solid var(--border);background:var(--ivory2,#F5F3EC);'});
-   editForm.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, 'MODIFIER LE PROFIL'));
+   editForm.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, ((window.isEnglish && window.isEnglish()) ? 'EDIT MY PROFILE' : 'MODIFIER LE PROFIL')));
 
    // Prénom
-   var _efPrenomLabel = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px;'}, 'Prénom');
+   var _efPrenomLabel = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px;'}, ((window.isEnglish && window.isEnglish()) ? 'First name' : 'Prénom'));
    editForm.appendChild(_efPrenomLabel);
    var _efPrenom = h('input', {
      type: 'text', value: S.prenom || '',
-     placeholder: 'Votre prénom',
+     placeholder: ((window.isEnglish && window.isEnglish()) ? 'Your first name' : 'Votre prénom'),
      style: 'width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border);background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;margin-bottom:14px;outline:none;border-radius:2px;',
      oninput: function(e) { S.prenom = e.target.value; }
    });
    editForm.appendChild(_efPrenom);
 
    // Poids
-   var _efPoidsLabel = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px;'}, 'Poids (kg)');
+   var _efPoidsLabel = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px;'}, ((window.isEnglish && window.isEnglish()) ? 'Weight (kg)' : 'Poids (kg)'));
    editForm.appendChild(_efPoidsLabel);
    var _efPoidsWrap = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-bottom:14px;'});
    var _efPoids = h('input', {
@@ -1119,7 +1119,7 @@ function renderProfilePage(container) {
    editForm.appendChild(_efPoidsWrap);
 
    // Taille
-   var _efTailleLabel = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px;'}, 'Taille (cm)');
+   var _efTailleLabel = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px;'}, ((window.isEnglish && window.isEnglish()) ? 'Height (cm)' : 'Taille (cm)'));
    editForm.appendChild(_efTailleLabel);
    var _efTailleWrap = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-bottom:14px;'});
    var _efTaille = h('input', {
@@ -1136,7 +1136,7 @@ function renderProfilePage(container) {
    editForm.appendChild(_efTailleWrap);
 
    // Niveau d'activité
-   var _efActLabel = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px;'}, 'Niveau d\'activité');
+   var _efActLabel = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px;'}, ((window.isEnglish && window.isEnglish()) ? 'Activity level' : 'Niveau d\'activité'));
    editForm.appendChild(_efActLabel);
    var _efActWrap = h('div', {style: 'display:flex;flex-direction:column;gap:6px;margin-bottom:14px;'});
    var _allActivities = window.ACTIVITIES || [];
@@ -1152,7 +1152,7 @@ function renderProfilePage(container) {
    editForm.appendChild(_efActWrap);
 
    // Régime alimentaire
-   var _efRegLabel = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px;'}, 'Régime alimentaire');
+   var _efRegLabel = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px;'}, ((window.isEnglish && window.isEnglish()) ? 'Diet type' : 'Régime alimentaire'));
    editForm.appendChild(_efRegLabel);
    var _efRegWrap = h('div', {style: 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;'});
    var _allRegimes = window.REGIMES || [];
@@ -1167,18 +1167,18 @@ function renderProfilePage(container) {
    editForm.appendChild(_efRegWrap);
 
    // Inclusions alimentaires — section opt-in (porc & alcool exclus par défaut)
-   editForm.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px;margin-top:4px;'}, "J\u2019inclus dans mon alimentation"));
+   editForm.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px;margin-top:4px;'}, ((window.isEnglish && window.isEnglish()) ? "I include in my diet" : "J\u2019inclus dans mon alimentation")));
    var _porkRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin-bottom:10px;cursor:pointer;', onclick: function() { S.allowPork = !S.allowPork; if (window.render) window.render(); }});
    var _porkBox = h('div', {style: 'width:18px;height:18px;border-radius:2px;border:1px solid var(--black,#0A0A09);display:flex;align-items:center;justify-content:center;background:' + (S.allowPork ? 'var(--black,#0A0A09)' : 'transparent') + ';flex-shrink:0;'});
    if (S.allowPork) _porkBox.appendChild(h('span', {style: 'color:var(--ivory,#FAF9F6);font-size:10px;'}, '\u2713'));
    _porkRow.appendChild(_porkBox);
-   _porkRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black);'}, 'Porc & charcuterie porcine'));
+   _porkRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black);'}, ((window.isEnglish && window.isEnglish()) ? 'Pork & pork products' : 'Porc & charcuterie porcine')));
    editForm.appendChild(_porkRow);
    var _alcRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin-bottom:18px;cursor:pointer;', onclick: function() { S.allowAlcohol = !S.allowAlcohol; if (window.render) window.render(); }});
    var _alcBox = h('div', {style: 'width:18px;height:18px;border-radius:2px;border:1px solid var(--black,#0A0A09);display:flex;align-items:center;justify-content:center;background:' + (S.allowAlcohol ? 'var(--black,#0A0A09)' : 'transparent') + ';flex-shrink:0;'});
    if (S.allowAlcohol) _alcBox.appendChild(h('span', {style: 'color:var(--ivory,#FAF9F6);font-size:10px;'}, '\u2713'));
    _alcRow.appendChild(_alcBox);
-   _alcRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black);'}, 'Alcool en cuisine'));
+   _alcRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black);'}, ((window.isEnglish && window.isEnglish()) ? 'Alcohol in cooking' : 'Alcool en cuisine')));
    editForm.appendChild(_alcRow);
 
    // Save button
@@ -1223,7 +1223,7 @@ function renderProfilePage(container) {
  var changeGoalBtn = h('button', {
    style: 'display:block;width:100%;padding:14px;border:1px solid var(--border);background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;',
    onclick: function() { S._goalModal = true; if (window.render) window.render(); }
- }, '\uD83C\uDFAF Changer mon objectif');
+ }, ((window.isEnglish && window.isEnglish()) ? '\uD83C\uDFAF Change my goal' : '\uD83C\uDFAF Changer mon objectif'));
  c.appendChild(changeGoalBtn);
 
  // ─── Strength Grade + Records (déplacé depuis la vue programme sport) ───
@@ -2632,7 +2632,7 @@ function renderRegister(app) {
  nameRow.appendChild(f0);
 
  var f0b = h('div', {'class': 'field', style: 'flex:1'});
- f0b.appendChild(h('label', {'class': 'field-label'}, 'Nom ●'));
+ f0b.appendChild(h('label', {'class': 'field-label'}, ((window.isEnglish && window.isEnglish()) ? 'Last name ●' : 'Nom ●')));
  var nomInput = h('input', {type: 'text', placeholder: 'Nom de famille', autocomplete: 'family-name'});
  f0b.appendChild(nomInput);
  nameRow.appendChild(f0b);
@@ -2641,7 +2641,7 @@ function renderRegister(app) {
 
  // ── Phone with country selector ───────────────────────────────────
  var fPhone = h('div', {'class': 'field'});
- fPhone.appendChild(h('label', {'class': 'field-label'}, 'Téléphone'));
+ fPhone.appendChild(h('label', {'class': 'field-label'}, ((window.isEnglish && window.isEnglish()) ? 'Phone' : 'Téléphone')));
 
  var phoneRow = h('div', {style: 'display:flex;gap:8px;align-items:stretch'});
 
@@ -3206,8 +3206,9 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  // Steps à préserver (programme généré) : 4(muscu) 6(CF) 8(running) 10(hyrox) 12(padel)
  // 14(golf) 15(prog dédié) 16(charges) 17-18(triathlon) 20(médical) 21(yoga) 23(cycling) 25(calisthenics)
  var _PROGRAM_STEPS_MAIN = [4, 6, 8, 10, 12, 14, 15, 16, 17, 18, 20, 21, 23, 25];
- // Guard : valeur manifestement corrompue (aucun step > 30 n'existe)
+ // Guard : valeurs manifestement corrompues
  if (S.sStep > 30) { S.sStep = 0; }
+ if (S.nStep > 12) { S.nStep = 0; }
  // Guard : step intermédiaire sans sportType → l'utilisateur n'a pas encore choisi son sport,
  // on remet à 0 pour qu'il reparte de la sélection sport (cas reload SW avant clic sport).
  if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) === -1 && !S.sportType) {

@@ -556,7 +556,7 @@ function getNextSportDay() {
     var _hasLocalProg = Array.isArray(S.sportProgram) && S.sportProgram.length > 0;
     if (!_hasLocalProg) {
       // Aucun programme local : afficher nom générique sans exercices (comportement précédent)
-      return { index: 0, day: { name: 'Programme sur mesure', exercises: [] }, kind: 'ia' };
+      return { index: 0, day: { name: (window.isEnglish && window.isEnglish() ? 'Custom program' : 'Programme sur mesure'), exercises: [] }, kind: 'ia' };
     }
     // Programme local disponible → utiliser pour l'aperçu (fall through au code normal)
   }
@@ -3756,8 +3756,8 @@ function renderCardSport() {
   // Correction : dès que sportProgram a des données, on passe directement à la carte normale.
   if (S.muscuIAProgram && S.sportType === 'musculation' && !(Array.isArray(S.sportProgram) && S.sportProgram.length > 0)) {
     var _iaCard = card('border-left:4px solid var(--green,#3E5C3A);');
-    _iaCard.appendChild(eyebrow('VOTRE PROGRAMME'));
-    _iaCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:8px;'}, 'Programme sur mesure actif'));
+    _iaCard.appendChild(eyebrow(window.isEnglish && window.isEnglish() ? 'YOUR PROGRAM' : 'VOTRE PROGRAMME'));
+    _iaCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:8px;'}, (window.isEnglish && window.isEnglish() ? 'Active custom program' : 'Programme sur mesure actif')));
     var _iaDate = S.muscuIAProgramDate ? ((window.isEnglish && window.isEnglish() ? 'Generated on ' : 'G\u00e9n\u00e9r\u00e9 le ') + window.formatDate(S.muscuIAProgramDate)) : '';
     if (_iaDate) _iaCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px;'}, _iaDate));
     // Aper\u00e7u exercices du jour si programme local disponible (m\u00eame non valid\u00e9)
@@ -4758,7 +4758,7 @@ function renderExtendedSections(wrapper, S) {
     onclick: function() { if (window.APP_NAVIGATE) window.APP_NAVIGATE('sport'); else { S.view = 'sport'; if (window.render) window.render(); } }
   });
   sportNavBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:17px;font-weight:normal;color:var(--ink-900,#0A0A09);margin-bottom:6px;' }, 'Sport'));
-  sportNavBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-style:italic;font-size:13px;color:var(--ink-500,#6B6B65);line-height:1.4;' }, 'Votre programme.'));
+  sportNavBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-style:italic;font-size:13px;color:var(--ink-500,#6B6B65);line-height:1.4;' }, (window.isEnglish && window.isEnglish() ? 'Your program.' : 'Votre programme.')));
   navRow.appendChild(sportNavBtn);
   actCard.appendChild(navRow);
 

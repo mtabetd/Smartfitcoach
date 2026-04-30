@@ -3225,12 +3225,12 @@ function renderStep9(p) {
   });
 
   // Cible calorique : plan du jour si présent, sinon fallback calcTarget()×multiplier
-  var _tgt = _planKcal > 0
-    ? Math.round(_planKcal)
+  var _calBase = _planKcal > 0
+    ? _planKcal
     : (calcTarget() || (window.isFemale(S) ? 1800 : 2000));
-  if (_planKcal === 0 && _dayAdapt && _dayAdapt.calMultiplier) {
-    _tgt = Math.round(_tgt * _dayAdapt.calMultiplier);
-  }
+  var _calMult = (_dayAdapt && typeof _dayAdapt.calMultiplier === 'number' && _dayAdapt.calMultiplier > 0)
+    ? _dayAdapt.calMultiplier : 1.0;
+  var _tgt = Math.round(_calBase * (_planKcal > 0 ? 1.0 : _calMult));
 
   // Consommation : FOOD_JOURNAL pour aujourd'hui, sinon = plan du jour sélectionné
   var _todayIdx9 = (new Date().getDay() + 6) % 7;
@@ -3416,7 +3416,7 @@ function renderStep9(p) {
         var _recentFoods = [];
         var _recentSeen = {};
         if (S.weekPlan) {
-          var _rDays = Object.keys(S.weekPlan).sort().reverse();
+          var _rDays = Object.keys(S.weekPlan).filter(function(k) { var n = parseInt(k, 10); return !isNaN(n) && n >= 0 && n <= 6; }).sort().reverse();
           for (var _rd2 = 0; _rd2 < Math.min(_rDays.length, 14); _rd2++) {
             var _rDay = S.weekPlan[_rDays[_rd2]];
             if (!_rDay) continue;

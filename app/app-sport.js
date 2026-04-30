@@ -889,7 +889,7 @@ function generateSportProgram() {
    'ppl_6':       ['Push A','Pull A','Legs A','Push B','Pull B','Legs B']
  };
  var _splitDayLabels = S._splitChoice ? (_SPLIT_DAY_LABELS[S._splitChoice] || null) : null;
- var _dayName = (_splitDayLabels && _splitDayLabels[d]) ? _splitDayLabels[d] : ('Jour ' + (d + 1));
+ var _dayName = (_splitDayLabels && _splitDayLabels[d]) ? _splitDayLabels[d] : ((window.isEnglish && window.isEnglish() ? 'Day ' : 'Jour ') + (d + 1));
 
  // Guard : ne jamais pousser un jour sans exercice — tous les filtres cumulés
  // (équipement + médical + grossesse + niveau) peuvent vider dayExercises.
@@ -1831,7 +1831,7 @@ function buildKcalCard(kcal, durationMins) {
   var kcalCard = h('div', {style: 'border:1px solid var(--border);background:var(--ivory2,#F4F4F0);padding:16px 20px;margin-bottom:20px;display:flex;align-items:stretch;gap:0'});
 
   var leftCol = h('div', {style: 'flex:1;padding-right:20px'});
-  leftCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:6px'}, 'Estimation séance'));
+  leftCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Session estimate' : 'Estimation séance')));
   leftCol.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:26px;font-style:italic;color:var(--black);line-height:1'}, '~' + kcal + ' kcal'));
   kcalCard.appendChild(leftCol);
 
@@ -1839,7 +1839,7 @@ function buildKcalCard(kcal, durationMins) {
   kcalCard.appendChild(divider);
 
   var rightCol = h('div', {style: 'padding-left:20px;display:flex;flex-direction:column;justify-content:center'});
-  rightCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:6px'}, 'Durée'));
+  rightCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:6px'}, (window.isEnglish && window.isEnglish() ? 'Duration' : 'Durée')));
   rightCol.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:26px;font-style:italic;color:var(--black);line-height:1'}, dureeStr));
   kcalCard.appendChild(rightCol);
 
@@ -4998,7 +4998,7 @@ function renderMusculationLevel(p) {
  if (!Array.isArray(S.trainingDaysSelected)) S.trainingDaysSelected = [];
  var _daysImported = false;
  if (S.trainingDaysSelected.length > 0) {
-   if (!S.sportDays) S.sportDays = S.trainingDaysSelected.length;
+   if (!S.sportDays) S.sportDays = Math.max(2, S.trainingDaysSelected.length);
    _daysImported = true;
  }
  var _sectionLabelDays = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-top:16px;margin-bottom:0'});
@@ -6828,7 +6828,8 @@ function renderMusculationProgram(p) {
  (function() {
   var _todayCardIdx = (new Date().getDay() + 6) % 7; // 0=Lun … 6=Dim
   var _dayFullFR = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
-  var _todayDayName = _dayFullFR[_todayCardIdx];
+  var _dayFullEN = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  var _todayDayName = (window.isEnglish && window.isEnglish() ? _dayFullEN : _dayFullFR)[_todayCardIdx];
 
   // Vérifier que aujourd'hui est un jour d'entraînement
   if (!Array.isArray(S.trainingDaysSelected) || S.trainingDaysSelected.length === 0) return;
@@ -7620,6 +7621,8 @@ function renderMusculationProgram(p) {
 
  var tabs = h('div', {'class': 'day-tabs'});
  var _dayAbbrFR = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+ var _dayAbbrEN = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+ var _dayAbbr = (window.isEnglish && window.isEnglish()) ? _dayAbbrEN : _dayAbbrFR;
  var _hasDayMap = Array.isArray(S.trainingDaysSelected) && S.trainingDaysSelected.length === S.sportProgram.length;
  function _shortFocus(focus) {
   if (!focus) return '';
@@ -7639,7 +7642,7 @@ function renderMusculationProgram(p) {
  }
  S.sportProgram.forEach(function(day, i) {
   var _short = _shortFocus(day.focus);
-  var _dayPrefix = _hasDayMap ? _dayAbbrFR[S.trainingDaysSelected[i]] : ('J' + (i + 1));
+  var _dayPrefix = _hasDayMap ? _dayAbbr[S.trainingDaysSelected[i]] : ((window.isEnglish && window.isEnglish() ? 'D' : 'J') + (i + 1));
   var _tabLabel = _short ? (_dayPrefix + ' \u00b7 ' + _short) : _dayPrefix;
   tabs.appendChild(h('button', {'class': 'day-tab' + (S.selectedSportDay === i ? ' active' : ''), onclick: (function(idx){ return function(){ S.selectedSportDay = idx; S.currentExerciseIdx = 0; S._exSwipeDayIdx = idx; window.render(); }; })(i)}, _tabLabel));
  });
@@ -8715,7 +8718,7 @@ function renderMusculationProgram(p) {
  _nudge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#fff;font-weight:700'}, (window.isEnglish && window.isEnglish() ? '\u2713 Exercise done' : '\u2713 Exercice termin\u00e9')));
  if (_nextEx2) {
  var _nudgeRight = h('div', {style: 'text-align:right'});
- _nudgeRight.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:1px'}, 'Suivant'));
+ _nudgeRight.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:1px'}, (window.isEnglish && window.isEnglish() ? 'Next' : 'Suivant')));
  _nudgeRight.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px;color:#fff;max-width:140px;text-align:right'}, _nextEx2.n));
  _nudge.appendChild(_nudgeRight);
  } else {
@@ -8747,7 +8750,7 @@ function renderMusculationProgram(p) {
  altPanel.appendChild(altTitle);
 
  if (alts.length === 0) {
- altPanel.appendChild(h('div', {style: 'padding:12px;text-align:center;font-size:13px;color:var(--grey);font-style:italic'}, 'Aucune alternative disponible.'));
+ altPanel.appendChild(h('div', {style: 'padding:12px;text-align:center;font-size:13px;color:var(--grey);font-style:italic'}, (window.isEnglish && window.isEnglish() ? 'No alternatives available.' : 'Aucune alternative disponible.')));
  } else {
  alts.forEach(function(alt) {
  var altRow = h('div', {
@@ -9006,8 +9009,8 @@ function renderMusculationProgram(p) {
  bnRow.appendChild(h('div', {'class': 'exercise-muscle'}, bex.m));
  bnRow.appendChild(h('span', {style: 'font-size:18px;color:var(--error,#7A1F1F);cursor:pointer;line-height:1;padding:0 4px', onclick: (function(idx) { return function(e) { e.stopPropagation(); if (!S.bonusExercises) S.bonusExercises = {}; var arr = S.bonusExercises[S.selectedSportDay] || []; arr.splice(idx, 1); S.bonusExercises[S.selectedSportDay] = arr; window.render(); }; })(bi)}, '\u00d7'));
  bc.appendChild(bnRow);
- bc.appendChild(h('div', {'class': 'exercise-name'}, bex.n || 'Exercice'));
- bc.appendChild(h('div', {'class': 'exercise-sets'}, bex.sets + ' \u2014 Repos ' + bex.rest));
+ bc.appendChild(h('div', {'class': 'exercise-name'}, bex.n || (window.isEnglish && window.isEnglish() ? 'Exercise' : 'Exercice')));
+ bc.appendChild(h('div', {'class': 'exercise-sets'}, bex.sets + ' \u2014 ' + (window.isEnglish && window.isEnglish() ? 'Rest ' : 'Repos ') + bex.rest));
  if (bex.eq) bc.appendChild(h('div', {'class': 'exercise-detail'}, bex.eq));
  var _bexParts = String(bex.sets || '').split('\u00d7');
  var _bexReps = _bexParts.length > 1 ? _bexParts[1] : null;
@@ -10256,7 +10259,7 @@ function renderRunningProgram(p) {
  tabs.appendChild(h('button', {
  'class': 'day-tab' + (S.selectedRunDay === i ? ' active' : ''),
  onclick: function() { S.selectedRunDay = i; window.render(); }
- }, 'Jour ' + (i + 1)));
+ }, (window.isEnglish && window.isEnglish() ? 'Day ' : 'Jour ') + (i + 1)));
  });
  p.appendChild(tabs);
 
@@ -10616,7 +10619,7 @@ function renderHyroxProgram(p) {
  tabs.appendChild(h('button', {
  'class': 'day-tab' + (S.selectedHyroxDay === i ? ' active' : ''),
  onclick: function() { S.selectedHyroxDay = i; window.render(); }
- }, 'Jour ' + (i + 1)));
+ }, (window.isEnglish && window.isEnglish() ? 'Day ' : 'Jour ') + (i + 1)));
  });
  p.appendChild(tabs);
 
@@ -10819,7 +10822,7 @@ function renderPadelProgram(p) {
  if (S.selectedPadelDay === undefined || S.selectedPadelDay === null || S.selectedPadelDay < 0 || S.selectedPadelDay >= _padelSessions.length) S.selectedPadelDay = 0;
  var tabs = h('div', {'class': 'day-tabs'});
  _padelSessions.forEach(function(s, i) {
- tabs.appendChild(h('button', {'class': 'day-tab' + (S.selectedPadelDay === i ? ' active' : ''), onclick: function(){ S.selectedPadelDay = i; window.render(); }}, 'Jour ' + (i + 1)));
+ tabs.appendChild(h('button', {'class': 'day-tab' + (S.selectedPadelDay === i ? ' active' : ''), onclick: function(){ S.selectedPadelDay = i; window.render(); }}, (window.isEnglish && window.isEnglish() ? 'Day ' : 'Jour ') + (i + 1)));
  });
  p.appendChild(tabs);
 
@@ -10957,7 +10960,7 @@ function renderGolfProgram(p) {
  if (S.selectedGolfDay === undefined || S.selectedGolfDay === null || S.selectedGolfDay < 0 || S.selectedGolfDay >= _golfSessions.length) S.selectedGolfDay = 0;
  var tabs = h('div', {'class': 'day-tabs'});
  _golfSessions.forEach(function(s, i) {
- tabs.appendChild(h('button', {'class': 'day-tab' + (S.selectedGolfDay === i ? ' active' : ''), onclick: function(){ S.selectedGolfDay = i; window.render(); }}, 'Jour ' + (i + 1)));
+ tabs.appendChild(h('button', {'class': 'day-tab' + (S.selectedGolfDay === i ? ' active' : ''), onclick: function(){ S.selectedGolfDay = i; window.render(); }}, (window.isEnglish && window.isEnglish() ? 'Day ' : 'Jour ') + (i + 1)));
  });
  p.appendChild(tabs);
 
@@ -11690,7 +11693,7 @@ function renderYogaProgram(p) {
  var tabs = h('div', {'class': 'day-tabs'});
  for (var di = 0; di < S.yogaDays; di++) {
  (function(idx) {
- tabs.appendChild(h('button', {'class': 'day-tab' + (S.yogaDay === idx ? ' active' : ''), onclick: function(){ S.yogaDay = idx; window.render(); }}, 'Jour ' + (idx + 1)));
+ tabs.appendChild(h('button', {'class': 'day-tab' + (S.yogaDay === idx ? ' active' : ''), onclick: function(){ S.yogaDay = idx; window.render(); }}, (window.isEnglish && window.isEnglish() ? 'Day ' : 'Jour ') + (idx + 1)));
  })(di);
  }
  p.appendChild(tabs);
