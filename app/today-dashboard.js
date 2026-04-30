@@ -6170,7 +6170,13 @@ function renderTodayDashboard(p) {
   try {
     var _cardToday = renderSmartFitCoachToday();
     if (_cardToday) wrapper.appendChild(_cardToday);
-  } catch (_eSFC) { console.warn('[SmartFitCoachToday]', _eSFC); }
+  } catch (_eSFC) { console.warn(‘[SmartFitCoachToday]’, _eSFC); }
+
+  // ── AI Insight — contextual intelligence surfaced from training history ──
+  try {
+    var _cardInsight = buildSmartInsight();
+    if (_cardInsight) wrapper.appendChild(_cardInsight);
+  } catch (_eIns) { console.warn(‘[AIInsight]’, _eIns); }
 
   // ── Wellness check-in inline (non bloquant) ──
   if (_wellnessCard) wrapper.appendChild(_wellnessCard);
@@ -7313,6 +7319,194 @@ function renderCardCrossfit1RM() {
   return c;
 }
 window.renderCardCrossfit1RM = renderCardCrossfit1RM;
+
+// ─── AI INSIGHT ENGINE ───────────────────────────────────────────────────────
+// Reads muscuSessionLog, sessionHistory, todayWellness to surface 1-2 data-driven
+// messages that make the app feel alive. Injected on the home dashboard.
+function buildSmartInsight() {
+  var S = window.S;
+  if (!S || S.appMode === 'nutrition') return null;
+  var EN = window.isEnglish && window.isEnglish();
+  var todayStr = new Date().toISOString().slice(0, 10);
+  var insights = [];
+
+  var lastMusDate = null, lastMusMuscles = [], lastMusTonnage = 0, lastMusSets = 0;
+  try {
+    var mLog = S.muscuSessionLog || {};
+    var mKeys = Object.keys(mLog).filter(function(k) {
+      return /^\d{4}-\d{2}-\d{2}$/.test(k) && k <= todayStr && mLog[k] && Object.keys(mLog[k]).length > 0;
+    }).sort();
+    if (mKeys.length > 0) {
+      lastMusDate = mKeys[mKeys.length - 1];
+      var dayLog = mLog[lastMusDate];
+      var muscleMap = {};
+      Object.keys(dayLog).forEach(function(exName) {
+        var mg = _classifyMuscleGroup(exName);
+        if (mg) muscleMap[mg] = true;
+        (dayLog[exName] || []).forEach(function(set) {
+          if (set.validated && typeof set.actualWeight === 'number' && set.actualWeight > 0
+              && typeof set.actualReps === 'number' && set.actualReps > 0) {
+            lastMusTonnage += set.actualWeight * set.actualReps;
+            lastMusSets++;
+          }
+        });
+      });
+      lastMusMuscles = Object.keys(muscleMap);
+    }
+  } catch(e) {}
+
+  var daysSinceLast = null;
+  try {
+    var allDates = [];
+    var _mL2 = S.muscuSessionLog || {};
+    Object.keys(_mL2).forEach(function(k) {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(k) && _mL2[k] && Object.keys(_mL2[k]).length > 0) allDates.push(k);
+    });
+    var _sH2 = S.sessionHistory || {};
+    Object.keys(_sH2).forEach(function(k) {
+      var m = k.match(/^(\d+)_(\d{4}-\d{2}-\d{2})$/);
+      if (m && m[2]) allDates.push(m[2]);
+    });
+    if (allDates.length > 0) {
+      allDates.sort();
+      var _ld = allDates[allDates.length - 1];
+      daysSinceLast = Math.floor((new Date(todayStr) - new Date(_ld)) / 86400000);
+    }
+  } catch(e) {}
+
+  var thisWeekTon = 0, lastWeekTon = 0;
+  try {
+    var _now3 = new Date();
+    var _mL3 = S.muscuSessionLog || {};
+    for (var dOff = 0; dOff <= 13; dOff++) {
+      var _dd = new Date(_now3.getFullYear(), _now3.getMonth(), _now3.getDate() - dOff);
+      var _dk = _dd.toISOString().slice(0, 10);
+      var _dl = _mL3[_dk];
+      if (!_dl) continue;
+      var _wb = dOff <= 6 ? 0 : 1;
+      Object.keys(_dl).forEach(function(ex) {
+        (_dl[ex] || []).forEach(function(set) {
+          if (set.validated && typeof set.actualWeight === 'number' && set.actualWeight > 0
+              && typeof set.actualReps === 'number' && set.actualReps > 0) {
+            if (_wb === 0) thisWeekTon += set.actualWeight * set.actualReps;
+            else lastWeekTon += set.actualWeight * set.actualReps;
+          }
+        });
+      });
+    }
+  } catch(e) {}
+
+  var doneToday = false;
+  try {
+    if (lastMusDate === todayStr && lastMusSets > 0) doneToday = true;
+    if (!doneToday) {
+      var _sH4 = S.sessionHistory || {};
+      Object.keys(_sH4).forEach(function(k) {
+        var m = k.match(/^(\d+)_(\d{4}-\d{2}-\d{2})$/);
+        if (m && m[2] === todayStr) doneToday = true;
+      });
+    }
+  } catch(e) {}
+
+  var energy = null, muscleSoreness = null;
+  try {
+    var _w5 = S.todayWellness;
+    if (_w5 && _w5.date === todayStr && typeof _w5.energy === 'number' && typeof _w5.muscle === 'number') {
+      energy = _w5.energy; muscleSoreness = _w5.muscle;
+    }
+  } catch(e) {}
+
+  var muscShort = {
+    pectoraux: EN ? 'Chest' : 'Pecs', dos: EN ? 'Back' : 'Dos',
+    epaules: EN ? 'Shoulders' : 'Épaules', jambes: EN ? 'Legs' : 'Jambes',
+    fessiers: 'Glutes', bras: EN ? 'Arms' : 'Bras', abdos: 'Abs'
+  };
+
+  if (doneToday && lastMusTonnage > 0) {
+    var _ton = lastMusTonnage >= 1000
+      ? (Math.round(lastMusTonnage / 100) / 10).toFixed(1) + ' t'
+      : Math.round(lastMusTonnage) + ' kg';
+    var _ms1 = lastMusMuscles.slice(0, 2).map(function(m) { return muscShort[m] || m; }).join(' + ');
+    insights.push({ icon: '✦', text: (_ms1 ? (EN ? _ms1 + ' session · ' : 'Séance ' + _ms1 + ' · ') : '') + _ton + (EN ? ' moved · ' : ' soulevés · ') + lastMusSets + (EN ? ' sets' : ' sets validés') });
+  } else if (doneToday) {
+    insights.push({ icon: ‘✦’, text: EN ? ‘Session complete today · Rest and recover well’ : ‘Séance validée aujourd\’hui · Récupère bien’ });
+  }
+
+  if (!doneToday && lastMusDate && daysSinceLast !== null) {
+    var _ms2 = lastMusMuscles.slice(0, 2).map(function(m) { return muscShort[m] || m; }).join(' + ');
+    var _recMsg = null;
+    if (daysSinceLast === 1 && _ms2) {
+      _recMsg = EN ? 'Yesterday: ' + _ms2 + ' · Supercompensation window active (24-48h)' : 'Hier : ' + _ms2 + ' · Fenêtre de surcompensation active (24-48h)';
+    } else if (daysSinceLast === 2 && _ms2) {
+      _recMsg = EN ? 'Well recovered since your ' + _ms2 + ' session · Ready to go' : 'Bien récupéré depuis ta séance ' + _ms2 + ' · Prêt pour la suite';
+    } else if (daysSinceLast >= 3 && daysSinceLast <= 4 && _ms2) {
+      _recMsg = EN ? ‘Full recovery from ‘ + _ms2 + ‘ · Optimal readiness today’ : ‘Récupération complète après ‘ + _ms2 + ‘ · Forme optimale aujourd\’hui’;
+    } else if (daysSinceLast >= 5) {
+      _recMsg = EN ? daysSinceLast + ' days without training · Motivation returns after rest' : daysSinceLast + ' jours sans entraînement · La motivation revient après le repos';
+    }
+    if (_recMsg) insights.push({ icon: '◈', text: _recMsg });
+  }
+
+  if (thisWeekTon > 0 && lastWeekTon > 200) {
+    var _delta = thisWeekTon - lastWeekTon;
+    var _pct = Math.round((_delta / lastWeekTon) * 100);
+    if (Math.abs(_pct) >= 3) {
+      var _sign = _pct >= 0 ? '+' : '';
+      insights.push({ icon: '▲', text: _pct >= 3
+        ? (EN ? 'Volume ' + _sign + _pct + '% vs last week · Progressive overload on track' : 'Volume ' + _sign + _pct + '% vs sem. préc. · Surcharge progressive en bonne voie')
+        : (EN ? 'Volume ' + _sign + _pct + '% vs last week · Consider a gradual increase' : 'Volume ' + _sign + _pct + '% vs sem. préc. · Envisage une progression graduelle')
+      });
+    }
+  }
+
+  if (!doneToday && energy !== null && muscleSoreness !== null && energy >= 4 && muscleSoreness >= 4) {
+    insights.push({ icon: ‘●’, text: EN ? ‘Energy and recovery green · Optimal conditions for today\’s session’ : ‘Énergie et récupération au vert · Conditions optimales pour ta séance’ });
+  }
+
+  if (insights.length === 0) {
+    var _wkCount = 0;
+    try {
+      var _now6 = new Date();
+      var _dow6 = (_now6.getDay() + 6) % 7;
+      var _mon6 = new Date(_now6); _mon6.setDate(_now6.getDate() - _dow6);
+      var _mL6 = S.muscuSessionLog || {};
+      var _sH6 = S.sessionHistory || {};
+      for (var _di6 = 0; _di6 <= _dow6; _di6++) {
+        var _d6 = new Date(_mon6); _d6.setDate(_mon6.getDate() + _di6);
+        var _ds6 = _d6.toISOString().slice(0, 10);
+        var _hM6 = _mL6[_ds6] && Object.keys(_mL6[_ds6]).length > 0;
+        var _hS6 = Object.keys(_sH6).some(function(k) { return k.indexOf('_' + _ds6) !== -1; });
+        if (_hM6 || _hS6) _wkCount++;
+      }
+    } catch(e) {}
+    if (_wkCount >= 2) {
+      insights.push({ icon: ‘✦’, text: EN ? _wkCount + (_wkCount === 1 ? ‘ session’ : ‘ sessions’) + ‘ this week · Keep the momentum’ : _wkCount + ‘ séance’ + (_wkCount > 1 ? ‘s’ : ‘’) + ‘ cette semaine · Garde l\’élan’ });
+    }
+  }
+
+  if (insights.length === 0) return null;
+
+  var _ic = h('div', {
+    style: 'max-width:560px;margin:0 auto;padding:14px 16px;background:var(--paper,#FAF9F6);border:1px solid var(--line,#D8D8D0);border-top:2px solid var(--black,#1A1A1A);'
+  });
+  _ic.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#999;margin-bottom:10px;font-weight:500;'
+  }, EN ? 'AI INSIGHT' : 'IA · INSIGHT'));
+  insights.slice(0, 2).forEach(function(ins, i) {
+    var row = h('div', {
+      style: 'display:flex;align-items:flex-start;gap:10px;' + (i > 0 ? 'margin-top:8px;padding-top:8px;border-top:1px solid rgba(10,10,9,0.08);' : '')
+    });
+    row.appendChild(h('span', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#aaa;flex-shrink:0;line-height:1.55;'
+    }, ins.icon));
+    row.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.55;color:#333;'
+    }, ins.text));
+    _ic.appendChild(row);
+  });
+  return _ic;
+}
+window.buildSmartInsight = buildSmartInsight;
 
 // ═══════════════════════════════════════════════════════════════════════════
 // ═══════════════════════════════════════════════════════════════════════════
