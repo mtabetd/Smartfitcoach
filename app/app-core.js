@@ -211,6 +211,56 @@ window.todayIdxMonStart = function() {
   return (new Date().getDay() + 6) % 7;
 };
 
+// HARDENING P1 — Local date string (YYYY-MM-DD using device timezone, not UTC).
+// toISOString() returns UTC, which is "wrong" for users in UTC+ timezones training
+// at 23:xx local time — their session key would be the next UTC day.
+// All session writes and "today" lookups must use this function.
+window.sfcLocalDateStr = function(d) {
+  var t = d instanceof Date ? d : new Date();
+  var mm = String(t.getMonth() + 1).padStart(2, '0');
+  var dd = String(t.getDate()).padStart(2, '0');
+  return t.getFullYear() + '-' + mm + '-' + dd;
+};
+
+// HARDENING P2 — Safe numeric conversion: trim → parse → validate.
+// Returns the number, or `fallback` (default null) when the value is not numeric.
+// Prevents "80 " (trailing space) producing NaN in arithmetic.
+window.sfcSafeNum = function(val, fallback) {
+  var fb = (fallback !== undefined) ? fallback : null;
+  if (val === null || val === undefined || val === '') return fb;
+  var n = parseFloat(String(val).trim().replace(',', '.'));
+  return isFinite(n) ? n : fb;
+};
+
+// HARDENING P4 — State integrity firewall.
+// Called at render time to silently repair well-known corruption patterns.
+// Returns true if any repair was performed (caller may choose to re-render).
+window.sfcRepairState = function(S) {
+  if (!S) return false;
+  var repaired = false;
+  // Ensure log/history fields are plain objects, not arrays or primitives
+  ['muscuSessionLog', 'sessionHistory', 'muscuProgressionHistory'].forEach(function(k) {
+    if (S[k] !== null && S[k] !== undefined && (typeof S[k] !== 'object' || Array.isArray(S[k]))) {
+      S[k] = {};
+      repaired = true;
+    }
+  });
+  // Ensure sportProgram is an array or null (never a primitive)
+  if (S.sportProgram !== null && S.sportProgram !== undefined && !Array.isArray(S.sportProgram)) {
+    S.sportProgram = null;
+    repaired = true;
+  }
+  // Clamp sStep / nStep to valid ranges
+  if (typeof S.sStep === 'number' && (S.sStep < 0 || S.sStep > 50)) { S.sStep = 0; repaired = true; }
+  if (typeof S.nStep === 'number' && (S.nStep < 0 || S.nStep > 12)) { S.nStep = 0; repaired = true; }
+  // Remove the poisoned "undefined" key if it crept into progressionHistory
+  if (S.muscuProgressionHistory && 'undefined' in S.muscuProgressionHistory) {
+    delete S.muscuProgressionHistory['undefined'];
+    repaired = true;
+  }
+  return repaired;
+};
+
 // FIX VALIDATION WEEKPLAN 2026-04 : dévalider le plan sans le supprimer.
 // Appelé quand un paramètre critique change (regime, allergies, mealsPerDay, etc.)
 // → le plan reste visible mais le bandeau "Revalider" s'affiche à l'user.
@@ -380,7 +430,10 @@ window.getNextScheduledSession = function() {
   try {
     var S = window.S;
     if (!S) return null;
-    var dayNames = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+    var _isEN = window.isEnglish && window.isEnglish();
+    var dayNames = _isEN
+      ? ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+      : ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
     // trainingDaysSelected = array de 0-6 (Lun=0, Dim=6)
     var days = Array.isArray(S.trainingDaysSelected) ? S.trainingDaysSelected : null;
     if (!days || !days.length) return null;
@@ -1686,7 +1739,9 @@ function getAdaptedMealSplit(dayIndex) {
            dayInfo: dayInfo, note: baseSplit.note, trainTimingNote: baseSplit.trainTimingNote };
 }
 window.getAdaptedMealSplit = getAdaptedMealSplit;
-var DAY_NAMES=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+var DAY_NAMES = (window.isEnglish && window.isEnglish())
+  ? ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+  : ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
 var SHOPPING=[
   {cat:'FRÉQUENCE',items:[
     {id:'daily',name:'Tous les jours',desc:'Produits frais quotidiens'},

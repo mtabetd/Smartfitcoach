@@ -988,6 +988,7 @@ function renderSportChoice(p) {
       S.bonusExercises = {}; S._splitChoice = null; S.cfCalendarOpen = false;
       S.trainingDaysSelected = [];
       S.sportMixEnabled = false; S.sportMixSecondary = null;
+      S._sfcOverride = false; S._sfcOverrideDate = null;
       // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (plan reste visible + bandeau Revalider)
       if (window.devalidateWeekPlan) window.devalidateWeekPlan('changement sport');
       else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
@@ -1224,6 +1225,7 @@ window.SPORT = {
        S.bonusExercises = {}; S._splitChoice = null; S.cfCalendarOpen = false;
        S.trainingDaysSelected = [];
        S.sportMixEnabled = false; S.sportMixSecondary = null;
+       S._sfcOverride = false; S._sfcOverrideDate = null;
        // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (plan reste visible)
        if (window.devalidateWeekPlan) window.devalidateWeekPlan('changement sport');
        else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
@@ -8190,7 +8192,8 @@ function renderMusculationProgram(p) {
  _setScheme = window.getSetScheme(exRef.n, S.weight || 70, S.sex || 'homme', S.sportLevel || 'intermediate', _cycleKey, numSets, _knownOneRM);
  }
 
- var today = new Date().toISOString().slice(0, 10);
+ var today = (window.sfcLocalDateStr && window.sfcLocalDateStr()) || new Date().toISOString().slice(0, 10);
+ if (!exRef.n || typeof exRef.n !== 'string' || !exRef.n.trim()) return;
  if (!S.muscuSessionLog[today]) S.muscuSessionLog[today] = {};
  if (!S.muscuSessionLog[today][exRef.n]) {
  S.muscuSessionLog[today][exRef.n] = [];
@@ -9149,7 +9152,7 @@ function renderMusculationProgram(p) {
  })();
 
  // ─── SÉANCE TERMINÉE + BILAN CALORIQUE ───
- var todayKey = S.selectedSportDay + '_' + new Date().toISOString().slice(0, 10);
+ var todayKey = S.selectedSportDay + '_' + ((window.sfcLocalDateStr && window.sfcLocalDateStr()) || new Date().toISOString().slice(0, 10));
  var doneSess = S.sessionHistory && S.sessionHistory[todayKey];
  if (doneSess) {
  var doneBadge = h('div', {style: 'border:1px solid var(--line,#D8D8D0);background:rgba(62,92,58,0.06);padding:12px 16px;margin-top:8px'});
@@ -9363,6 +9366,7 @@ function renderMusculationProgram(p) {
 
  var saveBtn = h('button', {style: 'width:100%;padding:12px;background:var(--black);color:#fff;border:none;font-family:"Helvetica Neue",sans-serif;font-size:13px;cursor:pointer', onclick: function() {
  if (!S.sessionHistory) S.sessionHistory = {};
+ if (S.sessionHistory[todayKey]) return;
  S.sessionHistory[todayKey] = {duration: realDur, kcalBase: kcalRes.base, kcalEpoc: kcalRes.epoc, kcalTotal: kcalRes.total, date: new Date().toISOString()};
  // Pruning : garder les 365 dernières sessions max
  var _shKeys = Object.keys(S.sessionHistory || {}).sort();
@@ -9832,7 +9836,7 @@ function renderMusculationProgram(p) {
 
  // Bouton "Séance libre" — visible et accessible depuis le programme
  var _freeSection = h('div', {style: 'margin-top:32px;padding-top:24px;border-top:1px solid var(--border,#E8E6DF);text-align:center;'});
- _freeSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:14px;'}, 'SÉANCE PERSONNALISÉE'));
+ _freeSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:14px;'}, (window.isEnglish && window.isEnglish() ? 'CUSTOM SESSION' : 'SÉANCE PERSONNALISÉE')));
  _freeSection.appendChild(h('button', {
    style: 'display:block;width:100%;max-width:300px;padding:15px 24px;background:transparent;color:var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:1px solid var(--black,#0A0A09);cursor:pointer;margin:0 auto;min-height:44px;',
    onclick: function() {
@@ -9847,7 +9851,7 @@ function renderMusculationProgram(p) {
  p.appendChild(_freeSection);
 
  p.appendChild(h('div', {style: 'height:12px'}));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 3; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier les zones'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 3; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Edit muscle groups' : 'Modifier les zones')}));
  appendNutritionModeCTA(p);
 }
 
@@ -10308,7 +10312,7 @@ function renderRunningProgram(p) {
   var _runHist = [];
   try { var _raw = localStorage.getItem(_runHistKey); if (_raw) _runHist = JSON.parse(_raw) || []; } catch(e) {}
   if (!Array.isArray(_runHist)) _runHist = [];
-  var _todayDate = new Date().toISOString().slice(0, 10);
+  var _todayDate = (window.sfcLocalDateStr && window.sfcLocalDateStr()) || new Date().toISOString().slice(0, 10);
   var _existing = null;
   for (var _ri = 0; _ri < _runHist.length; _ri++) {
     if (_runHist[_ri] && _runHist[_ri].runKey === _runKey) { _existing = _runHist[_ri]; break; }

@@ -411,7 +411,7 @@ window.CUSTOM_SESSION = {
     try { localStorage.setItem(this._histKey(), JSON.stringify(S.customSessionHistory)); } catch(e) {}
 
     // compte aussi dans sessionHistory pour le widget "semaine" + brûlé du dashboard
-    var todayStr = new Date().toISOString().slice(0, 10);
+    var todayStr = (window.sfcLocalDateStr && window.sfcLocalDateStr()) || new Date().toISOString().slice(0, 10);
     if (!S.sessionHistory) S.sessionHistory = {};
     var _kcal = this.calcKcal(draft);
     S.sessionHistory[todayStr] = {
@@ -423,10 +423,11 @@ window.CUSTOM_SESSION = {
     } catch(e) {}
 
     // Mise à jour muscuProgressionHistory (alimente sparklines + suggestions futures)
-    var _today3 = new Date().toISOString().slice(0, 10);
+    var _today3 = (window.sfcLocalDateStr && window.sfcLocalDateStr()) || new Date().toISOString().slice(0, 10);
     if (!S.muscuProgressionHistory) S.muscuProgressionHistory = {};
     draft.blocks.forEach(function(b) {
       if (b.type !== 'exercise' || !Array.isArray(b.loggedSets)) return;
+      if (!b.n || typeof b.n !== 'string' || !b.n.trim()) return;
       var vs3 = b.loggedSets.filter(function(s) { return s.validated && s.weight && s.reps; });
       if (!vs3.length) return;
       var avgW3 = vs3.reduce(function(sum3, s) { return sum3 + (parseFloat(s.weight) || 0); }, 0) / vs3.length;
@@ -2131,7 +2132,7 @@ function _csRound25(w) {
 
 // 1RM estimation: Brzycki (≤6 reps) + Epley (>10 reps), average for 7–10
 function _csEstimate1RM(weight, reps) {
-  var w = parseFloat(weight) || 0, r = parseInt(reps) || 1;
+  var w = parseFloat(weight) || 0, r = Math.min(parseInt(reps) || 1, 36);
   if (w <= 0) return 0;
   if (r === 1) return w;
   var brzycki = w * 36 / (37 - r);
