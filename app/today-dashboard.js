@@ -4143,7 +4143,7 @@ function renderSmartFitCoachToday() {
 
   // ── POURQUOI CETTE DÉCISION ──
   c.appendChild(h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:5px;text-transform:uppercase;color:#777;margin-bottom:12px;'
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#777;margin-bottom:12px;'
   }, EN ? 'WHY THIS DECISION' : 'POURQUOI CETTE DÉCISION'));
   c.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:300;line-height:1.65;color:#333;margin-bottom:24px;'
@@ -4159,9 +4159,6 @@ function renderSmartFitCoachToday() {
   c.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.6;color:#666;font-style:italic;margin-bottom:24px;'
   }, _nutGuidance));
-
-  // ── Divider ──
-  c.appendChild(h('div', { style: 'height:1px;background:#D8D6D0;margin-bottom:20px;' }));
 
   // ── Primary CTA ──
   c.appendChild(h('button', {
@@ -6111,14 +6108,19 @@ function renderTodayDashboard(p) {
     }
   } catch(_eTr) { console.warn('[trial banner hero]', _eTr); }
 
+  // ── SmartFitCoach Today — première décision visible dès l’ouverture ──
+  try {
+    var _cardToday = renderSmartFitCoachToday();
+    if (_cardToday) wrapper.appendChild(_cardToday);
+  } catch (_eSFC) { console.warn('[SmartFitCoachToday]', _eSFC); }
+
+  // ── Wellness check-in inline (non bloquant) ──
+  if (_wellnessCard) wrapper.appendChild(_wellnessCard);
+
   // ═══ HERO CONTEXTUEL HORAIRE (Bible Hermès §1, §7) ═══
-  // Remplace renderCardBonjour + renderCardHeroKcal + renderCardNextMeal en un seul bloc.
-  // 1 hero = 1 foyer. Matin (6h-11h) / Midi (11h-17h) / Soir (17h-23h).
+  // Matin (6h-11h) / Midi (11h-17h) / Soir (17h-23h).
   var hero = renderHeroContextuel();
   if (hero) wrapper.appendChild(hero);
-
-  // ── Wellness check-in inline (non bloquant) — après le hero ──
-  if (_wellnessCard) wrapper.appendChild(_wellnessCard);
 
   // ── Mini-pill Séquence (streak) — visible immédiatement sous le hero ──
   try {
@@ -6421,12 +6423,6 @@ function renderTodayDashboard(p) {
       }, 300);
     }
   } catch(_eVal) { console.warn('[validation banners]', _eVal); }
-
-  // ── SmartFitCoach Today — unified AI decision block ──
-  try {
-    var _cardToday = renderSmartFitCoachToday();
-    if (_cardToday) wrapper.appendChild(_cardToday);
-  } catch (_eSFC) { console.warn('[SmartFitCoachToday]', _eSFC); }
 
   // ── Streak inline — juste sous la séance pour la motivation immédiate ──
   // UX fix: était après les cartes nutrition → invisible. Maintenant sous la séance.
