@@ -3634,7 +3634,13 @@ function renderCardStreak() {
   var _S = window.S || {};
   var _todayStr = (window.sfcLocalDateStr && window.sfcLocalDateStr()) || new Date().toISOString().slice(0, 10);
   var _isFirstDay = !_S.firstLoginDate || _S.firstLoginDate === _todayStr;
-  if (streak === 1 && _isFirstDay && !lastBadge) return null;
+  if (streak === 1 && _isFirstDay && !lastBadge) {
+    var _d1 = card();
+    _d1.appendChild(eyebrow('PROGRESSION'));
+    _d1.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:28px;font-weight:400;color:#1A1A1A;margin-bottom:8px;'}, (window.isEnglish && window.isEnglish()) ? 'Day 1' : 'Jour 1'));
+    _d1.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:300;color:#888;line-height:1.6;'}, (window.isEnglish && window.isEnglish()) ? 'Build the habit. Come back tomorrow.' : 'La régularité commence aujourd\'hui. À demain.'));
+    return _d1;
+  }
 
   var c = card();
   c.appendChild(eyebrow('PROGRESSION'));
@@ -4381,7 +4387,7 @@ function renderSmartFitCoachToday() {
     }
     c.appendChild(h('div', {
       style: 'margin-top:20px;padding:14px 0;border-top:1px solid #E8E6E0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#3E5C3A;letter-spacing:1px;'
-    }, EN ? 'Recovery starts now.' : 'La récupération commence maintenant.'));
+    }, EN ? 'Recovery starts now. Come back stronger.' : 'La récupération commence. Reviens plus fort.'));
   } else {
     // ─── PRE-SESSION ───
     // Hook: context without a label — the text IS the label
@@ -4394,9 +4400,10 @@ function renderSmartFitCoachToday() {
     c.appendChild(h('div', {
       style: 'font-family:Georgia,serif;font-size:24px;font-weight:400;line-height:1.2;color:#1A1A1A;margin-bottom:12px;'
     }, sel2.session_focus));
-    c.appendChild(h('div', { style: 'margin-bottom:24px;' },
+    c.appendChild(h('div', { style: 'margin-bottom:14px;' },
       h('span', { style: _tagSt }, sel2.momentum_tag.toUpperCase())
     ));
+    c.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#C0BDB8;margin-bottom:18px;font-weight:400;'}, (window.isEnglish && window.isEnglish()) ? 'Adapted for you.' : 'Adapté pour toi.'));
     c.appendChild(h('div', { style: 'height:1px;background:#E8E6E0;margin-bottom:20px;' }));
     // Coach message: no section header — the text speaks for itself
     c.appendChild(h('div', {
