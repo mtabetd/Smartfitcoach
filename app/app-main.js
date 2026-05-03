@@ -624,7 +624,7 @@ window.renderWelcomeScreen = function renderWelcomeScreen(app) {
 
  var timingPill = h('div', {
    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#9A9A90);margin-top:8px;opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;'
- }, '~5 min · Vos données restent sur l’appareil');
+ }, '~5 min · Vos données restent sur l\'appareil');
  inner.appendChild(timingPill);
 
  inner.appendChild(divider);

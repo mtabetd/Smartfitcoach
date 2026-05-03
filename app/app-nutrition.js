@@ -1122,8 +1122,8 @@ function renderActiviteSommeil(p) {
   // ─── HEURE D'ENTRAÎNEMENT (mode 'both' uniquement — l'utilisateur s'entraîne activement, le timing affecte la répartition des macros) ───
   if (S.appMode === 'both') {
     p.appendChild(h('div', {style: 'height:20px'}));
-    p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? '⏰ Usual training time' : '⏰ Heure d’entraînement habituelle')));
-    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin:-4px 0 10px;line-height:1.5;'}, (window.isEnglish && window.isEnglish() ? 'Helps adapt meal distribution (carbs + proteins at the right time). Optional.' : 'Permet d’adapter la répartition des repas (glucides + protéines au bon moment). Optionnel.')));
+    p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? '⏰ Usual training time' : '⏰ Heure d\'entraînement habituelle')));
+    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin:-4px 0 10px;line-height:1.5;'}, (window.isEnglish && window.isEnglish() ? 'Helps adapt meal distribution (carbs + proteins at the right time). Optional.' : 'Permet d\'adapter la répartition des repas (glucides + protéines au bon moment). Optionnel.')));
     var _ttOpts = [
       {id: 'morning', label: '🌅 ' + (window.isEnglish && window.isEnglish() ? 'Morning' : 'Matin'), desc: (window.isEnglish && window.isEnglish() ? 'Before 12pm — post-workout breakfast' : 'Avant 12h — petit-déj post-séance')},
       {id: 'noon',    label: '☀️ ' + (window.isEnglish && window.isEnglish() ? 'Noon' : 'Midi'),    desc: (window.isEnglish && window.isEnglish() ? '12pm–15pm — post-workout lunch' : '12h–15h — déjeuner post-séance')},
@@ -1426,7 +1426,7 @@ function renderStep5(p) {
   } else {
     // ── 5b: Supplémentation + Alcool ──
     p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + (window.isEnglish && window.isEnglish() ? ' IX · b · Supplements' : ' IX · b · Suppléments')));
-    p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Supplementation<br><em>& alcohol consumption</em>' : 'Supplémentation<br><em>& consommation d’alcool</em>'), style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
+    p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Supplementation<br><em>& alcohol consumption</em>' : 'Supplémentation<br><em>& consommation d\'alcool</em>'), style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
     p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'This information adjusts your total caloric balance.' : 'Ces informations ajustent votre bilan calorique total.')));
 
   // Divider: Supplémentation

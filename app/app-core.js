@@ -4608,11 +4608,11 @@ function showSubscriptionContact(plan, ui) {
   if (old && old.parentNode) old.parentNode.removeChild(old);
 
   var EMAIL = 'smartfitcoach@proton.me';
-  var SUBJECT = encodeURIComponent('Demande d’accès — SmartFitCoach');
+  var SUBJECT = encodeURIComponent('Demande d\'accès — SmartFitCoach');
   var BODY = encodeURIComponent(
     'Bonjour,\n\n' +
-    'Je souhaite en savoir davantage sur SmartFitCoach et ses formules d’abonnement.\n\n' +
-    'Pourriez-vous m’adresser les informations nécessaires ?\n\n' +
+    'Je souhaite en savoir davantage sur SmartFitCoach et ses formules d\'abonnement.\n\n' +
+    'Pourriez-vous m\'adresser les informations nécessaires ?\n\n' +
     '[Votre prénom]'
   );
   var mailto = 'mailto:' + EMAIL + '?subject=' + SUBJECT + '&body=' + BODY;
@@ -4664,14 +4664,14 @@ function showSubscriptionContact(plan, ui) {
   // Corps
   var _body = document.createElement('div');
   _body.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.8;margin-bottom:24px;';
-  _body.textContent = 'L’accès à SmartFitCoach se fait par invitation personnalisée. Écrivez-nous, et nous vous répondrons dans les meilleurs délais avec l’ensemble des détails : formules, tarifs et modalités d’accès. Chaque demande reçoit notre attention complète.';
+  _body.textContent = 'L\'accès à SmartFitCoach se fait par invitation personnalisée. Écrivez-nous, et nous vous répondrons dans les meilleurs délais avec l\'ensemble des détails : formules, tarifs et modalités d\'accès. Chaque demande reçoit notre attention complète.';
   box.appendChild(_body);
 
   // Bouton principal — mailto
   var _mailBtn = document.createElement('a');
   _mailBtn.href = mailto;
   _mailBtn.style.cssText = 'display:block;width:100%;padding:16px;margin-bottom:10px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;text-decoration:none;box-sizing:border-box;cursor:pointer;border-radius:0;';
-  _mailBtn.textContent = 'Écrire à l’équipe';
+  _mailBtn.textContent = 'Écrire à l\'équipe';
   box.appendChild(_mailBtn);
 
   // Bouton secondaire — fermer

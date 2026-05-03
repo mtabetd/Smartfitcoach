@@ -1328,7 +1328,7 @@
           '</div>' +
           '<div style="white-space:pre-wrap;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;color:var(--ink-900,#0A0A09);">' + _escaped + '</div>' +
           '<div style="margin-top:24px;text-align:center;border-top:1px solid var(--line,#D8D8D0);padding-top:16px;">' +
-            '<button id="muscu-prog-retry-ia" style="background:transparent;border:1px solid var(--ink-900,#0A0A09);color:var(--ink-900,#0A0A09);padding:12px 20px;font-family:Georgia,serif;font-style:italic;font-size:13px;cursor:pointer;border-radius:2px;min-height:44px;">Régénérer avec l’IA</button>' +
+            '<button id="muscu-prog-retry-ia" style="background:transparent;border:1px solid var(--ink-900,#0A0A09);color:var(--ink-900,#0A0A09);padding:12px 20px;font-family:Georgia,serif;font-style:italic;font-size:13px;cursor:pointer;border-radius:2px;min-height:44px;">Régénérer avec l\'IA</button>' +
           '</div>';
         var _retryIaBtn = document.getElementById('muscu-prog-retry-ia');
         if (_retryIaBtn) _retryIaBtn.addEventListener('click', function() { window.openMuscuProgramGenerator(); });
