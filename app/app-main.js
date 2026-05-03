@@ -2387,7 +2387,35 @@ function render() {
  if (window.I18N && window.I18N.current === 'en' && window.I18N.translateDOM) {
    try { window.I18N.translateDOM(); } catch(e) {}
  }
- } catch (_renderErr) { console.error('[render] crash:', _renderErr); try { app.innerHTML = ''; var _errDiv = document.createElement('div'); _errDiv.style.cssText = 'padding:40px 24px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;'; _errDiv.innerHTML = '<div style="font-size:13px;color:var(--error,#7A1F1F);margin-bottom:16px;">Une erreur est survenue. Vos donn\u00e9es sont sauvegard\u00e9es.</div><button onclick="window.location.reload()" style="padding:12px 24px;background:#0A0A09;color:var(--paper,#FAF9F6);border:none;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;border-radius:0;">Recharger</button>'; app.appendChild(_errDiv); } catch(e2) {} }
+ } catch (_renderErr) {
+   console.error('[render] crash:', _renderErr);
+   if (typeof _showErrorPage === 'function') {
+     try { _showErrorPage(_renderErr && _renderErr.message ? _renderErr.message : String(_renderErr)); } catch(e2) {}
+   } else {
+     try {
+       app.innerHTML = '';
+       var _errDiv = document.createElement('div');
+       _errDiv.style.cssText = 'min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--ivory,#FAF9F6);padding:40px 24px;box-sizing:border-box;';
+       var _errInner = document.createElement('div');
+       _errInner.style.cssText = 'max-width:360px;width:100%;text-align:center;';
+       var _errH = document.createElement('h2');
+       _errH.style.cssText = 'font-family:Georgia,serif;font-size:24px;font-weight:400;color:#0A0A09;margin:0 0 12px;';
+       _errH.textContent = 'Une interruption est survenue';
+       var _errP = document.createElement('p');
+       _errP.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:#6B6B65;line-height:1.6;margin:0 0 28px;';
+       _errP.textContent = 'Nous avons s\u00e9curis\u00e9 votre session. Vous pouvez r\u00e9essayer.';
+       var _errBtn = document.createElement('button');
+       _errBtn.style.cssText = 'padding:14px 28px;background:#0A0A09;color:#FAF9F6;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;min-height:44px;border-radius:0;width:100%;';
+       _errBtn.textContent = 'R\u00e9essayer';
+       _errBtn.addEventListener('click', function(){ location.reload(); });
+       _errInner.appendChild(_errH);
+       _errInner.appendChild(_errP);
+       _errInner.appendChild(_errBtn);
+       _errDiv.appendChild(_errInner);
+       app.appendChild(_errDiv);
+     } catch(e2) {}
+   }
+ }
  } finally { render._lock = false; }
 }
 

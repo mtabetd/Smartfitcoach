@@ -14,20 +14,64 @@ function _showErrorPage(msg) {
   if (!app) return;
   var _isEN = _getLang() === 'en';
   var wrap = document.createElement('div');
-  wrap.style.cssText = 'padding:40px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif';
+  wrap.style.cssText = [
+    'min-height:100vh;display:flex;align-items:center;justify-content:center;',
+    'background:var(--ivory,#FAF9F6);padding:40px 24px;box-sizing:border-box;'
+  ].join('');
+  var inner = document.createElement('div');
+  inner.style.cssText = 'max-width:360px;width:100%;text-align:center;';
+  var eyebrow = document.createElement('div');
+  eyebrow.style.cssText = [
+    'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;',
+    'text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:24px;'
+  ].join('');
+  eyebrow.textContent = _isEN ? 'SESSION' : 'SESSION';
   var h2 = document.createElement('h2');
-  h2.style.cssText = 'font-family:Georgia,serif;color:var(--black,#0A0A09)';
-  h2.textContent = _isEN ? 'An error occurred' : 'Une erreur est survenue';
+  h2.style.cssText = [
+    'font-family:Georgia,serif;font-size:26px;font-weight:400;line-height:1.25;',
+    'color:var(--black,#0A0A09);margin:0 0 16px;'
+  ].join('');
+  h2.textContent = _isEN ? 'An interruption occurred' : 'Une interruption est survenue';
   var p = document.createElement('p');
-  p.style.cssText = 'color:var(--grey,#595953);margin:16px 0';
-  p.textContent = _isEN ? 'An unexpected error occurred. Please reload the page.' : 'Une erreur inattendue s\'est produite. Rechargez la page.';
-  var btn = document.createElement('button');
-  btn.style.cssText = 'padding:10px 24px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;cursor:pointer;font-size:14px;min-height:44px';
-  btn.textContent = _isEN ? 'Reload' : 'Recharger';
-  btn.addEventListener('click', function(){ location.reload(); });
-  wrap.appendChild(h2);
-  wrap.appendChild(p);
-  wrap.appendChild(btn);
+  p.style.cssText = [
+    'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:300;',
+    'color:var(--grey,#6B6B65);line-height:1.65;margin:0 0 32px;'
+  ].join('');
+  p.textContent = _isEN
+    ? 'Your session has been secured. You can retry or return to the home screen.'
+    : 'Nous avons sécurisé votre session. Vous pouvez réessayer ou revenir à l\'accueil.';
+  var btnRow = document.createElement('div');
+  btnRow.style.cssText = 'display:flex;flex-direction:column;gap:10px;';
+  var btnPrimary = document.createElement('button');
+  btnPrimary.style.cssText = [
+    'padding:14px 24px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);',
+    'border:none;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;',
+    'font-size:9px;letter-spacing:3px;text-transform:uppercase;min-height:44px;border-radius:0;'
+  ].join('');
+  btnPrimary.textContent = _isEN ? 'Retry' : 'Réessayer';
+  btnPrimary.addEventListener('click', function() { location.reload(); });
+  var btnSecondary = document.createElement('button');
+  btnSecondary.style.cssText = [
+    'padding:14px 24px;background:transparent;color:var(--grey,#6B6B65);',
+    'border:1px solid var(--border,#D8D8D0);cursor:pointer;',
+    'font-family:"Helvetica Neue",Arial,sans-serif;',
+    'font-size:9px;letter-spacing:3px;text-transform:uppercase;min-height:44px;border-radius:0;'
+  ].join('');
+  btnSecondary.textContent = _isEN ? 'Back to home' : 'Retour à l\'accueil';
+  btnSecondary.addEventListener('click', function() {
+    try {
+      if (window.S) window.S.view = 'dashboard';
+      if (window.render) window.render();
+      else location.href = '/';
+    } catch(e) { location.href = '/'; }
+  });
+  btnRow.appendChild(btnPrimary);
+  btnRow.appendChild(btnSecondary);
+  inner.appendChild(eyebrow);
+  inner.appendChild(h2);
+  inner.appendChild(p);
+  inner.appendChild(btnRow);
+  wrap.appendChild(inner);
   app.innerHTML = '';
   app.appendChild(wrap);
 }

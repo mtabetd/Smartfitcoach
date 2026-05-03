@@ -859,6 +859,307 @@ test('streak card reads local date not UTC (first-day logic)', function () {
   assert(_isFirstDay, 'first login today must be recognized as first day');
 });
 
+// ── TORTURE TESTS — Production Hardening 2026-05 ─────────────────────────────
+// Simulates corrupted state, invalid data, legacy programs, edge cases.
+// Every test below must produce zero crash and correct fallback.
+console.log('\nTorture tests — corrupted state, NaN, null, legacy, double-tap');
+
+// ─── T1: localStorage corrupted JSON ─────────────────────────────────────────
+function safeJsonParse(raw, fallback) {
+  if (!raw) return fallback;
+  try { return JSON.parse(raw); } catch(e) { return fallback; }
+}
+test('T1: corrupted JSON string returns fallback object', function() {
+  var result = safeJsonParse('{broken_json', {});
+  assert(typeof result === 'object' && result !== null, 'must return fallback object');
+});
+test('T1: null raw returns fallback', function() {
+  var result = safeJsonParse(null, { default: true });
+  assert(result.default === true, 'null raw must return fallback');
+});
+test('T1: valid JSON returns parsed object', function() {
+  var result = safeJsonParse('{"weight":75}', {});
+  assertEqual(result.weight, 75, 'valid JSON must be parsed');
+});
+
+// ─── T2: Profil vide / partiel ────────────────────────────────────────────────
+function rehydrateState(data) {
+  var S = { weight: null, height: null, age: null, sportProgram: null,
+            muscuSessionLog: {}, sessionHistory: {}, sStep: 0, nStep: 0 };
+  if (!data || typeof data !== 'object') return S;
+  var numFields = ['weight', 'height', 'age'];
+  numFields.forEach(function(k) {
+    var v = parseFloat(data[k]);
+    S[k] = (isFinite(v) && v > 0 && v <= 300) ? v : null;
+  });
+  if (Array.isArray(data.sportProgram)) S.sportProgram = data.sportProgram;
+  if (data.muscuSessionLog && typeof data.muscuSessionLog === 'object' && !Array.isArray(data.muscuSessionLog))
+    S.muscuSessionLog = data.muscuSessionLog;
+  if (typeof data.sStep === 'number' && data.sStep >= 0 && data.sStep <= 50) S.sStep = data.sStep;
+  if (typeof data.nStep === 'number' && data.nStep >= 0 && data.nStep <= 12) S.nStep = data.nStep;
+  return S;
+}
+test('T2: empty profile object → safe defaults', function() {
+  var S = rehydrateState({});
+  assert(S.weight === null, 'weight must default to null');
+  assert(S.sportProgram === null, 'sportProgram must default to null');
+  assert(typeof S.muscuSessionLog === 'object', 'muscuSessionLog must be object');
+});
+test('T2: null profile → safe defaults', function() {
+  var S = rehydrateState(null);
+  assert(S.sStep === 0, 'sStep must default to 0');
+  assert(S.nStep === 0, 'nStep must default to 0');
+});
+test('T2: partial profile preserves valid fields', function() {
+  var S = rehydrateState({ weight: 72, height: 170 });
+  assertEqual(S.weight, 72, 'valid weight must be preserved');
+  assertEqual(S.height, 170, 'valid height must be preserved');
+  assert(S.age === null, 'missing age must be null');
+});
+test('T2: weight as string "80" coerced to number', function() {
+  var S = rehydrateState({ weight: '80' });
+  assertEqual(S.weight, 80, 'string weight must be coerced to number');
+});
+test('T2: weight 0 rejected (impossible)', function() {
+  var S = rehydrateState({ weight: 0 });
+  assert(S.weight === null, 'zero weight must be rejected');
+});
+test('T2: weight 350 rejected (out of range)', function() {
+  var S = rehydrateState({ weight: 350 });
+  assert(S.weight === null, 'weight > 300 must be rejected');
+});
+test('T2: negative weight rejected', function() {
+  var S = rehydrateState({ weight: -5 });
+  assert(S.weight === null, 'negative weight must be rejected');
+});
+
+// ─── T3: Programme legacy (no splitKey) ──────────────────────────────────────
+function isLegacyProgram(program) {
+  if (!Array.isArray(program) || program.length === 0) return false;
+  return program.some(function(day) {
+    return typeof day.splitKey === 'undefined';
+  });
+}
+test('T3: program with no splitKey detected as legacy', function() {
+  var prog = [{ name: 'Séance 1', exercises: [] }];
+  assert(isLegacyProgram(prog), 'must detect legacy program');
+});
+test('T3: program with null splitKey not legacy', function() {
+  var prog = [{ name: 'Full Body', splitKey: null, exercises: [] }];
+  assert(!isLegacyProgram(prog), 'explicit null splitKey is not legacy');
+});
+test('T3: empty program not detected as legacy', function() {
+  assert(!isLegacyProgram([]), 'empty program must not be legacy');
+  assert(!isLegacyProgram(null), 'null program must not be legacy');
+});
+
+// ─── T4: Mauvais splitKey → fallback ─────────────────────────────────────────
+function resolveLabelSafe(day, idx, splitLabelMap, isEnglish) {
+  var storedKey = (day && day.splitKey) || null;
+  var storedIdx = (day && typeof day.splitDayIdx === 'number') ? day.splitDayIdx : idx;
+  var storedLabels = storedKey ? (splitLabelMap[storedKey] || null) : null;
+  var isGeneric = !day || !day.name || /^(Jour|Session|Séance)\s+\d+$/i.test(day.name);
+  if (storedLabels && storedLabels[storedIdx]) return storedLabels[storedIdx];
+  if (!isGeneric && day.name) return day.name;
+  return (isEnglish ? 'Session ' : 'Séance ') + (idx + 1);
+}
+test('T4: unknown splitKey falls back to day.name', function() {
+  var labels = {};
+  var day = { name: 'Épaules', splitKey: 'unknown_split', splitDayIdx: 0 };
+  var result = resolveLabelSafe(day, 0, labels, false);
+  assertEqual(result, 'Épaules', 'unknown splitKey must fall back to day.name');
+});
+test('T4: null day object falls back to numbered session', function() {
+  var result = resolveLabelSafe(null, 2, {}, false);
+  assertEqual(result, 'Séance 3', 'null day must produce numbered fallback');
+});
+test('T4: day without name and unknown key produces numbered fallback', function() {
+  var day = { splitKey: 'ghost_split', splitDayIdx: 0 };
+  var result = resolveLabelSafe(day, 0, {}, false);
+  assertEqual(result, 'Séance 1', 'must produce numbered fallback');
+});
+
+// ─── T5: NaN / Infinity / undefined numeric values ───────────────────────────
+function safeCalcBMR(weight, height, age, sex) {
+  var w = parseFloat(weight), h = parseFloat(height), a = parseFloat(age);
+  if (!isFinite(w) || w <= 0 || w > 300) return 0;
+  if (!isFinite(h) || h < 100 || h > 260) return 0;
+  if (!isFinite(a) || a < 10 || a > 120) return 0;
+  if (sex === 'F') return Math.round(9.247 * w + 3.098 * h - 4.330 * a + 447.593);
+  return Math.round(10 * w + 6.25 * h - 5 * a + 5);
+}
+test('T5: BMR with valid data is positive', function() {
+  var result = safeCalcBMR(75, 175, 30, 'M');
+  assert(result > 1000, 'BMR for 75kg/175cm/30y male must be >1000');
+  assert(isFinite(result), 'BMR must be finite');
+});
+test('T5: BMR with NaN weight returns 0', function() {
+  assertEqual(safeCalcBMR(NaN, 175, 30, 'M'), 0, 'NaN weight → 0');
+});
+test('T5: BMR with Infinity height returns 0', function() {
+  assertEqual(safeCalcBMR(75, Infinity, 30, 'M'), 0, 'Infinity height → 0');
+});
+test('T5: BMR with undefined age returns 0', function() {
+  assertEqual(safeCalcBMR(75, 175, undefined, 'M'), 0, 'undefined age → 0');
+});
+test('T5: BMR with height 1.75 (meters) returns 0 (guard invalid range)', function() {
+  assertEqual(safeCalcBMR(75, 1.75, 30, 'M'), 0, 'height 1.75m must be rejected');
+});
+
+// ─── T6: Calorie target guard ─────────────────────────────────────────────────
+function safeCalorieTarget(bmr, activityFactor, goalMultiplier) {
+  var b = parseFloat(bmr), af = parseFloat(activityFactor), gm = parseFloat(goalMultiplier);
+  if (!isFinite(b) || b <= 0) return 2000;
+  if (!isFinite(af) || af < 1.0 || af > 3.0) af = 1.375;
+  if (!isFinite(gm) || gm <= 0 || gm > 2.0) gm = 1.0;
+  var target = Math.round(b * af * gm);
+  if (target < 800) return 1200;
+  if (target > 6000) return 4000;
+  return target;
+}
+test('T6: valid inputs produce reasonable calorie target', function() {
+  var result = safeCalorieTarget(1800, 1.55, 0.85);
+  assert(result >= 800 && result <= 6000, 'target must be in range: ' + result);
+});
+test('T6: NaN BMR returns fallback 2000', function() {
+  assertEqual(safeCalorieTarget(NaN, 1.55, 0.85), 2000, 'NaN BMR → 2000');
+});
+test('T6: zero BMR returns fallback 2000', function() {
+  assertEqual(safeCalorieTarget(0, 1.55, 0.85), 2000, 'zero BMR → 2000');
+});
+test('T6: unrealistic activity factor falls back to 1.375', function() {
+  var result = safeCalorieTarget(1800, 99, 1.0);
+  assert(result > 0 && isFinite(result), 'must still produce valid output with bad activity factor');
+});
+test('T6: target below 800 clamped to 1200', function() {
+  // Very low BMR scenario
+  var result = safeCalorieTarget(500, 1.2, 0.5);
+  assert(result >= 1200, 'minimum calorie target must be 1200');
+});
+
+// ─── T7: Sport × Nutrition sync ──────────────────────────────────────────────
+function computeSportBurnForNutrition(sessionHistory, todayStr) {
+  var burn = 0;
+  if (!sessionHistory || typeof sessionHistory !== 'object') return burn;
+  Object.keys(sessionHistory).forEach(function(k) {
+    if (k === todayStr || (typeof k === 'string' && k.slice(-10) === todayStr)) {
+      var e = sessionHistory[k];
+      var kcal = e && typeof e.kcalTotal === 'number' ? e.kcalTotal : 0;
+      if (kcal > 0 && kcal < 5000) burn = Math.max(burn, Math.round(kcal));
+    }
+  });
+  return burn;
+}
+test('T7: sport burn found from session history for today', function() {
+  var hist = { '2_2026-05-01': { kcalTotal: 400 } };
+  assertEqual(computeSportBurnForNutrition(hist, '2026-05-01'), 400, 'must find 400 kcal burn');
+});
+test('T7: sport burn 0 when no session today', function() {
+  var hist = { '2_2026-04-30': { kcalTotal: 400 } };
+  assertEqual(computeSportBurnForNutrition(hist, '2026-05-01'), 0, 'yesterday session must not count');
+});
+test('T7: unrealistic burn (>5000 kcal) rejected', function() {
+  var hist = { '2026-05-01': { kcalTotal: 9999 } };
+  assertEqual(computeSportBurnForNutrition(hist, '2026-05-01'), 0, 'unrealistic burn must be rejected');
+});
+test('T7: null session history returns 0 without crash', function() {
+  assertEqual(computeSportBurnForNutrition(null, '2026-05-01'), 0, 'null history → 0');
+});
+test('T7: corrupt kcalTotal (string) returns 0', function() {
+  var hist = { '2026-05-01': { kcalTotal: 'beaucoup' } };
+  assertEqual(computeSportBurnForNutrition(hist, '2026-05-01'), 0, 'string kcalTotal → 0');
+});
+
+// ─── T8: Double validation séance ────────────────────────────────────────────
+function validateSession(sessionHistory, dayIdx, dateStr, kcal) {
+  var key = dayIdx + '_' + dateStr;
+  if (sessionHistory[key]) return { saved: false, reason: 'duplicate' };
+  sessionHistory[key] = { kcalTotal: kcal, date: dateStr };
+  return { saved: true };
+}
+test('T8: first validation saves session', function() {
+  var hist = {};
+  var res = validateSession(hist, 1, '2026-05-01', 350);
+  assert(res.saved === true, 'first validation must succeed');
+});
+test('T8: second validation is blocked (duplicate guard)', function() {
+  var hist = { '1_2026-05-01': { kcalTotal: 350 } };
+  var res = validateSession(hist, 1, '2026-05-01', 350);
+  assert(res.saved === false && res.reason === 'duplicate', 'duplicate must be blocked');
+});
+
+// ─── T9: lsGet safe wrapper ───────────────────────────────────────────────────
+function lsGetSafe(key, defaultVal, mockStorage) {
+  try {
+    var raw = mockStorage[key];
+    if (!raw) return defaultVal;
+    return JSON.parse(raw);
+  } catch(e) {
+    return defaultVal;
+  }
+}
+test('T9: lsGet returns defaultVal for corrupted JSON', function() {
+  var store = { myKey: '{bad' };
+  assertEqual(lsGetSafe('myKey', 42, store), 42, 'corrupted JSON → default');
+});
+test('T9: lsGet returns defaultVal for missing key', function() {
+  var result = lsGetSafe('missing', [], {});
+  assert(Array.isArray(result) && result.length === 0, 'missing key must return empty array default');
+});
+test('T9: lsGet returns parsed value for valid JSON', function() {
+  var store = { profile: '{"weight":80}' };
+  var result = lsGetSafe('profile', {}, store);
+  assertEqual(result.weight, 80, 'valid JSON must be parsed');
+});
+
+// ─── T10: Nutrition plan absent ──────────────────────────────────────────────
+function safeGetWeekPlan(S) {
+  if (!S || !Array.isArray(S.weekPlan) || S.weekPlan.length === 0) return null;
+  return S.weekPlan;
+}
+test('T10: null weekPlan returns null (no crash)', function() {
+  assert(safeGetWeekPlan({ weekPlan: null }) === null, 'null plan → null');
+});
+test('T10: string weekPlan (corrupted) returns null', function() {
+  assert(safeGetWeekPlan({ weekPlan: 'corrupted' }) === null, 'string plan → null');
+});
+test('T10: empty array weekPlan returns null', function() {
+  assert(safeGetWeekPlan({ weekPlan: [] }) === null, 'empty plan → null');
+});
+test('T10: valid 7-element weekPlan is returned', function() {
+  var plan = [{},{},{},{},{},{},{}];
+  assert(safeGetWeekPlan({ weekPlan: plan }) === plan, 'valid plan must be returned as-is');
+});
+
+// ─── T11: Macro targets NaN guard ────────────────────────────────────────────
+function safeMacros(kcal, pRatio, gRatio, lRatio) {
+  var k = parseFloat(kcal);
+  if (!isFinite(k) || k <= 0) k = 2000;
+  var p = parseFloat(pRatio), g = parseFloat(gRatio), l = parseFloat(lRatio);
+  if (!isFinite(p) || p <= 0) p = 0.30;
+  if (!isFinite(g) || g <= 0) g = 0.40;
+  if (!isFinite(l) || l <= 0) l = 0.30;
+  return {
+    p: Math.round(k * p / 4),
+    g: Math.round(k * g / 4),
+    l: Math.round(k * l / 9)
+  };
+}
+test('T11: valid macros produce finite positive values', function() {
+  var m = safeMacros(2000, 0.30, 0.40, 0.30);
+  assert(m.p > 0 && isFinite(m.p), 'protein must be positive finite');
+  assert(m.g > 0 && isFinite(m.g), 'carbs must be positive finite');
+  assert(m.l > 0 && isFinite(m.l), 'fat must be positive finite');
+});
+test('T11: NaN kcal falls back to 2000', function() {
+  var m = safeMacros(NaN, 0.30, 0.40, 0.30);
+  assert(isFinite(m.p) && m.p > 0, 'must produce valid macros with NaN kcal');
+});
+test('T11: undefined ratios fall back to sensible defaults', function() {
+  var m = safeMacros(2000, undefined, undefined, undefined);
+  assert(isFinite(m.p) && m.p > 0, 'must produce valid protein with undefined ratios');
+});
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 console.log('\n' + (failed === 0 ? '\x1b[32m' : '\x1b[31m') +
   'Results: ' + passed + ' passed, ' + failed + ' failed\x1b[0m\n');
