@@ -6362,17 +6362,17 @@ function renderTodayDashboard(p) {
     }
   } catch(_eTr) { console.warn('[trial banner hero]', _eTr); }
 
-  // ── SmartFitCoach Today — première décision visible dès l’ouverture ──
+  // ── SmartFitCoach Today — première décision visible dès l'ouverture ──
   try {
     var _cardToday = renderSmartFitCoachToday();
     if (_cardToday) wrapper.appendChild(_cardToday);
-  } catch (_eSFC) { console.warn(‘[SmartFitCoachToday]’, _eSFC); }
+  } catch (_eSFC) { console.warn('[SmartFitCoachToday]', _eSFC); }
 
   // ── AI Insight — contextual intelligence surfaced from training history ──
   try {
     var _cardInsight = buildSmartInsight();
     if (_cardInsight) wrapper.appendChild(_cardInsight);
-  } catch (_eIns) { console.warn(‘[AIInsight]’, _eIns); }
+  } catch (_eIns) { console.warn('[AIInsight]', _eIns); }
 
   // ── Wellness check-in inline (non bloquant) ──
   if (_wellnessCard) wrapper.appendChild(_wellnessCard);
@@ -7628,13 +7628,13 @@ function buildSmartInsight() {
     insights.push({ icon: '✦', text: (_ms1 ? (EN ? _ms1 + ' session · ' : 'Séance ' + _ms1 + ' · ') : '') + _ton + (EN ? ' moved · ' : ' soulevés · ') + lastMusSets + (EN ? ' sets' : ' sets validés') });
   } else if (doneToday) {
     var _trajMsg = mKeys.length >= 10
-      ? (EN ? ‘Session complete · Consistency confirmed · Progression on track’ : ‘Séance validée · Régularité confirmée · Ta progression est en marche’)
+      ? (EN ? 'Session complete · Consistency confirmed · Progression on track' : 'Séance validée · Régularité confirmée · Ta progression est en marche')
       : mKeys.length >= 4
-      ? (EN ? ‘Session complete · Your base is building · Keep going’ : ‘Séance validée · Ta base est en train de se construire’)
+      ? (EN ? 'Session complete · Your base is building · Keep going' : 'Séance validée · Ta base est en train de se construire')
       : mKeys.length >= 2
-      ? (EN ? ‘Session complete · You\’re on the right track’ : ‘Séance validée · Tu continues sur la bonne trajectoire’)
-      : (EN ? ‘Session complete · Protein and hydration lock it in · Back stronger’ : ‘Séance validée · Protéines et hydratation ce soir · Tu reviens plus fort’);
-    insights.push({ icon: ‘✦’, text: _trajMsg });
+      ? (EN ? 'Session complete · You\'re on the right track' : 'Séance validée · Tu continues sur la bonne trajectoire')
+      : (EN ? 'Session complete · Protein and hydration lock it in · Back stronger' : 'Séance validée · Protéines et hydratation ce soir · Tu reviens plus fort');
+    insights.push({ icon: '✦', text: _trajMsg });
   }
 
   if (!doneToday && lastMusDate && daysSinceLast !== null) {
@@ -7645,7 +7645,7 @@ function buildSmartInsight() {
     } else if (daysSinceLast === 2 && _ms2) {
       _recMsg = EN ? 'Well recovered since your ' + _ms2 + ' session · Ready to go' : 'Bien récupéré depuis ta séance ' + _ms2 + ' · Prêt pour la suite';
     } else if (daysSinceLast >= 3 && daysSinceLast <= 4 && _ms2) {
-      _recMsg = EN ? ‘Full recovery from ‘ + _ms2 + ‘ · Optimal readiness today’ : ‘Récupération complète après ‘ + _ms2 + ‘ · Forme optimale aujourd\’hui’;
+      _recMsg = EN ? 'Full recovery from ' + _ms2 + ' · Optimal readiness today' : 'Récupération complète après ' + _ms2 + ' · Forme optimale aujourd\'hui';
     } else if (daysSinceLast >= 5) {
       _recMsg = EN ? daysSinceLast + ' days without training · Motivation returns after rest' : daysSinceLast + ' jours sans entraînement · La motivation revient après le repos';
     }
@@ -7665,7 +7665,7 @@ function buildSmartInsight() {
   }
 
   if (!doneToday && energy !== null && muscleSoreness !== null && energy >= 4 && muscleSoreness >= 4) {
-    insights.push({ icon: ‘●’, text: EN ? ‘Energy and recovery green · Optimal conditions for today\’s session’ : ‘Énergie et récupération au vert · Conditions optimales pour ta séance’ });
+    insights.push({ icon: '●', text: EN ? 'Energy and recovery green · Optimal conditions for today\'s session' : 'Énergie et récupération au vert · Conditions optimales pour ta séance' });
   }
 
   if (insights.length === 0) {
@@ -7686,13 +7686,13 @@ function buildSmartInsight() {
     } catch(e) {}
     if (_wkCount >= 2) {
       var _wkTraj = _wkCount >= 5
-        ? (EN ? _wkCount + ‘ sessions this week · Exceptional · Keep it.’ : _wkCount + ‘ séances cette semaine · Semaine exceptionnelle · Continue.’)
+        ? (EN ? _wkCount + ' sessions this week · Exceptional · Keep it.' : _wkCount + ' séances cette semaine · Semaine exceptionnelle · Continue.')
         : _wkCount >= 4
-        ? (EN ? _wkCount + ‘ sessions this week · Solid · Build on it.’ : _wkCount + ‘ séances cette semaine · Solide · On construit dessus.’)
+        ? (EN ? _wkCount + ' sessions this week · Solid · Build on it.' : _wkCount + ' séances cette semaine · Solide · On construit dessus.')
         : _wkCount >= 3
-        ? (EN ? _wkCount + ‘ sessions this week · Consistency confirmed.’ : _wkCount + ‘ séances cette semaine · Régularité confirmée.’)
-        : (EN ? _wkCount + ‘ sessions this week · The habit is forming.’ : _wkCount + ‘ séances cette semaine · L\’habitude se construit.’);
-      insights.push({ icon: ‘✦’, text: _wkTraj });
+        ? (EN ? _wkCount + ' sessions this week · Consistency confirmed.' : _wkCount + ' séances cette semaine · Régularité confirmée.')
+        : (EN ? _wkCount + ' sessions this week · The habit is forming.' : _wkCount + ' séances cette semaine · L\'habitude se construit.');
+      insights.push({ icon: '✦', text: _wkTraj });
     }
   }
 
