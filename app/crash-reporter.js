@@ -53,6 +53,9 @@
     }).catch(function () {});
   }
 
+  // Expose for SFCLogger to forward captured errors without bypassing dedup/rate-limit
+  window._sfcCrashSend = _send;
+
   window.onerror = function (msg, src, line, col, err) {
     _send(msg, src, line, err && err.stack ? err.stack : '');
     return false;

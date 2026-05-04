@@ -1381,26 +1381,35 @@ window.validateProfile = function validateProfile(data) {
 var LS_VERSION = 1;
 window.LS_VERSION = LS_VERSION;
 
+// In-memory fallback for Safari private browsing / storage blocked / quota exceeded.
+// Data survives the session but not page reloads — better than silent loss.
+var _sfcMemFallback = {};
+
 window.lsGet = function lsGet(key, defaultVal) {
   try {
     var raw = localStorage.getItem(key);
-    if (!raw) return defaultVal;
+    if (raw === null || raw === undefined) {
+      // Check memory fallback (set when localStorage was unavailable)
+      return Object.prototype.hasOwnProperty.call(_sfcMemFallback, key) ? _sfcMemFallback[key] : defaultVal;
+    }
     return JSON.parse(raw);
   } catch(e) {
-    console.warn('[storage] Donnée corrompue pour', key, '— reset');
-    localStorage.removeItem(key);
+    // Corrupted JSON — try memory fallback before giving up
+    if (Object.prototype.hasOwnProperty.call(_sfcMemFallback, key)) return _sfcMemFallback[key];
+    try { localStorage.removeItem(key); } catch(_) {}
     return defaultVal;
   }
 };
 
 window.lsSet = function lsSet(key, value) {
+  // Keep memory store in sync regardless — ensures reads are consistent after a write failure
+  _sfcMemFallback[key] = value;
   try {
     localStorage.setItem(key, JSON.stringify(value));
   } catch(e) {
-    console.error('[storage] Impossible de sauvegarder', key, e);
-    // Quota dépassé : nettoyer les anciennes entrées
+    // Private browsing or quota exceeded: memory fallback already set above
     if (e.name === 'QuotaExceededError') {
-      console.warn('[storage] Quota dépassé, nettoyage...');
+      console.warn('[storage] Quota dépassé, sauvegarde mémoire uniquement pour', key);
     }
   }
 };

@@ -269,8 +269,8 @@
           });
       }).catch(function(e) {
         console.warn('[SupaSync] saveProfile failed:', e);
-        // 2026-04 N2 : erreur réseau (pas juste applicative) → tracker
         _trackSyncFailure((e && e.message) || String(e));
+        if (window.SFCLogger) window.SFCLogger.capture(e, { module: 'SupaSync.saveProfile' });
       });
     },
 
@@ -330,10 +330,21 @@
             return mergePayload(result.data);
           });
 
-        return Promise.race([_loadQuery, _loadTimeout]).catch(function(e) {
+        return Promise.race([_loadQuery, _loadTimeout]).then(function(result) {
+          // Snapshot last-known-good on every successful load
+          if (result && typeof result === 'object' && !Array.isArray(result)) {
+            try {
+              if (window.SFCLastGood) window.SFCLastGood.save('profile', result);
+            } catch(_) {}
+          }
+          return result;
+        }).catch(function(e) {
           console.warn('[SupaSync] loadProfile failed or timed out:', e && e.message ? e.message : e);
           _trackSyncFailure(e && e.message ? e.message : 'timeout');
-          return null;
+          if (window.SFCLogger) window.SFCLogger.capture(e, { module: 'SupaSync.loadProfile' });
+          // Attempt last-known-good fallback before returning null
+          var lkg = window.SFCLastGood ? window.SFCLastGood.get('profile') : null;
+          return lkg || null;
         });
       });
     },

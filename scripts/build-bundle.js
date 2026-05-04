@@ -11,6 +11,8 @@ const DEFERRED_SCRIPTS = [
   './prices-db.js',
   './recipe-engine.js',
   './supabase.min.js',
+  './sfc-logger.js',
+  './sfc-remote.js',
   './supabase-client.js',
   './exercise-gifs-map.js',
   './exercises-db.js',
