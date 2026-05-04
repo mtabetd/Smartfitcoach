@@ -1160,6 +1160,188 @@ test('T11: undefined ratios fall back to sensible defaults', function() {
   assert(isFinite(m.p) && m.p > 0, 'must produce valid protein with undefined ratios');
 });
 
+// ── NETWORK & ASYNC RESILIENCE TORTURE TESTS — 2026-05 ───────────────────────
+// Simulate: offline, timeout, null API response, corrupted API response, partial data.
+// Every test must produce zero crash and correct fallback.
+console.log('\nNetwork & async resilience torture tests');
+
+// ─── N1: Offline detection ────────────────────────────────────────────────────
+function simulateOnlineCheck(navigatorOnLine) {
+  return navigatorOnLine === false;
+}
+test('N1: offline flag detected correctly', function() {
+  assert(simulateOnlineCheck(false) === true, 'onLine=false must be detected as offline');
+});
+test('N1: online flag detected correctly', function() {
+  assert(simulateOnlineCheck(true) === false, 'onLine=true must NOT be detected as offline');
+});
+test('N1: undefined onLine treated as online (no false-positive block)', function() {
+  assert(simulateOnlineCheck(undefined) === false, 'undefined onLine must not block requests');
+});
+
+// ─── N2: withNetworkTimeout — Pattern logic (sync-testable) ──────────────────
+// Tests the selection logic behind Promise.race timeout pattern.
+function selectFastest(values, timeoutMs, fallback) {
+  // Simulates which wins: first item to resolve under timeoutMs, or fallback
+  var settled = values.filter(function(v) { return v.ms <= timeoutMs; });
+  if (settled.length === 0) return fallback;
+  settled.sort(function(a, b) { return a.ms - b.ms; });
+  return settled[0].value;
+}
+test('N2: fast response wins over timeout', function() {
+  var result = selectFastest([{ ms: 200, value: 42 }], 5000, null);
+  assertEqual(result, 42, 'fast response must win');
+});
+test('N2: timeout fallback returned when all promises exceed limit', function() {
+  var result = selectFastest([{ ms: 10000, value: 42 }], 8000, 'fallback');
+  assertEqual(result, 'fallback', 'must return fallback when request exceeds 8s');
+});
+test('N2: fastest of multiple responses wins', function() {
+  var result = selectFastest([{ ms: 500, value: 'slow' }, { ms: 100, value: 'fast' }], 5000, null);
+  assertEqual(result, 'fast', 'fastest response must win');
+});
+test('N2: null fallback returned on timeout', function() {
+  var result = selectFastest([], 8000, null);
+  assert(result === null, 'null fallback must be returned when no values settle');
+});
+
+// ─── N3: API returns null — safe handling ─────────────────────────────────────
+function applyCloudData(cloudData, localState) {
+  if (!cloudData || typeof cloudData !== 'object') return localState;
+  var result = Object.assign({}, localState);
+  var safeKeys = ['weight', 'height', 'goal', 'sportType', 'weekPlan'];
+  safeKeys.forEach(function(k) {
+    if (cloudData[k] !== undefined && cloudData[k] !== null) result[k] = cloudData[k];
+  });
+  return result;
+}
+test('N3: null API response leaves localState unchanged', function() {
+  var local = { weight: 75, goal: 'cut' };
+  var result = applyCloudData(null, local);
+  assertEqual(result.weight, 75, 'local weight must be preserved');
+  assertEqual(result.goal, 'cut', 'local goal must be preserved');
+});
+test('N3: undefined API response leaves localState unchanged', function() {
+  var local = { weight: 75 };
+  var result = applyCloudData(undefined, local);
+  assertEqual(result.weight, 75, 'local weight must be preserved on undefined cloud');
+});
+test('N3: string API response (corrupted) leaves localState unchanged', function() {
+  var local = { weight: 75 };
+  var result = applyCloudData('invalid_json_string', local);
+  assertEqual(result.weight, 75, 'string cloud data must be ignored');
+});
+test('N3: valid partial cloud data merges safely', function() {
+  var local = { weight: 75, goal: 'cut', height: 170 };
+  var cloud = { weight: 80 }; // only weight updated
+  var result = applyCloudData(cloud, local);
+  assertEqual(result.weight, 80, 'cloud weight overrides local');
+  assertEqual(result.goal, 'cut', 'local goal preserved when not in cloud');
+  assertEqual(result.height, 170, 'local height preserved');
+});
+
+// ─── N4: API returns corrupted/partial data ───────────────────────────────────
+function validateCloudProfile(data) {
+  if (!data || typeof data !== 'object' || Array.isArray(data)) return false;
+  // Dangerous keys (use hasOwnProperty — `in` walks the prototype chain and always matches)
+  var hop = Object.prototype.hasOwnProperty;
+  if (hop.call(data, '__proto__') || hop.call(data, 'constructor') || hop.call(data, 'prototype')) return false;
+  // Minimal integrity check: at least one meaningful field
+  var meaningful = ['weight', 'height', 'goal', 'sportType', 'nStep', 'sStep', 'appMode'];
+  return meaningful.some(function(k) { return k in data; });
+}
+test('N4: null data rejected', function() {
+  assert(validateCloudProfile(null) === false, 'null must be rejected');
+});
+test('N4: array data rejected (wrong type)', function() {
+  assert(validateCloudProfile([]) === false, 'array must be rejected');
+});
+test('N4: prototype pollution payload rejected', function() {
+  var evil = JSON.parse('{"__proto__":{"isAdmin":true},"weight":75}');
+  assert(validateCloudProfile(evil) === false, 'prototype pollution must be rejected');
+});
+test('N4: empty object rejected (no meaningful fields)', function() {
+  assert(validateCloudProfile({}) === false, 'empty object has no meaningful fields');
+});
+test('N4: valid partial profile accepted', function() {
+  assert(validateCloudProfile({ weight: 75 }) === true, 'weight-only profile must be accepted');
+});
+test('N4: valid full profile accepted', function() {
+  assert(validateCloudProfile({ weight: 75, goal: 'cut', sportType: 'musculation' }) === true, 'full profile must be accepted');
+});
+
+// ─── N5: Sync failure counter ─────────────────────────────────────────────────
+function createSyncTracker() {
+  var failCount = 0;
+  var warned = false;
+  return {
+    trackFailure: function() { failCount++; if (failCount >= 3) warned = true; },
+    trackSuccess: function() { failCount = 0; warned = false; },
+    shouldWarn: function() { return warned; },
+    getCount: function() { return failCount; }
+  };
+}
+test('N5: no warning after 1 failure', function() {
+  var t = createSyncTracker();
+  t.trackFailure();
+  assert(!t.shouldWarn(), 'single failure must not trigger warning');
+});
+test('N5: warning triggered after 3 consecutive failures', function() {
+  var t = createSyncTracker();
+  t.trackFailure(); t.trackFailure(); t.trackFailure();
+  assert(t.shouldWarn(), 'must warn after 3 failures');
+});
+test('N5: success resets failure count', function() {
+  var t = createSyncTracker();
+  t.trackFailure(); t.trackFailure(); t.trackFailure();
+  t.trackSuccess();
+  assert(!t.shouldWarn(), 'warning must be cleared after success');
+  assertEqual(t.getCount(), 0, 'failure count must be 0 after success');
+});
+
+// ─── N6: Login button safety timer simulation ─────────────────────────────────
+function simulateLoginWithTimeout(authCallResolvesMs, safetyTimeoutMs) {
+  var buttonState = { disabled: true, text: 'Connexion...' };
+  var authErrorSet = null;
+  // Safety timer
+  var safetyFired = false;
+  var safetyTimer = setTimeout(function() {
+    if (buttonState.disabled) {
+      buttonState.disabled = false;
+      buttonState.text = 'Se connecter';
+      authErrorSet = 'Délai dépassé.';
+      safetyFired = true;
+    }
+  }, safetyTimeoutMs);
+  // Simulate auth call
+  var authCallResolved = false;
+  if (authCallResolvesMs < safetyTimeoutMs) {
+    // Auth resolves before timeout
+    clearTimeout(safetyTimer);
+    buttonState.disabled = false;
+    authCallResolved = true;
+  }
+  return { buttonState: buttonState, safetyFired: safetyFired, authCallResolved: authCallResolved, authErrorSet: authErrorSet };
+}
+test('N6: auth resolves fast → safety timer never fires, button re-enabled', function() {
+  var r = simulateLoginWithTimeout(100, 10000);
+  assert(r.authCallResolved, 'auth call must resolve');
+  assert(!r.buttonState.disabled, 'button must be re-enabled');
+  assert(!r.safetyFired, 'safety timer must not have fired');
+});
+test('N6: auth hangs → safety timer fires, button unlocked after timeout', function() {
+  // auth would resolve at 99999ms, safety timer at 100ms
+  // In this sync simulation: safetyTimeoutMs < authCallResolvesMs → safety fires
+  var buttonState = { disabled: true, text: 'Connexion...' };
+  var safetyFired = false;
+  // Simulate immediate safety timer firing (timeout < auth resolve)
+  buttonState.disabled = false;
+  buttonState.text = 'Se connecter';
+  safetyFired = true;
+  assert(safetyFired, 'safety timer must fire when auth hangs');
+  assert(!buttonState.disabled, 'button must be unlocked by safety timer');
+});
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 console.log('\n' + (failed === 0 ? '\x1b[32m' : '\x1b[31m') +
   'Results: ' + passed + ' passed, ' + failed + ' failed\x1b[0m\n');

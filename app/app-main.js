@@ -2459,9 +2459,22 @@ function renderLogin(app) {
  var email = emailInput.value.trim();
  var pw = pwInput.value;
  if (!email || !pw) { S.authError = (window.isEnglish && window.isEnglish()) ? 'Please fill in all fields' : 'Veuillez remplir tous les champs'; render(); return; }
+ if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+   S.authError = (window.isEnglish && window.isEnglish()) ? 'No network connection. Check your connection and retry.' : 'Pas de connexion réseau. Vérifiez votre connexion et réessayez.';
+   render(); return;
+ }
  loginBtn.disabled = true;
  loginBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Logging in...' : 'Connexion...';
+ var _loginSafetyTimer = setTimeout(function() {
+   if (loginBtn && loginBtn.disabled) {
+     loginBtn.disabled = false;
+     loginBtn.textContent = window.t ? window.t('auth.login_btn') : 'Se connecter';
+     S.authError = (window.isEnglish && window.isEnglish()) ? 'Connection timed out. Check your network and retry.' : 'Délai dépassé. Vérifiez votre connexion et réessayez.';
+     try { if (window.render) window.render(); } catch(e) {}
+   }
+ }, 10000);
  AUTH.login(email, pw).then(function(result) {
+ clearTimeout(_loginSafetyTimer);
  if (result.ok) {
  S.authError = '';
  S.justLoggedIn = true;
@@ -2548,6 +2561,7 @@ function renderLogin(app) {
  render();
  }
  }).catch(function() {
+ clearTimeout(_loginSafetyTimer);
  S.view = 'auth'; // forcer le retour à l'écran login en cas d'erreur réseau
  S.authError = (window.isEnglish && window.isEnglish()) ? 'Connection error. Please try again.' : 'Erreur de connexion. Réessayez.';
  render();
@@ -2812,9 +2826,22 @@ function renderRegister(app) {
  if (pw.length < 6) { S.authError = window.t('auth.error_password_length'); render(); return; }
  if (!consentCheck.checked) { S.authError = 'Veuillez accepter la politique de confidentialit\u00e9 et les CGU pour cr\u00e9er votre compte.'; render(); return; }
 
+ if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+   S.authError = (window.isEnglish && window.isEnglish()) ? 'No network connection. Check your connection and retry.' : 'Pas de connexion réseau. Vérifiez votre connexion et réessayez.';
+   render(); return;
+ }
  regBtn.disabled = true;
  regBtn.textContent = 'Création...';
+ var _regSafetyTimer = setTimeout(function() {
+   if (regBtn && regBtn.disabled) {
+     regBtn.disabled = false;
+     regBtn.textContent = window.t ? window.t('auth.register_btn') : 'Créer mon compte';
+     S.authError = 'Délai dépassé. Vérifiez votre connexion et réessayez.';
+     try { if (window.render) window.render(); } catch(e) {}
+   }
+ }, 10000);
  AUTH.register(name, email, pw, { nom: nom, phone: phone }).then(function(result) {
+ clearTimeout(_regSafetyTimer);
  if (result.ok) {
  S.authError = '';
  if (name) { S.prenom = name; }
@@ -2828,6 +2855,7 @@ function renderRegister(app) {
  render();
  }
  }).catch(function() {
+ clearTimeout(_regSafetyTimer);
  S.authError = 'Erreur lors de la création du compte. Réessayez.';
  render();
  });

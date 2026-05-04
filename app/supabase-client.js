@@ -301,7 +301,11 @@
         if (!session || !session.user) return null;
         var userId = session.user.id;
 
-        return client
+        var _loadTimeout = new Promise(function(_, reject) {
+          setTimeout(function() { reject(new Error('SupaSync.loadProfile timeout (8s)')); }, 8000);
+        });
+
+        var _loadQuery = client
           .from('profiles')
           .select('data, subscription_plan, subscription_end, updated_at')
           .eq('id', userId)
@@ -325,6 +329,12 @@
             if (result.error || !result.data) return null;
             return mergePayload(result.data);
           });
+
+        return Promise.race([_loadQuery, _loadTimeout]).catch(function(e) {
+          console.warn('[SupaSync] loadProfile failed or timed out:', e && e.message ? e.message : e);
+          _trackSyncFailure(e && e.message ? e.message : 'timeout');
+          return null;
+        });
       });
     },
 
