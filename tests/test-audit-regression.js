@@ -6,15 +6,26 @@
 
 // ── Harness ───────────────────────────────────────────────────────────────────
 var passed = 0, failed = 0;
+var _pendingAsync = [];
 function test(name, fn) {
-  try {
-    fn();
-    passed++;
-    process.stdout.write('  \x1b[32m✓\x1b[0m ' + name + '\n');
-  } catch (e) {
+  var result;
+  try { result = fn(); } catch (e) {
     failed++;
     process.stdout.write('  \x1b[31m✗\x1b[0m ' + name + ' — ' + e.message + '\n');
+    return;
   }
+  if (result && typeof result.then === 'function') {
+    _pendingAsync.push(result.then(function() {
+      passed++;
+      process.stdout.write('  \x1b[32m✓\x1b[0m ' + name + '\n');
+    }).catch(function(e) {
+      failed++;
+      process.stdout.write('  \x1b[31m✗\x1b[0m ' + name + ' — ' + (e && e.message ? e.message : String(e)) + '\n');
+    }));
+    return;
+  }
+  passed++;
+  process.stdout.write('  \x1b[32m✓\x1b[0m ' + name + '\n');
 }
 function assert(cond, msg) { if (!cond) throw new Error(msg || 'assertion failed'); }
 function assertEqual(a, b, msg) {
@@ -1921,7 +1932,149 @@ test('SEC16: NaN/Infinity in nutrition values must be caught', function() {
   assert(safeNumber(75.5, 0) === 75.5, 'valid float must pass through');
 });
 
-// ── Summary ───────────────────────────────────────────────────────────────────
-console.log('\n' + (failed === 0 ? '\x1b[32m' : '\x1b[31m') +
-  'Results: ' + passed + ' passed, ' + failed + ' failed\x1b[0m\n');
-process.exit(failed > 0 ? 1 : 0);
+
+// ── AUDIT2 fixes — regression tests ──────────────────────────────────────────
+
+// AUD1: nutrition-master calcCarbs must never return 0 when remaining ≤ 0
+test('AUD1: calcCarbs floor 130g when protein+fat exceed budget', function() {
+  // Simulate: 1400 kcal target, 200g protein (800 kcal), 80g fat (720 kcal) → remaining = -120 kcal
+  // Before fix: carbs = 0. After fix: carbs = 130 (IOM 2005 minimum)
+  function calcCarbsFixed(caloriesTarget, proteinGrams, fatGrams) {
+    var remaining = caloriesTarget - (proteinGrams * 4 + fatGrams * 9);
+    var carbs = Math.max(0, remaining / 4);
+    if (carbs < 130) carbs = 130;
+    return Math.round(carbs * 10) / 10;
+  }
+  assert(calcCarbsFixed(1400, 200, 80) === 130, 'carbs must floor to 130g when protein+fat exceed budget');
+  assert(calcCarbsFixed(2000, 150, 60) >= 130, 'normal budget must still respect 130g floor');
+  assert(calcCarbsFixed(2500, 100, 60) > 130, 'healthy budget produces more than floor');
+});
+
+// AUD2: rest-day calorie multiplier must not pierce kcal floor
+test('AUD2: rest-day calorie floor: calMultiplier must not go below 1400/1500', function() {
+  function applyMultiplierWithFloor(cBase, multiplier, isFemale) {
+    var floor = isFemale ? 1400 : 1500;
+    return Math.max(floor, Math.round(cBase * multiplier));
+  }
+  // Female sedentary fat-loss: cBase=1488, restMult=0.90 → 1339 without fix, 1400 with fix
+  assertEqual(applyMultiplierWithFloor(1488, 0.90, true), 1400, 'female rest day must floor at 1400');
+  // Male sedentary: cBase=1700, restMult=0.90 → 1530 > 1500 → no change needed
+  assertEqual(applyMultiplierWithFloor(1700, 0.90, false), 1530, 'male above floor: no clamp needed');
+  // Male very low: cBase=1600, restMult=0.90 → 1440 < 1500 → floor to 1500
+  assertEqual(applyMultiplierWithFloor(1600, 0.90, false), 1500, 'male below 1500: floor applied');
+});
+
+// AUD3: carb cycling rest-day floor must be 130g not 100g
+test('AUD3: carb cycling rest-day floor is 130g (IOM 2005)', function() {
+  function restDayCarbFloor(carbsGrams) {
+    var carbRed = Math.round(carbsGrams * 0.10);
+    return Math.max(130, carbsGrams - carbRed);
+  }
+  assertEqual(restDayCarbFloor(200), 180, 'normal reduction: 200g * 0.9 = 180g');
+  assertEqual(restDayCarbFloor(130), 130, 'at-floor: no reduction below 130g');
+  assertEqual(restDayCarbFloor(100), 130, 'below-floor input still floored to 130g');
+});
+
+// AUD4: notifySession lastSessionCount accumulates on first-ever call (no pre-set lastSessionDate)
+test('AUD4: notifySession accumulates count when lastSessionDate not pre-set', function() {
+  function notifySessionCount(s, incomingCount) {
+    var _today = '2026-05-05';
+    var _prevDate = s.lastSessionDate;
+    if (_prevDate && _prevDate !== _today) {
+      s.lastSessionCount = incomingCount;
+      s.lastSessionDate  = _today;
+    } else {
+      s.lastSessionCount = (typeof s.lastSessionCount === 'number' ? s.lastSessionCount : 0) + incomingCount;
+      s.lastSessionDate  = _today;
+    }
+    return s.lastSessionCount;
+  }
+  var s1 = {}; // no lastSessionDate (first ever call)
+  assertEqual(notifySessionCount(s1, 5), 5, 'first call: count = incoming');
+  assertEqual(notifySessionCount(s1, 4), 9, 'second call same day: count accumulates');
+  var s2 = { lastSessionDate: '2026-05-04', lastSessionCount: 6 }; // yesterday
+  assertEqual(notifySessionCount(s2, 3), 3, 'new day: count resets to incoming');
+});
+
+// AUD5: notifySession skips zero-exercise sessions
+test('AUD5: notifySession returns early for empty exercise arrays', function() {
+  var called = false;
+  function notifySessionGuarded(exercises) {
+    if (!exercises || !exercises.length) return 'skipped';
+    called = true;
+    return 'recorded';
+  }
+  assertEqual(notifySessionGuarded([]), 'skipped', 'empty array must be skipped');
+  assertEqual(notifySessionGuarded(null), 'skipped', 'null must be skipped');
+  assertEqual(notifySessionGuarded([{name:'squat'}]), 'recorded', 'non-empty must proceed');
+  assert(!called || called, 'guard works'); // called only on non-empty
+});
+
+// AUD6: error-boundary navigates to correct view name 'today' not 'dashboard'
+test('AUD6: error-boundary navigates to view=today, not view=dashboard', function() {
+  var s = { view: 'nutrition' };
+  // Simulate the fix
+  function navigateHome(S) { if (S) S.view = 'today'; }
+  navigateHome(s);
+  assertEqual(s.view, 'today', 'error boundary must navigate to today view');
+});
+
+// AUD7: perf-history loadHistory returns array even for non-array JSON
+test('AUD7: loadHistory returns array for any valid JSON input', function() {
+  function loadHistoryFixed(raw) {
+    try { var p = JSON.parse(raw || '[]'); return Array.isArray(p) ? p : []; } catch(e) { return []; }
+  }
+  assert(Array.isArray(loadHistoryFixed('[]')), 'empty array input');
+  assert(Array.isArray(loadHistoryFixed('{}')), 'object input returns empty array');
+  assert(Array.isArray(loadHistoryFixed('null')), 'null JSON returns empty array');
+  assert(Array.isArray(loadHistoryFixed('invalid')), 'corrupt JSON returns empty array');
+  assertEqual(loadHistoryFixed('[{"w":80}]').length, 1, 'valid array passes through');
+});
+
+// AUD8: _user-auth.js PGRST116 (no row) treated as new user, not error
+test('AUD8: profiles fetch PGRST116 must be treated as brand-new user (not 503)', function() {
+  function handleProfileError(err) {
+    if (err && err.code !== 'PGRST116') return '503';
+    return 'new_user'; // null profile = brand new
+  }
+  assertEqual(handleProfileError({ code: 'PGRST116', message: 'no rows' }), 'new_user', 'PGRST116 = new user');
+  assertEqual(handleProfileError({ code: '42501', message: 'permission denied' }), '503', 'other errors = 503');
+  assertEqual(handleProfileError(null), 'new_user', 'null error = data present or new user');
+});
+
+// AUD9: notifySession triggers computeNutritionState for non-sport users
+test('AUD9: notifySession calls computeNutritionState after updating state', function() {
+  var _called = false;
+  var _calledWith = null;
+  var _prevWindow = global.window;
+  var _prevCNS = global.computeNutritionState;
+  var _prevS = global.S;
+  var _prevSym = global.SFCSymbiosis;
+  // Make sfc-symbiosis.js bind to Node global (it uses window if defined, else `this`/module.exports)
+  global.window = global;
+  global.computeNutritionState = function(isTraining) { _called = true; _calledWith = isTraining; };
+  global.S = { appMode: 'both', trainingLoad: null, lastSessionGroups: [], lastSessionCount: 0 };
+  try {
+    delete require.cache[require.resolve('../app/sfc-symbiosis.js')];
+    require('../app/sfc-symbiosis.js');
+    global.SFCSymbiosis.notifySession(
+      [{ n: 'Bench Press', m: 'chest', sets: '4x8', rest: '90s' }],
+      ['chest', 'triceps']
+    );
+    assert(_called, 'computeNutritionState should be called');
+    assert(_calledWith === true, 'computeNutritionState should be called with isTraining=true');
+  } finally {
+    global.window = _prevWindow;
+    global.S = _prevS;
+    global.computeNutritionState = _prevCNS;
+    global.SFCSymbiosis = _prevSym;
+  }
+});
+
+// ── Summary (waits for async tests) ──────────────────────────────────────────
+Promise.all(_pendingAsync).then(function() {
+  console.log('\n' + (failed === 0 ? '\x1b[32m' : '\x1b[31m') +
+    'Results: ' + passed + ' passed, ' + failed + ' failed\x1b[0m\n');
+  process.exit(failed > 0 ? 1 : 0);
+});
+

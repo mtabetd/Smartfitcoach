@@ -197,6 +197,12 @@
     // Passer lastSessionGroups (merged) pour refléter tous les sports du jour
     var today = new Date().toISOString().slice(0, 10);
     updateWeekContext(today, s.lastSessionGroups, s.trainingLoad, exercises);
+
+    // Recompute nutrition immediately so carb cycling reflects this session.
+    // computeNutritionState only reads S and writes S._nm — it never calls render.
+    if (s.appMode !== 'sport' && typeof window.computeNutritionState === 'function') {
+      try { window.computeNutritionState(true); } catch (_e) {}
+    }
   }
 
   // ── 6. Résumé périodisation (informatif pour l'UI) ────────────────────────

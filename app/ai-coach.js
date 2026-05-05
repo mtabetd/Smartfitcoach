@@ -172,7 +172,8 @@ function buildContext() {
     streak: _streakVal,
     intolerances: Array.isArray(S.intolerances) ? S.intolerances : [],
     allowPork: !!S.allowPork,
-    allowAlcohol: !!S.allowAlcohol
+    allowAlcohol: !!S.allowAlcohol,
+    lang: (window.I18N && window.I18N.current) || ((window.isEnglish && window.isEnglish()) ? 'en' : 'fr')
   };
 
   // Sport spécifique

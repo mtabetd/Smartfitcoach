@@ -7770,6 +7770,67 @@ function renderMusculationProgram(p) {
    p.appendChild(_flWrap);
  })();
 
+ // ─── PRÉ-BRIEF SÉANCE ───
+ (function() {
+   var _bToday = new Date().toISOString().slice(0, 10);
+   var _bKey = 'brief_' + S.selectedSportDay + '_' + _bToday;
+   var _bCtaDone = S.sessionHistory && S.sessionHistory[S.selectedSportDay + '_' + _bToday];
+   var _bStarted = !!S._sessionStartTime;
+   if (_bCtaDone || _bStarted || S._briefDismissedKey === _bKey) return;
+
+   var _isEn = window.isEnglish && window.isEnglish();
+   var _bAllEx = (day.exercises || []).concat((S.bonusExercises || {})[S.selectedSportDay] || []);
+   var _bCount = _bAllEx.length;
+
+   // Find best compound target from progression history
+   var _targetLine = '';
+   try {
+     var _mph = S.muscuProgressionHistory || {};
+     var _compounds = ['Squat', 'Bench Press', 'Deadlift', 'Overhead Press'];
+     _compounds.forEach(function(c) {
+       if (_targetLine) return;
+       var _hist = _mph[c];
+       if (!Array.isArray(_hist) || _hist.length < 1) return;
+       var _lastW = _hist[_hist.length - 1].weight || 0;
+       if (_lastW > 0) _targetLine = c + ' → ' + (_lastW + 2.5) + ' kg';
+     });
+   } catch(_e) {}
+
+   var _brief = document.createElement('div');
+   _brief.style.cssText = 'border:1px solid var(--border,#D8D8D0);padding:16px;margin-bottom:14px;background:rgba(250,250,247,0.9);';
+   var _bEye = document.createElement('div');
+   _bEye.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px;';
+   _bEye.textContent = _isEn ? 'Today\'s session' : 'Séance du jour';
+   _brief.appendChild(_bEye);
+
+   var _bTitle = document.createElement('div');
+   _bTitle.style.cssText = 'font-family:Georgia,serif;font-size:18px;color:var(--black,#0A0A09);margin-bottom:10px;';
+   _bTitle.textContent = day.focus || (_isEn ? 'Training' : 'Entraînement');
+   _brief.appendChild(_bTitle);
+
+   var _bMeta = document.createElement('div');
+   _bMeta.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:10px;';
+   _bMeta.textContent = _bCount + ' ' + (_isEn ? (_bCount > 1 ? 'exercises' : 'exercise') : (_bCount > 1 ? 'exercices' : 'exercice'));
+   if (_targetLine) _bMeta.textContent += '  ·  ' + (_isEn ? 'Target' : 'Objectif') + ': ' + _targetLine;
+   _brief.appendChild(_bMeta);
+
+   if (S._nm && S._nm.carbsGrams > 0) {
+     var _bNut = document.createElement('div');
+     _bNut.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--orange-ink,#7A3B0E);margin-bottom:12px;';
+     _bNut.textContent = _isEn
+       ? 'Nutrition plan: ' + Math.round(S._nm.kcal) + ' kcal · ' + Math.round(S._nm.carbsGrams) + 'g carbs (training day)'
+       : 'Nutrition : ' + Math.round(S._nm.kcal) + ' kcal · ' + Math.round(S._nm.carbsGrams) + 'g glucides (jour entraînement)';
+     _brief.appendChild(_bNut);
+   }
+
+   var _bBtn = document.createElement('button');
+   _bBtn.style.cssText = 'width:100%;padding:13px;background:var(--black,#0A0A09);color:#FAFAF7;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;min-height:44px;';
+   _bBtn.textContent = _isEn ? 'Start session' : 'Commencer la séance';
+   _bBtn.onclick = function() { S._briefDismissedKey = _bKey; if (window.render) window.render(); };
+   _brief.appendChild(_bBtn);
+   p.appendChild(_brief);
+ })();
+
  // ─── BADGE SÉANCE VALIDÉE ───
  var _ctaToday = new Date().toISOString().slice(0, 10);
  var _ctaTodayKey = S.selectedSportDay + '_' + _ctaToday;
@@ -9441,6 +9502,25 @@ function renderMusculationProgram(p) {
  if (window.SOCIAL && window.SOCIAL.shareWorkout && window.SOCIAL.getMyProfileCached && window.SOCIAL.getMyProfileCached()) {
    try { window.SOCIAL.shareWorkout({ sport: S.sportType || 'sport', duration: realDur, kcal: Math.round(kcalRes.total || 0) }); } catch(e) {}
  }
+ try {
+   var _prog2 = S.sportProgram || [];
+   var _ni2 = _prog2.length ? (S.selectedSportDay + 1) % _prog2.length : -1;
+   var _nd2 = _ni2 >= 0 ? _prog2[_ni2] : null;
+   var _nf2 = (_nd2 && _nd2.focus || '').toLowerCase();
+   S._postSessionPanel = {
+     duration: realDur,
+     kcalTotal: Math.round(kcalRes.total || 0),
+     kcalBase: kcalRes.base,
+     kcalEpoc: kcalRes.epoc,
+     load: S.trainingLoad || 'moderate',
+     focus: (day && day.focus) || '',
+     nmKcal: Math.round((S._nm && S._nm.kcal) || 0),
+     nmCarbs: Math.round((S._nm && S._nm.carbsGrams) || 0),
+     tomorrowFocus: (_nd2 && _nd2.focus) || '',
+     tomorrowIsRest: !_nd2 || !(_nd2.exercises && _nd2.exercises.length) ||
+       _nf2.indexOf('repos') !== -1 || _nf2.indexOf('rest') !== -1
+   };
+ } catch(_pErr) {}
  window.render();
  }}, (window.isEnglish && window.isEnglish() ? '\u2713 Validate session' : '\u2713 Valider la s\u00e9ance'));
  compPanel.appendChild(saveBtn);

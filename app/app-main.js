@@ -1335,6 +1335,63 @@ function renderProfilePage(container) {
      });
      card.appendChild(_featsWrap);
 
+     // Bloc progression réelle utilisateur — preuve sociale personnalisée
+     if (!_isSub) {
+       (function() {
+         var _uid = S.user && S.user.id;
+         var _hist = Array.isArray(S.sessionHistory) ? S.sessionHistory : [];
+         var _sessionCount = _hist.length;
+         var _kcalBurned = _hist.reduce(function(acc, sh) { return acc + (sh.kcalTotal || 0); }, 0);
+         var _streak = 0;
+         try { _streak = parseInt(localStorage.getItem('mtd_streak_' + _uid) || '0', 10) || 0; } catch(e) {}
+         var _bestLift = '';
+         try {
+           var _mph = S.muscuProgressionHistory || {};
+           var _compounds = ['Squat','Bench Press','Deadlift','Overhead Press','Pull-up'];
+           var _bestGain = 0;
+           _compounds.forEach(function(ex) {
+             var hist = _mph[ex];
+             if (!Array.isArray(hist) || hist.length < 2) return;
+             var first = hist[0].weight || 0;
+             var last = hist[hist.length - 1].weight || 0;
+             var gain = last - first;
+             if (gain > _bestGain) { _bestGain = gain; _bestLift = ex + ' +' + gain + 'kg'; }
+           });
+         } catch(e) {}
+         var _hasData = _sessionCount > 0 || _streak > 0 || _bestLift;
+         if (!_hasData) return;
+         var _isEn = window.isEnglish && window.isEnglish();
+         var _progBlock = h('div', {style:
+           'background:rgba(122,59,14,0.06);border:1px solid rgba(122,59,14,0.15);' +
+           'border-radius:6px;padding:14px 16px;margin:18px 0 4px;'
+         });
+         _progBlock.appendChild(h('div', {style:
+           'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;' +
+           'text-transform:uppercase;color:var(--orange-ink,#7A3B0E);margin-bottom:10px;'
+         }, _isEn ? 'Your progress so far' : 'Votre progression'));
+         var _rows = [];
+         if (_sessionCount > 0) _rows.push([
+           _sessionCount + ' ' + (_isEn ? (_sessionCount > 1 ? 'sessions' : 'session') : (_sessionCount > 1 ? 'séances' : 'séance')),
+           Math.round(_kcalBurned) + ' kcal ' + (_isEn ? 'burned' : 'brûlées')
+         ]);
+         if (_streak > 1) _rows.push([
+           _streak + ' ' + (_isEn ? 'day streak' : 'jours consécutifs'),
+           ''
+         ]);
+         if (_bestLift) _rows.push([
+           _isEn ? 'Best lift gain' : 'Meilleure progression',
+           _bestLift
+         ]);
+         _rows.forEach(function(r) {
+           var _row = h('div', {style: 'display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid rgba(122,59,14,0.1);'});
+           _row.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black);'}, r[0]));
+           if (r[1]) _row.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:11px;color:var(--orange-ink,#7A3B0E);'}, r[1]));
+           _progBlock.appendChild(_row);
+         });
+         card.appendChild(_progBlock);
+       })();
+     }
+
      // Sélecteur de plan — Hermès pricing UI
      if (!_isSub) {
        var _pData = window.SFC_PRICING_DATA || [];
@@ -2332,10 +2389,17 @@ function render() {
  // Détachés du wrap principal — ils vivent sur document.body pour être fixed au-dessus.
  try {
    // Nettoyer les instances précédentes
-   ['coach-bar', 'fab-logger-container', 'progression-drawer'].forEach(function(id) {
+   ['coach-bar', 'fab-logger-container', 'progression-drawer', 'sfc-post-session-panel'].forEach(function(id) {
      var el = document.getElementById(id);
      if (el) el.parentNode.removeChild(el);
    });
+
+   if (S._postSessionPanel && S.appMode) {
+     try {
+       var _panel = renderPostSessionPanel(S._postSessionPanel);
+       if (_panel) document.body.appendChild(_panel);
+     } catch(_pse) { console.warn('[PostSessionPanel]', _pse); }
+   }
 
    // FIX BUG #2+#4 audit debug login 2026-04-15 :
    // - Reset overlays éphémères si view ≠ today (drawer fullscreen stale masquait
@@ -3187,6 +3251,108 @@ function renderNewPassword(app) {
  cancelLink.appendChild(h('a', {onclick: function() { S.authError = ''; S.view = 'auth'; render(); }}, 'Retour \u00e0 la connexion'));
  c.appendChild(cancelLink);
  app.appendChild(c);
+}
+
+// ─── POST-SESSION PANEL ───────────────────────────────────────────────────────
+function renderPostSessionPanel(data) {
+  var isEn = window.isEnglish && window.isEnglish();
+  var panel = document.createElement('div');
+  panel.id = 'sfc-post-session-panel';
+  panel.style.cssText = 'position:fixed;inset:0;z-index:9000;background:#FAFAF7;display:flex;flex-direction:column;overflow-y:auto;animation:_psp-slide .28s cubic-bezier(.22,.61,.36,1) both;';
+
+  if (!document.getElementById('_sfc-psp-css')) {
+    var st = document.createElement('style');
+    st.id = '_sfc-psp-css';
+    st.textContent = '@keyframes _psp-slide{from{transform:translateY(100%)}to{transform:translateY(0)}}';
+    document.head.appendChild(st);
+  }
+
+  function _close() { S._postSessionPanel = null; window.render(); }
+
+  var inner = document.createElement('div');
+  inner.style.cssText = 'max-width:480px;width:100%;margin:0 auto;padding:24px 20px 40px;box-sizing:border-box;';
+
+  var eyebrow = document.createElement('div');
+  eyebrow.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px;';
+  eyebrow.textContent = isEn ? 'Session complete' : 'Séance terminée';
+  inner.appendChild(eyebrow);
+
+  var focusTitle = document.createElement('div');
+  focusTitle.style.cssText = 'font-family:Georgia,serif;font-size:22px;color:var(--black,#0A0A09);margin-bottom:20px;line-height:1.2;';
+  focusTitle.textContent = data.focus || (isEn ? 'Training' : 'Entraînement');
+  inner.appendChild(focusTitle);
+
+  var grid = document.createElement('div');
+  grid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;';
+  [
+    [data.duration + ' min', isEn ? 'Duration' : 'Durée'],
+    [data.kcalTotal + ' kcal', isEn ? 'Burned' : 'Brûlées'],
+    [isEn ? (data.load || 'Moderate') : ({ light:'Légère', moderate:'Modérée', heavy:'Intense', max:'Maximale' }[data.load] || 'Modérée'), isEn ? 'Load' : 'Charge']
+  ].forEach(function(col) {
+    var c = document.createElement('div');
+    c.style.cssText = 'background:var(--card-bg,#F0F0EA);border-radius:8px;padding:12px 8px;text-align:center;';
+    var val = document.createElement('div');
+    val.style.cssText = 'font-family:Georgia,serif;font-size:17px;color:var(--black,#0A0A09);';
+    val.textContent = col[0];
+    var lbl = document.createElement('div');
+    lbl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:4px;';
+    lbl.textContent = col[1];
+    c.appendChild(val); c.appendChild(lbl);
+    grid.appendChild(c);
+  });
+  inner.appendChild(grid);
+
+  if (data.nmKcal > 0) {
+    var nutSect = document.createElement('div');
+    nutSect.style.cssText = 'border-top:1px solid var(--border,#D8D8D0);padding-top:16px;margin-bottom:16px;';
+    var nutLabel = document.createElement('div');
+    nutLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px;';
+    nutLabel.textContent = isEn ? 'Nutrition today' : 'Nutrition du jour';
+    nutSect.appendChild(nutLabel);
+    var nutRow = document.createElement('div');
+    nutRow.style.cssText = 'display:flex;gap:16px;align-items:baseline;';
+    var kcalN = document.createElement('div');
+    kcalN.style.cssText = 'font-family:Georgia,serif;font-size:16px;color:var(--black,#0A0A09);';
+    kcalN.textContent = data.nmKcal + ' kcal';
+    nutRow.appendChild(kcalN);
+    if (data.nmCarbs > 0) {
+      var carbsN = document.createElement('div');
+      carbsN.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);';
+      carbsN.textContent = data.nmCarbs + 'g ' + (isEn ? 'carbs (training day)' : 'glucides (jour entraînement)');
+      nutRow.appendChild(carbsN);
+    }
+    nutSect.appendChild(nutRow);
+    inner.appendChild(nutSect);
+  }
+
+  if (data.tomorrowFocus) {
+    var tmrSect = document.createElement('div');
+    tmrSect.style.cssText = 'border-top:1px solid var(--border,#D8D8D0);padding-top:16px;margin-bottom:20px;';
+    var tmrLabel = document.createElement('div');
+    tmrLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:4px;';
+    tmrLabel.textContent = isEn ? 'Tomorrow' : 'Demain';
+    tmrSect.appendChild(tmrLabel);
+    var tmrVal = document.createElement('div');
+    tmrVal.style.cssText = 'font-family:Georgia,serif;font-size:14px;color:var(--black,#0A0A09);';
+    tmrVal.textContent = data.tomorrowIsRest ? (isEn ? 'Rest day — recovery' : 'Repos — récupération') : data.tomorrowFocus;
+    tmrSect.appendChild(tmrVal);
+    inner.appendChild(tmrSect);
+  }
+
+  var coachBtn = document.createElement('button');
+  coachBtn.style.cssText = 'width:100%;padding:14px;background:var(--black,#0A0A09);color:#FAFAF7;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;border:none;border-radius:6px;cursor:pointer;margin-bottom:10px;';
+  coachBtn.textContent = isEn ? 'Ask coach for insights' : 'Demander un bilan au coach';
+  coachBtn.onclick = function() { _close(); S.view = 'today'; S._openCoachAfterClose = true; window.render(); };
+  inner.appendChild(coachBtn);
+
+  var closeBtn = document.createElement('button');
+  closeBtn.style.cssText = 'width:100%;padding:12px;background:none;border:1px solid var(--border,#D8D8D0);border-radius:6px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);cursor:pointer;';
+  closeBtn.textContent = isEn ? 'Close' : 'Fermer';
+  closeBtn.onclick = _close;
+  inner.appendChild(closeBtn);
+
+  panel.appendChild(inner);
+  return panel;
 }
 
 // ─── MAKE RENDER GLOBAL ───
