@@ -4611,6 +4611,7 @@ function showPaywall(feature) {
   upgradeBtn.textContent = 'Découvrir Premium →';
   upgradeBtn.onclick = function() {
     dismiss();
+    if (window.SupaSync) { try { window.SupaSync._userStatusCacheTs = 0; } catch(_e) {} }
     if (window.S && window.render) { window.S.view = 'profil'; window.render(); }
   };
   var closeBtn = document.createElement('button');

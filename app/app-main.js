@@ -721,7 +721,7 @@ window.renderModuleChoice = function renderModuleChoice(content) {
 
    // SVG icon
    var iconWrap = h('div', {style: 'flex-shrink:0;margin-top:2px'});
-   iconWrap.innerHTML = card.svg;
+   iconWrap.innerHTML = (typeof _sfcSanitize === 'function') ? _sfcSanitize(card.svg) : '';
    el.appendChild(iconWrap);
 
    // Text
@@ -2340,6 +2340,13 @@ function render() {
  }
 
  if (S.view === 'profil' || S.view === 'profile') {
+ // Refresh subscription status when profile is opened (2-min TTL vs 15-min elsewhere)
+ if (window.SupaSync && typeof SupaSync.fetchUserStatus === 'function') {
+   var _pNow = Date.now();
+   if (!SupaSync._userStatusCacheTs || (_pNow - SupaSync._userStatusCacheTs) > 2 * 60 * 1000) {
+     SupaSync.fetchUserStatus().then(function() { window.render(); }).catch(function() {});
+   }
+ }
  renderProfilePage(content);
  } else if (['calendar','sport','nutrition','analytics','social'].indexOf(S.view) !== -1) {
  var _modMap = { calendar: 'SMART_CALENDAR', sport: 'SPORT', nutrition: 'NUTRITION', analytics: 'ANALYTICS', social: 'SOCIAL' };
@@ -2623,7 +2630,7 @@ function renderLogin(app) {
  SupaSync.startAutoSync(); // Démarrer après syncOnLogin pour éviter la double-écriture
  // Pull authoritative subscription state from server — DB columns may be NULL for unlimited plans
  if (typeof SupaSync.fetchUserStatus === 'function') {
- SupaSync.fetchUserStatus().then(function() { render(); }).catch(function() {});
+ SupaSync.fetchUserStatus().then(function() { render(); }).catch(function() { render(); });
  }
  }).catch(function(e) { console.warn('[Login] syncOnLogin unexpected error:', e); SupaSync.startAutoSync(); });
  }
