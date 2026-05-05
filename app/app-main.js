@@ -1386,7 +1386,7 @@ function renderProfilePage(container) {
          ];
 
          // ── Tier cards (sélecteur compact — nom + prix aperçu) ──
-         var _tierRow = h('div', {'data-sfc-tier-row': '1', style: 'display:flex;gap:8px;margin-bottom:16px;'});
+         var _tierRow = h('div', {style: 'display:flex;gap:8px;margin-bottom:16px;'});
          _tiers.forEach(function(t) {
            var isAct = _ui.tier === t;
            var isReco = t === 'champion';
@@ -1397,24 +1397,7 @@ function renderProfilePage(container) {
                'background:' + (isAct ? '#0A0A09' : 'transparent') + ';' +
                'cursor:pointer;text-align:center;border-radius:2px;' +
                'transition:background 0.2s,border-color 0.2s;position:relative;',
-             onclick: (function(tier) { return function() {
-               window._sfcPricingUI.tier = tier;
-               var _row = document.querySelector('[data-sfc-tier-row]');
-               if (_row) {
-                 var _cards = _row.querySelectorAll('[data-sfc-tier]');
-                 for (var _i = 0; _i < _cards.length; _i++) {
-                   var _c = _cards[_i]; var _ct = _c.getAttribute('data-sfc-tier'); var _a = _ct === tier;
-                   _c.style.background = _a ? '#0A0A09' : 'transparent';
-                   _c.style.border = _a ? '2px solid #0A0A09' : '1px solid var(--border,#E8E6DF)';
-                   var _b = _c.querySelector('[data-sfc-badge]');
-                   if (_b) { _b.style.background = _a ? '#FAF9F6' : '#0A0A09'; _b.style.color = _a ? '#0A0A09' : '#FAF9F6'; }
-                   var _n = _c.querySelector('[data-sfc-name]'); if (_n) _n.style.color = _a ? '#FAF9F6' : '#0A0A09';
-                   var _p = _c.querySelector('[data-sfc-price]'); if (_p) _p.style.color = _a ? '#FAF9F6' : '#0A0A09';
-                   var _pe = _c.querySelector('[data-sfc-per]'); if (_pe) _pe.style.color = _a ? 'rgba(250,249,246,0.55)' : 'var(--grey,#6B6B65)';
-                 }
-               }
-               if (window.render) window.render();
-             }; })(t)
+             onclick: (function(tier) { return function() { window._sfcPricingUI.tier = tier; render(); }; })(t)
            });
            if (isReco) {
              tcard.appendChild(h('div', {'data-sfc-badge': '1', style:
@@ -1445,7 +1428,7 @@ function renderProfilePage(container) {
          card.appendChild(_tierRow);
 
          // ── Duration pills ──
-         var _durRow = h('div', {'data-sfc-dur-row': '1', style: 'display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap;'});
+         var _durRow = h('div', {style: 'display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap;'});
          _durs.forEach(function(d) {
            var isAct = _ui.duration === d;
            var dp = _findPlan(_ui.tier, d);
@@ -1457,22 +1440,7 @@ function renderProfilePage(container) {
                'color:' + (isAct ? '#FAF9F6' : 'var(--grey)') + ';' +
                'cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;' +
                'letter-spacing:3px;text-transform:uppercase;min-height:44px;border-radius:0;appearance:none;-webkit-appearance:none;transition:background 0.2s ease,border-color 0.2s ease,color 0.2s ease;text-align:center;',
-             onclick: (function(dur) { return function() {
-               window._sfcPricingUI.duration = dur;
-               var _drow = document.querySelector('[data-sfc-dur-row]');
-               if (_drow) {
-                 var _pills = _drow.querySelectorAll('[data-sfc-dur]');
-                 for (var _j = 0; _j < _pills.length; _j++) {
-                   var _pill = _pills[_j]; var _dt = _pill.getAttribute('data-sfc-dur'); var _da = _dt === dur;
-                   _pill.style.background = _da ? 'var(--black)' : 'transparent';
-                   _pill.style.border = '1px solid ' + (_da ? 'var(--black)' : 'var(--border)');
-                   _pill.style.color = _da ? '#FAF9F6' : 'var(--grey)';
-                   var _sav = _pill.querySelector('[data-sfc-sav]');
-                   if (_sav) _sav.style.color = _da ? 'rgba(250,249,246,0.8)' : 'var(--grey)';
-                 }
-               }
-               if (window.render) window.render();
-             }; })(d)
+             onclick: (function(dur) { return function() { window._sfcPricingUI.duration = dur; render(); }; })(d)
            });
            pill.appendChild(h('div', {}, pillTxt));
            if (dp && dp.savings_pct > 0) {
