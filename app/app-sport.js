@@ -7771,6 +7771,57 @@ function renderMusculationProgram(p) {
    p.appendChild(_flWrap);
  })();
 
+ // ─── PRÉ-BRIEF SÉANCE ───
+ (function() {
+   var _bToday = new Date().toISOString().slice(0, 10);
+   var _bKey = 'brief_' + S.selectedSportDay + '_' + _bToday;
+   var _bCtaDone = S.sessionHistory && S.sessionHistory[S.selectedSportDay + '_' + _bToday];
+   var _bStarted = !!S._sessionStartTime;
+   if (_bCtaDone || _bStarted || S._briefDismissedKey === _bKey) return;
+
+   var _isEn = window.isEnglish && window.isEnglish();
+   var _bAllEx = (day.exercises || []).concat((S.bonusExercises || {})[S.selectedSportDay] || []);
+   var _bSessionNum = Object.keys(S.sessionHistory || {}).length + 1;
+
+   var _bTargetText = '';
+   var _bTargetDelta = '';
+   try {
+     var _mph = S.muscuProgressionHistory || {};
+     var _compounds = ['Squat', 'Bench Press', 'Deadlift', 'Overhead Press'];
+     _compounds.forEach(function(c) {
+       if (_bTargetText) return;
+       var _hist = _mph[c];
+       if (!Array.isArray(_hist) || _hist.length < 1) return;
+       var _lastW = _hist[_hist.length - 1].weight || 0;
+       if (_lastW > 0) { _bTargetText = c + ' — ' + (_lastW + 2.5) + ' kg'; _bTargetDelta = '+2,5 kg'; }
+     });
+   } catch(_e) {}
+   if (!_bTargetText) {
+     var _bDur = typeof calcSessionDuration === 'function' ? calcSessionDuration(_bAllEx) : 0;
+     _bTargetText = _bAllEx.length + ' ' + (_isEn ? 'exercises' : 'exercices') + (_bDur > 0 ? ' · ~' + _bDur + ' min' : '');
+   }
+
+   var _brief = document.createElement('div');
+   _brief.style.cssText = 'border:1px solid var(--border,#D8D8D0);padding:20px;margin-bottom:14px;';
+
+   var _bLine1 = document.createElement('div');
+   _bLine1.style.cssText = 'font-family:Georgia,serif;font-size:20px;color:var(--black,#0A0A09);margin-bottom:6px;line-height:1.25;';
+   _bLine1.textContent = (_isEn ? 'Session ' : 'Séance ') + _bSessionNum + '  ·  ' + (day.focus || (_isEn ? 'Training' : 'Entraînement'));
+   _brief.appendChild(_bLine1);
+
+   var _bLine2 = document.createElement('div');
+   _bLine2.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:' + (_bTargetDelta ? 'var(--orange-ink,#7A3B0E)' : 'var(--grey,#6B6B65)') + ';margin-bottom:18px;';
+   _bLine2.textContent = _bTargetText + (_bTargetDelta ? '  ·  ' + _bTargetDelta : '');
+   _brief.appendChild(_bLine2);
+
+   var _bBtn = document.createElement('button');
+   _bBtn.style.cssText = 'width:100%;padding:14px;background:var(--black,#0A0A09);color:#FAFAF7;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;min-height:44px;';
+   _bBtn.textContent = _isEn ? '▶ I CONTINUE' : '▶ JE CONTINUE';
+   _bBtn.onclick = function() { S._briefDismissedKey = _bKey; S._sessionStartTime = S._sessionStartTime || Date.now(); if (window.render) window.render(); };
+   _brief.appendChild(_bBtn);
+   p.appendChild(_brief);
+ })();
+
  // ─── BADGE SÉANCE VALIDÉE ───
  var _ctaToday = new Date().toISOString().slice(0, 10);
  var _ctaTodayKey = S.selectedSportDay + '_' + _ctaToday;
@@ -9442,6 +9493,45 @@ function renderMusculationProgram(p) {
  if (window.SOCIAL && window.SOCIAL.shareWorkout && window.SOCIAL.getMyProfileCached && window.SOCIAL.getMyProfileCached()) {
    try { window.SOCIAL.shareWorkout({ sport: S.sportType || 'sport', duration: realDur, kcal: Math.round(kcalRes.total || 0) }); } catch(e) {}
  }
+ try {
+   var _prog2 = S.sportProgram || [];
+   var _ni2 = _prog2.length ? (S.selectedSportDay + 1) % _prog2.length : -1;
+   var _nd2 = _ni2 >= 0 ? _prog2[_ni2] : null;
+   var _nf2 = (_nd2 && _nd2.focus || '').toLowerCase();
+   var _nmAfterKcal = Math.round((S._nm && S._nm.kcal) || 0);
+   var _nmAfterCarbs = Math.round((S._nm && S._nm.carbsGrams) || 0);
+   var _carbDeltaMap2 = { light: 10, moderate: 20, heavy: 40, max: 55 };
+   var _carbDeltaLoad2 = _carbDeltaMap2[S.trainingLoad] || 20;
+   var _projCompound2 = '', _projTarget2 = 0;
+   try {
+     var _projMph2 = S.muscuProgressionHistory || {};
+     ['Squat','Bench Press','Deadlift','Overhead Press'].forEach(function(c) {
+       if (_projCompound2) return;
+       var _h2 = _projMph2[c];
+       if (!Array.isArray(_h2) || _h2.length < 1) return;
+       var _lw2 = _h2[_h2.length - 1].weight || 0;
+       if (_lw2 > 0) { _projCompound2 = c; _projTarget2 = _lw2 + 2.5; }
+     });
+   } catch(_pe2) {}
+   S._postSessionPanel = {
+     screen: 1,
+     totalSessions: Object.keys(S.sessionHistory || {}).length,
+     duration: realDur,
+     kcalTotal: Math.round(kcalRes.total || 0),
+     load: S.trainingLoad || 'moderate',
+     focus: (day && day.focus) || '',
+     nmKcal: _nmAfterKcal,
+     nmCarbs: _nmAfterCarbs,
+     nmKcalBefore: Math.max(0, _nmAfterKcal - Math.round(kcalRes.epoc || 0)),
+     nmCarbsBefore: Math.max(0, _nmAfterCarbs - _carbDeltaLoad2),
+     tomorrowFocus: (_nd2 && _nd2.focus) || '',
+     tomorrowIsRest: !_nd2 || !(_nd2.exercises && _nd2.exercises.length) ||
+       _nf2.indexOf('repos') !== -1 || _nf2.indexOf('rest') !== -1,
+     projCompound: _projCompound2,
+     projTarget: Math.round(_projTarget2 * 10) / 10,
+     muscuWeek: S.muscuWeek || 1
+   };
+ } catch(_pErr) {}
  window.render();
  }}, (window.isEnglish && window.isEnglish() ? '\u2713 Validate session' : '\u2713 Valider la s\u00e9ance'));
  compPanel.appendChild(saveBtn);

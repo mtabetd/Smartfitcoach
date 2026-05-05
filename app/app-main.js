@@ -1335,6 +1335,63 @@ function renderProfilePage(container) {
      });
      card.appendChild(_featsWrap);
 
+     // Bloc progression réelle utilisateur — preuve sociale personnalisée
+     if (!_isSub) {
+       (function() {
+         var _uid = S.user && S.user.id;
+         var _shObj = (S.sessionHistory && typeof S.sessionHistory === 'object' && !Array.isArray(S.sessionHistory)) ? S.sessionHistory : {};
+         var _sessionCount = Object.keys(_shObj).length;
+         var _kcalBurned = Object.keys(_shObj).reduce(function(acc, k) { return acc + ((_shObj[k] && _shObj[k].kcalTotal) || 0); }, 0);
+         var _streak = 0;
+         try { _streak = parseInt(localStorage.getItem('mtd_streak_' + _uid) || '0', 10) || 0; } catch(e) {}
+         var _bestLift = '';
+         try {
+           var _mph = S.muscuProgressionHistory || {};
+           var _compounds = ['Squat','Bench Press','Deadlift','Overhead Press','Pull-up'];
+           var _bestGain = 0;
+           _compounds.forEach(function(ex) {
+             var hist = _mph[ex];
+             if (!Array.isArray(hist) || hist.length < 2) return;
+             var first = hist[0].weight || 0;
+             var last = hist[hist.length - 1].weight || 0;
+             var gain = last - first;
+             if (gain > _bestGain) { _bestGain = gain; _bestLift = ex + ' +' + gain + 'kg'; }
+           });
+         } catch(e) {}
+         var _hasData = _sessionCount > 0 || _streak > 0 || _bestLift;
+         if (!_hasData) return;
+         var _isEn = window.isEnglish && window.isEnglish();
+         var _progBlock = h('div', {style:
+           'background:rgba(122,59,14,0.06);border:1px solid rgba(122,59,14,0.15);' +
+           'border-radius:6px;padding:14px 16px;margin:18px 0 4px;'
+         });
+         _progBlock.appendChild(h('div', {style:
+           'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;' +
+           'text-transform:uppercase;color:var(--orange-ink,#7A3B0E);margin-bottom:10px;'
+         }, _isEn ? 'Your progress so far' : 'Votre progression'));
+         var _rows = [];
+         if (_sessionCount > 0) _rows.push([
+           _sessionCount + ' ' + (_isEn ? (_sessionCount > 1 ? 'sessions' : 'session') : (_sessionCount > 1 ? 'séances' : 'séance')),
+           Math.round(_kcalBurned) + ' kcal ' + (_isEn ? 'burned' : 'brûlées')
+         ]);
+         if (_streak > 1) _rows.push([
+           _streak + ' ' + (_isEn ? 'day streak' : 'jours consécutifs'),
+           ''
+         ]);
+         if (_bestLift) _rows.push([
+           _isEn ? 'Best lift gain' : 'Meilleure progression',
+           _bestLift
+         ]);
+         _rows.forEach(function(r) {
+           var _row = h('div', {style: 'display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid rgba(122,59,14,0.1);'});
+           _row.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black);'}, r[0]));
+           if (r[1]) _row.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:11px;color:var(--orange-ink,#7A3B0E);'}, r[1]));
+           _progBlock.appendChild(_row);
+         });
+         card.appendChild(_progBlock);
+       })();
+     }
+
      // Sélecteur de plan — Hermès pricing UI
      if (!_isSub) {
        var _pData = window.SFC_PRICING_DATA || [];
@@ -1562,7 +1619,16 @@ function renderProfilePage(container) {
        }
        var _durPer2 = { saison: '/trimestre', cycle: '/semestre', engagement: '/an' };
        var _isEn = (window.isEnglish && window.isEnglish());
-       var _ctaBase = _trialExpired ? (_isEn ? 'Reactivate my access' : 'Réactiver mon accès') : _daysLeft <= 1 ? (_isEn ? 'Last day — Subscribe' : 'Dernier jour — S\'abonner') : _daysLeft <= 2 ? (_isEn ? 'Only ' + _daysLeft + ' days left — Subscribe' : 'Plus que ' + _daysLeft + ' jours — S\'abonner') : (_isEn ? 'Subscribe' : 'S\'abonner');
+       var _ctaSessions = Object.keys((S.sessionHistory && typeof S.sessionHistory === 'object' && !Array.isArray(S.sessionHistory)) ? S.sessionHistory : {}).length;
+       var _ctaState = _ctaSessions >= 10 ? 'invested' : _ctaSessions >= 4 ? 'engaged' : 'starter';
+       var _ctaByState = {
+         starter:  _isEn ? 'CONTINUE MY PROGRAM'    : 'CONTINUER MON PROGRAMME',
+         engaged:  _isEn ? 'FINISH WHAT I STARTED'  : 'FINIR CE QUE J\'AI COMMENCÉ',
+         invested: _isEn ? 'PROTECT MY PROGRESS'    : 'PROTÉGER MA PROGRESSION'
+       };
+       var _ctaBase = _trialExpired
+         ? (_isEn ? 'Reactivate my access' : 'Réactiver mon accès')
+         : (_ctaByState[_ctaState] || (_isEn ? 'CONTINUE MY PROGRAM' : 'CONTINUER MON PROGRAMME'));
        var _ctaSuffix = _ctaPlan ? ' — ' + _ctaPlan.label_mad + (_durPer2[_ui2.duration] || '') : '';
        var _cta = h('button', {
          style:
@@ -2332,10 +2398,17 @@ function render() {
  // Détachés du wrap principal — ils vivent sur document.body pour être fixed au-dessus.
  try {
    // Nettoyer les instances précédentes
-   ['coach-bar', 'fab-logger-container', 'progression-drawer'].forEach(function(id) {
+   ['coach-bar', 'fab-logger-container', 'progression-drawer', 'sfc-post-session-panel'].forEach(function(id) {
      var el = document.getElementById(id);
      if (el) el.parentNode.removeChild(el);
    });
+
+   if (S._postSessionPanel && S.appMode) {
+     try {
+       var _panel = renderPostSessionPanel(S._postSessionPanel);
+       if (_panel) document.body.appendChild(_panel);
+     } catch(_pse) { console.warn('[PostSessionPanel]', _pse); }
+   }
 
    // FIX BUG #2+#4 audit debug login 2026-04-15 :
    // - Reset overlays éphémères si view ≠ today (drawer fullscreen stale masquait
@@ -3187,6 +3260,148 @@ function renderNewPassword(app) {
  cancelLink.appendChild(h('a', {onclick: function() { S.authError = ''; S.view = 'auth'; render(); }}, 'Retour \u00e0 la connexion'));
  c.appendChild(cancelLink);
  app.appendChild(c);
+}
+
+// ─── POST-SESSION PANEL ───────────────────────────────────────────────────────
+function renderPostSessionPanel(data) {
+  var isEn = window.isEnglish && window.isEnglish();
+  var screen = data.screen || 1;
+
+  var panel = document.createElement('div');
+  panel.id = 'sfc-post-session-panel';
+  panel.style.cssText = 'position:fixed;inset:0;z-index:9000;background:#FAFAF7;display:flex;flex-direction:column;overflow-y:auto;animation:_psp-slide .28s cubic-bezier(.22,.61,.36,1) both;';
+
+  if (!document.getElementById('_sfc-psp-css')) {
+    var st = document.createElement('style');
+    st.id = '_sfc-psp-css';
+    st.textContent = '@keyframes _psp-slide{from{transform:translateY(100%)}to{transform:translateY(0)}}';
+    document.head.appendChild(st);
+  }
+
+  function _close() { S._postSessionPanel = null; window.render(); }
+  function _next() { data.screen = screen + 1; window.render(); }
+
+  var inner = document.createElement('div');
+  inner.style.cssText = 'max-width:480px;width:100%;margin:0 auto;padding:32px 24px 48px;box-sizing:border-box;display:flex;flex-direction:column;min-height:100vh;justify-content:center;';
+
+  // ── Screen 1 — IDENTITY ──────────────────────────────────────────────────────
+  if (screen === 1) {
+    var s1n = data.totalSessions || 1;
+    var s1Head = document.createElement('div');
+    s1Head.style.cssText = 'font-family:Georgia,serif;font-size:32px;color:var(--black,#0A0A09);margin-bottom:10px;line-height:1.1;';
+    s1Head.textContent = (isEn ? 'Session ' : 'Séance ') + s1n + '.';
+    inner.appendChild(s1Head);
+
+    var s1Sub = document.createElement('div');
+    s1Sub.style.cssText = 'font-family:Georgia,serif;font-size:16px;color:var(--grey,#6B6B65);font-style:italic;margin-bottom:28px;';
+    s1Sub.textContent = isEn ? s1n + ' sessions. None skipped.' : s1n + ' séances. Aucune abandonnée.';
+    inner.appendChild(s1Sub);
+
+    var s1Sep = document.createElement('div');
+    s1Sep.style.cssText = 'height:1px;background:var(--border,#D8D8D0);margin-bottom:20px;';
+    inner.appendChild(s1Sep);
+
+    var s1Data = document.createElement('div');
+    s1Data.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);letter-spacing:1px;text-align:center;margin-bottom:32px;';
+    var _loadLabels1 = { light: isEn ? 'Light' : 'Légère', moderate: isEn ? 'Moderate' : 'Modérée', heavy: isEn ? 'Heavy' : 'Lourde', max: isEn ? 'Max' : 'Maximale' };
+    s1Data.textContent = data.duration + ' min  ·  ' + data.kcalTotal + ' kcal  ·  ' + (_loadLabels1[data.load] || data.load);
+    inner.appendChild(s1Data);
+
+    var s1Btn = document.createElement('button');
+    s1Btn.style.cssText = 'width:100%;padding:16px;background:var(--black,#0A0A09);color:#FAFAF7;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;min-height:52px;';
+    s1Btn.textContent = isEn ? '▼ see the insight' : '▼ voir le bilan';
+    s1Btn.onclick = _next;
+    inner.appendChild(s1Btn);
+  }
+
+  // ── Screen 2 — INTELLIGENCE (symbiosis delta) ────────────────────────────────
+  else if (screen === 2) {
+    var s2Eye = document.createElement('div');
+    s2Eye.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:18px;';
+    s2Eye.textContent = isEn ? 'WHAT JUST CHANGED' : 'CE QUI A CHANGÉ';
+    inner.appendChild(s2Eye);
+
+    var carbDelta = (data.nmCarbs || 0) - (data.nmCarbsBefore || 0);
+    if (carbDelta >= 5) {
+      var s2Delta = document.createElement('div');
+      s2Delta.style.cssText = 'font-family:Georgia,serif;font-size:22px;color:var(--black,#0A0A09);margin-bottom:6px;line-height:1.2;';
+      s2Delta.textContent = (isEn ? 'Carbs: ' : 'Glucides : ') + (data.nmCarbsBefore || 0) + 'g → ' + (data.nmCarbs || 0) + 'g';
+      inner.appendChild(s2Delta);
+
+      var s2Reason = document.createElement('div');
+      s2Reason.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--orange-ink,#7A3B0E);margin-bottom:24px;';
+      s2Reason.textContent = isEn ? "That's why." : "C'est pour ça.";
+      inner.appendChild(s2Reason);
+    } else {
+      var s2Stable = document.createElement('div');
+      s2Stable.style.cssText = 'font-family:Georgia,serif;font-size:16px;color:var(--grey,#6B6B65);font-style:italic;margin-bottom:24px;';
+      s2Stable.textContent = isEn ? 'Light session · Nutrition stable.' : 'Séance légère · Nutrition stable.';
+      inner.appendChild(s2Stable);
+    }
+
+    var s2Sep = document.createElement('div');
+    s2Sep.style.cssText = 'height:1px;background:var(--border,#D8D8D0);margin-bottom:20px;';
+    inner.appendChild(s2Sep);
+
+    var s2TmrLabel = document.createElement('div');
+    s2TmrLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px;';
+    s2TmrLabel.textContent = isEn ? 'TOMORROW' : 'DEMAIN';
+    inner.appendChild(s2TmrLabel);
+
+    var s2TmrVal = document.createElement('div');
+    s2TmrVal.style.cssText = 'font-family:Georgia,serif;font-size:16px;color:var(--black,#0A0A09);margin-bottom:28px;';
+    s2TmrVal.textContent = data.tomorrowIsRest
+      ? (isEn ? 'Rest · Recovery priority.' : 'Repos · Récupération prioritaire.')
+      : (data.tomorrowFocus || (isEn ? 'Next session.' : 'Prochaine séance.'));
+    inner.appendChild(s2TmrVal);
+
+    var s2Btn = document.createElement('button');
+    s2Btn.style.cssText = 'width:100%;padding:16px;background:var(--black,#0A0A09);color:#FAFAF7;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;min-height:52px;margin-bottom:10px;';
+    s2Btn.textContent = isEn ? '▼ what comes next' : '▼ la suite';
+    s2Btn.onclick = _next;
+    inner.appendChild(s2Btn);
+
+    var s2Close = document.createElement('button');
+    s2Close.style.cssText = 'width:100%;padding:12px;background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);cursor:pointer;';
+    s2Close.textContent = isEn ? 'Close' : 'Fermer';
+    s2Close.onclick = _close;
+    inner.appendChild(s2Close);
+  }
+
+  // ── Screen 3 — NEXT LOOP (projection) ───────────────────────────────────────
+  else {
+    var s3Eye = document.createElement('div');
+    s3Eye.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:18px;';
+    s3Eye.textContent = isEn ? 'IN 7 DAYS' : 'DANS 7 JOURS';
+    inner.appendChild(s3Eye);
+
+    if (data.projCompound && data.projTarget > 0) {
+      var s3Proj = document.createElement('div');
+      s3Proj.style.cssText = 'font-family:Georgia,serif;font-size:24px;color:var(--black,#0A0A09);margin-bottom:6px;line-height:1.2;';
+      s3Proj.textContent = data.projCompound + ' → ' + data.projTarget + ' kg';
+      inner.appendChild(s3Proj);
+    }
+
+    var s3Plan = document.createElement('div');
+    s3Plan.style.cssText = 'font-family:Georgia,serif;font-size:14px;color:var(--grey,#6B6B65);font-style:italic;margin-bottom:32px;';
+    s3Plan.textContent = isEn ? 'The plan continues.' : 'Le plan continue.';
+    inner.appendChild(s3Plan);
+
+    var s3CoachBtn = document.createElement('button');
+    s3CoachBtn.style.cssText = 'width:100%;padding:16px;background:var(--black,#0A0A09);color:#FAFAF7;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;min-height:52px;margin-bottom:10px;';
+    s3CoachBtn.textContent = isEn ? 'TALK TO THE COACH' : 'PARLER AU COACH';
+    s3CoachBtn.onclick = function() { _close(); S.view = 'today'; window.render(); };
+    inner.appendChild(s3CoachBtn);
+
+    var s3Close = document.createElement('button');
+    s3Close.style.cssText = 'width:100%;padding:12px;background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);cursor:pointer;';
+    s3Close.textContent = isEn ? 'Close' : 'Fermer';
+    s3Close.onclick = _close;
+    inner.appendChild(s3Close);
+  }
+
+  panel.appendChild(inner);
+  return panel;
 }
 
 // ─── MAKE RENDER GLOBAL ───

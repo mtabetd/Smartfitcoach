@@ -8,11 +8,8 @@ const { requirePremium } = require('./_user-auth');
 // (ajustements charges ISSN/ACSM, interprétation RPE + cycle + wellness).
 // Rate limit déjà strict (10/h, 30/j par IP) → coût maîtrisé.
 const MODEL = 'claude-sonnet-4-6';
-// FIX BUG-2 contre-audit : MAX_TOKENS 400 (marge safety timeout Sonnet 4.6).
-// Netlify Pro timeout = 26s, client abort = 25s. Sonnet 4.6 + 400 tokens +
-// contexte enrichi = ~12-18s nominal, <22s pic → safe dans fenêtre 25s.
-// Si phase B démontre plus besoin de tokens, réévaluer avec streaming.
-const MAX_TOKENS = 400;
+// 650 tokens: Sonnet 4.6 ~35-45 tok/s → ~15-19s nominal, well within 25s client timeout.
+const MAX_TOKENS = 650;
 
 // Domaines autorisés pour CORS
 var ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://smartfitcoach.netlify.app,https://smartfitcoach.fr,https://www.smartfitcoach.fr,https://smartfitcoach.fitness,https://www.smartfitcoach.fitness')
@@ -226,7 +223,9 @@ function sanitizeContext(ctx) {
     'lastSessionFeedback', 'weekPerformance',
     'nextSessionScheduled', 'cyclePhase',
     // POLISH 2026-04 (INSIGHTS) : synthèse hebdo + patterns détectés côté client
-    'weekInsights'
+    'weekInsights',
+    // P3 ELITE : langue de réponse demandée par le client
+    'lang'
   ];
 
   var safe = {};
@@ -413,6 +412,9 @@ function sanitizeContext(ctx) {
         safe.weekInsights = wi;
       }
     }
+    else if (field === 'lang') {
+      if (typeof val === 'string' && (val === 'fr' || val === 'en')) safe.lang = val;
+    }
     else {
       safe[field] = sanitizeString(String(val), 100);
     }
@@ -536,7 +538,7 @@ exports.handler = async function(event, context) {
 
   // ── Sanitize Context ───────────────────────────────────────────────────────
   var userContext = sanitizeContext(body.context || {});
-  var systemPrompt = buildSystemPrompt(userContext);
+  var systemPrompt = (userContext.lang === 'en') ? buildSystemPromptEN(userContext) : buildSystemPrompt(userContext);
 
   // Garder max 10 messages (5 échanges user/assistant)
   var messages = validatedMessages.slice(-10);
@@ -815,12 +817,226 @@ function buildSystemPrompt(ctx) {
       lines.push('- Grossesse : pas de Valsalva, pas de charges maximales, intensité modérée, hydratation +++.');
     }
     lines.push('- Toujours chiffrer les ajustements (ex: "passe de 60 à 62,5kg au DC") plutôt que vague.');
-    // Si patterns détectés, l'IA doit les adresser proactivement sans attendre
-    // que l'user pose la question (sauf si user change de sujet clairement).
     if (ctx.weekInsights && Array.isArray(ctx.weekInsights.patterns) && ctx.weekInsights.patterns.length) {
       lines.push('- Si un PATTERN est signalé ci-dessus (alert/warning), l\'intégrer naturellement dans ta réponse sans paraître alarmiste.');
     }
   }
+
+  lines.push('');
+  lines.push('FORMAT DE RÉPONSE OBLIGATOIRE (quand données sport disponibles) :');
+  lines.push('1. SITUATION — max 15 mots, basé sur les données du profil');
+  lines.push('2. ACTION — verbe impératif + cible chiffrée (ex: "Passe à 62,5 kg au DC")');
+  lines.push('3. RÉSULTAT — 1 métrique ou comparaison précise');
+  lines.push('INTERDIT de commencer par : "Bonne question", "En effet", "C\'est normal", "Bien sûr", "Je comprends", "Super", "Absolument".');
+  lines.push('Si données manquantes pour répondre : demande-les AVANT de répondre.');
+  lines.push('Chaque conseil DOIT contenir au moins un chiffre.');
+
+  return lines.join('\n');
+}
+
+function buildSystemPromptEN(ctx) {
+  var name = ctx.prenom || 'you';
+  var lines = [
+    'You are the private sport/nutrition coach for ' + name + ' on SmartFitCoach.',
+    'RULES: always reply in English, use ' + name + '\'s first name, be concise (2-3 paragraphs max).',
+    'Format: [Direct answer] / [Context from profile] / [1-3 specific actions with numbers].',
+    'You answer ONLY sport and nutrition questions. Off-topic → "I\'m here for your sport and nutrition, ' + name + '."',
+    'Base advice on the profile below. If data is missing, ask for it.',
+    ''
+  ];
+
+  var profile = [];
+  if (ctx.prenom) profile.push('Name:' + ctx.prenom);
+  if (ctx.sex) profile.push('Sex:' + ctx.sex);
+  if (ctx.age) profile.push('Age:' + ctx.age);
+  if (ctx.weight) profile.push('Weight:' + ctx.weight + 'kg');
+  if (ctx.height) profile.push('Height:' + ctx.height + 'cm');
+  if (ctx.goal) profile.push('Goal:' + ctx.goal);
+  if (ctx.activity) profile.push('Activity:' + ctx.activity);
+  if (profile.length) lines.push('PROFILE: ' + profile.join(' | '));
+
+  if (ctx.sportType) {
+    var sport = ['Sport:' + ctx.sportType];
+    if (ctx.sportLevel) sport.push('Level:' + ctx.sportLevel);
+    if (ctx.sportDays) sport.push('Days/wk:' + ctx.sportDays);
+    if (ctx.crossfitWeek) sport.push('CrossFit wk:' + ctx.crossfitWeek);
+    if (ctx.triathlonGoal) sport.push('Tri goal:' + ctx.triathlonGoal);
+    if (ctx.triathlonFTP) sport.push('FTP:' + ctx.triathlonFTP + 'W');
+    if (ctx.hyroxLevel) sport.push('Hyrox:' + ctx.hyroxLevel);
+    if (ctx.runningGoal) sport.push('Run goal:' + ctx.runningGoal);
+    if (ctx.cyclingGoal) sport.push('Cycling goal:' + ctx.cyclingGoal);
+    lines.push('SPORT: ' + sport.join(' | '));
+  }
+
+  if (ctx.wellness) {
+    var ww = ctx.wellness;
+    lines.push('WELLNESS: sleep=' + ww.sleep + '/5 muscles=' + ww.muscles + ' energy=' + ww.energy + (ww.adaptation ? ' → ' + ww.adaptation : ''));
+  }
+
+  if (ctx.todayNutrition) {
+    var n = ctx.todayNutrition;
+    var meals = [];
+    if (n.breakfast) meals.push('Breakfast:' + n.breakfast);
+    if (n.lunch) meals.push('Lunch:' + n.lunch);
+    if (n.snack) meals.push('Snack:' + n.snack);
+    if (n.dinner) meals.push('Dinner:' + n.dinner);
+    if (n.totalKcal) meals.push('Total:' + n.totalKcal + 'kcal');
+    if (meals.length) lines.push("TODAY'S NUTRITION: " + meals.join(' | '));
+  }
+
+  var constraints = [];
+  if (ctx.regime) constraints.push('Diet:' + ctx.regime);
+  if (Array.isArray(ctx.allergies) && ctx.allergies.length) constraints.push('Allergies:' + ctx.allergies.join(','));
+  if (Array.isArray(ctx.intolerances) && ctx.intolerances.length) constraints.push('Intolerances:' + ctx.intolerances.join(','));
+  if (ctx.halal) constraints.push('Halal');
+  if (ctx.excluded) constraints.push('Exclusions:' + ctx.excluded);
+  if (ctx.mealsPerDay) constraints.push('Meals/day:' + ctx.mealsPerDay);
+  if (constraints.length) lines.push('CONSTRAINTS: ' + constraints.join(' | '));
+
+  var health = [];
+  if (ctx.pregnant) {
+    if (ctx.pregnancyWeek) {
+      var pw = Number(ctx.pregnancyWeek);
+      var trim = pw <= 12 ? 'T1' : pw <= 26 ? 'T2' : 'T3';
+      health.push('⚠️ PREGNANT week ' + pw + ' (' + trim + ')');
+    } else {
+      health.push('⚠️ PREGNANT');
+    }
+  }
+  if (ctx.breastfeeding) health.push('⚠️ BREASTFEEDING');
+  if (ctx.cycleTracking && ctx.cycleLength) health.push('Cycle:' + ctx.cycleLength + 'd');
+  if (health.length) {
+    lines.push('HEALTH: ' + health.join(' | '));
+    if (ctx.pregnant) {
+      var _trimTextEN = '';
+      if (ctx.pregnancyWeek) {
+        var _pw = Number(ctx.pregnancyWeek);
+        if (_pw <= 12) _trimTextEN = 'T1: no caloric surplus. Avoid alcohol, raw meat, high-mercury fish.';
+        else if (_pw <= 26) _trimTextEN = 'T2: +340 kcal/day (ACOG 2022). Calcium 1000mg, iron 27mg, folate 600µg.';
+        else _trimTextEN = 'T3: +450 kcal/day (ACOG 2022). Protein 71g/day, moderate activity OK.';
+      } else {
+        _trimTextEN = 'Ask the trimester before advising caloric intake.';
+      }
+      lines.push('⚠️ CLINICAL SAFETY (PREGNANCY): no caloric deficit, no intermittent fasting, no unsanctioned supplements. ' + _trimTextEN);
+    }
+    if (ctx.breastfeeding) {
+      lines.push('⚠️ BREASTFEEDING SAFETY: +450 kcal/day (ACOG 2022). Enhanced hydration (3L/day). Limit caffeine <300mg/day, avoid alcohol.');
+    }
+  }
+
+  var medicalNotes = [];
+  if (Array.isArray(ctx.medical) && ctx.medical.length) medicalNotes.push('Medical:' + ctx.medical.join(','));
+  if (ctx.muscuMedical && typeof ctx.muscuMedical === 'object') {
+    var muscuLimits = Object.keys(ctx.muscuMedical).filter(function(k) { return ctx.muscuMedical[k]; });
+    if (muscuLimits.length) medicalNotes.push('Restrictions:' + muscuLimits.join(','));
+  }
+  if (medicalNotes.length) lines.push('LIMITATIONS: ' + medicalNotes.join(' | '));
+
+  var sportContext = [];
+  if (Array.isArray(ctx.trainingDaysSelected) && ctx.trainingDaysSelected.length) {
+    var dayNames = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    sportContext.push('Training days:' + ctx.trainingDaysSelected.map(function(i) { return dayNames[i] || i; }).join(','));
+  }
+  if (ctx.trainTime) sportContext.push('Session time:' + ctx.trainTime);
+  if (sportContext.length) lines.push('SCHEDULE: ' + sportContext.join(' | '));
+
+  if (ctx.streak && ctx.streak > 0) {
+    lines.push('STREAK: ' + ctx.streak + ' consecutive day' + (ctx.streak > 1 ? 's' : '') + ' (mention if relevant for motivation)');
+  }
+
+  if (ctx.muscuWeights) {
+    var wobj = ctx.muscuWeights;
+    var wlist = Object.keys(wobj).filter(function(k) { return wobj[k]; }).map(function(k) { return k + ':' + wobj[k] + 'kg'; });
+    if (wlist.length) lines.push('WORKING WEIGHTS: ' + wlist.join(' | '));
+  }
+
+  if (ctx.cyclePhase && ctx.cyclePhase.phase) {
+    var cp = ctx.cyclePhase;
+    var cpLine = 'CYCLE: phase=' + cp.phase;
+    if (cp.dayInCycle) cpLine += ' (D' + cp.dayInCycle + ')';
+    if (cp.intensityFactor) cpLine += ' — recommended intensity factor ×' + cp.intensityFactor;
+    lines.push(cpLine);
+  }
+
+  if (ctx.lastSessionFeedback && ctx.lastSessionFeedback.date) {
+    var lsf = ctx.lastSessionFeedback;
+    var lsfParts = ['Date:' + lsf.date];
+    if (lsf.sessionId) lsfParts.push('ID:' + lsf.sessionId);
+    if (typeof lsf.rpe === 'number') lsfParts.push('RPE:' + lsf.rpe + '/10');
+    if (lsf.feeling) lsfParts.push('Feeling:' + lsf.feeling);
+    if (lsf.pain) lsfParts.push('⚠️ Pain:' + lsf.pain);
+    if (lsf.chargeActual && Object.keys(lsf.chargeActual).length) {
+      var chList = Object.keys(lsf.chargeActual).slice(0, 6).map(function(k) { return k + ':' + lsf.chargeActual[k] + 'kg'; });
+      lsfParts.push('Actual loads:' + chList.join(','));
+    }
+    if (lsf.notes) lsfParts.push('Notes:' + lsf.notes);
+    lines.push('LAST SESSION: ' + lsfParts.join(' | '));
+  }
+
+  if (ctx.weekPerformance) {
+    var wperf = ctx.weekPerformance;
+    var wpParts = [];
+    if (typeof wperf.sessionsCount === 'number') wpParts.push('Sessions:' + wperf.sessionsCount);
+    if (typeof wperf.rpeAvg === 'number') wpParts.push('Avg RPE:' + wperf.rpeAvg + '/10');
+    if (typeof wperf.chargeProgressionPct === 'number') {
+      var sign2 = wperf.chargeProgressionPct >= 0 ? '+' : '';
+      wpParts.push('Load progression:' + sign2 + wperf.chargeProgressionPct + '%');
+    }
+    if (wperf.lastPain) wpParts.push('⚠️ Recent pain:' + wperf.lastPain);
+    if (wpParts.length) lines.push('WEEK PERFORMANCE: ' + wpParts.join(' | '));
+  }
+
+  if (ctx.nextSessionScheduled && ctx.nextSessionScheduled.date) {
+    var nss = ctx.nextSessionScheduled;
+    var nssParts = ['Date:' + nss.date];
+    if (nss.dayLabel) nssParts.push(nss.dayLabel);
+    if (nss.type) nssParts.push(nss.type);
+    lines.push('NEXT SESSION: ' + nssParts.join(' | '));
+  }
+
+  if (ctx.weekInsights) {
+    var wi2 = ctx.weekInsights;
+    var wiParts = [];
+    if (typeof wi2.sessions === 'number') wiParts.push(wi2.sessions + ' sessions');
+    if (typeof wi2.sleepAvg === 'number') wiParts.push('avg sleep ' + wi2.sleepAvg + '/5');
+    if (typeof wi2.rpeAvg === 'number') wiParts.push('avg RPE ' + wi2.rpeAvg + '/10');
+    if (wiParts.length) lines.push('WEEK INSIGHTS: ' + wiParts.join(' | '));
+    if (Array.isArray(wi2.patterns) && wi2.patterns.length) {
+      wi2.patterns.forEach(function(p) {
+        var sev = p.severity === 'alert' ? '⚠️' : (p.severity === 'warning' ? '⚡' : 'ℹ️');
+        lines.push(sev + ' PATTERN (' + p.id + '): ' + (p.label || ''));
+      });
+    }
+  }
+
+  if (ctx.lastSessionFeedback || ctx.weekPerformance || ctx.sportType) {
+    lines.push('');
+    lines.push('ADAPTIVE COACHING RULES (ISSN 2017 / ACSM):');
+    lines.push('- If LAST SESSION is missing and user mentions their session → ask for actual loads + RPE + feeling.');
+    lines.push('- RPE ≤ 6 → suggest +2.5 to 5% load on compound lifts (squat, bench, deadlift, OHP).');
+    lines.push('- RPE 7-8 → maintain volume, focus on technique and tempo.');
+    lines.push('- RPE ≥ 9 or pain reported → propose deload -10% volume or substitute exercise.');
+    lines.push('- Max volume progression: +10%/week (ACSM). Beyond that → injury risk.');
+    if (ctx.cyclePhase && ctx.cyclePhase.phase) {
+      lines.push('- Current cycle: adapt intensity to factor above. Menstruation (D1-5) = reduced load OK, Follicular (D6-13) = peak performance, Luteal (D17-28) = moderate volume.');
+    }
+    if (ctx.pregnant) {
+      lines.push('- Pregnancy: no Valsalva, no maximal loads, moderate intensity, extra hydration.');
+    }
+    lines.push('- Always quantify adjustments (e.g. "move from 60 to 62.5kg on bench") rather than vague advice.');
+    if (ctx.weekInsights && Array.isArray(ctx.weekInsights.patterns) && ctx.weekInsights.patterns.length) {
+      lines.push('- If a PATTERN is flagged above (alert/warning), address it naturally without being alarmist.');
+    }
+  }
+
+  lines.push('');
+  lines.push('MANDATORY RESPONSE FORMAT (when sport data is available):');
+  lines.push('1. SITUATION — max 15 words, based on profile data only');
+  lines.push('2. ACTION — imperative verb + specific number (e.g. "Move to 62.5kg on bench")');
+  lines.push('3. RESULT — 1 precise metric or comparison');
+  lines.push('NEVER start with: "Great question", "Of course", "Absolutely", "That\'s normal", "I understand", "Sure".');
+  lines.push('If data is missing: ask for it BEFORE answering.');
+  lines.push('Every recommendation MUST include at least one number.');
 
   return lines.join('\n');
 }
