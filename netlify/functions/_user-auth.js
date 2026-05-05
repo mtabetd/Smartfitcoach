@@ -98,10 +98,11 @@ async function requirePremium(event) {
         const trialEnd = new Date(rawDate);
         trialEnd.setUTCDate(trialEnd.getUTCDate() + TRIAL_DAYS);
         if (new Date() <= trialEnd) premium = true;
-      } else {
-        // No date at all → brand-new user still creating their profile
+      } else if (!profile.subscription_end) {
+        // Truly brand-new user (no trial date, no subscription ever set) — grant trial
         premium = true;
       }
+      // If subscription_end exists but expired and no trial date: deny (known lapsed user)
     }
   }
 

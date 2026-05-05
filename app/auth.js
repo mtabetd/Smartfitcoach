@@ -110,8 +110,12 @@ function validateName(name) {
 }
 
 function validatePassword(password) {
-  if (typeof password !== 'string') return false;
-  return password.length >= 6 && password.length <= 128;
+  if (!password || typeof password !== 'string') return false;
+  if (password.length < 6 || password.length > 128) return false;
+  if (!/[A-Z]/.test(password)) return false;
+  if (!/[0-9]/.test(password)) return false;
+  if (!/[!@#$%^&*()\-_=+\[\]{};:'",.<>/?\\|`~]/.test(password)) return false;
+  return true;
 }
 
 // ─── STORAGE KEYS ───
@@ -708,49 +712,55 @@ window.AUTH = {
       return withTimingDelay(Promise.resolve({ ok: false, error: 'Email invalide' }), startTime);
     }
     if (!validatePassword(password)) {
-      return withTimingDelay(Promise.resolve({ ok: false, error: 'Mot de passe min 6 caract\u00e8res' }), startTime);
+      return withTimingDelay(Promise.resolve({ ok: false, error: 'Mot de passe : 6 caract\u00e8res min, une majuscule, un chiffre, un caract\u00e8re sp\u00e9cial' }), startTime);
     }
 
     var metaData = { name: name };
     if (extra.nom)   metaData.nom   = sanitize(extra.nom.trim());
     if (extra.phone) metaData.phone = sanitize(extra.phone.trim());
 
-    // Tenter Supabase
-    var client = _getClient();
-    if (!client) {
-      return _fallbackRegister(name, email, password, extra, startTime);
-    }
-
-    var promise = client.auth.signUp({
-      email: email,
-      password: password,
-      options: { data: metaData }
+    // Route via server-side endpoint — enforces full password rules even if JS bypassed
+    var promise = fetch('/.netlify/functions/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name, email: email, password: password, extra: extra })
+    }).then(function(res) {
+      return res.json().then(function(d) { return { status: res.status, data: d }; });
     }).then(function(result) {
-      if (result.error) {
-        console.error('[AUTH] Supabase register error:', result.error.message || result.error);
-        return { ok: false, error: mapSupabaseError(result.error) };
-      }
-      var data = result.data;
-      if (data && data.user) {
-        var u = {
-          id: data.user.id,
-          name: name,
-          email: email
-        };
-        // NE PAS assigner _currentSession ici — l'email n'est pas encore confirmé
-        // L'utilisateur doit confirmer son email avant d'avoir accès
+      if (result.status === 200 && result.data && result.data.ok) {
         BLACKBOX.log('register', { email: email });
-        return { ok: true, user: u, needsConfirmation: true };
+        return { ok: true, user: result.data.user, needsConfirmation: true };
       }
-      return { ok: false, error: 'Erreur de connexion. R\u00e9essayez.' };
-    }).catch(function(err) {
-      console.error('[AUTH] Supabase register exception:', err);
-      // Fallback localStorage en cas d'erreur reseau
-      try {
-        return _fallbackRegister(name, email, password, extra, Date.now()).then(function(r) { return r; });
-      } catch (e2) {
-        return { ok: false, error: mapSupabaseError(err) };
+      return { ok: false, error: (result.data && result.data.error) || 'Erreur lors de la cr\u00e9ation du compte.' };
+    }).catch(function() {
+      // Netlify function unreachable — fall back to direct Supabase
+      var client = _getClient();
+      if (!client) {
+        return _fallbackRegister(name, email, password, extra, Date.now());
       }
+      return client.auth.signUp({
+        email: email,
+        password: password,
+        options: { data: metaData }
+      }).then(function(result) {
+        if (result.error) {
+          console.error('[AUTH] Supabase register error:', result.error.message || result.error);
+          return { ok: false, error: mapSupabaseError(result.error) };
+        }
+        var data = result.data;
+        if (data && data.user) {
+          BLACKBOX.log('register', { email: email });
+          return { ok: true, user: { id: data.user.id, name: name, email: email }, needsConfirmation: true };
+        }
+        return { ok: false, error: 'Erreur de connexion. R\u00e9essayez.' };
+      }).catch(function(err) {
+        console.error('[AUTH] Supabase register exception:', err);
+        try {
+          return _fallbackRegister(name, email, password, extra, Date.now()).then(function(r) { return r; });
+        } catch (e2) {
+          return { ok: false, error: mapSupabaseError(err) };
+        }
+      });
     });
 
     return withTimingDelay(promise, startTime);
@@ -1185,7 +1195,7 @@ window.AUTH = {
     if (!_currentSession) return Promise.resolve({ ok: false, error: 'Non connect\u00e9' });
 
     if (!validatePassword(newPassword)) {
-      return Promise.resolve({ ok: false, error: 'Nouveau mot de passe min 6 caract\u00e8res' });
+      return Promise.resolve({ ok: false, error: 'Mot de passe : 6 caract\u00e8res min, une majuscule, un chiffre, un caract\u00e8re sp\u00e9cial' });
     }
 
     // Tenter Supabase

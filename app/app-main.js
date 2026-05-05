@@ -1392,14 +1392,15 @@ function renderProfilePage(container) {
            var isReco = t === 'champion';
            var _preview = _findPlan(t, 'saison');
            var tcard = h('div', {
+             'data-sfc-tier': t,
              style: 'flex:1;padding:14px 6px 12px;border:' + (isAct ? '2px solid #0A0A09' : '1px solid var(--border,#E8E6DF)') + ';' +
                'background:' + (isAct ? '#0A0A09' : 'transparent') + ';' +
                'cursor:pointer;text-align:center;border-radius:2px;' +
                'transition:background 0.2s,border-color 0.2s;position:relative;',
-             onclick: (function(tier) { return function() { window._sfcPricingUI.tier = tier; if (window.render) window.render(); }; })(t)
+             onclick: (function(tier) { return function() { window._sfcPricingUI.tier = tier; render(); }; })(t)
            });
            if (isReco) {
-             tcard.appendChild(h('div', {style:
+             tcard.appendChild(h('div', {'data-sfc-badge': '1', style:
                'position:absolute;top:-9px;left:50%;transform:translateX(-50%);' +
                'background:' + (isAct ? '#FAF9F6' : '#0A0A09') + ';' +
                'color:' + (isAct ? '#0A0A09' : '#FAF9F6') + ';' +
@@ -1408,16 +1409,16 @@ function renderProfilePage(container) {
                'font-size:7px;letter-spacing:2px;padding:2px 7px;white-space:nowrap;'
              }, 'POPULAIRE'));
            }
-           tcard.appendChild(h('div', {style:
+           tcard.appendChild(h('div', {'data-sfc-name': '1', style:
              'font-family:Georgia,serif;font-size:13px;' +
              'color:' + (isAct ? '#FAF9F6' : '#0A0A09') + ';margin-bottom:3px;'
            }, _tierLabels[t]));
            if (_preview) {
-             tcard.appendChild(h('div', {style:
+             tcard.appendChild(h('div', {'data-sfc-price': '1', style:
                'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:600;' +
                'color:' + (isAct ? '#FAF9F6' : '#0A0A09') + ';line-height:1.2;'
              }, _preview.label_mad));
-             tcard.appendChild(h('div', {style:
+             tcard.appendChild(h('div', {'data-sfc-per': '1', style:
                'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;' +
                'color:' + (isAct ? 'rgba(250,249,246,0.55)' : 'var(--grey,#6B6B65)') + ';'
              }, '/trim.'));
@@ -1433,16 +1434,17 @@ function renderProfilePage(container) {
            var dp = _findPlan(_ui.tier, d);
            var pillTxt = _durLabels[d] || d;
            var pill = h('button', {
+             'data-sfc-dur': d,
              style: 'flex:1;padding:8px 4px;border:1px solid ' + (isAct ? 'var(--black)' : 'var(--border)') + ';' +
                'background:' + (isAct ? 'var(--black)' : 'transparent') + ';' +
                'color:' + (isAct ? '#FAF9F6' : 'var(--grey)') + ';' +
                'cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;' +
                'letter-spacing:3px;text-transform:uppercase;min-height:44px;border-radius:0;appearance:none;-webkit-appearance:none;transition:background 0.2s ease,border-color 0.2s ease,color 0.2s ease;text-align:center;',
-             onclick: (function(dur) { return function() { window._sfcPricingUI.duration = dur; if (window.render) window.render(); }; })(d)
+             onclick: (function(dur) { return function() { window._sfcPricingUI.duration = dur; render(); }; })(d)
            });
            pill.appendChild(h('div', {}, pillTxt));
            if (dp && dp.savings_pct > 0) {
-             pill.appendChild(h('div', {style:
+             pill.appendChild(h('div', {'data-sfc-sav': '1', style:
                'font-family:Georgia,serif;font-size:10px;' +
                'color:' + (isAct ? 'rgba(250,249,246,0.8)' : 'var(--grey)') + ';margin-top:1px;'
              }, '−' + dp.savings_pct + ' %'));
@@ -2781,12 +2783,19 @@ function renderRegister(app) {
  var f2 = h('div', {'class': 'field'});
  f2.appendChild(h('label', {'class': 'field-label'}, window.t('auth.password') + ' ●'));
  var pwWrap2 = h('div', {style: 'position:relative;display:flex;align-items:center'});
- var pwInput = h('input', {type: 'password', placeholder: 'Min. 6 caractères', autocomplete: 'new-password', style: 'padding-right:44px;width:100%;box-sizing:border-box'});
+ var pwInput = h('input', {type: 'password', placeholder: 'Ex: Motdepasse1!', autocomplete: 'new-password', style: 'padding-right:44px;width:100%;box-sizing:border-box'});
  var pwEye2 = h('button', {type: 'button', 'aria-label': 'Afficher/masquer le mot de passe', style: 'position:absolute;right:0;top:0;height:100%;width:44px;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--grey,#6B6B65);-webkit-tap-highlight-color:transparent', onclick: function() { pwInput.type = pwInput.type === 'password' ? 'text' : 'password'; pwEye2.innerHTML = pwInput.type === 'password' ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>' : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'; }});
  pwEye2.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
  pwWrap2.appendChild(pwInput);
  pwWrap2.appendChild(pwEye2);
  f2.appendChild(pwWrap2);
+ var pwHint = h('div', {style: 'font-size:10px;color:var(--grey,#6B6B65);margin-top:4px;display:none'}, '6 caractères min, 1 majuscule, 1 chiffre, 1 caractère spécial');
+ f2.appendChild(pwHint);
+ pwInput.addEventListener('input', function() {
+   pwHint.style.display = pwInput.value.length > 0 ? 'block' : 'none';
+   var ok = window.isValidPassword && window.isValidPassword(pwInput.value);
+   pwHint.style.color = ok ? 'var(--success,#2E7D32)' : 'var(--grey,#6B6B65)';
+ });
  form.appendChild(f2);
 
  // ── Confirm password ──────────────────────────────────────────────
@@ -2823,7 +2832,7 @@ function renderRegister(app) {
 
  if (!name || !nom || !email || !pw || !pw2) { S.authError = 'Prénom, nom, email et mot de passe sont obligatoires'; render(); return; }
  if (pw !== pw2) { S.authError = window.t('auth.error_password_match'); render(); return; }
- if (pw.length < 6) { S.authError = window.t('auth.error_password_length'); render(); return; }
+ if (!window.isValidPassword(pw)) { S.authError = window.t('auth.error_password_rules'); render(); return; }
  if (!consentCheck.checked) { S.authError = 'Veuillez accepter la politique de confidentialit\u00e9 et les CGU pour cr\u00e9er votre compte.'; render(); return; }
 
  if (typeof navigator !== 'undefined' && navigator.onLine === false) {
@@ -3104,11 +3113,11 @@ function renderNewPassword(app) {
 
  var form = h('form', {'class': 'auth-form', onsubmit: function(e){ e.preventDefault(); }, autocomplete: 'on'});
  form.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);line-height:1.7;margin-bottom:24px;text-align:center'},
- 'Choisissez un nouveau mot de passe (minimum 6 caract\u00e8res).'));
+ 'Nouveau mot de passe : min. 6 caract\u00e8res, une majuscule, un chiffre, un caract\u00e8re sp\u00e9cial.'));
 
  var f1 = h('div', {'class': 'field'});
  f1.appendChild(h('label', {'class': 'field-label'}, 'Nouveau mot de passe'));
- var pw1 = h('input', {type: 'password', placeholder: '\u2022\u2022\u2022\u2022\u2022\u2022', autocomplete: 'new-password'});
+ var pw1 = h('input', {type: 'password', placeholder: 'Ex: Motdepasse1!', autocomplete: 'new-password'});
  f1.appendChild(pw1);
  form.appendChild(f1);
 
@@ -3121,29 +3130,52 @@ function renderNewPassword(app) {
  var saveBtn = h('button', {'class': 'btn-primary', 'type': 'button', onclick: function() {
  if (saveBtn.disabled) return;
  var p1 = pw1.value, p2 = pw2.value;
- if (!p1 || p1.length < 6) { S.authError = 'Minimum 6 caract\u00e8res'; render(); return; }
+ if (!window.isValidPassword || !window.isValidPassword(p1)) { S.authError = window.t ? window.t('auth.error_password_rules') : 'Mot de passe insuffisant'; render(); return; }
  if (p1 !== p2) { S.authError = 'Les mots de passe ne correspondent pas'; render(); return; }
  saveBtn.disabled = true;
  saveBtn.textContent = 'Mise \u00e0 jour...';
- var client = window.getSupabaseClient ? window.getSupabaseClient() : null;
- if (client && client.auth) {
- client.auth.updateUser({ password: p1 }).then(function(result) {
- if (result.error) {
- S.authError = result.error.message || 'Erreur lors de la mise \u00e0 jour';
- render();
- } else {
- S.authError = '';
- S._passwordUpdated = true;
- render();
- }
+ var _jwtPromise = window.AUTH && typeof window.AUTH.getJWT === 'function' ? window.AUTH.getJWT() : Promise.resolve(null);
+ _jwtPromise.then(function(jwt) {
+   if (jwt) {
+     return fetch('/.netlify/functions/change-password', {
+       method: 'POST',
+       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt },
+       body: JSON.stringify({ password: p1 })
+     }).then(function(res) { return res.json().then(function(d) { return { status: res.status, data: d }; }); });
+   }
+   var client = window.getSupabaseClient ? window.getSupabaseClient() : null;
+   if (client && client.auth) {
+     return client.auth.updateUser({ password: p1 }).then(function(r) {
+       if (r.error) return { status: 422, data: { error: r.error.message } };
+       return { status: 200, data: { ok: true } };
+     });
+   }
+   return Promise.resolve({ status: 503, data: { error: 'Service indisponible' } });
+ }).then(function(result) {
+   if (result && result.status === 200 && result.data && result.data.ok) {
+     S.authError = '';
+     S._passwordUpdated = true;
+     render();
+   } else {
+     S.authError = (result && result.data && result.data.error) || 'Erreur lors de la mise \u00e0 jour';
+     saveBtn.disabled = false;
+     saveBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Save' : 'Enregistrer';
+     render();
+   }
  }).catch(function() {
- S.authError = 'Erreur r\u00e9seau. R\u00e9essayez.';
- render();
+   var client = window.getSupabaseClient ? window.getSupabaseClient() : null;
+   if (client && client.auth) {
+     client.auth.updateUser({ password: p1 }).then(function(r) {
+       if (r.error) { S.authError = r.error.message || 'Erreur lors de la mise \u00e0 jour'; }
+       else { S.authError = ''; S._passwordUpdated = true; }
+       render();
+     }).catch(function() { S.authError = 'Erreur r\u00e9seau. R\u00e9essayez.'; render(); });
+   } else {
+     S.authError = 'Service indisponible'; render();
+   }
+   saveBtn.disabled = false;
+   saveBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Save' : 'Enregistrer';
  });
- } else {
- S.authError = 'Service indisponible';
- render();
- }
  }}, (window.isEnglish && window.isEnglish()) ? 'Save' : 'Enregistrer');
  form.appendChild(saveBtn);
 

@@ -150,8 +150,17 @@
     form.appendChild(f2);
 
     // Champ mot de passe
-    var f3 = _makeField('Mot de passe', 'password', 'new-password', 'Min. 6 caractères');
+    var f3 = _makeField('Mot de passe', 'password', 'new-password', 'Ex: Motdepasse1!');
     var pwInput = f3.querySelector('input');
+    var pwHint = document.createElement('div');
+    pwHint.style.cssText = 'font-size:10px;color:var(--grey,#6B6B65);margin-top:4px;display:none';
+    pwHint.textContent = '6 caractères min, 1 majuscule, 1 chiffre, 1 caractère spécial';
+    f3.appendChild(pwHint);
+    pwInput.addEventListener('input', function() {
+      pwHint.style.display = pwInput.value.length > 0 ? 'block' : 'none';
+      var ok = window.isValidPassword && window.isValidPassword(pwInput.value);
+      pwHint.style.color = ok ? 'var(--success,#2E7D32)' : 'var(--grey,#6B6B65)';
+    });
     form.appendChild(f3);
 
     // Message d'erreur
@@ -191,8 +200,8 @@
         errEl.style.display = 'block';
         return;
       }
-      if (pw.length < 6) {
-        errEl.textContent = 'Le mot de passe doit contenir au moins 6 caractères.';
+      if (!window.isValidPassword || !window.isValidPassword(pw)) {
+        errEl.textContent = 'Le mot de passe doit contenir au moins 6 caractères, une majuscule, un chiffre et un caractère spécial.';
         errEl.style.display = 'block';
         return;
       }
