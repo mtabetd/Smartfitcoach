@@ -237,17 +237,19 @@
 
         // Note: birth_date and email_optin removed from dedicated columns
         // (not in schema) — already preserved inside the `data` JSONB field below.
-        // Strip subscription keys before upsert — these are server-authoritative
-        // columns (profiles.subscription_plan/end) since the 2026-04 migration.
-        // A user-side write can never set them; stripping client-side avoids
-        // unnecessary churn (the BEFORE trigger would strip them anyway) and
-        // keeps the JSONB clean for the admin JSONB fallback during rollout.
+        // Strip server-authoritative keys before upsert. These values live in
+        // dedicated DB columns protected from user modification:
+        //   subscription_plan/end  — since 2026-04 migration
+        //   first_login_date       — write-once column (20260505 migration)
+        // Stripping them from the JSONB blob keeps data clean and prevents a
+        // compromised client from polluting the JSONB fallback path.
         var _safeData = data;
         try {
-          if (data && (data.subscriptionPlan !== undefined || data.subscriptionEnd !== undefined)) {
+          if (data && (data.subscriptionPlan !== undefined || data.subscriptionEnd !== undefined || data.firstLoginDate !== undefined)) {
             _safeData = Object.assign({}, data);
             delete _safeData.subscriptionPlan;
             delete _safeData.subscriptionEnd;
+            delete _safeData.firstLoginDate;
           }
         } catch(e) { _safeData = data; }
 
@@ -301,13 +303,13 @@
       function mergePayload(row) {
         if (!row) return null;
         var payload = row.data || {};
-        // Server-authoritative subscription state — the dedicated columns
-        // override any stale JSONB value. Property names are kept identical
-        // so every consumer of S.subscriptionPlan / S.subscriptionEnd works
-        // unchanged. When the columns don't exist yet (pre-migration), the
-        // JSONB values inside row.data remain the fallback.
+        // Server-authoritative columns override any stale JSONB value.
+        // firstLoginDate comes from the write-once first_login_date column
+        // (see migration 20260505_secure_first_login_date.sql) — users cannot
+        // manipulate it via Supabase client to extend their trial window.
         if (row.subscription_plan) payload.subscriptionPlan = row.subscription_plan;
         if (row.subscription_end)  payload.subscriptionEnd  = row.subscription_end;
+        if (row.first_login_date)  payload.firstLoginDate   = row.first_login_date;
         if (row.updated_at) payload._cloudUpdatedAt = row.updated_at;
         return payload;
       }
@@ -322,7 +324,7 @@
 
         var _loadQuery = client
           .from('profiles')
-          .select('data, subscription_plan, subscription_end, updated_at')
+          .select('data, subscription_plan, subscription_end, first_login_date, updated_at')
           .eq('id', userId)
           .single()
           .then(function(result) {
@@ -330,7 +332,7 @@
             // the legacy SELECT so users can still log in before the DB
             // migration has been executed.
             if (result.error && (result.error.code === '42703' || /column .* does not exist/i.test(result.error.message || ''))) {
-              console.warn('[SupaSync] subscription_plan/end columns missing — falling back to legacy select. Run the migration in supabase-schema.sql.');
+              console.warn('[SupaSync] new columns missing — falling back to legacy select. Run migrations in supabase/migrations/.');
               return client
                 .from('profiles')
                 .select('data, updated_at')
@@ -892,6 +894,47 @@
         clearInterval(this._syncInterval);
         this._syncInterval = null;
       }
+    },
+
+    // Fetch authoritative premium/trial status from server.
+    // Result is cached for 15 min to avoid hammering the endpoint.
+    // On success, S.firstLoginDate / subscriptionPlan / subscriptionEnd are
+    // updated in-memory with server-confirmed values.
+    // Returns a Promise<{ premium, plan, planEnd, trialDaysLeft, firstLoginDate }|null>.
+    fetchUserStatus: function() {
+      var self = this;
+      var NOW = Date.now();
+      var TTL = 15 * 60 * 1000; // 15 minutes
+      if (self._userStatusCache && (NOW - self._userStatusCacheTs) < TTL) {
+        return Promise.resolve(self._userStatusCache);
+      }
+      return SupaAuth.getSession().then(function(session) {
+        if (!session || !session.access_token) return null;
+        var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+        var tid = setTimeout(function() { if (ctrl) ctrl.abort(); }, 8000);
+        return fetch('/.netlify/functions/user-status', {
+          method: 'GET',
+          headers: { 'Authorization': 'Bearer ' + session.access_token },
+          signal: ctrl ? ctrl.signal : undefined
+        }).then(function(res) {
+          clearTimeout(tid);
+          if (!res.ok) return null;
+          return res.json();
+        }).then(function(status) {
+          if (!status || typeof status.premium !== 'boolean') return null;
+          self._userStatusCache   = status;
+          self._userStatusCacheTs = Date.now();
+          // Propagate server-authoritative values into S
+          try {
+            if (window.S) {
+              if (status.firstLoginDate)   window.S.firstLoginDate   = status.firstLoginDate;
+              if (status.plan)             window.S.subscriptionPlan = status.plan;
+              if (status.planEnd !== undefined) window.S.subscriptionEnd = status.planEnd;
+            }
+          } catch(e) {}
+          return status;
+        }).catch(function() { clearTimeout(tid); return null; });
+      }).catch(function() { return null; });
     }
   };
 

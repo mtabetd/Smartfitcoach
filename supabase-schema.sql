@@ -12,6 +12,11 @@ create table public.profiles (
   email text,
   name text,
   data jsonb not null default '{}',  -- tout le profil S (goal, sex, age, weight, sport*, muscu*, etc.)
+  -- subscription_plan / subscription_end added via migration (2026-04)
+  -- first_login_date: write-once, server-managed date set on account creation.
+  -- Protected by trigger protect_first_login_date (migration 20260505).
+  -- NEVER read data->>'firstLoginDate' for premium checks — use this column.
+  first_login_date date,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );

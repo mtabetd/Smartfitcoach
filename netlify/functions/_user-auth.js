@@ -64,12 +64,16 @@ async function requirePremium(event) {
 
   const user = userResp.data.user;
 
-  // Fetch subscription status + trial date from profiles table
+  // Fetch subscription status + trial date from profiles table.
+  // first_login_date is a write-once server-managed column (see migration
+  // 20260505_secure_first_login_date.sql) — users cannot manipulate it via
+  // the Supabase client to extend their trial. data.firstLoginDate is only
+  // used as a fallback during the migration window for rows not yet backfilled.
   let profile = null;
   try {
     const { data } = await admin
       .from('profiles')
-      .select('subscription_end, data')
+      .select('subscription_end, first_login_date, data')
       .eq('id', user.id)
       .single();
     profile = data;
@@ -85,11 +89,19 @@ async function requirePremium(event) {
     // 1. Active subscription
     if (profile.subscription_end && profile.subscription_end >= today) premium = true;
 
-    // 2. Trial period (mirrors client-side logic in app-main.js)
-    if (!premium && profile.data && profile.data.firstLoginDate) {
-      const trialEnd = new Date(profile.data.firstLoginDate);
-      trialEnd.setUTCDate(trialEnd.getUTCDate() + TRIAL_DAYS);
-      if (new Date() <= trialEnd) premium = true;
+    // 2. Trial period — prefer the DB-managed write-once column; fall back to
+    //    JSONB only during the migration window when the column may be null.
+    if (!premium) {
+      const rawDate = profile.first_login_date ||
+        (profile.data && typeof profile.data.firstLoginDate === 'string' ? profile.data.firstLoginDate : null);
+      if (rawDate) {
+        const trialEnd = new Date(rawDate);
+        trialEnd.setUTCDate(trialEnd.getUTCDate() + TRIAL_DAYS);
+        if (new Date() <= trialEnd) premium = true;
+      } else {
+        // No date at all → brand-new user still creating their profile
+        premium = true;
+      }
     }
   }
 
