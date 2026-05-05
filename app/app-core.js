@@ -4518,7 +4518,7 @@ function getTrialDaysLeft() {
   try {
     var s = window.S;
     if (!s || !s.firstLoginDate) return 7;
-    if (s.subscriptionEnd && (s.subscriptionPlan === 'unlimited' || new Date(s.subscriptionEnd) > new Date())) return 0; // abonné
+    if (s.subscriptionPlan === 'unlimited' || (s.subscriptionEnd && new Date(s.subscriptionEnd) > new Date())) return 0; // abonné
     var trialEnd = new Date(s.firstLoginDate);
     trialEnd.setUTCDate(trialEnd.getUTCDate() + 7);
     var diff = Math.ceil((trialEnd - new Date()) / (1000 * 60 * 60 * 24));
@@ -4529,7 +4529,7 @@ function isTrialUser() {
   try {
     var s = window.S;
     if (!s) return false;
-    if (s.subscriptionEnd && (s.subscriptionPlan === 'unlimited' || new Date(s.subscriptionEnd) > new Date())) return false;
+    if (s.subscriptionPlan === 'unlimited' || (s.subscriptionEnd && new Date(s.subscriptionEnd) > new Date())) return false;
     return true; // pas d'abonnement = trial (actif ou expiré)
   } catch(e) { return false; }
 }

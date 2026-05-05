@@ -1238,7 +1238,7 @@ function renderProfilePage(container) {
  // ─── MON ABONNEMENT (Hermès — ivoire, orange tabac, Georgia serif) ───
  (function() {
    try {
-     var _isSub = !!(S.subscriptionEnd && (S.subscriptionPlan === 'unlimited' || new Date(S.subscriptionEnd) > new Date()));
+     var _isSub = !!(S.subscriptionPlan === 'unlimited' || (S.subscriptionEnd && new Date(S.subscriptionEnd) > new Date()));
      var _daysLeft = (typeof window.getTrialDaysLeft === 'function') ? window.getTrialDaysLeft() : 7;
      var _trialExpired = !_isSub && _daysLeft === 0 && !!S.firstLoginDate;
 
@@ -2621,6 +2621,10 @@ function renderLogin(app) {
  render(); // Re-render après sync cloud : nStep migré, unités à jour, vue recalculée
  }
  SupaSync.startAutoSync(); // Démarrer après syncOnLogin pour éviter la double-écriture
+ // Pull authoritative subscription state from server — DB columns may be NULL for unlimited plans
+ if (typeof SupaSync.fetchUserStatus === 'function') {
+ SupaSync.fetchUserStatus().then(function() { render(); }).catch(function() {});
+ }
  }).catch(function(e) { console.warn('[Login] syncOnLogin unexpected error:', e); SupaSync.startAutoSync(); });
  }
  if (window.GAMIFICATION) { GAMIFICATION.updateStreak(); GAMIFICATION.unlockBadge('first_login'); }
