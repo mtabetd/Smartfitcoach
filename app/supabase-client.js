@@ -832,6 +832,12 @@
             console.log('[SupaSync] Cloud stale — missing local data (sport=' + cloudWouldLoseSport + ', plan=' + cloudWouldLosePlan + '). Keeping local, forcing cloud resave.');
             // Forcer une re-sync pour repousser les données locales vers le cloud
             try { if (window.SupaSync && window.SupaSync.saveProfile) window.SupaSync.saveProfile(); } catch(e) {}
+            // Server-authoritative fields applied even when local wins — subscription is never in localStorage
+            try {
+              if (cloudData.subscriptionPlan) window.S.subscriptionPlan = cloudData.subscriptionPlan;
+              if (cloudData.subscriptionEnd !== undefined) window.S.subscriptionEnd = cloudData.subscriptionEnd;
+              if (cloudData.firstLoginDate) window.S.firstLoginDate = cloudData.firstLoginDate;
+            } catch(_e) {}
           } else if (cloudIsNewer || cloudNStep > localNStep || cloudSStep > localSStep || (cloudHasPlan && !localHasPlan)) {
             console.log('[SupaSync] Cloud preferred — cloudTime=' + new Date(cloudTime).toISOString() + ' localTime=' + (localTime ? new Date(localTime).toISOString() : 'none') + ' nStep cloud/local=' + cloudNStep + '/' + localNStep);
             _applyCloudData();
