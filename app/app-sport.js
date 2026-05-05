@@ -1691,6 +1691,28 @@ function renderObjectif(p) {
  // No Continue button needed - cards auto-navigate
 }
 
+// ─── MEDICAL SAFETY LIMITS ───
+var MEDICAL_LIMITS = {
+  HTA_INTENSITY_CAP: 0.60  // ESC/ESH 2018: max 60% 1RM for severe hypertension
+};
+window.MEDICAL_LIMITS = MEDICAL_LIMITS;
+
+// ─── BODY WEIGHT RESOLVER ───
+// Priority: S.weight → last entry in S.weightHistory → 75 kg default
+function _resolveBodyWeight() {
+  var w = parseFloat(window.S && window.S.weight);
+  if (w > 0) return w;
+  var hist = window.S && window.S.weightHistory;
+  if (Array.isArray(hist)) {
+    for (var _wi = hist.length - 1; _wi >= 0; _wi--) {
+      var _e = hist[_wi];
+      var _hw = parseFloat(_e && (_e.weight || _e.w || _e));
+      if (_hw > 0) return _hw;
+    }
+  }
+  return 75;
+}
+
 // ─── ESTIMATION CALORIQUE PAR SEANCE ───
 // Formule MET : kcal = MET x poids_kg x duree_heures (Ainsworth 2011)
 function estimateKcal(sportType, level, durationMins) {
@@ -1725,8 +1747,7 @@ function estimateKcal(sportType, level, durationMins) {
  if (MET_VALUES[sportType]) {
   met = MET_VALUES[sportType][levelNorm] || MET_VALUES[sportType][level] || MET_VALUES[sportType]['default'] || 8;
  }
- var _rawWeight = parseFloat(S.weight);
- var poids = (_rawWeight > 0) ? _rawWeight : 75;
+ var poids = _resolveBodyWeight();
  var defaultDur = SESSION_DURATION_DEFAULTS[sportType] ? (SESSION_DURATION_DEFAULTS[sportType][levelNorm] || SESSION_DURATION_DEFAULTS[sportType][level] || 60) : 60;
  var dureeMin = durationMins || defaultDur;
  var duree = dureeMin / 60;
@@ -2219,7 +2240,7 @@ function renderChargesQuestionnaire(p) {
  }
  if (!S.muscuStrengthProfile || typeof S.muscuStrengthProfile !== 'object' || Array.isArray(S.muscuStrengthProfile)) S.muscuStrengthProfile = {};
 
- var bodyWeight = S.weight || 75;
+ var bodyWeight = _resolveBodyWeight();
  var strengthThresholds = {
  bench_press: {low:0.5,mid:1.0}, squat: {low:0.75,mid:1.25},
  deadlift: {low:1.0,mid:1.5}, overhead_press: {low:0.35,mid:0.65},
@@ -2297,7 +2318,7 @@ function renderChargesQuestionnaire(p) {
 
  // ─── STRENGTH LEADERBOARD PERSO ───
  (function() {
-   var _bw = S.weight || 75;
+   var _bw = _resolveBodyWeight();
    var _sex = window.isFemale(S) ? 'f' : 'm';
    // Percentile thresholds [ratio×BW] by sex for Bench/Squat/Deadlift
    // Sources: Symmetric Strength population data (general gym population)
@@ -2354,7 +2375,7 @@ function renderChargesQuestionnaire(p) {
 
  // ─── EXERCICES AVANCÉS DÉBLOQUÉS ───
  (function() {
-   var _bw = S.weight || 75;
+   var _bw = _resolveBodyWeight();
    var _prof = S.muscuStrengthProfile || {};
    function _est1rm(key) {
      var w = _prof[key] || 0;
@@ -5317,7 +5338,7 @@ function getSuggestedWeight(exerciseName, reps, phase) {
  pct = Math.min(0.95, Math.max(0.40, pct + _macroBonus));
  // HTA sévère : limiter à 60% du 1RM (ESC/ESH 2018 — éviter manœuvre de Valsalva)
  if (Array.isArray(S.medical) && S.medical.indexOf('hta_severe') !== -1) {
-   pct = Math.min(pct, 0.60);
+   pct = Math.min(pct, MEDICAL_LIMITS.HTA_INTENSITY_CAP);
  }
  // Priority 1: use user's actual 1RM from strength profile (Epley-calculated)
  if (S.muscuStrengthProfile && window.MUSCU_KEY_EXERCISES) {
@@ -6566,7 +6587,7 @@ window.scoreSession = scoreSession;
 // On utilise donc MET pour la résistance et Keytel pour les séances à dominante cardio.
 function calcSessionKcal(exercises, durationMin) {
  var s = window.S;
- var weight = s.weight || 75;
+ var weight = _resolveBodyWeight();
  var age = getAge() || 30;
  var sex = window.isFemale(s) ? 'femme' : 'homme';
  // Phase courante → RPE (session-driven)
