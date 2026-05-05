@@ -2256,6 +2256,7 @@ window.I18N = {
       'auth.error_credentials': 'Email ou mot de passe incorrect',
       'auth.error_email': 'Email invalide',
       'auth.error_password_length': 'Mot de passe : 6 caractères minimum',
+      'auth.error_password_rules': 'Le mot de passe doit contenir au moins 6 caractères, une majuscule, un chiffre et un caractère spécial.',
       'auth.error_password_match': 'Les mots de passe ne correspondent pas',
       'auth.rate_limit': 'Trop de tentatives. Réessayez dans 5 minutes.',
 
@@ -2566,6 +2567,7 @@ window.I18N = {
       'auth.error_credentials': 'Incorrect email or password',
       'auth.error_email': 'Invalid email address',
       'auth.error_password_length': 'Password must be at least 6 characters',
+      'auth.error_password_rules': 'Password must contain at least 6 characters, one uppercase letter, one number and one special character.',
       'auth.error_password_match': 'Passwords do not match',
       'auth.rate_limit': 'Too many attempts. Please try again in 5 minutes.',
 
@@ -4626,6 +4628,16 @@ window.isPremium = isPremium;
 window.getTrialDaysLeft = getTrialDaysLeft;
 window.isTrialUser = isTrialUser;
 window.showPaywall = showPaywall;
+
+function isValidPassword(pw) {
+  if (!pw || typeof pw !== 'string') return false;
+  if (pw.length < 6) return false;
+  if (!/[A-Z]/.test(pw)) return false;
+  if (!/[0-9]/.test(pw)) return false;
+  if (!/[!@#$%^&*()\-_=+\[\]{};:'",.<>/?\\|`~]/.test(pw)) return false;
+  return true;
+}
+window.isValidPassword = isValidPassword;
 
 // Modale de contact abonnement — email smartfitcoach@proton.me
 function showSubscriptionContact(plan, ui) {

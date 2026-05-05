@@ -1719,6 +1719,56 @@ test('P: SFCLastGood valid data survives save/get round-trip', function() {
   assertEqual(retrieved.sportType, 'running', 'sportType round-trips correctly');
 });
 
+// ── PW: Password validation — isValidPassword() ──────────────────────────────
+var _isValidPassword = (function() {
+  function isValidPassword(pw) {
+    if (!pw || typeof pw !== 'string') return false;
+    if (pw.length < 6) return false;
+    if (!/[A-Z]/.test(pw)) return false;
+    if (!/[0-9]/.test(pw)) return false;
+    if (!/[!@#$%^&*()\-_=+\[\]{};:'",.<>/?\\|`~]/.test(pw)) return false;
+    return true;
+  }
+  return isValidPassword;
+})();
+
+test('PW1: "abc" (too short, no uppercase, no digit, no special) → FAIL', function() {
+  assert(_isValidPassword('abc') === false, '"abc" must fail');
+});
+test('PW2: "abcdef" (no uppercase, no digit, no special) → FAIL', function() {
+  assert(_isValidPassword('abcdef') === false, '"abcdef" must fail');
+});
+test('PW3: "Abcdef" (no digit, no special) → FAIL', function() {
+  assert(_isValidPassword('Abcdef') === false, '"Abcdef" must fail');
+});
+test('PW4: "Abcdef1" (no special character) → FAIL', function() {
+  assert(_isValidPassword('Abcdef1') === false, '"Abcdef1" must fail');
+});
+test('PW5: "Abcdef1!" (meets all requirements) → PASS', function() {
+  assert(_isValidPassword('Abcdef1!') === true, '"Abcdef1!" must pass');
+});
+test('PW6: empty string → FAIL', function() {
+  assert(_isValidPassword('') === false, 'empty string must fail');
+});
+test('PW7: null → FAIL', function() {
+  assert(_isValidPassword(null) === false, 'null must fail');
+});
+test('PW8: undefined → FAIL', function() {
+  assert(_isValidPassword(undefined) === false, 'undefined must fail');
+});
+test('PW9: "A1!" (too short despite meeting other rules) → FAIL', function() {
+  assert(_isValidPassword('A1!') === false, 'too-short password must fail even with uppercase+digit+special');
+});
+test('PW10: "SecureP@ss99" (strong password) → PASS', function() {
+  assert(_isValidPassword('SecureP@ss99') === true, '"SecureP@ss99" must pass');
+});
+test('PW11: "UPPERCASE1!" (all-caps with digit and special) → PASS', function() {
+  assert(_isValidPassword('UPPERCASE1!') === true, 'all-caps with digit and special must pass');
+});
+test('PW12: "Motdepasse1!" (French-style strong password) → PASS', function() {
+  assert(_isValidPassword('Motdepasse1!') === true, '"Motdepasse1!" must pass');
+});
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 console.log('\n' + (failed === 0 ? '\x1b[32m' : '\x1b[31m') +
   'Results: ' + passed + ' passed, ' + failed + ' failed\x1b[0m\n');
