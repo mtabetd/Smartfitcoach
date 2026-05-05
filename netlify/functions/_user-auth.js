@@ -69,7 +69,7 @@ async function requirePremium(event) {
   try {
     const { data } = await admin
       .from('profiles')
-      .select('subscription_end, data')
+      .select('subscription_end, first_login_date, data')
       .eq('id', user.id)
       .single();
     profile = data;
@@ -85,11 +85,18 @@ async function requirePremium(event) {
     // 1. Active subscription
     if (profile.subscription_end && profile.subscription_end >= today) premium = true;
 
-    // 2. Trial period (mirrors client-side logic in app-main.js)
-    if (!premium && profile.data && profile.data.firstLoginDate) {
-      const trialEnd = new Date(profile.data.firstLoginDate);
-      trialEnd.setUTCDate(trialEnd.getUTCDate() + TRIAL_DAYS);
-      if (new Date() <= trialEnd) premium = true;
+    // 2. Trial period — prefer write-once first_login_date column; fallback to JSONB during migration
+    if (!premium) {
+      const rawDate = profile.first_login_date || (profile.data && profile.data.firstLoginDate);
+      if (rawDate) {
+        const trialEnd = new Date(rawDate);
+        trialEnd.setUTCDate(trialEnd.getUTCDate() + TRIAL_DAYS);
+        if (new Date() <= trialEnd) premium = true;
+      } else if (!profile.subscription_end) {
+        // Truly brand-new user (no trial date, no subscription ever set) — grant trial
+        premium = true;
+      }
+      // If subscription_end exists but expired and no trial date: deny (known lapsed user)
     }
   }
 

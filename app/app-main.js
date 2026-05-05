@@ -3111,11 +3111,11 @@ function renderNewPassword(app) {
 
  var form = h('form', {'class': 'auth-form', onsubmit: function(e){ e.preventDefault(); }, autocomplete: 'on'});
  form.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);line-height:1.7;margin-bottom:24px;text-align:center'},
- 'Choisissez un nouveau mot de passe (minimum 6 caract\u00e8res).'));
+ 'Nouveau mot de passe : min. 6 caract\u00e8res, une majuscule, un chiffre, un caract\u00e8re sp\u00e9cial.'));
 
  var f1 = h('div', {'class': 'field'});
  f1.appendChild(h('label', {'class': 'field-label'}, 'Nouveau mot de passe'));
- var pw1 = h('input', {type: 'password', placeholder: '\u2022\u2022\u2022\u2022\u2022\u2022', autocomplete: 'new-password'});
+ var pw1 = h('input', {type: 'password', placeholder: 'Ex: Motdepasse1!', autocomplete: 'new-password'});
  f1.appendChild(pw1);
  form.appendChild(f1);
 
@@ -3128,29 +3128,52 @@ function renderNewPassword(app) {
  var saveBtn = h('button', {'class': 'btn-primary', 'type': 'button', onclick: function() {
  if (saveBtn.disabled) return;
  var p1 = pw1.value, p2 = pw2.value;
- if (!p1 || p1.length < 6) { S.authError = 'Minimum 6 caract\u00e8res'; render(); return; }
+ if (!window.isValidPassword || !window.isValidPassword(p1)) { S.authError = window.t ? window.t('auth.error_password_rules') : 'Mot de passe insuffisant'; render(); return; }
  if (p1 !== p2) { S.authError = 'Les mots de passe ne correspondent pas'; render(); return; }
  saveBtn.disabled = true;
  saveBtn.textContent = 'Mise \u00e0 jour...';
- var client = window.getSupabaseClient ? window.getSupabaseClient() : null;
- if (client && client.auth) {
- client.auth.updateUser({ password: p1 }).then(function(result) {
- if (result.error) {
- S.authError = result.error.message || 'Erreur lors de la mise \u00e0 jour';
- render();
- } else {
- S.authError = '';
- S._passwordUpdated = true;
- render();
- }
+ var _jwtPromise = window.AUTH && typeof window.AUTH.getJWT === 'function' ? window.AUTH.getJWT() : Promise.resolve(null);
+ _jwtPromise.then(function(jwt) {
+   if (jwt) {
+     return fetch('/.netlify/functions/change-password', {
+       method: 'POST',
+       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt },
+       body: JSON.stringify({ password: p1 })
+     }).then(function(res) { return res.json().then(function(d) { return { status: res.status, data: d }; }); });
+   }
+   var client = window.getSupabaseClient ? window.getSupabaseClient() : null;
+   if (client && client.auth) {
+     return client.auth.updateUser({ password: p1 }).then(function(r) {
+       if (r.error) return { status: 422, data: { error: r.error.message } };
+       return { status: 200, data: { ok: true } };
+     });
+   }
+   return Promise.resolve({ status: 503, data: { error: 'Service indisponible' } });
+ }).then(function(result) {
+   if (result && result.status === 200 && result.data && result.data.ok) {
+     S.authError = '';
+     S._passwordUpdated = true;
+     render();
+   } else {
+     S.authError = (result && result.data && result.data.error) || 'Erreur lors de la mise \u00e0 jour';
+     saveBtn.disabled = false;
+     saveBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Save' : 'Enregistrer';
+     render();
+   }
  }).catch(function() {
- S.authError = 'Erreur r\u00e9seau. R\u00e9essayez.';
- render();
+   var client = window.getSupabaseClient ? window.getSupabaseClient() : null;
+   if (client && client.auth) {
+     client.auth.updateUser({ password: p1 }).then(function(r) {
+       if (r.error) { S.authError = r.error.message || 'Erreur lors de la mise \u00e0 jour'; }
+       else { S.authError = ''; S._passwordUpdated = true; }
+       render();
+     }).catch(function() { S.authError = 'Erreur r\u00e9seau. R\u00e9essayez.'; render(); });
+   } else {
+     S.authError = 'Service indisponible'; render();
+   }
+   saveBtn.disabled = false;
+   saveBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Save' : 'Enregistrer';
  });
- } else {
- S.authError = 'Service indisponible';
- render();
- }
  }}, (window.isEnglish && window.isEnglish()) ? 'Save' : 'Enregistrer');
  form.appendChild(saveBtn);
 
