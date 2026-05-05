@@ -1198,21 +1198,25 @@ function togglePanel() {
 }
 
 function openPanel() {
-  if (window.isPremium && !window.isPremium()) {
-    if (window.showPaywall) window.showPaywall('ai-coach');
-    return;
-  }
-  var panel = document.getElementById('ai-coach-panel');
-  if (panel) { panel.classList.add('open'); _panelOpen = true; }
-  applyPanelLayout();
-  if (!_resizeHandler) {
-    _resizeHandler = function() { if (_panelOpen) applyPanelLayout(); };
-    window.addEventListener('resize', _resizeHandler);
-  }
-  var msgs = document.getElementById('ai-coach-messages');
-  if (msgs) { setTimeout(function() { msgs.scrollTop = msgs.scrollHeight; }, 100); }
-  var suggs = document.getElementById('ai-suggestions');
-  if (suggs) refreshSuggestions(suggs);
+  if (_panelOpen) return;
+  window.safeUserStatusCheck({ force: true }).then(function(status) {
+    if (!status.isPremium) {
+      if (status.source === 'fallback' && window._showPremiumCheckFailed) { window._showPremiumCheckFailed(openPanel); return; }
+      if (window.showPaywall) window.showPaywall('ai-coach');
+      return;
+    }
+    var panel = document.getElementById('ai-coach-panel');
+    if (panel) { panel.classList.add('open'); _panelOpen = true; }
+    applyPanelLayout();
+    if (!_resizeHandler) {
+      _resizeHandler = function() { if (_panelOpen) applyPanelLayout(); };
+      window.addEventListener('resize', _resizeHandler);
+    }
+    var msgs = document.getElementById('ai-coach-messages');
+    if (msgs) { setTimeout(function() { msgs.scrollTop = msgs.scrollHeight; }, 100); }
+    var suggs = document.getElementById('ai-suggestions');
+    if (suggs) refreshSuggestions(suggs);
+  });
 }
 
 function closePanel() {

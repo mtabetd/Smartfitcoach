@@ -103,10 +103,12 @@ function checkPage(doc, y) {
 
 window.exportWeeklyReportPDF = function() {
   try {
-    if (window.isPremium && !window.isPremium()) {
-      if (window.showPaywall) window.showPaywall('pdf');
-      return;
-    }
+    // Premium gate — weekly report = premium feature, server-verified
+    window.safeUserStatusCheck({ force: true }).then(function(status) {
+      if (!status.isPremium) {
+        if (status.source === 'fallback' && window._showPremiumCheckFailed) { window._showPremiumCheckFailed(window.exportWeeklyReportPDF); return; }
+        if (window.showPaywall) window.showPaywall('pdf'); return;
+      }
     if (!window.jspdf || !window.jspdf.jsPDF) {
       if (window.showToast) window.showToast((window.isEnglish && window.isEnglish() ? 'Loading PDF…' : 'Chargement du PDF…'), 'info', 2000);
       if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', window.exportWeeklyReportPDF); }
@@ -479,6 +481,7 @@ window.exportWeeklyReportPDF = function() {
     var pad = function(n) { return n < 10 ? '0' + n : '' + n; };
     var dateStrFile = now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate());
     doc.save('smartfitcoach-rapport-hebdo-' + dateStrFile + '.pdf');
+    }); // end safeUserStatusCheck.then
   } catch(e) {
     console.error('[exportWeeklyReportPDF] Erreur:', e);
     if (window.showToast) window.showToast((window.isEnglish && window.isEnglish() ? 'Error generating the PDF. Please retry or contact support.' : 'Erreur lors de la g\u00e9n\u00e9ration du PDF. R\u00e9essayez ou contactez le support.'), 'error', 4500);

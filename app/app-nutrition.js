@@ -4221,7 +4221,11 @@ function renderModal(app) {
 
 // ─── PDF EXPORT ───
 function exportDayPDF(dayIdx) {
-  if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
+  window.safeUserStatusCheck({ force: true }).then(function(status) {
+    if (!status.isPremium) {
+      if (status.source === 'fallback' && window._showPremiumCheckFailed) { window._showPremiumCheckFailed(function() { exportDayPDF(dayIdx); }); return; }
+      if (window.showPaywall) window.showPaywall('pdf'); return;
+    }
   if (!window.jspdf || !window.jspdf.jsPDF) {
     if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Loading PDF…' : 'Chargement du PDF…', 'info', 2000);
     if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', function() { exportDayPDF(dayIdx); }); }
@@ -4327,11 +4331,16 @@ function exportDayPDF(dayIdx) {
     .replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
   doc.save('plan-' + (safeDayName || 'jour') + '.pdf');
   } catch(e) { console.error('[exportDayPDF] Erreur:', e); if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Error generating PDF. Check your data.' : 'Erreur lors de la g\u00e9n\u00e9ration du PDF. V\u00e9rifiez vos donn\u00e9es.', 'error', 4000); }
+  }); // end safeUserStatusCheck.then
 }
 window.exportDayPDF = exportDayPDF;
 
 function exportRecipePDF(r) {
-  if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
+  window.safeUserStatusCheck({ force: true }).then(function(status) {
+    if (!status.isPremium) {
+      if (status.source === 'fallback' && window._showPremiumCheckFailed) { window._showPremiumCheckFailed(function() { exportRecipePDF(r); }); return; }
+      if (window.showPaywall) window.showPaywall('pdf'); return;
+    }
   if (!window.jspdf || !window.jspdf.jsPDF) {
     if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Loading PDF…' : 'Chargement du PDF…', 'info', 2000);
     if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', function() { exportRecipePDF(r); }); }
@@ -4406,6 +4415,7 @@ function exportRecipePDF(r) {
     .replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
   doc.save((safeName || (window.isEnglish && window.isEnglish() ? 'recipe' : 'recette')) + '.pdf');
   } catch(e) { console.error('[exportRecipePDF] Erreur:', e); if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Error generating recipe PDF' : 'Erreur lors de la g\u00e9n\u00e9ration du PDF recette', 'error', 3500); }
+  }); // end safeUserStatusCheck.then
 }
 window.exportRecipePDF = exportRecipePDF;
 
@@ -6397,7 +6407,11 @@ function printShoppingListAR(list) {
 }
 
 function exportShoppingListPDF(list, shopChecked) {
-  if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
+  window.safeUserStatusCheck({ force: true }).then(function(status) {
+    if (!status.isPremium) {
+      if (status.source === 'fallback' && window._showPremiumCheckFailed) { window._showPremiumCheckFailed(function() { exportShoppingListPDF(list, shopChecked); }); return; }
+      if (window.showPaywall) window.showPaywall('pdf'); return;
+    }
   if (!window.jspdf || !window.jspdf.jsPDF) {
     if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Loading PDF…' : 'Chargement du PDF…', 'info', 2000);
     if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', function() { exportShoppingListPDF(list, shopChecked); }); }
@@ -6475,6 +6489,7 @@ function exportShoppingListPDF(list, shopChecked) {
 
   doc.save('liste-courses-smartfitcoach.pdf');
   } catch(e) { console.error('[exportShoppingListPDF] Erreur:', e); if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Error generating shopping list PDF' : 'Erreur lors de la g\u00e9n\u00e9ration du PDF liste', 'error', 3500); }
+  }); // end safeUserStatusCheck.then
 }
 
 // ─── SALADE COMPOSER ───

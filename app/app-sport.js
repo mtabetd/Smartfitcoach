@@ -12517,7 +12517,11 @@ window.renderWellnessCheckin = renderWellnessCheckin;
 
 // ─── EXPORT SPORT PROGRAM PDF ─────────────────────────────────────────────
 window.exportSportPDF = function() {
-  if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
+  window.safeUserStatusCheck({ force: true }).then(function(status) {
+    if (!status.isPremium) {
+      if (status.source === 'fallback' && window._showPremiumCheckFailed) { window._showPremiumCheckFailed(function() { window.exportSportPDF(); }); return; }
+      if (window.showPaywall) window.showPaywall('pdf'); return;
+    }
   if (!window.jspdf || !window.jspdf.jsPDF) {
     if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Loading PDF…' : 'Chargement du PDF…', 'info', 2000);
     if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', window.exportSportPDF); }
@@ -12598,6 +12602,7 @@ window.exportSportPDF = function() {
     doc.text('Smart Fit Coach \u2014 ' + window.formatDate(new Date()), M, 290);
     doc.save('programme-musculation-sem' + (S.muscuWeek || 1) + '.pdf');
   } catch(e) { console.error('[exportSportPDF] Erreur:', e); if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Error generating program PDF' : 'Erreur lors de la g\u00e9n\u00e9ration du PDF programme', 'error', 3500); }
+  }); // end safeUserStatusCheck.then
 };
 
 window.generateSportProgram = generateSportProgram;

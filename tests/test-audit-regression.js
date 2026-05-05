@@ -6,15 +6,29 @@
 
 // ── Harness ───────────────────────────────────────────────────────────────────
 var passed = 0, failed = 0;
+var _pendingAsync = []; // collect async test promises
 function test(name, fn) {
-  try {
-    fn();
-    passed++;
-    process.stdout.write('  \x1b[32m✓\x1b[0m ' + name + '\n');
-  } catch (e) {
+  var result;
+  try { result = fn(); } catch (e) {
     failed++;
     process.stdout.write('  \x1b[31m✗\x1b[0m ' + name + ' — ' + e.message + '\n');
+    return;
   }
+  // If fn() returned a Promise, handle async
+  if (result && typeof result.then === 'function') {
+    _pendingAsync.push(
+      result.then(function() {
+        passed++;
+        process.stdout.write('  \x1b[32m✓\x1b[0m ' + name + '\n');
+      }).catch(function(e) {
+        failed++;
+        process.stdout.write('  \x1b[31m✗\x1b[0m ' + name + ' — ' + (e && e.message ? e.message : String(e)) + '\n');
+      })
+    );
+    return;
+  }
+  passed++;
+  process.stdout.write('  \x1b[32m✓\x1b[0m ' + name + '\n');
 }
 function assert(cond, msg) { if (!cond) throw new Error(msg || 'assertion failed'); }
 function assertEqual(a, b, msg) {
@@ -1719,7 +1733,145 @@ test('P: SFCLastGood valid data survives save/get round-trip', function() {
   assertEqual(retrieved.sportType, 'running', 'sportType round-trips correctly');
 });
 
-// ── Summary ───────────────────────────────────────────────────────────────────
-console.log('\n' + (failed === 0 ? '\x1b[32m' : '\x1b[31m') +
-  'Results: ' + passed + ' passed, ' + failed + ' failed\x1b[0m\n');
-process.exit(failed > 0 ? 1 : 0);
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION: safeUserStatusCheck — server authority + non-regression tests
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Minimal stub for safeUserStatusCheck logic (mirrors supabase-client.js)
+function makeSafeCheck(opts) {
+  // opts: { online, cacheValid, cachePremium, serverPremium, serverError, force }
+  var sync = {
+    _userStatusCache: null,
+    _userStatusCacheTs: 0,
+    fetchUserStatus: function() {
+      if (opts.serverError) return Promise.reject(new Error('network error'));
+      if (opts.serverPremium === null) return Promise.resolve(null); // corrupt
+      return Promise.resolve({
+        premium: opts.serverPremium,
+        plan: opts.serverPremium ? 'trial' : 'none',
+        trialDaysLeft: opts.serverPremium ? 3 : 0
+      });
+    }
+  };
+  if (opts.cacheValid) {
+    sync._userStatusCache = { premium: opts.cachePremium, plan: opts.cachePremium ? 'trial' : 'none', trialDaysLeft: opts.cachePremium ? 5 : 0 };
+    sync._userStatusCacheTs = Date.now() - 60000; // 1 min old — within TTL
+  }
+
+  var CACHE_TTL = 15 * 60 * 1000;
+  var force = opts.force === true;
+  var online = opts.online !== false;
+
+  function deny(source, reason) { return { ok: false, isPremium: false, trialActive: false, source: source, reason: reason }; }
+  function allow(source, status) { return { ok: true, isPremium: true, trialActive: !!(status && status.plan === 'trial' && status.trialDaysLeft > 0), source: source }; }
+
+  if (!online) return Promise.resolve(deny('fallback', 'offline'));
+
+  var now = Date.now();
+  if (!force && sync._userStatusCache && (now - sync._userStatusCacheTs) < CACHE_TTL) {
+    var c = sync._userStatusCache;
+    return Promise.resolve(c.premium ? allow('cache', c) : deny('cache', 'not_premium'));
+  }
+
+  if (force) sync._userStatusCacheTs = 0;
+
+  return sync.fetchUserStatus().then(function(status) {
+    if (!status || typeof status.premium !== 'boolean') return deny('fallback', 'corrupt_response');
+    return status.premium ? allow('server', status) : deny('server', 'not_premium');
+  }).catch(function() { return deny('fallback', 'server_error'); });
+}
+
+// SC1: Premium confirmed by server → access granted
+test('SC1: premium confirmed server → isPremium true, source server', function() {
+  return makeSafeCheck({ online: true, cacheValid: false, serverPremium: true, force: true }).then(function(s) {
+    assert(s.isPremium === true, 'isPremium must be true');
+    assertEqual(s.source, 'server', 'source must be server');
+    assert(s.ok === true, 'ok must be true');
+  });
+});
+
+// SC2: Server returns non-premium → access denied cleanly
+test('SC2: server says non-premium → access denied, source server', function() {
+  return makeSafeCheck({ online: true, cacheValid: false, serverPremium: false, force: true }).then(function(s) {
+    assert(s.isPremium === false, 'isPremium must be false');
+    assertEqual(s.source, 'server', 'source must be server');
+    assertEqual(s.reason, 'not_premium', 'reason must be not_premium');
+  });
+});
+
+// SC3: localStorage manipulated (cache shows premium) but server says no → denied
+test('SC3: cache premium=true but server premium=false with force → access denied', function() {
+  return makeSafeCheck({ online: true, cacheValid: true, cachePremium: true, serverPremium: false, force: true }).then(function(s) {
+    assert(s.isPremium === false, 'localStorage manipulation must not grant access when force=true');
+    assertEqual(s.source, 'server', 'must consult server when force=true');
+  });
+});
+
+// SC4: Server timeout / network error → safe fallback, no crash, ok=false
+test('SC4: server error → fallback, no crash, isPremium false', function() {
+  return makeSafeCheck({ online: true, cacheValid: false, serverError: true, force: true }).then(function(s) {
+    assert(s.isPremium === false, 'server error must deny access');
+    assertEqual(s.source, 'fallback', 'source must be fallback on error');
+    assert(s.ok === false, 'ok must be false on server error');
+  });
+});
+
+// SC5: Offline → safe fallback, no crash, app must not blank
+test('SC5: offline → fallback deny, no throw', function() {
+  return makeSafeCheck({ online: false, force: true }).then(function(s) {
+    assert(s.isPremium === false, 'offline must deny premium');
+    assertEqual(s.source, 'fallback', 'source must be fallback when offline');
+    assertEqual(s.reason, 'offline', 'reason must be offline');
+  });
+});
+
+// SC6: Fresh cache hit with force=false → returns cache, no server call
+test('SC6: valid cache + force=false → source cache, skips server', function() {
+  return makeSafeCheck({ online: true, cacheValid: true, cachePremium: true, serverPremium: false, force: false }).then(function(s) {
+    assert(s.isPremium === true, 'fresh cache premium must be trusted when force=false');
+    assertEqual(s.source, 'cache', 'must return from cache, not server');
+  });
+});
+
+// SC7: Cache says premium=false, server says premium=true (upgrade) — cache wins when not forced
+test('SC7: stale-but-valid cache non-premium wins over server when force=false', function() {
+  return makeSafeCheck({ online: true, cacheValid: true, cachePremium: false, serverPremium: true, force: false }).then(function(s) {
+    assert(s.isPremium === false, 'cache non-premium must be respected when not forced');
+    assertEqual(s.source, 'cache', 'source must be cache');
+  });
+});
+
+// SC8: Corrupt server response (null status) → safe fallback deny
+test('SC8: corrupt server response → fallback, isPremium false', function() {
+  return makeSafeCheck({ online: true, cacheValid: false, serverPremium: null, force: true }).then(function(s) {
+    assert(s.isPremium === false, 'corrupt response must deny access');
+    assertEqual(s.source, 'fallback', 'source must be fallback on corrupt response');
+    assertEqual(s.reason, 'corrupt_response', 'reason must be corrupt_response');
+  });
+});
+
+// SC9: Double invocation (anti-double-tap) — two concurrent calls both resolve safely
+test('SC9: two concurrent safeUserStatusCheck calls both resolve without error', function() {
+  var p1 = makeSafeCheck({ online: true, cacheValid: false, serverPremium: true, force: true });
+  var p2 = makeSafeCheck({ online: true, cacheValid: false, serverPremium: true, force: true });
+  return Promise.all([p1, p2]).then(function(results) {
+    assert(results[0].isPremium === true, 'first call must resolve premium');
+    assert(results[1].isPremium === true, 'second call must resolve premium');
+  });
+});
+
+// SC10: Old cache after logout/login — force=true always re-validates
+test('SC10: cached premium + user logged out (server now non-premium) → force detects correctly', function() {
+  return makeSafeCheck({ online: true, cacheValid: true, cachePremium: true, serverPremium: false, force: true }).then(function(s) {
+    assert(s.isPremium === false, 'post-logout server check must deny even if cache says premium');
+    assertEqual(s.source, 'server', 'must use server source after logout scenario');
+    assertEqual(s.reason, 'not_premium', 'must report not_premium after status change');
+  });
+});
+
+// ── Summary (waits for async tests) ──────────────────────────────────────────
+Promise.all(_pendingAsync).then(function() {
+  console.log('\n' + (failed === 0 ? '\x1b[32m' : '\x1b[31m') +
+    'Results: ' + passed + ' passed, ' + failed + ' failed\x1b[0m\n');
+  process.exit(failed > 0 ? 1 : 0);
+});

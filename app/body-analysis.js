@@ -577,14 +577,17 @@ function updateBtn() {
 }
 
 function openPanel() {
-  // Premium gate — analyse corporelle IA = feature premium
-  if (window.isPremium && !window.isPremium()) {
-    if (window.showPaywall) window.showPaywall('body');
-    return;
-  }
-  var panel = document.getElementById('ba-panel');
-  if (!panel) { try { buildPanel(); panel = document.getElementById('ba-panel'); } catch(e) {} }
-  if (panel) { panel.classList.add('open'); _panelOpen = true; }
+  // Premium gate — body analysis = premium feature, server-verified
+  window.safeUserStatusCheck({ force: true }).then(function(status) {
+    if (!status.isPremium) {
+      if (status.source === 'fallback' && window._showPremiumCheckFailed) { window._showPremiumCheckFailed(openPanel); return; }
+      if (window.showPaywall) window.showPaywall('body');
+      return;
+    }
+    var panel = document.getElementById('ba-panel');
+    if (!panel) { try { buildPanel(); panel = document.getElementById('ba-panel'); } catch(e) {} }
+    if (panel) { panel.classList.add('open'); _panelOpen = true; }
+  });
 }
 
 function closePanel() {

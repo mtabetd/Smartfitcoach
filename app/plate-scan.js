@@ -43,12 +43,14 @@ function openScan(mealSlot) {
   if (_scanning) return;
   var S = window.S;
   if (!S) return;
-  // Premium gate — scanner repas = feature premium
-  if (window.isPremium && !window.isPremium()) {
-    if (window.showPaywall) window.showPaywall('scanner');
-    else if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Premium feature required' : 'Fonctionnalit\u00e9 r\u00e9serv\u00e9e aux abonn\u00e9s', 'error', 3500);
-    return;
-  }
+  // Premium gate — scanner = premium feature, server-verified
+  window.safeUserStatusCheck({ force: true }).then(function(status) {
+    if (!status.isPremium) {
+      if (status.source === 'fallback' && window._showPremiumCheckFailed) { window._showPremiumCheckFailed(function() { openScan(mealSlot); }); return; }
+      if (window.showPaywall) window.showPaywall('scanner');
+      else if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Premium feature required' : 'Fonctionnalit\u00e9 r\u00e9serv\u00e9e aux abonn\u00e9s', 'error', 3500);
+      return;
+    }
 
   // Validate mealSlot
   var VALID_SLOTS = ['breakfast', 'lunch', 'snack', 'dinner'];
@@ -341,6 +343,7 @@ function openScan(mealSlot) {
     overlay.style.opacity = '1';
     sheet.style.transform = 'translateY(0)';
   });
+  }); // end safeUserStatusCheck.then
 }
 
 // ── Expose globally ──

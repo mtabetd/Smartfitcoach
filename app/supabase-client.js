@@ -944,3 +944,110 @@
   window.getSupabaseClient = getClient;
   window.resetSupabaseClient = resetClient;
 })();
+
+// ─── SAFE PREMIUM STATUS CHECK ────────────────────────────────────────────────
+// safeUserStatusCheck(opts) — single entry point for all premium action gates.
+// opts: { force?: boolean }
+//   force: true  → bypass TTL cache, always verify with server  (for critical actions)
+//   force: false → use 15-min TTL cache when fresh (default)
+//
+// Returns Promise<{ ok, isPremium, trialActive, source, reason? }>
+//   ok: false means the check itself failed (offline / server error) — deny but don't crash
+//   source: 'server' | 'cache' | 'fallback'
+//
+// Never throws. Always resolves.
+window.safeUserStatusCheck = function(opts) {
+  var force  = opts && opts.force === true;
+  var online = typeof navigator !== 'undefined' ? navigator.onLine !== false : true;
+  var sync   = window.SupaSync;
+  var CACHE_TTL = 15 * 60 * 1000;
+
+  function _deny(source, reason)  { return { ok: false, isPremium: false, trialActive: false, source: source, reason: reason }; }
+  function _allow(source, status) {
+    return {
+      ok: true,
+      isPremium: true,
+      trialActive: !!(status && status.plan === 'trial' && status.trialDaysLeft > 0),
+      source: source
+    };
+  }
+
+  // Offline → safe deny immediately
+  if (!online) return Promise.resolve(_deny('fallback', 'offline'));
+
+  var now = Date.now();
+
+  // Non-forced: serve from TTL cache when still fresh
+  if (!force && sync && sync._userStatusCache &&
+      (now - (sync._userStatusCacheTs || 0)) < CACHE_TTL) {
+    var c = sync._userStatusCache;
+    if (typeof c.premium !== 'boolean') return Promise.resolve(_deny('fallback', 'corrupt_cache'));
+    return Promise.resolve(c.premium ? _allow('cache', c) : _deny('cache', 'not_premium'));
+  }
+
+  if (!sync || typeof sync.fetchUserStatus !== 'function') {
+    // No sync module (unit tests, pre-login) — deny; never trust localStorage alone
+    return Promise.resolve(_deny('fallback', 'no_sync'));
+  }
+
+  // Force: invalidate cache timestamp so fetchUserStatus hits server
+  if (force) sync._userStatusCacheTs = 0;
+
+  return sync.fetchUserStatus().then(function(status) {
+    if (!status || typeof status.premium !== 'boolean') {
+      return _deny('fallback', 'corrupt_response');
+    }
+    return status.premium ? _allow('server', status) : _deny('server', 'not_premium');
+  }).catch(function() {
+    return _deny('fallback', 'server_error');
+  });
+};
+
+// ─── PREMIUM CHECK FAILED MESSAGE ─────────────────────────────────────────────
+// Shown when safeUserStatusCheck() returns source:'fallback' — server unreachable.
+// Displays a non-blocking toast with Retry + Home actions. Never crashes the app.
+window._showPremiumCheckFailed = function(retryFn) {
+  var isEN = typeof window.isEnglish === 'function' && window.isEnglish();
+  var msg  = isEN
+    ? 'Unstable connection. Verifying your access…'
+    : 'Connexion instable. Vérification de votre accès…';
+
+  // Toast for brief notice
+  if (window.showToast) window.showToast(msg, 'warning', 5000);
+
+  // Floating action strip (auto-removes after 8s or on interaction)
+  try {
+    var existing = document.getElementById('sfc-prem-check-strip');
+    if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
+
+    var strip = document.createElement('div');
+    strip.id = 'sfc-prem-check-strip';
+    strip.style.cssText = [
+      'position:fixed', 'bottom:72px', 'left:50%', 'transform:translateX(-50%)',
+      'z-index:10000', 'background:#1a1a18', 'color:#faf9f6',
+      'padding:12px 20px', 'border-radius:0', 'display:flex', 'gap:12px',
+      'align-items:center', 'font-family:"Helvetica Neue",Arial,sans-serif',
+      'font-size:9px', 'letter-spacing:2px', 'text-transform:uppercase',
+      'box-shadow:0 4px 24px rgba(0,0,0,.5)'
+    ].join(';');
+
+    function _remove() { if (strip.parentNode) strip.parentNode.removeChild(strip); }
+
+    if (typeof retryFn === 'function') {
+      var retryBtn = document.createElement('button');
+      retryBtn.textContent = isEN ? 'Retry' : 'Réessayer';
+      retryBtn.style.cssText = 'background:#3E5C3A;color:#faf9f6;border:none;padding:6px 14px;cursor:pointer;font-size:9px;letter-spacing:2px;text-transform:uppercase;';
+      retryBtn.onclick = function() { _remove(); try { retryFn(); } catch(e) {} };
+      strip.appendChild(retryBtn);
+    }
+
+    var homeBtn = document.createElement('button');
+    homeBtn.textContent = isEN ? 'Home' : 'Accueil';
+    homeBtn.style.cssText = 'background:transparent;color:#faf9f6;border:1px solid #555;padding:6px 14px;cursor:pointer;font-size:9px;letter-spacing:2px;text-transform:uppercase;';
+    homeBtn.onclick = function() { _remove(); try { if (window.navigateTo) window.navigateTo('home'); } catch(e) {} };
+    strip.appendChild(homeBtn);
+
+    document.body.appendChild(strip);
+    setTimeout(_remove, 8000);
+  } catch(e) {}
+};
