@@ -24,7 +24,7 @@ function storageKey(type) {
   return 'mtd_perf_hist_' + type + '_' + getUid();
 }
 function loadHistory(type) {
-  try { return JSON.parse(localStorage.getItem(storageKey(type)) || '[]'); } catch(e) { return []; }
+  try { var _p = JSON.parse(localStorage.getItem(storageKey(type)) || '[]'); return Array.isArray(_p) ? _p : []; } catch(e) { return []; }
 }
 function saveHistory(type, arr) {
   try {

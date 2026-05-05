@@ -147,6 +147,8 @@
   function notifySession(exercises, groups) {
     var s = global.S;
     if (!s) return;
+    // Zero-exercise sessions (equipment filter left pool empty) must not count as training days
+    if (!exercises || !exercises.length) return;
 
     // ── trainingLoad : MAX(existant, calculé) — jamais de dégradation ────────
     var RANK = { light: 0, moderate: 1, heavy: 2 };
@@ -180,12 +182,15 @@
     // ── lastSessionCount : cumul journalier (reset chaque nouveau jour) ──────
     var incomingCount = exercises ? exercises.length : 0;
     var _today = new Date().toISOString().slice(0, 10);
-    if (s.lastSessionDate !== _today) {
-      // Nouveau jour → repartir de zéro
+    var _prevDate = s.lastSessionDate;
+    if (_prevDate && _prevDate !== _today) {
+      // New calendar day — start fresh
       s.lastSessionCount = incomingCount;
       s.lastSessionDate  = _today;
     } else {
+      // Same day (or first-ever call: _prevDate is falsy) — accumulate
       s.lastSessionCount = (typeof s.lastSessionCount === 'number' ? s.lastSessionCount : 0) + incomingCount;
+      s.lastSessionDate  = _today;
     }
 
     // ── sportProgramStart : seulement si absent ───────────────────────────────

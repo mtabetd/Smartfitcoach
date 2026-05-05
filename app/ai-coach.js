@@ -416,6 +416,7 @@ function getSuggestions() {
 
 // ─── DOM ─────────────────────────────────────────────────────────────────────
 function buildUI() {
+  _panelOpen = false; // reset state — panel is rebuilt from scratch
   // FIX CRITIQUE 2026-04-15 (supervision Hermès user screenshot) :
   // Si la nouvelle coach bar Hermès (#coach-bar, today-dashboard.js) est active,
   // NE PAS créer ce FAB legacy — doublon visuel qui masque le contenu repas.
@@ -469,7 +470,7 @@ function buildUI() {
   // Message de bienvenue
   var ctx0 = buildContext();
   var prenom0 = ctx0.prenom ? (', ' + ctx0.prenom) : '';
-  appendCoachMessage(messages, _t('coach.welcome', "La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui") + prenom0 + ' ?');
+  appendCoachMessage(messages, _t('coach.welcome', "La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui") + prenom0 + ' ?', { skipActions: true });
   panel.appendChild(messages);
   // Disclaimer médical — WCAG + ACOG compliance (absent auparavant vs body-analysis.js qui en avait un)
   var disclaimer = document.createElement('div');
@@ -678,8 +679,10 @@ function replayLastUserMessage(_unused) {
     if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
     if (data.error) {
       appendError(messages, (window.isEnglish && window.isEnglish() ? 'Error: ' : 'Erreur : ') + data.error);
+    } else if (!data.reply) {
+      appendError(messages, window.isEnglish && window.isEnglish() ? 'The coach could not formulate a response. Please try again.' : 'Le coach n\'a pas pu formuler de réponse. Réessayez.');
     } else {
-      var reply = data.reply || (window.isEnglish && window.isEnglish() ? 'No response.' : 'Pas de réponse.');
+      var reply = data.reply;
       stripRegenerateButtonsFromPrevious(messages);
       appendCoachMessage(messages, reply, { canRegenerate: true, stream: true });
       if (Array.isArray(S.aiCoachHistory)) {
@@ -1239,7 +1242,7 @@ function sendMessage() {
 
   // Premium gate — coach IA illimité = premium (trial = 3 messages/jour)
   if (window.isTrialUser && window.isTrialUser()) {
-    var _today = new Date().toISOString().slice(0, 10);
+    var _today = (window.sfcLocalDateStr ? window.sfcLocalDateStr() : new Date().toISOString().slice(0, 10));
     var _rawCount = (function() { try { return JSON.parse(localStorage.getItem('sfc_coach_count') || 'null'); } catch(e) { return null; } })();
     var _coachCount = (_rawCount && _rawCount.date === _today) ? (_rawCount.n || 0) : 0;
     if (_coachCount >= 3) {
@@ -1303,8 +1306,10 @@ function sendMessage() {
 
     if (data.error) {
       appendError(messages, (window.isEnglish && window.isEnglish() ? 'Error: ' : 'Erreur : ') + data.error);
+    } else if (!data.reply) {
+      appendError(messages, window.isEnglish && window.isEnglish() ? 'The coach could not formulate a response. Please try again.' : 'Le coach n\'a pas pu formuler de réponse. Réessayez.');
     } else {
-      var reply = data.reply || (window.isEnglish && window.isEnglish() ? 'No response.' : 'Pas de réponse.');
+      var reply = data.reply;
       // POLISH 2026-04 (V1.2) : dernier message a le bouton "Régénérer".
       // Les précédents (via stripActions) gardent copier + feedback mais pas regen.
       stripRegenerateButtonsFromPrevious(messages);

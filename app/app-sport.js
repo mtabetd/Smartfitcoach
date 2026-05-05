@@ -4865,6 +4865,7 @@ function renderCrossfitProgram(p) {
  var _cfKcal = estimateKcal('crossfit', _cfLevel, _cfDur);
  var _cfSessKey = (S.selectedCrossfitDay || 0) + '_' + dateStr;
  S.sessionHistory[_cfSessKey] = {duration: _cfDur, kcalBase: _cfKcal ? _cfKcal.base : 0, kcalEpoc: _cfKcal ? _cfKcal.epoc : 0, kcalTotal: _cfKcal ? _cfKcal.total : 0, date: new Date().toISOString(), sport: 'crossfit', wodDay: wodDay, score: scoreInput.value.trim()};
+ (function(){ var _k=Object.keys(S.sessionHistory||{}).sort(); if(_k.length>365){_k.slice(0,_k.length-365).forEach(function(k){delete S.sessionHistory[k];});} })();
  if (window.GAMIFICATION) { try { window.GAMIFICATION.updateStreak(); } catch(e) {} }
  window.BLACKBOX && window.BLACKBOX.log('cf_wod_done', {day: wodDay, score: scoreInput.value.trim()});
  if (window.showToast) window.showToast((window.isEnglish && window.isEnglish() ? '✓ WOD done — day ' : '✓ WOD terminé — jour ') + wodDay + (scoreInput.value.trim() ? ' · ' + scoreInput.value.trim() : ''), 'success');
@@ -10414,6 +10415,7 @@ function renderRunningProgram(p) {
         var _sessKey = S.selectedRunDay + '_' + _todayDate;
         var _kcalEst = estimateKcal('running', S.runningLevel || 'intermediate', Math.round(_min));
         S.sessionHistory[_sessKey] = {duration: Math.round(_min), kcalBase: _kcalEst ? _kcalEst.base : 0, kcalEpoc: _kcalEst ? _kcalEst.epoc : 0, kcalTotal: _kcalEst ? _kcalEst.total : 0, date: new Date().toISOString(), sport: 'running'};
+        (function(){ var _k=Object.keys(S.sessionHistory||{}).sort(); if(_k.length>365){_k.slice(0,_k.length-365).forEach(function(k){delete S.sessionHistory[k];});} })();
         if (window.GAMIFICATION) { try { window.GAMIFICATION.updateStreak(); } catch(e) {} }
         window.BLACKBOX && window.BLACKBOX.log('run_logged', {distanceKm: _entry.distanceKm, durationMin: _entry.durationMin, pace: _paceStr});
         if (window.showToast) window.showToast((window.isEnglish && window.isEnglish() ? '✓ Run logged — ' + _entry.distanceKm + ' km at ' + _paceStr + ' /km' : '✓ Course enregistrée — ' + _entry.distanceKm + ' km à ' + _paceStr + ' /km'), 'success');
@@ -10731,6 +10733,7 @@ function renderHyroxProgram(p) {
       var _hxKcal = estimateKcal('hyrox', _hxLevel, _hxDur);
       var _hxSessKey = S.selectedHyroxDay + '_' + _hdateStr;
       S.sessionHistory[_hxSessKey] = {duration: _hxDur, kcalBase: _hxKcal ? _hxKcal.base : 0, kcalEpoc: _hxKcal ? _hxKcal.epoc : 0, kcalTotal: _hxKcal ? _hxKcal.total : 0, date: new Date().toISOString(), sport: 'hyrox', hxDayKey: _hxDayKey};
+      (function(){ var _k=Object.keys(S.sessionHistory||{}).sort(); if(_k.length>365){_k.slice(0,_k.length-365).forEach(function(k){delete S.sessionHistory[k];});} })();
       if (window.GAMIFICATION) { try { window.GAMIFICATION.updateStreak(); } catch(e) {} }
       window.BLACKBOX && window.BLACKBOX.log('hyrox_session_done', {week: S.hyroxWeek, day: S.selectedHyroxDay + 1, level: _hxLevel});
       if (window.showToast) window.showToast((window.isEnglish && window.isEnglish() ? '✓ Hyrox session validated — ' : '✓ Séance Hyrox validée — ') + _hxDayKey, 'success');

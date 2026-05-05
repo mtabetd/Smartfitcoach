@@ -140,7 +140,7 @@
     var remaining = caloriesTarget - (proteinGrams * KCAL_PER_PROT + fatGrams * KCAL_PER_FAT);
     // IOM 2005 minimum: 130g/day for brain function. Only applied when caloric room allows it.
     var carbs = Math.max(0, remaining / KCAL_PER_CARB);
-    if (remaining > 0 && carbs < 130) carbs = 130;
+    if (carbs < 130) carbs = 130; // IOM 2005: 130g/day minimum regardless of caloric budget
     return Math.round(carbs * 10) / 10;
   }
 

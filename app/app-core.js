@@ -5558,7 +5558,8 @@ var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w&
 // Allergie lait/produits laitiers : whey = protéine lactée → bloquer les smoothies whey (sécurité allergène)
 var _hasLaitAllergy=Array.isArray(s.allergies)&&(s.allergies.indexOf('Lait/Produits laitiers')!==-1||s.allergies.indexOf('Lactose')!==-1);
 var _canSmooth=!!(s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length&&s.regime!==3&&!_hasLaitAllergy);
-for(var d=0;d<7;d++){var dayProteins=[];var split=getAdaptedMealSplit(d);var c=Math.round(cBase*(split.calMultiplier||1));var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);
+var _kcalFloorDay=window.isFemale(s)?1400:1500;
+for(var d=0;d<7;d++){var dayProteins=[];var split=getAdaptedMealSplit(d);var c=Math.max(_kcalFloorDay,Math.round(cBase*(split.calMultiplier||1)));var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);
 // BUG-6 FIX: expose per-day training flag to pickRecipe for sportType-aware scoring
 s._pickRecipeTrainingDay=!!(split.dayInfo&&split.dayInfo.isTraining);
 // SFC Symbiosis : carbBoost propagé pour que pickRecipe favorise les recettes glucidiques les jours training
@@ -5611,7 +5612,7 @@ function swapMeal(di,slot){
     try { var _di = getDayType(di); _isTrainingDay = !!(_di && _di.isTraining); } catch(e) {}
     window.computeNutritionState(_isTrainingDay);
   }
-  var cBase=calcTarget(),split=getAdaptedMealSplit(di);if(!split)return;var c=Math.round(cBase*(split.calMultiplier||1));
+  var cBase=calcTarget(),split=getAdaptedMealSplit(di);if(!split)return;var _swapFloor=window.isFemale(s)?1400:1500;var c=Math.max(_swapFloor,Math.round(cBase*(split.calMultiplier||1)));
   // BUG-6 FIX: set training day flag so pickRecipe sportType-aware scoring applies on swap too
   s._pickRecipeTrainingDay=!!(split.dayInfo&&split.dayInfo.isTraining);
   var tgt=slot==='breakfast'?Math.round(c*split.pctBreak):slot==='lunch'?Math.round(c*split.pctLunch):slot==='snack'?Math.round(c*split.pctSnack):Math.round(c*split.pctDinner);
@@ -6924,7 +6925,7 @@ function computeNutritionState(trainingDay) {
     } else {
       // Rest day: -10% carbs, shift to fat (Helms 2014 calorie cycling)
       var _carbRed = Math.round(result.carbsGrams * 0.10);
-      result.carbsGrams = Math.max(100, result.carbsGrams - _carbRed); // floor 100g (ISSN 2017 — brain)
+      result.carbsGrams = Math.max(130, result.carbsGrams - _carbRed); // floor 130g (IOM 2005 — brain glucose minimum)
       result.fatGrams   = Math.min(result.fatGrams + Math.round(_carbRed * 4 / 9), Math.round(result.caloriesTarget * 0.35 / 9));
     }
     result.caloriesCheck = Math.round(result.proteinGrams*4 + result.carbsGrams*4 + result.fatGrams*9);

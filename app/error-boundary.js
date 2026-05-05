@@ -7,7 +7,13 @@
  */
 // Global error boundary — catch unhandled JS errors and show user-friendly message
 function _getLang() {
-  try { var p = JSON.parse(localStorage.getItem('sfc_profile') || '{}'); return p.lang || 'fr'; } catch(e) { return 'fr'; }
+  try {
+    if (window.S && window.S.lang) return window.S.lang;
+    var _uid = localStorage.getItem('mtd_uid') || '';
+    var _key = _uid ? ('mtd_profile_' + _uid) : null;
+    if (_key) { var p = JSON.parse(localStorage.getItem(_key) || '{}'); if (p.lang) return p.lang; }
+    return 'fr';
+  } catch(e) { return 'fr'; }
 }
 function _showErrorPage(msg) {
   var app = document.getElementById('app');
@@ -60,7 +66,7 @@ function _showErrorPage(msg) {
   btnSecondary.textContent = _isEN ? 'Back to home' : 'Retour à l\'accueil';
   btnSecondary.addEventListener('click', function() {
     try {
-      if (window.S) window.S.view = 'dashboard';
+      if (window.S) window.S.view = 'today';
       if (window.render) window.render();
       else location.href = '/';
     } catch(e) { location.href = '/'; }
@@ -79,10 +85,12 @@ function _showErrorPage(msg) {
 // this chain, the assignment below silently drops crash telemetry from every
 // subsequent error — reporter.js just gets overwritten.
 var _prevOnError = window.onerror;
+var _BENIGN_ERRORS = /ResizeObserver loop|Script error\.|Non-Error promise rejection|Loading chunk|Loading CSS chunk/i;
 window.onerror = function(msg, url, line, col, err) {
   if (typeof _prevOnError === 'function') {
     try { _prevOnError.call(this, msg, url, line, col, err); } catch (_) {}
   }
+  if (_BENIGN_ERRORS.test(String(msg))) { console.warn('[error-boundary] benign error suppressed:', msg); return false; }
   _showErrorPage(msg);
   console.error('GLOBAL ERROR:', msg, url, line, col, err);
   return true;

@@ -902,9 +902,10 @@ window.AUTH = {
   _performLogoutCleanup: function() {
     BLACKBOX.log('logout', { duration: BLACKBOX.getSessionMinutes() });
 
-    // Arreter la sync
+    // Arreter la sync + effacer le cache de statut utilisateur (évite fuite cross-user)
     if (window.SupaSync) {
       try { SupaSync.stopAutoSync(); } catch (e) {}
+      try { if (SupaSync._userStatusCache !== undefined) { SupaSync._userStatusCache = null; SupaSync._userStatusCacheTs = 0; } } catch(e) {}
     }
 
     // Supabase signOut
@@ -1065,6 +1066,8 @@ window.AUTH = {
       for (var _ri = 0; _ri < _keysToRemove.length; _ri++) {
         localStorage.removeItem(_keysToRemove[_ri]);
       }
+      // Non-uid-keyed keys that can leak cross-user on shared devices
+      localStorage.removeItem('mtd_blackbox'); // activity log contains email + navigation events
     } catch(e) { console.warn('localStorage cleanup error:', e); }
 
     // Nettoyer la session locale + legacy

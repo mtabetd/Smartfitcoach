@@ -71,12 +71,17 @@ async function requirePremium(event) {
   // used as a fallback during the migration window for rows not yet backfilled.
   let profile = null;
   try {
-    const { data } = await admin
+    const { data, error: profileErr } = await admin
       .from('profiles')
       .select('subscription_end, first_login_date, data')
       .eq('id', user.id)
       .single();
-    profile = data;
+    // PGRST116 = no row found (new user whose profile hasn't been created yet) — treat as new user
+    if (profileErr && profileErr.code !== 'PGRST116') {
+      console.warn('[_user-auth] profiles fetch error:', profileErr.message);
+      return { error: { statusCode: 503, msg: 'Service temporairement indisponible — réessayez' } };
+    }
+    profile = data; // null for brand-new users (PGRST116) — handled below as trial grant
   } catch (e) {
     console.warn('[_user-auth] profiles fetch exception:', e && e.message);
     return { error: { statusCode: 503, msg: 'Service temporairement indisponible — réessayez' } };
