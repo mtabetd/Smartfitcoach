@@ -6838,6 +6838,13 @@ function buildNMInputs(trainingDay) {
 }
 
 function computeNutritionState(trainingDay) {
+  // Derive training status from ACTUAL session history via SFCEngine — overrides schedule-based param
+  var _sfcSignal = null;
+  if (window.SFCEngine && window.SFCSymbiosis && window.SFCSymbiosis.getSFCSessions) {
+    try { _sfcSignal = window.SFCEngine.computeTrainingSignal(window.SFCSymbiosis.getSFCSessions(), Date.now()); } catch (_) {}
+  }
+  if (_sfcSignal !== null) { trainingDay = _sfcSignal.trainedToday; }
+
   if (!window.NutritionMaster) return null;
   // FIX BUG-NM-SPORT-ONLY 2026-04 : en mode sport-only (appMode='sport'), S.goal est null
   // (l'user n'a pas fait l'onboarding nutrition). computeNutritionState retournait null → S._nm=null
@@ -6885,7 +6892,11 @@ function computeNutritionState(trainingDay) {
   var _hasSportGoals = Array.isArray(window.S.sportGoals) && window.S.sportGoals.length > 0;
   if (_hasSportDays && _hasSportGoals && result.carbsGrams > 0 && result.fatGrams > 0 && result.caloriesTarget > 0) {
     var _fatFloor = Math.round(result.caloriesTarget * 0.15 / 9); // floor 15% fat (ACSM 2009)
-    var _tl = (window.S && (window.S.dailyTrainingLoad || window.S.trainingLoad)) || 'moderate';
+    // Load from SFCEngine (actual sessions) with fallback to legacy S.trainingLoad
+    var _tl = _sfcSignal
+      ? ((_sfcSignal.trainedToday && _sfcSignal.todayLoad) || (_sfcSignal.trainedYesterday && _sfcSignal.yesterdayLoad) || 'rest')
+      : ((window.S && (window.S.dailyTrainingLoad || window.S.trainingLoad)) || 'moderate');
+    if (!_tl) _tl = 'rest';
 
     // ── Consecutive heavy-day streak (smoothing) ──────────────────────────────────
     var _prevStreak  = (typeof window.S.heavyDayStreak === 'number') ? window.S.heavyDayStreak : 0;

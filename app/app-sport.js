@@ -1783,24 +1783,9 @@ function _sfcNotifySport(sport, level) {
   // even when SFCSymbiosis is not loaded. Precision engines (CF/running/cycling) override
   // this with their second assignment after _sfcNotifySport returns.
   var _loadFromMet = met >= 9 ? 'heavy' : met >= 5 ? 'moderate' : 'light';
+  // Aggregate into S.trainingLoad as a cache hint only — SFCEngine is now the authoritative source
+  // notifySession removed: render must never signal a completed session
   _sfcAggregateLoad(sport, _loadFromMet);
-  if (!window.SFCSymbiosis || !window.SFCSymbiosis.notifySession) return;
-  var exercises, groups;
-  if (met >= 9) {
-    exercises = [{n:'A',tags:[]},{n:'B',tags:[]},{n:'C',tags:[]},{n:'D',tags:[]},{n:'E',tags:[]},{n:'F',tags:[]}];
-    groups    = ['back', 'legs'];
-  } else if (met >= 5) {
-    exercises = [{n:'A',tags:[]},{n:'B',tags:[]},{n:'C',tags:[]},{n:'D',tags:[]},{n:'E',tags:[]}];
-    groups    = ['back'];
-  } else {
-    exercises = [{n:'A',tags:['isolation']},{n:'B',tags:['isolation']},{n:'C',tags:['isolation']}];
-    groups    = [];
-  }
-  window.SFCSymbiosis.notifySession(exercises, groups);
-  // Re-apply aggregated load — notifySession uses MAX merge but _sfcAggregateLoad
-  // is the canonical source of truth (precision engines + multi-sport MAX).
-  _sfcAggregateLoad(sport, _loadFromMet);
-  console.log('[SFC] notifySession', sport, level, '->', window.S && window.S.trainingLoad);
 }
 window._sfcNotifySport = _sfcNotifySport;
 
@@ -2601,7 +2586,7 @@ function renderDedicatedPrograms(p) {
 
  var variation = prog.variations[varIdx] || prog.variations[0];
  if (!variation) return;
- var currentPhase = getMuscuPhase(S.muscuWeek || 1);
+ var currentPhase = getMuscuPhase(sfcGetEffectiveWeek());
  var exercises = (variation.exercises || []).slice();
  // Medical filter for dedicated programs — uses the full filterExerciseByMedical function
  if (S.muscuMedical && S.muscuMedical.done && exercises.length > 0) {
@@ -6007,8 +5992,8 @@ function getExerciseTransitionTime(prevEx, nextEx) {
  var level = s.sportLevel || 'intermediate';
  var goalKey = (s.goal !== null && window.GOALS && window.GOALS[s.goal]) ? window.GOALS[s.goal].key : 'maintain';
 
- // Phase du cycle → intensité de la charge
- var phase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(s.muscuWeek || 1) : null;
+ // Phase du cycle → intensité de la charge (session-driven)
+ var phase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(sfcGetEffectiveWeek()) : null;
  var pct1rm = phase ? (phase.pct1rm || 0.72) : 0.72;
 
  // Déterminer le type d'exercice (compound vs isolation)
@@ -6208,6 +6193,27 @@ function getMuscuPhase(week) {
  }
  return MUSCU_PHASES[0];
 }
+
+// Session-driven week derivation — replaces manual S.muscuWeek as primary authority.
+// Maps SFCEngine programWeek (1-4) to MUSCU_PHASES week numbers (1, 3, 5, 7).
+// Falls back to S.muscuWeek if SFCEngine is not loaded or sessions are empty.
+function sfcGetEffectiveWeek() {
+  if (window.SFCEngine && window.SFCSymbiosis && window.SFCSymbiosis.getSFCSessions) {
+    try {
+      var _sessions = window.SFCSymbiosis.getSFCSessions();
+      if (_sessions.length > 0) {
+        var _prog = window.SFCEngine.computeCycleProgression(_sessions);
+        var _wkMap = {1: 1, 2: 3, 3: 5, 4: 7};
+        var _derived = _wkMap[_prog.programWeek] || 1;
+        // Sync S.muscuWeek so week tracker and any direct reads stay accurate
+        if (window.S) window.S.muscuWeek = _derived;
+        return _derived;
+      }
+    } catch (_) {}
+  }
+  return (window.S && window.S.muscuWeek) || 1;
+}
+window.sfcGetEffectiveWeek = sfcGetEffectiveWeek;
 
 function applyPhaseToExercise(ex, phase) {
  var result = JSON.parse(JSON.stringify(ex));
@@ -6557,8 +6563,8 @@ function calcSessionKcal(exercises, durationMin) {
  var weight = s.weight || 75;
  var age = getAge() || 30;
  var sex = window.isFemale(s) ? 'femme' : 'homme';
- // Phase courante → RPE
- var phase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(s.muscuWeek || 1) : null;
+ // Phase courante → RPE (session-driven)
+ var phase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(sfcGetEffectiveWeek()) : null;
  var rpe = phase ? phase.rpe : 7;
 
  // Déterminer si la séance est à dominante cardio ou musculation
@@ -8060,7 +8066,7 @@ function renderMusculationProgram(p) {
  // getMuscuPhase + getSuggestedWeight sont dans la même IIFE → accès direct (pas window.)
  if (!suggested) {
    try {
-     var _phase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(S.muscuWeek || 1) : null;
+     var _phase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(sfcGetEffectiveWeek()) : null;
      if (typeof getSuggestedWeight === 'function') {
        suggested = getSuggestedWeight(ex.n, suggestedReps || 8, _phase);
      }
@@ -8221,9 +8227,9 @@ function renderMusculationProgram(p) {
  var _weightUnit = _isHaltere ? (window.isEnglish && window.isEnglish() ? ' kg /dumbbell' : ' kg /haltère') : (_isKb ? ' kg /kettlebell' : (_isUnilateral ? (window.isEnglish && window.isEnglish() ? ' kg /side' : ' kg /côté') : ' kg'));
  var _weightHint = _isHaltere ? (window.isEnglish && window.isEnglish() ? ' (per dumbbell, take 2 identical)' : ' (par haltère, prendre 2 identiques)') : (_isKb ? (window.isEnglish && window.isEnglish() ? ' (per kettlebell)' : ' (par kettlebell)') : (_isUnilateral ? (window.isEnglish && window.isEnglish() ? ' (per working side)' : ' (par côté travaillant)') : ''));
 
- var exPhase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(S.muscuWeek || 1) : null;
+ var exPhase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(sfcGetEffectiveWeek()) : null;
  var sugWeight = getSuggestedWeight(exRef.n, minReps, exPhase) || 0;
- var progressiveWeight = getProgressiveWeight(exRef.n, sugWeight, S.muscuWeek || 1);
+ var progressiveWeight = getProgressiveWeight(exRef.n, sugWeight, sfcGetEffectiveWeek());
 
  // Per-set scheme from getSetScheme (ascending/descending loads)
  var _setScheme = null;
@@ -9431,6 +9437,20 @@ function renderMusculationProgram(p) {
  var saveBtn = h('button', {style: 'width:100%;padding:12px;background:var(--black);color:#fff;border:none;font-family:"Helvetica Neue",sans-serif;font-size:13px;cursor:pointer', onclick: function() {
  if (!S.sessionHistory) S.sessionHistory = {};
  if (S.sessionHistory[todayKey]) return;
+ // Validate exercise inputs before logging — non-blocking: warns but never drops the session
+ if (window.SFCEngine && (allEx || []).length > 0) {
+   try {
+     var _sfcHistForSan = window.SFCSymbiosis && window.SFCSymbiosis.getSFCSessions ? window.SFCSymbiosis.getSFCSessions() : [];
+     var _sanResult = window.SFCEngine.sanitizeSessionInput({
+       timestamp: Date.now(),
+       exercises: (allEx || []).map(function(ex) { return { name: ex.n || ex.name || '', sets: ex.sets || 3, reps: ex.reps || 8, weight: ex.weight || 0 }; }),
+       duration: realDur
+     }, _sfcHistForSan);
+     if (_sanResult.warnings && _sanResult.warnings.length) {
+       console.warn('[SFCEngine] session input warnings:', _sanResult.warnings);
+     }
+   } catch (_sanErr) {}
+ }
  S.sessionHistory[todayKey] = {duration: realDur, kcalBase: kcalRes.base, kcalEpoc: kcalRes.epoc, kcalTotal: kcalRes.total, date: new Date().toISOString()};
  // Pruning : garder les 365 dernières sessions max
  var _shKeys = Object.keys(S.sessionHistory || {}).sort();
@@ -9762,7 +9782,7 @@ function renderMusculationProgram(p) {
  card.appendChild(header);
 
  if (isOpen) {
- var phase4 = getMuscuPhase(S.muscuWeek || 1);
+ var phase4 = getMuscuPhase(sfcGetEffectiveWeek());
  var varIdx4 = S['dedicatedVar_' + key] || 0;
  // Dedicated programs use variations (not exercises directly)
  var exList = (prog.variations && prog.variations[varIdx4]) ? prog.variations[varIdx4].exercises : (prog.exercises || []);
@@ -9815,7 +9835,7 @@ function renderMusculationProgram(p) {
  var existIdx = -1;
  for (var ii = 0; ii < arr.length; ii++) { if ((arr[ii].n || '').toLowerCase().trim() === _k) { existIdx = ii; break; } }
  if (existIdx === -1) {
- var ph = getMuscuPhase(S.muscuWeek || 1);
+ var ph = getMuscuPhase(sfcGetEffectiveWeek());
  var appl = applyPhaseToExercise(exBCapture, ph);
  arr.push({n: appl.name, m: appl.muscle || '', eq: appl.equipment || '', sets: appl.sets + '\u00d7' + appl.reps, rest: appl.rest || '60s', lv: 1, tags: [], _bonus: true});
  S.bonusExercises[S.selectedSportDay] = arr;
