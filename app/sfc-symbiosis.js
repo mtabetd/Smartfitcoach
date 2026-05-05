@@ -413,6 +413,57 @@
     }
   }
 
+  // ── Session adapter for SFCEngine ────────────────────────────────────────
+  // Converts S.sessionHistory + S.muscuSessionLog into SFCEngine sessions[].
+  // Single bridge between app storage format and pure engine — called at query time.
+  function getSFCSessions() {
+    var s = global.S;
+    if (!s) return [];
+    var hist = (s.sessionHistory  && typeof s.sessionHistory  === 'object') ? s.sessionHistory  : {};
+    var log  = (s.muscuSessionLog && typeof s.muscuSessionLog === 'object') ? s.muscuSessionLog : {};
+    var sessions = [];
+
+    Object.keys(hist).forEach(function(key) {
+      var entry = hist[key];
+      if (!entry || !entry.date) return;
+      var ts = new Date(entry.date).getTime();
+      if (!isFinite(ts) || ts <= 0) return;
+
+      var dateStr    = entry.date.slice(0, 10);
+      var exercises  = [];
+
+      // Prefer real exercises from muscuSessionLog (validated sets per exercise)
+      if (log[dateStr] && typeof log[dateStr] === 'object') {
+        Object.keys(log[dateStr]).forEach(function(exName) {
+          var sets = Array.isArray(log[dateStr][exName]) ? log[dateStr][exName] : [];
+          var validated = sets.filter(function(set) { return set && set.validated === true; });
+          if (validated.length > 0) {
+            var maxW = 0, maxR = 0;
+            validated.forEach(function(set) {
+              if ((+set.actualWeight || 0) > maxW) maxW = +set.actualWeight || 0;
+              if ((+set.actualReps   || 0) > maxR) maxR = +set.actualReps   || 0;
+            });
+            exercises.push({ name: exName, sets: validated.length, reps: maxR || 8, weight: maxW });
+          }
+        });
+      }
+
+      // Fallback for non-muscu sports (running, cycling, crossfit…): synthesize from trainingLoad
+      if (exercises.length === 0) {
+        var load     = entry.trainingLoad || 'moderate';
+        var n        = load === 'heavy' ? 6 : load === 'light' ? 2 : 4;
+        var baseName = entry.sport || 'Training';
+        for (var i = 0; i < n; i++) {
+          exercises.push({ name: baseName + (i + 1), sets: 3, reps: 10 });
+        }
+      }
+
+      sessions.push({ id: key, timestamp: ts, exercises: exercises, duration: entry.duration || 0 });
+    });
+
+    return sessions;
+  }
+
   // ── Unique real-session entry point ──────────────────────────────────────
   // Called ONLY from the session save handler (never from render/preview/generate).
   // Idempotent: same sessionId is silently ignored.
@@ -492,13 +543,14 @@
     getFeedbackAdjustment:    getFeedbackAdjustment,
     notifySession:            notifySession,
     processCompletedSession:  processCompletedSession,
+    getSFCSessions:           getSFCSessions,
     getPeriodizationInfo:     getPeriodizationInfo,
     getPeriodizationCfg:      getPeriodizationCfg,
-    getNutritionState:     getNutritionState,
-    getFatigueScore:       getFatigueScore,
-    updateWeekContext:     updateWeekContext,
-    LOAD_MULTIPLIERS:      LOAD_MULTIPLIERS,
-    PERIODIZATION_CFG:     PERIODIZATION_CFG
+    getNutritionState:        getNutritionState,
+    getFatigueScore:          getFatigueScore,
+    updateWeekContext:        updateWeekContext,
+    LOAD_MULTIPLIERS:         LOAD_MULTIPLIERS,
+    PERIODIZATION_CFG:        PERIODIZATION_CFG
   };
 
 })(typeof window !== 'undefined' ? window : this);
