@@ -217,7 +217,8 @@ function () {
     var _minIso = (!cfg.isBeginner && !cfg.hasStrength)
       ? (_durEff >= 7 ? 2 : 1)
       : 0;
-    var _compSlots = _durEff - _minIso;
+    // Guard: at least 1 compound slot — edge case when durEff=1 and minIso=1 (1j/semaine intermédiaire)
+    var _compSlots = Math.max(1, _durEff - _minIso);
 
     var _poolComp = [], _poolIso = [];
     _pool.forEach(function(ex) {
@@ -368,13 +369,17 @@ function () {
               return String(Math.min(parseInt(n) + 1, 6));
             });
           } else if (_wIdx === 3) {
-            // Intensité : reps -2 (floor : 3 reps min pour composés, 5 pour plage basse)
+            // Intensité : reps -2 (floor relatif : ≥75% de la plage originale, jamais inversion)
             ex.sets = ex.sets
               .replace(/(×|x)(\d+)-(\d+)/, function(_, sep, r1, r2) {
-                return sep + Math.max(3, parseInt(r1) - 2) + '-' + Math.max(5, parseInt(r2) - 2);
+                var n1 = parseInt(r1), n2 = parseInt(r2);
+                var f1 = Math.max(Math.ceil(n1 * 0.75), n1 - 2);
+                var f2 = Math.max(Math.ceil(n2 * 0.75), n2 - 2);
+                return sep + f1 + '-' + f2;
               })
               .replace(/(×|x)(\d+)(?![-\d])/, function(_, sep, r) {
-                return sep + Math.max(3, parseInt(r) - 2);
+                var n = parseInt(r);
+                return sep + Math.max(Math.ceil(n * 0.75), n - 2);
               });
           } else if (_wIdx === 4) {
             // Deload : -1 série (min 2 — préserver le stimulus minimum)

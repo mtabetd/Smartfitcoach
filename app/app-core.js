@@ -258,6 +258,22 @@ window.sfcRepairState = function(S) {
     delete S.muscuProgressionHistory['undefined'];
     repaired = true;
   }
+  // Validate symbiosis fields — corrupted values break trainingLoad RANK comparisons
+  var _validLoads = ['light', 'moderate', 'heavy', 'rest'];
+  if (S.trainingLoad !== null && S.trainingLoad !== undefined &&
+      _validLoads.indexOf(String(S.trainingLoad).toLowerCase()) === -1) {
+    S.trainingLoad = null; repaired = true;
+  }
+  if (S.dailyTrainingLoad !== null && S.dailyTrainingLoad !== undefined &&
+      _validLoads.indexOf(String(S.dailyTrainingLoad).toLowerCase()) === -1) {
+    S.dailyTrainingLoad = null; repaired = true;
+  }
+  if (typeof S.lastSessionCount !== 'number' || !isFinite(S.lastSessionCount) || S.lastSessionCount < 0) {
+    S.lastSessionCount = 0; repaired = true;
+  }
+  if (S.lastSessionGroups !== null && S.lastSessionGroups !== undefined && !Array.isArray(S.lastSessionGroups)) {
+    S.lastSessionGroups = null; repaired = true;
+  }
   return repaired;
 };
 
@@ -4782,7 +4798,7 @@ function calcBMR(){var s=window.S;if(!s.sex)return 0;var _age=getAge();if(!_age|
 // deux fois les besoins énergétiques liés à la grossesse.
 var bw=s.weight;
 if(s.pregnant&&window.isFemale(s)&&s.prePregnancyWeight&&s.prePregnancyWeight>=30&&s.prePregnancyWeight<=300)bw=s.prePregnancyWeight;
-else if(s.pregnant&&window.isFemale(s)&&!s.prePregnancyWeight&&s.pregnancyWeek){
+else if(s.pregnant&&window.isFemale(s)&&!s.prePregnancyWeight&&s.pregnancyWeek&&s.pregnancyWeek>=1&&s.pregnancyWeek<=42){
   // Estimation poids pré-grossesse si non renseigné (IOM 2009 : gain moyen ~0.5kg/semaine après S12)
   var _estGain=s.pregnancyWeek>12?Math.round((s.pregnancyWeek-12)*0.5):0;
   bw=Math.max(40,s.weight-_estGain);

@@ -161,8 +161,15 @@
 
     // Sauvegarder le profil complet vers Supabase
     saveProfile: function() {
+      var self = this;
+      // Mutex : si un upsert est déjà en vol, marquer un re-flush pour après
+      if (self._syncing) {
+        self._savePendingDuringSync = true;
+        return Promise.resolve();
+      }
+      self._syncing = true;
       var client = getClient();
-      if (!client) return Promise.resolve();
+      if (!client) { self._syncing = false; return Promise.resolve(); }
 
       return SupaAuth.getSession().then(function(session) {
         if (!session || !session.user) return; // pas connecté
@@ -265,9 +272,17 @@
                 window.S._cloudUpdatedAt = new Date().toISOString();
               } catch(e) {}
             }
+            self._syncing = false;
+            // Re-flush if a save was queued while this one was in-flight
+            if (self._savePendingDuringSync) {
+              self._savePendingDuringSync = false;
+              setTimeout(function() { try { self.saveProfile(); } catch(_) {} }, 200);
+            }
             return result;
           });
       }).catch(function(e) {
+        self._syncing = false;
+        self._savePendingDuringSync = false;
         console.warn('[SupaSync] saveProfile failed:', e);
         _trackSyncFailure((e && e.message) || String(e));
         if (window.SFCLogger) window.SFCLogger.capture(e, { module: 'SupaSync.saveProfile' });
@@ -598,6 +613,8 @@
     syncOnLogin: function() {
       if (!getClient()) return Promise.resolve('no_client');
       if (this._syncLoginInProgress) return Promise.resolve('already_syncing');
+      // Set flag synchronously at entry — before any async tick — to block concurrent calls
+      this._syncLoginInProgress = true;
       var self = this;
 
       // 1) Attendre que la session Supabase soit hydratée (ou timeout 12s)

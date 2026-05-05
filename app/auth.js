@@ -385,7 +385,11 @@ function _initAuth() {
     if (event === 'TOKEN_REFRESHED') {
       if (session && session.user) {
         _currentSession = _extractUser(session.user);
-        if (_currentSession && window._SFC_DEBUG) console.log('[AUTH] Token refreshed');
+        // Persist refreshed session so API calls use the new token immediately
+        try { if (window.setLegacySession) window.setLegacySession(_currentSession); } catch(_) {}
+        if (window._SFC_DEBUG) console.log('[AUTH] Token refreshed — session persisted');
+        // Re-evaluate app state in case the refresh unblocked a stale UI
+        try { if (window.render) window.render(); } catch(_) {}
       }
       return;
     }

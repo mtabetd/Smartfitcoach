@@ -743,7 +743,7 @@ function generateSportProgram() {
    pregTri:       pregTri,
    pregForbidden: pregForbidden,
    pregnancyWeek: S.pregnancyWeek,
-   muscuMedical:  S.muscuMedical,
+   muscuMedical:  (S.muscuMedical && typeof S.muscuMedical === 'object' && !Array.isArray(S.muscuMedical) && S.muscuMedical.done === true) ? S.muscuMedical : null,
    medRx:         _medRx,
    weekUsed:      weekUsedNames,
    restOverride:  restOverride,

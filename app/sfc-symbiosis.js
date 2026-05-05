@@ -177,11 +177,16 @@
       s.lastSessionGroups = incomingGroups;
     }
 
-    // ── lastSessionCount : cumul ──────────────────────────────────────────────
+    // ── lastSessionCount : cumul journalier (reset chaque nouveau jour) ──────
     var incomingCount = exercises ? exercises.length : 0;
-    s.lastSessionCount = (typeof s.lastSessionCount === 'number' && s.lastSessionCount > 0)
-      ? s.lastSessionCount + incomingCount
-      : incomingCount;
+    var _today = new Date().toISOString().slice(0, 10);
+    if (s.lastSessionDate !== _today) {
+      // Nouveau jour → repartir de zéro
+      s.lastSessionCount = incomingCount;
+      s.lastSessionDate  = _today;
+    } else {
+      s.lastSessionCount = (typeof s.lastSessionCount === 'number' ? s.lastSessionCount : 0) + incomingCount;
+    }
 
     // ── sportProgramStart : seulement si absent ───────────────────────────────
     if (!s.sportProgramStart) {
