@@ -817,12 +817,19 @@ function buildSystemPrompt(ctx) {
       lines.push('- Grossesse : pas de Valsalva, pas de charges maximales, intensité modérée, hydratation +++.');
     }
     lines.push('- Toujours chiffrer les ajustements (ex: "passe de 60 à 62,5kg au DC") plutôt que vague.');
-    // Si patterns détectés, l'IA doit les adresser proactivement sans attendre
-    // que l'user pose la question (sauf si user change de sujet clairement).
     if (ctx.weekInsights && Array.isArray(ctx.weekInsights.patterns) && ctx.weekInsights.patterns.length) {
       lines.push('- Si un PATTERN est signalé ci-dessus (alert/warning), l\'intégrer naturellement dans ta réponse sans paraître alarmiste.');
     }
   }
+
+  lines.push('');
+  lines.push('FORMAT DE RÉPONSE OBLIGATOIRE (quand données sport disponibles) :');
+  lines.push('1. SITUATION — max 15 mots, basé sur les données du profil');
+  lines.push('2. ACTION — verbe impératif + cible chiffrée (ex: "Passe à 62,5 kg au DC")');
+  lines.push('3. RÉSULTAT — 1 métrique ou comparaison précise');
+  lines.push('INTERDIT de commencer par : "Bonne question", "En effet", "C\'est normal", "Bien sûr", "Je comprends", "Super", "Absolument".');
+  lines.push('Si données manquantes pour répondre : demande-les AVANT de répondre.');
+  lines.push('Chaque conseil DOIT contenir au moins un chiffre.');
 
   return lines.join('\n');
 }
@@ -1021,6 +1028,15 @@ function buildSystemPromptEN(ctx) {
       lines.push('- If a PATTERN is flagged above (alert/warning), address it naturally without being alarmist.');
     }
   }
+
+  lines.push('');
+  lines.push('MANDATORY RESPONSE FORMAT (when sport data is available):');
+  lines.push('1. SITUATION — max 15 words, based on profile data only');
+  lines.push('2. ACTION — imperative verb + specific number (e.g. "Move to 62.5kg on bench")');
+  lines.push('3. RESULT — 1 precise metric or comparison');
+  lines.push('NEVER start with: "Great question", "Of course", "Absolutely", "That\'s normal", "I understand", "Sure".');
+  lines.push('If data is missing: ask for it BEFORE answering.');
+  lines.push('Every recommendation MUST include at least one number.');
 
   return lines.join('\n');
 }

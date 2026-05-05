@@ -1339,9 +1339,9 @@ function renderProfilePage(container) {
      if (!_isSub) {
        (function() {
          var _uid = S.user && S.user.id;
-         var _hist = Array.isArray(S.sessionHistory) ? S.sessionHistory : [];
-         var _sessionCount = _hist.length;
-         var _kcalBurned = _hist.reduce(function(acc, sh) { return acc + (sh.kcalTotal || 0); }, 0);
+         var _shObj = (S.sessionHistory && typeof S.sessionHistory === 'object' && !Array.isArray(S.sessionHistory)) ? S.sessionHistory : {};
+         var _sessionCount = Object.keys(_shObj).length;
+         var _kcalBurned = Object.keys(_shObj).reduce(function(acc, k) { return acc + ((_shObj[k] && _shObj[k].kcalTotal) || 0); }, 0);
          var _streak = 0;
          try { _streak = parseInt(localStorage.getItem('mtd_streak_' + _uid) || '0', 10) || 0; } catch(e) {}
          var _bestLift = '';
@@ -1619,7 +1619,16 @@ function renderProfilePage(container) {
        }
        var _durPer2 = { saison: '/trimestre', cycle: '/semestre', engagement: '/an' };
        var _isEn = (window.isEnglish && window.isEnglish());
-       var _ctaBase = _trialExpired ? (_isEn ? 'Reactivate my access' : 'Réactiver mon accès') : _daysLeft <= 1 ? (_isEn ? 'Last day — Subscribe' : 'Dernier jour — S\'abonner') : _daysLeft <= 2 ? (_isEn ? 'Only ' + _daysLeft + ' days left — Subscribe' : 'Plus que ' + _daysLeft + ' jours — S\'abonner') : (_isEn ? 'Subscribe' : 'S\'abonner');
+       var _ctaSessions = Object.keys((S.sessionHistory && typeof S.sessionHistory === 'object' && !Array.isArray(S.sessionHistory)) ? S.sessionHistory : {}).length;
+       var _ctaState = _ctaSessions >= 10 ? 'invested' : _ctaSessions >= 4 ? 'engaged' : 'starter';
+       var _ctaByState = {
+         starter:  _isEn ? 'CONTINUE MY PROGRAM'    : 'CONTINUER MON PROGRAMME',
+         engaged:  _isEn ? 'FINISH WHAT I STARTED'  : 'FINIR CE QUE J\'AI COMMENCÉ',
+         invested: _isEn ? 'PROTECT MY PROGRESS'    : 'PROTÉGER MA PROGRESSION'
+       };
+       var _ctaBase = _trialExpired
+         ? (_isEn ? 'Reactivate my access' : 'Réactiver mon accès')
+         : (_ctaByState[_ctaState] || (_isEn ? 'CONTINUE MY PROGRAM' : 'CONTINUER MON PROGRAMME'));
        var _ctaSuffix = _ctaPlan ? ' — ' + _ctaPlan.label_mad + (_durPer2[_ui2.duration] || '') : '';
        var _cta = h('button', {
          style:
@@ -3256,6 +3265,8 @@ function renderNewPassword(app) {
 // ─── POST-SESSION PANEL ───────────────────────────────────────────────────────
 function renderPostSessionPanel(data) {
   var isEn = window.isEnglish && window.isEnglish();
+  var screen = data.screen || 1;
+
   var panel = document.createElement('div');
   panel.id = 'sfc-post-session-panel';
   panel.style.cssText = 'position:fixed;inset:0;z-index:9000;background:#FAFAF7;display:flex;flex-direction:column;overflow-y:auto;animation:_psp-slide .28s cubic-bezier(.22,.61,.36,1) both;';
@@ -3268,88 +3279,126 @@ function renderPostSessionPanel(data) {
   }
 
   function _close() { S._postSessionPanel = null; window.render(); }
+  function _next() { data.screen = screen + 1; window.render(); }
 
   var inner = document.createElement('div');
-  inner.style.cssText = 'max-width:480px;width:100%;margin:0 auto;padding:24px 20px 40px;box-sizing:border-box;';
+  inner.style.cssText = 'max-width:480px;width:100%;margin:0 auto;padding:32px 24px 48px;box-sizing:border-box;display:flex;flex-direction:column;min-height:100vh;justify-content:center;';
 
-  var eyebrow = document.createElement('div');
-  eyebrow.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px;';
-  eyebrow.textContent = isEn ? 'Session complete' : 'Séance terminée';
-  inner.appendChild(eyebrow);
+  // ── Screen 1 — IDENTITY ──────────────────────────────────────────────────────
+  if (screen === 1) {
+    var s1n = data.totalSessions || 1;
+    var s1Head = document.createElement('div');
+    s1Head.style.cssText = 'font-family:Georgia,serif;font-size:32px;color:var(--black,#0A0A09);margin-bottom:10px;line-height:1.1;';
+    s1Head.textContent = (isEn ? 'Session ' : 'Séance ') + s1n + '.';
+    inner.appendChild(s1Head);
 
-  var focusTitle = document.createElement('div');
-  focusTitle.style.cssText = 'font-family:Georgia,serif;font-size:22px;color:var(--black,#0A0A09);margin-bottom:20px;line-height:1.2;';
-  focusTitle.textContent = data.focus || (isEn ? 'Training' : 'Entraînement');
-  inner.appendChild(focusTitle);
+    var s1Sub = document.createElement('div');
+    s1Sub.style.cssText = 'font-family:Georgia,serif;font-size:16px;color:var(--grey,#6B6B65);font-style:italic;margin-bottom:28px;';
+    s1Sub.textContent = isEn ? s1n + ' sessions. None skipped.' : s1n + ' séances. Aucune abandonnée.';
+    inner.appendChild(s1Sub);
 
-  var grid = document.createElement('div');
-  grid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;';
-  [
-    [data.duration + ' min', isEn ? 'Duration' : 'Durée'],
-    [data.kcalTotal + ' kcal', isEn ? 'Burned' : 'Brûlées'],
-    [isEn ? (data.load || 'Moderate') : ({ light:'Légère', moderate:'Modérée', heavy:'Intense', max:'Maximale' }[data.load] || 'Modérée'), isEn ? 'Load' : 'Charge']
-  ].forEach(function(col) {
-    var c = document.createElement('div');
-    c.style.cssText = 'background:var(--card-bg,#F0F0EA);border-radius:8px;padding:12px 8px;text-align:center;';
-    var val = document.createElement('div');
-    val.style.cssText = 'font-family:Georgia,serif;font-size:17px;color:var(--black,#0A0A09);';
-    val.textContent = col[0];
-    var lbl = document.createElement('div');
-    lbl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:4px;';
-    lbl.textContent = col[1];
-    c.appendChild(val); c.appendChild(lbl);
-    grid.appendChild(c);
-  });
-  inner.appendChild(grid);
+    var s1Sep = document.createElement('div');
+    s1Sep.style.cssText = 'height:1px;background:var(--border,#D8D8D0);margin-bottom:20px;';
+    inner.appendChild(s1Sep);
 
-  if (data.nmKcal > 0) {
-    var nutSect = document.createElement('div');
-    nutSect.style.cssText = 'border-top:1px solid var(--border,#D8D8D0);padding-top:16px;margin-bottom:16px;';
-    var nutLabel = document.createElement('div');
-    nutLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px;';
-    nutLabel.textContent = isEn ? 'Nutrition today' : 'Nutrition du jour';
-    nutSect.appendChild(nutLabel);
-    var nutRow = document.createElement('div');
-    nutRow.style.cssText = 'display:flex;gap:16px;align-items:baseline;';
-    var kcalN = document.createElement('div');
-    kcalN.style.cssText = 'font-family:Georgia,serif;font-size:16px;color:var(--black,#0A0A09);';
-    kcalN.textContent = data.nmKcal + ' kcal';
-    nutRow.appendChild(kcalN);
-    if (data.nmCarbs > 0) {
-      var carbsN = document.createElement('div');
-      carbsN.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);';
-      carbsN.textContent = data.nmCarbs + 'g ' + (isEn ? 'carbs (training day)' : 'glucides (jour entraînement)');
-      nutRow.appendChild(carbsN);
+    var s1Data = document.createElement('div');
+    s1Data.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);letter-spacing:1px;text-align:center;margin-bottom:32px;';
+    var _loadLabels1 = { light: isEn ? 'Light' : 'Légère', moderate: isEn ? 'Moderate' : 'Modérée', heavy: isEn ? 'Heavy' : 'Lourde', max: isEn ? 'Max' : 'Maximale' };
+    s1Data.textContent = data.duration + ' min  ·  ' + data.kcalTotal + ' kcal  ·  ' + (_loadLabels1[data.load] || data.load);
+    inner.appendChild(s1Data);
+
+    var s1Btn = document.createElement('button');
+    s1Btn.style.cssText = 'width:100%;padding:16px;background:var(--black,#0A0A09);color:#FAFAF7;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;min-height:52px;';
+    s1Btn.textContent = isEn ? '▼ see the insight' : '▼ voir le bilan';
+    s1Btn.onclick = _next;
+    inner.appendChild(s1Btn);
+  }
+
+  // ── Screen 2 — INTELLIGENCE (symbiosis delta) ────────────────────────────────
+  else if (screen === 2) {
+    var s2Eye = document.createElement('div');
+    s2Eye.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:18px;';
+    s2Eye.textContent = isEn ? 'WHAT JUST CHANGED' : 'CE QUI A CHANGÉ';
+    inner.appendChild(s2Eye);
+
+    var carbDelta = (data.nmCarbs || 0) - (data.nmCarbsBefore || 0);
+    if (carbDelta >= 5) {
+      var s2Delta = document.createElement('div');
+      s2Delta.style.cssText = 'font-family:Georgia,serif;font-size:22px;color:var(--black,#0A0A09);margin-bottom:6px;line-height:1.2;';
+      s2Delta.textContent = (isEn ? 'Carbs: ' : 'Glucides : ') + (data.nmCarbsBefore || 0) + 'g → ' + (data.nmCarbs || 0) + 'g';
+      inner.appendChild(s2Delta);
+
+      var s2Reason = document.createElement('div');
+      s2Reason.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--orange-ink,#7A3B0E);margin-bottom:24px;';
+      s2Reason.textContent = isEn ? "That's why." : "C'est pour ça.";
+      inner.appendChild(s2Reason);
+    } else {
+      var s2Stable = document.createElement('div');
+      s2Stable.style.cssText = 'font-family:Georgia,serif;font-size:16px;color:var(--grey,#6B6B65);font-style:italic;margin-bottom:24px;';
+      s2Stable.textContent = isEn ? 'Light session · Nutrition stable.' : 'Séance légère · Nutrition stable.';
+      inner.appendChild(s2Stable);
     }
-    nutSect.appendChild(nutRow);
-    inner.appendChild(nutSect);
+
+    var s2Sep = document.createElement('div');
+    s2Sep.style.cssText = 'height:1px;background:var(--border,#D8D8D0);margin-bottom:20px;';
+    inner.appendChild(s2Sep);
+
+    var s2TmrLabel = document.createElement('div');
+    s2TmrLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px;';
+    s2TmrLabel.textContent = isEn ? 'TOMORROW' : 'DEMAIN';
+    inner.appendChild(s2TmrLabel);
+
+    var s2TmrVal = document.createElement('div');
+    s2TmrVal.style.cssText = 'font-family:Georgia,serif;font-size:16px;color:var(--black,#0A0A09);margin-bottom:28px;';
+    s2TmrVal.textContent = data.tomorrowIsRest
+      ? (isEn ? 'Rest · Recovery priority.' : 'Repos · Récupération prioritaire.')
+      : (data.tomorrowFocus || (isEn ? 'Next session.' : 'Prochaine séance.'));
+    inner.appendChild(s2TmrVal);
+
+    var s2Btn = document.createElement('button');
+    s2Btn.style.cssText = 'width:100%;padding:16px;background:var(--black,#0A0A09);color:#FAFAF7;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;min-height:52px;margin-bottom:10px;';
+    s2Btn.textContent = isEn ? '▼ what comes next' : '▼ la suite';
+    s2Btn.onclick = _next;
+    inner.appendChild(s2Btn);
+
+    var s2Close = document.createElement('button');
+    s2Close.style.cssText = 'width:100%;padding:12px;background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);cursor:pointer;';
+    s2Close.textContent = isEn ? 'Close' : 'Fermer';
+    s2Close.onclick = _close;
+    inner.appendChild(s2Close);
   }
 
-  if (data.tomorrowFocus) {
-    var tmrSect = document.createElement('div');
-    tmrSect.style.cssText = 'border-top:1px solid var(--border,#D8D8D0);padding-top:16px;margin-bottom:20px;';
-    var tmrLabel = document.createElement('div');
-    tmrLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:4px;';
-    tmrLabel.textContent = isEn ? 'Tomorrow' : 'Demain';
-    tmrSect.appendChild(tmrLabel);
-    var tmrVal = document.createElement('div');
-    tmrVal.style.cssText = 'font-family:Georgia,serif;font-size:14px;color:var(--black,#0A0A09);';
-    tmrVal.textContent = data.tomorrowIsRest ? (isEn ? 'Rest day — recovery' : 'Repos — récupération') : data.tomorrowFocus;
-    tmrSect.appendChild(tmrVal);
-    inner.appendChild(tmrSect);
+  // ── Screen 3 — NEXT LOOP (projection) ───────────────────────────────────────
+  else {
+    var s3Eye = document.createElement('div');
+    s3Eye.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:18px;';
+    s3Eye.textContent = isEn ? 'IN 7 DAYS' : 'DANS 7 JOURS';
+    inner.appendChild(s3Eye);
+
+    if (data.projCompound && data.projTarget > 0) {
+      var s3Proj = document.createElement('div');
+      s3Proj.style.cssText = 'font-family:Georgia,serif;font-size:24px;color:var(--black,#0A0A09);margin-bottom:6px;line-height:1.2;';
+      s3Proj.textContent = data.projCompound + ' → ' + data.projTarget + ' kg';
+      inner.appendChild(s3Proj);
+    }
+
+    var s3Plan = document.createElement('div');
+    s3Plan.style.cssText = 'font-family:Georgia,serif;font-size:14px;color:var(--grey,#6B6B65);font-style:italic;margin-bottom:32px;';
+    s3Plan.textContent = isEn ? 'The plan continues.' : 'Le plan continue.';
+    inner.appendChild(s3Plan);
+
+    var s3CoachBtn = document.createElement('button');
+    s3CoachBtn.style.cssText = 'width:100%;padding:16px;background:var(--black,#0A0A09);color:#FAFAF7;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;min-height:52px;margin-bottom:10px;';
+    s3CoachBtn.textContent = isEn ? 'TALK TO THE COACH' : 'PARLER AU COACH';
+    s3CoachBtn.onclick = function() { _close(); S.view = 'today'; window.render(); };
+    inner.appendChild(s3CoachBtn);
+
+    var s3Close = document.createElement('button');
+    s3Close.style.cssText = 'width:100%;padding:12px;background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);cursor:pointer;';
+    s3Close.textContent = isEn ? 'Close' : 'Fermer';
+    s3Close.onclick = _close;
+    inner.appendChild(s3Close);
   }
-
-  var coachBtn = document.createElement('button');
-  coachBtn.style.cssText = 'width:100%;padding:14px;background:var(--black,#0A0A09);color:#FAFAF7;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;border:none;border-radius:6px;cursor:pointer;margin-bottom:10px;';
-  coachBtn.textContent = isEn ? 'Ask coach for insights' : 'Demander un bilan au coach';
-  coachBtn.onclick = function() { _close(); S.view = 'today'; S._openCoachAfterClose = true; window.render(); };
-  inner.appendChild(coachBtn);
-
-  var closeBtn = document.createElement('button');
-  closeBtn.style.cssText = 'width:100%;padding:12px;background:none;border:1px solid var(--border,#D8D8D0);border-radius:6px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);cursor:pointer;';
-  closeBtn.textContent = isEn ? 'Close' : 'Fermer';
-  closeBtn.onclick = _close;
-  inner.appendChild(closeBtn);
 
   panel.appendChild(inner);
   return panel;
