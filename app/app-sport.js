@@ -754,8 +754,7 @@ function generateSportProgram() {
    cycleFactor:   cycleIntensityFactor,
    weekIndex:     window.SFCSymbiosis ? window.SFCSymbiosis.getWeekIndex() : 0
  });
- // SFC Symbiosis : bridge training → nutrition (trainingLoad + sportProgramStart)
- if (window.SFCSymbiosis) window.SFCSymbiosis.notifySession(dayExercises, groups);
+ // SFC Symbiosis bridge moved to processCompletedSession (session save only — never on render)
 
  // Grossesse : ajouter Kegel à chaque séance
  if (pregTri) {
@@ -6109,7 +6108,7 @@ function saveMuscuSessionLog() {
  var completedW = sets.filter(function(s) { return s.actualWeight !== null; });
  var completedR = sets.filter(function(s) { return s.actualReps !== null; });
  if (completedW.length === 0 && completedR.length === 0) return;
- var avgWeight = completedW.length > 0 ? completedW.reduce(function(sum, s) { return sum + (s.actualWeight || 0); }, 0) / completedW.length : 0;
+ var avgWeight = completedW.length > 0 ? completedW.reduce(function(sum, s) { return sum + (+(s.actualWeight) || 0); }, 0) / completedW.length : 0;
  var avgReps = completedR.length > 0 ? completedR.reduce(function(sum, s) { return sum + (s.actualReps || 0); }, 0) / completedR.length : 0;
  if (isNaN(avgWeight) || isNaN(avgReps)) return;
 
@@ -6119,7 +6118,7 @@ function saveMuscuSessionLog() {
  S.muscuProgressionHistory[exName].push({
  date: _today2,
  week: S.muscuWeek || 1,
- weight: Math.round(avgWeight * 2) / 2,
+ weight: Math.round(avgWeight / 2.5) * 2.5,
  reps: Math.round(avgReps)
  });
  if (S.muscuProgressionHistory[exName].length > 365) {
@@ -9482,6 +9481,24 @@ function renderMusculationProgram(p) {
  kcalEpoc: kcalRes.epoc,
  kcalTotal: kcalRes.total
  });
+ // Notify nutrition engine of completed training session (single source of truth)
+ if (window.SFCSymbiosis && window.SFCSymbiosis.processCompletedSession) {
+   try {
+     var _grps = [];
+     (allEx || []).forEach(function(ex) { var _g = ex.m || ex.muscle || ''; if (_g && _grps.indexOf(_g) === -1) _grps.push(_g); });
+     var _sessLoad = window.SFCSymbiosis.computeTrainingLoad
+       ? window.SFCSymbiosis.computeTrainingLoad(allEx || [], _grps)
+       : (S.trainingLoad || 'moderate');
+     S.sessionHistory[todayKey].trainingLoad = _sessLoad;
+     window.SFCSymbiosis.processCompletedSession({
+       sessionId: todayKey,
+       date: ((window.sfcLocalDateStr && window.sfcLocalDateStr()) || new Date().toISOString().slice(0, 10)),
+       exercises: allEx || [],
+       groups: _grps,
+       trainingLoad: _sessLoad
+     });
+   } catch(_pcsErr) {}
+ }
  S.sessionCompleting = false; S._sessionDuration = null;
  S._streakCache = null; // Invalider le cache streak après une nouvelle séance
  // FIX: persist S.sessionHistory (and musculationWeights) to localStorage so data survives reload
@@ -9509,8 +9526,12 @@ function renderMusculationProgram(p) {
        if (_projCompound2) return;
        var _h2 = _projMph2[c];
        if (!Array.isArray(_h2) || _h2.length < 1) return;
-       var _lw2 = _h2[_h2.length - 1].weight || 0;
-       if (_lw2 > 0) { _projCompound2 = c; _projTarget2 = _lw2 + 2.5; }
+       var _last2 = _h2[_h2.length - 1];
+       var _lw2 = (_last2 && _last2.weight) ? _last2.weight : 0;
+       if (_lw2 > 0) {
+         var _lowerRe2 = /squat|leg|fessier|ischios|mollet|presse|hip.{0,5}thrust|rdl|deadlift|soulev|cuisse|jambe/i;
+         _projCompound2 = c; _projTarget2 = _lw2 + (_lowerRe2.test(c) ? 5 : 2.5);
+       }
      });
    } catch(_pe2) {}
    S._postSessionPanel = {

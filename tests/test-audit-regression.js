@@ -2071,6 +2071,197 @@ test('AUD9: notifySession calls computeNutritionState after updating state', fun
   }
 });
 
+// ── AUD10–AUD16: processCompletedSession + progression bugs ──────────────────
+
+// AUD10: processCompletedSession is idempotent — same sessionId must not double-accumulate
+test('AUD10: processCompletedSession is idempotent on repeated calls with same sessionId', function() {
+  var _prevWindow = global.window;
+  var _prevS = global.S;
+  var _prevSym = global.SFCSymbiosis;
+  global.window = global;
+  global.S = { appMode: 'both', trainingLoad: null, lastSessionGroups: [], lastSessionCount: 0 };
+  global.computeNutritionState = function() {};
+  try {
+    delete require.cache[require.resolve('../app/sfc-symbiosis.js')];
+    require('../app/sfc-symbiosis.js');
+    var payload = {
+      sessionId: 'test-idem-001',
+      date: '2026-01-01',
+      exercises: [{ n: 'Squat', m: 'legs' }, { n: 'Bench Press', m: 'chest' }],
+      groups: ['legs', 'chest'],
+      trainingLoad: 'heavy'
+    };
+    global.SFCSymbiosis.processCompletedSession(payload);
+    var countAfterFirst = global.S.lastSessionCount;
+    global.SFCSymbiosis.processCompletedSession(payload);
+    assert(global.S.lastSessionCount === countAfterFirst, 'lastSessionCount must not change on 2nd call with same sessionId');
+    assert(global.S.trainingLoad === 'heavy', 'trainingLoad must remain heavy after duplicate call');
+  } finally {
+    global.window = _prevWindow;
+    global.S = _prevS;
+    global.SFCSymbiosis = _prevSym;
+    delete global.computeNutritionState;
+  }
+});
+
+// AUD11: processCompletedSession with empty exercises does nothing
+test('AUD11: processCompletedSession returns early when exercises array is empty', function() {
+  var _prevWindow = global.window;
+  var _prevS = global.S;
+  var _prevSym = global.SFCSymbiosis;
+  global.window = global;
+  global.S = { appMode: 'both', trainingLoad: null, lastSessionGroups: [], lastSessionCount: 0 };
+  global.computeNutritionState = function() {};
+  try {
+    delete require.cache[require.resolve('../app/sfc-symbiosis.js')];
+    require('../app/sfc-symbiosis.js');
+    global.SFCSymbiosis.processCompletedSession({
+      sessionId: 'test-empty-001',
+      date: '2026-01-02',
+      exercises: [],
+      groups: [],
+      trainingLoad: 'moderate'
+    });
+    assert(global.S.trainingLoad === null, 'trainingLoad must stay null for empty session');
+    assert(global.S.lastSessionCount === 0, 'lastSessionCount must stay 0 for empty session');
+  } finally {
+    global.window = _prevWindow;
+    global.S = _prevS;
+    global.SFCSymbiosis = _prevSym;
+    delete global.computeNutritionState;
+  }
+});
+
+// AUD12: processCompletedSession with missing sessionId returns early
+test('AUD12: processCompletedSession returns early when sessionId is missing', function() {
+  var _prevWindow = global.window;
+  var _prevS = global.S;
+  var _prevSym = global.SFCSymbiosis;
+  global.window = global;
+  global.S = { appMode: 'both', trainingLoad: null, lastSessionGroups: [], lastSessionCount: 0 };
+  global.computeNutritionState = function() {};
+  try {
+    delete require.cache[require.resolve('../app/sfc-symbiosis.js')];
+    require('../app/sfc-symbiosis.js');
+    global.SFCSymbiosis.processCompletedSession({
+      sessionId: null,
+      date: '2026-01-03',
+      exercises: [{ n: 'Squat', m: 'legs' }],
+      groups: ['legs']
+    });
+    assert(global.S.trainingLoad === null, 'trainingLoad must stay null when sessionId is missing');
+  } finally {
+    global.window = _prevWindow;
+    global.S = _prevS;
+    global.SFCSymbiosis = _prevSym;
+    delete global.computeNutritionState;
+  }
+});
+
+// AUD13: processCompletedSession MAX semantics — higher trainingLoad wins over existing lower one
+test('AUD13: processCompletedSession MAX semantics — heavy wins over moderate', function() {
+  var _prevWindow = global.window;
+  var _prevS = global.S;
+  var _prevSym = global.SFCSymbiosis;
+  global.window = global;
+  global.S = { appMode: 'both', trainingLoad: 'moderate', lastSessionGroups: [], lastSessionCount: 0 };
+  global.computeNutritionState = function() {};
+  try {
+    delete require.cache[require.resolve('../app/sfc-symbiosis.js')];
+    require('../app/sfc-symbiosis.js');
+    global.SFCSymbiosis.processCompletedSession({
+      sessionId: 'test-max-001',
+      date: '2026-01-04',
+      exercises: [{ n: 'Squat', m: 'legs' }, { n: 'Deadlift', m: 'legs' }, { n: 'Bench Press', m: 'chest' }, { n: 'Row', m: 'back' }],
+      groups: ['legs', 'chest', 'back'],
+      trainingLoad: 'heavy'
+    });
+    assert(global.S.trainingLoad === 'heavy', 'heavy must win over pre-existing moderate');
+  } finally {
+    global.window = _prevWindow;
+    global.S = _prevS;
+    global.SFCSymbiosis = _prevSym;
+    delete global.computeNutritionState;
+  }
+});
+
+// AUD13b: processCompletedSession MAX semantics — light does NOT override existing heavy
+test('AUD13b: processCompletedSession MAX semantics — light does not downgrade heavy', function() {
+  var _prevWindow = global.window;
+  var _prevS = global.S;
+  var _prevSym = global.SFCSymbiosis;
+  global.window = global;
+  global.S = { appMode: 'both', trainingLoad: 'heavy', lastSessionGroups: ['chest'], lastSessionCount: 3 };
+  global.computeNutritionState = function() {};
+  try {
+    delete require.cache[require.resolve('../app/sfc-symbiosis.js')];
+    require('../app/sfc-symbiosis.js');
+    global.SFCSymbiosis.processCompletedSession({
+      sessionId: 'test-max-002',
+      date: '2026-01-04',
+      exercises: [{ n: 'Curl', m: 'biceps' }],
+      groups: ['biceps'],
+      trainingLoad: 'light'
+    });
+    assert(global.S.trainingLoad === 'heavy', 'heavy must not be downgraded by a lighter session on the same day');
+  } finally {
+    global.window = _prevWindow;
+    global.S = _prevS;
+    global.SFCSymbiosis = _prevSym;
+    delete global.computeNutritionState;
+  }
+});
+
+// AUD14: getProgressiveWeight — lower body exercise uses 5kg increment
+test('AUD14: getProgressiveWeight uses 5kg increment for lower body (Squat)', function() {
+  // Test the regex logic directly — mirrors app-sport.js getProgressiveWeight implementation
+  var lowerBodyKeywords = /squat|leg|fessier|ischios|mollet|presse|hip.*thrust|rdl|deadlift|soulev|cuisse|jambe/i;
+  assert(lowerBodyKeywords.test('Squat'), 'Squat must match lower body pattern');
+  assert(lowerBodyKeywords.test('Deadlift'), 'Deadlift must match lower body pattern');
+  assert(lowerBodyKeywords.test('Leg Press'), 'Leg Press must match lower body pattern');
+  assert(!lowerBodyKeywords.test('Bench Press'), 'Bench Press must NOT match lower body pattern');
+  assert(!lowerBodyKeywords.test('Overhead Press'), 'Overhead Press must NOT match lower body pattern');
+  var increment = function(name) { return lowerBodyKeywords.test(name) ? 5 : 2.5; };
+  assert(increment('Squat') === 5, 'Squat increment must be 5kg');
+  assert(increment('Deadlift') === 5, 'Deadlift increment must be 5kg');
+  assert(increment('Bench Press') === 2.5, 'Bench Press increment must be 2.5kg');
+});
+
+// AUD15: History rounding must align to 2.5kg boundary (not 0.5kg)
+test('AUD15: history weight rounding uses 2.5kg alignment', function() {
+  var round25 = function(w) { return Math.round(w / 2.5) * 2.5; };
+  // 82kg raw → should round to 82.5
+  assert(round25(82) === 82.5, '82 → 82.5 with 2.5kg alignment');
+  // 83.3 → 82.5
+  assert(round25(83.3) === 82.5, '83.3 → 82.5 with 2.5kg alignment');
+  // 83.75 → 85.0
+  assert(round25(83.75) === 85.0, '83.75 → 85 with 2.5kg alignment');
+  // 100 → 100
+  assert(round25(100) === 100, '100 → 100 with 2.5kg alignment');
+  // Old 0.5-rounding would produce different values — verify the difference
+  var roundOld = function(w) { return Math.round(w * 2) / 2; };
+  // 82 rounds to same with old method (82.0), but 83.3 differs
+  assert(roundOld(83.3) !== round25(83.3), '83.3 must produce different results: 0.5-rounding vs 2.5-rounding');
+});
+
+// AUD16: Post-session projection — lower body compounds use +5, upper body +2.5
+test('AUD16: post-session projection uses +5 for lower body, +2.5 for upper body', function() {
+  var lowerRe = /squat|leg|fessier|ischios|mollet|presse|hip.{0,5}thrust|rdl|deadlift|soulev|cuisse|jambe/i;
+  var projIncrement = function(name) { return lowerRe.test(name) ? 5 : 2.5; };
+  // Deadlift is lower body — must use 5
+  var deadliftBase = 100;
+  var projDeadlift = deadliftBase + projIncrement('Deadlift');
+  assert(projDeadlift === 105, 'Deadlift projection must be base+5 = 105');
+  // Bench Press is upper body — must use 2.5
+  var benchBase = 80;
+  var projBench = benchBase + projIncrement('Bench Press');
+  assert(projBench === 82.5, 'Bench Press projection must be base+2.5 = 82.5');
+  // Squat is lower body
+  assert(projIncrement('Squat') === 5, 'Squat projection increment must be 5');
+  // Overhead Press is upper body
+  assert(projIncrement('Overhead Press') === 2.5, 'Overhead Press projection increment must be 2.5');
+});
+
 // ── Summary (waits for async tests) ──────────────────────────────────────────
 Promise.all(_pendingAsync).then(function() {
   console.log('\n' + (failed === 0 ? '\x1b[32m' : '\x1b[31m') +

@@ -413,15 +413,87 @@
     }
   }
 
+  // ── Unique real-session entry point ──────────────────────────────────────
+  // Called ONLY from the session save handler (never from render/preview/generate).
+  // Idempotent: same sessionId is silently ignored.
+  // @param {{ sessionId:string, date:string, exercises:Object[], groups:string[], trainingLoad?:string }} data
+  function processCompletedSession(data) {
+    var s = global.S;
+    if (!s) return;
+    if (!data || !data.sessionId || !data.date) return;
+
+    // Idempotency guard — in-memory per page-load (save button already prevents double-save)
+    if (!s._processedSessionIds || typeof s._processedSessionIds !== 'object') {
+      s._processedSessionIds = {};
+    }
+    if (s._processedSessionIds[data.sessionId]) return;
+
+    var exercises = data.exercises || [];
+    var groups    = data.groups    || [];
+    if (!exercises.length) return;
+
+    // Day boundary reset — if load stamp is from a previous calendar day, clear before applying
+    var _today = data.date;
+    if (s._trainingLoadDate && s._trainingLoadDate !== _today) {
+      s.trainingLoad      = null;
+      s.dailyTrainingLoad = null;
+      s.lastSessionCount  = 0;
+      s.lastSessionGroups = [];
+    }
+    s._trainingLoadDate = _today;
+
+    // Compute or accept load
+    var RANK         = { light: 0, moderate: 1, heavy: 2 };
+    var load         = data.trainingLoad || computeTrainingLoad(exercises, groups);
+    var existingRank = typeof RANK[s.trainingLoad] === 'number' ? RANK[s.trainingLoad] : -1;
+    var newRank      = typeof RANK[load]           === 'number' ? RANK[load]           :  0;
+    if (existingRank === -1 || newRank > existingRank) {
+      s.trainingLoad      = load;
+      s.dailyTrainingLoad = load;
+    }
+
+    // lastSessionGroups — union (multi-sport possible in one day)
+    var incomingGroups = groups.slice();
+    if (Array.isArray(s.lastSessionGroups) && s.lastSessionGroups.length > 0) {
+      var merged = s.lastSessionGroups.slice();
+      incomingGroups.forEach(function(g) { if (merged.indexOf(g) === -1) merged.push(g); });
+      s.lastSessionGroups = merged;
+    } else {
+      s.lastSessionGroups = incomingGroups;
+    }
+
+    // lastSessionCount — take max (multi-sport: biggest session wins)
+    var incomingCount = exercises.length;
+    s.lastSessionCount = Math.max(typeof s.lastSessionCount === 'number' ? s.lastSessionCount : 0, incomingCount);
+    s.lastSessionDate  = _today;
+
+    if (!s.sportProgramStart) s.sportProgramStart = _today;
+
+    updateWeekContext(_today, s.lastSessionGroups, s.trainingLoad, exercises);
+
+    // Mark processed — bounded map (365 sessions max)
+    s._processedSessionIds[data.sessionId] = true;
+    var pidKeys = Object.keys(s._processedSessionIds);
+    if (pidKeys.length > 365) {
+      pidKeys.slice(0, pidKeys.length - 365).forEach(function(k) { delete s._processedSessionIds[k]; });
+    }
+
+    // Recompute nutrition with real training signal
+    if (s.appMode !== 'sport' && typeof window.computeNutritionState === 'function') {
+      try { window.computeNutritionState(true); } catch (_e) {}
+    }
+  }
+
   // ── API publique ──────────────────────────────────────────────────────────
   global.SFCSymbiosis = {
-    computeTrainingLoad:   computeTrainingLoad,
-    getWeekIndex:          getWeekIndex,
-    getLoadMultipliers:    getLoadMultipliers,
-    getFeedbackAdjustment: getFeedbackAdjustment,
-    notifySession:         notifySession,
-    getPeriodizationInfo:  getPeriodizationInfo,
-    getPeriodizationCfg:   getPeriodizationCfg,
+    computeTrainingLoad:      computeTrainingLoad,
+    getWeekIndex:             getWeekIndex,
+    getLoadMultipliers:       getLoadMultipliers,
+    getFeedbackAdjustment:    getFeedbackAdjustment,
+    notifySession:            notifySession,
+    processCompletedSession:  processCompletedSession,
+    getPeriodizationInfo:     getPeriodizationInfo,
+    getPeriodizationCfg:      getPeriodizationCfg,
     getNutritionState:     getNutritionState,
     getFatigueScore:       getFatigueScore,
     updateWeekContext:     updateWeekContext,
