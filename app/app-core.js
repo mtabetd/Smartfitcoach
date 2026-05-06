@@ -4488,49 +4488,56 @@ function validatePregnancyState() {
 window.validatePregnancyState = validatePregnancyState;
 
 // ── PREMIUM / TRIAL SYSTEM ──────────────────────────────────────────────────
-// isPremium() retourne true si :
-//   - L'utilisateur a un abonnement actif (subscriptionEnd > today)
-//   - OU l'utilisateur est en période trial (firstLoginDate + 7 jours > today)
-//   - Fallback = true (en cas de bug, l'utilisateur a accès — jamais de blocage par erreur)
+// Single source of truth for subscription state. Three key invariants:
+//   1. subscriptionPlan === 'unlimited' → always premium, subscriptionEnd irrelevant
+//   2. While server status is loading (_subStatusReady not set), never flash trial UI
+//   3. All trial UI reads only these three functions — never raw S fields directly
 function isPremium() {
   try {
     var s = window.S;
-    if (!s) return false; // FIX 2026-04-16 — pas de state = pas premium
-    // Abonnement payant actif
-    if (s.subscriptionEnd) {
-      if (s.subscriptionPlan === 'unlimited') return true;
-      if (new Date(s.subscriptionEnd) > new Date()) return true;
-    }
-    // Trial 7 jours
+    if (!s) return false;
+    // 'unlimited' plan is premium regardless of subscriptionEnd (may be null by design)
+    if (s.subscriptionPlan === 'unlimited') return true;
+    // Active dated subscription
+    if (s.subscriptionEnd && new Date(s.subscriptionEnd) > new Date()) return true;
+    // Active trial window
     if (s.firstLoginDate) {
       var trialEnd = new Date(s.firstLoginDate);
       trialEnd.setUTCDate(trialEnd.getUTCDate() + 7);
       if (trialEnd > new Date()) return true;
     }
-    // Pas de firstLoginDate = nouvel utilisateur = accès trial
+    // Server status not yet confirmed — for logged-in users grant access while loading
+    if (!s._subStatusReady && window.AUTH && window.AUTH.isLoggedIn && window.AUTH.isLoggedIn()) return true;
+    // New user (no firstLoginDate yet) — grant trial access
     if (!s.firstLoginDate) return true;
-    // Trial expiré et pas d'abonnement
     return false;
-  } catch(e) { return false; } // FIX 2026-04-16 — erreur = pas premium (avant: true = tout le monde premium en cas de bug)
+  } catch(e) { return true; } // failsafe: on error always grant access
 }
-// Jours restants de trial (0 si expiré ou si abonné)
+// Jours restants de trial (0 si expiré, si abonné, ou si statut pas encore chargé)
 function getTrialDaysLeft() {
   try {
     var s = window.S;
-    if (!s || !s.firstLoginDate) return 7;
-    if (s.subscriptionPlan === 'unlimited' || (s.subscriptionEnd && new Date(s.subscriptionEnd) > new Date())) return 0; // abonné
+    if (!s) return 0;
+    if (s.subscriptionPlan === 'unlimited') return 0;
+    if (s.subscriptionEnd && new Date(s.subscriptionEnd) > new Date()) return 0;
+    if (!s.firstLoginDate) return s._subStatusReady ? 7 : 0;
     var trialEnd = new Date(s.firstLoginDate);
     trialEnd.setUTCDate(trialEnd.getUTCDate() + 7);
     var diff = Math.ceil((trialEnd - new Date()) / (1000 * 60 * 60 * 24));
     return Math.max(0, diff);
-  } catch(e) { return 7; }
+  } catch(e) { return 0; }
 }
+// isTrialUser — NEVER returns true while server subscription status is still loading.
+// This prevents every trial banner in the app from showing before the first fetch completes.
 function isTrialUser() {
   try {
     var s = window.S;
     if (!s) return false;
-    if (s.subscriptionPlan === 'unlimited' || (s.subscriptionEnd && new Date(s.subscriptionEnd) > new Date())) return false;
-    return true; // pas d'abonnement = trial (actif ou expiré)
+    // Server has not confirmed status yet — suppress all trial UI
+    if (!s._subStatusReady) return false;
+    if (s.subscriptionPlan === 'unlimited') return false;
+    if (s.subscriptionEnd && new Date(s.subscriptionEnd) > new Date()) return false;
+    return true;
   } catch(e) { return false; }
 }
 // Pricing cache — chargé en lazy depuis l'API get-pricing

@@ -791,6 +791,8 @@
             window.UNITS.weight = window.S.weightUnit || 'kg';
             window.UNITS.height = window.S.heightUnit || 'cm';
           }
+          // Mark subscription status as known — unblocks isTrialUser() / isPremium()
+          try { window.S._subStatusReady = true; } catch(_sr) {}
         }
 
         if (!hasValidLocalData && cloudData.goal != null) {
@@ -868,6 +870,8 @@
           if (cloudData.subscriptionPlan) window.S.subscriptionPlan = cloudData.subscriptionPlan;
           if (cloudData.subscriptionEnd !== undefined) window.S.subscriptionEnd = cloudData.subscriptionEnd;
           if (cloudData.firstLoginDate) window.S.firstLoginDate = cloudData.firstLoginDate;
+          // Mark subscription status as known so isTrialUser() / isPremium() use real values
+          window.S._subStatusReady = true;
         } catch(_se) {}
         return 'local_data_exists';
       }).catch(function(e) {
@@ -935,6 +939,8 @@
           if (!res.ok) return null;
           return res.json();
         }).then(function(status) {
+          // Always mark as ready — even null means server responded (no plan = trial)
+          try { if (window.S) window.S._subStatusReady = true; } catch(_) {}
           if (!status || typeof status.premium !== 'boolean') return null;
           self._userStatusCache   = status;
           self._userStatusCacheTs = Date.now();
@@ -947,7 +953,13 @@
             }
           } catch(e) {}
           return status;
-        }).catch(function() { clearTimeout(tid); return null; });
+        }).catch(function() {
+          clearTimeout(tid);
+          // Network failure — mark ready so trial UI is gated by actual subscription fields,
+          // not the loading guard. isPremium() failsafe will grant access on error.
+          try { if (window.S) window.S._subStatusReady = true; } catch(_) {}
+          return null;
+        });
       }).catch(function() { return null; });
     }
   };

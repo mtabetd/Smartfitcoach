@@ -1238,16 +1238,23 @@ function renderProfilePage(container) {
  // ─── MON ABONNEMENT (Hermès — ivoire, orange tabac, Georgia serif) ───
  (function() {
    try {
-     var _isSub = !!(S.subscriptionPlan === 'unlimited' || (S.subscriptionEnd && new Date(S.subscriptionEnd) > new Date()));
-     var _daysLeft = (typeof window.getTrialDaysLeft === 'function') ? window.getTrialDaysLeft() : 7;
-     var _trialExpired = !_isSub && _daysLeft === 0 && !!S.firstLoginDate;
+     // Use the authoritative isPremium() — handles unlimited+null-end, _subStatusReady guard
+     var _isSub = !!(typeof window.isPremium === 'function' ? window.isPremium()
+       : (S.subscriptionPlan === 'unlimited' || (S.subscriptionEnd && new Date(S.subscriptionEnd) > new Date())));
+     var _subLoading = !S._subStatusReady && !S.subscriptionPlan && !S.subscriptionEnd;
+     var _daysLeft = (typeof window.getTrialDaysLeft === 'function') ? window.getTrialDaysLeft() : 0;
+     var _trialExpired = !_isSub && !_subLoading && _daysLeft === 0 && !!S.firstLoginDate;
      // Debug marker — readable from console: window.SFC_SUBSCRIPTION_DEBUG
      try {
        window.SFC_SUBSCRIPTION_DEBUG = {
          statePlan: S.subscriptionPlan,
          stateEnd: S.subscriptionEnd,
+         subStatusReady: S._subStatusReady,
+         subLoading: _subLoading,
          isPremium: _isSub,
          daysLeft: _daysLeft,
+         shouldShowTrialBanner: !_isSub && !_subLoading,
+         shouldShowPaywall: !_isSub && !_subLoading,
          renderSource: 'render()',
          renderAt: new Date().toISOString()
        };
@@ -1270,13 +1277,14 @@ function renderProfilePage(container) {
        'display:flex;align-items:center;gap:10px;'
      });
      _topLabel.appendChild(h('span', {style: 'flex:1;height:1px;background:' + _accentBorder + ';'}));
-     _topLabel.appendChild(h('span', {}, _isSub ? 'MEMBRE' : 'VERSION D\u2019ESSAI'));
+     _topLabel.appendChild(h('span', {}, _isSub ? 'MEMBRE' : (_subLoading ? '—' : 'VERSION D\u2019ESSAI')));
      _topLabel.appendChild(h('span', {style: 'flex:1;height:1px;background:' + _accentBorder + ';'}));
      card.appendChild(_topLabel);
 
      // Numéro ou marqueur central Georgia — signature de la maison
      var _numRow = h('div', {style: 'text-align:center;margin-bottom:6px;'});
-     if (_isSub) {
+     if (_isSub || _subLoading) {
+       // Premium confirmed, or still loading — never show trial countdown
        _numRow.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:40px;color:var(--black);line-height:1;'}, '\u2014'));
      } else if (_daysLeft > 0) {
        _numRow.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:56px;color:var(--black);line-height:1;font-weight:normal;letter-spacing:-1px;'}, String(_daysLeft)));
@@ -1347,7 +1355,7 @@ function renderProfilePage(container) {
      card.appendChild(_featsWrap);
 
      // Bloc progression réelle utilisateur — preuve sociale personnalisée
-     if (!_isSub) {
+     if (!_isSub && !_subLoading) {
        (function() {
          var _uid = S.user && S.user.id;
          var _shObj = (S.sessionHistory && typeof S.sessionHistory === 'object' && !Array.isArray(S.sessionHistory)) ? S.sessionHistory : {};
@@ -1404,7 +1412,7 @@ function renderProfilePage(container) {
      }
 
      // Sélecteur de plan — Hermès pricing UI
-     if (!_isSub) {
+     if (!_isSub && !_subLoading) {
        var _pData = window.SFC_PRICING_DATA || [];
        var _ui = window._sfcPricingUI = window._sfcPricingUI || { tier: 'athlete', duration: 'saison' };
        var _tiers = ['athlete', 'champion', 'legende'];
@@ -1621,7 +1629,7 @@ function renderProfilePage(container) {
      }
 
           // CTA — bouton Hermès noir laqué
-     if (!_isSub) {
+     if (!_isSub && !_subLoading) {
        var _pData2 = window.SFC_PRICING_DATA || [];
        var _ui2 = window._sfcPricingUI || { tier: 'athlete', duration: 'saison' };
        var _ctaPlan = null;
