@@ -7,9 +7,9 @@
  */
 // Smart Fit Coach — Service Worker
 // Cache version: bump this string to force a full cache refresh on next visit.
-// 2026-04 NIVEAU 1 : versions unifiées pour éviter caches orphelins lors du bump
-const CACHE_VERSION = 'sfc-v20260430g';
-const RUNTIME_CACHE = 'sfc-runtime-v20260428a';
+// 2026-05 NIVEAU 2 : bundle.js retiré de APP_SHELL (no-cache + versioned URL)
+const CACHE_VERSION = 'sfc-v20260506';
+const RUNTIME_CACHE = 'sfc-runtime-v20260506';
 
 // Max age for static assets in the runtime cache: 7 days (in milliseconds).
 const STATIC_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
@@ -25,7 +25,8 @@ const APP_SHELL = [
   './tracker.js',
   './muscu-engine.js',
   './sfc-symbiosis.js',
-  './bundle.js',
+  // bundle.js intentionally excluded: served with no-cache + versioned ?v= URL,
+  // so SW pre-caching would cause URL mismatch and serve stale code.
   './jspdf.umd.min.js',
   './chart.umd.min.js',
   './premium-ui.css',
@@ -140,6 +141,13 @@ self.addEventListener('fetch', (event) => {
   // Supabase API data must always be network-first — stale data causes desync.
   if (url.hostname.includes('supabase.co')) {
     event.respondWith(networkFirst(request));
+    return;
+  }
+
+  // bundle.js is served with Cache-Control:no-cache and a ?v= version query.
+  // Always fetch from network so a stale SW cache can never block a new deploy.
+  if (url.pathname.endsWith('/bundle.js') || url.pathname.endsWith('bundle.js')) {
+    event.respondWith(fetch(request));
     return;
   }
 
