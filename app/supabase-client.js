@@ -861,6 +861,14 @@
             }
           } catch(e) {}
         }
+        // Subscription fields live in dedicated DB columns and are intentionally stripped
+        // from the localStorage JSONB blob (see saveProfile). They must always be applied
+        // from cloudData regardless of which data path won (cloud vs local).
+        try {
+          if (cloudData.subscriptionPlan) window.S.subscriptionPlan = cloudData.subscriptionPlan;
+          if (cloudData.subscriptionEnd !== undefined) window.S.subscriptionEnd = cloudData.subscriptionEnd;
+          if (cloudData.firstLoginDate) window.S.firstLoginDate = cloudData.firstLoginDate;
+        } catch(_se) {}
         return 'local_data_exists';
       }).catch(function(e) {
         self._syncPending = false;
