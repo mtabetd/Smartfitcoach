@@ -671,7 +671,20 @@
           var raw = localStorage.getItem('mtd_profile_' + uid);
           if (raw) {
             if (window._storageDecode) { localData = window._storageDecode(raw); }
-            if (!localData) { try { localData = JSON.parse(raw); } catch(e2) {} }
+            if (!localData) {
+              try {
+                localData = JSON.parse(raw);
+              } catch(e2) {
+                // P5 fix — JSON corrompu : purge + fallback cloud automatique.
+                // Corruption typique : écriture interrompue, quota dépassé.
+                console.warn('[SupaSync] Profil localStorage corrompu — purge + fallback cloud', e2);
+                try { localStorage.removeItem('mtd_profile_' + uid); } catch(_) {}
+                if (window.SFCLogger) {
+                  window.SFCLogger.capture(e2, { module: 'SupaSync.syncOnLogin.localParse', uid: uid });
+                }
+                // localData reste null → code tombe sur le chemin cloud (Branch B)
+              }
+            }
             // Local data is valid only if the user completed onboarding (goal is set)
             hasValidLocalData = localData && localData.goal != null;
           }
@@ -979,6 +992,24 @@
   window.SupaSync = SupaSync;
   window.getSupabaseClient = getClient;
   window.resetSupabaseClient = resetClient;
+
+  // ─── INVALIDATION CACHE ABONNEMENT (P1 fix) ───────────────
+  // Appeler immédiatement après un paiement réussi pour forcer le re-fetch.
+  // Évite les 15 minutes d'attente post-paiement où l'user voit encore "trial".
+  SupaSync.invalidateStatusCache = function() {
+    this._userStatusCache   = null;
+    this._userStatusCacheTs = 0;
+  };
+
+  // ─── RE-FETCH AU RETOUR EN PREMIER PLAN ───────────────────
+  // Couvre : paiement in-app, retour depuis App Store, reprise Safari kill.
+  if (typeof document !== 'undefined') {
+    document.addEventListener('visibilitychange', function() {
+      if (document.visibilityState === 'visible' && window.SupaSync) {
+        window.SupaSync.invalidateStatusCache();
+      }
+    });
+  }
 })();
 
 // ─── SAFE PREMIUM STATUS CHECK ────────────────────────────────────────────────

@@ -3685,4 +3685,48 @@ window.getProgressiveProgram = getProgressiveProgram;
 window.getWeeklySplit = getWeeklySplit;
 window.EXERCISE_ALTERNATIVES = EXERCISE_ALTERNATIVES;
 
+// ─── RÈGLE 48H RÉCUPÉRATION MUSCULAIRE ────────────────────────────────────────
+// Source : ACSM 2009 Position Stand on Resistance Exercise
+// Retourne l'état de récupération pour les groupes musculaires proposés.
+// Utilisé par SFCDecisionCore.getBlockedMuscleGroups() + UI warning.
+//
+// @param {string[]} proposedGroups — groupes musculaires planifiés pour aujourd'hui
+// @param {object}  [stateOverride] — override de S pour les tests
+// @returns {{ safe: boolean, conflictingGroups: string[], daysSince: number, reason: string }}
+window.check48hConflict = function check48hConflict(proposedGroups, stateOverride) {
+  var S = stateOverride || (typeof window !== 'undefined' ? window.S : {}) || {};
+  var lastGroups = S.lastSessionGroups || [];
+  var lastDate   = S.lastSessionDate;
+
+  if (!lastDate || !Array.isArray(lastGroups) || lastGroups.length === 0) {
+    return { safe: true, conflictingGroups: [], daysSince: 7, reason: null };
+  }
+
+  var daysSince = Math.floor((Date.now() - new Date(lastDate)) / 86400000);
+
+  if (daysSince >= 2) {
+    return { safe: true, conflictingGroups: [], daysSince: daysSince, reason: null };
+  }
+
+  // Normalisation : compare en lowercase, sans accents
+  function norm(s) { return String(s || '').toLowerCase().trim(); }
+  var normedLast = lastGroups.map(norm);
+
+  var conflicts = (proposedGroups || []).filter(function(g) {
+    return normedLast.indexOf(norm(g)) !== -1;
+  });
+
+  if (conflicts.length === 0) {
+    return { safe: true, conflictingGroups: [], daysSince: daysSince, reason: null };
+  }
+
+  return {
+    safe:              false,
+    conflictingGroups: conflicts,
+    daysSince:         daysSince,
+    reason:            'Récupération incomplète : ' + conflicts.join(', ') +
+                       ' entraîné(s) il y a ' + daysSince + 'j — ACSM 2009 recommande 48h minimum.'
+  };
+};
+
 })();

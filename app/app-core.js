@@ -4511,10 +4511,11 @@ function isPremium() {
     if (_isPremiumPlan(s.subscriptionPlan)) return true;
     // 3. Active dated subscription
     if (s.subscriptionEnd && new Date(s.subscriptionEnd) > new Date()) return true;
-    // 4. Active trial window
+    // 4. Active trial window — expiry at local midnight end-of-day 7 (P3 timezone fix)
     if (s.firstLoginDate) {
       var trialEnd = new Date(s.firstLoginDate);
-      trialEnd.setUTCDate(trialEnd.getUTCDate() + 7);
+      trialEnd.setDate(trialEnd.getDate() + 7);
+      trialEnd.setHours(23, 59, 59, 999);
       if (trialEnd > new Date()) return true;
     }
     // 5. Server status not yet confirmed — grant access while loading (never block by default)
@@ -4535,7 +4536,8 @@ function getTrialDaysLeft() {
     if (!s._subStatusReady) return 0; // loading — never show countdown
     if (!s.firstLoginDate) return 7;  // confirmed status, no date = new user
     var trialEnd = new Date(s.firstLoginDate);
-    trialEnd.setUTCDate(trialEnd.getUTCDate() + 7);
+    trialEnd.setDate(trialEnd.getDate() + 7);
+    trialEnd.setHours(23, 59, 59, 999); // local midnight end-of-day 7 (P3 timezone fix)
     return Math.max(0, Math.ceil((trialEnd - new Date()) / 86400000));
   } catch(e) { return 0; }
 }
