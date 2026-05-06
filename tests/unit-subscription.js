@@ -13,22 +13,24 @@ function test(name, fn) {
 function suite(n) { console.log('\n' + n); }
 
 // ─── Inline the three core functions (copied exactly from app-core.js) ───────
-// This avoids eval scope issues while testing the real logic.
 var _S = {};
-var _AUTH = { isLoggedIn: function() { return true; } };
+var _PREMIUM_PLANS = ['unlimited','lifetime','premium','legend','champion','athlete','admin','paid'];
+function _isPP(plan) { return !!plan && _PREMIUM_PLANS.indexOf(plan) !== -1; }
 
 function _isPremium() {
   try {
     var s = _S;
     if (!s) return false;
-    if (s.subscriptionPlan === 'unlimited') return true;
+    if (s._serverPremium === true) return true;
+    if (s._serverPremium === false && s._subStatusReady) return false;
+    if (_isPP(s.subscriptionPlan)) return true;
     if (s.subscriptionEnd && new Date(s.subscriptionEnd) > new Date()) return true;
     if (s.firstLoginDate) {
       var trialEnd = new Date(s.firstLoginDate);
       trialEnd.setUTCDate(trialEnd.getUTCDate() + 7);
       if (trialEnd > new Date()) return true;
     }
-    if (!s._subStatusReady && _AUTH && _AUTH.isLoggedIn && _AUTH.isLoggedIn()) return true;
+    if (!s._subStatusReady) return true;
     if (!s.firstLoginDate) return true;
     return false;
   } catch(e) { return true; }
@@ -37,13 +39,14 @@ function _getTrialDaysLeft() {
   try {
     var s = _S;
     if (!s) return 0;
-    if (s.subscriptionPlan === 'unlimited') return 0;
+    if (s._serverPremium === true) return 0;
+    if (_isPP(s.subscriptionPlan)) return 0;
     if (s.subscriptionEnd && new Date(s.subscriptionEnd) > new Date()) return 0;
-    if (!s.firstLoginDate) return s._subStatusReady ? 7 : 0;
+    if (!s._subStatusReady) return 0;
+    if (!s.firstLoginDate) return 7;
     var trialEnd = new Date(s.firstLoginDate);
     trialEnd.setUTCDate(trialEnd.getUTCDate() + 7);
-    var diff = Math.ceil((trialEnd - new Date()) / (1000 * 60 * 60 * 24));
-    return Math.max(0, diff);
+    return Math.max(0, Math.ceil((trialEnd - new Date()) / 86400000));
   } catch(e) { return 0; }
 }
 function _isTrialUser() {
@@ -51,7 +54,8 @@ function _isTrialUser() {
     var s = _S;
     if (!s) return false;
     if (!s._subStatusReady) return false;
-    if (s.subscriptionPlan === 'unlimited') return false;
+    if (s._serverPremium === true) return false;
+    if (_isPP(s.subscriptionPlan)) return false;
     if (s.subscriptionEnd && new Date(s.subscriptionEnd) > new Date()) return false;
     return true;
   } catch(e) { return false; }
@@ -83,14 +87,18 @@ test('expired subscriptionEnd + no plan → isPremium()=false', function() {
   assert.strictEqual(_isPremium(), false);
 });
 
-test('source: subscriptionPlan=unlimited check is outside if(subscriptionEnd) block', function() {
+test('source: _isPremiumPlan helper exists and unlimited is in PREMIUM_PLANS list', function() {
+  assert.ok(coreSrc.includes('_SFC_PREMIUM_PLANS'), '_SFC_PREMIUM_PLANS must be defined');
+  assert.ok(coreSrc.includes("'unlimited'"), "'unlimited' must be in premium plans");
+  assert.ok(coreSrc.includes("'lifetime'"), "'lifetime' must be in premium plans");
+  assert.ok(coreSrc.includes('_isPremiumPlan'), '_isPremiumPlan helper must exist');
+  // _serverPremium must be checked before subscriptionEnd in isPremium()
   var premiumFn = coreSrc.slice(coreSrc.indexOf('function isPremium()'));
   premiumFn = premiumFn.slice(0, premiumFn.indexOf('\n}') + 2);
-  // The unlimited check must come BEFORE any subscriptionEnd reference
-  var unlimitedPos = premiumFn.indexOf("=== 'unlimited') return true");
-  var endPos = premiumFn.indexOf('subscriptionEnd &&');
-  assert.ok(unlimitedPos > 0, 'unlimited check must exist');
-  assert.ok(unlimitedPos < endPos || endPos === -1, 'unlimited check must come before subscriptionEnd check');
+  var serverPos = premiumFn.indexOf('_serverPremium');
+  var endPos    = premiumFn.indexOf('subscriptionEnd &&');
+  assert.ok(serverPos > 0, '_serverPremium check must exist in isPremium()');
+  assert.ok(serverPos < endPos, '_serverPremium check must come before subscriptionEnd check');
 });
 
 // ─── 2. isTrialUser() — must return false while status loading ───────────────
@@ -220,6 +228,62 @@ test('premium user empty localStorage except auth → premium after fetchUserSta
   _S = { subscriptionPlan: 'unlimited', _subStatusReady: true };
   assert.strictEqual(_isPremium(), true);
   assert.strictEqual(_isTrialUser(), false);
+});
+
+// ─── 7. _serverPremium boolean (THE real root cause) ────────────────────────
+suite('_serverPremium boolean — server-confirmed truth');
+
+test('_serverPremium=true → isPremium()=true regardless of plan/end', function() {
+  _S = { _serverPremium: true, subscriptionPlan: 'trial', subscriptionEnd: null, _subStatusReady: true };
+  assert.strictEqual(_isPremium(), true, '_serverPremium=true must override plan=trial');
+  assert.strictEqual(_isTrialUser(), false, '_serverPremium=true must suppress trial UI');
+  assert.strictEqual(_getTrialDaysLeft(), 0);
+});
+
+test('_serverPremium=false + _subStatusReady=true → isPremium()=false', function() {
+  _S = { _serverPremium: false, _subStatusReady: true, firstLoginDate: '2020-01-01' };
+  assert.strictEqual(_isPremium(), false);
+  assert.strictEqual(_isTrialUser(), true);
+});
+
+test('plan=legend → isPremium()=true (premium plan without unlimited)', function() {
+  _S = { subscriptionPlan: 'legend', subscriptionEnd: null, _subStatusReady: true };
+  assert.strictEqual(_isPremium(), true);
+  assert.strictEqual(_isTrialUser(), false);
+});
+
+test('plan=lifetime → isPremium()=true', function() {
+  _S = { subscriptionPlan: 'lifetime', subscriptionEnd: null, _subStatusReady: true };
+  assert.strictEqual(_isPremium(), true);
+});
+
+test('plan=admin → isPremium()=true', function() {
+  _S = { subscriptionPlan: 'admin', subscriptionEnd: null, _subStatusReady: true };
+  assert.strictEqual(_isPremium(), true);
+});
+
+test('server returns plan=trial but premium=true → isPremium()=true (plan poisoning fix)', function() {
+  // Simulate the old server bug: premium=true but plan='trial'
+  // fetchUserStatus now sets _serverPremium=true AND subscriptionPlan='unlimited' in this case
+  _S = { _serverPremium: true, subscriptionPlan: 'unlimited', _subStatusReady: true };
+  assert.strictEqual(_isPremium(), true);
+  assert.strictEqual(_isTrialUser(), false);
+});
+
+test('source: fetchUserStatus sets _serverPremium', function() {
+  assert.ok(subSrc.includes('_serverPremium'), 'supabase-client.js must set _serverPremium');
+  assert.ok(subSrc.includes("status.plan !== 'trial'"), 'must guard against plan=trial overwrite');
+});
+
+test('source: Netlify function checks UNLIMITED_PLANS before subscription_end', function() {
+  var netlify = fs.readFileSync(path.join(__dirname, '../netlify/functions/user-status.js'), 'utf8');
+  assert.ok(netlify.includes('UNLIMITED_PLANS'), 'Netlify function must define UNLIMITED_PLANS');
+  assert.ok(netlify.includes("'unlimited'"), "Netlify UNLIMITED_PLANS must include 'unlimited'");
+  assert.ok(netlify.includes("'lifetime'"), "Netlify UNLIMITED_PLANS must include 'lifetime'");
+  // UNLIMITED_PLANS check must come before subscription_end check
+  var unlimitedIdx = netlify.indexOf('UNLIMITED_PLANS');
+  var endIdx = netlify.indexOf('subscription_end && profile.subscription_end');
+  assert.ok(unlimitedIdx < endIdx, 'UNLIMITED_PLANS check must precede subscription_end check');
 });
 
 // ─── SUMMARY ─────────────────────────────────────────────────────────────────

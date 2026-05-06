@@ -4488,54 +4488,66 @@ function validatePregnancyState() {
 window.validatePregnancyState = validatePregnancyState;
 
 // ── PREMIUM / TRIAL SYSTEM ──────────────────────────────────────────────────
-// Single source of truth for subscription state. Three key invariants:
-//   1. subscriptionPlan === 'unlimited' → always premium, subscriptionEnd irrelevant
-//   2. While server status is loading (_subStatusReady not set), never flash trial UI
-//   3. All trial UI reads only these three functions — never raw S fields directly
+// Single source of truth for subscription state.
+// Priority chain (highest → lowest):
+//   1. S._serverPremium === true  → server confirmed premium (boolean from user-status API)
+//   2. S._serverPremium === false → server confirmed NOT premium
+//   3. S.subscriptionPlan in PREMIUM_PLANS → plan name recognised as paid
+//   4. S.subscriptionEnd > now → active dated subscription
+//   5. Trial window (firstLoginDate + 7d)
+//   6. Loading guard — if _subStatusReady not set, never flash trial UI
+var _SFC_PREMIUM_PLANS = ['unlimited','lifetime','premium','legend','champion','athlete','admin','paid'];
+function _isPremiumPlan(plan) {
+  return !!plan && _SFC_PREMIUM_PLANS.indexOf(plan) !== -1;
+}
 function isPremium() {
   try {
     var s = window.S;
     if (!s) return false;
-    // 'unlimited' plan is premium regardless of subscriptionEnd (may be null by design)
-    if (s.subscriptionPlan === 'unlimited') return true;
-    // Active dated subscription
+    // 1. Server-confirmed boolean is authoritative
+    if (s._serverPremium === true) return true;
+    if (s._serverPremium === false && s._subStatusReady) return false;
+    // 2. Recognised premium plan name (unlimited / lifetime / etc. with null end date)
+    if (_isPremiumPlan(s.subscriptionPlan)) return true;
+    // 3. Active dated subscription
     if (s.subscriptionEnd && new Date(s.subscriptionEnd) > new Date()) return true;
-    // Active trial window
+    // 4. Active trial window
     if (s.firstLoginDate) {
       var trialEnd = new Date(s.firstLoginDate);
       trialEnd.setUTCDate(trialEnd.getUTCDate() + 7);
       if (trialEnd > new Date()) return true;
     }
-    // Server status not yet confirmed — for logged-in users grant access while loading
-    if (!s._subStatusReady && window.AUTH && window.AUTH.isLoggedIn && window.AUTH.isLoggedIn()) return true;
-    // New user (no firstLoginDate yet) — grant trial access
+    // 5. Server status not yet confirmed — grant access while loading (never block by default)
+    if (!s._subStatusReady) return true;
+    // 6. New user (no firstLoginDate) — grant trial access
     if (!s.firstLoginDate) return true;
     return false;
   } catch(e) { return true; } // failsafe: on error always grant access
 }
-// Jours restants de trial (0 si expiré, si abonné, ou si statut pas encore chargé)
+// Returns 0 when premium or loading; returns trial days when genuinely in trial
 function getTrialDaysLeft() {
   try {
     var s = window.S;
     if (!s) return 0;
-    if (s.subscriptionPlan === 'unlimited') return 0;
+    if (s._serverPremium === true) return 0;
+    if (_isPremiumPlan(s.subscriptionPlan)) return 0;
     if (s.subscriptionEnd && new Date(s.subscriptionEnd) > new Date()) return 0;
-    if (!s.firstLoginDate) return s._subStatusReady ? 7 : 0;
+    if (!s._subStatusReady) return 0; // loading — never show countdown
+    if (!s.firstLoginDate) return 7;  // confirmed status, no date = new user
     var trialEnd = new Date(s.firstLoginDate);
     trialEnd.setUTCDate(trialEnd.getUTCDate() + 7);
-    var diff = Math.ceil((trialEnd - new Date()) / (1000 * 60 * 60 * 24));
-    return Math.max(0, diff);
+    return Math.max(0, Math.ceil((trialEnd - new Date()) / 86400000));
   } catch(e) { return 0; }
 }
-// isTrialUser — NEVER returns true while server subscription status is still loading.
-// This prevents every trial banner in the app from showing before the first fetch completes.
+// Returns true ONLY when server has confirmed the user is NOT premium.
+// Never returns true while loading or for any recognised premium plan.
 function isTrialUser() {
   try {
     var s = window.S;
     if (!s) return false;
-    // Server has not confirmed status yet — suppress all trial UI
-    if (!s._subStatusReady) return false;
-    if (s.subscriptionPlan === 'unlimited') return false;
+    if (!s._subStatusReady) return false;          // loading guard
+    if (s._serverPremium === true) return false;   // server says premium
+    if (_isPremiumPlan(s.subscriptionPlan)) return false;
     if (s.subscriptionEnd && new Date(s.subscriptionEnd) > new Date()) return false;
     return true;
   } catch(e) { return false; }

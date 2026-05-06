@@ -1238,10 +1238,11 @@ function renderProfilePage(container) {
  // ─── MON ABONNEMENT (Hermès — ivoire, orange tabac, Georgia serif) ───
  (function() {
    try {
-     // Use the authoritative isPremium() — handles unlimited+null-end, _subStatusReady guard
+     // Use the authoritative isPremium() — checks _serverPremium boolean first
      var _isSub = !!(typeof window.isPremium === 'function' ? window.isPremium()
        : (S.subscriptionPlan === 'unlimited' || (S.subscriptionEnd && new Date(S.subscriptionEnd) > new Date())));
-     var _subLoading = !S._subStatusReady && !S.subscriptionPlan && !S.subscriptionEnd;
+     // Loading: status not yet confirmed AND no server premium boolean available
+     var _subLoading = !S._subStatusReady && S._serverPremium === undefined;
      var _daysLeft = (typeof window.getTrialDaysLeft === 'function') ? window.getTrialDaysLeft() : 0;
      var _trialExpired = !_isSub && !_subLoading && _daysLeft === 0 && !!S.firstLoginDate;
      // Debug marker — readable from console: window.SFC_SUBSCRIPTION_DEBUG
@@ -1297,9 +1298,10 @@ function renderProfilePage(container) {
      // Sous-titre — type d'abonnement / période
      var _subtitle = '';
      if (_isSub) {
-       var _planLabel = (S.subscriptionPlan === 'unlimited') ? 'Accès illimité' : 'Abonnement actif';
+       var _noEndPlans = ['unlimited','lifetime','admin'];
+       var _planLabel = (_noEndPlans.indexOf(S.subscriptionPlan) !== -1 || (S._serverPremium && !S.subscriptionEnd)) ? 'Accès illimité' : 'Abonnement actif';
        var _endStr = '';
-       if (S.subscriptionEnd && S.subscriptionPlan !== 'unlimited') {
+       if (S.subscriptionEnd && _noEndPlans.indexOf(S.subscriptionPlan) === -1) {
          try {
            var _d = new Date(S.subscriptionEnd);
            var _monthName = (window.getMonthName ? window.getMonthName(_d.getMonth(), true) : ['janv.','févr.','mars','avril','mai','juin','juil.','août','sept.','oct.','nov.','déc.'][_d.getMonth()]);

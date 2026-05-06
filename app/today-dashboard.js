@@ -6305,6 +6305,32 @@ function renderTodayDashboard(p) {
 
   var wrapper = h('div', { style: 'padding-bottom:16px;' });
 
+  // ── TEMPORARY SUBSCRIPTION DEBUG BAR (remove after production verified) ──
+  // Shows live subscription state values. Dismiss by tapping.
+  try {
+    var _dbPremium = typeof window.isPremium === 'function' ? window.isPremium() : '?';
+    var _dbTrial   = typeof window.isTrialUser === 'function' ? window.isTrialUser() : '?';
+    var _dbDays    = typeof window.getTrialDaysLeft === 'function' ? window.getTrialDaysLeft() : '?';
+    var _dbSrc     = window.S && window.S._serverPremium !== undefined ? 'server' : (window.S && window.S._subStatusReady ? 'local' : 'loading');
+    var _dbBar     = h('div', {
+      id: 'sfc-sub-debug',
+      style: 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#111;color:#0f0;' +
+             'font-family:monospace;font-size:10px;padding:4px 8px;line-height:1.5;cursor:pointer;'
+    });
+    _dbBar.innerHTML =
+      'PLAN=' + (window.S && window.S.subscriptionPlan || 'undefined') +
+      ' | END=' + (window.S && window.S.subscriptionEnd || 'null') +
+      ' | READY=' + (window.S && window.S._subStatusReady || 'false') +
+      ' | SRVSUB=' + (window.S && window.S._serverPremium) +
+      ' | PREMIUM=' + _dbPremium +
+      ' | TRIAL=' + _dbTrial +
+      ' | DAYS=' + _dbDays +
+      ' | SRC=' + _dbSrc;
+    _dbBar.onclick = function() { var el = document.getElementById('sfc-sub-debug'); if (el) el.remove(); };
+    wrapper.appendChild(_dbBar);
+  } catch(_dbe) {}
+  // ── END DEBUG BAR ──
+
   // Welcome banner — Bon retour parmi nous (shown only after login, then cleared)
   if (S.justLoggedIn) {
     wrapper.appendChild(renderWelcomeBanner(S));

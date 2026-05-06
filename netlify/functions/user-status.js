@@ -114,8 +114,17 @@ exports.handler = async function(event) {
   let planEnd = null;
   let trialDaysLeft = 0;
 
-  // 1. Active paid subscription
-  if (profile.subscription_end && profile.subscription_end >= today) {
+  // Unlimited/lifetime plans — these never have a subscription_end date.
+  // Must be checked BEFORE the dated-subscription block.
+  const UNLIMITED_PLANS = ['unlimited', 'lifetime', 'premium', 'legend', 'champion', 'athlete', 'admin'];
+  if (profile.subscription_plan && UNLIMITED_PLANS.indexOf(profile.subscription_plan) !== -1) {
+    premium = true;
+    plan = profile.subscription_plan;
+    planEnd = profile.subscription_end || null; // null is valid for these plans
+  }
+
+  // 2. Active dated subscription (explicit end date — must still be in the future)
+  if (!premium && profile.subscription_end && profile.subscription_end >= today) {
     premium = true;
     plan = profile.subscription_plan || 'paid';
     planEnd = profile.subscription_end;
