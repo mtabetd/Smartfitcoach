@@ -449,47 +449,53 @@ function getTodayTotals() {
 }
 
 // ─── GET CALORIE TARGET ───
-// Utilise getAdaptedMealSplit() pour appliquer le calMultiplier correct selon objectif et type de jour.
-// Cohérence avec generateWeek() qui utilise la même fonction — BUG B symbiose sport/nutrition.
+// Chemin primaire : SFCDecisionCore (symbiose bidirectionnelle training↔nutrition).
+// Fallback : getAdaptedMealSplit() + bonus intensité exercices force (comportement précédent).
 function getCalorieTarget() {
-  if (window.calcTarget) {
-    var t = window.calcTarget();
-    if (t > 0) {
-      if (window.getAdaptedMealSplit) {
-        var _todayIdxCal = (new Date().getDay() + 6) % 7;
-        try {
-          var _splitCal = window.getAdaptedMealSplit(_todayIdxCal);
-          if (_splitCal && typeof _splitCal.calMultiplier === 'number') {
-            // Intensity bonus: séances avec composés force (Squat/DL/Bench) consomment
-            // significativement plus qu'une séance d'isolation.
-            // Tier 0 (compose+force) = +5% par exercice lourd, max +10%
-            // Réf: Ainsworth MET tables — squat 5RM ≈ 8-10 MET vs curl ≈ 3-4 MET
-            var _intensityBonus = 1.0;
-            try {
-              var _Sp = window.S && window.S.sportProgram;
-              var _todayDayObj = null;
-              if (Array.isArray(_Sp) && _Sp.length > 0) {
-                var _sdIdx = window.S.selectedSportDay;
-                _todayDayObj = (_sdIdx != null && _Sp[_sdIdx]) ? _Sp[_sdIdx] : _Sp[0];
-              }
-              if (_todayDayObj && Array.isArray(_todayDayObj.exercises)) {
-                var _t0 = _todayDayObj.exercises.filter(function(ex) {
-                  var _tg = ex.tags || [];
-                  return _tg.indexOf('compose') !== -1 &&
-                    (_tg.indexOf('force') !== -1 || _tg.indexOf('powerlifting') !== -1);
-                }).length;
-                if (_t0 >= 2) _intensityBonus = 1.10; // Squat + DL = +10%
-                else if (_t0 === 1) _intensityBonus = 1.05; // 1 composé force = +5%
-              }
-            } catch(e2) {}
-            return Math.round(t * _splitCal.calMultiplier * _intensityBonus);
-          }
-        } catch(e) {}
+  if (!window.calcTarget) return 0;
+  var t = window.calcTarget();
+  if (t <= 0) return 0;
+
+  // ── Chemin primaire : moteur décisionnel central ──────────────────────────
+  if (window.SFCDecisionCore) {
+    try {
+      var _mod = window.SFCDecisionCore.getNutritionModulators();
+      if (_mod && typeof _mod.calMultiplier === 'number') {
+        return Math.round(t * _mod.calMultiplier);
       }
-      return t;
-    }
+    } catch(e) {}
   }
-  return 0;
+
+  // ── Fallback : getAdaptedMealSplit + bonus composés force ─────────────────
+  if (window.getAdaptedMealSplit) {
+    var _todayIdxCal = (new Date().getDay() + 6) % 7;
+    try {
+      var _splitCal = window.getAdaptedMealSplit(_todayIdxCal);
+      if (_splitCal && typeof _splitCal.calMultiplier === 'number') {
+        var _intensityBonus = 1.0;
+        try {
+          var _Sp = window.S && window.S.sportProgram;
+          var _todayDayObj = null;
+          if (Array.isArray(_Sp) && _Sp.length > 0) {
+            var _sdIdx = window.S.selectedSportDay;
+            _todayDayObj = (_sdIdx != null && _Sp[_sdIdx]) ? _Sp[_sdIdx] : _Sp[0];
+          }
+          if (_todayDayObj && Array.isArray(_todayDayObj.exercises)) {
+            var _t0 = _todayDayObj.exercises.filter(function(ex) {
+              var _tg = ex.tags || [];
+              return _tg.indexOf('compose') !== -1 &&
+                (_tg.indexOf('force') !== -1 || _tg.indexOf('powerlifting') !== -1);
+            }).length;
+            if (_t0 >= 2) _intensityBonus = 1.10;
+            else if (_t0 === 1) _intensityBonus = 1.05;
+          }
+        } catch(e2) {}
+        return Math.round(t * _splitCal.calMultiplier * _intensityBonus);
+      }
+    } catch(e) {}
+  }
+
+  return t;
 }
 
 // ─── GET MACRO TARGETS ───
@@ -6267,6 +6273,12 @@ function renderTodayDashboard(p) {
   // si le mode inclut la nutrition et que _nm est périmé ou absent.
   if (S.appMode !== 'sport' && !S._nm && window.computeNutritionState) {
     try { window.computeNutritionState(false); } catch(e) {}
+  }
+
+  // Moteur décisionnel central : rafraîchit la décision quotidienne (cache 5 min).
+  // Doit s'exécuter APRÈS computeNutritionState (besoin de S._nm pour le signal nutrition→training).
+  if (window.SFCDecisionCore) {
+    try { window.SFCDecisionCore.decide(); } catch(e) {}
   }
 
   p.innerHTML = '';

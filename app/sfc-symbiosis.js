@@ -533,6 +533,10 @@
     if (s.appMode !== 'sport' && typeof window.computeNutritionState === 'function') {
       try { window.computeNutritionState(true); } catch (_e) {}
     }
+    // Invalider la décision quotidienne — elle sera recalculée avec le nouvel état
+    if (typeof window.SFCDecisionCore !== 'undefined' && window.SFCDecisionCore.invalidate) {
+      try { window.SFCDecisionCore.invalidate(); } catch (_e) {}
+    }
   }
 
   // ── API publique ──────────────────────────────────────────────────────────

@@ -47,6 +47,7 @@ const DEFERRED_SCRIPTS = [
   './daily-decision-engine.js',
   './daily-decision-engine-v2.js',
   './daily-decision-engine-v3.js',
+  './sfc-decision-core.js',
   './workout-library-data.js',
   './session-history.js',
   './workout-selector.js',
