@@ -2227,6 +2227,31 @@ function render() {
  // Logged in → app
  var wrap = h('div', {'class': 'app'});
 
+ // ── GLOBAL SUBSCRIPTION DEBUG BAR (TEMP — tap × to dismiss) ──────────────
+ // Shows on EVERY view so values are provable after real device load.
+ try {
+   var _gDbKey = 'sfc_sub_debug_dismissed';
+   if (!sessionStorage.getItem(_gDbKey)) {
+     var _gPlan  = (window.S && window.S.subscriptionPlan) || 'undefined';
+     var _gSrvP  = (window.S && window.S._serverPremium !== undefined) ? String(window.S._serverPremium) : 'undefined';
+     var _gReady = (window.S && window.S._subStatusReady) ? 'true' : 'false';
+     var _gIsP   = (typeof window.isPremium === 'function') ? String(window.isPremium()) : '?';
+     var _gIsT   = (typeof window.isTrialUser === 'function') ? String(window.isTrialUser()) : '?';
+     var _gDays  = (typeof window.getTrialDaysLeft === 'function') ? String(window.getTrialDaysLeft()) : '?';
+     var _gBv    = (window.SFC_BUNDLE_VERSION || 'unknown');
+     var _gEl = document.createElement('div');
+     _gEl.id = 'sfc-global-debug';
+     _gEl.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:999999;background:#000;color:#0f0;' +
+       'font-size:9px;font-family:monospace;padding:3px 6px;line-height:1.4;display:flex;justify-content:space-between;align-items:center;';
+     _gEl.innerHTML = '<span>PLAN=<b>' + _gPlan + '</b> | SRV_PREMIUM=<b>' + _gSrvP + '</b> | IS_PREMIUM=<b>' + _gIsP +
+       '</b> | IS_TRIAL=<b>' + _gIsT + '</b> | DAYS=<b>' + _gDays + '</b> | READY=<b>' + _gReady + '</b> | BV=<b>' + _gBv + '</b></span>' +
+       '<span onclick="sessionStorage.setItem(\'sfc_sub_debug_dismissed\',\'1\');document.getElementById(\'sfc-global-debug\').remove();" ' +
+       'style="cursor:pointer;padding:0 6px;font-size:12px;color:#fff;">×</span>';
+     document.body ? document.body.insertBefore(_gEl, document.body.firstChild) : wrap.insertBefore(_gEl, wrap.firstChild);
+   }
+ } catch(_gDbe) {}
+ // ── END GLOBAL DEBUG BAR ──
+
  // User bar — épuré : logo gauche | langue + avatar droite
  var user = AUTH.getUser();
  var ub = h('div', {'class': 'user-bar'});
