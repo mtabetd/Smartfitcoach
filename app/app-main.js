@@ -1241,11 +1241,22 @@ function renderProfilePage(container) {
      var _isSub = !!(S.subscriptionPlan === 'unlimited' || (S.subscriptionEnd && new Date(S.subscriptionEnd) > new Date()));
      var _daysLeft = (typeof window.getTrialDaysLeft === 'function') ? window.getTrialDaysLeft() : 7;
      var _trialExpired = !_isSub && _daysLeft === 0 && !!S.firstLoginDate;
+     // Debug marker — readable from console: window.SFC_SUBSCRIPTION_DEBUG
+     try {
+       window.SFC_SUBSCRIPTION_DEBUG = {
+         statePlan: S.subscriptionPlan,
+         stateEnd: S.subscriptionEnd,
+         isPremium: _isSub,
+         daysLeft: _daysLeft,
+         renderSource: 'render()',
+         renderAt: new Date().toISOString()
+       };
+     } catch(_sde) {}
 
-     // Palette selon état
-     var _accent = _isSub ? 'var(--ink-900,#0A0A09)' : 'var(--orange-ink,#7A3B0E)';
-     var _bgTint = _isSub ? 'var(--paper-2,#F4F1EA)' : 'rgba(232,111,30,0.04)';
-     var _accentBorder = _isSub ? 'var(--line,#D8D8D0)' : 'var(--orange,#E86F1E)';
+     // Palette selon état — même style Hermès neutre dans les deux cas
+     var _accent = 'var(--ink-900,#0A0A09)';
+     var _bgTint = 'var(--paper-2,#F4F1EA)';
+     var _accentBorder = 'var(--line,#D8D8D0)';
 
      var card = h('div', {style:
        'margin:28px 0;padding:28px 24px;border:1px solid ' + _accentBorder + ';' +
@@ -3635,6 +3646,10 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
      if (window.render) window.render();
    }
    SupaSync.startAutoSync(); // Démarrer après syncOnLogin pour éviter la double-écriture
+   // Pull authoritative subscription state from server — same as manual login path
+   if (typeof SupaSync.fetchUserStatus === 'function') {
+     SupaSync.fetchUserStatus().then(function() { render(); }).catch(function() { render(); });
+   }
  }).catch(function() { SupaSync.startAutoSync(); });
  }
 } else {
