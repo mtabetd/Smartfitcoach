@@ -4488,49 +4488,68 @@ function validatePregnancyState() {
 window.validatePregnancyState = validatePregnancyState;
 
 // ── PREMIUM / TRIAL SYSTEM ──────────────────────────────────────────────────
-// isPremium() retourne true si :
-//   - L'utilisateur a un abonnement actif (subscriptionEnd > today)
-//   - OU l'utilisateur est en période trial (firstLoginDate + 7 jours > today)
-//   - Fallback = true (en cas de bug, l'utilisateur a accès — jamais de blocage par erreur)
+// Single source of truth for subscription state.
+// Priority chain (highest → lowest):
+//   1. S._serverPremium === true  → server confirmed premium (boolean from user-status API)
+//   2. S._serverPremium === false → server confirmed NOT premium
+//   3. S.subscriptionPlan in PREMIUM_PLANS → plan name recognised as paid
+//   4. S.subscriptionEnd > now → active dated subscription
+//   5. Trial window (firstLoginDate + 7d)
+//   6. Loading guard — if _subStatusReady not set, never flash trial UI
+var _SFC_PREMIUM_PLANS = ['unlimited','lifetime','premium','legend','champion','athlete','admin','paid'];
+function _isPremiumPlan(plan) {
+  return !!plan && _SFC_PREMIUM_PLANS.indexOf(plan) !== -1;
+}
 function isPremium() {
   try {
     var s = window.S;
-    if (!s) return false; // FIX 2026-04-16 — pas de state = pas premium
-    // Abonnement payant actif
-    if (s.subscriptionEnd) {
-      if (s.subscriptionPlan === 'unlimited') return true;
-      if (new Date(s.subscriptionEnd) > new Date()) return true;
-    }
-    // Trial 7 jours
+    if (!s) return false;
+    // 1. Server-confirmed boolean is authoritative
+    if (s._serverPremium === true) return true;
+    if (s._serverPremium === false && s._subStatusReady) return false;
+    // 2. Recognised premium plan name (unlimited / lifetime / etc. with null end date)
+    if (_isPremiumPlan(s.subscriptionPlan)) return true;
+    // 3. Active dated subscription
+    if (s.subscriptionEnd && new Date(s.subscriptionEnd) > new Date()) return true;
+    // 4. Active trial window
     if (s.firstLoginDate) {
       var trialEnd = new Date(s.firstLoginDate);
       trialEnd.setUTCDate(trialEnd.getUTCDate() + 7);
       if (trialEnd > new Date()) return true;
     }
-    // Pas de firstLoginDate = nouvel utilisateur = accès trial
+    // 5. Server status not yet confirmed — grant access while loading (never block by default)
+    if (!s._subStatusReady) return true;
+    // 6. New user (no firstLoginDate) — grant trial access
     if (!s.firstLoginDate) return true;
-    // Trial expiré et pas d'abonnement
     return false;
-  } catch(e) { return false; } // FIX 2026-04-16 — erreur = pas premium (avant: true = tout le monde premium en cas de bug)
+  } catch(e) { return true; } // failsafe: on error always grant access
 }
-// Jours restants de trial (0 si expiré ou si abonné)
+// Returns 0 when premium or loading; returns trial days when genuinely in trial
 function getTrialDaysLeft() {
   try {
     var s = window.S;
-    if (!s || !s.firstLoginDate) return 7;
-    if (s.subscriptionEnd && (s.subscriptionPlan === 'unlimited' || new Date(s.subscriptionEnd) > new Date())) return 0; // abonné
+    if (!s) return 0;
+    if (s._serverPremium === true) return 0;
+    if (_isPremiumPlan(s.subscriptionPlan)) return 0;
+    if (s.subscriptionEnd && new Date(s.subscriptionEnd) > new Date()) return 0;
+    if (!s._subStatusReady) return 0; // loading — never show countdown
+    if (!s.firstLoginDate) return 7;  // confirmed status, no date = new user
     var trialEnd = new Date(s.firstLoginDate);
     trialEnd.setUTCDate(trialEnd.getUTCDate() + 7);
-    var diff = Math.ceil((trialEnd - new Date()) / (1000 * 60 * 60 * 24));
-    return Math.max(0, diff);
-  } catch(e) { return 7; }
+    return Math.max(0, Math.ceil((trialEnd - new Date()) / 86400000));
+  } catch(e) { return 0; }
 }
+// Returns true ONLY when server has confirmed the user is NOT premium.
+// Never returns true while loading or for any recognised premium plan.
 function isTrialUser() {
   try {
     var s = window.S;
     if (!s) return false;
-    if (s.subscriptionEnd && (s.subscriptionPlan === 'unlimited' || new Date(s.subscriptionEnd) > new Date())) return false;
-    return true; // pas d'abonnement = trial (actif ou expiré)
+    if (!s._subStatusReady) return false;          // loading guard
+    if (s._serverPremium === true) return false;   // server says premium
+    if (_isPremiumPlan(s.subscriptionPlan)) return false;
+    if (s.subscriptionEnd && new Date(s.subscriptionEnd) > new Date()) return false;
+    return true;
   } catch(e) { return false; }
 }
 // Pricing cache — chargé en lazy depuis l'API get-pricing
@@ -4611,6 +4630,7 @@ function showPaywall(feature) {
   upgradeBtn.textContent = 'Découvrir Premium →';
   upgradeBtn.onclick = function() {
     dismiss();
+    if (window.SupaSync) { try { window.SupaSync._userStatusCacheTs = 0; } catch(_e) {} }
     if (window.S && window.render) { window.S.view = 'profil'; window.render(); }
   };
   var closeBtn = document.createElement('button');

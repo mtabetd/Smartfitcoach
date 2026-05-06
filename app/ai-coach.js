@@ -1242,7 +1242,7 @@ function sendMessage() {
   if (window.TRACKER) window.TRACKER.track('ai_coach_used', {});
 
   // Premium gate — coach IA illimité = premium (trial = 3 messages/jour)
-  if (window.isTrialUser && window.isTrialUser()) {
+  if (window.isTrialUser && window.isTrialUser() && !(window.S && window.S._serverPremium) && !(window.isPremium && window.isPremium())) {
     var _today = (window.sfcLocalDateStr ? window.sfcLocalDateStr() : new Date().toISOString().slice(0, 10));
     var _rawCount = (function() { try { return JSON.parse(localStorage.getItem('sfc_coach_count') || 'null'); } catch(e) { return null; } })();
     var _coachCount = (_rawCount && _rawCount.date === _today) ? (_rawCount.n || 0) : 0;

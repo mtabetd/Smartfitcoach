@@ -1266,6 +1266,10 @@ function renderStep4(p) {
           else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
         }
         if (window.validatePregnancyState) validatePregnancyState();
+        // Regenerate sport program immediately so no stale program survives a medical change
+        if (typeof window.generateSportProgram === 'function' && Array.isArray(S.sportProgram) && S.sportProgram.length) {
+          try { S.sportProgram = window.generateSportProgram(); S.sportProgramValidated = true; S.sportProgramValidatedAt = new Date().toISOString(); } catch(_rme) {}
+        }
         window.render();
       }}, (function() {
         var _inner = h('div', {});

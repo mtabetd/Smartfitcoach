@@ -721,7 +721,7 @@ window.renderModuleChoice = function renderModuleChoice(content) {
 
    // SVG icon
    var iconWrap = h('div', {style: 'flex-shrink:0;margin-top:2px'});
-   iconWrap.innerHTML = card.svg;
+   iconWrap.innerHTML = (typeof _sfcSanitize === 'function') ? _sfcSanitize(card.svg) : '';
    el.appendChild(iconWrap);
 
    // Text
@@ -1238,16 +1238,24 @@ function renderProfilePage(container) {
  // ─── MON ABONNEMENT (Hermès — ivoire, orange tabac, Georgia serif) ───
  (function() {
    try {
-     var _isSub = !!(S.subscriptionEnd && (S.subscriptionPlan === 'unlimited' || new Date(S.subscriptionEnd) > new Date()));
-     var _daysLeft = (typeof window.getTrialDaysLeft === 'function') ? window.getTrialDaysLeft() : 7;
-     var _trialExpired = !_isSub && _daysLeft === 0 && !!S.firstLoginDate;
+     // Use the authoritative isPremium() — checks _serverPremium boolean first
+     var _isSub = !!(typeof window.isPremium === 'function' ? window.isPremium()
+       : (S.subscriptionPlan === 'unlimited' || (S.subscriptionEnd && new Date(S.subscriptionEnd) > new Date())));
+     // Loading: status not yet confirmed AND no server premium boolean available
+     var _subLoading = !S._subStatusReady && S._serverPremium === undefined;
+     var _daysLeft = (typeof window.getTrialDaysLeft === 'function') ? window.getTrialDaysLeft() : 0;
+     var _trialExpired = !_isSub && !_subLoading && _daysLeft === 0 && !!S.firstLoginDate;
      // Debug marker — readable from console: window.SFC_SUBSCRIPTION_DEBUG
      try {
        window.SFC_SUBSCRIPTION_DEBUG = {
          statePlan: S.subscriptionPlan,
          stateEnd: S.subscriptionEnd,
+         subStatusReady: S._subStatusReady,
+         subLoading: _subLoading,
          isPremium: _isSub,
          daysLeft: _daysLeft,
+         shouldShowTrialBanner: !_isSub && !_subLoading,
+         shouldShowPaywall: !_isSub && !_subLoading,
          renderSource: 'render()',
          renderAt: new Date().toISOString()
        };
@@ -1270,13 +1278,14 @@ function renderProfilePage(container) {
        'display:flex;align-items:center;gap:10px;'
      });
      _topLabel.appendChild(h('span', {style: 'flex:1;height:1px;background:' + _accentBorder + ';'}));
-     _topLabel.appendChild(h('span', {}, _isSub ? 'MEMBRE' : 'VERSION D\u2019ESSAI'));
+     _topLabel.appendChild(h('span', {}, _isSub ? 'MEMBRE' : (_subLoading ? '—' : 'VERSION D\u2019ESSAI')));
      _topLabel.appendChild(h('span', {style: 'flex:1;height:1px;background:' + _accentBorder + ';'}));
      card.appendChild(_topLabel);
 
      // Numéro ou marqueur central Georgia — signature de la maison
      var _numRow = h('div', {style: 'text-align:center;margin-bottom:6px;'});
-     if (_isSub) {
+     if (_isSub || _subLoading) {
+       // Premium confirmed, or still loading — never show trial countdown
        _numRow.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:40px;color:var(--black);line-height:1;'}, '\u2014'));
      } else if (_daysLeft > 0) {
        _numRow.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:56px;color:var(--black);line-height:1;font-weight:normal;letter-spacing:-1px;'}, String(_daysLeft)));
@@ -1289,9 +1298,10 @@ function renderProfilePage(container) {
      // Sous-titre — type d'abonnement / période
      var _subtitle = '';
      if (_isSub) {
-       var _planLabel = (S.subscriptionPlan === 'unlimited') ? 'Accès illimité' : 'Abonnement actif';
+       var _noEndPlans = ['unlimited','lifetime','admin'];
+       var _planLabel = (_noEndPlans.indexOf(S.subscriptionPlan) !== -1 || (S._serverPremium && !S.subscriptionEnd)) ? 'Accès illimité' : 'Abonnement actif';
        var _endStr = '';
-       if (S.subscriptionEnd && S.subscriptionPlan !== 'unlimited') {
+       if (S.subscriptionEnd && _noEndPlans.indexOf(S.subscriptionPlan) === -1) {
          try {
            var _d = new Date(S.subscriptionEnd);
            var _monthName = (window.getMonthName ? window.getMonthName(_d.getMonth(), true) : ['janv.','févr.','mars','avril','mai','juin','juil.','août','sept.','oct.','nov.','déc.'][_d.getMonth()]);
@@ -1347,7 +1357,7 @@ function renderProfilePage(container) {
      card.appendChild(_featsWrap);
 
      // Bloc progression réelle utilisateur — preuve sociale personnalisée
-     if (!_isSub) {
+     if (!_isSub && !_subLoading) {
        (function() {
          var _uid = S.user && S.user.id;
          var _shObj = (S.sessionHistory && typeof S.sessionHistory === 'object' && !Array.isArray(S.sessionHistory)) ? S.sessionHistory : {};
@@ -1404,7 +1414,7 @@ function renderProfilePage(container) {
      }
 
      // Sélecteur de plan — Hermès pricing UI
-     if (!_isSub) {
+     if (!_isSub && !_subLoading) {
        var _pData = window.SFC_PRICING_DATA || [];
        var _ui = window._sfcPricingUI = window._sfcPricingUI || { tier: 'athlete', duration: 'saison' };
        var _tiers = ['athlete', 'champion', 'legende'];
@@ -1621,7 +1631,7 @@ function renderProfilePage(container) {
      }
 
           // CTA — bouton Hermès noir laqué
-     if (!_isSub) {
+     if (!_isSub && !_subLoading) {
        var _pData2 = window.SFC_PRICING_DATA || [];
        var _ui2 = window._sfcPricingUI || { tier: 'athlete', duration: 'saison' };
        var _ctaPlan = null;
@@ -2379,6 +2389,13 @@ function render() {
  }
 
  if (S.view === 'profil' || S.view === 'profile') {
+ // Refresh subscription status when profile is opened (2-min TTL vs 15-min elsewhere)
+ if (window.SupaSync && typeof SupaSync.fetchUserStatus === 'function') {
+   var _pNow = Date.now();
+   if (!SupaSync._userStatusCacheTs || (_pNow - SupaSync._userStatusCacheTs) > 2 * 60 * 1000) {
+     SupaSync.fetchUserStatus().then(function() { window.render(); }).catch(function() {});
+   }
+ }
  renderProfilePage(content);
  } else if (['calendar','sport','nutrition','analytics','social'].indexOf(S.view) !== -1) {
  var _modMap = { calendar: 'SMART_CALENDAR', sport: 'SPORT', nutrition: 'NUTRITION', analytics: 'ANALYTICS', social: 'SOCIAL' };
@@ -2660,6 +2677,10 @@ function renderLogin(app) {
  render(); // Re-render après sync cloud : nStep migré, unités à jour, vue recalculée
  }
  SupaSync.startAutoSync(); // Démarrer après syncOnLogin pour éviter la double-écriture
+ // Pull authoritative subscription state from server — DB columns may be NULL for unlimited plans
+ if (typeof SupaSync.fetchUserStatus === 'function') {
+ SupaSync.fetchUserStatus().then(function() { render(); }).catch(function() { render(); });
+ }
  }).catch(function(e) { console.warn('[Login] syncOnLogin unexpected error:', e); SupaSync.startAutoSync(); });
  }
  if (window.GAMIFICATION) { GAMIFICATION.updateStreak(); GAMIFICATION.unlockBadge('first_login'); }

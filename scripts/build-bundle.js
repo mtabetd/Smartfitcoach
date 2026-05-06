@@ -78,8 +78,32 @@ const parts = DEFERRED_SCRIPTS.map(function(file) {
   return '\n/* ====== ' + file + ' ====== */\n' + content;
 });
 
-const banner = '/* SmartFitCoach bundle — generated at build time. Do not edit. */\n';
+// Version token for cache-busting — injected into index.html bundle.js reference
+// and exposed as window.SFC_BUNDLE_VERSION so the debug bar can show it.
+const buildVersion = process.env.COMMIT_REF
+  ? process.env.COMMIT_REF.slice(0, 8)
+  : Date.now().toString(36);
+
+const banner = '/* SmartFitCoach bundle v' + buildVersion + ' — generated at build time. Do not edit. */\n' +
+  'window.SFC_BUNDLE_VERSION="' + buildVersion + '";\n';
 fs.writeFileSync(bundlePath, banner + parts.join('\n'));
+
+// Patch index.html to add ?v= cache-busting query on bundle.js reference.
+// This forces browser/CDN to fetch the new bundle even with immutable cache headers.
+const indexPath = path.join(APP_DIR, 'index.html');
+try {
+  const indexHtml = fs.readFileSync(indexPath, 'utf8');
+  const patched = indexHtml.replace(
+    /(<script[^>]+src=["']\.\/bundle\.js)(\?v=[^"']*)?/,
+    '$1?v=' + buildVersion
+  );
+  if (patched !== indexHtml) {
+    fs.writeFileSync(indexPath, patched);
+    console.log('[build-bundle] index.html bundle.js?v=' + buildVersion + ' (cache buster updated)');
+  }
+} catch(e) {
+  console.warn('[build-bundle] index.html patch failed:', e.message);
+}
 const rawSize = fs.statSync(bundlePath).size;
 console.log('[build-bundle] bundle.js written (' + parts.length + ' scripts, ' + Math.round(rawSize / 1024) + ' KB raw)');
 

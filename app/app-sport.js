@@ -1691,6 +1691,28 @@ function renderObjectif(p) {
  // No Continue button needed - cards auto-navigate
 }
 
+// ─── MEDICAL SAFETY LIMITS ───
+var MEDICAL_LIMITS = {
+  HTA_INTENSITY_CAP: 0.60  // ESC/ESH 2018: max 60% 1RM for severe hypertension
+};
+window.MEDICAL_LIMITS = MEDICAL_LIMITS;
+
+// ─── BODY WEIGHT RESOLVER ───
+// Priority: S.weight → last entry in S.weightHistory → 75 kg default
+function _resolveBodyWeight() {
+  var w = parseFloat(window.S && window.S.weight);
+  if (w > 0) return w;
+  var hist = window.S && window.S.weightHistory;
+  if (Array.isArray(hist)) {
+    for (var _wi = hist.length - 1; _wi >= 0; _wi--) {
+      var _e = hist[_wi];
+      var _hw = parseFloat(_e && (_e.weight || _e.w || _e));
+      if (_hw > 0) return _hw;
+    }
+  }
+  return 75;
+}
+
 // ─── ESTIMATION CALORIQUE PAR SEANCE ───
 // Formule MET : kcal = MET x poids_kg x duree_heures (Ainsworth 2011)
 function estimateKcal(sportType, level, durationMins) {
@@ -1725,8 +1747,7 @@ function estimateKcal(sportType, level, durationMins) {
  if (MET_VALUES[sportType]) {
   met = MET_VALUES[sportType][levelNorm] || MET_VALUES[sportType][level] || MET_VALUES[sportType]['default'] || 8;
  }
- var _rawWeight = parseFloat(S.weight);
- var poids = (_rawWeight > 0) ? _rawWeight : 75;
+ var poids = _resolveBodyWeight();
  var defaultDur = SESSION_DURATION_DEFAULTS[sportType] ? (SESSION_DURATION_DEFAULTS[sportType][levelNorm] || SESSION_DURATION_DEFAULTS[sportType][level] || 60) : 60;
  var dureeMin = durationMins || defaultDur;
  var duree = dureeMin / 60;
@@ -2219,7 +2240,7 @@ function renderChargesQuestionnaire(p) {
  }
  if (!S.muscuStrengthProfile || typeof S.muscuStrengthProfile !== 'object' || Array.isArray(S.muscuStrengthProfile)) S.muscuStrengthProfile = {};
 
- var bodyWeight = S.weight || 75;
+ var bodyWeight = _resolveBodyWeight();
  var strengthThresholds = {
  bench_press: {low:0.5,mid:1.0}, squat: {low:0.75,mid:1.25},
  deadlift: {low:1.0,mid:1.5}, overhead_press: {low:0.35,mid:0.65},
@@ -2297,7 +2318,7 @@ function renderChargesQuestionnaire(p) {
 
  // ─── STRENGTH LEADERBOARD PERSO ───
  (function() {
-   var _bw = S.weight || 75;
+   var _bw = _resolveBodyWeight();
    var _sex = window.isFemale(S) ? 'f' : 'm';
    // Percentile thresholds [ratio×BW] by sex for Bench/Squat/Deadlift
    // Sources: Symmetric Strength population data (general gym population)
@@ -2354,7 +2375,7 @@ function renderChargesQuestionnaire(p) {
 
  // ─── EXERCICES AVANCÉS DÉBLOQUÉS ───
  (function() {
-   var _bw = S.weight || 75;
+   var _bw = _resolveBodyWeight();
    var _prof = S.muscuStrengthProfile || {};
    function _est1rm(key) {
      var w = _prof[key] || 0;
@@ -4848,8 +4869,14 @@ function renderCrossfitProgram(p) {
  var _cfDur = _cfDurMap[_cfLevel] || 75;
  var _cfKcal = estimateKcal('crossfit', _cfLevel, _cfDur);
  var _cfSessKey = (S.selectedCrossfitDay || 0) + '_' + dateStr;
- S.sessionHistory[_cfSessKey] = {duration: _cfDur, kcalBase: _cfKcal ? _cfKcal.base : 0, kcalEpoc: _cfKcal ? _cfKcal.epoc : 0, kcalTotal: _cfKcal ? _cfKcal.total : 0, date: new Date().toISOString(), sport: 'crossfit', wodDay: wodDay, score: scoreInput.value.trim()};
+ var _cfTrainingLoad = (_cfLevel === 'rx_plus' || _cfLevel === 'rx') ? 'heavy' : (_cfLevel === 'inter') ? 'moderate' : 'light';
+ S.sessionHistory[_cfSessKey] = {duration: _cfDur, kcalBase: _cfKcal ? _cfKcal.base : 0, kcalEpoc: _cfKcal ? _cfKcal.epoc : 0, kcalTotal: _cfKcal ? _cfKcal.total : 0, date: new Date().toISOString(), sport: 'crossfit', trainingLoad: _cfTrainingLoad, wodDay: wodDay, score: scoreInput.value.trim()};
  (function(){ var _k=Object.keys(S.sessionHistory||{}).sort(); if(_k.length>365){_k.slice(0,_k.length-365).forEach(function(k){delete S.sessionHistory[k];});} })();
+ if (window.SFCSymbiosis && window.SFCSymbiosis.processCompletedSession) {
+   var _cfN = _cfTrainingLoad === 'heavy' ? 6 : _cfTrainingLoad === 'light' ? 2 : 4;
+   var _cfEx = []; for (var _cfi = 0; _cfi < _cfN; _cfi++) { _cfEx.push({name: 'CrossFit' + (_cfi + 1), sets: 3, reps: 10}); }
+   try { window.SFCSymbiosis.processCompletedSession({sessionId: _cfSessKey, date: dateStr, exercises: _cfEx, trainingLoad: _cfTrainingLoad}); } catch(_e) {}
+ } else if (typeof window.computeNutritionState === 'function') { try { window.computeNutritionState(true); } catch(_e) {} }
  if (window.GAMIFICATION) { try { window.GAMIFICATION.updateStreak(); } catch(e) {} }
  window.BLACKBOX && window.BLACKBOX.log('cf_wod_done', {day: wodDay, score: scoreInput.value.trim()});
  if (window.showToast) window.showToast((window.isEnglish && window.isEnglish() ? '✓ WOD done — day ' : '✓ WOD terminé — jour ') + wodDay + (scoreInput.value.trim() ? ' · ' + scoreInput.value.trim() : ''), 'success');
@@ -5311,7 +5338,7 @@ function getSuggestedWeight(exerciseName, reps, phase) {
  pct = Math.min(0.95, Math.max(0.40, pct + _macroBonus));
  // HTA sévère : limiter à 60% du 1RM (ESC/ESH 2018 — éviter manœuvre de Valsalva)
  if (Array.isArray(S.medical) && S.medical.indexOf('hta_severe') !== -1) {
-   pct = Math.min(pct, 0.60);
+   pct = Math.min(pct, MEDICAL_LIMITS.HTA_INTENSITY_CAP);
  }
  // Priority 1: use user's actual 1RM from strength profile (Epley-calculated)
  if (S.muscuStrengthProfile && window.MUSCU_KEY_EXERCISES) {
@@ -6259,7 +6286,7 @@ function loadMuscuWeek() {
 
 function renderWeekTracker(p) {
  loadMuscuWeek();
- var week = S.muscuWeek || 1;
+ var week = (typeof sfcGetEffectiveWeek === 'function') ? sfcGetEffectiveWeek() : (S.muscuWeek || 1);
  var phase = getMuscuPhase(week);
  var cycleNum = S.muscuCycle || 1;
  var macroPhase = getMacroCyclePhase(cycleNum);
@@ -6560,7 +6587,7 @@ window.scoreSession = scoreSession;
 // On utilise donc MET pour la résistance et Keytel pour les séances à dominante cardio.
 function calcSessionKcal(exercises, durationMin) {
  var s = window.S;
- var weight = s.weight || 75;
+ var weight = _resolveBodyWeight();
  var age = getAge() || 30;
  var sex = window.isFemale(s) ? 'femme' : 'homme';
  // Phase courante → RPE (session-driven)
@@ -7195,7 +7222,7 @@ function renderMusculationProgram(p) {
  // ─── SUIVI 7 SEMAINES (collapsible) ───
  (function() {
   loadMuscuWeek();
-  var _wkNum = S.muscuWeek || 1;
+  var _wkNum = (typeof sfcGetEffectiveWeek === 'function') ? sfcGetEffectiveWeek() : (S.muscuWeek || 1);
   var _wkPhase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(_wkNum) : {label: '', color: 'var(--ink-900,#0A0A09)'};
   var _wtOpen = !!S._weekTrackerOpen;
   var _wtBar = h('div', {
@@ -10545,8 +10572,12 @@ function renderRunningProgram(p) {
         if (!S.sessionHistory) S.sessionHistory = {};
         var _sessKey = S.selectedRunDay + '_' + _todayDate;
         var _kcalEst = estimateKcal('running', S.runningLevel || 'intermediate', Math.round(_min));
-        S.sessionHistory[_sessKey] = {duration: Math.round(_min), kcalBase: _kcalEst ? _kcalEst.base : 0, kcalEpoc: _kcalEst ? _kcalEst.epoc : 0, kcalTotal: _kcalEst ? _kcalEst.total : 0, date: new Date().toISOString(), sport: 'running'};
+        var _runTrainingLoad = (S.runningLevel === 'advanced' || S.runningLevel === 'elite') ? 'heavy' : 'moderate';
+        S.sessionHistory[_sessKey] = {duration: Math.round(_min), kcalBase: _kcalEst ? _kcalEst.base : 0, kcalEpoc: _kcalEst ? _kcalEst.epoc : 0, kcalTotal: _kcalEst ? _kcalEst.total : 0, date: new Date().toISOString(), sport: 'running', trainingLoad: _runTrainingLoad};
         (function(){ var _k=Object.keys(S.sessionHistory||{}).sort(); if(_k.length>365){_k.slice(0,_k.length-365).forEach(function(k){delete S.sessionHistory[k];});} })();
+        if (window.SFCSymbiosis && window.SFCSymbiosis.processCompletedSession) {
+          try { window.SFCSymbiosis.processCompletedSession({sessionId: _sessKey, date: _todayDate, exercises: [{name:'Running1',sets:1,reps:1},{name:'Running2',sets:1,reps:1},{name:'Running3',sets:1,reps:1},{name:'Running4',sets:1,reps:1}], trainingLoad: _runTrainingLoad}); } catch(_re) {}
+        } else if (typeof window.computeNutritionState === 'function') { try { window.computeNutritionState(true); } catch(_re) {} }
         if (window.GAMIFICATION) { try { window.GAMIFICATION.updateStreak(); } catch(e) {} }
         window.BLACKBOX && window.BLACKBOX.log('run_logged', {distanceKm: _entry.distanceKm, durationMin: _entry.durationMin, pace: _paceStr});
         if (window.showToast) window.showToast((window.isEnglish && window.isEnglish() ? '✓ Run logged — ' + _entry.distanceKm + ' km at ' + _paceStr + ' /km' : '✓ Course enregistrée — ' + _entry.distanceKm + ' km à ' + _paceStr + ' /km'), 'success');
@@ -10863,8 +10894,12 @@ function renderHyroxProgram(p) {
       var _hxDur = (sess && sess.duration) || _hxDurMap[_hxLevel] || 75;
       var _hxKcal = estimateKcal('hyrox', _hxLevel, _hxDur);
       var _hxSessKey = S.selectedHyroxDay + '_' + _hdateStr;
-      S.sessionHistory[_hxSessKey] = {duration: _hxDur, kcalBase: _hxKcal ? _hxKcal.base : 0, kcalEpoc: _hxKcal ? _hxKcal.epoc : 0, kcalTotal: _hxKcal ? _hxKcal.total : 0, date: new Date().toISOString(), sport: 'hyrox', hxDayKey: _hxDayKey};
+      S.sessionHistory[_hxSessKey] = {duration: _hxDur, kcalBase: _hxKcal ? _hxKcal.base : 0, kcalEpoc: _hxKcal ? _hxKcal.epoc : 0, kcalTotal: _hxKcal ? _hxKcal.total : 0, date: new Date().toISOString(), sport: 'hyrox', trainingLoad: 'heavy', hxDayKey: _hxDayKey};
       (function(){ var _k=Object.keys(S.sessionHistory||{}).sort(); if(_k.length>365){_k.slice(0,_k.length-365).forEach(function(k){delete S.sessionHistory[k];});} })();
+      if (window.SFCSymbiosis && window.SFCSymbiosis.processCompletedSession) {
+        var _hxEx = [{name:'Hyrox1',sets:3,reps:10},{name:'Hyrox2',sets:3,reps:10},{name:'Hyrox3',sets:3,reps:10},{name:'Hyrox4',sets:3,reps:10},{name:'Hyrox5',sets:3,reps:10},{name:'Hyrox6',sets:3,reps:10}];
+        try { window.SFCSymbiosis.processCompletedSession({sessionId: _hxSessKey, date: _hdateStr, exercises: _hxEx, trainingLoad: 'heavy'}); } catch(_he) {}
+      } else if (typeof window.computeNutritionState === 'function') { try { window.computeNutritionState(true); } catch(_he) {} }
       if (window.GAMIFICATION) { try { window.GAMIFICATION.updateStreak(); } catch(e) {} }
       window.BLACKBOX && window.BLACKBOX.log('hyrox_session_done', {week: S.hyroxWeek, day: S.selectedHyroxDay + 1, level: _hxLevel});
       if (window.showToast) window.showToast((window.isEnglish && window.isEnglish() ? '✓ Hyrox session validated — ' : '✓ Séance Hyrox validée — ') + _hxDayKey, 'success');

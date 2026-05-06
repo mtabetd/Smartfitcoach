@@ -791,6 +791,8 @@
             window.UNITS.weight = window.S.weightUnit || 'kg';
             window.UNITS.height = window.S.heightUnit || 'cm';
           }
+          // Mark subscription status as known — unblocks isTrialUser() / isPremium()
+          try { window.S._subStatusReady = true; } catch(_sr) {}
         }
 
         if (!hasValidLocalData && cloudData.goal != null) {
@@ -868,6 +870,8 @@
           if (cloudData.subscriptionPlan) window.S.subscriptionPlan = cloudData.subscriptionPlan;
           if (cloudData.subscriptionEnd !== undefined) window.S.subscriptionEnd = cloudData.subscriptionEnd;
           if (cloudData.firstLoginDate) window.S.firstLoginDate = cloudData.firstLoginDate;
+          // Mark subscription status as known so isTrialUser() / isPremium() use real values
+          window.S._subStatusReady = true;
         } catch(_se) {}
         return 'local_data_exists';
       }).catch(function(e) {
@@ -935,19 +939,37 @@
           if (!res.ok) return null;
           return res.json();
         }).then(function(status) {
+          // Always mark as ready — even null means server responded
+          try { if (window.S) window.S._subStatusReady = true; } catch(_) {}
           if (!status || typeof status.premium !== 'boolean') return null;
           self._userStatusCache   = status;
           self._userStatusCacheTs = Date.now();
-          // Propagate server-authoritative values into S
           try {
             if (window.S) {
-              if (status.firstLoginDate)   window.S.firstLoginDate   = status.firstLoginDate;
-              if (status.plan)             window.S.subscriptionPlan = status.plan;
+              // Store server-confirmed premium boolean as the single source of truth.
+              // isPremium() / isTrialUser() read this first before any plan string.
+              window.S._serverPremium = status.premium;
+              if (status.firstLoginDate) window.S.firstLoginDate = status.firstLoginDate;
               if (status.planEnd !== undefined) window.S.subscriptionEnd = status.planEnd;
+              // Only propagate plan string when it is a real paid plan.
+              // CRITICAL: never overwrite a premium plan with 'trial' — the server
+              // may return plan='trial' when it incorrectly missed an unlimited row
+              // (e.g. null subscription_end). Use status.premium as the gate.
+              if (status.plan && status.plan !== 'trial') {
+                window.S.subscriptionPlan = status.plan;
+              } else if (status.premium && (!window.S.subscriptionPlan || window.S.subscriptionPlan === 'trial')) {
+                // Server says premium but returned 'trial' plan label — default to 'unlimited'
+                window.S.subscriptionPlan = 'unlimited';
+              }
             }
           } catch(e) {}
           return status;
-        }).catch(function() { clearTimeout(tid); return null; });
+        }).catch(function() {
+          clearTimeout(tid);
+          // Network failure — mark ready; isPremium() failsafe grants access on error
+          try { if (window.S) window.S._subStatusReady = true; } catch(_) {}
+          return null;
+        });
       }).catch(function() { return null; });
     }
   };

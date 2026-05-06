@@ -1469,7 +1469,7 @@ function renderCardBonjour(S) {
   })();
 
   // ── Bandeau Trial ──
-  if (window.isTrialUser && window.isTrialUser()) {
+  if (window.isTrialUser && window.isTrialUser() && !(window.S && window.S._serverPremium) && !(window.isPremium && window.isPremium())) {
     var _trialDays = window.getTrialDaysLeft ? window.getTrialDaysLeft() : 0;
     var _trialUrgent = _trialDays <= 2;
     var _trialBorderColor = _trialUrgent ? '#C0390E' : 'var(--orange,#E86F1E)';
@@ -6325,7 +6325,7 @@ function renderTodayDashboard(p) {
   // FIX 2026-04-16 : le bandeau trial de renderCardBonjour n'était plus appelé
   // depuis la migration vers renderHeroContextuel → invisible. On le remet ici.
   try {
-    if (window.isTrialUser && window.isTrialUser()) {
+    if (window.isTrialUser && window.isTrialUser() && !(window.S && window.S._serverPremium) && !(window.isPremium && window.isPremium())) {
       var _td = (typeof window.getTrialDaysLeft === 'function') ? window.getTrialDaysLeft() : 0;
       var _tdUrgent = _td <= 2;
       var _tBorder = _tdUrgent ? '#C0390E' : 'var(--orange,#E86F1E)';
