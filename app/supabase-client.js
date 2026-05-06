@@ -619,6 +619,20 @@
       this._syncLoginInProgress = true;
       var self = this;
 
+      // Watchdog: if flag stays true > 10s, something unexpected kept it stuck.
+      // Auto-reset so subsequent syncOnLogin calls are never permanently blocked.
+      var _watchdogTimer = setTimeout(function() {
+        if (self._syncLoginInProgress) {
+          self._syncLoginInProgress = false;
+          self._syncPending = false;
+          console.error('[SupaSync] WATCHDOG: _syncLoginInProgress stuck >10s — force-reset');
+          if (window.SFCLogger) window.SFCLogger.capture(
+            new Error('syncOnLogin watchdog triggered'),
+            { module: 'SupaSync.syncOnLogin.watchdog' }
+          );
+        }
+      }, 10000);
+
       // 1) Attendre que la session Supabase soit hydratée (ou timeout 12s)
       var authReadyPromise = (window.AUTH && window.AUTH.ready)
         ? window.AUTH.ready()
@@ -639,13 +653,19 @@
                 // Session trouvée tardivement : on continue
                 return _doSync(session.user.id);
               }
+              clearTimeout(_watchdogTimer);
+              self._syncLoginInProgress = false;
               console.warn('[SupaSync] syncOnLogin abandonné : aucune session utilisateur valide');
               return 'no_session';
             }).catch(function() {
+              clearTimeout(_watchdogTimer);
+              self._syncLoginInProgress = false;
               console.warn('[SupaSync] syncOnLogin abandonné : getSession failed');
               return 'no_session';
             });
           }
+          clearTimeout(_watchdogTimer);
+          self._syncLoginInProgress = false;
           console.warn('[SupaSync] syncOnLogin abandonné : AUTH non initialisé');
           return 'no_session';
         }
@@ -880,6 +900,7 @@
         console.warn('[SupaSync] syncOnLogin failed:', e);
         return null;
       }).then(function(result) {
+        clearTimeout(_watchdogTimer); // cancel watchdog — sync completed normally
         // FIX V3 2026-04 : si l'utilisateur a tenté un saveProfile pendant le sync
         // (qui a été skippé par scheduleSave car _syncPending=true), on le rejoue
         // maintenant pour ne pas perdre ses modifs.
