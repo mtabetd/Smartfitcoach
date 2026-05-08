@@ -51,7 +51,8 @@ var _notifications = [];
 var _unreadCount = 0;
 var _loadingFeed = false;
 var _loadingFriends = false;
-var _dbReady = null;          // null = inconnu, true/false = détecté
+var _dbReady  = null;         // null = inconnu, true = confirmé, false = dernier essai échoué
+var _dbFailTs = 0;            // timestamp du dernier échec — pour le cooldown de retry
 var _lastLoad = {};           // throttle par clé
 
 // ══════════════════════════════════════════════════════════════
@@ -124,15 +125,24 @@ function rateLimitCheck(key, max, windowMs){
   } catch(e){ return true; /* fail-open en cas d'erreur storage */ }
 }
 
-// Détecte si les tables sont créées (première requête)
+// Détecte si les tables sociales sont accessibles.
+// true  → mis en cache définitivement (la table ne disparaît pas).
+// false → jamais mis en cache définitivement : retry après 30 s ou au retour
+//         en premier plan, pour ne pas bloquer l'onglet Social sur un glitch réseau.
+var DB_RETRY_MS = 30000;
 function probeDb(){
-  if (_dbReady !== null) return Promise.resolve(_dbReady);
+  if (_dbReady === true) return Promise.resolve(true);
+  if (_dbReady === false && (Date.now() - _dbFailTs) < DB_RETRY_MS) {
+    return Promise.resolve(false);
+  }
+  _dbReady = null;
   var c = db();
-  if (!c) { _dbReady = false; return Promise.resolve(false); }
+  if (!c) { _dbReady = false; _dbFailTs = Date.now(); return Promise.resolve(false); }
   return c.from('social_profiles').select('id').limit(1).then(function(r){
-    _dbReady = !r.error;
-    return _dbReady;
-  }).catch(function(){ _dbReady = false; return false; });
+    if (r.error) { _dbReady = false; _dbFailTs = Date.now(); return false; }
+    _dbReady = true;
+    return true;
+  }).catch(function(){ _dbReady = false; _dbFailTs = Date.now(); return false; });
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -1791,5 +1801,16 @@ async function shareWorkout(data){    return publishPost('workout',   data, true
 async function sharePR(data){         return publishPost('pr',        data, true); }
 async function shareStreak(data){     return publishPost('streak',    data, true); }
 async function shareChallenge(data){  return publishPost('challenge', data, true); }
+
+// Retour en premier plan → reset immédiat du cache d'échec pour que le prochain
+// clic sur Social relance le probe sans attendre le cooldown de 30 s.
+if (typeof document !== 'undefined') {
+  document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'visible' && _dbReady === false) {
+      _dbReady  = null;
+      _dbFailTs = 0;
+    }
+  });
+}
 
 })();
