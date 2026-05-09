@@ -9,7 +9,6 @@ const APP_DIR = path.join(__dirname, '../app');
 const DEFERRED_SCRIPTS = [
   './chart.umd.min.js',
   './prices-db.js',
-  './recipe-engine.js',
   './supabase.min.js',
   './sfc-logger.js',
   './sfc-remote.js',

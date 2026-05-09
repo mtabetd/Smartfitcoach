@@ -2398,6 +2398,9 @@ function render() {
  }
  renderProfilePage(content);
  } else if (['calendar','sport','nutrition','analytics','social'].indexOf(S.view) !== -1) {
+ if (S.view === 'nutrition' && !window.RecipeEngine && window._lazyLoad) {
+   window._lazyLoad('./recipe-engine.js');
+ }
  var _modMap = { calendar: 'SMART_CALENDAR', sport: 'SPORT', nutrition: 'NUTRITION', analytics: 'ANALYTICS', social: 'SOCIAL' };
  var _modName = _modMap[S.view];
  if (window[_modName]) {
