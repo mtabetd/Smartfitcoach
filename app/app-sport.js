@@ -777,7 +777,8 @@ function generateSportProgram() {
    repSuffix:     repSuffix,
    supersetNote:  supersetNote,
    cycleFactor:   cycleIntensityFactor,
-   weekIndex:     window.SFCSymbiosis ? window.SFCSymbiosis.getWeekIndex() : 0
+   weekIndex:     window.SFCSymbiosis ? window.SFCSymbiosis.getWeekIndex() : 0,
+   perioCfgApplied: !!_perioCfg
  });
  // SFC Symbiosis bridge moved to processCompletedSession (session save only — never on render)
 

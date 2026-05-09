@@ -330,6 +330,50 @@ test('int.1: sfc-perf-monitor.js is in index.html', function() {
   assert(html.indexOf('sfc-perf-monitor.js') !== -1, 'sfc-perf-monitor.js must be in index.html');
 });
 
+// ── Duration bug: double-deload fix ──────────────────────────────────────────
+console.log('\n══ Duration bug: no double-deload in S4 ════════════════════════════');
+
+test('deload.1: muscu-engine perioCfgApplied skips set-count reduction in W4', function() {
+  var sfcBuildMuscuDay = require(path.join(appDir, 'muscu-engine.js')).sfcBuildMuscuDay;
+  window.EXERCISES = {
+    jambes: [
+      { n: 'Squat', m: 'Quadriceps', sets: '3×12-15', rest: '90s', eq: 'Barre', lv: 2, tags: ['compose'] },
+      { n: 'Leg Press', m: 'Quadriceps', sets: '3×12-15', rest: '90s', eq: 'Machine', lv: 1, tags: ['compose'] },
+      { n: 'RDL', m: 'Ischios', sets: '3×12-15', rest: '90s', eq: 'Barre', lv: 2, tags: ['compose'] },
+      { n: 'Leg Curl', m: 'Ischios', sets: '3×12-15', rest: '60s', eq: 'Machine', lv: 1, tags: ['isolation'] },
+      { n: 'Leg Extension', m: 'Quadriceps', sets: '3×12-15', rest: '60s', eq: 'Machine', lv: 1, tags: ['isolation'] }
+    ]
+  };
+  // S4 deload: durSets already reduced to 3 by SFCSymbiosis, perioCfgApplied=true
+  var exWithFlag = sfcBuildMuscuDay(['jambes'], {
+    exercises: window.EXERCISES, durMax: 5, durSets: 3,
+    weekIndex: 4, perioCfgApplied: true
+  });
+  var setsWithFlag = exWithFlag.map(function(e) { return parseInt((e.sets||'').match(/^(\d+)/)[1]); });
+  // S4: compound should have durSets=3, isolation=max(2, durSets-1)=2
+  // With perioCfgApplied, step 8 must NOT subtract 1 more
+  assert(setsWithFlag.every(function(s) { return s >= 2; }), 'sets must not drop below 2');
+  var compounds = exWithFlag.filter(function(e) { return (e.tags||[]).indexOf('isolation') === -1 && (e.tags||[]).indexOf('finisher') === -1; });
+  assert(compounds.every(function(e) { return parseInt(e.sets) === 3; }), 'compound sets must be 3 (not 2) when perioCfgApplied');
+});
+
+test('deload.2: muscu-engine without perioCfgApplied still reduces sets in W4', function() {
+  var sfcBuildMuscuDay = require(path.join(appDir, 'muscu-engine.js')).sfcBuildMuscuDay;
+  window.EXERCISES = {
+    jambes: [
+      { n: 'Squat', m: 'Quadriceps', sets: '4×12-15', rest: '90s', eq: 'Barre', lv: 2, tags: ['compose'] },
+      { n: 'Leg Press', m: 'Quadriceps', sets: '4×12-15', rest: '90s', eq: 'Machine', lv: 1, tags: ['compose'] }
+    ]
+  };
+  // Without perioCfgApplied (no SFCSymbiosis), step 8 deload still fires
+  var exNoFlag = sfcBuildMuscuDay(['jambes'], {
+    exercises: window.EXERCISES, durMax: 2, durSets: 4,
+    weekIndex: 4
+  });
+  var compounds = exNoFlag.filter(function(e) { return (e.tags||[]).indexOf('isolation') === -1; });
+  assert(compounds.every(function(e) { return parseInt(e.sets) === 3; }), 'step 8 deload must fire when perioCfgApplied is absent (4-1=3)');
+});
+
 // ─── Summary ─────────────────────────────────────────────────────────────────
 console.log('\n═══════════════════════════════════════════════════════════════════');
 console.log('RESULTS:', _passed, 'passed,', _failed, 'failed');
