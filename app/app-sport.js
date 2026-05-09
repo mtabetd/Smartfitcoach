@@ -711,6 +711,18 @@ function generateSportProgram() {
      restOverride = _perioCfg.restOverride;
    }
  }
+ // ── Signal nutrition→training (SFCDecisionCore.getVolumeModifier) ──────────
+ // Branché en runtime : réduit _durMax si déficit calorique > 300 kcal ou fatigue élevée.
+ // Plancher durée respecté — ne tombe jamais sous le minimum de la préférence utilisateur.
+ if (window.SFCDecisionCore) {
+   try {
+     var _sfcVolMod = window.SFCDecisionCore.getVolumeModifier();
+     if (typeof _sfcVolMod === 'number' && _sfcVolMod < 1.0) {
+       var _sfcFloor = _dur ? ({'45min':3,'1h':4,'1h15':5,'1h30':6}[_dur] || 3) : 3;
+       _durMax = Math.max(_sfcFloor, Math.round(_durMax * _sfcVolMod));
+     }
+   } catch(_e) {}
+ }
 
  // Construire les regexes médicales (pont S.medical) une seule fois par jour
  var _medRx = [];
@@ -7867,6 +7879,26 @@ function renderMusculationProgram(p) {
    p.appendChild(_ctaDoneBadge);
  }
 
+ // ─── AVERTISSEMENT RÉCUPÉRATION 48h ───────────────────────────────────────────────
+ // check48hConflict lit S.lastSessionGroups+S.lastSessionDate (sfc-symbiosis.js).
+ // getBlockedMuscleGroups confirme via SFCDecisionCore (multi-signal).
+ if (!_ctaDone && typeof window.check48hConflict === 'function') {
+   var _proposed48h = [];
+   (day.exercises || []).forEach(function(ex) {
+     if (ex.m && _proposed48h.indexOf(ex.m) === -1) _proposed48h.push(ex.m);
+   });
+   var _conflict48h = window.check48hConflict(_proposed48h);
+   var _blockedGrps = (window.SFCDecisionCore && typeof window.SFCDecisionCore.getBlockedMuscleGroups === 'function')
+     ? window.SFCDecisionCore.getBlockedMuscleGroups() : [];
+   if (!_conflict48h.safe || _blockedGrps.length > 0) {
+     var _recWarnEl = h('div', {style: 'border-left:3px solid var(--orange-ink,#7A3B0E);background:rgba(122,59,14,0.06);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);line-height:1.6'});
+     var _recWarnText = _conflict48h.reason ||
+       ((window.isEnglish && window.isEnglish() ? 'Muscle groups in recovery: ' : 'Groupes musculaires en récup. : ') + _blockedGrps.join(', '));
+     _recWarnEl.textContent = '⚠ ' + _recWarnText;
+     p.appendChild(_recWarnEl);
+   }
+ }
+
  var _totalExercises = (day.exercises || []).length;
 
  // ─── SWIPE NAVIGATION STATE ───
@@ -10416,6 +10448,20 @@ function renderRunningProgram(p) {
  infoCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--success,#3E5C3A);margin-top:6px;font-weight:bold'}, (window.isEnglish && window.isEnglish() ? ' Taper — keep intensity, reduce volume' : ' Affûtage — gardez l\'intensité, réduisez le volume')));
  }
  p.appendChild(infoCard);
+
+ // ─── RÈGLE +10% PROGRESSION VOLUME RUNNING ───────────────────────────────────
+ // checkRunning10pct + getLastWeekRunKm définis dans sport-running.js.
+ if (typeof window.checkRunning10pct === 'function' && typeof window.getLastWeekRunKm === 'function') {
+   var _prevRunKm = window.getLastWeekRunKm();
+   var _propRunKm = currentWeekData.totalKm || 0;
+   var _runVolCheck = window.checkRunning10pct(_prevRunKm, _propRunKm);
+   if (_runVolCheck.capApplied) {
+     var _runWarnEl = h('div', {style: 'border-left:3px solid var(--orange-ink,#7A3B0E);background:rgba(122,59,14,0.06);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);line-height:1.6'});
+     _runWarnEl.textContent = '⚠ ' + _runVolCheck.reason;
+     p.appendChild(_runWarnEl);
+   }
+ }
+
 
  // ─── ESTIMATION CALORIQUE RUNNING ───
  (function() {
