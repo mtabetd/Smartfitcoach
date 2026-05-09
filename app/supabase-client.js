@@ -28,6 +28,32 @@
     return _client;
   }
 
+  // ─── PENDING-FLAG HELPERS (localStorage instead of sessionStorage) ──────────
+  // _sfc_save_pending survives Safari private-mode tab closes and page reloads.
+  // We store a timestamp so stale flags (> 24h) are ignored automatically.
+  var _PENDING_FLAG_KEY = '_sfc_save_pending';
+  var _PENDING_FLAG_TTL = 24 * 60 * 60 * 1000; // 24 h
+
+  function _setPendingFlag() {
+    try {
+      var _store = (window.safeStorage && window.safeStorage.local) || localStorage;
+      _store.setItem(_PENDING_FLAG_KEY, String(Date.now()));
+    } catch(_) {}
+  }
+  function _getPendingFlag() {
+    try {
+      var _store = (window.safeStorage && window.safeStorage.local) || localStorage;
+      var _raw = _store.getItem(_PENDING_FLAG_KEY);
+      return !!(_raw && (Date.now() - parseInt(_raw, 10)) < _PENDING_FLAG_TTL);
+    } catch(_) { return false; }
+  }
+  function _clearPendingFlag() {
+    try {
+      var _store = (window.safeStorage && window.safeStorage.local) || localStorage;
+      _store.removeItem(_PENDING_FLAG_KEY);
+    } catch(_) {}
+  }
+
   // Force-recreate a fresh client (used when auth state is stuck)
   function resetClient() {
     console.log('[Supabase] Resetting client');
@@ -163,10 +189,10 @@
     saveProfile: function() {
       var self = this;
       // Mutex : si un upsert est déjà en vol, marquer un re-flush pour après
-      // P2 fix: persist le flag en sessionStorage pour survivre aux rechargements de page.
+      // Persist le flag en localStorage (pas sessionStorage) pour survivre Safari private mode.
       if (self._syncing) {
         self._savePendingDuringSync = true;
-        try { sessionStorage.setItem('_sfc_save_pending', '1'); } catch(_) {}
+        _setPendingFlag();
         return Promise.resolve();
       }
       self._syncing = true;
@@ -297,9 +323,12 @@
             p_updated_at: new Date().toISOString()
           })
           .then(function(rpcResult) {
-            // If RPC not found (pre-migration), fall back to direct upsert
+            // If RPC not found (pre-migration), fall back to direct upsert.
+            // SAFETY: _safeData already has null/empty protected fields stripped,
+            // so large blobs (weekPlan, sportProgram…) won't overwrite cloud data when absent here.
             if (rpcResult && rpcResult.error && (rpcResult.error.code === 'PGRST202' || /function.*does not exist/i.test(rpcResult.error.message || ''))) {
-              console.warn('[SupaSync] merge_profile_data RPC not found — falling back to upsert (run migration 20260509)');
+              console.error('[SupaSync] CRITICAL: merge_profile_data RPC not found — falling back to full upsert (run migration 20260509). Multi-device data may be overwritten.');
+              if (window.SFCLogger) window.SFCLogger.capture(new Error('merge_profile_data RPC missing'), { module: 'SupaSync.saveProfile.rpcFallback' });
               return _doUpsert(_safeData);
             }
             return rpcResult;
@@ -317,12 +346,11 @@
               } catch(e) {}
             }
             self._syncing = false;
-            // Re-flush if a save was queued while this one was in-flight (P2: check sessionStorage too)
-            var _pendingA = self._savePendingDuringSync;
-            try { _pendingA = _pendingA || sessionStorage.getItem('_sfc_save_pending') === '1'; } catch(_) {}
+            // Re-flush if a save was queued while this one was in-flight
+            var _pendingA = self._savePendingDuringSync || _getPendingFlag();
             if (_pendingA) {
               self._savePendingDuringSync = false;
-              try { sessionStorage.removeItem('_sfc_save_pending'); } catch(_) {}
+              _clearPendingFlag();
               setTimeout(function() { try { self.saveProfile(); } catch(_) {} }, 200);
             }
             return result;
@@ -330,7 +358,7 @@
       }).catch(function(e) {
         self._syncing = false;
         self._savePendingDuringSync = false;
-        try { sessionStorage.removeItem('_sfc_save_pending'); } catch(_) {}
+        _clearPendingFlag();
         console.warn('[SupaSync] saveProfile failed:', e);
         _trackSyncFailure((e && e.message) || String(e));
         if (window.SFCLogger) window.SFCLogger.capture(e, { module: 'SupaSync.saveProfile' });
@@ -646,7 +674,7 @@
       // le save différé pour ne PAS perdre les modifs user pendant la fenêtre de sync.
       if (self._syncPending) {
         self._savePendingDuringSync = true;
-        try { sessionStorage.setItem('_sfc_save_pending', '1'); } catch(_) {}
+        _setPendingFlag();
         return;
       }
       if (self._debounceTimer) clearTimeout(self._debounceTimer);
@@ -964,12 +992,11 @@
         // FIX V3 2026-04 : si l'utilisateur a tenté un saveProfile pendant le sync
         // (qui a été skippé par scheduleSave car _syncPending=true), on le rejoue
         // maintenant pour ne pas perdre ses modifs.
-        // P2 fix: check sessionStorage in addition to memory flag (survives page reload)
-        var _pendingB = self._savePendingDuringSync;
-        try { _pendingB = _pendingB || sessionStorage.getItem('_sfc_save_pending') === '1'; } catch(_) {}
+        // Check memory flag + persistent flag (localStorage, survives Safari private mode)
+        var _pendingB = self._savePendingDuringSync || _getPendingFlag();
         if (_pendingB) {
           self._savePendingDuringSync = false;
-          try { sessionStorage.removeItem('_sfc_save_pending'); } catch(_) {}
+          _clearPendingFlag();
           console.log('[SupaSync] Re-flushing saveProfile (modifs user pendant sync)');
           try {
             self.saveProfile(); // fire-and-forget — la promise prochaine devient idempotente
@@ -1007,7 +1034,7 @@
     fetchUserStatus: function() {
       var self = this;
       var NOW = Date.now();
-      var TTL = 15 * 60 * 1000; // 15 minutes
+      var TTL = 5 * 60 * 1000; // 5 minutes — reduced from 15min to limit post-expiry access
       if (self._userStatusCache && (NOW - self._userStatusCacheTs) < TTL) {
         return Promise.resolve(self._userStatusCache);
       }
@@ -1099,7 +1126,7 @@ window.safeUserStatusCheck = function(opts) {
   var force  = opts && opts.force === true;
   var online = typeof navigator !== 'undefined' ? navigator.onLine !== false : true;
   var sync   = window.SupaSync;
-  var CACHE_TTL = 15 * 60 * 1000;
+  var CACHE_TTL = 5 * 60 * 1000; // 5 minutes — reduced from 15min to limit post-expiry access
 
   function _deny(source, reason)  { return { ok: false, isPremium: false, trialActive: false, source: source, reason: reason }; }
   function _allow(source, status) {
@@ -1135,6 +1162,11 @@ window.safeUserStatusCheck = function(opts) {
   return sync.fetchUserStatus().then(function(status) {
     if (!status || typeof status.premium !== 'boolean') {
       return _deny('fallback', 'corrupt_response');
+    }
+    // Immediately invalidate cache if server confirms not-premium (no stale-premium window)
+    if (!status.premium && sync._userStatusCache) {
+      sync._userStatusCache   = null;
+      sync._userStatusCacheTs = 0;
     }
     return status.premium ? _allow('server', status) : _deny('server', 'not_premium');
   }).catch(function() {

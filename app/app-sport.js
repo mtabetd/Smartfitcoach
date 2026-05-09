@@ -301,6 +301,15 @@ function getPregnancySportWarning() {
 
 function generateSportProgram() {
  var S = window.S; // always use current state (module-level S may be stale if replaced)
+ // Guard: this function only handles 'musculation'. Other sport types use their own generators.
+ if (!S || !S.sportType) {
+   console.error('[generateSportProgram] S.sportType is null/undefined — aborting');
+   return [];
+ }
+ if (S.sportType !== 'musculation') {
+   console.warn('[generateSportProgram] Called for non-musculation sport:', S.sportType, '— delegating');
+   return [];
+ }
  // Normalize S.sportEquipment — prevents crashes on null / array inputs.
  // null  → 'gym' (safe default), array → first element or 'gym', string → unchanged.
  if (!S.sportEquipment) {
@@ -709,6 +718,8 @@ function generateSportProgram() {
    // restOverride : périodisation n'écrase pas les objectifs shred/force (priorité goal)
    if (_perioCfg.restOverride && !hasShred && !hasStrength) {
      restOverride = _perioCfg.restOverride;
+   } else if (_perioCfg.restOverride && (hasShred || hasStrength)) {
+     console.log('[generateSportProgram] restOverride ignoré (priorité goal:', hasShred ? 'shred' : 'strength', '> périodisation', _perioCfg.restOverride, ')');
    }
  }
  // ── Signal nutrition→training (SFCDecisionCore.getVolumeModifier) ──────────
@@ -5417,7 +5428,17 @@ function getSuggestedWeight(exerciseName, reps, phase) {
    var _begLoad = Math.round(_bwFb * _ratioFb * pct / 2.5) * 2.5;
    if (_begLoad > 0) return Math.max(_begLoad, 2.5);
  }
- return null;
+ // Priority 5: universal fallback — never return null (would display as 0 in UI).
+ // Use a conservative bodyweight-ratio estimate for any level if all else fails.
+ var _bwFallback = S.weight || 70;
+ var _sexFallback = S.sex || 'homme';
+ var _nameFallback = (exerciseName || '').toLowerCase();
+ var _ratioFallback = /squat|fessier|cuisse|leg[\s-]press|rdl|deadlift|soulev/.test(_nameFallback) ? (_sexFallback === 'femme' ? 0.30 : 0.40)
+   : /bench|développé|d[eé]velopp[eé]|press|dips|push/.test(_nameFallback) ? (_sexFallback === 'femme' ? 0.18 : 0.30)
+   : /pull|traction|rowing|tirage|row/.test(_nameFallback) ? (_sexFallback === 'femme' ? 0.18 : 0.25)
+   : (_sexFallback === 'femme' ? 0.07 : 0.10);
+ var _fallbackLoad = Math.round(_bwFallback * _ratioFallback * pct / 2.5) * 2.5;
+ return Math.max(_fallbackLoad, 2.5);
 }
 
 window.getSuggestedWeight = getSuggestedWeight;

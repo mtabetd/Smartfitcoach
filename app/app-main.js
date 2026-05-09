@@ -193,7 +193,8 @@ var SPORT_PROGRAM_KEYS = [
  'sportLevel', 'sportDays', 'sportEquipment', 'sportType', 'sportGoals',
  'sportFocus', 'muscuMedical',
  'sportMixEnabled', 'sportMixSecondary',
- 'pregnant', 'pregnancyWeek' // grossesse filtre les exercices dangereux → programme doit être régénéré
+ 'pregnant', 'pregnancyWeek', // grossesse filtre les exercices dangereux → programme doit être régénéré
+ 'weight' // poids impacte estimateBaseLoad (débutants sans 1RM) et suggestionsPoids
 ];
 
 // ─── SAFE STORAGE WRAPPER (Safari private mode — throws QuotaExceededError on write) ───
@@ -2695,8 +2696,30 @@ function renderLogin(app) {
  // évitant tout flash "trial" pour les comptes premium entre le render immédiat et fetchUserStatus.
  if (window.S) window.S._subStatusReady = false;
  // Sync from cloud (async — will re-render if cloud data was loaded)
+ // Show a non-blocking sync indicator so the user knows data is loading (avoids blank-screen confusion).
+ function _showSyncBanner() {
+   var _b = document.getElementById('_sfc-sync-banner');
+   if (_b) return;
+   var banner = document.createElement('div');
+   banner.id = '_sfc-sync-banner';
+   var _msg = (window.isEnglish && window.isEnglish()) ? 'Syncing your data…' : 'Synchronisation en cours…';
+   banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:8888;' +
+     'background:var(--green,#3E5C3A);color:#FAF9F6;font-family:"Helvetica Neue",Arial,sans-serif;' +
+     'font-size:9px;letter-spacing:3px;text-transform:uppercase;text-align:center;padding:6px;' +
+     'pointer-events:none;animation:sfcToastIn .2s ease forwards;';
+   banner.textContent = _msg;
+   document.body.appendChild(banner);
+ }
+ function _hideSyncBanner() {
+   var _b = document.getElementById('_sfc-sync-banner');
+   if (_b && _b.parentNode) { _b.parentNode.removeChild(_b); }
+   if (window.S) window.S._syncingFromCloud = false;
+ }
  if (window.SupaSync) {
+ window.S._syncingFromCloud = true;
+ setTimeout(_showSyncBanner, 300); // Only show if sync takes >300ms (avoids flash on fast connections)
  SupaSync.syncOnLogin().then(function(syncResult) {
+ _hideSyncBanner();
  if (syncResult === 'loaded_from_cloud') {
  _migrateSteps();
  if (window.I18N && S.lang) window.I18N.current = S.lang;
@@ -2710,7 +2733,12 @@ function renderLogin(app) {
  if (typeof SupaSync.fetchUserStatus === 'function') {
  SupaSync.fetchUserStatus().then(function() { render(); }).catch(function() { render(); });
  }
- }).catch(function(e) { console.warn('[Login] syncOnLogin unexpected error:', e); SupaSync.startAutoSync(); render(); });
+ }).catch(function(e) {
+ _hideSyncBanner();
+ console.warn('[Login] syncOnLogin unexpected error:', e);
+ SupaSync.startAutoSync();
+ render();
+ });
  }
  if (window.GAMIFICATION) { GAMIFICATION.updateStreak(); GAMIFICATION.unlockBadge('first_login'); }
  // Enregistre la date du premier login (pour bloquer le bilan de forme au J+1)
