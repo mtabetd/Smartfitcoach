@@ -2674,17 +2674,13 @@ function renderLogin(app) {
  window.UNITS.weight = S.weightUnit || 'kg';
  window.UNITS.height = S.heightUnit || 'cm';
  }
- // FIX audit backend : recalculer la vue après chargement cloud
- // (le profil peut être plus récent/complet que le local).
  _resolvePostLoginView();
- render(); // Re-render après sync cloud : nStep migré, unités à jour, vue recalculée
  }
- SupaSync.startAutoSync(); // Démarrer après syncOnLogin pour éviter la double-écriture
- // Pull authoritative subscription state from server — DB columns may be NULL for unlimited plans
+ SupaSync.startAutoSync();
  if (typeof SupaSync.fetchUserStatus === 'function') {
  SupaSync.fetchUserStatus().then(function() { render(); }).catch(function() { render(); });
  }
- }).catch(function(e) { console.warn('[Login] syncOnLogin unexpected error:', e); SupaSync.startAutoSync(); });
+ }).catch(function(e) { console.warn('[Login] syncOnLogin unexpected error:', e); SupaSync.startAutoSync(); render(); });
  }
  if (window.GAMIFICATION) { GAMIFICATION.updateStreak(); GAMIFICATION.unlockBadge('first_login'); }
  // Enregistre la date du premier login (pour bloquer le bilan de forme au J+1)
@@ -3674,7 +3670,6 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
      _migrateSteps();
      if (window.I18N && S.lang) window.I18N.current = S.lang;
      if (window.UNITS) { window.UNITS.weight = S.weightUnit || 'kg'; window.UNITS.height = S.heightUnit || 'cm'; }
-     // FIX 2026-04-16 : recalculer la vue après chargement cloud (comme _resolvePostLoginView dans login manuel)
      var _csSetup = !!S.sportType;
      var _csProg = (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) || !!S.muscuIAProgram;
      if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) !== -1 && !_csSetup) { S.view = 'sport'; }
@@ -3684,14 +3679,12 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
      else if (S.appMode === 'both' && S.nStep === 12 && !_csSetup && !_csProg) { S.view = 'sport'; }
      else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
      else if (S.appMode) { S.view = 'today'; }
-     if (window.render) window.render();
    }
-   SupaSync.startAutoSync(); // Démarrer après syncOnLogin pour éviter la double-écriture
-   // Pull authoritative subscription state from server — same as manual login path
+   SupaSync.startAutoSync();
    if (typeof SupaSync.fetchUserStatus === 'function') {
      SupaSync.fetchUserStatus().then(function() { render(); }).catch(function() { render(); });
    }
- }).catch(function() { SupaSync.startAutoSync(); });
+ }).catch(function() { SupaSync.startAutoSync(); render(); });
  }
 } else {
  S.view = 'auth';
