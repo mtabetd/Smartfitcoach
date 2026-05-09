@@ -7878,6 +7878,23 @@ function renderMusculationProgram(p) {
    _ctaDoneBadge.appendChild(h('span', {}, (window.isEnglish && window.isEnglish() ? 'Session validated\u00a0— ' : 'Séance validée\u00a0— ') + _ctaDone.duration + '\u00a0min\u00a0·\u00a0' + _ctaDone.kcalTotal + '\u00a0kcal'));
    p.appendChild(_ctaDoneBadge);
  }
+ // Avertissement récupération 48h (check48hConflict + getBlockedMuscleGroups)
+ if (!_ctaDone && typeof window.check48hConflict === 'function') {
+   var _proposed48h = [];
+   (day.exercises || []).forEach(function(ex) {
+     if (ex.m && _proposed48h.indexOf(ex.m) === -1) _proposed48h.push(ex.m);
+   });
+   var _conflict48h = window.check48hConflict(_proposed48h);
+   var _blockedGrps = (window.SFCDecisionCore && typeof window.SFCDecisionCore.getBlockedMuscleGroups === 'function')
+     ? window.SFCDecisionCore.getBlockedMuscleGroups() : [];
+   if (!_conflict48h.safe || _blockedGrps.length > 0) {
+     var _recWarnEl = h('div', {style: 'border-left:3px solid var(--orange-ink,#7A3B0E);background:rgba(122,59,14,0.06);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);line-height:1.6'});
+     var _recWarnText = _conflict48h.reason ||
+       ((window.isEnglish && window.isEnglish() ? 'Muscle groups in recovery: ' : 'Groupes musculaires en récup. : ') + _blockedGrps.join(', '));
+     _recWarnEl.textContent = '⚠ ' + _recWarnText;
+     p.appendChild(_recWarnEl);
+   }
+ }
 
  // ─── AVERTISSEMENT RÉCUPÉRATION 48h ───────────────────────────────────────────────
  // check48hConflict lit S.lastSessionGroups+S.lastSessionDate (sfc-symbiosis.js).
@@ -10448,6 +10465,17 @@ function renderRunningProgram(p) {
  infoCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--success,#3E5C3A);margin-top:6px;font-weight:bold'}, (window.isEnglish && window.isEnglish() ? ' Taper — keep intensity, reduce volume' : ' Affûtage — gardez l\'intensité, réduisez le volume')));
  }
  p.appendChild(infoCard);
+ // Règle +10% progression volume running
+ if (typeof window.checkRunning10pct === 'function' && typeof window.getLastWeekRunKm === 'function') {
+   var _prevRunKm = window.getLastWeekRunKm();
+   var _propRunKm = currentWeekData.totalKm || 0;
+   var _runVolCheck = window.checkRunning10pct(_prevRunKm, _propRunKm);
+   if (_runVolCheck.capApplied) {
+     var _runWarnEl = h('div', {style: 'border-left:3px solid var(--orange-ink,#7A3B0E);background:rgba(122,59,14,0.06);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);line-height:1.6'});
+     _runWarnEl.textContent = '⚠ ' + _runVolCheck.reason;
+     p.appendChild(_runWarnEl);
+   }
+ }
 
  // ─── RÈGLE +10% PROGRESSION VOLUME RUNNING ───────────────────────────────────
  // checkRunning10pct + getLastWeekRunKm définis dans sport-running.js.

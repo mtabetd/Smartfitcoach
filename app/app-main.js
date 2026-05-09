@@ -196,6 +196,33 @@ var SPORT_PROGRAM_KEYS = [
  'pregnant', 'pregnancyWeek' // grossesse filtre les exercices dangereux → programme doit être régénéré
 ];
 
+// ─── SAFE STORAGE WRAPPER (Safari private mode — throws QuotaExceededError on write) ───
+window.safeStorage = (function() {
+  function _onUnavailable(storeName, err) {
+    if (window._sfcStorageUnavailableShown) return;
+    window._sfcStorageUnavailableShown = true;
+    console.warn('[SFC] ' + storeName + ' unavailable (Safari private mode?):', err && err.message);
+    setTimeout(function() {
+      if (window.showToast) {
+        window.showToast(
+          (window.isEnglish && window.isEnglish())
+            ? 'Private browsing detected — your data will not be saved locally. Enable cloud sync or exit private mode.'
+            : 'Navigation privée détectée — vos données ne seront pas sauvegardées localement. Activez la synchro cloud ou quittez le mode privé.',
+          'warning', 8000
+        );
+      }
+    }, 1000);
+  }
+  function _wrap(store, name) {
+    return {
+      getItem:    function(k)    { try { return store.getItem(k); }         catch(e) { return null; } },
+      setItem:    function(k, v) { try { store.setItem(k, v); return true; } catch(e) { _onUnavailable(name, e); return false; } },
+      removeItem: function(k)    { try { store.removeItem(k); return true; } catch(e) { return false; } }
+    };
+  }
+  return { local: _wrap(localStorage, 'localStorage'), session: _wrap(sessionStorage, 'sessionStorage') };
+})();
+
 function saveProfile() {
  try {
  // FIX V7 2026-04 : si loadProfile a détecté un decode corrompu, on REFUSE de sauver
@@ -353,9 +380,7 @@ function saveProfile() {
      if (!recovered) {
        window._saveFailedAt = Date.now();
        // Sauvegarde d'urgence en sessionStorage (survit tant que l'onglet est ouvert)
-       try {
-         sessionStorage.setItem('mtd_profile_emergency_' + uid, JSON.stringify(data));
-       } catch(e5) {}
+       window.safeStorage.session.setItem('mtd_profile_emergency_' + uid, JSON.stringify(data));
 
        // Toast répété (une fois toutes les 10 actions, pas à chaque save pour éviter spam)
        window._quotaWarnCount = (window._quotaWarnCount || 0) + 1;
@@ -2227,6 +2252,33 @@ function render() {
  // Logged in → app
  var wrap = h('div', {'class': 'app'});
 
+ // ── GLOBAL SUBSCRIPTION DEBUG BAR (dev only — enable via localStorage.setItem('sfc_dev','1')) ──
+ // Idempotent: only one bar even with multiple render() calls.
+ try {
+   var _gDbKey = 'sfc_sub_debug_dismissed';
+   var _devMode = window.SFC_DEBUG === true || (function(){ try{ return localStorage.getItem('sfc_dev')==='1'; }catch(e){ return false; } })();
+   if (_devMode && !sessionStorage.getItem(_gDbKey) && !document.getElementById('sfc-global-debug')) {
+     var _gPlan  = (window.S && window.S.subscriptionPlan) || 'undefined';
+     var _gSrvP  = (window.S && window.S._serverPremium !== undefined) ? String(window.S._serverPremium) : 'undefined';
+     var _gReady = (window.S && window.S._subStatusReady) ? 'true' : 'false';
+     var _gIsP   = (typeof window.isPremium === 'function') ? String(window.isPremium()) : '?';
+     var _gIsT   = (typeof window.isTrialUser === 'function') ? String(window.isTrialUser()) : '?';
+     var _gDays  = (typeof window.getTrialDaysLeft === 'function') ? String(window.getTrialDaysLeft()) : '?';
+     var _gBv    = (window.SFC_BUNDLE_VERSION || 'unknown');
+     var _gEl = document.createElement('div');
+     _gEl.id = 'sfc-global-debug';
+     _gEl.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:999999;background:#000;color:#0f0;' +
+       'font-size:9px;font-family:monospace;padding:3px 6px;line-height:1.4;display:flex;justify-content:space-between;align-items:center;';
+     _gEl.innerHTML = '<span>PLAN=<b>' + _gPlan + '</b> | SRV_PREMIUM=<b>' + _gSrvP + '</b> | IS_PREMIUM=<b>' + _gIsP +
+       '</b> | IS_TRIAL=<b>' + _gIsT + '</b> | DAYS=<b>' + _gDays + '</b> | READY=<b>' + _gReady + '</b> | BV=<b>' + _gBv + '</b></span>' +
+       '<span onclick="sessionStorage.setItem(\'sfc_sub_debug_dismissed\',\'1\');document.getElementById(\'sfc-global-debug\').remove();" ' +
+       'style="cursor:pointer;padding:0 6px;font-size:12px;color:#fff;">×</span>';
+     if (document.body) {
+       document.body.appendChild(_gEl);
+     }
+   }
+ } catch(_gDbe) {}
+ // ── END GLOBAL DEBUG BAR ──
 
 
  // User bar — épuré : logo gauche | langue + avatar droite
@@ -2372,6 +2424,9 @@ function render() {
  }
  renderProfilePage(content);
  } else if (['calendar','sport','nutrition','analytics','social'].indexOf(S.view) !== -1) {
+ if (S.view === 'nutrition' && !window.RecipeEngine && window._lazyLoad) {
+   window._lazyLoad('./recipe-engine.js');
+ }
  var _modMap = { calendar: 'SMART_CALENDAR', sport: 'SPORT', nutrition: 'NUTRITION', analytics: 'ANALYTICS', social: 'SOCIAL' };
  var _modName = _modMap[S.view];
  if (window[_modName]) {
@@ -2649,17 +2704,13 @@ function renderLogin(app) {
  window.UNITS.weight = S.weightUnit || 'kg';
  window.UNITS.height = S.heightUnit || 'cm';
  }
- // FIX audit backend : recalculer la vue après chargement cloud
- // (le profil peut être plus récent/complet que le local).
  _resolvePostLoginView();
- render(); // Re-render après sync cloud : nStep migré, unités à jour, vue recalculée
  }
- SupaSync.startAutoSync(); // Démarrer après syncOnLogin pour éviter la double-écriture
- // Pull authoritative subscription state from server — DB columns may be NULL for unlimited plans
+ SupaSync.startAutoSync();
  if (typeof SupaSync.fetchUserStatus === 'function') {
  SupaSync.fetchUserStatus().then(function() { render(); }).catch(function() { render(); });
  }
- }).catch(function(e) { console.warn('[Login] syncOnLogin unexpected error:', e); SupaSync.startAutoSync(); });
+ }).catch(function(e) { console.warn('[Login] syncOnLogin unexpected error:', e); SupaSync.startAutoSync(); render(); });
  }
  if (window.GAMIFICATION) { GAMIFICATION.updateStreak(); GAMIFICATION.unlockBadge('first_login'); }
  // Enregistre la date du premier login (pour bloquer le bilan de forme au J+1)
@@ -3649,7 +3700,6 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
      _migrateSteps();
      if (window.I18N && S.lang) window.I18N.current = S.lang;
      if (window.UNITS) { window.UNITS.weight = S.weightUnit || 'kg'; window.UNITS.height = S.heightUnit || 'cm'; }
-     // FIX 2026-04-16 : recalculer la vue après chargement cloud (comme _resolvePostLoginView dans login manuel)
      var _csSetup = !!S.sportType;
      var _csProg = (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) || !!S.muscuIAProgram;
      if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) !== -1 && !_csSetup) { S.view = 'sport'; }
@@ -3659,14 +3709,12 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
      else if (S.appMode === 'both' && S.nStep === 12 && !_csSetup && !_csProg) { S.view = 'sport'; }
      else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
      else if (S.appMode) { S.view = 'today'; }
-     if (window.render) window.render();
    }
-   SupaSync.startAutoSync(); // Démarrer après syncOnLogin pour éviter la double-écriture
-   // Pull authoritative subscription state from server — same as manual login path
+   SupaSync.startAutoSync();
    if (typeof SupaSync.fetchUserStatus === 'function') {
      SupaSync.fetchUserStatus().then(function() { render(); }).catch(function() { render(); });
    }
- }).catch(function() { SupaSync.startAutoSync(); });
+ }).catch(function() { SupaSync.startAutoSync(); render(); });
  }
 } else {
  S.view = 'auth';

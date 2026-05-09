@@ -3229,9 +3229,22 @@ function renderStep9(p) {
   });
 
   // Cible calorique : plan du jour si présent, sinon fallback calcTarget()×multiplier
+  var _calcTargetResult = calcTarget();
+  if (_planKcal <= 0 && !_calcTargetResult) {
+    console.warn('[SFC] calcTarget() returned falsy — using default calorie target (1800/2000)');
+    if (!window._sfcCalFallbackToastShown && window.showToast) {
+      window._sfcCalFallbackToastShown = true;
+      window.showToast(
+        (window.isEnglish && window.isEnglish())
+          ? 'Profile incomplete — calorie target estimated provisionally.'
+          : 'Certaines données profil sont incomplètes. Objectif calorique estimé provisoirement.',
+        'info', 5000
+      );
+    }
+  }
   var _calBase = _planKcal > 0
     ? _planKcal
-    : (calcTarget() || (window.isFemale(S) ? 1800 : 2000));
+    : (_calcTargetResult || (window.isFemale(S) ? 1800 : 2000));
   var _calMult = (_dayAdapt && typeof _dayAdapt.calMultiplier === 'number' && _dayAdapt.calMultiplier > 0)
     ? _dayAdapt.calMultiplier : 1.0;
   var _tgt = Math.round(_calBase * (_planKcal > 0 ? 1.0 : _calMult));
@@ -6086,7 +6099,20 @@ function showSmoothieModal(sm) {
         lv: 1, _id: sm.id, _smoothie: true
       };
       var split = window.getMealSplit ? window.getMealSplit() : null;
-      var totalTarget = (typeof calcTarget === 'function' ? calcTarget() : 0) || window.S.caloriesTarget || (window.isFemale(window.S) ? 1800 : 2000);
+      var _ttRaw = (typeof calcTarget === 'function' ? calcTarget() : 0) || window.S.caloriesTarget;
+      if (!_ttRaw) {
+        console.warn('[SFC] calcTarget() and caloriesTarget both falsy — using default calorie target (1800/2000)');
+        if (!window._sfcCalFallbackToastShown && window.showToast) {
+          window._sfcCalFallbackToastShown = true;
+          window.showToast(
+            (window.isEnglish && window.isEnglish())
+              ? 'Profile incomplete — calorie target estimated provisionally.'
+              : 'Certaines données profil sont incomplètes. Objectif calorique estimé provisoirement.',
+            'info', 5000
+          );
+        }
+      }
+      var totalTarget = _ttRaw || (window.isFemale(window.S) ? 1800 : 2000);
       var snackTargetBefore = split ? Math.round(totalTarget * split.pctSnack) : Math.round(totalTarget * 0.15);
       var delta = sm.cal - snackTargetBefore;
       var dayPlan = S.weekPlan[S.selectedDay];

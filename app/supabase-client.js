@@ -1138,6 +1138,13 @@ window.safeUserStatusCheck = function(opts) {
     }
     return status.premium ? _allow('server', status) : _deny('server', 'not_premium');
   }).catch(function() {
+    // Network error — use stale cache if available, consistent with isPremium() behaviour
+    if (sync._userStatusCache && typeof sync._userStatusCache.premium === 'boolean') {
+      return sync._userStatusCache.premium
+        ? _allow('fallback', sync._userStatusCache)
+        : _deny('fallback', 'not_premium_stale');
+    }
+    if (window.S && window.S._serverPremium === true) return _allow('fallback', null);
     return _deny('fallback', 'server_error');
   });
 };

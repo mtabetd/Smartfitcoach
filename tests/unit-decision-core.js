@@ -87,16 +87,16 @@ test('Fatigue 4 + déficit -250 → volumeModifier max 0.75', function() {
 // ─── GROUPE 2 : Signal training → nutrition ───────────────────────────────────
 console.log('\n── Signal Training → Nutrition ─────────────────────────');
 
-test('Load heavy → calMultiplier 1.12, carbBoost 1.25', function() {
+test('Load heavy → calMultiplier 1.10, carbBoost 1.20 (unified with SFCSymbiosis)', function() {
   var sig = DC._trainingToNutritionSignal('heavy', 2, [], 3);
-  assert.strictEqual(sig.calMultiplier, 1.12);
-  assert.strictEqual(sig.carbBoost, 1.25);
+  assert.strictEqual(sig.calMultiplier, 1.10);
+  assert.strictEqual(sig.carbBoost, 1.20);
 });
 
-test('Load rest → calMultiplier 0.88 (jour repos)', function() {
+test('Load rest → calMultiplier 0.90, carbBoost 0.90 (unified with SFCSymbiosis)', function() {
   var sig = DC._trainingToNutritionSignal('rest', 2, [], 7);
-  assert.strictEqual(sig.calMultiplier, 0.88);
-  assert.strictEqual(sig.carbBoost, 0.85);
+  assert.strictEqual(sig.calMultiplier, 0.90);
+  assert.strictEqual(sig.carbBoost, 0.90);
 });
 
 test('Fatigue 4 → proteinBoost 1.12', function() {
