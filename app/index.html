@@ -368,6 +368,7 @@ canvas.weight-chart{width:100%;height:200px}
   .alcohol-item{flex-direction:column;align-items:flex-start;gap:6px}
   .user-bar{flex-direction:column;align-items:flex-start;gap:6px}
 }
+@keyframes sfcpulse{0%,100%{opacity:.3}50%{opacity:.7}}
 </style>
 </head>
 <body>
@@ -383,7 +384,7 @@ canvas.weight-chart{width:100%;height:200px}
 </div>
 
 <a id="skip-nav-link" href="#app" class="skip-nav" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:99999;padding:12px 16px;background:var(--black);color:var(--ivory);font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;text-decoration:none;border-radius:0 0 4px 0;">Aller au contenu principal</a>
-<main id="app" role="main"></main>
+<main id="app" role="main"><div id="sfc-skeleton" aria-hidden="true" style="padding:24px;max-width:440px;margin:0 auto;box-sizing:border-box"><div style="height:44px;background:#E8E8E4;border-radius:2px;margin-bottom:24px;animation:sfcpulse 1.4s ease-in-out infinite"></div><div style="height:120px;background:#E8E8E4;border-radius:2px;margin-bottom:16px;animation:sfcpulse 1.4s ease-in-out .1s infinite"></div><div style="height:60px;background:#E8E8E4;border-radius:2px;margin-bottom:16px;animation:sfcpulse 1.4s ease-in-out .2s infinite"></div><div style="height:60px;background:#E8E8E4;border-radius:2px;animation:sfcpulse 1.4s ease-in-out .3s infinite"></div></div></main>
 <script src="./error-boundary.js"></script>
 <script src="./gate.js"></script>
 <script defer src="./tracker.js"></script>
@@ -391,7 +392,7 @@ canvas.weight-chart{width:100%;height:200px}
 <script src="./muscu-engine.js"></script>
 <script src="./sfc-engine.js"></script>
 <script src="./sfc-symbiosis.js"></script>
-<script defer src="./bundle.js?v=motywfmh"></script>
+<script defer src="./bundle.js?v=moxz3iee"></script>
 <div id="offline-banner" role="status" aria-live="polite" data-fr="Hors ligne · Vos données sont sauvegardées localement" data-en="Offline · Your data is saved locally" style="display:none;position:fixed;top:0;left:0;right:0;z-index:10001;background:var(--tabac,#6A4A1A);color:var(--ivory,#FAF9F6);text-align:center;padding:10px 16px;font-size:10px;font-family:'Helvetica Neue',Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;">
   Hors ligne &middot; Vos donn&eacute;es sont sauvegard&eacute;es localement
 </div>
