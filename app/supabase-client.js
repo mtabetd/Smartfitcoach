@@ -163,8 +163,10 @@
     saveProfile: function() {
       var self = this;
       // Mutex : si un upsert est déjà en vol, marquer un re-flush pour après
+      // P2 fix: persist le flag en sessionStorage pour survivre aux rechargements de page.
       if (self._syncing) {
         self._savePendingDuringSync = true;
+        try { sessionStorage.setItem('_sfc_save_pending', '1'); } catch(_) {}
         return Promise.resolve();
       }
       self._syncing = true;
@@ -243,25 +245,65 @@
         //   first_login_date       — write-once column (20260505 migration)
         // Stripping them from the JSONB blob keeps data clean and prevents a
         // compromised client from polluting the JSONB fallback path.
+        // P6 fix: strip server-authoritative keys AND null/empty protected keys.
+        // Protected keys stripped when null avoid overwriting another device's value via
+        // the merge_profile_data RPC (uses JSONB || — keys absent here are preserved in cloud).
+        var _P6_PROTECTED = [
+          'sportProgram', 'runningProgram', 'cyclingProgram', 'triathlonProgram',
+          'hyroxProgram', 'padelProgram', 'golfProgram', 'yogaWeek', 'calisthenicsWeek',
+          'weekPlan', 'favoriteRecipes', 'nutritionLog',
+          'muscuSessionLog', 'musculationWeights', 'muscuProgressionHistory',
+          'sessionHistory', 'bonusExercises', 'weightHistory', 'crossfit1RM',
+          'muscuStrengthProfile', 'weeklyCalendar', 'aiCoachHistory', 'trainingDaysSelected'
+        ];
         var _safeData = data;
         try {
-          if (data && (data.subscriptionPlan !== undefined || data.subscriptionEnd !== undefined || data.firstLoginDate !== undefined)) {
-            _safeData = Object.assign({}, data);
-            delete _safeData.subscriptionPlan;
-            delete _safeData.subscriptionEnd;
-            delete _safeData.firstLoginDate;
+          _safeData = Object.assign({}, data);
+          // Strip server-authoritative keys (never let client overwrite DB columns)
+          delete _safeData.subscriptionPlan;
+          delete _safeData.subscriptionEnd;
+          delete _safeData.firstLoginDate;
+          // Strip null/empty protected keys so the DB merge (||) preserves the cloud value.
+          // Null here means "not generated on this device", not an intentional deletion.
+          for (var _pi = 0; _pi < _P6_PROTECTED.length; _pi++) {
+            var _pk = _P6_PROTECTED[_pi];
+            var _pv = _safeData[_pk];
+            var _isEmpty = _pv === null || _pv === undefined ||
+              (Array.isArray(_pv) && _pv.length === 0) ||
+              (typeof _pv === 'object' && !Array.isArray(_pv) && Object.keys(_pv).length === 0);
+            if (_isEmpty) delete _safeData[_pk];
           }
         } catch(e) { _safeData = data; }
 
+        // P6: use merge_profile_data RPC (JSONB || merge) instead of full-blob upsert.
+        // Falls back to direct upsert if the RPC is unavailable (pre-migration environment).
+        var _doUpsert = function(_sd) {
+          return client
+            .from('profiles')
+            .upsert({
+              id: userId,
+              email: session.user.email,
+              name: data.name || (session.user.user_metadata && session.user.user_metadata.name) || '',
+              data: _sd,
+              updated_at: new Date().toISOString()
+            }, { onConflict: 'id' });
+        };
         return client
-          .from('profiles')
-          .upsert({
-            id: userId,
-            email: session.user.email,
-            name: data.name || session.user.user_metadata.name || '',
-            data: _safeData,
-            updated_at: new Date().toISOString()
-          }, { onConflict: 'id' })
+          .rpc('merge_profile_data', {
+            p_user_id:    userId,
+            p_email:      session.user.email,
+            p_name:       data.name || (session.user.user_metadata && session.user.user_metadata.name) || '',
+            p_data:       _safeData,
+            p_updated_at: new Date().toISOString()
+          })
+          .then(function(rpcResult) {
+            // If RPC not found (pre-migration), fall back to direct upsert
+            if (rpcResult && rpcResult.error && (rpcResult.error.code === 'PGRST202' || /function.*does not exist/i.test(rpcResult.error.message || ''))) {
+              console.warn('[SupaSync] merge_profile_data RPC not found — falling back to upsert (run migration 20260509)');
+              return _doUpsert(_safeData);
+            }
+            return rpcResult;
+          })
           .then(function(result) {
             if (result.error) {
               console.warn('[SupaSync] saveProfile error:', result.error.message);
@@ -275,9 +317,12 @@
               } catch(e) {}
             }
             self._syncing = false;
-            // Re-flush if a save was queued while this one was in-flight
-            if (self._savePendingDuringSync) {
+            // Re-flush if a save was queued while this one was in-flight (P2: check sessionStorage too)
+            var _pendingA = self._savePendingDuringSync;
+            try { _pendingA = _pendingA || sessionStorage.getItem('_sfc_save_pending') === '1'; } catch(_) {}
+            if (_pendingA) {
               self._savePendingDuringSync = false;
+              try { sessionStorage.removeItem('_sfc_save_pending'); } catch(_) {}
               setTimeout(function() { try { self.saveProfile(); } catch(_) {} }, 200);
             }
             return result;
@@ -285,6 +330,7 @@
       }).catch(function(e) {
         self._syncing = false;
         self._savePendingDuringSync = false;
+        try { sessionStorage.removeItem('_sfc_save_pending'); } catch(_) {}
         console.warn('[SupaSync] saveProfile failed:', e);
         _trackSyncFailure((e && e.message) || String(e));
         if (window.SFCLogger) window.SFCLogger.capture(e, { module: 'SupaSync.saveProfile' });
@@ -600,6 +646,7 @@
       // le save différé pour ne PAS perdre les modifs user pendant la fenêtre de sync.
       if (self._syncPending) {
         self._savePendingDuringSync = true;
+        try { sessionStorage.setItem('_sfc_save_pending', '1'); } catch(_) {}
         return;
       }
       if (self._debounceTimer) clearTimeout(self._debounceTimer);
@@ -917,8 +964,12 @@
         // FIX V3 2026-04 : si l'utilisateur a tenté un saveProfile pendant le sync
         // (qui a été skippé par scheduleSave car _syncPending=true), on le rejoue
         // maintenant pour ne pas perdre ses modifs.
-        if (self._savePendingDuringSync) {
+        // P2 fix: check sessionStorage in addition to memory flag (survives page reload)
+        var _pendingB = self._savePendingDuringSync;
+        try { _pendingB = _pendingB || sessionStorage.getItem('_sfc_save_pending') === '1'; } catch(_) {}
+        if (_pendingB) {
           self._savePendingDuringSync = false;
+          try { sessionStorage.removeItem('_sfc_save_pending'); } catch(_) {}
           console.log('[SupaSync] Re-flushing saveProfile (modifs user pendant sync)');
           try {
             self.saveProfile(); // fire-and-forget — la promise prochaine devient idempotente

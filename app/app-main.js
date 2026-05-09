@@ -2635,6 +2635,10 @@ function renderLogin(app) {
  if (window.PERF_HISTORY) {
  try { PERF_HISTORY.migrateExistingData(); } catch(e) {}
  }
+ // C8 guard : marquer le statut abonnement comme "en chargement" avant tout render.
+ // isPremium() retourne true et isTrialUser() retourne false tant que _subStatusReady=false,
+ // évitant tout flash "trial" pour les comptes premium entre le render immédiat et fetchUserStatus.
+ if (window.S) window.S._subStatusReady = false;
  // Sync from cloud (async — will re-render if cloud data was loaded)
  if (window.SupaSync) {
  SupaSync.syncOnLogin().then(function(syncResult) {

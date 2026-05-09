@@ -140,6 +140,7 @@ exports.handler = async function(event) {
     if (rawDate) {
       const trialEnd = new Date(rawDate);
       trialEnd.setUTCDate(trialEnd.getUTCDate() + TRIAL_DAYS);
+      trialEnd.setUTCHours(23, 59, 59, 999); // C9 fix: fin de journée UTC — aligné avec client et _user-auth.js
       const msLeft = trialEnd.getTime() - nowMs;
       if (msLeft > 0) {
         premium = true;
