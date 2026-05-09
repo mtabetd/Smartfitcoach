@@ -102,6 +102,7 @@ async function requirePremium(event) {
       if (rawDate) {
         const trialEnd = new Date(rawDate);
         trialEnd.setUTCDate(trialEnd.getUTCDate() + TRIAL_DAYS);
+        trialEnd.setUTCHours(23, 59, 59, 999); // C9 fix: fin de journée UTC — aligné avec user-status.js et client
         if (new Date() <= trialEnd) premium = true;
       } else if (!profile.subscription_end) {
         // Truly brand-new user (no trial date, no subscription ever set) — grant trial
