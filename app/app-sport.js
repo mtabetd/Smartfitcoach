@@ -703,6 +703,8 @@ function generateSportProgram() {
  if (window.SFCSymbiosis && window.SFCSymbiosis.getPeriodizationCfg) {
    var _perioCfg = window.SFCSymbiosis.getPeriodizationCfg(window.SFCSymbiosis.getWeekIndex());
    _durMax  = Math.min(_durMax, _perioCfg.durMax);           // S4 deload plafonne le volume
+   // Garantir le plancher lié à la préférence utilisateur — évite les séances < 30 min en décharge.
+   if (_dur) { var _durFloor = {'45min':3,'1h':4,'1h15':5,'1h30':6}[_dur] || 3; if (_durMax < _durFloor) _durMax = _durFloor; }
    _durSets = _perioCfg.durSets || _durSets;                  // S3 +1 série / S4 -1 série
    // restOverride : périodisation n'écrase pas les objectifs shred/force (priorité goal)
    if (_perioCfg.restOverride && !hasShred && !hasStrength) {
@@ -983,7 +985,7 @@ function renderSportChoice(p) {
       if (_restTimerInterval) { clearInterval(_restTimerInterval); _restTimerInterval = null; }
       S.sportType = null; S.sStep = 0; S.selectedSportDay = 0;
       S.sportGoals = []; S.sportLevel = null; S.sportFocus = {};
-      S.sportProgram = null; S.sportDays = 3; S.sportSessionDuration = null; S.bonusExercises = {};
+      S.sportProgram = null; S.sportDays = 3; S.bonusExercises = {};
       S.bonusExercises = {}; S._splitChoice = null; S.cfCalendarOpen = false;
       S.trainingDaysSelected = [];
       S.sportMixEnabled = false; S.sportMixSecondary = null;
@@ -1220,7 +1222,7 @@ window.SPORT = {
        // Réinitialiser tous les champs liés au sport actif
        S.sportType = null; S.sStep = 0; S.selectedSportDay = 0;
        S.sportGoals = []; S.sportLevel = null; S.sportFocus = {};
-       S.sportProgram = null; S.sportDays = 3; S.sportSessionDuration = null; S.bonusExercises = {};
+       S.sportProgram = null; S.sportDays = 3; S.bonusExercises = {};
        S.bonusExercises = {}; S._splitChoice = null; S.cfCalendarOpen = false;
        S.trainingDaysSelected = [];
        S.sportMixEnabled = false; S.sportMixSecondary = null;
