@@ -89,17 +89,21 @@ const banner = '/* SmartFitCoach bundle v' + buildVersion + ' — generated at b
   'window.SFC_BUNDLE_VERSION="' + buildVersion + '";\n';
 fs.writeFileSync(bundlePath, banner + parts.join('\n'));
 
-// Patch index.html to add ?v= cache-busting query on bundle.js reference.
-// This forces browser/CDN to fetch the new bundle even with immutable cache headers.
+// Patch index.html: update ?v= cache-busting on bundle.js script tag AND preload hint.
 const indexPath = path.join(APP_DIR, 'index.html');
 try {
-  const indexHtml = fs.readFileSync(indexPath, 'utf8');
-  const patched = indexHtml.replace(
+  let indexHtml = fs.readFileSync(indexPath, 'utf8');
+  const orig = indexHtml;
+  indexHtml = indexHtml.replace(
     /(<script[^>]+src=["']\.\/bundle\.js)(\?v=[^"']*)?/,
     '$1?v=' + buildVersion
   );
-  if (patched !== indexHtml) {
-    fs.writeFileSync(indexPath, patched);
+  indexHtml = indexHtml.replace(
+    /(<link[^>]+rel=["']preload["'][^>]+href=["']\.\/bundle\.js)(\?v=[^"']*)?/,
+    '$1?v=' + buildVersion
+  );
+  if (indexHtml !== orig) {
+    fs.writeFileSync(indexPath, indexHtml);
     console.log('[build-bundle] index.html bundle.js?v=' + buildVersion + ' (cache buster updated)');
   }
 } catch(e) {
