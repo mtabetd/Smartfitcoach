@@ -396,7 +396,8 @@ window.CUSTOM_SESSION = {
     if (!S) return;
     draft.view = 'done';
     draft.endTime = Date.now();
-    draft.durationMins = durationMins || Math.max(1, Math.round(((draft.endTime - (draft.startTime || draft.endTime)) / 60000))) || 30;
+    var _prefMins = ({'45min':45,'1h':60,'1h15':75,'1h30':90}[(window.S && window.S.sportSessionDuration)] || 60);
+    draft.durationMins = durationMins || Math.max(1, Math.round(((draft.endTime - (draft.startTime || draft.endTime)) / 60000))) || _prefMins;
 
     // historique des séances custom (max 90)
     if (!Array.isArray(S.customSessionHistory)) S.customSessionHistory = [];
@@ -505,7 +506,7 @@ window.CUSTOM_SESSION = {
 
   calcKcal: function(draft) {
     if (!draft) return { base: 0, epoc: 0, total: 0 };
-    var mins   = draft.durationMins || 30;
+    var mins   = draft.durationMins || ({'45min':45,'1h':60,'1h15':75,'1h30':90}[(window.S && window.S.sportSessionDuration)] || 60);
     var weight = (window.S && window.S.weight) ? (parseFloat(window.S.weight) || 70) : 70;
     var hasCardio = draft.blocks.some(function(b) { return b.type === 'cardio'; });
     var met = hasCardio ? 5.5 : 4.5;
@@ -1564,7 +1565,7 @@ function _csRenderDone(container, draft) {
   durRow.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);flex:1;' }, _dEN ? 'Actual duration' : 'Durée réelle'));
   var durInp = h('input', {
     type: 'number', min: '1', max: '300', inputmode: 'numeric',
-    value: String(draft.durationMins || 30),
+    value: String(draft.durationMins || ({'45min':45,'1h':60,'1h15':75,'1h30':90}[(window.S && window.S.sportSessionDuration)] || 60)),
     style: 'width:60px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:16px;text-align:center;background:var(--ivory);',
     onclick: function(e) { e.stopPropagation(); },
     onchange: function(e) {

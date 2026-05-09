@@ -353,15 +353,16 @@
       last3SessionsIntensity: ctx.training.last3Intensity
     };
 
-    // Décision de base via V3 (dégradation vers V2 → V1 si absent)
+    // Décision de base via V3 (dégradation vers V2 → V1 si absent).
+    // Les moteurs exposent DailyDecisionEngineV3/V2/V1 — PAS decideDailyPlanVX directement.
     var baseV3 = null;
     try {
-      if (typeof root.decideDailyPlanV3 === 'function') {
-        baseV3 = root.decideDailyPlanV3(v3Inputs);
-      } else if (typeof root.decideDailyPlanV2 === 'function') {
-        baseV3 = root.decideDailyPlanV2(v3Inputs);
-      } else if (typeof root.decideDailyPlan === 'function') {
-        baseV3 = root.decideDailyPlan(v3Inputs);
+      if (root.DailyDecisionEngineV3 && typeof root.DailyDecisionEngineV3.decideDailyPlanV3 === 'function') {
+        baseV3 = root.DailyDecisionEngineV3.decideDailyPlanV3(v3Inputs);
+      } else if (root.DailyDecisionEngineV2 && typeof root.DailyDecisionEngineV2.decideDailyPlanV2 === 'function') {
+        baseV3 = root.DailyDecisionEngineV2.decideDailyPlanV2(v3Inputs);
+      } else if (root.DailyDecisionEngine && typeof root.DailyDecisionEngine.decideDailyPlan === 'function') {
+        baseV3 = root.DailyDecisionEngine.decideDailyPlan(v3Inputs);
       }
     } catch(e) { console.warn('[SFCDecisionCore] decideDailyPlan error:', e && e.message); }
 

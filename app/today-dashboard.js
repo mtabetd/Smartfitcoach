@@ -4175,7 +4175,7 @@ function renderSmartFitCoachToday() {
     sel2 = selAPI.selectWorkout({
       user_level:        ({ beginner:'beginner', intermediate:'intermediate', advanced:'intermediate', pro:'intermediate', expert:'intermediate' })[S.sportLevel] || 'beginner',
       goal:              ({ muscle_gain:'strength', maintenance:'conditioning', fat_loss:'fat_loss' })[v3In.goal] || 'conditioning',
-      available_time:    ({ '45min':45, '1h':60, '1h15':75, '1h30':90 })[S.sportSessionDuration] || 45,
+      available_time:    ({ '45min':45, '1h':60, '1h15':75, '1h30':90 })[S.sportSessionDuration] || 60,
       fatigue_level:     v3In.fatigueLevel,
       last_workouts:     (window.SFCSessionHistory ? window.SFCSessionHistory.getSessionHistory() : []),
       preferred_subtypes: null

@@ -248,37 +248,36 @@ test('getDecision() retourne le cache si < 5min', function() {
   assert.strictEqual(d, cached);
 });
 
-// ─── GROUPE 7 : timezone trial expiry (app-core.js P3) ───────────────────────
-console.log('\n── Timezone Trial Expiry (P3) ────────────────────────────');
+// ─── GROUPE 7 : timezone trial expiry (C9 fix — UTC unifié) ─────────────────
+console.log('\n── Timezone Trial Expiry (C9 — UTC unifié) ──────────────');
 
-test('Trial expiry = fin de journée locale J+7 (23:59:59)', function() {
-  // Simule le calcul de isPremium / getTrialDaysLeft après fix P3
+test('Trial expiry = fin de journée UTC J+7 (23:59:59 UTC)', function() {
+  // C9 fix : serveur et client utilisent setUTCDate + setUTCHours(23,59,59,999)
   var firstLoginDate = new Date();
-  firstLoginDate.setDate(firstLoginDate.getDate() - 6); // il y a 6 jours
+  firstLoginDate.setUTCDate(firstLoginDate.getUTCDate() - 6); // il y a 6 jours UTC
   var trialEnd = new Date(firstLoginDate);
-  trialEnd.setDate(trialEnd.getDate() + 7);
-  trialEnd.setHours(23, 59, 59, 999);
+  trialEnd.setUTCDate(trialEnd.getUTCDate() + 7);
+  trialEnd.setUTCHours(23, 59, 59, 999);
   var now = new Date();
-  // Doit encore être dans le trial (J6 sur 7 → encore valide)
   assert(trialEnd > now, 'Trial doit être encore actif J6/7');
-  // L'heure d'expiration doit être 23:59:59 local (pas minuit UTC)
-  assert.strictEqual(trialEnd.getHours(), 23);
-  assert.strictEqual(trialEnd.getMinutes(), 59);
+  assert.strictEqual(trialEnd.getUTCHours(), 23);
+  assert.strictEqual(trialEnd.getUTCMinutes(), 59);
 });
 
-test('UTC vs local — expiry != minuit UTC pour UTC+6', function() {
+test('Serveur et client produisent le même timestamp (UTC+12 et UTC-12)', function() {
   var firstLoginDate = new Date('2026-05-01T00:00:00Z');
-  // Ancienne logique (bug) : expiry = 2026-05-08T00:00:00Z
-  var oldEnd = new Date(firstLoginDate);
-  oldEnd.setUTCDate(oldEnd.getUTCDate() + 7);
-  // Nouvelle logique (fix) : expiry = fin de journée locale J+7
-  var newEnd = new Date(firstLoginDate);
-  newEnd.setDate(newEnd.getDate() + 7);
-  newEnd.setHours(23, 59, 59, 999);
-  // Les deux ne doivent pas être identiques (sauf si l'environnement de test est UTC)
-  // Vérification de la logique : newEnd doit avoir H=23, M=59
-  assert.strictEqual(newEnd.getHours(), 23);
-  assert.strictEqual(newEnd.getMinutes(), 59);
+  // Calcul serveur (user-status.js + _user-auth.js)
+  var serverEnd = new Date(firstLoginDate);
+  serverEnd.setUTCDate(serverEnd.getUTCDate() + 7);
+  serverEnd.setUTCHours(23, 59, 59, 999);
+  // Calcul client (app-core.js — C9 fix)
+  var clientEnd = new Date(firstLoginDate);
+  clientEnd.setUTCDate(clientEnd.getUTCDate() + 7);
+  clientEnd.setUTCHours(23, 59, 59, 999);
+  // Doivent être identiques quel que soit le timezone du runtime
+  assert.strictEqual(serverEnd.getTime(), clientEnd.getTime(), 'Serveur et client alignés');
+  // Expiry = 2026-05-08T23:59:59.999Z
+  assert.strictEqual(serverEnd.toISOString(), '2026-05-08T23:59:59.999Z');
 });
 
 // ─── Résultat final ───────────────────────────────────────────────────────────
