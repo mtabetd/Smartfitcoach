@@ -44,6 +44,8 @@ eval(fs.readFileSync(ROOT + '/app/i18n-helpers.js', 'utf8'));  // isFemale, isMa
 eval(fs.readFileSync(ROOT + '/app/nutrition-master.js', 'utf8'));  // NutritionMaster.compute
 eval(fs.readFileSync(ROOT + '/app/sfc-symbiosis.js', 'utf8'));  // SFCSymbiosis, LOAD_MULTIPLIERS
 eval(fs.readFileSync(ROOT + '/app/exercises-db.js', 'utf8'));
+var _muscuEngine = require(ROOT + '/app/muscu-engine.js');       // sfcBuildMuscuDay — UMD exports via module.exports in Node
+window.sfcBuildMuscuDay = _muscuEngine.sfcBuildMuscuDay;
 eval(fs.readFileSync(ROOT + '/app/sport-data.js', 'utf8'));  // données statiques sport (Phase 2)
 eval(fs.readFileSync(ROOT + '/app/app-sport.js', 'utf8'));
 

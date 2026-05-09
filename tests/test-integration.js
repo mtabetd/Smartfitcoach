@@ -223,9 +223,9 @@ console.log('\nINT-05: Double session same day');
 (function() {
   var now    = Date.now();
   var today  = new Date(now).toISOString().slice(0, 10);
-  // Two sessions on the same calendar day
+  // Two sessions on the same calendar day — use small offsets to avoid UTC day boundary
   var s1 = {
-    id: 'morning', timestamp: now - 8 * 60 * MIN,
+    id: 'morning', timestamp: now - 2 * 60 * MIN,
     exercises: [
       { name: 'Squat',      sets: 4, reps: 6, weight: 110 },
       { name: 'Deadlift',   sets: 3, reps: 5, weight: 140 }
@@ -395,7 +395,7 @@ console.log('\nINT-12: Multiple sports same day — max load wins');
   var now   = Date.now();
   // Morning: yoga (light), evening: running heavy
   var yoga    = {
-    id: 'yoga', timestamp: now - 10 * 60 * MIN,
+    id: 'yoga', timestamp: now - 2 * 60 * MIN,
     exercises: [{ name: 'pose1', sets: 1, reps: 10 }, { name: 'pose2', sets: 1, reps: 10 }],
     duration: 30
   };

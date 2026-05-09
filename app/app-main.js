@@ -2227,11 +2227,12 @@ function render() {
  // Logged in → app
  var wrap = h('div', {'class': 'app'});
 
- // ── GLOBAL SUBSCRIPTION DEBUG BAR (TEMP — tap × to dismiss) ──────────────
- // Shows on EVERY view. Idempotent: only one bar even with multiple render() calls.
+ // ── GLOBAL SUBSCRIPTION DEBUG BAR (dev only — enable via localStorage.setItem('sfc_dev','1')) ──
+ // Idempotent: only one bar even with multiple render() calls.
  try {
    var _gDbKey = 'sfc_sub_debug_dismissed';
-   if (!sessionStorage.getItem(_gDbKey) && !document.getElementById('sfc-global-debug')) {
+   var _devMode = window.SFC_DEBUG === true || (function(){ try{ return localStorage.getItem('sfc_dev')==='1'; }catch(e){ return false; } })();
+   if (_devMode && !sessionStorage.getItem(_gDbKey) && !document.getElementById('sfc-global-debug')) {
      var _gPlan  = (window.S && window.S.subscriptionPlan) || 'undefined';
      var _gSrvP  = (window.S && window.S._serverPremium !== undefined) ? String(window.S._serverPremium) : 'undefined';
      var _gReady = (window.S && window.S._subStatusReady) ? 'true' : 'false';

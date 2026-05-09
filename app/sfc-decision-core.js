@@ -356,7 +356,7 @@
       } else if (typeof root.decideDailyPlan === 'function') {
         baseV3 = root.decideDailyPlan(v3Inputs);
       }
-    } catch(e) {}
+    } catch(e) { console.warn('[SFCDecisionCore] decideDailyPlan error:', e && e.message); }
 
     // Signaux bidirectionnels
     var nutritionMod = _nutritionToTrainingSignal(
