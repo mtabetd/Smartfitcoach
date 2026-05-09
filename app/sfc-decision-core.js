@@ -155,8 +155,15 @@
   // Sources : ISSN 2023 (carb timing) ; Helms 2014 (carb cycling) ; Morton 2018
 
   function _trainingToNutritionSignal(trainingLoad, fatigueLevel, lastGroups, daysSince) {
-    var calMults  = { heavy: 1.12, moderate: 1.06, light: 1.02, rest: 0.88 };
-    var carbBoost = { heavy: 1.25, moderate: 1.12, light: 1.05, rest: 0.85 };
+    // Read from SFCSymbiosis.LOAD_MULTIPLIERS (single source of truth) with inline fallback
+    var _lm = (window.SFCSymbiosis && window.SFCSymbiosis.LOAD_MULTIPLIERS) || {
+      heavy:    { cal: 1.10, carbBoost: 1.20 },
+      moderate: { cal: 1.07, carbBoost: 1.10 },
+      light:    { cal: 1.03, carbBoost: 1.00 },
+      rest:     { cal: 0.90, carbBoost: 0.90 }
+    };
+    var calMults  = { heavy: _lm.heavy.cal,    moderate: _lm.moderate.cal,    light: _lm.light.cal,    rest: _lm.rest.cal    };
+    var carbBoost = { heavy: _lm.heavy.carbBoost, moderate: _lm.moderate.carbBoost, light: _lm.light.carbBoost, rest: _lm.rest.carbBoost };
 
     var sig = {
       calMultiplier: calMults[trainingLoad]  || 1.0,

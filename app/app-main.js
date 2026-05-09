@@ -196,6 +196,33 @@ var SPORT_PROGRAM_KEYS = [
  'pregnant', 'pregnancyWeek' // grossesse filtre les exercices dangereux → programme doit être régénéré
 ];
 
+// ─── SAFE STORAGE WRAPPER (Safari private mode — throws QuotaExceededError on write) ───
+window.safeStorage = (function() {
+  function _onUnavailable(storeName, err) {
+    if (window._sfcStorageUnavailableShown) return;
+    window._sfcStorageUnavailableShown = true;
+    console.warn('[SFC] ' + storeName + ' unavailable (Safari private mode?):', err && err.message);
+    setTimeout(function() {
+      if (window.showToast) {
+        window.showToast(
+          (window.isEnglish && window.isEnglish())
+            ? 'Private browsing detected — your data will not be saved locally. Enable cloud sync or exit private mode.'
+            : 'Navigation privée détectée — vos données ne seront pas sauvegardées localement. Activez la synchro cloud ou quittez le mode privé.',
+          'warning', 8000
+        );
+      }
+    }, 1000);
+  }
+  function _wrap(store, name) {
+    return {
+      getItem:    function(k)    { try { return store.getItem(k); }         catch(e) { return null; } },
+      setItem:    function(k, v) { try { store.setItem(k, v); return true; } catch(e) { _onUnavailable(name, e); return false; } },
+      removeItem: function(k)    { try { store.removeItem(k); return true; } catch(e) { return false; } }
+    };
+  }
+  return { local: _wrap(localStorage, 'localStorage'), session: _wrap(sessionStorage, 'sessionStorage') };
+})();
+
 function saveProfile() {
  try {
  // FIX V7 2026-04 : si loadProfile a détecté un decode corrompu, on REFUSE de sauver
@@ -353,9 +380,7 @@ function saveProfile() {
      if (!recovered) {
        window._saveFailedAt = Date.now();
        // Sauvegarde d'urgence en sessionStorage (survit tant que l'onglet est ouvert)
-       try {
-         sessionStorage.setItem('mtd_profile_emergency_' + uid, JSON.stringify(data));
-       } catch(e5) {}
+       window.safeStorage.session.setItem('mtd_profile_emergency_' + uid, JSON.stringify(data));
 
        // Toast répété (une fois toutes les 10 actions, pas à chaque save pour éviter spam)
        window._quotaWarnCount = (window._quotaWarnCount || 0) + 1;
