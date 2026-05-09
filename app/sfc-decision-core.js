@@ -353,15 +353,30 @@
       last3SessionsIntensity: ctx.training.last3Intensity
     };
 
-    // Décision de base via V3 (dégradation vers V2 → V1 si absent).
-    // Les moteurs exposent DailyDecisionEngineV3/V2/V1 — PAS decideDailyPlanVX directement.
+    // Engine version selection — locked per session once resolved (prevents mid-session V3→V1 fallback).
+    // The resolved engine is stored in S._decisionEngineVersion and reused for all subsequent calls.
+    // Cleared on logout (via window.S reset) or explicit re-generation.
+    var _engineVersion = (S && S._decisionEngineVersion) || null;
+    if (!_engineVersion) {
+      if (root.DailyDecisionEngineV3 && typeof root.DailyDecisionEngineV3.decideDailyPlanV3 === 'function') {
+        _engineVersion = 'V3';
+      } else if (root.DailyDecisionEngineV2 && typeof root.DailyDecisionEngineV2.decideDailyPlanV2 === 'function') {
+        _engineVersion = 'V2';
+        console.warn('[SFCDecisionCore] V3 not available — falling back to V2 for this session');
+      } else if (root.DailyDecisionEngine && typeof root.DailyDecisionEngine.decideDailyPlan === 'function') {
+        _engineVersion = 'V1';
+        console.warn('[SFCDecisionCore] V3/V2 not available — falling back to V1 for this session');
+      }
+      if (_engineVersion && S) S._decisionEngineVersion = _engineVersion;
+    }
+
     var baseV3 = null;
     try {
-      if (root.DailyDecisionEngineV3 && typeof root.DailyDecisionEngineV3.decideDailyPlanV3 === 'function') {
+      if (_engineVersion === 'V3') {
         baseV3 = root.DailyDecisionEngineV3.decideDailyPlanV3(v3Inputs);
-      } else if (root.DailyDecisionEngineV2 && typeof root.DailyDecisionEngineV2.decideDailyPlanV2 === 'function') {
+      } else if (_engineVersion === 'V2') {
         baseV3 = root.DailyDecisionEngineV2.decideDailyPlanV2(v3Inputs);
-      } else if (root.DailyDecisionEngine && typeof root.DailyDecisionEngine.decideDailyPlan === 'function') {
+      } else if (_engineVersion === 'V1') {
         baseV3 = root.DailyDecisionEngine.decideDailyPlan(v3Inputs);
       }
     } catch(e) { console.warn('[SFCDecisionCore] decideDailyPlan error:', e && e.message); }
