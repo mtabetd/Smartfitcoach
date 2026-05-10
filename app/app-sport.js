@@ -1858,6 +1858,41 @@ function _sfcAggregateLoad(sport, load) {
 }
 window._sfcAggregateLoad = _sfcAggregateLoad;
 
+// ─── SPORT SESSION COMPLETION — shared for sports without dedicated save handlers ───
+// Writes to S.sessionHistory + calls SFCSymbiosis.processCompletedSession.
+// Idempotent: same sessKey is silently ignored.
+function _completeSportSession(sportType, level, durationMin, sessKey) {
+  var dateStr = new Date().toISOString().slice(0, 10);
+  var finKey  = sessKey || (sportType + '_' + dateStr);
+  if (!S.sessionHistory) S.sessionHistory = {};
+  if (S.sessionHistory[finKey]) return;
+  var MET_MAP = { cycling: 7, triathlon: 9, padel: 7, golf: 4, yoga: 3, calisthenics: 5 };
+  var met  = MET_MAP[sportType] || 6;
+  var load = met >= 9 ? 'heavy' : met >= 5 ? 'moderate' : 'light';
+  var kcalEst = (typeof estimateKcal === 'function') ? estimateKcal(sportType, level, durationMin) : null;
+  S.sessionHistory[finKey] = {
+    duration: durationMin, sport: sportType, trainingLoad: load,
+    kcalBase: kcalEst ? (kcalEst.base || 0) : 0,
+    kcalEpoc: kcalEst ? (kcalEst.epoc || 0) : 0,
+    kcalTotal: kcalEst ? (kcalEst.total || 0) : 0,
+    date: new Date().toISOString()
+  };
+  (function(){ var _k = Object.keys(S.sessionHistory).sort(); if (_k.length > 365) { _k.slice(0, _k.length - 365).forEach(function(k) { delete S.sessionHistory[k]; }); } })();
+  _sfcAggregateLoad(sportType, load);
+  var _n = load === 'heavy' ? 6 : load === 'light' ? 2 : 4;
+  var _ex = []; for (var _i = 0; _i < _n; _i++) { _ex.push({ name: sportType + (_i + 1), sets: 3, reps: 10 }); }
+  if (window.SFCSymbiosis && window.SFCSymbiosis.processCompletedSession) {
+    try { window.SFCSymbiosis.processCompletedSession({ sessionId: finKey, date: dateStr, exercises: _ex, trainingLoad: load }); } catch (_e) {}
+  } else if (typeof window.computeNutritionState === 'function') {
+    try { window.computeNutritionState(true); } catch (_e) {}
+  }
+  if (window.GAMIFICATION) { try { window.GAMIFICATION.updateStreak(); } catch (_e) {} }
+  if (window.saveProfile) { try { window.saveProfile(); } catch (_e) {} }
+  if (window.showToast) window.showToast((window.isEnglish && window.isEnglish() ? '✓ Session done!' : '✓ Séance terminée !'), 'success');
+  window.render();
+}
+window._completeSportSession = _completeSportSession;
+
 // Creer une carte estimation calorique pour les programmes sport
 function buildKcalCard(kcal, durationMins) {
   var dureeStr = durationMins ? (durationMins + ' min') : '--';
@@ -4743,7 +4778,8 @@ function renderCrossfitProgram(p) {
  // Clé unique basée sur le WOD en cours + type de timer (countdown/up) + durée prévue
  var _wodPersistKey = '_sfc_wodTimer_' + (wod && wod.day ? wod.day : 'adhoc') + '_' + (isCountdown ? 'cd' : 'up') + '_' + totalSeconds;
  try {
-   var _savedState = sessionStorage.getItem(_wodPersistKey);
+   var _sfcSessStore = (window.safeStorage && window.safeStorage.session) || { getItem: function(k){ try{return sessionStorage.getItem(k);}catch(e){return null;} }, setItem: function(k,v){ try{sessionStorage.setItem(k,v);}catch(e){} }, removeItem: function(k){ try{sessionStorage.removeItem(k);}catch(e){} } };
+   var _savedState = _sfcSessStore.getItem(_wodPersistKey);
    if (_savedState) {
      var _st = JSON.parse(_savedState);
      // Ne restaurer que si < 4h (sinon c'est un timer abandonné)
@@ -4751,7 +4787,7 @@ function renderCrossfitProgram(p) {
        _elapsed = _st.elapsed;
        // Ne pas auto-démarrer — l'utilisateur doit explicitement reprendre
      } else {
-       sessionStorage.removeItem(_wodPersistKey);
+       _sfcSessStore.removeItem(_wodPersistKey);
      }
    }
  } catch(e) {}
@@ -4793,7 +4829,7 @@ function renderCrossfitProgram(p) {
  _elapsed = Math.floor((Date.now() - _timerStartTime) / 1000);
  updateDisplay();
  // 2026-04 N2 : sauvegarder l'état toutes les secondes (persist face au verrou écran)
- try { sessionStorage.setItem(_wodPersistKey, JSON.stringify({ elapsed: _elapsed, savedAt: Date.now() })); } catch(e) {}
+ try { _sfcSessStore.setItem(_wodPersistKey, JSON.stringify({ elapsed: _elapsed, savedAt: Date.now() })); } catch(e) {}
  if (isCountdown) {
  var remaining = totalSeconds - _elapsed;
  // Tick pour les 3 dernières secondes (une seule fois par seconde)
@@ -4819,7 +4855,7 @@ function renderCrossfitProgram(p) {
  _elapsed = 0;
  _lastTickSecond = -1;
  // 2026-04 N2 : purger l'état persistant (l'utilisateur veut repartir à zéro)
- try { sessionStorage.removeItem(_wodPersistKey); } catch(e) {}
+ try { _sfcSessStore.removeItem(_wodPersistKey); } catch(e) {}
  startBtn.textContent = (window.isEnglish && window.isEnglish() ? 'Start' : 'Démarrer');
  displayEl.style.color = '#0A0A09';
  updateDisplay();
@@ -11136,6 +11172,15 @@ function renderPadelProgram(p) {
   p.appendChild(buildKcalCard(padelKcal, padelDur));
  }());
  p.appendChild(h('div', {style: 'height:12px'}));
+ (function() {
+  var _pdDateStr = new Date().toISOString().slice(0, 10);
+  var _pdKey = 'padel_' + (S.selectedPadelDay || 0) + '_' + _pdDateStr;
+  var _pdDone = S.sessionHistory && S.sessionHistory[_pdKey];
+  var _pdDur  = ({ debutant: 60, intermediaire: 75, avance: 90, competition: 90 }[S.padelLevel || 'intermediaire'] || 75);
+  p.appendChild(h('button', { 'class': 'btn-primary', disabled: !!_pdDone,
+    onclick: function() { _completeSportSession('padel', S.padelLevel || 'intermediaire', _pdDur, _pdKey); }
+  }, _pdDone ? (window.isEnglish && window.isEnglish() ? '✓ Session logged' : '✓ Séance validée') : (window.isEnglish && window.isEnglish() ? '✓ Session done' : '✓ Séance terminée')));
+ }());
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 11; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration'}));
  appendNutritionModeCTA(p);
 }
@@ -11273,6 +11318,15 @@ function renderGolfProgram(p) {
   p.appendChild(buildKcalCard(golfKcal, golfDur));
  }());
  p.appendChild(h('div', {style: 'height:12px'}));
+ (function() {
+  var _gfDateStr = new Date().toISOString().slice(0, 10);
+  var _gfKey  = 'golf_' + (S.selectedGolfDay || 0) + '_' + _gfDateStr;
+  var _gfDone = S.sessionHistory && S.sessionHistory[_gfKey];
+  var _gfDur  = ({ debutant: 90, intermediaire: 120, avance: 150, scratch: 180 }[S.golfLevel || 'intermediaire'] || 120);
+  p.appendChild(h('button', { 'class': 'btn-primary', disabled: !!_gfDone,
+    onclick: function() { _completeSportSession('golf', S.golfLevel || 'intermediaire', _gfDur, _gfKey); }
+  }, _gfDone ? (window.isEnglish && window.isEnglish() ? '✓ Session logged' : '✓ Séance validée') : (window.isEnglish && window.isEnglish() ? '✓ Session done' : '✓ Séance terminée')));
+ }());
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 13; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration'}));
  appendNutritionModeCTA(p);
 }
@@ -11653,6 +11707,15 @@ function renderTriathlonProgram(p) {
  p.appendChild(sumRow);
 
  p.appendChild(h('div', {style: 'height:12px'}));
+ (function() {
+  var _triDateStr = new Date().toISOString().slice(0, 10);
+  var _triKey  = 'tri_' + (S.selectedTriDay || 0) + '_' + _triDateStr;
+  var _triDone = S.sessionHistory && S.sessionHistory[_triKey];
+  var _triDur  = Math.round(totalTriMins > 0 ? totalTriMins / Math.max(1, triSessions.length) : ({ beginner: 75, intermediate: 90, advanced: 105, elite: 120 }[S.triathlonLevel || 'intermediate'] || 90));
+  p.appendChild(h('button', { 'class': 'btn-primary', disabled: !!_triDone,
+    onclick: function() { _completeSportSession('triathlon', S.triathlonLevel || 'intermediate', _triDur, _triKey); }
+  }, _triDone ? (window.isEnglish && window.isEnglish() ? '✓ Session logged' : '✓ Séance validée') : (window.isEnglish && window.isEnglish() ? '✓ Session done' : '✓ Séance terminée')));
+ }());
  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { S.sStep = 17; window.render(); }, html: backArrow + 'Modifier la configuration'}));
  appendNutritionModeCTA(p);
 }
@@ -12038,6 +12101,17 @@ function renderYogaProgram(p) {
   p.appendChild(buildKcalCard(yogaKcal, yogaDurMin));
  }());
  p.appendChild(h('div', {style: 'height:12px'}));
+ (function() {
+  var _ygDateStr = new Date().toISOString().slice(0, 10);
+  var _ygKey  = 'yoga_' + _ygDateStr;
+  var _ygDone = S.sessionHistory && S.sessionHistory[_ygKey];
+  var _ygLvl  = S.yogaLevel || 'debutant';
+  var _ygDur  = S.yogaDuration ? parseInt(S.yogaDuration) : ({ debutant: 45, intermediaire: 60, avance: 75 }[_ygLvl] || 45);
+  if (isNaN(_ygDur) || _ygDur <= 0) _ygDur = 45;
+  p.appendChild(h('button', { 'class': 'btn-primary', disabled: !!_ygDone,
+    onclick: function() { _completeSportSession('yoga', _ygLvl, _ygDur, _ygKey); }
+  }, _ygDone ? (window.isEnglish && window.isEnglish() ? '✓ Session logged' : '✓ Séance validée') : (window.isEnglish && window.isEnglish() ? '✓ Session done' : '✓ Séance terminée')));
+ }());
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 19; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration'}));
  appendNutritionModeCTA(p);
 }
@@ -12332,7 +12406,6 @@ function renderCyclingProgram(p) {
               : S.cyclingTrainingLoad >= 40 ? 'moderate' : 'light';
  _sfcAggregateLoad('cycling', _cycLoad);
  _sfcNotifySport('cycling', S.cyclingLevel || 'intermediaire');
- _sfcAggregateLoad('cycling', _cycLoad);
  var zoneData = CYCLING_ZONES[Math.max(0, Math.min(zoneNum - 1, 4))] || CYCLING_ZONES[1];
  var zoneColor = zoneData ? zoneData.color : '#1A3A6A';
  var kcal = cyclingKcal(sess.duration, zoneNum, weightKg);
@@ -12368,6 +12441,16 @@ function renderCyclingProgram(p) {
  }
 
  p.appendChild(h('div', {style: 'height:12px'}));
+ (function() {
+  var _cycDateStr = new Date().toISOString().slice(0, 10);
+  var _cycKey2 = 'cycling_' + (S.selectedCyclingDay || 0) + '_' + _cycDateStr;
+  var _cycDone = S.sessionHistory && S.sessionHistory[_cycKey2];
+  var _cycLvl  = S.cyclingLevel || 'intermediaire';
+  var _cycDur2 = sess ? (sess.duration || ({ debutant: 60, intermediaire: 75, avance: 90, elite: 120 }[_cycLvl] || 75)) : ({ debutant: 60, intermediaire: 75, avance: 90, elite: 120 }[_cycLvl] || 75);
+  p.appendChild(h('button', { 'class': 'btn-primary', disabled: !!_cycDone,
+    onclick: function() { _completeSportSession('cycling', _cycLvl, _cycDur2, _cycKey2); }
+  }, _cycDone ? (window.isEnglish && window.isEnglish() ? '✓ Session logged' : '✓ Séance validée') : (window.isEnglish && window.isEnglish() ? '✓ Session done' : '✓ Séance terminée')));
+ }());
  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { S.sStep = 22; window.render(); }, html: backArrow + 'Modifier la configuration'}));
  appendNutritionModeCTA(p);
 }
@@ -12774,7 +12857,17 @@ function renderCalisthenicsProgram(content) {
  }
  content.appendChild(rulesCard);
 
- // ── BACK BUTTON ──
+ // ── DONE + BACK BUTTONS ──
+ (function() {
+  var _calDateStr = new Date().toISOString().slice(0, 10);
+  var _calKey  = 'calis_' + _calDateStr;
+  var _calDone = S.sessionHistory && S.sessionHistory[_calKey];
+  var _calLvl  = S.calisthenicsLevel || 'intermediaire';
+  var _calDur  = { debutant: 50, intermediaire: 65, avance: 80, elite: 90 }[_calLvl] || 65;
+  content.appendChild(h('button', { 'class': 'btn-primary', style: 'margin-top:16px', disabled: !!_calDone,
+    onclick: function() { _completeSportSession('calisthenics', _calLvl, _calDur, _calKey); }
+  }, _calDone ? (window.isEnglish && window.isEnglish() ? '✓ Session logged' : '✓ Séance validée') : (window.isEnglish && window.isEnglish() ? '✓ Session done' : '✓ Séance terminée')));
+ }());
  content.appendChild(h('button', {'class': 'btn-back', style: 'margin-top:16px', onclick: function(){ S.sStep = 24; window.render(); }}, '< Modifier les objectifs'));
  appendNutritionModeCTA(content);
 }
