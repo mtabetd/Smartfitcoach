@@ -349,6 +349,8 @@ function generateSportProgram() {
    var _validForDays = _VALID_SPLITS_PER_DAY[days] || [];
    if (!S._splitChoice || _validForDays.indexOf(S._splitChoice) === -1) {
      S._splitChoice = _DEFAULT_SPLITS[days] || _DEFAULT_SPLITS[Math.min(6, Math.max(2, days))] || null;
+   } else if (_isBeginner && S._splitChoice === 'ppl_3' && days === 3) {
+     S._splitChoice = 'fullbody_3';
    }
  }
 
@@ -701,7 +703,7 @@ function generateSportProgram() {
 
 
  // ── Pré-pipeline : durée · niveau · réglages médicaux ─────────────────────
- var _isBeginner = (S.sportLevel === 'beginner' || !S.sportLevel);
+ var _isBeginner = (S.sportLevel === 'beginner' || S.sportLevel === 'debutant' || !S.sportLevel);
  var _dur = S.sportSessionDuration;
  var _durMax  = _dur === '45min' ? 5 : _dur === '1h' ? 6 : _dur === '1h15' ? 7 : 8;
  var _durSets = (_dur === '1h15' || _dur === '1h30') ? 4 : 3;
@@ -853,7 +855,7 @@ function generateSportProgram() {
    });
  }
 
- if (_cyclePhaseIdx === 2) {
+ if (_cyclePhaseIdx === 2 && !_perioCfg) {
    var _dlCap = Math.max(3, Math.round(dayExercises.length * 0.6));
    if (dayExercises.length > _dlCap) dayExercises = dayExercises.slice(0, _dlCap);
    dayExercises.forEach(function(ex) {
@@ -12411,7 +12413,7 @@ function renderCyclingProgram(p) {
  var _cycLoad = S.cyclingTrainingLoad >= 80 ? 'heavy'
               : S.cyclingTrainingLoad >= 40 ? 'moderate' : 'light';
  _sfcAggregateLoad('cycling', _cycLoad);
- _sfcNotifySport('cycling', S.cyclingLevel || 'intermediaire');
+ if (!_cycFTP) _sfcNotifySport('cycling', S.cyclingLevel || 'intermediaire');
  var zoneData = CYCLING_ZONES[Math.max(0, Math.min(zoneNum - 1, 4))] || CYCLING_ZONES[1];
  var zoneColor = zoneData ? zoneData.color : '#1A3A6A';
  var kcal = cyclingKcal(sess.duration, zoneNum, weightKg);

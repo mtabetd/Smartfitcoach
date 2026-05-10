@@ -188,6 +188,8 @@
     // Sauvegarder le profil complet vers Supabase
     saveProfile: function() {
       var self = this;
+      // Guard: données corrompues détectées au load — ne jamais écraser le cloud avec un profil vide
+      if (window.S && window.S._loadCorrupted) { return Promise.resolve(); }
       // Mutex : si un upsert est déjà en vol, marquer un re-flush pour après
       // Persist le flag en localStorage (pas sessionStorage) pour survivre Safari private mode.
       if (self._syncing) {
@@ -1013,7 +1015,7 @@
       if (self._syncInterval) return;
       // Sync toutes les 2 minutes
       self._syncInterval = setInterval(function() {
-        self.saveProfile();
+        if (window._profileDirty !== false) self.saveProfile();
       }, 120000);
       console.log('[SupaSync] Auto-sync started (every 2 min)');
     },

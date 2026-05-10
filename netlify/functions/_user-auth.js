@@ -73,7 +73,7 @@ async function requirePremium(event) {
   try {
     const { data, error: profileErr } = await admin
       .from('profiles')
-      .select('subscription_end, first_login_date, data')
+      .select('subscription_end, subscription_plan, first_login_date, data')
       .eq('id', user.id)
       .single();
     // PGRST116 = no row found (new user whose profile hasn't been created yet) — treat as new user
@@ -90,11 +90,16 @@ async function requirePremium(event) {
   const today = new Date().toISOString().slice(0, 10);
   let premium = false;
 
-  if (profile) {
-    // 1. Active subscription
-    if (profile.subscription_end && profile.subscription_end >= today) premium = true;
+  const PREMIUM_PLANS = ['unlimited','lifetime','premium','legend','champion','athlete','admin','paid'];
 
-    // 2. Trial period — prefer the DB-managed write-once column; fall back to
+  if (profile) {
+    // 1. Lifetime / plan-based premium (no end date required)
+    if (profile.subscription_plan && PREMIUM_PLANS.indexOf(profile.subscription_plan) !== -1) premium = true;
+
+    // 2. Active dated subscription
+    if (!premium && profile.subscription_end && profile.subscription_end >= today) premium = true;
+
+    // 3. Trial period — prefer the DB-managed write-once column; fall back to
     //    JSONB only during the migration window when the column may be null.
     if (!premium) {
       const rawDate = profile.first_login_date ||
