@@ -381,8 +381,8 @@
       add('Cardio', 'Cardio');
 
       // --- Phases / levels ---
-      add('Prise de masse', 'Muscle gain');
-      add('Prise de masse douce', 'Lean bulk');
+      add('Prise de muscle', 'Muscle gain');
+      add('Prise de muscle progressive', 'Lean bulk');
       add('Maintien', 'Maintain');
       add('Perte de poids', 'Weight loss');
       add('Sèche', 'Cut');

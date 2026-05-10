@@ -6923,7 +6923,9 @@ function computeNutritionState(trainingDay) {
 
     // ── Consecutive heavy-day streak (smoothing) ──────────────────────────────────
     var _prevStreak  = (typeof window.S.heavyDayStreak === 'number') ? window.S.heavyDayStreak : 0;
-    var _heavyStreak = (_tl === 'heavy') ? _prevStreak + 1 : 0;
+    // Only count actual training days toward the streak — yesterdayLoad carryover must not increment it
+    var _trainedTodayHeavy = trainingDay === true && _tl === 'heavy';
+    var _heavyStreak = _trainedTodayHeavy ? _prevStreak + 1 : 0;
     window.S.heavyDayStreak = _heavyStreak;
 
     // ── UX nutrition tag ──────────────────────────────────────────────────────────
@@ -6959,8 +6961,13 @@ function computeNutritionState(trainingDay) {
     } else {
       // Rest day: -10% carbs, shift to fat (Helms 2014 calorie cycling)
       var _carbRed = Math.round(result.carbsGrams * 0.10);
-      result.carbsGrams = Math.max(130, result.carbsGrams - _carbRed); // floor 130g (IOM 2005 — brain glucose minimum)
-      result.fatGrams   = Math.min(result.fatGrams + Math.round(_carbRed * 4 / 9), Math.round(result.caloriesTarget * 0.35 / 9));
+      var _carbsAfterRed = Math.max(130, result.carbsGrams - _carbRed); // floor 130g (IOM 2005 — brain glucose minimum)
+      var _actualCarbRed = result.carbsGrams - _carbsAfterRed; // < _carbRed when IOM floor is hit
+      result.carbsGrams = _carbsAfterRed;
+      // Only add fat for the calories actually removed from carbs (prevents net surplus when floor is hit)
+      if (_actualCarbRed > 0) {
+        result.fatGrams = Math.min(result.fatGrams + Math.round(_actualCarbRed * 4 / 9), Math.round(result.caloriesTarget * 0.35 / 9));
+      }
     }
     result.caloriesCheck = Math.round(result.proteinGrams*4 + result.carbsGrams*4 + result.fatGrams*9);
   }
