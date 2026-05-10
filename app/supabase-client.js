@@ -134,6 +134,19 @@
       // 2026-04 P1 FIX : stopper la sync automatique avant logout
       // (sinon l'interval continue à tenter des saves vers le user déco)
       try { if (window.SupaSync && window.SupaSync.stopAutoSync) window.SupaSync.stopAutoSync(); } catch(e) {}
+      // PD-01 FIX : purger les clés SYNC_EXACT uid-scopées de l'utilisateur qui se déconnecte.
+      // Sans ce cleanup, les données du compte A resteraient en localStorage et polueraient
+      // une session ultérieure du compte B sur le même device.
+      try {
+        var _logoutUser = (window.AUTH && window.AUTH.getUser) ? window.AUTH.getUser() : null;
+        if (_logoutUser && _logoutUser.id) {
+          var _logoutSuffix = '_' + _logoutUser.id;
+          var _SYNC_EXACT_PURGE = ['mtd_muscu_program', 'mtd_muscu_ia_progress', 'mtd_muscu_generations'];
+          for (var _pi2 = 0; _pi2 < _SYNC_EXACT_PURGE.length; _pi2++) {
+            try { localStorage.removeItem(_SYNC_EXACT_PURGE[_pi2] + _logoutSuffix); } catch(_pe) {}
+          }
+        }
+      } catch(_e) {}
       return client.auth.signOut();
     },
 
@@ -188,6 +201,19 @@
     // Sauvegarder le profil complet vers Supabase
     saveProfile: function() {
       var self = this;
+      // Invariant SYN-01 — saveProfile ne doit jamais s'exécuter si le profil est corrompu
+      if (window.SFCInvariant) {
+        try {
+          window.SFCInvariant.checkSync({
+            _loadCorrupted:   window.S ? window.S._loadCorrupted : false,
+            _attemptingSave:  true
+          });
+        } catch (_ie) {
+          if (_ie && typeof _ie.message === 'string' && _ie.message.indexOf('[SFCInvariant]') === 0) throw _ie;
+          console.warn('[SFCInvariant] internal error in checkSync (saveProfile):', _ie && _ie.message);
+          if (window.SFCMonitor) { try { window.SFCMonitor.reportException(_ie, 'SFCInvariant.checkSync.save'); } catch(_){} }
+        }
+      }
       // Guard: données corrompues détectées au load — ne jamais écraser le cloud avec un profil vide
       if (window.S && window.S._loadCorrupted) { return Promise.resolve(); }
       // Mutex : si un upsert est déjà en vol, marquer un re-flush pour après
@@ -245,7 +271,10 @@
             // Daily challenges
             'mtd_daily_challenge_'
           ];
-          // Clés exactes sans UID (programme IA, progression, générations)
+          // Clés exactes — programme IA, progression, générations.
+          // PD-01 fix: on stocke ces clés avec suffixe _<uid> pour isoler les données
+          // par utilisateur sur un device multi-comptes. Migration : on lit la clé
+          // uid-scopée en priorité, avec fallback sur l'ancienne clé sans uid.
           var SYNC_EXACT = ['mtd_muscu_program', 'mtd_muscu_ia_progress', 'mtd_muscu_generations'];
           for (var i = 0; i < localStorage.length; i++) {
             var key = localStorage.key(i);
@@ -257,9 +286,25 @@
                 break;
               }
             }
-            if (!matches && SYNC_EXACT.indexOf(key) !== -1) matches = true;
+            // SYNC_EXACT: match the uid-scoped variant (e.g. mtd_muscu_program_<uid>)
+            if (!matches) {
+              for (var eq = 0; eq < SYNC_EXACT.length; eq++) {
+                if (key === SYNC_EXACT[eq] + uidSuffix) { matches = true; break; }
+              }
+            }
             if (matches) {
               try { legacy[key] = localStorage.getItem(key); } catch(e) {}
+            }
+          }
+          // PD-01 migration: for any SYNC_EXACT key that has no uid-scoped entry yet,
+          // fall back to reading the legacy bare key so existing data is not lost.
+          for (var meq = 0; meq < SYNC_EXACT.length; meq++) {
+            var _scopedKey = SYNC_EXACT[meq] + uidSuffix;
+            if (!legacy[_scopedKey]) {
+              try {
+                var _legacyVal = localStorage.getItem(SYNC_EXACT[meq]);
+                if (_legacyVal) legacy[_scopedKey] = _legacyVal;
+              } catch(e) {}
             }
           }
           if (Object.keys(legacy).length > 0) data._legacy_storage = legacy;
@@ -755,7 +800,11 @@
         return self.loadProfile().then(function(cloudData) {
         self._syncPending = false;
         self._syncLoginInProgress = false;
-        if (!cloudData) return 'no_cloud_data';
+        if (!cloudData) {
+          // Unblock premium/trial checks even when cloud is unreachable — fail-closed
+          try { if (window.S) window.S._subStatusReady = true; } catch(_) {}
+          return 'no_cloud_data';
+        }
 
         // Check localStorage directly for this user's actual persisted data
         // (don't rely on window.S which may have stale values from a previous session)
@@ -987,6 +1036,8 @@
       }).catch(function(e) {
         self._syncPending = false;
         self._syncLoginInProgress = false;
+        // Unblock premium/trial checks so the UI doesn't stay stuck
+        try { if (window.S) window.S._subStatusReady = true; } catch(_) {}
         console.warn('[SupaSync] syncOnLogin failed:', e);
         return null;
       }).then(function(result) {
@@ -1015,6 +1066,16 @@
       if (self._syncInterval) return;
       // Sync toutes les 2 minutes
       self._syncInterval = setInterval(function() {
+        // SYN-02 — vérifié uniquement quand dirty (évite faux positifs sur ticks à vide)
+        if (window.SFCInvariant && window._profileDirty !== false) {
+          try {
+            window.SFCInvariant.checkSync({ _profileDirty: window._profileDirty, _attemptingAutosync: true });
+          } catch (_ie) {
+            if (_ie && typeof _ie.message === 'string' && _ie.message.indexOf('[SFCInvariant]') === 0) throw _ie;
+            console.warn('[SFCInvariant] internal error in checkSync (autosync):', _ie && _ie.message);
+            if (window.SFCMonitor) { try { window.SFCMonitor.reportException(_ie, 'SFCInvariant.checkSync.autosync'); } catch(_){} }
+          }
+        }
         if (window._profileDirty !== false) self.saveProfile();
       }, 120000);
       console.log('[SupaSync] Auto-sync started (every 2 min)');
@@ -1078,10 +1139,20 @@
             }
           } catch(e) {}
           return status;
-        }).catch(function() {
+        }).catch(function(netErr) {
           clearTimeout(tid);
           // Network failure — mark ready with no server data; isPremium() fails closed on error
           try { if (window.S) window.S._subStatusReady = true; } catch(_) {}
+          // Monitor réseau — visible dans SFCMonitor sans spammer l'utilisateur avec un toast
+          if (window.SFCMonitor) {
+            try {
+              window.SFCMonitor.reportSyncFailure({
+                op: 'fetchUserStatus',
+                error: netErr ? (netErr.message || String(netErr)) : 'network_timeout',
+                retries: 0
+              });
+            } catch (_me) {}
+          }
           return null;
         });
       }).catch(function() { return null; });

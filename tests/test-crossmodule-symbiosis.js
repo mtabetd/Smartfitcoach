@@ -102,6 +102,7 @@ function getProgram(overrides) {
     goal: maintainIdx, medical: [], pregnant: false, birthDate: null,
     cycleTracking: false, regime: 0, supplements: [],
     trainingDaysSelected: [1, 3, 5],
+    sportType: 'musculation',
     sportLevel: 'intermediate', sportEquipment: 'gym', sportGoals: ['muscle'],
     sportDays: 3, muscuSplit: 'fullbody', _splitChoice: 'fullbody',
     muscuMedical: { done: false, lowerBack: false, knees: false, shoulders: false, herniaDisc: false },

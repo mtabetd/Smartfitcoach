@@ -21,6 +21,7 @@ async function testAsync(name, fn) {
 
 // ─── Minimal browser env ─────────────────────────────────────────────────────
 global.window   = global;
+global.addEventListener = function() {};
 global.S        = {};
 global.document = { addEventListener: function() {} };
 Object.defineProperty(global, 'navigator', {

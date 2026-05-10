@@ -19,6 +19,36 @@
   var LS_KEY_PROGRESS = 'mtd_muscu_ia_progress';
   var LS_KEY_GENERATIONS = 'mtd_muscu_generations';
 
+  // PD-01: helper to get the uid-scoped localStorage key for SYNC_EXACT keys.
+  // Returns the uid-scoped key when a valid user is authenticated, null otherwise.
+  function _getUidSuffix() {
+    try {
+      var u = window.AUTH && window.AUTH.getUser ? window.AUTH.getUser() : null;
+      return (u && u.id) ? '_' + u.id : null;
+    } catch(e) { return null; }
+  }
+  // Read a SYNC_EXACT key: prefer uid-scoped, fall back to legacy bare key.
+  function _lsGet(bareKey) {
+    try {
+      var suf = _getUidSuffix();
+      if (suf) {
+        var v = localStorage.getItem(bareKey + suf);
+        if (v !== null) return v;
+      }
+      return localStorage.getItem(bareKey);
+    } catch(e) { return null; }
+  }
+  // Write a SYNC_EXACT key: always write to uid-scoped key when possible.
+  // Also write bare key for backwards-compatibility with legacy consumers.
+  function _lsSet(bareKey, value) {
+    try {
+      var suf = _getUidSuffix();
+      if (suf) localStorage.setItem(bareKey + suf, value);
+      // Keep bare key in sync so legacy code paths still work during migration.
+      localStorage.setItem(bareKey, value);
+    } catch(e) {}
+  }
+
   // FIX Hermès : icônes unicode sobres (◆ ● ○ ◇ ■ □ ▲ △) — remplacement des emojis
   // décoratifs colorés par des marqueurs typographiques tonal-on-tonal.
   var INSTALLATIONS = [
@@ -64,14 +94,14 @@
 
   function getGenerationsData() {
     try {
-      var raw = localStorage.getItem(LS_KEY_GENERATIONS);
+      var raw = _lsGet(LS_KEY_GENERATIONS);
       if (raw) return JSON.parse(raw);
     } catch(e) {}
     return { week: '', count: 0 };
   }
 
   function saveGenerationsData(data) {
-    try { localStorage.setItem(LS_KEY_GENERATIONS, JSON.stringify(data)); } catch(e) {}
+    _lsSet(LS_KEY_GENERATIONS, JSON.stringify(data));
   }
 
   function getGenerationsRemaining() {
@@ -153,13 +183,13 @@
 
   function loadProgress() {
     try {
-      var raw = localStorage.getItem(LS_KEY_PROGRESS);
+      var raw = _lsGet(LS_KEY_PROGRESS);
       return raw ? JSON.parse(raw) : [];
     } catch(e) { return []; }
   }
 
   function saveProgress(progressArray) {
-    try { localStorage.setItem(LS_KEY_PROGRESS, JSON.stringify(progressArray)); } catch(e) {}
+    _lsSet(LS_KEY_PROGRESS, JSON.stringify(progressArray));
   }
 
   function getProgressKey(weekIdx, dayName, exerciseIdx) {
@@ -1507,7 +1537,7 @@
         if (cardsContainer) attachProgramInteractivity(cardsContainer);
       }
       // Sauvegarder localement
-      try { localStorage.setItem(LS_KEY_PROGRAM, JSON.stringify({ program: programText, generatedAt: data.generatedAt })); } catch(e) { console.error('[muscu-prog] save fail:', e); }
+      try { _lsSet(LS_KEY_PROGRAM, JSON.stringify({ program: programText, generatedAt: data.generatedAt })); } catch(e) { console.error('[muscu-prog] save fail:', e); }
       if (window.TRACKER) window.TRACKER.track('program_generated', { sport_type: window.S && window.S.sportType });
     })
     .catch(function(err) {

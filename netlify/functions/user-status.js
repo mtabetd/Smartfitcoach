@@ -116,7 +116,7 @@ exports.handler = async function(event) {
 
   // Unlimited/lifetime plans — these never have a subscription_end date.
   // Must be checked BEFORE the dated-subscription block.
-  const UNLIMITED_PLANS = ['unlimited', 'lifetime', 'premium', 'legend', 'champion', 'athlete', 'admin'];
+  const UNLIMITED_PLANS = ['unlimited', 'lifetime', 'premium', 'legend', 'champion', 'athlete', 'admin', 'paid'];
   if (profile.subscription_plan && UNLIMITED_PLANS.indexOf(profile.subscription_plan) !== -1) {
     premium = true;
     plan = profile.subscription_plan;
