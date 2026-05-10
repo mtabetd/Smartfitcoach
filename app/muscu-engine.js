@@ -145,7 +145,7 @@ function () {
       if (cfg.pregTri) {
         if (cfg.pregForbidden && cfg.pregForbidden.some(function(fw){ return nm.indexOf(fw.toLowerCase()) !== -1; })) return false;
         if (typeof cfg.pregnancyWeek === 'number' && cfg.pregnancyWeek >= 14 &&
-          /d[eé]velopp[eé] couch[eé]|developpe couche|bench press|leg press|presse[\s-]?cuisses|crunch|sit.?up|d[eé]clin[eé]|decline|hip thrust|glute bridge sol|box jump|nordic curl|soulev[eé] de terre|deadlift/.test(nm)) return false;
+          /d[eé]velopp[eé] couch[eé]|developpe couche|bench press|leg press|presse[\s-]?cuisses|crunch|sit.?up|d[eé]clin[eé]|decline|hip thrust|glute bridge sol|box jump|nordic curl|soulev[eé] de terre|deadlift|saut[s ]|jump\s*squat|burpee|jumping\s*jack|plyom/.test(nm)) return false;
       }
       if (cfg.muscuMedical && cfg.muscuMedical.done && typeof cfg.filterMedical === 'function') {
         if (!cfg.filterMedical(ex, cfg.muscuMedical)) return false;

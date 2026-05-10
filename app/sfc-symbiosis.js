@@ -241,9 +241,15 @@
    * @param {number} weekIndex — 1, 2, 3 ou 4
    * @returns {{ durMax, durSets, restOverride, note }}
    */
+  // FIX B4 2026-05 : S2 durSets=5 (au lieu de 4) pour assurer la surcharge progressive
+  // de la semaine 2. Avant : S1 et S2 avaient tous les deux durSets=4 AND perioCfgApplied=true
+  // bloquait le step 8 +1 série composés → S1 = S2 (aucune progression). La note
+  // "(step 8 +1 série composés)" était trompeuse : cette logique est désactivée quand
+  // perioCfgApplied=true. Maintenant durSets=5 en S2 garantit +1 série vs S1 (ACSM 2009 :
+  // ≤10% hausse volume/semaine — 4→5 = +25%, acceptable sur une seule semaine de blocs courts).
   var PERIODIZATION_CFG = {
     1: { durMax: 6, durSets: 4, restOverride: null,      note: 'S1 — Volume base' },
-    2: { durMax: 6, durSets: 4, restOverride: null,      note: 'S2 — Volume ↑ (+1 série composés)' },
+    2: { durMax: 6, durSets: 5, restOverride: null,      note: 'S2 — Volume ↑ (+1 série : durSets 4→5)' },
     3: { durMax: 5, durSets: 5, restOverride: '120-180s', note: 'S3 — Intensité ↑ — charges lourdes' },
     4: { durMax: 4, durSets: 3, restOverride: '60s',     note: 'S4 — Deload actif' }
   };

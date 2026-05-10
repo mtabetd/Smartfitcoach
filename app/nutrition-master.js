@@ -154,25 +154,30 @@
    * @param {'male'|'female'} gender  Nécessaire pour plancher sexe-spécifique ACSM
    * @returns {{ carbsGrams: number, caloriesTarget: number, clampedToBMR: boolean }}
    */
-  function applyCarbCycling(carbsGrams, proteinGrams, fatGrams, bmr, gender) {
-    var boostedCarbs = Math.round(carbsGrams * (1 + CARB_CYCLING_BOOST) * 10) / 10;
+  function applyCarbCycling(carbsGrams, proteinGrams, fatGrams, bmr, gender, weightKg) {
+    var carbExtra    = Math.round(carbsGrams * CARB_CYCLING_BOOST);
+    var boostedCarbs = carbsGrams + carbExtra;
+    // Calorie-neutral swap: compensate added carb kcal by removing fat kcal
+    var fatFloor     = Math.ceil(FAT_MIN_PER_KG * (weightKg || 60));
+    var fatCompens   = Math.min(Math.round(carbExtra * KCAL_PER_CARB / KCAL_PER_FAT), fatGrams - fatFloor);
+    var newFat       = fatGrams - Math.max(0, fatCompens);
     var newCalories  = Math.round(
       proteinGrams * KCAL_PER_PROT +
-      fatGrams     * KCAL_PER_FAT  +
+      newFat       * KCAL_PER_FAT  +
       boostedCarbs * KCAL_PER_CARB
     );
 
     var kcalFloor = Math.max(bmr, gender === 'male' ? KCAL_FLOOR_MALE : KCAL_FLOOR_FEMALE);
 
     if (newCalories >= kcalFloor) {
-      return { carbsGrams: boostedCarbs, caloriesTarget: newCalories, clampedToBMR: false };
+      return { carbsGrams: boostedCarbs, fatGrams: newFat, caloriesTarget: newCalories, clampedToBMR: false };
     }
 
     // Sécurité : remonter au plancher, ajuster G en conséquence
     var carbsAtFloor = Math.round(
-      Math.max(0, (kcalFloor - proteinGrams * KCAL_PER_PROT - fatGrams * KCAL_PER_FAT) / KCAL_PER_CARB) * 10
+      Math.max(0, (kcalFloor - proteinGrams * KCAL_PER_PROT - newFat * KCAL_PER_FAT) / KCAL_PER_CARB) * 10
     ) / 10;
-    return { carbsGrams: carbsAtFloor, caloriesTarget: kcalFloor, clampedToBMR: true };
+    return { carbsGrams: carbsAtFloor, fatGrams: newFat, caloriesTarget: kcalFloor, clampedToBMR: true };
   }
 
   // ─── VALIDATION ───────────────────────────────────────────────────────────────
@@ -246,8 +251,9 @@
     var clampedToBMR       = false;
 
     if (inputs.trainingDay) {
-      var cycled = applyCarbCycling(carbsGrams, proteinGrams, fatGrams, bmr, inputs.gender);
+      var cycled = applyCarbCycling(carbsGrams, proteinGrams, fatGrams, bmr, inputs.gender, inputs.weightKg);
       carbsGrams         = cycled.carbsGrams;
+      fatGrams           = cycled.fatGrams;
       caloriesTarget     = cycled.caloriesTarget;
       clampedToBMR       = cycled.clampedToBMR;
       carbCyclingApplied = true;

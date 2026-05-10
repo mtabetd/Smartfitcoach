@@ -858,9 +858,25 @@ function generateSportProgram() {
  if (_cyclePhaseIdx === 2 && !_perioCfg) {
    var _dlCap = Math.max(3, Math.round(dayExercises.length * 0.6));
    if (dayExercises.length > _dlCap) dayExercises = dayExercises.slice(0, _dlCap);
+   // FIX B3 2026-05 : plancher durée × séries — la décharge ne doit jamais tomber sous
+   // le minimum NSCA lié à la durée de séance préférée de l'utilisateur.
+   // Formule : plancher_total = exos_floor × 3 sets_minimum
+   //   45min → 3×3=9 sets · 1h → 4×3=12 · 1h15 → 5×3=15 · 1h30 → 6×3=18
+   // Implémentation : on calcule le nombre de séries minimum par exercice (plancher_exo)
+   // tel que n_exos × plancher_exo >= plancher_total.
+   // Sans ce guard : 4 exos × 2 sets = 8 sets pour 45min < 9 sets minimum NSCA.
+   var _dlSetFloor = 2; // minimum absolu par exercice
+   if (_dur) {
+     var _dlExosFloor = {'45min':3,'1h':4,'1h15':5,'1h30':6}[_dur] || 3;
+     var _dlTotalFloor = _dlExosFloor * 3; // plancher total en séries
+     if (dayExercises.length > 0) {
+       _dlSetFloor = Math.max(2, Math.ceil(_dlTotalFloor / dayExercises.length));
+     }
+   }
    dayExercises.forEach(function(ex) {
      if (typeof ex.sets === 'string') {
-       ex.sets = ex.sets.replace(/^(\d+)/, function(m, n) { return String(Math.max(1, parseInt(n) - 1)); });
+       // Décharge : -1 série mais jamais sous _dlSetFloor (plancher NSCA)
+       ex.sets = ex.sets.replace(/^(\d+)/, function(m, n) { return String(Math.max(_dlSetFloor, parseInt(n) - 1)); });
      }
      // Intensité basse : reps hautes (endurance musculaire, pas de charge max pendant deload)
      if (typeof ex.sets === 'string' && !ex._deloadRepsSet) {
