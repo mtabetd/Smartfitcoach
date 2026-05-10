@@ -332,7 +332,12 @@ function generateSportProgram() {
  // → épaules sur jour Legs, dos sur jour Push, etc. Bug critique "Arnold Press sur Leg A".
  // Maintenant : on auto-set _splitChoice ICI si l'user est intermediate+ et n'a pas encore choisi.
  var _isIntermediatePlus = S.sportLevel === 'intermediate' || S.sportLevel === 'advanced' || S.sportLevel === 'pro';
- var _DEFAULT_SPLITS = { 2:'fullbody_ab', 3:'ppl_3', 4:'upper_lower', 5:'ppl_5', 6:'ppl_6' };
+ // Beginners on 3 days default to fullbody (2×/week per muscle group — Schoenfeld 2016 meta-analysis)
+ // PPL for beginners concentrates volume on one day per muscle group, which is sub-optimal for adaptation
+ var _isBeginner = S.sportLevel === 'beginner' || S.sportLevel === 'debutant';
+ var _DEFAULT_SPLITS = _isBeginner
+   ? { 2:'fullbody_ab', 3:'fullbody_3', 4:'upper_lower', 5:'ppl_5', 6:'ppl_6' }
+   : { 2:'fullbody_ab', 3:'ppl_3',      4:'upper_lower', 5:'ppl_5', 6:'ppl_6' };
  // Valider que le _splitChoice existant correspond au nombre de jours actuel
  var _VALID_SPLITS_PER_DAY = {
    2:['fullbody_ab'], 3:['fullbody_3','ppl_3'], 4:['upper_lower','ppl_plus1','bro_4'],
@@ -652,8 +657,9 @@ function generateSportProgram() {
  restOverride = '90-120s';
  repSuffix = '';
  } else if (hasWeightloss) {
- restOverride = '30-45s';
- repSuffix = ' (circuit)';
+ // ACSM 2009: beginners need 60-90s minimum to maintain form — 30-45s is intermediate+
+ restOverride = _isBeginner ? '60-90s' : '30-45s';
+ repSuffix = _isBeginner ? '' : ' (circuit)';
  }
 
  // Pregnancy: get trimester info for filtering

@@ -153,7 +153,7 @@ function () {
       if (cfg.medRx) {
         for (var _ri = 0; _ri < cfg.medRx.length; _ri++) { if (cfg.medRx[_ri].test(nm)) return false; }
       }
-      if (cfg.isBeginner && /svend|upright row|hanging knee|zercher|jm press|kroc row|meadows|reverse nordic|copenhagen|jefferson curl|cuban press|arnold press|pistol squat|sissy squat|nordic ham|weighted dips|muscle.?up/i.test(nm)) return false;
+      if (cfg.isBeginner && /svend|upright row|hanging knee|zercher|jm press|skull crusher|skull.?crush|barre front|kroc row|meadows|reverse nordic|copenhagen|jefferson curl|cuban press|arnold press|pistol squat|sissy squat|nordic ham|weighted dips|muscle.?up|militaire debout barre/i.test(nm)) return false;
       return true;
     });
 

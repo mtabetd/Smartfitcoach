@@ -6555,8 +6555,8 @@ window.openSaladComposer = function openSaladComposer(slotKey) {
 function renderBodyScan(p) {
   renderProgressBar(p, 6, 12);
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'OPTIONAL \u00b7 30 SECONDS' : 'OPTIONNEL \u00b7 30 SECONDES')));
-  p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Your body,<br><em>analyzed.</em>' : 'Ton corps,<br><em>analys\u00e9.</em>'), style: 'font-family:Georgia,serif;font-size:28px;font-weight:normal;line-height:1.2;margin-bottom:12px'}));
-  p.appendChild(h('p', {style: 'font-family:Georgia,serif;font-style:italic;font-size:14px;color:var(--grey,#6B6B65);line-height:1.65;margin-bottom:28px'}, (window.isEnglish && window.isEnglish() ? 'Our AI can estimate your body composition from a photo. This allows precise calculation of your lean mass and refines your protein needs.' : 'Notre IA peut estimer ta composition corporelle \u00e0 partir d\u2019une photo. Cela permet un calcul pr\u00e9cis de ta masse maigre et affine tes besoins prot\u00e9iques.')));
+  p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Your body,<br><em>analyzed.</em>' : 'Votre corps,<br><em>analys\u00e9.</em>'), style: 'font-family:Georgia,serif;font-size:28px;font-weight:normal;line-height:1.2;margin-bottom:12px'}));
+  p.appendChild(h('p', {style: 'font-family:Georgia,serif;font-style:italic;font-size:14px;color:var(--grey,#6B6B65);line-height:1.65;margin-bottom:28px'}, (window.isEnglish && window.isEnglish() ? 'Our AI can estimate your body composition from a photo. This allows precise calculation of your lean mass and refines your protein needs.' : 'Notre IA peut estimer votre composition corporelle \u00e0 partir d\u2019une photo. Cela permet un calcul pr\u00e9cis de votre masse maigre et affine vos besoins prot\u00e9iques.')));
 
   // If already scanned, show result and allow rescan
   if (S._bodyFatEstimate !== null && S._bodyFatEstimate !== undefined) {
@@ -6583,8 +6583,8 @@ function renderBodyScan(p) {
     {id: 'very_lean',     label: (window.isEnglish && window.isEnglish() ? 'Very lean' : 'Tr\u00e8s sec'),      range: [5, 10],   desc: '5-10%',  sub: (window.isEnglish && window.isEnglish() ? 'Visible veins, exposed muscle' : 'Veines apparentes, muscle \u00e0 nu')},
     {id: 'lean',          label: (window.isEnglish && window.isEnglish() ? 'Lean' : 'Sec'),              range: [11, 17],  desc: '11-17%', sub: (window.isEnglish && window.isEnglish() ? 'Visible muscle definition' : 'D\u00e9finition musculaire visible')},
     {id: 'average',       label: (window.isEnglish && window.isEnglish() ? 'Average' : 'Normal'),           range: [18, 24],  desc: '18-24%', sub: (window.isEnglish && window.isEnglish() ? 'Standard physique' : 'Silhouette standard')},
-    {id: 'above_average', label: (window.isEnglish && window.isEnglish() ? 'Above avg' : 'Envelopp\u00e9'),   range: [25, 32],  desc: '25-32%', sub: (window.isEnglish && window.isEnglish() ? 'Visible waistline' : 'Tour de taille visible')},
-    {id: 'heavy',         label: (window.isEnglish && window.isEnglish() ? 'Heavy' : 'Fort'),             range: [33, 45],  desc: '33-45%', sub: (window.isEnglish && window.isEnglish() ? 'Significant overweight' : 'Surpoids notable')}
+    {id: 'above_average', label: (window.isEnglish && window.isEnglish() ? 'Curvy' : 'Ronde'),             range: [25, 32],  desc: '25-32%', sub: (window.isEnglish && window.isEnglish() ? 'Soft curves' : 'Courbes naturelles')},
+    {id: 'heavy',         label: (window.isEnglish && window.isEnglish() ? 'Full' : 'G\u00e9n\u00e9reuse'),  range: [33, 45],  desc: '33-45%', sub: (window.isEnglish && window.isEnglish() ? 'Fuller figure' : 'Silhouette g\u00e9n\u00e9reuse')}
   ];
   // Adjust ranges for women (women carry ~5-8% more essential fat)
   if (window.isFemale(S)) {
@@ -6592,8 +6592,8 @@ function renderBodyScan(p) {
       {id: 'very_lean',     label: (window.isEnglish && window.isEnglish() ? 'Very lean' : 'Tr\u00e8s sec'),     range: [14, 18], desc: '14-18%', sub: (window.isEnglish && window.isEnglish() ? 'Competition athlete' : 'Ath\u00e8te de comp\u00e9tition')},
       {id: 'lean',          label: (window.isEnglish && window.isEnglish() ? 'Lean' : 'Sec'),             range: [19, 24], desc: '19-24%', sub: (window.isEnglish && window.isEnglish() ? 'Visible definition' : 'D\u00e9finition visible')},
       {id: 'average',       label: (window.isEnglish && window.isEnglish() ? 'Average' : 'Normal'),          range: [25, 31], desc: '25-31%', sub: (window.isEnglish && window.isEnglish() ? 'Standard physique' : 'Silhouette standard')},
-      {id: 'above_average', label: (window.isEnglish && window.isEnglish() ? 'Above avg' : 'Envelopp\u00e9e'), range: [32, 39], desc: '32-39%', sub: (window.isEnglish && window.isEnglish() ? 'Visible waistline' : 'Tour de taille visible')},
-      {id: 'heavy',         label: (window.isEnglish && window.isEnglish() ? 'Heavy' : 'Fort'),            range: [40, 50], desc: '40-50%', sub: (window.isEnglish && window.isEnglish() ? 'Significant overweight' : 'Surpoids notable')}
+      {id: 'above_average', label: (window.isEnglish && window.isEnglish() ? 'Curvy' : 'Ronde'),            range: [32, 39], desc: '32-39%', sub: (window.isEnglish && window.isEnglish() ? 'Soft curves' : 'Courbes naturelles')},
+      {id: 'heavy',         label: (window.isEnglish && window.isEnglish() ? 'Full' : 'G\u00e9n\u00e9reuse'), range: [40, 50], desc: '40-50%', sub: (window.isEnglish && window.isEnglish() ? 'Fuller figure' : 'Silhouette g\u00e9n\u00e9reuse')}
     ];
   }
   p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Select your approximate body type' : 'S\u00e9lectionnez votre silhouette approximative')));
@@ -6684,8 +6684,8 @@ function renderProvisionalPreview(p) {
   var _useKM = (S._bodyFatEstimate !== null && S._bodyFatEstimate !== undefined && S._bodyFatEstimate >= 4);
 
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px'}, (window.isEnglish && window.isEnglish() ? 'PREVIEW · PROVISIONAL' : 'APERCU · PROVISOIRE')));
-  p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Your estimated<br><em>program.</em>' : 'Ton programme<br><em>estimatif.</em>'), style: 'font-family:Georgia,serif;font-size:28px;font-weight:normal;line-height:1.2;margin-bottom:12px'}));
-  p.appendChild(h('p', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:24px'}, (window.isEnglish && window.isEnglish() ? 'Here is a first estimate based on your data. We will refine it after a few health questions.' : 'Voici une premi\u00e8re estimation bas\u00e9e sur tes donn\u00e9es. Nous affinerons apr\u00e8s quelques questions de sant\u00e9.')));
+  p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Your estimated<br><em>program.</em>' : 'Votre programme<br><em>estimatif.</em>'), style: 'font-family:Georgia,serif;font-size:28px;font-weight:normal;line-height:1.2;margin-bottom:12px'}));
+  p.appendChild(h('p', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:24px'}, (window.isEnglish && window.isEnglish() ? 'Here is a first estimate based on your data. We will refine it after a few health questions.' : 'Voici une premi\u00e8re estimation bas\u00e9e sur vos donn\u00e9es. Nous affinerons apr\u00e8s quelques questions de sant\u00e9.')));
 
   if (_useKM) {
     var _lbmPrev = Math.round(S.weight * (1 - S._bodyFatEstimate / 100));
