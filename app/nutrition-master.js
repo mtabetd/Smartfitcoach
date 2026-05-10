@@ -305,7 +305,11 @@
           pregnant:   inputs.pregnant || false,
           sportGoals: inputs.sportGoals || []
         });
-      } catch (_ie) {}
+      } catch (_ie) {
+        if (_ie && typeof _ie.message === 'string' && _ie.message.indexOf('[SFCInvariant]') === 0) throw _ie;
+        console.warn('[SFCInvariant] internal error in checkNutrition:', _ie && _ie.message);
+        if (window.SFCMonitor) { try { window.SFCMonitor.reportException(_ie, 'SFCInvariant.checkNutrition'); } catch(_){} }
+      }
     }
 
     return result;

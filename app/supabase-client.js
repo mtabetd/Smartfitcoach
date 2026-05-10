@@ -208,7 +208,11 @@
             _loadCorrupted:   window.S ? window.S._loadCorrupted : false,
             _attemptingSave:  true
           });
-        } catch (_ie) {}
+        } catch (_ie) {
+          if (_ie && typeof _ie.message === 'string' && _ie.message.indexOf('[SFCInvariant]') === 0) throw _ie;
+          console.warn('[SFCInvariant] internal error in checkSync (saveProfile):', _ie && _ie.message);
+          if (window.SFCMonitor) { try { window.SFCMonitor.reportException(_ie, 'SFCInvariant.checkSync.save'); } catch(_){} }
+        }
       }
       // Guard: données corrompues détectées au load — ne jamais écraser le cloud avec un profil vide
       if (window.S && window.S._loadCorrupted) { return Promise.resolve(); }
@@ -1058,7 +1062,13 @@
       self._syncInterval = setInterval(function() {
         // SYN-02 — vérifié uniquement quand dirty (évite faux positifs sur ticks à vide)
         if (window.SFCInvariant && window._profileDirty !== false) {
-          try { window.SFCInvariant.checkSync({ _profileDirty: window._profileDirty, _attemptingAutosync: true }); } catch (_ie) {}
+          try {
+            window.SFCInvariant.checkSync({ _profileDirty: window._profileDirty, _attemptingAutosync: true });
+          } catch (_ie) {
+            if (_ie && typeof _ie.message === 'string' && _ie.message.indexOf('[SFCInvariant]') === 0) throw _ie;
+            console.warn('[SFCInvariant] internal error in checkSync (autosync):', _ie && _ie.message);
+            if (window.SFCMonitor) { try { window.SFCMonitor.reportException(_ie, 'SFCInvariant.checkSync.autosync'); } catch(_){} }
+          }
         }
         if (window._profileDirty !== false) self.saveProfile();
       }, 120000);

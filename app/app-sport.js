@@ -1008,7 +1008,11 @@ function generateSportProgram() {
        sfcSymbiosisDeload:  !!(window.SFCSymbiosis && window.SFCSymbiosis.getPeriodizationCfg &&
                                window.SFCSymbiosis.getPeriodizationCfg().durMax <= 4)
      });
-   } catch (_ie) {}
+   } catch (_ie) {
+     if (_ie && typeof _ie.message === 'string' && _ie.message.indexOf('[SFCInvariant]') === 0) throw _ie;
+     console.warn('[SFCInvariant] internal error in checkSport:', _ie && _ie.message);
+     if (window.SFCMonitor) { try { window.SFCMonitor.reportException(_ie, 'SFCInvariant.checkSport'); } catch(_){} }
+   }
  }
 
  return program;
