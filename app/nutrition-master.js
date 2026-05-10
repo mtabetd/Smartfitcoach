@@ -229,6 +229,12 @@
     }
 
     var bmr = calcBMR(inputs.gender, inputs.weightKg, inputs.heightCm, inputs.age);
+    // Katch-McArdle if body-fat % measured — more accurate than Mifflin-St Jeor for lean/muscular users
+    var _bf = inputs.bodyFatEstimate;
+    if (_bf !== null && _bf !== undefined && _bf >= 4 && _bf <= 60) {
+      var _lbm = inputs.weightKg * (1 - _bf / 100);
+      bmr = Math.round(370 + 21.6 * _lbm); // Katch-McArdle 1975
+    }
     var tdee = calcTDEE(bmr, inputs.activityLevel);
     var caloriesTarget = calcCaloriesTarget(tdee, inputs.goal, bmr, inputs.gender, inputs.activityLevel);
 
@@ -293,7 +299,10 @@
     calcProtein:     calcProtein,
     calcFat:         calcFat,
     calcCarbs:       calcCarbs,
-    applyCarbCycling: applyCarbCycling
+    applyCarbCycling: applyCarbCycling,
+    // Planchers caloriques ACSM/ISSN — exposés pour partage avec app-nutrition.js
+    KCAL_FLOOR_FEMALE: KCAL_FLOOR_FEMALE,
+    KCAL_FLOOR_MALE:   KCAL_FLOOR_MALE
   };
 
 })();

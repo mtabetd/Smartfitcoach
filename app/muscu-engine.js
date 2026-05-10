@@ -363,8 +363,9 @@ function () {
           if (typeof ex.sets !== 'string') return;
           var _tg  = ex.tags || [];
           var _isComp = _tg.indexOf('isolation') === -1 && _tg.indexOf('finisher') === -1;
-          if (_wIdx === 2 && _isComp) {
+          if (_wIdx === 2 && _isComp && !cfg.perioCfgApplied) {
             // +1 série sur composés (plafond 6 pour éviter sur-volume)
+            // Skipped when SFCSymbiosis already applied durSets for this week.
             ex.sets = ex.sets.replace(/^(\d+)/, function(m, n) {
               return String(Math.min(parseInt(n) + 1, 6));
             });
@@ -381,8 +382,9 @@ function () {
                 var n = parseInt(r);
                 return sep + Math.max(Math.ceil(n * 0.75), n - 2);
               });
-          } else if (_wIdx === 4) {
+          } else if (_wIdx === 4 && !cfg.perioCfgApplied) {
             // Deload : -1 série (min 2 — préserver le stimulus minimum)
+            // Skipped when SFCSymbiosis already applied durSets=3 for S4 deload.
             ex.sets = ex.sets.replace(/^(\d+)/, function(m, n) {
               return String(Math.max(2, parseInt(n) - 1));
             });

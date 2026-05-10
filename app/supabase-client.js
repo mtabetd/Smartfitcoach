@@ -680,7 +680,7 @@
       if (self._debounceTimer) clearTimeout(self._debounceTimer);
       self._debounceTimer = setTimeout(function() {
         self.saveProfile();
-      }, 5000); // 5s debounce
+      }, 1500); // 1.5s debounce — reduces trainingLoad loss on fast reload
     },
 
     // Sync initial au login : charger depuis Supabase si localStorage vide ou moins avancé
@@ -1078,7 +1078,7 @@
           return status;
         }).catch(function() {
           clearTimeout(tid);
-          // Network failure — mark ready; isPremium() failsafe grants access on error
+          // Network failure — mark ready with no server data; isPremium() fails closed on error
           try { if (window.S) window.S._subStatusReady = true; } catch(_) {}
           return null;
         });
@@ -1106,6 +1106,23 @@
     document.addEventListener('visibilitychange', function() {
       if (document.visibilityState === 'visible' && window.SupaSync) {
         window.SupaSync.invalidateStatusCache();
+      }
+      // Flush pending save when tab is hidden — prevents trainingLoad loss on tab switch/close
+      if (document.visibilityState === 'hidden' && window.SupaSync) {
+        if (window.SupaSync._debounceTimer) {
+          clearTimeout(window.SupaSync._debounceTimer);
+          window.SupaSync._debounceTimer = null;
+          try { window.SupaSync.saveProfile(); } catch (_e) {}
+        }
+      }
+    });
+
+    // Flush on page unload — covers reload within the 1.5s debounce window
+    window.addEventListener('beforeunload', function() {
+      if (window.SupaSync && window.SupaSync._debounceTimer) {
+        clearTimeout(window.SupaSync._debounceTimer);
+        window.SupaSync._debounceTimer = null;
+        try { window.SupaSync.saveProfile(); } catch (_e) {}
       }
     });
   }
