@@ -1244,7 +1244,8 @@ function sendMessage() {
   // Premium gate — coach IA illimité = premium (trial = 3 messages/jour)
   if (window.isTrialUser && window.isTrialUser() && !(window.S && window.S._serverPremium) && !(window.isPremium && window.isPremium())) {
     var _today = (window.sfcLocalDateStr ? window.sfcLocalDateStr() : new Date().toISOString().slice(0, 10));
-    var _uid = (window.S && window.S.userId) ? window.S.userId : 'anon';
+    var _authUser = (window.AUTH && window.AUTH.getUser) ? window.AUTH.getUser() : null;
+    var _uid = (_authUser && _authUser.id) ? _authUser.id : 'anon';
     var _coachKey = 'sfc_coach_count_' + _uid + '_' + _today;
     var _rawCount = (function() { try { return JSON.parse(localStorage.getItem(_coachKey) || 'null'); } catch(e) { return null; } })();
     var _coachCount = (_rawCount && typeof _rawCount.n === 'number') ? _rawCount.n : 0;

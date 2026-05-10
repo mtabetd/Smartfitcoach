@@ -1078,7 +1078,7 @@
           return status;
         }).catch(function() {
           clearTimeout(tid);
-          // Network failure — mark ready; isPremium() failsafe grants access on error
+          // Network failure — mark ready with no server data; isPremium() fails closed on error
           try { if (window.S) window.S._subStatusReady = true; } catch(_) {}
           return null;
         });

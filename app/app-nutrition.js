@@ -6104,7 +6104,7 @@ function showSmoothieModal(sm) {
       var split = window.getMealSplit ? window.getMealSplit() : null;
       var _ttRaw = (typeof calcTarget === 'function' ? calcTarget() : 0) || window.S.caloriesTarget;
       if (!_ttRaw) {
-        console.warn('[SFC] calcTarget() and caloriesTarget both falsy — using default calorie target (1800/2000)');
+        console.warn('[SFC] calcTarget() and caloriesTarget both falsy — using KCAL_FLOOR as provisional target');
         if (!window._sfcCalFallbackToastShown && window.showToast) {
           window._sfcCalFallbackToastShown = true;
           window.showToast(

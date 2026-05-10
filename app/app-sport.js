@@ -1861,14 +1861,14 @@ window._sfcAggregateLoad = _sfcAggregateLoad;
 // ─── SPORT SESSION COMPLETION — shared for sports without dedicated save handlers ───
 // Writes to S.sessionHistory + calls SFCSymbiosis.processCompletedSession.
 // Idempotent: same sessKey is silently ignored.
-function _completeSportSession(sportType, level, durationMin, sessKey) {
+function _completeSportSession(sportType, level, durationMin, sessKey, overrideLoad) {
   var dateStr = new Date().toISOString().slice(0, 10);
   var finKey  = sessKey || (sportType + '_' + dateStr);
   if (!S.sessionHistory) S.sessionHistory = {};
   if (S.sessionHistory[finKey]) return;
   var MET_MAP = { cycling: 7, triathlon: 9, padel: 7, golf: 4, yoga: 3, calisthenics: 5 };
   var met  = MET_MAP[sportType] || 6;
-  var load = met >= 9 ? 'heavy' : met >= 5 ? 'moderate' : 'light';
+  var load = overrideLoad || (met >= 9 ? 'heavy' : met >= 5 ? 'moderate' : 'light');
   var kcalEst = (typeof estimateKcal === 'function') ? estimateKcal(sportType, level, durationMin) : null;
   S.sessionHistory[finKey] = {
     duration: durationMin, sport: sportType, trainingLoad: load,
@@ -12447,8 +12447,10 @@ function renderCyclingProgram(p) {
   var _cycDone = S.sessionHistory && S.sessionHistory[_cycKey2];
   var _cycLvl  = S.cyclingLevel || 'intermediaire';
   var _cycDur2 = sess ? (sess.duration || ({ debutant: 60, intermediaire: 75, avance: 90, elite: 120 }[_cycLvl] || 75)) : ({ debutant: 60, intermediaire: 75, avance: 90, elite: 120 }[_cycLvl] || 75);
+  // Use zone-computed load if available (more accurate than MET default)
+  var _cycLoad2 = S.cyclingTrainingLoad >= 80 ? 'heavy' : S.cyclingTrainingLoad >= 40 ? 'moderate' : null;
   p.appendChild(h('button', { 'class': 'btn-primary', disabled: !!_cycDone,
-    onclick: function() { _completeSportSession('cycling', _cycLvl, _cycDur2, _cycKey2); }
+    onclick: function() { _completeSportSession('cycling', _cycLvl, _cycDur2, _cycKey2, _cycLoad2 || undefined); }
   }, _cycDone ? (window.isEnglish && window.isEnglish() ? '✓ Session logged' : '✓ Séance validée') : (window.isEnglish && window.isEnglish() ? '✓ Session done' : '✓ Séance terminée')));
  }());
  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { S.sStep = 22; window.render(); }, html: backArrow + 'Modifier la configuration'}));
