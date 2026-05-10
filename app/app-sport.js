@@ -12448,9 +12448,9 @@ function renderCyclingProgram(p) {
   var _cycLvl  = S.cyclingLevel || 'intermediaire';
   var _cycDur2 = sess ? (sess.duration || ({ debutant: 60, intermediaire: 75, avance: 90, elite: 120 }[_cycLvl] || 75)) : ({ debutant: 60, intermediaire: 75, avance: 90, elite: 120 }[_cycLvl] || 75);
   // Use zone-computed load if available (more accurate than MET default)
-  var _cycLoad2 = S.cyclingTrainingLoad >= 80 ? 'heavy' : S.cyclingTrainingLoad >= 40 ? 'moderate' : null;
+  var _cycLoad2 = S.cyclingTrainingLoad >= 80 ? 'heavy' : S.cyclingTrainingLoad >= 40 ? 'moderate' : 'light';
   p.appendChild(h('button', { 'class': 'btn-primary', disabled: !!_cycDone,
-    onclick: function() { _completeSportSession('cycling', _cycLvl, _cycDur2, _cycKey2, _cycLoad2 || undefined); }
+    onclick: function() { _completeSportSession('cycling', _cycLvl, _cycDur2, _cycKey2, _cycLoad2); }
   }, _cycDone ? (window.isEnglish && window.isEnglish() ? '✓ Session logged' : '✓ Séance validée') : (window.isEnglish && window.isEnglish() ? '✓ Session done' : '✓ Séance terminée')));
  }());
  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { S.sStep = 22; window.render(); }, html: backArrow + 'Modifier la configuration'}));
