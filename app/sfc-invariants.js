@@ -32,8 +32,17 @@
   // ─── Buffer de violations (monitoring) ───────────────────────────────────────
   var _violations = [];
 
-  // ─── Plans premium reconnus (miroir de _SFC_PREMIUM_PLANS dans app-core.js) ──
-  var PREMIUM_PLANS = ['unlimited', 'lifetime', 'premium', 'legend', 'champion', 'athlete', 'admin', 'paid'];
+  // ─── Source de vérité — sync avec SFCConstants (fallback si non chargé) ─────
+  var _C = (typeof window !== 'undefined' && window.SFCConstants) || {};
+
+  var PREMIUM_PLANS = (Array.isArray(_C.PREMIUM_PLANS) ? _C.PREMIUM_PLANS
+    : ['unlimited', 'lifetime', 'premium', 'legend', 'champion', 'athlete', 'admin', 'paid']);
+
+  var _KCAL_FLOOR_FEMALE   = _C.KCAL_FLOOR_FEMALE   || 1400;
+  var _KCAL_FLOOR_MALE     = _C.KCAL_FLOOR_MALE     || 1500;
+  var _KCAL_FLOOR_PREGNANT = _C.KCAL_FLOOR_PREGNANT || 1800;
+  var _FAT_MIN_PCT_KCAL_CC = _C.FAT_MIN_PCT_KCAL_CARB_CYCLING || 0.15;
+  var _CARB_MIN_GDAY       = _C.CARB_MIN_GDAY       || 130;
 
   // ─── Regex exercices interdits grossesse T3 (ACOG 2020) ──────────────────────
   var _PREG_T3_FORBIDDEN = /deadlift|bench|saut|jump|burpee/i;
@@ -110,23 +119,23 @@
     // NUT-01 — Calories minimales (ISSN 2017)
     if (_isPregnant(profile)) {
       _assert(
-        cal >= 1800,
+        cal >= _KCAL_FLOOR_PREGNANT,
         'NUT-01',
-        'caloriesTarget (' + cal + ') < 1800 kcal pour femme enceinte (ISSN 2017)',
+        'caloriesTarget (' + cal + ') < ' + _KCAL_FLOOR_PREGNANT + ' kcal pour femme enceinte (ISSN 2017)',
         { caloriesTarget: cal, pregnant: true }
       );
     } else if (_isFemale(profile)) {
       _assert(
-        cal >= 1400,
+        cal >= _KCAL_FLOOR_FEMALE,
         'NUT-01',
-        'caloriesTarget (' + cal + ') < 1400 kcal pour femme (ISSN 2017)',
+        'caloriesTarget (' + cal + ') < ' + _KCAL_FLOOR_FEMALE + ' kcal pour femme (ISSN 2017)',
         { caloriesTarget: cal, sex: profile.sex }
       );
     } else {
       _assert(
-        cal >= 1500,
+        cal >= _KCAL_FLOOR_MALE,
         'NUT-01',
-        'caloriesTarget (' + cal + ') < 1500 kcal pour homme (ISSN 2017)',
+        'caloriesTarget (' + cal + ') < ' + _KCAL_FLOOR_MALE + ' kcal pour homme (ISSN 2017)',
         { caloriesTarget: cal, sex: profile.sex }
       );
     }
@@ -152,18 +161,19 @@
     if (cal > 0) {
       var _fatPct = (fat * 9) / cal;
       _assert(
-        _fatPct >= 0.15,
+        _fatPct >= _FAT_MIN_PCT_KCAL_CC,
         'NUT-03',
-        'fatGrams × 9 / caloriesTarget = ' + (_fatPct * 100).toFixed(1) + '% < 15% (ACSM 2009)',
+        'fatGrams × 9 / caloriesTarget = ' + (_fatPct * 100).toFixed(1) + '% < ' +
+          (_FAT_MIN_PCT_KCAL_CC * 100) + '% (ACSM 2009)',
         { fatGrams: fat, caloriesTarget: cal, fatPct: _fatPct }
       );
     }
 
     // NUT-04 — Glucides ≥ 130 g (IOM 2005)
     _assert(
-      carbs >= 130,
+      carbs >= _CARB_MIN_GDAY,
       'NUT-04',
-      'carbsGrams (' + carbs + ') < 130 g — plancher cérébral IOM 2005',
+      'carbsGrams (' + carbs + ') < ' + _CARB_MIN_GDAY + ' g — plancher cérébral IOM 2005',
       { carbsGrams: carbs }
     );
 
