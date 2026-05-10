@@ -488,6 +488,14 @@ test('coach.quota.2: logout purges legacy sfc_coach_count key', function() {
   assert(src.indexOf("removeItem('sfc_coach_count')") !== -1, 'auth.js logout must remove legacy sfc_coach_count key');
 });
 
+test('coach.quota.3: coach uid resolved from AUTH.getUser not S.userId', function() {
+  var src = require('fs').readFileSync(path.join(appDir, 'ai-coach.js'), 'utf8');
+  // Must use AUTH.getUser() to get user identity
+  assert(src.indexOf('AUTH.getUser') !== -1, 'ai-coach must use AUTH.getUser() for uid');
+  // Must NOT rely on S.userId (which is never populated)
+  assert(src.indexOf('S.userId') === -1, 'ai-coach must not use S.userId for coach quota uid');
+});
+
 console.log('\n══ Stab-5: Persistence — debounce reduced to 1500ms ════════════════');
 
 test('persist.debounce.1: supabase-client debounce is 1500ms not 5000ms', function() {
