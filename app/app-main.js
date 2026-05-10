@@ -407,10 +407,11 @@ function _migrateSteps() {
  // Appliquer seulement en mode nutrition/both (jamais si appMode absent = nouvel utilisateur sans choix de mode)
  if ((S.appMode === 'nutrition' || S.appMode === 'both') && typeof S.nStep === 'number' && S.nStep >= 1 && S.nStep <= 11) {
    if (S.weekPlan) { S.nStep = 12; }
-   // nStep=8 sans profil de base → retour au début de l'onboarding
+   // nStep=8 avec profil complet → jump to results
    else if (S.nStep === 8 && S.sex && S.goal !== null && S.goal !== undefined) { S.nStep = 11; }
-   // nStep=8 en mode 'both' avec sexe renseigné = transition sport→nutrition en cours — NE PAS réinitialiser
-   else if (S.nStep === 8 && !(S.appMode === 'both' && S.sex)) { S.nStep = 1; }
+   // nStep=8 en cours d'onboarding normal (sex renseigné mais goal pas encore choisi) — NE PAS réinitialiser
+   // Seul le cas sans aucune donnée (sex null) doit reset vers step 1
+   else if (S.nStep === 8 && !S.sex) { S.nStep = 1; }
    // Migrer vers step 8 UNIQUEMENT si toutes les données de base sont renseignées (utilisateur pré-migration)
    // — nStep 9 et 10 sont des steps courants à préserver — évite de sauter steps 5-7 pour nouveaux utilisateurs
    else if (S.nStep >= 1 && S.nStep <= 7 && S.sex && S.goal !== null && S.weight && S.height && S.activity !== null && S.sleep !== null) { S.nStep = 8; }
@@ -635,7 +636,7 @@ window.renderWelcomeScreen = function renderWelcomeScreen(app) {
      saveProfile();
      window.render();
    }
- }, 'JE ME FAIS CONNA\u00ceTRE');
+ }, (window.isEnglish && window.isEnglish() ? 'DISCOVER MY PROGRAM' : 'D\u00c9COUVRIR MON PROGRAMME'));
 
  var signature = h('div', {
    style: 'font-family:Georgia,serif;font-style:italic;font-size:12px;line-height:1.7;color:var(--grey,#6B6B65);max-width:280px;text-align:center;opacity:0;transform:translateY(12px);transition:opacity .6s ease,transform .6s ease;'
