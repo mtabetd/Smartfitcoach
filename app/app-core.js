@@ -4496,7 +4496,12 @@ window.validatePregnancyState = validatePregnancyState;
 //   4. S.subscriptionEnd > now → active dated subscription
 //   5. Trial window (firstLoginDate + 7d)
 //   6. Loading guard — if _subStatusReady not set, never flash trial UI
-var _SFC_PREMIUM_PLANS = ['unlimited','lifetime','premium','legend','champion','athlete','admin','paid'];
+// Sync avec SFCConstants (source de vérité unique) — fallback liste locale si module non chargé
+var _SFC_PREMIUM_PLANS = (
+  typeof window !== 'undefined' && window.SFCConstants && Array.isArray(window.SFCConstants.PREMIUM_PLANS)
+    ? window.SFCConstants.PREMIUM_PLANS
+    : ['unlimited','lifetime','premium','legend','champion','athlete','admin','paid']
+);
 function _isPremiumPlan(plan) {
   return !!plan && _SFC_PREMIUM_PLANS.indexOf(plan) !== -1;
 }

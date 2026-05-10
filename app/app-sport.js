@@ -696,6 +696,18 @@ function generateSportProgram() {
  // During pregnancy, cap level
  if (pregTri) maxLv = Math.min(maxLv, 2);
 
+ // Exos minimum par durée — dérivé de SFCConstants.MIN_SETS_PER_SESSION (÷3 sets/exo).
+ // Fallback = valeurs NSCA directes si SFCConstants non chargé.
+ var _minExosByDur = (function() {
+   var mss = (typeof window !== 'undefined' && window.SFCConstants && window.SFCConstants.MIN_SETS_PER_SESSION) || {};
+   return {
+     '45min': mss['45min'] ? Math.round(mss['45min'] / 3) : 3,
+     '1h':    mss['1h']    ? Math.round(mss['1h']    / 3) : 4,
+     '1h15':  mss['1h15']  ? Math.round(mss['1h15']  / 3) : 5,
+     '1h30':  mss['1h30']  ? Math.round(mss['1h30']  / 3) : 6
+   };
+ }());
+
  for (var d = 0; d < days; d++) {
  var groups = daySplits[d];
  if (!groups.length) continue;
@@ -721,7 +733,7 @@ function generateSportProgram() {
    var _perioCfg = window.SFCSymbiosis.getPeriodizationCfg(window.SFCSymbiosis.getWeekIndex());
    _durMax  = Math.min(_durMax, _perioCfg.durMax);           // S4 deload plafonne le volume
    // Garantir le plancher lié à la préférence utilisateur — évite les séances < 30 min en décharge.
-   if (_dur) { var _durFloor = {'45min':3,'1h':4,'1h15':5,'1h30':6}[_dur] || 3; if (_durMax < _durFloor) _durMax = _durFloor; }
+   if (_dur) { var _durFloor = _minExosByDur[_dur] || 3; if (_durMax < _durFloor) _durMax = _durFloor; }
    _durSets = _perioCfg.durSets || _durSets;                  // S3 +1 série / S4 -1 série
    // restOverride : périodisation n'écrase pas les objectifs shred/force (priorité goal)
    if (_perioCfg.restOverride && !hasShred && !hasStrength) {
@@ -737,7 +749,7 @@ function generateSportProgram() {
    try {
      var _sfcVolMod = window.SFCDecisionCore.getVolumeModifier();
      if (typeof _sfcVolMod === 'number' && _sfcVolMod < 1.0) {
-       var _sfcFloor = _dur ? ({'45min':3,'1h':4,'1h15':5,'1h30':6}[_dur] || 3) : 3;
+       var _sfcFloor = _dur ? (_minExosByDur[_dur] || 3) : 3;
        _durMax = Math.max(_sfcFloor, Math.round(_durMax * _sfcVolMod));
      }
    } catch(_e) {}
@@ -816,7 +828,7 @@ function generateSportProgram() {
      // Ex: 1h15 recovery = max(5, floor(7×0.75)) = 5 exos × 3 séries ≈ 50 min (approprié)
      // vs. ancienne formule : max(3, floor(7×0.6)) = 4 exos × 3 séries ≈ 30 min (trop court).
      var _durMinBound = S.sportSessionDuration
-       ? ({'45min':3,'1h':4,'1h15':5,'1h30':6}[S.sportSessionDuration] || 3) : 3;
+       ? (_minExosByDur[S.sportSessionDuration] || 3) : 3;
      var _recoveryCap = Math.max(_durMinBound, Math.floor(dayExercises.length * 0.75));
      if (dayExercises.length > _recoveryCap) {
        dayExercises = dayExercises.slice(0, _recoveryCap);
@@ -867,7 +879,7 @@ function generateSportProgram() {
    // Sans ce guard : 4 exos × 2 sets = 8 sets pour 45min < 9 sets minimum NSCA.
    var _dlSetFloor = 2; // minimum absolu par exercice
    if (_dur) {
-     var _dlExosFloor = {'45min':3,'1h':4,'1h15':5,'1h30':6}[_dur] || 3;
+     var _dlExosFloor = _minExosByDur[_dur] || 3;
      var _dlTotalFloor = _dlExosFloor * 3; // plancher total en séries
      if (dayExercises.length > 0) {
        _dlSetFloor = Math.max(2, Math.ceil(_dlTotalFloor / dayExercises.length));
@@ -992,6 +1004,18 @@ function generateSportProgram() {
  // Runtime validation + auto-fix (doublons, champs manquants)
  if (window.validateSportProgram) {
    try { window.validateSportProgram(program); } catch(_e) {}
+ }
+
+ // Invariants runtime sport — warn + monitor en production, throw en test
+ if (window.SFCInvariant) {
+   try {
+     window.SFCInvariant.checkSport(program, S, {
+       sessionDuration:     S.sportSessionDuration,
+       muscuCycleDeload:    !!(S._deloadWeek),
+       sfcSymbiosisDeload:  !!(window.SFCSymbiosis && window.SFCSymbiosis.getPeriodizationCfg &&
+                               window.SFCSymbiosis.getPeriodizationCfg().durMax <= 4)
+     });
+   } catch (_ie) {}
  }
 
  return program;

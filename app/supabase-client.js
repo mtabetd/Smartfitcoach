@@ -201,6 +201,15 @@
     // Sauvegarder le profil complet vers Supabase
     saveProfile: function() {
       var self = this;
+      // Invariant SYN-01 — saveProfile ne doit jamais s'exécuter si le profil est corrompu
+      if (window.SFCInvariant) {
+        try {
+          window.SFCInvariant.checkSync({
+            _loadCorrupted:   window.S ? window.S._loadCorrupted : false,
+            _attemptingSave:  true
+          });
+        } catch (_ie) {}
+      }
       // Guard: données corrompues détectées au load — ne jamais écraser le cloud avec un profil vide
       if (window.S && window.S._loadCorrupted) { return Promise.resolve(); }
       // Mutex : si un upsert est déjà en vol, marquer un re-flush pour après
@@ -1047,6 +1056,15 @@
       if (self._syncInterval) return;
       // Sync toutes les 2 minutes
       self._syncInterval = setInterval(function() {
+        // Invariant SYN-02 — autosync doit être ignoré si _profileDirty === false
+        if (window.SFCInvariant) {
+          try {
+            window.SFCInvariant.checkSync({
+              _profileDirty:         window._profileDirty,
+              _attemptingAutosync:   true
+            });
+          } catch (_ie) {}
+        }
         if (window._profileDirty !== false) self.saveProfile();
       }, 120000);
       console.log('[SupaSync] Auto-sync started (every 2 min)');
@@ -1110,10 +1128,20 @@
             }
           } catch(e) {}
           return status;
-        }).catch(function() {
+        }).catch(function(netErr) {
           clearTimeout(tid);
           // Network failure — mark ready with no server data; isPremium() fails closed on error
           try { if (window.S) window.S._subStatusReady = true; } catch(_) {}
+          // Monitor réseau — visible dans SFCMonitor sans spammer l'utilisateur avec un toast
+          if (window.SFCMonitor) {
+            try {
+              window.SFCMonitor.reportSyncFailure({
+                op: 'fetchUserStatus',
+                error: netErr ? (netErr.message || String(netErr)) : 'network_timeout',
+                retries: 0
+              });
+            } catch (_me) {}
+          }
           return null;
         });
       }).catch(function() { return null; });

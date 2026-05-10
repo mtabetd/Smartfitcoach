@@ -12,6 +12,10 @@
   'use strict';
 
   // ─── CONSTANTES ───────────────────────────────────────────────────────────────
+  // Sync avec sfc-constants.js (source de vérité unique).
+  // Fallback = valeur locale identique si SFCConstants non chargé (CI, tests hors bundle).
+  var _C = (typeof window !== 'undefined' && window.SFCConstants) || {};
+
   var GOAL_ADJUSTMENTS = {
     bulk:          +0.15,
     lean_bulk:     +0.10,  // Prise de masse douce — ISSN 2023 : surplus modéré préserve le ratio masse maigre/grasse
@@ -27,14 +31,14 @@
   // PROT_DEFAULT : valeur médiane ISSN Position Stand 2023 pour non-élite en résistance
   // ISSN 2023 : 1.4-2.0 g/kg (force/muscu non-élite) — 1.8 = milieu de fourchette
   // 2.2 g/kg correspond à l'UPPER BOUND pour sportifs intensifs/sèche, pas au défaut général
-  var PROT_DEFAULT_MALE   = 1.8;  // g/kg — ISSN Position Stand 2023 (non-élite résistance)
-  var PROT_DEFAULT_FEMALE = 1.6;  // g/kg — Tarnopolsky 2000 : femmes ~11% moins (oestrogène anti-catabolique)
-  var PROT_ELITE_MALE     = 2.2;  // g/kg — ISSN 2023 upper / Morton 2018 BJSM meta-analysis
-  var PROT_ELITE_FEMALE   = 2.0;  // g/kg — Morton 2018 BJSM
+  var PROT_DEFAULT_MALE   = _C.PROTEIN_MIN_GPERKG_MUSCLE   || 1.8;
+  var PROT_DEFAULT_FEMALE = _C.PROTEIN_MIN_GPERKG_STANDARD || 1.6;
+  var PROT_ELITE_MALE     = _C.PROTEIN_MAX_GPERKG          || 2.2;
+  var PROT_ELITE_FEMALE   = 2.0; // Morton 2018 — pas de constante SFCConstants distincte
 
-  var FAT_MIN_PER_KG      = 0.8;  // g/kg minimum absolu (ISSN 2021 — santé hormonale)
+  var FAT_MIN_PER_KG      = _C.FAT_MIN_GPERKG           || 0.8;
 
-  var CARB_CYCLING_BOOST  = 0.20; // +20% glucides les jours d'entraînement
+  var CARB_CYCLING_BOOST  = _C.CARB_CYCLING_BOOST_HEAVY  || 0.20;
 
   var KCAL_PER_PROT       = 4;    // kcal/g protéines
   var KCAL_PER_CARB       = 4;    // kcal/g glucides
@@ -68,10 +72,9 @@
     return Math.round(bmr * activityLevel);
   }
 
-  var KCAL_FLOOR_MALE          = 1500; // ACSM — plancher physiologique masculin (cohérent avec app-core.js calcTarget)
-  var KCAL_FLOOR_FEMALE        = 1400; // ISSN 2017 / ACSM 2016 — plancher universel femme (l'ancien 1200 est obsolète)
-  var KCAL_FLOOR_FEMALE_ACTIVE = 1400; // ACSM / IOC 2018 — plancher femme sportive (RED-S prevention)
-  // Seuil d'activité : PAL ≥ 1.375 (légèrement actif, ≥1x/semaine) → plancher 1400 kcal
+  var KCAL_FLOOR_MALE          = _C.KCAL_FLOOR_MALE   || 1500;
+  var KCAL_FLOOR_FEMALE        = _C.KCAL_FLOOR_FEMALE || 1400;
+  var KCAL_FLOOR_FEMALE_ACTIVE = _C.KCAL_FLOOR_FEMALE || 1400;
   var ACTIVITY_THRESHOLD_ACTIVE = 1.375;
 
   /**
@@ -274,7 +277,7 @@
     var postWorkoutProtein = Math.round(Math.min(40, Math.max(20, proteinGrams * 0.20)));
     var preWorkoutCarbs    = Math.round(Math.min(80, Math.max(30, carbsGrams   * 0.25)));
 
-    return {
+    var result = {
       inputs:             inputs,
       bmr:                bmr,
       tdee:               tdee,
@@ -286,13 +289,26 @@
       carbCyclingApplied: carbCyclingApplied,
       clampedToBMR:       clampedToBMR,
       errors:             [],
-      // Timing nutritionnel exposé pour l'UI (Moore et al. AJCN 2009 ; Jeukendrup & Killer 2010)
       timingAdvice: {
-        postWorkoutProtein: postWorkoutProtein, // g — 0-2h après séance
-        preWorkoutCarbs:    preWorkoutCarbs,    // g — 2-3h avant séance
+        postWorkoutProtein: postWorkoutProtein,
+        preWorkoutCarbs:    preWorkoutCarbs,
         electrolytesNeeded: inputs.trainingDay && inputs.activityLevel >= 1.725
       }
     };
+
+    // Invariants runtime — warn + monitor en production, throw en test (mode sfc-invariants.js)
+    if (typeof window !== 'undefined' && window.SFCInvariant) {
+      try {
+        window.SFCInvariant.checkNutrition(result, {
+          sex:        inputs.gender,
+          weight:     inputs.weightKg,
+          pregnant:   inputs.pregnant || false,
+          sportGoals: inputs.sportGoals || []
+        });
+      } catch (_ie) {}
+    }
+
+    return result;
   }
 
   // ─── EXPOSITION GLOBALE ────────────────────────────────────────────────────────
