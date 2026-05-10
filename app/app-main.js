@@ -2258,22 +2258,33 @@ function render() {
  try {
    var _gDbKey = 'sfc_sub_debug_dismissed';
    var _devMode = window.SFC_DEBUG === true || (function(){ try{ return localStorage.getItem('sfc_dev')==='1'; }catch(e){ return false; } })();
-   if (_devMode && !sessionStorage.getItem(_gDbKey) && !document.getElementById('sfc-global-debug')) {
-     var _gPlan  = (window.S && window.S.subscriptionPlan) || 'undefined';
-     var _gSrvP  = (window.S && window.S._serverPremium !== undefined) ? String(window.S._serverPremium) : 'undefined';
-     var _gReady = (window.S && window.S._subStatusReady) ? 'true' : 'false';
-     var _gIsP   = (typeof window.isPremium === 'function') ? String(window.isPremium()) : '?';
-     var _gIsT   = (typeof window.isTrialUser === 'function') ? String(window.isTrialUser()) : '?';
-     var _gDays  = (typeof window.getTrialDaysLeft === 'function') ? String(window.getTrialDaysLeft()) : '?';
-     var _gBv    = (window.SFC_BUNDLE_VERSION || 'unknown');
+   var _sfcSS = (window.safeStorage && window.safeStorage.session) || { getItem: function(k){ try{return sessionStorage.getItem(k);}catch(e){return null;} }, setItem: function(k,v){ try{sessionStorage.setItem(k,v);}catch(e){} } };
+   if (_devMode && !_sfcSS.getItem(_gDbKey) && !document.getElementById('sfc-global-debug')) {
+     var _esc = function(v) { return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); };
+     var _gPlan  = _esc((window.S && window.S.subscriptionPlan) || 'undefined');
+     var _gSrvP  = _esc((window.S && window.S._serverPremium !== undefined) ? String(window.S._serverPremium) : 'undefined');
+     var _gReady = _esc((window.S && window.S._subStatusReady) ? 'true' : 'false');
+     var _gIsP   = _esc((typeof window.isPremium === 'function') ? String(window.isPremium()) : '?');
+     var _gIsT   = _esc((typeof window.isTrialUser === 'function') ? String(window.isTrialUser()) : '?');
+     var _gDays  = _esc((typeof window.getTrialDaysLeft === 'function') ? String(window.getTrialDaysLeft()) : '?');
+     var _gBv    = _esc(window.SFC_BUNDLE_VERSION || 'unknown');
      var _gEl = document.createElement('div');
      _gEl.id = 'sfc-global-debug';
      _gEl.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:999999;background:#000;color:#0f0;' +
        'font-size:9px;font-family:monospace;padding:3px 6px;line-height:1.4;display:flex;justify-content:space-between;align-items:center;';
-     _gEl.innerHTML = '<span>PLAN=<b>' + _gPlan + '</b> | SRV_PREMIUM=<b>' + _gSrvP + '</b> | IS_PREMIUM=<b>' + _gIsP +
-       '</b> | IS_TRIAL=<b>' + _gIsT + '</b> | DAYS=<b>' + _gDays + '</b> | READY=<b>' + _gReady + '</b> | BV=<b>' + _gBv + '</b></span>' +
-       '<span onclick="sessionStorage.setItem(\'sfc_sub_debug_dismissed\',\'1\');document.getElementById(\'sfc-global-debug\').remove();" ' +
-       'style="cursor:pointer;padding:0 6px;font-size:12px;color:#fff;">×</span>';
+     var _gInfo = document.createElement('span');
+     _gInfo.textContent = 'PLAN=' + _gPlan + ' | SRV_PREMIUM=' + _gSrvP + ' | IS_PREMIUM=' + _gIsP +
+       ' | IS_TRIAL=' + _gIsT + ' | DAYS=' + _gDays + ' | READY=' + _gReady + ' | BV=' + _gBv;
+     var _gClose = document.createElement('span');
+     _gClose.textContent = '×';
+     _gClose.style.cssText = 'cursor:pointer;padding:0 6px;font-size:12px;color:#fff;';
+     _gClose.addEventListener('click', function() {
+       _sfcSS.setItem(_gDbKey, '1');
+       var _bar = document.getElementById('sfc-global-debug');
+       if (_bar && _bar.parentNode) _bar.parentNode.removeChild(_bar);
+     });
+     _gEl.appendChild(_gInfo);
+     _gEl.appendChild(_gClose);
      if (document.body) {
        document.body.appendChild(_gEl);
      }

@@ -14,10 +14,9 @@
   var _sessionId = null;
   function _getSessionId() {
     if (_sessionId) return _sessionId;
-    try {
-      var stored = sessionStorage.getItem('sfc_sid');
-      if (stored) { _sessionId = stored; return _sessionId; }
-    } catch(_) {}
+    var _ss = (window.safeStorage && window.safeStorage.session) || { getItem: function(k){ try{return sessionStorage.getItem(k);}catch(e){return null;} }, setItem: function(k,v){ try{sessionStorage.setItem(k,v);}catch(e){} } };
+    var stored = _ss.getItem('sfc_sid');
+    if (stored) { _sessionId = stored; return _sessionId; }
     // Generate a random session ID (no PII)
     var arr = new Uint8Array(16);
     if (window.crypto && window.crypto.getRandomValues) {
@@ -26,7 +25,7 @@
       for (var i = 0; i < 16; i++) arr[i] = Math.floor(Math.random() * 256);
     }
     _sessionId = Array.from(arr).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
-    try { sessionStorage.setItem('sfc_sid', _sessionId); } catch(_) {}
+    _ss.setItem('sfc_sid', _sessionId);
     return _sessionId;
   }
 
