@@ -800,7 +800,11 @@
         return self.loadProfile().then(function(cloudData) {
         self._syncPending = false;
         self._syncLoginInProgress = false;
-        if (!cloudData) return 'no_cloud_data';
+        if (!cloudData) {
+          // Unblock premium/trial checks even when cloud is unreachable — fail-closed
+          try { if (window.S) window.S._subStatusReady = true; } catch(_) {}
+          return 'no_cloud_data';
+        }
 
         // Check localStorage directly for this user's actual persisted data
         // (don't rely on window.S which may have stale values from a previous session)
@@ -1032,6 +1036,8 @@
       }).catch(function(e) {
         self._syncPending = false;
         self._syncLoginInProgress = false;
+        // Unblock premium/trial checks so the UI doesn't stay stuck
+        try { if (window.S) window.S._subStatusReady = true; } catch(_) {}
         console.warn('[SupaSync] syncOnLogin failed:', e);
         return null;
       }).then(function(result) {
