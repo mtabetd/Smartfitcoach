@@ -4507,19 +4507,21 @@ function isPremium() {
     // 1. Server-confirmed boolean is authoritative
     if (s._serverPremium === true) return true;
     if (s._serverPremium === false && s._subStatusReady) return false;
-    // 2. Recognised premium plan name (unlimited / lifetime / etc. with null end date)
+    // 2. Loading guard — subscriptionPlan / subscriptionEnd come from the server response;
+    //    reading them before _subStatusReady risks granting access based on stale/injected
+    //    localStorage values that haven't been validated by the server yet. SEC-06 fix.
+    if (!s._subStatusReady) return false;
+    // 3. Recognised premium plan name (unlimited / lifetime / etc. with null end date)
     if (_isPremiumPlan(s.subscriptionPlan)) return true;
-    // 3. Active dated subscription
+    // 4. Active dated subscription
     if (s.subscriptionEnd && new Date(s.subscriptionEnd) > new Date()) return true;
-    // 4. Active trial window — expiry at local midnight end-of-day 7 (P3 timezone fix)
+    // 5. Active trial window — expiry at local midnight end-of-day 7 (P3 timezone fix)
     if (s.firstLoginDate) {
       var trialEnd = new Date(s.firstLoginDate);
       trialEnd.setUTCDate(trialEnd.getUTCDate() + 7);
       trialEnd.setUTCHours(23, 59, 59, 999); // C9 fix: fin de journée UTC — aligné serveur (user-status.js + _user-auth.js)
       if (trialEnd > new Date()) return true;
     }
-    // 5. Server status not yet confirmed — deny while loading (isLoading() handles UX)
-    if (!s._subStatusReady) return false;
     // 6. No firstLoginDate after status confirmed → corrupted profile, deny
     if (!s.firstLoginDate) return false;
     return false;

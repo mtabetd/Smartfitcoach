@@ -134,6 +134,19 @@
       // 2026-04 P1 FIX : stopper la sync automatique avant logout
       // (sinon l'interval continue à tenter des saves vers le user déco)
       try { if (window.SupaSync && window.SupaSync.stopAutoSync) window.SupaSync.stopAutoSync(); } catch(e) {}
+      // PD-01 FIX : purger les clés SYNC_EXACT uid-scopées de l'utilisateur qui se déconnecte.
+      // Sans ce cleanup, les données du compte A resteraient en localStorage et polueraient
+      // une session ultérieure du compte B sur le même device.
+      try {
+        var _logoutUser = (window.AUTH && window.AUTH.getUser) ? window.AUTH.getUser() : null;
+        if (_logoutUser && _logoutUser.id) {
+          var _logoutSuffix = '_' + _logoutUser.id;
+          var _SYNC_EXACT_PURGE = ['mtd_muscu_program', 'mtd_muscu_ia_progress', 'mtd_muscu_generations'];
+          for (var _pi2 = 0; _pi2 < _SYNC_EXACT_PURGE.length; _pi2++) {
+            try { localStorage.removeItem(_SYNC_EXACT_PURGE[_pi2] + _logoutSuffix); } catch(_pe) {}
+          }
+        }
+      } catch(_e) {}
       return client.auth.signOut();
     },
 
@@ -245,7 +258,10 @@
             // Daily challenges
             'mtd_daily_challenge_'
           ];
-          // Clés exactes sans UID (programme IA, progression, générations)
+          // Clés exactes — programme IA, progression, générations.
+          // PD-01 fix: on stocke ces clés avec suffixe _<uid> pour isoler les données
+          // par utilisateur sur un device multi-comptes. Migration : on lit la clé
+          // uid-scopée en priorité, avec fallback sur l'ancienne clé sans uid.
           var SYNC_EXACT = ['mtd_muscu_program', 'mtd_muscu_ia_progress', 'mtd_muscu_generations'];
           for (var i = 0; i < localStorage.length; i++) {
             var key = localStorage.key(i);
@@ -257,9 +273,25 @@
                 break;
               }
             }
-            if (!matches && SYNC_EXACT.indexOf(key) !== -1) matches = true;
+            // SYNC_EXACT: match the uid-scoped variant (e.g. mtd_muscu_program_<uid>)
+            if (!matches) {
+              for (var eq = 0; eq < SYNC_EXACT.length; eq++) {
+                if (key === SYNC_EXACT[eq] + uidSuffix) { matches = true; break; }
+              }
+            }
             if (matches) {
               try { legacy[key] = localStorage.getItem(key); } catch(e) {}
+            }
+          }
+          // PD-01 migration: for any SYNC_EXACT key that has no uid-scoped entry yet,
+          // fall back to reading the legacy bare key so existing data is not lost.
+          for (var meq = 0; meq < SYNC_EXACT.length; meq++) {
+            var _scopedKey = SYNC_EXACT[meq] + uidSuffix;
+            if (!legacy[_scopedKey]) {
+              try {
+                var _legacyVal = localStorage.getItem(SYNC_EXACT[meq]);
+                if (_legacyVal) legacy[_scopedKey] = _legacyVal;
+              } catch(e) {}
             }
           }
           if (Object.keys(legacy).length > 0) data._legacy_storage = legacy;
