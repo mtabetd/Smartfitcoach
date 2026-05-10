@@ -3244,7 +3244,9 @@ function renderStep9(p) {
   }
   var _calBase = _planKcal > 0
     ? _planKcal
-    : (_calcTargetResult || (window.isFemale(S) ? 1800 : 2000));
+    : (_calcTargetResult || (window.isFemale(S)
+        ? (window.NutritionMaster ? window.NutritionMaster.KCAL_FLOOR_FEMALE : 1400)
+        : (window.NutritionMaster ? window.NutritionMaster.KCAL_FLOOR_MALE   : 1500)));
   var _calMult = (_dayAdapt && typeof _dayAdapt.calMultiplier === 'number' && _dayAdapt.calMultiplier > 0)
     ? _dayAdapt.calMultiplier : 1.0;
   var _tgt = Math.round(_calBase * (_planKcal > 0 ? 1.0 : _calMult));
@@ -5586,8 +5588,9 @@ function renderRecipePicker(p) {
 
   // ── Restore / init macro filter state from sessionStorage ──
   var SFC_FILTER_KEY = 'sfc_recipe_filters';
+  var _sfcSS = (window.safeStorage && window.safeStorage.session) || { getItem: function(k){ try{return sessionStorage.getItem(k);}catch(e){return null;} }, setItem: function(k,v){ try{sessionStorage.setItem(k,v);}catch(e){} }, removeItem: function(k){ try{sessionStorage.removeItem(k);}catch(e){} } };
   var savedFilters = (function() {
-    try { return JSON.parse(sessionStorage.getItem(SFC_FILTER_KEY) || 'null'); } catch(e) { return null; }
+    try { return JSON.parse(_sfcSS.getItem(SFC_FILTER_KEY) || 'null'); } catch(e) { return null; }
   })();
   if (!picker._filtersInit) {
     picker.minKcal    = savedFilters ? savedFilters.minKcal    : 0;
@@ -5601,7 +5604,7 @@ function renderRecipePicker(p) {
   // ── Helper: save filters to sessionStorage ──
   function saveFilters() {
     try {
-      sessionStorage.setItem(SFC_FILTER_KEY, JSON.stringify({
+      _sfcSS.setItem(SFC_FILTER_KEY, JSON.stringify({
         minKcal:    picker.minKcal,
         maxKcal:    picker.maxKcal,
         minProt:    picker.minProt,
@@ -5764,7 +5767,7 @@ function renderRecipePicker(p) {
   resetBtn.addEventListener('click', function() {
     picker.minKcal = 0; picker.maxKcal = 1200; picker.minProt = 0;
     picker.activeTags = []; picker.sortBy = 'default';
-    try { sessionStorage.removeItem(SFC_FILTER_KEY); } catch(e) {}
+    try { _sfcSS.removeItem(SFC_FILTER_KEY); } catch(e) {}
     window.render();
   });
   row3.appendChild(resetBtn);
@@ -6112,7 +6115,9 @@ function showSmoothieModal(sm) {
           );
         }
       }
-      var totalTarget = _ttRaw || (window.isFemale(window.S) ? 1800 : 2000);
+      var totalTarget = _ttRaw || (window.isFemale(window.S)
+        ? (window.NutritionMaster ? window.NutritionMaster.KCAL_FLOOR_FEMALE : 1400)
+        : (window.NutritionMaster ? window.NutritionMaster.KCAL_FLOOR_MALE   : 1500));
       var snackTargetBefore = split ? Math.round(totalTarget * split.pctSnack) : Math.round(totalTarget * 0.15);
       var delta = sm.cal - snackTargetBefore;
       var dayPlan = S.weekPlan[S.selectedDay];

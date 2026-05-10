@@ -4518,12 +4518,12 @@ function isPremium() {
       trialEnd.setUTCHours(23, 59, 59, 999); // C9 fix: fin de journée UTC — aligné serveur (user-status.js + _user-auth.js)
       if (trialEnd > new Date()) return true;
     }
-    // 5. Server status not yet confirmed — grant access while loading (never block by default)
-    if (!s._subStatusReady) return true;
-    // 6. New user (no firstLoginDate) — grant trial access
-    if (!s.firstLoginDate) return true;
+    // 5. Server status not yet confirmed — deny while loading (isLoading() handles UX)
+    if (!s._subStatusReady) return false;
+    // 6. No firstLoginDate after status confirmed → corrupted profile, deny
+    if (!s.firstLoginDate) return false;
     return false;
-  } catch(e) { return true; } // failsafe: on error always grant access
+  } catch(e) { return false; } // fail-closed: any JS error must not grant premium access
 }
 // Returns 0 when premium or loading; returns trial days when genuinely in trial
 function getTrialDaysLeft() {
@@ -6853,9 +6853,10 @@ function buildNMInputs(trainingDay) {
     activityLevel: s.activity !== null && ACTIVITIES[s.activity]
                    ? Math.min(ACTIVITIES[s.activity].factor, 2.5)
                    : 1.2,
-    goal:          s.goal !== null && GOALS[s.goal] ? GOALS[s.goal].key : 'maintain',
-    isElite:       s.activity !== null && s.activity >= 4,
-    trainingDay:   trainingDay === true
+    goal:             s.goal !== null && GOALS[s.goal] ? GOALS[s.goal].key : 'maintain',
+    isElite:          s.activity !== null && s.activity >= 4,
+    bodyFatEstimate:  (s._bodyFatEstimate !== undefined && s._bodyFatEstimate !== null) ? s._bodyFatEstimate : null,
+    trainingDay:      false // NM never applies carb cycling; computeNutritionState is the sole source
   };
 }
 
