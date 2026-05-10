@@ -3242,11 +3242,14 @@ function renderStep9(p) {
       );
     }
   }
+  // N05 fix: grossesse → plancher OMS 1800 kcal au lieu du plancher universel 1400
+  var _kcalFallbackFloor = (S.pregnant && window.isFemale(S)) ? 1800
+    : (window.isFemale(S)
+        ? (window.NutritionMaster ? window.NutritionMaster.KCAL_FLOOR_FEMALE : 1400)
+        : (window.NutritionMaster ? window.NutritionMaster.KCAL_FLOOR_MALE   : 1500));
   var _calBase = _planKcal > 0
     ? _planKcal
-    : (_calcTargetResult || (window.isFemale(S)
-        ? (window.NutritionMaster ? window.NutritionMaster.KCAL_FLOOR_FEMALE : 1400)
-        : (window.NutritionMaster ? window.NutritionMaster.KCAL_FLOOR_MALE   : 1500)));
+    : (_calcTargetResult || _kcalFallbackFloor);
   var _calMult = (_dayAdapt && typeof _dayAdapt.calMultiplier === 'number' && _dayAdapt.calMultiplier > 0)
     ? _dayAdapt.calMultiplier : 1.0;
   var _tgt = Math.round(_calBase * (_planKcal > 0 ? 1.0 : _calMult));
