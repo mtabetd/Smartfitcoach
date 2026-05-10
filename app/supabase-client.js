@@ -1056,14 +1056,9 @@
       if (self._syncInterval) return;
       // Sync toutes les 2 minutes
       self._syncInterval = setInterval(function() {
-        // Invariant SYN-02 — autosync doit être ignoré si _profileDirty === false
-        if (window.SFCInvariant) {
-          try {
-            window.SFCInvariant.checkSync({
-              _profileDirty:         window._profileDirty,
-              _attemptingAutosync:   true
-            });
-          } catch (_ie) {}
+        // SYN-02 — vérifié uniquement quand dirty (évite faux positifs sur ticks à vide)
+        if (window.SFCInvariant && window._profileDirty !== false) {
+          try { window.SFCInvariant.checkSync({ _profileDirty: window._profileDirty, _attemptingAutosync: true }); } catch (_ie) {}
         }
         if (window._profileDirty !== false) self.saveProfile();
       }, 120000);

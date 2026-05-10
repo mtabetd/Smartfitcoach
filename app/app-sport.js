@@ -696,17 +696,10 @@ function generateSportProgram() {
  // During pregnancy, cap level
  if (pregTri) maxLv = Math.min(maxLv, 2);
 
- // Exos minimum par durée — dérivé de SFCConstants.MIN_SETS_PER_SESSION (÷3 sets/exo).
- // Fallback = valeurs NSCA directes si SFCConstants non chargé.
- var _minExosByDur = (function() {
-   var mss = (typeof window !== 'undefined' && window.SFCConstants && window.SFCConstants.MIN_SETS_PER_SESSION) || {};
-   return {
-     '45min': mss['45min'] ? Math.round(mss['45min'] / 3) : 3,
-     '1h':    mss['1h']    ? Math.round(mss['1h']    / 3) : 4,
-     '1h15':  mss['1h15']  ? Math.round(mss['1h15']  / 3) : 5,
-     '1h30':  mss['1h30']  ? Math.round(mss['1h30']  / 3) : 6
-   };
- }());
+ // Exos minimum par durée — depuis SFCConstants.MIN_EXOS_BY_DUR (pré-calculé).
+ // Fallback = valeurs NSCA si SFCConstants non chargé.
+ var _minExosByDur = (window.SFCConstants && window.SFCConstants.MIN_EXOS_BY_DUR) ||
+   { '45min': 3, '1h': 4, '1h15': 5, '1h30': 6 };
 
  for (var d = 0; d < days; d++) {
  var groups = daySplits[d];

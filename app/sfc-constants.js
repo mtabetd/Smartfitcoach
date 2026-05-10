@@ -129,6 +129,15 @@
       '1h30':  18                        // 6 exos × 3 sets minimum
     },
 
+    // Exos minimum par durée (MIN_SETS_PER_SESSION ÷ 3 sets/exo) — utilisé dans app-sport.js
+    // Pré-calculé ici pour éviter l'IIFE répétée à chaque appel de generateSportProgram().
+    MIN_EXOS_BY_DUR: {
+      '45min': 3,
+      '1h':    4,
+      '1h15':  5,
+      '1h30':  6
+    },
+
     MAX_SPORT_DAYS: 6,                  // Maximum physiologique (récupération)
                                          // Vérifié : app-core.js l.4858 (sportDays>=5 → factor 1.725,
                                          //           jamais plus de 6j dans les recommandations programme)

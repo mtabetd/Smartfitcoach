@@ -297,7 +297,7 @@
     };
 
     // Invariants runtime — warn + monitor en production, throw en test (mode sfc-invariants.js)
-    if (typeof window !== 'undefined' && window.SFCInvariant) {
+    if (window.SFCInvariant) {
       try {
         window.SFCInvariant.checkNutrition(result, {
           sex:        inputs.gender,

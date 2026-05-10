@@ -65,6 +65,8 @@
         ctx: context || {},
         ts:  Date.now()
       };
+      // Rolling buffer de 500 entrées max — évite la croissance illimitée sur sessions longues
+      if (_violations.length >= 500) _violations.splice(0, 250);
       _violations.push(entry);
 
       // Bridge monitoring externe (SFCMonitor côté navigateur)
