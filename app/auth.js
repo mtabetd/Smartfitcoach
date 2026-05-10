@@ -1068,6 +1068,7 @@ window.AUTH = {
       }
       // Non-uid-keyed keys that can leak cross-user on shared devices
       localStorage.removeItem('mtd_blackbox'); // activity log contains email + navigation events
+      localStorage.removeItem('sfc_coach_count'); // legacy unkeyed coach quota (replaced by uid-keyed key)
     } catch(e) { console.warn('localStorage cleanup error:', e); }
 
     // Nettoyer la session locale + legacy

@@ -1244,13 +1244,15 @@ function sendMessage() {
   // Premium gate — coach IA illimité = premium (trial = 3 messages/jour)
   if (window.isTrialUser && window.isTrialUser() && !(window.S && window.S._serverPremium) && !(window.isPremium && window.isPremium())) {
     var _today = (window.sfcLocalDateStr ? window.sfcLocalDateStr() : new Date().toISOString().slice(0, 10));
-    var _rawCount = (function() { try { return JSON.parse(localStorage.getItem('sfc_coach_count') || 'null'); } catch(e) { return null; } })();
-    var _coachCount = (_rawCount && _rawCount.date === _today) ? (_rawCount.n || 0) : 0;
+    var _uid = (window.S && window.S.userId) ? window.S.userId : 'anon';
+    var _coachKey = 'sfc_coach_count_' + _uid + '_' + _today;
+    var _rawCount = (function() { try { return JSON.parse(localStorage.getItem(_coachKey) || 'null'); } catch(e) { return null; } })();
+    var _coachCount = (_rawCount && typeof _rawCount.n === 'number') ? _rawCount.n : 0;
     if (_coachCount >= 3) {
       appendError(messages, (window.isEnglish && window.isEnglish() ? 'Limit reached (3 messages/day in trial). Subscribe for unlimited access.' : 'Limite atteinte (3 messages/jour en version d\u2019essai). Abonnez-vous pour un acc\u00e8s illimit\u00e9.'));
       return;
     }
-    try { localStorage.setItem('sfc_coach_count', JSON.stringify({ date: _today, n: _coachCount + 1 })); } catch(e) {}
+    try { localStorage.setItem(_coachKey, JSON.stringify({ n: _coachCount + 1 })); } catch(e) {}
   }
 
   input.value = '';
