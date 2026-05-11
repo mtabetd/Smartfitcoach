@@ -3923,8 +3923,18 @@ function renderCardSport() {
               : ((window.isEnglish && window.isEnglish() ? 'Session ' : 'S\u00e9ance ') + (idx + 1)));
   var exCount = Array.isArray(day.exercises) ? day.exercises.length : 0;
 
-  // Estimated duration heuristic
-  var _estMins = exCount <= 0 ? null : (exCount <= 4 ? 30 : exCount <= 6 ? 45 : 60);
+  // Duration: profile setting first (what the user chose), then calcSessionDuration, then heuristic
+  var _estMins = null;
+  if (exCount > 0) {
+    var _durMap = { '45min': 45, '1h': 60, '1h15': 75, '1h30': 90 };
+    if (S.sportSessionDuration && _durMap[S.sportSessionDuration]) {
+      _estMins = _durMap[S.sportSessionDuration];
+    } else if (typeof calcSessionDuration === 'function' && Array.isArray(day.exercises) && day.exercises.length > 0) {
+      _estMins = calcSessionDuration(day.exercises);
+    } else {
+      _estMins = exCount <= 4 ? 30 : exCount <= 6 ? 45 : 60;
+    }
+  }
 
   // FIX D11 COHÉRENCE SESSION COUNT 2026-04 : scanner muscuSessionLog + sessionHistory
   // Avant : comptait UNIQUEMENT S.muscuSessionLog → runner/triathlète/crossfit voyait 0/3
