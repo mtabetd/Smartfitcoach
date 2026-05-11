@@ -5084,7 +5084,7 @@ function renderExtendedSections(wrapper, S) {
       // au moins une séance sur la semaine (sinon toutes les barres sont grises = bruit visuel).
       // FIX CONTRE-AUDIT : éviter l'UX confuse quand seul wellness est loggé sans session.
       if (Array.isArray(insights.byDay) && insights.byDay.length === 7 && (insights.sessions || 0) > 0) {
-        var dayLabels = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+        var dayLabels = ['L', 'Ma', 'Me', 'J', 'V', 'S', 'D'];
         var max = Math.max.apply(null, insights.byDay.concat([1]));
         var barsWrap = h('div', { style: 'display:flex;gap:4px;align-items:flex-end;height:32px;margin-bottom:12px;padding:0 4px;' });
         insights.byDay.forEach(function(cnt, i) {
@@ -6454,7 +6454,7 @@ function renderTodayDashboard(p) {
       var _hmDow = _hmToday.getDay(); // 0=dim, 1=lun, ...
       var _hmMonday = new Date(_hmToday);
       _hmMonday.setDate(_hmToday.getDate() - ((_hmDow + 6) % 7));
-      var _hmDays = (window.isEnglish && window.isEnglish()) ? ['M','T','W','T','F','S','S'] : ['L','M','M','J','V','S','D'];
+      var _hmDays = (window.isEnglish && window.isEnglish()) ? ['M','Tu','W','Th','F','Sa','Su'] : ['L','Ma','Me','J','V','S','D'];
       var _hmHasAny = false;
       var _hmDots = [];
       for (var _hi = 0; _hi < 7; _hi++) {

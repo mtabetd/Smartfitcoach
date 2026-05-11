@@ -891,9 +891,9 @@ function generateSportProgram() {
        ex._deloadRepsSet = true;
      }
    });
-   S._currentDeloadWeek = true; // flag pour l'UI (afficher bandeau "Semaine de décharge")
+   S._currentDeloadWeek = true; S._deloadWeek = true;
  } else {
-   S._currentDeloadWeek = false;
+   S._currentDeloadWeek = false; S._deloadWeek = false;
  }
 
  // Build focus label with star ratings (bilingual names, max 5 stars, deduplicated)
@@ -5382,6 +5382,7 @@ function renderMusculationZones(p) {
  var isOn = S.sportSessionDuration === opt.id;
  durGrid.appendChild(h('div', {'class': 'sel-card' + (isOn ? ' on' : ''), onclick: function(){
  S.sportSessionDuration = opt.id;
+ S.sportProgram = null; S.sportProgramValidated = false;
  window.render();
  }}, [
  h('div', {'class': 'card-name'}, opt.label),
@@ -7715,9 +7716,10 @@ function renderMusculationProgram(p) {
     // de l'ancien split. Maintenant : on régénère immédiatement pour aligner exercices et labels.
     onclick: (function(_id) { return function() {
       S._splitChoice = _id;
+      S.bonusExercises = {};
       try { S.sportProgram = generateSportProgram(); } catch(e) { console.error('[split] regen error:', e); }
+      if (S.sportProgram && typeof SPORT_PROGRAM_VERSION !== 'undefined') S.sportProgram._version = SPORT_PROGRAM_VERSION;
       S.selectedSportDay = 0;
-      // Préserver le statut validé (l'user a juste changé de split, pas reset)
       S.sportProgramValidated = true; S.sportProgramValidatedAt = new Date().toISOString();
       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       window.render();

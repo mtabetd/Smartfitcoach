@@ -1045,6 +1045,11 @@ window.AUTH = {
       window.S.sportHobbies = []; window.S.installations = []; window.S.calisthenicsEquipment = [];
       window.S.crossfitCompGoal = null; window.S.crossfitOpenDate = null;
       window.S.runningVO2max = null; window.S.triathlonFTP = null; window.S.triathlonRaceDate = null;
+      // Subscription — reset to prevent stale premium status leaking to next user on shared device
+      window.S.subscriptionPlan = null; window.S.subscriptionEnd = null;
+      window.S._serverPremium = undefined; window.S._subStatusReady = false;
+      // Clear corruption flag so next user's saveProfile isn't blocked by previous user's corrupt data
+      window.S._loadCorrupted = false;
     }
 
     // ── Nettoyer UNIQUEMENT les tokens Supabase (session fantôme) ──
@@ -1067,6 +1072,7 @@ window.AUTH = {
         localStorage.removeItem(_keysToRemove[_ri]);
       }
       // Non-uid-keyed keys that can leak cross-user on shared devices
+      localStorage.removeItem('mtd_profile_anon'); // written when saveProfile runs before auth resolves
       localStorage.removeItem('mtd_blackbox'); // activity log contains email + navigation events
       localStorage.removeItem('sfc_coach_count'); // legacy unkeyed coach quota (replaced by uid-keyed key)
     } catch(e) { console.warn('localStorage cleanup error:', e); }

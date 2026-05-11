@@ -2047,7 +2047,7 @@ function renderProfilePage(container) {
      onclick: function() {
        if (!_canSave) return;
        // Apply changes
-       S.goal = S._modalGoal;
+       S.goal = S._modalGoal; S._nm = null;
        if (_needsTarget) {
          S.targetWeight = S._modalTargetWeight;
        } else {
