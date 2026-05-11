@@ -145,7 +145,7 @@ function buildContext() {
   var ctx = {
     prenom: (window.getDisplayFirstName ? window.getDisplayFirstName() : (_aiFirst || S.prenom || '')),
     sex: S.sex || '',
-    age: S.age || '',
+    age: (typeof window.getAge === 'function' ? window.getAge() : S.age) || '',
     weight: S.weight || '',
     height: S.height || '',
     goal: S.goal || '',
