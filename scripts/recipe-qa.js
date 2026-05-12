@@ -3,12 +3,14 @@
 
 // ─── RECIPE QA V2 — ENTERPRISE QUALITY GATE ──────────────────────────────────
 // Scanne toutes les recettes, détecte les anomalies, compare les snapshots.
-// V2 : ajoute l'analyse Intelligence + UX Engine (7 dimensions de qualité).
+// V2 : Intelligence + UX Engine (7 dimensions), severity tiers, dashboard.
+// V2 + --explain : Explainable report (facteurs, répétitions, fatigue LT).
 //
 // Usage : node scripts/recipe-qa.js [options]
 //   --snapshot   Créer / comparer le snapshot de référence
 //   --fix        Afficher les auto-corrections applicables (sans écrire)
 //   --verbose    Afficher chaque warning
+//   --explain    Rapport explicatif complet (facteurs + projection fatigue)
 //   --report=F   Écrire un rapport JSON dans le fichier F
 //
 // Codes de sortie :
@@ -26,6 +28,7 @@ var OPT  = {
   snapshot: argv.indexOf('--snapshot') >= 0,
   fix:      argv.indexOf('--fix')      >= 0,
   verbose:  argv.indexOf('--verbose')  >= 0,
+  explain:  argv.indexOf('--explain')  >= 0,
   report:   (argv.find(function(a) { return /^--report=/.test(a); }) || '').replace('--report=', '') || null
 };
 
@@ -74,15 +77,18 @@ loadModule('app/recipe-engine.js');
 loadModule('app/recipe-validator.js');
 loadModule('app/recipe-intelligence.js');
 loadModule('app/recipe-ux-engine.js');
+loadModule('app/recipe-ux-explainer.js');
 
 var RE  = window.RecipeEngine;
 var RV  = window.RecipeValidator;
 var RI  = window.RecipeIntelligence;
 var RU  = window.RecipeUXEngine;
+var REX = window.RecipeUXExplainer;
 if (!RE || !RE.RECIPES_DB) { console.error('[FATAL] RecipeEngine non chargé'); process.exit(1); }
 if (!RV)                   { console.error('[FATAL] RecipeValidator non chargé'); process.exit(1); }
 if (!RI)                   { console.error('[FATAL] RecipeIntelligence non chargé'); process.exit(1); }
 if (!RU)                   { console.error('[FATAL] RecipeUXEngine non chargé'); process.exit(1); }
+if (!REX)                  { console.error('[FATAL] RecipeUXExplainer non chargé'); process.exit(1); }
 
 var DB = RE.RECIPES_DB;
 
@@ -343,6 +349,31 @@ if (OPT.report) {
   };
   fs.writeFileSync(OPT.report, JSON.stringify(reportObj, null, 2));
   console.log('Rapport JSON : ' + OPT.report);
+}
+
+// ── EXPLAINABLE REPORT (opt-in) ───────────────────────────────────────────────
+if (OPT.explain) {
+  process.stdout.write('\n[7/7] Rapport explicatif (facteurs + fatigue LT)… ');
+  var dbExplain = REX.explainDatabase(DB);
+  console.log('OK\n');
+  console.log(REX.generateExplainableReport(DB));
+
+  if (OPT.report) {
+    // Enrichir le rapport JSON existant
+    try {
+      var existing = JSON.parse(fs.readFileSync(OPT.report, 'utf8'));
+      existing.explainable = {
+        analyzed:     dbExplain.analyzed,
+        avgScores:    dbExplain.avgScores,
+        topLimiting:  dbExplain.topLimiting,
+        topStrengths: dbExplain.topStrengths,
+        clusters:     dbExplain.clusters.slice(0, 10),
+        fatigue:      dbExplain.fatigue
+      };
+      fs.writeFileSync(OPT.report, JSON.stringify(existing, null, 2));
+      console.log('Rapport JSON enrichi : ' + OPT.report);
+    } catch(e) { /* rapport non encore créé, pas d'erreur */ }
+  }
 }
 
 // ── EXIT ──────────────────────────────────────────────────────────────────────
