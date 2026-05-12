@@ -1,0 +1,36 @@
+{
+  "generated": "2026-05-12T20:03:58.254Z",
+  "totalRecipes": 827,
+  "rFormatCount": 469,
+  "lCompactCount": 50,
+  "lExtendedCount": 308,
+  "avgCalPerServing": 316,
+  "avgProtPerServing": 25,
+  "avgCarbPerServing": 28,
+  "avgFatPerServing": 11.5,
+  "totalIngEntries": 3842,
+  "unitDistribution": {
+    "g": 2745,
+    "ml": 629,
+    "pce": 302,
+    "gousses": 28,
+    "branches": 2,
+    "pincée": 107,
+    "feuilles": 2,
+    "gousse": 15,
+    "feuille": 1,
+    "bouquet": 1,
+    "tranches": 1,
+    "tranche": 1,
+    "brin": 1,
+    "brins": 2,
+    "pc": 1,
+    "tige": 1,
+    "c.à.café": 3
+  },
+  "validationSummary": {
+    "totalErrors": 0,
+    "totalWarnings": 405,
+    "invalidCount": 0
+  }
+}
