@@ -24,11 +24,14 @@ function loadScript(relPath) {
   vm.runInThisContext(src, { filename: relPath });
 }
 
+loadScript('app/recipe-registry.js');
+loadScript('app/recipe-engine.js');
 loadScript('app/recipe-ux-engine.js');
 loadScript('app/recipe-ux-explainer.js');
 loadScript('app/recipe-auto-improver.js');
 
 var RAI = window.RecipeAutoImprover;
+var RE  = window.RecipeEngine;
 
 // ── Parse args ────────────────────────────────────────────────────────────────
 var argv = process.argv.slice(2);
@@ -44,20 +47,16 @@ argv.forEach(function(a) {
   if (/^--report=(.+)$/.test(a))  OPT.report = RegExp.$1;
 });
 
-// ── Charger la base recettes ──────────────────────────────────────────────────
-var DB_PATH = path.join(__dirname, '..', 'app', 'recipes.js');
-if (!fs.existsSync(DB_PATH)) {
-  console.error('[ERREUR] Base recettes introuvable : ' + DB_PATH);
+// ── Charger la base recettes via RecipeEngine (même pattern que recipe-qa.js) ─
+if (!RE || !RE.RECIPES_DB) {
+  console.error('[ERREUR] RecipeEngine non chargé ou RECIPES_DB introuvable');
   process.exit(1);
 }
 
-loadScript('app/recipes.js');
-
-var DB = window.AppRecipes || window.recipes || [];
-if (!Array.isArray(DB)) DB = DB.recipes || [];
+var DB = RE.RECIPES_DB;
 
 if (!DB.length) {
-  console.error('[ERREUR] Base recettes vide ou format non reconnu');
+  console.error('[ERREUR] Base recettes vide');
   process.exit(1);
 }
 
