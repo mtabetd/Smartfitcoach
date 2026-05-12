@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 'use strict';
 
-// ─── RECIPE QA — ENTERPRISE QUALITY GATE ─────────────────────────────────────
+// ─── RECIPE QA V2 — ENTERPRISE QUALITY GATE ──────────────────────────────────
 // Scanne toutes les recettes, détecte les anomalies, compare les snapshots.
+// V2 : ajoute l'analyse Intelligence + UX Engine (7 dimensions de qualité).
 //
 // Usage : node scripts/recipe-qa.js [options]
 //   --snapshot   Créer / comparer le snapshot de référence
@@ -71,11 +72,17 @@ function loadModule(rel) {
 loadModule('app/recipe-registry.js');
 loadModule('app/recipe-engine.js');
 loadModule('app/recipe-validator.js');
+loadModule('app/recipe-intelligence.js');
+loadModule('app/recipe-ux-engine.js');
 
 var RE  = window.RecipeEngine;
 var RV  = window.RecipeValidator;
+var RI  = window.RecipeIntelligence;
+var RU  = window.RecipeUXEngine;
 if (!RE || !RE.RECIPES_DB) { console.error('[FATAL] RecipeEngine non chargé'); process.exit(1); }
 if (!RV)                   { console.error('[FATAL] RecipeValidator non chargé'); process.exit(1); }
+if (!RI)                   { console.error('[FATAL] RecipeIntelligence non chargé'); process.exit(1); }
+if (!RU)                   { console.error('[FATAL] RecipeUXEngine non chargé'); process.exit(1); }
 
 var DB = RE.RECIPES_DB;
 
@@ -203,8 +210,8 @@ if (snapDivergences.length > 0) {
   snapDivergences.forEach(function(d) { console.log('  ⚠ SNAPSHOT DIVERGE : ' + d); });
 }
 
-// ── PHASE 5 — RAPPORT ────────────────────────────────────────────────────────
-console.log('[5/5] Rapport…\n');
+// ── PHASE 5 — RAPPORT TECHNIQUE ──────────────────────────────────────────────
+console.log('[5/6] Rapport technique…\n');
 console.log(RV.generateReport(validation));
 
 if (OPT.verbose && validation.totalWarnings > 0) {
@@ -213,6 +220,88 @@ if (OPT.verbose && validation.totalWarnings > 0) {
     r.warnings.forEach(function(w) { console.log('  ⚠ [' + w.code + '] ' + w.message); });
   });
 }
+
+// ── PHASE 6 — INTELLIGENCE + UX DASHBOARD V2 ─────────────────────────────────
+process.stdout.write('[6/6] Analyse Intelligence + UX… ');
+
+var intelligence = RI.analyzeDatabase(DB);
+var uxAnalysis   = RU.analyzeDatabaseUX(DB);
+
+console.log('OK (' + intelligence.analyzed + ' R-format)\n');
+
+// ── Severity breakdown ───────────────────────────────────────────────────────
+var tierCounts = { critical: 0, high: 0, medium: 0, low: 0, info: 0 };
+validation.results.forEach(function(r) {
+  r.issues.forEach(function(issue) {
+    var t = RU.getTier(issue.code);
+    tierCounts[t] = (tierCounts[t] || 0) + 1;
+  });
+});
+
+// ── QA DASHBOARD V2 ──────────────────────────────────────────────────────────
+function bar100(v) {
+  var filled = Math.round(v / 5);
+  return '[' + '█'.repeat(filled) + '░'.repeat(20 - filled) + '] ' + String(v).padStart(3) + '/100';
+}
+function pad6(v) { return String(v).padStart(6); }
+
+var g  = intelligence.gradeDistribution;
+var ug = uxAnalysis.uxGradeDistribution;
+var w  = uxAnalysis.weekSimulation;
+
+console.log(hr('═'));
+console.log(' QA DASHBOARD V2 — SmartFitCoach Quality Report');
+console.log(hr('═'));
+console.log(' Recettes totales      : ' + DB.length + '  (R:' + rFormat.length + '  L:' + (lCompact.length + lExt.length) + ')');
+console.log(hr('─'));
+console.log(' INTÉGRITÉ TECHNIQUE');
+console.log('  Erreurs critiques    : ' + pad6(tierCounts.critical) + (tierCounts.critical > 0 ? '  ✗ BLOQUANT' : '  ✓'));
+console.log('  Erreurs HIGH         : ' + pad6(tierCounts.high)     + (tierCounts.high > 0     ? '  ⚠ à corriger' : '  ✓'));
+console.log('  Warnings MEDIUM      : ' + pad6(tierCounts.medium));
+console.log('  Notes LOW            : ' + pad6(tierCounts.low));
+console.log(hr('─'));
+console.log(' QUALITÉ PREMIUM (Intelligence) — ' + intelligence.analyzed + ' recettes R-format');
+console.log('  Score moyen          : ' + bar100(intelligence.avgPremiumScore));
+console.log('  Grades               : A=' + g.A + '  B=' + g.B + '  C=' + g.C + '  D=' + g.D);
+console.log('  Diversité DB         : ' + bar100(intelligence.diversity.diversityScore));
+console.log(hr('─'));
+console.log(' EXPÉRIENCE UTILISATEUR (UX Engine)');
+console.log('  Score UX moyen       : ' + bar100(uxAnalysis.avgUxScore));
+console.log('  Grades UX            : A=' + ug.A + '  B=' + ug.B + '  C=' + ug.C + '  D=' + ug.D);
+console.log('  Satiété psychol.     : ' + bar100(uxAnalysis.satietyAvg));
+console.log('  Plaisir alimentaire  : ' + bar100(uxAnalysis.pleasureAvg));
+console.log('  Charge mentale       : ' + bar100(uxAnalysis.mentalLoadAvg) + '  (100=facile)');
+console.log('  Potentiel variété    : ' + bar100(uxAnalysis.varietyAvg));
+console.log('  Adhérence LT         : ' + bar100(uxAnalysis.adherenceAvg));
+console.log('  Feel premium         : ' + bar100(uxAnalysis.premiumFeelAvg));
+console.log('  Index frustration    : ' + uxAnalysis.frustrationIndex + '% des recettes psychologiquement insuffisantes');
+console.log('  Ratio premium        : ' + uxAnalysis.premiumRatio + '% expérience premium');
+
+if (w && w.feasible) {
+  console.log(hr('─'));
+  console.log(' SIMULATION 1 SEMAINE');
+  console.log('  Adhérence semaine    : ' + bar100(w.weekAdherence));
+  console.log('  Plaisir semaine      : ' + bar100(w.weekPleasure));
+  console.log('  Repas frustrants     : ' + w.frustratingMeals + '/21');
+  console.log('  Repas premium        : ' + w.premiumMeals    + '/21');
+  console.log('  Risque monotonie     : ' + (w.monotonyRisk ? '⚠ OUI' : '✓ Non'));
+  console.log('  Adhérence projetée 1M: ' + bar100(w.projectedMonthAdherence));
+}
+
+console.log(hr('─'));
+console.log(' RECOMMANDATIONS :');
+var noReco = true;
+if (tierCounts.critical > 0) { console.log('  ✗ ' + tierCounts.critical + ' problèmes critiques bloquants — corriger avant déploiement'); noReco = false; }
+if (uxAnalysis.frustrationIndex > 20) { console.log('  → ' + uxAnalysis.frustrationIndex + '% recettes frustrant — revoir les portions minimales'); noReco = false; }
+if (uxAnalysis.premiumRatio < 40)     { console.log('  → Ratio premium faible — enrichir noms, emojis, origines'); noReco = false; }
+if (intelligence.avgPremiumScore >= 75 && uxAnalysis.avgUxScore >= 60 && tierCounts.critical === 0) {
+  console.log('  ✓ Qualité premium atteinte — DB technique et UX au standard'); noReco = false;
+}
+if ((intelligence.flagCounts['NO_PROTEIN_SOURCE'] || 0) > 10) {
+  console.log('  → ' + intelligence.flagCounts['NO_PROTEIN_SOURCE'] + ' recettes déjeuner/dîner sans protéines'); noReco = false;
+}
+if (noReco) console.log('  ✓ Aucune recommandation urgente');
+console.log(hr('═') + '\n');
 
 if (OPT.report) {
   var reportObj = {
@@ -224,9 +313,32 @@ if (OPT.report) {
       totalWarnings: validation.totalWarnings,
       invalidCount:  validation.invalidCount,
       invalidRecipes: validation.invalidRecipes,
+      tierCounts:    tierCounts,
       issues: validation.results
         .filter(function(r) { return r.issues.length > 0; })
         .map(function(r) { return { id: r.id, errors: r.errors, warnings: r.warnings }; })
+    },
+    intelligence: {
+      analyzed:          intelligence.analyzed,
+      avgPremiumScore:   intelligence.avgPremiumScore,
+      gradeDistribution: intelligence.gradeDistribution,
+      diversityScore:    intelligence.diversity.diversityScore,
+      topRecipes:        intelligence.topRecipes,
+      flagCounts:        intelligence.flagCounts
+    },
+    ux: {
+      analyzed:         uxAnalysis.analyzed,
+      avgUxScore:       uxAnalysis.avgUxScore,
+      frustrationIndex: uxAnalysis.frustrationIndex,
+      premiumRatio:     uxAnalysis.premiumRatio,
+      adherenceAvg:     uxAnalysis.adherenceAvg,
+      varietyAvg:       uxAnalysis.varietyAvg,
+      pleasureAvg:      uxAnalysis.pleasureAvg,
+      mentalLoadAvg:    uxAnalysis.mentalLoadAvg,
+      satietyAvg:       uxAnalysis.satietyAvg,
+      premiumFeelAvg:   uxAnalysis.premiumFeelAvg,
+      gradeDistribution: uxAnalysis.uxGradeDistribution,
+      weekSimulation:   uxAnalysis.weekSimulation
     }
   };
   fs.writeFileSync(OPT.report, JSON.stringify(reportObj, null, 2));
