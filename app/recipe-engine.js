@@ -6595,7 +6595,7 @@
       ingredients: [
         { name: 'Yaourt grec 0%', qty: 300, unit: 'g' },
         { name: 'Lait demi-écrémé', qty: 200, unit: 'ml' },
-        { name: 'Œufs entiers', qty: 100, unit: 'g' },
+        { name: 'Œuf', qty: 2, unit: 'pce' },
         { name: 'Café soluble', qty: 8, unit: 'g' },
         { name: 'Sucre de coco', qty: 40, unit: 'g' },
         { name: 'Extrait de vanille', qty: 3, unit: 'ml' },
@@ -6683,7 +6683,7 @@
       ingredients: [
         { name: 'Chocolat noir 70%', qty: 120, unit: 'g' },
         { name: 'Beurre', qty: 40, unit: 'g' },
-        { name: 'Œufs entiers', qty: 150, unit: 'g' },
+        { name: 'Œuf', qty: 3, unit: 'pce' },
         { name: 'Farine d\'avoine', qty: 40, unit: 'g' },
         { name: 'Cacao en poudre non sucré', qty: 20, unit: 'g' },
         { name: 'Sucre de coco', qty: 30, unit: 'g' },
@@ -6799,7 +6799,7 @@
       ingredients: [
         { name: 'Cerises fraîches ou surgelées dénoyautées', qty: 400, unit: 'g' },
         { name: 'Fromage blanc 0%', qty: 400, unit: 'g' },
-        { name: 'Œufs entiers', qty: 180, unit: 'g' },
+        { name: 'Œuf', qty: 4, unit: 'pce' },
         { name: 'Farine d\'avoine', qty: 60, unit: 'g' },
         { name: 'Poudre d\'amandes', qty: 40, unit: 'g' },
         { name: 'Extrait d\'amande amère', qty: 5, unit: 'ml' },
@@ -6829,7 +6829,7 @@
         { name: 'Pommes Golden', qty: 600, unit: 'g' },
         { name: 'Farine d\'avoine', qty: 120, unit: 'g' },
         { name: 'Fromage blanc 0%', qty: 250, unit: 'g' },
-        { name: 'Œufs entiers', qty: 120, unit: 'g' },
+        { name: 'Œuf', qty: 2, unit: 'pce' },
         { name: 'Beurre', qty: 40, unit: 'g' },
         { name: 'Miel', qty: 50, unit: 'g' },
         { name: 'Stevia en poudre', qty: 4, unit: 'g' },
@@ -6884,7 +6884,7 @@
       ingredients: [
         { name: 'Farine d\'avoine', qty: 200, unit: 'g' },
         { name: 'Fromage blanc 0%', qty: 300, unit: 'g' },
-        { name: 'Œufs entiers', qty: 160, unit: 'g' },
+        { name: 'Œuf', qty: 3, unit: 'pce' },
         { name: 'Huile de coco', qty: 20, unit: 'g' },
         { name: 'Levure chimique', qty: 8, unit: 'g' },
         { name: 'Stevia en poudre', qty: 6, unit: 'g' },
@@ -6917,7 +6917,7 @@
         { name: 'Farine d\'avoine', qty: 200, unit: 'g' },
         { name: 'Beurre', qty: 60, unit: 'g' },
         { name: 'Sucre de coco', qty: 50, unit: 'g' },
-        { name: 'Œufs entiers', qty: 120, unit: 'g' },
+        { name: 'Œuf', qty: 2, unit: 'pce' },
         { name: 'Levure chimique', qty: 5, unit: 'g' },
         { name: 'Lait demi-écrémé', qty: 300, unit: 'ml' },
         { name: 'Jaunes d\'œufs', qty: 60, unit: 'g' },
@@ -6980,7 +6980,7 @@
         { name: 'Cannelle moulue', qty: 4, unit: 'g' },
         { name: 'Gingembre moulu', qty: 3, unit: 'g' },
         { name: 'Anis étoilé moulu', qty: 2, unit: 'g' },
-        { name: 'Œufs entiers', qty: 120, unit: 'g' },
+        { name: 'Œuf', qty: 2, unit: 'pce' },
         { name: 'Lait demi-écrémé', qty: 150, unit: 'ml' },
         { name: 'Levure chimique', qty: 6, unit: 'g' },
         { name: 'Huile d\'olive légère', qty: 30, unit: 'ml' }
@@ -7010,7 +7010,7 @@
         { name: 'Beurre', qty: 30, unit: 'g' },
         { name: 'Jus de citron frais', qty: 120, unit: 'ml' },
         { name: 'Zeste de citron', qty: 8, unit: 'g' },
-        { name: 'Œufs entiers', qty: 150, unit: 'g' },
+        { name: 'Œuf', qty: 3, unit: 'pce' },
         { name: 'Stevia', qty: 6, unit: 'g' },
         { name: 'Maïzena', qty: 20, unit: 'g' },
         { name: 'Fromage blanc 0%', qty: 200, unit: 'g' },
@@ -7375,7 +7375,7 @@
       ingredients: [
         { name: 'Patates douces', qty: 400, unit: 'g' },
         { name: 'Farine de riz (ou farine T45)', qty: 80, unit: 'g' },
-        { name: 'Oeuf entier', qty: 1, unit: 'pce' },
+        { name: 'Œuf entier', qty: 1, unit: 'pce' },
         { name: 'Parmesan râpé', qty: 30, unit: 'g' },
         { name: 'Beurre', qty: 15, unit: 'g' },
         { name: 'Sauge fraîche', qty: 10, unit: 'feuilles' },
@@ -13446,7 +13446,7 @@
     servings: 1,
     baseNutrition: { calories: 374, proteinGrams: 42, carbsGrams: 2, fatGrams: 22 },
     ingredients: [
-      { name: "Œufs entiers", qty: 180, unit: 'g', note: "3 unité(s)" },
+      { name: "Œuf", qty: 4, unit: 'pce', note: "3 unité(s)" },
       { name: "blancs d'œufs", qty: 60, unit: 'g', note: "2 unité(s)" },
       { name: "saumon fumé", qty: 50, unit: 'g' },
       { name: "fromage blanc 0%", qty: 50, unit: 'g' },
@@ -13708,7 +13708,7 @@
       { name: "concombre", qty: 100, unit: 'g' },
       { name: "tomates", qty: 150, unit: 'g' },
       { name: "olives noires", qty: 30, unit: 'g' },
-      { name: "oeuf dur", qty: 50, unit: 'g' },
+      { name: "Œuf dur", qty: 50, unit: 'g' },
       { name: "huile d'olive", qty: 5, unit: 'ml' },
       { name: "origan", qty: 0, unit: 'g' },
       { name: "citron", qty: 0, unit: 'g' },
@@ -13817,7 +13817,7 @@
       { name: "boeuf haché 5%", qty: 100, unit: 'g' },
       { name: "épinards", qty: 80, unit: 'g' },
       { name: "carotte râpée", qty: 80, unit: 'g' },
-      { name: "oeuf", qty: 50, unit: 'g' },
+      { name: "Œuf", qty: 50, unit: 'g' },
       { name: "sauce gochujang", qty: 20, unit: 'g' },
       { name: "huile de sésame", qty: 5, unit: 'ml' },
     ],
@@ -13948,7 +13948,7 @@
     ingredients: [
       { name: "Crevettes cuites", qty: 150, unit: 'g' },
       { name: "vermicelles de riz cuits", qty: 120, unit: 'g' },
-      { name: "oeuf entier", qty: 50, unit: 'g', note: "1 unité(s)" },
+      { name: "Œuf", qty: 1, unit: 'pce', note: "1 unité(s)" },
       { name: "sauce soja", qty: 15, unit: 'ml' },
       { name: "huile de sésame", qty: 5, unit: 'ml' },
       { name: "pousses de soja", qty: 50, unit: 'g' },
@@ -13977,7 +13977,7 @@
     ingredients: [
       { name: "Blanc de poulet cuit", qty: 150, unit: 'g' },
       { name: "soba cuites", qty: 150, unit: 'g' },
-      { name: "oeuf mollet", qty: 50, unit: 'g', note: "1 unité(s)" },
+      { name: "Œuf mollet", qty: 50, unit: 'g', note: "1 unité(s)" },
       { name: "miso blanc", qty: 20, unit: 'g' },
       { name: "bouillon de poulet", qty: 500, unit: 'ml' },
       { name: "épinards frais", qty: 40, unit: 'g' },
@@ -14032,7 +14032,7 @@
     baseNutrition: { calories: 447, proteinGrams: 25, carbsGrams: 41, fatGrams: 20 },
     ingredients: [
       { name: "Pain de mie japonais shokupan 2 tranches", qty: 80, unit: 'g' },
-      { name: "oeufs durs", qty: 150, unit: 'g', note: "3 unité(s)" },
+      { name: "Œufs durs", qty: 150, unit: 'g', note: "3 unité(s)" },
       { name: "mayonnaise légère", qty: 20, unit: 'g' },
       { name: "moutarde de Dijon", qty: 5, unit: 'g' },
       { name: "sel", qty: 0, unit: 'g' },
@@ -14141,7 +14141,7 @@
     baseNutrition: { calories: 367, proteinGrams: 18, carbsGrams: 40, fatGrams: 15 },
     ingredients: [
       { name: "Riz cuit (veille)", qty: 120, unit: 'g' },
-      { name: "oeufs entiers", qty: 100, unit: 'g', note: "2 unité(s)" },
+      { name: "Œuf", qty: 2, unit: 'pce', note: "2 unité(s)" },
       { name: "courgette", qty: 150, unit: 'g' },
       { name: "sauce soja", qty: 15, unit: 'ml' },
       { name: "huile de sésame", qty: 5, unit: 'ml' },
@@ -14792,7 +14792,7 @@
     servings: 1,
     baseNutrition: { calories: 225, proteinGrams: 18, carbsGrams: 3, fatGrams: 16 },
     ingredients: [
-      { name: "Œufs entiers", qty: 120, unit: 'g', note: "2 unité(s)" },
+      { name: "Œuf", qty: 2, unit: 'pce', note: "2 unité(s)" },
       { name: "épinards frais", qty: 30, unit: 'g' },
       { name: "féta émiettée", qty: 20, unit: 'g' },
       { name: "huile d'olive spray", qty: 0, unit: 'g' },
@@ -16446,7 +16446,7 @@
     g: 44,
     l: 18,
     lv: 2,
-    i: "Pain pita 80g, zaatar mélange 15g, huile d'olive 12g, fromage blanc 0% 100g, oeuf dur 1, tomate 80g, concombre 60g, menthe fraîche 10g, sumac 2g",
+    i: "Pain pita 80g, zaatar mélange 15g, huile d'olive 12g, fromage blanc 0% 100g, œuf dur 1, tomate 80g, concombre 60g, menthe fraîche 10g, sumac 2g",
     st: [
       "Mélanger le zaatar avec l'huile d'olive pour obtenir une pâte épaisse et parfumée, étaler uniformément sur le pain pita.",
       "Passer le pita zaatar au four à 220°C pendant 8-10 min jusqu'à bords légèrement croustillants.",
@@ -17649,7 +17649,7 @@
     baseNutrition: { calories: 280, proteinGrams: 22, carbsGrams: 30, fatGrams: 8 },
     ingredients: [
       { name: "Flocons d'avoine mixés", qty: 80, unit: 'g' },
-      { name: 'Oeufs', qty: 2, unit: 'pce' },
+      { name: 'Œufs', qty: 2, unit: 'pce' },
       { name: 'Ricotta', qty: 80, unit: 'g' },
       { name: 'Lait écrémé', qty: 60, unit: 'ml' },
       { name: 'Miel', qty: 10, unit: 'g' },
@@ -17827,7 +17827,7 @@
         { name: 'Oignon', qty: 100, unit: 'g' },
         { name: 'Céleri', qty: 80, unit: 'g' },
         { name: 'Poivron rouge', qty: 100, unit: 'g' },
-        { name: 'Oeufs', qty: 2, unit: 'pce' },
+        { name: 'Œufs', qty: 2, unit: 'pce' },
         { name: 'Pain de campagne grillé', qty: 50, unit: 'g' },
         { name: 'Bouillon de légumes', qty: 400, unit: 'ml' },
         { name: "Huile d'olive extra-vierge", qty: 15, unit: 'ml' },
@@ -17892,7 +17892,7 @@
       // P×4 + G×4 + L×9 = 24×4 + 10×4 + 16×9 = 96 + 40 + 144 = 280 kcal ✓
       baseNutrition: { calories: 280, proteinGrams: 24, carbsGrams: 10, fatGrams: 16 },
       ingredients: [
-        { name: 'Oeufs', qty: 4, unit: 'pce' },
+        { name: 'Œufs', qty: 4, unit: 'pce' },
         { name: 'Courgette', qty: 120, unit: 'g' },
         { name: 'Poivron rouge', qty: 100, unit: 'g' },
         { name: 'Épinards frais', qty: 60, unit: 'g' },
@@ -17926,7 +17926,7 @@
       // P×4 + G×4 + L×9 = 18×4 + 16×4 + 14×9 = 72 + 64 + 126 = 262 kcal ✓
       baseNutrition: { calories: 262, proteinGrams: 18, carbsGrams: 16, fatGrams: 14 },
       ingredients: [
-        { name: 'Oeufs', qty: 4, unit: 'pce' },
+        { name: 'Œufs', qty: 4, unit: 'pce' },
         { name: 'Tomates pelées en boîte', qty: 400, unit: 'g' },
         { name: 'Ail', qty: 3, unit: 'pce' },
         { name: 'Piment rouge séché', qty: 1, unit: 'pce' },
@@ -18857,7 +18857,7 @@
   baseNutrition: { calories: 628, proteinGrams: 54, carbsGrams: 58, fatGrams: 20 },
   ingredients: [
     { name: 'Blanc de poulet', qty: 360, unit: 'g' },
-    { name: 'Galette de blé (tortilla)', qty: 4, unit: 'pièce' },
+    { name: 'Galette de blé (tortilla)', qty: 4, unit: 'pce' },
     { name: 'Tomates', qty: 200, unit: 'g' },
     { name: 'Avocat', qty: 120, unit: 'g' },
     { name: 'Oignon rouge', qty: 60, unit: 'g' },
@@ -19010,7 +19010,7 @@
   baseNutrition: { calories: 618, proteinGrams: 62, carbsGrams: 52, fatGrams: 18 },
   ingredients: [
     { name: 'Blanc de poulet', qty: 380, unit: 'g' },
-    { name: 'Galette de blé (tortilla)', qty: 4, unit: 'pièce' },
+    { name: 'Galette de blé (tortilla)', qty: 4, unit: 'pce' },
     { name: 'Tomates pelées en boîte', qty: 400, unit: 'g' },
     { name: 'Oignon', qty: 80, unit: 'g' },
     { name: 'Ail', qty: 2, unit: 'gousse' },
@@ -19055,7 +19055,7 @@
     { name: 'Haricots noirs (boîte, égouttés)', qty: 160, unit: 'g' },
     { name: 'Maïs en boîte (égoutté)', qty: 100, unit: 'g' },
     { name: 'Tomates pelées en boîte', qty: 200, unit: 'g' },
-    { name: 'Galette de blé (tortilla)', qty: 2, unit: 'pièce' },
+    { name: 'Galette de blé (tortilla)', qty: 2, unit: 'pce' },
     { name: 'Oignon', qty: 60, unit: 'g' },
     { name: 'Ail', qty: 2, unit: 'gousse' },
     { name: 'Piment rouge frais', qty: 15, unit: 'g' },
@@ -19352,7 +19352,7 @@
     {
       "name": "Zeste de citron",
       "qty": 1,
-      "unit": "pièce"
+      "unit": "pce"
     },
     {
       "name": "Ail",
@@ -19410,7 +19410,7 @@
     {
       "name": "Œufs entiers",
       "qty": 3,
-      "unit": "pièces"
+      "unit": "pce"
     },
     {
       "name": "Épinards frais",
@@ -19692,7 +19692,7 @@
     {
       "name": "Feuilles de sauge",
       "qty": 6,
-      "unit": "pièces"
+      "unit": "pce"
     },
     {
       "name": "Vin blanc sec",
@@ -19828,7 +19828,7 @@
     {
       "name": "Citron",
       "qty": 1,
-      "unit": "pièce"
+      "unit": "pce"
     },
     {
       "name": "Ail",
@@ -20519,9 +20519,9 @@
       "unit": "g"
     },
     {
-      "name": "Oeuf entier",
+      "name": "Œuf entier",
       "qty": 1,
-      "unit": "unité"
+      "unit": "pce"
     },
     {
       "name": "Chapelure complète",
@@ -20692,7 +20692,7 @@
     {
       "name": "Graines de vanille (1/2 gousse)",
       "qty": 1,
-      "unit": "unité"
+      "unit": "pce"
     },
     {
       "name": "Lécithine de soja (stabilisant)",
@@ -20951,7 +20951,7 @@
     {
       "name": "Œufs entiers",
       "qty": 2,
-      "unit": "unité"
+      "unit": "pce"
     },
     {
       "name": "Fromage blanc 0%",
@@ -21212,7 +21212,7 @@
     {
       "name": "Œufs entiers",
       "qty": 3,
-      "unit": "unité"
+      "unit": "pce"
     },
     {
       "name": "Champignons de Paris",
@@ -21284,7 +21284,7 @@
     {
       "name": "Œuf dur",
       "qty": 1,
-      "unit": "unité"
+      "unit": "pce"
     },
     {
       "name": "Tomates",
@@ -21659,9 +21659,9 @@
       "unit": "g"
     },
     {
-      "name": "Œuf entier",
-      "qty": 50,
-      "unit": "g"
+      "name": "Œuf",
+      "qty": 1,
+      "unit": "pce"
     },
     {
       "name": "Feta allégée",
@@ -21734,9 +21734,9 @@
       "unit": "g"
     },
     {
-      "name": "Œuf entier",
-      "qty": 50,
-      "unit": "g"
+      "name": "Œuf",
+      "qty": 1,
+      "unit": "pce"
     },
     {
       "name": "Lait demi-écrémé",
@@ -21804,9 +21804,9 @@
   },
   "ingredients": [
     {
-      "name": "Œuf entier",
-      "qty": 100,
-      "unit": "g"
+      "name": "Œuf",
+      "qty": 2,
+      "unit": "pce"
     },
     {
       "name": "Comté râpé allégé",
@@ -22089,9 +22089,9 @@
       "unit": "ml"
     },
     {
-      "name": "Œuf entier",
-      "qty": 50,
-      "unit": "g"
+      "name": "Œuf",
+      "qty": 1,
+      "unit": "pce"
     },
     {
       "name": "Fromage blanc 0%",
@@ -22527,9 +22527,9 @@
       "unit": "g"
     },
     {
-      "name": "Œuf entier",
-      "qty": 50,
-      "unit": "g"
+      "name": "Œuf",
+      "qty": 1,
+      "unit": "pce"
     },
     {
       "name": "Lait écrémé",
@@ -23615,7 +23615,7 @@
     {
       "name": "Œufs entiers",
       "qty": 2,
-      "unit": "unités"
+      "unit": "pce"
     },
     {
       "name": "Flocons d'avoine mixés",
@@ -23625,7 +23625,7 @@
     {
       "name": "Zeste de citron",
       "qty": 1,
-      "unit": "citron"
+      "unit": "pce"
     },
     {
       "name": "Jus de citron",
@@ -23704,7 +23704,7 @@
     {
       "name": "Œufs entiers",
       "qty": 2,
-      "unit": "unités"
+      "unit": "pce"
     },
     {
       "name": "Lait écrémé",
@@ -23778,7 +23778,7 @@
     {
       "name": "Œufs entiers",
       "qty": 2,
-      "unit": "unités"
+      "unit": "pce"
     },
     {
       "name": "Lait écrémé",
@@ -23837,12 +23837,12 @@
     {
       "name": "Blancs d'œufs",
       "qty": 4,
-      "unit": "unités"
+      "unit": "pce"
     },
     {
       "name": "Jaunes d'œufs",
       "qty": 2,
-      "unit": "unités"
+      "unit": "pce"
     },
     {
       "name": "Farine d'avoine fine",
@@ -23921,7 +23921,7 @@
     {
       "name": "Œufs entiers",
       "qty": 2,
-      "unit": "unités"
+      "unit": "pce"
     },
     {
       "name": "Poudre de protéines vanille",
@@ -24000,7 +24000,7 @@
     {
       "name": "Œuf entier",
       "qty": 1,
-      "unit": "unité"
+      "unit": "pce"
     },
     {
       "name": "Lait écrémé",
@@ -24020,7 +24020,7 @@
     {
       "name": "Œuf (pour garnir)",
       "qty": 1,
-      "unit": "unité"
+      "unit": "pce"
     },
     {
       "name": "Sel et poivre",
@@ -24084,7 +24084,7 @@
     {
       "name": "Œuf entier",
       "qty": 1,
-      "unit": "unité"
+      "unit": "pce"
     },
     {
       "name": "Yaourt grec 0%",
@@ -24163,7 +24163,7 @@
     {
       "name": "Œufs entiers",
       "qty": 2,
-      "unit": "unités"
+      "unit": "pce"
     },
     {
       "name": "Fromage blanc 0%",
@@ -24242,7 +24242,7 @@
     {
       "name": "Œufs entiers",
       "qty": 2,
-      "unit": "unités"
+      "unit": "pce"
     },
     {
       "name": "Yaourt grec 0%",
@@ -24321,7 +24321,7 @@
     {
       "name": "Œufs entiers",
       "qty": 2,
-      "unit": "unités"
+      "unit": "pce"
     },
     {
       "name": "Farine d'épeautre",
@@ -24405,7 +24405,7 @@
     {
       "name": "Œuf",
       "qty": 2,
-      "unit": "pièce"
+      "unit": "pce"
     },
     {
       "name": "Yaourt grec 0%",
@@ -24415,7 +24415,7 @@
     {
       "name": "Zeste de citron",
       "qty": 1,
-      "unit": "pièce"
+      "unit": "pce"
     },
     {
       "name": "Jus de citron",
@@ -24490,7 +24490,7 @@
     {
       "name": "Œuf",
       "qty": 1,
-      "unit": "pièce"
+      "unit": "pce"
     },
     {
       "name": "Pomme",
@@ -24650,7 +24650,7 @@
     {
       "name": "Gousse de vanille",
       "qty": 1,
-      "unit": "pièce"
+      "unit": "pce"
     },
     {
       "name": "Fraises fraîches",
@@ -24796,7 +24796,7 @@
     {
       "name": "Zeste de 2 citrons",
       "qty": 1,
-      "unit": "pièce"
+      "unit": "pce"
     },
     {
       "name": "Jus de citron",
@@ -24937,7 +24937,7 @@
     {
       "name": "Jaunes d'œuf",
       "qty": 3,
-      "unit": "pièce"
+      "unit": "pce"
     },
     {
       "name": "Fromage blanc 0%",
@@ -24947,7 +24947,7 @@
     {
       "name": "Gousse de vanille",
       "qty": 1,
-      "unit": "pièce"
+      "unit": "pce"
     },
     {
       "name": "Édulcorant (érythritol)",
@@ -25099,7 +25099,7 @@
     {
       "name": "Fruit de la passion (pulpe)",
       "qty": 2,
-      "unit": "pièce"
+      "unit": "pce"
     },
     {
       "name": "Granola faible en sucre",
@@ -25517,9 +25517,9 @@
       "unit": "g"
     },
     {
-      "name": "Œuf entier",
-      "qty": 55,
-      "unit": "g"
+      "name": "Œuf",
+      "qty": 1,
+      "unit": "pce"
     },
     {
       "name": "Erythritol",
@@ -27980,7 +27980,7 @@
     {
       "name": "Œuf entier",
       "qty": 2,
-      "unit": "unité"
+      "unit": "pce"
     },
     {
       "name": "Jambon de dinde tranché",
@@ -28000,7 +28000,7 @@
     {
       "name": "Jaune d'œuf",
       "qty": 1,
-      "unit": "unité"
+      "unit": "pce"
     },
     {
       "name": "Citron (jus)",
@@ -28224,7 +28224,7 @@
     {
       "name": "Œuf dur",
       "qty": 1,
-      "unit": "unité"
+      "unit": "pce"
     },
     {
       "name": "Bacon de dinde grillé",
@@ -28518,7 +28518,7 @@
         { name: 'Poivron rouge', qty: 100, unit: 'g' },
         { name: 'Courgette', qty: 100, unit: 'g' },
         { name: "Huile d'olive", qty: 15, unit: 'ml' },
-        { name: 'Thym, herbes de Provence', qty: 2, unit: 'pincées' },
+        { name: 'Thym, herbes de Provence', qty: 2, unit: 'pincée' },
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
@@ -28551,7 +28551,7 @@
         { name: 'Oignon', qty: 60, unit: 'g' },
         { name: 'Ail', qty: 2, unit: 'gousses' },
         { name: "Huile d'olive", qty: 20, unit: 'ml' },
-        { name: 'Herbes de Provence', qty: 1, unit: 'c. à café' },
+        { name: 'Herbes de Provence', qty: 1, unit: 'c.à.café' },
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
@@ -28999,7 +28999,7 @@
         { name: 'Fromage de brebis frais', qty: 30, unit: 'g' },
         { name: 'Ail', qty: 2, unit: 'gousses' },
         { name: "Huile d'olive", qty: 20, unit: 'ml' },
-        { name: 'Herbes de Provence', qty: 1, unit: 'c. à café' },
+        { name: 'Herbes de Provence', qty: 1, unit: 'c.à.café' },
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
@@ -29031,7 +29031,7 @@
         { name: 'Oignon rouge', qty: 50, unit: 'g' },
         { name: "Huile d'olive", qty: 20, unit: 'ml' },
         { name: 'Citron (jus)', qty: 1, unit: 'pce' },
-        { name: 'Paprika fumé', qty: 1, unit: 'c. à café' },
+        { name: 'Paprika fumé', qty: 1, unit: 'c.à.café' },
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
@@ -29359,11 +29359,11 @@
   function getAdaptedRecipe(recipeId, userState, options) {
     var recipe = _findRawRecipe(recipeId);
     if (!recipe) return null;
-    if (!userState || !userState.caloriesTarget) return null;
 
     options = options || {};
     var mealFraction   = options.mealFraction || DEFAULT_MEAL_FRACTION;
-    var targetCalories = options.targetCalories || Math.round(userState.caloriesTarget * mealFraction);
+    var targetCalories = options.targetCalories || (userState && userState.caloriesTarget ? Math.round(userState.caloriesTarget * mealFraction) : 0);
+    if (!targetCalories) return null;
 
     // scalingRatio : rapport calories cibles / calories de la recette entière
     if (!recipe.baseNutrition || !recipe.baseNutrition.calories) return null; // recette format compact sans baseNutrition
@@ -30240,6 +30240,18 @@
     // Sauce soja
     'sauce soja salee':        'sauce soja',
     'sauce soja sucree':       'sauce soja',
+    // Bœuf — unifier les variantes courantes
+    'boeuf hache maigre':      'boeuf hache',
+    'boeuf maigre hache':      'boeuf hache',
+    'boeuf hache 5%':          'boeuf hache',
+    'boeuf hache 5% mg':       'boeuf hache',
+    'boeuf hache 5%mg':        'boeuf hache',
+    // Yaourt grec
+    'yaourt grec nature':      'yaourt grec',
+    'yaourt grec 0% mg':       'yaourt grec 0%',
+    // Fromage blanc
+    'fromage blanc 0% mg':     'fromage blanc 0%',
+    'fromage blanc nature':    'fromage blanc 0%',
   };
 
   function _normIngKey(name) {
@@ -30267,10 +30279,13 @@
   function _normUnit(unit) {
     var u = (unit || '').trim().toLowerCase();
     if (/^(œuf[s]?|oeuf[s]?|blanc[s]?|jaune[s]?)$/.test(u)) return 'pce';
-    if (/^c\.?à\.?soupe$|^c\.?a\.?soupe$|^c\.\u00e0\.soupe$/.test(u)) return 'cs';
-    if (/^c\.?à\.?caf[eé]$|^c\.?a\.?cafe$/.test(u)) return 'cc';
+    if (/^pi[eè]ce[s]?$|^unit[eé][s]?$/.test(u)) return 'pce';
+    if (/^c\.?à\.?soupe$|^c\.?a\.?soupe$|^c\.\u00e0\.soupe$|c\.? ?à\.? ?soupe$/.test(u)) return 'cs';
+    if (/^c\.?à\.?caf[eé]$|^c\.?a\.?cafe$|c\.? ?à\.? ?caf[eé]$/.test(u)) return 'cc';
     if (u === 'cl') return 'ml';
-    if (/^pinc[eé][e]?s?$/.test(u)) return 'pincee'; // pincée / pincee / pincées → clé d'agrégation unique
+    if (/^pinc[eé][e]?s?$/.test(u)) return 'pincee';
+    if (u === 'tige' || u === 'brins' || u === 'brin') return 'pce';
+    if (u === 'bouquet') return 'pce'
     return u;
   }
 
@@ -30295,8 +30310,8 @@
       if (mFwd) {
         return { name: mFwd[3].trim(), qty: parseFloat(mFwd[1]), unit: _normUnit(mFwd[2]) };
       }
-      // Unités d'affichage françaises : "1 œuf Name", "2 c.à.soupe Name", "1 pincée Sel"
-      var mFr = part.match(/^([\d.]+)\s+(œuf[s]?|oeuf[s]?|blanc[s]?|jaune[s]?|c\.à\.soupe|c\.à\.café|c\.a\.soupe|c\.a\.cafe|pinc[eé][e]?s?)\s+(.+)$/i);
+      // Unités d'affichage françaises : "1 œuf Name", "2 c.à.soupe Name", "1 pincée Sel", "1 pièce Tomate"
+      var mFr = part.match(/^([\d.]+)\s+(œuf[s]?|oeuf[s]?|blanc[s]?|jaune[s]?|pi[eè]ce[s]?|unit[eé][s]?|c\.à\.soupe|c\.à\.café|c\.a\.soupe|c\.a\.cafe|pinc[eé][e]?s?)\s+(.+)$/i);
       if (mFr) {
         return { name: mFr[3].trim(), qty: parseFloat(mFr[1]), unit: _normUnit(mFr[2]) };
       }
@@ -30849,7 +30864,8 @@
     parseIngredientsString:  parseIngredientsString,
     convertToDisplay:        convertToDisplay,
     getPool:          getPool,
-    db:               RECIPES_DB
+    db:               RECIPES_DB,
+    RECIPES_DB:       RECIPES_DB
   };
 
 })();
