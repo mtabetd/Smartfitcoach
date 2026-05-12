@@ -17,6 +17,8 @@ if (!window.t) window.t = function(k){ return k; };
 
 // ─── DISPLAY ROUNDING ───
 function roundDisplayQty(qty, unit) {
+  // Fractions string depuis convertToDisplay ('¼', '½', '1½') — passer tel quel
+  if (typeof qty === 'string') return qty;
   if (!qty) return 0;
   if (unit === 'g') return Math.round(qty / 5) * 5 || 5;
   if (unit === 'ml') return Math.round(qty / 10) * 10 || 10;
@@ -4146,33 +4148,76 @@ function renderModal(app) {
     body.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Ingredients' : 'Ingr\u00e9dients')));
     var ingredList = h('ul', {'class': 'ingredient-list'});
     // Helper: display one ingredient {name, qty, unit} as a readable line
-    // FIX 2026-04-16 : "pce" masqué (affichait "1 pce Citron" au lieu de "1 Citron").
-    // Standardisation : g/ml affichés, pce masqué, c.à.s/c.à.c abrégés proprement.
     function fmtIng(ing) {
-      var qty = ing.qty ? roundDisplayQty(ing.qty, ing.unit) : '';
-      var u = (ing.unit || '').toLowerCase().trim();
-      var unitStr = '';
-      if (u === 'g' || u === 'ml' || u === 'cl' || u === 'l') unitStr = '\u00a0' + u;
-      else if (u === 'c.à.s' || u === 'c.a.s' || u === 'cas' || u === 'càs') unitStr = (window.isEnglish && window.isEnglish() ? ' tbsp' : ' c.\u00e0 s.');
-      else if (u === 'c.à.c' || u === 'c.a.c' || u === 'cac' || u === 'càc') unitStr = (window.isEnglish && window.isEnglish() ? ' tsp' : ' c.\u00e0 c.');
-      else if (u === 'pce' || u === 'piece' || u === 'pièce' || u === 'unité' || u === 'unite') unitStr = '';
-      else if (u) unitStr = ' ' + u;
       var name = (ing.name || '').trim();
-      // Normalisation noms courants (cohérence affichage sans toucher la DB)
+      var rawQty = ing.qty;
+      var u = (ing.unit || '').toLowerCase().trim();
+
+      // qty=0 avec quantité intégrée dans le nom (ex: "levure chimique 1 c.à.c.")
+      if (rawQty === 0 && name) {
+        return name.charAt(0).toUpperCase() + name.slice(1);
+      }
+
+      // Fractions string depuis convertToDisplay ('¼', '½', '1½') — passer tel quel
+      var qty = typeof rawQty === 'string' ? rawQty : (rawQty ? roundDisplayQty(rawQty, u) : '');
+
+      // ── Unité → chaîne d'affichage ─────────────────────────────────────────
+      var unitStr = '';
+      if (u === 'g' || u === 'ml' || u === 'cl' || u === 'l') {
+        unitStr = ' ' + u;
+      } else if (u === 'kg') {
+        unitStr = ' kg';
+      } else if (u === 'c.à.s' || u === 'c.a.s' || u === 'cas' || u === 'càs' || u === 'cs' ||
+                 u === 'c.à.soupe' || u === 'c. à soupe' || u === 'c.a.soupe') {
+        unitStr = (window.isEnglish && window.isEnglish() ? ' tbsp' : ' c.à s.');
+      } else if (u === 'c.à.c' || u === 'c.a.c' || u === 'cac' || u === 'càc' || u === 'cc' ||
+                 u === 'c.à.café' || u === 'c.à.cafe' || u === 'c. à café' || u === 'c. à cafe') {
+        unitStr = (window.isEnglish && window.isEnglish() ? ' tsp' : ' c.à c.');
+      } else if (u === 'pce' || u === 'piece' || u === 'pièce' || u === 'unité' || u === 'unite') {
+        unitStr = '';
+      } else if (u === 'pincée' || u === 'pincee' || u === 'pincées' || u === 'pincees') {
+        var qNum = parseFloat(qty);
+        unitStr = ' ' + ((!isNaN(qNum) && qNum > 1) ? 'pincées' : 'pincée');
+      } else if (u === 'gousse' || u === 'gousses') {
+        var qGousse = parseFloat(qty);
+        unitStr = ' ' + ((!isNaN(qGousse) && qGousse > 1) ? 'gousses' : 'gousse');
+      } else if (u === 'avocat' || u === 'tomate' || u === 'citron' || u === 'oignon' ||
+                 u === 'oignon moyen' || u === 'échalote' || u === 'echalote' ||
+                 u === 'blanc' || u === 'blancs' || u === 'jaune' || u === 'jaunes') {
+        unitStr = ' ' + u;
+      } else if (u) {
+        unitStr = ' ' + u;
+      }
+
+      // ── Normalisation noms canoniques ───────────────────────────────────────
       var _nameNorm = {
-        'huile':'Huile d\'olive','huile olive':'Huile d\'olive',
-        'fromage blanc':'Fromage blanc 0%','Fromage Blanc':'Fromage blanc 0%','Fromage blanc':'Fromage blanc 0%',
-        'blanc de poulet':'Blanc de poulet','Blanc de Poulet':'Blanc de poulet','blancs de poulet':'Blancs de poulet',
-        'filets de poulet':'Filets de poulet','Filets de Poulet':'Filets de poulet',
-        'oeuf':'Oeuf entier','Oeuf':'Oeuf entier','oeuf entier':'Oeuf entier',
+        // Œufs
+        'oeuf': 'Œuf entier', 'oeuf entier': 'Œuf entier',
+        'oeufs': 'Œufs', 'oeufs entiers': 'Œufs entiers',
+        // Huile
+        'huile': "Huile d'olive", 'huile olive': "Huile d'olive",
+        // Fromage blanc
+        'fromage blanc': 'Fromage blanc 0%',
+        // Poulet
+        'blanc de poulet': 'Blanc de poulet', 'blancs de poulet': 'Blancs de poulet',
+        'filets de poulet': 'Filets de poulet',
+        // Bœuf
+        'boeuf haché': 'Bœuf haché maigre', 'boeuf hache': 'Bœuf haché maigre',
+        'boeuf haché maigre': 'Bœuf haché maigre', 'boeuf maigre haché': 'Bœuf haché maigre',
       };
-      if (_nameNorm[name]) name = _nameNorm[name];
-      else if (name) name = name.charAt(0).toUpperCase() + name.slice(1);
+      var nameLow = name.toLowerCase();
+      if (_nameNorm[nameLow]) {
+        name = _nameNorm[nameLow];
+      } else if (name) {
+        name = name.charAt(0).toUpperCase() + name.slice(1);
+      }
+
       return (qty + unitStr + (name ? ' ' + name : '')).trim();
     }
-    // FIX 2026-04-16 : appliquer le scaleFactor aux quantités des ingrédients
+    // Fractions string (convertToDisplay) et qty falsy : skip scaling pour éviter NaN
     function scaleIng(ing) {
       if (_scaleFactor === 1 || !ing.qty) return ing;
+      if (typeof ing.qty === 'string') return ing;
       return Object.assign({}, ing, { qty: Math.round(ing.qty * _scaleFactor * 10) / 10 });
     }
     if (r._scaledIngredients && r._scaledIngredients.length > 0) {
