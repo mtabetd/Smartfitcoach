@@ -141,7 +141,7 @@ function goStep(n) {
     else if (_step1ok && _step2ok) { n = 3; } // missing poids/taille
     else if (_step1ok) { n = 2; } // missing date naissance
   }
-  if (n === 10) window._s7page = 0;
+  if (n === 10) { window._s7page = 0; window._s8expanded = false; }
   S.nStep = n;
   bb('nutrition_step', {step: n});
   window.render();
@@ -300,6 +300,9 @@ function renderEmailVerifyBanner(p) {
     _resendBtn.disabled = true;
     client.auth.resend({type: 'signup', email: window.S._pendingEmailVerify}).then(function() {
       _resendBtn.textContent = _isENbanner ? '\u2713 Sent' : '\u2713 Envoy\u00e9';
+      setTimeout(function() {
+        if (_resendBtn) { _resendBtn.disabled = false; _resendBtn.textContent = _isENbanner ? 'Resend email' : 'Renvoyer l\u2019email'; }
+      }, 30000);
     }).catch(function() {
       _resendBtn.textContent = _isENbanner ? 'Error — retry' : 'Erreur — r\u00e9essayez';
       _resendBtn.disabled = false;
