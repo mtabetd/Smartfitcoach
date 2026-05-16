@@ -748,7 +748,7 @@ window.renderModuleChoice = function renderModuleChoice(content) {
 
    // SVG icon
    var iconWrap = h('div', {style: 'flex-shrink:0;margin-top:2px'});
-   iconWrap.innerHTML = (typeof _sfcSanitize === 'function') ? _sfcSanitize(card.svg) : '';
+   iconWrap.innerHTML = (typeof window._sfcSanitize === 'function') ? window._sfcSanitize(card.svg) : card.svg;
    el.appendChild(iconWrap);
 
    // Text
