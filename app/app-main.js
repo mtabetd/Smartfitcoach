@@ -132,7 +132,8 @@ var PROFILE_KEYS = [
  // Repopulated into window.S on every loadProfile(), never persisted to localStorage,
  // so a stale or tampered local value can never bypass the server check.
  '_prePregnancyGoal',
- '_medicalDisclaimerShown'
+ '_medicalDisclaimerShown',
+ '_pendingEmailVerify'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
@@ -2818,176 +2819,23 @@ function renderRegister(app) {
  c.appendChild(h('div', {'class': 'auth-error'}, S.authError));
  }
 
- // ── Country dial codes for phone selector ──────────────────────────
- // POLISH 2026-04 : Maroc en 1er (cible utilisateurs MA), suivi du Maghreb,
- // puis Europe francophone (FR/BE/CH), puis reste du monde.
- var DIAL_CODES = [
-   {code:'+212',flag:'🇲🇦',name:'Maroc'},
-   {code:'+213',flag:'🇩🇿',name:'Algérie'},
-   {code:'+216',flag:'🇹🇳',name:'Tunisie'},
-   {code:'+33',flag:'🇫🇷',name:'France'},
-   {code:'+32',flag:'🇧🇪',name:'Belgique'},
-   {code:'+41',flag:'🇨🇭',name:'Suisse'},
-   {code:'+1',flag:'🇨🇦',name:'Canada'},
-   {code:'+1',flag:'🇺🇸',name:'États-Unis'},
-   {code:'+44',flag:'🇬🇧',name:'Royaume-Uni'},
-   {code:'+49',flag:'🇩🇪',name:'Allemagne'},
-   {code:'+34',flag:'🇪🇸',name:'Espagne'},
-   {code:'+39',flag:'🇮🇹',name:'Italie'},
-   {code:'+351',flag:'🇵🇹',name:'Portugal'},
-   {code:'+31',flag:'🇳🇱',name:'Pays-Bas'},
-   {code:'+352',flag:'🇱🇺',name:'Luxembourg'},
-   {code:'+221',flag:'🇸🇳',name:'Sénégal'},
-   {code:'+225',flag:'🇨🇮',name:'Côte d\'Ivoire'},
-   {code:'+237',flag:'🇨🇲',name:'Cameroun'},
-   {code:'+243',flag:'🇨🇩',name:'RD Congo'},
-   {code:'+261',flag:'🇲🇬',name:'Madagascar'},
-   {code:'+230',flag:'🇲🇺',name:'Maurice'},
-   {code:'+262',flag:'🇷🇪',name:'Réunion'},
-   {code:'+590',flag:'🇬🇵',name:'Guadeloupe'},
-   {code:'+596',flag:'🇲🇶',name:'Martinique'},
-   {code:'+594',flag:'🇬🇫',name:'Guyane'},
-   {code:'+238',flag:'🇨🇻',name:'Cap-Vert'},
-   {code:'+7',flag:'🇷🇺',name:'Russie'},
-   {code:'+81',flag:'🇯🇵',name:'Japon'},
-   {code:'+82',flag:'🇰🇷',name:'Corée du Sud'},
-   {code:'+86',flag:'🇨🇳',name:'Chine'},
-   {code:'+91',flag:'🇮🇳',name:'Inde'},
-   {code:'+55',flag:'🇧🇷',name:'Brésil'},
-   {code:'+52',flag:'🇲🇽',name:'Mexique'},
-   {code:'+54',flag:'🇦🇷',name:'Argentine'},
-   {code:'+57',flag:'🇨🇴',name:'Colombie'},
-   {code:'+58',flag:'🇻🇪',name:'Venezuela'},
-   {code:'+20',flag:'🇪🇬',name:'Égypte'},
-   {code:'+27',flag:'🇿🇦',name:'Afrique du Sud'},
-   {code:'+234',flag:'🇳🇬',name:'Nigéria'},
-   {code:'+254',flag:'🇰🇪',name:'Kenya'},
-   {code:'+971',flag:'🇦🇪',name:'Émirats arabes unis'},
-   {code:'+966',flag:'🇸🇦',name:'Arabie saoudite'},
-   {code:'+972',flag:'🇮🇱',name:'Israël'},
-   {code:'+90',flag:'🇹🇷',name:'Turquie'},
-   {code:'+48',flag:'🇵🇱',name:'Pologne'},
-   {code:'+46',flag:'🇸🇪',name:'Suède'},
-   {code:'+47',flag:'🇳🇴',name:'Norvège'},
-   {code:'+45',flag:'🇩🇰',name:'Danemark'},
-   {code:'+358',flag:'🇫🇮',name:'Finlande'},
-   {code:'+61',flag:'🇦🇺',name:'Australie'}
- ];
- var _selDialIdx = 0; // default: Maroc +212 (cible utilisateurs MA)
-
  var form = h('form', {'class': 'auth-form', onsubmit: function(e){ e.preventDefault(); }, autocomplete: 'on'});
 
- // ── Row: Prénom + Nom ─────────────────────────────────────────────
- var nameRow = h('div', {style: 'display:flex;gap:10px'});
-
- var f0 = h('div', {'class': 'field', style: 'flex:1'});
- f0.appendChild(h('label', {'class': 'field-label'}, window.t('auth.firstname') + ' ●'));
- var nameInput = h('input', {type: 'text', placeholder: 'Prénom', autocomplete: 'given-name'});
+ // ── Prénom (optionnel) ────────────────────────────────────────────────────
+ var f0 = h('div', {'class': 'field'});
+ f0.appendChild(h('label', {'class': 'field-label'}, (window.isEnglish && window.isEnglish()) ? 'First name (optional)' : 'Prénom (optionnel)'));
+ var nameInput = h('input', {type: 'text', placeholder: (window.isEnglish && window.isEnglish()) ? 'Your first name' : 'Votre prénom', autocomplete: 'given-name'});
  f0.appendChild(nameInput);
- nameRow.appendChild(f0);
+ form.appendChild(f0);
 
- var f0b = h('div', {'class': 'field', style: 'flex:1'});
- f0b.appendChild(h('label', {'class': 'field-label'}, ((window.isEnglish && window.isEnglish()) ? 'Last name ●' : 'Nom ●')));
- var nomInput = h('input', {type: 'text', placeholder: 'Nom de famille', autocomplete: 'family-name'});
- f0b.appendChild(nomInput);
- nameRow.appendChild(f0b);
-
- form.appendChild(nameRow);
-
- // ── Phone with country selector ───────────────────────────────────
- var fPhone = h('div', {'class': 'field'});
- fPhone.appendChild(h('label', {'class': 'field-label'}, ((window.isEnglish && window.isEnglish()) ? 'Phone' : 'Téléphone')));
-
- var phoneRow = h('div', {style: 'display:flex;gap:8px;align-items:stretch'});
-
- // Dial selector button
- var dialBtn = h('button', {
-   type: 'button',
-   style: 'display:flex;align-items:center;gap:6px;padding:0 12px;border:1px solid var(--border);border-radius:2px;background:var(--ivory,#FAF9F6);cursor:pointer;font-size:15px;white-space:nowrap;min-width:90px;height:44px;',
- });
- var dialFlagSpan = h('span', {style: 'font-size:20px'}, DIAL_CODES[_selDialIdx].flag);
- var dialCodeSpan = h('span', {style: 'font-size:13px;color:var(--grey);font-weight:600'}, DIAL_CODES[_selDialIdx].code);
- var dialArrow = h('span', {style: 'font-size:10px;color:var(--grey);margin-left:2px'}, '▾');
- dialBtn.appendChild(dialFlagSpan);
- dialBtn.appendChild(dialCodeSpan);
- dialBtn.appendChild(dialArrow);
-
- // Dropdown overlay — appended to document.body (position:fixed) pour éviter tout problème de z-index/stacking context
- // Nettoyer tout dropdown résiduel (fuite DOM si re-render sans fermeture préalable)
- var _oldDialDrop = document.getElementById('_sfc_dial_dropdown');
- if (_oldDialDrop && _oldDialDrop.parentNode) _oldDialDrop.parentNode.removeChild(_oldDialDrop);
- var dialDropdown = document.createElement('div');
- dialDropdown.id = '_sfc_dial_dropdown';
- dialDropdown.style.cssText = 'display:none;position:fixed;z-index:9999;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#E8E6DF);border-radius:0;max-height:260px;overflow-y:auto;min-width:220px;';
- document.body.appendChild(dialDropdown);
-
- DIAL_CODES.forEach(function(dc, idx) {
-   var opt = h('div', {
-     style: 'display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;font-size:14px;' + (idx === _selDialIdx ? 'background:var(--accent-subtle,#f0f0e8);font-weight:700;' : ''),
-     onclick: function() {
-       _selDialIdx = idx;
-       dialFlagSpan.textContent = dc.flag;
-       dialCodeSpan.textContent = dc.code;
-       dialDropdown.style.display = 'none';
-       // update highlight
-       Array.from(dialDropdown.children).forEach(function(ch, i) {
-         ch.style.background = i === idx ? 'var(--accent-subtle,#f0f0e8)' : '';
-         ch.style.fontWeight = i === idx ? '700' : '';
-       });
-     }
-   });
-   opt.appendChild(h('span', {style: 'font-size:18px'}, dc.flag));
-   opt.appendChild(h('span', {style: 'color:var(--grey);font-size:12px;font-weight:600;min-width:36px'}, dc.code));
-   opt.appendChild(h('span', {}, dc.name));
-   dialDropdown.appendChild(opt);
- });
-
- var dialWrapper = h('div', {style: 'position:relative;flex-shrink:0'});
- dialWrapper.appendChild(dialBtn);
- // dialDropdown est sur document.body, pas dans dialWrapper
-
- dialBtn.addEventListener('click', function(e) {
-   e.stopPropagation();
-   var isOpen = dialDropdown.style.display !== 'none';
-   if (isOpen) {
-     dialDropdown.style.display = 'none';
-   } else {
-     // Positionner sous le bouton via getBoundingClientRect (indépendant du stacking context)
-     var rect = dialBtn.getBoundingClientRect();
-     dialDropdown.style.top = (rect.bottom + 4) + 'px';
-     dialDropdown.style.left = rect.left + 'px';
-     dialDropdown.style.minWidth = rect.width + 'px';
-     dialDropdown.style.display = 'block';
-     // Fermer au prochain clic externe (once:true évite l'accumulation de listeners)
-     setTimeout(function() {
-       document.addEventListener('click', function() {
-         dialDropdown.style.display = 'none';
-       }, { once: true });
-     }, 0);
-   }
- });
-
- var phoneInput = h('input', {
-   type: 'tel',
-   placeholder: '6 12 34 56 78',
-   autocomplete: 'tel-national',
-   inputmode: 'tel',
-   style: 'flex:1;height:44px;min-width:0'
- });
-
- phoneRow.appendChild(dialWrapper);
- phoneRow.appendChild(phoneInput);
- fPhone.appendChild(phoneRow);
- form.appendChild(fPhone);
-
- // ── Email ─────────────────────────────────────────────────────────
+ // ── Email ─────────────────────────────────────────────────────────────────
  var f1 = h('div', {'class': 'field'});
  f1.appendChild(h('label', {'class': 'field-label'}, window.t('auth.email') + ' ●'));
  var emailInput = h('input', {type: 'email', placeholder: 'votre@email.com', autocomplete: 'email'});
  f1.appendChild(emailInput);
  form.appendChild(f1);
 
- // ── Password ──────────────────────────────────────────────────────
+ // ── Password ──────────────────────────────────────────────────────────────────
  var f2 = h('div', {'class': 'field'});
  f2.appendChild(h('label', {'class': 'field-label'}, window.t('auth.password') + ' ●'));
  var pwWrap2 = h('div', {style: 'position:relative;display:flex;align-items:center'});
@@ -3006,7 +2854,7 @@ function renderRegister(app) {
  });
  form.appendChild(f2);
 
- // ── Confirm password ──────────────────────────────────────────────
+ // ── Confirm password ──────────────────────────────────────────────────────────
  var f3 = h('div', {'class': 'field'});
  f3.appendChild(h('label', {'class': 'field-label'}, window.t('auth.confirm_password') + ' ●'));
  var pw2Wrap = h('div', {style: 'position:relative;display:flex;align-items:center'});
@@ -3018,30 +2866,27 @@ function renderRegister(app) {
  f3.appendChild(pw2Wrap);
  form.appendChild(f3);
 
- // ── Consentement RGPD (obligatoire — Art. 9 données de santé) ─────
+ // ── Consentement RGPD (obligatoire — Art. 9 données de santé) ─────────────────
  var consentWrap = h('div', {style: 'display:flex;align-items:flex-start;gap:10px;margin:16px 0 8px;padding:12px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px'});
  var consentCheck = h('input', {type: 'checkbox', id: 'rgpd-consent', style: 'margin-top:3px;min-width:18px;min-height:18px;cursor:pointer'});
  consentWrap.appendChild(consentCheck);
  var consentLabel = h('label', {'for': 'rgpd-consent', style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;cursor:pointer'});
- consentLabel.innerHTML = 'J\u2019accepte la <a href="/privacy-policy.html" target="_blank" rel="noopener" style="color:var(--ink-900,#0A0A09);text-decoration:underline">politique de confidentialit\u00e9</a> et les <a href="/cgu.html" target="_blank" rel="noopener" style="color:var(--ink-900,#0A0A09);text-decoration:underline">conditions g\u00e9n\u00e9rales d\u2019utilisation</a>. Je consens au traitement de mes donn\u00e9es de sant\u00e9 (poids, conditions m\u00e9dicales, grossesse) pour la personnalisation de mon programme.';
+ consentLabel.innerHTML = 'J’accepte la <a href="/privacy-policy.html" target="_blank" rel="noopener" style="color:var(--ink-900,#0A0A09);text-decoration:underline">politique de confidentialité</a> et les <a href="/cgu.html" target="_blank" rel="noopener" style="color:var(--ink-900,#0A0A09);text-decoration:underline">conditions générales d’utilisation</a>. Je consens au traitement de mes données de santé (poids, conditions médicales, grossesse) pour la personnalisation de mon programme.';
  consentWrap.appendChild(consentLabel);
  form.appendChild(consentWrap);
 
- // ── Register button ───────────────────────────────────────────────
+ // ── Register button ───────────────────────────────────────────────────────────────────
  var regBtn = h('button', {'class': 'btn-primary', 'type': 'button', onclick: function(){
  if (regBtn.disabled) return;
  var name = nameInput.value.trim();
- var nom  = nomInput.value.trim();
  var email = emailInput.value.trim();
  var pw = pwInput.value;
  var pw2 = pw2Input.value;
- var phoneRaw = phoneInput.value.trim();
- var phone = phoneRaw ? (DIAL_CODES[_selDialIdx].code + phoneRaw.replace(/\s/g,'')) : '';
 
- if (!name || !nom || !email || !pw || !pw2) { S.authError = 'Prénom, nom, email et mot de passe sont obligatoires'; render(); return; }
+ if (!email || !pw || !pw2) { S.authError = (window.isEnglish && window.isEnglish()) ? 'Email and password are required.' : 'Email et mot de passe sont obligatoires.'; render(); return; }
  if (pw !== pw2) { S.authError = window.t('auth.error_password_match'); render(); return; }
  if (!window.isValidPassword(pw)) { S.authError = window.t('auth.error_password_rules'); render(); return; }
- if (!consentCheck.checked) { S.authError = 'Veuillez accepter la politique de confidentialit\u00e9 et les CGU pour cr\u00e9er votre compte.'; render(); return; }
+ if (!consentCheck.checked) { S.authError = 'Veuillez accepter la politique de confidentialité et les CGU pour créer votre compte.'; render(); return; }
 
  if (typeof navigator !== 'undefined' && navigator.onLine === false) {
    S.authError = (window.isEnglish && window.isEnglish()) ? 'No network connection. Check your connection and retry.' : 'Pas de connexion réseau. Vérifiez votre connexion et réessayez.';
@@ -3057,15 +2902,19 @@ function renderRegister(app) {
      try { if (window.render) window.render(); } catch(e) {}
    }
  }, 10000);
- AUTH.register(name, email, pw, { nom: nom, phone: phone }).then(function(result) {
+ // Use email prefix as backend name when prénom not provided (validateName requires ≥2 chars)
+ var _rawName = name || email.split('@')[0];
+ var regName = _rawName.length >= 2 ? _rawName : _rawName + '_';
+ AUTH.register(regName, email, pw, {}).then(function(result) {
  clearTimeout(_regSafetyTimer);
  if (result.ok) {
  S.authError = '';
  if (name) { S.prenom = name; }
- if (nom) { S.nom = nom; }
- if (phone) { S.phone = phone; }
- S.view = 'authVerify';
+ // Navigate to onboarding immediately — email verify reminder shown as banner
+ S._pendingEmailVerify = email;
  S.authVerifyEmail = email;
+ S.view = 'nutrition';
+ S.nStep = 0;
  render();
  } else {
  S.authError = result.error;
@@ -3089,9 +2938,9 @@ function renderRegister(app) {
 
  // Liens légaux footer register
  var legalFooter2 = h('div', {style: 'text-align:center;margin-top:20px;padding-top:16px;border-top:1px solid var(--border,#D8D8D0)'});
- legalFooter2.appendChild(h('a', {href: '/privacy-policy.html', target: '_blank', rel: 'noopener', style: 'font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 8px'}, 'Confidentialit\u00e9'));
+ legalFooter2.appendChild(h('a', {href: '/privacy-policy.html', target: '_blank', rel: 'noopener', style: 'font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 8px'}, 'Confidentialité'));
  legalFooter2.appendChild(h('a', {href: '/cgu.html', target: '_blank', rel: 'noopener', style: 'font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 8px'}, 'CGU'));
- legalFooter2.appendChild(h('a', {href: '/mentions-legales.html', target: '_blank', rel: 'noopener', style: 'font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 8px'}, 'Mentions l\u00e9gales'));
+ legalFooter2.appendChild(h('a', {href: '/mentions-legales.html', target: '_blank', rel: 'noopener', style: 'font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 8px'}, 'Mentions légales'));
  c.appendChild(legalFooter2);
 
  app.appendChild(c);
