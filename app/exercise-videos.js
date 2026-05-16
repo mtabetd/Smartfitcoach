@@ -102,7 +102,7 @@
     version:          '5.0',
     urlStrategy:      'channel-search',    // '@handle/search?query='
     fallbackStrategy: 'video-filter',      // 'results?...&sp=EgIYAQ'
-    exerciseCoverage: 339,                 // entrées CURATED_QUERIES
+    exerciseCoverage: 338,                 // entrées CURATED_QUERIES
     cfCoverage:       86,                  // entrées CF_QUERIES
     auditDate:        '2026-05'
   };
@@ -428,7 +428,6 @@
     'back extension ghd lestee':               'weighted GHD back extension tutorial',
     'stiff leg deadlift halteres':             'stiff leg dumbbell deadlift tutorial',
     'rotation du tronc cable':                 'cable woodchop trunk rotation tutorial',
-    'soulevé de terre hex bar':                'trap bar hex bar deadlift tutorial',
     'souleve de terre hex bar':                'trap bar hex bar deadlift tutorial',
 
     // ── Abdos ─────────────────────────────────────────────────────────────
@@ -724,7 +723,15 @@
   // ─── Aliases muscu : abréviations / variantes → clé CURATED_QUERIES ─────
   // Permet aux futurs exercices d'hériter automatiquement d'une bonne vidéo
   // sans nécessiter d'entrée manuelle dans CURATED_QUERIES.
-  // Valeurs = clés normalisées valides dans CURATED_QUERIES.
+  //
+  // RÈGLES CRITIQUES pour les contributeurs :
+  // 1. Les clés ET valeurs doivent être en forme NORMALISÉE : minuscules,
+  //    sans accents, SANS TRAIT D'UNION (hyphens → espaces via _normalizeName).
+  //    Ex : 'pull ups' ✓   'pull-ups' ✗ (jamais atteint après normalisation)
+  //         'developpé' ✗  'developpe' ✓
+  // 2. N'ajoutez PAS une clé qui existe déjà dans CURATED_QUERIES — l'alias
+  //    serait mort (EXACT match a la priorité sur ALIAS).
+  // 3. La valeur doit être une clé valide dans CURATED_QUERIES.
   var EXERCISE_ALIASES = {
     // Pectoraux
     'bench':                   'developpe couche',
@@ -755,7 +762,6 @@
     'pullup':                  'tractions',
     'pullups':                 'tractions',
     'chin up':                 'chin ups',
-    'chin ups':                'chin ups',
     'barbell row':             'rowing barre',
     'bb row':                  'rowing barre',
     'bent over row':           'rowing barre',
@@ -775,12 +781,10 @@
     'db shrug':                'shrug halteres',
     // Épaules
     'ohp':                     'developpe militaire',
-    'overhead press':          'developpe militaire',
     'military press':          'developpe militaire',
     'shoulder press':          'developpe militaire',
     'seated press':            'developpe halteres assis',
     'db shoulder press':       'developpe halteres assis',
-    'arnold press':            'developpe arnold',
     'lateral raise':           'elevations laterales',
     'lat raise':               'elevations laterales',
     'side raise':              'elevations laterales',
@@ -823,7 +827,6 @@
     'bulgarian':               'split squat bulgare',
     'bulgarian split':         'split squat bulgare',
     'bulgarian split squat':   'split squat bulgare',
-    'leg extension':           'leg extension',
     'lying leg curl':          'leg curl couche',
     'seated leg curl':         'leg curl assis',
     // Fessiers
@@ -842,7 +845,6 @@
     'deadbug':                 'dead bug',
     'hollow hold':             'hollow body hold',
     'hollow body':             'hollow body hold',
-    'ab wheel':                'roulette abdominale',
     'ab rollout':              'ab rollout sur genoux',
     // Générique
     'farmer walk':             'farmer carry',
@@ -850,7 +852,6 @@
     'farmers carry':           'farmer carry',
     'jump rope':               'corde a sauter',
     'rope jump':               'corde a sauter',
-    'mountain climber':        'mountain climbers',
     // Variantes françaises courtes
     'dev couche':              'developpe couche',
     'dev incline':             'developpe incline',
@@ -858,13 +859,12 @@
     'souleve de terre':        'deadlift',
     'squat bulgare':           'split squat bulgare',
     'fente bulgare':           'split squat bulgare',
-    'tirage lat':              'tirage vertical poulie',
-    'tirage poulie haute':     'tirage vertical poulie'
+    'tirage lat':              'tirage vertical poulie'
   };
 
   // ─── Aliases CrossFit / Hyrox : abréviations → clé CF_QUERIES ───────────
+  // Règle : n'ajoutez PAS une clé déjà présente dans CF_QUERIES — l'alias serait mort.
   var CF_ALIASES = {
-    'c2b':                     'chest to bar',
     't2b':                     'toes to bar',
     'ttb':                     'toes to bar',
     'mu':                      'muscle up',
@@ -874,12 +874,9 @@
     'hs push up':              'handstand push up',
     'du':                      'double unders',
     'dus':                     'double unders',
-    'kb swing':                'kettlebell swing',
-    'kb swings':               'kettlebell swing',
     'american swing':          'american kettlebell swing',
     'tgu':                     'turkish get up',
     'p clean':                 'power clean',
-    'hang squat clean':        'hang squat clean',
     'c&j':                     'clean and jerk',
     'ohs':                     'overhead squat',
     'kipping':                 'kipping pull up',
