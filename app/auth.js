@@ -410,9 +410,14 @@ function _initAuth() {
       }
       // FIX EMAIL CONFIRM 2026-04 : quand Supabase redirige vers l'app avec
       // #access_token=... après confirmation email, le client traite le hash et
-      // fire SIGNED_IN — mais render() n'était jamais appelé → écran authVerify
-      // restait bloqué (bouton "J'ai confirmé mon email" semblait mort).
-      if (event === 'SIGNED_IN' && window.S && window.S.view === 'authVerify' && _currentSession) {
+      // fire SIGNED_IN. Deux cas déclencheurs :
+      //  (A) même onglet — S.view==='authVerify' (flux normal)
+      //  (B) nouveau chargement de page via le lien de confirmation — S.view==='auth'
+      //      (état initial) ET aucun profil local pour cet utilisateur (nouvel inscrit).
+      // Dans les deux cas on reroute vers l'onboarding plutôt que vers le dashboard vide.
+      var _isNewUserConfirm = window.S.view === 'authVerify' ||
+        (window.S.view === 'auth' && !localStorage.getItem('mtd_profile_' + _currentSession.id));
+      if (event === 'SIGNED_IN' && window.S && _isNewUserConfirm && _currentSession) {
         _migrateAnonKeys(_currentSession.id);
         window.S.authError = '';
         if (window.S.appMode === 'sport') {
