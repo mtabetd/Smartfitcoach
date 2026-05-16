@@ -18278,7 +18278,7 @@ function renderMusculationProgram(p) {
  (function() {
   var _aeIsEN = window.isEnglish && window.isEnglish();
   var _aeLevel = (S.sportLevel || S.muscuLevel || '');
-  var _aeGoal = S.goal || '';
+  var _aeGoal = (typeof S.goal === 'string') ? S.goal : '';
   var _aeLine = '';
   if (_aeLevel === 'beginner' || _aeLevel === 'debutant') {
    _aeLine = _aeIsEN ? 'Priority: perfect technique before load.' : 'Priorit\u00e9 : technique parfaite avant la charge.';
@@ -18286,12 +18286,15 @@ function renderMusculationProgram(p) {
    _aeLine = _aeIsEN ? 'Focus: preserve strength in deficit \u00b7 controlled volume.' : 'Focus : pr\u00e9server la force en d\u00e9ficit \u00b7 volume contr\u00f4l\u00e9.';
   } else if (_aeGoal === 'bulk' || _aeGoal === 'lean_bulk') {
    var _aeWk = (typeof sfcGetEffectiveWeek === 'function') ? sfcGetEffectiveWeek() : (S.muscuWeek || 1);
+   _aeWk = (isNaN(_aeWk) || _aeWk < 1) ? 1 : _aeWk;
    _aeLine = _aeIsEN ? 'Focus: progressive overload \u00b7 volume build \u00b7 wk. ' + _aeWk + '/7.' : 'Focus : surcharge progressive \u00b7 construction volume \u00b7 sem. ' + _aeWk + '/7.';
   } else if (_aeGoal === 'sport' || _aeGoal === 'performance') {
    _aeLine = _aeIsEN ? 'Focus: work capacity \u00b7 performance \u00b7 recovery quality.' : 'Focus : capacit\u00e9 de travail \u00b7 performance \u00b7 qualit\u00e9 de r\u00e9cup\u00e9ration.';
+  } else if (_aeGoal === 'maintain') {
+   _aeLine = _aeIsEN ? 'Focus: maintain muscle mass \u00b7 stable composition.' : 'Focus : maintien de la masse musculaire \u00b7 composition stable.';
   }
   if (_aeLine) {
-   p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:8px;margin-top:-6px;font-style:italic'}, _aeLine));
+   p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:8px;font-style:italic'}, _aeLine));
   }
  })();
  if (window.TIPS) TIPS.renderTip(p, 'sportProgram');
@@ -18977,15 +18980,16 @@ function renderMusculationProgram(p) {
      if (S.sportLevel === 'beginner' || S.muscuLevel === 'beginner') {
        return _isEn ? 'Priority: perfect technique on every rep.' : 'Priorité : technique parfaite sur chaque répétition.';
      }
-     if (_bPhId === 'deload') return _isEn ? 'Deload week — active recovery, reduced load.' : 'Semaine de décharge — récupération active, charge réduite.';
+     if (_bPhId === 'adaptation') return _isEn ? 'Adaptation phase — master technique before adding load.' : 'Phase d\'adaptation — maîtrise technique avant la charge.';
+     if (_bPhId === 'progression') return _isEn ? 'Progression — increase loads progressively, reps then weight.' : 'Progression — augmentez charges progressivement, reps puis poids.';
      if (_bPhId === 'intensification') return _isEn ? 'Intensification — push the load, aim for progressive overload.' : 'Intensification — poussez la charge, visez la surcharge progressive.';
-     if (_bPhId === 'accumulation') return _isEn ? 'Accumulation — build volume, controlled intensity.' : 'Accumulation — construire le volume, intensité contrôlée.';
-     if (_bPhId === 'peak') return _isEn ? 'Peak phase — max intensity, peak energy required.' : 'Phase pic — intensité maximale, énergie max requise.';
+     if (_bPhId === 'decharge') return _isEn ? 'Deload week — active recovery, reduced load.' : 'Semaine de décharge — récupération active, charge réduite.';
      return '';
    })();
    if (_bPhaseIntent) {
+     _bLine2.style.marginBottom = '10px';
      var _bIntentDiv = document.createElement('div');
-     _bIntentDiv.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);font-style:italic;margin-bottom:16px;padding:8px 10px;background:var(--ivory2,#F4F2EB);border-left:2px solid var(--border,#D8D8D0);';
+     _bIntentDiv.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);font-style:italic;margin-bottom:14px;padding:8px 10px;background:var(--ivory2,#F4F2EB);border-left:2px solid var(--border,#D8D8D0);';
      _bIntentDiv.textContent = _bPhaseIntent;
      _brief.appendChild(_bIntentDiv);
    }
