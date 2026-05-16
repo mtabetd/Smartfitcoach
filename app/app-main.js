@@ -3660,8 +3660,11 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  // Steps à préserver (programme généré) : 4(muscu) 6(CF) 8(running) 10(hyrox) 12(padel)
  // 14(golf) 15(prog dédié) 16(charges) 17-18(triathlon) 20(médical) 21(yoga) 23(cycling) 25(calisthenics)
  var _PROGRAM_STEPS_MAIN = [4, 6, 8, 10, 12, 14, 15, 16, 17, 18, 20, 21, 23, 25];
- // Guard : valeurs manifestement corrompues
- if (S.sStep > 30) { S.sStep = 0; }
+ // Guard : valeurs manifestement corrompues.
+ // sStep=30 = "Séance libre" — step de navigation pure, non restauré au démarrage.
+ // Sans ce reset, rouvrir l'app après une séance libre incomplète force S.view='sport'
+ // via la branche sStep>0 && not-in-_PROGRAM_STEPS_MAIN ci-dessous (sStep=30 absent de la liste).
+ if (S.sStep >= 30) { S.sStep = 0; }
  if (S.nStep > 12) { S.nStep = 0; }
  // Guard : step intermédiaire sans sportType → l'utilisateur n'a pas encore choisi son sport,
  // on remet à 0 pour qu'il reparte de la sélection sport (cas reload SW avant clic sport).
