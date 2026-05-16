@@ -10472,7 +10472,19 @@ function renderPostSessionPanel(data) {
 
     var s1Sub = document.createElement('div');
     s1Sub.style.cssText = 'font-family:Georgia,serif;font-size:16px;color:var(--grey,#6B6B65);font-style:italic;margin-bottom:28px;';
-    s1Sub.textContent = isEn ? s1n + ' sessions. None skipped.' : s1n + ' séances. Aucune abandonnée.';
+    (function() {
+      var _s1sub = '';
+      if (s1n === 1) {
+        _s1sub = isEn ? 'First session. The foundations are set.' : 'Première séance. Les bases sont posées.';
+      } else if (s1n <= 4) {
+        _s1sub = isEn ? 'Session ' + s1n + '. The habit is being built.' : 'Séance ' + s1n + '. L\'habitude se construit.';
+      } else if (s1n < 20) {
+        _s1sub = isEn ? s1n + ' sessions. Consistent.' : s1n + ' séances. Constant.';
+      } else {
+        _s1sub = isEn ? s1n + ' sessions. None skipped.' : s1n + ' séances. Aucune abandonnée.';
+      }
+      s1Sub.textContent = _s1sub;
+    })();
     inner.appendChild(s1Sub);
 
     var s1Sep = document.createElement('div');
@@ -10480,10 +10492,16 @@ function renderPostSessionPanel(data) {
     inner.appendChild(s1Sep);
 
     var s1Data = document.createElement('div');
-    s1Data.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);letter-spacing:1px;text-align:center;margin-bottom:32px;';
+    s1Data.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);letter-spacing:1px;text-align:center;margin-bottom:16px;';
     var _loadLabels1 = { light: isEn ? 'Light' : 'Légère', moderate: isEn ? 'Moderate' : 'Modérée', heavy: isEn ? 'Heavy' : 'Lourde', max: isEn ? 'Max' : 'Maximale' };
     s1Data.textContent = data.duration + ' min  ·  ' + data.kcalTotal + ' kcal  ·  ' + (_loadLabels1[data.load] || data.load);
     inner.appendChild(s1Data);
+    if (data.load === 'heavy' || data.load === 'max') {
+      var s1LoadCtx = document.createElement('div');
+      s1LoadCtx.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);font-style:italic;margin-bottom:20px;text-align:center;';
+      s1LoadCtx.textContent = isEn ? 'Heavy session — nutrition and sleep priority.' : 'Séance intense — nutrition et sommeil prioritaires.';
+      inner.appendChild(s1LoadCtx);
+    }
 
     var s1Btn = document.createElement('button');
     s1Btn.style.cssText = 'width:100%;padding:16px;background:var(--black,#0A0A09);color:#FAFAF7;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;min-height:52px;';
@@ -18933,9 +18951,29 @@ function renderMusculationProgram(p) {
    _bLine2.textContent = _bTargetText + (_bTargetDelta ? '  ·  ' + _bTargetDelta : '');
    _brief.appendChild(_bLine2);
 
+   var _bPhaseIntent = (function() {
+     var _bWk = (typeof sfcGetEffectiveWeek === 'function') ? sfcGetEffectiveWeek() : (S.muscuWeek || 1);
+     var _bPh = (typeof getMuscuPhase === 'function') ? getMuscuPhase(_bWk) : null;
+     var _bPhId = _bPh ? (_bPh.id || '') : '';
+     if (S.sportLevel === 'beginner' || S.muscuLevel === 'beginner') {
+       return _isEn ? 'Priority: perfect technique on every rep.' : 'Priorité : technique parfaite sur chaque répétition.';
+     }
+     if (_bPhId === 'deload') return _isEn ? 'Deload week — active recovery, reduced load.' : 'Semaine de décharge — récupération active, charge réduite.';
+     if (_bPhId === 'intensification') return _isEn ? 'Intensification — push the load, aim for progressive overload.' : 'Intensification — poussez la charge, visez la surcharge progressive.';
+     if (_bPhId === 'accumulation') return _isEn ? 'Accumulation — build volume, controlled intensity.' : 'Accumulation — construire le volume, intensité contrôlée.';
+     if (_bPhId === 'peak') return _isEn ? 'Peak phase — max intensity, peak energy required.' : 'Phase pic — intensité maximale, énergie max requise.';
+     return '';
+   })();
+   if (_bPhaseIntent) {
+     var _bIntentDiv = document.createElement('div');
+     _bIntentDiv.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);font-style:italic;margin-bottom:16px;padding:8px 10px;background:var(--ivory2,#F4F2EB);border-left:2px solid var(--border,#D8D8D0);';
+     _bIntentDiv.textContent = _bPhaseIntent;
+     _brief.appendChild(_bIntentDiv);
+   }
+
    var _bBtn = document.createElement('button');
    _bBtn.style.cssText = 'width:100%;padding:14px;background:var(--black,#0A0A09);color:#FAFAF7;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;min-height:44px;';
-   _bBtn.textContent = _isEn ? '▶ I CONTINUE' : '▶ JE CONTINUE';
+   _bBtn.textContent = _isEn ? '▶ START THE SESSION' : '▶ DÉMARRER LA SÉANCE';
    _bBtn.onclick = function() { S._briefDismissedKey = _bKey; S._sessionStartTime = S._sessionStartTime || Date.now(); if (window.render) window.render(); };
    _brief.appendChild(_bBtn);
    p.appendChild(_brief);
@@ -27222,6 +27260,12 @@ function renderStep9(p) {
     _snapGrid.appendChild(_nutSnapCell(_avgP + 'g', _isENSnap ? 'protein' : 'prot\u00e9ines', _isENSnap ? 'daily avg.' : 'moy. / jour'));
     _snapGrid.appendChild(_nutSnapCell(_trainCount, _isENSnap ? 'training' : 'entra\u00een.', _isENSnap ? 'days / week' : 'jours / sem.'));
     p.appendChild(_snapGrid);
+    var _goalCtx = '';
+    if (S.goal === 'cut' || S.goal === 'shred') _goalCtx = _isENSnap ? 'Plan calibrated for gradual fat loss.' : 'Plan calibr\u00e9 pour une perte de masse grasse progressive.';
+    else if (S.goal === 'bulk' || S.goal === 'lean_bulk') _goalCtx = _isENSnap ? 'Plan calibrated for lean muscle gain.' : 'Plan calibr\u00e9 pour une prise de masse lean.';
+    else if (S.goal === 'sport') _goalCtx = _isENSnap ? 'Plan calibrated for performance and recovery.' : 'Plan calibr\u00e9 pour la performance et la r\u00e9cup\u00e9ration.';
+    else if (S.goal === 'maintain') _goalCtx = _isENSnap ? 'Plan calibrated for body composition maintenance.' : 'Plan calibr\u00e9 pour le maintien de la composition corporelle.';
+    if (_goalCtx) p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;color:var(--grey,#6B6B65);margin-bottom:16px;text-align:center;font-style:italic'}, _goalCtx));
   })();
 
   // Day tabs
@@ -27248,15 +27292,22 @@ function renderStep9(p) {
     p.appendChild(_prevBadge);
   }
 
-  // Day type indicator (training vs rest)
+  // Day type indicator (training vs rest) + symbiosis coaching context
   var _selDayInfo = window.getDayType ? window.getDayType(S.selectedDay) : null;
   if (_selDayInfo) {
     var _dayAdapt = window.getAdaptedMealSplit ? window.getAdaptedMealSplit(S.selectedDay) : null;
+    var _sdIsEN = window.isEnglish && window.isEnglish();
     if (_selDayInfo.isTraining) {
       var _tNote = (_dayAdapt && _dayAdapt.trainTimingNote) ? ' \u2014 ' + _dayAdapt.trainTimingNote : '';
-      p.appendChild(h('div', {'class': 'day-training-indicator'}, (window.isEnglish && window.isEnglish() ? '\uD83C\uDFCB\uFE0F Training day' : '\uD83C\uDFCB\uFE0F Jour d\u2019entra\u00eenement') + _tNote));
+      p.appendChild(h('div', {'class': 'day-training-indicator'}, (_sdIsEN ? '\uD83C\uDFCB\uFE0F Training day' : '\uD83C\uDFCB\uFE0F Jour d\u2019entra\u00eenement') + _tNote));
+      p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:12px;padding:0 2px'},
+        _sdIsEN ? 'Carbs increased to fuel your workout \u00b7 post-workout protein timing optimized.'
+                : 'Glucides augment\u00e9s pour alimenter votre s\u00e9ance \u00b7 timing prot\u00e9ines post-entra\u00eenement optimis\u00e9.'));
     } else {
-      p.appendChild(h('div', {'class': 'day-rest-indicator'}, (window.isEnglish && window.isEnglish() ? '\uD83D\uDE34 Rest day \u2014 adjusted calories (\u221210%)' : '\uD83D\uDE34 Jour de repos \u2014 calories adapt\u00e9es (\u221210%)')));
+      p.appendChild(h('div', {'class': 'day-rest-indicator'}, (_sdIsEN ? '\uD83D\uDE34 Rest day \u2014 adjusted calories (\u221210%)' : '\uD83D\uDE34 Jour de repos \u2014 calories adapt\u00e9es (\u221210%)')));
+      p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:12px;padding:0 2px'},
+        _sdIsEN ? 'Calories slightly reduced \u00b7 proteins maintained to preserve and rebuild muscle.'
+                : 'Calories l\u00e9g\u00e8rement r\u00e9duites \u00b7 prot\u00e9ines maintenues pour pr\u00e9server et reconstruire le muscle.'));
     }
   }
 
@@ -27798,7 +27849,7 @@ function renderStep9(p) {
     if (window.isFreeMeal ? window.isFreeMeal(r) : (r.n === 'Repas libre')) {
       card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);margin-bottom:4px;'}, (window.isEnglish && window.isEnglish() ? '◦ To customize — no recipe available with your filters' : '◦ À personnaliser — aucune recette disponible avec vos filtres')));
     }
-    card.appendChild(h('div', {'class': 'meal-kcal'}, (r.k || 0) + ' kcal'));
+    card.appendChild(h('div', {'class': 'meal-kcal'}, (r.k || 0) + ' kcal' + (tgtCal > 0 && (r.k||0) > 0 ? ' \u00b7 ' + Math.round((r.k || 0) / tgtCal * 100) + '%' : '')));
     var mc = h('div', {'class': 'meal-macros'});
     var _microMacroStyle = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);';
     mc.appendChild(h('span', {title:(window.isEnglish && window.isEnglish() ? 'Carbs' : 'Glucides'), style:_microMacroStyle}, 'GLU. ' + (r.g || 0) + 'g'));

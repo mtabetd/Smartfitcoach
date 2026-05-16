@@ -8011,9 +8011,29 @@ function renderMusculationProgram(p) {
    _bLine2.textContent = _bTargetText + (_bTargetDelta ? '  ·  ' + _bTargetDelta : '');
    _brief.appendChild(_bLine2);
 
+   var _bPhaseIntent = (function() {
+     var _bWk = (typeof sfcGetEffectiveWeek === 'function') ? sfcGetEffectiveWeek() : (S.muscuWeek || 1);
+     var _bPh = (typeof getMuscuPhase === 'function') ? getMuscuPhase(_bWk) : null;
+     var _bPhId = _bPh ? (_bPh.id || '') : '';
+     if (S.sportLevel === 'beginner' || S.muscuLevel === 'beginner') {
+       return _isEn ? 'Priority: perfect technique on every rep.' : 'Priorité : technique parfaite sur chaque répétition.';
+     }
+     if (_bPhId === 'deload') return _isEn ? 'Deload week — active recovery, reduced load.' : 'Semaine de décharge — récupération active, charge réduite.';
+     if (_bPhId === 'intensification') return _isEn ? 'Intensification — push the load, aim for progressive overload.' : 'Intensification — poussez la charge, visez la surcharge progressive.';
+     if (_bPhId === 'accumulation') return _isEn ? 'Accumulation — build volume, controlled intensity.' : 'Accumulation — construire le volume, intensité contrôlée.';
+     if (_bPhId === 'peak') return _isEn ? 'Peak phase — max intensity, peak energy required.' : 'Phase pic — intensité maximale, énergie max requise.';
+     return '';
+   })();
+   if (_bPhaseIntent) {
+     var _bIntentDiv = document.createElement('div');
+     _bIntentDiv.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);font-style:italic;margin-bottom:16px;padding:8px 10px;background:var(--ivory2,#F4F2EB);border-left:2px solid var(--border,#D8D8D0);';
+     _bIntentDiv.textContent = _bPhaseIntent;
+     _brief.appendChild(_bIntentDiv);
+   }
+
    var _bBtn = document.createElement('button');
    _bBtn.style.cssText = 'width:100%;padding:14px;background:var(--black,#0A0A09);color:#FAFAF7;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;min-height:44px;';
-   _bBtn.textContent = _isEn ? '▶ I CONTINUE' : '▶ JE CONTINUE';
+   _bBtn.textContent = _isEn ? '▶ START THE SESSION' : '▶ DÉMARRER LA SÉANCE';
    _bBtn.onclick = function() { S._briefDismissedKey = _bKey; S._sessionStartTime = S._sessionStartTime || Date.now(); if (window.render) window.render(); };
    _brief.appendChild(_bBtn);
    p.appendChild(_brief);
