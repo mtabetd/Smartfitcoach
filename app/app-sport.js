@@ -4527,8 +4527,10 @@ function renderCrossfitProgram(p) {
  haltCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;color:#1A3A6A;font-weight:bold'}, (window.isEnglish && window.isEnglish() ? 'Load: ' : 'Charge : ') + weightStr));
  }
  }
- var haltVideoQ = encodeURIComponent((_halt.name || '') + ' crossfit technique');
- haltCard.appendChild(h('a', {'class': 'exercise-video', href: 'https://www.youtube.com/results?search_query=' + haltVideoQ, target: '_blank', rel: 'noopener'}, (window.isEnglish && window.isEnglish() ? '▶ Watch technique' : '▶ Voir la technique')));
+ var haltVideoUrl = (window.EXERCISE_VIDEOS && window.EXERCISE_VIDEOS.buildCFVideoUrl)
+   ? window.EXERCISE_VIDEOS.buildCFVideoUrl(_halt.name)
+   : 'https://www.youtube.com/results?search_query=' + encodeURIComponent((_halt.name || '') + ' crossfit technique tutorial') + '&sp=EgIYAQ%253D%253D';
+ haltCard.appendChild(h('a', {'class': 'exercise-video', href: haltVideoUrl, target: '_blank', rel: 'noopener'}, (window.isEnglish && window.isEnglish() ? '▶ Watch technique' : '▶ Voir la technique')));
  p.appendChild(haltCard);
  } else {
  // Show gym skills section first for non-haltero days
@@ -4541,8 +4543,10 @@ function renderCrossfitProgram(p) {
  drillListTop.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;color:var(--grey);padding:3px 0'}, (idx + 1) + '. ' + drill));
  });
  gymSkillCard.appendChild(drillListTop);
- var gymVideoQTop = encodeURIComponent((_gym.name || '').replace('Skill: ', '') + ' crossfit tutorial');
- gymSkillCard.appendChild(h('a', {'class': 'exercise-video', href: 'https://www.youtube.com/results?search_query=' + gymVideoQTop, target: '_blank', rel: 'noopener', style: 'margin-top:8px'}, (window.isEnglish && window.isEnglish() ? '▶ Watch technique' : '▶ Voir la technique')));
+ var gymVideoUrlTop = (window.EXERCISE_VIDEOS && window.EXERCISE_VIDEOS.buildCFVideoUrl)
+   ? window.EXERCISE_VIDEOS.buildCFVideoUrl((_gym.name || '').replace('Skill: ', ''))
+   : 'https://www.youtube.com/results?search_query=' + encodeURIComponent((_gym.name || '').replace('Skill: ', '') + ' crossfit tutorial') + '&sp=EgIYAQ%253D%253D';
+ gymSkillCard.appendChild(h('a', {'class': 'exercise-video', href: gymVideoUrlTop, target: '_blank', rel: 'noopener', style: 'margin-top:8px'}, (window.isEnglish && window.isEnglish() ? '▶ Watch technique' : '▶ Voir la technique')));
  p.appendChild(gymSkillCard);
  }
 
@@ -4654,8 +4658,10 @@ function renderCrossfitProgram(p) {
  });
  gymCard.appendChild(drillList);
 
- var gymVideoQ = encodeURIComponent((_gym2.name || '').replace('Skill: ', '') + ' crossfit tutorial');
- gymCard.appendChild(h('a', {'class': 'exercise-video', href: 'https://www.youtube.com/results?search_query=' + gymVideoQ, target: '_blank', rel: 'noopener', style: 'margin-top:8px'}, (window.isEnglish && window.isEnglish() ? '▶ Watch technique' : '▶ Voir la technique')));
+ var gymVideoUrl = (window.EXERCISE_VIDEOS && window.EXERCISE_VIDEOS.buildCFVideoUrl)
+   ? window.EXERCISE_VIDEOS.buildCFVideoUrl((_gym2.name || '').replace('Skill: ', ''))
+   : 'https://www.youtube.com/results?search_query=' + encodeURIComponent((_gym2.name || '').replace('Skill: ', '') + ' crossfit tutorial') + '&sp=EgIYAQ%253D%253D';
+ gymCard.appendChild(h('a', {'class': 'exercise-video', href: gymVideoUrl, target: '_blank', rel: 'noopener', style: 'margin-top:8px'}, (window.isEnglish && window.isEnglish() ? '▶ Watch technique' : '▶ Voir la technique')));
  p.appendChild(gymCard);
  }
  // For non-haltero days, gym was already shown before the WOD
