@@ -3204,6 +3204,45 @@ function renderStep9(p) {
     }
   })();
 
+
+  // ─── WEEKLY NUTRITION SNAPSHOT (Impact First) ─────────────────────────────
+  (function() {
+    if (!Array.isArray(S.weekPlan) || S.weekPlan.length < 7) return;
+    var _sumK = 0, _sumP = 0, _trainCount = 0, _daysWithData = 0;
+    for (var _wi = 0; _wi < 7; _wi++) {
+      var _wd = S.weekPlan[_wi] || {};
+      var _wdK = 0, _wdP = 0;
+      ['breakfast','lunch','snack','dinner'].forEach(function(sl) {
+        var _m = _wd[sl];
+        if (_m) { _wdK += (_m.k || _m.kcal || 0); _wdP += (_m.p || 0); }
+      });
+      if (_wdK > 0) { _sumK += _wdK; _sumP += _wdP; _daysWithData++; }
+      if (window.getDayType && window.getDayType(_wi) && window.getDayType(_wi).isTraining) _trainCount++;
+    }
+    if (_daysWithData === 0) return;
+    var _avgKcal = Math.round(_sumK / _daysWithData);
+    var _avgP = Math.round(_sumP / _daysWithData);
+    var _isENSnap = window.isEnglish && window.isEnglish();
+    var _snapGrid = h('div', {style: 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border,#D8D8D0);border:1px solid var(--border,#D8D8D0);border-radius:2px;margin-bottom:16px;overflow:hidden'});
+    function _nutSnapCell(val, unit, label) {
+      var cell = h('div', {style: 'background:var(--ivory,#FAF9F6);padding:12px 8px;text-align:center'});
+      cell.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:20px;font-weight:bold;color:var(--black,#0A0A09);line-height:1.1'}, String(val)));
+      cell.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:2px'}, unit));
+      cell.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey,#6B6B65);margin-top:1px'}, label));
+      return cell;
+    }
+    _snapGrid.appendChild(_nutSnapCell(_avgKcal, 'kcal', _isENSnap ? 'daily avg.' : 'moy. / jour'));
+    _snapGrid.appendChild(_nutSnapCell(_avgP + 'g', _isENSnap ? 'protein' : 'prot\u00e9ines', _isENSnap ? 'daily avg.' : 'moy. / jour'));
+    _snapGrid.appendChild(_nutSnapCell(_trainCount, _isENSnap ? 'training' : 'entra\u00een.', _isENSnap ? 'days / week' : 'jours / sem.'));
+    p.appendChild(_snapGrid);
+    var _goalCtx = '';
+    if (S.goal === 'cut' || S.goal === 'shred') _goalCtx = _isENSnap ? 'Plan calibrated for gradual fat loss.' : 'Plan calibr\u00e9 pour une perte de masse grasse progressive.';
+    else if (S.goal === 'bulk' || S.goal === 'lean_bulk') _goalCtx = _isENSnap ? 'Plan calibrated for lean muscle gain.' : 'Plan calibr\u00e9 pour une prise de masse lean.';
+    else if (S.goal === 'sport') _goalCtx = _isENSnap ? 'Plan calibrated for performance and recovery.' : 'Plan calibr\u00e9 pour la performance et la r\u00e9cup\u00e9ration.';
+    else if (S.goal === 'maintain') _goalCtx = _isENSnap ? 'Plan calibrated for body composition maintenance.' : 'Plan calibr\u00e9 pour le maintien de la composition corporelle.';
+    if (_goalCtx) p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;color:var(--grey,#6B6B65);margin-bottom:16px;text-align:center;font-style:italic'}, _goalCtx));
+  })();
+
   // Day tabs
   var tabs = h('div', {'class': 'day-tabs'});
   DAY_NAMES.forEach(function(d, i) {
@@ -3228,15 +3267,22 @@ function renderStep9(p) {
     p.appendChild(_prevBadge);
   }
 
-  // Day type indicator (training vs rest)
+  // Day type indicator (training vs rest) + symbiosis coaching context
   var _selDayInfo = window.getDayType ? window.getDayType(S.selectedDay) : null;
   if (_selDayInfo) {
     var _dayAdapt = window.getAdaptedMealSplit ? window.getAdaptedMealSplit(S.selectedDay) : null;
+    var _sdIsEN = window.isEnglish && window.isEnglish();
     if (_selDayInfo.isTraining) {
       var _tNote = (_dayAdapt && _dayAdapt.trainTimingNote) ? ' \u2014 ' + _dayAdapt.trainTimingNote : '';
-      p.appendChild(h('div', {'class': 'day-training-indicator'}, (window.isEnglish && window.isEnglish() ? '\uD83C\uDFCB\uFE0F Training day' : '\uD83C\uDFCB\uFE0F Jour d\u2019entra\u00eenement') + _tNote));
+      p.appendChild(h('div', {'class': 'day-training-indicator'}, (_sdIsEN ? '\uD83C\uDFCB\uFE0F Training day' : '\uD83C\uDFCB\uFE0F Jour d\u2019entra\u00eenement') + _tNote));
+      p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:12px;padding:0 2px'},
+        _sdIsEN ? 'Carbs increased to fuel your workout \u00b7 post-workout protein timing optimized.'
+                : 'Glucides augment\u00e9s pour alimenter votre s\u00e9ance \u00b7 timing prot\u00e9ines post-entra\u00eenement optimis\u00e9.'));
     } else {
-      p.appendChild(h('div', {'class': 'day-rest-indicator'}, (window.isEnglish && window.isEnglish() ? '\uD83D\uDE34 Rest day \u2014 adjusted calories (\u221210%)' : '\uD83D\uDE34 Jour de repos \u2014 calories adapt\u00e9es (\u221210%)')));
+      p.appendChild(h('div', {'class': 'day-rest-indicator'}, (_sdIsEN ? '\uD83D\uDE34 Rest day \u2014 adjusted calories (\u221210%)' : '\uD83D\uDE34 Jour de repos \u2014 calories adapt\u00e9es (\u221210%)')));
+      p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:12px;padding:0 2px'},
+        _sdIsEN ? 'Calories slightly reduced \u00b7 proteins maintained to preserve and rebuild muscle.'
+                : 'Calories l\u00e9g\u00e8rement r\u00e9duites \u00b7 prot\u00e9ines maintenues pour pr\u00e9server et reconstruire le muscle.'));
     }
   }
 
@@ -3778,7 +3824,7 @@ function renderStep9(p) {
     if (window.isFreeMeal ? window.isFreeMeal(r) : (r.n === 'Repas libre')) {
       card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange-ink,#7A3B0E);margin-bottom:4px;'}, (window.isEnglish && window.isEnglish() ? '◦ To customize — no recipe available with your filters' : '◦ À personnaliser — aucune recette disponible avec vos filtres')));
     }
-    card.appendChild(h('div', {'class': 'meal-kcal'}, (r.k || 0) + ' kcal'));
+    card.appendChild(h('div', {'class': 'meal-kcal'}, (r.k || 0) + ' kcal' + (tgtCal > 0 && (r.k||0) > 0 ? ' \u00b7 ' + Math.round((r.k || 0) / tgtCal * 100) + '%' : '')));
     var mc = h('div', {'class': 'meal-macros'});
     var _microMacroStyle = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);';
     mc.appendChild(h('span', {title:(window.isEnglish && window.isEnglish() ? 'Carbs' : 'Glucides'), style:_microMacroStyle}, 'GLU. ' + (r.g || 0) + 'g'));

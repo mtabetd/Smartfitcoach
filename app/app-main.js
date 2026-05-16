@@ -3297,7 +3297,19 @@ function renderPostSessionPanel(data) {
 
     var s1Sub = document.createElement('div');
     s1Sub.style.cssText = 'font-family:Georgia,serif;font-size:16px;color:var(--grey,#6B6B65);font-style:italic;margin-bottom:28px;';
-    s1Sub.textContent = isEn ? s1n + ' sessions. None skipped.' : s1n + ' séances. Aucune abandonnée.';
+    (function() {
+      var _s1sub = '';
+      if (s1n === 1) {
+        _s1sub = isEn ? 'First session. The foundations are set.' : 'Première séance. Les bases sont posées.';
+      } else if (s1n <= 4) {
+        _s1sub = isEn ? 'Session ' + s1n + '. The habit is being built.' : 'Séance ' + s1n + '. L\'habitude se construit.';
+      } else if (s1n < 20) {
+        _s1sub = isEn ? s1n + ' sessions. Consistent.' : s1n + ' séances. Constant.';
+      } else {
+        _s1sub = isEn ? s1n + ' sessions. None skipped.' : s1n + ' séances. Aucune abandonnée.';
+      }
+      s1Sub.textContent = _s1sub;
+    })();
     inner.appendChild(s1Sub);
 
     var s1Sep = document.createElement('div');
@@ -3305,10 +3317,16 @@ function renderPostSessionPanel(data) {
     inner.appendChild(s1Sep);
 
     var s1Data = document.createElement('div');
-    s1Data.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);letter-spacing:1px;text-align:center;margin-bottom:32px;';
+    s1Data.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);letter-spacing:1px;text-align:center;margin-bottom:16px;';
     var _loadLabels1 = { light: isEn ? 'Light' : 'Légère', moderate: isEn ? 'Moderate' : 'Modérée', heavy: isEn ? 'Heavy' : 'Lourde', max: isEn ? 'Max' : 'Maximale' };
     s1Data.textContent = data.duration + ' min  ·  ' + data.kcalTotal + ' kcal  ·  ' + (_loadLabels1[data.load] || data.load);
     inner.appendChild(s1Data);
+    if (data.load === 'heavy' || data.load === 'max') {
+      var s1LoadCtx = document.createElement('div');
+      s1LoadCtx.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);font-style:italic;margin-bottom:20px;text-align:center;';
+      s1LoadCtx.textContent = isEn ? 'Heavy session — nutrition and sleep priority.' : 'Séance intense — nutrition et sommeil prioritaires.';
+      inner.appendChild(s1LoadCtx);
+    }
 
     var s1Btn = document.createElement('button');
     s1Btn.style.cssText = 'width:100%;padding:16px;background:var(--black,#0A0A09);color:#FAFAF7;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;min-height:52px;';

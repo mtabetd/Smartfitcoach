@@ -7335,6 +7335,28 @@ function renderMusculationProgram(p) {
  }
 
  p.appendChild(h('p', {'class': 'subtitle'}, S.sportDays + ' ' + (window.isEnglish && window.isEnglish() ? 'days/week \u2014 ' : 'jours/semaine \u2014 ') + goalNames));
+ (function() {
+  var _aeIsEN = window.isEnglish && window.isEnglish();
+  var _aeLevel = (S.sportLevel || S.muscuLevel || '');
+  var _aeGoal = (typeof S.goal === 'string') ? S.goal : '';
+  var _aeLine = '';
+  if (_aeLevel === 'beginner' || _aeLevel === 'debutant') {
+   _aeLine = _aeIsEN ? 'Priority: perfect technique before load.' : 'Priorit\u00e9 : technique parfaite avant la charge.';
+  } else if (_aeGoal === 'cut' || _aeGoal === 'shred') {
+   _aeLine = _aeIsEN ? 'Focus: preserve strength in deficit \u00b7 controlled volume.' : 'Focus : pr\u00e9server la force en d\u00e9ficit \u00b7 volume contr\u00f4l\u00e9.';
+  } else if (_aeGoal === 'bulk' || _aeGoal === 'lean_bulk') {
+   var _aeWk = (typeof sfcGetEffectiveWeek === 'function') ? sfcGetEffectiveWeek() : (S.muscuWeek || 1);
+   _aeWk = (isNaN(_aeWk) || _aeWk < 1) ? 1 : _aeWk;
+   _aeLine = _aeIsEN ? 'Focus: progressive overload \u00b7 volume build \u00b7 wk. ' + _aeWk + '/7.' : 'Focus : surcharge progressive \u00b7 construction volume \u00b7 sem. ' + _aeWk + '/7.';
+  } else if (_aeGoal === 'sport' || _aeGoal === 'performance') {
+   _aeLine = _aeIsEN ? 'Focus: work capacity \u00b7 performance \u00b7 recovery quality.' : 'Focus : capacit\u00e9 de travail \u00b7 performance \u00b7 qualit\u00e9 de r\u00e9cup\u00e9ration.';
+  } else if (_aeGoal === 'maintain') {
+   _aeLine = _aeIsEN ? 'Focus: maintain muscle mass \u00b7 stable composition.' : 'Focus : maintien de la masse musculaire \u00b7 composition stable.';
+  }
+  if (_aeLine) {
+   p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:8px;font-style:italic'}, _aeLine));
+  }
+ })();
  if (window.TIPS) TIPS.renderTip(p, 'sportProgram');
 
  // ─── SUIVI 7 SEMAINES (collapsible) ───
@@ -7601,22 +7623,36 @@ function renderMusculationProgram(p) {
       var _exMeta = (exo.sets || '') + ' ' + (window.isEnglish && window.isEnglish() ? 'sets \u00d7 ' : 's\u00e9ries \u00d7 ') + (exo.reps || '') + ' reps \u00b7 ' + (window.isEnglish && window.isEnglish() ? 'Rest ' : 'Repos ') + (exo.rest || '90s');
       if (exo.muscle) _exMeta += ' \u2014 ' + exo.muscle;
       _exCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px'}, _exMeta));
-      // Equipment tag
-      if (exo.equipment) {
-       _exCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-bottom:6px'}, exo.equipment));
-      }
-      // Technique (full text, not truncated)
-      if (exo.technique) {
-       _exCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey);margin-top:2px;line-height:1.6;border-top:1px solid var(--border);padding-top:8px'}, exo.technique));
-      }
-      // RIR target badge
-      if (exo.rirTarget !== undefined) {
-       var _rirColors = {0:'var(--error,#7A1F1F)', 1:'var(--error,#7A1F1F)', 2:'var(--orange-ink,#7A3B0E)', 3:'var(--orange-ink,#7A3B0E)', 4:'var(--success,#3E5C3A)'};
-       var _rirC = _rirColors[exo.rirTarget] || 'var(--orange-ink,#7A3B0E)';
-       var _rirBadge = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:' + _rirC + ';margin-top:6px;padding:3px 8px;background:rgba(232,111,30,0.06);display:inline-block;border-radius:2px'});
-       _rirBadge.appendChild(termTooltip('RIR', (window.isEnglish && window.isEnglish() ? 'Reps In Reserve — number of reps you could still do before muscle failure' : 'Reps In Reserve — nombre de reps que vous pourriez encore faire avant l\'\u00e9chec musculaire')));
-       var _rirIsEN = window.isEnglish && window.isEnglish(); _rirBadge.appendChild(h('span', {}, '\u00a0' + (_rirIsEN ? 'target' : 'cible') + '\u00a0: ' + exo.rirTarget + (exo.rirTarget === 0 ? ' \u2014 ' + (_rirIsEN ? 'failure' : '\u00e9chec') : exo.rirTarget === 1 ? ' \u2014 ' + (_rirIsEN ? 'near-failure' : 'quasi-\u00e9chec') : exo.rirTarget === 2 ? ' \u2014 ' + (_rirIsEN ? 'intense effort' : 'effort intense') : exo.rirTarget === 3 ? ' \u2014 ' + (_rirIsEN ? 'moderate' : 'mod\u00e9r\u00e9') : ' \u2014 ' + (_rirIsEN ? 'light' : 'l\u00e9ger'))));
-       _exCard.appendChild(_rirBadge);
+      // Progressive disclosure: equipment / technique / RIR behind expand
+      var _sfcHasDetails = exo.equipment || exo.technique || exo.rirTarget !== undefined;
+      if (_sfcHasDetails) {
+       var _sfcExKey = (exo.name || exo.n || '').replace(/\s+/g, '_').slice(0, 40);
+       if (!S._sfcExDetails) S._sfcExDetails = {};
+       var _sfcExOpen = !!S._sfcExDetails[_sfcExKey];
+       var _sfcIsEN = window.isEnglish && window.isEnglish();
+       var _sfcToggle = h('button', {
+        style: 'background:none;border:none;padding:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);cursor:pointer;margin-top:4px;min-height:32px;display:block',
+        onclick: (function(_k) { return function(e) { e.stopPropagation(); if (!S._sfcExDetails) S._sfcExDetails = {}; S._sfcExDetails[_k] = !S._sfcExDetails[_k]; window.render(); }; })(_sfcExKey)
+       }, (_sfcExOpen ? '\u25b2 ' : '\u25bc ') + (_sfcIsEN ? 'Details' : 'D\u00e9tails'));
+       _exCard.appendChild(_sfcToggle);
+       if (_sfcExOpen) {
+        var _sfcDetailDiv = h('div', {style: 'margin-top:8px;padding-top:8px;border-top:1px solid var(--border)'});
+        if (exo.equipment) {
+         _sfcDetailDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-bottom:6px'}, exo.equipment));
+        }
+        if (exo.technique) {
+         _sfcDetailDiv.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey);line-height:1.6;margin-top:2px'}, exo.technique));
+        }
+        if (exo.rirTarget !== undefined) {
+         var _rirColors2 = {0:'var(--error,#7A1F1F)', 1:'var(--error,#7A1F1F)', 2:'var(--orange-ink,#7A3B0E)', 3:'var(--orange-ink,#7A3B0E)', 4:'var(--success,#3E5C3A)'};
+         var _rirC2 = _rirColors2[exo.rirTarget] || 'var(--orange-ink,#7A3B0E)';
+         var _rirBadge2 = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:' + _rirC2 + ';margin-top:6px;padding:3px 8px;background:rgba(232,111,30,0.06);display:inline-block;border-radius:2px'});
+         _rirBadge2.appendChild(termTooltip('RIR', (_sfcIsEN ? 'Reps In Reserve \u2014 number of reps you could still do before muscle failure' : 'Reps In Reserve \u2014 nombre de reps que vous pourriez encore faire avant l\'\u00e9chec musculaire')));
+         var _rirIsEN2 = _sfcIsEN; _rirBadge2.appendChild(h('span', {}, '\u00a0' + (_rirIsEN2 ? 'target' : 'cible') + '\u00a0: ' + exo.rirTarget + (exo.rirTarget === 0 ? ' \u2014 ' + (_rirIsEN2 ? 'failure' : '\u00e9chec') : exo.rirTarget === 1 ? ' \u2014 ' + (_rirIsEN2 ? 'near-failure' : 'quasi-\u00e9chec') : exo.rirTarget === 2 ? ' \u2014 ' + (_rirIsEN2 ? 'intense effort' : 'effort intense') : exo.rirTarget === 3 ? ' \u2014 ' + (_rirIsEN2 ? 'moderate' : 'mod\u00e9r\u00e9') : ' \u2014 ' + (_rirIsEN2 ? 'light' : 'l\u00e9ger'))));
+         _sfcDetailDiv.appendChild(_rirBadge2);
+        }
+        _exCard.appendChild(_sfcDetailDiv);
+       }
       }
       _sfcSection.appendChild(_exCard);
      });
@@ -7772,6 +7808,38 @@ function renderMusculationProgram(p) {
    }
    S._selectedSportDayDate = _sportTodayKey;
  }
+
+ // ─── COACHING SNAPSHOT (Impact First — before day tabs) ─────────────────────
+ (function() {
+  if (!S.sportProgram || !S.sportProgram.length) return;
+  var _wk = (typeof sfcGetEffectiveWeek === 'function') ? sfcGetEffectiveWeek() : (S.muscuWeek || 1);
+  var _ph = (typeof getMuscuPhase === 'function') ? getMuscuPhase(_wk) : null;
+  var _isEN = window.isEnglish && window.isEnglish();
+  var _totalSess = S.sportDays || S.sportProgram.length;
+  var _now = new Date();
+  var _monDate = new Date(_now);
+  _monDate.setDate(_now.getDate() - (_now.getDay() + 6) % 7);
+  _monDate.setHours(0, 0, 0, 0);
+  var _sessDone = 0;
+  if (S.muscuSessionLog) {
+   Object.keys(S.muscuSessionLog).forEach(function(d) {
+    var _dd = new Date(d + 'T00:00:00');
+    if (_dd >= _monDate && _dd <= _now && Object.keys(S.muscuSessionLog[d] || {}).length > 0) _sessDone++;
+   });
+  }
+  var _phLabel = (_ph && _ph.label) ? _ph.label.split(' ')[0] : (_isEN ? 'Active' : 'Actif');
+  var snap = h('div', {style: 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border,#D8D8D0);border:1px solid var(--border,#D8D8D0);border-radius:2px;margin-bottom:12px;overflow:hidden'});
+  function _snapSportCell(val, label) {
+   var cell = h('div', {style: 'background:var(--ivory,#FAF9F6);padding:10px 8px;text-align:center'});
+   cell.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:var(--black,#0A0A09);line-height:1.1'}, val));
+   cell.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:3px;line-height:1.3'}, label));
+   return cell;
+  }
+  snap.appendChild(_snapSportCell((_isEN ? 'W' : 'S') + _wk + '/7', _isEN ? 'Week cycle' : 'Sem. cycle'));
+  snap.appendChild(_snapSportCell(_sessDone + '/' + _totalSess, _isEN ? 'Sessions done' : 'Séances / sem.'));
+  snap.appendChild(_snapSportCell(_phLabel, _isEN ? 'Phase' : 'Phase'));
+  p.appendChild(snap);
+ })();
 
  var tabs = h('div', {'class': 'day-tabs'});
  var _dayAbbrFR = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
@@ -7965,9 +8033,30 @@ function renderMusculationProgram(p) {
    _bLine2.textContent = _bTargetText + (_bTargetDelta ? '  ·  ' + _bTargetDelta : '');
    _brief.appendChild(_bLine2);
 
+   var _bPhaseIntent = (function() {
+     var _bWk = (typeof sfcGetEffectiveWeek === 'function') ? sfcGetEffectiveWeek() : (S.muscuWeek || 1);
+     var _bPh = (typeof getMuscuPhase === 'function') ? getMuscuPhase(_bWk) : null;
+     var _bPhId = _bPh ? (_bPh.id || '') : '';
+     if (S.sportLevel === 'beginner' || S.muscuLevel === 'beginner') {
+       return _isEn ? 'Priority: perfect technique on every rep.' : 'Priorité : technique parfaite sur chaque répétition.';
+     }
+     if (_bPhId === 'adaptation') return _isEn ? 'Adaptation phase — master technique before adding load.' : 'Phase d\'adaptation — maîtrise technique avant la charge.';
+     if (_bPhId === 'progression') return _isEn ? 'Progression — increase loads progressively, reps then weight.' : 'Progression — augmentez charges progressivement, reps puis poids.';
+     if (_bPhId === 'intensification') return _isEn ? 'Intensification — push the load, aim for progressive overload.' : 'Intensification — poussez la charge, visez la surcharge progressive.';
+     if (_bPhId === 'decharge') return _isEn ? 'Deload week — active recovery, reduced load.' : 'Semaine de décharge — récupération active, charge réduite.';
+     return '';
+   })();
+   if (_bPhaseIntent) {
+     _bLine2.style.marginBottom = '10px';
+     var _bIntentDiv = document.createElement('div');
+     _bIntentDiv.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);font-style:italic;margin-bottom:14px;padding:8px 10px;background:var(--ivory2,#F4F2EB);border-left:2px solid var(--border,#D8D8D0);';
+     _bIntentDiv.textContent = _bPhaseIntent;
+     _brief.appendChild(_bIntentDiv);
+   }
+
    var _bBtn = document.createElement('button');
    _bBtn.style.cssText = 'width:100%;padding:14px;background:var(--black,#0A0A09);color:#FAFAF7;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;min-height:44px;';
-   _bBtn.textContent = _isEn ? '▶ I CONTINUE' : '▶ JE CONTINUE';
+   _bBtn.textContent = _isEn ? '▶ START THE SESSION' : '▶ DÉMARRER LA SÉANCE';
    _bBtn.onclick = function() { S._briefDismissedKey = _bKey; S._sessionStartTime = S._sessionStartTime || Date.now(); if (window.render) window.render(); };
    _brief.appendChild(_bBtn);
    p.appendChild(_brief);
