@@ -3,7 +3,7 @@
  * Copyright (c) 2024-2026 SmartFitCoach. All rights reserved.
  */
 /* ============================================================
-   EXERCISE-VIDEOS.JS — Stratégie vidéo de confiance v3
+   EXERCISE-VIDEOS.JS — Stratégie vidéo de confiance v5
 
    Architecture (2026-05) :
    • URLs filtrées par CHAÎNE :
@@ -11,28 +11,110 @@
      → seules les vidéos du canal choisi apparaissent.
      → élimine influenceurs, clickbait, shorts parasites.
 
-   Canaux par niveau + langue :
+   Canaux par niveau + langue (voir TRUSTED_VIDEO_SOURCES) :
    - Débutant FR  → @TiboInShape  (8.7M, pédagogue FR)
    - Débutant EN  → @athleanx    (14M, Jeff Cavaliere)
    - Inter        → @athleanx    (technique + science)
    - Avancé       → @JeffNippard (peer-reviewed, hypertrophie)
    - CrossFit     → @CrossFit    (officiel, gymnique/oly)
-   - Hyrox        → @CrossFit    (officiel, fonctionnel)
 
-   Fallback exercice inconnu :
-   → YouTube search général + filtre vidéos sp=EgIYAQ%3D%3D
+   Résolution en 4 niveaux (voir _resolveKey) :
+   1. EXACT   — clé directe dans CURATED_QUERIES / CF_QUERIES
+   2. ALIAS   — abréviation/variante dans EXERCISE_ALIASES
+   3. PARTIAL — match partiel sur les premiers tokens
+   4. FALLBACK — recherche générale + filtre vidéos YouTube
+
+   Isolation YouTube : _buildChannelUrl / _buildFallbackUrl
+   → changer ces 2 fonctions suffit si YouTube migre son format.
    ============================================================ */
 (function() {
   'use strict';
 
-  // ─── Handles YouTube des canaux de confiance ──────────────────────────────
+  // ─── Isolation format URL YouTube ─────────────────────────────────────────
+  // Point unique de changement si YouTube modifie sa structure d'URL.
+  function _buildChannelUrl(handle, query) {
+    return 'https://www.youtube.com/@' + handle + '/search?query=' + encodeURIComponent(query);
+  }
+  function _buildFallbackUrl(query) {
+    return 'https://www.youtube.com/results?search_query='
+      + encodeURIComponent(query) + '&sp=EgIYAQ%253D%253D';
+  }
+
+  // ─── Niveaux de confiance ──────────────────────────────────────────────────
+  var CONF = {
+    EXACT:    4,  // Clé directe dans CURATED_QUERIES — meilleure qualité
+    ALIAS:    3,  // Alias/abréviation → clé curatée — excellente qualité
+    PARTIAL:  2,  // Match partiel sur tokens — bonne qualité
+    FALLBACK: 1   // Recherche générale YouTube + filtre vidéo — acceptable
+  };
+
+  // ─── Registre des sources de confiance ────────────────────────────────────
+  // Extensible : ajouter une entrée ici suffit pour supporter un nouveau canal.
+  var TRUSTED_VIDEO_SOURCES = {
+    fr_beginner: {
+      handle:         'TiboInShape',
+      name:           'Tibo InShape',
+      locale:         'fr',
+      levels:         [1],
+      qualityScore:   9,
+      educationScore: 9,
+      stabilityScore: 9,
+      specialties:    ['musculation', 'nutrition', 'débutants'],
+      fallbackPriority: 1
+    },
+    muscu_inter: {
+      handle:         'athleanx',
+      name:           'AthleanX',
+      locale:         'any',
+      levels:         [1, 2],
+      qualityScore:   10,
+      educationScore: 10,
+      stabilityScore: 10,
+      specialties:    ['biomécanique', 'prévention blessures', 'force', 'muscle'],
+      fallbackPriority: 2
+    },
+    muscu_advanced: {
+      handle:         'JeffNippard',
+      name:           'Jeff Nippard',
+      locale:         'any',
+      levels:         [3],
+      qualityScore:   10,
+      educationScore: 10,
+      stabilityScore: 9,
+      specialties:    ['hypertrophie', 'evidence-based', 'powerbuilding'],
+      fallbackPriority: 3
+    },
+    crossfit_official: {
+      handle:         'CrossFit',
+      name:           'CrossFit',
+      locale:         'any',
+      levels:         [1, 2, 3],
+      qualityScore:   9,
+      educationScore: 9,
+      stabilityScore: 10,
+      specialties:    ['crossfit', 'haltérophilie olympique', 'gymnastique', 'hyrox'],
+      fallbackPriority: 1
+    }
+  };
+
+  // Métadonnées de version — utile pour audits et diagnostics
+  var _META = {
+    version:          '5.0',
+    urlStrategy:      'channel-search',    // '@handle/search?query='
+    fallbackStrategy: 'video-filter',      // 'results?...&sp=EgIYAQ'
+    exerciseCoverage: 339,                 // entrées CURATED_QUERIES
+    cfCoverage:       86,                  // entrées CF_QUERIES
+    auditDate:        '2026-05'
+  };
+
+  // Rétro-compat (ancienne forme CHANNEL_INFO, alias vers TRUSTED_VIDEO_SOURCES)
   var CHANNEL_INFO = {
-    fr_beginner: { handle: 'TiboInShape',  name: 'Tibo InShape' },
-    en_beginner: { handle: 'athleanx',     name: 'AthleanX'     },
-    intermediate:{ handle: 'athleanx',     name: 'AthleanX'     },
-    advanced:    { handle: 'JeffNippard',  name: 'Jeff Nippard' },
-    crossfit:    { handle: 'CrossFit',     name: 'CrossFit'     },
-    hyrox:       { handle: 'CrossFit',     name: 'CrossFit'     }
+    fr_beginner:  TRUSTED_VIDEO_SOURCES.fr_beginner,
+    en_beginner:  TRUSTED_VIDEO_SOURCES.muscu_inter,
+    intermediate: TRUSTED_VIDEO_SOURCES.muscu_inter,
+    advanced:     TRUSTED_VIDEO_SOURCES.muscu_advanced,
+    crossfit:     TRUSTED_VIDEO_SOURCES.crossfit_official,
+    hyrox:        TRUSTED_VIDEO_SOURCES.crossfit_official
   };
 
   // Rétro-compat (ancienne forme, exposée en _CHANNELS)
@@ -639,6 +721,183 @@
     'rowing hyrox':              'rowing machine hyrox technique'
   };
 
+  // ─── Aliases muscu : abréviations / variantes → clé CURATED_QUERIES ─────
+  // Permet aux futurs exercices d'hériter automatiquement d'une bonne vidéo
+  // sans nécessiter d'entrée manuelle dans CURATED_QUERIES.
+  // Valeurs = clés normalisées valides dans CURATED_QUERIES.
+  var EXERCISE_ALIASES = {
+    // Pectoraux
+    'bench':                   'developpe couche',
+    'bench press':             'developpe couche',
+    'bb bench':                'developpe couche',
+    'bb bench press':          'developpe couche',
+    'db press':                'developpe halteres couche',
+    'dumbbell press':          'developpe halteres couche',
+    'incline bench':           'developpe incline',
+    'incline press':           'developpe incline',
+    'incline dumbbell':        'developpe incline halteres',
+    'decline bench':           'developpe decline',
+    'cgbp':                    'close grip bench press',
+    'close grip':              'close grip bench press',
+    'push up':                 'pompes classiques',
+    'push ups':                'pompes classiques',
+    'pushup':                  'pompes classiques',
+    'pushups':                 'pompes classiques',
+    'pompes':                  'pompes classiques',
+    'chest fly':               'ecarte halteres couche',
+    'db fly':                  'ecarte halteres couche',
+    'cable fly':               'cable crossover',
+    'pec fly':                 'ecarte halteres couche',
+    'butterfly':               'pec deck',
+    // Dos
+    'pull up':                 'tractions',
+    'pull ups':                'tractions',
+    'pullup':                  'tractions',
+    'pullups':                 'tractions',
+    'chin up':                 'chin ups',
+    'chin ups':                'chin ups',
+    'barbell row':             'rowing barre',
+    'bb row':                  'rowing barre',
+    'bent over row':           'rowing barre',
+    'db row':                  'rowing haltere',
+    'dumbbell row':            'rowing haltere',
+    'cable row':               'rowing assis cable',
+    'seated row':              'rowing assis cable',
+    'lat pulldown':            'tirage vertical poulie',
+    'lat pull':                'tirage vertical poulie',
+    'tirage poulie':           'tirage vertical poulie',
+    'lat pull down':           'tirage vertical poulie',
+    'dl':                      'deadlift',
+    'sumo dl':                 'sumo deadlift',
+    'stiff leg':               'romanian deadlift',
+    'upright row':             'tirage menton',
+    'shrug':                   'shrug barre',
+    'db shrug':                'shrug halteres',
+    // Épaules
+    'ohp':                     'developpe militaire',
+    'overhead press':          'developpe militaire',
+    'military press':          'developpe militaire',
+    'shoulder press':          'developpe militaire',
+    'seated press':            'developpe halteres assis',
+    'db shoulder press':       'developpe halteres assis',
+    'arnold press':            'developpe arnold',
+    'lateral raise':           'elevations laterales',
+    'lat raise':               'elevations laterales',
+    'side raise':              'elevations laterales',
+    'side lateral':            'elevations laterales',
+    'front raise':             'elevations frontales',
+    'rear delt':               'oiseau halteres',
+    'rear delt fly':           'oiseau halteres',
+    'rear fly':                'oiseau halteres',
+    // Biceps
+    'barbell curl':            'curl barre',
+    'bb curl':                 'curl barre',
+    'ez curl':                 'curl ez barre',
+    'ez bar curl':             'curl ez barre',
+    'db curl':                 'curl haltere',
+    'dumbbell curl':           'curl haltere',
+    'hammer curl':             'curl marteau',
+    'preacher curl':           'curl pupitre',
+    'scott curl':              'curl pupitre',
+    'concentration curl':      'curl concentre',
+    'cable curl':              'curl cable basse poulie',
+    // Triceps
+    'tricep pushdown':         'extension triceps poulie',
+    'rope pushdown':           'pushdown cable corde',
+    'bar pushdown':            'pushdown cable barre',
+    'skull crusher':           'extension triceps barre',
+    'skull crushers':          'skull crushers ez',
+    'skullcrusher':            'extension triceps barre',
+    'overhead extension':      'overhead extension cable',
+    'overhead tri':            'overhead extension cable',
+    'tricep extension':        'extension triceps barre',
+    'tri pushdown':            'extension triceps poulie',
+    'kickback':                'kickback triceps',
+    'tricep kickback':         'kickback triceps',
+    // Jambes
+    'lunge':                   'fentes avant',
+    'lunges':                  'fentes avant',
+    'walking lunge':           'fentes marchees',
+    'walking lunges':          'fentes marchees',
+    'split squat':             'split squat bulgare',
+    'bulgarian':               'split squat bulgare',
+    'bulgarian split':         'split squat bulgare',
+    'bulgarian split squat':   'split squat bulgare',
+    'leg extension':           'leg extension',
+    'lying leg curl':          'leg curl couche',
+    'seated leg curl':         'leg curl assis',
+    // Fessiers
+    'cable kickback':          'kickback cable fessier',
+    'glute kickback':          'kickback cable fessier',
+    'donkey kick':             'donkey kicks',
+    // Mollets
+    'calf raise':              'mollets debout',
+    'calf raises':             'mollets debout',
+    'standing calf':           'mollets debout',
+    'seated calf':             'mollets assis',
+    'calf press':              'mollets leg press',
+    // Core
+    'plank':                   'planche',
+    'side plank':              'gainage lateral',
+    'deadbug':                 'dead bug',
+    'hollow hold':             'hollow body hold',
+    'hollow body':             'hollow body hold',
+    'ab wheel':                'roulette abdominale',
+    'ab rollout':              'ab rollout sur genoux',
+    // Générique
+    'farmer walk':             'farmer carry',
+    'farmers walk':            'farmer carry',
+    'farmers carry':           'farmer carry',
+    'jump rope':               'corde a sauter',
+    'rope jump':               'corde a sauter',
+    'mountain climber':        'mountain climbers',
+    // Variantes françaises courtes
+    'dev couche':              'developpe couche',
+    'dev incline':             'developpe incline',
+    'dev militaire':           'developpe militaire',
+    'souleve de terre':        'deadlift',
+    'squat bulgare':           'split squat bulgare',
+    'fente bulgare':           'split squat bulgare',
+    'tirage lat':              'tirage vertical poulie',
+    'tirage poulie haute':     'tirage vertical poulie'
+  };
+
+  // ─── Aliases CrossFit / Hyrox : abréviations → clé CF_QUERIES ───────────
+  var CF_ALIASES = {
+    'c2b':                     'chest to bar',
+    't2b':                     'toes to bar',
+    'ttb':                     'toes to bar',
+    'mu':                      'muscle up',
+    'ring mu':                 'muscle up anneau',
+    'bmu':                     'bar muscle up',
+    'bmup':                    'bar muscle up',
+    'hs push up':              'handstand push up',
+    'du':                      'double unders',
+    'dus':                     'double unders',
+    'kb swing':                'kettlebell swing',
+    'kb swings':               'kettlebell swing',
+    'american swing':          'american kettlebell swing',
+    'tgu':                     'turkish get up',
+    'p clean':                 'power clean',
+    'hang squat clean':        'hang squat clean',
+    'c&j':                     'clean and jerk',
+    'ohs':                     'overhead squat',
+    'kipping':                 'kipping pull up',
+    'kip':                     'kipping pull up',
+    'wbs':                     'wall balls',
+    'wb':                      'wall ball',
+    'bj':                      'box jump',
+    'bjo':                     'box jump over',
+    'airdyne':                 'assault bike',
+    'echo bike':               'assault bike',
+    'row':                     'rowing crossfit',
+    'erg':                     'ski erg',
+    'rope':                    'rope climb',
+    'db thruster':             'dumbbell thruster',
+    'ring dips':               'ring dip',
+    'sled':                    'sled push'
+  };
+
   function _normalizeName(name) {
     if (!name) return '';
     return String(name).toLowerCase()
@@ -654,9 +913,39 @@
   function _resolveChannel(lv) {
     var isEN = window.isEnglish && window.isEnglish();
     var level = (typeof lv === 'number' && lv >= 1 && lv <= 3) ? lv : 1;
-    if (level === 1 && !isEN) return CHANNEL_INFO.fr_beginner;
-    if (level <= 2)           return CHANNEL_INFO.intermediate;
-    return CHANNEL_INFO.advanced;
+    if (level === 1 && !isEN) return TRUSTED_VIDEO_SOURCES.fr_beginner;
+    if (level <= 2)           return TRUSTED_VIDEO_SOURCES.muscu_inter;
+    return TRUSTED_VIDEO_SOURCES.muscu_advanced;
+  }
+
+  // ─── Résolution intelligente en 4 niveaux ─────────────────────────────────
+  // 1. EXACT   — clé directe dans queryMap
+  // 2. ALIAS   — EXERCISE_ALIASES / CF_ALIASES → clé dans queryMap
+  // 3. PARTIAL — match partiel sur premiers tokens (≥2)
+  // 4. FALLBACK — aucune correspondance curatée
+  function _resolveKey(name, queryMap, aliasMap) {
+    var key = _normalizeName(name);
+    if (queryMap[key]) return { key: key, conf: CONF.EXACT };
+
+    var ak = aliasMap && aliasMap[key];
+    if (ak && queryMap[ak]) return { key: ak, conf: CONF.ALIAS };
+
+    var partial = _partialMatch(key, queryMap);
+    if (partial) return { key: partial, conf: CONF.PARTIAL };
+
+    return { key: key, conf: CONF.FALLBACK };
+  }
+
+  // Match partiel : tente des préfixes de longueur décroissante (min 2 tokens).
+  // Evite les faux positifs sur 1 token isolé.
+  function _partialMatch(key, queryMap) {
+    var tokens = key.split(' ');
+    if (tokens.length < 2) return null;
+    for (var len = tokens.length - 1; len >= 2; len--) {
+      var sub = tokens.slice(0, len).join(' ');
+      if (queryMap[sub]) return sub;
+    }
+    return null;
   }
 
   /**
@@ -671,45 +960,57 @@
    */
   function buildSmartVideoUrl(name, lv) {
     if (!name) return null;
-    var key = _normalizeName(name);
+    var resolved = _resolveKey(name, CURATED_QUERIES, EXERCISE_ALIASES);
     var chan = _resolveChannel(lv);
-    var baseQuery = CURATED_QUERIES[key];
+    var baseQuery = CURATED_QUERIES[resolved.key];
 
     if (baseQuery) {
-      var query = (chan.handle === 'TiboInShape' && FR_QUERIES[key])
-        ? FR_QUERIES[key]
+      var query = (chan.handle === 'TiboInShape' && FR_QUERIES[resolved.key])
+        ? FR_QUERIES[resolved.key]
         : baseQuery;
-      return 'https://www.youtube.com/@' + chan.handle
-        + '/search?query=' + encodeURIComponent(query);
+      return _buildChannelUrl(chan.handle, query);
     }
 
-    // Exercice inconnu : recherche générale + filtre vidéos uniquement
+    // Exercice non curé : recherche générale + filtre vidéos uniquement
     var isEN = window.isEnglish && window.isEnglish();
     var fallbackQ = isEN
-      ? (key + ' exercise form tutorial')
-      : (key + ' exercice technique tutoriel');
-    return 'https://www.youtube.com/results?search_query='
-      + encodeURIComponent(fallbackQ)
-      + '&sp=EgIYAQ%253D%253D';
+      ? (_normalizeName(name) + ' exercise form tutorial')
+      : (_normalizeName(name) + ' exercice technique tutoriel');
+    return _buildFallbackUrl(fallbackQ);
   }
 
   /**
    * buildCFVideoUrl(name)
-   * URL dédiée CrossFit / Haltérophilie / Hyrox → canal @CrossFit officiel.
-   * Fallback : YouTube search général + filtre vidéos + qualifier crossfit.
+   * URL CrossFit / Haltérophilie / Hyrox → canal @CrossFit officiel.
+   * Résolution en 4 niveaux via _resolveKey + CF_ALIASES.
    */
   function buildCFVideoUrl(name) {
     if (!name) return null;
-    var key = _normalizeName(name);
-    var cfQuery = CF_QUERIES[key];
+    var resolved = _resolveKey(name, CF_QUERIES, CF_ALIASES);
+    var cfQuery = CF_QUERIES[resolved.key];
 
-    if (cfQuery) {
-      return 'https://www.youtube.com/@CrossFit/search?query=' + encodeURIComponent(cfQuery);
-    }
+    if (cfQuery) return _buildChannelUrl('CrossFit', cfQuery);
 
-    return 'https://www.youtube.com/results?search_query='
-      + encodeURIComponent(name + ' crossfit technique tutorial')
-      + '&sp=EgIYAQ%253D%253D';
+    return _buildFallbackUrl(name + ' crossfit technique tutorial');
+  }
+
+  /**
+   * getVideoMeta(name, lv) → { url, confidence, label, channel, key }
+   * Retourne les métadonnées complètes du match vidéo.
+   * Utilisable par l'UI pour afficher le niveau de confiance ou adapter le CTA.
+   */
+  function getVideoMeta(name, lv) {
+    if (!name) return { url: null, confidence: 0, label: 'none', channel: null, key: '' };
+    var resolved = _resolveKey(name, CURATED_QUERIES, EXERCISE_ALIASES);
+    var chan = _resolveChannel(lv);
+    var labels = ['none', 'fallback', 'partial', 'alias', 'exact'];
+    return {
+      url:        buildSmartVideoUrl(name, lv),
+      confidence: resolved.conf,
+      label:      labels[resolved.conf] || 'fallback',
+      channel:    chan,
+      key:        resolved.key
+    };
   }
 
   /**
@@ -801,14 +1102,21 @@
 
   // ─── API publique ─────────────────────────────────────────────────────────
   window.EXERCISE_VIDEOS = {
+    // Fonctions publiques
     buildSmartVideoUrl: buildSmartVideoUrl,
     buildCFVideoUrl:    buildCFVideoUrl,
     getChannelInfo:     getChannelInfo,
+    getVideoMeta:       getVideoMeta,      // v5: confiance + métadonnées complètes
     openVideoModal:     openVideoModal,
+    // Données accessibles pour audit / debug
     _CURATED_QUERIES:   CURATED_QUERIES,
     _CF_QUERIES:        CF_QUERIES,
     _FR_QUERIES:        FR_QUERIES,
-    _CHANNELS:          CHANNELS
+    _EXERCISE_ALIASES:  EXERCISE_ALIASES,  // v5
+    _CF_ALIASES:        CF_ALIASES,        // v5
+    _SOURCES:           TRUSTED_VIDEO_SOURCES, // v5
+    _META:              _META,             // v5
+    _CHANNELS:          CHANNELS           // rétro-compat
   };
 
   // Compatibilité avec l'ancien appel getExerciseVideoUrl (app-sport.js legacy)
