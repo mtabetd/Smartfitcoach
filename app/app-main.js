@@ -3355,9 +3355,33 @@ function renderPostSessionPanel(data) {
       inner.appendChild(s2Reason);
     } else {
       var s2Stable = document.createElement('div');
-      s2Stable.style.cssText = 'font-family:Georgia,serif;font-size:16px;color:var(--grey,#6B6B65);font-style:italic;margin-bottom:24px;';
-      s2Stable.textContent = isEn ? 'Light session · Nutrition stable.' : 'Séance légère · Nutrition stable.';
+      s2Stable.style.cssText = 'font-family:Georgia,serif;font-size:17px;color:var(--black,#0A0A09);margin-bottom:10px;line-height:1.3;';
+      var _s2msg = (function() {
+        var _st = S.sportType || 'musculation';
+        var _ld = data.load || 'light';
+        var _nx = (data.totalSessions || 1) % 4;
+        var fr, en;
+        if (_st === 'running' || _st === 'cycling' || _st === 'triathlon') {
+          fr = ['Base aérobie renforcée. Les sorties légères construisent les performances dures.', 'Travail Z2 validé. Votre moteur absorbe la charge silencieusement.', 'Endurance composée. Les gains les plus durables se bâtissent ici.', 'Récupération aérobie. Votre moteur se reconstruit entre les efforts.'];
+          en = ['Aerobic base reinforced. Easy sessions build the hard ones.', 'Z2 work done. Your engine absorbs load silently.', 'Endurance compounding. The most durable gains are built here.', 'Aerobic recovery. Your engine rebuilds between efforts.'];
+        } else if (_st === 'crossfit') {
+          fr = ['SNC préservé. L\'intensité est une ressource — gérez-la.', 'La capacité se construit entre les efforts. Récupérer, c\'est s\'entraîner.', 'Les athlètes élites récupèrent aussi intelligemment qu\'ils s\'entraînent.', 'Volume contrôlé. Les semaines solides valent mieux que les séances isolées.'];
+          en = ['CNS preserved. Intensity is a resource — manage it.', 'Capacity builds between efforts. Recovery is training.', 'Elite athletes recover as intelligently as they train.', 'Controlled volume. Solid weeks beat isolated sessions.'];
+        } else if (_ld === 'moderate') {
+          fr = ['Travail effectué. Votre corps absorbe et revient plus fort.', 'L\'entraînement régulier construit le moteur. Cette séance compte.', 'Volume validé. L\'effet cumulé est silencieux mais réel.', 'Progression constante. Chaque séance validée est une brique posée.'];
+          en = ['Work done. Your body absorbs this and comes back stronger.', 'Consistent training builds the engine. This session counts.', 'Volume logged. The compound effect is silent but real.', 'Steady progress. Every session logged is a brick laid.'];
+        } else {
+          fr = ['Récupération active. Les adaptations se consolident entre les séances.', 'Cohérence > intensité. Cette séance compte autant que les plus lourdes.', 'Système nerveux préservé. Les adaptations continuent après la séance.', 'Volume contrôlé. Le progrès vit dans la régularité.'];
+          en = ['Active recovery. Adaptations consolidate between sessions.', 'Consistency > intensity. This session matters as much as the hardest ones.', 'Nervous system preserved. Adaptations continue post-session.', 'Controlled volume. Progress lives in regularity.'];
+        }
+        return isEn ? en[_nx] : fr[_nx];
+      })();
+      s2Stable.textContent = _s2msg;
       inner.appendChild(s2Stable);
+      var s2NutNote = document.createElement('div');
+      s2NutNote.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);letter-spacing:0.5px;margin-bottom:24px;';
+      s2NutNote.textContent = isEn ? 'Nutrition calibrated to today’s output.' : 'Nutrition calibrée sur la dépense du jour.';
+      inner.appendChild(s2NutNote);
     }
 
     var s2Sep = document.createElement('div');
@@ -3405,7 +3429,12 @@ function renderPostSessionPanel(data) {
 
     var s3Plan = document.createElement('div');
     s3Plan.style.cssText = 'font-family:Georgia,serif;font-size:14px;color:var(--grey,#6B6B65);font-style:italic;margin-bottom:32px;';
-    s3Plan.textContent = isEn ? 'The plan continues.' : 'Le plan continue.';
+    s3Plan.textContent = (function() {
+      var _s3n = data.totalSessions || 1;
+      if (_s3n < 5) return isEn ? 'Foundation. Every session is a habit being formed.' : 'Fondations. Chaque s\u00e9ance est une habitude qui se construit.';
+      if (_s3n < 20) return isEn ? 'Building momentum. The compound effect is real.' : '\u00c9lan en construction. L\'effet cumul\u00e9 est r\u00e9el.';
+      return isEn ? 'The engine holds. Precision and consistency \u2014 that\u2019s the formula.' : 'Le moteur tient. Pr\u00e9cision et r\u00e9gularit\u00e9 \u2014 c\'est la formule.';
+    })()
     inner.appendChild(s3Plan);
 
     var s3CoachBtn = document.createElement('button');

@@ -7338,20 +7338,47 @@ function renderMusculationProgram(p) {
  (function() {
   var _aeIsEN = window.isEnglish && window.isEnglish();
   var _aeLevel = (S.sportLevel || S.muscuLevel || '');
+  var _aeSport = S.sportType || 'musculation';
   var _aeGoal = (typeof S.goal === 'string') ? S.goal : '';
   var _aeLine = '';
-  if (_aeLevel === 'beginner' || _aeLevel === 'debutant') {
-   _aeLine = _aeIsEN ? 'Priority: perfect technique before load.' : 'Priorit\u00e9 : technique parfaite avant la charge.';
-  } else if (_aeGoal === 'cut' || _aeGoal === 'shred') {
-   _aeLine = _aeIsEN ? 'Focus: preserve strength in deficit \u00b7 controlled volume.' : 'Focus : pr\u00e9server la force en d\u00e9ficit \u00b7 volume contr\u00f4l\u00e9.';
-  } else if (_aeGoal === 'bulk' || _aeGoal === 'lean_bulk') {
-   var _aeWk = (typeof sfcGetEffectiveWeek === 'function') ? sfcGetEffectiveWeek() : (S.muscuWeek || 1);
-   _aeWk = (isNaN(_aeWk) || _aeWk < 1) ? 1 : _aeWk;
-   _aeLine = _aeIsEN ? 'Focus: progressive overload \u00b7 volume build \u00b7 wk. ' + _aeWk + '/7.' : 'Focus : surcharge progressive \u00b7 construction volume \u00b7 sem. ' + _aeWk + '/7.';
-  } else if (_aeGoal === 'sport' || _aeGoal === 'performance') {
-   _aeLine = _aeIsEN ? 'Focus: work capacity \u00b7 performance \u00b7 recovery quality.' : 'Focus : capacit\u00e9 de travail \u00b7 performance \u00b7 qualit\u00e9 de r\u00e9cup\u00e9ration.';
-  } else if (_aeGoal === 'maintain') {
-   _aeLine = _aeIsEN ? 'Focus: maintain muscle mass \u00b7 stable composition.' : 'Focus : maintien de la masse musculaire \u00b7 composition stable.';
+  var _aeBeginner = (_aeLevel === 'beginner' || _aeLevel === 'debutant');
+  if (_aeBeginner) {
+   if (_aeSport === 'running') _aeLine = _aeIsEN ? 'Ease in. Aerobic base first \u2014 speed comes with consistency.' : 'Construisez la base. La vitesse vient avec la r\u00e9gularit\u00e9.';
+   else if (_aeSport === 'crossfit') _aeLine = _aeIsEN ? 'Movement quality before intensity. Mechanics first, always.' : 'Qualit\u00e9 de mouvement avant intensit\u00e9. La m\u00e9canique d\'abord.';
+   else if (_aeSport === 'yoga') _aeLine = _aeIsEN ? 'Breath before depth. Alignment before flexibility.' : 'Respiration avant amplitude. Alignement avant souplesse.';
+   else if (_aeSport === 'calisthenics') _aeLine = _aeIsEN ? 'Control before reps. Own the position before adding volume.' : 'Contr\u00f4le avant reps. Ma\u00eetrisez la position avant le volume.';
+   else _aeLine = _aeIsEN ? 'Technique first. Load follows.' : 'Technique d\'abord. La charge suit.';
+  } else if (_aeSport === 'crossfit') {
+   var _cfLv = S.crossfitLevel || '';
+   _aeLine = (_cfLv === 'rx' || _cfLv === 'rx_plus')
+    ? (_aeIsEN ? 'CNS load management. Intensity is a tool \u2014 not a habit.' : 'Gestion SNC. L\'intensit\u00e9 est un outil \u2014 pas une habitude.')
+    : (_aeIsEN ? 'Engine + technique. Sustainable capacity over raw output.' : 'Moteur + technique. Capacit\u00e9 durable avant puissance brute.');
+  } else if (_aeSport === 'running') {
+   var _rg = S.runningGoal || '';
+   _aeLine = (_rg === 'marathon' || _rg === 'trail')
+    ? (_aeIsEN ? 'Aerobic economy. Easy days build the hard ones.' : '\u00c9conomie a\u00e9robie. Les jours faciles construisent les durs.')
+    : (_aeIsEN ? 'Build your engine. Pacing consistency beats raw effort.' : 'Construisez votre moteur. La r\u00e9gularit\u00e9 prime sur l\'effort brut.');
+  } else if (_aeSport === 'hyrox') {
+   _aeLine = _aeIsEN ? 'Hybrid load. Engine and strength must grow together.' : 'Charge hybride. Moteur et force progressent ensemble.';
+  } else if (_aeSport === 'cycling') {
+   _aeLine = _aeIsEN ? 'Aerobic base. Leg recovery shapes your next output.' : 'Base a\u00e9robie. La r\u00e9cup\u00e9ration musculaire construit la prochaine performance.';
+  } else if (_aeSport === 'yoga') {
+   _aeLine = _aeIsEN ? 'Nervous system quality. Recovery and mobility compound silently.' : 'Qualit\u00e9 nerveuse. R\u00e9cup\u00e9ration et mobilit\u00e9 progressent en profondeur.';
+  } else if (_aeSport === 'calisthenics') {
+   _aeLine = _aeIsEN ? 'Relative strength. Your body is the load \u2014 control is the metric.' : 'Force relative. Votre corps est la charge \u2014 le contr\u00f4le est la m\u00e9trique.';
+  } else if (_aeSport === 'triathlon') {
+   _aeLine = _aeIsEN ? 'Multi-system load. Recovery quality determines your next block.' : 'Charge multi-syst\u00e8mes. La r\u00e9cup\u00e9ration d\u00e9termine votre prochain bloc.';
+  } else {
+   if (_aeGoal === 'cut' || _aeGoal === 'shred') _aeLine = _aeIsEN ? 'Strength in deficit. Muscle is earned \u2014 protect it.' : 'Force en d\u00e9ficit. Le muscle est acquis \u2014 prot\u00e9gez-le.';
+   else if (_aeGoal === 'bulk' || _aeGoal === 'lean_bulk') {
+    var _aeWk = (typeof sfcGetEffectiveWeek === 'function') ? sfcGetEffectiveWeek() : (S.muscuWeek || 1);
+    _aeWk = (isNaN(_aeWk) || _aeWk < 1) ? 1 : _aeWk;
+    _aeLine = _aeIsEN ? 'Progressive overload \u00b7 wk. ' + _aeWk + '/7. Every kilo added is a statement.' : 'Surcharge progressive \u00b7 sem. ' + _aeWk + '/7. Chaque kilo ajout\u00e9 est une d\u00e9claration.';
+   } else if (_aeGoal === 'sport' || _aeGoal === 'performance') {
+    _aeLine = _aeIsEN ? 'Work capacity and recovery \u2014 the two levers of athletic performance.' : 'Capacit\u00e9 de travail et r\u00e9cup\u00e9ration \u2014 les deux leviers de la performance.';
+   } else if (_aeGoal === 'maintain') {
+    _aeLine = _aeIsEN ? 'Maintain force. Protect composition. Consistency is the strategy.' : 'Maintenez la force. Prot\u00e9gez la composition. La r\u00e9gularit\u00e9 est la strat\u00e9gie.';
+   }
   }
   if (_aeLine) {
    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:8px;font-style:italic'}, _aeLine));
@@ -8038,12 +8065,12 @@ function renderMusculationProgram(p) {
      var _bPh = (typeof getMuscuPhase === 'function') ? getMuscuPhase(_bWk) : null;
      var _bPhId = _bPh ? (_bPh.id || '') : '';
      if (S.sportLevel === 'beginner' || S.muscuLevel === 'beginner') {
-       return _isEn ? 'Priority: perfect technique on every rep.' : 'Priorité : technique parfaite sur chaque répétition.';
+       return _isEn ? 'Every rep teaches. Technique now, load later.' : 'Chaque r\u00e9p\u00e9tition enseigne. La technique maintenant, les charges apr\u00e8s.';
      }
-     if (_bPhId === 'adaptation') return _isEn ? 'Adaptation phase — master technique before adding load.' : 'Phase d\'adaptation — maîtrise technique avant la charge.';
-     if (_bPhId === 'progression') return _isEn ? 'Progression — increase loads progressively, reps then weight.' : 'Progression — augmentez charges progressivement, reps puis poids.';
-     if (_bPhId === 'intensification') return _isEn ? 'Intensification — push the load, aim for progressive overload.' : 'Intensification — poussez la charge, visez la surcharge progressive.';
-     if (_bPhId === 'decharge') return _isEn ? 'Deload week — active recovery, reduced load.' : 'Semaine de décharge — récupération active, charge réduite.';
+     if (_bPhId === 'adaptation') return _isEn ? 'Weeks 1\u20132. Read your body. Technique beats load. Always.' : 'Sem. 1\u20132. \u00c9coutez votre corps. La technique prime toujours sur la charge.';
+     if (_bPhId === 'progression') return _isEn ? 'The engine is rising. Add a rep before adding weight.' : 'Le moteur monte. Ajoutez une r\u00e9p\u00e9tition avant de monter le poids.';
+     if (_bPhId === 'intensification') return _isEn ? 'Heavy weeks. Push the load. Mark every kilo.' : 'Semaines lourdes. Poussez la charge. Marquez chaque kilo.';
+     if (_bPhId === 'decharge') return _isEn ? 'Step back to leap forward. Deload is not optional \u2014 it\u2019s the strategy.' : 'Reculer pour mieux avancer. La d\u00e9charge n\'est pas optionnelle \u2014 c\'est la strat\u00e9gie.';
      return '';
    })();
    if (_bPhaseIntent) {

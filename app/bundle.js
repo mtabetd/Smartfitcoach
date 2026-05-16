@@ -10530,9 +10530,33 @@ function renderPostSessionPanel(data) {
       inner.appendChild(s2Reason);
     } else {
       var s2Stable = document.createElement('div');
-      s2Stable.style.cssText = 'font-family:Georgia,serif;font-size:16px;color:var(--grey,#6B6B65);font-style:italic;margin-bottom:24px;';
-      s2Stable.textContent = isEn ? 'Light session · Nutrition stable.' : 'Séance légère · Nutrition stable.';
+      s2Stable.style.cssText = 'font-family:Georgia,serif;font-size:17px;color:var(--black,#0A0A09);margin-bottom:10px;line-height:1.3;';
+      var _s2msg = (function() {
+        var _st = S.sportType || 'musculation';
+        var _ld = data.load || 'light';
+        var _nx = (data.totalSessions || 1) % 4;
+        var fr, en;
+        if (_st === 'running' || _st === 'cycling' || _st === 'triathlon') {
+          fr = ['Base aérobie renforcée. Les sorties légères construisent les performances dures.', 'Travail Z2 validé. Votre moteur absorbe la charge silencieusement.', 'Endurance composée. Les gains les plus durables se bâtissent ici.', 'Récupération aérobie. Votre moteur se reconstruit entre les efforts.'];
+          en = ['Aerobic base reinforced. Easy sessions build the hard ones.', 'Z2 work done. Your engine absorbs load silently.', 'Endurance compounding. The most durable gains are built here.', 'Aerobic recovery. Your engine rebuilds between efforts.'];
+        } else if (_st === 'crossfit') {
+          fr = ['SNC préservé. L\'intensité est une ressource — gérez-la.', 'La capacité se construit entre les efforts. Récupérer, c\'est s\'entraîner.', 'Les athlètes élites récupèrent aussi intelligemment qu\'ils s\'entraînent.', 'Volume contrôlé. Les semaines solides valent mieux que les séances isolées.'];
+          en = ['CNS preserved. Intensity is a resource — manage it.', 'Capacity builds between efforts. Recovery is training.', 'Elite athletes recover as intelligently as they train.', 'Controlled volume. Solid weeks beat isolated sessions.'];
+        } else if (_ld === 'moderate') {
+          fr = ['Travail effectué. Votre corps absorbe et revient plus fort.', 'L\'entraînement régulier construit le moteur. Cette séance compte.', 'Volume validé. L\'effet cumulé est silencieux mais réel.', 'Progression constante. Chaque séance validée est une brique posée.'];
+          en = ['Work done. Your body absorbs this and comes back stronger.', 'Consistent training builds the engine. This session counts.', 'Volume logged. The compound effect is silent but real.', 'Steady progress. Every session logged is a brick laid.'];
+        } else {
+          fr = ['Récupération active. Les adaptations se consolident entre les séances.', 'Cohérence > intensité. Cette séance compte autant que les plus lourdes.', 'Système nerveux préservé. Les adaptations continuent après la séance.', 'Volume contrôlé. Le progrès vit dans la régularité.'];
+          en = ['Active recovery. Adaptations consolidate between sessions.', 'Consistency > intensity. This session matters as much as the hardest ones.', 'Nervous system preserved. Adaptations continue post-session.', 'Controlled volume. Progress lives in regularity.'];
+        }
+        return isEn ? en[_nx] : fr[_nx];
+      })();
+      s2Stable.textContent = _s2msg;
       inner.appendChild(s2Stable);
+      var s2NutNote = document.createElement('div');
+      s2NutNote.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);letter-spacing:0.5px;margin-bottom:24px;';
+      s2NutNote.textContent = isEn ? 'Nutrition calibrated to today’s output.' : 'Nutrition calibrée sur la dépense du jour.';
+      inner.appendChild(s2NutNote);
     }
 
     var s2Sep = document.createElement('div');
@@ -10580,7 +10604,12 @@ function renderPostSessionPanel(data) {
 
     var s3Plan = document.createElement('div');
     s3Plan.style.cssText = 'font-family:Georgia,serif;font-size:14px;color:var(--grey,#6B6B65);font-style:italic;margin-bottom:32px;';
-    s3Plan.textContent = isEn ? 'The plan continues.' : 'Le plan continue.';
+    s3Plan.textContent = (function() {
+      var _s3n = data.totalSessions || 1;
+      if (_s3n < 5) return isEn ? 'Foundation. Every session is a habit being formed.' : 'Fondations. Chaque s\u00e9ance est une habitude qui se construit.';
+      if (_s3n < 20) return isEn ? 'Building momentum. The compound effect is real.' : '\u00c9lan en construction. L\'effet cumul\u00e9 est r\u00e9el.';
+      return isEn ? 'The engine holds. Precision and consistency \u2014 that\u2019s the formula.' : 'Le moteur tient. Pr\u00e9cision et r\u00e9gularit\u00e9 \u2014 c\'est la formule.';
+    })()
     inner.appendChild(s3Plan);
 
     var s3CoachBtn = document.createElement('button');
@@ -18278,20 +18307,47 @@ function renderMusculationProgram(p) {
  (function() {
   var _aeIsEN = window.isEnglish && window.isEnglish();
   var _aeLevel = (S.sportLevel || S.muscuLevel || '');
+  var _aeSport = S.sportType || 'musculation';
   var _aeGoal = (typeof S.goal === 'string') ? S.goal : '';
   var _aeLine = '';
-  if (_aeLevel === 'beginner' || _aeLevel === 'debutant') {
-   _aeLine = _aeIsEN ? 'Priority: perfect technique before load.' : 'Priorit\u00e9 : technique parfaite avant la charge.';
-  } else if (_aeGoal === 'cut' || _aeGoal === 'shred') {
-   _aeLine = _aeIsEN ? 'Focus: preserve strength in deficit \u00b7 controlled volume.' : 'Focus : pr\u00e9server la force en d\u00e9ficit \u00b7 volume contr\u00f4l\u00e9.';
-  } else if (_aeGoal === 'bulk' || _aeGoal === 'lean_bulk') {
-   var _aeWk = (typeof sfcGetEffectiveWeek === 'function') ? sfcGetEffectiveWeek() : (S.muscuWeek || 1);
-   _aeWk = (isNaN(_aeWk) || _aeWk < 1) ? 1 : _aeWk;
-   _aeLine = _aeIsEN ? 'Focus: progressive overload \u00b7 volume build \u00b7 wk. ' + _aeWk + '/7.' : 'Focus : surcharge progressive \u00b7 construction volume \u00b7 sem. ' + _aeWk + '/7.';
-  } else if (_aeGoal === 'sport' || _aeGoal === 'performance') {
-   _aeLine = _aeIsEN ? 'Focus: work capacity \u00b7 performance \u00b7 recovery quality.' : 'Focus : capacit\u00e9 de travail \u00b7 performance \u00b7 qualit\u00e9 de r\u00e9cup\u00e9ration.';
-  } else if (_aeGoal === 'maintain') {
-   _aeLine = _aeIsEN ? 'Focus: maintain muscle mass \u00b7 stable composition.' : 'Focus : maintien de la masse musculaire \u00b7 composition stable.';
+  var _aeBeginner = (_aeLevel === 'beginner' || _aeLevel === 'debutant');
+  if (_aeBeginner) {
+   if (_aeSport === 'running') _aeLine = _aeIsEN ? 'Ease in. Aerobic base first \u2014 speed comes with consistency.' : 'Construisez la base. La vitesse vient avec la r\u00e9gularit\u00e9.';
+   else if (_aeSport === 'crossfit') _aeLine = _aeIsEN ? 'Movement quality before intensity. Mechanics first, always.' : 'Qualit\u00e9 de mouvement avant intensit\u00e9. La m\u00e9canique d\'abord.';
+   else if (_aeSport === 'yoga') _aeLine = _aeIsEN ? 'Breath before depth. Alignment before flexibility.' : 'Respiration avant amplitude. Alignement avant souplesse.';
+   else if (_aeSport === 'calisthenics') _aeLine = _aeIsEN ? 'Control before reps. Own the position before adding volume.' : 'Contr\u00f4le avant reps. Ma\u00eetrisez la position avant le volume.';
+   else _aeLine = _aeIsEN ? 'Technique first. Load follows.' : 'Technique d\'abord. La charge suit.';
+  } else if (_aeSport === 'crossfit') {
+   var _cfLv = S.crossfitLevel || '';
+   _aeLine = (_cfLv === 'rx' || _cfLv === 'rx_plus')
+    ? (_aeIsEN ? 'CNS load management. Intensity is a tool \u2014 not a habit.' : 'Gestion SNC. L\'intensit\u00e9 est un outil \u2014 pas une habitude.')
+    : (_aeIsEN ? 'Engine + technique. Sustainable capacity over raw output.' : 'Moteur + technique. Capacit\u00e9 durable avant puissance brute.');
+  } else if (_aeSport === 'running') {
+   var _rg = S.runningGoal || '';
+   _aeLine = (_rg === 'marathon' || _rg === 'trail')
+    ? (_aeIsEN ? 'Aerobic economy. Easy days build the hard ones.' : '\u00c9conomie a\u00e9robie. Les jours faciles construisent les durs.')
+    : (_aeIsEN ? 'Build your engine. Pacing consistency beats raw effort.' : 'Construisez votre moteur. La r\u00e9gularit\u00e9 prime sur l\'effort brut.');
+  } else if (_aeSport === 'hyrox') {
+   _aeLine = _aeIsEN ? 'Hybrid load. Engine and strength must grow together.' : 'Charge hybride. Moteur et force progressent ensemble.';
+  } else if (_aeSport === 'cycling') {
+   _aeLine = _aeIsEN ? 'Aerobic base. Leg recovery shapes your next output.' : 'Base a\u00e9robie. La r\u00e9cup\u00e9ration musculaire construit la prochaine performance.';
+  } else if (_aeSport === 'yoga') {
+   _aeLine = _aeIsEN ? 'Nervous system quality. Recovery and mobility compound silently.' : 'Qualit\u00e9 nerveuse. R\u00e9cup\u00e9ration et mobilit\u00e9 progressent en profondeur.';
+  } else if (_aeSport === 'calisthenics') {
+   _aeLine = _aeIsEN ? 'Relative strength. Your body is the load \u2014 control is the metric.' : 'Force relative. Votre corps est la charge \u2014 le contr\u00f4le est la m\u00e9trique.';
+  } else if (_aeSport === 'triathlon') {
+   _aeLine = _aeIsEN ? 'Multi-system load. Recovery quality determines your next block.' : 'Charge multi-syst\u00e8mes. La r\u00e9cup\u00e9ration d\u00e9termine votre prochain bloc.';
+  } else {
+   if (_aeGoal === 'cut' || _aeGoal === 'shred') _aeLine = _aeIsEN ? 'Strength in deficit. Muscle is earned \u2014 protect it.' : 'Force en d\u00e9ficit. Le muscle est acquis \u2014 prot\u00e9gez-le.';
+   else if (_aeGoal === 'bulk' || _aeGoal === 'lean_bulk') {
+    var _aeWk = (typeof sfcGetEffectiveWeek === 'function') ? sfcGetEffectiveWeek() : (S.muscuWeek || 1);
+    _aeWk = (isNaN(_aeWk) || _aeWk < 1) ? 1 : _aeWk;
+    _aeLine = _aeIsEN ? 'Progressive overload \u00b7 wk. ' + _aeWk + '/7. Every kilo added is a statement.' : 'Surcharge progressive \u00b7 sem. ' + _aeWk + '/7. Chaque kilo ajout\u00e9 est une d\u00e9claration.';
+   } else if (_aeGoal === 'sport' || _aeGoal === 'performance') {
+    _aeLine = _aeIsEN ? 'Work capacity and recovery \u2014 the two levers of athletic performance.' : 'Capacit\u00e9 de travail et r\u00e9cup\u00e9ration \u2014 les deux leviers de la performance.';
+   } else if (_aeGoal === 'maintain') {
+    _aeLine = _aeIsEN ? 'Maintain force. Protect composition. Consistency is the strategy.' : 'Maintenez la force. Prot\u00e9gez la composition. La r\u00e9gularit\u00e9 est la strat\u00e9gie.';
+   }
   }
   if (_aeLine) {
    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:8px;font-style:italic'}, _aeLine));
@@ -18978,12 +19034,12 @@ function renderMusculationProgram(p) {
      var _bPh = (typeof getMuscuPhase === 'function') ? getMuscuPhase(_bWk) : null;
      var _bPhId = _bPh ? (_bPh.id || '') : '';
      if (S.sportLevel === 'beginner' || S.muscuLevel === 'beginner') {
-       return _isEn ? 'Priority: perfect technique on every rep.' : 'Priorité : technique parfaite sur chaque répétition.';
+       return _isEn ? 'Every rep teaches. Technique now, load later.' : 'Chaque r\u00e9p\u00e9tition enseigne. La technique maintenant, les charges apr\u00e8s.';
      }
-     if (_bPhId === 'adaptation') return _isEn ? 'Adaptation phase — master technique before adding load.' : 'Phase d\'adaptation — maîtrise technique avant la charge.';
-     if (_bPhId === 'progression') return _isEn ? 'Progression — increase loads progressively, reps then weight.' : 'Progression — augmentez charges progressivement, reps puis poids.';
-     if (_bPhId === 'intensification') return _isEn ? 'Intensification — push the load, aim for progressive overload.' : 'Intensification — poussez la charge, visez la surcharge progressive.';
-     if (_bPhId === 'decharge') return _isEn ? 'Deload week — active recovery, reduced load.' : 'Semaine de décharge — récupération active, charge réduite.';
+     if (_bPhId === 'adaptation') return _isEn ? 'Weeks 1\u20132. Read your body. Technique beats load. Always.' : 'Sem. 1\u20132. \u00c9coutez votre corps. La technique prime toujours sur la charge.';
+     if (_bPhId === 'progression') return _isEn ? 'The engine is rising. Add a rep before adding weight.' : 'Le moteur monte. Ajoutez une r\u00e9p\u00e9tition avant de monter le poids.';
+     if (_bPhId === 'intensification') return _isEn ? 'Heavy weeks. Push the load. Mark every kilo.' : 'Semaines lourdes. Poussez la charge. Marquez chaque kilo.';
+     if (_bPhId === 'decharge') return _isEn ? 'Step back to leap forward. Deload is not optional \u2014 it\u2019s the strategy.' : 'Reculer pour mieux avancer. La d\u00e9charge n\'est pas optionnelle \u2014 c\'est la strat\u00e9gie.';
      return '';
    })();
    if (_bPhaseIntent) {
@@ -27284,10 +27340,10 @@ function renderStep9(p) {
     _snapGrid.appendChild(_nutSnapCell(_trainCount, _isENSnap ? 'training' : 'entra\u00een.', _isENSnap ? 'days / week' : 'jours / sem.'));
     p.appendChild(_snapGrid);
     var _goalCtx = '';
-    if (S.goal === 'cut' || S.goal === 'shred') _goalCtx = _isENSnap ? 'Plan calibrated for gradual fat loss.' : 'Plan calibr\u00e9 pour une perte de masse grasse progressive.';
-    else if (S.goal === 'bulk' || S.goal === 'lean_bulk') _goalCtx = _isENSnap ? 'Plan calibrated for lean muscle gain.' : 'Plan calibr\u00e9 pour une prise de masse lean.';
-    else if (S.goal === 'sport') _goalCtx = _isENSnap ? 'Plan calibrated for performance and recovery.' : 'Plan calibr\u00e9 pour la performance et la r\u00e9cup\u00e9ration.';
-    else if (S.goal === 'maintain') _goalCtx = _isENSnap ? 'Plan calibrated for body composition maintenance.' : 'Plan calibr\u00e9 pour le maintien de la composition corporelle.';
+    if (S.goal === 'cut' || S.goal === 'shred') _goalCtx = _isENSnap ? 'Controlled deficit. The plan protects your muscle.' : 'D\u00e9ficit contr\u00f4l\u00e9. Le plan prot\u00e8ge le muscle.';
+    else if (S.goal === 'bulk' || S.goal === 'lean_bulk') _goalCtx = _isENSnap ? 'Controlled surplus. Lean build — no excess.' : 'Surplus contr\u00f4l\u00e9. Construction lean, sans exc\u00e8s.';
+    else if (S.goal === 'sport') _goalCtx = _isENSnap ? 'Performance + recovery. Both objectives, calibrated.' : 'Performance + r\u00e9cup\u00e9ration. Les deux objectifs, calibr\u00e9s.';
+    else if (S.goal === 'maintain') _goalCtx = _isENSnap ? 'Maintenance. Composition protected, force preserved.' : 'Maintien. Composition prot\u00e9g\u00e9e, force pr\u00e9serv\u00e9e.';
     if (_goalCtx) p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;color:var(--grey,#6B6B65);margin-bottom:16px;text-align:center;font-style:italic'}, _goalCtx));
   })();
 
@@ -27324,13 +27380,13 @@ function renderStep9(p) {
       var _tNote = (_dayAdapt && _dayAdapt.trainTimingNote) ? ' \u2014 ' + _dayAdapt.trainTimingNote : '';
       p.appendChild(h('div', {'class': 'day-training-indicator'}, (_sdIsEN ? '\uD83C\uDFCB\uFE0F Training day' : '\uD83C\uDFCB\uFE0F Jour d\u2019entra\u00eenement') + _tNote));
       p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:12px;padding:0 2px'},
-        _sdIsEN ? 'Carbs increased to fuel your workout \u00b7 post-workout protein timing optimized.'
-                : 'Glucides augment\u00e9s pour alimenter votre s\u00e9ance \u00b7 timing prot\u00e9ines post-entra\u00eenement optimis\u00e9.'));
+        _sdIsEN ? 'Carbs elevated today. Your body needs them to perform and recover.'
+                : 'Glucides \u00e9lev\u00e9s aujourd\'hui. Votre corps en a besoin pour performer et r\u00e9cup\u00e9rer.'));
     } else {
       p.appendChild(h('div', {'class': 'day-rest-indicator'}, (_sdIsEN ? '\uD83D\uDE34 Rest day \u2014 adjusted calories (\u221210%)' : '\uD83D\uDE34 Jour de repos \u2014 calories adapt\u00e9es (\u221210%)')));
       p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:12px;padding:0 2px'},
-        _sdIsEN ? 'Calories slightly reduced \u00b7 proteins maintained to preserve and rebuild muscle.'
-                : 'Calories l\u00e9g\u00e8rement r\u00e9duites \u00b7 prot\u00e9ines maintenues pour pr\u00e9server et reconstruire le muscle.'));
+        _sdIsEN ? 'Calories reduced, proteins maintained. Your body rebuilds muscle. Let it.'
+                : 'Calories r\u00e9duites, prot\u00e9ines maintenues. Votre corps reconstruit le muscle. Laissez-le faire.'));
     }
   }
 
