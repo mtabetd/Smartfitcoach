@@ -3236,10 +3236,10 @@ function renderStep9(p) {
     _snapGrid.appendChild(_nutSnapCell(_trainCount, _isENSnap ? 'training' : 'entra\u00een.', _isENSnap ? 'days / week' : 'jours / sem.'));
     p.appendChild(_snapGrid);
     var _goalCtx = '';
-    if (S.goal === 'cut' || S.goal === 'shred') _goalCtx = _isENSnap ? 'Plan calibrated for gradual fat loss.' : 'Plan calibr\u00e9 pour une perte de masse grasse progressive.';
-    else if (S.goal === 'bulk' || S.goal === 'lean_bulk') _goalCtx = _isENSnap ? 'Plan calibrated for lean muscle gain.' : 'Plan calibr\u00e9 pour une prise de masse lean.';
-    else if (S.goal === 'sport') _goalCtx = _isENSnap ? 'Plan calibrated for performance and recovery.' : 'Plan calibr\u00e9 pour la performance et la r\u00e9cup\u00e9ration.';
-    else if (S.goal === 'maintain') _goalCtx = _isENSnap ? 'Plan calibrated for body composition maintenance.' : 'Plan calibr\u00e9 pour le maintien de la composition corporelle.';
+    if (S.goal === 'cut' || S.goal === 'shred') _goalCtx = _isENSnap ? 'Controlled deficit. The plan protects your muscle.' : 'D\u00e9ficit contr\u00f4l\u00e9. Le plan prot\u00e8ge le muscle.';
+    else if (S.goal === 'bulk' || S.goal === 'lean_bulk') _goalCtx = _isENSnap ? 'Controlled surplus. Lean build — no excess.' : 'Surplus contr\u00f4l\u00e9. Construction lean, sans exc\u00e8s.';
+    else if (S.goal === 'sport') _goalCtx = _isENSnap ? 'Performance + recovery. Both objectives, calibrated.' : 'Performance + r\u00e9cup\u00e9ration. Les deux objectifs, calibr\u00e9s.';
+    else if (S.goal === 'maintain') _goalCtx = _isENSnap ? 'Maintenance. Composition protected, force preserved.' : 'Maintien. Composition prot\u00e9g\u00e9e, force pr\u00e9serv\u00e9e.';
     if (_goalCtx) p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;color:var(--grey,#6B6B65);margin-bottom:16px;text-align:center;font-style:italic'}, _goalCtx));
   })();
 
@@ -3276,13 +3276,13 @@ function renderStep9(p) {
       var _tNote = (_dayAdapt && _dayAdapt.trainTimingNote) ? ' \u2014 ' + _dayAdapt.trainTimingNote : '';
       p.appendChild(h('div', {'class': 'day-training-indicator'}, (_sdIsEN ? '\uD83C\uDFCB\uFE0F Training day' : '\uD83C\uDFCB\uFE0F Jour d\u2019entra\u00eenement') + _tNote));
       p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:12px;padding:0 2px'},
-        _sdIsEN ? 'Carbs increased to fuel your workout \u00b7 post-workout protein timing optimized.'
-                : 'Glucides augment\u00e9s pour alimenter votre s\u00e9ance \u00b7 timing prot\u00e9ines post-entra\u00eenement optimis\u00e9.'));
+        _sdIsEN ? 'Carbs elevated today. Your body needs them to perform and recover.'
+                : 'Glucides \u00e9lev\u00e9s aujourd\'hui. Votre corps en a besoin pour performer et r\u00e9cup\u00e9rer.'));
     } else {
       p.appendChild(h('div', {'class': 'day-rest-indicator'}, (_sdIsEN ? '\uD83D\uDE34 Rest day \u2014 adjusted calories (\u221210%)' : '\uD83D\uDE34 Jour de repos \u2014 calories adapt\u00e9es (\u221210%)')));
       p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:12px;padding:0 2px'},
-        _sdIsEN ? 'Calories slightly reduced \u00b7 proteins maintained to preserve and rebuild muscle.'
-                : 'Calories l\u00e9g\u00e8rement r\u00e9duites \u00b7 prot\u00e9ines maintenues pour pr\u00e9server et reconstruire le muscle.'));
+        _sdIsEN ? 'Calories reduced, proteins maintained. Your body rebuilds muscle. Let it.'
+                : 'Calories r\u00e9duites, prot\u00e9ines maintenues. Votre corps reconstruit le muscle. Laissez-le faire.'));
     }
   }
 
