@@ -3171,13 +3171,32 @@ function renderVerifyEmail(app) {
    var user = res.data && (res.data.user || (res.data.session && res.data.session.user));
    if (user && user.email_confirmed_at) {
      S.authError = '';
+     // BUG FIX 2026-05 : if the user confirmed email in a DIFFERENT browser/app (e.g.
+     // iOS Mail opens Safari while the PWA is Chrome), _currentSession is still null here.
+     // Routing to onboarding without a session causes saveProfile() to write to
+     // mtd_profile_anon instead of mtd_profile_<uid> \u2014 data is then wiped by the
+     // next _doAutoLogin() purge. Fix: require an active session; if missing, guide
+     // the user to log in with their password so the session is properly established.
+     if (window.AUTH && !window.AUTH.isLoggedIn()) {
+       statusMsg.textContent = '\u2713 Email confirm\u00e9 ! Connectez-vous maintenant avec votre mot de passe.';
+       statusMsg.style.color = 'var(--green,#3E5C3A)';
+       setTimeout(function() { S.view = 'auth'; render(); }, 1800);
+       return;
+     }
+     if (window.loadProfile) window.loadProfile();
      if (S.appMode === 'sport') {
        S.view = 'sport';
+     } else if (S.nStep > 0 && S.nStep < 12) {
+       S.view = 'nutrition'; // resume interrupted onboarding
+     } else if (S.appMode) {
+       S.view = 'today'; // returning user \u2014 profile fully loaded
      } else {
-       S.view = 'nutrition';
-       S.nStep = 0;
+       S.view = 'nutrition'; S.nStep = 0; // brand new user \u2014 mode selection
      }
      if (window.GAMIFICATION) { try { GAMIFICATION.unlockBadge('first_login'); } catch(e) {} }
+     if (window.SupaSync) {
+       try { window.SupaSync.syncOnLogin(); window.SupaSync.startAutoSync(); } catch(e) {}
+     }
      try { render(); } catch(e) {
        statusMsg.textContent = 'Erreur d\'affichage. Rechargez la page.';
        statusMsg.style.color = 'var(--error,#7A1F1F)';
@@ -3669,7 +3688,13 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
  // Tout le reste → Dashboard Today (le safe default)
  else if (S.appMode) { S.view = 'today'; }
- else { S.view = 'today'; } // Fallback absolu si appMode non défini
+ else {
+   // appMode=null → soit nouvel utilisateur, soit profil legacy sans appMode.
+   // Si des données significatives existent (nStep=12, weekPlan, sportType) → today.
+   // Sinon (profil vide, nouvel utilisateur après confirmation email) → onboarding.
+   var _hasAnyProfileData = S.nStep === 12 || S.weekPlan != null || !!S.sportType;
+   S.view = _hasAnyProfileData ? 'today' : 'nutrition'; // nutrition nStep=0 = sélection de mode
+ }
  // ─── AUTO-REGENERATION PLAN NUTRITION — DÉSACTIVÉE (FIX VALIDATION 2026-04) ───
  // AVANT : le plan se régénérait tout seul à chaque boot si >7j ou lundi matin
  //         → user voyait son plan changer mystérieusement.
@@ -3752,6 +3777,10 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
      else if (S.appMode === 'both' && S.nStep === 12 && !_csSetup && !_csProg) { S.view = 'sport'; }
      else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
      else if (S.appMode) { S.view = 'today'; }
+     else {
+       var _hasCloudData = S.nStep === 12 || S.weekPlan != null || !!S.sportType;
+       S.view = _hasCloudData ? 'today' : 'nutrition';
+     }
    }
    SupaSync.startAutoSync();
    if (typeof SupaSync.fetchUserStatus === 'function') {
@@ -3761,10 +3790,12 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  }
 } else {
  S.view = 'auth';
- // Purger les données anon résiduelles — évite l'affichage de données après suppression compte
- try { localStorage.removeItem('mtd_profile_anon'); } catch(e) {}
- try { localStorage.removeItem('mtd_weight_history_anon'); } catch(e) {}
- try { localStorage.removeItem('mtd_onboarding_done'); } catch(e) {}
+ // NOTE 2026-05 : on NE purge PAS mtd_profile_anon ici.
+ // Raison : si l'utilisateur a confirmé son email depuis un autre navigateur, ses données
+ // d'onboarding ont pu être sauvegardées dans mtd_profile_anon (session non établie dans ce
+ // navigateur). Supprimer cet instant avant le login empêche _migrateAnonKeys() de récupérer
+ // ces données → perte définitive. La clé est nettoyée au logout (performLogoutCleanup)
+ // et lors de la migration (migrateAnonKeys), ce qui suffit.
 }
 render();
 }
