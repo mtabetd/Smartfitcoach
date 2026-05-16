@@ -525,6 +525,12 @@ function loadProfile() {
    if (typeof S.age === 'string') { var _a = parseInt(S.age, 10); S.age = isNaN(_a) ? null : _a; }
    if (S.age !== null && S.age !== undefined && (S.age < 10 || S.age > 120)) S.age = null;
    if (typeof S.prePregnancyWeight === 'string') { var _pw = parseFloat(S.prePregnancyWeight); S.prePregnancyWeight = isNaN(_pw) ? null : _pw; }
+   // Coerce nStep/sStep — peuvent être stockés comme string dans certaines migrations
+   if (typeof S.nStep === 'string') { var _ns = parseInt(S.nStep, 10); S.nStep = isNaN(_ns) ? 0 : _ns; }
+   if (typeof S.sStep === 'string') { var _ss = parseInt(S.sStep, 10); S.sStep = isNaN(_ss) ? 0 : _ss; }
+   // Bornes nStep [0..12] et sStep [0..30]
+   if (typeof S.nStep === 'number' && (S.nStep < 0 || S.nStep > 12)) S.nStep = 0;
+   if (typeof S.sStep === 'number' && (S.sStep < 0 || S.sStep > 30)) S.sStep = 0;
 
    // 2. Repair validation flags désynchronisés (flag=true mais programme=null)
    if (S.weekPlanValidated && !S.weekPlan) S.weekPlanValidated = false;
