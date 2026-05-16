@@ -7335,6 +7335,25 @@ function renderMusculationProgram(p) {
  }
 
  p.appendChild(h('p', {'class': 'subtitle'}, S.sportDays + ' ' + (window.isEnglish && window.isEnglish() ? 'days/week \u2014 ' : 'jours/semaine \u2014 ') + goalNames));
+ (function() {
+  var _aeIsEN = window.isEnglish && window.isEnglish();
+  var _aeLevel = (S.sportLevel || S.muscuLevel || '');
+  var _aeGoal = S.goal || '';
+  var _aeLine = '';
+  if (_aeLevel === 'beginner' || _aeLevel === 'debutant') {
+   _aeLine = _aeIsEN ? 'Priority: perfect technique before load.' : 'Priorit\u00e9 : technique parfaite avant la charge.';
+  } else if (_aeGoal === 'cut' || _aeGoal === 'shred') {
+   _aeLine = _aeIsEN ? 'Focus: preserve strength in deficit \u00b7 controlled volume.' : 'Focus : pr\u00e9server la force en d\u00e9ficit \u00b7 volume contr\u00f4l\u00e9.';
+  } else if (_aeGoal === 'bulk' || _aeGoal === 'lean_bulk') {
+   var _aeWk = (typeof sfcGetEffectiveWeek === 'function') ? sfcGetEffectiveWeek() : (S.muscuWeek || 1);
+   _aeLine = _aeIsEN ? 'Focus: progressive overload \u00b7 volume build \u00b7 wk. ' + _aeWk + '/7.' : 'Focus : surcharge progressive \u00b7 construction volume \u00b7 sem. ' + _aeWk + '/7.';
+  } else if (_aeGoal === 'sport' || _aeGoal === 'performance') {
+   _aeLine = _aeIsEN ? 'Focus: work capacity \u00b7 performance \u00b7 recovery quality.' : 'Focus : capacit\u00e9 de travail \u00b7 performance \u00b7 qualit\u00e9 de r\u00e9cup\u00e9ration.';
+  }
+  if (_aeLine) {
+   p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:8px;margin-top:-6px;font-style:italic'}, _aeLine));
+  }
+ })();
  if (window.TIPS) TIPS.renderTip(p, 'sportProgram');
 
  // ─── SUIVI 7 SEMAINES (collapsible) ───
