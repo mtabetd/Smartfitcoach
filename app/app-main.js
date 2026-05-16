@@ -2902,8 +2902,9 @@ function renderRegister(app) {
      try { if (window.render) window.render(); } catch(e) {}
    }
  }, 10000);
- // Use email prefix as backend name when prénom not provided
- var regName = name || email.split('@')[0];
+ // Use email prefix as backend name when prénom not provided (validateName requires ≥2 chars)
+ var _rawName = name || email.split('@')[0];
+ var regName = _rawName.length >= 2 ? _rawName : _rawName + '_';
  AUTH.register(regName, email, pw, {}).then(function(result) {
  clearTimeout(_regSafetyTimer);
  if (result.ok) {

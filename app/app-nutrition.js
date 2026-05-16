@@ -1610,9 +1610,11 @@ function renderStep5(p) {
   // Fréquence sélectionnée — détail par verre disponible dans les paramètres du profil
   if (S.alcoholFreq && S.alcoholFreq !== 'never') {
     // Auto-set default alcoholTypes pour que le moteur calorique ait une estimation
+    var _defaultDrinkFreqs = {rarely: 2, weekly: 4, daily: 7};
     if (!S.alcoholTypes || S.alcoholTypes.length === 0) {
-      var _defaultDrinkFreqs = {rarely: 2, weekly: 4, daily: 7};
       S.alcoholTypes = [{type: 'Vin rouge (15cl)', freq: _defaultDrinkFreqs[S.alcoholFreq] || 2}];
+    } else if (S.alcoholTypes.length === 1 && S.alcoholTypes[0].type === 'Vin rouge (15cl)' && _defaultDrinkFreqs[S.alcoholFreq]) {
+      S.alcoholTypes[0].freq = _defaultDrinkFreqs[S.alcoholFreq];
     }
     var _isENalc = window.isEnglish && window.isEnglish();
     var _alcNote = h('div', {style: 'margin-top:8px;padding:10px 14px;background:var(--ivory2,#F5F4EF);border:1px solid var(--border,#E8E6DF);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.5'});
@@ -1994,7 +1996,7 @@ function renderStep7(p) {
 
 
     p.appendChild(h('div', {style: 'height:24px'}));
-    p.appendChild(h('button', {'class': 'btn-primary', onclick: function() { window._s7page = 1; window.render(); }}, (_isEN ? 'Continue \u2192' : 'Continuer \u2192')));
+    p.appendChild(h('button', {'class': 'btn-primary', onclick: function() { window._s7page = 1; if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} } window.render(); }}, (_isEN ? 'Continue \u2192' : 'Continuer \u2192')));
     p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s7page = 0; window._s5page = 0; goStep(9); }, html: backArrowHtml() + window.t('onb.back')}));
 
   } else if (_page === 1) {
@@ -2034,7 +2036,7 @@ function renderStep7(p) {
 
     var _ok10b = S.cookLevel !== null && S.cookLevel !== undefined;
     p.appendChild(h('div', {style: 'height:24px'}));
-    p.appendChild(h('button', {'class': 'btn-primary', disabled: !_ok10b, onclick: function() { if (_ok10b) { window._s7page = 2; window.render(); } }}, (_isEN ? 'Continue \u2192' : 'Continuer \u2192')));
+    p.appendChild(h('button', {'class': 'btn-primary', disabled: !_ok10b, onclick: function() { if (_ok10b) { window._s7page = 2; if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} } window.render(); } }}, (_isEN ? 'Continue \u2192' : 'Continuer \u2192')));
     p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s7page = 0; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
 
   } else {
@@ -2256,7 +2258,7 @@ function renderStep8(p) {
   _s8sentEl.style.cssText = 'font-family:Georgia,serif;font-size:14px;font-style:italic;color:var(--black,#1A1A18);line-height:1.45;max-width:280px;margin:0 auto 18px';
   _s8sentEl.textContent = _s8msg;
   _heroWrap.appendChild(_s8sentEl);
-  var _expandBtn8 = h('button', {style: 'background:none;border:1px solid var(--border,#D8D8D0);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);padding:8px 20px;cursor:pointer;border-radius:2px;min-height:36px', onclick: function() { window._s8expanded = !window._s8expanded; if (window.render) window.render(); }}, window._s8expanded ? (_isEN8 ? '▲ Hide detail' : '▲ Masquer le détail') : (_isEN8 ? '▼ See detail' : '▼ Voir le détail'));
+  var _expandBtn8 = h('button', {style: 'background:none;border:1px solid var(--border,#D8D8D0);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);padding:8px 20px;cursor:pointer;border-radius:2px;min-height:44px', onclick: function() { window._s8expanded = !window._s8expanded; if (window.render) window.render(); }}, window._s8expanded ? (_isEN8 ? '▲ Hide detail' : '▲ Masquer le détail') : (_isEN8 ? '▼ See detail' : '▼ Voir le détail'));
   _heroWrap.appendChild(_expandBtn8);
   p.appendChild(_heroWrap);
   var _dw = document.createElement('div');
@@ -2411,9 +2413,7 @@ function renderStep8(p) {
   stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val'}, water), h('div', {'class': 'stat-label'}, (window.isEnglish && window.isEnglish() ? 'L water/day' : 'L eau/jour'))]));
   stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val'}, String(m.p)), h('div', {'class': 'stat-label'}, (window.isEnglish && window.isEnglish() ? 'g protein/day' : 'g prot\u00e9ines/j'))]));
   if (bmi !== null) {
-    var bi = bmiInfo(bmi);
-    var imcClass = bmi < 18.5 ? 'stat-warn' : bmi < 25 ? 'stat-good' : bmi < 30 ? 'stat-warn' : 'stat-alert';
-    stats.appendChild(h('div', {'class': 'stat-cell ' + imcClass}, [h('div', {'class': 'stat-val', style: 'color:' + bi.color}, bmi.toFixed(1)), h('div', {'class': 'stat-label'}, window.t('onb.s2.bmi'))]));
+    stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val'}, bmi.toFixed(1)), h('div', {'class': 'stat-label'}, window.t('onb.s2.bmi'))]));
   }
   p.appendChild(stats);
 
@@ -2742,6 +2742,7 @@ function renderStep8(p) {
           if (suppRecs[cri].id === 'creatine') { creatRec = suppRecs[cri]; break; }
         }
         if (creatRec) {
+          var creatCard = h('div', {style: 'border:1px solid var(--green,#3E5C3A);padding:14px 16px;background:rgba(62,92,58,0.06);margin-bottom:8px'});
           creatCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:4px'}, creatRec.icon + (window.isEnglish && window.isEnglish() ? ' Creatine \u2014 Your dose: ' : ' Cr\u00e9atine \u2014 Votre dose : ') + (S.creatineDose || '?') + (window.isEnglish && window.isEnglish() ? 'g/day' : 'g/jour')));
           if (S.creatineDose && creatRec.dosage && S.creatineDose !== creatRec.dosage.dose) {
             creatCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange);margin-bottom:4px'}, (window.isEnglish && window.isEnglish() ? '\u26A0 Recommended dose: ' + creatRec.dosage.dose + 'g/day (based on your weight)' : '\u26A0 Dose recommand\u00e9e : ' + creatRec.dosage.dose + 'g/jour (bas\u00e9 sur votre poids)')));
