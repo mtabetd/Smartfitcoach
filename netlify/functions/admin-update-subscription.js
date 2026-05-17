@@ -5,7 +5,8 @@
 
 const { corsHeaders, requireAdmin } = require('./_admin-auth.js');
 
-var VALID_PLANS = ['trial', '1m', '3m', '6m', '12m', 'unlimited'];
+// Tier-based values (new) + legacy duration-based values (backward compat)
+var VALID_PLANS = ['trial', 'athlete', 'champion', 'legende', 'unlimited', '1m', '3m', '6m', '12m'];
 var UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 var DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 

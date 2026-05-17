@@ -91,14 +91,22 @@ select,button{font-family:'Helvetica Neue',Arial,sans-serif}
   <div class="modal-box">
     <div class="modal-title" id="modal-title">Gérer l'abonnement</div>
     <div class="field">
-      <label>Formule</label>
-      <select id="modal-plan">
+      <label>Type d'abonnement</label>
+      <select id="modal-tier">
         <option value="trial">Trial 7 jours</option>
+        <option value="athlete">Athlete</option>
+        <option value="champion">Champion</option>
+        <option value="legende">Légende</option>
+        <option value="unlimited">Illimité</option>
+      </select>
+    </div>
+    <div class="field" id="modal-duration-field">
+      <label>Durée</label>
+      <select id="modal-duration">
         <option value="1m">1 mois</option>
         <option value="3m">3 mois</option>
         <option value="6m">6 mois</option>
         <option value="12m">12 mois</option>
-        <option value="unlimited">Illimité</option>
       </select>
     </div>
     <div class="field">
