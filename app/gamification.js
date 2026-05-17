@@ -314,11 +314,10 @@ function updateNutritionStreak() {
   if (!user) return;
   var key = NUTR_STREAK_KEY + user.id;
   var data = {}; try { data = JSON.parse(localStorage.getItem(key) || '{"current":0,"lastDate":null}'); } catch(e) { data = {current:0,lastDate:null}; }
-  var today = new Date();
-  var todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+  var todayStr = (function(d){ return d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0'); })(new Date());
   if (data.lastDate === todayStr) return;
-  var yd = new Date(); yd.setDate(yd.getDate()-1);
-  var ydStr = yd.getFullYear() + '-' + String(yd.getMonth()+1).padStart(2,'0') + '-' + String(yd.getDate()).padStart(2,'0');
+  var yd = new Date(); yd.setUTCDate(yd.getUTCDate()-1);
+  var ydStr = yd.getUTCFullYear()+'-'+String(yd.getUTCMonth()+1).padStart(2,'0')+'-'+String(yd.getUTCDate()).padStart(2,'0');
   data.current = (data.lastDate === ydStr) ? (data.current || 0) + 1 : 1;
   data.lastDate = todayStr;
   try { localStorage.setItem(key, JSON.stringify(data)); } catch(e) {}
