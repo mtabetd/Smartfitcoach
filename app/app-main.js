@@ -2141,7 +2141,7 @@ function _showMedicalDisclaimer() {
   if (!h) return;
   var ov = h('div', {
     id: 'sfc-medical-disclaimer',
-    style: 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,9,0.6);z-index:9600;display:flex;align-items:flex-end;justify-content:center;padding-bottom:env(safe-area-inset-bottom);'
+    style: 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,9,0.6);z-index:10000;display:flex;align-items:flex-end;justify-content:center;padding-bottom:env(safe-area-inset-bottom);'
   });
   var box = h('div', {
     style: 'background:var(--ivory,#FAF9F6);width:100%;max-width:480px;padding:28px 24px 32px;border-top:1px solid var(--line,#D8D8D0);'

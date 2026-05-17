@@ -3,7 +3,7 @@
  * Copyright (c) 2024-2026 SmartFitCoach. All rights reserved.
  */
 /* ============================================================
-   EXERCISE-VIDEOS.JS — Stratégie vidéo de confiance v5.1
+   EXERCISE-VIDEOS.JS — Stratégie vidéo de confiance v5.5
 
    Architecture (2026-05) :
    • URLs filtrées PAR NOM DE CHAÎNE dans la recherche :
@@ -44,10 +44,9 @@
   //   → Fiable mobile/desktop/iOS/Android, toutes régions.
   //   channelName = nom d'affichage ("AthleanX", "Tibo InShape", "Jeff Nippard", "CrossFit")
   //
-  //   sp=EgIYAQ%3D%3D = YouTube Videos filter (exclut channels, playlists).
-  //   Shorts : ne peuvent pas être exclus par sp (YouTube les classe "type=Video").
-  //   Anti-Shorts : queries suffisamment spécifiques (ex. "proper form technique tutorial")
-  //   → YouTube ne remonte jamais de Shorts sur des queries multi-mots pédagogiques.
+  //   sp=EgIYAQ%3D%3D = YouTube Videos filter (exclut playlists, pages de chaînes).
+  //   ⚠ Shorts : NE PEUVENT PAS être exclus via sp (YouTube les classe "type=Video").
+  //   Anti-Shorts fallback : queries ≥4 mots pédagogiques → Shorts ne remontent pas.
   //
   //   IMPORTANT : utiliser %3D%3D (simple-encodé), PAS %253D%253D (double-encodé).
   //   Double-encodé = YouTube reçoit EgIYAQ%3D%3D (invalide) → filtre ignoré.
@@ -64,10 +63,11 @@
 
   // ─── Niveaux de confiance ──────────────────────────────────────────────────
   var CONF = {
-    EXACT:    4,  // Clé directe dans CURATED_QUERIES — meilleure qualité
-    ALIAS:    3,  // Alias/abréviation → clé curatée — excellente qualité
-    PARTIAL:  2,  // Match partiel sur tokens — bonne qualité
-    FALLBACK: 1   // Recherche générale YouTube + filtre vidéo — acceptable
+    DIRECT:   5,  // URL directe watch?v= ou shorts/ — expérience premium
+    EXACT:    4,  // Clé directe dans CURATED_QUERIES — haute qualité
+    ALIAS:    3,  // Alias/abréviation → clé curatée — bonne qualité
+    PARTIAL:  2,  // Match partiel sur tokens — qualité acceptable
+    FALLBACK: 1   // Recherche générale YouTube + filtre vidéo — dernier recours
   };
 
   // ─── Registre des sources de confiance ────────────────────────────────────
@@ -121,12 +121,13 @@
 
   // Métadonnées de version — utile pour audits et diagnostics
   var _META = {
-    version:          '5.3',
+    version:          '5.6',
     urlStrategy:      'direct-registry-first',     // watch?v= / shorts/ → channel-search fallback
     fallbackStrategy: 'channel-name-video-search', // results?search_query=CHANNEL+QUERY&sp=EgIYAQ
     exerciseCoverage: 338,                         // entrées CURATED_QUERIES
     cfCoverage:       86,                          // entrées CF_QUERIES
     directRegistry:   true,                        // DIRECT_VIDEO_REGISTRY actif
+    directRegistrySize: 60,                        // clés avec au moins une URL directe (audit 2026-05)
     auditDate:        '2026-05'
   };
 
@@ -167,204 +168,195 @@
   //   → youtube.com/results?search_query=AthleanX+bench+press+short&sp=EgIYAQ%3D%3D
   //   → CrossFit Movement Standards playlist : youtube.com/@CrossFit/playlists
   var DIRECT_VIDEO_REGISTRY = {
-    // ── Pectoraux ─────────────────────────────────────────────────────────────
     'developpe couche': {
-      fr_beginner: null, // TODO: Short TiboInShape bench press
-      en_any:      { url: 'https://www.youtube.com/shorts/BHBAlViRFas', verified: false, source: 'AthleanX', note: 'bench press form' },
-      advanced:    null  // TODO: Jeff Nippard bench press tutorial
+      fr_beginner: { url: 'https://www.youtube.com/shorts/MUa0U36oz3s', verified: true, source: 'TiboInShape', score: 78 },
+      en_any: { url: 'https://www.youtube.com/shorts/0cXAp6WhSj4', verified: true, source: 'athleanx', score: 92 },
+    },
+    'developpe couche haltere unilateral': {
+      fr_beginner: { url: 'https://www.youtube.com/shorts/rgPDTr46RNE', verified: false, source: 'TiboInShape', score: 42 },
     },
     'developpe incline': {
-      fr_beginner: null,
-      en_any:      null, // TODO: AthleanX incline press short
-      advanced:    null
+      fr_beginner: { url: 'https://www.youtube.com/shorts/wj_zXKF7Mh0', verified: false, source: 'TiboInShape', score: 45 },
+      en_any: { url: 'https://www.youtube.com/shorts/cq-4gME3IFY', verified: true, source: 'athleanx', score: 88 },
     },
-    'dips': {
-      fr_beginner: null, // TODO: TiboInShape dips short
-      en_any:      { url: 'https://www.youtube.com/shorts/EwjKGc1RCeI', verified: false, source: 'AthleanX', note: 'chest dips form' },
-      advanced:    null
+    'developpe decline': {
+      fr_beginner: { url: 'https://www.youtube.com/shorts/pX3tD7APce0', verified: false, source: 'TiboInShape', score: 47 },
+    },
+    'chest press machine': {
+      en_any: { url: 'https://www.youtube.com/shorts/VHIlmOPMWWs', verified: true, source: 'athleanx', score: 92 },
     },
     'pompes classiques': {
-      fr_beginner: null,
-      en_any:      { url: 'https://www.youtube.com/shorts/IODxDxX7oi4', verified: false, source: 'AthleanX', note: 'push up form' },
-      advanced:    null
+      en_any: { url: 'https://www.youtube.com/shorts/14D-2c9kvVw', verified: true, source: 'athleanx', score: 92 },
     },
-    // ── Dos ───────────────────────────────────────────────────────────────────
-    'tractions': {
-      fr_beginner: null, // TODO: TiboInShape tractions short
-      en_any:      { url: 'https://www.youtube.com/shorts/eGo4IYlbE5g', verified: false, source: 'AthleanX', note: 'pull up form' },
-      advanced:    null
+    'pompes diamant': {
+      fr_beginner: { url: 'https://www.youtube.com/shorts/Wt78IMVu4sY', verified: false, source: 'TiboInShape', score: 45 },
     },
-    'chin ups': {
-      fr_beginner: null,
-      en_any:      null, // TODO: AthleanX chin up short
-      advanced:    null
+    'diamond push up': {
+      fr_beginner: { url: 'https://www.youtube.com/shorts/3J8QPfZ3L0Q', verified: false, source: 'TiboInShape', score: 50 },
     },
-    'rowing barre': {
-      fr_beginner: null,
-      en_any:      { url: 'https://www.youtube.com/shorts/QFq9-bOMLJQ', verified: false, source: 'AthleanX', note: 'barbell row form' },
-      advanced:    null
-    },
-    'rowing haltere': {
-      fr_beginner: null,
-      en_any:      null, // TODO: AthleanX one arm row short
-      advanced:    null
-    },
-    'tirage vertical poulie': {
-      fr_beginner: null,
-      en_any:      null, // TODO: AthleanX lat pulldown short
-      advanced:    null
+    'squat': {
+      fr_beginner: { url: 'https://www.youtube.com/shorts/kYPPcb3ucCE', verified: true, source: 'TiboInShape', score: 82 },
+      en_any: { url: 'https://www.youtube.com/shorts/iZTxa8NJH2g', verified: true, source: 'athleanx', score: 92 },
     },
     'deadlift': {
-      fr_beginner: null,
-      en_any:      { url: 'https://www.youtube.com/shorts/op9kVnSso6Q', verified: false, source: 'AthleanX', note: 'deadlift form' },
-      advanced:    null
+      en_any: { url: 'https://www.youtube.com/shorts/8np3vKDBJfc', verified: true, source: 'athleanx', score: 92 },
     },
-    'souleve de terre roumain': {
-      fr_beginner: null,
-      en_any:      null, // TODO: AthleanX RDL short
-      advanced:    null
-    },
-    'rdl': {
-      fr_beginner: null,
-      en_any:      null,
-      advanced:    null
-    },
-    // ── Épaules ───────────────────────────────────────────────────────────────
-    'overhead press': {
-      fr_beginner: null,
-      en_any:      { url: 'https://www.youtube.com/shorts/2yjwXTZQDDI', verified: false, source: 'AthleanX', note: 'overhead press form' },
-      advanced:    null
+    'tractions': {
+      en_any: { url: 'https://www.youtube.com/shorts/ZPG8OsHKXLw', verified: true, source: 'athleanx', score: 92 },
     },
     'developpe militaire': {
-      fr_beginner: null,
-      en_any:      { url: 'https://www.youtube.com/shorts/2yjwXTZQDDI', verified: false, source: 'AthleanX', note: 'overhead press form' },
-      advanced:    null
+      en_any: { url: 'https://www.youtube.com/shorts/4LBVP2Oe7fg', verified: true, source: 'athleanx', score: 92 },
     },
-    'elevations laterales': {
-      fr_beginner: null,
-      en_any:      { url: 'https://www.youtube.com/shorts/kDqklp1ze_0', verified: false, source: 'AthleanX', note: 'lateral raise form' },
-      advanced:    null
-    },
-    'oiseau halteres': {
-      fr_beginner: null,
-      en_any:      null, // TODO: AthleanX rear delt fly short
-      advanced:    null
-    },
-    // ── Biceps ────────────────────────────────────────────────────────────────
-    'curl barre': {
-      fr_beginner: null,
-      en_any:      null, // TODO: AthleanX barbell curl short
-      advanced:    null
-    },
-    'curl marteau': {
-      fr_beginner: null,
-      en_any:      null, // TODO: AthleanX hammer curl short
-      advanced:    null
-    },
-    // ── Triceps ───────────────────────────────────────────────────────────────
-    'extension triceps poulie': {
-      fr_beginner: null,
-      en_any:      null, // TODO: AthleanX tricep pushdown short
-      advanced:    null
-    },
-    'skull crushers ez': {
-      fr_beginner: null,
-      en_any:      null, // TODO: AthleanX skull crusher short
-      advanced:    null
-    },
-    // ── Jambes ────────────────────────────────────────────────────────────────
-    'squat': {
-      fr_beginner: null, // TODO: TiboInShape squat short
-      en_any:      { url: 'https://www.youtube.com/shorts/U94ByqlB5LA', verified: false, source: 'AthleanX', note: 'back squat form' },
-      advanced:    null
-    },
-    'squat barre': {
-      fr_beginner: null,
-      en_any:      { url: 'https://www.youtube.com/shorts/U94ByqlB5LA', verified: false, source: 'AthleanX', note: 'back squat form' },
-      advanced:    null
-    },
-    'split squat bulgare': {
-      fr_beginner: null,
-      en_any:      null, // TODO: AthleanX Bulgarian split squat short
-      advanced:    null
-    },
-    'leg press': {
-      fr_beginner: null,
-      en_any:      null, // TODO: leg press short
-      advanced:    null
-    },
-    'leg extension': {
-      fr_beginner: null,
-      en_any:      null, // TODO: leg extension short
-      advanced:    null
-    },
-    // ── Ischio-jambiers ───────────────────────────────────────────────────────
-    'leg curl': {
-      fr_beginner: null,
-      en_any:      null, // TODO: lying leg curl short
-      advanced:    null
-    },
-    'nordic curl': {
-      fr_beginner: null,
-      en_any:      null, // TODO: nordic curl short
-      advanced:    null
-    },
-    // ── Fessiers ──────────────────────────────────────────────────────────────
-    'hip thrust': {
-      fr_beginner: null,
-      en_any:      { url: 'https://www.youtube.com/shorts/LM8XHLYJoYs', verified: false, source: 'AthleanX', note: 'hip thrust form' },
-      advanced:    null
-    },
-    'hip thrust barre': {
-      fr_beginner: null,
-      en_any:      { url: 'https://www.youtube.com/shorts/LM8XHLYJoYs', verified: false, source: 'AthleanX', note: 'barbell hip thrust form' },
-      advanced:    null
-    },
-    'glute bridge': {
-      fr_beginner: null,
-      en_any:      null, // TODO: glute bridge short
-      advanced:    null
-    },
-    // ── CrossFit / Hyrox ──────────────────────────────────────────────────────
     'snatch': {
-      cf: { url: 'https://www.youtube.com/watch?v=9xQp2sldyts', verified: false, source: 'CrossFit', note: 'snatch movement standard' }
+      cf: { url: 'https://www.youtube.com/shorts/GhxhiehJcQY', verified: false, source: 'CrossFit', score: 85 },
     },
-    'power clean': {
-      cf: { url: 'https://www.youtube.com/watch?v=NUeaVQJfAe4', verified: false, source: 'CrossFit', note: 'power clean movement standard' }
+    'power snatch': {
+      cf: { url: 'https://www.youtube.com/shorts/TL8SMp7RdXQ', verified: false, source: 'CrossFit', score: 70 },
+    },
+    'hang snatch': {
+      cf: { url: 'https://www.youtube.com/shorts/-mLzQdVAwlw', verified: false, source: 'CrossFit', score: 85 },
+    },
+    'hang power snatch': {
+      cf: { url: 'https://www.youtube.com/shorts/-mLzQdVAwlw', verified: false, source: 'CrossFit', score: 85 },
     },
     'clean and jerk': {
-      cf: { url: 'https://www.youtube.com/watch?v=lo1kKrNDfko', verified: false, source: 'CrossFit', note: 'clean and jerk standard' }
+      cf: { url: 'https://www.youtube.com/shorts/PjY1rH4_MOA', verified: false, source: 'CrossFit', score: 70 },
     },
-    'thruster': {
-      cf: { url: 'https://www.youtube.com/watch?v=L219ltL15zk', verified: false, source: 'CrossFit', note: 'thruster movement' }
+    'clean jerk': {
+      cf: { url: 'https://www.youtube.com/shorts/PjY1rH4_MOA', verified: false, source: 'CrossFit', score: 70 },
+    },
+    'power clean': {
+      cf: { url: 'https://www.youtube.com/shorts/Sk1vhXhHO_A', verified: false, source: 'CrossFit', score: 75 },
+    },
+    'hang power clean': {
+      cf: { url: 'https://www.youtube.com/shorts/DaKC_BEN5bk', verified: false, source: 'CrossFit', score: 72 },
+    },
+    'hang power cleans': {
+      cf: { url: 'https://www.youtube.com/shorts/DaKC_BEN5bk', verified: false, source: 'CrossFit', score: 58 },
+    },
+    'hang clean': {
+      cf: { url: 'https://www.youtube.com/shorts/DaKC_BEN5bk', verified: false, source: 'CrossFit', score: 85 },
+    },
+    'hang cleans': {
+      cf: { url: 'https://www.youtube.com/shorts/DaKC_BEN5bk', verified: false, source: 'CrossFit', score: 65 },
+    },
+    'hang squat clean': {
+      cf: { url: 'https://www.youtube.com/shorts/DaKC_BEN5bk', verified: false, source: 'CrossFit', score: 72 },
+    },
+    'hang squat cleans': {
+      cf: { url: 'https://www.youtube.com/shorts/DaKC_BEN5bk', verified: false, source: 'CrossFit', score: 58 },
+    },
+    'clean': {
+      cf: { url: 'https://www.youtube.com/shorts/KwYJTpQ_x5A', verified: false, source: 'CrossFit', score: 70 },
+    },
+    'split jerk': {
+      cf: null,
+    },
+    'push jerk': {
+      cf: { url: 'https://www.youtube.com/shorts/v_0E1udYSnQ', verified: false, source: 'CrossFit', score: 75 },
+    },
+    'push press': {
+      cf: { url: 'https://www.youtube.com/shorts/0tOcLSIT3u4', verified: false, source: 'CrossFit', score: 82 },
+    },
+    'jerk': {
+      cf: { url: 'https://www.youtube.com/shorts/GqAEuwXQXRU', verified: false, source: 'CrossFit', score: 75 },
+    },
+    'clean pull speed': {
+      cf: { url: 'https://www.youtube.com/shorts/fNi-bG0shwE', verified: false, source: 'CrossFit', score: 68 },
+    },
+    'overhead squat': {
+      cf: { url: 'https://www.youtube.com/shorts/i3VMBdEBB7c', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'dumbbell snatch': {
+      cf: { url: 'https://www.youtube.com/shorts/JXNPBnzBCt0', verified: false, source: 'CrossFit', score: 80 },
     },
     'muscle up': {
-      cf: { url: 'https://www.youtube.com/watch?v=PBMKyf7gmE4', verified: false, source: 'CrossFit', note: 'muscle up progression' }
+      cf: { url: 'https://www.youtube.com/watch?v=kQVOD7wPIns', verified: false, source: 'CrossFit', score: 70 },
     },
-    'toes to bar': {
-      cf: { url: 'https://www.youtube.com/watch?v=_03pCKOv4l4', verified: false, source: 'CrossFit', note: 'toes to bar standard' }
+    'muscle up anneau': {
+      cf: null,
+    },
+    'muscle up barre': {
+      cf: { url: 'https://www.youtube.com/shorts/o69WaY_7k2c', verified: false, source: 'CrossFit', score: 60 },
+    },
+    'bar muscle up': {
+      cf: { url: 'https://www.youtube.com/shorts/o69WaY_7k2c', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'bar muscle ups': {
+      cf: { url: 'https://www.youtube.com/shorts/o69WaY_7k2c', verified: false, source: 'CrossFit', score: 67 },
+    },
+    'kipping pull up': {
+      cf: { url: 'https://www.youtube.com/shorts/bMnS7IO5a5M', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'kipping pull up speed': {
+      cf: { url: 'https://www.youtube.com/shorts/bMnS7IO5a5M', verified: false, source: 'CrossFit', score: 67 },
     },
     'chest to bar': {
-      cf: { url: 'https://www.youtube.com/watch?v=YPq4ZzaS4ro', verified: false, source: 'CrossFit', note: 'chest to bar standard' }
+      cf: { url: 'https://www.youtube.com/shorts/AyPTCEXTjOo', verified: false, source: 'CrossFit', score: 80 },
     },
-    'double unders': {
-      cf: { url: 'https://www.youtube.com/watch?v=VbNF_Z38oq0', verified: false, source: 'CrossFit', note: 'double unders technique' }
+    'chest to bar pull ups': {
+      cf: { url: 'https://www.youtube.com/shorts/AyPTCEXTjOo', verified: false, source: 'CrossFit', score: 70 },
     },
-    'wall ball': {
-      cf: { url: 'https://www.youtube.com/watch?v=fpUD0mcFp_0', verified: false, source: 'CrossFit', note: 'wall ball standard' }
+    'c2b': {
+      cf: { url: 'https://www.youtube.com/shorts/AyPTCEXTjOo', verified: false, source: 'CrossFit', score: 40 },
     },
-    'box jump': {
-      cf: { url: 'https://www.youtube.com/watch?v=52r-3meCfTw', verified: false, source: 'CrossFit', note: 'box jump standard' }
+    'c2b pull ups': {
+      cf: { url: 'https://www.youtube.com/watch?v=Mk47nndUMHw', verified: false, source: 'CrossFit', score: 57 },
     },
-    'kettlebell swing': {
-      cf: { url: 'https://www.youtube.com/watch?v=cKx8xE8jhjY', verified: false, source: 'CrossFit', note: 'kettlebell swing standard' }
+    'toes to bar': {
+      cf: { url: 'https://www.youtube.com/shorts/xX9Hzi7Onnw', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'handstand walk': {
+      cf: { url: 'https://www.youtube.com/shorts/I5p2VVDupq8', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'hs walk': {
+      cf: { url: 'https://www.youtube.com/shorts/I5p2VVDupq8', verified: false, source: 'CrossFit', score: 80 },
     },
     'handstand push up': {
-      cf: { url: 'https://www.youtube.com/watch?v=E3z2ohbpWjA', verified: false, source: 'CrossFit', note: 'handstand push up progression' }
+      cf: { url: 'https://www.youtube.com/shorts/0wDEO6shVjc', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'handstand push ups': {
+      cf: { url: 'https://www.youtube.com/shorts/0wDEO6shVjc', verified: false, source: 'CrossFit', score: 67 },
+    },
+    'hspu': {
+      cf: { url: 'https://www.youtube.com/shorts/9wIkPCS4Mbo', verified: false, source: 'CrossFit', score: 40 },
+    },
+    'ring dip': {
+      cf: { url: 'https://www.youtube.com/shorts/Vt0lO4jpIDo', verified: false, source: 'CrossFit', score: 80 },
     },
     'rope climb': {
-      cf: { url: 'https://www.youtube.com/watch?v=fp5_4Dg3jSE', verified: false, source: 'CrossFit', note: 'rope climb standard' }
-    }
+      cf: { url: 'https://www.youtube.com/watch?v=G_3kJy-_CiA', verified: false, source: 'CrossFit', score: 82 },
+    },
+    'l sit': {
+      cf: { url: 'https://www.youtube.com/shorts/DemH-mw1O9I', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'pistol squat': {
+      cf: { url: 'https://www.youtube.com/shorts/keSzg7MaoVQ', verified: false, source: 'CrossFit', score: 60 },
+    },
+    'ring row': {
+      cf: { url: 'https://www.youtube.com/shorts/xhlReCpAE9k', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'wall walk': {
+      cf: { url: 'https://www.youtube.com/shorts/2TnX8j29tRY', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'air squat': {
+      cf: { url: 'https://www.youtube.com/shorts/a_fb6Kz7FQg', verified: false, source: 'CrossFit', score: 85 },
+    },
+    'strict pull up': {
+      cf: { url: 'https://www.youtube.com/shorts/HRV5YKKaeVw', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'strict handstand push up': {
+      cf: { url: 'https://www.youtube.com/shorts/0wDEO6shVjc', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'thruster': {
+      cf: { url: 'https://www.youtube.com/shorts/88w6SthC-58', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'dumbbell thruster': {
+      cf: { url: 'https://www.youtube.com/shorts/u3wKkZjE8QM', verified: false, source: 'CrossFit', score: 70 },
+    },
+    'wall ball': {
+      cf: { url: 'https://www.youtube.com/shorts/fpUD0mcFp_0', verified: false, source: 'CrossFit', score: 80 },
+    },
   };
 
   // Résoudre un niveau utilisateur vers une clé de registre
@@ -392,8 +384,9 @@
     }
     var levelKey = _registryLevelKey(lv, isCF);
     var video = entry[levelKey];
-    // Fallback de niveau : advanced → en_any → fr_beginner
-    if (!video && levelKey === 'advanced') video = entry['en_any'];
+    // Cascade niveau : advanced → en_any → fr_beginner (et en_any → fr_beginner en dernier recours)
+    if (!video && levelKey === 'advanced')    video = entry['en_any'] || entry['fr_beginner'];
+    if (!video && levelKey === 'en_any')      video = entry['fr_beginner'];
     if (!video && levelKey === 'fr_beginner') video = entry['en_any'];
     if (!video || !video.url) return null;
     return video.url;
@@ -1134,7 +1127,20 @@
     'souleve de terre':        'deadlift',
     'squat bulgare':           'split squat bulgare',
     'fente bulgare':           'split squat bulgare',
-    'tirage lat':              'tirage vertical poulie'
+    'tirage lat':              'tirage vertical poulie',
+    // Singuliers défensifs → pluriels curatés
+    'traction':                'tractions',
+    'burpee':                  'burpees',
+    'pompe':                   'pompes classiques',
+    // Variantes manquantes identifiées par audit 2026-05
+    'rowing t bar':            't bar row',
+    't bar':                   't bar row',
+    'tirage vertical':         'tirage vertical poulie',
+    'fente bulgare barre':     'split squat bulgare',
+    'straight arm pulldown':   'straight arm pulldown barre',
+    'abdos rouleau':           'ab rollout sur genoux',
+    'ab wheel':                'ab rollout sur genoux',
+    'ecarte poulie':           'cable crossover'
   };
 
   // ─── Aliases CrossFit / Hyrox : abréviations → clé CF_QUERIES ───────────
@@ -1233,12 +1239,19 @@
   function buildSmartVideoUrl(name, lv) {
     if (!name) return null;
 
+    // Superset / parenthetical pre-processing : "Curl + Dips" → "Curl", "Row (T-bar)" → "Row"
+    // Prend seulement le premier exercice d'un superset pour la résolution vidéo
+    var _n = String(name);
+    if (_n.indexOf(' + ') !== -1) _n = _n.split(' + ')[0].trim();
+    if (_n.indexOf('(') !== -1)  _n = _n.replace(/\s*\([^)]*\)/g, '').trim();
+    if (!_n) _n = name;
+
     // 1. Registre direct : URL exacte (watch?v= ou shorts/) — priorité absolue
-    var directUrl = _resolveDirectVideo(name, lv, false);
+    var directUrl = _resolveDirectVideo(_n, lv, false);
     if (directUrl) return directUrl;
 
     // 2. Recherche filtrée par canal (fallback si pas de vidéo directe dans le registre)
-    var resolved = _resolveKey(name, CURATED_QUERIES, EXERCISE_ALIASES);
+    var resolved = _resolveKey(_n, CURATED_QUERIES, EXERCISE_ALIASES);
     var chan = _resolveChannel(lv);
     var baseQuery = CURATED_QUERIES[resolved.key];
 
@@ -1284,16 +1297,26 @@
   function getVideoMeta(name, lv) {
     if (!name) return { url: null, confidence: 0, label: 'none', channel: null, key: '', direct: false };
     var directUrl = _resolveDirectVideo(name, lv, false);
+    if (directUrl) {
+      return {
+        url:        directUrl,
+        confidence: CONF.DIRECT,
+        label:      'direct',
+        channel:    null,
+        key:        _normalizeName(name),
+        direct:     true
+      };
+    }
     var resolved = _resolveKey(name, CURATED_QUERIES, EXERCISE_ALIASES);
     var chan = _resolveChannel(lv);
     var labels = ['none', 'fallback', 'partial', 'alias', 'exact'];
     return {
-      url:        directUrl || buildSmartVideoUrl(name, lv),
-      confidence: directUrl ? 5 : resolved.conf,
-      label:      directUrl ? 'direct' : (labels[resolved.conf] || 'fallback'),
+      url:        buildSmartVideoUrl(name, lv),
+      confidence: resolved.conf,
+      label:      labels[resolved.conf] || 'fallback',
       channel:    chan,
       key:        resolved.key,
-      direct:     !!directUrl
+      direct:     false
     };
   }
 
@@ -1311,14 +1334,45 @@
    */
   function openVideoModal(url, exerciseName, level) {
     if (!url || typeof document === 'undefined') return;
-    var existing = document.getElementById('exo-video-modal');
-    if (existing) existing.parentNode.removeChild(existing);
+    var isDirect = /(?:watch\?v=|\/shorts\/)/.test(url);
+
+    // URL directe (watch?v= ou /shorts/) → ouverture immédiate, zéro friction
+    // L'élément <a> synthétique préserve le geste utilisateur sur iOS/Android.
+    if (isDirect) {
+      try {
+        var a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      } catch(domErr) {
+        try { window.open(url, '_blank', 'noopener,noreferrer'); } catch(e) {}
+      }
+      try { if (window.BLACKBOX) window.BLACKBOX.log('exo_video_open', { exo: exerciseName, lv: level, direct: true }); } catch(e) {}
+      return;
+    }
+
+    // URL de recherche → modal pour indiquer ce que l'utilisateur va voir
+    try {
+      var existing = document.getElementById('exo-video-modal');
+      if (existing) existing.parentNode.removeChild(existing);
+    } catch(e) {}
 
     var chan = _resolveChannel(level);
     var isEN = window.isEnglish && window.isEnglish();
 
-    var ov = document.createElement('div');
+    var ov;
+    try { ov = document.createElement('div'); } catch(e) {
+      try { window.open(url, '_blank', 'noopener,noreferrer'); } catch(e2) {}
+      return;
+    }
     ov.id = 'exo-video-modal';
+    ov.setAttribute('role', 'dialog');
+    ov.setAttribute('aria-modal', 'true');
+    ov.setAttribute('aria-label', isEN ? 'Technique video' : 'Vidéo technique');
     ov.style.cssText = 'position:fixed;inset:0;background:rgba(10,10,9,0.85);z-index:9999;'
       + 'display:flex;align-items:center;justify-content:center;padding:20px;';
 
@@ -1336,14 +1390,14 @@
     var title = document.createElement('div');
     title.style.cssText = 'font-family:Georgia,serif;font-size:20px;color:var(--black,#0A0A09);'
       + 'margin-bottom:10px;line-height:1.3;';
-    title.textContent = exerciseName || (isEN ? 'Technique demonstration' : 'Démonstration de l’exercice');
+    title.textContent = exerciseName || (isEN ? 'Technique demonstration' : 'Démonstration de l\'exercice');
     sheet.appendChild(title);
 
     var body = document.createElement('p');
     body.style.cssText = 'font-size:13px;color:var(--grey,#6B6B65);line-height:1.6;margin:0 0 22px;';
     body.textContent = isEN
-      ? 'Opens a search filtered to ' + chan.name + '’s channel. Select the first result for a clean technique demonstration.'
-      : 'Ouvre une recherche filtrée sur la chaîne ' + chan.name + '. Sélectionnez le premier résultat pour une démonstration technique propre.';
+      ? 'Opens YouTube filtered to ' + chan.name + '. First result = technique video for this exercise.'
+      : 'Ouvre YouTube filtré sur ' + chan.name + '. Premier résultat = vidéo technique de cet exercice.';
     sheet.appendChild(body);
 
     var actions = document.createElement('div');
@@ -1359,7 +1413,7 @@
       + 'min-height:44px;line-height:18px;';
     openBtn.textContent = isEN ? '▶ Open video' : '▶ Ouvrir la vidéo';
     openBtn.addEventListener('click', function() {
-      try { if (window.BLACKBOX) window.BLACKBOX.log('exo_video_open', { exo: exerciseName, lv: level }); } catch(e) {}
+      try { if (window.BLACKBOX) window.BLACKBOX.log('exo_video_open', { exo: exerciseName, lv: level, direct: false }); } catch(e) {}
       setTimeout(function() { if (ov.parentNode) ov.parentNode.removeChild(ov); }, 200);
     });
     actions.appendChild(openBtn);
@@ -1371,17 +1425,22 @@
       + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;'
       + 'text-transform:uppercase;min-height:44px;';
     cancelBtn.textContent = isEN ? 'Cancel' : 'Annuler';
-    cancelBtn.addEventListener('click', function() {
-      if (ov.parentNode) ov.parentNode.removeChild(ov);
-    });
+
+    function _closeModal() {
+      try { document.removeEventListener('keydown', _escHandler); } catch(e) {}
+      try { if (ov.parentNode) ov.parentNode.removeChild(ov); } catch(e) {}
+    }
+    function _escHandler(e) { if (e.key === 'Escape') _closeModal(); }
+
+    cancelBtn.addEventListener('click', _closeModal);
     actions.appendChild(cancelBtn);
 
     sheet.appendChild(actions);
     ov.appendChild(sheet);
-    ov.addEventListener('click', function(e) {
-      if (e.target === ov && ov.parentNode) ov.parentNode.removeChild(ov);
-    });
-    document.body.appendChild(ov);
+    ov.addEventListener('click', function(e) { if (e.target === ov) _closeModal(); });
+    document.addEventListener('keydown', _escHandler);
+    try { document.body.appendChild(ov); } catch(e) { return; }
+    try { cancelBtn.focus(); } catch(e) {}
   }
 
   // ─── API publique ─────────────────────────────────────────────────────────

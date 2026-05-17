@@ -6810,7 +6810,8 @@ window.generateGolfProgram=generateGolfProgram;
 
 // ─── CARDIO PRESCRIPTIONS (ACSM 2018, Tanaka FCmax) ───
 function generateCardioPrescription(userAge, userWeight, sportGoals, sportLevel, sex) {
-  var fcMax = Math.round(208 - 0.7 * (userAge || 30));
+  var _safeAge = (userAge && userAge >= 13 && userAge <= 100) ? userAge : 30;
+  var fcMax = Math.round(208 - 0.7 * _safeAge);
   var isShred = sportGoals && (sportGoals.indexOf('shred') !== -1 || sportGoals.indexOf('weightloss') !== -1);
   var isBulk = sportGoals && sportGoals.indexOf('muscle') !== -1;
   var isEndurance = sportGoals && sportGoals.indexOf('endurance') !== -1;
@@ -7080,21 +7081,7 @@ if (Object.freeze) {
     return tampered.length === 0;
   };
 
-  // ─── SECURITY: Anti-copy protection on sensitive calculated results ───
-  // Disables right-click and text selection on macro result elements
-  document.addEventListener('DOMContentLoaded', function() {
-    document.addEventListener('contextmenu', function(e) {
-      var el = e.target;
-      // Only block on macro/result display elements
-      if (el && (
-        el.classList.contains('macro-cell') ||
-        el.classList.contains('result-title') ||
-        el.classList.contains('stat-val')
-      )) {
-        e.preventDefault();
-      }
-    });
-  });
+  // Context menu allowed — users must be able to copy their own health data (GDPR Art. 20)
 })();
 
 })();
@@ -7150,7 +7137,7 @@ function exportUserData() {
   a.download = 'smartfitcoach-mes-donnees-' + new Date().toISOString().slice(0,10) + '.json';
   document.body.appendChild(a);
   a.click();
-  setTimeout(function() { document.body.removeChild(a); URL.revokeObjectURL(url); }, 1000);
+  setTimeout(function() { document.body.removeChild(a); URL.revokeObjectURL(url); }, 5000);
 }
 
 // Exposer globalement
@@ -9316,7 +9303,7 @@ function _showMedicalDisclaimer() {
   if (!h) return;
   var ov = h('div', {
     id: 'sfc-medical-disclaimer',
-    style: 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,9,0.6);z-index:9600;display:flex;align-items:flex-end;justify-content:center;padding-bottom:env(safe-area-inset-bottom);'
+    style: 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,9,0.6);z-index:10000;display:flex;align-items:flex-end;justify-content:center;padding-bottom:env(safe-area-inset-bottom);'
   });
   var box = h('div', {
     style: 'background:var(--ivory,#FAF9F6);width:100%;max-width:480px;padding:28px 24px 32px;border-top:1px solid var(--line,#D8D8D0);'
@@ -11739,6 +11726,11 @@ function generateSportProgram() {
  // PIPELINE GÉNÉRATION SÉANCE MUSCU — délégué à muscu-engine.js
  // Source unique de vérité : window.sfcBuildMuscuDay (chargé avant app-sport.js)
  // ════════════════════════════════════════════════════════════════════════════
+ if (typeof window.sfcBuildMuscuDay !== 'function') {
+   if (window.showToast) window.showToast((window.isEnglish && window.isEnglish() ? 'Training engine not loaded. Please reload.' : 'Moteur entraînement non chargé. Rechargez la page.'), 'error', 5000);
+   return;
+ }
+ try {
  dayExercises = window.sfcBuildMuscuDay(groups, {
    exercises:     window.EXERCISES,
    filterMedical: (typeof filterExerciseByMedical === 'function') ? filterExerciseByMedical : null,
@@ -11762,6 +11754,10 @@ function generateSportProgram() {
    weekIndex:     window.SFCSymbiosis ? window.SFCSymbiosis.getWeekIndex() : 0,
    perioCfgApplied: !!_perioCfg
  });
+ } catch(_sfcE) {
+   if (window.showToast) window.showToast((window.isEnglish && window.isEnglish() ? 'Error generating session. Please reload.' : 'Erreur génération séance. Rechargez la page.'), 'error', 5000);
+   dayExercises = [];
+ }
  // SFC Symbiosis bridge moved to processCompletedSession (session save only — never on render)
 
  // Grossesse : ajouter Kegel à chaque séance
@@ -13816,6 +13812,7 @@ function renderMusculationGoals(p) {
  // FIX DESYNC 2026-04-16 — invalider sportProgram si goals changent (repos/reps baked at gen time)
  if (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) { S.sportProgram = null; S.muscuIAProgram = null; S.bonusExercises = {}; }
  syncSportGoalsToNutrition();
+ S._nm = null;
  window.render();
  }}, [
  h('span', {'class': 'card-icon'}, gl.icon),
@@ -15192,7 +15189,6 @@ function renderCrossfitProgram(p) {
  h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'}, (window.isEnglish && window.isEnglish()) ? 'Reload the page to display the program.' : 'Rechargez la page pour afficher le programme.')
  ]));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 5; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 5; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + ((window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour')}));
  return;
  }
 
@@ -19092,26 +19088,6 @@ function renderMusculationProgram(p) {
    }
  }
 
- // ─── AVERTISSEMENT RÉCUPÉRATION 48h ───────────────────────────────────────────────
- // check48hConflict lit S.lastSessionGroups+S.lastSessionDate (sfc-symbiosis.js).
- // getBlockedMuscleGroups confirme via SFCDecisionCore (multi-signal).
- if (!_ctaDone && typeof window.check48hConflict === 'function') {
-   var _proposed48h = [];
-   (day.exercises || []).forEach(function(ex) {
-     if (ex.m && _proposed48h.indexOf(ex.m) === -1) _proposed48h.push(ex.m);
-   });
-   var _conflict48h = window.check48hConflict(_proposed48h);
-   var _blockedGrps = (window.SFCDecisionCore && typeof window.SFCDecisionCore.getBlockedMuscleGroups === 'function')
-     ? window.SFCDecisionCore.getBlockedMuscleGroups() : [];
-   if (!_conflict48h.safe || _blockedGrps.length > 0) {
-     var _recWarnEl = h('div', {style: 'border-left:3px solid var(--orange-ink,#7A3B0E);background:rgba(122,59,14,0.06);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);line-height:1.6'});
-     var _recWarnText = _conflict48h.reason ||
-       ((window.isEnglish && window.isEnglish() ? 'Muscle groups in recovery: ' : 'Groupes musculaires en récup. : ') + _blockedGrps.join(', '));
-     _recWarnEl.textContent = '⚠ ' + _recWarnText;
-     p.appendChild(_recWarnEl);
-   }
- }
-
  var _totalExercises = (day.exercises || []).length;
 
  // ─── SWIPE NAVIGATION STATE ───
@@ -21673,19 +21649,6 @@ function renderRunningProgram(p) {
    }
  }
 
- // ─── RÈGLE +10% PROGRESSION VOLUME RUNNING ───────────────────────────────────
- // checkRunning10pct + getLastWeekRunKm définis dans sport-running.js.
- if (typeof window.checkRunning10pct === 'function' && typeof window.getLastWeekRunKm === 'function') {
-   var _prevRunKm = window.getLastWeekRunKm();
-   var _propRunKm = currentWeekData.totalKm || 0;
-   var _runVolCheck = window.checkRunning10pct(_prevRunKm, _propRunKm);
-   if (_runVolCheck.capApplied) {
-     var _runWarnEl = h('div', {style: 'border-left:3px solid var(--orange-ink,#7A3B0E);background:rgba(122,59,14,0.06);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange-ink,#7A3B0E);line-height:1.6'});
-     _runWarnEl.textContent = '⚠ ' + _runVolCheck.reason;
-     p.appendChild(_runWarnEl);
-   }
- }
-
 
  // ─── ESTIMATION CALORIQUE RUNNING ───
  (function() {
@@ -23113,7 +23076,7 @@ function renderYogaProgram(p) {
  if (S.yogaWeek > totalWeeks) S.yogaWeek = totalWeeks;
  if (S.yogaWeek < 1) S.yogaWeek = 1;
 
- var weekData = YOGA_WEEKS[S.yogaWeek - 1];
+ var weekData = (typeof YOGA_WEEKS !== 'undefined' && YOGA_WEEKS) ? YOGA_WEEKS[S.yogaWeek - 1] : null;
  var poses = generateYogaSession({ objective: S.yogaObjectif, style: S.yogaStyle, level: S.yogaLevel, duration: S.yogaDuration });
 
  // Pregnancy warning
@@ -24027,7 +23990,8 @@ window.exportSportPDF = function() {
     if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', window.exportSportPDF); }
     return;
   }
-  if (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) { if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'No program to export. Generate your program first.' : 'Aucun programme \u00e0 exporter. G\u00e9n\u00e9rez votre programme.', 'error', 4000); return; }
+  var _pdfProgram = (Array.isArray(S.muscuIAProgram) && S.muscuIAProgram.length > 0) ? S.muscuIAProgram : S.sportProgram;
+  if (!Array.isArray(_pdfProgram) || _pdfProgram.length === 0) { if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'No program to export. Generate your program first.' : 'Aucun programme \u00e0 exporter. G\u00e9n\u00e9rez votre programme.', 'error', 4000); return; }
   try {
     var jsPDF = window.jspdf.jsPDF;
     var doc = new jsPDF({unit: 'mm', format: 'a4'});
@@ -24044,11 +24008,11 @@ window.exportSportPDF = function() {
     doc.text((window.isEnglish && window.isEnglish() ? 'Strength Program \u2014 Week ' : 'Programme Musculation \u2014 Semaine ') + (S.muscuWeek || 1), M, 24);
     doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
     var levelText = S.sportLevel === 'beginner' ? (window.isEnglish && window.isEnglish() ? 'Beginner' : 'D\u00e9butant') : S.sportLevel === 'intermediate' ? (window.isEnglish && window.isEnglish() ? 'Intermediate' : 'Interm\u00e9diaire') : (window.isEnglish && window.isEnglish() ? 'Advanced' : 'Avanc\u00e9');
-    doc.text(levelText + '  |  ' + S.sportProgram.length + (window.isEnglish && window.isEnglish() ? ' days/week' : ' jours/semaine'), M, 31);
+    doc.text(levelText + '  |  ' + _pdfProgram.length + (window.isEnglish && window.isEnglish() ? ' days/week' : ' jours/semaine'), M, 31);
     y = 42;
 
     // Each day
-    S.sportProgram.forEach(function(day, di) {
+    _pdfProgram.forEach(function(day, di) {
       if (y > 260) { doc.addPage(); y = 20; }
       // Day header
       doc.setFillColor(green[0], green[1], green[2]);
@@ -26751,7 +26715,7 @@ function renderStep8(p) {
       // Calorie adjustment note
       if (cycleInfo.phase.calorieAdjust !== 0) {
         var adjPct = Math.round(cycleInfo.phase.calorieAdjust * 100);
-        var baseCal = Math.round(calcTDEE() * ((S.goal !== null && GOALS[S.goal]) ? GOALS[S.goal].mult : 1));
+        var baseCal = (typeof calcTarget === 'function') ? Math.round(calcTarget()) : Math.round(calcTDEE() * ((S.goal !== null && GOALS[S.goal]) ? GOALS[S.goal].mult : 1));
         var adjCal = tgt;
         var adjNote = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + phaseColor + ';margin-top:4px;padding:6px 10px;background:rgba(0,0,0,0.03);border-radius:2px'});
         adjNote.textContent = (window.isEnglish && window.isEnglish() ? 'Adjusted calories: ' + baseCal + ' kcal (base) + ' + adjPct + '% = ' + adjCal + ' kcal' : 'Calories adapt\u00e9es : ' + baseCal + ' kcal (base) + ' + adjPct + '% = ' + adjCal + ' kcal');
@@ -27157,7 +27121,7 @@ function renderStep9(p) {
   renderProgressBar(p, 12, 12);
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, 'Planning'));
   p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Your<br><em>week</em>' : 'Votre<br><em>semaine</em>'), style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
-  p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? '7 days \u00b7 ' + (S.mealsPerDay || 3) + ' meals/day \u00b7 527 recipes' : '7 jours \u00b7 ' + (S.mealsPerDay || 3) + ' repas/jour \u00b7 527 recettes')));
+  p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? '7 days \u00b7 ' + (S.mealsPerDay || 3) + ' meals/day \u00b7 662 recipes' : '7 jours \u00b7 ' + (S.mealsPerDay || 3) + ' repas/jour \u00b7 662 recettes')));
   if (window.TIPS) TIPS.renderTip(p, 'planning');
 
   // FIX 2026-04-16 — reset selectedDay à aujourd'hui AVANT tout calcul (sinon _nm est calculé pour hier)
@@ -27608,7 +27572,7 @@ function renderStep9(p) {
             S.weekPlan[S.selectedDay][slotKey3] = { n: pItem.name, k: Math.round(pItem.kcal * r), kcal: Math.round(pItem.kcal * r), p: Math.round(pItem.p * r), g: Math.round(pItem.g * r), l: Math.round(pItem.l * r), f: '\u25CE', emoji: '\u25CE', custom: true, portions: gr };
             // BUG-1 FIX: recalculate day aggregate totals so dashboard/shopping-list stay in sync
             (function(_di3) { var _d3 = S.weekPlan[_di3]; if (!_d3) return; var _t3 = {k:0,p:0,g:0,l:0}; ['breakfast','lunch','snack','dinner'].forEach(function(q){var m=_d3[q];if(m){_t3.k+=m.k||0;_t3.p+=m.p||0;_t3.g+=m.g||0;_t3.l+=m.l||0;}}); _d3.kcal=_t3.k;_d3.p=_t3.p;_d3.g=_t3.g;_d3.l=_t3.l; })(S.selectedDay);
-            try { if (Math.round(pItem.kcal * r) > 1500 && window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'This meal exceeds 1500 kcal \u2014 check the portion.' : 'Ce repas d\u00e9passe 1500 kcal\u00a0\u2014 v\u00e9rifiez la portion.', 'warning', 4000); } catch(_hcE) {}
+            try { var _mealThr1 = Math.max(1500, Math.round(calcTarget() / (S.mealsPerDay || 3) * 1.5)); if (Math.round(pItem.kcal * r) > _mealThr1 && window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'This meal exceeds ' + _mealThr1 + ' kcal \u2014 check the portion.' : 'Ce repas d\u00e9passe ' + _mealThr1 + ' kcal\u00a0\u2014 v\u00e9rifiez la portion.', 'warning', 4000); } catch(_hcE) {}
             S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false; S._foodPortionItem = null; S._foodPortionGrams = null;
             try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saveProfile error:', e); }
             try { var _cn = (pItem.name||'').toLowerCase(), _cw=[]; if(!S.allowPork&&/porc|jambon|bacon|lardon(?!.*(?:dinde|volaille|poulet))|saucisson|prosciutto|pancetta|chorizo/.test(_cn))_cw.push('porc'); if(S.regime===2&&/poulet|boeuf|b\u0153uf|veau|dinde|saumon|thon|poisson/.test(_cn))_cw.push('non v\u00e9g\u00e9tarien'); if(S.regime===3&&/poulet|boeuf|b\u0153uf|veau|oeuf|fromage|yaourt|lait/.test(_cn))_cw.push('non vegan'); if(_cw.length&&window.showToast)window.showToast((window.isEnglish && window.isEnglish()) ? '\u26a0\ufe0f Meal added \u2014 contains: '+_cw.join(', ') : '\u26a0\ufe0f Repas ajout\u00e9 \u2014 contient : '+_cw.join(', '), 'warning', 4000); } catch(_wE){}
@@ -27654,7 +27618,7 @@ function renderStep9(p) {
                   S.weekPlan[S.selectedDay][slotKey3c] = { n: rf.n, k: Math.max(0, rf.kcal || rf.k || 0), kcal: Math.max(0, rf.kcal || rf.k || 0), p: Math.max(0, rf.p || 0), g: Math.max(0, rf.g || 0), l: Math.max(0, rf.l || 0), f: '\u25CE', emoji: '\u25CE', custom: true };
                   // BUG-1 FIX: recalculate day aggregate totals so dashboard/shopping-list stay in sync
                   (function(_di3c) { var _d3c = S.weekPlan[_di3c]; if (!_d3c) return; var _t3c = {k:0,p:0,g:0,l:0}; ['breakfast','lunch','snack','dinner'].forEach(function(q){var m=_d3c[q];if(m){_t3c.k+=m.k||0;_t3c.p+=m.p||0;_t3c.g+=m.g||0;_t3c.l+=m.l||0;}}); _d3c.kcal=_t3c.k;_d3c.p=_t3c.p;_d3c.g=_t3c.g;_d3c.l=_t3c.l; })(S.selectedDay);
-                  try { var _rfKcal = Math.max(0, rf.kcal || rf.k || 0); if (_rfKcal > 1500 && window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'This meal exceeds 1500 kcal — check the portion.' : 'Ce repas dépasse 1500 kcal — vérifiez la portion.', 'warning', 4000); } catch(_hcE2) {}
+                  try { var _rfKcal = Math.max(0, rf.kcal || rf.k || 0); var _mealThr2 = Math.max(1500, Math.round(calcTarget() / (S.mealsPerDay || 3) * 1.5)); if (_rfKcal > _mealThr2 && window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'This meal exceeds ' + _mealThr2 + ' kcal — check the portion.' : 'Ce repas dépasse ' + _mealThr2 + ' kcal — vérifiez la portion.', 'warning', 4000); } catch(_hcE2) {}
                   S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false;
                   try { if (window.saveProfile) window.saveProfile(); } catch(e) {}
                   if (window.incrementMealsLogged) window.incrementMealsLogged();
@@ -27788,7 +27752,7 @@ function renderStep9(p) {
           };
           // BUG-1 FIX: recalculate day aggregate totals so dashboard/shopping-list stay in sync
           (function(_di4) { var _d4 = S.weekPlan[_di4]; if (!_d4) return; var _t4 = {k:0,p:0,g:0,l:0}; ['breakfast','lunch','snack','dinner'].forEach(function(q){var m=_d4[q];if(m){_t4.k+=m.k||0;_t4.p+=m.p||0;_t4.g+=m.g||0;_t4.l+=m.l||0;}}); _d4.kcal=_t4.k;_d4.p=_t4.p;_d4.g=_t4.g;_d4.l=_t4.l; })(S.selectedDay);
-          try { var _manKcal = Math.max(0, parseFloat(fd.kcal) || 0); if (_manKcal > 1500 && window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'This meal exceeds 1500 kcal — check the portion.' : 'Ce repas dépasse 1500 kcal — vérifiez la portion.', 'warning', 4000); } catch(_hcE3) {}
+          try { var _manKcal = Math.max(0, parseFloat(fd.kcal) || 0); var _mealThr3 = Math.max(1500, Math.round(calcTarget() / (S.mealsPerDay || 3) * 1.5)); if (_manKcal > _mealThr3 && window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'This meal exceeds ' + _mealThr3 + ' kcal — check the portion.' : 'Ce repas dépasse ' + _mealThr3 + ' kcal — vérifiez la portion.', 'warning', 4000); } catch(_hcE3) {}
           S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false; S._foodManualData = null;
           try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saveProfile error:', e); }
           try { var _mn = (fd.name||'').trim().toLowerCase(), _mw=[]; if(!S.allowPork&&/porc|jambon|bacon|lardon(?!.*(?:dinde|volaille|poulet))|saucisson|prosciutto|pancetta|chorizo/.test(_mn))_mw.push('porc'); if(S.regime===2&&/poulet|boeuf|bœuf|veau|dinde|saumon|thon|poisson/.test(_mn))_mw.push('non végétarien'); if(S.regime===3&&/poulet|boeuf|bœuf|veau|oeuf|fromage|yaourt|lait/.test(_mn))_mw.push('non vegan'); if(_mw.length&&window.showToast)window.showToast((window.isEnglish && window.isEnglish()) ? '\u26a0\ufe0f Meal added — contains: '+_mw.join(', ') : '\u26a0\ufe0f Repas ajouté — contient : '+_mw.join(', '), 'warning', 4000); } catch(_mwE){}

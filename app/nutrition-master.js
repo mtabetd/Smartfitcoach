@@ -74,7 +74,7 @@
 
   var KCAL_FLOOR_MALE          = _C.KCAL_FLOOR_MALE   || 1500;
   var KCAL_FLOOR_FEMALE        = _C.KCAL_FLOOR_FEMALE || 1400;
-  var KCAL_FLOOR_FEMALE_ACTIVE = _C.KCAL_FLOOR_FEMALE || 1400;
+  var KCAL_FLOOR_FEMALE_ACTIVE = _C.KCAL_FLOOR_FEMALE_ACTIVE || 1600; // IOC 2018 RED-S consensus: higher floor for active women
   var ACTIVITY_THRESHOLD_ACTIVE = 1.375;
 
   /**
@@ -268,6 +268,9 @@
       fatGrams     * KCAL_PER_FAT  +
       carbsGrams   * KCAL_PER_CARB
     );
+    // IOM 130g floor can push macro total above caloriesTarget (deep cut scenario).
+    // Align caloriesTarget with actual macro sum so UI badge stays coherent.
+    if (caloriesCheck > caloriesTarget) caloriesTarget = caloriesCheck;
 
     // ─── TIMING NUTRITIONNEL SPORTIF ────────────────────────────────────────────
     // Fenêtre anabolique post-entraînement : 20-40g protéines dans les 2h
