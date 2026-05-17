@@ -77,7 +77,7 @@
     if (_syncFailCount > 0) {
       // Transition offline → online : toast de rétablissement si on avait alerté
       if (_syncFailWarnedAt > 0 && window.showToast) {
-        try { window.showToast('Synchronisation cloud rétablie.', 'info', 3000); } catch(e) {}
+        try { window.showToast((window.isEnglish && window.isEnglish()) ? 'Cloud sync restored.' : 'Synchronisation cloud rétablie.', 'info', 3000); } catch(e) {}
       }
     }
     _syncFailCount = 0;
@@ -89,7 +89,7 @@
     if (_syncFailCount >= 3 && (Date.now() - _syncFailWarnedAt > 10 * 60 * 1000)) {
       _syncFailWarnedAt = Date.now();
       if (window.showToast) {
-        try { window.showToast('Synchronisation cloud indisponible. Vos modifications sont conservées localement.', 'warning', 5000); } catch(e) {}
+        try { window.showToast((window.isEnglish && window.isEnglish()) ? 'Cloud sync unavailable. Your changes are saved locally.' : 'Synchronisation cloud indisponible. Vos modifications sont conservées localement.', 'warning', 5000); } catch(e) {}
       }
     }
   }

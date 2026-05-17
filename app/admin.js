@@ -142,6 +142,7 @@ function renderUsers(users) {
     // Build the badge as a real DOM element — subPlan originates from
     // user-writable JSONB on legacy rows, so string-concat + innerHTML
     // would enable stored XSS against the admin. Use textContent.
+    var _planLabels = { athlete: 'Core', champion: 'Performance', legende: 'Élite', trial: 'Trial', unlimited: 'Illimité' };
     var status, badgeEl = document.createElement('span');
     badgeEl.className = 'badge';
     if (subPlan === 'unlimited') {
@@ -152,7 +153,7 @@ function renderUsers(users) {
     } else if (subEnd && new Date(subEnd) > now) {
       status = 'active';
       badgeEl.classList.add('badge-active');
-      badgeEl.textContent = 'Actif · ' + (subPlan || '');
+      badgeEl.textContent = 'Actif · ' + (_planLabels[subPlan] || subPlan || '');
       statsActive++;
     } else if (firstLogin) {
       var trialEnd = new Date(firstLogin);
@@ -205,25 +206,68 @@ function renderUsers(users) {
 }
 
 // ── MODAL ──
+// Legacy plan values from older records: '1m','3m','6m','12m' → map to tier 'athlete'
+var _LEGACY_DURATIONS = { '1m': '1m', '3m': '3m', '6m': '6m', '12m': '12m' };
+var _TIER_VALUES = ['trial', 'athlete', 'champion', 'legende', 'unlimited'];
+
+function _updateDateFromDuration() {
+  var tier = document.getElementById('modal-tier').value;
+  var dur  = document.getElementById('modal-duration').value;
+  var durationField = document.getElementById('modal-duration-field');
+
+  if (tier === 'unlimited') {
+    durationField.style.display = 'none';
+    document.getElementById('modal-date').value = '2099-12-31';
+    return;
+  }
+  if (tier === 'trial') {
+    durationField.style.display = 'none';
+    var t = new Date();
+    t.setUTCDate(t.getUTCDate() + 7);
+    document.getElementById('modal-date').value = t.toISOString().slice(0, 10);
+    return;
+  }
+  durationField.style.display = 'block';
+  var d = new Date();
+  if (dur === '1m')  d.setMonth(d.getMonth() + 1);
+  else if (dur === '3m')  d.setMonth(d.getMonth() + 3);
+  else if (dur === '6m')  d.setMonth(d.getMonth() + 6);
+  else if (dur === '12m') d.setFullYear(d.getFullYear() + 1);
+  document.getElementById('modal-date').value = d.toISOString().slice(0, 10);
+}
+
 function openModal(userId, name, currentPlan, currentEnd) {
   _editingUserId = userId;
   document.getElementById('modal-title').textContent = 'Abonnement · ' + (name || userId);
-  document.getElementById('modal-plan').value = currentPlan || 'trial';
-  document.getElementById('modal-date').value = currentEnd || '';
+
+  var tierEl = document.getElementById('modal-tier');
+  var durEl  = document.getElementById('modal-duration');
+
+  // Detect legacy duration-as-plan (e.g. '3m') vs new tier values
+  if (currentPlan && _LEGACY_DURATIONS[currentPlan]) {
+    tierEl.value = 'athlete';   // default tier for legacy records
+    durEl.value  = currentPlan;
+  } else if (currentPlan && _TIER_VALUES.indexOf(currentPlan) !== -1) {
+    tierEl.value = currentPlan;
+    durEl.value  = '3m';        // sensible default duration
+  } else {
+    tierEl.value = 'trial';
+    durEl.value  = '3m';
+  }
+
+  // If we have an existing end date, keep it; otherwise compute from duration
+  if (currentEnd) {
+    document.getElementById('modal-date').value = currentEnd;
+    var durationField = document.getElementById('modal-duration-field');
+    durationField.style.display = (tierEl.value === 'trial' || tierEl.value === 'unlimited') ? 'none' : 'block';
+  } else {
+    _updateDateFromDuration();
+  }
+
   document.getElementById('modal').classList.add('open');
 
-  document.getElementById('modal-plan').onchange = function() {
-    var plan = this.value;
-    var d = new Date();
-    if (plan === '1m') d.setMonth(d.getMonth() + 1);
-    else if (plan === '3m') d.setMonth(d.getMonth() + 3);
-    else if (plan === '6m') d.setMonth(d.getMonth() + 6);
-    else if (plan === '12m') d.setFullYear(d.getFullYear() + 1);
-    else if (plan === 'unlimited') { document.getElementById('modal-date').value = '2099-12-31'; return; }
-    else if (plan === 'trial') { var t = new Date(); t.setUTCDate(t.getUTCDate() + 7); document.getElementById('modal-date').value = t.toISOString().slice(0,10); return; }
-    document.getElementById('modal-date').value = d.toISOString().slice(0, 10);
-  };
-  document.getElementById('modal-plan').onchange();
+  tierEl.onchange = _updateDateFromDuration;
+  durEl.onchange  = _updateDateFromDuration;
 }
 
 function closeModal() {
@@ -233,7 +277,7 @@ function closeModal() {
 
 async function saveSubscription() {
   if (!_editingUserId || !_accessToken) return;
-  var plan = document.getElementById('modal-plan').value;
+  var plan = document.getElementById('modal-tier').value;
   var endDate = document.getElementById('modal-date').value;
   if (plan === 'unlimited') endDate = '2099-12-31';
 

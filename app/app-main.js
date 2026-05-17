@@ -100,6 +100,7 @@ var PROFILE_KEYS = [
  'firstLoginDate',
  'sportMixEnabled',
  'sportMixSecondary',
+ 'sportMixTertiary',
  '_bodyFatEstimate',
  '_bodyCompositionProfile',
  '_bodyCompositionWeight',
@@ -193,7 +194,7 @@ var NUTRITION_PLAN_KEYS = [
 var SPORT_PROGRAM_KEYS = [
  'sportLevel', 'sportDays', 'sportEquipment', 'sportType', 'sportGoals',
  'sportFocus', 'muscuMedical',
- 'sportMixEnabled', 'sportMixSecondary',
+ 'sportMixEnabled', 'sportMixSecondary', 'sportMixTertiary',
  'pregnant', 'pregnancyWeek', // grossesse filtre les exercices dangereux → programme doit être régénéré
  'weight' // poids impacte estimateBaseLoad (débutants sans 1RM) et suggestionsPoids
 ];
@@ -234,7 +235,7 @@ function saveProfile() {
    console.warn('[saveProfile] BLOQUÉ — données corrompues détectées au load. Reload nécessaire.');
    if (!window._corruptedToastShown && window.showToast) {
      window._corruptedToastShown = true;
-     window.showToast('Données corrompues détectées. Rechargez la page pour restaurer.', 'error', 6000);
+     window.showToast((window.isEnglish && window.isEnglish()) ? 'Corrupted data detected. Reload the page to restore.' : 'Données corrompues détectées. Rechargez la page pour restaurer.', 'error', 6000);
    }
    return;
  }
@@ -243,6 +244,7 @@ function saveProfile() {
  // On bloque pour éviter la perte de données. saveProfile sera re-déclenché après restore.
  if (window.AUTH && typeof window.AUTH.isAuthRestoring === 'function' && window.AUTH.isAuthRestoring()) {
    console.log('[saveProfile] DIFFÉRÉ — session Supabase en cours de restauration');
+   window._profileDirty = true; // Ensure retry after restore completes (prevents data loss on early tab close)
    return;
  }
  var user = AUTH.getUser();
@@ -388,12 +390,12 @@ function saveProfile() {
        window._quotaWarnCount = (window._quotaWarnCount || 0) + 1;
        if (window._quotaWarnCount === 1 || window._quotaWarnCount % 10 === 0) {
          if (window.showToast) {
-           window.showToast('⚠️ Stockage saturé. Vos modifications ne sont PAS sauvegardées localement. Synchronisation cloud tentée automatiquement.', 'error', 8000);
+           window.showToast((window.isEnglish && window.isEnglish()) ? 'Storage full — local changes not saved. Cloud sync attempted.' : 'Stockage saturé — modifications non sauvegardées localement. Synchronisation cloud tentée.', 'error', 8000);
          }
        }
      } else {
        // Récupération réussie : toast informatif
-       if (window.showToast) window.showToast('Espace libéré automatiquement — données sauvegardées.', 'info', 3000);
+       if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Storage freed automatically — data saved.' : 'Espace libéré automatiquement — données sauvegardées.', 'info', 3000);
      }
    }
  }
@@ -448,7 +450,7 @@ function loadProfile() {
      console.error('[loadProfile] DATA CORRUPTED — backed up to ' + _bkKey + ' — saveProfile désactivé jusqu\'au prochain reload');
    } catch(eb) { console.error('[loadProfile] backup also failed:', eb); }
    S._loadCorrupted = true;
-   setTimeout(function(){ if (window.showToast) window.showToast('Profil endommagé — rechargez la page pour restaurer vos données.', 'error', 8000); }, 800);
+   setTimeout(function(){ if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Profile error — reload the page to restore your data.' : 'Profil endommagé — rechargez la page pour restaurer vos données.', 'error', 8000); }, 800);
    return;
  }
  }
@@ -461,7 +463,7 @@ function loadProfile() {
      console.error('[loadProfile] DECODE retourné null — backup ' + _bkKey2 + ' — saveProfile désactivé');
    } catch(eb2) { console.error('[loadProfile] backup also failed:', eb2); }
    S._loadCorrupted = true;
-   setTimeout(function(){ if (window.showToast) window.showToast('Profil endommagé — rechargez la page pour restaurer vos données.', 'error', 8000); }, 800);
+   setTimeout(function(){ if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Profile error — reload the page to restore your data.' : 'Profil endommagé — rechargez la page pour restaurer vos données.', 'error', 8000); }, 800);
    return;
  }
  // Prototype pollution guard: reject any parsed object that carries dangerous keys
@@ -493,7 +495,7 @@ function loadProfile() {
  if (S.weekPlan && typeof S.weekPlan === 'string') { try { S.weekPlan = JSON.parse(S.weekPlan); } catch(e) { S.weekPlan = null; } }
  if (S.weekPlan !== null && !Array.isArray(S.weekPlan)) S.weekPlan = null;
  if (S.weeklyCalendar && typeof S.weeklyCalendar === 'string') { try { S.weeklyCalendar = JSON.parse(S.weeklyCalendar); } catch(e) { S.weeklyCalendar = null; } }
- if (S.weeklyCalendar !== null && !Array.isArray(S.weeklyCalendar)) S.weeklyCalendar = null;
+ if (S.weeklyCalendar !== null && (typeof S.weeklyCalendar !== 'object' || Array.isArray(S.weeklyCalendar))) S.weeklyCalendar = null;
  // mealTimes is an object {breakfast,lunch,snack,dinner} — reject malformed values
  if (S.mealTimes !== null && S.mealTimes !== undefined && (typeof S.mealTimes !== 'object' || Array.isArray(S.mealTimes))) S.mealTimes = null;
  // excluded is a string (comma-separated), not an array — guard separately
@@ -585,9 +587,10 @@ window.renderWelcomeScreen = function renderWelcomeScreen(app) {
  var _name = (window.S && typeof window.S.prenom === 'string' && window.S.prenom.trim())
    || _nameFromAuth || '';
  var _cap = _name ? _name.charAt(0).toUpperCase() + _name.slice(1) : '';
- var _titleText = _cap
-   ? (_cap + ', nous allons apprendre \u00e0 vous conna\u00eetre.')
-   : 'Nous allons apprendre \u00e0 vous conna\u00eetre.';
+ var _wsEN = window.isEnglish && window.isEnglish();
+ var _titleText = _wsEN
+   ? (_cap ? (_cap + ', let\u2019s get to know you.') : 'Let\u2019s get to know you.')
+   : (_cap ? (_cap + ', nous allons apprendre \u00e0 vous conna\u00eetre.') : 'Nous allons apprendre \u00e0 vous conna\u00eetre.');
 
  var wrap = h('div', {
    style: 'position:fixed;inset:0;background:var(--ivory,#FAF9F6);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;overflow-y:auto;'
@@ -608,23 +611,23 @@ window.renderWelcomeScreen = function renderWelcomeScreen(app) {
 
  var sousTitre = h('div', {
    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:400;letter-spacing:.35em;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:40px;opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;'
- }, 'Votre corps a une logique. Nous allons la lire.');
+ }, _wsEN ? 'Your body has a logic. We are going to read it.' : 'Votre corps a une logique. Nous allons la lire.');
 
  // Corps phrase 1 — courte, italique, noire
  var corps1 = h('div', {
    style: 'font-family:Georgia,serif;font-style:italic;font-size:15px;line-height:1.75;color:var(--black,#0A0A09);max-width:300px;margin-bottom:24px;opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;'
- }, 'Avant de vous proposer quoi que ce soit, nous vous \u00e9coutons.');
+ }, _wsEN ? 'Before suggesting anything, we listen.' : 'Avant de vous proposer quoi que ce soit, nous vous \u00e9coutons.');
 
  // Corps phrase 2 — longue, analytique, grise (Helvetica Neue light)
  var corps2 = h('div', {
    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.85;color:var(--grey,#6B6B65);max-width:320px;margin-bottom:24px;opacity:0;transform:translateY(16px);transition:opacity .65s ease,transform .65s ease;'
  });
- corps2.appendChild(document.createTextNode('Votre m\u00e9tabolisme, votre composition corporelle, votre rythme de vie, vos heures de sommeil, la fa\u00e7on dont vous bougez et dont vous mangez \u2014 chaque donn\u00e9e que vous nous confierez sera le mat\u00e9riau d\u2019un programme qui ne ressemblera \u00e0 aucun autre.'));
+ corps2.appendChild(document.createTextNode(_wsEN ? 'Your metabolism, your body composition, your lifestyle, your sleep, the way you move and eat \u2014 every piece of data you share will be the material for a program unlike any other.' : 'Votre m\u00e9tabolisme, votre composition corporelle, votre rythme de vie, vos heures de sommeil, la fa\u00e7on dont vous bougez et dont vous mangez \u2014 chaque donn\u00e9e que vous nous confierez sera le mat\u00e9riau d\u2019un programme qui ne ressemblera \u00e0 aucun autre.'));
 
  // Corps phrase 3 — courte, forte, uppercase (déclaration finale)
  var corps3 = h('div', {
    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:500;letter-spacing:.25em;text-transform:uppercase;color:var(--black,#0A0A09);margin-bottom:40px;opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;'
- }, 'Ce que vous \u00eates construit ce que vous recevrez.');
+ }, _wsEN ? 'What you are builds what you receive.' : 'Ce que vous \u00eates construit ce que vous recevrez.');
 
  var divider = h('div', {
    style: 'width:100%;max-width:260px;height:1px;background:var(--border,#D8D8D0);margin-bottom:36px;opacity:0;transition:opacity .5s ease;'
@@ -647,7 +650,7 @@ window.renderWelcomeScreen = function renderWelcomeScreen(app) {
 
  var signature = h('div', {
    style: 'font-family:Georgia,serif;font-style:italic;font-size:12px;line-height:1.7;color:var(--grey,#6B6B65);max-width:280px;text-align:center;opacity:0;transform:translateY(12px);transition:opacity .6s ease,transform .6s ease;'
- }, 'Un programme qui vous ressemble n\u2019existe pas encore. Il va na\u00eetre ici.');
+ }, _wsEN ? 'A program that resembles you doesn\u2019t exist yet. It will be born here.' : 'Un programme qui vous ressemble n\u2019existe pas encore. Il va na\u00eetre ici.');
 
  inner.appendChild(logo);
  inner.appendChild(titre);
@@ -658,7 +661,7 @@ window.renderWelcomeScreen = function renderWelcomeScreen(app) {
 
  var timingPill = h('div', {
    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#9A9A90);margin-top:8px;opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;'
- }, '~5 min · Vos données restent sur l\'appareil');
+ }, _wsEN ? '~5 min · Your data stays on your device' : '~5 min · Vos donn\u00e9es restent sur l\'appareil');
  inner.appendChild(timingPill);
 
  inner.appendChild(divider);
@@ -801,6 +804,7 @@ window.renderModuleChoice = function renderModuleChoice(content) {
 // ─── PROFILE PAGE ───
 function renderProfilePage(container) {
  var S = window.S;
+ var _pEN = window.isEnglish && window.isEnglish();
  var user = window.AUTH ? window.AUTH.getUser() : null;
  var c = h('div', {style: 'max-width:480px;margin:0 auto;padding:24px 20px 48px'});
  if (!window.SFC_PRICING_DATA && !window._sfcPricingAttempted && window.loadSFCPricing) {
@@ -811,11 +815,11 @@ function renderProfilePage(container) {
  var backBtn = h('button', {
    style: 'background:none;border:none;padding:10px 14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);cursor:pointer;margin-bottom:24px;display:inline-flex;align-items:center;gap:6px;min-height:44px;',
    onclick: function() { S.view = 'today'; if (window.render) window.render(); }
- }, '← Retour');
+ }, _pEN ? '← Back' : '← Retour');
  c.appendChild(backBtn);
 
  // Title
- c.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:24px;font-weight:normal;margin-bottom:4px;'}, 'Mon profil'));
+ c.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:24px;font-weight:normal;margin-bottom:4px;'}, _pEN ? 'My profile' : 'Mon profil'));
  c.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);letter-spacing:1px;margin-bottom:28px;'}, user ? (user.email || '') : ''));
 
  // ─── Photo + nom ───
@@ -869,9 +873,9 @@ function renderProfilePage(container) {
  photoWrap.addEventListener('click', function() { photoInput.click(); });
  photoSection.appendChild(photoWrap);
  var nameBlock = h('div', {style: 'flex:1;'});
- var displayName = [S.prenom, S.nom].filter(Boolean).join(' ') || (user && (user.name || user.email)) || 'Utilisateur';
+ var displayName = [S.prenom, S.nom].filter(Boolean).join(' ') || (user && (user.name || user.email)) || (_pEN ? 'User' : 'Utilisateur');
  nameBlock.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:4px;'}, displayName));
- nameBlock.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);letter-spacing:1px;cursor:pointer;text-transform:uppercase;'}, 'Changer la photo'));
+ nameBlock.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);letter-spacing:1px;cursor:pointer;text-transform:uppercase;'}, _pEN ? 'Change photo' : 'Changer la photo'));
  photoSection.appendChild(nameBlock);
  c.appendChild(photoSection);
 
@@ -889,20 +893,20 @@ function renderProfilePage(container) {
 
  // ── Section 1: Identité ──
  var sec1 = h('div', {style: 'margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);'});
- sec1.appendChild(h('div', {style: _sh}, 'IDENTIT\u00c9'));
- sec1.appendChild(_infoRow('Sexe', window.isMale(S) ? 'Homme' : window.isFemale(S) ? 'Femme' : null));
- sec1.appendChild(_infoRow('\u00c2ge', S.age ? S.age + ' ans' : null));
- sec1.appendChild(_infoRow('Poids', S.weight ? S.weight + ' kg' : null));
+ sec1.appendChild(h('div', {style: _sh}, _pEN ? 'IDENTITY' : 'IDENTIT\u00c9'));
+ sec1.appendChild(_infoRow(_pEN ? 'Sex' : 'Sexe', window.isMale(S) ? (_pEN ? 'Male' : 'Homme') : window.isFemale(S) ? (_pEN ? 'Female' : 'Femme') : null));
+ sec1.appendChild(_infoRow(_pEN ? 'Age' : '\u00c2ge', S.age ? S.age + (_pEN ? ' yrs' : ' ans') : null));
+ sec1.appendChild(_infoRow(_pEN ? 'Weight' : 'Poids', S.weight ? S.weight + ' kg' : null));
  // FIX D16 COHÉRENCE PRE-PREGNANCY 2026-04 : affiche le poids pré-grossesse si applicable.
  // Avant : calcTarget utilisait prePregnancyWeight (invisible dans profil) → user voyait
  //         son poids actuel (ex 75 kg) dans profil mais la cible kcal était basée sur
  //         68 kg → mismatch incompréhensible pour l'user.
  if (window.isFemale(S) && S.pregnant && S.prePregnancyWeight && S.prePregnancyWeight !== S.weight) {
-   sec1.appendChild(_infoRow('Poids pré-grossesse', S.prePregnancyWeight + ' kg'));
+   sec1.appendChild(_infoRow(_pEN ? 'Pre-pregnancy weight' : 'Poids pré-grossesse', S.prePregnancyWeight + ' kg'));
  }
- sec1.appendChild(_infoRow('Taille', S.height ? S.height + ' cm' : null));
+ sec1.appendChild(_infoRow(_pEN ? 'Height' : 'Taille', S.height ? S.height + ' cm' : null));
  var _bmiVal = (typeof calcBMI === 'function') ? calcBMI() : null;
- sec1.appendChild(_infoRow('IMC', _bmiVal ? _bmiVal.toFixed(1) : null));
+ sec1.appendChild(_infoRow(_pEN ? 'BMI' : 'IMC', _bmiVal ? _bmiVal.toFixed(1) : null));
  // FIX STREAK PROFIL 2026-04 : afficher le streak dans la fiche perso (source unique
  // = localStorage mtd_streak_<uid>, même source que dashboard et gamification).
  // FIX F7 CONTRE-AUDIT 2026-04 : UNIQUEMENT si user connecté (pas 'anon') pour éviter
@@ -920,16 +924,16 @@ function renderProfilePage(container) {
      }
    } catch(eStreak) {}
  })();
- if (window.isFemale(S) && S.pregnant) sec1.appendChild(_infoRow('Grossesse', 'Semaine ' + (S.pregnancyWeek || '?')));
- if (window.isFemale(S) && S.cycleTracking) sec1.appendChild(_infoRow('Cycle', S.cycleLength + ' jours'));
+ if (window.isFemale(S) && S.pregnant) sec1.appendChild(_infoRow(_pEN ? 'Pregnancy' : 'Grossesse', (_pEN ? 'Week ' : 'Semaine ') + (S.pregnancyWeek || '?')));
+ if (window.isFemale(S) && S.cycleTracking) sec1.appendChild(_infoRow(_pEN ? 'Cycle' : 'Cycle', S.cycleLength + (_pEN ? ' days' : ' jours')));
  c.appendChild(sec1);
 
  // ── Section 2: Objectif & Nutrition ──
  var sec2 = h('div', {style: 'margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);'});
- sec2.appendChild(h('div', {style: _sh}, 'OBJECTIF & NUTRITION'));
+ sec2.appendChild(h('div', {style: _sh}, _pEN ? 'GOAL & NUTRITION' : 'OBJECTIF & NUTRITION'));
  var _goalName = (function() { var g = window.GOALS; if (g && Array.isArray(g) && S.goal !== null && S.goal !== undefined && g[S.goal]) return g[S.goal].icon + ' ' + g[S.goal].name; return null; })();
- sec2.appendChild(_infoRow('Objectif', _goalName));
- if (S.targetWeight) sec2.appendChild(_infoRow('Poids cible', S.targetWeight + ' kg'));
+ sec2.appendChild(_infoRow(_pEN ? 'Goal' : 'Objectif', _goalName));
+ if (S.targetWeight) sec2.appendChild(_infoRow(_pEN ? 'Target weight' : 'Poids cible', S.targetWeight + ' kg'));
  // FIX COHÉRENCE PROFIL 2026-04 : utiliser getCalorieTarget/getMacroTargets (même source
  // que le dashboard) au lieu de calcTarget/calcMacros bruts.
  // Avant : profil affichait 2200 kcal (théorique jour training) tandis que dashboard
@@ -938,25 +942,25 @@ function renderProfilePage(container) {
  var _tgtCal = (typeof window.getCalorieTarget === 'function')
    ? window.getCalorieTarget()
    : ((typeof calcTarget === 'function') ? calcTarget() : 0);
- if (_tgtCal > 0) sec2.appendChild(_infoRow('Calories/jour', Math.round(_tgtCal) + ' kcal'));
+ if (_tgtCal > 0) sec2.appendChild(_infoRow(_pEN ? 'Calories/day' : 'Calories/jour', Math.round(_tgtCal) + ' kcal'));
  var _macros = (typeof window.getMacroTargets === 'function')
    ? window.getMacroTargets()
    : ((typeof calcMacros === 'function') ? calcMacros() : null);
- if (_macros) sec2.appendChild(_infoRow('Macros (P/G/L)', Math.round(_macros.p) + 'g / ' + Math.round(_macros.g) + 'g / ' + Math.round(_macros.l) + 'g'));
+ if (_macros) sec2.appendChild(_infoRow(_pEN ? 'Macros (P/C/F)' : 'Macros (P/G/L)', Math.round(_macros.p) + 'g / ' + Math.round(_macros.g) + 'g / ' + Math.round(_macros.l) + 'g'));
  var _actName = (window.ACTIVITIES && S.activity !== null && S.activity !== undefined && window.ACTIVITIES[S.activity]) ? window.ACTIVITIES[S.activity].name : null;
- sec2.appendChild(_infoRow('Activit\u00e9', _actName));
- var _regNames = ['Omnivore', 'Pesc\u00e9tarien', 'V\u00e9g\u00e9tarien', 'V\u00e9gan'];
- sec2.appendChild(_infoRow('R\u00e9gime', _regNames[S.regime] || 'Omnivore'));
- if (!S.allowPork) sec2.appendChild(_infoRow('Porc', 'Exclu'));
- if (!S.allowAlcohol) sec2.appendChild(_infoRow('Alcool cuisine', 'Exclu'));
- if (Array.isArray(S.allergies) && S.allergies.length > 0 && S.allergies[0] !== 'Aucune') sec2.appendChild(_infoRow('Allergies', S.allergies.join(', ')));
+ sec2.appendChild(_infoRow(_pEN ? 'Activity' : 'Activit\u00e9', _actName));
+ var _regNames = _pEN ? ['Omnivore', 'Pescatarian', 'Vegetarian', 'Vegan'] : ['Omnivore', 'Pesc\u00e9tarien', 'V\u00e9g\u00e9tarien', 'V\u00e9gan'];
+ sec2.appendChild(_infoRow(_pEN ? 'Diet' : 'R\u00e9gime', _regNames[S.regime] || (_pEN ? 'Omnivore' : 'Omnivore')));
+ if (!S.allowPork) sec2.appendChild(_infoRow(_pEN ? 'Pork' : 'Porc', _pEN ? 'Excluded' : 'Exclu'));
+ if (!S.allowAlcohol) sec2.appendChild(_infoRow(_pEN ? 'Cooking alcohol' : 'Alcool cuisine', _pEN ? 'Excluded' : 'Exclu'));
+ if (Array.isArray(S.allergies) && S.allergies.length > 0 && S.allergies[0] !== 'Aucune') sec2.appendChild(_infoRow(_pEN ? 'Allergies' : 'Allergies', S.allergies.join(', ')));
  if (Array.isArray(S.medical) && S.medical.length > 0) {
    var _medNames = S.medical.map(function(id) {
      var found = null;
      (window.MEDICAL || []).forEach(function(cat) { (cat.items || []).forEach(function(item) { if (item.id === id) found = item; }); });
      return found ? found.name : id;
    });
-   sec2.appendChild(_infoRow('Conditions', _medNames.join(', ')));
+   sec2.appendChild(_infoRow(_pEN ? 'Conditions' : 'Conditions', _medNames.join(', ')));
  }
  c.appendChild(sec2);
 
@@ -964,30 +968,47 @@ function renderProfilePage(container) {
  if (S.appMode === 'sport' || S.appMode === 'both') {
    var sec3 = h('div', {style: 'margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);'});
    sec3.appendChild(h('div', {style: _sh}, 'SPORT'));
-   var _sportNames = { muscu: 'Musculation', crossfit: 'CrossFit', running: 'Course \u00e0 pied', triathlon: 'Triathlon', calisthenics: 'Calisth\u00e9nics', hyrox: 'Hyrox', padel: 'Padel', golf: 'Golf', yoga: 'Yoga', cycling: 'Cyclisme' };
-   sec3.appendChild(_infoRow('Sport principal', _sportNames[S.sportType] || S.sportType || '\u2014'));
-   if (S.sportMixEnabled && S.sportMixSecondary) sec3.appendChild(_infoRow('Sport secondaire', 'Musculation (' + (S.sportMixSecondary.days || 1) + 'j)'));
-   var _lvlNames = { beginner: 'D\u00e9butant', intermediate: 'Interm\u00e9diaire', advanced: 'Avanc\u00e9', elite: '\u00c9lite' };
-   sec3.appendChild(_infoRow('Niveau', _lvlNames[S.sportLevel] || S.sportLevel || '\u2014'));
-   sec3.appendChild(_infoRow('Jours/semaine', S.sportDays ? S.sportDays + ' jours' : '\u2014'));
-   var _eqNames = { gym: 'Salle compl\u00e8te', home: 'Domicile', dumbbells: 'Halt\u00e8res uniquement' };
-   sec3.appendChild(_infoRow('\u00c9quipement', _eqNames[S.sportEquipment] || S.sportEquipment || '\u2014'));
+   var _sportNames = _pEN
+     ? { muscu: 'Weightlifting', musculation: 'Weightlifting', crossfit: 'CrossFit', running: 'Running', triathlon: 'Triathlon', calisthenics: 'Calisthenics', hyrox: 'Hyrox', padel: 'Padel', golf: 'Golf', yoga: 'Yoga', cycling: 'Cycling' }
+     : { muscu: 'Musculation', musculation: 'Musculation', crossfit: 'CrossFit', running: 'Course \u00e0 pied', triathlon: 'Triathlon', calisthenics: 'Calisth\u00e9nics', hyrox: 'Hyrox', padel: 'Padel', golf: 'Golf', yoga: 'Yoga', cycling: 'Cyclisme' };
+   sec3.appendChild(_infoRow(_pEN ? 'Primary sport' : 'Sport principal', _sportNames[S.sportType] || S.sportType || '\u2014'));
+   if (S.sportMixEnabled && S.sportMixSecondary && S.sportMixSecondary.type) {
+     var _secLabel = (_sportNames[S.sportMixSecondary.type] || S.sportMixSecondary.type) + ' (' + (S.sportMixSecondary.days || 1) + (_pEN ? 'd)' : 'j)');
+     sec3.appendChild(_infoRow(_pEN ? 'Secondary sport' : 'Sport secondaire', _secLabel));
+   }
+   if (S.sportMixEnabled && S.sportMixTertiary && S.sportMixTertiary.type) {
+     var _terLabel = (_sportNames[S.sportMixTertiary.type] || S.sportMixTertiary.type) + ' (' + (S.sportMixTertiary.days || 1) + (_pEN ? 'd)' : 'j)');
+     sec3.appendChild(_infoRow(_pEN ? 'Tertiary sport' : 'Sport tertiaire', _terLabel));
+   }
+   var _lvlNames = _pEN
+     ? { beginner: 'Beginner', intermediate: 'Intermediate', advanced: 'Advanced', elite: 'Elite' }
+     : { beginner: 'D\u00e9butant', intermediate: 'Interm\u00e9diaire', advanced: 'Avanc\u00e9', elite: '\u00c9lite' };
+   sec3.appendChild(_infoRow(_pEN ? 'Level' : 'Niveau', _lvlNames[S.sportLevel] || S.sportLevel || '\u2014'));
+   sec3.appendChild(_infoRow(_pEN ? 'Days/week' : 'Jours/semaine', S.sportDays ? S.sportDays + (_pEN ? ' days' : ' jours') : '\u2014'));
+   var _eqNames = _pEN
+     ? { gym: 'Full gym', home: 'Home', dumbbells: 'Dumbbells only' }
+     : { gym: 'Salle compl\u00e8te', home: 'Domicile', dumbbells: 'Halt\u00e8res uniquement' };
+   sec3.appendChild(_infoRow(_pEN ? 'Equipment' : '\u00c9quipement', _eqNames[S.sportEquipment] || S.sportEquipment || '\u2014'));
    if (Array.isArray(S.sportGoals) && S.sportGoals.length > 0) {
      var _sgNames = S.sportGoals.map(function(gid) { var g = (window.SPORT_GOALS || []).find(function(x) { return x.id === gid; }); return g ? g.name : gid; });
-     sec3.appendChild(_infoRow('Objectifs sport', _sgNames.join(', ')));
+     sec3.appendChild(_infoRow(_pEN ? 'Sport goals' : 'Objectifs sport', _sgNames.join(', ')));
    }
    // Bouton changer de sport
    sec3.appendChild(h('button', {style: 'display:block;width:100%;margin-top:16px;padding:12px;background:transparent;border:1.5px solid var(--black);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--black);cursor:pointer;transition:all 0.2s ease;min-height:44px', onclick: function() {
      S.sStep = 0; S.view = 'sport'; window.render();
-   }}, '\u21bb Changer de sport'));
+   }}, '\u21bb ' + (_pEN ? 'Change sport' : 'Changer de sport')));
    c.appendChild(sec3);
  }
 
  // ─── Mode application ───
  var modeSection = h('div', {style: 'margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);'});
- modeSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:4px;'}, 'MODE D\'UTILISATION'));
- modeSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:16px;line-height:1.5;'}, 'Choisissez les modules que vous souhaitez utiliser.'));
- var modes = [
+ modeSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:4px;'}, _pEN ? 'USAGE MODE' : 'MODE D\'UTILISATION'));
+ modeSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:16px;line-height:1.5;'}, _pEN ? 'Choose the modules you want to use.' : 'Choisissez les modules que vous souhaitez utiliser.'));
+ var modes = _pEN ? [
+   { value: 'nutrition', label: 'Nutrition only', desc: 'Food tracking and calorie goals.' },
+   { value: 'sport', label: 'Sport only', desc: 'Training programs and progression.' },
+   { value: 'both', label: 'Nutrition & Sport', desc: 'The complete approach. Recommended.' }
+ ] : [
    { value: 'nutrition', label: 'Nutrition uniquement', desc: 'Suivi alimentaire et objectifs caloriques.' },
    { value: 'sport', label: 'Sport uniquement', desc: 'Programmes d\'entraînement et progression.' },
    { value: 'both', label: 'Nutrition & Sport', desc: 'L\'approche complète. Recommandé.' }
@@ -1068,11 +1089,11 @@ function renderProfilePage(container) {
    var favIds = Object.keys(favMap).filter(function(id) { return (favMap[id]|0) > 0; });
    var favSection = h('div', {style: 'margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);'});
    var favHeader = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;'});
-   favHeader.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);'}, 'MES RECETTES FAVORITES'));
+   favHeader.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);'}, _pEN ? 'MY FAVORITE RECIPES' : 'MES RECETTES FAVORITES'));
    favHeader.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px;color:var(--grey);'}, favIds.length + ' ' + window.locPlural(favIds.length, {fr:{one:'recette',other:'recettes'},en:{one:'recipe',other:'recipes'}})));
    favSection.appendChild(favHeader);
    if (!favIds.length) {
-     favSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);line-height:1.6;font-style:italic;'}, 'Notez une recette avec ★ dans votre planning pour qu\u2019elle revienne régulièrement dans vos semaines.'));
+     favSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);line-height:1.6;font-style:italic;'}, _pEN ? 'Rate a recipe with ★ in your meal plan so it recurs in your weeks.' : 'Notez une recette avec ★ dans votre planning pour qu\u2019elle revienne régulièrement dans vos semaines.'));
    } else {
      // Tri : étoiles décroissantes, puis nom alphabétique
      favIds.sort(function(a, b) {
@@ -1258,7 +1279,7 @@ function renderProfilePage(container) {
  var changeGoalBtn = h('button', {
    style: 'display:block;width:100%;padding:14px;border:1px solid var(--border);background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;',
    onclick: function() { S._goalModal = true; if (window.render) window.render(); }
- }, ((window.isEnglish && window.isEnglish()) ? '\uD83C\uDFAF Change my goal' : '\uD83C\uDFAF Changer mon objectif'));
+ }, ((window.isEnglish && window.isEnglish()) ? 'Change my goal' : 'Changer mon objectif'));
  c.appendChild(changeGoalBtn);
 
  // ─── Strength Grade + Records (déplacé depuis la vue programme sport) ───
@@ -1312,7 +1333,8 @@ function renderProfilePage(container) {
        'display:flex;align-items:center;gap:10px;'
      });
      _topLabel.appendChild(h('span', {style: 'flex:1;height:1px;background:' + _accentBorder + ';'}));
-     _topLabel.appendChild(h('span', {}, _isSub ? 'MEMBRE' : (_subLoading ? '—' : 'VERSION D\u2019ESSAI')));
+     var _subEN = window.isEnglish && window.isEnglish();
+     _topLabel.appendChild(h('span', {}, _isSub ? (_subEN ? 'MEMBER' : 'MEMBRE') : (_subLoading ? '—' : (_subEN ? 'FREE TRIAL' : 'VERSION D\u2019ESSAI'))));
      _topLabel.appendChild(h('span', {style: 'flex:1;height:1px;background:' + _accentBorder + ';'}));
      card.appendChild(_topLabel);
 
@@ -1333,7 +1355,7 @@ function renderProfilePage(container) {
      var _subtitle = '';
      if (_isSub) {
        var _noEndPlans = ['unlimited','lifetime','admin'];
-       var _planLabel = (_noEndPlans.indexOf(S.subscriptionPlan) !== -1 || (S._serverPremium && !S.subscriptionEnd)) ? 'Accès illimité' : 'Abonnement actif';
+       var _planLabel = (_noEndPlans.indexOf(S.subscriptionPlan) !== -1 || (S._serverPremium && !S.subscriptionEnd)) ? (_subEN ? 'Unlimited access' : 'Accès illimité') : (_subEN ? 'Active subscription' : 'Abonnement actif');
        var _endStr = '';
        if (S.subscriptionEnd && _noEndPlans.indexOf(S.subscriptionPlan) === -1) {
          try {
@@ -1345,9 +1367,9 @@ function renderProfilePage(container) {
        }
        _subtitle = _planLabel + _endStr;
      } else if (_daysLeft > 0) {
-       _subtitle = 'Toutes les fonctionnalités — sans restriction';
+       _subtitle = _subEN ? 'All features — no restriction' : 'Toutes les fonctionnalités — sans restriction';
      } else {
-       _subtitle = 'Votre période d\u2019essai de 7 jours est écoulée';
+       _subtitle = _subEN ? 'Your 7-day free trial has ended' : 'Votre période d\u2019essai de 7 jours est écoulée';
      }
      card.appendChild(h('div', {style:
        'text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;' +
@@ -1367,9 +1389,15 @@ function renderProfilePage(container) {
      _featsWrap.appendChild(h('div', {style:
        'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;' +
        'text-transform:uppercase;color:var(--grey);margin-bottom:14px;text-align:center;'
-     }, 'Ce qui est inclus'));
+     }, _subEN ? 'What is included' : 'Ce qui est inclus'));
 
-     var _feats = [
+     var _feats = _subEN ? [
+       ['AI Meal Scanner', 'Instant nutritional analysis'],
+       ['Unlimited AI Coach', 'Unrestricted conversations'],
+       ['PDF Export', 'Complete weekly reports'],
+       ['Full history', 'Progress over the entire duration'],
+       ['Body analysis', 'Composition & evolution']
+     ] : [
        ['Scanner repas IA', 'Analyse nutritionnelle instantanée'],
        ['Coach IA illimité', 'Conversations sans restriction'],
        ['Export PDF', 'Rapports hebdomadaires complets'],
@@ -1452,12 +1480,12 @@ function renderProfilePage(container) {
        var _pData = window.SFC_PRICING_DATA || [];
        var _ui = window._sfcPricingUI = window._sfcPricingUI || { tier: 'athlete', duration: 'saison' };
        var _tiers = ['athlete', 'champion', 'legende'];
-       var _tierLabels = { athlete: 'Athlete', champion: 'Champion', legende: 'Légende' };
-       var _tierSubs  = { athlete: 'Accès complet', champion: 'Le plus choisi', legende: 'Soutien Légende' };
+       var _tierLabels = { athlete: 'Core', champion: 'Performance', legende: 'Élite' };
+       var _tierSubs  = _subEN ? { athlete: 'Solo · Digital', champion: 'Full Access', legende: 'Human + AI' } : { athlete: 'Solo · Digital', champion: 'Accès complet', legende: 'Humain + IA' };
        var _durs = ['saison', 'cycle', 'engagement'];
-       var _durLabels  = { saison: 'Trimestriel', cycle: 'Semestriel', engagement: 'Annuel' };
+       var _durLabels  = _subEN ? { saison: 'Quarterly', cycle: 'Semi-annual', engagement: 'Annual' } : { saison: 'Trimestriel', cycle: 'Semestriel', engagement: 'Annuel' };
        var _durMonths  = { saison: 3, cycle: 6, engagement: 12 };
-       var _durPeriods = { saison: '/trimestre', cycle: '/semestre', engagement: '/an' };
+       var _durPeriods = _subEN ? { saison: '/quarter', cycle: '/6 months', engagement: '/year' } : { saison: '/trimestre', cycle: '/semestre', engagement: '/an' };
        function _findPlan(t, d) {
          for (var _k = 0; _k < _pData.length; _k++) {
            if (_pData[_k].tier === t && _pData[_k].duration === d) return _pData[_k];
@@ -1474,27 +1502,61 @@ function renderProfilePage(container) {
            'display:flex;align-items:center;gap:10px;'
          });
          _pLabel.appendChild(h('span', {style: 'flex:1;height:1px;background:var(--border);'}));
-         _pLabel.appendChild(h('span', {}, 'VOTRE PLAN'));
+         _pLabel.appendChild(h('span', {}, _subEN ? 'YOUR PLAN' : 'VOTRE PLAN'));
          _pLabel.appendChild(h('span', {style: 'flex:1;height:1px;background:var(--border);'}));
          card.appendChild(_pLabel);
 
          // ── Features complètes par tier (affichées dans le grand bloc) ──
-         var _allFeatures = [
-           { label: 'Programmes nutrition personnalisés',  tiers: ['athlete','champion','legende'] },
-           { label: 'Coach IA (questions illimitées)',     tiers: ['athlete','champion','legende'] },
-           { label: 'Scanner repas — codes-barres & IA',  tiers: ['athlete','champion','legende'] },
-           { label: 'Générateur de programme muscu IA',   tiers: ['athlete','champion','legende'] },
-           { label: 'Export PDF hebdomadaire',            tiers: ['athlete','champion','legende'] },
-           { label: 'Historique & courbes de progression',tiers: ['athlete','champion','legende'] },
-           { label: 'Analyse corporelle IA',              tiers: ['athlete','champion','legende'] },
-           { label: 'Gamification — streaks & badges',    tiers: ['athlete','champion','legende'] },
-           { label: 'Espace social & amis',               tiers: ['athlete','champion','legende'] },
-           { label: 'Support prioritaire (< 24 h)',       tiers: ['champion','legende'] },
-           { label: 'Accès anticipé nouvelles features',  tiers: ['champion','legende'] },
-           { label: 'Badge Champion dans le profil',      tiers: ['champion','legende'] },
-           { label: 'Support VIP dédié (< 4 h)',          tiers: ['legende'] },
-           { label: 'Statut Membre Fondateur',            tiers: ['legende'] },
-           { label: 'Badge Légende exclusif',             tiers: ['legende'] }
+         var _allFeatures = _subEN ? [
+           { label: 'Personalized nutrition program — macros & calories to your real metabolism', tiers: ['athlete','champion','legende'] },
+           { label: 'Daily food journal — real-time macro tracking',                          tiers: ['athlete','champion','legende'] },
+           { label: 'Barcode scanner — 1M+ products',                                         tiers: ['athlete','champion','legende'] },
+           { label: '3 sport disciplines of your choice',                                        tiers: ['athlete','champion','legende'] },
+           { label: 'AI sport program — sessions tailored to your level & equipment',         tiers: ['athlete','champion','legende'] },
+           { label: 'AI Coach — 30 questions/month',                                          tiers: ['athlete','champion','legende'] },
+           { label: 'Weight, sleep, wellness & hydration tracking',                              tiers: ['athlete','champion','legende'] },
+           { label: 'Progress charts — 3-month history',                                      tiers: ['athlete','champion','legende'] },
+           { label: 'Streaks & badges',                                                          tiers: ['athlete','champion','legende'] },
+           { label: 'Cloud sync — all your devices',                                          tiers: ['athlete','champion','legende'] },
+           { label: 'AI meal photo scanner — photograph your plate → instant macros',       tiers: ['champion','legende'] },
+           { label: '12 sport disciplines: CrossFit, Hyrox, triathlon, cycling, padel, golf, calisthenics, yoga…', tiers: ['champion','legende'] },
+           { label: 'Unlimited AI Coach — 24/7',                                               tiers: ['champion','legende'] },
+           { label: 'AI body analysis — estimate your body composition from a photo',          tiers: ['champion','legende'] },
+           { label: 'Full history — unlimited timeline',                                       tiers: ['champion','legende'] },
+           { label: 'Automatic weekly PDF report',                                               tiers: ['champion','legende'] },
+           { label: 'Social space — share your progress, follow friends',                     tiers: ['champion','legende'] },
+           { label: 'Advanced challenges',                                                       tiers: ['champion','legende'] },
+           { label: 'Priority email support (< 24 h weekdays)',                                 tiers: ['champion','legende'] },
+           { label: 'WhatsApp coaching 7/7 — expert answers (< 12 h weekdays)',               tiers: ['legende'] },
+           { label: 'Monthly personal review — data analysis + adjustment recommendations',   tiers: ['legende'] },
+           { label: 'On-demand program adjustment — up to 2x/month',                          tiers: ['legende'] },
+           { label: 'Early access to new features',                                              tiers: ['legende'] },
+           { label: 'Exclusive Élite badge in your profile',                                      tiers: ['legende'] }
+         ] : [
+           { label: 'Programme nutrition personnalisé — macros & calories sur votre métabolisme réel', tiers: ['athlete','champion','legende'] },
+           { label: 'Journal alimentaire quotidien — suivi macros en temps réel',       tiers: ['athlete','champion','legende'] },
+           { label: 'Scanner codes-barres — base 1M+ produits',                               tiers: ['athlete','champion','legende'] },
+           { label: '3 disciplines sportives au choix',                                          tiers: ['athlete','champion','legende'] },
+           { label: 'Programme sport IA — séances selon votre niveau & équipement',     tiers: ['athlete','champion','legende'] },
+           { label: 'Coach IA — 30 questions/mois',                                           tiers: ['athlete','champion','legende'] },
+           { label: 'Suivi poids, sommeil, bien-être & eau',                                tiers: ['athlete','champion','legende'] },
+           { label: 'Courbes de progression — 3 mois d’historique',                       tiers: ['athlete','champion','legende'] },
+           { label: 'Streaks & badges',                                                          tiers: ['athlete','champion','legende'] },
+           { label: 'Synchro cloud — tous vos appareils',                                     tiers: ['athlete','champion','legende'] },
+           { label: 'Scanner IA photo repas — photographiez votre assiette → macros instantanés', tiers: ['champion','legende'] },
+           { label: '12 disciplines sportives : CrossFit, Hyrox, triathlon, cyclisme, padel, golf, calisthenics, yoga…', tiers: ['champion','legende'] },
+           { label: 'Coach IA illimité — 24h/24, 7j/7',                                  tiers: ['champion','legende'] },
+           { label: 'Analyse corporelle IA — composition estimée depuis une photo',     tiers: ['champion','legende'] },
+           { label: 'Historique complet — sans limite dans le temps',                         tiers: ['champion','legende'] },
+           { label: 'Export PDF hebdomadaire automatique',                                       tiers: ['champion','legende'] },
+           { label: 'Espace social — partagez vos progrès, suivez vos amis',             tiers: ['champion','legende'] },
+           { label: 'Défis & challenges avancés',                                           tiers: ['champion','legende'] },
+           { label: 'Support email prioritaire (< 24h jours ouvrables)',                        tiers: ['champion','legende'] },
+           { label: 'Accompagnement WhatsApp 7j/7 — expert (< 12h jours ouvrables)',          tiers: ['legende'] },
+           { label: 'Revue mensuelle personnalisée — analyse de vos données + ajustements', tiers: ['legende'] },
+           { label: 'Ajustement de programme sur demande (jusqu’à2x/mois)',                  tiers: ['legende'] },
+           { label: 'Accès anticipé aux nouvelles fonctionnalités',                       tiers: ['legende'] },
+           { label: 'Badge Élite exclusif dans votre profil',                                      tiers: ['legende'] }
          ];
 
          // ── Tier cards (sélecteur compact — nom + prix aperçu) ──
@@ -1575,7 +1637,7 @@ function renderProfilePage(container) {
            var _months = _durMonths[_ui.duration] || 1;
            var _perMonth = Math.round(_selPlan.price_mad / _months);
            var _periodLabel = _durPeriods[_ui.duration] || '';
-           var _subLine = _periodLabel + ( _months > 1 ? (' · soit ' + _perMonth + ' MAD/mois') : '');
+           var _subLine = _periodLabel + ( _months > 1 ? (' · ' + (_subEN ? 'i.e. ' : 'soit ') + _perMonth + ' MAD/mois') : '');
            _priceWrap.appendChild(h('div', {style:
              'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);letter-spacing:0.5px;'
            }, _subLine));
@@ -1591,7 +1653,7 @@ function renderProfilePage(container) {
                    'display:inline-block;margin-top:10px;padding:4px 12px;border-radius:0;' +
                    'border:1px solid var(--black);font-family:"Helvetica Neue",Arial,sans-serif;' +
                    'font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--black);'
-                 }, 'Vous économisez ' + _saved + ' MAD');
+                 }, (_subEN ? 'You save ' : 'Vous économisez ') + _saved + ' MAD');
                  _priceWrap.appendChild(_savingsBadge);
                }
              }
@@ -1604,7 +1666,7 @@ function renderProfilePage(container) {
          _inclWrap.appendChild(h('div', {style:
            'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;' +
            'text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:12px;'
-         }, 'CE QUI EST INCLUS · ' + (_tierLabels[_ui.tier] || _ui.tier).toUpperCase()));
+         }, (_subEN ? 'WHAT IS INCLUDED · ' : 'CE QUI EST INCLUS · ') + (_tierLabels[_ui.tier] || _ui.tier).toUpperCase()));
 
          var _incl = _allFeatures.filter(function(f) { return f.tiers.indexOf(_ui.tier) !== -1; });
          var _locked = _allFeatures.filter(function(f) { return f.tiers.indexOf(_ui.tier) === -1; });
@@ -1629,7 +1691,7 @@ function renderProfilePage(container) {
 
          // Zone 2 — features à débloquer : bloc doré incitatif
          if (_locked.length > 0) {
-           var _nextTier = _ui.tier === 'athlete' ? 'Champion' : 'Légende';
+           var _nextTier = _ui.tier === 'athlete' ? 'Performance' : 'Élite';
            var _upgradeBlock = h('div', {style:
              'margin-top:12px;padding:10px 10px 10px 14px;' +
              'border-left:2px solid #C8A96E;background:#FAF7F0;'
@@ -1637,7 +1699,7 @@ function renderProfilePage(container) {
            _upgradeBlock.appendChild(h('div', {style:
              'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:2px;' +
              'text-transform:uppercase;color:#C8A96E;margin-bottom:8px;'
-           }, 'DÉBLOQUEZ AVEC ' + _nextTier.toUpperCase()));
+           }, (_subEN ? 'UNLOCK WITH ' : 'DÉBLOQUEZ AVEC ') + _nextTier.toUpperCase()));
            _locked.forEach(function(f) {
              var row = h('div', {style: 'display:flex;align-items:flex-start;gap:10px;padding:4px 0;'});
              row.appendChild(h('div', {style:
@@ -1659,7 +1721,7 @@ function renderProfilePage(container) {
          var _priceRow = h('div', {style: 'text-align:center;margin:18px 0 4px;'});
          _priceRow.appendChild(h('div', {style:
            'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);font-style:italic;'
-         }, window._sfcPricingAttempted ? 'Tarifs temporairement indisponibles' : 'Chargement des tarifs…'));
+         }, window._sfcPricingAttempted ? (_subEN ? 'Prices temporarily unavailable' : 'Tarifs temporairement indisponibles') : (_subEN ? 'Loading prices…' : 'Chargement des tarifs…')));
          card.appendChild(_priceRow);
        }
      }
@@ -1672,7 +1734,7 @@ function renderProfilePage(container) {
        for (var _ci = 0; _ci < _pData2.length; _ci++) {
          if (_pData2[_ci].tier === _ui2.tier && _pData2[_ci].duration === _ui2.duration) { _ctaPlan = _pData2[_ci]; break; }
        }
-       var _durPer2 = { saison: '/trimestre', cycle: '/semestre', engagement: '/an' };
+       var _durPer2 = _isEn ? { saison: '/quarter', cycle: '/6 months', engagement: '/year' } : { saison: '/trimestre', cycle: '/semestre', engagement: '/an' };
        var _isEn = (window.isEnglish && window.isEnglish());
        var _ctaSessions = Object.keys((S.sessionHistory && typeof S.sessionHistory === 'object' && !Array.isArray(S.sessionHistory)) ? S.sessionHistory : {}).length;
        var _ctaState = _ctaSessions >= 10 ? 'invested' : _ctaSessions >= 4 ? 'engaged' : 'starter';
@@ -1710,7 +1772,7 @@ function renderProfilePage(container) {
          'border-top:1px solid ' + _accentBorder + ';' +
          'font-family:Georgia,serif;font-style:italic;font-size:12px;' +
          'color:' + _accent + ';'
-       }, 'Merci de votre confiance.'));
+       }, (window.isEnglish && window.isEnglish()) ? 'Thank you for your trust.' : 'Merci de votre confiance.'));
      }
 
      c.appendChild(card);
@@ -1722,13 +1784,15 @@ function renderProfilePage(container) {
    var restoreBtn = h('button', {
      style: 'display:block;width:100%;padding:14px;border:1px solid var(--line,#D8D8D0);background:transparent;color:var(--ink-900,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;min-height:44px;',
      onclick: function() {
-       if (!(window.sfcConfirm ? window.sfcConfirm('Restaurer vos données depuis le cloud ?\n\nLes données locales seront remplacées par la dernière sauvegarde cloud.') : confirm('Restaurer vos données depuis le cloud ?\n\nLes données locales seront remplacées par la dernière sauvegarde cloud.'))) return;
-       restoreBtn.textContent = 'Restauration en cours...';
+       var _restEN = window.isEnglish && window.isEnglish();
+       var _restMsg = _restEN ? 'Restore your data from the cloud?\n\nLocal data will be replaced by the latest cloud backup.' : 'Restaurer vos données depuis le cloud ?\n\nLes données locales seront remplacées par la dernière sauvegarde cloud.';
+       if (!(window.sfcConfirm ? window.sfcConfirm(_restMsg) : confirm(_restMsg))) return;
+       restoreBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Restoring...' : 'Restauration en cours...';
        restoreBtn.disabled = true;
        SupaSync.loadProfile().then(function(cloudData) {
          if (!cloudData) {
-           if (window.showToast) window.showToast('Aucune donnée trouvée sur le cloud.', 'info', 3000);
-           restoreBtn.textContent = 'Restaurer depuis le cloud';
+           if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'No data found in the cloud.' : 'Aucune donnée trouvée sur le cloud.', 'info', 3000);
+           restoreBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Restore from cloud' : 'Restaurer depuis le cloud';
            restoreBtn.disabled = false;
            return;
          }
@@ -1742,16 +1806,16 @@ function renderProfilePage(container) {
          S._cloudUpdatedAt = new Date().toISOString();
          window._profileDirty = true;
          if (window.saveProfile) saveProfile();
-         if (window.showToast) window.showToast('Données restaurées avec succès.', 'success', 3000);
+         if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Data restored successfully.' : 'Données restaurées avec succès.', 'success', 3000);
          if (window.render) render();
        }).catch(function(err) {
          console.error('[restore] Error:', err);
-         if (window.showToast) window.showToast('Erreur de restauration. Vérifiez votre connexion.', 'error', 3000);
-         restoreBtn.textContent = 'Restaurer depuis le cloud';
+         if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Restore error. Check your connection.' : 'Erreur de restauration. Vérifiez votre connexion.', 'error', 3000);
+         restoreBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Restore from cloud' : 'Restaurer depuis le cloud';
          restoreBtn.disabled = false;
        });
      }
-   }, 'Restaurer depuis le cloud');
+   }, (window.isEnglish && window.isEnglish()) ? 'Restore from cloud' : 'Restaurer depuis le cloud');
    c.appendChild(restoreBtn);
  }
 
@@ -1783,7 +1847,7 @@ function renderProfilePage(container) {
 
  // ─── Zone de danger (RGPD) ───
  c.appendChild(h('div', {style: 'margin-top:32px;padding-top:20px;border-top:1px solid var(--border);'}));
- c.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:14px;'}, 'DONNÉES PERSONNELLES'));
+ c.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:14px;'}, (window.isEnglish && window.isEnglish()) ? 'PERSONAL DATA' : 'DONNÉES PERSONNELLES'));
 
  // Télécharger mes données (RGPD Art. 20 portabilité — export EXHAUSTIF)
  // POLISH 2026-04 : enrichi — inclut désormais food_journal, photos, streak,
@@ -1944,7 +2008,7 @@ function renderProfilePage(container) {
    var _tdee = window.calcTarget ? window.calcTarget() : 0;
    if (_tdee > 0) {
      var _tdeeInfo = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:16px;text-align:center;border:1px solid var(--border);padding:10px;'});
-     _tdeeInfo.textContent = 'Vos besoins\u00a0: ' + _tdee + '\u00a0kcal/jour';
+     _tdeeInfo.textContent = (window.isEnglish && window.isEnglish()) ? 'Your needs: ' + _tdee + '\u00a0kcal/day' : 'Vos besoins\u00a0: ' + _tdee + '\u00a0kcal/jour';
      _sheet.appendChild(_tdeeInfo);
    }
 
@@ -2086,11 +2150,11 @@ function renderProfilePage(container) {
          var _toast = document.createElement('div');
          _toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;padding:12px 16px;z-index:10000;border-radius:0;border:1px solid var(--ink-900,#0A0A09);display:flex;align-items:center;gap:12px;';
          var _toastTxt = document.createElement('span');
-         _toastTxt.textContent = '\u2713 Objectif mis \u00e0 jour';
+         _toastTxt.textContent = (window.isEnglish && window.isEnglish()) ? '\u2713 Goal updated' : '\u2713 Objectif mis \u00e0 jour';
          _toast.appendChild(_toastTxt);
          var _regenBtn = document.createElement('button');
          _regenBtn.style.cssText = 'background:var(--ivory,#FAF9F6);color:#0A0A09;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:6px 12px;cursor:pointer;border-radius:1px;white-space:nowrap;';
-         _regenBtn.textContent = 'Reg\u00e9n\u00e9rer \u2192';
+         _regenBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Regenerate \u2192' : 'Reg\u00e9n\u00e9rer \u2192';
          _regenBtn.onclick = function() {
            try {
              if (window.computeNutritionState) window.computeNutritionState(false);
@@ -2146,9 +2210,9 @@ function _showMedicalDisclaimer() {
   var box = h('div', {
     style: 'background:var(--ivory,#FAF9F6);width:100%;max-width:480px;padding:28px 24px 32px;border-top:1px solid var(--line,#D8D8D0);'
   });
-  box.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:12px;'}, 'INFORMATION IMPORTANTE'));
-  box.appendChild(h('div', {style:'font-family:Georgia,serif;font-size:16px;color:var(--black,#0A0A09);margin-bottom:12px;line-height:1.4;'}, 'SmartFitCoach ne remplace pas un professionnel de santé'));
-  box.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.7;margin-bottom:20px;'}, 'Les informations fournies par cette application sont à titre indicatif. Consultez un médecin avant de prendre toute décision relative à votre santé, en particulier en cas de pathologie ou de traitement médical en cours.'));
+  box.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:12px;'}, (window.isEnglish && window.isEnglish()) ? 'IMPORTANT NOTICE' : 'INFORMATION IMPORTANTE'));
+  box.appendChild(h('div', {style:'font-family:Georgia,serif;font-size:16px;color:var(--black,#0A0A09);margin-bottom:12px;line-height:1.4;'}, (window.isEnglish && window.isEnglish()) ? 'SmartFitCoach does not replace a healthcare professional' : 'SmartFitCoach ne remplace pas un professionnel de santé'));
+  box.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.7;margin-bottom:20px;'}, (window.isEnglish && window.isEnglish()) ? 'The information provided by this application is for informational purposes only. Consult a doctor before making any health-related decisions, particularly if you have a medical condition or ongoing treatment.' : 'Les informations fournies par cette application sont à titre indicatif. Consultez un médecin avant de prendre toute décision relative à votre santé, en particulier en cas de pathologie ou de traitement médical en cours.'));
   var acceptBtn = h('button', {
     style: 'display:block;width:100%;padding:16px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;min-height:48px;',
     onclick: function() {
@@ -2157,7 +2221,7 @@ function _showMedicalDisclaimer() {
       if (window.saveProfile) try { window.saveProfile(); } catch(_) {}
       if (ov.parentNode) ov.parentNode.removeChild(ov);
     }
-  }, 'J\'AI COMPRIS');
+  }, (window.isEnglish && window.isEnglish()) ? 'I UNDERSTAND' : 'J\'AI COMPRIS');
   box.appendChild(acceptBtn);
   ov.appendChild(box);
   document.body.appendChild(ov);
@@ -2165,10 +2229,10 @@ function _showMedicalDisclaimer() {
 
 // ─── MAIN RENDER ───
 function render() {
+ // State repair runs BEFORE lock check: concurrent render calls must not skip repair
+ try { if (window.sfcRepairState) window.sfcRepairState(window.S); } catch(_eRep) {}
  if (render._lock) return;
  render._lock = true;
- // State integrity firewall — repair known corruption before any view renders
- try { if (window.sfcRepairState) window.sfcRepairState(window.S); } catch(_eRep) {}
  // Clean any stale tooltips left over from previous view
  try { document.querySelectorAll('.sfc-tooltip-pop').forEach(function(el){ el.remove(); }); } catch(_eTp) {}
  try { if (S._quickAddSlot && S.view !== 'today') { S._quickAddSlot = null; } } catch(_eQa) {}
@@ -2580,13 +2644,14 @@ function render() {
        _errInner.style.cssText = 'max-width:360px;width:100%;text-align:center;';
        var _errH = document.createElement('h2');
        _errH.style.cssText = 'font-family:Georgia,serif;font-size:24px;font-weight:400;color:#0A0A09;margin:0 0 12px;';
-       _errH.textContent = 'Une interruption est survenue';
+       var _errIsEN = window.isEnglish && window.isEnglish();
+       _errH.textContent = _errIsEN ? 'An interruption occurred' : 'Une interruption est survenue';
        var _errP = document.createElement('p');
        _errP.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:#6B6B65;line-height:1.6;margin:0 0 28px;';
-       _errP.textContent = 'Nous avons s\u00e9curis\u00e9 votre session. Vous pouvez r\u00e9essayer.';
+       _errP.textContent = _errIsEN ? 'Your session has been secured. You can try again.' : 'Nous avons s\u00e9curis\u00e9 votre session. Vous pouvez r\u00e9essayer.';
        var _errBtn = document.createElement('button');
        _errBtn.style.cssText = 'padding:14px 28px;background:#0A0A09;color:#FAF9F6;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;min-height:44px;border-radius:0;width:100%;';
-       _errBtn.textContent = 'R\u00e9essayer';
+       _errBtn.textContent = _errIsEN ? 'Try again' : 'R\u00e9essayer';
        _errBtn.addEventListener('click', function(){ location.reload(); });
        _errInner.appendChild(_errH);
        _errInner.appendChild(_errP);
@@ -2649,7 +2714,7 @@ function renderLogin(app) {
    if (loginBtn && loginBtn.disabled) {
      loginBtn.disabled = false;
      loginBtn.textContent = window.t ? window.t('auth.login_btn') : 'Se connecter';
-     S.authError = (window.isEnglish && window.isEnglish()) ? 'Connection timed out. Check your network and retry.' : 'Délai dépassé. Vérifiez votre connexion et réessayez.';
+     S.authError = (window.isEnglish && window.isEnglish()) ? 'Connection timed out. Check your network and retry.' : (window.isEnglish && window.isEnglish()) ? 'Request timed out. Check your connection and retry.' : 'Délai dépassé. Vérifiez votre connexion et réessayez.';
      try { if (window.render) window.render(); } catch(e) {}
    }
  }, 10000);
@@ -2871,7 +2936,10 @@ function renderRegister(app) {
  var consentCheck = h('input', {type: 'checkbox', id: 'rgpd-consent', style: 'margin-top:3px;min-width:18px;min-height:18px;cursor:pointer'});
  consentWrap.appendChild(consentCheck);
  var consentLabel = h('label', {'for': 'rgpd-consent', style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;cursor:pointer'});
- consentLabel.innerHTML = 'J’accepte la <a href="/privacy-policy.html" target="_blank" rel="noopener" style="color:var(--ink-900,#0A0A09);text-decoration:underline">politique de confidentialité</a> et les <a href="/cgu.html" target="_blank" rel="noopener" style="color:var(--ink-900,#0A0A09);text-decoration:underline">conditions générales d’utilisation</a>. Je consens au traitement de mes données de santé (poids, conditions médicales, grossesse) pour la personnalisation de mon programme.';
+ var _cgEN = window.isEnglish && window.isEnglish();
+ consentLabel.innerHTML = _cgEN
+   ? 'I accept the <a href="/privacy-policy.html" target="_blank" rel="noopener" style="color:var(--ink-900,#0A0A09);text-decoration:underline">privacy policy</a> and the <a href="/cgu.html" target="_blank" rel="noopener" style="color:var(--ink-900,#0A0A09);text-decoration:underline">terms of service</a>. I consent to the processing of my health data (weight, medical conditions, pregnancy) for programme personalisation.'
+   : 'J’accepte la <a href="/privacy-policy.html" target="_blank" rel="noopener" style="color:var(--ink-900,#0A0A09);text-decoration:underline">politique de confidentialité</a> et les <a href="/cgu.html" target="_blank" rel="noopener" style="color:var(--ink-900,#0A0A09);text-decoration:underline">conditions générales d’utilisation</a>. Je consens au traitement de mes données de santé (poids, conditions médicales, grossesse) pour la personnalisation de mon programme.';
  consentWrap.appendChild(consentLabel);
  form.appendChild(consentWrap);
 
@@ -2886,14 +2954,14 @@ function renderRegister(app) {
  if (!email || !pw || !pw2) { S.authError = (window.isEnglish && window.isEnglish()) ? 'Email and password are required.' : 'Email et mot de passe sont obligatoires.'; render(); return; }
  if (pw !== pw2) { S.authError = window.t('auth.error_password_match'); render(); return; }
  if (!window.isValidPassword(pw)) { S.authError = window.t('auth.error_password_rules'); render(); return; }
- if (!consentCheck.checked) { S.authError = 'Veuillez accepter la politique de confidentialité et les CGU pour créer votre compte.'; render(); return; }
+ if (!consentCheck.checked) { S.authError = (window.isEnglish && window.isEnglish()) ? 'Please accept the privacy policy and terms to create your account.' : 'Veuillez accepter la politique de confidentialité et les CGU pour créer votre compte.'; render(); return; }
 
  if (typeof navigator !== 'undefined' && navigator.onLine === false) {
    S.authError = (window.isEnglish && window.isEnglish()) ? 'No network connection. Check your connection and retry.' : 'Pas de connexion réseau. Vérifiez votre connexion et réessayez.';
    render(); return;
  }
  regBtn.disabled = true;
- regBtn.textContent = 'Création...';
+ regBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Creating...' : 'Création...';
  var _regSafetyTimer = setTimeout(function() {
    if (regBtn && regBtn.disabled) {
      regBtn.disabled = false;
@@ -2922,7 +2990,7 @@ function renderRegister(app) {
  }
  }).catch(function() {
  clearTimeout(_regSafetyTimer);
- S.authError = 'Erreur lors de la création du compte. Réessayez.';
+ S.authError = (window.isEnglish && window.isEnglish()) ? 'Error creating account. Please try again.' : 'Erreur lors de la création du compte. Réessayez.';
  render();
  });
  }}, window.t('auth.register_btn'));
@@ -2938,9 +3006,9 @@ function renderRegister(app) {
 
  // Liens légaux footer register
  var legalFooter2 = h('div', {style: 'text-align:center;margin-top:20px;padding-top:16px;border-top:1px solid var(--border,#D8D8D0)'});
- legalFooter2.appendChild(h('a', {href: '/privacy-policy.html', target: '_blank', rel: 'noopener', style: 'font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 8px'}, 'Confidentialité'));
+ legalFooter2.appendChild(h('a', {href: '/privacy-policy.html', target: '_blank', rel: 'noopener', style: 'font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 8px'}, (window.isEnglish && window.isEnglish()) ? 'Privacy' : 'Confidentialité'));
  legalFooter2.appendChild(h('a', {href: '/cgu.html', target: '_blank', rel: 'noopener', style: 'font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 8px'}, 'CGU'));
- legalFooter2.appendChild(h('a', {href: '/mentions-legales.html', target: '_blank', rel: 'noopener', style: 'font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 8px'}, 'Mentions légales'));
+ legalFooter2.appendChild(h('a', {href: '/mentions-legales.html', target: '_blank', rel: 'noopener', style: 'font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 8px'}, (window.isEnglish && window.isEnglish()) ? 'Legal notices' : 'Mentions légales'));
  c.appendChild(legalFooter2);
 
  app.appendChild(c);
@@ -3776,10 +3844,18 @@ document.addEventListener('keydown', function(e) {
         if (window.S.shopArMode)         { window.S.shopArMode = false;        _changed = true; }
       }
       if (_changed) { if (window.render) window.render(); return; }
-      // 2. If on a sub-view, go back to 'today'
+      // 2. Auth sub-views (forgot, register, verify) → back to main auth
+      var _authSubViews = ['authForgot', 'authRegister', 'authVerify', 'authNewPassword'];
+      if (window.S && _authSubViews.indexOf(window.S.view) !== -1) {
+        window.S.view = 'auth';
+        if (window.render) window.render();
+        return;
+      }
+      // 3. Any other sub-view → back to 'today'
       var _rootViews = ['auth', 'today'];
       if (window.S && window.S.view && _rootViews.indexOf(window.S.view) === -1) {
         window.S.view = 'today';
+        if (window.S && window.S.sStep > 0) { window.S.sStep = 0; }
         if (window.render) window.render();
         return;
       }

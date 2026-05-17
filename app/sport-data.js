@@ -380,6 +380,226 @@ window.CALISTHENICS_MIX_SESSIONS = [
  }
 ];
 
+window.HYROX_MIX_SESSIONS = [
+ {
+  name: 'Fonctionnel & Cardio',
+  focus: 'Endurance musculaire — mouvements Hyrox spécifiques',
+  exercises: [
+   { name: 'Échauffement', sets: '5 min', rest: '—', note: 'Mobilité épaules + genoux + rowing léger' },
+   { name: 'SkiErg (ou rameur)', sets: '4 × 250m', rest: '60s', note: 'Rythme constant — tirer avec les bras ET les jambes' },
+   { name: 'Wall Balls', sets: '4 × 15 reps', rest: '60s', note: 'Squat profond — balle à hauteur cible. Charge : 6-9 kg.' },
+   { name: 'Burpees Broad Jump', sets: '3 × 10 reps', rest: '75s', note: 'Saut en avant à chaque burpee — explosive' },
+   { name: 'Farmers Carry', sets: '4 × 50m', rest: '60s', note: 'Haltères lourdes — gainage fort — épaules basses' }
+  ]
+ },
+ {
+  name: 'Force Fonctionnelle',
+  focus: 'Puissance de traction + Core Hyrox',
+  exercises: [
+   { name: 'Échauffement', sets: '5 min', rest: '—', note: 'Activation hanches + épaules — rowing léger' },
+   { name: 'Sled Push (ou Box Step-up lesté)', sets: '4 × 20m', rest: '90s', note: 'Poids du corps × 0.7 sur sled. Ou step-up 2 × 20 par jambe.' },
+   { name: 'Sandbag Lunges', sets: '3 × 40m', rest: '75s', note: 'Fentes marchées avec sac de sable — 10-20 kg' },
+   { name: 'Rowing (rameur)', sets: '4 × 500m', rest: '2 min', note: 'Rythme 2:00-2:10/500m. Poussée avec les jambes d\'abord.' },
+   { name: 'Planche + Mountain climbers', sets: '3 × 30s + 20 reps', rest: '45s', note: 'Core — transition directe sans repos' }
+  ]
+ },
+ {
+  name: 'Cardio-Endurance Hyrox',
+  focus: 'Zone 3-4 — Simulation course Hyrox',
+  exercises: [
+   { name: 'Échauffement', sets: '8 min', rest: '—', note: 'Jogging léger + mobilité dynamique complète' },
+   { name: 'Run 1 km + SkiErg 250m', sets: '3 cycles', rest: '2 min entre cycles', note: 'Transition directe course → SkiErg sans pause' },
+   { name: 'Wall Balls 20 reps + Burpees 10 reps', sets: '3 cycles', rest: '2 min entre cycles', note: 'Effort continu — pas de pause dans le cycle' },
+   { name: 'Retour au calme', sets: '5 min', rest: '—', note: 'Marche + étirements mollets + hanches' }
+  ]
+ },
+ {
+  name: 'Gainage & Récupération Active',
+  focus: 'Core + Mobilité — Récupération Hyrox',
+  exercises: [
+   { name: 'Planche frontale', sets: '4 × 45s', rest: '30s', note: 'Bassin neutre — ne pas laisser descendre les hanches' },
+   { name: 'Planche latérale', sets: '3 × 30s chaque côté', rest: '20s', note: 'Corps aligné pied-épaule-hanche' },
+   { name: 'Dead Bug', sets: '3 × 10 chaque côté', rest: '30s', note: 'Bras et jambe opposés — dos plaqué au sol' },
+   { name: 'Mobilité thoracique + hanches', sets: '10 min', rest: '—', note: 'Foam roller + étirements passifs — récupération active' }
+  ]
+ }
+];
+
+window.TRIATHLON_MIX_SESSIONS = [
+ {
+  name: 'Brique Vélo-Course',
+  focus: 'Transition musculaire vélo → course — entraînement spécifique triathlon',
+  exercises: [
+   { name: 'Échauffement vélo', sets: '10 min Zone 1', rest: '—', note: 'Cadence élevée (90 rpm) — intensité très légère' },
+   { name: 'Vélo fractionné Z3', sets: '3 × 8 min Zone 3', rest: '3 min Zone 1', note: 'FC 80-85% FCmax. Maintenir puissance constante.' },
+   { name: 'Transition T2 simulée', sets: '2-3 min', rest: '—', note: 'Changer chaussures — simuler la transition réelle' },
+   { name: 'Course à pied post-vélo', sets: '15-20 min Zone 2', rest: '—', note: 'Premières minutes : jambes lourdes normales — s\'effacer' }
+  ]
+ },
+ {
+  name: 'Natation Technique',
+  focus: 'Crawl endurance — économie de nage',
+  exercises: [
+   { name: 'Échauffement', sets: '200m libre', rest: '—', note: 'Allure très confortable — activation épaules' },
+   { name: 'Technique de bras (catch-up drill)', sets: '4 × 50m', rest: '20s', note: 'Une bras avance pendant l\'autre finit — focus catch' },
+   { name: 'Crawl continu Z2', sets: '600-800m', rest: '—', note: 'Allure constante — respiration tous les 3 temps' },
+   { name: 'Pull-buoy (bras seuls)', sets: '4 × 50m', rest: '15s', note: 'Focus traction — pas de battements de jambes' }
+  ]
+ },
+ {
+  name: 'Run Aérobie',
+  focus: 'Zone 2 prolongée — base aérobie triathlon',
+  exercises: [
+   { name: 'Échauffement', sets: '5 min marche', rest: '—', note: 'Transition progressive vers jogging' },
+   { name: 'Course Zone 2', sets: '30-45 min', rest: '—', note: 'FC 70-75% FCmax — conversation possible. Allure cible triathlon.' },
+   { name: 'Accélérations progressives', sets: '4 × 30s', rest: '60s', note: 'Fin de séance — montée d\'allure vers Z3' },
+   { name: 'Retour au calme + mobilité', sets: '5 min', rest: '—', note: 'Étirements quadriceps, ischios, mollets' }
+  ]
+ },
+ {
+  name: 'Vélo Endurance',
+  focus: 'Zone 2 longue — foncier vélo',
+  exercises: [
+   { name: 'Échauffement', sets: '10 min Zone 1', rest: '—', note: 'Cadence libre — jambes douces' },
+   { name: 'Vélo Zone 2 continu', sets: '45-60 min', rest: '—', note: 'FC 70-75% FCmax. Cadence 85-90 rpm. Hydratation régulière.' },
+   { name: 'Montées en danseuse', sets: '4 × 1 min', rest: '2 min assis', note: 'Force sur la montée — variation technique' },
+   { name: 'Retour au calme', sets: '5 min Zone 1', rest: '—', note: 'Décélération progressive' }
+  ]
+ }
+];
+
+window.CYCLING_MIX_SESSIONS = [
+ {
+  name: 'Endurance Z2',
+  focus: 'Aérobie fondamentale — foncier cycliste',
+  exercises: [
+   { name: 'Échauffement', sets: '10 min Zone 1', rest: '—', note: 'Cadence libre — 80-90 rpm — activation progressive' },
+   { name: 'Vélo Zone 2 continu', sets: '35-50 min', rest: '—', note: 'FC 68-75% FCmax. Conversation possible. Cadence 85-92 rpm.' },
+   { name: 'Sprint de fin', sets: '3 × 15s sprint', rest: '2 min Zone 1', note: 'Effort maximal 15s — récupération complète' },
+   { name: 'Retour au calme', sets: '5 min Zone 1', rest: '—', note: 'Descendre doucement l\'intensité' }
+  ]
+ },
+ {
+  name: 'Fractionné Vélo',
+  focus: 'Intervalles VO2max — puissance cycliste',
+  exercises: [
+   { name: 'Échauffement', sets: '15 min', rest: '—', note: 'Zone 1 + 3 accélérations 30s vers Z3 avec retour' },
+   { name: 'Intervalles 4 min Z4', sets: '4 × 4 min Zone 4', rest: '4 min Zone 1', note: 'FC 90-95% FCmax. Puissance constante sur les 4 min. Cadence libre.' },
+   { name: 'Retour au calme', sets: '10 min Zone 1', rest: '—', note: 'Décélération très progressive — pas d\'arrêt brutal' },
+   { name: 'Étirements cycliste', sets: '5 min', rest: '—', note: 'Quadriceps, ischios, bas du dos, mollets' }
+  ]
+ },
+ {
+  name: 'Force-Vélo Côtes',
+  focus: 'Force musculaire sur vélo — grimpe',
+  exercises: [
+   { name: 'Échauffement', sets: '10 min plat Zone 1', rest: '—', note: 'Avant de chercher les côtes' },
+   { name: 'Répétitions de côtes', sets: '5 × 3 min grimpe', rest: '3 min descente récupération', note: 'Cadence basse (60-70 rpm) — force sur les pédales — grand braquet' },
+   { name: 'Vélo plat tempo', sets: '15 min Zone 3', rest: '—', note: 'Après les côtes — cadence normale 85+ rpm' },
+   { name: 'Retour au calme', sets: '5 min', rest: '—', note: 'Zone 1 facile' }
+  ]
+ },
+ {
+  name: 'Sweet Spot',
+  focus: 'Zone 3-4 — Seuil cycliste efficacité maximale',
+  exercises: [
+   { name: 'Échauffement', sets: '15 min', rest: '—', note: 'Zone 1 → Zone 2 progressive' },
+   { name: 'Sweet Spot continu', sets: '2 × 15 min Zone 3-4', rest: '5 min Zone 1', note: 'FC 88-93% FCseuil. "Inconfortable mais tenable." Cadence 90 rpm.' },
+   { name: 'Retour au calme', sets: '10 min Zone 1', rest: '—', note: 'Effort en douceur. Ne pas s\'arrêter sec.' }
+  ]
+ }
+];
+
+window.PADEL_MIX_SESSIONS = [
+ {
+  name: 'Agilité & Réactivité',
+  focus: 'Explosivité — déplacements latéraux spécifiques padel',
+  exercises: [
+   { name: 'Échauffement', sets: '5 min', rest: '—', note: 'Corde à sauter + mobilité chevilles + hanches' },
+   { name: 'Déplacements latéraux', sets: '5 × 10m aller-retour', rest: '30s', note: 'Shuffles latéraux — pas croisés — position basse' },
+   { name: 'Réaction au signal', sets: '4 × 8 réactions', rest: '45s', note: 'Partenaire ou cône — réaction visuelle → sprint court' },
+   { name: 'Split-step + frappe', sets: '3 × 10 reps', rest: '45s', note: 'Split-step (petit saut de préparation) avant chaque frappe simulée' },
+   { name: 'Corde à sauter explosive', sets: '3 × 45s', rest: '30s', note: 'Vitesse maximale — travail cardio + coordination pieds' }
+  ]
+ },
+ {
+  name: 'Technique & Puissance de Frappe',
+  focus: 'Service, smash, vibora — technique padel',
+  exercises: [
+   { name: 'Échauffement', sets: '5 min', rest: '—', note: 'Rotations épaules + poignets — activation coiffe des rotateurs' },
+   { name: 'Drive revers (mur)', sets: '4 × 15 frappes', rest: '45s', note: 'Impact contrôlé — orientation du poignet' },
+   { name: 'Bandeja / Vibora technique', sets: '3 × 10 reps', rest: '60s', note: 'Travail de la rotation tronc-épaule — lenteur d\'abord' },
+   { name: 'Smash de défense (mur)', sets: '3 × 12 reps', rest: '45s', note: 'Anticipation + timing — haut de la fenêtre de frappe' },
+   { name: 'Service + placement net', sets: '3 × 10 enchaînements', rest: '60s', note: 'Service → montée filet → volée haute simulée' }
+  ]
+ },
+ {
+  name: 'Cardio Padel',
+  focus: 'Endurance spécifique — efforts intermittents',
+  exercises: [
+   { name: 'Échauffement', sets: '5 min', rest: '—', note: 'Footing léger + mobilité' },
+   { name: 'Shadow Padel', sets: '6 × 45s', rest: '30s', note: 'Simule les déplacements d\'un point : 4 coins + filet. Raquette en main.' },
+   { name: 'Sprints 10m × 6 directions', sets: '4 séries', rest: '60s', note: 'Départ position basse → sprint → retour centre. 6 directions.' },
+   { name: 'Gainage rotatif core', sets: '3 × 12 rotations', rest: '30s', note: 'Russian twist lesté — rotation tronc spécifique au padel' }
+  ]
+ },
+ {
+  name: 'Mobilité & Prévention',
+  focus: 'Récupération active — prévention blessures padel',
+  exercises: [
+   { name: 'Épaule — rotation externe', sets: '3 × 15 reps', rest: '30s', note: 'Élastique faible résistance — coiffe des rotateurs' },
+   { name: 'Mobilité thoracique', sets: '3 × 10 rotations', rest: '20s', note: 'Bâton ou raquette sur épaules — rotation dos droit' },
+   { name: 'Renforcement cheville', sets: '3 × 15 reps chaque', rest: '30s', note: 'Pronation/supination avec élastique — prévention entorse' },
+   { name: 'Étirements actifs membres inférieurs', sets: '8 min', rest: '—', note: 'Fessiers, ischio-jambiers, mollets — maintien 30s chaque' }
+  ]
+ }
+];
+
+window.GOLF_MIX_SESSIONS = [
+ {
+  name: 'Swing & Puissance',
+  focus: 'Rotation — puissance du drive — mécanique de swing',
+  exercises: [
+   { name: 'Activation rotation thoracique', sets: '3 × 10 rotations lentes', rest: '20s', note: 'Bâton sur épaules — rotation maximale — dos droit' },
+   { name: 'Swing à vide avec résistance', sets: '4 × 12 swings', rest: '30s', note: 'Élastique résistance légère — travail de la rotation hanche-épaule' },
+   { name: 'Travail du backswing', sets: '3 × 10 reps', rest: '20s', note: 'Montée lente (3s) — pause en haut — descente explosive' },
+   { name: 'Hip Hinge Golf', sets: '3 × 12 reps', rest: '30s', note: 'Bâton dans le dos — charnière hanches — dos neutre. Base du plan swing.' },
+   { name: 'Core anti-rotation (Pallof Press)', sets: '3 × 12 chaque côté', rest: '30s', note: 'Élastique à hauteur poitrine — résister la rotation — gainage latéral' }
+  ]
+ },
+ {
+  name: 'Mobilité & Précision',
+  focus: 'Souplesse fonctionnelle — short game — putting',
+  exercises: [
+   { name: 'Mobilité hanches (90/90)', sets: '3 × 90s chaque côté', rest: '—', note: 'Position 90/90 sol — rotation interne + externe alternative' },
+   { name: 'Mobilité thoracique (foam roller)', sets: '5 min', rest: '—', note: 'Rouleau sous les dorsaux — extensions en arrière' },
+   { name: 'Putting — alignement & rythme', sets: '20 min', rest: '—', note: 'Distances 1m / 2m / 3m / 4m — 10 putts chaque. Focus : pendule régulier.' },
+   { name: 'Chip & Pitch technique', sets: '30 coups', rest: '—', note: 'Wedge 52-58° — cibles à différentes distances — touche balle d\'abord' }
+  ]
+ },
+ {
+  name: 'Condition Physique Golfeur',
+  focus: 'Gainage — équilibre — endurance de parcours',
+  exercises: [
+   { name: 'Marche active 30 min', sets: '30 min', rest: '—', note: 'Simule les 18 trous — terrain varié si possible' },
+   { name: 'Gainage unilatéral', sets: '3 × 30s chaque côté', rest: '20s', note: 'Planche avec un bras levé — stabilité lombo-pelvienne' },
+   { name: 'Équilibre sur une jambe', sets: '3 × 30s chaque', rest: '20s', note: 'Yeux fermés — simule la frappe en déséquilibre' },
+   { name: 'Fentes rotatives', sets: '3 × 10 chaque jambe', rest: '30s', note: 'Fente + rotation tronc côté jambe avant — spécifique golf' },
+   { name: 'Étirements golfer complets', sets: '10 min', rest: '—', note: 'Hanches, thoracique, ischio-jambiers, épaules — fin de session' }
+  ]
+ },
+ {
+  name: 'Techniques de Frappe',
+  focus: 'Fers longs — approche — situation de jeu',
+  exercises: [
+   { name: 'Échauffement dynamique swing', sets: '10 min', rest: '—', note: 'Rotation progressive — du pitching wedge au fer 6' },
+   { name: 'Fers courts (PW, 9, 8)', sets: '30 balles chaque', rest: '—', note: 'Focus : compresse la balle — divot devant la balle — contact first' },
+   { name: 'Fers longs (5, 4) ou hybride', sets: '20 balles', rest: '—', note: 'Ball-position plus à gauche — swing plus large — contact sweeping' },
+   { name: 'Simulation de fairway', sets: '10 tirs scénarisés', rest: '—', note: 'Choisir club et cible — simuler situation de jeu réelle' }
+  ]
+ }
+];
+
 window.MACRO_PHASES = [
  {id: 'hypertrophie', label: 'Hypertrophie', shortLabel: 'HYPERTROPHIE', color: '#3E5C3A',
   mesosInPhase: 1, // tous les mésocycles i%3===1 (cycle 1,4,7...)

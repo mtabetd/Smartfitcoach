@@ -463,7 +463,8 @@ window.getNextScheduledSession = function() {
         var dateStr = d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
         var out = { date: dateStr, dayLabel: dayNames[d.getDay()] };
         if (S.sportType) {
-          var typeLabels = { muscu:'Musculation', crossfit:'CrossFit', running:'Running', cycling:'Vélo', triathlon:'Triathlon', hyrox:'Hyrox', calisthenics:'Calisthenics', padel:'Padel', golf:'Golf', yoga:'Yoga' };
+          var _tlEN = window.isEnglish && window.isEnglish();
+          var typeLabels = { muscu: _tlEN ? 'Strength Training' : 'Musculation', crossfit:'CrossFit', running:'Running', cycling: _tlEN ? 'Cycling' : 'Vélo', triathlon:'Triathlon', hyrox:'Hyrox', calisthenics:'Calisthenics', padel:'Padel', golf:'Golf', yoga:'Yoga' };
           out.type = typeLabels[S.sportType] || String(S.sportType);
         }
         return out;
@@ -1050,21 +1051,23 @@ window.detectWeekPatterns = function() {
     // PATTERN 1 : fatigue chronique — sommeil moyen < 3/5 sur 7j avec ≥ 3 jours loggés.
     // Évite faux positif si 1 seul jour logué.
     if (wellnessAvg && wellnessAvg.sleepAvg !== null && wellnessAvg.daysLogged >= 3 && wellnessAvg.sleepAvg < 3) {
+      var _slEN = window.isEnglish && window.isEnglish();
       patterns.push({
         id: 'sleep_low_avg',
         severity: 'warning',
-        label: 'Sommeil moyen bas (' + wellnessAvg.sleepAvg + '/5 sur ' + wellnessAvg.daysLogged + 'j)',
-        advice: 'Privilégie récupération active, coucher avant 23h, évite écran 1h avant dodo.'
+        label: (_slEN ? 'Low average sleep (' : 'Sommeil moyen bas (') + wellnessAvg.sleepAvg + '/5 ' + (_slEN ? 'over ' : 'sur ') + wellnessAvg.daysLogged + (_slEN ? 'd)' : 'j)'),
+        advice: _slEN ? 'Prioritise active recovery, bedtime before 11pm, avoid screens 1h before sleep.' : 'Privilégie récupération active, coucher avant 23h, évite écran 1h avant dodo.'
       });
     }
 
     // PATTERN 2 : douleurs récurrentes — muscles='douleurs' sur ≥ 2 jours dans les 7 derniers.
     if (wellnessAvg && wellnessAvg.muscleStats && wellnessAvg.muscleStats['douleurs'] >= 2) {
+      var _prEN = window.isEnglish && window.isEnglish();
       patterns.push({
         id: 'pain_recurrent',
         severity: 'alert',
-        label: wellnessAvg.muscleStats['douleurs'] + ' jours de douleurs sur 7',
-        advice: 'Envisager un dé-load cette semaine. Consulter un pro si persiste.'
+        label: wellnessAvg.muscleStats['douleurs'] + (_prEN ? ' days of pain out of 7' : ' jours de douleurs sur 7'),
+        advice: _prEN ? 'Consider a deload this week. Consult a professional if it persists.' : 'Envisager un dé-load cette semaine. Consulter un pro si persiste.'
       });
     }
 
@@ -1072,11 +1075,12 @@ window.detectWeekPatterns = function() {
     // FIX CONTRE-AUDIT : .length > 0 car [] est truthy en JS (array vide passait ce check).
     var _hasActiveProgram = S.sportType && Array.isArray(S.sportProgram) && S.sportProgram.length > 0;
     if (sessionsSummary && sessionsSummary.sessions === 0 && _hasActiveProgram) {
+      var _utEN = window.isEnglish && window.isEnglish();
       patterns.push({
         id: 'undertraining',
         severity: 'info',
-        label: 'Aucune séance cette semaine',
-        advice: 'Reprise en douceur recommandée. Commence par 1 séance courte (30 min).'
+        label: _utEN ? 'No session this week' : 'Aucune séance cette semaine',
+        advice: _utEN ? 'Gentle restart recommended. Start with 1 short session (30 min).' : 'Reprise en douceur recommandée. Commence par 1 séance courte (30 min).'
       });
     }
 
@@ -1087,12 +1091,13 @@ window.detectWeekPatterns = function() {
     if (sessionsSummary && sessionsSummary.sessions >= 7) {
       var overSev = (weekPerf && weekPerf.lastPain) ? 'alert' : 'warning';
       var overId = (weekPerf && weekPerf.lastPain) ? 'overtraining' : 'high_volume';
+      var _ovEN = window.isEnglish && window.isEnglish();
       var overLabel = (weekPerf && weekPerf.lastPain)
-        ? sessionsSummary.sessions + ' séances + douleur ' + weekPerf.lastPain
-        : sessionsSummary.sessions + ' séances cette semaine (volume élevé)';
+        ? sessionsSummary.sessions + (_ovEN ? ' sessions + pain ' : ' séances + douleur ') + weekPerf.lastPain
+        : sessionsSummary.sessions + (_ovEN ? ' sessions this week (high volume)' : ' séances cette semaine (volume élevé)');
       var overAdvice = (weekPerf && weekPerf.lastPain)
-        ? 'Dé-load -20% volume cette semaine. 1-2 jours repos complet conseillés.'
-        : 'Au-delà de 6 séances/sem, le risque de blessure augmente. Pense à caser 1-2 jours repos complet.';
+        ? (_ovEN ? 'Deload -20% volume this week. 1-2 full rest days advised.' : 'Dé-load -20% volume cette semaine. 1-2 jours repos complet conseillés.')
+        : (_ovEN ? 'Beyond 6 sessions/week, injury risk increases. Plan 1-2 full rest days.' : 'Au-delà de 6 séances/sem, le risque de blessure augmente. Pense à caser 1-2 jours repos complet.');
       patterns.push({ id: overId, severity: overSev, label: overLabel, advice: overAdvice });
     }
 
@@ -1101,11 +1106,12 @@ window.detectWeekPatterns = function() {
         weekPerf.rpeAvg >= 6 && weekPerf.rpeAvg <= 8 &&
         typeof weekPerf.chargeProgressionPct === 'number' &&
         weekPerf.chargeProgressionPct > 0) {
+      var _ppEN = window.isEnglish && window.isEnglish();
       patterns.push({
         id: 'progress_positive',
         severity: 'info',
-        label: 'Progression +' + weekPerf.chargeProgressionPct.toFixed(1) + '% charges, RPE moyen ' + weekPerf.rpeAvg + '/10',
-        advice: 'Continue sur cette lancée. Respect du volume recommandé ISSN.'
+        label: (_ppEN ? 'Progression +' : 'Progression +') + weekPerf.chargeProgressionPct.toFixed(1) + (_ppEN ? '% load, avg RPE ' : '% charges, RPE moyen ') + weekPerf.rpeAvg + '/10',
+        advice: _ppEN ? 'Keep it up. Stay within ISSN recommended volume.' : 'Continue sur cette lancée. Respect du volume recommandé ISSN.'
       });
     }
 
@@ -1113,21 +1119,23 @@ window.detectWeekPatterns = function() {
     // Détectable uniquement si chargeProgressionPct < -5% (charges qui baissent).
     if (weekPerf && typeof weekPerf.chargeProgressionPct === 'number' &&
         weekPerf.chargeProgressionPct < -5) {
+      var _cdEN = window.isEnglish && window.isEnglish();
       patterns.push({
         id: 'charges_drop',
         severity: 'warning',
-        label: 'Charges en baisse (' + weekPerf.chargeProgressionPct.toFixed(1) + '% vs sem précédente)',
-        advice: 'Fatigue ? Deload voulu ? Vérifier sommeil + alimentation.'
+        label: (_cdEN ? 'Load dropping (' : 'Charges en baisse (') + weekPerf.chargeProgressionPct.toFixed(1) + (_cdEN ? '% vs prev week)' : '% vs sem précédente)'),
+        advice: _cdEN ? 'Fatigue? Planned deload? Check sleep + nutrition.' : 'Fatigue ? Deload voulu ? Vérifier sommeil + alimentation.'
       });
     }
 
     // PATTERN 7 : sommeil excellent — sleepAvg >= 4 sur ≥ 5j → encouragement.
     if (wellnessAvg && wellnessAvg.sleepAvg !== null && wellnessAvg.daysLogged >= 5 && wellnessAvg.sleepAvg >= 4) {
+      var _seEN = window.isEnglish && window.isEnglish();
       patterns.push({
         id: 'sleep_excellent',
         severity: 'info',
-        label: 'Sommeil excellent (' + wellnessAvg.sleepAvg + '/5 sur ' + wellnessAvg.daysLogged + 'j)',
-        advice: 'Bases solides de récupération. Idéal pour pousser la progression.'
+        label: (_seEN ? 'Excellent sleep (' : 'Sommeil excellent (') + wellnessAvg.sleepAvg + '/5 ' + (_seEN ? 'over ' : 'sur ') + wellnessAvg.daysLogged + (_seEN ? 'd)' : 'j)'),
+        advice: _seEN ? 'Solid recovery foundation. Perfect time to push progression.' : 'Bases solides de récupération. Idéal pour pousser la progression.'
       });
     }
 
@@ -1297,14 +1305,20 @@ window.showMedicalDisclaimerIfNeeded = function() {
     sheet.style.cssText = 'background:var(--ivory,#FAF9F6);max-width:460px;width:100%;max-height:90vh;overflow-y:auto;border:1px solid var(--black,#0A0A09);border-radius:0;padding:28px 26px;';
     var eyebrow = document.createElement('div');
     eyebrow.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--error,#7A1F1F);font-weight:400;margin-bottom:10px;';
-    eyebrow.textContent = '\u26A0 Avertissement important';
+    eyebrow.textContent = (window.isEnglish && window.isEnglish()) ? '\u26A0 Important notice' : '\u26A0 Avertissement important';
     var title = document.createElement('h2');
     title.id = 'mtd-disclaimer-title';
     title.style.cssText = 'font-family:Georgia,serif;font-size:22px;line-height:1.3;margin:0 0 16px;color:var(--black,#0A0A09);font-weight:normal;';
-    title.textContent = 'SmartFitCoach n\'est pas un dispositif m\u00e9dical';
+    title.textContent = (window.isEnglish && window.isEnglish()) ? 'SmartFitCoach is not a medical device' : 'SmartFitCoach n\'est pas un dispositif m\u00e9dical';
     var body = document.createElement('div');
     body.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;line-height:1.65;color:var(--black,#0A0A09);margin-bottom:20px;';
-    body.innerHTML = [
+    var _discEN = window.isEnglish && window.isEnglish();
+    body.innerHTML = _discEN ? [
+      '<p style="margin:0 0 12px">The information and recommendations provided by SmartFitCoach (AI coach, nutrition and sport plans, analyses) are offered for <strong>informational and educational purposes</strong> only.</p>',
+      '<p style="margin:0 0 12px">They do not replace the advice of a <strong>doctor, nutritionist, physiotherapist, or qualified sports coach</strong>.</p>',
+      '<p style="margin:0 0 12px">Before starting a programme, consult a healthcare professional if you are pregnant, breastfeeding, have a chronic condition (cardiac, diabetes, eating disorder, etc.), are on medication, or have undiagnosed pain.</p>',
+      '<p style="margin:0">In case of doubt, persistent pain, or discomfort: <strong>stop your training and consult a doctor</strong>.</p>'
+    ].join('') : [
       '<p style="margin:0 0 12px">Les informations et recommandations fournies par SmartFitCoach (coach IA, plans nutrition et sport, analyses) sont proposées \u00e0 titre <strong>informatif et p\u00e9dagogique</strong>.</p>',
       '<p style="margin:0 0 12px">Elles ne remplacent en aucun cas l\'avis d\'un <strong>m\u00e9decin, nutritionniste, kin\u00e9sith\u00e9rapeute ou coach sportif qualifi\u00e9</strong>.</p>',
       '<p style="margin:0 0 12px">Avant de d\u00e9buter un programme, consulte un professionnel de sant\u00e9 si tu es enceinte, allaitantes, as une pathologie chronique (cardiaque, diab\u00e8te, TCA, etc.), prends un traitement ou as des douleurs non diagnostiqu\u00e9es.</p>',
@@ -1314,12 +1328,12 @@ window.showMedicalDisclaimerIfNeeded = function() {
     cguLink.href = 'cgu.html';
     cguLink.target = '_blank';
     cguLink.rel = 'noopener';
-    cguLink.textContent = 'Lire les CGU complètes →';
+    cguLink.textContent = (window.isEnglish && window.isEnglish()) ? 'Read full Terms & Conditions →' : 'Lire les CGU complètes →';
     cguLink.style.cssText = 'display:inline-block;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;color:var(--grey,#6B6B65);text-decoration:underline;';
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.style.cssText = 'width:100%;padding:14px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;';
-    btn.textContent = 'J\'ai lu et compris';
+    btn.textContent = (window.isEnglish && window.isEnglish()) ? 'I have read and understood' : 'J\'ai lu et compris';
     btn.addEventListener('click', function() {
       try { localStorage.setItem(storageKey, '1'); } catch(e) {}
       if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
@@ -1385,11 +1399,11 @@ window.sanitizeHTML = function(str) {
 window.validateProfile = function validateProfile(data) {
   var errors = [];
   if (data.age !== undefined && (isNaN(data.age) || data.age < 10 || data.age > 120))
-    errors.push('Âge invalide (10-120 ans)');
+    errors.push((window.isEnglish && window.isEnglish()) ? 'Invalid age (10-120 years)' : 'Âge invalide (10-120 ans)');
   if (data.weight !== undefined && (isNaN(data.weight) || data.weight < 30 || data.weight > 300))
-    errors.push('Poids invalide (30-300 kg)');
+    errors.push((window.isEnglish && window.isEnglish()) ? 'Invalid weight (30-300 kg)' : 'Poids invalide (30-300 kg)');
   if (data.height !== undefined && (isNaN(data.height) || data.height < 100 || data.height > 250))
-    errors.push('Taille invalide (100-250 cm)');
+    errors.push((window.isEnglish && window.isEnglish()) ? 'Invalid height (100-250 cm)' : 'Taille invalide (100-250 cm)');
   return errors;
 };
 
@@ -1714,6 +1728,31 @@ function getDayType(dayIndex) {
 }
 window.getDayType = getDayType;
 
+// ─── PER-DAY SPORT LOAD MAPPING ───────────────────────────────────────────
+// Reads the sport assigned to a specific day from weeklyCalendar and maps it
+// to the corresponding trainingLoad level used by the nutrition engine.
+// Returns null when weeklyCalendar is absent → existing global fallback applies.
+// MET thresholds mirror _sfcNotifySport: heavy≥9, moderate≥5, light<5.
+function _getSportLoadForDay(dayIndex) {
+  var s = window.S;
+  if (!s || !s.weeklyCalendar || typeof s.weeklyCalendar !== 'object' || Array.isArray(s.weeklyCalendar)) return null;
+  var _sport = s.weeklyCalendar[String(dayIndex)];
+  if (!_sport || _sport === 'repos' || _sport === 'autre') return null;
+  var _DAY_LOAD = {
+    musculation:  'heavy',
+    crossfit:     'heavy',
+    hyrox:        'heavy',
+    running:      'moderate',
+    triathlon:    'moderate',
+    cycling:      'moderate',
+    calisthenics: 'moderate',
+    padel:        'moderate',
+    yoga:         'light',
+    golf:         'light'
+  };
+  return _DAY_LOAD[_sport] || null;
+}
+
 // ─── ADAPTIVE MEAL SPLIT PER DAY ──────────────────────────────────────────
 // getAdaptedMealSplit(dayIndex) — adapte la répartition calorique selon
 // le type de jour (entraînement vs repos).
@@ -1749,7 +1788,7 @@ function getAdaptedMealSplit(dayIndex) {
   // Sans SFCSymbiosis ou sans trainingLoad → calMultiplier=1.0 (comportement inchangé).
   var _trainMult  = 1.0;
   var _carbBoost  = 1.0;
-  var _tl4mults = window.S && (window.S.dailyTrainingLoad || window.S.trainingLoad);
+  var _tl4mults = _getSportLoadForDay(dayIndex) || (window.S && (window.S.dailyTrainingLoad || window.S.trainingLoad));
   if (window.SFCSymbiosis && _tl4mults) {
     var _mults = window.SFCSymbiosis.getLoadMultipliers(true, _tl4mults);
     _trainMult = _mults.cal;
@@ -3982,6 +4021,7 @@ window.S = {
   // Sport mix
   sportMixEnabled: false,       // mode sport mixte activé
   sportMixSecondary: null,      // sport secondaire en mode mixte
+  sportMixTertiary: null,       // sport tertiaire en mode mixte (3 disciplines)
   // Body composition
   _bodyFatEstimate: null,       // estimation % masse grasse (calcul interne)
   _bodyCompositionProfile: null,// profil composition corporelle détaillé
@@ -4636,7 +4676,7 @@ function showPaywall(feature) {
   var dismiss = function() { ov.style.opacity = '0'; setTimeout(function() { if (ov.parentNode) ov.parentNode.removeChild(ov); }, 250); };
   var upgradeBtn = document.createElement('button');
   upgradeBtn.style.cssText = 'width:100%;padding:14px;margin-bottom:8px;background:var(--black,#0A0A09);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#fff;cursor:pointer;min-height:44px;letter-spacing:1px;';
-  upgradeBtn.textContent = 'Découvrir Premium →';
+  upgradeBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Discover Premium →' : 'Découvrir Premium →';
   upgradeBtn.onclick = function() {
     dismiss();
     if (window.SupaSync) { try { window.SupaSync._userStatusCacheTs = 0; } catch(_e) {} }
@@ -4644,7 +4684,7 @@ function showPaywall(feature) {
   };
   var closeBtn = document.createElement('button');
   closeBtn.style.cssText = 'width:100%;padding:14px;background:transparent;border:1px solid #D8D8D0;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#6B6B65;cursor:pointer;min-height:44px;';
-  closeBtn.textContent = 'Fermer';
+  closeBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Close' : 'Fermer';
   closeBtn.onclick = dismiss;
   box.appendChild(upgradeBtn);
   box.appendChild(closeBtn);
@@ -4687,7 +4727,7 @@ function showSubscriptionContact(plan, ui) {
   var _durPer = { saison: '/trimestre', cycle: '/semestre', engagement: '/an' };
   var planLine = '';
   if (plan && ui) {
-    var _tierLabels = { athlete: 'Athlete', champion: 'Champion', legende: 'Légende' };
+    var _tierLabels = { athlete: 'Core', champion: 'Performance', legende: 'Élite' };
     planLine = (_tierLabels[ui.tier] || ui.tier) + ' · ' + (plan.label_mad || '') + (_durPer[ui.duration] || '');
   }
 
@@ -4704,7 +4744,8 @@ function showSubscriptionContact(plan, ui) {
   var _l1 = document.createElement('span'); _l1.style.cssText = 'flex:1;height:1px;background:var(--border,#D8D8D0);';
   var _titleSpan = document.createElement('span');
   _titleSpan.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);white-space:nowrap;';
-  _titleSpan.textContent = 'VOTRE ACCÈS SUR MESURE';
+  var _pmEN = window.isEnglish && window.isEnglish();
+  _titleSpan.textContent = _pmEN ? 'YOUR TAILORED ACCESS' : 'VOTRE ACCÈS SUR MESURE';
   var _l2 = document.createElement('span'); _l2.style.cssText = 'flex:1;height:1px;background:var(--border,#D8D8D0);';
   _headerLine.appendChild(_l1); _headerLine.appendChild(_titleSpan); _headerLine.appendChild(_l2);
   box.appendChild(_headerLine);
@@ -4719,7 +4760,7 @@ function showSubscriptionContact(plan, ui) {
   if (planLine) {
     var _selLabel = document.createElement('div');
     _selLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px;margin-top:12px;';
-    _selLabel.textContent = 'VOTRE SÉLECTION';
+    _selLabel.textContent = _pmEN ? 'YOUR SELECTION' : 'VOTRE SÉLECTION';
     box.appendChild(_selLabel);
     var _planTag = document.createElement('div');
     _planTag.style.cssText = 'display:inline-block;border:1px solid var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;margin:12px 0 16px;color:var(--black,#0A0A09);';
@@ -4730,21 +4771,21 @@ function showSubscriptionContact(plan, ui) {
   // Corps
   var _body = document.createElement('div');
   _body.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.8;margin-bottom:24px;';
-  _body.textContent = 'L\'accès à SmartFitCoach se fait par invitation personnalisée. Écrivez-nous, et nous vous répondrons dans les meilleurs délais avec l\'ensemble des détails : formules, tarifs et modalités d\'accès. Chaque demande reçoit notre attention complète.';
+  _body.textContent = _pmEN ? 'Access to SmartFitCoach is by personalised invitation. Write to us and we will respond promptly with all details: plans, pricing and access terms. Every request receives our full attention.' : 'L\'accès à SmartFitCoach se fait par invitation personnalisée. Écrivez-nous, et nous vous répondrons dans les meilleurs délais avec l\'ensemble des détails : formules, tarifs et modalités d\'accès. Chaque demande reçoit notre attention complète.';
   box.appendChild(_body);
 
   // Bouton principal — mailto
   var _mailBtn = document.createElement('a');
   _mailBtn.href = mailto;
   _mailBtn.style.cssText = 'display:block;width:100%;padding:16px;margin-bottom:10px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;text-decoration:none;box-sizing:border-box;cursor:pointer;border-radius:0;';
-  _mailBtn.textContent = 'Écrire à l\'équipe';
+  _mailBtn.textContent = _pmEN ? 'Write to the team' : 'Écrire à l\'équipe';
   box.appendChild(_mailBtn);
 
   // Bouton secondaire — fermer
   var dismiss = function() { ov.style.opacity = '0'; setTimeout(function() { if (ov.parentNode) ov.parentNode.removeChild(ov); }, 300); };
   var _closeBtn = document.createElement('button');
   _closeBtn.style.cssText = 'display:block;width:100%;padding:16px;background:transparent;border:1px solid var(--border,#D8D8D0);color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;border-radius:0;appearance:none;-webkit-appearance:none;';
-  _closeBtn.textContent = 'Peut-être plus tard';
+  _closeBtn.textContent = _pmEN ? 'Maybe later' : 'Peut-être plus tard';
   _closeBtn.onclick = dismiss;
   box.appendChild(_closeBtn);
 
@@ -4752,7 +4793,7 @@ function showSubscriptionContact(plan, ui) {
   var _reassure = document.createElement('div');
   var _filet = document.createElement('div'); _filet.style.cssText = 'height:1px;background:var(--border,#D8D8D0);margin:20px 0 14px;'; box.appendChild(_filet);
   _reassure.style.cssText = 'text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;color:var(--grey,#6B6B65);';
-  _reassure.textContent = 'Discrétion assurée — nous ne partageons aucune information personnelle.';
+  _reassure.textContent = _pmEN ? 'Full discretion — we never share personal information.' : 'Discrétion assurée — nous ne partageons aucune information personnelle.';
   box.appendChild(_reassure);
 
   ov.appendChild(box);
@@ -4821,7 +4862,8 @@ window.getPregnancyWeightGuideline = getPregnancyWeightGuideline;
 // Formule Devine : homme = 50 + 2.3×(taille_pouces-60), femme = 45.5 + 2.3×(taille_pouces-60)
 function calcAdjustedWeight(){
   var s=window.S;
-  if(!s.weight||!s.height)return s.weight||75;
+  if(!s.weight)return 75; // No weight: generic fallback
+  if(!s.height)return s.weight; // Height missing: use actual weight (BMI can't be computed, no obesity adjustment)
   var bmi=s.weight/Math.pow(s.height/100,2);
   if(bmi<=30)return s.weight; // Pas d'ajustement si IMC ≤ 30
   var heightInches=s.height/2.54;
@@ -4878,7 +4920,9 @@ var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&window.isFemale(s
 var pregExtra=tri?tri.trimester.calorieExtra:340;
 // Si allaitement ET enceinte (fin de grossesse + allaitement aîné) → ADDITIF (ACOG 2018 + 2022)
 var allaitExtra=(s.medical&&s.medical.indexOf('allaitement')!==-1)?500:0;
-base=Math.round(tdeeVal)+pregExtra+allaitExtra;
+// Math.max(base, tdeeVal): never restrict pregnant users below maintenance (ACOG — no caloric deficit during pregnancy),
+// but preserve surplus if user is in bulk (e.g., TDEE×1.15 > TDEE).
+base=Math.round(Math.max(base,tdeeVal))+pregExtra+allaitExtra;
 // Plancher grossesse : 1800 kcal/j minimum (OMS 2016 — jamais de restriction chez femme enceinte sauf prescription médicale)
 base=Math.max(base,1800);return base;}var goalKey=GOALS[s.goal].key;// Cap shred deficit to 500 kcal/day (Helms 2014, ACSM — RED-S + muscle loss risk above 500kcal deficit)
 // Cap déficit à -500 kcal/j pour shred ET cut (ACSM 2009, Helms 2014 — au-delà : perte musculaire + fatigue chronique)

@@ -1183,7 +1183,7 @@ function renderHeroContextuel() {
       _sparkRow.appendChild(_sparkSvg);
       var _sparkMeta = h('div', {});
       _sparkMeta.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;color:var(--ink-900,#0A0A09);line-height:1.2;' }, (window.UNITS ? window.UNITS.displayWeightVal(_lastW) : _lastW.toFixed(1)) + (window.UNITS ? ' ' + window.UNITS.weightLabel() : ' kg')));
-      _sparkMeta.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--ink-500,#6B6B65);margin-top:2px;' }, _wDeltaLabel + ' ' + ((window.isEnglish && window.isEnglish()) ? 'over ' + _wVals.length + ' weigh-ins' : 'sur ' + _wVals.length + ' pesees')));
+      _sparkMeta.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--ink-500,#6B6B65);margin-top:2px;' }, _wDeltaLabel + ' ' + ((window.isEnglish && window.isEnglish()) ? 'over ' + _wVals.length + ' weigh-ins' : 'sur ' + _wVals.length + ' pesées')));
       _sparkRow.appendChild(_sparkMeta);
       inner.appendChild(_sparkRow);
     }
@@ -1912,10 +1912,10 @@ function _fjOpenCreateFoodModal() {
           + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--black,#0A0A09);'
           + 'display:flex;align-items:center;justify-content:center;gap:8px;box-sizing:border-box;'
       });
-      scanBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M3 3 L3 13 M5 3 L5 13 M7.5 3 L7.5 13 M10 3 L10 13 M13 3 L13 13"/></svg><span>Scanner un code-barres</span>';
+      scanBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M3 3 L3 13 M5 3 L5 13 M7.5 3 L7.5 13 M10 3 L10 13 M13 3 L13 13"/></svg><span>' + ((window.isEnglish && window.isEnglish()) ? 'Scan a barcode' : 'Scanner un code-barres') + '</span>';
       scanBtn.addEventListener('click', function() {
         try {
-          todayModal('Scanner un code-barres', function(scanBox, scanOverlay) {
+          todayModal((window.isEnglish && window.isEnglish()) ? 'Scan a barcode' : 'Scanner un code-barres', function(scanBox, scanOverlay) {
             var scanContainer = h('div', { style: 'margin-top:8px;' });
             try { window.SCANNER.renderWidget(scanContainer, { onPrefill: function(p) {
               if (!p) return;
@@ -1928,7 +1928,7 @@ function _fjOpenCreateFoodModal() {
               try { if (scanOverlay && scanOverlay.parentNode) scanOverlay.parentNode.removeChild(scanOverlay); } catch(e) {}
               if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Pre-filled values — verify before saving.' : 'Valeurs pré-remplies — vérifiez avant d\'enregistrer.', 'success', 2500);
             } }); }
-            catch(e) { scanContainer.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, 'Scanner indisponible sur ce navigateur.')); }
+            catch(e) { scanContainer.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, (window.isEnglish && window.isEnglish()) ? 'Scanner unavailable on this browser.' : 'Scanner indisponible sur ce navigateur.')); }
             scanBox.appendChild(scanContainer);
           });
         } catch(e) { console.warn('[create-food] scanner open failed:', e); }
@@ -2066,6 +2066,10 @@ function renderFoodJournalCard() {
     cell.appendChild(h('div', {
       style: 'font-family:Georgia,serif;font-size:15px;color:' + valColor + ';'
     }, displayVal + (unit || '')));
+    if (tgt > 0) {
+      var pctVal = Math.round(val / tgt * 100);
+      cell.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:' + valColor + ';opacity:0.75;margin-top:2px;' }, pctVal + '%'));
+    }
     return cell;
   }
   totalsBox.appendChild(totCell('Kcal', totals.kcal, kcalTarget, ''));
@@ -2240,10 +2244,10 @@ function renderFoodJournalCard() {
     barcodeBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M3 3 L3 13 M5 3 L5 13 M7.5 3 L7.5 13 M10 3 L10 13 M13 3 L13 13"/></svg><span style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;">Code-barres</span>';
     barcodeBtn.addEventListener('click', function() {
       try {
-        todayModal('Scanner un code-barres', function(box) {
+        todayModal((window.isEnglish && window.isEnglish()) ? 'Scan a barcode' : 'Scanner un code-barres', function(box) {
           var scanContainer = h('div', { style: 'margin-top:8px;' });
           try { window.SCANNER.renderWidget(scanContainer); }
-          catch(e) { scanContainer.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, 'Scanner indisponible sur ce navigateur.')); }
+          catch(e) { scanContainer.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, (window.isEnglish && window.isEnglish()) ? 'Scanner unavailable on this browser.' : 'Scanner indisponible sur ce navigateur.')); }
           box.appendChild(scanContainer);
         });
       } catch(e) { console.warn('[journal] barcode scan open failed:', e); }
@@ -2294,11 +2298,11 @@ function renderFoodJournalCard() {
     if (!hasPlan) return;
     var pillPlan = h('button', {
       type: 'button',
-      'aria-label': 'Charger le plan repas du jour dans le journal',
+      'aria-label': (window.isEnglish && window.isEnglish()) ? 'Load today\'s meal plan into journal' : 'Charger le plan repas du jour dans le journal',
       style: 'padding:5px 12px;min-height:32px;border-radius:0;cursor:pointer;box-sizing:border-box;'
         + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;'
         + 'background:transparent;color:var(--ink-500,#6B6B65);border:1px solid var(--line,#D8D8D0);'
-    }, '+ Plan du jour');
+    }, (window.isEnglish && window.isEnglish()) ? '+ Today\'s plan' : '+ Plan du jour');
     pillPlan.addEventListener('click', function() {
       if (!window.FOOD_JOURNAL) return;
       try {
@@ -2504,7 +2508,7 @@ function _fjRenderFoodRow(food, source) {
   var isFav = _fjIsFav(food.name);
   var favStarColor = isFav ? 'var(--black,#0A0A09)' : 'var(--line,#D8D8D0)';
   var favStar = h('button', {
-    'aria-label': isFav ? 'Retirer des favoris' : 'Ajouter aux favoris',
+    'aria-label': (window.isEnglish && window.isEnglish()) ? (isFav ? 'Remove from favorites' : 'Add to favorites') : (isFav ? 'Retirer des favoris' : 'Ajouter aux favoris'),
     style: 'display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0;'
       + 'background:none;border:none;cursor:pointer;flex-shrink:0;'
   });
@@ -2639,12 +2643,12 @@ function _fjAppendOFFResults() {
     });
     loadRow.appendChild(h('span', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'
-    }, 'Recherche de produits en ligne\u2026'));
+    }, (window.isEnglish && window.isEnglish()) ? 'Searching online products\u2026' : 'Recherche de produits en ligne\u2026'));
     var cancelBtn = h('button', {
       type: 'button',
       style: 'background:none;border:1px solid var(--line,#D8D8D0);padding:6px 12px;min-height:32px;cursor:pointer;'
         + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);border-radius:2px;'
-    }, 'Annuler');
+    }, (window.isEnglish && window.isEnglish()) ? 'Cancel' : 'Annuler');
     cancelBtn.addEventListener('click', function() {
       try { if (_fjOFF.ctrl) _fjOFF.ctrl.abort(); } catch(e) {}
       _fjOFF.loading = false;
@@ -2731,7 +2735,7 @@ function _fjRenderSavedMeals(box) {
     // Bouton supprimer
     var delBtn = h('button', {
       type: 'button',
-      'aria-label': 'Supprimer ' + meal.name,
+      'aria-label': (window.isEnglish && window.isEnglish()) ? 'Remove ' + meal.name : 'Supprimer ' + meal.name,
       style: 'display:inline-flex;align-items:center;justify-content:center;min-width:36px;min-height:44px;padding:0;'
         + 'background:none;border:none;cursor:pointer;color:var(--grey,#6B6B65);flex-shrink:0;margin-left:2px;'
     });
@@ -2985,7 +2989,7 @@ function _fjShowSelection() {
       if (isNaN(v) || v < 0.5) v = 0.5;
       if (v > 20) {
         v = 20;
-        if (window.showToast) window.showToast('Maximum 20 portions. Pour plus, passez en mode grammes.', 'warning', 3000);
+        if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Maximum 20 portions. For more, switch to grams mode.' : 'Maximum 20 portions. Pour plus, passez en mode grammes.', 'warning', 3000);
       }
       _fjState.portionCount = v;
       _fjUpdateMacrosLive();
@@ -3204,7 +3208,7 @@ function _fjBuildEntriesList(container) {
     row.appendChild(info);
 
     var del = h('button', {
-      'aria-label': 'Retirer cet aliment',
+      'aria-label': (window.isEnglish && window.isEnglish()) ? 'Remove this food' : 'Retirer cet aliment',
       style: 'display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0;'
         + 'background:none;border:none;cursor:pointer;color:var(--grey,#6B6B65);flex-shrink:0;'
     });
@@ -3446,6 +3450,28 @@ function renderCardRepas() {
 
   if (!hasAny) return null;
 
+  // ── Daily planned calorie total + micro progress bar ──
+  var _rpEN = window.isEnglish && window.isEnglish();
+  var _dayTotalK = 0;
+  SLOTS.forEach(function(s2) { var m2 = dayData[s2.key]; if (m2 && m2.k) _dayTotalK += (m2.k || 0); });
+  if (_dayTotalK > 0) {
+    var _dayTarget = (typeof getCalorieTarget === 'function') ? getCalorieTarget() : 0;
+    var _pct2 = _dayTarget > 0 ? Math.min(100, Math.round((_dayTotalK / _dayTarget) * 100)) : 0;
+    var _barColor2 = (_dayTarget > 0 && _dayTotalK > _dayTarget * 1.1) ? '#C0392B' : ((_dayTarget > 0 && _dayTotalK < _dayTarget * 0.85) ? '#E67E22' : '#3E5C3A');
+    var _totalDiv = h('div', { style: 'margin-top:12px;padding-top:10px;border-top:1px solid var(--line,#D8D8D0);' });
+    var _totalRow = h('div', { style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;' });
+    _totalRow.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);' }, _rpEN ? 'PLANNED TOTAL' : 'TOTAL PRÉVU'));
+    _totalRow.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;color:var(--ink-900,#0A0A09);' }, Math.round(_dayTotalK) + (_dayTarget > 0 ? ' / ' + Math.round(_dayTarget) : '') + ' kcal'));
+    _totalDiv.appendChild(_totalRow);
+    if (_dayTarget > 0) {
+      var _outerBar2 = h('div', { style: 'height:3px;background:var(--line,#D8D8D0);border-radius:0;overflow:hidden;' });
+      _outerBar2.appendChild(h('div', { style: 'height:3px;background:' + _barColor2 + ';width:' + _pct2 + '%;transition:width .3s ease;' }));
+      _totalDiv.appendChild(_outerBar2);
+    }
+    c.appendChild(_totalDiv);
+  }
+
+
   // Compteur repas pris aujourd'hui
   var loggedCount = SLOTS.filter(function(slot) {
     return dayData[slot.key] && dayData[slot.key].n && mealsLoggedToday[slot.key] === true;
@@ -3455,6 +3481,17 @@ function renderCardRepas() {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:8px;'
   }, loggedCount + '/' + totalSlots + ' ' + ((window.isEnglish && window.isEnglish()) ? 'meals today' : 'repas aujourd\u2019hui'));
   c.appendChild(counterEl);
+
+  // Plan revalidation nudge
+  if (S.weekPlan && S.weekPlanValidated === false) {
+    var _revalDiv = h('div', {
+      style: 'margin-top:10px;padding:8px 12px;border-left:2px solid var(--orange,#E86F1E);background:rgba(232,111,30,0.05);display:flex;align-items:center;justify-content:space-between;cursor:pointer;',
+      onclick: function() { S.view = 'nutrition'; S.nStep = 12; if (window.render) window.render(); }
+    });
+    _revalDiv.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--ink-700,#2B2B27);line-height:1.4;' }, _rpEN ? 'Settings changed — update your plan' : 'Paramètres modifiés — recalibrez votre plan'));
+    _revalDiv.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;color:var(--orange,#E86F1E);white-space:nowrap;margin-left:8px;' }, _rpEN ? 'Update →' : 'Recalibrer →'));
+    c.appendChild(_revalDiv);
+  }
 
   // Footer link
   var link = h('div', {
@@ -4575,6 +4612,78 @@ function renderCardRestDay(S) {
   return c;
 }
 
+// ─── RENDER CARD — Suivi hydratation (via WATER_TRACKER — même source que FAB EAU) ───
+function renderCardWater() {
+  var S = window.S;
+  if (!S) return null;
+  if (!window.WATER_TRACKER) return null;
+
+  var EN = window.isEnglish && window.isEnglish();
+  var _data = window.WATER_TRACKER.getToday();
+  var _glasses = _data.glasses;
+  var _target = _data.target;
+  var _pct = _data.percent;
+  var _liters = Math.round(_glasses * 250) / 1000;
+  var _goalL = Math.round(_target * 250) / 1000;
+  var _barColor = _glasses >= _target ? '#3E5C3A' : (_glasses >= _target * 0.5 ? 'var(--orange,#E86F1E)' : '#C0392B');
+
+  var c = card('background:var(--ivory,#FAF9F6);border-color:var(--border);');
+  c.appendChild(eyebrow(EN ? 'HYDRATION' : 'HYDRATATION'));
+
+  var _headRow = h('div', { style: 'display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px;' });
+  var _numWrap = h('div', { style: 'display:flex;align-items:baseline;gap:6px;' });
+  _numWrap.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:26px;color:var(--ink-900,#0A0A09);line-height:1;' }, _liters.toFixed(1)));
+  _numWrap.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);letter-spacing:0.5px;' }, '/ ' + _goalL.toFixed(1) + ' L'));
+  _headRow.appendChild(_numWrap);
+  if (_pct > 0) {
+    _headRow.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:' + _barColor + ';letter-spacing:1px;' }, _pct + '%'));
+  }
+  c.appendChild(_headRow);
+
+  var _barOuter = h('div', { style: 'height:3px;background:var(--line,#D8D8D0);border-radius:0;margin-bottom:14px;overflow:hidden;' });
+  _barOuter.appendChild(h('div', { style: 'height:3px;background:' + _barColor + ';width:' + _pct + '%;transition:width .3s ease;' }));
+  c.appendChild(_barOuter);
+
+  var _btns = h('div', { style: 'display:flex;gap:8px;' });
+
+  var _add1 = h('button', {
+    style: 'flex:1;min-height:44px;padding:10px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
+    onclick: function() {
+      if (window.WATER_TRACKER) window.WATER_TRACKER.addGlass();
+      if (window.render) window.render();
+    }
+  }, '+ 250 ml');
+  _btns.appendChild(_add1);
+
+  var _add2 = h('button', {
+    style: 'flex:1;min-height:44px;padding:10px;background:transparent;color:var(--ink-900,#0A0A09);border:1px solid var(--line,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
+    onclick: function() {
+      if (window.WATER_TRACKER) { window.WATER_TRACKER.addGlass(); window.WATER_TRACKER.addGlass(); }
+      if (window.render) window.render();
+    }
+  }, '+ 500 ml');
+  _btns.appendChild(_add2);
+
+  if (_glasses > 0) {
+    var _undo = h('button', {
+      style: 'min-height:44px;padding:10px 16px;background:transparent;color:var(--grey,#6B6B65);border:1px solid var(--line,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;cursor:pointer;',
+      onclick: function() {
+        if (window.WATER_TRACKER) window.WATER_TRACKER.removeGlass();
+        if (window.render) window.render();
+      }
+    }, '−');
+    _btns.appendChild(_undo);
+  }
+  c.appendChild(_btns);
+
+  if (_glasses >= _target && _target > 0) {
+    c.appendChild(h('div', { style: 'margin-top:10px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#3E5C3A;letter-spacing:0.3px;' },
+      EN ? 'Daily goal reached' : 'Objectif journalier atteint'));
+  }
+
+  return c;
+}
+
 // ─── RENDER CARD 5 — Checkin bien-être ───
 function renderCardWellness(S) {
   var today = new Date().toISOString().split('T')[0];
@@ -4621,7 +4730,7 @@ function renderCardShortcuts() {
 
   var btnMeal = h('button', {
     style: 'flex:1;background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:14px 8px;border:1px solid var(--border);border-radius:2px;cursor:pointer;transition:all .2s;',
-    'aria-label': 'Ajouter un repas',
+    'aria-label': (window.isEnglish && window.isEnglish()) ? 'Add a meal' : 'Ajouter un repas',
     onclick: function() {
       var S = window.S;
       if (!S) return;
@@ -4632,7 +4741,7 @@ function renderCardShortcuts() {
 
   var btnSport = h('button', {
     style: 'flex:1;background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:14px 8px;border:1px solid var(--border);border-radius:2px;cursor:pointer;transition:all .2s;',
-    'aria-label': 'Voir mon programme sportif',
+    'aria-label': (window.isEnglish && window.isEnglish()) ? 'View my sport plan' : 'Voir mon programme sportif',
     onclick: function() {
       var S = window.S;
       if (!S) return;
@@ -4673,7 +4782,7 @@ function todayModal(title, buildFn) {
   }
   var closeBtn = h('button', {
     style: 'position:absolute;top:12px;right:16px;background:none;border:none;font-size:18px;cursor:pointer;color:var(--grey);',
-    'aria-label': 'Fermer',
+    'aria-label': (window.isEnglish && window.isEnglish()) ? 'Close' : 'Fermer',
     onclick: _closeModal
   }, '\u00D7');
   box.appendChild(closeBtn);
@@ -4771,7 +4880,7 @@ function openTodayWeightPrompt() {
 
 // ─── MEASUREMENTS MODAL ───
 function openTodayMeasurementsModal() {
-  todayModal('Mes mensurations', function(box) {
+  todayModal((window.isEnglish && window.isEnglish()) ? 'My measurements' : 'Mes mensurations', function(box) {
     var formContainer = h('div', { style: 'margin-top:8px;' });
     if (window.MEASUREMENTS && window.MEASUREMENTS.renderForm) {
       try { window.MEASUREMENTS.renderForm(formContainer); } catch(e) {
@@ -4786,11 +4895,12 @@ function openTodayMeasurementsModal() {
 
 // ─── BADGES MODAL ───
 function openTodayBadgesModal() {
-  todayModal('Tous les badges', function(box) {
+  var _bEN = window.isEnglish && window.isEnglish();
+  todayModal(_bEN ? 'All badges' : 'Tous les badges', function(box) {
     var panel = h('div', { style: 'margin-top:8px;' });
     if (window.GAMIFICATION && window.GAMIFICATION.renderBadgesPanel) {
       try { window.GAMIFICATION.renderBadgesPanel(panel); } catch(e) {
-        panel.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, 'Panneau badges indisponible.'));
+        panel.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, _bEN ? 'Badges panel unavailable.' : 'Panneau badges indisponible.'));
       }
     }
     box.appendChild(panel);
@@ -4800,7 +4910,7 @@ function openTodayBadgesModal() {
 // ─── KITCHEN TIMER MODAL ───
 function openTodayKitchenTimer() {
   if (window._kitchenTimerInterval) { clearInterval(window._kitchenTimerInterval); window._kitchenTimerInterval = null; }
-  todayModal('Timer cuisine', function(box, overlay) {
+  todayModal((window.isEnglish && window.isEnglish()) ? 'Kitchen timer' : 'Timer cuisine', function(box, overlay) {
     box.style.textAlign = 'center';
     var display = h('div', {
       style: 'font-family:Georgia,serif;font-style:italic;font-size:48px;margin:24px 0 8px;line-height:1.1;color:var(--black);'
@@ -4874,7 +4984,7 @@ function openTodayKitchenTimer() {
 
     overlay.addEventListener('click', function(e) { if (e.target === overlay) { clearInterval(interval); window._kitchenTimerInterval = null; } });
     // Étendre le bouton ✕ du modal générique pour nettoyer l'interval
-    var _closeEl = box.querySelector('[aria-label="Fermer"]');
+    var _closeEl = box.querySelector('[aria-label="Fermer"]') || box.querySelector('[aria-label="Close"]');
     if (_closeEl) {
       var _origClose = _closeEl.onclick;
       _closeEl.onclick = function() { clearInterval(interval); window._kitchenTimerInterval = null; if (_origClose) _origClose(); };
@@ -4946,8 +5056,8 @@ function todayDeleteAllData() {
 // ─── RENDER EXTENDED SECTIONS (ex-Dashboard) ───
 function renderExtendedSections(wrapper, S) {
   if (!S || typeof S !== 'object') return;
-  // Actions rapides
-  wrapper.appendChild(sectionLabel('Actions rapides'));
+  var _exEN = window.isEnglish && window.isEnglish();
+  wrapper.appendChild(sectionLabel(_exEN ? 'Quick actions' : 'Actions rapides'));
   var actCard = card();
   var navRow = h('div', { style: 'display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;' });
 
@@ -4960,7 +5070,7 @@ function renderExtendedSections(wrapper, S) {
     onclick: function() { if (window.APP_NAVIGATE) window.APP_NAVIGATE('nutrition'); else { S.view = 'nutrition'; if (window.render) window.render(); } }
   });
   nutNavBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:17px;font-weight:normal;color:var(--ink-900,#0A0A09);margin-bottom:6px;' }, 'Nutrition'));
-  nutNavBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-style:italic;font-size:13px;color:var(--ink-500,#6B6B65);line-height:1.4;' }, 'Planifiez vos repas.'));
+  nutNavBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-style:italic;font-size:13px;color:var(--ink-500,#6B6B65);line-height:1.4;' }, _exEN ? 'Plan your meals.' : 'Planifiez vos repas.'));
   navRow.appendChild(nutNavBtn);
 
   var sportNavBtn = h('div', {
@@ -4979,16 +5089,16 @@ function renderExtendedSections(wrapper, S) {
     style: 'background:var(--ivory2);border:1px solid var(--border);padding:16px;cursor:pointer;text-align:center;transition:all .2s ease;',
     onclick: function() { openTodayWeightPrompt(); }
   });
-  weightActBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;margin:0 0 4px;' }, 'Poids'));
-  weightActBtn.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Enregistrer'));
+  weightActBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;margin:0 0 4px;' }, _exEN ? 'Weight' : 'Poids'));
+  weightActBtn.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, _exEN ? 'Log it' : 'Enregistrer'));
   btnRow.appendChild(weightActBtn);
 
   var measActBtn = h('div', {
     style: 'background:var(--ivory2);border:1px solid var(--border);padding:16px;cursor:pointer;text-align:center;transition:all .2s ease;',
     onclick: function() { openTodayMeasurementsModal(); }
   });
-  measActBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;margin:0 0 4px;' }, 'Mensur.'));
-  measActBtn.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Mes mesures'));
+  measActBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;margin:0 0 4px;' }, _exEN ? 'Meas.' : 'Mensur.'));
+  measActBtn.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, _exEN ? 'My measures' : 'Mes mesures'));
   btnRow.appendChild(measActBtn);
 
   var timerActBtn = h('div', {
@@ -4996,29 +5106,29 @@ function renderExtendedSections(wrapper, S) {
     onclick: function() { openTodayKitchenTimer(); }
   });
   timerActBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;margin:0 0 4px;' }, 'Timer'));
-  timerActBtn.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Cuisine'));
+  timerActBtn.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, _exEN ? 'Kitchen' : 'Cuisine'));
   btnRow.appendChild(timerActBtn);
   actCard.appendChild(btnRow);
   wrapper.appendChild(actCard);
 
   // Water Tracker
-  wrapper.appendChild(sectionLabel('Suivi hydratation'));
+  wrapper.appendChild(sectionLabel(_exEN ? 'Hydration tracking' : 'Suivi hydratation'));
   var waterBox = card();
   if (window.WATER_TRACKER && window.WATER_TRACKER.renderWidget) {
     try { window.WATER_TRACKER.renderWidget(waterBox); } catch(e) {
-      waterBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Suivi hydratation non disponible pour le moment.'));
+      waterBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, _exEN ? 'Hydration tracking unavailable at the moment.' : 'Suivi hydratation non disponible pour le moment.'));
     }
   } else {
-    waterBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Enregistrez votre consommation d\u2019eau via le suivi hydratation.'));
+    waterBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, _exEN ? 'Track your water intake using the hydration tracker.' : 'Enregistrez votre consommation d\u2019eau via le suivi hydratation.'));
   }
   wrapper.appendChild(waterBox);
 
   // Sleep Tracker
-  wrapper.appendChild(sectionLabel('Suivi sommeil'));
+  wrapper.appendChild(sectionLabel(_exEN ? 'Sleep tracking' : 'Suivi sommeil'));
   var sleepBox = card();
   if (window.SLEEP_TRACKER && window.SLEEP_TRACKER.renderWidget) {
     try { window.SLEEP_TRACKER.renderWidget(sleepBox); } catch(e) {
-      sleepBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Suivi sommeil non disponible pour le moment.'));
+      sleepBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, _exEN ? 'Sleep tracking unavailable at the moment.' : 'Suivi sommeil non disponible pour le moment.'));
     }
   } else {
     sleepBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, (window.isEnglish && window.isEnglish()) ? 'Record your nights to track your sleep quality.' : 'Enregistrez vos nuits pour suivre la qualit\u00e9 de votre sommeil.'));
@@ -5038,11 +5148,11 @@ function renderExtendedSections(wrapper, S) {
   wrapper.appendChild(weeklyBox);
 
   // Progression
-  wrapper.appendChild(sectionLabel('Ma progression'));
+  wrapper.appendChild(sectionLabel(_exEN ? 'My progress' : 'Ma progression'));
   var perfBox = card();
   if (window.PERF_HISTORY && window.PERF_HISTORY.renderProgressionWidget) {
     try { window.PERF_HISTORY.renderProgressionWidget(perfBox); } catch(e) {
-      perfBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Graphique de progression non disponible pour le moment.'));
+      perfBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, _exEN ? 'Progress chart unavailable at the moment.' : 'Graphique de progression non disponible pour le moment.'));
     }
   } else {
     perfBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, (window.isEnglish && window.isEnglish()) ? 'Your progress will appear here as you complete sessions.' : 'Votre progression s\u2019affichera ici au fil de vos s\u00e9ances.'));
@@ -5059,7 +5169,7 @@ function renderExtendedSections(wrapper, S) {
       (insights.patterns && insights.patterns.length > 0)
     );
     if (hasAnyData) {
-      wrapper.appendChild(sectionLabel('Bilan 7 jours'));
+      wrapper.appendChild(sectionLabel(_exEN ? '7-day summary' : 'Bilan 7 jours'));
       var insightsBox = card();
 
       // Stats principales — grille 2x2 sobre
@@ -5137,7 +5247,7 @@ function renderExtendedSections(wrapper, S) {
     if (typeof window.getWeeklyGoalsProgress === 'function') {
       var goals = window.getWeeklyGoalsProgress();
       if (goals) {
-        wrapper.appendChild(sectionLabel('Objectifs cette semaine'));
+        wrapper.appendChild(sectionLabel(_exEN ? 'Weekly goals' : 'Objectifs cette semaine'));
         var goalsBox = card();
 
         // Helper : row progress avec label + progress bar + valeur
@@ -6720,6 +6830,12 @@ function renderTodayDashboard(p) {
     if (cardFoodJournal) wrapper.appendChild(cardFoodJournal);
   } catch(_eFJ) { console.warn('[today] renderFoodJournalCard error', _eFJ); }
 
+  // ── Card 2c — HYDRATATION ──
+  try {
+    var cardWater = renderCardWater();
+    if (cardWater) wrapper.appendChild(cardWater);
+  } catch(_eWat) { console.warn('[today] renderCardWater error', _eWat); }
+
   // ── Éléments secondaires différés — visibles après le contenu actionnable ──
   if (_formeCard) wrapper.appendChild(_formeCard);
   if (_heatmap) wrapper.appendChild(_heatmap);
@@ -6797,9 +6913,10 @@ function renderTodayDashboard(p) {
   // Warning — Conflit objectif nutrition × sport (mode nutrition ou both uniquement)
   var _nm = window.S && window.S._nm;
   if (_nm && _nm.goalConflict && S.appMode !== 'sport') {
-    wrapper.appendChild(h('div', {
-      style: 'margin:0 0 16px;padding:12px 14px;background:var(--warning-bg,#FFF8E1);border:1px solid var(--warning-border,#F9A825);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--ink-900,#0A0A09);line-height:1.6;'
-    }, '⚠️ ' + _nm.goalConflict));
+    var _gcWrap = h('div', { style: 'margin:0 0 16px;padding:12px 14px;border-left:3px solid var(--orange,#E86F1E);background:rgba(232,111,30,0.05);border-radius:0 2px 2px 0;' });
+    _gcWrap.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange,#E86F1E);font-weight:500;margin-bottom:6px;' }, (window.isEnglish && window.isEnglish()) ? 'GOAL CONFLICT' : 'CONFLIT D’OBJECTIF'));
+    _gcWrap.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--ink-900,#0A0A09);line-height:1.6;' }, _nm.goalConflict));
+    wrapper.appendChild(_gcWrap);
   }
 
   // Card — TDEE adaptatif
@@ -7246,16 +7363,16 @@ function renderFabLogger() {
           if (window.AI_COACH) window.AI_COACH.open();
           if (window.render) window.render();
         } },
-      { label: 'REPAS', icon: 'M4 5h8M4 8h8M4 11h8', action: function() {
+      { label: (window.isEnglish && window.isEnglish()) ? 'MEAL' : 'REPAS', icon: 'M4 5h8M4 8h8M4 11h8', action: function() {
           S._fabOpen = false;
           S._quickAddSlot = getDefaultMealSlot();
           if (window.render) window.render();
         } },
-      { label: 'POIDS', icon: 'M3 7h10v6H3zM6 7V4h4v3', action: function() {
+      { label: (window.isEnglish && window.isEnglish()) ? 'WEIGHT' : 'POIDS', icon: 'M3 7h10v6H3zM6 7V4h4v3', action: function() {
           S._modalQuickWeight = true; S._fabOpen = false;
           if (window.render) window.render();
         } },
-      { label: 'EAU', icon: 'M8 2C8 2 4 7 4 10a4 4 0 1 0 8 0c0-3-4-8-4-8z', action: function() {
+      { label: (window.isEnglish && window.isEnglish()) ? 'WATER' : 'EAU', icon: 'M8 2C8 2 4 7 4 10a4 4 0 1 0 8 0c0-3-4-8-4-8z', action: function() {
           S._fabOpen = false;
           if (window.WATER_TRACKER) {
             var _wd = WATER_TRACKER.addGlass();
@@ -8043,7 +8160,7 @@ function renderProgressionDrawer() {
   });
   header.appendChild(h('button', {
     style: 'background:transparent;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-900,#0A0A09);cursor:pointer;padding:10px 0;font-weight:500;min-height:44px;',
-    'aria-label': 'Fermer',
+    'aria-label': (window.isEnglish && window.isEnglish()) ? 'Close' : 'Fermer',
     onclick: function() { S._dashExtOpen = false; if (window.render) window.render(); }
   }, (window.isEnglish && window.isEnglish()) ? '\u2190 CLOSE' : '\u2190 FERMER'));
   header.appendChild(h('div', {

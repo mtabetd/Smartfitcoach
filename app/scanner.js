@@ -491,7 +491,7 @@ window.SCANNER = {
         resultContainer.innerHTML = '';
         var previewMsg = document.createElement('div');
         previewMsg.style.cssText = 'padding:10px 12px;margin-bottom:8px;background:rgba(232,111,30,0.08);border-left:2px solid #E86F1E;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;line-height:1.5;';
-        previewMsg.textContent = 'Détection automatique non disponible dans ce navigateur. Lisez le numéro sur la photo et saisissez-le ci-dessous.';
+        previewMsg.textContent = (window.isEnglish && window.isEnglish()) ? 'Automatic detection not available in this browser. Read the number from the photo and enter it below.' : 'Détection automatique non disponible dans ce navigateur. Lisez le numéro sur la photo et saisissez-le ci-dessous.';
         var previewImg = document.createElement('img');
         previewImg.style.cssText = 'display:block;width:100%;max-height:200px;object-fit:contain;background:#000;margin-top:8px;';
         var objUrl = URL.createObjectURL(file);
@@ -513,14 +513,14 @@ window.SCANNER = {
         } else {
           var errDiv = document.createElement('div');
           errDiv.className = 'scan-error';
-          errDiv.textContent = 'Aucun code-barres détecté dans la photo. Cadrez uniquement le code-barres et réessayez, ou entrez le numéro manuellement.';
+          errDiv.textContent = (window.isEnglish && window.isEnglish()) ? 'No barcode detected in the photo. Frame only the barcode and try again, or enter the number manually.' : 'Aucun code-barres détecté dans la photo. Cadrez uniquement le code-barres et réessayez, ou entrez le numéro manuellement.';
           resultContainer.appendChild(errDiv);
         }
       }).catch(function() {
         resultContainer.innerHTML = '';
         var errDiv = document.createElement('div');
         errDiv.className = 'scan-error';
-        errDiv.textContent = 'Impossible d\'analyser la photo. Entrez le code-barres manuellement.';
+        errDiv.textContent = (window.isEnglish && window.isEnglish()) ? 'Unable to analyse the photo. Enter the barcode manually.' : 'Impossible d\'analyser la photo. Entrez le code-barres manuellement.';
         resultContainer.appendChild(errDiv);
       });
     };
@@ -531,7 +531,7 @@ window.SCANNER = {
       var liveScanBtn = document.createElement('div');
       liveScanBtn.className = 'scan-btn';
       liveScanBtn.style.marginTop = '6px';
-      liveScanBtn.textContent = '🔴 Scan en temps réel';
+      liveScanBtn.textContent = (window.isEnglish && window.isEnglish()) ? '🔴 Live scan' : '🔴 Scan en temps réel';
       liveScanBtn.onclick = function() {
         showCamera = true;
         renderCameraView();

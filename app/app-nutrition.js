@@ -556,7 +556,7 @@ function renderStep2(p) {
       goStep(3);
     }
   }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s2page = 0; S.nStep = 1; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { window._s2page = 0; S.nStep = 1; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 2b (N4b): CYCLE MENSTRUEL + GROSSESSE (femmes seulement) ───
@@ -797,7 +797,7 @@ function renderStep2b(p) {
     window._s2page = 0;
     goStep(3);
   }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s2page = 0; goStep(2); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { window._s2page = 0; goStep(2); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 
@@ -1077,7 +1077,7 @@ function renderStep3(p) {
   p.appendChild(h('div', {style: 'height:24px'}));
   var _step2ok = !!(S.weight && S.height);
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !_step2ok, onclick: function() { if (S.weight && S.height) goStep(4); }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() {
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() {
     // Femmes : revenir à N4b sauf si ménopause ou âge ≥ 50
     var _bkAge = getAge();
     var _bkMeno = Array.isArray(S.medical) && S.medical.indexOf('menopause') !== -1;
@@ -1185,12 +1185,12 @@ function renderActiviteSommeil(p) {
   // ─── HEURE D'ENTRAÎNEMENT (mode 'both' uniquement — l'utilisateur s'entraîne activement, le timing affecte la répartition des macros) ───
   if (S.appMode === 'both') {
     p.appendChild(h('div', {style: 'height:20px'}));
-    p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? '⏰ Usual training time' : '⏰ Heure d\'entraînement habituelle')));
+    p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Usual training time' : 'Heure d\'entraînement habituelle')));
     p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin:-4px 0 10px;line-height:1.5;'}, (window.isEnglish && window.isEnglish() ? 'Helps adapt meal distribution (carbs + proteins at the right time). Optional.' : 'Permet d\'adapter la répartition des repas (glucides + protéines au bon moment). Optionnel.')));
     var _ttOpts = [
-      {id: 'morning', label: '🌅 ' + (window.isEnglish && window.isEnglish() ? 'Morning' : 'Matin'), desc: (window.isEnglish && window.isEnglish() ? 'Before 12pm — post-workout breakfast' : 'Avant 12h — petit-déj post-séance')},
-      {id: 'noon',    label: '☀️ ' + (window.isEnglish && window.isEnglish() ? 'Noon' : 'Midi'),    desc: (window.isEnglish && window.isEnglish() ? '12pm–15pm — post-workout lunch' : '12h–15h — déjeuner post-séance')},
-      {id: 'evening', label: '🌙 ' + (window.isEnglish && window.isEnglish() ? 'Evening' : 'Soir'),  desc: (window.isEnglish && window.isEnglish() ? 'After 5pm — post-workout dinner' : 'Après 17h — dîner post-séance')}
+      {id: 'morning', label: (window.isEnglish && window.isEnglish() ? 'Morning' : 'Matin'), desc: (window.isEnglish && window.isEnglish() ? 'Before 12pm — post-workout breakfast' : 'Avant 12h — petit-déj post-séance')},
+      {id: 'noon',    label: (window.isEnglish && window.isEnglish() ? 'Noon' : 'Midi'),    desc: (window.isEnglish && window.isEnglish() ? '12pm–15pm — post-workout lunch' : '12h–15h — déjeuner post-séance')},
+      {id: 'evening', label: (window.isEnglish && window.isEnglish() ? 'Evening' : 'Soir'),  desc: (window.isEnglish && window.isEnglish() ? 'After 5pm — post-workout dinner' : 'Après 17h — dîner post-séance')}
     ];
     var _ttGrid = h('div', {'class': 'level-list'});
     _ttOpts.forEach(function(opt) {
@@ -1210,7 +1210,7 @@ function renderActiviteSommeil(p) {
   p.appendChild(h('div', {style: 'height:24px'}));
   var ok = S.activity !== null && Array.isArray(S.train) && S.train.length > 0 && S.sleep !== null;
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() { if (ok) goStep(6); }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(4); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { goStep(4); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 8 (MEDICAL): SANTE — CONDITIONS MÉDICALES ───
@@ -1364,7 +1364,7 @@ function renderStep4(p) {
   p.appendChild(warn);
 
   p.appendChild(h('button', {'class': 'btn-primary', onclick: function() { window._s5page = 0; goStep(9); }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(7); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { goStep(7); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 9 (HABITUDES): HABITUDES ALIMENTAIRES (9a) + SUPPLÉMENTATION & ALCOOL (9b) ───
@@ -1488,7 +1488,7 @@ function renderStep5(p) {
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !_canContinue5a, onclick: function() {
     if (_canContinue5a) { window._s5page = 1; window.render(); }
   }}, (window.isEnglish && window.isEnglish() ? 'Continue \u2192 Supplements & Alcohol' : 'Continuer \u2192 Suppl\u00e9ments & Alcool')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s5page = 0; goStep(8); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { window._s5page = 0; goStep(8); }, html: backArrowHtml() + window.t('onb.back')}));
 
   } else {
     // ── 5b: Supplémentation + Alcool ──
@@ -1640,7 +1640,7 @@ function renderStep5(p) {
       goStep(10);
     }
   }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s5page = 0; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { window._s5page = 0; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
   } // end _page === 1
 }
 
@@ -1730,7 +1730,7 @@ function renderStep6(p) {
       bb('nutrition_goal', {goal: 'maintain_pregnancy', target: calcTarget()});
       goStep(5);
     }}, window.t('onb.next')));
-    p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(3); }, html: backArrowHtml() + window.t('onb.back')}));
+    p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { goStep(3); }, html: backArrowHtml() + window.t('onb.back')}));
     return;
   }
 
@@ -1900,7 +1900,7 @@ function renderStep6(p) {
       goStep(5);
     }
   }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(3); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { goStep(3); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 10 (PRÉFÉRENCES): RÉGIME + ALLERGIES + NIVEAU CUISINE + REPAS/J ───
@@ -2000,7 +2000,7 @@ function renderStep7(p) {
 
     p.appendChild(h('div', {style: 'height:24px'}));
     p.appendChild(h('button', {'class': 'btn-primary', onclick: function() { window._s7page = 1; if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} } window.render(); }}, (_isEN ? 'Continue \u2192' : 'Continuer \u2192')));
-    p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s7page = 0; window._s5page = 0; goStep(9); }, html: backArrowHtml() + window.t('onb.back')}));
+    p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { window._s7page = 0; window._s5page = 0; goStep(9); }, html: backArrowHtml() + window.t('onb.back')}));
 
   } else if (_page === 1) {
     // ── 10b : Cuisines + Niveau cuisine ─────────────────────────────────────────
@@ -2040,7 +2040,7 @@ function renderStep7(p) {
     var _ok10b = S.cookLevel !== null && S.cookLevel !== undefined;
     p.appendChild(h('div', {style: 'height:24px'}));
     p.appendChild(h('button', {'class': 'btn-primary', disabled: !_ok10b, onclick: function() { if (_ok10b) { window._s7page = 2; if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} } window.render(); } }}, (_isEN ? 'Continue \u2192' : 'Continuer \u2192')));
-    p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s7page = 0; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
+    p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { window._s7page = 0; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
 
   } else {
     // ── 10c : Whey + Génération ──────────────────────────────────────────────────
@@ -2195,7 +2195,7 @@ function renderStep7(p) {
     }, 50);
   }}, window.t('onb.finish'));
   p.appendChild(_genBtn);
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s7page = 1; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { window._s7page = 1; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
 
   }
 }
@@ -2642,7 +2642,7 @@ function renderStep8(p) {
       if (cycleInfo.phase.calorieAdjust !== 0) {
         var adjPct = Math.round(cycleInfo.phase.calorieAdjust * 100);
         var baseCal = (typeof calcTarget === 'function') ? Math.round(calcTarget()) : Math.round(calcTDEE() * ((S.goal !== null && GOALS[S.goal]) ? GOALS[S.goal].mult : 1));
-        var adjCal = tgt;
+        var adjCal = Math.round(baseCal * (1 + cycleInfo.phase.calorieAdjust));
         var adjNote = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + phaseColor + ';margin-top:4px;padding:6px 10px;background:rgba(0,0,0,0.03);border-radius:2px'});
         adjNote.textContent = (window.isEnglish && window.isEnglish() ? 'Adjusted calories: ' + baseCal + ' kcal (base) + ' + adjPct + '% = ' + adjCal + ' kcal' : 'Calories adapt\u00e9es : ' + baseCal + ' kcal (base) + ' + adjPct + '% = ' + adjCal + ' kcal');
         cycCard.appendChild(adjNote);
@@ -3105,11 +3105,15 @@ function renderStep9(p) {
   // NOTE : on ne touche plus au plan si hash change. La bannière ci-dessous informe l'user.
   // Guard: si weekPlan est toujours null/vide après génération, afficher un message d'erreur
   if (!S.weekPlan || !S.weekPlan.length) {
-    // BUG-3 FIX: bilingual empty-plan error message
     var _isEn3 = window.isEnglish && window.isEnglish();
-    p.appendChild(h('div', {style: 'padding:20px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'},
-      _isEn3 ? 'Some information is missing to generate your plan. Complete the previous steps.' : 'Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes.'));
-    p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(11); }}, (window.isEnglish && window.isEnglish() ? '\u2190 Back to results' : '\u2190 Retour aux résultats')));
+    var _emptyBox = h('div', { style: 'padding:32px 20px;text-align:center;' });
+    _emptyBox.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:20px;margin-bottom:12px;font-weight:normal;color:var(--black,#0A0A09);line-height:1.3;' }, _isEn3 ? 'Your plan could not be generated' : 'Votre plan n\'a pas pu être généré'));
+    _emptyBox.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);margin-bottom:24px;line-height:1.6;max-width:280px;margin-left:auto;margin-right:auto;' }, _isEn3 ? 'Some required information is missing. Complete the previous steps to unlock your personalized plan.' : 'Certaines informations nécessaires sont manquantes. Complétez les étapes précédentes pour débloquer votre plan personnalisé.'));
+    var _emptyBtns = h('div', { style: 'display:flex;flex-direction:column;gap:10px;max-width:240px;margin:0 auto;' });
+    _emptyBtns.appendChild(h('button', { 'class': 'btn-primary', onclick: function() { goStep(1); } }, _isEn3 ? 'Complete my profile' : 'Compléter mon profil'));
+    _emptyBtns.appendChild(h('button', { 'class': 'btn-secondary', onclick: function() { goStep(11); } }, _isEn3 ? '← Back to results' : '← Retour aux résultats'));
+    _emptyBox.appendChild(_emptyBtns);
+    p.appendChild(_emptyBox);
     return;
   }
   // (reset selectedDay déjà fait en haut de fonction avant calcul _nm)
@@ -3489,13 +3493,13 @@ function renderStep9(p) {
         var addPortionBtn = h('button', {
           style: 'width:100%;padding:14px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:8px',
           onclick: function() {
-            var gr = parseFloat(S._foodPortionGrams) || 100;
-            var r = gr / 100;
+            var gr = Math.max(1, parseFloat(S._foodPortionGrams) || 100);
+            var r = Math.max(0.01, gr / 100);
             var slotKey3 = S._foodSearchSlot;
             if (!slotKey3) return;
             if (!S.weekPlan) return;
             if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
-            S.weekPlan[S.selectedDay][slotKey3] = { n: pItem.name, k: Math.round(pItem.kcal * r), kcal: Math.round(pItem.kcal * r), p: Math.round(pItem.p * r), g: Math.round(pItem.g * r), l: Math.round(pItem.l * r), f: '\u25CE', emoji: '\u25CE', custom: true, portions: gr };
+            S.weekPlan[S.selectedDay][slotKey3] = { n: pItem.name, k: Math.max(0, Math.round(pItem.kcal * r)), kcal: Math.max(0, Math.round(pItem.kcal * r)), p: Math.max(0, Math.round(pItem.p * r)), g: Math.max(0, Math.round(pItem.g * r)), l: Math.max(0, Math.round(pItem.l * r)), f: '\u25CE', emoji: '\u25CE', custom: true, portions: gr };
             // BUG-1 FIX: recalculate day aggregate totals so dashboard/shopping-list stay in sync
             (function(_di3) { var _d3 = S.weekPlan[_di3]; if (!_d3) return; var _t3 = {k:0,p:0,g:0,l:0}; ['breakfast','lunch','snack','dinner'].forEach(function(q){var m=_d3[q];if(m){_t3.k+=m.k||0;_t3.p+=m.p||0;_t3.g+=m.g||0;_t3.l+=m.l||0;}}); _d3.kcal=_t3.k;_d3.p=_t3.p;_d3.g=_t3.g;_d3.l=_t3.l; })(S.selectedDay);
             try { var _mealThr1 = Math.max(1500, Math.round(calcTarget() / (S.mealsPerDay || 3) * 1.5)); if (Math.round(pItem.kcal * r) > _mealThr1 && window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'This meal exceeds ' + _mealThr1 + ' kcal \u2014 check the portion.' : 'Ce repas d\u00e9passe ' + _mealThr1 + ' kcal\u00a0\u2014 v\u00e9rifiez la portion.', 'warning', 4000); } catch(_hcE) {}
@@ -6698,7 +6702,7 @@ function renderBodyScan(p) {
       S._bodyFatEstimate = null;
       window.render();
     }}, (window.isEnglish && window.isEnglish() ? 'Reset' : 'R\u00e9initialiser')));
-    p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(5); }, html: backArrowHtml() + window.t('onb.back')}));
+    p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { goStep(5); }, html: backArrowHtml() + window.t('onb.back')}));
     return;
   }
 
@@ -6789,7 +6793,7 @@ function renderBodyScan(p) {
     S.bodyScanDone = true;
     goStep(7);
   }}, (window.isEnglish && window.isEnglish() ? 'Skip this step \u2192' : 'Passer cette \u00e9tape \u2192')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(5); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { goStep(5); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 7: PROVISIONAL PREVIEW — APERÇU DE L'ESTIMATION PERSONNALISÉE ───
@@ -6847,7 +6851,7 @@ function renderProvisionalPreview(p) {
   p.appendChild(h('button', {'class': 'btn-primary', onclick: function() {
     goStep(8);
   }}, (window.isEnglish && window.isEnglish() ? 'Refine with my health data \u2192' : 'Affiner avec mes donn\u00e9es de sant\u00e9 \u2192')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(6); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { goStep(6); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── PUBLIC API ───

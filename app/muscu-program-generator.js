@@ -1615,12 +1615,14 @@
       var fallbackText = shareData.title + '\n\n' + shareData.text + '\n\n' + shareData.url;
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(fallbackText).then(function() {
-          if (window.showToast) window.showToast('Lien copié', 'success', 2200);
+          var _mpEN = window.isEnglish && window.isEnglish();
+          if (window.showToast) window.showToast(_mpEN ? 'Link copied' : 'Lien copié', 'success', 2200);
         }).catch(function() {
-          if (window.showToast) window.showToast('Partage non disponible', 'error', 2800);
+          var _mpEN = window.isEnglish && window.isEnglish();
+          if (window.showToast) window.showToast(_mpEN ? 'Sharing unavailable' : 'Partage non disponible', 'error', 2800);
         });
       } else {
-        if (window.showToast) window.showToast('Partage non disponible sur ce navigateur', 'error', 3000);
+        if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Sharing not available on this browser' : 'Partage non disponible sur ce navigateur', 'error', 3000);
       }
     }
   }

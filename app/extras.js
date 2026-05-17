@@ -326,7 +326,7 @@ window.WATER_TRACKER = {
     function updateInfo() {
       data = self.getToday();
       var litres = (data.glasses * 0.25).toFixed(2).replace(/\.?0+$/, '');
-      info.textContent = data.glasses + ' / ' + data.target + ' verres (' + litres + ' L)';
+      info.textContent = data.glasses + ' / ' + data.target + ' ' + ((window.isEnglish && window.isEnglish()) ? 'glasses (' : 'verres (') + litres + ' L)';
       progressFill.style.width = data.percent + '%';
     }
     updateInfo();
@@ -522,7 +522,7 @@ window.MEAL_TIMER = {
       if (event === 'tick') {
         display.textContent = self._formatTime(data);
       } else if (event === 'done') {
-        display.textContent = 'Termine !';
+        display.textContent = (window.isEnglish && window.isEnglish()) ? 'Done!' : 'Terminé !';
         setRunning(false);
         setTimeout(function() {
           display.textContent = self._formatTime(selectedMinutes * 60);
@@ -551,11 +551,11 @@ window.MEAL_TIMER = {
 window.MEASUREMENTS = {
 
   _FIELDS: [
-    { key: 'chest',  label: 'Tour de poitrine' },
-    { key: 'waist',  label: 'Tour de taille' },
-    { key: 'hips',   label: 'Tour de hanches' },
-    { key: 'arms',   label: 'Tour de bras' },
-    { key: 'thighs', label: 'Tour de cuisses' }
+    { key: 'chest',  label: 'Tour de poitrine', labelEn: 'Chest' },
+    { key: 'waist',  label: 'Tour de taille',   labelEn: 'Waist' },
+    { key: 'hips',   label: 'Tour de hanches',  labelEn: 'Hips' },
+    { key: 'arms',   label: 'Tour de bras',     labelEn: 'Arms' },
+    { key: 'thighs', label: 'Tour de cuisses',  labelEn: 'Thighs' }
   ],
 
   save: function(data) {
@@ -617,7 +617,7 @@ window.MEASUREMENTS = {
       var f = self._FIELDS[i];
       var row = el('div', 'measure-row');
 
-      var label = el('div', 'measure-label', f.label + ' (cm)');
+      var label = el('div', 'measure-label', ((window.isEnglish && window.isEnglish()) ? (f.labelEn || f.label) : f.label) + ' (cm)');
       row.appendChild(label);
 
       var input = el('input', 'measure-input');
@@ -673,7 +673,7 @@ window.MEASUREMENTS = {
       if (!hasValue) return;
       self.save(data);
       if (window.GAMIFICATION && window.GAMIFICATION.showToast) {
-        window.GAMIFICATION.showToast('Mensurations enregistrées');
+        window.GAMIFICATION.showToast((window.isEnglish && window.isEnglish()) ? 'Measurements saved' : 'Mensurations enregistrées');
       }
       if (window.BLACKBOX) window.BLACKBOX.log('measurements_saved', data);
       self.renderForm(container);
@@ -689,12 +689,13 @@ window.MEASUREMENTS = {
     container.innerHTML = '';
 
     var wrap = el('div', 'extras-widget measure-history');
-    var title = el('div', 'measure-title', 'Historique des mensurations');
+    var _mhEN = window.isEnglish && window.isEnglish();
+    var title = el('div', 'measure-title', _mhEN ? 'Measurement history' : 'Historique des mensurations');
     wrap.appendChild(title);
 
     var history = self.getHistory();
     if (history.length === 0) {
-      wrap.appendChild(el('div', 'extras-empty', 'Aucune mesure enregistrée.'));
+      wrap.appendChild(el('div', 'extras-empty', _mhEN ? 'No measurements recorded yet.' : 'Aucune mesure enregistrée.'));
       container.appendChild(wrap);
       return;
     }
@@ -1205,11 +1206,12 @@ window.FOOD_CALC = {
       detailPanel.appendChild(nameEl);
 
       var macros = el('div', 'food-detail-macros');
+      var _fdEN = window.isEnglish && window.isEnglish();
       var fields = [
         { label: 'KCAL', val: food.kcal },
         { label: 'PROT.', val: food.protein },
-        { label: 'GLUC.', val: food.carbs },
-        { label: 'LIP.', val: food.fat }
+        { label: _fdEN ? 'CARB.' : 'GLUC.', val: food.carbs },
+        { label: _fdEN ? 'FAT' : 'LIP.', val: food.fat }
       ];
       var valEls = [];
       for (var i = 0; i < fields.length; i++) {
@@ -1225,7 +1227,7 @@ window.FOOD_CALC = {
 
       // Quantity row
       var qtyRow = el('div', 'food-qty-row');
-      var qtyLabel = el('span', 'food-qty-label', 'Quantité (g) :');
+      var qtyLabel = el('span', 'food-qty-label', (_fdEN ? 'Quantity (g):' : 'Quantité (g) :'));
       qtyRow.appendChild(qtyLabel);
 
       var qtyInput = el('input', 'food-qty-input');
@@ -1242,7 +1244,7 @@ window.FOOD_CALC = {
       });
       qtyRow.appendChild(qtyInput);
 
-      var addBtn = el('button', 'food-add-btn', 'Ajouter au journal');
+      var addBtn = el('button', 'food-add-btn', _fdEN ? '+ Add to journal' : 'Ajouter au journal');
       addBtn.addEventListener('click', function() {
         var g = parseFloat(qtyInput.value) || 100;
         // Calculer les macros scalées à la quantité saisie
@@ -1259,11 +1261,11 @@ window.FOOD_CALC = {
         }
         log('food_add_journal', { food: food.name, quantity: g });
         if (window.TRACKER) window.TRACKER.track('meal_logged', { source: 'scanner', kcal: kcal });
-        addBtn.textContent = 'Ajoute !';
+        addBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Added!' : 'Ajouté !';
         addBtn.style.borderColor = 'var(--green,#1A4A1A)';
         addBtn.style.color = 'var(--green,#1A4A1A)';
         setTimeout(function() {
-          addBtn.textContent = 'Ajouter au journal';
+          addBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Add to journal' : 'Ajouter au journal';
           addBtn.style.borderColor = '';
           addBtn.style.color = '';
         }, 1500);
@@ -1300,7 +1302,7 @@ window.FOOD_CALC = {
           var noResult = el('div', 'food-result-item');
           noResult.style.color = 'var(--grey,#6B6B65)';
           noResult.style.fontStyle = 'italic';
-          noResult.textContent = 'Aucun résultat';
+          noResult.textContent = (window.isEnglish && window.isEnglish()) ? 'No results' : 'Aucun résultat';
           resultsList.appendChild(noResult);
         }
       }, 250);
@@ -1673,7 +1675,7 @@ window.FOOD_JOURNAL = {
     // Section label
     var label = document.createElement('div');
     label.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border,#D8D8D0)';
-    label.textContent = 'Journal alimentaire du jour';
+    label.textContent = (window.isEnglish && window.isEnglish()) ? 'Today\'s food journal' : 'Journal alimentaire du jour';
     section.appendChild(label);
 
     // Quick add form
@@ -1681,7 +1683,8 @@ window.FOOD_JOURNAL = {
     addRow.className = 'fj-add-row';
 
     var mealSelect = document.createElement('select');
-    [{v:'breakfast',l:'Petit-d\u00E9j'},{v:'lunch',l:'D\u00E9jeuner'},{v:'snack',l:'Collation'},{v:'dinner',l:'D\u00EEner'}].forEach(function(m){
+    var _fjEN = window.isEnglish && window.isEnglish();
+    [{v:'breakfast',l:_fjEN?'Breakfast':'Petit-d\u00E9j'},{v:'lunch',l:_fjEN?'Lunch':'D\u00E9jeuner'},{v:'snack',l:_fjEN?'Snack':'Collation'},{v:'dinner',l:_fjEN?'Dinner':'D\u00EEner'}].forEach(function(m){
       var opt = document.createElement('option');
       opt.value = m.v; opt.textContent = m.l;
       mealSelect.appendChild(opt);
@@ -1690,7 +1693,7 @@ window.FOOD_JOURNAL = {
 
     var nameInput = document.createElement('input');
     nameInput.type = 'text';
-    nameInput.placeholder = 'Aliment...';
+    nameInput.placeholder = (window.isEnglish && window.isEnglish()) ? 'Food...' : 'Aliment...';
     nameInput.style.cssText = 'width:100%;padding:8px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",sans-serif;font-size:16px;background:transparent;box-sizing:border-box;';
     nameInput.setAttribute('autocomplete', 'off');
 
@@ -1790,7 +1793,7 @@ window.FOOD_JOURNAL = {
 
     var addBtn = document.createElement('button');
     addBtn.className = 'fj-add-btn';
-    addBtn.textContent = '+ Ajouter';
+    addBtn.textContent = (window.isEnglish && window.isEnglish()) ? '+ Add' : '+ Ajouter';
     addBtn.onclick = function() {
       var name = nameInput.value.trim();
       var kcal = parseFloat(kcalInput.value);
@@ -1807,7 +1810,7 @@ window.FOOD_JOURNAL = {
       var self2 = this;
       var loadBtn = document.createElement('div');
       loadBtn.style.cssText = 'padding:8px 14px;border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);cursor:pointer;font-family:"Helvetica Neue",sans-serif;font-size:11px;letter-spacing:1px;text-align:center;margin-bottom:10px';
-      loadBtn.textContent = '\uD83D\uDCCB Charger le plan du jour';
+      loadBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Load today\'s plan' : 'Charger le plan du jour';
       loadBtn.onclick = function() {
         var user2 = window.AUTH ? window.AUTH.getUser() : null;
         localStorage.removeItem('mtd_journal_loaded_' + (user2 ? user2.id : 'anon'));
@@ -1888,7 +1891,8 @@ window.FOOD_JOURNAL = {
       kcalSummary.appendChild(document.createTextNode(' / ' + target + ' kcal'));
       var macroSummary = document.createElement('span');
       // 2026-04 UX-2 : libellés lisibles (avant "P 165/180g" → incompréhensible ; maintenant "Prot 165/180g")
-      macroSummary.textContent = 'Prot ' + total.p.toFixed(0) + '/' + targetMacros.p + 'g \u00B7 Gluc ' + total.g.toFixed(0) + '/' + targetMacros.g + 'g \u00B7 Lip ' + total.l.toFixed(0) + '/' + targetMacros.l + 'g';
+      var _msEN = window.isEnglish && window.isEnglish();
+      macroSummary.textContent = 'Prot ' + total.p.toFixed(0) + '/' + targetMacros.p + 'g \u00B7 ' + (_msEN ? 'Carbs' : 'Gluc') + ' ' + total.g.toFixed(0) + '/' + targetMacros.g + 'g \u00B7 ' + (_msEN ? 'Fat' : 'Lip') + ' ' + total.l.toFixed(0) + '/' + targetMacros.l + 'g';
       totalRow.appendChild(kcalSummary);
       totalRow.appendChild(macroSummary);
       section.appendChild(totalRow);
@@ -1977,7 +1981,8 @@ window.PHOTO_PROGRESS = {
     // Section label
     var label = document.createElement('div');
     label.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border,#D8D8D0)';
-    label.textContent = 'Photos de progression';
+    var _ppEN = window.isEnglish && window.isEnglish();
+    label.textContent = _ppEN ? 'Progress photos' : 'Photos de progression';
     section.appendChild(label);
 
     // Upload buttons
@@ -1988,7 +1993,7 @@ window.PHOTO_PROGRESS = {
     ['front', 'back'].forEach(function(type) {
       var btn = document.createElement('div');
       btn.className = 'photo-upload-btn';
-      btn.textContent = '\uD83D\uDCF7 Photo ' + (type === 'front' ? 'de face' : 'de dos');
+      btn.textContent = _ppEN ? 'Photo ' + (type === 'front' ? 'front' : 'back') : 'Photo ' + (type === 'front' ? 'de face' : 'de dos');
       btn.onclick = function() {
         var input = document.createElement('input');
         input.type = 'file';
@@ -2040,7 +2045,7 @@ window.PHOTO_PROGRESS = {
       if (frontPhotos.length > 0) {
         var frontLabel = document.createElement('div');
         frontLabel.style.cssText = 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);margin:8px 0 4px;letter-spacing:2px;text-transform:uppercase';
-        frontLabel.textContent = 'Face \u2014 ' + frontPhotos.length + ' photos';
+        frontLabel.textContent = (_ppEN ? 'Front \u2014 ' : 'Face \u2014 ') + frontPhotos.length + ' photos';
         section.appendChild(frontLabel);
 
         var frontRow = document.createElement('div');
@@ -2064,7 +2069,7 @@ window.PHOTO_PROGRESS = {
       if (backPhotos.length > 0) {
         var backLabel = document.createElement('div');
         backLabel.style.cssText = 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);margin:8px 0 4px;letter-spacing:2px;text-transform:uppercase';
-        backLabel.textContent = 'Dos \u2014 ' + backPhotos.length + ' photos';
+        backLabel.textContent = (_ppEN ? 'Back \u2014 ' : 'Dos \u2014 ') + backPhotos.length + ' photos';
         section.appendChild(backLabel);
 
         var backRow = document.createElement('div');
@@ -2089,7 +2094,7 @@ window.PHOTO_PROGRESS = {
       if (frontPhotos.length >= 2) {
         var compLabel = document.createElement('div');
         compLabel.style.cssText = 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);margin:16px 0 8px;letter-spacing:2px;text-transform:uppercase';
-        compLabel.textContent = 'Avant / Apr\u00E8s';
+        compLabel.textContent = _ppEN ? 'Before / After' : 'Avant / Apr\u00E8s';
         section.appendChild(compLabel);
 
         var compGrid = document.createElement('div');
@@ -2107,7 +2112,7 @@ window.PHOTO_PROGRESS = {
           card.appendChild(img);
           var clabel = document.createElement('div');
           clabel.style.cssText = 'font-family:Georgia;font-size:13px;' + (idx === 0 ? 'color:var(--grey)' : 'color:var(--green,#1A4A1A)');
-          clabel.textContent = idx === 0 ? 'D\u00E9but \u2014 ' + photo.date : 'Maintenant \u2014 ' + photo.date;
+          clabel.textContent = idx === 0 ? (_ppEN ? 'Start \u2014 ' : 'D\u00E9but \u2014 ') + photo.date : (_ppEN ? 'Now \u2014 ' : 'Maintenant \u2014 ') + photo.date;
           card.appendChild(clabel);
           compGrid.appendChild(card);
         });
@@ -2116,7 +2121,7 @@ window.PHOTO_PROGRESS = {
     } else {
       var empty = document.createElement('div');
       empty.style.cssText = 'text-align:center;padding:20px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey3,#C8C8C0)';
-      empty.textContent = 'Prenez votre premi\u00E8re photo pour suivre votre progression';
+      empty.textContent = _ppEN ? 'Take your first photo to track your progress' : 'Prenez votre premi\u00E8re photo pour suivre votre progression';
       section.appendChild(empty);
     }
 
