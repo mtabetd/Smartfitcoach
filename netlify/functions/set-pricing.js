@@ -102,7 +102,7 @@ exports.handler = async function(event) {
     return {
       statusCode: 500,
       headers: cors,
-      body: JSON.stringify({ error: 'Database error: ' + (e && e.message || 'unknown') })
+      body: JSON.stringify({ error: 'Database error' })
     };
   }
 };

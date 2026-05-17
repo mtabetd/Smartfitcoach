@@ -5019,9 +5019,10 @@ var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&window.isFemale(s
 var pregExtra=tri?tri.trimester.calorieExtra:340;
 // Si allaitement ET enceinte (fin de grossesse + allaitement aîné) → ADDITIF (ACOG 2018 + 2022)
 var allaitExtra=(s.medical&&s.medical.indexOf('allaitement')!==-1)?500:0;
-// Math.max(base, tdeeVal): never restrict pregnant users below maintenance (ACOG — no caloric deficit during pregnancy),
-// but preserve surplus if user is in bulk (e.g., TDEE×1.15 > TDEE).
-base=Math.round(Math.max(base,tdeeVal))+pregExtra+allaitExtra;
+// ACOG: pregnant women always get TDEE + trimester bonus, regardless of stated goal.
+// Bulk/lean_bulk surplus is overridden (medically incorrect during pregnancy).
+// cut/shred are also overridden (no deficit allowed — ACOG: no caloric restriction during pregnancy).
+base=Math.round(tdeeVal)+pregExtra+allaitExtra;
 // Plancher grossesse : 1800 kcal/j minimum (OMS 2016 — jamais de restriction chez femme enceinte sauf prescription médicale)
 base=Math.max(base,1800);return base;}var goalKey=GOALS[s.goal].key;// Cap shred deficit to 500 kcal/day (Helms 2014, ACSM — RED-S + muscle loss risk above 500kcal deficit)
 // Cap déficit à -500 kcal/j pour shred ET cut (ACSM 2009, Helms 2014 — au-delà : perte musculaire + fatigue chronique)

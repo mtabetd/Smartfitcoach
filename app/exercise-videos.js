@@ -124,8 +124,8 @@
     version:          '5.6',
     urlStrategy:      'direct-registry-first',     // watch?v= / shorts/ → channel-search fallback
     fallbackStrategy: 'channel-name-video-search', // results?search_query=CHANNEL+QUERY&sp=EgIYAQ
-    exerciseCoverage: 338,                         // entrées CURATED_QUERIES
-    cfCoverage:       86,                          // entrées CF_QUERIES
+    exerciseCoverage: 414,                         // entrées CURATED_QUERIES
+    cfCoverage:       101,                         // entrées CF_QUERIES
     directRegistry:   true,                        // DIRECT_VIDEO_REGISTRY actif
     directRegistrySize: 60,                        // clés avec au moins une URL directe (audit 2026-05)
     auditDate:        '2026-05'
@@ -758,7 +758,87 @@
     'etirement piriforme figure 4':            'piriformis stretch figure 4',
     'activation fessier prone':                'prone glute activation tutorial',
     'terminal leg extension':                  'terminal knee extension VMO tutorial',
-    'terminal leg extension elastique':        'terminal knee extension VMO tutorial'
+    'terminal leg extension elastique':        'terminal knee extension VMO tutorial',
+
+    // ── Running / Course à pied ────────────────────────────────────────────
+    'interval run':                            'interval running training technique',
+    'tempo run':                               'tempo run training technique',
+    'long run':                                'long distance running form technique',
+    'easy run':                                'easy run aerobic base training',
+    'strides':                                 'running strides form drill',
+    'hill repeat':                             'hill repeat running training',
+    'hill repeats':                            'hill repeat running training',
+    'fartlek':                                 'fartlek training running technique',
+    'progressive run':                         'progressive run pace build training',
+    'recovery run':                            'easy recovery run technique',
+    'run cadence drill':                       'running cadence 180 spm drill',
+    'running form drill':                      'running form drills technique',
+    'high knees running':                      'high knees running drill form',
+    'butt kicks':                              'butt kicks running drill form',
+    'a-skip':                                  'a-skip running drill form tutorial',
+    'b-skip':                                  'b-skip running drill form tutorial',
+    'carioca':                                 'carioca running drill lateral',
+    'dynamic warmup running':                  'dynamic warm up before running routine',
+    'running cooldown stretch':                'post run stretching cooldown routine',
+    'hip flexor stretch running':              'hip flexor stretch runners',
+    'calf stretch runner':                     'calf stretch runners wall',
+    'hamstring stretch runner':                'hamstring stretch standing runner',
+    'it band stretch':                         'IT band stretch runner foam roll',
+    'foam roll calves':                        'foam rolling calves technique',
+    'foam roll quads':                         'foam rolling quads technique',
+    'foam roll it band':                       'foam rolling IT band technique',
+    'foot strength running':                   'foot strength exercises runners',
+    'single leg calf raise':                   'single leg calf raise form',
+    'single leg balance':                      'single leg balance proprioception runner',
+    'glute bridge runner':                     'glute bridge running activation',
+    'clamshell':                               'clamshell exercise runners hip',
+    'side lying hip abduction':                'hip abduction side lying runners',
+
+    // ── Yoga / Mobilité dynamique ──────────────────────────────────────────
+    'sun salutation':                          'sun salutation beginner tutorial yoga',
+    'salutation au soleil':                    'sun salutation beginner tutorial yoga',
+    'downward dog':                            'downward dog yoga pose tutorial',
+    'chien tete en bas':                       'downward facing dog yoga tutorial',
+    'warrior 1':                               'warrior 1 yoga pose tutorial',
+    'warrior 2':                               'warrior 2 yoga pose tutorial',
+    'warrior 3':                               'warrior 3 yoga balance tutorial',
+    'guerrier 1':                              'warrior 1 yoga pose tutorial',
+    'guerrier 2':                              'warrior 2 yoga pose tutorial',
+    'triangle pose':                           'triangle pose yoga tutorial',
+    'trikonasana':                             'triangle pose yoga tutorial',
+    'child pose':                              'childs pose yoga tutorial',
+    'balasana':                                'childs pose yoga tutorial',
+    'pigeon pose':                             'pigeon pose hip opener yoga tutorial',
+    'demi-pigeon':                             'pigeon pose hip opener yoga tutorial',
+    'cat cow':                                 'cat cow yoga movement tutorial',
+    'marjaryasana':                            'cat cow spine yoga tutorial',
+    'bridge pose yoga':                        'bridge pose yoga tutorial',
+    'setu bandhasana':                         'bridge pose yoga tutorial',
+    'chair pose':                              'chair pose yoga tutorial',
+    'utkatasana':                              'chair pose yoga tutorial',
+    'tree pose':                               'tree pose balance yoga tutorial',
+    'vrksasana':                               'tree pose balance yoga tutorial',
+    'plank pose yoga':                         'plank pose yoga core tutorial',
+    'cobra pose':                              'cobra pose yoga tutorial',
+    'bhujangasana':                            'cobra pose yoga tutorial',
+    'upward dog':                              'upward facing dog yoga tutorial',
+    'seated forward bend':                     'seated forward bend flexibility yoga',
+    'paschimottanasana':                       'seated forward bend yoga tutorial',
+    'supine twist':                            'supine spinal twist yoga tutorial',
+    'happy baby':                              'happy baby pose yoga tutorial',
+    'legs up the wall':                        'legs up the wall yoga restorative',
+    'savasana':                                'savasana corpse pose relaxation yoga',
+    'corpse pose':                             'savasana relaxation yoga tutorial',
+    'breathwork yoga':                         'pranayama breathing yoga tutorial',
+    'pranayama':                               'pranayama breathing exercises yoga',
+    'box breathing':                           'box breathing technique relaxation',
+    'yin yoga hips':                           'yin yoga hip opener tutorial',
+    'yin yoga spine':                          'yin yoga spine flexibility tutorial',
+    'yoga flow beginner':                      'yoga flow beginner full body tutorial',
+    'yoga flow intermediate':                  'yoga flow intermediate full body',
+    'morning yoga':                            'morning yoga routine full body',
+    'yoga stretching total body':              'full body yoga stretching routine',
+    'yoga strength flow':                      'yoga strength flow body weight'
   };
 
   // ─── Requêtes FR pour canal @TiboInShape (niveau 1 FR) ───────────────────
@@ -985,7 +1065,23 @@
     'sandbag clean':             'sandbag clean hyrox tutorial',
     'burpee broad jump':         'burpee broad jump hyrox technique',
     'ski erg hyrox':             'ski erg hyrox technique tutorial',
-    'rowing hyrox':              'rowing machine hyrox technique'
+    'rowing hyrox':              'rowing machine hyrox technique',
+    'wall ball hyrox':           'wall ball shot hyrox technique',
+    'run hyrox station':         'hyrox 1km run station pacing strategy',
+    'hyrox race strategy':       'hyrox race strategy pacing guide',
+    'hyrox training plan':       'hyrox training plan workout',
+    'hyrox full race':           'hyrox full race run workout',
+    // Cycling
+    'cadence drill cycling':     'cycling cadence drill high rpm technique',
+    'climbing cycling':          'cycling climbing technique seated standing',
+    'sprint cycling':            'cycling sprint technique power',
+    'tempo cycling':             'cycling tempo workout technique',
+    'threshold cycling':         'cycling FTP threshold workout technique',
+    'zone 2 cycling':            'zone 2 cycling aerobic base training',
+    'bike fit':                  'bike fit tutorial cycling position',
+    'pedaling technique':        'cycling pedaling technique efficiency',
+    'cycling warmup':            'cycling warmup routine before ride',
+    'cycling cooldown':          'cycling cooldown stretch routine'
   };
 
   // ─── Aliases muscu : abréviations / variantes → clé CURATED_QUERIES ─────
