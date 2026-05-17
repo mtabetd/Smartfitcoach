@@ -530,12 +530,12 @@ function renderProfileSetup(container){
       submitBtn.disabled = true;
       return;
     }
-    hint.textContent = 'Vérification de disponibilité…';
+    hint.textContent = (window.isEnglish && window.isEnglish()) ? 'Checking availability…' : 'Vérification de disponibilité…';
     hint.style.color = 'var(--grey3)';
     submitBtn.disabled = true;
     checkPseudoAvailable(val).then(function(r){
       if (r.ok){
-        hint.textContent = '✓ Disponible';
+        hint.textContent = (window.isEnglish && window.isEnglish()) ? '✓ Available' : '✓ Disponible';
         hint.style.color = '#556B2F';
         submitBtn.disabled = false;
       } else {
@@ -548,7 +548,7 @@ function renderProfileSetup(container){
   pInput.addEventListener('input', function(){
     clearTimeout(validateTimer);
     submitBtn.disabled = true;
-    hint.textContent = 'Vérification…';
+    hint.textContent = (window.isEnglish && window.isEnglish()) ? 'Checking…' : 'Vérification…';
     validateTimer = setTimeout(doValidate, 350);
     updatePreview();
   });
@@ -653,23 +653,24 @@ function renderSocialHub(container){
 // UI — ONGLET FEED
 // ══════════════════════════════════════════════════════════════
 function _postTypeLabel(type){
-  if (type === 'workout')  return 'Séance';
+  var _ptEN = window.isEnglish && window.isEnglish();
+  if (type === 'workout')  return _ptEN ? 'Session' : 'Séance';
   if (type === 'pr')       return 'Record';
   if (type === 'challenge')return 'Challenge';
-  if (type === 'streak')   return 'Série';
-  return 'Activité';
+  if (type === 'streak')   return _ptEN ? 'Streak' : 'Série';
+  return _ptEN ? 'Activity' : 'Activité';
 }
 
 function _postSummary(post){
   var d = post.data || {};
   if (post.type === 'workout'){
-    var s = d.sport || 'Séance';
+    var s = d.sport || ((window.isEnglish && window.isEnglish()) ? 'Session' : 'Séance');
     var dur = d.duration ? ' · ' + d.duration + ' min' : '';
-    var ex = d.exercises ? ' · ' + d.exercises + ' exercices' : '';
+    var ex = d.exercises ? ' · ' + d.exercises + ((window.isEnglish && window.isEnglish()) ? ' exercises' : ' exercices') : '';
     return { title: s, sub: (dur + ex).replace(/^ · /, '') };
   }
   if (post.type === 'pr'){
-    return { title: d.exercise || 'Record personnel', sub: [d.weight?(d.weight+' '+(d.unit||'kg')):'', d.reps?(d.reps+' reps'):''].filter(Boolean).join(' · ') };
+    return { title: d.exercise || ((window.isEnglish && window.isEnglish()) ? 'Personal record' : 'Record personnel'), sub: [d.weight?(d.weight+' '+(d.unit||'kg')):'', d.reps?(d.reps+' reps'):''].filter(Boolean).join(' · ') };
   }
   if (post.type === 'challenge'){
     return { title: d.name || 'Challenge terminé', sub: d.days ? d.days+' jours' : '' };
@@ -766,12 +767,12 @@ function _postCard(post){
   commentBtn.addEventListener('click', async function(){
     if (commentsBox.style.display === 'none'){
       commentsBox.style.display = 'block';
-      commentsBox.innerHTML = '<div style="font-size:11px;color:var(--grey3);padding:8px 0">Chargement…</div>';
+      commentsBox.innerHTML = '<div style="font-size:11px;color:var(--grey3);padding:8px 0">' + ((window.isEnglish && window.isEnglish()) ? 'Loading…' : 'Chargement…') + '</div>';
       try {
         var comments = await loadComments(post.id);
         _renderCommentsBox(commentsBox, post, comments);
       } catch(e){
-        commentsBox.innerHTML = '<div style="font-size:11px;color:#7B3F00">Erreur de chargement</div>';
+        commentsBox.innerHTML = '<div style="font-size:11px;color:#7B3F00">' + ((window.isEnglish && window.isEnglish()) ? 'Loading error' : 'Erreur de chargement') + '</div>';
       }
     } else {
       commentsBox.style.display = 'none';
@@ -838,9 +839,9 @@ function _renderCommentsBox(box, post, comments){
       _renderCommentsBox(box, post, fresh);
       post._comments = fresh.length;
     } catch(e){
-      if (e.message === 'rate_limit') _toast('Trop de commentaires. Réessayez dans quelques minutes.', 'error');
-      else if (e.message === 'too_long') _toast('Commentaire trop long', 'error');
-      else _toast('Erreur d\'envoi', 'error');
+      if (e.message === 'rate_limit') _toast((window.isEnglish && window.isEnglish()) ? 'Too many comments. Please try again in a few minutes.' : 'Trop de commentaires. Réessayez dans quelques minutes.', 'error');
+      else if (e.message === 'too_long') _toast((window.isEnglish && window.isEnglish()) ? 'Comment too long' : 'Commentaire trop long', 'error');
+      else _toast((window.isEnglish && window.isEnglish()) ? 'Send error' : 'Erreur d\'envoi', 'error');
     } finally { submitting = false; sendBtn.disabled = false; }
   }
   sendBtn.addEventListener('click', submit);
@@ -921,18 +922,18 @@ function renderFriendsTab(container){
   addBox.appendChild(feedback);
   addBox.appendChild(_h('div', {
     style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey3);margin-top:10px;line-height:1.6'
-  }, 'Aucun annuaire public — seul l\'email exact permet de trouver quelqu\'un.'));
+  }, (window.isEnglish && window.isEnglish()) ? 'No public directory — only an exact email address can find someone.' : 'Aucun annuaire public — seul l\'email exact permet de trouver quelqu\'un.'));
 
   var submitting = false;
   async function doSend(){
     if (submitting) return;
     var e = emailInput.value.trim();
-    if (!e){ feedback.textContent = 'Email requis.'; feedback.style.color = '#7B3F00'; return; }
+    if (!e){ feedback.textContent = (window.isEnglish && window.isEnglish()) ? 'Email required.' : 'Email requis.'; feedback.style.color = '#7B3F00'; return; }
     submitting = true; sendBtn.disabled = true;
-    feedback.textContent = 'Envoi…'; feedback.style.color = 'var(--grey)';
+    feedback.textContent = (window.isEnglish && window.isEnglish()) ? 'Sending…' : 'Envoi…'; feedback.style.color = 'var(--grey)';
     try {
       var r = await sendFriendRequestByEmail(e);
-      feedback.textContent = 'Demande envoyée à ' + r.target.pseudo;
+      feedback.textContent = ((window.isEnglish && window.isEnglish()) ? 'Request sent to ' : 'Demande envoyée à ') + r.target.pseudo;
       feedback.style.color = '#556B2F';
       emailInput.value = '';
       await loadFriendships();
@@ -958,7 +959,7 @@ function renderFriendsTab(container){
 
   // Demandes reçues
   if (_pendingIn.length){
-    container.appendChild(_h('div', { 'class':'section-label' }, 'Demandes reçues (' + _pendingIn.length + ')'));
+    container.appendChild(_h('div', { 'class':'section-label' }, ((window.isEnglish && window.isEnglish()) ? 'Received requests (' : 'Demandes reçues (') + _pendingIn.length + ')'));
     _pendingIn.forEach(function(p){
       container.appendChild(_friendRow(p, 'incoming'));
     });
@@ -966,7 +967,7 @@ function renderFriendsTab(container){
 
   // Demandes envoyées
   if (_pendingOut.length){
-    container.appendChild(_h('div', { 'class':'section-label' }, 'En attente (' + _pendingOut.length + ')'));
+    container.appendChild(_h('div', { 'class':'section-label' }, ((window.isEnglish && window.isEnglish()) ? 'Pending (' : 'En attente (') + _pendingOut.length + ')'));
     _pendingOut.forEach(function(p){
       container.appendChild(_friendRow(p, 'outgoing'));
     });
@@ -1074,11 +1075,12 @@ function renderNotificationsTab(container){
     });
     row.appendChild(_avatar(n._actor, 36));
     var txt;
-    if (n.type === 'friend_request') txt = n._actor.pseudo + ' vous a envoyé une demande d\'ami';
-    else if (n.type === 'friend_accepted') txt = n._actor.pseudo + ' a accepté votre demande';
-    else if (n.type === 'like') txt = n._actor.pseudo + ' a aimé votre publication';
-    else if (n.type === 'comment') txt = n._actor.pseudo + ' a commenté votre publication';
-    else txt = 'Activité';
+    var _ntEN = window.isEnglish && window.isEnglish();
+    if (n.type === 'friend_request') txt = n._actor.pseudo + (_ntEN ? ' sent you a friend request' : ' vous a envoyé une demande d\'ami');
+    else if (n.type === 'friend_accepted') txt = n._actor.pseudo + (_ntEN ? ' accepted your request' : ' a accepté votre demande');
+    else if (n.type === 'like') txt = n._actor.pseudo + (_ntEN ? ' liked your post' : ' a aimé votre publication');
+    else if (n.type === 'comment') txt = n._actor.pseudo + (_ntEN ? ' commented on your post' : ' a commenté votre publication');
+    else txt = _ntEN ? 'Activity' : 'Activité';
 
     var body = _h('div', { style:'flex:1;min-width:0' });
     body.appendChild(_h('div', {

@@ -482,7 +482,8 @@ function renderCycleInfo(container, totalWeeks, sex, level) {
   var card = h('div', {style: 'border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);padding:16px;margin:12px 0'});
 
   // Header
-  card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--blue,#1A3A6A);margin-bottom:8px'}, 'Cycle Haltérophilie'));
+  var _chEN = window.isEnglish && window.isEnglish();
+  card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--blue,#1A3A6A);margin-bottom:8px'}, _chEN ? 'Weightlifting Cycle' : 'Cycle Haltérophilie'));
   card.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:4px'}, info.cycle.name));
   card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:12px'}, info.cycle.focus));
 
@@ -496,14 +497,14 @@ function renderCycleInfo(container, totalWeeks, sex, level) {
 
   // Week info
   card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:10px;color:var(--grey)'},
-    'Semaine ' + info.weekInCycle + '/6 — Phase : ' + weekData.phase));
+    (_chEN ? 'Week ' : 'Semaine ') + info.weekInCycle + '/6 — ' + (_chEN ? 'Phase: ' : 'Phase : ') + weekData.phase));
 
   // Both lifts for this cycle
   info.cycle.lifts.forEach(function(lift, idx) {
     var liftDiv = h('div', {style: 'margin-top:12px;padding-top:12px;border-top:1px solid var(--border,#D8D8D0)'});
 
     liftDiv.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:4px'},
-      (idx === 0 ? 'Jour A' : 'Jour B') + ' — ' + lift.name));
+      (idx === 0 ? (_chEN ? 'Day A' : 'Jour A') : (_chEN ? 'Day B' : 'Jour B')) + ' — ' + lift.name));
 
     // Show sets/reps/percentage for this week
     weekData.sets_reps_pct.forEach(function(srp) {
@@ -512,10 +513,10 @@ function renderCycleInfo(container, totalWeeks, sex, level) {
       var weight = calcWorkingWeight(lift.standards_key, sex, level, effectivePct);
       var has1RM = window.S && window.S.crossfit1RM && window.S.crossfit1RM[lift.standards_key];
       var setLine = h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--black,#0A0A09);padding:4px 0'});
-      var displayPct = (lift.standards_key === 'overhead_squat') ? effectivePct + '% (OHS corrigé)' : srp.pct + '%';
+      var displayPct = (lift.standards_key === 'overhead_squat') ? effectivePct + (_chEN ? '% (OHS corrected)' : '% (OHS corrigé)') : srp.pct + '%';
       var lineText = srp.sets + '\u00D7' + srp.reps + ' @' + displayPct + ' (' + weight + 'kg)';
       if (has1RM) lineText += ' \u2014 1RM: ' + window.S.crossfit1RM[lift.standards_key] + 'kg';
-      lineText += ' \u2014 Repos ' + srp.rest;
+      lineText += ' \u2014 ' + (_chEN ? 'Rest ' : 'Repos ') + srp.rest;
       setLine.textContent = lineText;
       liftDiv.appendChild(setLine);
 
@@ -536,7 +537,7 @@ function renderCycleInfo(container, totalWeeks, sex, level) {
   // Test week special note
   if (info.weekInCycle === 6) {
     var testNote = h('div', {style: 'margin-top:12px;padding:10px 14px;background:var(--redbg,rgba(90,16,16,.06));border-left:2px solid var(--red,#5A1010);font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--red,#5A1010)'});
-    testNote.textContent = 'SEMAINE DE TEST — C\'est le moment de tout donner. Échauffement long, montée progressive, tentative de PR !';
+    testNote.textContent = _chEN ? 'TEST WEEK — Time to give everything. Long warm-up, progressive build-up, PR attempt!' : 'SEMAINE DE TEST — C\'est le moment de tout donner. Échauffement long, montée progressive, tentative de PR !';
     card.appendChild(testNote);
     // Medical warning: HTA/cardio users should NOT do 1RM Valsalva (ESC/ESH 2018, KDOQI 2012)
     var _med1rmList = window.S && Array.isArray(window.S.medical) ? window.S.medical.map(function(m){ return String(m).toLowerCase(); }) : [];
@@ -544,11 +545,11 @@ function renderCycleInfo(container, totalWeeks, sex, level) {
     var _1rmCaution = !_1rmBlocked && (_med1rmList.indexOf('hta') !== -1 || _med1rmList.indexOf('hypertension') !== -1 || _med1rmList.indexOf('irc') !== -1);
     if (_1rmBlocked) {
       var blockNote = h('div', {style: 'margin-top:8px;padding:10px 14px;background:rgba(220,53,69,0.1);border-left:3px solid #8B0000;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#8B0000'});
-      blockNote.textContent = '⚠ CONTRE-INDIQUÉ — Votre profil médical (HTA sévère / insuffisance cardiaque) contre-indique les tentatives de 1RM. La manœuvre de Valsalva sous charge maximale présente un risque cardiovasculaire sérieux. Consultez votre médecin. Remplacez par 3×5 à 75%.';
+      blockNote.textContent = _chEN ? '⚠ CONTRAINDICATED — Your medical profile (severe hypertension / heart failure) contraindicates 1RM attempts. The Valsalva manoeuvre under maximal load carries serious cardiovascular risk. Consult your doctor. Replace with 3×5 at 75%.' : '⚠ CONTRE-INDIQUÉ — Votre profil médical (HTA sévère / insuffisance cardiaque) contre-indique les tentatives de 1RM. La manœuvre de Valsalva sous charge maximale présente un risque cardiovasculaire sérieux. Consultez votre médecin. Remplacez par 3×5 à 75%.';
       card.appendChild(blockNote);
     } else if (_1rmCaution) {
       var cautionNote = h('div', {style: 'margin-top:8px;padding:10px 14px;background:rgba(255,193,7,0.1);border-left:3px solid #856404;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#856404'});
-      cautionNote.textContent = '⚠ Attention médicale — HTA / IRC détectée. Limitez à 85-90% du 1RM maximum. Évitez l\'apnée (Valsalva) sous charge. Consultez votre médecin avant de tester votre max. — ESC/ESH 2018';
+      cautionNote.textContent = _chEN ? '⚠ Medical caution — Hypertension / CKD detected. Limit to 85-90% of max 1RM. Avoid breath-holding (Valsalva) under load. Consult your doctor before testing your max. — ESC/ESH 2018' : '⚠ Attention médicale — HTA / IRC détectée. Limitez à 85-90% du 1RM maximum. Évitez l\'apnée (Valsalva) sous charge. Consultez votre médecin avant de tester votre max. — ESC/ESH 2018';
       card.appendChild(cautionNote);
     }
   }
