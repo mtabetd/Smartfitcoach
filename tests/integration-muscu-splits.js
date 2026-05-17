@@ -56,6 +56,17 @@ try { vm.runInThisContext(exCode, { filename: 'exercises-db.js' }); } catch(e) {
 }
 if (!global.EXERCISES) { console.error('[FATAL] window.EXERCISES non défini'); process.exit(1); }
 
+// muscu-engine.js (fournit window.sfcBuildMuscuDay — requis par generateSportProgram)
+try {
+  var muscuEngine = require(path.join(__dirname, '../app/muscu-engine.js'));
+  global.sfcBuildMuscuDay = muscuEngine.sfcBuildMuscuDay;
+} catch(e) {
+  console.error('[FATAL] muscu-engine.js:', e.message); process.exit(1);
+}
+if (typeof global.sfcBuildMuscuDay !== 'function') {
+  console.error('[FATAL] sfcBuildMuscuDay non défini'); process.exit(1);
+}
+
 // app-sport.js (fournit generateSportProgram)
 var sportCode = fs.readFileSync(path.join(__dirname, '../app/app-sport.js'), 'utf8');
 try { vm.runInThisContext(sportCode, { filename: 'app-sport.js' }); } catch(e) {

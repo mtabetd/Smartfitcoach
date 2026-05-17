@@ -41,7 +41,6 @@
   function saveSession(workoutId) {
     if (!workoutId || typeof workoutId !== 'string') return;
     var history = _load();
-    if (history.indexOf(workoutId) !== -1) history.splice(history.indexOf(workoutId), 1);
     history.unshift(workoutId);
     if (history.length > MAX_HISTORY) history = history.slice(0, MAX_HISTORY);
     _persist(history);

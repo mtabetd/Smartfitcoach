@@ -2905,15 +2905,18 @@ test('document: all 3 fields required for disciplined classification', function 
   assertEqual(withAll.profileType, 'disciplined'); // all 3 present → correct
 });
 
-// ── FINDING: progression triggered but silently discarded by dense schedule ───
-test('document: progression triggered but overridden by dense schedule (freq=4+fatigue=3)', function () {
+// ── FINDING: progression triggered but capped by Module-4 bootstrap safety ────
+// With lastSessionDate far in the past (19+ days), effectiveFatigue drops from 3→1
+// (daysSince>=2 -1, daysSince>=4 -1). Dense schedule cap (freq>=4 AND eff>=3) does
+// NOT fire when eff=1. Module-4 bootstrap safety cap (no userProfile) limits to moderate.
+test('document: progression triggered but capped at moderate by bootstrap safety (freq=4, no profile)', function () {
   var out = decideV3({
     goal: 'muscle_gain', fatigueLevel: 3, trainingFrequency: 4,
     lastSessionDate: '2026-04-28', last3SessionsIntensity: ['moderate','moderate','moderate']
   });
   assert(out.progressionTriggered === true, 'progression IS triggered');
-  assertEqual(out.recommendedIntensity, 'low'); // BUT dense schedule wins → low
-  assertEqual(out.priorityApplied, 'frequency_consistency'); // not progression_logic
+  assertEqual(out.recommendedIntensity, 'moderate'); // Module-4 bootstrap cap: no profile → max moderate
+  assertEqual(out.priorityApplied, 'goal_alignment'); // dense schedule cap not reached (eff=1 after 19 days)
 });
 
 // ── FINDING: consistencyScore=2 for 0 training sessions (non-zero minimum) ────
