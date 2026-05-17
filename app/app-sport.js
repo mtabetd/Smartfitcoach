@@ -11706,9 +11706,9 @@ function renderTriathlonProgram(p) {
  (window.TRIATHLON_LEVELS || []).forEach(function(l) { if (l.id === S.triathlonLevel) levelObj = l; });
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Triathlon / IRONMAN'));
- p.appendChild(h('h1', {html: (goalObj ? goalObj.name : 'Triathlon') + '<br><em>Programme</em>'}));
+ p.appendChild(h('h1', {html: (goalObj ? goalObj.name : 'Triathlon') + '<br><em>' + ((window.isEnglish && window.isEnglish()) ? 'Program' : 'Programme') + '</em>'}));
  var subtitleParts = [totalWeeks + (window.isEnglish && window.isEnglish() ? ' weeks' : ' semaines'), (levelObj ? levelObj.name : ''), '80/20', (window.isEnglish && window.isEnglish() ? 'Method: Jan Frodeno' : 'Méthode Jan Frodeno')];
- if (program[0] && program[0].raceDate) { try { subtitleParts.unshift('Course : ' + window.formatDate(program[0].raceDate, {day:'numeric',month:'short',year:'numeric'})); } catch(e) {} }
+ if (program[0] && program[0].raceDate) { try { subtitleParts.unshift(((window.isEnglish && window.isEnglish()) ? 'Race: ' : 'Course : ') + window.formatDate(program[0].raceDate, {day:'numeric',month:'short',year:'numeric'})); } catch(e) {} }
  p.appendChild(h('p', {'class': 'subtitle'}, subtitleParts.join(' · ')));
 
  appendWellnessBanner(p);
