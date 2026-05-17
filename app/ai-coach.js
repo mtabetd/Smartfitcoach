@@ -944,6 +944,22 @@ function recordCoachFeedback(messageText, rating) {
     // Purge > 100 entries
     if (arr.length > 100) arr = arr.slice(-100);
     localStorage.setItem(key, JSON.stringify(arr));
+    // Persist to backend (fire-and-forget — localStorage is the source of truth client-side)
+    try {
+      var _fbHash = msgHash;
+      var _fbSnippet = messageText ? String(messageText).slice(0, 300) : '';
+      var _fbRating = rating;
+      if (window.AUTH && window.AUTH.getJWT) {
+        window.AUTH.getJWT().then(function(token) {
+          if (!token) return;
+          fetch('/.netlify/functions/ai-coach-feedback', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify({ messageHash: _fbHash, messageSnippet: _fbSnippet, rating: _fbRating })
+          }).catch(function(){});
+        }).catch(function(){});
+      }
+    } catch(e) {}
   } catch(e) {}
 }
 

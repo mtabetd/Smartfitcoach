@@ -54,6 +54,7 @@ var _loadingFriends = false;
 var _dbReady  = null;         // null = inconnu, true = confirmé, false = dernier essai échoué
 var _dbFailTs = 0;            // timestamp du dernier échec — pour le cooldown de retry
 var _lastLoad = {};           // throttle par clé
+var _rtChannel = null;        // Supabase Realtime channel (feed + notifications)
 
 // ══════════════════════════════════════════════════════════════
 // HELPERS
@@ -1738,6 +1739,8 @@ window.SOCIAL = {
   sharePR: sharePR,
   shareStreak: shareStreak,
   shareChallenge: shareChallenge,
+  // Realtime
+  stopRealtime: _stopRealtime,
   // État
   _state: function(){ return {
     myProfile: _myProfile, feed: _feed, friends: _friends,
@@ -1781,6 +1784,78 @@ function _showLoader(container){
   }, 'Chargement…'));
 }
 
+// ══════════════════════════════════════════════════════════════
+// REALTIME — feed_posts + social_notifications live updates
+// ══════════════════════════════════════════════════════════════
+function _stopRealtime() {
+  try {
+    var c = db();
+    if (_rtChannel && c) { c.removeChannel(_rtChannel); }
+  } catch(e) {}
+  _rtChannel = null;
+}
+
+function _startRealtime() {
+  var c = db();
+  var me = uid();
+  if (!c || !me || _rtChannel) return; // already running or no client
+
+  try {
+    _rtChannel = c.channel('social-live-' + me.slice(0, 8))
+      .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'feed_posts'
+      }, function(payload) {
+        try {
+          var row = payload.new;
+          if (!row || row.user_id === me) return; // skip own posts
+          // Prepend to feed (skip if already present)
+          var exists = _feed.some(function(p) { return p.id === row.id; });
+          if (!exists) {
+            _feed.unshift(Object.assign({}, row, {
+              _author: { id: row.user_id, pseudo: '…', avatar_color: '#C9A84C' },
+              _likes: 0, _comments: 0, _myLike: false, _new: true
+            }));
+          }
+          // Re-render only if user is currently on the social feed tab
+          var S = window.S || {};
+          if (S.view === 'social' && !S.socialView && S.socialTab === 'feed') {
+            if (window.render) window.render();
+          }
+        } catch(e) {}
+      })
+      .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'social_notifications',
+        filter: 'user_id=eq.' + me
+      }, function(payload) {
+        try {
+          var row = payload.new;
+          if (!row) return;
+          _unreadCount++;
+          // Add to cached notifications list
+          _notifications.unshift(Object.assign({}, row, { read: false }));
+          if (_notifications.length > 50) _notifications = _notifications.slice(0, 50);
+          // Re-render only if social view is visible (to update the badge)
+          var S = window.S || {};
+          if (S.view === 'social' && !S.socialView && window.render) {
+            window.render();
+          }
+        } catch(e) {}
+      })
+      .subscribe(function(status) {
+        if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+          // Silently drop and clear — next _boot() will retry
+          _rtChannel = null;
+        }
+      });
+  } catch(e) {
+    _rtChannel = null;
+  }
+}
+
 async function _boot(container){
   var S = window.S;
   if (!_myProfile){ try { await fetchMyProfile(); } catch(e){} }
@@ -1793,6 +1868,8 @@ async function _boot(container){
       refreshUnreadCount()
     ]);
   } catch(e){ console.warn('[SOCIAL] boot load error', e); }
+  // Start realtime after initial data load
+  _startRealtime();
   if (S.socialView === 'editProfile')       renderEditProfile(container);
   else if (S.socialView === 'composePost')  renderComposePost(container);
   else                                       renderSocialHub(container);
