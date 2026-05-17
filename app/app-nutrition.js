@@ -1185,12 +1185,12 @@ function renderActiviteSommeil(p) {
   // ─── HEURE D'ENTRAÎNEMENT (mode 'both' uniquement — l'utilisateur s'entraîne activement, le timing affecte la répartition des macros) ───
   if (S.appMode === 'both') {
     p.appendChild(h('div', {style: 'height:20px'}));
-    p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? '⏰ Usual training time' : '⏰ Heure d\'entraînement habituelle')));
+    p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish() ? 'Usual training time' : 'Heure d\'entraînement habituelle')));
     p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin:-4px 0 10px;line-height:1.5;'}, (window.isEnglish && window.isEnglish() ? 'Helps adapt meal distribution (carbs + proteins at the right time). Optional.' : 'Permet d\'adapter la répartition des repas (glucides + protéines au bon moment). Optionnel.')));
     var _ttOpts = [
-      {id: 'morning', label: '🌅 ' + (window.isEnglish && window.isEnglish() ? 'Morning' : 'Matin'), desc: (window.isEnglish && window.isEnglish() ? 'Before 12pm — post-workout breakfast' : 'Avant 12h — petit-déj post-séance')},
-      {id: 'noon',    label: '☀️ ' + (window.isEnglish && window.isEnglish() ? 'Noon' : 'Midi'),    desc: (window.isEnglish && window.isEnglish() ? '12pm–15pm — post-workout lunch' : '12h–15h — déjeuner post-séance')},
-      {id: 'evening', label: '🌙 ' + (window.isEnglish && window.isEnglish() ? 'Evening' : 'Soir'),  desc: (window.isEnglish && window.isEnglish() ? 'After 5pm — post-workout dinner' : 'Après 17h — dîner post-séance')}
+      {id: 'morning', label: (window.isEnglish && window.isEnglish() ? 'Morning' : 'Matin'), desc: (window.isEnglish && window.isEnglish() ? 'Before 12pm — post-workout breakfast' : 'Avant 12h — petit-déj post-séance')},
+      {id: 'noon',    label: (window.isEnglish && window.isEnglish() ? 'Noon' : 'Midi'),    desc: (window.isEnglish && window.isEnglish() ? '12pm–15pm — post-workout lunch' : '12h–15h — déjeuner post-séance')},
+      {id: 'evening', label: (window.isEnglish && window.isEnglish() ? 'Evening' : 'Soir'),  desc: (window.isEnglish && window.isEnglish() ? 'After 5pm — post-workout dinner' : 'Après 17h — dîner post-séance')}
     ];
     var _ttGrid = h('div', {'class': 'level-list'});
     _ttOpts.forEach(function(opt) {
