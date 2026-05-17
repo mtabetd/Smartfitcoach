@@ -26715,7 +26715,7 @@ function renderStep8(p) {
       // Calorie adjustment note
       if (cycleInfo.phase.calorieAdjust !== 0) {
         var adjPct = Math.round(cycleInfo.phase.calorieAdjust * 100);
-        var baseCal = Math.round(calcTDEE() * ((S.goal !== null && GOALS[S.goal]) ? GOALS[S.goal].mult : 1));
+        var baseCal = (typeof calcTarget === 'function') ? Math.round(calcTarget()) : Math.round(calcTDEE() * ((S.goal !== null && GOALS[S.goal]) ? GOALS[S.goal].mult : 1));
         var adjCal = tgt;
         var adjNote = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + phaseColor + ';margin-top:4px;padding:6px 10px;background:rgba(0,0,0,0.03);border-radius:2px'});
         adjNote.textContent = (window.isEnglish && window.isEnglish() ? 'Adjusted calories: ' + baseCal + ' kcal (base) + ' + adjPct + '% = ' + adjCal + ' kcal' : 'Calories adapt\u00e9es : ' + baseCal + ' kcal (base) + ' + adjPct + '% = ' + adjCal + ' kcal');
@@ -27121,7 +27121,7 @@ function renderStep9(p) {
   renderProgressBar(p, 12, 12);
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, 'Planning'));
   p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Your<br><em>week</em>' : 'Votre<br><em>semaine</em>'), style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
-  p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? '7 days \u00b7 ' + (S.mealsPerDay || 3) + ' meals/day \u00b7 527 recipes' : '7 jours \u00b7 ' + (S.mealsPerDay || 3) + ' repas/jour \u00b7 527 recettes')));
+  p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? '7 days \u00b7 ' + (S.mealsPerDay || 3) + ' meals/day \u00b7 662 recipes' : '7 jours \u00b7 ' + (S.mealsPerDay || 3) + ' repas/jour \u00b7 662 recettes')));
   if (window.TIPS) TIPS.renderTip(p, 'planning');
 
   // FIX 2026-04-16 — reset selectedDay à aujourd'hui AVANT tout calcul (sinon _nm est calculé pour hier)
@@ -27572,7 +27572,7 @@ function renderStep9(p) {
             S.weekPlan[S.selectedDay][slotKey3] = { n: pItem.name, k: Math.round(pItem.kcal * r), kcal: Math.round(pItem.kcal * r), p: Math.round(pItem.p * r), g: Math.round(pItem.g * r), l: Math.round(pItem.l * r), f: '\u25CE', emoji: '\u25CE', custom: true, portions: gr };
             // BUG-1 FIX: recalculate day aggregate totals so dashboard/shopping-list stay in sync
             (function(_di3) { var _d3 = S.weekPlan[_di3]; if (!_d3) return; var _t3 = {k:0,p:0,g:0,l:0}; ['breakfast','lunch','snack','dinner'].forEach(function(q){var m=_d3[q];if(m){_t3.k+=m.k||0;_t3.p+=m.p||0;_t3.g+=m.g||0;_t3.l+=m.l||0;}}); _d3.kcal=_t3.k;_d3.p=_t3.p;_d3.g=_t3.g;_d3.l=_t3.l; })(S.selectedDay);
-            try { if (Math.round(pItem.kcal * r) > 1500 && window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'This meal exceeds 1500 kcal \u2014 check the portion.' : 'Ce repas d\u00e9passe 1500 kcal\u00a0\u2014 v\u00e9rifiez la portion.', 'warning', 4000); } catch(_hcE) {}
+            try { var _mealThr1 = Math.max(1500, Math.round(calcTarget() / (S.mealsPerDay || 3) * 1.5)); if (Math.round(pItem.kcal * r) > _mealThr1 && window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'This meal exceeds ' + _mealThr1 + ' kcal \u2014 check the portion.' : 'Ce repas d\u00e9passe ' + _mealThr1 + ' kcal\u00a0\u2014 v\u00e9rifiez la portion.', 'warning', 4000); } catch(_hcE) {}
             S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false; S._foodPortionItem = null; S._foodPortionGrams = null;
             try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saveProfile error:', e); }
             try { var _cn = (pItem.name||'').toLowerCase(), _cw=[]; if(!S.allowPork&&/porc|jambon|bacon|lardon(?!.*(?:dinde|volaille|poulet))|saucisson|prosciutto|pancetta|chorizo/.test(_cn))_cw.push('porc'); if(S.regime===2&&/poulet|boeuf|b\u0153uf|veau|dinde|saumon|thon|poisson/.test(_cn))_cw.push('non v\u00e9g\u00e9tarien'); if(S.regime===3&&/poulet|boeuf|b\u0153uf|veau|oeuf|fromage|yaourt|lait/.test(_cn))_cw.push('non vegan'); if(_cw.length&&window.showToast)window.showToast((window.isEnglish && window.isEnglish()) ? '\u26a0\ufe0f Meal added \u2014 contains: '+_cw.join(', ') : '\u26a0\ufe0f Repas ajout\u00e9 \u2014 contient : '+_cw.join(', '), 'warning', 4000); } catch(_wE){}
@@ -27618,7 +27618,7 @@ function renderStep9(p) {
                   S.weekPlan[S.selectedDay][slotKey3c] = { n: rf.n, k: Math.max(0, rf.kcal || rf.k || 0), kcal: Math.max(0, rf.kcal || rf.k || 0), p: Math.max(0, rf.p || 0), g: Math.max(0, rf.g || 0), l: Math.max(0, rf.l || 0), f: '\u25CE', emoji: '\u25CE', custom: true };
                   // BUG-1 FIX: recalculate day aggregate totals so dashboard/shopping-list stay in sync
                   (function(_di3c) { var _d3c = S.weekPlan[_di3c]; if (!_d3c) return; var _t3c = {k:0,p:0,g:0,l:0}; ['breakfast','lunch','snack','dinner'].forEach(function(q){var m=_d3c[q];if(m){_t3c.k+=m.k||0;_t3c.p+=m.p||0;_t3c.g+=m.g||0;_t3c.l+=m.l||0;}}); _d3c.kcal=_t3c.k;_d3c.p=_t3c.p;_d3c.g=_t3c.g;_d3c.l=_t3c.l; })(S.selectedDay);
-                  try { var _rfKcal = Math.max(0, rf.kcal || rf.k || 0); if (_rfKcal > 1500 && window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'This meal exceeds 1500 kcal — check the portion.' : 'Ce repas dépasse 1500 kcal — vérifiez la portion.', 'warning', 4000); } catch(_hcE2) {}
+                  try { var _rfKcal = Math.max(0, rf.kcal || rf.k || 0); var _mealThr2 = Math.max(1500, Math.round(calcTarget() / (S.mealsPerDay || 3) * 1.5)); if (_rfKcal > _mealThr2 && window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'This meal exceeds ' + _mealThr2 + ' kcal — check the portion.' : 'Ce repas dépasse ' + _mealThr2 + ' kcal — vérifiez la portion.', 'warning', 4000); } catch(_hcE2) {}
                   S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false;
                   try { if (window.saveProfile) window.saveProfile(); } catch(e) {}
                   if (window.incrementMealsLogged) window.incrementMealsLogged();
@@ -27752,7 +27752,7 @@ function renderStep9(p) {
           };
           // BUG-1 FIX: recalculate day aggregate totals so dashboard/shopping-list stay in sync
           (function(_di4) { var _d4 = S.weekPlan[_di4]; if (!_d4) return; var _t4 = {k:0,p:0,g:0,l:0}; ['breakfast','lunch','snack','dinner'].forEach(function(q){var m=_d4[q];if(m){_t4.k+=m.k||0;_t4.p+=m.p||0;_t4.g+=m.g||0;_t4.l+=m.l||0;}}); _d4.kcal=_t4.k;_d4.p=_t4.p;_d4.g=_t4.g;_d4.l=_t4.l; })(S.selectedDay);
-          try { var _manKcal = Math.max(0, parseFloat(fd.kcal) || 0); if (_manKcal > 1500 && window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'This meal exceeds 1500 kcal — check the portion.' : 'Ce repas dépasse 1500 kcal — vérifiez la portion.', 'warning', 4000); } catch(_hcE3) {}
+          try { var _manKcal = Math.max(0, parseFloat(fd.kcal) || 0); var _mealThr3 = Math.max(1500, Math.round(calcTarget() / (S.mealsPerDay || 3) * 1.5)); if (_manKcal > _mealThr3 && window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'This meal exceeds ' + _mealThr3 + ' kcal — check the portion.' : 'Ce repas dépasse ' + _mealThr3 + ' kcal — vérifiez la portion.', 'warning', 4000); } catch(_hcE3) {}
           S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false; S._foodManualData = null;
           try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saveProfile error:', e); }
           try { var _mn = (fd.name||'').trim().toLowerCase(), _mw=[]; if(!S.allowPork&&/porc|jambon|bacon|lardon(?!.*(?:dinde|volaille|poulet))|saucisson|prosciutto|pancetta|chorizo/.test(_mn))_mw.push('porc'); if(S.regime===2&&/poulet|boeuf|bœuf|veau|dinde|saumon|thon|poisson/.test(_mn))_mw.push('non végétarien'); if(S.regime===3&&/poulet|boeuf|bœuf|veau|oeuf|fromage|yaourt|lait/.test(_mn))_mw.push('non vegan'); if(_mw.length&&window.showToast)window.showToast((window.isEnglish && window.isEnglish()) ? '\u26a0\ufe0f Meal added — contains: '+_mw.join(', ') : '\u26a0\ufe0f Repas ajouté — contient : '+_mw.join(', '), 'warning', 4000); } catch(_mwE){}
