@@ -1728,6 +1728,31 @@ function getDayType(dayIndex) {
 }
 window.getDayType = getDayType;
 
+// ─── PER-DAY SPORT LOAD MAPPING ───────────────────────────────────────────
+// Reads the sport assigned to a specific day from weeklyCalendar and maps it
+// to the corresponding trainingLoad level used by the nutrition engine.
+// Returns null when weeklyCalendar is absent → existing global fallback applies.
+// MET thresholds mirror _sfcNotifySport: heavy≥9, moderate≥5, light<5.
+function _getSportLoadForDay(dayIndex) {
+  var s = window.S;
+  if (!s || !s.weeklyCalendar || typeof s.weeklyCalendar !== 'object' || Array.isArray(s.weeklyCalendar)) return null;
+  var _sport = s.weeklyCalendar[String(dayIndex)];
+  if (!_sport || _sport === 'repos' || _sport === 'autre') return null;
+  var _DAY_LOAD = {
+    musculation:  'heavy',
+    crossfit:     'heavy',
+    hyrox:        'heavy',
+    running:      'moderate',
+    triathlon:    'moderate',
+    cycling:      'moderate',
+    calisthenics: 'moderate',
+    padel:        'moderate',
+    yoga:         'light',
+    golf:         'light'
+  };
+  return _DAY_LOAD[_sport] || null;
+}
+
 // ─── ADAPTIVE MEAL SPLIT PER DAY ──────────────────────────────────────────
 // getAdaptedMealSplit(dayIndex) — adapte la répartition calorique selon
 // le type de jour (entraînement vs repos).
@@ -1763,7 +1788,7 @@ function getAdaptedMealSplit(dayIndex) {
   // Sans SFCSymbiosis ou sans trainingLoad → calMultiplier=1.0 (comportement inchangé).
   var _trainMult  = 1.0;
   var _carbBoost  = 1.0;
-  var _tl4mults = window.S && (window.S.dailyTrainingLoad || window.S.trainingLoad);
+  var _tl4mults = _getSportLoadForDay(dayIndex) || (window.S && (window.S.dailyTrainingLoad || window.S.trainingLoad));
   if (window.SFCSymbiosis && _tl4mults) {
     var _mults = window.SFCSymbiosis.getLoadMultipliers(true, _tl4mults);
     _trainMult = _mults.cal;

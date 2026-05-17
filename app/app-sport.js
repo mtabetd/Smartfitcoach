@@ -1225,6 +1225,11 @@ function renderMixDisciplineView(p, mixObj) {
  if (!mixObj || !mixObj.type) return;
  var _type = mixObj.type;
  var _days = mixObj.days || 1;
+ // Notify symbiosis engine of this sport so _sfcAggregateLoad includes secondary/tertiary
+ // in S.trainingLoads. Uses primary sport level as proxy — safe default if unrecognized.
+ if (window._sfcNotifySport) {
+  try { window._sfcNotifySport(_type, (window.S && window.S.sportLevel) || 'debutant'); } catch(_e) {}
+ }
  var _sessions = (typeof window.getMixSessionsForType === 'function')
   ? window.getMixSessionsForType(_type, _days)
   : [];
