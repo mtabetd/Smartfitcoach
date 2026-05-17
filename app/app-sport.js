@@ -10872,7 +10872,7 @@ function renderRunningProgram(p) {
  })();
 
  p.appendChild(h('div', {style: 'height:12px'}));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 7; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 7; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + ((window.isEnglish && window.isEnglish()) ? 'Edit configuration' : 'Modifier la configuration')}));
  appendNutritionModeCTA(p);
 }
 
@@ -11193,7 +11193,7 @@ function renderHyroxProgram(p) {
  })();
 
  p.appendChild(h('div', {style: 'height:12px'}));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 9; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 9; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + ((window.isEnglish && window.isEnglish()) ? 'Edit configuration' : 'Modifier la configuration')}));
  appendNutritionModeCTA(p);
 }
 
@@ -11329,7 +11329,7 @@ function renderPadelProgram(p) {
     onclick: function() { _completeSportSession('padel', S.padelLevel || 'intermediaire', _pdDur, _pdKey); }
   }, _pdDone ? (window.isEnglish && window.isEnglish() ? '✓ Session logged' : '✓ Séance validée') : (window.isEnglish && window.isEnglish() ? '✓ Session done' : '✓ Séance terminée')));
  }());
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 11; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 11; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + ((window.isEnglish && window.isEnglish()) ? 'Edit configuration' : 'Modifier la configuration')}));
  appendNutritionModeCTA(p);
 }
 
@@ -11475,7 +11475,7 @@ function renderGolfProgram(p) {
     onclick: function() { _completeSportSession('golf', S.golfLevel || 'intermediaire', _gfDur, _gfKey); }
   }, _gfDone ? (window.isEnglish && window.isEnglish() ? '✓ Session logged' : '✓ Séance validée') : (window.isEnglish && window.isEnglish() ? '✓ Session done' : '✓ Séance terminée')));
  }());
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 13; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 13; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + ((window.isEnglish && window.isEnglish()) ? 'Edit configuration' : 'Modifier la configuration')}));
  appendNutritionModeCTA(p);
 }
 
@@ -12260,7 +12260,7 @@ function renderYogaProgram(p) {
     onclick: function() { _completeSportSession('yoga', _ygLvl, _ygDur, _ygKey); }
   }, _ygDone ? (window.isEnglish && window.isEnglish() ? '✓ Session logged' : '✓ Séance validée') : (window.isEnglish && window.isEnglish() ? '✓ Session done' : '✓ Séance terminée')));
  }());
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 19; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 19; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + ((window.isEnglish && window.isEnglish()) ? 'Edit configuration' : 'Modifier la configuration')}));
  appendNutritionModeCTA(p);
 }
 
@@ -12430,7 +12430,7 @@ function renderCyclingProgram(p) {
  if (!plan || !plan.length) {
  var backArrowCyc = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
  p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey)'}, (window.isEnglish && window.isEnglish() ? 'Program unavailable. Reload the page or reconfigure your plan.' : 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.')));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 22; window.render(); }, html: backArrowCyc + 'Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 22; window.render(); }, html: backArrowCyc + ((window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour')}));
  return;
  }
  var totalWeeks = plan.length;
