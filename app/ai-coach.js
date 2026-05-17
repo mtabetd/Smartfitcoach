@@ -1263,7 +1263,8 @@ function sendMessage() {
       if (window.showPaywall) window.showPaywall('ai-coach-limit', _nextTierKey);
       return;
     }
-    try { localStorage.setItem(_monthKey, JSON.stringify({ n: _monthCount + 1 })); } catch(e) {}
+    // NOTE: quota incremented AFTER successful API response (see .then handler below)
+    // This prevents wasting a quota slot when the network fails or times out.
   } else if (_monthlyLimit === null) {
     // Free/trial — legacy 3/day limit
     if (window.isTrialUser && window.isTrialUser() && !(window.S && window.S._serverPremium) && !(window.isPremium && window.isPremium())) {
@@ -1274,7 +1275,7 @@ function sendMessage() {
         appendError(messages, _isEN_coach ? 'Limit reached (3 messages/day in trial). Subscribe for access.' : 'Limite atteinte (3 messages/jour en essai). Abonnez-vous pour accéder.');
         return;
       }
-      try { localStorage.setItem(_coachKey, JSON.stringify({ n: _coachCount + 1 })); } catch(e) {}
+      // NOTE: quota incremented AFTER successful API response (see .then handler below)
     }
   }
   // Élite/unlimited: no client-side limit (server-side rate limit applies)
@@ -1337,6 +1338,13 @@ function sendMessage() {
       appendError(messages, window.isEnglish && window.isEnglish() ? 'The coach could not formulate a response. Please try again.' : 'Le coach n\'a pas pu formuler de réponse. Réessayez.');
     } else {
       var reply = data.reply;
+      // Quota increment on success only — never wasted on network/API failure.
+      // _monthlyLimit, _monthKey, _monthCount, _coachKey, _coachCount captured by closure.
+      if (_monthlyLimit !== null && _monthlyLimit !== Infinity && isFinite(_monthlyLimit)) {
+        try { localStorage.setItem(_monthKey, JSON.stringify({ n: _monthCount + 1 })); } catch(e) {}
+      } else if (_monthlyLimit === null && typeof _coachKey !== 'undefined') {
+        try { localStorage.setItem(_coachKey, JSON.stringify({ n: (_coachCount || 0) + 1 })); } catch(e) {}
+      }
       // POLISH 2026-04 (V1.2) : dernier message a le bouton "Régénérer".
       // Les précédents (via stripActions) gardent copier + feedback mais pas regen.
       stripRegenerateButtonsFromPrevious(messages);

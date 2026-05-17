@@ -4758,8 +4758,9 @@ function getPlanTier() {
 // Returns true when user's tier is ≥ minTier
 function isPlanAtLeast(minTier) {
   try {
+    if (!minTier || !(_PLAN_TIER_RANK.hasOwnProperty(minTier))) return false; // unknown tier → fail-closed
     var myRank  = _PLAN_TIER_RANK[getPlanTier()]  || 0;
-    var minRank = _PLAN_TIER_RANK[minTier]         || 0;
+    var minRank = _PLAN_TIER_RANK[minTier];
     return myRank >= minRank;
   } catch(e) { return false; }
 }
