@@ -2642,7 +2642,7 @@ function renderStep8(p) {
       if (cycleInfo.phase.calorieAdjust !== 0) {
         var adjPct = Math.round(cycleInfo.phase.calorieAdjust * 100);
         var baseCal = (typeof calcTarget === 'function') ? Math.round(calcTarget()) : Math.round(calcTDEE() * ((S.goal !== null && GOALS[S.goal]) ? GOALS[S.goal].mult : 1));
-        var adjCal = tgt;
+        var adjCal = Math.round(baseCal * (1 + cycleInfo.phase.calorieAdjust));
         var adjNote = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + phaseColor + ';margin-top:4px;padding:6px 10px;background:rgba(0,0,0,0.03);border-radius:2px'});
         adjNote.textContent = (window.isEnglish && window.isEnglish() ? 'Adjusted calories: ' + baseCal + ' kcal (base) + ' + adjPct + '% = ' + adjCal + ' kcal' : 'Calories adapt\u00e9es : ' + baseCal + ' kcal (base) + ' + adjPct + '% = ' + adjCal + ' kcal');
         cycCard.appendChild(adjNote);
@@ -3489,13 +3489,13 @@ function renderStep9(p) {
         var addPortionBtn = h('button', {
           style: 'width:100%;padding:14px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:8px',
           onclick: function() {
-            var gr = parseFloat(S._foodPortionGrams) || 100;
-            var r = gr / 100;
+            var gr = Math.max(1, parseFloat(S._foodPortionGrams) || 100);
+            var r = Math.max(0.01, gr / 100);
             var slotKey3 = S._foodSearchSlot;
             if (!slotKey3) return;
             if (!S.weekPlan) return;
             if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
-            S.weekPlan[S.selectedDay][slotKey3] = { n: pItem.name, k: Math.round(pItem.kcal * r), kcal: Math.round(pItem.kcal * r), p: Math.round(pItem.p * r), g: Math.round(pItem.g * r), l: Math.round(pItem.l * r), f: '\u25CE', emoji: '\u25CE', custom: true, portions: gr };
+            S.weekPlan[S.selectedDay][slotKey3] = { n: pItem.name, k: Math.max(0, Math.round(pItem.kcal * r)), kcal: Math.max(0, Math.round(pItem.kcal * r)), p: Math.max(0, Math.round(pItem.p * r)), g: Math.max(0, Math.round(pItem.g * r)), l: Math.max(0, Math.round(pItem.l * r)), f: '\u25CE', emoji: '\u25CE', custom: true, portions: gr };
             // BUG-1 FIX: recalculate day aggregate totals so dashboard/shopping-list stay in sync
             (function(_di3) { var _d3 = S.weekPlan[_di3]; if (!_d3) return; var _t3 = {k:0,p:0,g:0,l:0}; ['breakfast','lunch','snack','dinner'].forEach(function(q){var m=_d3[q];if(m){_t3.k+=m.k||0;_t3.p+=m.p||0;_t3.g+=m.g||0;_t3.l+=m.l||0;}}); _d3.kcal=_t3.k;_d3.p=_t3.p;_d3.g=_t3.g;_d3.l=_t3.l; })(S.selectedDay);
             try { var _mealThr1 = Math.max(1500, Math.round(calcTarget() / (S.mealsPerDay || 3) * 1.5)); if (Math.round(pItem.kcal * r) > _mealThr1 && window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'This meal exceeds ' + _mealThr1 + ' kcal \u2014 check the portion.' : 'Ce repas d\u00e9passe ' + _mealThr1 + ' kcal\u00a0\u2014 v\u00e9rifiez la portion.', 'warning', 4000); } catch(_hcE) {}

@@ -1268,10 +1268,11 @@ function sendMessage() {
   // Sauvegarder dans historique
   var S = window.S || {};
   if (!Array.isArray(S.aiCoachHistory)) S.aiCoachHistory = [];
-  S.aiCoachHistory.push({ role: 'user', content: text });
-  if (S.aiCoachHistory.length > MAX_HISTORY) {
-    S.aiCoachHistory = S.aiCoachHistory.slice(-MAX_HISTORY);
+  // Trim BEFORE push to prevent history ever exceeding MAX_HISTORY during concurrent rapid sends
+  if (S.aiCoachHistory.length >= MAX_HISTORY) {
+    S.aiCoachHistory = S.aiCoachHistory.slice(-(MAX_HISTORY - 1));
   }
+  S.aiCoachHistory.push({ role: 'user', content: text });
 
   // Afficher "en train de réfléchir"
   var typingEl = appendTyping(messages);

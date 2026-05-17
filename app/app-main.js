@@ -243,6 +243,7 @@ function saveProfile() {
  // On bloque pour éviter la perte de données. saveProfile sera re-déclenché après restore.
  if (window.AUTH && typeof window.AUTH.isAuthRestoring === 'function' && window.AUTH.isAuthRestoring()) {
    console.log('[saveProfile] DIFFÉRÉ — session Supabase en cours de restauration');
+   window._profileDirty = true; // Ensure retry after restore completes (prevents data loss on early tab close)
    return;
  }
  var user = AUTH.getUser();
@@ -2165,10 +2166,10 @@ function _showMedicalDisclaimer() {
 
 // ─── MAIN RENDER ───
 function render() {
+ // State repair runs BEFORE lock check: concurrent render calls must not skip repair
+ try { if (window.sfcRepairState) window.sfcRepairState(window.S); } catch(_eRep) {}
  if (render._lock) return;
  render._lock = true;
- // State integrity firewall — repair known corruption before any view renders
- try { if (window.sfcRepairState) window.sfcRepairState(window.S); } catch(_eRep) {}
  // Clean any stale tooltips left over from previous view
  try { document.querySelectorAll('.sfc-tooltip-pop').forEach(function(el){ el.remove(); }); } catch(_eTp) {}
  try { if (S._quickAddSlot && S.view !== 'today') { S._quickAddSlot = null; } } catch(_eQa) {}
@@ -3776,10 +3777,18 @@ document.addEventListener('keydown', function(e) {
         if (window.S.shopArMode)         { window.S.shopArMode = false;        _changed = true; }
       }
       if (_changed) { if (window.render) window.render(); return; }
-      // 2. If on a sub-view, go back to 'today'
+      // 2. Auth sub-views (forgot, register, verify) → back to main auth
+      var _authSubViews = ['authForgot', 'authRegister', 'authVerify', 'authNewPassword'];
+      if (window.S && _authSubViews.indexOf(window.S.view) !== -1) {
+        window.S.view = 'auth';
+        if (window.render) window.render();
+        return;
+      }
+      // 3. Any other sub-view → back to 'today'
       var _rootViews = ['auth', 'today'];
       if (window.S && window.S.view && _rootViews.indexOf(window.S.view) === -1) {
         window.S.view = 'today';
+        if (window.S && window.S.sStep > 0) { window.S.sStep = 0; }
         if (window.render) window.render();
         return;
       }

@@ -772,7 +772,7 @@ function generateSportProgram() {
  // ════════════════════════════════════════════════════════════════════════════
  if (typeof window.sfcBuildMuscuDay !== 'function') {
    if (window.showToast) window.showToast((window.isEnglish && window.isEnglish() ? 'Training engine not loaded. Please reload.' : 'Moteur entraînement non chargé. Rechargez la page.'), 'error', 5000);
-   return;
+   return []; // Return empty array (not undefined) so callers don't crash on Array.isArray checks
  }
  try {
  dayExercises = window.sfcBuildMuscuDay(groups, {
@@ -1305,6 +1305,9 @@ window.SPORT = {
        S.trainingDaysSelected = [];
        S.sportMixEnabled = false; S.sportMixSecondary = null;
        S._sfcOverride = false; S._sfcOverrideDate = null;
+       S.runningProgram = null; S.hyroxProgram = null;
+       S.yogaLevel = null; S.yogaObjectif = null;
+       S.muscuCycle = null; S.muscuIAProgram = null;
        // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (plan reste visible)
        if (window.devalidateWeekPlan) window.devalidateWeekPlan('changement sport');
        else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;

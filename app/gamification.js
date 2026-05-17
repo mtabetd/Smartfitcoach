@@ -172,9 +172,11 @@ function updateStreak() {
   // Helper timezone-safe : évite le décalage UTC/local (ex. UTC+2 à 23h → jour UTC suivant)
   function _localDateStr(d) {
     var dt = d || new Date();
-    return dt.getFullYear() + '-' +
-      String(dt.getMonth() + 1).padStart(2, '0') + '-' +
-      String(dt.getDate()).padStart(2, '0');
+    // Use UTC to avoid DST boundary ambiguity: at 23:59 local time on DST transition
+    // the UTC date may already be the next day, causing double-increment or missed streak.
+    return dt.getUTCFullYear() + '-' +
+      String(dt.getUTCMonth() + 1).padStart(2, '0') + '-' +
+      String(dt.getUTCDate()).padStart(2, '0');
   }
   var today = _localDateStr();
 

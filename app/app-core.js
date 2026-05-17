@@ -4821,7 +4821,8 @@ window.getPregnancyWeightGuideline = getPregnancyWeightGuideline;
 // Formule Devine : homme = 50 + 2.3×(taille_pouces-60), femme = 45.5 + 2.3×(taille_pouces-60)
 function calcAdjustedWeight(){
   var s=window.S;
-  if(!s.weight||!s.height)return s.weight||75;
+  if(!s.weight)return 75; // No weight: generic fallback
+  if(!s.height)return s.weight; // Height missing: use actual weight (BMI can't be computed, no obesity adjustment)
   var bmi=s.weight/Math.pow(s.height/100,2);
   if(bmi<=30)return s.weight; // Pas d'ajustement si IMC ≤ 30
   var heightInches=s.height/2.54;
@@ -4878,7 +4879,9 @@ var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&window.isFemale(s
 var pregExtra=tri?tri.trimester.calorieExtra:340;
 // Si allaitement ET enceinte (fin de grossesse + allaitement aîné) → ADDITIF (ACOG 2018 + 2022)
 var allaitExtra=(s.medical&&s.medical.indexOf('allaitement')!==-1)?500:0;
-base=Math.round(tdeeVal)+pregExtra+allaitExtra;
+// Math.max(base, tdeeVal): never restrict pregnant users below maintenance (ACOG — no caloric deficit during pregnancy),
+// but preserve surplus if user is in bulk (e.g., TDEE×1.15 > TDEE).
+base=Math.round(Math.max(base,tdeeVal))+pregExtra+allaitExtra;
 // Plancher grossesse : 1800 kcal/j minimum (OMS 2016 — jamais de restriction chez femme enceinte sauf prescription médicale)
 base=Math.max(base,1800);return base;}var goalKey=GOALS[s.goal].key;// Cap shred deficit to 500 kcal/day (Helms 2014, ACSM — RED-S + muscle loss risk above 500kcal deficit)
 // Cap déficit à -500 kcal/j pour shred ET cut (ACSM 2009, Helms 2014 — au-delà : perte musculaire + fatigue chronique)
