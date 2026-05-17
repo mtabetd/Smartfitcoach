@@ -3,20 +3,25 @@
  * Copyright (c) 2024-2026 SmartFitCoach. All rights reserved.
  */
 /* ============================================================
-   EXERCISE-VIDEOS.JS — Stratégie vidéo de confiance v5
+   EXERCISE-VIDEOS.JS — Stratégie vidéo de confiance v5.1
 
    Architecture (2026-05) :
-   • URLs filtrées par CHAÎNE :
-       https://www.youtube.com/@handle/search?query=...
-     → seules les vidéos du canal choisi apparaissent.
-     → élimine influenceurs, clickbait, shorts parasites.
+   • URLs filtrées PAR NOM DE CHAÎNE dans la recherche :
+       https://www.youtube.com/results?search_query=AthleanX+dips+form&sp=EgIYAQ
+     → filtre vidéos uniquement (sp=EgIYAQ exclut Shorts, playlists, chaînes).
+     → nom de canal dans la query → premier résultat = vidéo de ce canal.
+     → fiable sur mobile, desktop, iOS, Android, toutes régions.
+
+   Pourquoi PAS @handle/search?query= :
+     → instable sur mobile : YouTube redirige parfois vers la homepage.
+     → résultats non garantis selon la région/session.
 
    Canaux par niveau + langue (voir TRUSTED_VIDEO_SOURCES) :
-   - Débutant FR  → @TiboInShape  (8.7M, pédagogue FR)
-   - Débutant EN  → @athleanx    (14M, Jeff Cavaliere)
-   - Inter        → @athleanx    (technique + science)
-   - Avancé       → @JeffNippard (peer-reviewed, hypertrophie)
-   - CrossFit     → @CrossFit    (officiel, gymnique/oly)
+   - Débutant FR  → Tibo InShape  (8.7M, pédagogue FR)
+   - Débutant EN  → AthleanX     (14M, Jeff Cavaliere)
+   - Inter        → AthleanX     (technique + science)
+   - Avancé       → Jeff Nippard (peer-reviewed, hypertrophie)
+   - CrossFit     → CrossFit     (officiel, gymnique/oly)
 
    Résolution en 4 niveaux (voir _resolveKey) :
    1. EXACT   — clé directe dans CURATED_QUERIES / CF_QUERIES
@@ -32,9 +37,18 @@
 
   // ─── Isolation format URL YouTube ─────────────────────────────────────────
   // Point unique de changement si YouTube modifie sa structure d'URL.
-  function _buildChannelUrl(handle, query) {
-    return 'https://www.youtube.com/@' + handle + '/search?query=' + encodeURIComponent(query);
+  //
+  // _buildChannelUrl : recherche filtrée vidéos UNIQUEMENT, nom de canal en tête de query.
+  //   → sp=EgIYAQ exclut Shorts, playlists et pages de chaînes.
+  //   → "AthleanX dips form tutorial" → premier résultat = vidéo AthleanX.
+  //   → Fiable mobile/desktop/iOS/Android, toutes régions.
+  //   channelName = nom d'affichage ("AthleanX", "Tibo InShape", "Jeff Nippard", "CrossFit")
+  function _buildChannelUrl(channelName, query) {
+    return 'https://www.youtube.com/results?search_query='
+      + encodeURIComponent(channelName + ' ' + query)
+      + '&sp=EgIYAQ%253D%253D';
   }
+  // _buildFallbackUrl : recherche générale sans canal — utilisée quand l'exercice est inconnu.
   function _buildFallbackUrl(query) {
     return 'https://www.youtube.com/results?search_query='
       + encodeURIComponent(query) + '&sp=EgIYAQ%253D%253D';
@@ -99,11 +113,11 @@
 
   // Métadonnées de version — utile pour audits et diagnostics
   var _META = {
-    version:          '5.0',
-    urlStrategy:      'channel-search',    // '@handle/search?query='
-    fallbackStrategy: 'video-filter',      // 'results?...&sp=EgIYAQ'
-    exerciseCoverage: 338,                 // entrées CURATED_QUERIES
-    cfCoverage:       86,                  // entrées CF_QUERIES
+    version:          '5.1',
+    urlStrategy:      'channel-name-video-search', // 'results?search_query=CHANNEL+QUERY&sp=EgIYAQ'
+    fallbackStrategy: 'video-filter',              // idem, sans nom de canal
+    exerciseCoverage: 338,                         // entrées CURATED_QUERIES
+    cfCoverage:       86,                          // entrées CF_QUERIES
     auditDate:        '2026-05'
   };
 
@@ -965,7 +979,7 @@
       var query = (chan.handle === 'TiboInShape' && FR_QUERIES[resolved.key])
         ? FR_QUERIES[resolved.key]
         : baseQuery;
-      return _buildChannelUrl(chan.handle, query);
+      return _buildChannelUrl(chan.name, query);
     }
 
     // Exercice non curé : recherche générale + filtre vidéos uniquement
@@ -988,7 +1002,8 @@
 
     if (cfQuery) return _buildChannelUrl('CrossFit', cfQuery);
 
-    return _buildFallbackUrl(name + ' crossfit technique tutorial');
+    // Exercice CF inconnu : CrossFit dans la query oriente vers le bon contexte
+    return _buildChannelUrl('CrossFit', _normalizeName(name) + ' technique tutorial');
   }
 
   /**
