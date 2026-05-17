@@ -121,13 +121,13 @@
 
   // Métadonnées de version — utile pour audits et diagnostics
   var _META = {
-    version:          '5.5',
+    version:          '5.6',
     urlStrategy:      'direct-registry-first',     // watch?v= / shorts/ → channel-search fallback
     fallbackStrategy: 'channel-name-video-search', // results?search_query=CHANNEL+QUERY&sp=EgIYAQ
     exerciseCoverage: 338,                         // entrées CURATED_QUERIES
     cfCoverage:       86,                          // entrées CF_QUERIES
     directRegistry:   true,                        // DIRECT_VIDEO_REGISTRY actif
-    directRegistrySize: 52,                        // API-validated, dédupliqués (audit 2026-05)
+    directRegistrySize: 56,                        // clés avec au moins une URL directe (audit 2026-05)
     auditDate:        '2026-05'
   };
 
@@ -373,8 +373,9 @@
     }
     var levelKey = _registryLevelKey(lv, isCF);
     var video = entry[levelKey];
-    // Fallback de niveau : advanced → en_any → fr_beginner
-    if (!video && levelKey === 'advanced') video = entry['en_any'];
+    // Cascade niveau : advanced → en_any → fr_beginner (et en_any → fr_beginner en dernier recours)
+    if (!video && levelKey === 'advanced')    video = entry['en_any'] || entry['fr_beginner'];
+    if (!video && levelKey === 'en_any')      video = entry['fr_beginner'];
     if (!video && levelKey === 'fr_beginner') video = entry['en_any'];
     if (!video || !video.url) return null;
     return video.url;
@@ -1115,7 +1116,11 @@
     'souleve de terre':        'deadlift',
     'squat bulgare':           'split squat bulgare',
     'fente bulgare':           'split squat bulgare',
-    'tirage lat':              'tirage vertical poulie'
+    'tirage lat':              'tirage vertical poulie',
+    // Singuliers défensifs → pluriels curatés
+    'traction':                'tractions',
+    'burpee':                  'burpees',
+    'pompe':                   'pompes classiques'
   };
 
   // ─── Aliases CrossFit / Hyrox : abréviations → clé CF_QUERIES ───────────
@@ -1307,27 +1312,40 @@
     // URL directe (watch?v= ou /shorts/) → ouverture immédiate, zéro friction
     // L'élément <a> synthétique préserve le geste utilisateur sur iOS/Android.
     if (isDirect) {
-      var a = document.createElement('a');
-      a.href = url;
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-      a.style.display = 'none';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      try {
+        var a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      } catch(domErr) {
+        try { window.open(url, '_blank', 'noopener,noreferrer'); } catch(e) {}
+      }
       try { if (window.BLACKBOX) window.BLACKBOX.log('exo_video_open', { exo: exerciseName, lv: level, direct: true }); } catch(e) {}
       return;
     }
 
     // URL de recherche → modal pour indiquer ce que l'utilisateur va voir
-    var existing = document.getElementById('exo-video-modal');
-    if (existing) existing.parentNode.removeChild(existing);
+    try {
+      var existing = document.getElementById('exo-video-modal');
+      if (existing) existing.parentNode.removeChild(existing);
+    } catch(e) {}
 
     var chan = _resolveChannel(level);
     var isEN = window.isEnglish && window.isEnglish();
 
-    var ov = document.createElement('div');
+    var ov;
+    try { ov = document.createElement('div'); } catch(e) {
+      try { window.open(url, '_blank', 'noopener,noreferrer'); } catch(e2) {}
+      return;
+    }
     ov.id = 'exo-video-modal';
+    ov.setAttribute('role', 'dialog');
+    ov.setAttribute('aria-modal', 'true');
+    ov.setAttribute('aria-label', isEN ? 'Technique video' : 'Vidéo technique');
     ov.style.cssText = 'position:fixed;inset:0;background:rgba(10,10,9,0.85);z-index:9999;'
       + 'display:flex;align-items:center;justify-content:center;padding:20px;';
 
@@ -1380,17 +1398,22 @@
       + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;'
       + 'text-transform:uppercase;min-height:44px;';
     cancelBtn.textContent = isEN ? 'Cancel' : 'Annuler';
-    cancelBtn.addEventListener('click', function() {
-      if (ov.parentNode) ov.parentNode.removeChild(ov);
-    });
+
+    function _closeModal() {
+      try { document.removeEventListener('keydown', _escHandler); } catch(e) {}
+      try { if (ov.parentNode) ov.parentNode.removeChild(ov); } catch(e) {}
+    }
+    function _escHandler(e) { if (e.key === 'Escape') _closeModal(); }
+
+    cancelBtn.addEventListener('click', _closeModal);
     actions.appendChild(cancelBtn);
 
     sheet.appendChild(actions);
     ov.appendChild(sheet);
-    ov.addEventListener('click', function(e) {
-      if (e.target === ov && ov.parentNode) ov.parentNode.removeChild(ov);
-    });
-    document.body.appendChild(ov);
+    ov.addEventListener('click', function(e) { if (e.target === ov) _closeModal(); });
+    document.addEventListener('keydown', _escHandler);
+    try { document.body.appendChild(ov); } catch(e) { return; }
+    try { cancelBtn.focus(); } catch(e) {}
   }
 
   // ─── API publique ─────────────────────────────────────────────────────────

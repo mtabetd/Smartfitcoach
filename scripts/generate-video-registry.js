@@ -168,20 +168,20 @@ function scoreVideo(snippet, contentDetails, statistics, query) {
   var matched = keywords.filter(function(w) { return title.includes(w); }).length;
   score += Math.round((matched / Math.max(keywords.length, 1)) * 50);
 
-  // 2. Durée — Short idéal (0–40 pts)
-  if (dur > 0 && dur <= 60)   score += 40;
-  else if (dur <= 120)         score += 30;
-  else if (dur <= 240)         score += 20;
-  else if (dur <= 480)         score += 10;
+  // 2. Durée — Short ≤90s idéal (YouTube Shorts = jusqu'à 3min depuis 2024, sweet spot pédago ≤90s)
+  if (dur > 0 && dur <= 90)   score += 40;
+  else if (dur <= 180)         score += 25;
+  else if (dur <= 360)         score += 15;
   else if (dur <= 600)         score += 5;
   else                         score -= 10;
 
-  // 3. Mots pédagogiques dans le titre (+15 pts max)
+  // 3. Mots pédagogiques dans le titre (+20 pts max)
   if (title.includes('form') || title.includes('technique')) score += 8;
   if (title.includes('tutorial') || title.includes('tuto'))  score += 6;
   if (title.includes('how to') || title.includes('comment')) score += 5;
   if (title.includes('proper') || title.includes('correct')) score += 4;
   if (title.includes('beginner') || title.includes('basics'))score += 3;
+  if (title.includes('standards') || title.includes('movement standard')) score += 5;
 
   // 4. Popularité (signal qualité) (0–10 pts)
   if (views > 1000000)       score += 10;
@@ -244,7 +244,7 @@ async function findBestVideo(exerciseKey, query, channelId, source, usedIds) {
         query
       );
       var dur = parseDuration(detail.contentDetails && detail.contentDetails.duration || 'PT0S');
-      var isShort = dur > 0 && dur <= 60;
+      var isShort = dur > 0 && dur <= 90;
       var urlType = isShort ? 'shorts' : 'watch';
       var url = isShort
         ? 'https://www.youtube.com/shorts/' + id
