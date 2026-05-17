@@ -646,22 +646,23 @@ function generateSportProgram() {
  var restOverride = null;
  var repSuffix = '';
  var supersetNote = '';
+ var _gsEN = window.isEnglish && window.isEnglish();
  if (hasShred) {
  restOverride = '45-60s';
- repSuffix = ' (haute intensité)';
- supersetNote = ' — Superset recommandé';
+ repSuffix = _gsEN ? ' (high intensity)' : ' (haute intensité)';
+ supersetNote = _gsEN ? ' — Superset recommended' : ' — Superset recommandé';
  } else if (hasStrength) {
  // FIX P2 2026-04-16 — goal 'strength'/'force' était ignoré dans generateSportProgram.
  // Force = repos longs (3-5 min), séries basses (3-6 reps), charges lourdes (NSCA 2016).
  restOverride = '180-300s';
- repSuffix = ' (force)';
+ repSuffix = _gsEN ? ' (strength)' : ' (force)';
  } else if (hasMuscle) {
  restOverride = '90-120s';
  repSuffix = '';
  } else if (hasWeightloss) {
  // ACSM 2009: beginners need 60-90s minimum to maintain form — 30-45s is intermediate+
  restOverride = _isBeginner ? '60-90s' : '30-45s';
- repSuffix = _isBeginner ? '' : ' (circuit)';
+ repSuffix = _isBeginner ? '' : (_gsEN ? ' (circuit)' : ' (circuit)');
  }
 
  // Pregnancy: get trimester info for filtering
@@ -946,9 +947,9 @@ function generateSportProgram() {
    'ppl_3':       ['Push','Pull','Legs'],
    'upper_lower': ['Upper A','Lower A','Upper B','Lower B'],
    'ppl_plus1':   ['Push','Pull','Legs','Upper'],
-   'bro_4':       ['Pecs + Triceps','Dos + Biceps','Épaules','Jambes'],
+   'bro_4':       (window.isEnglish && window.isEnglish()) ? ['Chest + Triceps','Back + Biceps','Shoulders','Legs'] : ['Pecs + Triceps','Dos + Biceps','Épaules','Jambes'],
    'ppl_5':       ['Push A','Pull A','Legs','Push B','Pull B'],
-   'bro_5':       ['Pecs','Dos','Épaules','Bras','Jambes'],
+   'bro_5':       (window.isEnglish && window.isEnglish()) ? ['Chest','Back','Shoulders','Arms','Legs'] : ['Pecs','Dos','Épaules','Bras','Jambes'],
    'ppl_6':       ['Push A','Pull A','Legs A','Push B','Pull B','Legs B']
  };
  var _splitDayLabels = S._splitChoice ? (_SPLIT_DAY_LABELS[S._splitChoice] || null) : null;
@@ -1032,10 +1033,13 @@ function generateSportProgram() {
 // ─── INTERSTITIEL SPORT: programme existant ───
 function renderSportChoice(p) {
   var prenom = S.prenom || S.nom || '';
+  var _scEN = window.isEnglish && window.isEnglish();
   var sportLabels = {
     musculation: 'Musculation', crossfit: 'Cross Training', running: 'Running',
     hyrox: 'Hyrox', padel: 'Padel', golf: 'Golf', triathlon: 'Triathlon / IRONMAN',
-    yoga: 'Yoga & Mobilité', cycling: 'Cyclisme', calisthenics: 'Callisthénie'
+    yoga: _scEN ? 'Yoga & Mobility' : 'Yoga & Mobilité',
+    cycling: _scEN ? 'Cycling' : 'Cyclisme',
+    calisthenics: _scEN ? 'Calisthenics' : 'Callisthénie'
   };
   var sportLabel = S.sportType ? (sportLabels[S.sportType] || S.sportType) : 'Sport';
   var wrap = h('div', {style: 'display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px 28px 56px;text-align:center;min-height:65vh'});
@@ -1516,7 +1520,7 @@ function renderObjectif(p) {
    var _50reason = (window.isEnglish && window.isEnglish() ? 'Recommended for 50+ — preserves joints and improves quality of life.' : 'Recommandé pour les 50+ — préserve les articulations et améliore la qualité de vie.');
    if (_rGoalKey === 'cut' || _rGoalKey === 'shred') _50reason = (window.isEnglish && window.isEnglish() ? 'After 50, active yoga promotes gentle fat loss without joint stress — longevity first.' : 'Après 50 ans, le yoga actif favorise la perte de masse grasse douce sans stress articulaire — priorité à la longévité.');
    else if (_rGoalKey === 'bulk' || _rGoalKey === 'lean_bulk') _50reason = (window.isEnglish && window.isEnglish() ? 'After 50, mobility is the foundation — yoga prepares your joints before adding load.' : 'Après 50 ans, la mobilité est la base — le yoga prépare les articulations avant d\'ajouter de la charge.');
-   _rec = { type: 'yoga', label: 'Yoga & Mobilité', icon: '🧘',
+   _rec = { type: 'yoga', label: (window.isEnglish && window.isEnglish()) ? 'Yoga & Mobility' : 'Yoga & Mobilité', icon: '🧘',
     sub: (window.isEnglish && window.isEnglish() ? 'Mobility · Flexibility · Active recovery' : 'Mobilité · Souplesse · Récupération active'),
     reason: _50reason,
     nextStep: 19 };
@@ -3898,24 +3902,25 @@ function appendSportMedicalBanner(p, sportName) {
   // ── CONDITIONS MÉDICALES (S.medical) ──
   if (Array.isArray(S.medical) && S.medical.length > 0) {
     var _warns = [];
+    var _mbEN = window.isEnglish && window.isEnglish();
     var _ml = S.medical.map(function(m) { return String(m).toLowerCase(); });
     if (_ml.indexOf('cardio') !== -1 || _ml.indexOf('insuffisance_card') !== -1) {
-      _warns.push('\u26A0 Cardiopathie : intensité max Zone 2 (< 65% FCmax). Pas de sprints, pas d\u2019intervalles courts. Arrêtez immédiatement en cas de douleur thoracique, essoufflement anormal ou vertiges (AHA 2018).');
+      _warns.push(_mbEN ? '\u26A0 Heart condition: max Zone 2 intensity (< 65% HRmax). No sprints, no short intervals. Stop immediately if chest pain, abnormal breathlessness or dizziness (AHA 2018).' : '\u26A0 Cardiopathie : intensité max Zone 2 (< 65% FCmax). Pas de sprints, pas d\u2019intervalles courts. Arrêtez immédiatement en cas de douleur thoracique, essoufflement anormal ou vertiges (AHA 2018).');
     }
     if (_ml.indexOf('hta') !== -1 || _ml.indexOf('hta_severe') !== -1 || _ml.indexOf('hypertension') !== -1) {
-      _warns.push('\u26A0 Hypertension : évitez les efforts isométriques intenses et les sprints. Restez en Zone 1-2. Mesurez votre tension avant chaque séance (ESC/ESH 2018).');
+      _warns.push(_mbEN ? '\u26A0 Hypertension: avoid intense isometric efforts and sprints. Stay in Zone 1-2. Measure your blood pressure before each session (ESC/ESH 2018).' : '\u26A0 Hypertension : évitez les efforts isométriques intenses et les sprints. Restez en Zone 1-2. Mesurez votre tension avant chaque séance (ESC/ESH 2018).');
     }
     if (_ml.indexOf('osteoporose') !== -1 || _ml.indexOf('osteoporosis') !== -1) {
-      _warns.push('\u26A0 Ostéoporose : évitez les impacts élevés (sauts, sprints, changements de direction brusques). Privilégiez les mouvements contrôlés et la marche (NOF 2022).');
+      _warns.push(_mbEN ? '\u26A0 Osteoporosis: avoid high impacts (jumps, sprints, sudden direction changes). Favour controlled movements and walking (NOF 2022).' : '\u26A0 Ostéoporose : évitez les impacts élevés (sauts, sprints, changements de direction brusques). Privilégiez les mouvements contrôlés et la marche (NOF 2022).');
     }
     if (_ml.indexOf('diabete_t1') !== -1 || _ml.indexOf('diabete_t2') !== -1) {
-      _warns.push('\u26A0 Diabète : mesurez votre glycémie avant/après. Évitez l\u2019effort si < 4 mmol/L ou > 14 mmol/L. Gardez du sucre rapide à portée (ADA 2023).');
+      _warns.push(_mbEN ? '\u26A0 Diabetes: measure blood glucose before/after. Avoid exercise if < 4 mmol/L or > 14 mmol/L. Keep fast sugar nearby (ADA 2023).' : '\u26A0 Diabète : mesurez votre glycémie avant/après. Évitez l\u2019effort si < 4 mmol/L ou > 14 mmol/L. Gardez du sucre rapide à portée (ADA 2023).');
     }
     if (_ml.indexOf('polyarthrite') !== -1 || _ml.indexOf('arthrite') !== -1 || _ml.indexOf('rheumatoid') !== -1) {
-      _warns.push('\u26A0 Arthrite : évitez les impacts répétés et les charges lourdes. Privilégiez les mouvements doux à amplitude contrôlée. Arrêtez en cas de poussée inflammatoire (EULAR 2020).');
+      _warns.push(_mbEN ? '\u26A0 Arthritis: avoid repeated impacts and heavy loads. Favour gentle movements with controlled range. Stop during inflammatory flares (EULAR 2020).' : '\u26A0 Arthrite : évitez les impacts répétés et les charges lourdes. Privilégiez les mouvements doux à amplitude contrôlée. Arrêtez en cas de poussée inflammatoire (EULAR 2020).');
     }
     if (_ml.indexOf('fibromyalgie') !== -1) {
-      _warns.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode('\u26A0 Fibromyalgie : intensité légère uniquement (')); _el.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _el.appendChild(document.createTextNode(' max 5/10). Progression très graduelle. Évitez l\u2019épuisement (Häuser, Cochrane 2017).')); return _el; })());
+      _warns.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode(_mbEN ? '\u26A0 Fibromyalgia: light intensity only (' : '\u26A0 Fibromyalgie : intensité légère uniquement (')); _el.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _el.appendChild(document.createTextNode(_mbEN ? ' max 5/10). Very gradual progression. Avoid exhaustion (Häuser, Cochrane 2017).' : ' max 5/10). Progression très graduelle. Évitez l\u2019épuisement (Häuser, Cochrane 2017).')); return _el; })());
     }
     if (_warns.length > 0) {
       var _mc = h('div', {style: 'border-left:3px solid var(--orange,#E86F1E);background:rgba(232,111,30,0.06);padding:12px 16px;margin-bottom:12px'});
@@ -3927,24 +3932,25 @@ function appendSportMedicalBanner(p, sportName) {
   // ── CONDITIONS MUSCU-SPÉCIFIQUES (S.muscuMedical) ──
   if (S.muscuMedical && S.muscuMedical.done) {
     var _mw = [];
+    var _mwEN = window.isEnglish && window.isEnglish();
     if (S.muscuMedical.knees || S.muscuMedical.acl || S.muscuMedical.meniscus || S.muscuMedical.kneeOsteoarthritis) {
-      _mw.push('\u26A0 Genoux : évitez les sauts, changements de direction brusques, sprints et descentes. Privilégiez le vélo ou la natation.');
+      _mw.push(_mwEN ? '\u26A0 Knees: avoid jumps, sudden direction changes, sprints and descents. Favour cycling or swimming.' : '\u26A0 Genoux : évitez les sauts, changements de direction brusques, sprints et descentes. Privilégiez le vélo ou la natation.');
     }
     if (S.muscuMedical.lowerBack || S.muscuMedical.herniaDisc || S.muscuMedical.spondylarthritis) {
-      _mw.push('\u26A0 Dos / Hernie : évitez les impacts, rotations sous charge et positions prolongées penchées. Gainage et mobilité recommandés.');
+      _mw.push(_mwEN ? '\u26A0 Back / Herniated disc: avoid impacts, loaded rotations and prolonged forward bends. Core work and mobility recommended.' : '\u26A0 Dos / Hernie : évitez les impacts, rotations sous charge et positions prolongées penchées. Gainage et mobilité recommandés.');
     }
     if (S.muscuMedical.shoulders || S.muscuMedical.rotatorCuff) {
-      _mw.push('\u26A0 Épaules : évitez les mouvements au-dessus de la tête et les gestes balistiques (service, smash, swing).');
+      _mw.push(_mwEN ? '\u26A0 Shoulders: avoid overhead movements and ballistic gestures (serve, smash, swing).' : '\u26A0 Épaules : évitez les mouvements au-dessus de la tête et les gestes balistiques (service, smash, swing).');
     }
     if (S.muscuMedical.elbows || S.muscuMedical.epicondylitis) {
-      _mw.push('Coudes / Épicondylite : évitez les gestes répétitifs en pronation/supination forcée. Protégez avec une coudière.');
+      _mw.push(_mwEN ? 'Elbows / Epicondylitis: avoid repetitive pronation/supination movements. Use an elbow brace.' : 'Coudes / Épicondylite : évitez les gestes répétitifs en pronation/supination forcée. Protégez avec une coudière.');
     }
     if (S.muscuMedical.feet) {
-      _mw.push('\u26A0 Pieds / Fasciite : évitez les impacts répétés (course, sauts). Semelles adaptées obligatoires.');
+      _mw.push(_mwEN ? '\u26A0 Feet / Fasciitis: avoid repeated impacts (running, jumps). Adapted insoles mandatory.' : '\u26A0 Pieds / Fasciite : évitez les impacts répétés (course, sauts). Semelles adaptées obligatoires.');
     }
     var _mlMu = Array.isArray(S.medical) ? S.medical.map(function(m){return String(m).toLowerCase();}) : [];
     if (S.muscuMedical.hypertension && _mlMu.indexOf('hta') === -1 && _mlMu.indexOf('hta_severe') === -1 && _mlMu.indexOf('hypertension') === -1) {
-      _mw.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode('\u26A0 HTA (profil muscu) : pas d\u2019efforts isométriques maximaux. ')); _el.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _el.appendChild(document.createTextNode(' max 6/10. Restez en Zone 1-2.')); return _el; })());
+      _mw.push((function(){ var _el = document.createElement('span'); _el.appendChild(document.createTextNode(_mwEN ? '\u26A0 Hypertension (strength profile): no maximal isometric efforts. ' : '\u26A0 HTA (profil muscu) : pas d\u2019efforts isométriques maximaux. ')); _el.appendChild(termTooltip('RPE', 'Rate of Perceived Exertion — effort perçu sur 10 (7/10 = effort modéré, grosses dernières reps)')); _el.appendChild(document.createTextNode(_mwEN ? ' max 6/10. Stay in Zone 1-2.' : ' max 6/10. Restez en Zone 1-2.')); return _el; })());
     }
     if (_mw.length > 0) {
       var _mwc = h('div', {style: 'border-left:3px solid var(--error,#7A1F1F);background:rgba(122,31,31,0.04);padding:12px 16px;margin-bottom:12px'});
@@ -12273,7 +12279,7 @@ function renderYogaProgram(p) {
 function renderCyclingOnboarding(p) {
  var backArrow = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
- p.appendChild(h('div', {'class': 'eyebrow'}, 'Cyclisme'));
+ p.appendChild(h('div', {'class': 'eyebrow'}, (window.isEnglish && window.isEnglish()) ? 'Cycling' : 'Cyclisme'));
  p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish() ? 'Your<br><em>cycling plan</em>' : 'Votre plan<br><em>vélo</em>')}));
  p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Plan based on FTP zones (Andy Coggan method)' : 'Plan basé sur les zones FTP (méthode Andy Coggan)')));
 
@@ -12453,7 +12459,7 @@ function renderCyclingProgram(p) {
  var goalNames = window.isEnglish && window.isEnglish() ? { weightloss: 'Weight loss', endurance: 'Base endurance', competitive: 'Competitive athlete', granfondo: 'Gran Fondo', triathlon: 'Triathlon' } : { weightloss: 'Perte de poids', endurance: 'Endurance de base', competitive: 'Sportif compétitif', granfondo: 'Gran Fondo', triathlon: 'Triathlon' };
  var bikeNames = { road: 'Route ', vtt: 'VTT ', indoor: 'Indoor ', gravel: 'Gravel ' };
 
- p.appendChild(h('div', {'class': 'eyebrow'}, 'Cyclisme'));
+ p.appendChild(h('div', {'class': 'eyebrow'}, (window.isEnglish && window.isEnglish()) ? 'Cycling' : 'Cyclisme'));
  p.appendChild(h('h1', {html: (goalNames[S.cyclingGoal] || 'Cyclisme') + ((window.isEnglish && window.isEnglish()) ? '<br><em>8-week plan</em>' : '<br><em>Plan 8 semaines</em>')}));
 
  var speedTarget = S.cyclingSpeed ? Math.round(S.cyclingSpeed * 1.08) : null;
@@ -12619,7 +12625,7 @@ function renderCyclingProgram(p) {
 
 // ─── STEP 24: CALISTHENICS ONBOARDING ───
 function renderCalisthenicsOnboarding(p) {
- p.appendChild(h('div', {'class': 'eyebrow'}, 'Callisthenie'));
+ p.appendChild(h('div', {'class': 'eyebrow'}, (window.isEnglish && window.isEnglish()) ? 'Calisthenics' : 'Callisthenie'));
  p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish()) ? 'Your calisthenics<br><em>program</em>' : 'Votre programme<br><em>callisthenie</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish()) ? 'Street workout — bodyweight progressions. Adapted to your actual level.' : 'Street workout — progressions au poids du corps. Personnalise selon votre niveau reel.'));
 
