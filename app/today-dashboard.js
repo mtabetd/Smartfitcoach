@@ -5169,7 +5169,7 @@ function renderExtendedSections(wrapper, S) {
       (insights.patterns && insights.patterns.length > 0)
     );
     if (hasAnyData) {
-      wrapper.appendChild(sectionLabel('Bilan 7 jours'));
+      wrapper.appendChild(sectionLabel(_exEN ? '7-day summary' : 'Bilan 7 jours'));
       var insightsBox = card();
 
       // Stats principales — grille 2x2 sobre
@@ -5247,7 +5247,7 @@ function renderExtendedSections(wrapper, S) {
     if (typeof window.getWeeklyGoalsProgress === 'function') {
       var goals = window.getWeeklyGoalsProgress();
       if (goals) {
-        wrapper.appendChild(sectionLabel('Objectifs cette semaine'));
+        wrapper.appendChild(sectionLabel(_exEN ? 'Weekly goals' : 'Objectifs cette semaine'));
         var goalsBox = card();
 
         // Helper : row progress avec label + progress bar + valeur
@@ -7363,16 +7363,16 @@ function renderFabLogger() {
           if (window.AI_COACH) window.AI_COACH.open();
           if (window.render) window.render();
         } },
-      { label: 'REPAS', icon: 'M4 5h8M4 8h8M4 11h8', action: function() {
+      { label: (window.isEnglish && window.isEnglish()) ? 'MEAL' : 'REPAS', icon: 'M4 5h8M4 8h8M4 11h8', action: function() {
           S._fabOpen = false;
           S._quickAddSlot = getDefaultMealSlot();
           if (window.render) window.render();
         } },
-      { label: 'POIDS', icon: 'M3 7h10v6H3zM6 7V4h4v3', action: function() {
+      { label: (window.isEnglish && window.isEnglish()) ? 'WEIGHT' : 'POIDS', icon: 'M3 7h10v6H3zM6 7V4h4v3', action: function() {
           S._modalQuickWeight = true; S._fabOpen = false;
           if (window.render) window.render();
         } },
-      { label: 'EAU', icon: 'M8 2C8 2 4 7 4 10a4 4 0 1 0 8 0c0-3-4-8-4-8z', action: function() {
+      { label: (window.isEnglish && window.isEnglish()) ? 'WATER' : 'EAU', icon: 'M8 2C8 2 4 7 4 10a4 4 0 1 0 8 0c0-3-4-8-4-8z', action: function() {
           S._fabOpen = false;
           if (window.WATER_TRACKER) {
             var _wd = WATER_TRACKER.addGlass();
