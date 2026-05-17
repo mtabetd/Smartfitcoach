@@ -512,6 +512,23 @@ body.dark-mode .profile-photo-frame.has-photo {
   transform: translateX(2px);
 }
 
+.exercise-video--soon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 11px;
+  color: var(--grey, #6B6B65);
+  margin-top: 10px;
+  border: 1.5px solid var(--line, #D8D8D0);
+  padding: 6px 12px;
+  border-radius: 2px;
+  letter-spacing: 0.5px;
+  cursor: default;
+  user-select: none;
+  opacity: 0.6;
+}
+
 .exercise-name {
   font-family: Georgia, serif;
   font-size: 18px;

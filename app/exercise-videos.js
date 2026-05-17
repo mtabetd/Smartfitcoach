@@ -121,14 +121,16 @@
 
   // Métadonnées de version — utile pour audits et diagnostics
   var _META = {
-    version:          '6.0',
+    version:          '6.1',
     urlStrategy:      'verified-direct-only',      // watch?v= / shorts/ + verified:true ONLY
-    fallbackStrategy: 'none',                      // NO search fallback — missing = no button shown
-    exerciseCoverage: 414,                         // entrées CURATED_QUERIES (kept for future use)
-    cfCoverage:       101,                         // entrées CF_QUERIES (kept for future use)
+    fallbackStrategy: 'none',                      // NO search fallback — missing = disabled UX state
+    exerciseCoverage: 414,                         // entrées CURATED_QUERIES
+    cfCoverage:       101,                         // entrées CF_QUERIES
     directRegistry:   true,                        // DIRECT_VIDEO_REGISTRY actif
-    directRegistrySize: 60,                        // clés avec au moins une URL directe
-    verifiedCount:    34,                          // entrées verified:true après audit 2026-05
+    directRegistrySize: 48,                        // clés dans le registre (nettoyé 2026-05)
+    verifiedCount:    29,                          // entrées verified:true (clés canoniques)
+    aliasCount:       45,                          // CF_ALIASES + EXERCISE_ALIASES qui résolvent vers une entrée vérifiée
+    cascadeFixed:     true,                        // cascade fr→en quand fr est verified:false
     strictMode:       true,                        // aucune vidéo non-vérifiée affichée
     auditDate:        '2026-05'
   };
@@ -224,29 +226,17 @@
     'clean and jerk': {
       cf: { url: 'https://www.youtube.com/shorts/PjY1rH4_MOA', verified: false, source: 'CrossFit', score: 70 },
     },
-    'clean jerk': {
-      cf: { url: 'https://www.youtube.com/shorts/PjY1rH4_MOA', verified: false, source: 'CrossFit', score: 70 },
-    },
     'power clean': {
       cf: { url: 'https://www.youtube.com/shorts/Sk1vhXhHO_A', verified: false, source: 'CrossFit', score: 75 },
     },
     'hang power clean': {
       cf: { url: 'https://www.youtube.com/shorts/DaKC_BEN5bk', verified: false, source: 'CrossFit', score: 72 },
     },
-    'hang power cleans': {
-      cf: { url: 'https://www.youtube.com/shorts/DaKC_BEN5bk', verified: false, source: 'CrossFit', score: 58 },
-    },
     'hang clean': {
       cf: { url: 'https://www.youtube.com/shorts/DaKC_BEN5bk', verified: false, source: 'CrossFit', score: 85 },
     },
-    'hang cleans': {
-      cf: { url: 'https://www.youtube.com/shorts/DaKC_BEN5bk', verified: false, source: 'CrossFit', score: 65 },
-    },
     'hang squat clean': {
       cf: { url: 'https://www.youtube.com/shorts/DaKC_BEN5bk', verified: false, source: 'CrossFit', score: 72 },
-    },
-    'hang squat cleans': {
-      cf: { url: 'https://www.youtube.com/shorts/DaKC_BEN5bk', verified: false, source: 'CrossFit', score: 58 },
     },
     'clean': {
       cf: { url: 'https://www.youtube.com/shorts/KwYJTpQ_x5A', verified: false, source: 'CrossFit', score: 70 },
@@ -278,32 +268,14 @@
     'muscle up anneau': {
       cf: null,
     },
-    'muscle up barre': {
-      cf: { url: 'https://www.youtube.com/shorts/o69WaY_7k2c', verified: false, source: 'CrossFit', score: 60 },
-    },
     'bar muscle up': {
       cf: { url: 'https://www.youtube.com/shorts/o69WaY_7k2c', verified: true, source: 'CrossFit', score: 80 },
-    },
-    'bar muscle ups': {
-      cf: { url: 'https://www.youtube.com/shorts/o69WaY_7k2c', verified: false, source: 'CrossFit', score: 67 },
     },
     'kipping pull up': {
       cf: { url: 'https://www.youtube.com/shorts/bMnS7IO5a5M', verified: true, source: 'CrossFit', score: 80 },
     },
-    'kipping pull up speed': {
-      cf: { url: 'https://www.youtube.com/shorts/bMnS7IO5a5M', verified: false, source: 'CrossFit', score: 67 },
-    },
     'chest to bar': {
       cf: { url: 'https://www.youtube.com/shorts/AyPTCEXTjOo', verified: true, source: 'CrossFit', score: 80 },
-    },
-    'chest to bar pull ups': {
-      cf: { url: 'https://www.youtube.com/shorts/AyPTCEXTjOo', verified: false, source: 'CrossFit', score: 70 },
-    },
-    'c2b': {
-      cf: { url: 'https://www.youtube.com/shorts/AyPTCEXTjOo', verified: false, source: 'CrossFit', score: 40 },
-    },
-    'c2b pull ups': {
-      cf: { url: 'https://www.youtube.com/watch?v=Mk47nndUMHw', verified: false, source: 'CrossFit', score: 57 },
     },
     'toes to bar': {
       cf: { url: 'https://www.youtube.com/shorts/xX9Hzi7Onnw', verified: true, source: 'CrossFit', score: 80 },
@@ -316,12 +288,6 @@
     },
     'handstand push up': {
       cf: { url: 'https://www.youtube.com/shorts/0wDEO6shVjc', verified: true, source: 'CrossFit', score: 80 },
-    },
-    'handstand push ups': {
-      cf: { url: 'https://www.youtube.com/shorts/0wDEO6shVjc', verified: false, source: 'CrossFit', score: 67 },
-    },
-    'hspu': {
-      cf: { url: 'https://www.youtube.com/shorts/9wIkPCS4Mbo', verified: false, source: 'CrossFit', score: 40 },
     },
     'ring dip': {
       cf: { url: 'https://www.youtube.com/shorts/Vt0lO4jpIDo', verified: true, source: 'CrossFit', score: 80 },
@@ -386,13 +352,14 @@
     }
     var levelKey = _registryLevelKey(lv, isCF);
     var video = entry[levelKey];
-    // Cascade niveau : advanced → en_any → fr_beginner (et en_any → fr_beginner en dernier recours)
-    if (!video && levelKey === 'advanced')    video = entry['en_any'] || entry['fr_beginner'];
-    if (!video && levelKey === 'en_any')      video = entry['fr_beginner'];
-    if (!video && levelKey === 'fr_beginner') video = entry['en_any'];
+    // Cascade: also cascade when the preferred-language entry exists but is not verified.
+    // A verified EN video beats no video for a FR user.
+    function _notVerified(v) { return !v || !v.url || !v.verified; }
+    if (_notVerified(video) && levelKey === 'advanced')    video = entry['en_any'] || entry['fr_beginner'];
+    if (_notVerified(video) && levelKey === 'en_any')      video = entry['fr_beginner'];
+    if (_notVerified(video) && levelKey === 'fr_beginner') video = entry['en_any'];
     // STRICT MODE: only serve URLs where verified === true
-    // verified: false entries are blocked — no wrong video beats no video
-    if (!video || !video.url || !video.verified) return null;
+    if (_notVerified(video)) return null;
     return video.url;
   }
 
@@ -1246,13 +1213,35 @@
   // ─── Aliases CrossFit / Hyrox : abréviations → clé CF_QUERIES ───────────
   // Règle : n'ajoutez PAS une clé déjà présente dans CF_QUERIES — l'alias serait mort.
   var CF_ALIASES = {
+    // Toes to bar
     't2b':                     'toes to bar',
     'ttb':                     'toes to bar',
+    // Muscle up
     'mu':                      'muscle up',
     'ring mu':                 'muscle up anneau',
+    // Bar muscle up (plural/variant → canonical verified entry)
     'bmu':                     'bar muscle up',
     'bmup':                    'bar muscle up',
+    'bar muscle ups':          'bar muscle up',
+    'muscle up barre':         'bar muscle up',
+    // Kipping pull up (speed variant → same technique video)
+    'kipping pull up speed':   'kipping pull up',
+    'kipping':                 'kipping pull up',
+    'kip':                     'kipping pull up',
+    // Chest to bar (plural/abbreviations → canonical verified entry)
+    'chest to bar pull ups':   'chest to bar',
+    'c2b':                     'chest to bar',
+    'c2b pull ups':            'chest to bar',
+    // Handstand push up (plural/abbrev → canonical verified entry)
+    'handstand push ups':      'handstand push up',
+    'hspu':                    'handstand push up',
     'hs push up':              'handstand push up',
+    // Clean variants (plural/compound → primary entry)
+    'clean jerk':              'clean and jerk',
+    'hang power cleans':       'hang power clean',
+    'hang cleans':             'hang clean',
+    'hang squat cleans':       'hang squat clean',
+    // Common abbreviations
     'du':                      'double unders',
     'dus':                     'double unders',
     'american swing':          'american kettlebell swing',
@@ -1260,8 +1249,6 @@
     'p clean':                 'power clean',
     'c&j':                     'clean and jerk',
     'ohs':                     'overhead squat',
-    'kipping':                 'kipping pull up',
-    'kip':                     'kipping pull up',
     'wbs':                     'wall balls',
     'wb':                      'wall ball',
     'bj':                      'box jump',
@@ -1553,7 +1540,7 @@
       });
       return { exercises: total, withDirectVideo: withVideo, verified: verified, pendingVerification: pending };
     },
-    // Données accessibles pour audit / debug
+    // Données accessibles pour audit / debug / tests
     _DIRECT_REGISTRY:   DIRECT_VIDEO_REGISTRY,
     _CURATED_QUERIES:   CURATED_QUERIES,
     _CF_QUERIES:        CF_QUERIES,
@@ -1562,7 +1549,8 @@
     _CF_ALIASES:        CF_ALIASES,
     _SOURCES:           TRUSTED_VIDEO_SOURCES,
     _META:              _META,
-    _CHANNELS:          CHANNELS
+    _CHANNELS:          CHANNELS,
+    _normalizeName:     _normalizeName
   };
 
   // Compatibilité avec l'ancien appel getExerciseVideoUrl (app-sport.js legacy)

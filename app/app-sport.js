@@ -4694,6 +4694,8 @@ function renderCrossfitProgram(p) {
    : null;
  if (haltVideoUrl) {
    haltCard.appendChild(h('a', {'class': 'exercise-video', href: haltVideoUrl, target: '_blank', rel: 'noopener'}, (window.isEnglish && window.isEnglish() ? '▶ Watch technique' : '▶ Voir la technique')));
+ } else {
+   haltCard.appendChild(h('div', {'class': 'exercise-video--soon'}, (window.isEnglish && window.isEnglish() ? '▷ Video coming soon' : '▷ Vidéo bientôt disponible')));
  }
  p.appendChild(haltCard);
  } else {
@@ -4712,6 +4714,8 @@ function renderCrossfitProgram(p) {
    : null;
  if (gymVideoUrlTop) {
    gymSkillCard.appendChild(h('a', {'class': 'exercise-video', href: gymVideoUrlTop, target: '_blank', rel: 'noopener', style: 'margin-top:8px'}, (window.isEnglish && window.isEnglish() ? '▶ Watch technique' : '▶ Voir la technique')));
+ } else {
+   gymSkillCard.appendChild(h('div', {'class': 'exercise-video--soon', style: 'margin-top:8px'}, (window.isEnglish && window.isEnglish() ? '▷ Video coming soon' : '▷ Vidéo bientôt disponible')));
  }
  p.appendChild(gymSkillCard);
  }
@@ -4829,6 +4833,8 @@ function renderCrossfitProgram(p) {
    : null;
  if (gymVideoUrl) {
    gymCard.appendChild(h('a', {'class': 'exercise-video', href: gymVideoUrl, target: '_blank', rel: 'noopener', style: 'margin-top:8px'}, (window.isEnglish && window.isEnglish() ? '▶ Watch technique' : '▶ Voir la technique')));
+ } else {
+   gymCard.appendChild(h('div', {'class': 'exercise-video--soon', style: 'margin-top:8px'}, (window.isEnglish && window.isEnglish() ? '▷ Video coming soon' : '▷ Vidéo bientôt disponible')));
  }
  p.appendChild(gymCard);
  }
@@ -8472,6 +8478,8 @@ function renderMusculationProgram(p) {
  if (count >= 20 && window.GAMIFICATION) GAMIFICATION.unlockBadge('exercises_20');
  }}, '\u25b6 ' + (window.isEnglish && window.isEnglish() ? 'View technique' : 'Voir la technique'));
  card.appendChild(vlink);
+ } else {
+ card.appendChild(h('div', {'class': 'exercise-video--soon'}, '\u25b7 ' + (window.isEnglish && window.isEnglish() ? 'Video coming soon' : 'Vid\u00e9o bient\u00f4t disponible')));
  }
 
  // ─── Weight/Load tracking ───
@@ -10644,7 +10652,6 @@ function renderSportModal(app) {
    ? window.EXERCISE_VIDEOS.buildSmartVideoUrl(ex.n, _detailExoLv)
    : (ex.video || (window.getExerciseVideoUrl ? window.getExerciseVideoUrl(ex.n) : null));
  if (_detailVideoUrl) {
- // 2026-04 UX-1 : lien direct (plus de modal intermédiaire)
  body.appendChild(h('a', {
  'class': 'btn-primary', href: _detailVideoUrl, target: '_blank', rel: 'noopener',
  style: 'display:block;text-align:center;text-decoration:none;margin-top:16px',
@@ -10652,6 +10659,11 @@ function renderSportModal(app) {
    window.BLACKBOX && window.BLACKBOX.log('video_clicked', {exercise: ex.n});
  }
  }, (window.isEnglish && window.isEnglish() ? '▶ Watch guided video' : '▶ Voir la vidéo guidée')));
+ } else {
+ body.appendChild(h('div', {
+   'class': 'exercise-video--soon',
+   style: 'display:block;text-align:center;margin-top:16px;padding:12px;border:1px solid var(--line,#D8D8D0);border-radius:2px'
+ }, (window.isEnglish && window.isEnglish() ? '▷ Guided video coming soon' : '▷ Vidéo guidée bientôt disponible')));
  }
 
  sheet.appendChild(body);
