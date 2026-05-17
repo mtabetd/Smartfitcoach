@@ -216,16 +216,17 @@ function _updateDateFromDuration() {
   var dur  = document.getElementById('modal-duration').value;
   var durationField = document.getElementById('modal-duration-field');
 
+  var dateEl = document.getElementById('modal-date');
   if (tier === 'unlimited') {
     durationField.style.display = 'none';
-    document.getElementById('modal-date').value = '2099-12-31';
+    if (dateEl) dateEl.value = '2099-12-31';
     return;
   }
   if (tier === 'trial') {
     durationField.style.display = 'none';
     var t = new Date();
     t.setUTCDate(t.getUTCDate() + 7);
-    document.getElementById('modal-date').value = t.toISOString().slice(0, 10);
+    if (dateEl) dateEl.value = t.toISOString().slice(0, 10);
     return;
   }
   durationField.style.display = 'block';
@@ -234,7 +235,7 @@ function _updateDateFromDuration() {
   else if (dur === '3m')  d.setMonth(d.getMonth() + 3);
   else if (dur === '6m')  d.setMonth(d.getMonth() + 6);
   else if (dur === '12m') d.setFullYear(d.getFullYear() + 1);
-  document.getElementById('modal-date').value = d.toISOString().slice(0, 10);
+  if (dateEl) dateEl.value = d.toISOString().slice(0, 10);
 }
 
 function openModal(userId, name, currentPlan, currentEnd) {
@@ -257,10 +258,11 @@ function openModal(userId, name, currentPlan, currentEnd) {
   }
 
   // If we have an existing end date, keep it; otherwise compute from duration
+  var _dateEl = document.getElementById('modal-date');
   if (currentEnd) {
-    document.getElementById('modal-date').value = currentEnd;
+    if (_dateEl) _dateEl.value = currentEnd.slice(0, 10);
     var durationField = document.getElementById('modal-duration-field');
-    durationField.style.display = (tierEl.value === 'trial' || tierEl.value === 'unlimited') ? 'none' : 'block';
+    if (durationField) durationField.style.display = (tierEl.value === 'trial' || tierEl.value === 'unlimited') ? 'none' : 'block';
   } else {
     _updateDateFromDuration();
   }
@@ -279,7 +281,8 @@ function closeModal() {
 async function saveSubscription() {
   if (!_editingUserId || !_accessToken) return;
   var plan = document.getElementById('modal-tier').value;
-  var endDate = document.getElementById('modal-date').value;
+  var _dEl = document.getElementById('modal-date');
+  var endDate = _dEl ? _dEl.value : '';
   if (plan === 'unlimited') endDate = '2099-12-31';
 
   try {
