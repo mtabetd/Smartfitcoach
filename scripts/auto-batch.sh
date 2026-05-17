@@ -10,13 +10,14 @@ if [ -z "$YOUTUBE_API_KEY" ]; then echo "ERR: YOUTUBE_API_KEY absent de .env"; e
 LOG="registry-auto-$(date +%Y%m%d-%H%M).log"
 echo "=== AUTO BATCH START $(date -u) ===" | tee "$LOG"
 
-# check_quota_for_search : vérifie qu'on a assez de quota pour search.list (100 unités)
-# Utilise search.list avec maxResults=1 (100 unités) — si 403 = quota épuisé
+# check_quota : vérifie que le quota API est disponible via videos.list (1 unité)
+# videos.list et search.list partagent le même budget journalier — 1 unité suffit
+# pour confirmer le reset, sans gaspiller 100 unités par poll.
 check_quota() {
   node -e "
     var https=require('https'),fs=require('fs');
     fs.readFileSync('.env','utf8').split('\n').forEach(function(l){var m=l.match(/^([A-Z0-9_]+)=(.+)\$/);if(m)process.env[m[1]]=m[2].trim();});
-    https.get('https://www.googleapis.com/youtube/v3/search?part=id&q=bench+press&type=video&maxResults=1&channelId=UCe0TLA0EsQbE-MjuHXevj2A&key='+process.env.YOUTUBE_API_KEY,function(r){
+    https.get('https://www.googleapis.com/youtube/v3/videos?part=id&id=dQw4w9WgXcQ&key='+process.env.YOUTUBE_API_KEY,function(r){
       var d='';r.on('data',function(c){d+=c;});r.on('end',function(){
         try{var p=JSON.parse(d);if(p.error&&p.error.code===403)process.exit(1);else process.exit(0);}catch(e){process.exit(1);}
       });
