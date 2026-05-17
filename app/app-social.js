@@ -564,7 +564,7 @@ function renderProfileSetup(container){
       // Inclut la photo thumbnail si sélectionnée
       if (usePhoto && selectedPhotoUrl) payload.avatar_url = selectedPhotoUrl;
       await createOrUpdateProfile(payload);
-      _toast('Pseudo confirmé', 'success');
+      _toast((window.isEnglish && window.isEnglish()) ? 'Username confirmed' : 'Pseudo confirmé', 'success');
       // Re-render la vue social (on passe au hub)
       if (window.render) window.render();
     } catch(e){
@@ -703,7 +703,7 @@ function _postCard(post){
       style:'background:none;border:none;color:var(--grey3);cursor:pointer;font-size:16px;padding:4px 8px',
       onclick: async function(){
         if (!(window.sfcConfirm || confirm)('Supprimer ce post ?')) return;
-        try { await deletePost(post.id); _toast('Supprimé', 'success'); await loadFeed(); window.render(); }
+        try { await deletePost(post.id); _toast((window.isEnglish && window.isEnglish()) ? 'Deleted' : 'Supprimé', 'success'); await loadFeed(); window.render(); }
         catch(e){ _toast('Erreur de suppression', 'error'); }
       }
     }, '×'));
@@ -1029,12 +1029,12 @@ function _friendRow(f, kind){
   } else { // friend
     actions.appendChild(_act('Retirer', async function(){
       if (!(window.sfcConfirm || confirm)((window.isEnglish && window.isEnglish()) ? ('Remove ' + f.pseudo + ' from your friends?') : ('Retirer ' + f.pseudo + ' de vos amis ?'))) return;
-      try { await removeFriend(f._fsId); _toast('Ami retiré'); await loadFriendships(); window.render(); }
+      try { await removeFriend(f._fsId); _toast((window.isEnglish && window.isEnglish()) ? 'Friend removed' : 'Ami retiré'); await loadFriendships(); window.render(); }
       catch(e){ _toast('Erreur', 'error'); }
     }));
     actions.appendChild(_act('Bloquer', async function(){
       if (!(window.sfcConfirm || confirm)((window.isEnglish && window.isEnglish()) ? ('Block ' + f.pseudo + '? This person will no longer be able to contact you.') : ('Bloquer ' + f.pseudo + ' ? Cette personne ne pourra plus vous contacter.'))) return;
-      try { await blockUser(f.id); _toast('Utilisateur bloqué', 'success'); await loadFriendships(); window.render(); }
+      try { await blockUser(f.id); _toast((window.isEnglish && window.isEnglish()) ? 'User blocked' : 'Utilisateur bloqué', 'success'); await loadFriendships(); window.render(); }
       catch(e){ _toast('Erreur de blocage', 'error'); }
     }));
   }
@@ -1190,7 +1190,7 @@ function renderComposePost(container){
         title: title,
         text: sanitizeText(descInput.value)
       }, true);
-      _toast('Publié', 'success');
+      _toast((window.isEnglish && window.isEnglish()) ? 'Published' : 'Publié', 'success');
       window.S.socialView = null;
       window.S.socialTab = 'feed';
       await loadFeed();
@@ -1323,7 +1323,7 @@ function renderEditProfile(container){
         avatar_url: currentPhotoUrl,   // null = retirer la photo
         bio: sanitizeText(bioInput.value)
       });
-      _toast('Profil mis à jour', 'success');
+      _toast((window.isEnglish && window.isEnglish()) ? 'Profile updated' : 'Profil mis à jour', 'success');
       window.S.socialView = null;
       window.render();
     } catch(e){
