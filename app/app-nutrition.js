@@ -3105,11 +3105,15 @@ function renderStep9(p) {
   // NOTE : on ne touche plus au plan si hash change. La bannière ci-dessous informe l'user.
   // Guard: si weekPlan est toujours null/vide après génération, afficher un message d'erreur
   if (!S.weekPlan || !S.weekPlan.length) {
-    // BUG-3 FIX: bilingual empty-plan error message
     var _isEn3 = window.isEnglish && window.isEnglish();
-    p.appendChild(h('div', {style: 'padding:20px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'},
-      _isEn3 ? 'Some information is missing to generate your plan. Complete the previous steps.' : 'Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes.'));
-    p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(11); }}, (window.isEnglish && window.isEnglish() ? '\u2190 Back to results' : '\u2190 Retour aux résultats')));
+    var _emptyBox = h('div', { style: 'padding:32px 20px;text-align:center;' });
+    _emptyBox.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:20px;margin-bottom:12px;font-weight:normal;color:var(--black,#0A0A09);line-height:1.3;' }, _isEn3 ? 'Your plan could not be generated' : 'Votre plan n\'a pas pu être généré'));
+    _emptyBox.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);margin-bottom:24px;line-height:1.6;max-width:280px;margin-left:auto;margin-right:auto;' }, _isEn3 ? 'Some required information is missing. Complete the previous steps to unlock your personalized plan.' : 'Certaines informations nécessaires sont manquantes. Complétez les étapes précédentes pour débloquer votre plan personnalisé.'));
+    var _emptyBtns = h('div', { style: 'display:flex;flex-direction:column;gap:10px;max-width:240px;margin:0 auto;' });
+    _emptyBtns.appendChild(h('button', { 'class': 'btn-primary', onclick: function() { goStep(1); } }, _isEn3 ? 'Complete my profile' : 'Compléter mon profil'));
+    _emptyBtns.appendChild(h('button', { 'class': 'btn-secondary', onclick: function() { goStep(11); } }, _isEn3 ? '← Back to results' : '← Retour aux résultats'));
+    _emptyBox.appendChild(_emptyBtns);
+    p.appendChild(_emptyBox);
     return;
   }
   // (reset selectedDay déjà fait en haut de fonction avant calcul _nm)
