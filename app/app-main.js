@@ -586,9 +586,10 @@ window.renderWelcomeScreen = function renderWelcomeScreen(app) {
  var _name = (window.S && typeof window.S.prenom === 'string' && window.S.prenom.trim())
    || _nameFromAuth || '';
  var _cap = _name ? _name.charAt(0).toUpperCase() + _name.slice(1) : '';
- var _titleText = _cap
-   ? (_cap + ', nous allons apprendre \u00e0 vous conna\u00eetre.')
-   : 'Nous allons apprendre \u00e0 vous conna\u00eetre.';
+ var _wsEN = window.isEnglish && window.isEnglish();
+ var _titleText = _wsEN
+   ? (_cap ? (_cap + ', let\u2019s get to know you.') : 'Let\u2019s get to know you.')
+   : (_cap ? (_cap + ', nous allons apprendre \u00e0 vous conna\u00eetre.') : 'Nous allons apprendre \u00e0 vous conna\u00eetre.');
 
  var wrap = h('div', {
    style: 'position:fixed;inset:0;background:var(--ivory,#FAF9F6);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;overflow-y:auto;'
@@ -609,23 +610,23 @@ window.renderWelcomeScreen = function renderWelcomeScreen(app) {
 
  var sousTitre = h('div', {
    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:400;letter-spacing:.35em;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:40px;opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;'
- }, 'Votre corps a une logique. Nous allons la lire.');
+ }, _wsEN ? 'Your body has a logic. We are going to read it.' : 'Votre corps a une logique. Nous allons la lire.');
 
  // Corps phrase 1 — courte, italique, noire
  var corps1 = h('div', {
    style: 'font-family:Georgia,serif;font-style:italic;font-size:15px;line-height:1.75;color:var(--black,#0A0A09);max-width:300px;margin-bottom:24px;opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;'
- }, 'Avant de vous proposer quoi que ce soit, nous vous \u00e9coutons.');
+ }, _wsEN ? 'Before suggesting anything, we listen.' : 'Avant de vous proposer quoi que ce soit, nous vous \u00e9coutons.');
 
  // Corps phrase 2 — longue, analytique, grise (Helvetica Neue light)
  var corps2 = h('div', {
    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.85;color:var(--grey,#6B6B65);max-width:320px;margin-bottom:24px;opacity:0;transform:translateY(16px);transition:opacity .65s ease,transform .65s ease;'
  });
- corps2.appendChild(document.createTextNode('Votre m\u00e9tabolisme, votre composition corporelle, votre rythme de vie, vos heures de sommeil, la fa\u00e7on dont vous bougez et dont vous mangez \u2014 chaque donn\u00e9e que vous nous confierez sera le mat\u00e9riau d\u2019un programme qui ne ressemblera \u00e0 aucun autre.'));
+ corps2.appendChild(document.createTextNode(_wsEN ? 'Your metabolism, your body composition, your lifestyle, your sleep, the way you move and eat \u2014 every piece of data you share will be the material for a program unlike any other.' : 'Votre m\u00e9tabolisme, votre composition corporelle, votre rythme de vie, vos heures de sommeil, la fa\u00e7on dont vous bougez et dont vous mangez \u2014 chaque donn\u00e9e que vous nous confierez sera le mat\u00e9riau d\u2019un programme qui ne ressemblera \u00e0 aucun autre.'));
 
  // Corps phrase 3 — courte, forte, uppercase (déclaration finale)
  var corps3 = h('div', {
    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:500;letter-spacing:.25em;text-transform:uppercase;color:var(--black,#0A0A09);margin-bottom:40px;opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;'
- }, 'Ce que vous \u00eates construit ce que vous recevrez.');
+ }, _wsEN ? 'What you are builds what you receive.' : 'Ce que vous \u00eates construit ce que vous recevrez.');
 
  var divider = h('div', {
    style: 'width:100%;max-width:260px;height:1px;background:var(--border,#D8D8D0);margin-bottom:36px;opacity:0;transition:opacity .5s ease;'
@@ -648,7 +649,7 @@ window.renderWelcomeScreen = function renderWelcomeScreen(app) {
 
  var signature = h('div', {
    style: 'font-family:Georgia,serif;font-style:italic;font-size:12px;line-height:1.7;color:var(--grey,#6B6B65);max-width:280px;text-align:center;opacity:0;transform:translateY(12px);transition:opacity .6s ease,transform .6s ease;'
- }, 'Un programme qui vous ressemble n\u2019existe pas encore. Il va na\u00eetre ici.');
+ }, _wsEN ? 'A program that resembles you doesn\u2019t exist yet. It will be born here.' : 'Un programme qui vous ressemble n\u2019existe pas encore. Il va na\u00eetre ici.');
 
  inner.appendChild(logo);
  inner.appendChild(titre);
@@ -659,7 +660,7 @@ window.renderWelcomeScreen = function renderWelcomeScreen(app) {
 
  var timingPill = h('div', {
    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#9A9A90);margin-top:8px;opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;'
- }, '~5 min · Vos données restent sur l\'appareil');
+ }, _wsEN ? '~5 min · Your data stays on your device' : '~5 min · Vos donn\u00e9es restent sur l\'appareil');
  inner.appendChild(timingPill);
 
  inner.appendChild(divider);
@@ -1324,7 +1325,8 @@ function renderProfilePage(container) {
        'display:flex;align-items:center;gap:10px;'
      });
      _topLabel.appendChild(h('span', {style: 'flex:1;height:1px;background:' + _accentBorder + ';'}));
-     _topLabel.appendChild(h('span', {}, _isSub ? 'MEMBRE' : (_subLoading ? '—' : 'VERSION D\u2019ESSAI')));
+     var _subEN = window.isEnglish && window.isEnglish();
+     _topLabel.appendChild(h('span', {}, _isSub ? (_subEN ? 'MEMBER' : 'MEMBRE') : (_subLoading ? '—' : (_subEN ? 'FREE TRIAL' : 'VERSION D\u2019ESSAI'))));
      _topLabel.appendChild(h('span', {style: 'flex:1;height:1px;background:' + _accentBorder + ';'}));
      card.appendChild(_topLabel);
 
@@ -1345,7 +1347,7 @@ function renderProfilePage(container) {
      var _subtitle = '';
      if (_isSub) {
        var _noEndPlans = ['unlimited','lifetime','admin'];
-       var _planLabel = (_noEndPlans.indexOf(S.subscriptionPlan) !== -1 || (S._serverPremium && !S.subscriptionEnd)) ? 'Accès illimité' : 'Abonnement actif';
+       var _planLabel = (_noEndPlans.indexOf(S.subscriptionPlan) !== -1 || (S._serverPremium && !S.subscriptionEnd)) ? (_subEN ? 'Unlimited access' : 'Accès illimité') : (_subEN ? 'Active subscription' : 'Abonnement actif');
        var _endStr = '';
        if (S.subscriptionEnd && _noEndPlans.indexOf(S.subscriptionPlan) === -1) {
          try {
@@ -1357,9 +1359,9 @@ function renderProfilePage(container) {
        }
        _subtitle = _planLabel + _endStr;
      } else if (_daysLeft > 0) {
-       _subtitle = 'Toutes les fonctionnalités — sans restriction';
+       _subtitle = _subEN ? 'All features — no restriction' : 'Toutes les fonctionnalités — sans restriction';
      } else {
-       _subtitle = 'Votre période d\u2019essai de 7 jours est écoulée';
+       _subtitle = _subEN ? 'Your 7-day free trial has ended' : 'Votre période d\u2019essai de 7 jours est écoulée';
      }
      card.appendChild(h('div', {style:
        'text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;' +
@@ -1379,9 +1381,15 @@ function renderProfilePage(container) {
      _featsWrap.appendChild(h('div', {style:
        'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;' +
        'text-transform:uppercase;color:var(--grey);margin-bottom:14px;text-align:center;'
-     }, 'Ce qui est inclus'));
+     }, _subEN ? 'What is included' : 'Ce qui est inclus'));
 
-     var _feats = [
+     var _feats = _subEN ? [
+       ['AI Meal Scanner', 'Instant nutritional analysis'],
+       ['Unlimited AI Coach', 'Unrestricted conversations'],
+       ['PDF Export', 'Complete weekly reports'],
+       ['Full history', 'Progress over the entire duration'],
+       ['Body analysis', 'Composition & evolution']
+     ] : [
        ['Scanner repas IA', 'Analyse nutritionnelle instantanée'],
        ['Coach IA illimité', 'Conversations sans restriction'],
        ['Export PDF', 'Rapports hebdomadaires complets'],
@@ -1465,11 +1473,11 @@ function renderProfilePage(container) {
        var _ui = window._sfcPricingUI = window._sfcPricingUI || { tier: 'athlete', duration: 'saison' };
        var _tiers = ['athlete', 'champion', 'legende'];
        var _tierLabels = { athlete: 'Athlete', champion: 'Champion', legende: 'Légende' };
-       var _tierSubs  = { athlete: 'Accès complet', champion: 'Le plus choisi', legende: 'Soutien Légende' };
+       var _tierSubs  = _subEN ? { athlete: 'Full access', champion: 'Most popular', legende: 'Legend support' } : { athlete: 'Accès complet', champion: 'Le plus choisi', legende: 'Soutien Légende' };
        var _durs = ['saison', 'cycle', 'engagement'];
-       var _durLabels  = { saison: 'Trimestriel', cycle: 'Semestriel', engagement: 'Annuel' };
+       var _durLabels  = _subEN ? { saison: 'Quarterly', cycle: 'Semi-annual', engagement: 'Annual' } : { saison: 'Trimestriel', cycle: 'Semestriel', engagement: 'Annuel' };
        var _durMonths  = { saison: 3, cycle: 6, engagement: 12 };
-       var _durPeriods = { saison: '/trimestre', cycle: '/semestre', engagement: '/an' };
+       var _durPeriods = _subEN ? { saison: '/quarter', cycle: '/6 months', engagement: '/year' } : { saison: '/trimestre', cycle: '/semestre', engagement: '/an' };
        function _findPlan(t, d) {
          for (var _k = 0; _k < _pData.length; _k++) {
            if (_pData[_k].tier === t && _pData[_k].duration === d) return _pData[_k];
@@ -1486,12 +1494,28 @@ function renderProfilePage(container) {
            'display:flex;align-items:center;gap:10px;'
          });
          _pLabel.appendChild(h('span', {style: 'flex:1;height:1px;background:var(--border);'}));
-         _pLabel.appendChild(h('span', {}, 'VOTRE PLAN'));
+         _pLabel.appendChild(h('span', {}, _subEN ? 'YOUR PLAN' : 'VOTRE PLAN'));
          _pLabel.appendChild(h('span', {style: 'flex:1;height:1px;background:var(--border);'}));
          card.appendChild(_pLabel);
 
          // ── Features complètes par tier (affichées dans le grand bloc) ──
-         var _allFeatures = [
+         var _allFeatures = _subEN ? [
+           { label: 'Personalized nutrition programs',    tiers: ['athlete','champion','legende'] },
+           { label: 'AI Coach (unlimited questions)',     tiers: ['athlete','champion','legende'] },
+           { label: 'Meal scanner — barcode & AI',        tiers: ['athlete','champion','legende'] },
+           { label: 'AI strength program generator',      tiers: ['athlete','champion','legende'] },
+           { label: 'Weekly PDF export',                  tiers: ['athlete','champion','legende'] },
+           { label: 'History & progress charts',          tiers: ['athlete','champion','legende'] },
+           { label: 'AI body analysis',                   tiers: ['athlete','champion','legende'] },
+           { label: 'Gamification — streaks & badges',    tiers: ['athlete','champion','legende'] },
+           { label: 'Social space & friends',             tiers: ['athlete','champion','legende'] },
+           { label: 'Priority support (< 24 h)',          tiers: ['champion','legende'] },
+           { label: 'Early access to new features',       tiers: ['champion','legende'] },
+           { label: 'Champion badge in profile',          tiers: ['champion','legende'] },
+           { label: 'Dedicated VIP support (< 4 h)',      tiers: ['legende'] },
+           { label: 'Founding Member status',             tiers: ['legende'] },
+           { label: 'Exclusive Legend badge',             tiers: ['legende'] }
+         ] : [
            { label: 'Programmes nutrition personnalisés',  tiers: ['athlete','champion','legende'] },
            { label: 'Coach IA (questions illimitées)',     tiers: ['athlete','champion','legende'] },
            { label: 'Scanner repas — codes-barres & IA',  tiers: ['athlete','champion','legende'] },
@@ -1587,7 +1611,7 @@ function renderProfilePage(container) {
            var _months = _durMonths[_ui.duration] || 1;
            var _perMonth = Math.round(_selPlan.price_mad / _months);
            var _periodLabel = _durPeriods[_ui.duration] || '';
-           var _subLine = _periodLabel + ( _months > 1 ? (' · soit ' + _perMonth + ' MAD/mois') : '');
+           var _subLine = _periodLabel + ( _months > 1 ? (' · ' + (_subEN ? 'i.e. ' : 'soit ') + _perMonth + ' MAD/mois') : '');
            _priceWrap.appendChild(h('div', {style:
              'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);letter-spacing:0.5px;'
            }, _subLine));
@@ -1603,7 +1627,7 @@ function renderProfilePage(container) {
                    'display:inline-block;margin-top:10px;padding:4px 12px;border-radius:0;' +
                    'border:1px solid var(--black);font-family:"Helvetica Neue",Arial,sans-serif;' +
                    'font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--black);'
-                 }, 'Vous économisez ' + _saved + ' MAD');
+                 }, (_subEN ? 'You save ' : 'Vous économisez ') + _saved + ' MAD');
                  _priceWrap.appendChild(_savingsBadge);
                }
              }
@@ -1616,7 +1640,7 @@ function renderProfilePage(container) {
          _inclWrap.appendChild(h('div', {style:
            'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;' +
            'text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:12px;'
-         }, 'CE QUI EST INCLUS · ' + (_tierLabels[_ui.tier] || _ui.tier).toUpperCase()));
+         }, (_subEN ? 'WHAT IS INCLUDED · ' : 'CE QUI EST INCLUS · ') + (_tierLabels[_ui.tier] || _ui.tier).toUpperCase()));
 
          var _incl = _allFeatures.filter(function(f) { return f.tiers.indexOf(_ui.tier) !== -1; });
          var _locked = _allFeatures.filter(function(f) { return f.tiers.indexOf(_ui.tier) === -1; });
@@ -1649,7 +1673,7 @@ function renderProfilePage(container) {
            _upgradeBlock.appendChild(h('div', {style:
              'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:2px;' +
              'text-transform:uppercase;color:#C8A96E;margin-bottom:8px;'
-           }, 'DÉBLOQUEZ AVEC ' + _nextTier.toUpperCase()));
+           }, (_subEN ? 'UNLOCK WITH ' : 'DÉBLOQUEZ AVEC ') + _nextTier.toUpperCase()));
            _locked.forEach(function(f) {
              var row = h('div', {style: 'display:flex;align-items:flex-start;gap:10px;padding:4px 0;'});
              row.appendChild(h('div', {style:
@@ -1671,7 +1695,7 @@ function renderProfilePage(container) {
          var _priceRow = h('div', {style: 'text-align:center;margin:18px 0 4px;'});
          _priceRow.appendChild(h('div', {style:
            'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);font-style:italic;'
-         }, window._sfcPricingAttempted ? 'Tarifs temporairement indisponibles' : 'Chargement des tarifs…'));
+         }, window._sfcPricingAttempted ? (_subEN ? 'Prices temporarily unavailable' : 'Tarifs temporairement indisponibles') : (_subEN ? 'Loading prices…' : 'Chargement des tarifs…')));
          card.appendChild(_priceRow);
        }
      }
@@ -1684,7 +1708,7 @@ function renderProfilePage(container) {
        for (var _ci = 0; _ci < _pData2.length; _ci++) {
          if (_pData2[_ci].tier === _ui2.tier && _pData2[_ci].duration === _ui2.duration) { _ctaPlan = _pData2[_ci]; break; }
        }
-       var _durPer2 = { saison: '/trimestre', cycle: '/semestre', engagement: '/an' };
+       var _durPer2 = _isEn ? { saison: '/quarter', cycle: '/6 months', engagement: '/year' } : { saison: '/trimestre', cycle: '/semestre', engagement: '/an' };
        var _isEn = (window.isEnglish && window.isEnglish());
        var _ctaSessions = Object.keys((S.sessionHistory && typeof S.sessionHistory === 'object' && !Array.isArray(S.sessionHistory)) ? S.sessionHistory : {}).length;
        var _ctaState = _ctaSessions >= 10 ? 'invested' : _ctaSessions >= 4 ? 'engaged' : 'starter';
@@ -1722,7 +1746,7 @@ function renderProfilePage(container) {
          'border-top:1px solid ' + _accentBorder + ';' +
          'font-family:Georgia,serif;font-style:italic;font-size:12px;' +
          'color:' + _accent + ';'
-       }, 'Merci de votre confiance.'));
+       }, (window.isEnglish && window.isEnglish()) ? 'Thank you for your trust.' : 'Merci de votre confiance.'));
      }
 
      c.appendChild(card);
@@ -1734,13 +1758,15 @@ function renderProfilePage(container) {
    var restoreBtn = h('button', {
      style: 'display:block;width:100%;padding:14px;border:1px solid var(--line,#D8D8D0);background:transparent;color:var(--ink-900,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;min-height:44px;',
      onclick: function() {
-       if (!(window.sfcConfirm ? window.sfcConfirm('Restaurer vos données depuis le cloud ?\n\nLes données locales seront remplacées par la dernière sauvegarde cloud.') : confirm('Restaurer vos données depuis le cloud ?\n\nLes données locales seront remplacées par la dernière sauvegarde cloud.'))) return;
-       restoreBtn.textContent = 'Restauration en cours...';
+       var _restEN = window.isEnglish && window.isEnglish();
+       var _restMsg = _restEN ? 'Restore your data from the cloud?\n\nLocal data will be replaced by the latest cloud backup.' : 'Restaurer vos données depuis le cloud ?\n\nLes données locales seront remplacées par la dernière sauvegarde cloud.';
+       if (!(window.sfcConfirm ? window.sfcConfirm(_restMsg) : confirm(_restMsg))) return;
+       restoreBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Restoring...' : 'Restauration en cours...';
        restoreBtn.disabled = true;
        SupaSync.loadProfile().then(function(cloudData) {
          if (!cloudData) {
-           if (window.showToast) window.showToast('Aucune donnée trouvée sur le cloud.', 'info', 3000);
-           restoreBtn.textContent = 'Restaurer depuis le cloud';
+           if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'No data found in the cloud.' : 'Aucune donnée trouvée sur le cloud.', 'info', 3000);
+           restoreBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Restore from cloud' : 'Restaurer depuis le cloud';
            restoreBtn.disabled = false;
            return;
          }
@@ -1754,16 +1780,16 @@ function renderProfilePage(container) {
          S._cloudUpdatedAt = new Date().toISOString();
          window._profileDirty = true;
          if (window.saveProfile) saveProfile();
-         if (window.showToast) window.showToast('Données restaurées avec succès.', 'success', 3000);
+         if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Data restored successfully.' : 'Données restaurées avec succès.', 'success', 3000);
          if (window.render) render();
        }).catch(function(err) {
          console.error('[restore] Error:', err);
-         if (window.showToast) window.showToast('Erreur de restauration. Vérifiez votre connexion.', 'error', 3000);
-         restoreBtn.textContent = 'Restaurer depuis le cloud';
+         if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Restore error. Check your connection.' : 'Erreur de restauration. Vérifiez votre connexion.', 'error', 3000);
+         restoreBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Restore from cloud' : 'Restaurer depuis le cloud';
          restoreBtn.disabled = false;
        });
      }
-   }, 'Restaurer depuis le cloud');
+   }, (window.isEnglish && window.isEnglish()) ? 'Restore from cloud' : 'Restaurer depuis le cloud');
    c.appendChild(restoreBtn);
  }
 

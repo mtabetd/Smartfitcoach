@@ -551,11 +551,11 @@ window.MEAL_TIMER = {
 window.MEASUREMENTS = {
 
   _FIELDS: [
-    { key: 'chest',  label: 'Tour de poitrine' },
-    { key: 'waist',  label: 'Tour de taille' },
-    { key: 'hips',   label: 'Tour de hanches' },
-    { key: 'arms',   label: 'Tour de bras' },
-    { key: 'thighs', label: 'Tour de cuisses' }
+    { key: 'chest',  label: 'Tour de poitrine', labelEn: 'Chest' },
+    { key: 'waist',  label: 'Tour de taille',   labelEn: 'Waist' },
+    { key: 'hips',   label: 'Tour de hanches',  labelEn: 'Hips' },
+    { key: 'arms',   label: 'Tour de bras',     labelEn: 'Arms' },
+    { key: 'thighs', label: 'Tour de cuisses',  labelEn: 'Thighs' }
   ],
 
   save: function(data) {
@@ -617,7 +617,7 @@ window.MEASUREMENTS = {
       var f = self._FIELDS[i];
       var row = el('div', 'measure-row');
 
-      var label = el('div', 'measure-label', f.label + ' (cm)');
+      var label = el('div', 'measure-label', ((window.isEnglish && window.isEnglish()) ? (f.labelEn || f.label) : f.label) + ' (cm)');
       row.appendChild(label);
 
       var input = el('input', 'measure-input');
@@ -689,12 +689,13 @@ window.MEASUREMENTS = {
     container.innerHTML = '';
 
     var wrap = el('div', 'extras-widget measure-history');
-    var title = el('div', 'measure-title', 'Historique des mensurations');
+    var _mhEN = window.isEnglish && window.isEnglish();
+    var title = el('div', 'measure-title', _mhEN ? 'Measurement history' : 'Historique des mensurations');
     wrap.appendChild(title);
 
     var history = self.getHistory();
     if (history.length === 0) {
-      wrap.appendChild(el('div', 'extras-empty', 'Aucune mesure enregistrée.'));
+      wrap.appendChild(el('div', 'extras-empty', _mhEN ? 'No measurements recorded yet.' : 'Aucune mesure enregistrée.'));
       container.appendChild(wrap);
       return;
     }
@@ -1205,11 +1206,12 @@ window.FOOD_CALC = {
       detailPanel.appendChild(nameEl);
 
       var macros = el('div', 'food-detail-macros');
+      var _fdEN = window.isEnglish && window.isEnglish();
       var fields = [
         { label: 'KCAL', val: food.kcal },
         { label: 'PROT.', val: food.protein },
-        { label: 'GLUC.', val: food.carbs },
-        { label: 'LIP.', val: food.fat }
+        { label: _fdEN ? 'CARB.' : 'GLUC.', val: food.carbs },
+        { label: _fdEN ? 'FAT' : 'LIP.', val: food.fat }
       ];
       var valEls = [];
       for (var i = 0; i < fields.length; i++) {
@@ -1225,7 +1227,7 @@ window.FOOD_CALC = {
 
       // Quantity row
       var qtyRow = el('div', 'food-qty-row');
-      var qtyLabel = el('span', 'food-qty-label', 'Quantité (g) :');
+      var qtyLabel = el('span', 'food-qty-label', (_fdEN ? 'Quantity (g):' : 'Quantité (g) :'));
       qtyRow.appendChild(qtyLabel);
 
       var qtyInput = el('input', 'food-qty-input');
@@ -1242,7 +1244,7 @@ window.FOOD_CALC = {
       });
       qtyRow.appendChild(qtyInput);
 
-      var addBtn = el('button', 'food-add-btn', 'Ajouter au journal');
+      var addBtn = el('button', 'food-add-btn', _fdEN ? '+ Add to journal' : 'Ajouter au journal');
       addBtn.addEventListener('click', function() {
         var g = parseFloat(qtyInput.value) || 100;
         // Calculer les macros scalées à la quantité saisie

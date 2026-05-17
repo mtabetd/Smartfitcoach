@@ -4928,7 +4928,7 @@ function renderCrossfitProgram(p) {
  var wodMuteBtn = h('button', {'class': 'btn-secondary', style: 'width:auto;padding:8px 12px;margin:0;font-size:10px;letter-spacing:2px;text-transform:uppercase', title: window._sfcMuted ? (window.isEnglish && window.isEnglish() ? 'Muted — click to enable' : 'Son coupé — cliquer pour activer') : (window.isEnglish && window.isEnglish() ? 'Sound on — click to mute' : 'Son actif — cliquer pour couper'),
  onclick: function() {
  window._sfcMuted = !window._sfcMuted;
- wodMuteBtn.textContent = window._sfcMuted ? 'Muet' : 'Son';
+ wodMuteBtn.textContent = window._sfcMuted ? (window.isEnglish && window.isEnglish() ? 'Muted' : 'Muet') : (window.isEnglish && window.isEnglish() ? 'Sound' : 'Son');
  wodMuteBtn.title = window._sfcMuted ? (window.isEnglish && window.isEnglish() ? 'Muted — click to enable' : 'Son coupé — cliquer pour activer') : (window.isEnglish && window.isEnglish() ? 'Sound on — click to mute' : 'Son actif — cliquer pour couper');
  }}, window._sfcMuted ? (window.isEnglish && window.isEnglish() ? 'Muted' : 'Muet') : (window.isEnglish && window.isEnglish() ? 'Sound' : 'Son'));
 
@@ -5975,7 +5975,7 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  muteBtn.title = window._sfcMuted ? (window.isEnglish && window.isEnglish() ? 'Muted — click to enable' : 'Son coupé — cliquer pour activer') : (window.isEnglish && window.isEnglish() ? 'Sound on — click to mute' : 'Son actif — cliquer pour couper');
  muteBtn.addEventListener('click', function() {
  window._sfcMuted = !window._sfcMuted;
- muteBtn.textContent = window._sfcMuted ? 'Muet' : 'Son';
+ muteBtn.textContent = window._sfcMuted ? (window.isEnglish && window.isEnglish() ? 'Muted' : 'Muet') : (window.isEnglish && window.isEnglish() ? 'Sound' : 'Son');
  muteBtn.title = window._sfcMuted ? (window.isEnglish && window.isEnglish() ? 'Muted — click to enable' : 'Son coupé — cliquer pour activer') : (window.isEnglish && window.isEnglish() ? 'Sound on — click to mute' : 'Son actif — cliquer pour couper');
  if (window._sfcMuted) { muteBtn.classList.add('muted'); } else { muteBtn.classList.remove('muted'); }
  });
@@ -10197,7 +10197,7 @@ function renderMusculationProgram(p) {
  if (triSport.trimester.sportTips) triSport.trimester.sportTips.forEach(function(tip) {
  pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:3px;padding-left:8px'}, '\u2022 ' + tip));
  });
- pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:' + triSportColor + ';margin:10px 0 6px'}, 'Exercices interdits ce trimestre'));
+ pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:' + triSportColor + ';margin:10px 0 6px'}, (window.isEnglish && window.isEnglish() ? 'Exercises to avoid this trimester' : 'Exercices interdits ce trimestre')));
  if (triSport.trimester.forbiddenExercises) triSport.trimester.forbiddenExercises.forEach(function(ex) {
  pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + triSportColor + ';margin-bottom:2px;padding-left:8px'}, '\u2716 ' + ex));
  });
@@ -10928,8 +10928,9 @@ function renderHyroxConfig(p) {
  // Benchmarks (optional)
  p.appendChild(h('div', {style: 'height:24px'}));
  p.appendChild(h('div', {style: 'width:100%;height:1px;background:var(--border);margin-bottom:16px'}));
- p.appendChild(h('div', {'class': 'section-label'}, 'Benchmarks actuels (optionnel)'));
- p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:16px'}, 'Renseignez vos temps actuels pour suivre votre progression.'));
+ var _hyrEN = window.isEnglish && window.isEnglish();
+ p.appendChild(h('div', {'class': 'section-label'}, _hyrEN ? 'Current benchmarks (optional)' : 'Benchmarks actuels (optionnel)'));
+ p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:16px'}, _hyrEN ? 'Enter your current times to track your progress.' : 'Renseignez vos temps actuels pour suivre votre progression.'));
 
  var bmGrid = h('div', {style: 'margin-bottom:16px'});
  var stations = window.HYROX_STATIONS || [];
@@ -10941,7 +10942,7 @@ function renderHyroxConfig(p) {
  nameDiv.appendChild(h('div', {style: 'font-family:Georgia;font-size:13px'}, station.name));
  // Show standard for their level
  if (station.standards && S.hyroxLevel && station.standards[S.hyroxLevel]) {
- nameDiv.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;color:var(--grey)'}, 'Standard ' + S.hyroxLevel + ' : ' + station.standards[S.hyroxLevel]));
+ nameDiv.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;color:var(--grey)'}, (_hyrEN ? 'Standard ' : 'Standard ') + S.hyroxLevel + ' : ' + station.standards[S.hyroxLevel]));
  }
  row.appendChild(nameDiv);
 
@@ -12453,15 +12454,16 @@ function renderCyclingProgram(p) {
  var bikeNames = { road: 'Route ', vtt: 'VTT ', indoor: 'Indoor ', gravel: 'Gravel ' };
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Cyclisme'));
- p.appendChild(h('h1', {html: (goalNames[S.cyclingGoal] || 'Cyclisme') + '<br><em>Plan 8 semaines</em>'}));
+ p.appendChild(h('h1', {html: (goalNames[S.cyclingGoal] || 'Cyclisme') + ((window.isEnglish && window.isEnglish()) ? '<br><em>8-week plan</em>' : '<br><em>Plan 8 semaines</em>')}));
 
  var speedTarget = S.cyclingSpeed ? Math.round(S.cyclingSpeed * 1.08) : null;
  var ftpTarget = S.cyclingFTP ? Math.round(S.cyclingFTP * 1.10) : null;
+ var _cycEN = window.isEnglish && window.isEnglish();
  var infoLine = (levelNames[S.cyclingLevel] || '') +
  (S.cyclingType ? ' · ' + (bikeNames[S.cyclingType] || S.cyclingType) : '') +
- (S.cyclingFTP ? ' · FTP actuel : ' + S.cyclingFTP + 'W' : '') +
- (ftpTarget ? ' \u2192 cible : ~' + ftpTarget + 'W' : '') +
- (speedTarget ? ' · Vitesse cible : ~' + speedTarget + ' km/h' : '');
+ (S.cyclingFTP ? ' · ' + (_cycEN ? 'Current FTP: ' : 'FTP actuel : ') + S.cyclingFTP + 'W' : '') +
+ (ftpTarget ? ' \u2192 ' + (_cycEN ? 'target: ~' : 'cible : ~') + ftpTarget + 'W' : '') +
+ (speedTarget ? ' · ' + (_cycEN ? 'Target speed: ~' : 'Vitesse cible : ~') + speedTarget + ' km/h' : '');
  p.appendChild(h('p', {'class': 'subtitle'}, infoLine));
 
  appendSportMedicalBanner(p, 'Cyclisme');
@@ -12619,16 +12621,17 @@ function renderCyclingProgram(p) {
 function renderCalisthenicsOnboarding(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Callisthenie'));
  p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish()) ? 'Your calisthenics<br><em>program</em>' : 'Votre programme<br><em>callisthenie</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Street workout — progressions au poids du corps. Personnalise selon votre niveau reel.'));
+ p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish()) ? 'Street workout — bodyweight progressions. Adapted to your actual level.' : 'Street workout — progressions au poids du corps. Personnalise selon votre niveau reel.'));
 
  // Niveau
  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.level')));
  var lvlList = h('div', {'class': 'level-list'});
+ var _calisEN = window.isEnglish && window.isEnglish();
  [
-  { id: 'debutant', icon: '', name: window.t('sport.beginner'), desc: 'Moins de 5 tractions — bases a construire' },
-  { id: 'intermediaire', icon: '', name: window.t('sport.intermediate'), desc: '5-12 tractions — maitrise des fondamentaux' },
-  { id: 'avance', icon: '', name: window.t('sport.advanced'), desc: '12+ tractions — apprentissage des skills avances' },
-  { id: 'elite', icon: '', name: window.t('sport.elite'), desc: 'Maitrise complete — skills de haut niveau' }
+  { id: 'debutant', icon: '', name: window.t('sport.beginner'), desc: _calisEN ? 'Under 5 pull-ups — fundamentals to build' : 'Moins de 5 tractions — bases a construire' },
+  { id: 'intermediaire', icon: '', name: window.t('sport.intermediate'), desc: _calisEN ? '5-12 pull-ups — mastering the fundamentals' : '5-12 tractions — maitrise des fondamentaux' },
+  { id: 'avance', icon: '', name: window.t('sport.advanced'), desc: _calisEN ? '12+ pull-ups — learning advanced skills' : '12+ tractions — apprentissage des skills avances' },
+  { id: 'elite', icon: '', name: window.t('sport.elite'), desc: _calisEN ? 'Full mastery — high-level skills' : 'Maitrise complete — skills de haut niveau' }
  ].forEach(function(lv) {
   var isOn = S.calisthenicsLevel === lv.id;
   lvlList.appendChild(h('div', {'class': 'level-item' + (isOn ? ' on' : ''), onclick: function(){ S.calisthenicsLevel = lv.id; window.render(); }}, [
@@ -12982,7 +12985,7 @@ function renderCalisthenicsProgram(content) {
    // Cooldown
    if (sess.cooldown && sess.cooldown.length > 0) {
     var coolDiv = h('div', {style: 'background:var(--surface,#F4F4F0);padding:8px 12px;border-radius:2px;margin-top:8px'});
-    coolDiv.appendChild(h('div', {style: 'font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--grey3);margin-bottom:4px'}, 'RETOUR AU CALME'));
+    coolDiv.appendChild(h('div', {style: 'font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--grey3);margin-bottom:4px'}, (window.isEnglish && window.isEnglish()) ? 'COOL DOWN' : 'RETOUR AU CALME'));
     var coolList = sess.cooldown.join(' | ');
     coolDiv.appendChild(h('div', {style: 'font-size:11px;color:var(--grey3)'}, coolList));
     sessCard.appendChild(coolDiv);
@@ -12993,8 +12996,16 @@ function renderCalisthenicsProgram(content) {
 
  // ── GOLDEN RULES ──
  var rulesCard = h('div', {'class': 'card', style: 'margin-bottom:16px'});
- rulesCard.appendChild(h('div', {'class': 'label-caps', style: 'margin-bottom:12px'}, 'REGLES D OR CALLISTHENIE'));
- var rules = [
+ var _calEN = window.isEnglish && window.isEnglish();
+ rulesCard.appendChild(h('div', {'class': 'label-caps', style: 'margin-bottom:12px'}, _calEN ? 'GOLDEN RULES OF CALISTHENICS' : 'REGLES D OR CALLISTHENIE'));
+ var rules = _calEN ? [
+  'Consistency beats intensity — 20 min/day > 2h/week',
+  'Rest 3-5 min between skill sets (not 60 sec)',
+  'Master prerequisites BEFORE progressing',
+  'Quality > quantity — 1 perfect rep beats 10 sloppy ones',
+  'Warm up your wrists SYSTEMATICALLY',
+  'The planche takes years — that\'s normal and that\'s beautiful'
+ ] : [
   'La regularite bat l intensite — 20 min/jour > 2h/semaine',
   'Repos 3-5 min entre series de skills (pas 60 sec)',
   'Maitrisez les prerequis AVANT de progresser',
@@ -13018,7 +13029,7 @@ function renderCalisthenicsProgram(content) {
     onclick: function() { _completeSportSession('calisthenics', _calLvl, _calDur, _calKey); }
   }, _calDone ? (window.isEnglish && window.isEnglish() ? '✓ Session logged' : '✓ Séance validée') : (window.isEnglish && window.isEnglish() ? '✓ Session done' : '✓ Séance terminée')));
  }());
- content.appendChild(h('button', {'class': 'btn-back', style: 'margin-top:16px', onclick: function(){ S.sStep = 24; window.render(); }}, '< Modifier les objectifs'));
+ content.appendChild(h('button', {'class': 'btn-back', style: 'margin-top:16px', onclick: function(){ S.sStep = 24; window.render(); }}, (window.isEnglish && window.isEnglish()) ? '< Edit goals' : '< Modifier les objectifs'));
  appendNutritionModeCTA(content);
 }
 
