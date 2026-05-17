@@ -3208,7 +3208,7 @@ function _fjBuildEntriesList(container) {
     row.appendChild(info);
 
     var del = h('button', {
-      'aria-label': 'Retirer cet aliment',
+      'aria-label': (window.isEnglish && window.isEnglish()) ? 'Remove this food' : 'Retirer cet aliment',
       style: 'display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0;'
         + 'background:none;border:none;cursor:pointer;color:var(--grey,#6B6B65);flex-shrink:0;'
     });

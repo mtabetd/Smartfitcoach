@@ -826,8 +826,9 @@ function _csGenerateSessionFromMuscles(groups) {
   var durSets = _perio ? _perio.durSets : (hasStr ? 5 : 4);
 
   // restOverride : priorité objectif sport, puis périodisation (sauf S4 deload)
+  var _csGEN = window.isEnglish && window.isEnglish();
   var restOverride = null, repSuffix = '';
-  if (hasShred)    { restOverride = '45-60s'; repSuffix = ' (haute intensité)'; }
+  if (hasShred)    { restOverride = '45-60s'; repSuffix = _csGEN ? ' (high intensity)' : ' (haute intensité)'; }
   else if (hasStr) { restOverride = '180-240s'; }
   else if (_perio && _perio.restOverride) { restOverride = _perio.restOverride; }
 
