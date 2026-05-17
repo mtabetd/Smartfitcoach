@@ -4701,7 +4701,7 @@ function showSubscriptionContact(plan, ui) {
   var _durPer = { saison: '/trimestre', cycle: '/semestre', engagement: '/an' };
   var planLine = '';
   if (plan && ui) {
-    var _tierLabels = { athlete: 'Athlete', champion: 'Champion', legende: 'Légende' };
+    var _tierLabels = { athlete: 'Core', champion: 'Performance', legende: 'Élite' };
     planLine = (_tierLabels[ui.tier] || ui.tier) + ' · ' + (plan.label_mad || '') + (_durPer[ui.duration] || '');
   }
 

@@ -142,6 +142,7 @@ function renderUsers(users) {
     // Build the badge as a real DOM element — subPlan originates from
     // user-writable JSONB on legacy rows, so string-concat + innerHTML
     // would enable stored XSS against the admin. Use textContent.
+    var _planLabels = { athlete: 'Core', champion: 'Performance', legende: 'Élite', trial: 'Trial', unlimited: 'Illimité' };
     var status, badgeEl = document.createElement('span');
     badgeEl.className = 'badge';
     if (subPlan === 'unlimited') {
@@ -152,7 +153,7 @@ function renderUsers(users) {
     } else if (subEnd && new Date(subEnd) > now) {
       status = 'active';
       badgeEl.classList.add('badge-active');
-      badgeEl.textContent = 'Actif · ' + (subPlan || '');
+      badgeEl.textContent = 'Actif · ' + (_planLabels[subPlan] || subPlan || '');
       statsActive++;
     } else if (firstLogin) {
       var trialEnd = new Date(firstLogin);
