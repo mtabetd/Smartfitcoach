@@ -581,7 +581,11 @@ function openPanel() {
   window.safeUserStatusCheck({ force: true }).then(function(status) {
     if (!status.isPremium) {
       if (status.source === 'fallback' && window._showPremiumCheckFailed) { window._showPremiumCheckFailed(openPanel); return; }
-      if (window.showPaywall) window.showPaywall('body');
+      if (window.showPaywall) window.showPaywall('body', 'champion');
+      return;
+    }
+    if (!(window.isPlanAtLeast && window.isPlanAtLeast('champion'))) {
+      if (window.showPaywall) window.showPaywall('body', 'champion');
       return;
     }
     var panel = document.getElementById('ba-panel');
