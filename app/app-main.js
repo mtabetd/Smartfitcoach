@@ -802,6 +802,7 @@ window.renderModuleChoice = function renderModuleChoice(content) {
 // ─── PROFILE PAGE ───
 function renderProfilePage(container) {
  var S = window.S;
+ var _pEN = window.isEnglish && window.isEnglish();
  var user = window.AUTH ? window.AUTH.getUser() : null;
  var c = h('div', {style: 'max-width:480px;margin:0 auto;padding:24px 20px 48px'});
  if (!window.SFC_PRICING_DATA && !window._sfcPricingAttempted && window.loadSFCPricing) {
@@ -812,11 +813,11 @@ function renderProfilePage(container) {
  var backBtn = h('button', {
    style: 'background:none;border:none;padding:10px 14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);cursor:pointer;margin-bottom:24px;display:inline-flex;align-items:center;gap:6px;min-height:44px;',
    onclick: function() { S.view = 'today'; if (window.render) window.render(); }
- }, '← Retour');
+ }, _pEN ? '← Back' : '← Retour');
  c.appendChild(backBtn);
 
  // Title
- c.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:24px;font-weight:normal;margin-bottom:4px;'}, 'Mon profil'));
+ c.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:24px;font-weight:normal;margin-bottom:4px;'}, _pEN ? 'My profile' : 'Mon profil'));
  c.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);letter-spacing:1px;margin-bottom:28px;'}, user ? (user.email || '') : ''));
 
  // ─── Photo + nom ───
@@ -870,9 +871,9 @@ function renderProfilePage(container) {
  photoWrap.addEventListener('click', function() { photoInput.click(); });
  photoSection.appendChild(photoWrap);
  var nameBlock = h('div', {style: 'flex:1;'});
- var displayName = [S.prenom, S.nom].filter(Boolean).join(' ') || (user && (user.name || user.email)) || 'Utilisateur';
+ var displayName = [S.prenom, S.nom].filter(Boolean).join(' ') || (user && (user.name || user.email)) || (_pEN ? 'User' : 'Utilisateur');
  nameBlock.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:4px;'}, displayName));
- nameBlock.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);letter-spacing:1px;cursor:pointer;text-transform:uppercase;'}, 'Changer la photo'));
+ nameBlock.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);letter-spacing:1px;cursor:pointer;text-transform:uppercase;'}, _pEN ? 'Change photo' : 'Changer la photo'));
  photoSection.appendChild(nameBlock);
  c.appendChild(photoSection);
 
@@ -890,20 +891,20 @@ function renderProfilePage(container) {
 
  // ── Section 1: Identité ──
  var sec1 = h('div', {style: 'margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);'});
- sec1.appendChild(h('div', {style: _sh}, 'IDENTIT\u00c9'));
- sec1.appendChild(_infoRow('Sexe', window.isMale(S) ? 'Homme' : window.isFemale(S) ? 'Femme' : null));
- sec1.appendChild(_infoRow('\u00c2ge', S.age ? S.age + ' ans' : null));
- sec1.appendChild(_infoRow('Poids', S.weight ? S.weight + ' kg' : null));
+ sec1.appendChild(h('div', {style: _sh}, _pEN ? 'IDENTITY' : 'IDENTIT\u00c9'));
+ sec1.appendChild(_infoRow(_pEN ? 'Sex' : 'Sexe', window.isMale(S) ? (_pEN ? 'Male' : 'Homme') : window.isFemale(S) ? (_pEN ? 'Female' : 'Femme') : null));
+ sec1.appendChild(_infoRow(_pEN ? 'Age' : '\u00c2ge', S.age ? S.age + (_pEN ? ' yrs' : ' ans') : null));
+ sec1.appendChild(_infoRow(_pEN ? 'Weight' : 'Poids', S.weight ? S.weight + ' kg' : null));
  // FIX D16 COHÉRENCE PRE-PREGNANCY 2026-04 : affiche le poids pré-grossesse si applicable.
  // Avant : calcTarget utilisait prePregnancyWeight (invisible dans profil) → user voyait
  //         son poids actuel (ex 75 kg) dans profil mais la cible kcal était basée sur
  //         68 kg → mismatch incompréhensible pour l'user.
  if (window.isFemale(S) && S.pregnant && S.prePregnancyWeight && S.prePregnancyWeight !== S.weight) {
-   sec1.appendChild(_infoRow('Poids pré-grossesse', S.prePregnancyWeight + ' kg'));
+   sec1.appendChild(_infoRow(_pEN ? 'Pre-pregnancy weight' : 'Poids pré-grossesse', S.prePregnancyWeight + ' kg'));
  }
- sec1.appendChild(_infoRow('Taille', S.height ? S.height + ' cm' : null));
+ sec1.appendChild(_infoRow(_pEN ? 'Height' : 'Taille', S.height ? S.height + ' cm' : null));
  var _bmiVal = (typeof calcBMI === 'function') ? calcBMI() : null;
- sec1.appendChild(_infoRow('IMC', _bmiVal ? _bmiVal.toFixed(1) : null));
+ sec1.appendChild(_infoRow(_pEN ? 'BMI' : 'IMC', _bmiVal ? _bmiVal.toFixed(1) : null));
  // FIX STREAK PROFIL 2026-04 : afficher le streak dans la fiche perso (source unique
  // = localStorage mtd_streak_<uid>, même source que dashboard et gamification).
  // FIX F7 CONTRE-AUDIT 2026-04 : UNIQUEMENT si user connecté (pas 'anon') pour éviter
@@ -921,16 +922,16 @@ function renderProfilePage(container) {
      }
    } catch(eStreak) {}
  })();
- if (window.isFemale(S) && S.pregnant) sec1.appendChild(_infoRow('Grossesse', 'Semaine ' + (S.pregnancyWeek || '?')));
- if (window.isFemale(S) && S.cycleTracking) sec1.appendChild(_infoRow('Cycle', S.cycleLength + ' jours'));
+ if (window.isFemale(S) && S.pregnant) sec1.appendChild(_infoRow(_pEN ? 'Pregnancy' : 'Grossesse', (_pEN ? 'Week ' : 'Semaine ') + (S.pregnancyWeek || '?')));
+ if (window.isFemale(S) && S.cycleTracking) sec1.appendChild(_infoRow(_pEN ? 'Cycle' : 'Cycle', S.cycleLength + (_pEN ? ' days' : ' jours')));
  c.appendChild(sec1);
 
  // ── Section 2: Objectif & Nutrition ──
  var sec2 = h('div', {style: 'margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);'});
- sec2.appendChild(h('div', {style: _sh}, 'OBJECTIF & NUTRITION'));
+ sec2.appendChild(h('div', {style: _sh}, _pEN ? 'GOAL & NUTRITION' : 'OBJECTIF & NUTRITION'));
  var _goalName = (function() { var g = window.GOALS; if (g && Array.isArray(g) && S.goal !== null && S.goal !== undefined && g[S.goal]) return g[S.goal].icon + ' ' + g[S.goal].name; return null; })();
- sec2.appendChild(_infoRow('Objectif', _goalName));
- if (S.targetWeight) sec2.appendChild(_infoRow('Poids cible', S.targetWeight + ' kg'));
+ sec2.appendChild(_infoRow(_pEN ? 'Goal' : 'Objectif', _goalName));
+ if (S.targetWeight) sec2.appendChild(_infoRow(_pEN ? 'Target weight' : 'Poids cible', S.targetWeight + ' kg'));
  // FIX COHÉRENCE PROFIL 2026-04 : utiliser getCalorieTarget/getMacroTargets (même source
  // que le dashboard) au lieu de calcTarget/calcMacros bruts.
  // Avant : profil affichait 2200 kcal (théorique jour training) tandis que dashboard
@@ -939,25 +940,25 @@ function renderProfilePage(container) {
  var _tgtCal = (typeof window.getCalorieTarget === 'function')
    ? window.getCalorieTarget()
    : ((typeof calcTarget === 'function') ? calcTarget() : 0);
- if (_tgtCal > 0) sec2.appendChild(_infoRow('Calories/jour', Math.round(_tgtCal) + ' kcal'));
+ if (_tgtCal > 0) sec2.appendChild(_infoRow(_pEN ? 'Calories/day' : 'Calories/jour', Math.round(_tgtCal) + ' kcal'));
  var _macros = (typeof window.getMacroTargets === 'function')
    ? window.getMacroTargets()
    : ((typeof calcMacros === 'function') ? calcMacros() : null);
- if (_macros) sec2.appendChild(_infoRow('Macros (P/G/L)', Math.round(_macros.p) + 'g / ' + Math.round(_macros.g) + 'g / ' + Math.round(_macros.l) + 'g'));
+ if (_macros) sec2.appendChild(_infoRow(_pEN ? 'Macros (P/C/F)' : 'Macros (P/G/L)', Math.round(_macros.p) + 'g / ' + Math.round(_macros.g) + 'g / ' + Math.round(_macros.l) + 'g'));
  var _actName = (window.ACTIVITIES && S.activity !== null && S.activity !== undefined && window.ACTIVITIES[S.activity]) ? window.ACTIVITIES[S.activity].name : null;
- sec2.appendChild(_infoRow('Activit\u00e9', _actName));
- var _regNames = ['Omnivore', 'Pesc\u00e9tarien', 'V\u00e9g\u00e9tarien', 'V\u00e9gan'];
- sec2.appendChild(_infoRow('R\u00e9gime', _regNames[S.regime] || 'Omnivore'));
- if (!S.allowPork) sec2.appendChild(_infoRow('Porc', 'Exclu'));
- if (!S.allowAlcohol) sec2.appendChild(_infoRow('Alcool cuisine', 'Exclu'));
- if (Array.isArray(S.allergies) && S.allergies.length > 0 && S.allergies[0] !== 'Aucune') sec2.appendChild(_infoRow('Allergies', S.allergies.join(', ')));
+ sec2.appendChild(_infoRow(_pEN ? 'Activity' : 'Activit\u00e9', _actName));
+ var _regNames = _pEN ? ['Omnivore', 'Pescatarian', 'Vegetarian', 'Vegan'] : ['Omnivore', 'Pesc\u00e9tarien', 'V\u00e9g\u00e9tarien', 'V\u00e9gan'];
+ sec2.appendChild(_infoRow(_pEN ? 'Diet' : 'R\u00e9gime', _regNames[S.regime] || (_pEN ? 'Omnivore' : 'Omnivore')));
+ if (!S.allowPork) sec2.appendChild(_infoRow(_pEN ? 'Pork' : 'Porc', _pEN ? 'Excluded' : 'Exclu'));
+ if (!S.allowAlcohol) sec2.appendChild(_infoRow(_pEN ? 'Cooking alcohol' : 'Alcool cuisine', _pEN ? 'Excluded' : 'Exclu'));
+ if (Array.isArray(S.allergies) && S.allergies.length > 0 && S.allergies[0] !== 'Aucune') sec2.appendChild(_infoRow(_pEN ? 'Allergies' : 'Allergies', S.allergies.join(', ')));
  if (Array.isArray(S.medical) && S.medical.length > 0) {
    var _medNames = S.medical.map(function(id) {
      var found = null;
      (window.MEDICAL || []).forEach(function(cat) { (cat.items || []).forEach(function(item) { if (item.id === id) found = item; }); });
      return found ? found.name : id;
    });
-   sec2.appendChild(_infoRow('Conditions', _medNames.join(', ')));
+   sec2.appendChild(_infoRow(_pEN ? 'Conditions' : 'Conditions', _medNames.join(', ')));
  }
  c.appendChild(sec2);
 
@@ -965,30 +966,40 @@ function renderProfilePage(container) {
  if (S.appMode === 'sport' || S.appMode === 'both') {
    var sec3 = h('div', {style: 'margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);'});
    sec3.appendChild(h('div', {style: _sh}, 'SPORT'));
-   var _sportNames = { muscu: 'Musculation', crossfit: 'CrossFit', running: 'Course \u00e0 pied', triathlon: 'Triathlon', calisthenics: 'Calisth\u00e9nics', hyrox: 'Hyrox', padel: 'Padel', golf: 'Golf', yoga: 'Yoga', cycling: 'Cyclisme' };
-   sec3.appendChild(_infoRow('Sport principal', _sportNames[S.sportType] || S.sportType || '\u2014'));
-   if (S.sportMixEnabled && S.sportMixSecondary) sec3.appendChild(_infoRow('Sport secondaire', 'Musculation (' + (S.sportMixSecondary.days || 1) + 'j)'));
-   var _lvlNames = { beginner: 'D\u00e9butant', intermediate: 'Interm\u00e9diaire', advanced: 'Avanc\u00e9', elite: '\u00c9lite' };
-   sec3.appendChild(_infoRow('Niveau', _lvlNames[S.sportLevel] || S.sportLevel || '\u2014'));
-   sec3.appendChild(_infoRow('Jours/semaine', S.sportDays ? S.sportDays + ' jours' : '\u2014'));
-   var _eqNames = { gym: 'Salle compl\u00e8te', home: 'Domicile', dumbbells: 'Halt\u00e8res uniquement' };
-   sec3.appendChild(_infoRow('\u00c9quipement', _eqNames[S.sportEquipment] || S.sportEquipment || '\u2014'));
+   var _sportNames = _pEN
+     ? { muscu: 'Weightlifting', crossfit: 'CrossFit', running: 'Running', triathlon: 'Triathlon', calisthenics: 'Calisthenics', hyrox: 'Hyrox', padel: 'Padel', golf: 'Golf', yoga: 'Yoga', cycling: 'Cycling' }
+     : { muscu: 'Musculation', crossfit: 'CrossFit', running: 'Course \u00e0 pied', triathlon: 'Triathlon', calisthenics: 'Calisth\u00e9nics', hyrox: 'Hyrox', padel: 'Padel', golf: 'Golf', yoga: 'Yoga', cycling: 'Cyclisme' };
+   sec3.appendChild(_infoRow(_pEN ? 'Primary sport' : 'Sport principal', _sportNames[S.sportType] || S.sportType || '\u2014'));
+   if (S.sportMixEnabled && S.sportMixSecondary) sec3.appendChild(_infoRow(_pEN ? 'Secondary sport' : 'Sport secondaire', (_pEN ? 'Weightlifting (' : 'Musculation (') + (S.sportMixSecondary.days || 1) + (_pEN ? 'd)' : 'j)')));
+   var _lvlNames = _pEN
+     ? { beginner: 'Beginner', intermediate: 'Intermediate', advanced: 'Advanced', elite: 'Elite' }
+     : { beginner: 'D\u00e9butant', intermediate: 'Interm\u00e9diaire', advanced: 'Avanc\u00e9', elite: '\u00c9lite' };
+   sec3.appendChild(_infoRow(_pEN ? 'Level' : 'Niveau', _lvlNames[S.sportLevel] || S.sportLevel || '\u2014'));
+   sec3.appendChild(_infoRow(_pEN ? 'Days/week' : 'Jours/semaine', S.sportDays ? S.sportDays + (_pEN ? ' days' : ' jours') : '\u2014'));
+   var _eqNames = _pEN
+     ? { gym: 'Full gym', home: 'Home', dumbbells: 'Dumbbells only' }
+     : { gym: 'Salle compl\u00e8te', home: 'Domicile', dumbbells: 'Halt\u00e8res uniquement' };
+   sec3.appendChild(_infoRow(_pEN ? 'Equipment' : '\u00c9quipement', _eqNames[S.sportEquipment] || S.sportEquipment || '\u2014'));
    if (Array.isArray(S.sportGoals) && S.sportGoals.length > 0) {
      var _sgNames = S.sportGoals.map(function(gid) { var g = (window.SPORT_GOALS || []).find(function(x) { return x.id === gid; }); return g ? g.name : gid; });
-     sec3.appendChild(_infoRow('Objectifs sport', _sgNames.join(', ')));
+     sec3.appendChild(_infoRow(_pEN ? 'Sport goals' : 'Objectifs sport', _sgNames.join(', ')));
    }
    // Bouton changer de sport
    sec3.appendChild(h('button', {style: 'display:block;width:100%;margin-top:16px;padding:12px;background:transparent;border:1.5px solid var(--black);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--black);cursor:pointer;transition:all 0.2s ease;min-height:44px', onclick: function() {
      S.sStep = 0; S.view = 'sport'; window.render();
-   }}, '\u21bb Changer de sport'));
+   }}, '\u21bb ' + (_pEN ? 'Change sport' : 'Changer de sport')));
    c.appendChild(sec3);
  }
 
  // ─── Mode application ───
  var modeSection = h('div', {style: 'margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);'});
- modeSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:4px;'}, 'MODE D\'UTILISATION'));
- modeSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:16px;line-height:1.5;'}, 'Choisissez les modules que vous souhaitez utiliser.'));
- var modes = [
+ modeSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:4px;'}, _pEN ? 'USAGE MODE' : 'MODE D\'UTILISATION'));
+ modeSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:16px;line-height:1.5;'}, _pEN ? 'Choose the modules you want to use.' : 'Choisissez les modules que vous souhaitez utiliser.'));
+ var modes = _pEN ? [
+   { value: 'nutrition', label: 'Nutrition only', desc: 'Food tracking and calorie goals.' },
+   { value: 'sport', label: 'Sport only', desc: 'Training programs and progression.' },
+   { value: 'both', label: 'Nutrition & Sport', desc: 'The complete approach. Recommended.' }
+ ] : [
    { value: 'nutrition', label: 'Nutrition uniquement', desc: 'Suivi alimentaire et objectifs caloriques.' },
    { value: 'sport', label: 'Sport uniquement', desc: 'Programmes d\'entraînement et progression.' },
    { value: 'both', label: 'Nutrition & Sport', desc: 'L\'approche complète. Recommandé.' }
@@ -1069,11 +1080,11 @@ function renderProfilePage(container) {
    var favIds = Object.keys(favMap).filter(function(id) { return (favMap[id]|0) > 0; });
    var favSection = h('div', {style: 'margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);'});
    var favHeader = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;'});
-   favHeader.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);'}, 'MES RECETTES FAVORITES'));
+   favHeader.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);'}, _pEN ? 'MY FAVORITE RECIPES' : 'MES RECETTES FAVORITES'));
    favHeader.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px;color:var(--grey);'}, favIds.length + ' ' + window.locPlural(favIds.length, {fr:{one:'recette',other:'recettes'},en:{one:'recipe',other:'recipes'}})));
    favSection.appendChild(favHeader);
    if (!favIds.length) {
-     favSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);line-height:1.6;font-style:italic;'}, 'Notez une recette avec ★ dans votre planning pour qu\u2019elle revienne régulièrement dans vos semaines.'));
+     favSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);line-height:1.6;font-style:italic;'}, _pEN ? 'Rate a recipe with ★ in your meal plan so it recurs in your weeks.' : 'Notez une recette avec ★ dans votre planning pour qu\u2019elle revienne régulièrement dans vos semaines.'));
    } else {
      // Tri : étoiles décroissantes, puis nom alphabétique
      favIds.sort(function(a, b) {
@@ -1259,7 +1270,7 @@ function renderProfilePage(container) {
  var changeGoalBtn = h('button', {
    style: 'display:block;width:100%;padding:14px;border:1px solid var(--border);background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;',
    onclick: function() { S._goalModal = true; if (window.render) window.render(); }
- }, ((window.isEnglish && window.isEnglish()) ? '\uD83C\uDFAF Change my goal' : '\uD83C\uDFAF Changer mon objectif'));
+ }, ((window.isEnglish && window.isEnglish()) ? 'Change my goal' : 'Changer mon objectif'));
  c.appendChild(changeGoalBtn);
 
  // ─── Strength Grade + Records (déplacé depuis la vue programme sport) ───
