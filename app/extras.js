@@ -522,7 +522,7 @@ window.MEAL_TIMER = {
       if (event === 'tick') {
         display.textContent = self._formatTime(data);
       } else if (event === 'done') {
-        display.textContent = 'Termine !';
+        display.textContent = (window.isEnglish && window.isEnglish()) ? 'Done!' : 'Terminé !';
         setRunning(false);
         setTimeout(function() {
           display.textContent = self._formatTime(selectedMinutes * 60);
@@ -1259,11 +1259,11 @@ window.FOOD_CALC = {
         }
         log('food_add_journal', { food: food.name, quantity: g });
         if (window.TRACKER) window.TRACKER.track('meal_logged', { source: 'scanner', kcal: kcal });
-        addBtn.textContent = 'Ajoute !';
+        addBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Added!' : 'Ajouté !';
         addBtn.style.borderColor = 'var(--green,#1A4A1A)';
         addBtn.style.color = 'var(--green,#1A4A1A)';
         setTimeout(function() {
-          addBtn.textContent = 'Ajouter au journal';
+          addBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Add to journal' : 'Ajouter au journal';
           addBtn.style.borderColor = '';
           addBtn.style.color = '';
         }, 1500);
@@ -1300,7 +1300,7 @@ window.FOOD_CALC = {
           var noResult = el('div', 'food-result-item');
           noResult.style.color = 'var(--grey,#6B6B65)';
           noResult.style.fontStyle = 'italic';
-          noResult.textContent = 'Aucun résultat';
+          noResult.textContent = (window.isEnglish && window.isEnglish()) ? 'No results' : 'Aucun résultat';
           resultsList.appendChild(noResult);
         }
       }, 250);
@@ -1673,7 +1673,7 @@ window.FOOD_JOURNAL = {
     // Section label
     var label = document.createElement('div');
     label.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border,#D8D8D0)';
-    label.textContent = 'Journal alimentaire du jour';
+    label.textContent = (window.isEnglish && window.isEnglish()) ? 'Today\'s food journal' : 'Journal alimentaire du jour';
     section.appendChild(label);
 
     // Quick add form
@@ -1681,7 +1681,8 @@ window.FOOD_JOURNAL = {
     addRow.className = 'fj-add-row';
 
     var mealSelect = document.createElement('select');
-    [{v:'breakfast',l:'Petit-d\u00E9j'},{v:'lunch',l:'D\u00E9jeuner'},{v:'snack',l:'Collation'},{v:'dinner',l:'D\u00EEner'}].forEach(function(m){
+    var _fjEN = window.isEnglish && window.isEnglish();
+    [{v:'breakfast',l:_fjEN?'Breakfast':'Petit-d\u00E9j'},{v:'lunch',l:_fjEN?'Lunch':'D\u00E9jeuner'},{v:'snack',l:_fjEN?'Snack':'Collation'},{v:'dinner',l:_fjEN?'Dinner':'D\u00EEner'}].forEach(function(m){
       var opt = document.createElement('option');
       opt.value = m.v; opt.textContent = m.l;
       mealSelect.appendChild(opt);
@@ -1690,7 +1691,7 @@ window.FOOD_JOURNAL = {
 
     var nameInput = document.createElement('input');
     nameInput.type = 'text';
-    nameInput.placeholder = 'Aliment...';
+    nameInput.placeholder = (window.isEnglish && window.isEnglish()) ? 'Food...' : 'Aliment...';
     nameInput.style.cssText = 'width:100%;padding:8px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",sans-serif;font-size:16px;background:transparent;box-sizing:border-box;';
     nameInput.setAttribute('autocomplete', 'off');
 
@@ -1790,7 +1791,7 @@ window.FOOD_JOURNAL = {
 
     var addBtn = document.createElement('button');
     addBtn.className = 'fj-add-btn';
-    addBtn.textContent = '+ Ajouter';
+    addBtn.textContent = (window.isEnglish && window.isEnglish()) ? '+ Add' : '+ Ajouter';
     addBtn.onclick = function() {
       var name = nameInput.value.trim();
       var kcal = parseFloat(kcalInput.value);
@@ -1807,7 +1808,7 @@ window.FOOD_JOURNAL = {
       var self2 = this;
       var loadBtn = document.createElement('div');
       loadBtn.style.cssText = 'padding:8px 14px;border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);cursor:pointer;font-family:"Helvetica Neue",sans-serif;font-size:11px;letter-spacing:1px;text-align:center;margin-bottom:10px';
-      loadBtn.textContent = '\uD83D\uDCCB Charger le plan du jour';
+      loadBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Load today\'s plan' : 'Charger le plan du jour';
       loadBtn.onclick = function() {
         var user2 = window.AUTH ? window.AUTH.getUser() : null;
         localStorage.removeItem('mtd_journal_loaded_' + (user2 ? user2.id : 'anon'));
@@ -1888,7 +1889,8 @@ window.FOOD_JOURNAL = {
       kcalSummary.appendChild(document.createTextNode(' / ' + target + ' kcal'));
       var macroSummary = document.createElement('span');
       // 2026-04 UX-2 : libellés lisibles (avant "P 165/180g" → incompréhensible ; maintenant "Prot 165/180g")
-      macroSummary.textContent = 'Prot ' + total.p.toFixed(0) + '/' + targetMacros.p + 'g \u00B7 Gluc ' + total.g.toFixed(0) + '/' + targetMacros.g + 'g \u00B7 Lip ' + total.l.toFixed(0) + '/' + targetMacros.l + 'g';
+      var _msEN = window.isEnglish && window.isEnglish();
+      macroSummary.textContent = 'Prot ' + total.p.toFixed(0) + '/' + targetMacros.p + 'g \u00B7 ' + (_msEN ? 'Carbs' : 'Gluc') + ' ' + total.g.toFixed(0) + '/' + targetMacros.g + 'g \u00B7 ' + (_msEN ? 'Fat' : 'Lip') + ' ' + total.l.toFixed(0) + '/' + targetMacros.l + 'g';
       totalRow.appendChild(kcalSummary);
       totalRow.appendChild(macroSummary);
       section.appendChild(totalRow);
