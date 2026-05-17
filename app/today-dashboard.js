@@ -2508,7 +2508,7 @@ function _fjRenderFoodRow(food, source) {
   var isFav = _fjIsFav(food.name);
   var favStarColor = isFav ? 'var(--black,#0A0A09)' : 'var(--line,#D8D8D0)';
   var favStar = h('button', {
-    'aria-label': isFav ? 'Retirer des favoris' : 'Ajouter aux favoris',
+    'aria-label': (window.isEnglish && window.isEnglish()) ? (isFav ? 'Remove from favorites' : 'Add to favorites') : (isFav ? 'Retirer des favoris' : 'Ajouter aux favoris'),
     style: 'display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0;'
       + 'background:none;border:none;cursor:pointer;flex-shrink:0;'
   });
@@ -4984,7 +4984,7 @@ function openTodayKitchenTimer() {
 
     overlay.addEventListener('click', function(e) { if (e.target === overlay) { clearInterval(interval); window._kitchenTimerInterval = null; } });
     // Étendre le bouton ✕ du modal générique pour nettoyer l'interval
-    var _closeEl = box.querySelector('[aria-label="Fermer"]');
+    var _closeEl = box.querySelector('[aria-label="Fermer"]') || box.querySelector('[aria-label="Close"]');
     if (_closeEl) {
       var _origClose = _closeEl.onclick;
       _closeEl.onclick = function() { clearInterval(interval); window._kitchenTimerInterval = null; if (_origClose) _origClose(); };

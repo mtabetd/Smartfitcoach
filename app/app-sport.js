@@ -9188,7 +9188,7 @@ function renderMusculationProgram(p) {
   _arrowRow.appendChild(h('button', {
    style: 'padding:10px 16px;border:1px solid var(--border,#D8D8D0);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;color:var(--grey,#6B6B65);border-radius:2px;cursor:pointer;' + (S.currentExerciseIdx >= _totalExercises - 1 ? 'opacity:0.25;pointer-events:none' : ''),
    onclick: function(e) { e.stopPropagation(); if (S.currentExerciseIdx < _totalExercises - 1) { S.currentExerciseIdx++; if (navigator.vibrate) navigator.vibrate(10); window.render(); } }
-  }, 'Suivant ›'));
+  }, (window.isEnglish && window.isEnglish() ? 'Next ›' : 'Suivant ›')));
   _swipeWrap.appendChild(_arrowRow);
  }
 
