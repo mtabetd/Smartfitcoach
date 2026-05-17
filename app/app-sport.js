@@ -5353,7 +5353,7 @@ function renderMusculationZones(p) {
  // Zone name + weak indicator
  var nameDiv = h('div', {});
  nameDiv.appendChild(h('span', {style: 'font-family:Georgia;font-size:15px'}, zone));
- if (isWeak) nameDiv.appendChild(h('span', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;color:var(--orange);margin-left:8px'}, (window.isEnglish && window.isEnglish() ? '⚡ To strengthen' : '⚡ À renforcer')));
+ if (isWeak) nameDiv.appendChild(h('span', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;color:var(--orange);margin-left:8px;letter-spacing:1px;text-transform:uppercase;'}, (window.isEnglish && window.isEnglish() ? '— To strengthen' : '— À renforcer')));
  row.appendChild(nameDiv);
 
  // Star rating
@@ -5382,7 +5382,7 @@ function renderMusculationZones(p) {
 
  if (S.weakZones.length > 0) {
  var tip = h('div', {style: 'border-left:2px solid var(--orange);padding:8px 16px;background:rgba(232,111,30,0.06);margin-bottom:16px;font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'});
- tip.textContent = (window.isEnglish && window.isEnglish() ? '⚡ Zones identified to strengthen from your nutrition profile' : '⚡ Zones identifiées à renforcer depuis votre profil nutrition');
+ tip.textContent = (window.isEnglish && window.isEnglish() ? 'Zones identified to strengthen from your nutrition profile' : 'Zones identifiées à renforcer depuis votre profil nutrition');
  p.appendChild(tip);
  }
 
