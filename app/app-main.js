@@ -1956,7 +1956,7 @@ function renderProfilePage(container) {
    var _tdee = window.calcTarget ? window.calcTarget() : 0;
    if (_tdee > 0) {
      var _tdeeInfo = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:16px;text-align:center;border:1px solid var(--border);padding:10px;'});
-     _tdeeInfo.textContent = 'Vos besoins\u00a0: ' + _tdee + '\u00a0kcal/jour';
+     _tdeeInfo.textContent = (window.isEnglish && window.isEnglish()) ? 'Your needs: ' + _tdee + '\u00a0kcal/day' : 'Vos besoins\u00a0: ' + _tdee + '\u00a0kcal/jour';
      _sheet.appendChild(_tdeeInfo);
    }
 
@@ -2592,13 +2592,14 @@ function render() {
        _errInner.style.cssText = 'max-width:360px;width:100%;text-align:center;';
        var _errH = document.createElement('h2');
        _errH.style.cssText = 'font-family:Georgia,serif;font-size:24px;font-weight:400;color:#0A0A09;margin:0 0 12px;';
-       _errH.textContent = 'Une interruption est survenue';
+       var _errIsEN = window.isEnglish && window.isEnglish();
+       _errH.textContent = _errIsEN ? 'An interruption occurred' : 'Une interruption est survenue';
        var _errP = document.createElement('p');
        _errP.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:#6B6B65;line-height:1.6;margin:0 0 28px;';
-       _errP.textContent = 'Nous avons s\u00e9curis\u00e9 votre session. Vous pouvez r\u00e9essayer.';
+       _errP.textContent = _errIsEN ? 'Your session has been secured. You can try again.' : 'Nous avons s\u00e9curis\u00e9 votre session. Vous pouvez r\u00e9essayer.';
        var _errBtn = document.createElement('button');
        _errBtn.style.cssText = 'padding:14px 28px;background:#0A0A09;color:#FAF9F6;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;min-height:44px;border-radius:0;width:100%;';
-       _errBtn.textContent = 'R\u00e9essayer';
+       _errBtn.textContent = _errIsEN ? 'Try again' : 'R\u00e9essayer';
        _errBtn.addEventListener('click', function(){ location.reload(); });
        _errInner.appendChild(_errH);
        _errInner.appendChild(_errP);
