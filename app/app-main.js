@@ -234,7 +234,7 @@ function saveProfile() {
    console.warn('[saveProfile] BLOQUÉ — données corrompues détectées au load. Reload nécessaire.');
    if (!window._corruptedToastShown && window.showToast) {
      window._corruptedToastShown = true;
-     window.showToast('Données corrompues détectées. Rechargez la page pour restaurer.', 'error', 6000);
+     window.showToast((window.isEnglish && window.isEnglish()) ? 'Corrupted data detected. Reload the page to restore.' : 'Données corrompues détectées. Rechargez la page pour restaurer.', 'error', 6000);
    }
    return;
  }
@@ -389,7 +389,7 @@ function saveProfile() {
        window._quotaWarnCount = (window._quotaWarnCount || 0) + 1;
        if (window._quotaWarnCount === 1 || window._quotaWarnCount % 10 === 0) {
          if (window.showToast) {
-           window.showToast('⚠️ Stockage saturé. Vos modifications ne sont PAS sauvegardées localement. Synchronisation cloud tentée automatiquement.', 'error', 8000);
+           window.showToast('Stockage saturé — modifications non sauvegardées localement. Synchronisation cloud tentée.', 'error', 8000);
          }
        }
      } else {
@@ -449,7 +449,7 @@ function loadProfile() {
      console.error('[loadProfile] DATA CORRUPTED — backed up to ' + _bkKey + ' — saveProfile désactivé jusqu\'au prochain reload');
    } catch(eb) { console.error('[loadProfile] backup also failed:', eb); }
    S._loadCorrupted = true;
-   setTimeout(function(){ if (window.showToast) window.showToast('Profil endommagé — rechargez la page pour restaurer vos données.', 'error', 8000); }, 800);
+   setTimeout(function(){ if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Profile error — reload the page to restore your data.' : 'Profil endommagé — rechargez la page pour restaurer vos données.', 'error', 8000); }, 800);
    return;
  }
  }
@@ -462,7 +462,7 @@ function loadProfile() {
      console.error('[loadProfile] DECODE retourné null — backup ' + _bkKey2 + ' — saveProfile désactivé');
    } catch(eb2) { console.error('[loadProfile] backup also failed:', eb2); }
    S._loadCorrupted = true;
-   setTimeout(function(){ if (window.showToast) window.showToast('Profil endommagé — rechargez la page pour restaurer vos données.', 'error', 8000); }, 800);
+   setTimeout(function(){ if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Profile error — reload the page to restore your data.' : 'Profil endommagé — rechargez la page pour restaurer vos données.', 'error', 8000); }, 800);
    return;
  }
  // Prototype pollution guard: reject any parsed object that carries dangerous keys

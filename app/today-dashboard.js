@@ -4612,33 +4612,28 @@ function renderCardRestDay(S) {
   return c;
 }
 
-// ─── RENDER CARD — Suivi hydratation ───
+// ─── RENDER CARD — Suivi hydratation (via WATER_TRACKER — même source que FAB EAU) ───
 function renderCardWater() {
   var S = window.S;
   if (!S) return null;
-  if (S.appMode === 'sport') return null;
-
-  var _today = new Date().toISOString().slice(0, 10);
-  if (S.waterTodayDate !== _today) {
-    S.waterToday = 0;
-    S.waterTodayDate = _today;
-  }
+  if (!window.WATER_TRACKER) return null;
 
   var EN = window.isEnglish && window.isEnglish();
-  var _weightKg = (S.weight) ? parseFloat(S.weight) : 70;
-  var _floor = (window.isMale && window.isMale(S)) ? 2.5 : 2.0;
-  var _goal = Math.max(_floor, Math.round(_weightKg * 0.035 * 10) / 10);
-  var _cur = Math.round(((S.waterToday || 0) * 100)) / 100;
-  var _pct = _goal > 0 ? Math.min(100, Math.round(_cur / _goal * 100)) : 0;
-  var _barColor = _cur >= _goal ? '#3E5C3A' : (_cur >= _goal * 0.5 ? 'var(--orange,#E86F1E)' : '#C0392B');
+  var _data = window.WATER_TRACKER.getToday();
+  var _glasses = _data.glasses;
+  var _target = _data.target;
+  var _pct = _data.percent;
+  var _liters = Math.round(_glasses * 250) / 1000;
+  var _goalL = Math.round(_target * 250) / 1000;
+  var _barColor = _glasses >= _target ? '#3E5C3A' : (_glasses >= _target * 0.5 ? 'var(--orange,#E86F1E)' : '#C0392B');
 
   var c = card('background:var(--ivory,#FAF9F6);border-color:var(--border);');
   c.appendChild(eyebrow(EN ? 'HYDRATION' : 'HYDRATATION'));
 
   var _headRow = h('div', { style: 'display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px;' });
   var _numWrap = h('div', { style: 'display:flex;align-items:baseline;gap:6px;' });
-  _numWrap.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:26px;color:var(--ink-900,#0A0A09);line-height:1;' }, _cur.toFixed(1)));
-  _numWrap.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);letter-spacing:0.5px;' }, '/ ' + _goal.toFixed(1) + ' L'));
+  _numWrap.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:26px;color:var(--ink-900,#0A0A09);line-height:1;' }, _liters.toFixed(1)));
+  _numWrap.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);letter-spacing:0.5px;' }, '/ ' + _goalL.toFixed(1) + ' L'));
   _headRow.appendChild(_numWrap);
   if (_pct > 0) {
     _headRow.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:' + _barColor + ';letter-spacing:1px;' }, _pct + '%'));
@@ -4651,39 +4646,29 @@ function renderCardWater() {
 
   var _btns = h('div', { style: 'display:flex;gap:8px;' });
 
-  var _add250 = h('button', {
+  var _add1 = h('button', {
     style: 'flex:1;min-height:44px;padding:10px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
     onclick: function() {
-      var _S = window.S; if (!_S) return;
-      var _t = new Date().toISOString().slice(0, 10);
-      if (_S.waterTodayDate !== _t) { _S.waterToday = 0; _S.waterTodayDate = _t; }
-      _S.waterToday = Math.round(((_S.waterToday || 0) + 0.25) * 100) / 100;
-      if (window.saveProfile) try { window.saveProfile(); } catch(e) {}
+      if (window.WATER_TRACKER) window.WATER_TRACKER.addGlass();
       if (window.render) window.render();
     }
-  }, '+ 250 ml');
-  _btns.appendChild(_add250);
+  }, '+ 250 ml');
+  _btns.appendChild(_add1);
 
-  var _add500 = h('button', {
+  var _add2 = h('button', {
     style: 'flex:1;min-height:44px;padding:10px;background:transparent;color:var(--ink-900,#0A0A09);border:1px solid var(--line,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
     onclick: function() {
-      var _S = window.S; if (!_S) return;
-      var _t = new Date().toISOString().slice(0, 10);
-      if (_S.waterTodayDate !== _t) { _S.waterToday = 0; _S.waterTodayDate = _t; }
-      _S.waterToday = Math.round(((_S.waterToday || 0) + 0.5) * 100) / 100;
-      if (window.saveProfile) try { window.saveProfile(); } catch(e) {}
+      if (window.WATER_TRACKER) { window.WATER_TRACKER.addGlass(); window.WATER_TRACKER.addGlass(); }
       if (window.render) window.render();
     }
-  }, '+ 500 ml');
-  _btns.appendChild(_add500);
+  }, '+ 500 ml');
+  _btns.appendChild(_add2);
 
-  if (_cur > 0) {
+  if (_glasses > 0) {
     var _undo = h('button', {
       style: 'min-height:44px;padding:10px 16px;background:transparent;color:var(--grey,#6B6B65);border:1px solid var(--line,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;cursor:pointer;',
       onclick: function() {
-        var _S = window.S; if (!_S) return;
-        _S.waterToday = Math.max(0, Math.round(((_S.waterToday || 0) - 0.25) * 100) / 100);
-        if (window.saveProfile) try { window.saveProfile(); } catch(e) {}
+        if (window.WATER_TRACKER) window.WATER_TRACKER.removeGlass();
         if (window.render) window.render();
       }
     }, '−');
@@ -4691,7 +4676,7 @@ function renderCardWater() {
   }
   c.appendChild(_btns);
 
-  if (_cur >= _goal) {
+  if (_glasses >= _target && _target > 0) {
     c.appendChild(h('div', { style: 'margin-top:10px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#3E5C3A;letter-spacing:0.3px;' },
       EN ? 'Daily goal reached' : 'Objectif journalier atteint'));
   }
