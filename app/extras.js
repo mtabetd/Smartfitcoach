@@ -673,7 +673,7 @@ window.MEASUREMENTS = {
       if (!hasValue) return;
       self.save(data);
       if (window.GAMIFICATION && window.GAMIFICATION.showToast) {
-        window.GAMIFICATION.showToast('Mensurations enregistrées');
+        window.GAMIFICATION.showToast((window.isEnglish && window.isEnglish()) ? 'Measurements saved' : 'Mensurations enregistrées');
       }
       if (window.BLACKBOX) window.BLACKBOX.log('measurements_saved', data);
       self.renderForm(container);

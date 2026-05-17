@@ -389,12 +389,12 @@ function saveProfile() {
        window._quotaWarnCount = (window._quotaWarnCount || 0) + 1;
        if (window._quotaWarnCount === 1 || window._quotaWarnCount % 10 === 0) {
          if (window.showToast) {
-           window.showToast('Stockage saturé — modifications non sauvegardées localement. Synchronisation cloud tentée.', 'error', 8000);
+           window.showToast((window.isEnglish && window.isEnglish()) ? 'Storage full — local changes not saved. Cloud sync attempted.' : 'Stockage saturé — modifications non sauvegardées localement. Synchronisation cloud tentée.', 'error', 8000);
          }
        }
      } else {
        // Récupération réussie : toast informatif
-       if (window.showToast) window.showToast('Espace libéré automatiquement — données sauvegardées.', 'info', 3000);
+       if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Storage freed automatically — data saved.' : 'Espace libéré automatiquement — données sauvegardées.', 'info', 3000);
      }
    }
  }

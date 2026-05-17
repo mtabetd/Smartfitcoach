@@ -283,15 +283,16 @@ function getPregnancySportWarning() {
  var s = window.S;
  if (!s || !s.pregnant || !window.isFemale(s)) return null;
  var week = s.pregnancyWeek || 0;
+ var _pgwEN = window.isEnglish && window.isEnglish();
  if (week < 14) {
  // T1 : nausées, fatigue → intensité réduite, pas de sur-échauffement
- return ' Grossesse T1 (sem. 1-13) : Activité physique modérée recommandée (150 min/sem, ACOG 2020). Évitez le sur-échauffement (>38,5°C). Consultez votre obstétricien avant tout programme intensif.';
+ return _pgwEN ? ' Pregnancy T1 (wk 1-13): Moderate physical activity recommended (150 min/wk, ACOG 2020). Avoid overheating (>38.5°C). Consult your obstetrician before any intense programme.' : ' Grossesse T1 (sem. 1-13) : Activité physique modérée recommandée (150 min/sem, ACOG 2020). Évitez le sur-échauffement (>38,5°C). Consultez votre obstétricien avant tout programme intensif.';
  } else if (week < 28) {
  // T2 : veine cave — décubitus dorsal contre-indiqué
- return ' Grossesse T2 (sem. 14-27, ACOG 2020) : (1) Évitez le décubitus dorsal prolongé >20 min — compression de la veine cave inférieure. (2) Pas de Valsalva (squat lourd, soulevé de terre) — risque de chute de pression. (3) Sports de contact contre-indiqués. Exercices recommandés : natation, marche, vélo stationnaire, yoga prénatal.';
+ return _pgwEN ? ' Pregnancy T2 (wk 14-27, ACOG 2020): (1) Avoid prolonged supine position >20 min — inferior vena cava compression. (2) No Valsalva (heavy squat, deadlift) — risk of pressure drop. (3) Contact sports contraindicated. Recommended: swimming, walking, stationary bike, prenatal yoga.' : ' Grossesse T2 (sem. 14-27, ACOG 2020) : (1) Évitez le décubitus dorsal prolongé >20 min — compression de la veine cave inférieure. (2) Pas de Valsalva (squat lourd, soulevé de terre) — risque de chute de pression. (3) Sports de contact contre-indiqués. Exercices recommandés : natation, marche, vélo stationnaire, yoga prénatal.';
  } else {
  // T3 : mêmes contre-indications + risque chute de l'équilibre
- return ' Grossesse T3 (sem. 28+, ACOG 2020) : (1) Décubitus dorsal INTERDIT. (2) Valsalva interdit (soulevé de terre, squat lourd, développé couché). (3) Sports de contact et à risque de chute contre-indiqués. (4) Équilibre altéré — préférez exercices guidés ou en appui. Consultez votre obstétricien avant chaque modification du programme.';
+ return _pgwEN ? ' Pregnancy T3 (wk 28+, ACOG 2020): (1) Supine position PROHIBITED. (2) Valsalva prohibited (deadlift, heavy squat, bench press). (3) Contact sports and fall-risk sports contraindicated. (4) Altered balance — prefer guided or supported exercises. Consult your obstetrician before any programme change.' : ' Grossesse T3 (sem. 28+, ACOG 2020) : (1) Décubitus dorsal INTERDIT. (2) Valsalva interdit (soulevé de terre, squat lourd, développé couché). (3) Sports de contact et à risque de chute contre-indiqués. (4) Équilibre altéré — préférez exercices guidés ou en appui. Consultez votre obstétricien avant chaque modification du programme.';
  }
 }
 
@@ -3961,63 +3962,64 @@ function appendSportMedicalBanner(p, sportName) {
   }
   // ── ZONES SPORT-SPÉCIFIQUES (depuis bilan santé step 27) ──
   if (Array.isArray(S.medical) && S.medical.length > 0 && S.sportType) {
+    var _zwEN = window.isEnglish && window.isEnglish();
     var _zwm = {
       genou: {
-        running:'Genoux : évitez les descentes et surfaces dures. Réduisez le volume de 20%. Natation comme cross-training (ACSM 2021).',
-        crossfit:'Genoux : pas de box jumps à impact maximal ni de squat snatches lourds. Substituez par step-ups et goblet squats (NSCA 2020).',
-        yoga:'Genoux : modifiez le pigeon pose et le lotus. Blocs sous les hanches. Évitez la flexion maximale.',
-        cycling:'Genoux : selle à bonne hauteur (genou légèrement fléchi en bas). Évitez les cadences < 60 RPM avec forte résistance.',
-        hyrox:'Genoux : remplacez les lunges par des step-ups. Réduisez les sauts.',
-        padel:'Genoux : chauffage prolongé obligatoire. Réduisez les pivots brusques. Genouillère recommandée.',
-        triathlon:'Genoux : vérifiez le fit vélo. Foulée plus courte en course. Évitez les longues descentes.',
-        calisthenics:'Genoux : pistol squats remplacés par chaise murale ou band-assisted. Pas de réception sur sol dur.'
+        running: _zwEN ? 'Knees: avoid descents and hard surfaces. Reduce volume by 20%. Swimming as cross-training (ACSM 2021).' : 'Genoux : évitez les descentes et surfaces dures. Réduisez le volume de 20%. Natation comme cross-training (ACSM 2021).',
+        crossfit: _zwEN ? 'Knees: no max-impact box jumps or heavy squat snatches. Substitute with step-ups and goblet squats (NSCA 2020).' : 'Genoux : pas de box jumps à impact maximal ni de squat snatches lourds. Substituez par step-ups et goblet squats (NSCA 2020).',
+        yoga: _zwEN ? 'Knees: modify pigeon pose and lotus. Blocks under hips. Avoid maximum flexion.' : 'Genoux : modifiez le pigeon pose et le lotus. Blocs sous les hanches. Évitez la flexion maximale.',
+        cycling: _zwEN ? 'Knees: saddle at correct height (knee slightly bent at bottom). Avoid cadences < 60 RPM with heavy resistance.' : 'Genoux : selle à bonne hauteur (genou légèrement fléchi en bas). Évitez les cadences < 60 RPM avec forte résistance.',
+        hyrox: _zwEN ? 'Knees: replace lunges with step-ups. Reduce jumps.' : 'Genoux : remplacez les lunges par des step-ups. Réduisez les sauts.',
+        padel: _zwEN ? 'Knees: extended warm-up mandatory. Reduce abrupt pivots. Knee brace recommended.' : 'Genoux : chauffage prolongé obligatoire. Réduisez les pivots brusques. Genouillère recommandée.',
+        triathlon: _zwEN ? 'Knees: check bike fit. Shorter stride when running. Avoid long descents.' : 'Genoux : vérifiez le fit vélo. Foulée plus courte en course. Évitez les longues descentes.',
+        calisthenics: _zwEN ? 'Knees: replace pistol squats with wall sit or band-assisted. No landings on hard floors.' : 'Genoux : pistol squats remplacés par chaise murale ou band-assisted. Pas de réception sur sol dur.'
       },
       cheville: {
-        running:'Cheville / Tendon d\'Achille : échauffement strict (10 min). Pas de sprints ni de côtes raides. Kilométrage réduit de 30%.',
-        padel:'Cheville : chaussures à soutien latéral. Propioception hors du court. Cheillière recommandée.',
-        triathlon:'Cheville : protégez le tendon en dernière portion course. Évitez les sorties post-vélo sur dénivelé.',
-        calisthenics:'Cheville : pas de sauts avec réception unipodale. Substitut : step-ups et squats bilatéraux.'
+        running: _zwEN ? 'Ankle / Achilles tendon: strict warm-up (10 min). No sprints or steep hills. Mileage reduced by 30%.' : "Cheville / Tendon d'Achille : échauffement strict (10 min). Pas de sprints ni de côtes raides. Kilométrage réduit de 30%.",
+        padel: _zwEN ? 'Ankle: lateral-support footwear. Proprioception training off court. Ankle brace recommended.' : 'Cheville : chaussures à soutien latéral. Propioception hors du court. Cheillière recommandée.',
+        triathlon: _zwEN ? 'Ankle: protect tendon in final run leg. Avoid post-bike rides on steep terrain.' : 'Cheville : protégez le tendon en dernière portion course. Évitez les sorties post-vélo sur dénivelé.',
+        calisthenics: _zwEN ? 'Ankle: no single-leg landing jumps. Substitute: step-ups and bilateral squats.' : 'Cheville : pas de sauts avec réception unipodale. Substitut : step-ups et squats bilatéraux.'
       },
       tibia: {
-        running:'Tibias (shin splints) : kilométrage réduit de 40%. Pas d\'interval training. Semelles de soutien d\'arche. Repos si douleur aiguë.'
+        running: _zwEN ? 'Shins (shin splints): reduce mileage by 40%. No interval training. Arch support insoles. Rest if acute pain.' : "Tibias (shin splints) : kilométrage réduit de 40%. Pas d'interval training. Semelles de soutien d'arche. Repos si douleur aiguë."
       },
       lombaire: {
-        running:'Bas du dos : gainage avant chaque séance (planche, bird-dog). Évitez les longues sorties sans échauffement postural.',
-        crossfit:'Bas du dos : deadlifts plafonnés à 70% 1RM. Dos neutre strict. Pas de cleans lourds.',
-        yoga:'Bas du dos : backbends profonds évités (Camel pose). Twists sans forçage. Forward folds avec genoux légèrement fléchis.',
-        cycling:'Bas du dos : guidon plus haut. Échauffement postural avant sortie. Positions aéro prolongées déconseillées.',
-        hyrox:'Bas du dos : farmer carry léger, dos neutre sur sled push. Rowing machine : gainage obligatoire.',
-        golf:'Bas du dos : mobilité thoracique en préalable. Swing progressif. Renforcez les abdominaux profonds.',
-        triathlon:'Bas du dos : fit vélo professionnel. Étirements lombaires en transition T2.',
-        calisthenics:'Bas du dos : front lever à extension contrôlée uniquement. L-sit avec gainage strict.'
+        running: _zwEN ? 'Lower back: core work before each session (plank, bird-dog). Avoid long runs without postural warm-up.' : 'Bas du dos : gainage avant chaque séance (planche, bird-dog). Évitez les longues sorties sans échauffement postural.',
+        crossfit: _zwEN ? 'Lower back: deadlifts capped at 70% 1RM. Strict neutral spine. No heavy cleans.' : 'Bas du dos : deadlifts plafonnés à 70% 1RM. Dos neutre strict. Pas de cleans lourds.',
+        yoga: _zwEN ? 'Lower back: avoid deep backbends (Camel pose). Twists without forcing. Forward folds with knees slightly bent.' : 'Bas du dos : backbends profonds évités (Camel pose). Twists sans forçage. Forward folds avec genoux légèrement fléchis.',
+        cycling: _zwEN ? 'Lower back: raise handlebars. Postural warm-up before ride. Prolonged aero positions not recommended.' : 'Bas du dos : guidon plus haut. Échauffement postural avant sortie. Positions aéro prolongées déconseillées.',
+        hyrox: _zwEN ? 'Lower back: light farmer carry, neutral back on sled push. Rowing machine: core bracing mandatory.' : 'Bas du dos : farmer carry léger, dos neutre sur sled push. Rowing machine : gainage obligatoire.',
+        golf: _zwEN ? 'Lower back: thoracic mobility first. Progressive swing. Strengthen deep abdominals.' : 'Bas du dos : mobilité thoracique en préalable. Swing progressif. Renforcez les abdominaux profonds.',
+        triathlon: _zwEN ? 'Lower back: professional bike fit. Lower-back stretches in T2 transition.' : 'Bas du dos : fit vélo professionnel. Étirements lombaires en transition T2.',
+        calisthenics: _zwEN ? 'Lower back: front lever with controlled extension only. L-sit with strict core bracing.' : 'Bas du dos : front lever à extension contrôlée uniquement. L-sit avec gainage strict.'
       },
       epaule: {
-        crossfit:'Épaules : pas de snatch ni de clean & jerk overhead. Scale systématique. Mouvements sous la hauteur des épaules.',
-        yoga:'Épaules : inversions déconseillées (handstand, headstand). Chaturanga modifié sur les genoux.',
-        hyrox:'Épaules : sled push amplitude réduite. Wall balls à hauteur modérée.',
-        padel:'Épaule / Coiffe : pas de smash à pleine puissance. Service avec amplitude réduite. Kinésithérapie si douleur persistante.',
-        triathlon:'Épaules : overreach réduit en crawl. Brasse ou dos crawlé si douloureux. Volume natation réduit.',
-        calisthenics:'Épaules : pas de handstand ni muscle-up. Remplacez par dips (amplitude limitée) et rows.',
-        golf:'Épaule : finition du swing réduite. Compensez par la rotation thoracique.'
+        crossfit: _zwEN ? 'Shoulders: no snatch or clean & jerk overhead. Systematic scaling. Movements below shoulder height.' : 'Épaules : pas de snatch ni de clean & jerk overhead. Scale systématique. Mouvements sous la hauteur des épaules.',
+        yoga: _zwEN ? 'Shoulders: inversions not recommended (handstand, headstand). Modified chaturanga on knees.' : 'Épaules : inversions déconseillées (handstand, headstand). Chaturanga modifié sur les genoux.',
+        hyrox: _zwEN ? 'Shoulders: reduced sled push range. Wall balls at moderate height.' : 'Épaules : sled push amplitude réduite. Wall balls à hauteur modérée.',
+        padel: _zwEN ? 'Shoulder / Rotator cuff: no full-power smash. Reduced service range. Physiotherapy if persistent pain.' : 'Épaule / Coiffe : pas de smash à pleine puissance. Service avec amplitude réduite. Kinésithérapie si douleur persistante.',
+        triathlon: _zwEN ? 'Shoulders: reduced overreach in crawl. Breaststroke or backstroke if painful. Reduced swim volume.' : 'Épaules : overreach réduit en crawl. Brasse ou dos crawlé si douloureux. Volume natation réduit.',
+        calisthenics: _zwEN ? 'Shoulders: no handstand or muscle-up. Replace with dips (limited range) and rows.' : 'Épaules : pas de handstand ni muscle-up. Remplacez par dips (amplitude limitée) et rows.',
+        golf: _zwEN ? 'Shoulder: reduced swing finish. Compensate with thoracic rotation.' : "Épaule : finition du swing réduite. Compensez par la rotation thoracique."
       },
       poignet: {
-        crossfit:'Poignets : wraps obligatoires. Pas de kipping pull-ups. Cleans remplacés par hex bar deadlifts si douloureux.',
-        yoga:'Poignets : planche sur les poings ou les coudes. Blocs sous les paumes pour réduire l\'extension.',
-        calisthenics:'Poignets : planche sur les poings. Évitez le L-sit en appui direct. Isométriques progressifs.',
-        golf:'Poignets : grip ferme mais non crispé. Antivibration sur le club.'
+        crossfit: _zwEN ? 'Wrists: wraps mandatory. No kipping pull-ups. Replace cleans with hex bar deadlifts if painful.' : "Poignets : wraps obligatoires. Pas de kipping pull-ups. Cleans remplacés par hex bar deadlifts si douloureux.",
+        yoga: _zwEN ? "Wrists: plank on fists or elbows. Blocks under palms to reduce extension." : "Poignets : planche sur les poings ou les coudes. Blocs sous les paumes pour réduire l'extension.",
+        calisthenics: _zwEN ? 'Wrists: plank on fists. Avoid L-sit on direct support. Progressive isometrics.' : 'Poignets : planche sur les poings. Évitez le L-sit en appui direct. Isométriques progressifs.',
+        golf: _zwEN ? 'Wrists: firm but not tight grip. Anti-vibration on the club.' : 'Poignets : grip ferme mais non crispé. Antivibration sur le club.'
       },
       coude: {
-        padel:'Coude / Épicondylite : pas de coup droit avec spin excessif. Poignée plus épaisse. Strapping. Arrêtez si douleur irradie.',
-        golf:'Coude : swing raccourci en backswing. Grip plus léger. Manchon de compression.',
-        calisthenics:'Coudes : pas de muscle-ups ni tractions kippées. Renforcement excentrique progressif.'
+        padel: _zwEN ? 'Elbow / Epicondylitis: no forehand with excessive spin. Thicker grip. Strapping. Stop if pain radiates.' : 'Coude / Épicondylite : pas de coup droit avec spin excessif. Poignée plus épaisse. Strapping. Arrêtez si douleur irradie.',
+        golf: _zwEN ? 'Elbow: shortened backswing. Lighter grip. Compression sleeve.' : 'Coude : swing raccourci en backswing. Grip plus léger. Manchon de compression.',
+        calisthenics: _zwEN ? 'Elbows: no muscle-ups or kipping pull-ups. Progressive eccentric strengthening.' : 'Coudes : pas de muscle-ups ni tractions kippées. Renforcement excentrique progressif.'
       },
       hanche: {
-        running:'Hanche / Ilio-psoas : étirements hip flexors après séance (2 × 90 sec/côté). Renforcement fessiers.',
-        yoga:'Hanches : pigeon pose avec bloc sous la hanche. Amplitude progressive. Surveillez tout pincement à l\'aine.'
+        running: _zwEN ? 'Hip / Ilio-psoas: hip flexor stretches after session (2 × 90 sec/side). Glute strengthening.' : 'Hanche / Ilio-psoas : étirements hip flexors après séance (2 × 90 sec/côté). Renforcement fessiers.',
+        yoga: _zwEN ? 'Hips: pigeon pose with block under hip. Progressive range. Watch for any pinching in the groin.' : 'Hanches : pigeon pose avec bloc sous la hanche. Amplitude progressive. Surveillez tout pincement à l\'aine.'
       },
       cervicale: {
-        crossfit:'Nuque : position overhead vérifiée. Soulévé de terre tête neutre obligatoire. Mobilité cervicale en échauffement.',
-        cycling:'Cervicales : guidon plus haut. Pauses mobilité cervicale toutes les 30 min sur les longues sorties.'
+        crossfit: _zwEN ? 'Neck: check overhead position. Deadlift with neutral head mandatory. Cervical mobility in warm-up.' : 'Nuque : position overhead vérifiée. Soulévé de terre tête neutre obligatoire. Mobilité cervicale en échauffement.',
+        cycling: _zwEN ? 'Cervicals: raise handlebars. Cervical mobility pauses every 30 min on long rides.' : 'Cervicales : guidon plus haut. Pauses mobilité cervicale toutes les 30 min sur les longues sorties.'
       }
     };
     var _szWarns = [];
