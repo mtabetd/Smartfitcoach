@@ -4212,3 +4212,137 @@ button:disabled,
   .sfc-help-item__a:not([hidden]) { animation: none; }
   .sfc-profile-help-row > span:last-child { transition: none; }
 }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   COGNITIVE LOAD REDUCTION — Apple-level UX clarity
+   Phase 8: Attention economy, progressive disclosure, visual rhythm.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Section entrance animation (card-by-card, staggered feel) ───────────── */
+@keyframes sfc-card-enter {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Primary cards: immediate render, no animation needed */
+/* Secondary cards (below-the-fold context): gentle entrance */
+.sfc-card-secondary {
+  animation: sfc-card-enter 0.35s cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation-delay: 0.08s;
+}
+
+/* ── Visual breathing room between major dashboard sections ──────────────── */
+/* Applies to max-width:560px wrappers in the today dashboard */
+[style*="max-width:560px"] + [style*="max-width:560px"],
+[style*="max-width: 560px"] + [style*="max-width: 560px"] {
+  margin-top: 8px;
+}
+
+/* ── Progression drawer trigger — elevated visual weight ─────────────────── */
+/* The "Voir ma progression →" button needs to feel like an invitation */
+#app [style*="View my progress"],
+#app [style*="Voir ma progression"] {
+  transition: background 0.2s ease, opacity 0.2s ease;
+}
+#app [style*="View my progress"]:active,
+#app [style*="Voir ma progression"]:active {
+  opacity: 0.75;
+}
+
+/* ── Food journal tab bar: pill-style active indicator ───────────────────── */
+/* Make active meal tab clearly distinct */
+.fj-tab-active,
+.fj-tab.active,
+[class*="fj-tab"][aria-selected="true"] {
+  border-bottom: 2px solid var(--black, #0A0A09) !important;
+  color: var(--black, #0A0A09) !important;
+  font-weight: 500;
+}
+
+/* ── Streak pill: subtle pulse on active day ─────────────────────────────── */
+@keyframes sfc-streak-pulse {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+/* Applied by JS on "done today" state — class added programmatically */
+.sfc-streak-done { animation: sfc-streak-pulse 2.4s ease infinite; }
+
+/* ── Empty state helper: warm, non-intimidating ──────────────────────────── */
+.sfc-empty-state {
+  text-align: center;
+  padding: 40px 24px;
+  color: var(--ink-500, #6B6B65);
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.sfc-empty-state__action {
+  display: inline-block;
+  margin-top: 20px;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--ink-900, #0A0A09);
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* ── Card visual hierarchy: primary vs secondary ─────────────────────────── */
+/* Primary cards (workout, nutrition) — full presence */
+.sfc-card-primary {
+  border-left: 3px solid var(--ink-900, #0A0A09);
+}
+/* Secondary cards (analytics, advanced metrics) — recessed */
+.sfc-card-secondary-visual {
+  opacity: 0.88;
+  border-left: none;
+}
+
+/* ── Touch feedback: instant, premium, 44px minimum ─────────────────────── */
+/* All interactive elements in the today dashboard */
+#app button,
+#app [role="button"],
+#app [onclick] {
+  touch-action: manipulation;
+}
+/* Minimum touch target for small controls */
+#app button:not([style*="width"]) {
+  min-height: 44px;
+}
+
+/* ── Typography improvements: readability on mobile ─────────────────────── */
+/* Prevent subpixel font rendering issues on mobile Safari */
+#app {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* Line-height floor for body text */
+#app p,
+#app [style*="font-size:12px"],
+#app [style*="font-size:13px"],
+#app [style*="font-size:14px"] {
+  line-height: 1.55;
+}
+
+/* ── Focus visibility: keyboard + switch access ──────────────────────────── */
+#app button:focus-visible,
+#app [role="button"]:focus-visible,
+#app input:focus-visible,
+#app select:focus-visible {
+  outline: 2px solid var(--ink-900, #0A0A09);
+  outline-offset: 3px;
+}
+
+/* ── Reduce motion: all new animations disabled ──────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .sfc-card-secondary,
+  .sfc-streak-done {
+    animation: none;
+  }
+}

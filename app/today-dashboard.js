@@ -5135,6 +5135,28 @@ function renderExtendedSections(wrapper, S) {
   }
   wrapper.appendChild(sleepBox);
 
+  // ── Advanced metrics (progressive disclosure — available here via "Voir ma progression") ──
+
+  // Volume tracking MEV/MAV/MRV (muscu users)
+  try {
+    var _extVolume = renderCardVolumeTracking();
+    if (_extVolume) {
+      wrapper.appendChild(sectionLabel(_exEN ? 'Volume tracking' : 'Suivi du volume'));
+      var _extVtDiv = document.createElement('div');
+      _extVtDiv.innerHTML = _extVolume;
+      if (_extVtDiv.firstElementChild) wrapper.appendChild(_extVtDiv.firstElementChild);
+    }
+  } catch(_eExtVt) {}
+
+  // TDEE adaptatif
+  try {
+    var _extTDEE = renderCardTDEEAdaptatif(S);
+    if (_extTDEE) {
+      wrapper.appendChild(sectionLabel(_exEN ? 'Adaptive caloric needs' : 'Besoins caloriques adaptatifs'));
+      wrapper.appendChild(_extTDEE);
+    }
+  } catch(_eExtTDEE) {}
+
   // Weekly Summary
   wrapper.appendChild(sectionLabel((window.isEnglish && window.isEnglish()) ? 'Weekly summary' : 'Résumé hebdomadaire'));
   var weeklyBox = card();
@@ -6849,15 +6871,8 @@ function renderTodayDashboard(p) {
   var cardStreak = renderCardStreak();
   if (cardStreak) wrapper.appendChild(cardStreak);
 
-  // Card 3b — Volume tracking MEV/MAV/MRV (muscu users uniquement)
-  try {
-    var cardVolume = renderCardVolumeTracking();
-    if (cardVolume) {
-      var _vtDiv = document.createElement('div');
-      _vtDiv.innerHTML = cardVolume;
-      if (_vtDiv.firstElementChild) wrapper.appendChild(_vtDiv.firstElementChild);
-    }
-  } catch(_eVt) { console.warn('[today] renderCardVolumeTracking error', _eVt); }
+  // Card 3b — Volume tracking MEV/MAV/MRV : moved to progression drawer (→ "Voir ma progression")
+  // Rationale: advanced metric — cognitive overload for most users on the main today view.
 
   // ═══ SECTION "CONTEXTE & SECONDAIRE" ═══
 
@@ -6919,9 +6934,8 @@ function renderTodayDashboard(p) {
     wrapper.appendChild(_gcWrap);
   }
 
-  // Card — TDEE adaptatif
-  var cardTDEE = renderCardTDEEAdaptatif(S);
-  if (cardTDEE) wrapper.appendChild(cardTDEE);
+  // Card — TDEE adaptatif : moved to progression drawer (→ "Voir ma progression")
+  // Rationale: highly technical metric — surfaced on demand, not by default.
 
   // Card — Bilan hebdo (dimanche uniquement)
   var cardWeekly = renderCardSundayReview(S);

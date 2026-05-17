@@ -342,7 +342,11 @@
     var msg = customMsg || t(tipId);
     if (!msg || msg === tipId) return; // no translation available
     if (_currentTip) {
-      _tipQueue.push({ id: tipId, msg: msg });
+      // Cap queue at 1 — prevent tip cascade (max 2 sequential tips per interaction).
+      // Dropped tips are not lost: their trigger conditions re-evaluate on next session.
+      if (_tipQueue.length < 1) {
+        _tipQueue.push({ id: tipId, msg: msg });
+      }
     } else {
       _showTipNow(tipId, msg);
     }
