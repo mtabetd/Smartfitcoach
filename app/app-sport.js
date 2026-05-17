@@ -9605,7 +9605,7 @@ function renderMusculationProgram(p) {
  _ncWrap.style.cssText = 'margin-top:12px;padding:10px 14px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);font-size:13px';
  var _ncTitle = document.createElement('div');
  _ncTitle.style.cssText = 'font-weight:600;margin-bottom:6px;color:var(--text)';
- _ncTitle.textContent = '\uD83C\uDF7D\ufe0f Impact nutritionnel';
+ _ncTitle.textContent = (window.isEnglish && window.isEnglish()) ? 'Nutritional impact' : 'Impact nutritionnel';
  _ncWrap.appendChild(_ncTitle);
  function _ncRow(label, value, valueStyle) {
    var row = document.createElement('div');
@@ -10225,7 +10225,7 @@ function renderMusculationProgram(p) {
  cycSportCard.appendChild(warnDiv);
  } else if (cycleInfo.phase.intensityFactor > 1.0) {
  var greenDiv = h('div', {style: 'margin-top:8px;padding:6px 10px;background:rgba(39,174,96,0.06);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--success,#3E5C3A);border-radius:2px'});
- greenDiv.textContent = '\u2705 Phase optimale \u2014 poussez vos limites !';
+ greenDiv.textContent = (window.isEnglish && window.isEnglish()) ? '\u2713 Optimal phase \u2014 push your limits!' : '\u2713 Phase optimale \u2014 poussez vos limites\u00a0!';
  cycSportCard.appendChild(greenDiv);
  }
  p.appendChild(cycSportCard);

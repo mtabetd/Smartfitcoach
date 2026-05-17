@@ -1912,7 +1912,7 @@ function _fjOpenCreateFoodModal() {
           + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--black,#0A0A09);'
           + 'display:flex;align-items:center;justify-content:center;gap:8px;box-sizing:border-box;'
       });
-      scanBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M3 3 L3 13 M5 3 L5 13 M7.5 3 L7.5 13 M10 3 L10 13 M13 3 L13 13"/></svg><span>Scanner un code-barres</span>';
+      scanBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M3 3 L3 13 M5 3 L5 13 M7.5 3 L7.5 13 M10 3 L10 13 M13 3 L13 13"/></svg><span>' + ((window.isEnglish && window.isEnglish()) ? 'Scan a barcode' : 'Scanner un code-barres') + '</span>';
       scanBtn.addEventListener('click', function() {
         try {
           todayModal((window.isEnglish && window.isEnglish()) ? 'Scan a barcode' : 'Scanner un code-barres', function(scanBox, scanOverlay) {
