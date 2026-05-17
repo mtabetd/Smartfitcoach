@@ -100,6 +100,7 @@ var PROFILE_KEYS = [
  'firstLoginDate',
  'sportMixEnabled',
  'sportMixSecondary',
+ 'sportMixTertiary',
  '_bodyFatEstimate',
  '_bodyCompositionProfile',
  '_bodyCompositionWeight',
@@ -193,7 +194,7 @@ var NUTRITION_PLAN_KEYS = [
 var SPORT_PROGRAM_KEYS = [
  'sportLevel', 'sportDays', 'sportEquipment', 'sportType', 'sportGoals',
  'sportFocus', 'muscuMedical',
- 'sportMixEnabled', 'sportMixSecondary',
+ 'sportMixEnabled', 'sportMixSecondary', 'sportMixTertiary',
  'pregnant', 'pregnancyWeek', // grossesse filtre les exercices dangereux → programme doit être régénéré
  'weight' // poids impacte estimateBaseLoad (débutants sans 1RM) et suggestionsPoids
 ];

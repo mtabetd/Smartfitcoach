@@ -3996,6 +3996,7 @@ window.S = {
   // Sport mix
   sportMixEnabled: false,       // mode sport mixte activé
   sportMixSecondary: null,      // sport secondaire en mode mixte
+  sportMixTertiary: null,       // sport tertiaire en mode mixte (3 disciplines)
   // Body composition
   _bodyFatEstimate: null,       // estimation % masse grasse (calcul interne)
   _bodyCompositionProfile: null,// profil composition corporelle détaillé
