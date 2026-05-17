@@ -4650,7 +4650,7 @@ function showPaywall(feature) {
   var dismiss = function() { ov.style.opacity = '0'; setTimeout(function() { if (ov.parentNode) ov.parentNode.removeChild(ov); }, 250); };
   var upgradeBtn = document.createElement('button');
   upgradeBtn.style.cssText = 'width:100%;padding:14px;margin-bottom:8px;background:var(--black,#0A0A09);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#fff;cursor:pointer;min-height:44px;letter-spacing:1px;';
-  upgradeBtn.textContent = 'Découvrir Premium →';
+  upgradeBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Discover Premium →' : 'Découvrir Premium →';
   upgradeBtn.onclick = function() {
     dismiss();
     if (window.SupaSync) { try { window.SupaSync._userStatusCacheTs = 0; } catch(_e) {} }
@@ -4658,7 +4658,7 @@ function showPaywall(feature) {
   };
   var closeBtn = document.createElement('button');
   closeBtn.style.cssText = 'width:100%;padding:14px;background:transparent;border:1px solid #D8D8D0;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#6B6B65;cursor:pointer;min-height:44px;';
-  closeBtn.textContent = 'Fermer';
+  closeBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Close' : 'Fermer';
   closeBtn.onclick = dismiss;
   box.appendChild(upgradeBtn);
   box.appendChild(closeBtn);
@@ -4718,7 +4718,8 @@ function showSubscriptionContact(plan, ui) {
   var _l1 = document.createElement('span'); _l1.style.cssText = 'flex:1;height:1px;background:var(--border,#D8D8D0);';
   var _titleSpan = document.createElement('span');
   _titleSpan.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);white-space:nowrap;';
-  _titleSpan.textContent = 'VOTRE ACCÈS SUR MESURE';
+  var _pmEN = window.isEnglish && window.isEnglish();
+  _titleSpan.textContent = _pmEN ? 'YOUR TAILORED ACCESS' : 'VOTRE ACCÈS SUR MESURE';
   var _l2 = document.createElement('span'); _l2.style.cssText = 'flex:1;height:1px;background:var(--border,#D8D8D0);';
   _headerLine.appendChild(_l1); _headerLine.appendChild(_titleSpan); _headerLine.appendChild(_l2);
   box.appendChild(_headerLine);
@@ -4733,7 +4734,7 @@ function showSubscriptionContact(plan, ui) {
   if (planLine) {
     var _selLabel = document.createElement('div');
     _selLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px;margin-top:12px;';
-    _selLabel.textContent = 'VOTRE SÉLECTION';
+    _selLabel.textContent = _pmEN ? 'YOUR SELECTION' : 'VOTRE SÉLECTION';
     box.appendChild(_selLabel);
     var _planTag = document.createElement('div');
     _planTag.style.cssText = 'display:inline-block;border:1px solid var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;margin:12px 0 16px;color:var(--black,#0A0A09);';
@@ -4744,21 +4745,21 @@ function showSubscriptionContact(plan, ui) {
   // Corps
   var _body = document.createElement('div');
   _body.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.8;margin-bottom:24px;';
-  _body.textContent = 'L\'accès à SmartFitCoach se fait par invitation personnalisée. Écrivez-nous, et nous vous répondrons dans les meilleurs délais avec l\'ensemble des détails : formules, tarifs et modalités d\'accès. Chaque demande reçoit notre attention complète.';
+  _body.textContent = _pmEN ? 'Access to SmartFitCoach is by personalised invitation. Write to us and we will respond promptly with all details: plans, pricing and access terms. Every request receives our full attention.' : 'L\'accès à SmartFitCoach se fait par invitation personnalisée. Écrivez-nous, et nous vous répondrons dans les meilleurs délais avec l\'ensemble des détails : formules, tarifs et modalités d\'accès. Chaque demande reçoit notre attention complète.';
   box.appendChild(_body);
 
   // Bouton principal — mailto
   var _mailBtn = document.createElement('a');
   _mailBtn.href = mailto;
   _mailBtn.style.cssText = 'display:block;width:100%;padding:16px;margin-bottom:10px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;text-decoration:none;box-sizing:border-box;cursor:pointer;border-radius:0;';
-  _mailBtn.textContent = 'Écrire à l\'équipe';
+  _mailBtn.textContent = _pmEN ? 'Write to the team' : 'Écrire à l\'équipe';
   box.appendChild(_mailBtn);
 
   // Bouton secondaire — fermer
   var dismiss = function() { ov.style.opacity = '0'; setTimeout(function() { if (ov.parentNode) ov.parentNode.removeChild(ov); }, 300); };
   var _closeBtn = document.createElement('button');
   _closeBtn.style.cssText = 'display:block;width:100%;padding:16px;background:transparent;border:1px solid var(--border,#D8D8D0);color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;border-radius:0;appearance:none;-webkit-appearance:none;';
-  _closeBtn.textContent = 'Peut-être plus tard';
+  _closeBtn.textContent = _pmEN ? 'Maybe later' : 'Peut-être plus tard';
   _closeBtn.onclick = dismiss;
   box.appendChild(_closeBtn);
 
@@ -4766,7 +4767,7 @@ function showSubscriptionContact(plan, ui) {
   var _reassure = document.createElement('div');
   var _filet = document.createElement('div'); _filet.style.cssText = 'height:1px;background:var(--border,#D8D8D0);margin:20px 0 14px;'; box.appendChild(_filet);
   _reassure.style.cssText = 'text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;color:var(--grey,#6B6B65);';
-  _reassure.textContent = 'Discrétion assurée — nous ne partageons aucune information personnelle.';
+  _reassure.textContent = _pmEN ? 'Full discretion — we never share personal information.' : 'Discrétion assurée — nous ne partageons aucune information personnelle.';
   box.appendChild(_reassure);
 
   ov.appendChild(box);

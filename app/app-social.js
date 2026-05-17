@@ -1250,14 +1250,14 @@ function renderEditProfile(container){
       var useBtn = _h('button', {
         type:'button', 'class':'btn-secondary',
         style:'margin:0;flex:1;min-width:150px'
-      }, currentPhotoUrl ? 'Regénérer depuis mon profil' : 'Utiliser ma photo de profil');
+      }, currentPhotoUrl ? ((window.isEnglish && window.isEnglish()) ? 'Re-generate from my profile' : 'Regénérer depuis mon profil') : ((window.isEnglish && window.isEnglish()) ? 'Use my profile photo' : 'Utiliser ma photo de profil'));
       useBtn.addEventListener('click', async function(){
         useBtn.disabled = true;
-        useBtn.textContent = 'Génération…';
+        useBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Generating…' : 'Génération…';
         var thumb = await _makeThumbnail(S.profilePhoto, 128, 0.7);
         if (thumb) { currentPhotoUrl = thumb; refreshEditPreview(); }
         useBtn.disabled = false;
-        useBtn.textContent = 'Regénérer depuis mon profil';
+        useBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Re-generate from my profile' : 'Regénérer depuis mon profil';
       });
       photoActions.appendChild(useBtn);
     }
