@@ -162,8 +162,10 @@ function compressImage(file, callback) {
       var b64 = canvas.toDataURL('image/jpeg', 0.92);
       callback(b64);
     };
+    img.onerror = function() { callback(null); };
     img.src = e.target.result;
   };
+  reader.onerror = function() { callback(null); };
   reader.readAsDataURL(file);
 }
 
@@ -486,6 +488,10 @@ function buildPanel() {
         return;
       }
       compressImage(file, function(b64) {
+        if (!b64) {
+          if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Unable to read this image. Please try another file.' : 'Impossible de lire cette image. Essayez un autre fichier.');
+          return;
+        }
         _photos[side] = b64;
         // Afficher preview
         zone.innerHTML = '';
@@ -631,6 +637,10 @@ function resetAnalysis() {
       var file = e.target.files[0];
       if (!file || !file.type.startsWith('image/')) return;
       compressImage(file, function(b64) {
+        if (!b64) {
+          if (window.showToast) window.showToast(isEN ? 'Unable to read this image. Please try another file.' : 'Impossible de lire cette image. Essayez un autre fichier.');
+          return;
+        }
         _photos[side] = b64;
         zone.innerHTML = '';
         var preview = document.createElement('img');

@@ -55,6 +55,7 @@ const DEFERRED_SCRIPTS = [
   './smart-calendar.js',
   './auth-banner.js',
   './onboarding-complete.js',
+  './onboarding-engine.js',
   './app-social.js',
   './feedback-widget.js',
   './plate-scan.js',
