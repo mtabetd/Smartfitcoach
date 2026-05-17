@@ -495,7 +495,7 @@ function loadProfile() {
  if (S.weekPlan && typeof S.weekPlan === 'string') { try { S.weekPlan = JSON.parse(S.weekPlan); } catch(e) { S.weekPlan = null; } }
  if (S.weekPlan !== null && !Array.isArray(S.weekPlan)) S.weekPlan = null;
  if (S.weeklyCalendar && typeof S.weeklyCalendar === 'string') { try { S.weeklyCalendar = JSON.parse(S.weeklyCalendar); } catch(e) { S.weeklyCalendar = null; } }
- if (S.weeklyCalendar !== null && !Array.isArray(S.weeklyCalendar)) S.weeklyCalendar = null;
+ if (S.weeklyCalendar !== null && (typeof S.weeklyCalendar !== 'object' || Array.isArray(S.weeklyCalendar))) S.weeklyCalendar = null;
  // mealTimes is an object {breakfast,lunch,snack,dinner} — reject malformed values
  if (S.mealTimes !== null && S.mealTimes !== undefined && (typeof S.mealTimes !== 'object' || Array.isArray(S.mealTimes))) S.mealTimes = null;
  // excluded is a string (comma-separated), not an array — guard separately
@@ -969,10 +969,17 @@ function renderProfilePage(container) {
    var sec3 = h('div', {style: 'margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);'});
    sec3.appendChild(h('div', {style: _sh}, 'SPORT'));
    var _sportNames = _pEN
-     ? { muscu: 'Weightlifting', crossfit: 'CrossFit', running: 'Running', triathlon: 'Triathlon', calisthenics: 'Calisthenics', hyrox: 'Hyrox', padel: 'Padel', golf: 'Golf', yoga: 'Yoga', cycling: 'Cycling' }
-     : { muscu: 'Musculation', crossfit: 'CrossFit', running: 'Course \u00e0 pied', triathlon: 'Triathlon', calisthenics: 'Calisth\u00e9nics', hyrox: 'Hyrox', padel: 'Padel', golf: 'Golf', yoga: 'Yoga', cycling: 'Cyclisme' };
+     ? { muscu: 'Weightlifting', musculation: 'Weightlifting', crossfit: 'CrossFit', running: 'Running', triathlon: 'Triathlon', calisthenics: 'Calisthenics', hyrox: 'Hyrox', padel: 'Padel', golf: 'Golf', yoga: 'Yoga', cycling: 'Cycling' }
+     : { muscu: 'Musculation', musculation: 'Musculation', crossfit: 'CrossFit', running: 'Course \u00e0 pied', triathlon: 'Triathlon', calisthenics: 'Calisth\u00e9nics', hyrox: 'Hyrox', padel: 'Padel', golf: 'Golf', yoga: 'Yoga', cycling: 'Cyclisme' };
    sec3.appendChild(_infoRow(_pEN ? 'Primary sport' : 'Sport principal', _sportNames[S.sportType] || S.sportType || '\u2014'));
-   if (S.sportMixEnabled && S.sportMixSecondary) sec3.appendChild(_infoRow(_pEN ? 'Secondary sport' : 'Sport secondaire', (_pEN ? 'Weightlifting (' : 'Musculation (') + (S.sportMixSecondary.days || 1) + (_pEN ? 'd)' : 'j)')));
+   if (S.sportMixEnabled && S.sportMixSecondary && S.sportMixSecondary.type) {
+     var _secLabel = (_sportNames[S.sportMixSecondary.type] || S.sportMixSecondary.type) + ' (' + (S.sportMixSecondary.days || 1) + (_pEN ? 'd)' : 'j)');
+     sec3.appendChild(_infoRow(_pEN ? 'Secondary sport' : 'Sport secondaire', _secLabel));
+   }
+   if (S.sportMixEnabled && S.sportMixTertiary && S.sportMixTertiary.type) {
+     var _terLabel = (_sportNames[S.sportMixTertiary.type] || S.sportMixTertiary.type) + ' (' + (S.sportMixTertiary.days || 1) + (_pEN ? 'd)' : 'j)');
+     sec3.appendChild(_infoRow(_pEN ? 'Tertiary sport' : 'Sport tertiaire', _terLabel));
+   }
    var _lvlNames = _pEN
      ? { beginner: 'Beginner', intermediate: 'Intermediate', advanced: 'Advanced', elite: 'Elite' }
      : { beginner: 'D\u00e9butant', intermediate: 'Interm\u00e9diaire', advanced: 'Avanc\u00e9', elite: '\u00c9lite' };

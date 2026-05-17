@@ -23,6 +23,11 @@ var RUNNING_MIX_SESSIONS = window.RUNNING_MIX_SESSIONS || [];
 var YOGA_MIX_SESSIONS = window.YOGA_MIX_SESSIONS || [];
 var CROSSFIT_MIX_SESSIONS = window.CROSSFIT_MIX_SESSIONS || [];
 var CALISTHENICS_MIX_SESSIONS = window.CALISTHENICS_MIX_SESSIONS || [];
+var HYROX_MIX_SESSIONS = window.HYROX_MIX_SESSIONS || [];
+var TRIATHLON_MIX_SESSIONS = window.TRIATHLON_MIX_SESSIONS || [];
+var CYCLING_MIX_SESSIONS = window.CYCLING_MIX_SESSIONS || [];
+var PADEL_MIX_SESSIONS = window.PADEL_MIX_SESSIONS || [];
+var GOLF_MIX_SESSIONS = window.GOLF_MIX_SESSIONS || [];
 var MACRO_PHASES = window.MACRO_PHASES || [];
 var MUSCU_PHASES = window.MUSCU_PHASES || [];
 var YOGA_SESSIONS = window.YOGA_SESSIONS || {};
@@ -3364,7 +3369,12 @@ function getMixSessionsForType(type, days) {
  else if (t === 'yoga')         source = YOGA_MIX_SESSIONS;
  else if (t === 'crossfit')     source = CROSSFIT_MIX_SESSIONS;
  else if (t === 'calisthenics') source = CALISTHENICS_MIX_SESSIONS;
- else                           source = MUSCU_MIX_SESSIONS; // défaut safe
+ else if (t === 'hyrox')        source = HYROX_MIX_SESSIONS;
+ else if (t === 'triathlon')    source = TRIATHLON_MIX_SESSIONS;
+ else if (t === 'cycling')      source = CYCLING_MIX_SESSIONS;
+ else if (t === 'padel')        source = PADEL_MIX_SESSIONS;
+ else if (t === 'golf')         source = GOLF_MIX_SESSIONS;
+ else                           source = MUSCU_MIX_SESSIONS;
  if (!source || !source.length) source = MUSCU_MIX_SESSIONS; // guard: source vide → fallback safe
  // Toujours retourner exactement "d" sessions (rotation si moins de sessions disponibles)
  var out = [];
@@ -10737,9 +10747,12 @@ function renderRunningConfig(p) {
  // 2026-04 PHASE 2 : offrir le mix pour running primaire aussi
  // sportDays utilisé par renderSportMixSection mappe vers runningDays ici
  var _prevSportDays = S.sportDays;
- S.sportDays = S.runningDays || 3;
- renderSportMixSection(p, 'running');
- S.sportDays = _prevSportDays;
+ try {
+  S.sportDays = S.runningDays || 3;
+  renderSportMixSection(p, 'running');
+ } finally {
+  S.sportDays = _prevSportDays;
+ }
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (window.isEnglish && window.isEnglish() ? 'Back' : 'Retour')}));
 }
 

@@ -30,47 +30,31 @@
     var sports = [];
     sports.push({ value: 'repos', label: _calLang === 'en' ? 'Rest' : 'Repos' });
     if (S) {
-      if (S.sportType === 'musculation' || S.sportMixEnabled) {
-        sports.push({ value: 'musculation', label: 'Musculation' });
-      }
-      if (S.sportType === 'crossfit' ||
-          (S.sportMixEnabled && S.sportMixSecondary && S.sportMixSecondary.type === 'crossfit')) {
-        sports.push({ value: 'crossfit', label: 'CrossFit' });
-      }
-      if (S.sportType === 'running' ||
-          (S.sportMixEnabled && S.sportMixSecondary && S.sportMixSecondary.type === 'running')) {
-        sports.push({ value: 'running', label: 'Running' });
-      }
-      if (S.sportType === 'padel') {
-        sports.push({ value: 'padel', label: 'Padel' });
-      }
-      if (S.sportType === 'golf') {
-        sports.push({ value: 'golf', label: 'Golf' });
-      }
-      if (S.sportType === 'yoga') {
-        sports.push({ value: 'yoga', label: 'Yoga' });
-      }
-      // FIX D7 COHÉRENCE SMART-CALENDAR 2026-04 : ajout des 4 sports manquants
-      // Avant : hyrox, triathlon, calisthenics, cycling absents → users sur ces disciplines
-      //         voyaient leur jour forcé à 'repos' → getDayType() isTraining=false
-      //         → split calorique faux (pas de bonus +200 kcal post-séance).
-      if (S.sportType === 'hyrox') {
-        sports.push({ value: 'hyrox', label: 'Hyrox' });
-      }
-      if (S.sportType === 'triathlon') {
-        // BUG-FIX: was hardcoded 'Triathlon' (FR only) — now bilingual
-        sports.push({ value: 'triathlon', label: _calLang === 'en' ? 'Triathlon' : 'Triathlon' });
-      }
-      if (S.sportType === 'calisthenics') {
-        // BUG-FIX: was hardcoded 'Calisthénie' (FR only) — now bilingual
-        sports.push({ value: 'calisthenics', label: _calLang === 'en' ? 'Calisthenics' : 'Calisthénie' });
-      }
-      if (S.sportType === 'cycling') {
-        // BUG-FIX: was hardcoded 'Cyclisme' (FR only) — now bilingual
-        sports.push({ value: 'cycling', label: _calLang === 'en' ? 'Cycling' : 'Cyclisme' });
+      var _en = _calLang === 'en';
+      var _calLabels = {
+        musculation: _en ? 'Weightlifting' : 'Musculation',
+        crossfit: 'CrossFit',
+        running: _en ? 'Running' : 'Course à pied',
+        hyrox: 'Hyrox',
+        padel: 'Padel',
+        golf: 'Golf',
+        triathlon: 'Triathlon',
+        yoga: 'Yoga',
+        cycling: _en ? 'Cycling' : 'Cyclisme',
+        calisthenics: _en ? 'Calisthenics' : 'Calisthénie'
+      };
+      var _seen = {};
+      var _addSport = function(type) {
+        if (!type || _seen[type]) return;
+        _seen[type] = true;
+        if (_calLabels[type]) sports.push({ value: type, label: _calLabels[type] });
+      };
+      _addSport(S.sportType);
+      if (S.sportMixEnabled) {
+        if (S.sportMixSecondary && S.sportMixSecondary.type) _addSport(S.sportMixSecondary.type);
+        if (S.sportMixTertiary && S.sportMixTertiary.type) _addSport(S.sportMixTertiary.type);
       }
     }
-    // BUG-FIX: 'Autre' was always French — now bilingual
     sports.push({ value: 'autre', label: _calLang === 'en' ? 'Other' : 'Autre' });
     return sports;
   }
