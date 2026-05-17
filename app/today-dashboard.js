@@ -1915,7 +1915,7 @@ function _fjOpenCreateFoodModal() {
       scanBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M3 3 L3 13 M5 3 L5 13 M7.5 3 L7.5 13 M10 3 L10 13 M13 3 L13 13"/></svg><span>Scanner un code-barres</span>';
       scanBtn.addEventListener('click', function() {
         try {
-          todayModal('Scanner un code-barres', function(scanBox, scanOverlay) {
+          todayModal((window.isEnglish && window.isEnglish()) ? 'Scan a barcode' : 'Scanner un code-barres', function(scanBox, scanOverlay) {
             var scanContainer = h('div', { style: 'margin-top:8px;' });
             try { window.SCANNER.renderWidget(scanContainer, { onPrefill: function(p) {
               if (!p) return;
@@ -1928,7 +1928,7 @@ function _fjOpenCreateFoodModal() {
               try { if (scanOverlay && scanOverlay.parentNode) scanOverlay.parentNode.removeChild(scanOverlay); } catch(e) {}
               if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Pre-filled values — verify before saving.' : 'Valeurs pré-remplies — vérifiez avant d\'enregistrer.', 'success', 2500);
             } }); }
-            catch(e) { scanContainer.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, 'Scanner indisponible sur ce navigateur.')); }
+            catch(e) { scanContainer.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, (window.isEnglish && window.isEnglish()) ? 'Scanner unavailable on this browser.' : 'Scanner indisponible sur ce navigateur.')); }
             scanBox.appendChild(scanContainer);
           });
         } catch(e) { console.warn('[create-food] scanner open failed:', e); }
@@ -2244,10 +2244,10 @@ function renderFoodJournalCard() {
     barcodeBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M3 3 L3 13 M5 3 L5 13 M7.5 3 L7.5 13 M10 3 L10 13 M13 3 L13 13"/></svg><span style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;">Code-barres</span>';
     barcodeBtn.addEventListener('click', function() {
       try {
-        todayModal('Scanner un code-barres', function(box) {
+        todayModal((window.isEnglish && window.isEnglish()) ? 'Scan a barcode' : 'Scanner un code-barres', function(box) {
           var scanContainer = h('div', { style: 'margin-top:8px;' });
           try { window.SCANNER.renderWidget(scanContainer); }
-          catch(e) { scanContainer.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, 'Scanner indisponible sur ce navigateur.')); }
+          catch(e) { scanContainer.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, (window.isEnglish && window.isEnglish()) ? 'Scanner unavailable on this browser.' : 'Scanner indisponible sur ce navigateur.')); }
           box.appendChild(scanContainer);
         });
       } catch(e) { console.warn('[journal] barcode scan open failed:', e); }
@@ -4730,7 +4730,7 @@ function renderCardShortcuts() {
 
   var btnMeal = h('button', {
     style: 'flex:1;background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:14px 8px;border:1px solid var(--border);border-radius:2px;cursor:pointer;transition:all .2s;',
-    'aria-label': 'Ajouter un repas',
+    'aria-label': (window.isEnglish && window.isEnglish()) ? 'Add a meal' : 'Ajouter un repas',
     onclick: function() {
       var S = window.S;
       if (!S) return;
@@ -4741,7 +4741,7 @@ function renderCardShortcuts() {
 
   var btnSport = h('button', {
     style: 'flex:1;background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:14px 8px;border:1px solid var(--border);border-radius:2px;cursor:pointer;transition:all .2s;',
-    'aria-label': 'Voir mon programme sportif',
+    'aria-label': (window.isEnglish && window.isEnglish()) ? 'View my sport plan' : 'Voir mon programme sportif',
     onclick: function() {
       var S = window.S;
       if (!S) return;
@@ -4782,7 +4782,7 @@ function todayModal(title, buildFn) {
   }
   var closeBtn = h('button', {
     style: 'position:absolute;top:12px;right:16px;background:none;border:none;font-size:18px;cursor:pointer;color:var(--grey);',
-    'aria-label': 'Fermer',
+    'aria-label': (window.isEnglish && window.isEnglish()) ? 'Close' : 'Fermer',
     onclick: _closeModal
   }, '\u00D7');
   box.appendChild(closeBtn);
@@ -4880,7 +4880,7 @@ function openTodayWeightPrompt() {
 
 // ─── MEASUREMENTS MODAL ───
 function openTodayMeasurementsModal() {
-  todayModal('Mes mensurations', function(box) {
+  todayModal((window.isEnglish && window.isEnglish()) ? 'My measurements' : 'Mes mensurations', function(box) {
     var formContainer = h('div', { style: 'margin-top:8px;' });
     if (window.MEASUREMENTS && window.MEASUREMENTS.renderForm) {
       try { window.MEASUREMENTS.renderForm(formContainer); } catch(e) {
@@ -4895,11 +4895,12 @@ function openTodayMeasurementsModal() {
 
 // ─── BADGES MODAL ───
 function openTodayBadgesModal() {
-  todayModal('Tous les badges', function(box) {
+  var _bEN = window.isEnglish && window.isEnglish();
+  todayModal(_bEN ? 'All badges' : 'Tous les badges', function(box) {
     var panel = h('div', { style: 'margin-top:8px;' });
     if (window.GAMIFICATION && window.GAMIFICATION.renderBadgesPanel) {
       try { window.GAMIFICATION.renderBadgesPanel(panel); } catch(e) {
-        panel.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, 'Panneau badges indisponible.'));
+        panel.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, _bEN ? 'Badges panel unavailable.' : 'Panneau badges indisponible.'));
       }
     }
     box.appendChild(panel);
@@ -4909,7 +4910,7 @@ function openTodayBadgesModal() {
 // ─── KITCHEN TIMER MODAL ───
 function openTodayKitchenTimer() {
   if (window._kitchenTimerInterval) { clearInterval(window._kitchenTimerInterval); window._kitchenTimerInterval = null; }
-  todayModal('Timer cuisine', function(box, overlay) {
+  todayModal((window.isEnglish && window.isEnglish()) ? 'Kitchen timer' : 'Timer cuisine', function(box, overlay) {
     box.style.textAlign = 'center';
     var display = h('div', {
       style: 'font-family:Georgia,serif;font-style:italic;font-size:48px;margin:24px 0 8px;line-height:1.1;color:var(--black);'
@@ -5055,8 +5056,8 @@ function todayDeleteAllData() {
 // ─── RENDER EXTENDED SECTIONS (ex-Dashboard) ───
 function renderExtendedSections(wrapper, S) {
   if (!S || typeof S !== 'object') return;
-  // Actions rapides
-  wrapper.appendChild(sectionLabel('Actions rapides'));
+  var _exEN = window.isEnglish && window.isEnglish();
+  wrapper.appendChild(sectionLabel(_exEN ? 'Quick actions' : 'Actions rapides'));
   var actCard = card();
   var navRow = h('div', { style: 'display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;' });
 
@@ -5069,7 +5070,7 @@ function renderExtendedSections(wrapper, S) {
     onclick: function() { if (window.APP_NAVIGATE) window.APP_NAVIGATE('nutrition'); else { S.view = 'nutrition'; if (window.render) window.render(); } }
   });
   nutNavBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:17px;font-weight:normal;color:var(--ink-900,#0A0A09);margin-bottom:6px;' }, 'Nutrition'));
-  nutNavBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-style:italic;font-size:13px;color:var(--ink-500,#6B6B65);line-height:1.4;' }, 'Planifiez vos repas.'));
+  nutNavBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-style:italic;font-size:13px;color:var(--ink-500,#6B6B65);line-height:1.4;' }, _exEN ? 'Plan your meals.' : 'Planifiez vos repas.'));
   navRow.appendChild(nutNavBtn);
 
   var sportNavBtn = h('div', {
@@ -5088,16 +5089,16 @@ function renderExtendedSections(wrapper, S) {
     style: 'background:var(--ivory2);border:1px solid var(--border);padding:16px;cursor:pointer;text-align:center;transition:all .2s ease;',
     onclick: function() { openTodayWeightPrompt(); }
   });
-  weightActBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;margin:0 0 4px;' }, 'Poids'));
-  weightActBtn.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Enregistrer'));
+  weightActBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;margin:0 0 4px;' }, _exEN ? 'Weight' : 'Poids'));
+  weightActBtn.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, _exEN ? 'Log it' : 'Enregistrer'));
   btnRow.appendChild(weightActBtn);
 
   var measActBtn = h('div', {
     style: 'background:var(--ivory2);border:1px solid var(--border);padding:16px;cursor:pointer;text-align:center;transition:all .2s ease;',
     onclick: function() { openTodayMeasurementsModal(); }
   });
-  measActBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;margin:0 0 4px;' }, 'Mensur.'));
-  measActBtn.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Mes mesures'));
+  measActBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;margin:0 0 4px;' }, _exEN ? 'Meas.' : 'Mensur.'));
+  measActBtn.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, _exEN ? 'My measures' : 'Mes mesures'));
   btnRow.appendChild(measActBtn);
 
   var timerActBtn = h('div', {
@@ -5105,29 +5106,29 @@ function renderExtendedSections(wrapper, S) {
     onclick: function() { openTodayKitchenTimer(); }
   });
   timerActBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;margin:0 0 4px;' }, 'Timer'));
-  timerActBtn.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Cuisine'));
+  timerActBtn.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, _exEN ? 'Kitchen' : 'Cuisine'));
   btnRow.appendChild(timerActBtn);
   actCard.appendChild(btnRow);
   wrapper.appendChild(actCard);
 
   // Water Tracker
-  wrapper.appendChild(sectionLabel('Suivi hydratation'));
+  wrapper.appendChild(sectionLabel(_exEN ? 'Hydration tracking' : 'Suivi hydratation'));
   var waterBox = card();
   if (window.WATER_TRACKER && window.WATER_TRACKER.renderWidget) {
     try { window.WATER_TRACKER.renderWidget(waterBox); } catch(e) {
-      waterBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Suivi hydratation non disponible pour le moment.'));
+      waterBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, _exEN ? 'Hydration tracking unavailable at the moment.' : 'Suivi hydratation non disponible pour le moment.'));
     }
   } else {
-    waterBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Enregistrez votre consommation d\u2019eau via le suivi hydratation.'));
+    waterBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, _exEN ? 'Track your water intake using the hydration tracker.' : 'Enregistrez votre consommation d\u2019eau via le suivi hydratation.'));
   }
   wrapper.appendChild(waterBox);
 
   // Sleep Tracker
-  wrapper.appendChild(sectionLabel('Suivi sommeil'));
+  wrapper.appendChild(sectionLabel(_exEN ? 'Sleep tracking' : 'Suivi sommeil'));
   var sleepBox = card();
   if (window.SLEEP_TRACKER && window.SLEEP_TRACKER.renderWidget) {
     try { window.SLEEP_TRACKER.renderWidget(sleepBox); } catch(e) {
-      sleepBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Suivi sommeil non disponible pour le moment.'));
+      sleepBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, _exEN ? 'Sleep tracking unavailable at the moment.' : 'Suivi sommeil non disponible pour le moment.'));
     }
   } else {
     sleepBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, (window.isEnglish && window.isEnglish()) ? 'Record your nights to track your sleep quality.' : 'Enregistrez vos nuits pour suivre la qualit\u00e9 de votre sommeil.'));
@@ -5147,11 +5148,11 @@ function renderExtendedSections(wrapper, S) {
   wrapper.appendChild(weeklyBox);
 
   // Progression
-  wrapper.appendChild(sectionLabel('Ma progression'));
+  wrapper.appendChild(sectionLabel(_exEN ? 'My progress' : 'Ma progression'));
   var perfBox = card();
   if (window.PERF_HISTORY && window.PERF_HISTORY.renderProgressionWidget) {
     try { window.PERF_HISTORY.renderProgressionWidget(perfBox); } catch(e) {
-      perfBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Graphique de progression non disponible pour le moment.'));
+      perfBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, _exEN ? 'Progress chart unavailable at the moment.' : 'Graphique de progression non disponible pour le moment.'));
     }
   } else {
     perfBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, (window.isEnglish && window.isEnglish()) ? 'Your progress will appear here as you complete sessions.' : 'Votre progression s\u2019affichera ici au fil de vos s\u00e9ances.'));
@@ -8159,7 +8160,7 @@ function renderProgressionDrawer() {
   });
   header.appendChild(h('button', {
     style: 'background:transparent;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-900,#0A0A09);cursor:pointer;padding:10px 0;font-weight:500;min-height:44px;',
-    'aria-label': 'Fermer',
+    'aria-label': (window.isEnglish && window.isEnglish()) ? 'Close' : 'Fermer',
     onclick: function() { S._dashExtOpen = false; if (window.render) window.render(); }
   }, (window.isEnglish && window.isEnglish()) ? '\u2190 CLOSE' : '\u2190 FERMER'));
   header.appendChild(h('div', {
