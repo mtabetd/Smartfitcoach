@@ -1131,7 +1131,16 @@
     // Singuliers défensifs → pluriels curatés
     'traction':                'tractions',
     'burpee':                  'burpees',
-    'pompe':                   'pompes classiques'
+    'pompe':                   'pompes classiques',
+    // Variantes manquantes identifiées par audit 2026-05
+    'rowing t bar':            't bar row',
+    't bar':                   't bar row',
+    'tirage vertical':         'tirage vertical poulie',
+    'fente bulgare barre':     'split squat bulgare',
+    'straight arm pulldown':   'straight arm pulldown barre',
+    'abdos rouleau':           'ab rollout sur genoux',
+    'ab wheel':                'ab rollout sur genoux',
+    'ecarte poulie':           'cable crossover'
   };
 
   // ─── Aliases CrossFit / Hyrox : abréviations → clé CF_QUERIES ───────────
@@ -1230,12 +1239,19 @@
   function buildSmartVideoUrl(name, lv) {
     if (!name) return null;
 
+    // Superset / parenthetical pre-processing : "Curl + Dips" → "Curl", "Row (T-bar)" → "Row"
+    // Prend seulement le premier exercice d'un superset pour la résolution vidéo
+    var _n = String(name);
+    if (_n.indexOf(' + ') !== -1) _n = _n.split(' + ')[0].trim();
+    if (_n.indexOf('(') !== -1)  _n = _n.replace(/\s*\([^)]*\)/g, '').trim();
+    if (!_n) _n = name;
+
     // 1. Registre direct : URL exacte (watch?v= ou shorts/) — priorité absolue
-    var directUrl = _resolveDirectVideo(name, lv, false);
+    var directUrl = _resolveDirectVideo(_n, lv, false);
     if (directUrl) return directUrl;
 
     // 2. Recherche filtrée par canal (fallback si pas de vidéo directe dans le registre)
-    var resolved = _resolveKey(name, CURATED_QUERIES, EXERCISE_ALIASES);
+    var resolved = _resolveKey(_n, CURATED_QUERIES, EXERCISE_ALIASES);
     var chan = _resolveChannel(lv);
     var baseQuery = CURATED_QUERIES[resolved.key];
 

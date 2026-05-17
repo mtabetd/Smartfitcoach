@@ -6810,7 +6810,8 @@ window.generateGolfProgram=generateGolfProgram;
 
 // ─── CARDIO PRESCRIPTIONS (ACSM 2018, Tanaka FCmax) ───
 function generateCardioPrescription(userAge, userWeight, sportGoals, sportLevel, sex) {
-  var fcMax = Math.round(208 - 0.7 * (userAge || 30));
+  var _safeAge = (userAge && userAge >= 13 && userAge <= 100) ? userAge : 30;
+  var fcMax = Math.round(208 - 0.7 * _safeAge);
   var isShred = sportGoals && (sportGoals.indexOf('shred') !== -1 || sportGoals.indexOf('weightloss') !== -1);
   var isBulk = sportGoals && sportGoals.indexOf('muscle') !== -1;
   var isEndurance = sportGoals && sportGoals.indexOf('endurance') !== -1;
@@ -7080,21 +7081,7 @@ if (Object.freeze) {
     return tampered.length === 0;
   };
 
-  // ─── SECURITY: Anti-copy protection on sensitive calculated results ───
-  // Disables right-click and text selection on macro result elements
-  document.addEventListener('DOMContentLoaded', function() {
-    document.addEventListener('contextmenu', function(e) {
-      var el = e.target;
-      // Only block on macro/result display elements
-      if (el && (
-        el.classList.contains('macro-cell') ||
-        el.classList.contains('result-title') ||
-        el.classList.contains('stat-val')
-      )) {
-        e.preventDefault();
-      }
-    });
-  });
+  // Context menu allowed — users must be able to copy their own health data (GDPR Art. 20)
 })();
 
 })();
@@ -7150,7 +7137,7 @@ function exportUserData() {
   a.download = 'smartfitcoach-mes-donnees-' + new Date().toISOString().slice(0,10) + '.json';
   document.body.appendChild(a);
   a.click();
-  setTimeout(function() { document.body.removeChild(a); URL.revokeObjectURL(url); }, 1000);
+  setTimeout(function() { document.body.removeChild(a); URL.revokeObjectURL(url); }, 5000);
 }
 
 // Exposer globalement
