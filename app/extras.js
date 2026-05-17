@@ -1979,7 +1979,8 @@ window.PHOTO_PROGRESS = {
     // Section label
     var label = document.createElement('div');
     label.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border,#D8D8D0)';
-    label.textContent = 'Photos de progression';
+    var _ppEN = window.isEnglish && window.isEnglish();
+    label.textContent = _ppEN ? 'Progress photos' : 'Photos de progression';
     section.appendChild(label);
 
     // Upload buttons
@@ -1990,7 +1991,7 @@ window.PHOTO_PROGRESS = {
     ['front', 'back'].forEach(function(type) {
       var btn = document.createElement('div');
       btn.className = 'photo-upload-btn';
-      btn.textContent = '\uD83D\uDCF7 Photo ' + (type === 'front' ? 'de face' : 'de dos');
+      btn.textContent = _ppEN ? 'Photo ' + (type === 'front' ? 'front' : 'back') : 'Photo ' + (type === 'front' ? 'de face' : 'de dos');
       btn.onclick = function() {
         var input = document.createElement('input');
         input.type = 'file';
@@ -2042,7 +2043,7 @@ window.PHOTO_PROGRESS = {
       if (frontPhotos.length > 0) {
         var frontLabel = document.createElement('div');
         frontLabel.style.cssText = 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);margin:8px 0 4px;letter-spacing:2px;text-transform:uppercase';
-        frontLabel.textContent = 'Face \u2014 ' + frontPhotos.length + ' photos';
+        frontLabel.textContent = (_ppEN ? 'Front \u2014 ' : 'Face \u2014 ') + frontPhotos.length + ' photos';
         section.appendChild(frontLabel);
 
         var frontRow = document.createElement('div');
@@ -2066,7 +2067,7 @@ window.PHOTO_PROGRESS = {
       if (backPhotos.length > 0) {
         var backLabel = document.createElement('div');
         backLabel.style.cssText = 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);margin:8px 0 4px;letter-spacing:2px;text-transform:uppercase';
-        backLabel.textContent = 'Dos \u2014 ' + backPhotos.length + ' photos';
+        backLabel.textContent = (_ppEN ? 'Back \u2014 ' : 'Dos \u2014 ') + backPhotos.length + ' photos';
         section.appendChild(backLabel);
 
         var backRow = document.createElement('div');
@@ -2091,7 +2092,7 @@ window.PHOTO_PROGRESS = {
       if (frontPhotos.length >= 2) {
         var compLabel = document.createElement('div');
         compLabel.style.cssText = 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);margin:16px 0 8px;letter-spacing:2px;text-transform:uppercase';
-        compLabel.textContent = 'Avant / Apr\u00E8s';
+        compLabel.textContent = _ppEN ? 'Before / After' : 'Avant / Apr\u00E8s';
         section.appendChild(compLabel);
 
         var compGrid = document.createElement('div');
@@ -2109,7 +2110,7 @@ window.PHOTO_PROGRESS = {
           card.appendChild(img);
           var clabel = document.createElement('div');
           clabel.style.cssText = 'font-family:Georgia;font-size:13px;' + (idx === 0 ? 'color:var(--grey)' : 'color:var(--green,#1A4A1A)');
-          clabel.textContent = idx === 0 ? 'D\u00E9but \u2014 ' + photo.date : 'Maintenant \u2014 ' + photo.date;
+          clabel.textContent = idx === 0 ? (_ppEN ? 'Start \u2014 ' : 'D\u00E9but \u2014 ') + photo.date : (_ppEN ? 'Now \u2014 ' : 'Maintenant \u2014 ') + photo.date;
           card.appendChild(clabel);
           compGrid.appendChild(card);
         });
@@ -2118,7 +2119,7 @@ window.PHOTO_PROGRESS = {
     } else {
       var empty = document.createElement('div');
       empty.style.cssText = 'text-align:center;padding:20px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey3,#C8C8C0)';
-      empty.textContent = 'Prenez votre premi\u00E8re photo pour suivre votre progression';
+      empty.textContent = _ppEN ? 'Take your first photo to track your progress' : 'Prenez votre premi\u00E8re photo pour suivre votre progression';
       section.appendChild(empty);
     }
 
