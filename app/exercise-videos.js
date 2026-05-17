@@ -43,15 +43,23 @@
   //   → "AthleanX dips form tutorial" → premier résultat = vidéo AthleanX.
   //   → Fiable mobile/desktop/iOS/Android, toutes régions.
   //   channelName = nom d'affichage ("AthleanX", "Tibo InShape", "Jeff Nippard", "CrossFit")
+  //
+  //   sp=EgIYAQ%3D%3D = YouTube Videos filter (exclut channels, playlists).
+  //   Shorts : ne peuvent pas être exclus par sp (YouTube les classe "type=Video").
+  //   Anti-Shorts : queries suffisamment spécifiques (ex. "proper form technique tutorial")
+  //   → YouTube ne remonte jamais de Shorts sur des queries multi-mots pédagogiques.
+  //
+  //   IMPORTANT : utiliser %3D%3D (simple-encodé), PAS %253D%253D (double-encodé).
+  //   Double-encodé = YouTube reçoit EgIYAQ%3D%3D (invalide) → filtre ignoré.
   function _buildChannelUrl(channelName, query) {
     return 'https://www.youtube.com/results?search_query='
       + encodeURIComponent(channelName + ' ' + query)
-      + '&sp=EgIYAQ%253D%253D';
+      + '&sp=EgIYAQ%3D%3D';
   }
   // _buildFallbackUrl : recherche générale sans canal — utilisée quand l'exercice est inconnu.
   function _buildFallbackUrl(query) {
     return 'https://www.youtube.com/results?search_query='
-      + encodeURIComponent(query) + '&sp=EgIYAQ%253D%253D';
+      + encodeURIComponent(query) + '&sp=EgIYAQ%3D%3D';
   }
 
   // ─── Niveaux de confiance ──────────────────────────────────────────────────
@@ -113,11 +121,13 @@
 
   // Métadonnées de version — utile pour audits et diagnostics
   var _META = {
-    version:          '5.1',
-    urlStrategy:      'channel-name-video-search', // 'results?search_query=CHANNEL+QUERY&sp=EgIYAQ'
-    fallbackStrategy: 'video-filter',              // idem, sans nom de canal
+    version:          '5.4',
+    urlStrategy:      'direct-registry-first',     // watch?v= / shorts/ → channel-search fallback
+    fallbackStrategy: 'channel-name-video-search', // results?search_query=CHANNEL+QUERY&sp=EgIYAQ
     exerciseCoverage: 338,                         // entrées CURATED_QUERIES
     cfCoverage:       86,                          // entrées CF_QUERIES
+    directRegistry:   true,                        // DIRECT_VIDEO_REGISTRY actif
+    directRegistrySize: 66,                        // 50 CF + 16 muscu (API-validated)
     auditDate:        '2026-05'
   };
 
@@ -138,38 +148,304 @@
     3: ['Squat University', 'Jeff Nippard', 'Stronger By Science']
   };
 
+  // ─── Registre vidéo direct ────────────────────────────────────────────────
+  // Chaque entrée : URL directe youtube.com/watch?v=ID ou youtube.com/shorts/ID
+  // verified: true  = ID testé et confirmé valide
+  // verified: false = ID à vérifier sur YouTube avant production
+  // null            = aucune vidéo directe disponible → rien n'est affiché
+  //
+  // Niveaux : 'fr_beginner' | 'en_any' | 'advanced' | 'cf'
+  // Résolution : fr_beginner (lv=1, FR) → en_any (lv=1-2, EN) → advanced (lv=3) → cf (CrossFit)
+  //
+  // ⚠ IMPORTANT POUR LES CONTRIBUTEURS :
+  //   1. Tester chaque URL avant de passer verified:true
+  //   2. Préférer les Shorts (15-60s) quand l'exercice est clairement démontré
+  //   3. Vérifier : exercice exact, technique propre, source fiable, pas de compilation
+  //   4. Ne jamais ajouter un ID non testé avec verified:true
+  //
+  // Comment trouver une bonne vidéo :
+  //   → youtube.com/results?search_query=TiboInShape+développé+couché+short&sp=EgIYAQ%3D%3D
+  //   → youtube.com/results?search_query=AthleanX+bench+press+short&sp=EgIYAQ%3D%3D
+  //   → CrossFit Movement Standards playlist : youtube.com/@CrossFit/playlists
+  var DIRECT_VIDEO_REGISTRY = {
+    'developpe couche': {
+      fr_beginner: { url: 'https://www.youtube.com/shorts/nBJky6rLbjw', verified: false, source: 'TiboInShape', score: 60 },
+      en_any: { url: 'https://www.youtube.com/shorts/s-T3E6654A8', verified: false, source: 'athleanx', score: 55 },
+    },
+    'developpe halteres couche': {
+      fr_beginner: { url: 'https://www.youtube.com/shorts/eYOzEiSMO4s', verified: false, source: 'TiboInShape', score: 37 },
+      en_any: { url: 'https://www.youtube.com/shorts/s-T3E6654A8', verified: false, source: 'athleanx', score: 55 },
+    },
+    'developpe couche haltere unilateral': {
+      fr_beginner: { url: 'https://www.youtube.com/shorts/rgPDTr46RNE', verified: false, source: 'TiboInShape', score: 42 },
+      en_any: { url: 'https://www.youtube.com/shorts/s-T3E6654A8', verified: false, source: 'athleanx', score: 55 },
+    },
+    'developpe incline': {
+      fr_beginner: { url: 'https://www.youtube.com/shorts/wj_zXKF7Mh0', verified: false, source: 'TiboInShape', score: 45 },
+      en_any: { url: 'https://www.youtube.com/shorts/PU8_czOohQs', verified: false, source: 'athleanx', score: 60 },
+    },
+    'developpe incline barre': {
+      fr_beginner: { url: 'https://www.youtube.com/shorts/wj_zXKF7Mh0', verified: false, source: 'TiboInShape', score: 38 },
+      en_any: { url: 'https://www.youtube.com/shorts/s-T3E6654A8', verified: false, source: 'athleanx', score: 55 },
+    },
+    'developpe incline halteres': {
+      fr_beginner: { url: 'https://www.youtube.com/shorts/wj_zXKF7Mh0', verified: false, source: 'TiboInShape', score: 38 },
+      en_any: { url: 'https://www.youtube.com/shorts/s-T3E6654A8', verified: false, source: 'athleanx', score: 55 },
+    },
+    'developpe decline': {
+      fr_beginner: { url: 'https://www.youtube.com/shorts/pX3tD7APce0', verified: false, source: 'TiboInShape', score: 47 },
+      en_any: { url: 'https://www.youtube.com/shorts/PU8_czOohQs', verified: false, source: 'athleanx', score: 60 },
+    },
+    'developpe decline barre': {
+      fr_beginner: { url: 'https://www.youtube.com/shorts/pX3tD7APce0', verified: false, source: 'TiboInShape', score: 47 },
+      en_any: { url: 'https://www.youtube.com/shorts/s-T3E6654A8', verified: false, source: 'athleanx', score: 55 },
+    },
+    'close grip bench press': {
+      en_any: { url: 'https://www.youtube.com/shorts/s-T3E6654A8', verified: false, source: 'athleanx', score: 65 },
+    },
+    'developpe couche prise serree': {
+      fr_beginner: { url: 'https://www.youtube.com/shorts/rgPDTr46RNE', verified: false, source: 'TiboInShape', score: 42 },
+      en_any: { url: 'https://www.youtube.com/shorts/s-T3E6654A8', verified: false, source: 'athleanx', score: 55 },
+    },
+    'chest press machine': {
+      fr_beginner: { url: 'https://www.youtube.com/shorts/MUa0U36oz3s', verified: false, source: 'TiboInShape', score: 50 },
+      en_any: { url: 'https://www.youtube.com/shorts/s-T3E6654A8', verified: false, source: 'athleanx', score: 68 },
+    },
+    'chest press unilateral cable': {
+      en_any: { url: 'https://www.youtube.com/shorts/s-T3E6654A8', verified: false, source: 'athleanx', score: 65 },
+    },
+    'pompes classiques': {
+      fr_beginner: { url: 'https://www.youtube.com/shorts/kYPPcb3ucCE', verified: false, source: 'TiboInShape', score: 52 },
+      en_any: { url: 'https://www.youtube.com/shorts/IlWN4SNqaEM', verified: false, source: 'athleanx', score: 50 },
+    },
+    'pompes diamant': {
+      fr_beginner: { url: 'https://www.youtube.com/shorts/Wt78IMVu4sY', verified: false, source: 'TiboInShape', score: 45 },
+      en_any: { url: 'https://www.youtube.com/shorts/At8PRTDDhrU', verified: false, source: 'athleanx', score: 45 },
+    },
+    'diamond push up': {
+      fr_beginner: { url: 'https://www.youtube.com/shorts/3J8QPfZ3L0Q', verified: false, source: 'TiboInShape', score: 50 },
+      en_any: { url: 'https://www.youtube.com/shorts/At8PRTDDhrU', verified: false, source: 'athleanx', score: 65 },
+    },
+    'pompes declinees': {
+      fr_beginner: { url: 'https://www.youtube.com/shorts/GV6BrFXHz9U', verified: false, source: 'TiboInShape', score: 30 },
+      en_any: { url: 'https://www.youtube.com/shorts/IlWN4SNqaEM', verified: false, source: 'athleanx', score: 50 },
+    },
+    'snatch': {
+      cf: { url: 'https://www.youtube.com/shorts/GhxhiehJcQY', verified: false, source: 'CrossFit', score: 85 },
+    },
+    'power snatch': {
+      cf: { url: 'https://www.youtube.com/shorts/TL8SMp7RdXQ', verified: false, source: 'CrossFit', score: 70 },
+    },
+    'hang snatch': {
+      cf: { url: 'https://www.youtube.com/shorts/-mLzQdVAwlw', verified: false, source: 'CrossFit', score: 85 },
+    },
+    'hang power snatch': {
+      cf: { url: 'https://www.youtube.com/shorts/-mLzQdVAwlw', verified: false, source: 'CrossFit', score: 85 },
+    },
+    'clean and jerk': {
+      cf: { url: 'https://www.youtube.com/shorts/PjY1rH4_MOA', verified: false, source: 'CrossFit', score: 70 },
+    },
+    'clean jerk': {
+      cf: { url: 'https://www.youtube.com/shorts/PjY1rH4_MOA', verified: false, source: 'CrossFit', score: 70 },
+    },
+    'power clean': {
+      cf: { url: 'https://www.youtube.com/shorts/Sk1vhXhHO_A', verified: false, source: 'CrossFit', score: 75 },
+    },
+    'hang power clean': {
+      cf: { url: 'https://www.youtube.com/shorts/DaKC_BEN5bk', verified: false, source: 'CrossFit', score: 72 },
+    },
+    'hang power cleans': {
+      cf: { url: 'https://www.youtube.com/shorts/DaKC_BEN5bk', verified: false, source: 'CrossFit', score: 58 },
+    },
+    'hang clean': {
+      cf: { url: 'https://www.youtube.com/shorts/DaKC_BEN5bk', verified: false, source: 'CrossFit', score: 85 },
+    },
+    'hang cleans': {
+      cf: { url: 'https://www.youtube.com/shorts/DaKC_BEN5bk', verified: false, source: 'CrossFit', score: 65 },
+    },
+    'hang squat clean': {
+      cf: { url: 'https://www.youtube.com/shorts/DaKC_BEN5bk', verified: false, source: 'CrossFit', score: 72 },
+    },
+    'hang squat cleans': {
+      cf: { url: 'https://www.youtube.com/shorts/DaKC_BEN5bk', verified: false, source: 'CrossFit', score: 58 },
+    },
+    'clean': {
+      cf: { url: 'https://www.youtube.com/shorts/KwYJTpQ_x5A', verified: false, source: 'CrossFit', score: 70 },
+    },
+    'split jerk': {
+      cf: { url: 'https://www.youtube.com/shorts/Sk1vhXhHO_A', verified: false, source: 'CrossFit', score: 75 },
+    },
+    'push jerk': {
+      cf: { url: 'https://www.youtube.com/shorts/v_0E1udYSnQ', verified: false, source: 'CrossFit', score: 75 },
+    },
+    'push press': {
+      cf: { url: 'https://www.youtube.com/shorts/0tOcLSIT3u4', verified: false, source: 'CrossFit', score: 82 },
+    },
+    'jerk': {
+      cf: { url: 'https://www.youtube.com/shorts/GqAEuwXQXRU', verified: false, source: 'CrossFit', score: 75 },
+    },
+    'clean pull speed': {
+      cf: { url: 'https://www.youtube.com/shorts/fNi-bG0shwE', verified: false, source: 'CrossFit', score: 68 },
+    },
+    'overhead squat': {
+      cf: { url: 'https://www.youtube.com/shorts/i3VMBdEBB7c', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'dumbbell snatch': {
+      cf: { url: 'https://www.youtube.com/shorts/JXNPBnzBCt0', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'muscle up': {
+      cf: { url: 'https://www.youtube.com/watch?v=kQVOD7wPIns', verified: false, source: 'CrossFit', score: 70 },
+    },
+    'muscle up anneau': {
+      cf: { url: 'https://www.youtube.com/watch?v=kQVOD7wPIns', verified: false, source: 'CrossFit', score: 50 },
+    },
+    'muscle up barre': {
+      cf: { url: 'https://www.youtube.com/shorts/o69WaY_7k2c', verified: false, source: 'CrossFit', score: 60 },
+    },
+    'bar muscle up': {
+      cf: { url: 'https://www.youtube.com/shorts/o69WaY_7k2c', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'bar muscle ups': {
+      cf: { url: 'https://www.youtube.com/shorts/o69WaY_7k2c', verified: false, source: 'CrossFit', score: 67 },
+    },
+    'kipping pull up': {
+      cf: { url: 'https://www.youtube.com/shorts/bMnS7IO5a5M', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'kipping pull up speed': {
+      cf: { url: 'https://www.youtube.com/shorts/bMnS7IO5a5M', verified: false, source: 'CrossFit', score: 67 },
+    },
+    'chest to bar': {
+      cf: { url: 'https://www.youtube.com/shorts/AyPTCEXTjOo', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'chest to bar pull ups': {
+      cf: { url: 'https://www.youtube.com/shorts/AyPTCEXTjOo', verified: false, source: 'CrossFit', score: 70 },
+    },
+    'c2b': {
+      cf: { url: 'https://www.youtube.com/shorts/AyPTCEXTjOo', verified: false, source: 'CrossFit', score: 40 },
+    },
+    'c2b pull ups': {
+      cf: { url: 'https://www.youtube.com/watch?v=Mk47nndUMHw', verified: false, source: 'CrossFit', score: 57 },
+    },
+    'toes to bar': {
+      cf: { url: 'https://www.youtube.com/shorts/xX9Hzi7Onnw', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'handstand walk': {
+      cf: { url: 'https://www.youtube.com/shorts/I5p2VVDupq8', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'hs walk': {
+      cf: { url: 'https://www.youtube.com/shorts/I5p2VVDupq8', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'handstand push up': {
+      cf: { url: 'https://www.youtube.com/shorts/0wDEO6shVjc', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'handstand push ups': {
+      cf: { url: 'https://www.youtube.com/shorts/0wDEO6shVjc', verified: false, source: 'CrossFit', score: 67 },
+    },
+    'hspu': {
+      cf: { url: 'https://www.youtube.com/shorts/9wIkPCS4Mbo', verified: false, source: 'CrossFit', score: 40 },
+    },
+    'ring dip': {
+      cf: { url: 'https://www.youtube.com/shorts/Vt0lO4jpIDo', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'rope climb': {
+      cf: { url: 'https://www.youtube.com/watch?v=G_3kJy-_CiA', verified: false, source: 'CrossFit', score: 82 },
+    },
+    'l sit': {
+      cf: { url: 'https://www.youtube.com/shorts/DemH-mw1O9I', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'pistol squat': {
+      cf: { url: 'https://www.youtube.com/shorts/keSzg7MaoVQ', verified: false, source: 'CrossFit', score: 60 },
+    },
+    'ring row': {
+      cf: { url: 'https://www.youtube.com/shorts/xhlReCpAE9k', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'wall walk': {
+      cf: { url: 'https://www.youtube.com/shorts/2TnX8j29tRY', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'air squat': {
+      cf: { url: 'https://www.youtube.com/shorts/a_fb6Kz7FQg', verified: false, source: 'CrossFit', score: 85 },
+    },
+    'strict pull up': {
+      cf: { url: 'https://www.youtube.com/shorts/HRV5YKKaeVw', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'strict handstand push up': {
+      cf: { url: 'https://www.youtube.com/shorts/0wDEO6shVjc', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'thruster': {
+      cf: { url: 'https://www.youtube.com/shorts/88w6SthC-58', verified: false, source: 'CrossFit', score: 80 },
+    },
+    'dumbbell thruster': {
+      cf: { url: 'https://www.youtube.com/shorts/u3wKkZjE8QM', verified: false, source: 'CrossFit', score: 70 },
+    },
+    'wall ball': {
+      cf: { url: 'https://www.youtube.com/shorts/fpUD0mcFp_0', verified: false, source: 'CrossFit', score: 80 },
+    },
+  };
+
+  // Résoudre un niveau utilisateur vers une clé de registre
+  function _registryLevelKey(lv, isCF) {
+    if (isCF) return 'cf';
+    var isEN = window.isEnglish && window.isEnglish();
+    var level = (typeof lv === 'number' && lv >= 1 && lv <= 3) ? lv : 1;
+    if (level === 1 && !isEN) return 'fr_beginner';
+    if (level === 3) return 'advanced';
+    return 'en_any';
+  }
+
+  // Résolution directe : retourne une URL directe ou null
+  function _resolveDirectVideo(name, lv, isCF) {
+    if (!name) return null;
+    var key = _normalizeName(name);
+    var entry = DIRECT_VIDEO_REGISTRY[key];
+    if (!entry) {
+      // Essai via alias
+      var ak = isCF
+        ? (CF_ALIASES[key] && DIRECT_VIDEO_REGISTRY[CF_ALIASES[key]])
+        : (EXERCISE_ALIASES[key] && DIRECT_VIDEO_REGISTRY[EXERCISE_ALIASES[key]]);
+      if (!ak) return null;
+      entry = ak;
+    }
+    var levelKey = _registryLevelKey(lv, isCF);
+    var video = entry[levelKey];
+    // Fallback de niveau : advanced → en_any → fr_beginner
+    if (!video && levelKey === 'advanced') video = entry['en_any'];
+    if (!video && levelKey === 'fr_beginner') video = entry['en_any'];
+    if (!video || !video.url) return null;
+    return video.url;
+  }
+
   // ─── Requêtes curatées EN : nom_normalisé → query précise ─────────────────
   // Clés = _normalizeName(nom exact de l'exercice dans muscu-programs.js).
   // Couverture complète validée sur 236 exercices (audit 2026-05).
   var CURATED_QUERIES = {
     // ── Pectoraux ─────────────────────────────────────────────────────────
-    'developpe couche':                        'bench press form tutorial',
-    'developpe halteres couche':               'dumbbell bench press form tutorial',
-    'developpe couche haltere unilateral':     'unilateral dumbbell press form tutorial',
-    'developpe incline':                       'incline bench press form tutorial',
-    'developpe incline barre':                 'incline barbell bench press form tutorial',
-    'developpe incline halteres':              'incline dumbbell press form tutorial',
-    'developpe decline':                       'decline bench press form tutorial',
-    'developpe decline barre':                 'decline barbell bench press form tutorial',
-    'close grip bench press':                  'close grip bench press tricep tutorial',
-    'developpe couche prise serree':           'close grip bench press tutorial',
-    'chest press machine':                     'chest press machine form tutorial',
-    'chest press unilateral cable':            'single arm cable chest press tutorial',
-    'pompes classiques':                       'push up correct form tutorial',
-    'pompes diamant':                          'diamond push up form tutorial',
-    'diamond push up':                         'diamond push up close grip form tutorial',
-    'pompes declinees':                        'decline push up form tutorial',
-    'pompes plyometriques':                    'plyometric push up tutorial',
-    'pompes archer':                           'archer push up form tutorial',
-    'pompes prise large':                      'wide grip push up form tutorial',
-    'dips':                                    'chest dips proper form tutorial',
-    'dips lestes':                             'weighted dips chest tutorial',
-    'dips prise large':                        'wide grip dips chest tutorial',
-    'dips triceps banc':                       'bench dips tricep form tutorial',
-    'bench dips lestes':                       'weighted bench dips tricep tutorial',
-    'ecartes haltere':                         'dumbbell fly chest form tutorial',
-    'ecarte halteres couche':                  'dumbbell chest fly form tutorial',
-    'ecartes haltere incline':                 'incline dumbbell fly form tutorial',
+    'developpe couche':                        'barbell bench press proper form technique tutorial',
+    'developpe halteres couche':               'dumbbell bench press proper form technique tutorial',
+    'developpe couche haltere unilateral':     'single arm dumbbell press proper form tutorial',
+    'developpe incline':                       'incline bench press proper form technique tutorial',
+    'developpe incline barre':                 'incline barbell bench press proper form technique tutorial',
+    'developpe incline halteres':              'incline dumbbell press proper form technique tutorial',
+    'developpe decline':                       'decline bench press proper form technique tutorial',
+    'developpe decline barre':                 'decline barbell bench press proper form tutorial',
+    'close grip bench press':                  'close grip bench press tricep proper form tutorial',
+    'developpe couche prise serree':           'close grip barbell bench press technique tutorial',
+    'chest press machine':                     'chest press machine proper form technique tutorial',
+    'chest press unilateral cable':            'single arm cable chest press proper form tutorial',
+    'pompes classiques':                       'push up proper form technique tutorial',
+    'pompes diamant':                          'diamond push up proper form technique tutorial',
+    'diamond push up':                         'diamond push up close grip proper form tutorial',
+    'pompes declinees':                        'decline push up proper form technique tutorial',
+    'pompes plyometriques':                    'plyometric push up proper form tutorial',
+    'pompes archer':                           'archer push up proper form tutorial',
+    'pompes prise large':                      'wide grip push up proper form tutorial',
+    'dips':                                    'chest dips proper form technique tutorial',
+    'dips lestes':                             'weighted chest dips proper form tutorial',
+    'dips prise large':                        'wide grip chest dips proper form tutorial',
+    'dips triceps banc':                       'bench dips tricep proper form technique tutorial',
+    'bench dips lestes':                       'weighted bench dips tricep proper form tutorial',
+    'ecartes haltere':                         'dumbbell fly chest proper form technique tutorial',
+    'ecarte halteres couche':                  'dumbbell chest fly proper form technique tutorial',
+    'ecartes haltere incline':                 'incline dumbbell fly proper form tutorial',
     'pec deck butterfly':                      'pec deck machine form tutorial',
     'pec deck':                                'pec deck machine form tutorial',
     'cable crossover':                         'cable crossover fly chest tutorial',
@@ -178,60 +454,60 @@
     'ecart cable croise':                      'cable crossover form tutorial',
     'ecarte cable poulie basse crossover haut':'low cable fly upper chest tutorial',
     'ecarte cable poulie haute':               'high cable fly upper chest tutorial',
-    'spoto press':                             'spoto press technique',
+    'spoto press':                             'spoto press bench press technique tutorial',
     'floor press':                             'floor press barbell tutorial',
     'landmine press':                          'landmine press chest form tutorial',
 
     // ── Dos ───────────────────────────────────────────────────────────────
-    'tractions':                               'pull up form tutorial',
-    'tractions pronation':                     'overhand pull up form tutorial',
-    'traction prise neutre':                   'neutral grip pull up tutorial',
-    'traction prise large':                    'wide grip pull up tutorial',
-    'traction prise serree':                   'close grip chin up tutorial',
-    'traction prise tres large':               'wide overhand pull up form tutorial',
-    'traction lestee':                         'weighted pull up form tutorial',
-    'traction elastique assistee':             'band assisted pull up form tutorial',
-    'chin ups':                                'chin up form tutorial',
-    'chin ups traction supination':            'chin up bicep form tutorial',
-    'rowing barre':                            'barbell row form tutorial',
-    'rowing pendlay':                          'pendlay row form tutorial',
-    'pendlay row':                             'pendlay row form tutorial',
-    'rowing pendlay prise large':              'wide grip pendlay row form tutorial',
-    'rowing haltere':                          'one arm dumbbell row form tutorial',
-    'rowing haltere unilateral':               'one arm dumbbell row form tutorial',
-    'rowing haltere prise neutre':             'neutral grip dumbbell row form tutorial',
-    'rowing assis cable':                      'seated cable row form tutorial',
-    'rowing assis cable prise large':          'wide grip seated cable row tutorial',
-    'rowing buste penche prise large':         'wide grip bent over barbell row tutorial',
-    'rowing buste penche cable prise neutre':  'bent over cable row neutral grip tutorial',
-    'rowing debout halteres':                  'dumbbell upright row form tutorial',
-    'rowing prise large debout cable':         'wide grip cable upright row tutorial',
-    'rowing machine unilateral':               'unilateral cable row form tutorial',
-    't bar row':                               't bar row form tutorial',
-    't bar row machine':                       't bar row machine form tutorial',
-    'yates row':                               'yates row underhand barbell row tutorial',
-    'chest supported row':                     'chest supported row form tutorial',
-    'seal row':                                'seal row form tutorial',
-    'tirage vertical poulie':                  'lat pulldown form tutorial',
-    'tirage poulie haute':                     'lat pulldown form tutorial',
-    'tirage vertical prise large':             'wide grip lat pulldown tutorial',
-    'tirage vertical prise neutre v bar':      'v bar lat pulldown tutorial',
-    'tirage horizontal':                       'seated cable row form tutorial',
-    'tirage horizontal cable':                 'seated cable row form tutorial',
-    'tirage nuque':                            'behind neck lat pulldown tutorial',
-    'tirage menton':                           'upright row form tutorial',
-    'tirage menton barre':                     'barbell upright row form tutorial',
-    'tirage menton cable':                     'cable upright row form tutorial',
-    'soulever de terre':                       'deadlift form tutorial',
-    'deadlift':                                'deadlift form tutorial',
-    'deadlift roumain barre':                  'romanian deadlift barbell form tutorial',
-    'souleve de terre conventionnel':          'conventional deadlift form tutorial',
-    'souleve de terre roumain':                'romanian deadlift form tutorial',
-    'sumo deadlift':                           'sumo deadlift form tutorial',
-    'romanian deadlift':                       'romanian deadlift form tutorial',
-    'romanian deadlift rdl':                   'romanian deadlift form tutorial',
-    'romanian deadlift halteres':              'romanian deadlift dumbbell form tutorial',
-    'rdl':                                     'romanian deadlift form tutorial',
+    'tractions':                               'pull up proper form technique tutorial',
+    'tractions pronation':                     'overhand pull up proper form technique tutorial',
+    'traction prise neutre':                   'neutral grip pull up proper form tutorial',
+    'traction prise large':                    'wide grip pull up proper form tutorial',
+    'traction prise serree':                   'close grip chin up proper form tutorial',
+    'traction prise tres large':               'wide overhand pull up proper form tutorial',
+    'traction lestee':                         'weighted pull up proper form technique tutorial',
+    'traction elastique assistee':             'band assisted pull up proper form tutorial',
+    'chin ups':                                'chin up supination proper form technique tutorial',
+    'chin ups traction supination':            'chin up bicep supination proper form tutorial',
+    'rowing barre':                            'bent over barbell row proper form technique tutorial',
+    'rowing pendlay':                          'pendlay row proper form technique tutorial',
+    'pendlay row':                             'pendlay row proper form technique tutorial',
+    'rowing pendlay prise large':              'wide grip pendlay row proper form tutorial',
+    'rowing haltere':                          'one arm dumbbell row proper form technique tutorial',
+    'rowing haltere unilateral':               'single arm dumbbell row proper form tutorial',
+    'rowing haltere prise neutre':             'neutral grip dumbbell row proper form tutorial',
+    'rowing assis cable':                      'seated cable row proper form technique tutorial',
+    'rowing assis cable prise large':          'wide grip seated cable row proper form tutorial',
+    'rowing buste penche prise large':         'wide grip bent over barbell row proper form tutorial',
+    'rowing buste penche cable prise neutre':  'bent over cable row neutral grip proper form tutorial',
+    'rowing debout halteres':                  'dumbbell upright row proper form tutorial',
+    'rowing prise large debout cable':         'wide grip cable upright row proper form tutorial',
+    'rowing machine unilateral':               'unilateral cable row proper form tutorial',
+    't bar row':                               't bar row proper form technique tutorial',
+    't bar row machine':                       't bar row machine proper form tutorial',
+    'yates row':                               'yates row underhand barbell proper form tutorial',
+    'chest supported row':                     'chest supported row proper form technique tutorial',
+    'seal row':                                'seal row proper form technique tutorial',
+    'tirage vertical poulie':                  'lat pulldown proper form technique tutorial',
+    'tirage poulie haute':                     'lat pulldown proper form technique tutorial',
+    'tirage vertical prise large':             'wide grip lat pulldown proper form tutorial',
+    'tirage vertical prise neutre v bar':      'v bar lat pulldown proper form tutorial',
+    'tirage horizontal':                       'seated cable row proper form technique tutorial',
+    'tirage horizontal cable':                 'seated cable row proper form technique tutorial',
+    'tirage nuque':                            'behind neck lat pulldown proper form tutorial',
+    'tirage menton':                           'barbell upright row proper form tutorial',
+    'tirage menton barre':                     'barbell upright row proper form technique tutorial',
+    'tirage menton cable':                     'cable upright row proper form tutorial',
+    'soulever de terre':                       'barbell deadlift proper form technique tutorial',
+    'deadlift':                                'barbell deadlift proper form technique tutorial',
+    'deadlift roumain barre':                  'romanian deadlift barbell proper form technique tutorial',
+    'souleve de terre conventionnel':          'conventional barbell deadlift proper form technique tutorial',
+    'souleve de terre roumain':                'romanian deadlift barbell proper form technique tutorial',
+    'sumo deadlift':                           'sumo deadlift barbell proper form technique tutorial',
+    'romanian deadlift':                       'romanian deadlift proper form technique tutorial',
+    'romanian deadlift rdl':                   'romanian deadlift proper form technique tutorial',
+    'romanian deadlift halteres':              'dumbbell romanian deadlift proper form technique tutorial',
+    'rdl':                                     'romanian deadlift proper form technique tutorial',
     'rdl kettlebell':                          'kettlebell romanian deadlift tutorial',
     'snatch grip rdl barre':                   'snatch grip rdl form tutorial',
     'rack pull':                               'rack pull form tutorial',
@@ -264,25 +540,25 @@
     'suitcase carry':                          'suitcase carry lateral core tutorial',
 
     // ── Épaules ───────────────────────────────────────────────────────────
-    'developpe militaire':                     'overhead press form tutorial',
-    'overhead press':                          'overhead press form tutorial',
-    'developpe militaire barre':               'barbell overhead press form tutorial',
-    'developpe militaire machine':             'machine shoulder press form tutorial',
-    'developpe haltere assis':                 'seated dumbbell shoulder press tutorial',
-    'developpe halteres assis':                'seated dumbbell shoulder press tutorial',
-    'developpe halteres debout':               'standing dumbbell overhead press tutorial',
-    'developpe arnold':                        'arnold press form tutorial',
-    'arnold press':                            'arnold press form tutorial',
-    'elevations laterales':                    'lateral raise form tutorial',
-    'elevations laterales cable':              'cable lateral raise form tutorial',
-    'elevations laterales elastique':          'band lateral raise shoulder tutorial',
-    'elevations frontales':                    'front raise form tutorial',
-    'elevations frontales cable':              'cable front raise shoulder tutorial',
-    'elevation frontale cable':                'cable front raise tutorial',
-    'oiseau':                                  'rear delt fly form tutorial',
-    'oiseau halteres rear delt':               'rear delt fly form tutorial',
-    'oiseau halteres':                         'rear delt fly dumbbell form tutorial',
-    'oiseau poulie cable':                     'cable rear delt fly form tutorial',
+    'developpe militaire':                     'barbell overhead press proper form technique tutorial',
+    'overhead press':                          'barbell overhead press proper form technique tutorial',
+    'developpe militaire barre':               'barbell overhead press proper form technique tutorial',
+    'developpe militaire machine':             'machine shoulder press proper form technique tutorial',
+    'developpe haltere assis':                 'seated dumbbell shoulder press proper form tutorial',
+    'developpe halteres assis':                'seated dumbbell shoulder press proper form tutorial',
+    'developpe halteres debout':               'standing dumbbell overhead press proper form tutorial',
+    'developpe arnold':                        'arnold press dumbbell proper form technique tutorial',
+    'arnold press':                            'arnold press dumbbell proper form technique tutorial',
+    'elevations laterales':                    'dumbbell lateral raise proper form technique tutorial',
+    'elevations laterales cable':              'cable lateral raise proper form technique tutorial',
+    'elevations laterales elastique':          'band lateral raise shoulder proper form tutorial',
+    'elevations frontales':                    'dumbbell front raise proper form technique tutorial',
+    'elevations frontales cable':              'cable front raise shoulder proper form tutorial',
+    'elevation frontale cable':                'cable front raise shoulder proper form tutorial',
+    'oiseau':                                  'rear delt fly dumbbell proper form tutorial',
+    'oiseau halteres rear delt':               'rear delt fly dumbbell proper form technique tutorial',
+    'oiseau halteres':                         'rear delt fly dumbbell proper form technique tutorial',
+    'oiseau poulie cable':                     'cable rear delt fly proper form technique tutorial',
     'lu raise':                                'lu raise shoulder tutorial',
     'developpe nuque':                         'behind neck press tutorial',
     'developpe militaire barre nuque':         'behind neck press tutorial',
@@ -292,114 +568,114 @@
     'push press barre':                        'barbell push press form tutorial',
 
     // ── Biceps ────────────────────────────────────────────────────────────
-    'curl barre':                              'barbell curl form tutorial',
-    'curl barre droite':                       'straight bar bicep curl tutorial',
-    'curl ez barre':                           'ez bar curl form tutorial',
-    'curl haltere':                            'dumbbell curl form tutorial',
-    'curl halteres alterne':                   'alternating dumbbell curl tutorial',
-    'curl marteau':                            'hammer curl form tutorial',
-    'curl marteau cable':                      'cable hammer curl tutorial',
-    'curl incline halteres':                   'incline dumbbell curl tutorial',
-    'curl spider araignee':                    'spider curl form tutorial',
-    'curl pupitre':                            'preacher curl form tutorial',
-    'curl pupitre scott curl':                 'preacher curl scott curl form tutorial',
-    'curl pupitre haltere unilateral':         'single arm preacher curl dumbbell tutorial',
-    'curl concentre':                          'concentration curl tutorial',
-    'curl barre supination 3 4 amplitude':     'partial bicep curl peak contraction tutorial',
-    'curl 21s':                                'barbell 21s bicep curl technique',
-    'bayesian curl cable':                     'bayesian cable curl long head tutorial',
-    'curl cable basse poulie':                 'low cable bicep curl tutorial',
-    'reverse curl cable':                      'cable reverse curl brachialis tutorial',
-    'curl prise neutre barre ez':              'neutral grip ez bar curl tutorial',
-    'drag curl barre':                         'drag curl barbell long head tutorial',
-    'curl incline cable unilateral':           'incline cable curl form tutorial',
-    'zottman curl':                            'zottman curl forearm bicep tutorial',
-    'curl cable a 90 peak':                    'cable curl peak contraction tutorial',
+    'curl barre':                              'barbell bicep curl proper form technique tutorial',
+    'curl barre droite':                       'straight bar bicep curl proper form tutorial',
+    'curl ez barre':                           'ez bar bicep curl proper form technique tutorial',
+    'curl haltere':                            'dumbbell bicep curl proper form technique tutorial',
+    'curl halteres alterne':                   'alternating dumbbell bicep curl proper form tutorial',
+    'curl marteau':                            'dumbbell hammer curl proper form technique tutorial',
+    'curl marteau cable':                      'cable hammer curl proper form tutorial',
+    'curl incline halteres':                   'incline dumbbell bicep curl proper form tutorial',
+    'curl spider araignee':                    'spider curl proper form technique tutorial',
+    'curl pupitre':                            'preacher curl proper form technique tutorial',
+    'curl pupitre scott curl':                 'preacher curl scott curl proper form tutorial',
+    'curl pupitre haltere unilateral':         'single arm preacher curl dumbbell proper form tutorial',
+    'curl concentre':                          'concentration curl proper form technique tutorial',
+    'curl barre supination 3 4 amplitude':     'partial range bicep curl peak contraction tutorial',
+    'curl 21s':                                'barbell 21s bicep curl technique tutorial',
+    'bayesian curl cable':                     'bayesian cable curl long head technique tutorial',
+    'curl cable basse poulie':                 'low cable bicep curl proper form tutorial',
+    'reverse curl cable':                      'cable reverse curl brachialis proper form tutorial',
+    'curl prise neutre barre ez':              'neutral grip ez bar curl proper form tutorial',
+    'drag curl barre':                         'drag curl barbell bicep long head tutorial',
+    'curl incline cable unilateral':           'incline cable curl proper form tutorial',
+    'zottman curl':                            'zottman curl forearm bicep proper form tutorial',
+    'curl cable a 90 peak':                    'cable curl peak contraction proper form tutorial',
 
     // ── Triceps ───────────────────────────────────────────────────────────
-    'extension triceps poulie':                'tricep pushdown form tutorial',
-    'pushdown cable barre':                    'tricep bar pushdown form tutorial',
-    'pushdown cable corde':                    'rope tricep pushdown form tutorial',
-    'overhead extension cable':                'cable overhead tricep extension tutorial',
-    'extension triceps barre':                 'skull crusher form tutorial',
-    'skull crushers ez':                       'skull crusher ez bar form tutorial',
-    'extension barre couche':                  'skull crusher barbell form tutorial',
-    'extension haltere tete':                  'overhead tricep extension dumbbell tutorial',
-    'extension triceps machine':               'tricep machine extension form tutorial',
-    'extension triceps bras tendu haltere':    'overhead tricep extension tutorial',
-    'overhead extension halteres bilateral':   'overhead dumbbell tricep extension tutorial',
-    'jm press barre':                          'jm press barbell tricep tutorial',
-    'jm press ez':                             'jm press ez bar tricep tutorial',
-    'dips barres paralleles lest':             'weighted parallel bar dips tricep tutorial',
-    'kickback triceps':                        'tricep kickback form tutorial',
-    'kick back haltere':                       'dumbbell tricep kickback form tutorial',
-    'kick back cable':                         'cable tricep kickback form tutorial',
-    'extension triceps elastique debout':      'resistance band tricep pushdown tutorial',
-    'tate press':                              'tate press tricep form tutorial',
+    'extension triceps poulie':                'cable tricep pushdown proper form technique tutorial',
+    'pushdown cable barre':                    'cable bar tricep pushdown proper form tutorial',
+    'pushdown cable corde':                    'rope cable tricep pushdown proper form technique tutorial',
+    'overhead extension cable':                'cable overhead tricep extension proper form tutorial',
+    'extension triceps barre':                 'skull crusher barbell tricep proper form technique tutorial',
+    'skull crushers ez':                       'ez bar skull crusher tricep proper form technique tutorial',
+    'extension barre couche':                  'barbell skull crusher lying tricep proper form tutorial',
+    'extension haltere tete':                  'overhead dumbbell tricep extension proper form tutorial',
+    'extension triceps machine':               'tricep machine extension proper form technique tutorial',
+    'extension triceps bras tendu haltere':    'overhead dumbbell tricep extension proper form tutorial',
+    'overhead extension halteres bilateral':   'bilateral overhead dumbbell tricep extension proper form tutorial',
+    'jm press barre':                          'jm press barbell tricep proper form tutorial',
+    'jm press ez':                             'jm press ez bar tricep proper form tutorial',
+    'dips barres paralleles lest':             'weighted parallel bar dips tricep proper form tutorial',
+    'kickback triceps':                        'dumbbell tricep kickback proper form technique tutorial',
+    'kick back haltere':                       'dumbbell tricep kickback proper form tutorial',
+    'kick back cable':                         'cable tricep kickback proper form tutorial',
+    'extension triceps elastique debout':      'resistance band tricep pushdown proper form tutorial',
+    'tate press':                              'tate press tricep proper form tutorial',
 
     // ── Quadriceps / Jambes ───────────────────────────────────────────────
-    'squat':                                   'back squat form tutorial',
-    'squat barre':                             'back squat barbell form tutorial',
-    'back squat':                              'back squat form tutorial',
-    'squat poids de corps':                    'bodyweight squat form tutorial',
-    'squat sumo':                              'sumo squat form tutorial',
-    'sumo squat haltere':                      'sumo dumbbell squat tutorial',
-    'goblet squat':                            'goblet squat form tutorial',
-    'squat gobelet kettlebell':                'goblet squat kettlebell tutorial',
-    'front squat':                             'front squat form tutorial',
-    'front squat barre':                       'front squat barbell form tutorial',
-    'sissy squat':                             'sissy squat form tutorial',
-    'squat zercher':                           'zercher squat form tutorial',
-    'squat saute':                             'jump squat form tutorial',
-    'hack squat machine':                      'hack squat machine form tutorial',
-    'split squat bulgare':                     'bulgarian split squat tutorial',
-    'fente bulgare halteres':                  'bulgarian split squat dumbbell tutorial',
-    'fentes avant':                            'forward lunges form tutorial',
-    'fente avant halteres':                    'dumbbell forward lunge form tutorial',
-    'fente avant barre':                       'barbell lunge form tutorial',
-    'fentes marchees':                         'walking lunges form tutorial',
-    'fente avant barre marchee':               'barbell walking lunge form tutorial',
-    'fentes laterales':                        'side lunges form tutorial',
-    'fente laterale halteres':                 'lateral lunge dumbbell form tutorial',
-    'fentes arriere':                          'reverse lunges form tutorial',
-    'fente reverse halteres':                  'reverse lunge dumbbell form tutorial',
-    'leg press':                               'leg press form tutorial',
-    'leg press pied haut':                     'high foot leg press glutes tutorial',
-    'leg press unilateral':                    'single leg press form tutorial',
-    'leg press 15 rep':                        'leg press 1.5 rep technique tutorial',
-    'leg extension':                           'leg extension form tutorial',
-    'extension jambes machine':                'leg extension machine form tutorial',
-    'step up halteres':                        'dumbbell step up tutorial',
-    'step up genou haut lestes':               'step up high knee weighted tutorial',
-    'wall sit isometrique':                    'wall sit isometric quad tutorial',
+    'squat':                                   'barbell back squat proper form technique tutorial',
+    'squat barre':                             'barbell back squat proper form technique tutorial',
+    'back squat':                              'barbell back squat proper form technique tutorial',
+    'squat poids de corps':                    'bodyweight squat proper form technique tutorial',
+    'squat sumo':                              'sumo squat proper form technique tutorial',
+    'sumo squat haltere':                      'sumo squat dumbbell proper form tutorial',
+    'goblet squat':                            'goblet squat proper form technique tutorial',
+    'squat gobelet kettlebell':                'kettlebell goblet squat proper form tutorial',
+    'front squat':                             'front squat proper form technique tutorial',
+    'front squat barre':                       'barbell front squat proper form technique tutorial',
+    'sissy squat':                             'sissy squat proper form technique tutorial',
+    'squat zercher':                           'zercher squat proper form technique tutorial',
+    'squat saute':                             'jump squat proper form plyometric tutorial',
+    'hack squat machine':                      'hack squat machine proper form technique tutorial',
+    'split squat bulgare':                     'bulgarian split squat proper form technique tutorial',
+    'fente bulgare halteres':                  'bulgarian split squat dumbbell proper form tutorial',
+    'fentes avant':                            'forward lunge proper form technique tutorial',
+    'fente avant halteres':                    'dumbbell forward lunge proper form tutorial',
+    'fente avant barre':                       'barbell lunge proper form tutorial',
+    'fentes marchees':                         'walking lunge proper form technique tutorial',
+    'fente avant barre marchee':               'barbell walking lunge proper form tutorial',
+    'fentes laterales':                        'side lunge proper form technique tutorial',
+    'fente laterale halteres':                 'lateral lunge dumbbell proper form tutorial',
+    'fentes arriere':                          'reverse lunge proper form technique tutorial',
+    'fente reverse halteres':                  'reverse lunge dumbbell proper form tutorial',
+    'leg press':                               'leg press machine proper form technique tutorial',
+    'leg press pied haut':                     'high foot leg press glutes proper form tutorial',
+    'leg press unilateral':                    'single leg press proper form tutorial',
+    'leg press 15 rep':                        'leg press 1.5 rep technique proper form tutorial',
+    'leg extension':                           'leg extension machine proper form technique tutorial',
+    'extension jambes machine':                'leg extension machine proper form technique tutorial',
+    'step up halteres':                        'dumbbell step up proper form technique tutorial',
+    'step up genou haut lestes':               'weighted step up high knee proper form tutorial',
+    'wall sit isometrique':                    'wall sit isometric quad hold proper form tutorial',
 
     // ── Ischio-jambiers ───────────────────────────────────────────────────
-    'leg curl':                                'leg curl form tutorial',
-    'leg curl couche':                         'lying leg curl tutorial',
-    'leg curl allonge':                        'lying leg curl form tutorial',
-    'leg curl assis':                          'seated leg curl tutorial',
-    'leg curl assis unilateral':               'seated unilateral leg curl tutorial',
-    'leg curl debout cable':                   'standing cable leg curl tutorial',
-    'leg curl debout unilateral cable':        'standing unilateral leg curl cable tutorial',
-    'leg curl balle suisse':                   'swiss ball hamstring curl tutorial',
-    'leg curl elastique couche':               'prone hamstring curl resistance band tutorial',
-    'glute ham raise':                         'glute ham raise form tutorial',
-    'cable pull through':                      'cable pull through posterior chain tutorial',
-    'nordic curl':                             'nordic hamstring curl tutorial',
-    'sliding leg curl':                        'sliding leg curl hamstring tutorial',
-    'hamstring walkout':                       'hamstring walkout isometric tutorial',
-    'hip extension 45 ischio focus':           '45 degree back extension hamstring focus tutorial',
-    'hyperextension ischios focus':            'back extension hamstring focus tutorial',
+    'leg curl':                                'lying leg curl machine proper form technique tutorial',
+    'leg curl couche':                         'lying leg curl machine proper form technique tutorial',
+    'leg curl allonge':                        'lying leg curl machine proper form tutorial',
+    'leg curl assis':                          'seated leg curl machine proper form tutorial',
+    'leg curl assis unilateral':               'seated single leg curl proper form tutorial',
+    'leg curl debout cable':                   'standing cable leg curl proper form tutorial',
+    'leg curl debout unilateral cable':        'standing unilateral cable leg curl proper form tutorial',
+    'leg curl balle suisse':                   'swiss ball hamstring curl proper form tutorial',
+    'leg curl elastique couche':               'prone hamstring curl resistance band proper form tutorial',
+    'glute ham raise':                         'glute ham raise proper form technique tutorial',
+    'cable pull through':                      'cable pull through posterior chain proper form tutorial',
+    'nordic curl':                             'nordic hamstring curl proper form technique tutorial',
+    'sliding leg curl':                        'sliding hamstring curl proper form tutorial',
+    'hamstring walkout':                       'hamstring walkout isometric proper form tutorial',
+    'hip extension 45 ischio focus':           '45 degree back extension hamstring focus proper form tutorial',
+    'hyperextension ischios focus':            'back extension hamstring focus proper form tutorial',
 
     // ── Fessiers ──────────────────────────────────────────────────────────
-    'hip thrust':                              'hip thrust form tutorial',
-    'hip thrust barre':                        'barbell hip thrust form tutorial',
-    'hip thrust haltere':                      'hip thrust dumbbell form tutorial',
-    'hip thrust unilateral':                   'single leg hip thrust tutorial',
-    'hip thrust unilateral leger':             'single leg hip thrust tutorial',
-    'hip thrust pieds sureleves':              'elevated hip thrust tutorial',
-    'glute bridge':                            'glute bridge form tutorial',
-    'glute bridge bilateral':                  'glute bridge bilateral form tutorial',
+    'hip thrust':                              'barbell hip thrust proper form technique tutorial',
+    'hip thrust barre':                        'barbell hip thrust proper form technique tutorial',
+    'hip thrust haltere':                      'dumbbell hip thrust proper form tutorial',
+    'hip thrust unilateral':                   'single leg hip thrust proper form tutorial',
+    'hip thrust unilateral leger':             'single leg hip thrust proper form tutorial',
+    'hip thrust pieds sureleves':              'elevated barbell hip thrust proper form tutorial',
+    'glute bridge':                            'glute bridge proper form technique tutorial',
+    'glute bridge bilateral':                  'bilateral glute bridge proper form tutorial',
     'single leg glute bridge lestee':          'weighted single leg glute bridge tutorial',
     'kickback cable fessier':                  'cable glute kickback tutorial',
     'kick back cable fessiers':                'cable glute kickback tutorial',
@@ -414,13 +690,13 @@
     'donkey kicks':                            'donkey kicks glute tutorial',
 
     // ── Mollets ───────────────────────────────────────────────────────────
-    'mollets debout':                          'standing calf raise tutorial',
-    'mollets debout halteres':                 'standing dumbbell calf raise tutorial',
-    'mollets debout machine':                  'standing calf machine form tutorial',
-    'mollets barre debout':                    'standing barbell calf raise tutorial',
-    'mollets debout sur step barre':           'barbell calf raise step tutorial',
-    'mollets assis':                           'seated calf raise tutorial',
-    'mollets assis machine':                   'seated calf machine form tutorial',
+    'mollets debout':                          'standing calf raise proper form technique tutorial',
+    'mollets debout halteres':                 'standing dumbbell calf raise proper form tutorial',
+    'mollets debout machine':                  'standing calf raise machine proper form tutorial',
+    'mollets barre debout':                    'standing barbell calf raise proper form tutorial',
+    'mollets debout sur step barre':           'barbell calf raise step proper form tutorial',
+    'mollets assis':                           'seated calf raise proper form technique tutorial',
+    'mollets assis machine':                   'seated calf raise machine proper form tutorial',
     'mollets assis elastique':                 'banded seated calf raise tutorial',
     'mollets assis haltere sur genoux':        'seated dumbbell calf raise tutorial',
     'mollets unilateraux':                     'single leg calf raise form tutorial',
@@ -436,7 +712,7 @@
     // ── Lombaires / Core profond ──────────────────────────────────────────
     'hyperextension banc lombaires':           'back extension hyperextension tutorial',
     'superman':                                'superman back extension floor tutorial',
-    'hyperextension reverse':                  'reverse hyperextension tutorial',
+    'hyperextension reverse':                  'reverse hyperextension proper form tutorial',
     'kettlebell swing americain':              'american kettlebell swing overhead tutorial',
     'pallof press a genoux':                   'kneeling pallof press anti rotation tutorial',
     'back extension ghd lestee':               'weighted GHD back extension tutorial',
@@ -445,20 +721,20 @@
     'souleve de terre hex bar':                'trap bar hex bar deadlift tutorial',
 
     // ── Abdos ─────────────────────────────────────────────────────────────
-    'crunch':                                  'crunch form tutorial',
-    'crunch classique':                        'crunch form tutorial',
-    'crunch incline':                          'incline crunch form tutorial',
+    'crunch':                                  'crunch proper form technique tutorial',
+    'crunch classique':                        'crunch proper form technique tutorial',
+    'crunch incline':                          'incline crunch proper form tutorial',
     'oblique crunch au sol':                   'oblique crunch floor tutorial',
     'swiss ball crunch':                       'swiss ball crunch tutorial',
     'crunch decline lestee':                   'weighted decline crunch tutorial',
-    'crunch cable poulie haute':               'cable crunch tutorial',
+    'crunch cable poulie haute':               'cable crunch proper form technique tutorial',
     'cable reverse crunch':                    'cable reverse crunch lower abs tutorial',
     'ab crunch machine':                       'ab crunch machine tutorial',
-    'planche':                                 'plank form tutorial',
-    'gainage':                                 'plank form tutorial',
-    'planche abdominale':                      'plank form tutorial',
-    'planche ventrale prone plank':            'plank form tutorial',
-    'planche abdominale dynamique':            'dynamic plank tutorial',
+    'planche':                                 'plank proper form technique tutorial',
+    'gainage':                                 'plank proper form technique tutorial',
+    'planche abdominale':                      'plank proper form technique tutorial',
+    'planche ventrale prone plank':            'prone plank proper form technique tutorial',
+    'planche abdominale dynamique':            'dynamic plank proper form tutorial',
     'gainage lateral':                         'side plank form tutorial',
     'leg raises':                              'hanging leg raises tutorial',
     'releve de jambes':                        'leg raises form tutorial',
@@ -486,12 +762,12 @@
 
     // ── Cardio ────────────────────────────────────────────────────────────
     'kettlebell swing':                        'kettlebell swing technique tutorial',
-    'burpees':                                 'burpee form tutorial',
+    'burpees':                                 'burpee proper form technique tutorial',
     'jumping jacks':                           'jumping jacks form tutorial',
     'corde a sauter':                          'jump rope form tutorial',
     'sauts a la corde':                        'jump rope form tutorial',
     'high knees':                              'high knees form tutorial',
-    'rameur':                                  'rowing machine technique',
+    'rameur':                                  'rowing machine proper form technique tutorial',
     'double unders':                           'double unders technique tutorial',
 
     // ── Prehab / mobilité ─────────────────────────────────────────────────
@@ -971,6 +1247,12 @@
    */
   function buildSmartVideoUrl(name, lv) {
     if (!name) return null;
+
+    // 1. Registre direct : URL exacte (watch?v= ou shorts/) — priorité absolue
+    var directUrl = _resolveDirectVideo(name, lv, false);
+    if (directUrl) return directUrl;
+
+    // 2. Recherche filtrée par canal (fallback si pas de vidéo directe dans le registre)
     var resolved = _resolveKey(name, CURATED_QUERIES, EXERCISE_ALIASES);
     var chan = _resolveChannel(lv);
     var baseQuery = CURATED_QUERIES[resolved.key];
@@ -982,7 +1264,6 @@
       return _buildChannelUrl(chan.name, query);
     }
 
-    // Exercice non curé : recherche générale + filtre vidéos uniquement
     var isEN = window.isEnglish && window.isEnglish();
     var fallbackQ = isEN
       ? (_normalizeName(name) + ' exercise form tutorial')
@@ -997,12 +1278,16 @@
    */
   function buildCFVideoUrl(name) {
     if (!name) return null;
+
+    // 1. Registre direct CF
+    var directUrl = _resolveDirectVideo(name, null, true);
+    if (directUrl) return directUrl;
+
+    // 2. Fallback recherche CrossFit channel
     var resolved = _resolveKey(name, CF_QUERIES, CF_ALIASES);
     var cfQuery = CF_QUERIES[resolved.key];
-
     if (cfQuery) return _buildChannelUrl('CrossFit', cfQuery);
 
-    // Exercice CF inconnu : CrossFit dans la query oriente vers le bon contexte
     return _buildChannelUrl('CrossFit', _normalizeName(name) + ' technique tutorial');
   }
 
@@ -1012,16 +1297,18 @@
    * Utilisable par l'UI pour afficher le niveau de confiance ou adapter le CTA.
    */
   function getVideoMeta(name, lv) {
-    if (!name) return { url: null, confidence: 0, label: 'none', channel: null, key: '' };
+    if (!name) return { url: null, confidence: 0, label: 'none', channel: null, key: '', direct: false };
+    var directUrl = _resolveDirectVideo(name, lv, false);
     var resolved = _resolveKey(name, CURATED_QUERIES, EXERCISE_ALIASES);
     var chan = _resolveChannel(lv);
     var labels = ['none', 'fallback', 'partial', 'alias', 'exact'];
     return {
-      url:        buildSmartVideoUrl(name, lv),
-      confidence: resolved.conf,
-      label:      labels[resolved.conf] || 'fallback',
+      url:        directUrl || buildSmartVideoUrl(name, lv),
+      confidence: directUrl ? 5 : resolved.conf,
+      label:      directUrl ? 'direct' : (labels[resolved.conf] || 'fallback'),
       channel:    chan,
-      key:        resolved.key
+      key:        resolved.key,
+      direct:     !!directUrl
     };
   }
 
@@ -1118,17 +1405,33 @@
     buildSmartVideoUrl: buildSmartVideoUrl,
     buildCFVideoUrl:    buildCFVideoUrl,
     getChannelInfo:     getChannelInfo,
-    getVideoMeta:       getVideoMeta,      // v5: confiance + métadonnées complètes
+    getVideoMeta:       getVideoMeta,
     openVideoModal:     openVideoModal,
+    // Audit registre direct
+    auditRegistry:      function() {
+      var total = Object.keys(DIRECT_VIDEO_REGISTRY).length;
+      var withVideo = 0, verified = 0, pending = 0;
+      Object.values(DIRECT_VIDEO_REGISTRY).forEach(function(entry) {
+        var levels = ['fr_beginner','en_any','advanced','cf'];
+        levels.forEach(function(lv) {
+          if (entry[lv] && entry[lv].url) {
+            withVideo++;
+            if (entry[lv].verified) verified++; else pending++;
+          }
+        });
+      });
+      return { exercises: total, withDirectVideo: withVideo, verified: verified, pendingVerification: pending };
+    },
     // Données accessibles pour audit / debug
+    _DIRECT_REGISTRY:   DIRECT_VIDEO_REGISTRY,
     _CURATED_QUERIES:   CURATED_QUERIES,
     _CF_QUERIES:        CF_QUERIES,
     _FR_QUERIES:        FR_QUERIES,
-    _EXERCISE_ALIASES:  EXERCISE_ALIASES,  // v5
-    _CF_ALIASES:        CF_ALIASES,        // v5
-    _SOURCES:           TRUSTED_VIDEO_SOURCES, // v5
-    _META:              _META,             // v5
-    _CHANNELS:          CHANNELS           // rétro-compat
+    _EXERCISE_ALIASES:  EXERCISE_ALIASES,
+    _CF_ALIASES:        CF_ALIASES,
+    _SOURCES:           TRUSTED_VIDEO_SOURCES,
+    _META:              _META,
+    _CHANNELS:          CHANNELS
   };
 
   // Compatibilité avec l'ancien appel getExerciseVideoUrl (app-sport.js legacy)
