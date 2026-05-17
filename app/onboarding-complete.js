@@ -187,20 +187,20 @@
 
     // Tagline
     var FR_TAGLINES = {
-      beginner:   'Étape par étape, nous rendons la science du sport accessible.',
+      beginner:   'Étape par étape. Nous sommes là pour chaque séance.',
       endurance:  'Nutrition et entraînement en parfaite synchronisation.',
-      crossfit:   'Chaque rep compte. Chaque macro optimisé.',
-      weightloss: 'Durable. Basé sur la science. Entièrement le vôtre.',
-      muscle:     'Hypertrophie et précision nutritionnelle réunies.',
-      default:    'Simple en surface. Extraordinairement puissant en profondeur.'
+      crossfit:   'Chaque rep compte. Chaque macro optimisé pour vous.',
+      weightloss: 'Pas de régime. Pas de restriction. Un plan qui vous respecte.',
+      muscle:     'Chaque gramme compte. Chaque séance calculée pour vous.',
+      default:    'Simple en surface. Extraordinairement précis en profondeur.'
     };
     var EN_TAGLINES = {
-      beginner:   'Step by step, we make sports science accessible.',
-      endurance:  'Nutrition and training in perfect synchronization.',
-      crossfit:   'Every rep counted. Every macro optimized.',
-      weightloss: 'Sustainable. Science-backed. Entirely yours.',
-      muscle:     'Hypertrophy meets nutritional precision.',
-      default:    'Simple on the surface. Extraordinarily powerful beneath.'
+      beginner:   'Step by step. We\'re here for every session.',
+      endurance:  'Nutrition and training in perfect sync.',
+      crossfit:   'Every rep counted. Every macro optimized for you.',
+      weightloss: 'No diets. No restrictions. A plan built around you.',
+      muscle:     'Every gram counts. Every session calculated for you.',
+      default:    'Simple on the surface. Extraordinarily precise beneath.'
     };
     var taglines = EN ? EN_TAGLINES : FR_TAGLINES;
 
@@ -279,13 +279,13 @@
     div.appendChild(label);
 
     var features = EN ? [
-      { icon: '📸', name: 'Meal Scanner',    desc: 'Photograph any meal — macros auto-logged' },
-      { icon: '🤖', name: 'AI Coach',        desc: 'Ask anything about training or nutrition' },
-      { icon: '📅', name: 'Smart Calendar',  desc: 'Your full training plan at a glance' }
+      { icon: '📸', name: 'Meal Scanner',   desc: 'Photograph any meal. Macros calculate instantly.' },
+      { icon: '🤖', name: 'AI Coach',       desc: 'Ask anything. No judgment. 24/7.' },
+      { icon: '📅', name: 'Smart Calendar', desc: 'Your next 4 weeks. At a glance.' }
     ] : [
-      { icon: '📸', name: 'Scanner repas',   desc: 'Photographiez vos repas — macros ajoutés' },
-      { icon: '🤖', name: 'IA Coach',        desc: 'Posez toutes vos questions sport & nutrition' },
-      { icon: '📅', name: 'Calendrier',      desc: 'Votre planning d\'entraînement complet' }
+      { icon: '📸', name: 'Scanner repas',  desc: 'Photographiez n\'importe quel repas. Macros instantanés.' },
+      { icon: '🤖', name: 'IA Coach',       desc: 'Posez vos questions. Zéro jugement. 24h/24.' },
+      { icon: '📅', name: 'Calendrier',     desc: 'Vos 4 prochaines semaines. D\'un seul regard.' }
     ];
 
     features.forEach(function(f) {

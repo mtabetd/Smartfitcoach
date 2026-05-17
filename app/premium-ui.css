@@ -4115,3 +4115,100 @@ button:disabled,
   .sfc-help-modal__title { color: var(--ivory, #E8E8E0); }
   .sfc-help-item__q { color: var(--ivory, #E8E8E0); }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SFC ONBOARDING MICRO-DELIGHTS — Apple-level polish
+   Adds: active feedback, touch targets, answer reveal, dark mode, chevron.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Touch manipulation on every onboarding interactive */
+.sfc-tip-bar,
+.sfc-tip-bar__dismiss,
+.sfc-discovery__btn,
+.sfc-help-modal__close,
+.sfc-help-modal__action-btn,
+.sfc-help-item__q,
+.sfc-profile-help-row { touch-action: manipulation; }
+
+/* Dismiss button: full 44px touch target */
+.sfc-tip-bar__dismiss { min-height: 44px; min-width: 44px; }
+
+/* Instant, subtle active press states */
+.sfc-tip-bar__dismiss:active {
+  opacity: 0.5;
+  transform: scale(0.88);
+  transition: opacity 0.07s ease, transform 0.07s ease;
+}
+.sfc-discovery__btn:active {
+  transform: scale(0.94);
+  opacity: 0.72;
+  transition: transform 0.07s ease, opacity 0.07s ease;
+}
+.sfc-help-modal__action-btn:active {
+  transform: scale(0.975);
+  transition: transform 0.07s ease;
+}
+.sfc-help-modal__close:active {
+  opacity: 0.5;
+  transition: opacity 0.07s ease;
+}
+.sfc-profile-help-row:active { background: var(--ivory2, #EDE9E0); }
+
+/* Help modal body: smooth scroll on iOS */
+.sfc-help-modal__body { scroll-behavior: smooth; }
+
+/* FAQ answer reveal — micro-animation on expand */
+@keyframes sfc-answer-reveal {
+  from { opacity: 0; transform: translateY(-5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.sfc-help-item__a:not([hidden]) {
+  animation: sfc-answer-reveal 0.2s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* Profile help row: chevron nudge on hover */
+.sfc-profile-help-row > span:last-child { transition: transform 0.18s ease; }
+.sfc-profile-help-row:hover > span:last-child { transform: translateX(4px); }
+
+/* Discovery btn: accessible focus ring */
+.sfc-discovery__btn:focus-visible {
+  outline: 2px solid var(--black, #0A0A09);
+  outline-offset: 2px;
+}
+
+/* Dark mode: discovery card + help refinements */
+@media (prefers-color-scheme: dark) {
+  .sfc-discovery {
+    background: rgba(28, 28, 26, 0.97);
+    border-color: rgba(255, 255, 255, 0.09);
+    box-shadow: 0 4px 28px rgba(0, 0, 0, 0.42);
+  }
+  .sfc-discovery__label { color: rgba(232, 232, 224, 0.92); }
+  .sfc-discovery__sub   { color: rgba(232, 232, 224, 0.52); }
+  .sfc-discovery__btn {
+    color: rgba(232, 232, 224, 0.82);
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+  .sfc-discovery__btn:hover { background: rgba(255, 255, 255, 0.08); }
+  .sfc-help-item__a { color: rgba(232, 232, 224, 0.6); }
+  .sfc-help-item { border-bottom-color: rgba(255, 255, 255, 0.08); }
+  .sfc-help-modal__header { border-bottom-color: rgba(255, 255, 255, 0.08); }
+  .sfc-profile-help-row { border-top-color: rgba(255, 255, 255, 0.08); }
+  .sfc-profile-help-row:hover { background: rgba(255, 255, 255, 0.04); }
+  .sfc-profile-help-row:active { background: rgba(255, 255, 255, 0.07); }
+  .sfc-help-modal__action-btn--ghost {
+    border-color: rgba(255, 255, 255, 0.16);
+    color: rgba(232, 232, 224, 0.72);
+  }
+  .sfc-help-modal__action-btn--ghost:hover { background: rgba(255, 255, 255, 0.06); }
+}
+
+/* Micro-delights: suppress all animations for reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .sfc-tip-bar__dismiss:active,
+  .sfc-discovery__btn:active,
+  .sfc-help-modal__action-btn:active,
+  .sfc-help-modal__close:active { transform: none; }
+  .sfc-help-item__a:not([hidden]) { animation: none; }
+  .sfc-profile-help-row > span:last-child { transition: none; }
+}

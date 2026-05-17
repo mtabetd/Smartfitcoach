@@ -1090,6 +1090,100 @@ check('v2 public API: injectProfileHelp preserved', function() {
   assert(typeof OB.injectProfileHelp === 'function', 'injectProfileHelp not on v2 API');
 });
 
+console.log('\n=== 28. Apple-level polish — micro-delights, emotional copy, dark mode ===');
+var CSS2 = fs.readFileSync(ROOT + '/app/premium-ui.css', 'utf8');
+var OC3  = fs.readFileSync(ROOT + '/app/onboarding-complete.js', 'utf8');
+var SRC3 = fs.readFileSync(ROOT + '/app/onboarding-engine.js', 'utf8');
+
+// CSS micro-delights
+check('touch-action: manipulation on SFC onboarding elements', function() {
+  assert(CSS2.indexOf('touch-action: manipulation') !== -1, 'touch-action missing on onboarding elements');
+});
+check('.sfc-tip-bar__dismiss min 44px touch target', function() {
+  assert(CSS2.indexOf('.sfc-tip-bar__dismiss { min-height: 44px') !== -1 ||
+    (CSS2.indexOf('sfc-tip-bar__dismiss') !== -1 && CSS2.indexOf('min-height: 44px') !== -1),
+    '44px touch target for dismiss button missing');
+});
+check('Active press state on .sfc-tip-bar__dismiss (scale feedback)', function() {
+  assert(CSS2.indexOf('.sfc-tip-bar__dismiss:active') !== -1, 'No :active state on dismiss');
+});
+check('Active press state on .sfc-discovery__btn', function() {
+  assert(CSS2.indexOf('.sfc-discovery__btn:active') !== -1, 'No :active state on discovery btn');
+});
+check('Active press state on .sfc-help-modal__action-btn', function() {
+  assert(CSS2.indexOf('.sfc-help-modal__action-btn:active') !== -1, 'No :active state on help action');
+});
+check('FAQ answer reveal animation defined (@keyframes sfc-answer-reveal)', function() {
+  assert(CSS2.indexOf('@keyframes sfc-answer-reveal') !== -1, 'FAQ answer animation missing');
+});
+check('Answer reveal applied to .sfc-help-item__a:not([hidden])', function() {
+  assert(CSS2.indexOf('.sfc-help-item__a:not([hidden])') !== -1, 'Answer reveal selector missing');
+});
+check('scroll-behavior: smooth on help modal body', function() {
+  assert(CSS2.indexOf('scroll-behavior: smooth') !== -1, 'scroll-behavior smooth missing');
+});
+check('Profile help row chevron animation on hover', function() {
+  assert(CSS2.indexOf('.sfc-profile-help-row > span:last-child') !== -1 &&
+    CSS2.indexOf('transform: translateX(4px)') !== -1, 'Chevron animation missing');
+});
+check('Dark mode: discovery card dark background', function() {
+  assert(CSS2.indexOf('sfc-discovery') !== -1 &&
+    CSS2.indexOf('rgba(28, 28, 26') !== -1, 'Dark mode discovery card missing');
+});
+check('Dark mode: help item answer text color', function() {
+  assert(CSS2.indexOf('.sfc-help-item__a') !== -1 &&
+    CSS2.indexOf('rgba(232, 232, 224, 0.6)') !== -1, 'Dark help item answer color missing');
+});
+check('Micro-delights: reduced-motion suppresses animations', function() {
+  assert(CSS2.indexOf('transform: none') !== -1, 'No transform:none suppression in CSS (reduced-motion)');
+});
+
+// Emotional copy quality
+check('FR tip.comeback is warm — contains "attendait" (waiting tone)', function() {
+  assert(SRC3.indexOf('attendait') !== -1, 'FR comeback lacks emotional warmth ("attendait")');
+});
+check('EN tip.comeback is warm — contains "waiting for you"', function() {
+  assert(SRC3.indexOf('waiting for you') !== -1, 'EN comeback lacks waiting-for-you warmth');
+});
+check('FR tip.unlock_workout contains "livres" (milestone tone)', function() {
+  assert(SRC3.indexOf('livres') !== -1, 'FR unlock_workout lacks milestone "livres" copy');
+});
+check('EN tip.unlock_workout contains "in the books"', function() {
+  assert(SRC3.indexOf('in the books') !== -1, 'EN unlock_workout lacks "in the books" copy');
+});
+check('FR tip.ai_intro contains "sans jugement" (no-judgment tone)', function() {
+  assert(SRC3.indexOf('sans jugement') !== -1, 'FR ai_intro lacks no-judgment copy');
+});
+check('EN tip.ai_intro contains "No judgment"', function() {
+  assert(SRC3.indexOf('No judgment') !== -1, 'EN ai_intro lacks no-judgment copy');
+});
+check('FR tip.day3 is encouraging — contains "habitudes"', function() {
+  assert(SRC3.indexOf('habitudes') !== -1, 'FR day3 lacks habit-formation encouragement');
+});
+check('EN tip.day3 contains "habits take hold"', function() {
+  assert(SRC3.indexOf('habits take hold') !== -1, 'EN day3 lacks habits-take-hold copy');
+});
+check('FR tip.unlock_7days contains "vrai" (real progress tone)', function() {
+  assert(SRC3.indexOf('quelque chose de vrai') !== -1, 'FR unlock_7days lacks real-progress copy');
+});
+check('Carousel taglines avoid technical jargon — no "hypertrophie" in beginner persona', function() {
+  // The beginner tagline should not contain "hypertrophie"
+  var beginnerFR = OC3.slice(OC3.indexOf('FR_TAGLINES'), OC3.indexOf('EN_TAGLINES'));
+  assert(beginnerFR.indexOf('hypertrophie') === -1 || beginnerFR.indexOf('beginner') > beginnerFR.indexOf('hypertrophie') === false, 'Beginner tagline should not contain technical jargon');
+});
+check('Carousel slide 2 feature desc: EN AI Coach has "No judgment"', function() {
+  assert(OC3.indexOf('No judgment') !== -1, 'AI Coach feature desc lacks "No judgment" copy');
+});
+check('Carousel slide 2 feature desc: FR AI Coach has "Zéro jugement"', function() {
+  assert(OC3.indexOf('Zéro jugement') !== -1, 'FR AI Coach feature desc lacks "Zéro jugement"');
+});
+check('Carousel slide 2: FR features mention "4 prochaines semaines"', function() {
+  assert(OC3.indexOf('4 prochaines semaines') !== -1, 'FR calendar desc lacks 4-week horizon copy');
+});
+check('Carousel slide 2: EN features mention "next 4 weeks"', function() {
+  assert(OC3.indexOf('next 4 weeks') !== -1, 'EN calendar desc lacks 4-week horizon copy');
+});
+
 // ─── SUMMARY ─────────────────────────────────────────────────────────────────
 var total = pass + fail;
 console.log('\n══════════════════════════════════════════════════════════════');
