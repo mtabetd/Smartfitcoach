@@ -463,7 +463,8 @@ window.getNextScheduledSession = function() {
         var dateStr = d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
         var out = { date: dateStr, dayLabel: dayNames[d.getDay()] };
         if (S.sportType) {
-          var typeLabels = { muscu:'Musculation', crossfit:'CrossFit', running:'Running', cycling:'Vélo', triathlon:'Triathlon', hyrox:'Hyrox', calisthenics:'Calisthenics', padel:'Padel', golf:'Golf', yoga:'Yoga' };
+          var _tlEN = window.isEnglish && window.isEnglish();
+          var typeLabels = { muscu: _tlEN ? 'Strength Training' : 'Musculation', crossfit:'CrossFit', running:'Running', cycling: _tlEN ? 'Cycling' : 'Vélo', triathlon:'Triathlon', hyrox:'Hyrox', calisthenics:'Calisthenics', padel:'Padel', golf:'Golf', yoga:'Yoga' };
           out.type = typeLabels[S.sportType] || String(S.sportType);
         }
         return out;
@@ -1072,11 +1073,12 @@ window.detectWeekPatterns = function() {
     // FIX CONTRE-AUDIT : .length > 0 car [] est truthy en JS (array vide passait ce check).
     var _hasActiveProgram = S.sportType && Array.isArray(S.sportProgram) && S.sportProgram.length > 0;
     if (sessionsSummary && sessionsSummary.sessions === 0 && _hasActiveProgram) {
+      var _utEN = window.isEnglish && window.isEnglish();
       patterns.push({
         id: 'undertraining',
         severity: 'info',
-        label: 'Aucune séance cette semaine',
-        advice: 'Reprise en douceur recommandée. Commence par 1 séance courte (30 min).'
+        label: _utEN ? 'No session this week' : 'Aucune séance cette semaine',
+        advice: _utEN ? 'Gentle restart recommended. Start with 1 short session (30 min).' : 'Reprise en douceur recommandée. Commence par 1 séance courte (30 min).'
       });
     }
 
@@ -1087,12 +1089,13 @@ window.detectWeekPatterns = function() {
     if (sessionsSummary && sessionsSummary.sessions >= 7) {
       var overSev = (weekPerf && weekPerf.lastPain) ? 'alert' : 'warning';
       var overId = (weekPerf && weekPerf.lastPain) ? 'overtraining' : 'high_volume';
+      var _ovEN = window.isEnglish && window.isEnglish();
       var overLabel = (weekPerf && weekPerf.lastPain)
-        ? sessionsSummary.sessions + ' séances + douleur ' + weekPerf.lastPain
-        : sessionsSummary.sessions + ' séances cette semaine (volume élevé)';
+        ? sessionsSummary.sessions + (_ovEN ? ' sessions + pain ' : ' séances + douleur ') + weekPerf.lastPain
+        : sessionsSummary.sessions + (_ovEN ? ' sessions this week (high volume)' : ' séances cette semaine (volume élevé)');
       var overAdvice = (weekPerf && weekPerf.lastPain)
-        ? 'Dé-load -20% volume cette semaine. 1-2 jours repos complet conseillés.'
-        : 'Au-delà de 6 séances/sem, le risque de blessure augmente. Pense à caser 1-2 jours repos complet.';
+        ? (_ovEN ? 'Deload -20% volume this week. 1-2 full rest days advised.' : 'Dé-load -20% volume cette semaine. 1-2 jours repos complet conseillés.')
+        : (_ovEN ? 'Beyond 6 sessions/week, injury risk increases. Plan 1-2 full rest days.' : 'Au-delà de 6 séances/sem, le risque de blessure augmente. Pense à caser 1-2 jours repos complet.');
       patterns.push({ id: overId, severity: overSev, label: overLabel, advice: overAdvice });
     }
 
@@ -1101,11 +1104,12 @@ window.detectWeekPatterns = function() {
         weekPerf.rpeAvg >= 6 && weekPerf.rpeAvg <= 8 &&
         typeof weekPerf.chargeProgressionPct === 'number' &&
         weekPerf.chargeProgressionPct > 0) {
+      var _ppEN = window.isEnglish && window.isEnglish();
       patterns.push({
         id: 'progress_positive',
         severity: 'info',
-        label: 'Progression +' + weekPerf.chargeProgressionPct.toFixed(1) + '% charges, RPE moyen ' + weekPerf.rpeAvg + '/10',
-        advice: 'Continue sur cette lancée. Respect du volume recommandé ISSN.'
+        label: (_ppEN ? 'Progression +' : 'Progression +') + weekPerf.chargeProgressionPct.toFixed(1) + (_ppEN ? '% load, avg RPE ' : '% charges, RPE moyen ') + weekPerf.rpeAvg + '/10',
+        advice: _ppEN ? 'Keep it up. Stay within ISSN recommended volume.' : 'Continue sur cette lancée. Respect du volume recommandé ISSN.'
       });
     }
 
@@ -1113,21 +1117,23 @@ window.detectWeekPatterns = function() {
     // Détectable uniquement si chargeProgressionPct < -5% (charges qui baissent).
     if (weekPerf && typeof weekPerf.chargeProgressionPct === 'number' &&
         weekPerf.chargeProgressionPct < -5) {
+      var _cdEN = window.isEnglish && window.isEnglish();
       patterns.push({
         id: 'charges_drop',
         severity: 'warning',
-        label: 'Charges en baisse (' + weekPerf.chargeProgressionPct.toFixed(1) + '% vs sem précédente)',
-        advice: 'Fatigue ? Deload voulu ? Vérifier sommeil + alimentation.'
+        label: (_cdEN ? 'Load dropping (' : 'Charges en baisse (') + weekPerf.chargeProgressionPct.toFixed(1) + (_cdEN ? '% vs prev week)' : '% vs sem précédente)'),
+        advice: _cdEN ? 'Fatigue? Planned deload? Check sleep + nutrition.' : 'Fatigue ? Deload voulu ? Vérifier sommeil + alimentation.'
       });
     }
 
     // PATTERN 7 : sommeil excellent — sleepAvg >= 4 sur ≥ 5j → encouragement.
     if (wellnessAvg && wellnessAvg.sleepAvg !== null && wellnessAvg.daysLogged >= 5 && wellnessAvg.sleepAvg >= 4) {
+      var _seEN = window.isEnglish && window.isEnglish();
       patterns.push({
         id: 'sleep_excellent',
         severity: 'info',
-        label: 'Sommeil excellent (' + wellnessAvg.sleepAvg + '/5 sur ' + wellnessAvg.daysLogged + 'j)',
-        advice: 'Bases solides de récupération. Idéal pour pousser la progression.'
+        label: (_seEN ? 'Excellent sleep (' : 'Sommeil excellent (') + wellnessAvg.sleepAvg + '/5 ' + (_seEN ? 'over ' : 'sur ') + wellnessAvg.daysLogged + (_seEN ? 'd)' : 'j)'),
+        advice: _seEN ? 'Solid recovery foundation. Perfect time to push progression.' : 'Bases solides de récupération. Idéal pour pousser la progression.'
       });
     }
 
@@ -1297,14 +1303,20 @@ window.showMedicalDisclaimerIfNeeded = function() {
     sheet.style.cssText = 'background:var(--ivory,#FAF9F6);max-width:460px;width:100%;max-height:90vh;overflow-y:auto;border:1px solid var(--black,#0A0A09);border-radius:0;padding:28px 26px;';
     var eyebrow = document.createElement('div');
     eyebrow.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--error,#7A1F1F);font-weight:400;margin-bottom:10px;';
-    eyebrow.textContent = '\u26A0 Avertissement important';
+    eyebrow.textContent = (window.isEnglish && window.isEnglish()) ? '\u26A0 Important notice' : '\u26A0 Avertissement important';
     var title = document.createElement('h2');
     title.id = 'mtd-disclaimer-title';
     title.style.cssText = 'font-family:Georgia,serif;font-size:22px;line-height:1.3;margin:0 0 16px;color:var(--black,#0A0A09);font-weight:normal;';
-    title.textContent = 'SmartFitCoach n\'est pas un dispositif m\u00e9dical';
+    title.textContent = (window.isEnglish && window.isEnglish()) ? 'SmartFitCoach is not a medical device' : 'SmartFitCoach n\'est pas un dispositif m\u00e9dical';
     var body = document.createElement('div');
     body.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;line-height:1.65;color:var(--black,#0A0A09);margin-bottom:20px;';
-    body.innerHTML = [
+    var _discEN = window.isEnglish && window.isEnglish();
+    body.innerHTML = _discEN ? [
+      '<p style="margin:0 0 12px">The information and recommendations provided by SmartFitCoach (AI coach, nutrition and sport plans, analyses) are offered for <strong>informational and educational purposes</strong> only.</p>',
+      '<p style="margin:0 0 12px">They do not replace the advice of a <strong>doctor, nutritionist, physiotherapist, or qualified sports coach</strong>.</p>',
+      '<p style="margin:0 0 12px">Before starting a programme, consult a healthcare professional if you are pregnant, breastfeeding, have a chronic condition (cardiac, diabetes, eating disorder, etc.), are on medication, or have undiagnosed pain.</p>',
+      '<p style="margin:0">In case of doubt, persistent pain, or discomfort: <strong>stop your training and consult a doctor</strong>.</p>'
+    ].join('') : [
       '<p style="margin:0 0 12px">Les informations et recommandations fournies par SmartFitCoach (coach IA, plans nutrition et sport, analyses) sont proposées \u00e0 titre <strong>informatif et p\u00e9dagogique</strong>.</p>',
       '<p style="margin:0 0 12px">Elles ne remplacent en aucun cas l\'avis d\'un <strong>m\u00e9decin, nutritionniste, kin\u00e9sith\u00e9rapeute ou coach sportif qualifi\u00e9</strong>.</p>',
       '<p style="margin:0 0 12px">Avant de d\u00e9buter un programme, consulte un professionnel de sant\u00e9 si tu es enceinte, allaitantes, as une pathologie chronique (cardiaque, diab\u00e8te, TCA, etc.), prends un traitement ou as des douleurs non diagnostiqu\u00e9es.</p>',
@@ -1314,12 +1326,12 @@ window.showMedicalDisclaimerIfNeeded = function() {
     cguLink.href = 'cgu.html';
     cguLink.target = '_blank';
     cguLink.rel = 'noopener';
-    cguLink.textContent = 'Lire les CGU complètes →';
+    cguLink.textContent = (window.isEnglish && window.isEnglish()) ? 'Read full Terms & Conditions →' : 'Lire les CGU complètes →';
     cguLink.style.cssText = 'display:inline-block;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;color:var(--grey,#6B6B65);text-decoration:underline;';
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.style.cssText = 'width:100%;padding:14px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;';
-    btn.textContent = 'J\'ai lu et compris';
+    btn.textContent = (window.isEnglish && window.isEnglish()) ? 'I have read and understood' : 'J\'ai lu et compris';
     btn.addEventListener('click', function() {
       try { localStorage.setItem(storageKey, '1'); } catch(e) {}
       if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
@@ -1385,11 +1397,11 @@ window.sanitizeHTML = function(str) {
 window.validateProfile = function validateProfile(data) {
   var errors = [];
   if (data.age !== undefined && (isNaN(data.age) || data.age < 10 || data.age > 120))
-    errors.push('Âge invalide (10-120 ans)');
+    errors.push((window.isEnglish && window.isEnglish()) ? 'Invalid age (10-120 years)' : 'Âge invalide (10-120 ans)');
   if (data.weight !== undefined && (isNaN(data.weight) || data.weight < 30 || data.weight > 300))
-    errors.push('Poids invalide (30-300 kg)');
+    errors.push((window.isEnglish && window.isEnglish()) ? 'Invalid weight (30-300 kg)' : 'Poids invalide (30-300 kg)');
   if (data.height !== undefined && (isNaN(data.height) || data.height < 100 || data.height > 250))
-    errors.push('Taille invalide (100-250 cm)');
+    errors.push((window.isEnglish && window.isEnglish()) ? 'Invalid height (100-250 cm)' : 'Taille invalide (100-250 cm)');
   return errors;
 };
 
