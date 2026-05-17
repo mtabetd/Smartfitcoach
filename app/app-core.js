@@ -1051,21 +1051,23 @@ window.detectWeekPatterns = function() {
     // PATTERN 1 : fatigue chronique — sommeil moyen < 3/5 sur 7j avec ≥ 3 jours loggés.
     // Évite faux positif si 1 seul jour logué.
     if (wellnessAvg && wellnessAvg.sleepAvg !== null && wellnessAvg.daysLogged >= 3 && wellnessAvg.sleepAvg < 3) {
+      var _slEN = window.isEnglish && window.isEnglish();
       patterns.push({
         id: 'sleep_low_avg',
         severity: 'warning',
-        label: 'Sommeil moyen bas (' + wellnessAvg.sleepAvg + '/5 sur ' + wellnessAvg.daysLogged + 'j)',
-        advice: 'Privilégie récupération active, coucher avant 23h, évite écran 1h avant dodo.'
+        label: (_slEN ? 'Low average sleep (' : 'Sommeil moyen bas (') + wellnessAvg.sleepAvg + '/5 ' + (_slEN ? 'over ' : 'sur ') + wellnessAvg.daysLogged + (_slEN ? 'd)' : 'j)'),
+        advice: _slEN ? 'Prioritise active recovery, bedtime before 11pm, avoid screens 1h before sleep.' : 'Privilégie récupération active, coucher avant 23h, évite écran 1h avant dodo.'
       });
     }
 
     // PATTERN 2 : douleurs récurrentes — muscles='douleurs' sur ≥ 2 jours dans les 7 derniers.
     if (wellnessAvg && wellnessAvg.muscleStats && wellnessAvg.muscleStats['douleurs'] >= 2) {
+      var _prEN = window.isEnglish && window.isEnglish();
       patterns.push({
         id: 'pain_recurrent',
         severity: 'alert',
-        label: wellnessAvg.muscleStats['douleurs'] + ' jours de douleurs sur 7',
-        advice: 'Envisager un dé-load cette semaine. Consulter un pro si persiste.'
+        label: wellnessAvg.muscleStats['douleurs'] + (_prEN ? ' days of pain out of 7' : ' jours de douleurs sur 7'),
+        advice: _prEN ? 'Consider a deload this week. Consult a professional if it persists.' : 'Envisager un dé-load cette semaine. Consulter un pro si persiste.'
       });
     }
 

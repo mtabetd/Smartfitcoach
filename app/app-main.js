@@ -1821,7 +1821,7 @@ function renderProfilePage(container) {
 
  // ─── Zone de danger (RGPD) ───
  c.appendChild(h('div', {style: 'margin-top:32px;padding-top:20px;border-top:1px solid var(--border);'}));
- c.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:14px;'}, 'DONNÉES PERSONNELLES'));
+ c.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:14px;'}, (window.isEnglish && window.isEnglish()) ? 'PERSONAL DATA' : 'DONNÉES PERSONNELLES'));
 
  // Télécharger mes données (RGPD Art. 20 portabilité — export EXHAUSTIF)
  // POLISH 2026-04 : enrichi — inclut désormais food_journal, photos, streak,
@@ -2184,9 +2184,9 @@ function _showMedicalDisclaimer() {
   var box = h('div', {
     style: 'background:var(--ivory,#FAF9F6);width:100%;max-width:480px;padding:28px 24px 32px;border-top:1px solid var(--line,#D8D8D0);'
   });
-  box.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:12px;'}, 'INFORMATION IMPORTANTE'));
-  box.appendChild(h('div', {style:'font-family:Georgia,serif;font-size:16px;color:var(--black,#0A0A09);margin-bottom:12px;line-height:1.4;'}, 'SmartFitCoach ne remplace pas un professionnel de santé'));
-  box.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.7;margin-bottom:20px;'}, 'Les informations fournies par cette application sont à titre indicatif. Consultez un médecin avant de prendre toute décision relative à votre santé, en particulier en cas de pathologie ou de traitement médical en cours.'));
+  box.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:12px;'}, (window.isEnglish && window.isEnglish()) ? 'IMPORTANT NOTICE' : 'INFORMATION IMPORTANTE'));
+  box.appendChild(h('div', {style:'font-family:Georgia,serif;font-size:16px;color:var(--black,#0A0A09);margin-bottom:12px;line-height:1.4;'}, (window.isEnglish && window.isEnglish()) ? 'SmartFitCoach does not replace a healthcare professional' : 'SmartFitCoach ne remplace pas un professionnel de santé'));
+  box.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.7;margin-bottom:20px;'}, (window.isEnglish && window.isEnglish()) ? 'The information provided by this application is for informational purposes only. Consult a doctor before making any health-related decisions, particularly if you have a medical condition or ongoing treatment.' : 'Les informations fournies par cette application sont à titre indicatif. Consultez un médecin avant de prendre toute décision relative à votre santé, en particulier en cas de pathologie ou de traitement médical en cours.'));
   var acceptBtn = h('button', {
     style: 'display:block;width:100%;padding:16px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;min-height:48px;',
     onclick: function() {
@@ -2195,7 +2195,7 @@ function _showMedicalDisclaimer() {
       if (window.saveProfile) try { window.saveProfile(); } catch(_) {}
       if (ov.parentNode) ov.parentNode.removeChild(ov);
     }
-  }, 'J\'AI COMPRIS');
+  }, (window.isEnglish && window.isEnglish()) ? 'I UNDERSTAND' : 'J\'AI COMPRIS');
   box.appendChild(acceptBtn);
   ov.appendChild(box);
   document.body.appendChild(ov);
@@ -2688,7 +2688,7 @@ function renderLogin(app) {
    if (loginBtn && loginBtn.disabled) {
      loginBtn.disabled = false;
      loginBtn.textContent = window.t ? window.t('auth.login_btn') : 'Se connecter';
-     S.authError = (window.isEnglish && window.isEnglish()) ? 'Connection timed out. Check your network and retry.' : 'Délai dépassé. Vérifiez votre connexion et réessayez.';
+     S.authError = (window.isEnglish && window.isEnglish()) ? 'Connection timed out. Check your network and retry.' : (window.isEnglish && window.isEnglish()) ? 'Request timed out. Check your connection and retry.' : 'Délai dépassé. Vérifiez votre connexion et réessayez.';
      try { if (window.render) window.render(); } catch(e) {}
    }
  }, 10000);
@@ -2910,7 +2910,10 @@ function renderRegister(app) {
  var consentCheck = h('input', {type: 'checkbox', id: 'rgpd-consent', style: 'margin-top:3px;min-width:18px;min-height:18px;cursor:pointer'});
  consentWrap.appendChild(consentCheck);
  var consentLabel = h('label', {'for': 'rgpd-consent', style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;cursor:pointer'});
- consentLabel.innerHTML = 'J’accepte la <a href="/privacy-policy.html" target="_blank" rel="noopener" style="color:var(--ink-900,#0A0A09);text-decoration:underline">politique de confidentialité</a> et les <a href="/cgu.html" target="_blank" rel="noopener" style="color:var(--ink-900,#0A0A09);text-decoration:underline">conditions générales d’utilisation</a>. Je consens au traitement de mes données de santé (poids, conditions médicales, grossesse) pour la personnalisation de mon programme.';
+ var _cgEN = window.isEnglish && window.isEnglish();
+ consentLabel.innerHTML = _cgEN
+   ? 'I accept the <a href="/privacy-policy.html" target="_blank" rel="noopener" style="color:var(--ink-900,#0A0A09);text-decoration:underline">privacy policy</a> and the <a href="/cgu.html" target="_blank" rel="noopener" style="color:var(--ink-900,#0A0A09);text-decoration:underline">terms of service</a>. I consent to the processing of my health data (weight, medical conditions, pregnancy) for programme personalisation.'
+   : 'J’accepte la <a href="/privacy-policy.html" target="_blank" rel="noopener" style="color:var(--ink-900,#0A0A09);text-decoration:underline">politique de confidentialité</a> et les <a href="/cgu.html" target="_blank" rel="noopener" style="color:var(--ink-900,#0A0A09);text-decoration:underline">conditions générales d’utilisation</a>. Je consens au traitement de mes données de santé (poids, conditions médicales, grossesse) pour la personnalisation de mon programme.';
  consentWrap.appendChild(consentLabel);
  form.appendChild(consentWrap);
 
@@ -2925,14 +2928,14 @@ function renderRegister(app) {
  if (!email || !pw || !pw2) { S.authError = (window.isEnglish && window.isEnglish()) ? 'Email and password are required.' : 'Email et mot de passe sont obligatoires.'; render(); return; }
  if (pw !== pw2) { S.authError = window.t('auth.error_password_match'); render(); return; }
  if (!window.isValidPassword(pw)) { S.authError = window.t('auth.error_password_rules'); render(); return; }
- if (!consentCheck.checked) { S.authError = 'Veuillez accepter la politique de confidentialité et les CGU pour créer votre compte.'; render(); return; }
+ if (!consentCheck.checked) { S.authError = (window.isEnglish && window.isEnglish()) ? 'Please accept the privacy policy and terms to create your account.' : 'Veuillez accepter la politique de confidentialité et les CGU pour créer votre compte.'; render(); return; }
 
  if (typeof navigator !== 'undefined' && navigator.onLine === false) {
    S.authError = (window.isEnglish && window.isEnglish()) ? 'No network connection. Check your connection and retry.' : 'Pas de connexion réseau. Vérifiez votre connexion et réessayez.';
    render(); return;
  }
  regBtn.disabled = true;
- regBtn.textContent = 'Création...';
+ regBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Creating...' : 'Création...';
  var _regSafetyTimer = setTimeout(function() {
    if (regBtn && regBtn.disabled) {
      regBtn.disabled = false;
@@ -2961,7 +2964,7 @@ function renderRegister(app) {
  }
  }).catch(function() {
  clearTimeout(_regSafetyTimer);
- S.authError = 'Erreur lors de la création du compte. Réessayez.';
+ S.authError = (window.isEnglish && window.isEnglish()) ? 'Error creating account. Please try again.' : 'Erreur lors de la création du compte. Réessayez.';
  render();
  });
  }}, window.t('auth.register_btn'));
@@ -2977,9 +2980,9 @@ function renderRegister(app) {
 
  // Liens légaux footer register
  var legalFooter2 = h('div', {style: 'text-align:center;margin-top:20px;padding-top:16px;border-top:1px solid var(--border,#D8D8D0)'});
- legalFooter2.appendChild(h('a', {href: '/privacy-policy.html', target: '_blank', rel: 'noopener', style: 'font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 8px'}, 'Confidentialité'));
+ legalFooter2.appendChild(h('a', {href: '/privacy-policy.html', target: '_blank', rel: 'noopener', style: 'font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 8px'}, (window.isEnglish && window.isEnglish()) ? 'Privacy' : 'Confidentialité'));
  legalFooter2.appendChild(h('a', {href: '/cgu.html', target: '_blank', rel: 'noopener', style: 'font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 8px'}, 'CGU'));
- legalFooter2.appendChild(h('a', {href: '/mentions-legales.html', target: '_blank', rel: 'noopener', style: 'font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 8px'}, 'Mentions légales'));
+ legalFooter2.appendChild(h('a', {href: '/mentions-legales.html', target: '_blank', rel: 'noopener', style: 'font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 8px'}, (window.isEnglish && window.isEnglish()) ? 'Legal notices' : 'Mentions légales'));
  c.appendChild(legalFooter2);
 
  app.appendChild(c);
