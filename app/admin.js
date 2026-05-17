@@ -92,6 +92,7 @@ async function openApp() {
 
   var json = await r.json();
   renderUsers(json.users || []);
+  loadPricingEditor();
 }
 
 async function signOut(silent) {
@@ -304,6 +305,196 @@ async function saveSubscription() {
   }
 }
 
+// ── PRICING EDITOR ──
+var _PRICING_FALLBACK = [
+  { tier:'athlete',  duration:'saison',     price_mad:349,  label_mad:'349 MAD',   savings_pct:0,  visible:true },
+  { tier:'athlete',  duration:'cycle',      price_mad:599,  label_mad:'599 MAD',   savings_pct:14, visible:true },
+  { tier:'athlete',  duration:'engagement', price_mad:999,  label_mad:'999 MAD',   savings_pct:24, visible:true },
+  { tier:'champion', duration:'saison',     price_mad:649,  label_mad:'649 MAD',   savings_pct:0,  visible:true },
+  { tier:'champion', duration:'cycle',      price_mad:1099, label_mad:'1 099 MAD', savings_pct:15, visible:true },
+  { tier:'champion', duration:'engagement', price_mad:1799, label_mad:'1 799 MAD', savings_pct:23, visible:true },
+  { tier:'legende',  duration:'saison',     price_mad:999,  label_mad:'999 MAD',   savings_pct:0,  visible:true },
+  { tier:'legende',  duration:'cycle',      price_mad:1649, label_mad:'1 649 MAD', savings_pct:17, visible:true },
+  { tier:'legende',  duration:'engagement', price_mad:2799, label_mad:'2 799 MAD', savings_pct:27, visible:true }
+];
+
+var _TIER_DISPLAY   = { athlete:'Core (Athlete)', champion:'Performance (Champion)', legende:'Élite (Légende)' };
+var _DUR_DISPLAY    = { saison:'3 mois (Saison)', cycle:'6 mois (Cycle)', engagement:'12 mois (Engagement)' };
+var _pricingData    = null;
+
+async function loadPricingEditor() {
+  var wrap = document.getElementById('pricing-editor');
+  if (!wrap) return;
+  wrap.textContent = 'Chargement…';
+
+  try {
+    var r = await fetch('/.netlify/functions/get-pricing');
+    var json = r.ok ? await r.json() : { data: [] };
+    _pricingData = (json.data && json.data.length) ? json.data : _PRICING_FALLBACK.map(function(r){ return Object.assign({}, r); });
+  } catch(e) {
+    _pricingData = _PRICING_FALLBACK.map(function(r){ return Object.assign({}, r); });
+  }
+
+  renderPricingEditor(_pricingData);
+}
+
+function renderPricingEditor(rows) {
+  var wrap = document.getElementById('pricing-editor');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+
+  var tiers = ['athlete', 'champion', 'legende'];
+  tiers.forEach(function(tier) {
+    var tierRows = rows.filter(function(r){ return r.tier === tier; });
+
+    var block = document.createElement('div');
+    block.className = 'tier-block';
+
+    var lbl = document.createElement('div');
+    lbl.className = 'tier-label';
+    lbl.textContent = _TIER_DISPLAY[tier] || tier;
+    block.appendChild(lbl);
+
+    var tbl = document.createElement('table');
+    tbl.className = 'pricing-table';
+    var thead = document.createElement('thead');
+    thead.innerHTML = '<tr>' +
+      '<th>Durée</th>' +
+      '<th>Prix MAD</th>' +
+      '<th>Label MAD</th>' +
+      '<th>Prix EUR</th>' +
+      '<th>Label EUR</th>' +
+      '<th>Remise %</th>' +
+      '<th>Visible</th>' +
+      '</tr>';
+    tbl.appendChild(thead);
+    var tbody = document.createElement('tbody');
+
+    var durations = ['saison', 'cycle', 'engagement'];
+    durations.forEach(function(dur) {
+      var row = tierRows.find(function(r){ return r.duration === dur; });
+      if (!row) row = { tier: tier, duration: dur, price_mad: 0, label_mad: '', savings_pct: 0, visible: true };
+
+      var tr = document.createElement('tr');
+      var _tdText = function(txt) { var td = document.createElement('td'); td.textContent = txt; return td; };
+
+      tr.appendChild(_tdText(_DUR_DISPLAY[dur] || dur));
+
+      var tdPmad = document.createElement('td');
+      var inpPmad = document.createElement('input');
+      inpPmad.type = 'number'; inpPmad.className = 'price-input';
+      inpPmad.min = '0'; inpPmad.step = '1';
+      inpPmad.value = row.price_mad || 0;
+      inpPmad.dataset.tier = tier; inpPmad.dataset.dur = dur; inpPmad.dataset.field = 'price_mad';
+      tdPmad.appendChild(inpPmad); tr.appendChild(tdPmad);
+
+      var tdLmad = document.createElement('td');
+      var inpLmad = document.createElement('input');
+      inpLmad.type = 'text'; inpLmad.className = 'label-input';
+      inpLmad.maxLength = 40;
+      inpLmad.value = row.label_mad || '';
+      inpLmad.dataset.tier = tier; inpLmad.dataset.dur = dur; inpLmad.dataset.field = 'label_mad';
+      tdLmad.appendChild(inpLmad); tr.appendChild(tdLmad);
+
+      var tdPeur = document.createElement('td');
+      var inpPeur = document.createElement('input');
+      inpPeur.type = 'number'; inpPeur.className = 'price-input';
+      inpPeur.min = '0'; inpPeur.step = '0.01';
+      inpPeur.value = row.price_eur != null ? row.price_eur : '';
+      inpPeur.placeholder = '—';
+      inpPeur.dataset.tier = tier; inpPeur.dataset.dur = dur; inpPeur.dataset.field = 'price_eur';
+      tdPeur.appendChild(inpPeur); tr.appendChild(tdPeur);
+
+      var tdLeur = document.createElement('td');
+      var inpLeur = document.createElement('input');
+      inpLeur.type = 'text'; inpLeur.className = 'label-input';
+      inpLeur.maxLength = 40;
+      inpLeur.value = row.label_eur || '';
+      inpLeur.placeholder = '—';
+      inpLeur.dataset.tier = tier; inpLeur.dataset.dur = dur; inpLeur.dataset.field = 'label_eur';
+      tdLeur.appendChild(inpLeur); tr.appendChild(tdLeur);
+
+      var tdSav = document.createElement('td');
+      var inpSav = document.createElement('input');
+      inpSav.type = 'number'; inpSav.className = 'savings-input';
+      inpSav.min = '0'; inpSav.max = '100'; inpSav.step = '1';
+      inpSav.value = row.savings_pct != null ? row.savings_pct : 0;
+      inpSav.dataset.tier = tier; inpSav.dataset.dur = dur; inpSav.dataset.field = 'savings_pct';
+      tdSav.appendChild(inpSav); tr.appendChild(tdSav);
+
+      var tdVis = document.createElement('td');
+      var inpVis = document.createElement('input');
+      inpVis.type = 'checkbox';
+      inpVis.checked = row.visible !== false;
+      inpVis.dataset.tier = tier; inpVis.dataset.dur = dur; inpVis.dataset.field = 'visible';
+      tdVis.appendChild(inpVis); tr.appendChild(tdVis);
+
+      tbody.appendChild(tr);
+    });
+
+    tbl.appendChild(tbody);
+    block.appendChild(tbl);
+    wrap.appendChild(block);
+  });
+}
+
+function collectPricingRows() {
+  var rows = [];
+  var tiers = ['athlete', 'champion', 'legende'];
+  var durations = ['saison', 'cycle', 'engagement'];
+  tiers.forEach(function(tier) {
+    durations.forEach(function(dur) {
+      var get = function(field) {
+        return document.querySelector('input[data-tier="' + tier + '"][data-dur="' + dur + '"][data-field="' + field + '"]');
+      };
+      var inpPmad = get('price_mad');
+      var inpLmad = get('label_mad');
+      var inpPeur = get('price_eur');
+      var inpLeur = get('label_eur');
+      var inpSav  = get('savings_pct');
+      var inpVis  = get('visible');
+      if (!inpPmad) return;
+      var rec = {
+        tier:        tier,
+        duration:    dur,
+        price_mad:   parseFloat(inpPmad.value) || 0,
+        label_mad:   inpLmad ? inpLmad.value.trim() : '',
+        price_eur:   (inpPeur && inpPeur.value !== '') ? parseFloat(inpPeur.value) : null,
+        label_eur:   (inpLeur && inpLeur.value.trim()) ? inpLeur.value.trim() : null,
+        savings_pct: inpSav ? (parseInt(inpSav.value, 10) || 0) : 0,
+        visible:     inpVis ? inpVis.checked : true
+      };
+      rows.push(rec);
+    });
+  });
+  return rows;
+}
+
+async function savePricingRows() {
+  if (!_accessToken) { showToast('Non connecté'); return; }
+  var rows = collectPricingRows();
+  if (!rows.length) { showToast('Aucune ligne à enregistrer'); return; }
+  try {
+    var r = await fetch('/.netlify/functions/set-pricing', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + _accessToken
+      },
+      body: JSON.stringify({ rows: rows })
+    });
+    if (r.status === 401) { showToast('Session expirée'); return signOut(); }
+    var json = null; try { json = await r.json(); } catch(e) {}
+    if (!r.ok) {
+      showToast('Erreur: ' + ((json && json.error) || ('HTTP ' + r.status)));
+      return;
+    }
+    showToast('Tarifs enregistrés (' + (json && json.updated) + ' lignes)');
+  } catch(e) {
+    showToast('Erreur: ' + (e.message || 'inconnue'));
+  }
+}
+
 // ── BOOT ──
 // CSP forbids inline event handlers — wire everything up via JS.
 document.addEventListener('DOMContentLoaded', function() {
@@ -320,6 +511,11 @@ document.addEventListener('DOMContentLoaded', function() {
   if (btnSave)     btnSave.addEventListener('click', saveSubscription);
   if (btnCancel)   btnCancel.addEventListener('click', closeModal);
   if (pw)          pw.addEventListener('keydown', function(e) { if (e.key === 'Enter') tryLogin(); });
+
+  var btnSavePricing   = document.getElementById('btn-save-pricing');
+  var btnReloadPricing = document.getElementById('btn-reload-pricing');
+  if (btnSavePricing)   btnSavePricing.addEventListener('click', savePricingRows);
+  if (btnReloadPricing) btnReloadPricing.addEventListener('click', loadPricingEditor);
 
   // Auto-login if session already present (e.g. refresh)
   var c = getClient();

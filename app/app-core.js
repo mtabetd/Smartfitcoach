@@ -4617,6 +4617,9 @@ function loadSFCPricing() {
       window._sfcPricingAttempted = true;
       if (json && json.ok && Array.isArray(json.data) && json.data.length > 0)
         window.SFC_PRICING_DATA = json.data;
+      // Fallback: if API returned empty, use hardcoded pricing so UI never shows "unavailable"
+      if (!window.SFC_PRICING_DATA || !window.SFC_PRICING_DATA.length)
+        window.SFC_PRICING_DATA = window._SFC_FALLBACK_PRICING || [];
       window._sfcPricingPromise = null;
       return window.SFC_PRICING_DATA;
     })
@@ -4624,7 +4627,10 @@ function loadSFCPricing() {
       clearTimeout(_timeout);
       window._sfcPricingAttempted = true;
       window._sfcPricingPromise = null;
-      return null;
+      // Network failure — use fallback pricing
+      if (!window.SFC_PRICING_DATA || !window.SFC_PRICING_DATA.length)
+        window.SFC_PRICING_DATA = window._SFC_FALLBACK_PRICING || [];
+      return window.SFC_PRICING_DATA;
     });
   return window._sfcPricingPromise;
 }
@@ -4633,50 +4639,64 @@ window.loadSFCPricing = loadSFCPricing;
 loadSFCPricing();
 
 // Paywall modal — affiche un message d'upgrade pour les features premium
-function showPaywall(feature) {
-  var featureNames = {
-    scanner: 'Scanner de repas IA',
-    pdf: 'Export PDF',
-    coach: 'Coach IA illimité',
-    'ai-coach': 'Coach IA',
-    history: 'Historique de progression',
-    body: 'Analyse corporelle IA',
-    'body-analysis': 'Analyse corporelle IA',
-    'muscu-program': 'Générateur de programme IA'
+function showPaywall(feature, requiredTier) {
+  var _isEN = window.isEnglish && window.isEnglish();
+  var _minTier = requiredTier || 'champion';
+  var _myTier  = (window.getPlanTier ? window.getPlanTier() : 'free');
+  var _tierLabel = { athlete: 'Core', champion: 'Performance', legende: 'Élite' };
+  var _targetLabel = _tierLabel[_minTier] || 'Performance';
+  var _priceHint = (function() {
+    var _d = window.SFC_PRICING_DATA || window._SFC_FALLBACK_PRICING || [];
+    for (var _pi = 0; _pi < _d.length; _pi++) {
+      if (_d[_pi].tier === _minTier && _d[_pi].duration === 'saison')
+        return (_isEN ? 'From ' : 'À partir de ') + (_d[_pi].label_mad || '649 MAD') + (_isEN ? '/quarter' : '/trimestre');
+    }
+    if (_minTier === 'legende') return _isEN ? 'From 999 MAD/quarter' : 'À partir de 999 MAD/trimestre';
+    return _isEN ? 'From 649 MAD/quarter' : 'À partir de 649 MAD/trimestre';
+  })();
+  var _featureNames = {
+    scanner: _isEN ? 'AI food photo scanner' : 'Scanner photo repas IA',
+    pdf: _isEN ? 'PDF Weekly Report' : 'Export PDF hebdomadaire',
+    coach: _isEN ? 'Unlimited AI Coach' : 'Coach IA illimité',
+    'ai-coach': _isEN ? 'AI Coach' : 'Coach IA',
+    history: _isEN ? 'Progress history' : 'Historique de progression',
+    body: _isEN ? 'AI body analysis' : 'Analyse corporelle IA',
+    'body-analysis': _isEN ? 'AI body analysis' : 'Analyse corporelle IA',
+    'muscu-program': _isEN ? 'AI program generator' : 'Générateur de programme IA',
+    'sport-mix': _isEN ? 'Multi-discipline training' : 'Entraînement multi-disciplines',
+    'ai-coach-limit': _isEN ? 'Additional AI questions' : 'Questions IA supplémentaires',
+    whatsapp: _isEN ? 'WhatsApp coaching 7/7' : 'Accompagnement WhatsApp 7j/7'
   };
-  var name = featureNames[feature] || 'Cette fonctionnalité';
+  var _name = _featureNames[feature] || (_isEN ? 'This feature' : 'Cette fonctionnalité');
+  var _isUpgrade = (_myTier === 'athlete' && _minTier === 'champion') || (_myTier === 'champion' && _minTier === 'legende');
+  var _headerText = _isUpgrade
+    ? (_isEN ? 'Upgrade to ' + _targetLabel : 'Passer à ' + _targetLabel)
+    : (_isEN ? 'Subscribe to ' + _targetLabel : 'S\'abonner \xe0 ' + _targetLabel);
+  var _bodyText = _isUpgrade
+    ? (_isEN ? _name + ' is included in ' + _targetLabel + '. Upgrade to unlock it.'
+             : _name + ' est inclus dans l\'offre ' + _targetLabel + '. Passez à ' + _targetLabel + ' pour y accéder.')
+    : (_isEN ? _name + ' requires a SmartFitCoach ' + _targetLabel + ' subscription.'
+             : _name + ' nécessite un abonnement SmartFitCoach ' + _targetLabel + '.');
   var old = document.getElementById('sfc-paywall-modal');
   if (old && old.parentNode) old.parentNode.removeChild(old);
-  if (window.TRACKER) window.TRACKER.track('paywall_hit', { feature: feature });
+  if (window.TRACKER) window.TRACKER.track('paywall_hit', { feature: feature, myTier: _myTier, requiredTier: _minTier });
   var h = window.h;
-  if (!h) { if (window.showToast) window.showToast(name + ' est r\u00e9serv\u00e9e aux abonn\u00e9s', 'error', 3500); return; }
+  if (!h) { if (window.showToast) window.showToast(_name + (_isEN ? ' requires ' : ' nécessite ') + _targetLabel, 'error', 3500); return; }
   var ov = document.createElement('div');
   ov.id = 'sfc-paywall-modal';
   ov.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,9,0.55);z-index:9500;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.25s ease;';
   var box = document.createElement('div');
   box.style.cssText = 'background:var(--ivory,#FAF9F6);max-width:380px;width:90%;padding:28px 24px;border-radius:2px;text-align:center;';
-  var _safeName = name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  box.innerHTML = '<div style="font-size:28px;margin-bottom:12px;">\u2B50</div>' +
-    '<div style="font-family:Georgia,serif;font-size:20px;margin-bottom:8px;">Passez \u00e0 Premium</div>' +
-    '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:#6B6B65;line-height:1.6;margin-bottom:20px;">' +
-    '<strong>' + _safeName + '</strong> est r\u00e9serv\u00e9(e) aux abonn\u00e9s SmartFitCoach Premium. D\u00e9bloquez toutes les fonctionnalit\u00e9s avanc\u00e9es pour atteindre vos objectifs.</div>' +
-    '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:#6B6B65;margin-bottom:12px;">' +
-    'Scanner repas IA \u00b7 Coach IA illimit\u00e9 \u00b7 Export PDF \u00b7 Historique \u00b7 Analyse corporelle</div>' +
-    '<div style="font-family:Georgia,serif;font-size:22px;color:#0A0A09;margin-bottom:4px;">' + (function() {
-    var _d = window.SFC_PRICING_DATA;
-    if (_d && _d.length) {
-      for (var _pi = 0; _pi < _d.length; _pi++) {
-        if (_d[_pi].tier === 'athlete' && _d[_pi].duration === 'saison')
-          return 'À partir de ' + (_d[_pi].label_mad || '249 MAD') + '/trimestre';
-      }
-    }
-    return window.SFC_PREMIUM_PRICE || 'À partir de 249 MAD/trimestre';
-  })() + '</div>' +
-    '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:10px;color:#6B6B65;letter-spacing:1px;margin-bottom:20px;">SANS ENGAGEMENT \u00b7 R\u00c9SILIABLE \u00c0 TOUT MOMENT</div>';
+  var _s = function(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); };
+  box.innerHTML = '<div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;">' + _s(_targetLabel).toUpperCase() + '</div>' +
+    '<div style="font-family:Georgia,serif;font-size:20px;margin-bottom:10px;">' + _s(_headerText) + '</div>' +
+    '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:#6B6B65;line-height:1.6;margin-bottom:16px;">' + _s(_bodyText) + '</div>' +
+    '<div style="font-family:Georgia,serif;font-size:22px;color:#0A0A09;margin-bottom:4px;">' + _s(_priceHint) + '</div>' +
+    '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:10px;color:#6B6B65;letter-spacing:1px;margin-bottom:20px;">' + (_isEN ? 'NO COMMITMENT · CANCEL ANYTIME' : 'SANS ENGAGEMENT · RÉSILIABLE À TOUT MOMENT') + '</div>';
   var dismiss = function() { ov.style.opacity = '0'; setTimeout(function() { if (ov.parentNode) ov.parentNode.removeChild(ov); }, 250); };
   var upgradeBtn = document.createElement('button');
   upgradeBtn.style.cssText = 'width:100%;padding:14px;margin-bottom:8px;background:var(--black,#0A0A09);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#fff;cursor:pointer;min-height:44px;letter-spacing:1px;';
-  upgradeBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Discover Premium →' : 'Découvrir Premium →';
+  upgradeBtn.textContent = _isEN ? ('Discover ' + _targetLabel + ' →') : ('Découvrir ' + _targetLabel + ' →');
   upgradeBtn.onclick = function() {
     dismiss();
     if (window.SupaSync) { try { window.SupaSync._userStatusCacheTs = 0; } catch(_e) {} }
@@ -4684,7 +4704,7 @@ function showPaywall(feature) {
   };
   var closeBtn = document.createElement('button');
   closeBtn.style.cssText = 'width:100%;padding:14px;background:transparent;border:1px solid #D8D8D0;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#6B6B65;cursor:pointer;min-height:44px;';
-  closeBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Close' : 'Fermer';
+  closeBtn.textContent = _isEN ? 'Close' : 'Fermer';
   closeBtn.onclick = dismiss;
   box.appendChild(upgradeBtn);
   box.appendChild(closeBtn);
@@ -4693,10 +4713,89 @@ function showPaywall(feature) {
   document.body.appendChild(ov);
   requestAnimationFrame(function() { ov.style.opacity = '1'; });
 }
+
 window.isPremium = isPremium;
 window.getTrialDaysLeft = getTrialDaysLeft;
 window.isTrialUser = isTrialUser;
 window.showPaywall = showPaywall;
+
+// ─── TIER INFRASTRUCTURE ──────────────────────────────────────────────────
+// Tier ranking: free < athlete < champion < legende ≤ unlimited
+// All existing isPremium() callers are unchanged — these are ADDITIVE functions.
+
+var _PLAN_TIER_RANK = { free: 0, loading: 0, trial: 1, athlete: 1, champion: 2, legende: 3, unlimited: 3 };
+
+// Returns the user's current tier: 'free'|'athlete'|'champion'|'legende'|'unlimited'
+function getPlanTier() {
+  try {
+    var s = window.S;
+    if (!s) return 'free';
+    // Still loading — conservative champion to avoid blocking UI (isPremium() handles security)
+    if (!s._subStatusReady && s._serverPremium === undefined) return 'champion';
+    var plan = s.subscriptionPlan;
+    var _active = !!(s.subscriptionEnd && new Date(s.subscriptionEnd) > new Date());
+    // Special plans — always active
+    if (plan === 'unlimited' || plan === 'lifetime' || plan === 'admin') return 'unlimited';
+    // Named tier plans — require active subscription end date
+    if (plan === 'legende' || plan === 'legend') return _active ? 'legende' : 'free';
+    if (plan === 'champion') return _active ? 'champion' : 'free';
+    if (plan === 'athlete') return _active ? 'athlete' : 'free';
+    // Legacy duration plans (1m, 3m, 6m, 12m) with active end → champion (Performance)
+    if (_active) return 'champion';
+    // Trial window → champion (full Performance access for 7 days)
+    if (s.firstLoginDate) {
+      var trialEnd = new Date(s.firstLoginDate);
+      trialEnd.setUTCDate(trialEnd.getUTCDate() + 7);
+      trialEnd.setUTCHours(23, 59, 59, 999);
+      if (trialEnd > new Date()) return 'champion';
+    }
+    // Server says premium but no tier info → champion (safe fallback)
+    if (s._serverPremium === true) return 'champion';
+    return 'free';
+  } catch(e) { return 'free'; }
+}
+
+// Returns true when user's tier is ≥ minTier
+function isPlanAtLeast(minTier) {
+  try {
+    var myRank  = _PLAN_TIER_RANK[getPlanTier()]  || 0;
+    var minRank = _PLAN_TIER_RANK[minTier]         || 0;
+    return myRank >= minRank;
+  } catch(e) { return false; }
+}
+
+// Monthly AI-coach quota per tier (returns Infinity for unlimited)
+function getAICoachMonthlyLimit() {
+  try {
+    var tier = getPlanTier();
+    if (tier === 'unlimited' || tier === 'legende') return Infinity;
+    if (tier === 'champion') return 60;
+    if (tier === 'athlete')  return 10;
+    return null; // free/trial → daily limit handled by existing logic
+  } catch(e) { return null; }
+}
+
+// ─── FALLBACK PRICING ─────────────────────────────────────────────────────
+// Used when Supabase get-pricing returns empty (dev/CI/offline).
+// Format mirrors pricing_config table: { tier, duration, price_mad, price_eur,
+//   label_mad, label_eur, savings_pct, visible }
+var _SFC_FALLBACK_PRICING = [
+  { tier:'athlete',  duration:'saison',     price_mad:349,  price_eur:32,  label_mad:'349 MAD',   label_eur:'32 €',   savings_pct:0,  visible:true },
+  { tier:'athlete',  duration:'cycle',      price_mad:599,  price_eur:55,  label_mad:'599 MAD',   label_eur:'55 €',   savings_pct:14, visible:true },
+  { tier:'athlete',  duration:'engagement', price_mad:999,  price_eur:92,  label_mad:'999 MAD',   label_eur:'92 €',   savings_pct:24, visible:true },
+  { tier:'champion', duration:'saison',     price_mad:649,  price_eur:60,  label_mad:'649 MAD',   label_eur:'60 €',   savings_pct:0,  visible:true },
+  { tier:'champion', duration:'cycle',      price_mad:1099, price_eur:101, label_mad:'1 099 MAD', label_eur:'101 €',  savings_pct:15, visible:true },
+  { tier:'champion', duration:'engagement', price_mad:1799, price_eur:166, label_mad:'1 799 MAD', label_eur:'166 €',  savings_pct:23, visible:true },
+  { tier:'legende',  duration:'saison',     price_mad:999,  price_eur:92,  label_mad:'999 MAD',   label_eur:'92 €',   savings_pct:0,  visible:true },
+  { tier:'legende',  duration:'cycle',      price_mad:1649, price_eur:152, label_mad:'1 649 MAD', label_eur:'152 €',  savings_pct:17, visible:true },
+  { tier:'legende',  duration:'engagement', price_mad:2799, price_eur:258, label_mad:'2 799 MAD', label_eur:'258 €',  savings_pct:27, visible:true }
+];
+
+window.getPlanTier = getPlanTier;
+window.isPlanAtLeast = isPlanAtLeast;
+window.getAICoachMonthlyLimit = getAICoachMonthlyLimit;
+window._SFC_FALLBACK_PRICING = _SFC_FALLBACK_PRICING;
+
 
 function isValidPassword(pw) {
   if (!pw || typeof pw !== 'string') return false;

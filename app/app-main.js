@@ -1507,58 +1507,68 @@ function renderProfilePage(container) {
          card.appendChild(_pLabel);
 
          // ── Features complètes par tier (affichées dans le grand bloc) ──
+         // Matrix exacte : Core (10) / Performance (10+) / Élite (5+)
          var _allFeatures = _subEN ? [
+           // ─── CORE (athlete) — 10 features —───
            { label: 'Personalized nutrition program — macros & calories to your real metabolism', tiers: ['athlete','champion','legende'] },
-           { label: 'Daily food journal — real-time macro tracking',                          tiers: ['athlete','champion','legende'] },
-           { label: 'Barcode scanner — 1M+ products',                                         tiers: ['athlete','champion','legende'] },
-           { label: '3 sport disciplines of your choice',                                        tiers: ['athlete','champion','legende'] },
-           { label: 'AI sport program — sessions tailored to your level & equipment',         tiers: ['athlete','champion','legende'] },
-           { label: 'AI Coach — 30 questions/month',                                          tiers: ['athlete','champion','legende'] },
+           { label: 'Daily food journal — real-time macro tracking',                             tiers: ['athlete','champion','legende'] },
+           { label: 'Barcode scanner — 1M+ products',                                           tiers: ['athlete','champion','legende'] },
+           { label: '1 sport discipline (simple program)',                                       tiers: ['athlete'] },
+           { label: 'AI sport program — sessions tailored to your level & equipment',           tiers: ['athlete','champion','legende'] },
+           { label: 'AI Coach — 10 questions/month',                                            tiers: ['athlete'] },
            { label: 'Weight, sleep, wellness & hydration tracking',                              tiers: ['athlete','champion','legende'] },
-           { label: 'Progress charts — 3-month history',                                      tiers: ['athlete','champion','legende'] },
+           { label: 'Progress charts — 3-month history',                                        tiers: ['athlete'] },
            { label: 'Streaks & badges',                                                          tiers: ['athlete','champion','legende'] },
-           { label: 'Cloud sync — all your devices',                                          tiers: ['athlete','champion','legende'] },
-           { label: 'AI meal photo scanner — photograph your plate → instant macros',       tiers: ['champion','legende'] },
-           { label: '12 sport disciplines: CrossFit, Hyrox, triathlon, cycling, padel, golf, calisthenics, yoga…', tiers: ['champion','legende'] },
-           { label: 'Unlimited AI Coach — 24/7',                                               tiers: ['champion','legende'] },
-           { label: 'AI body analysis — estimate your body composition from a photo',          tiers: ['champion','legende'] },
-           { label: 'Full history — unlimited timeline',                                       tiers: ['champion','legende'] },
+           { label: 'Cloud sync — all your devices',                                            tiers: ['athlete','champion','legende'] },
+           // ─── PERFORMANCE (champion) — all Core + —───
+           { label: 'Up to 3 sport disciplines + daily sport/nutrition symbiosis',              tiers: ['champion','legende'] },
+           { label: 'Calorie & carb adaptation per sport day (yoga ≠ lifting ≠ running)',        tiers: ['champion','legende'] },
+           { label: 'AI meal photo scanner — photograph your plate → instant macros',         tiers: ['champion','legende'] },
+           { label: 'AI Coach — 60 questions/month',                                            tiers: ['champion'] },
+           { label: 'AI body analysis — estimate body composition from a photo',                tiers: ['champion','legende'] },
+           { label: 'Progress history — 12 months',                                             tiers: ['champion'] },
            { label: 'Automatic weekly PDF report',                                               tiers: ['champion','legende'] },
-           { label: 'Social space — share your progress, follow friends',                     tiers: ['champion','legende'] },
-           { label: 'Advanced challenges',                                                       tiers: ['champion','legende'] },
-           { label: 'Priority email support (< 24 h weekdays)',                                 tiers: ['champion','legende'] },
-           { label: 'WhatsApp coaching 7/7 — expert answers (< 12 h weekdays)',               tiers: ['legende'] },
-           { label: 'Monthly personal review — data analysis + adjustment recommendations',   tiers: ['legende'] },
-           { label: 'On-demand program adjustment — up to 2x/month',                          tiers: ['legende'] },
-           { label: 'Early access to new features',                                              tiers: ['legende'] },
-           { label: 'Exclusive Élite badge in your profile',                                      tiers: ['legende'] }
+           { label: 'Social space — share progress, follow friends',                            tiers: ['champion','legende'] },
+           { label: 'Advanced analytics & recovery recommendations',                            tiers: ['champion','legende'] },
+           { label: 'Priority email support (< 24h weekdays)',                                  tiers: ['champion','legende'] },
+           // ─── ÉLITE (légende) — all Performance + —───
+           { label: 'WhatsApp coaching 7/7 — expert answers (< 12h weekdays)',                 tiers: ['legende'] },
+           { label: 'Monthly personal review — data analysis + adjustments',                   tiers: ['legende'] },
+           { label: 'On-demand program adjustment — up to 2x/month',                           tiers: ['legende'] },
+           { label: 'AI Coach — unlimited',                                                     tiers: ['legende'] },
+           { label: 'Full history — unlimited timeline',                                        tiers: ['legende'] },
+           { label: 'Early access to new features + exclusive Élite badge',                    tiers: ['legende'] }
          ] : [
+           // ─── CORE (athlete) — 10 fonctionnalités —───
            { label: 'Programme nutrition personnalisé — macros & calories sur votre métabolisme réel', tiers: ['athlete','champion','legende'] },
-           { label: 'Journal alimentaire quotidien — suivi macros en temps réel',       tiers: ['athlete','champion','legende'] },
-           { label: 'Scanner codes-barres — base 1M+ produits',                               tiers: ['athlete','champion','legende'] },
-           { label: '3 disciplines sportives au choix',                                          tiers: ['athlete','champion','legende'] },
+           { label: 'Journal alimentaire quotidien — suivi macros en temps réel',         tiers: ['athlete','champion','legende'] },
+           { label: 'Scanner codes-barres — base 1M+ produits',                             tiers: ['athlete','champion','legende'] },
+           { label: '1 discipline sportive (programme simple)',                                  tiers: ['athlete'] },
            { label: 'Programme sport IA — séances selon votre niveau & équipement',     tiers: ['athlete','champion','legende'] },
-           { label: 'Coach IA — 30 questions/mois',                                           tiers: ['athlete','champion','legende'] },
+           { label: 'Coach IA — 10 questions/mois',                                         tiers: ['athlete'] },
            { label: 'Suivi poids, sommeil, bien-être & eau',                                tiers: ['athlete','champion','legende'] },
-           { label: 'Courbes de progression — 3 mois d’historique',                       tiers: ['athlete','champion','legende'] },
+           { label: 'Courbes de progression — 3 mois d’historique',                     tiers: ['athlete'] },
            { label: 'Streaks & badges',                                                          tiers: ['athlete','champion','legende'] },
-           { label: 'Synchro cloud — tous vos appareils',                                     tiers: ['athlete','champion','legende'] },
+           { label: 'Synchro cloud — tous vos appareils',                                   tiers: ['athlete','champion','legende'] },
+           // ─── PERFORMANCE (champion) — tout Core + —───
+           { label: 'Jusqu’à 3 disciplines sportives + symbiose sport/nutrition jour par jour', tiers: ['champion','legende'] },
+           { label: 'Adaptation calories/glucides selon sport du jour (yoga ≠ muscu ≠ running)',  tiers: ['champion','legende'] },
            { label: 'Scanner IA photo repas — photographiez votre assiette → macros instantanés', tiers: ['champion','legende'] },
-           { label: '12 disciplines sportives : CrossFit, Hyrox, triathlon, cyclisme, padel, golf, calisthenics, yoga…', tiers: ['champion','legende'] },
-           { label: 'Coach IA illimité — 24h/24, 7j/7',                                  tiers: ['champion','legende'] },
+           { label: 'Coach IA — 60 questions/mois',                                         tiers: ['champion'] },
            { label: 'Analyse corporelle IA — composition estimée depuis une photo',     tiers: ['champion','legende'] },
-           { label: 'Historique complet — sans limite dans le temps',                         tiers: ['champion','legende'] },
+           { label: 'Historique de progression — 12 mois',                                  tiers: ['champion'] },
            { label: 'Export PDF hebdomadaire automatique',                                       tiers: ['champion','legende'] },
-           { label: 'Espace social — partagez vos progrès, suivez vos amis',             tiers: ['champion','legende'] },
-           { label: 'Défis & challenges avancés',                                           tiers: ['champion','legende'] },
+           { label: 'Espace social — partagez vos progrès, suivez vos amis',           tiers: ['champion','legende'] },
+           { label: 'Analytics avancés & recommandations récupération',            tiers: ['champion','legende'] },
            { label: 'Support email prioritaire (< 24h jours ouvrables)',                        tiers: ['champion','legende'] },
-           { label: 'Accompagnement WhatsApp 7j/7 — expert (< 12h jours ouvrables)',          tiers: ['legende'] },
+           // ─── ÉLITE (légende) — tout Performance + —───
+           { label: 'Accompagnement WhatsApp 7j/7 — expert (< 12h jours ouvrables)',        tiers: ['legende'] },
            { label: 'Revue mensuelle personnalisée — analyse de vos données + ajustements', tiers: ['legende'] },
-           { label: 'Ajustement de programme sur demande (jusqu’à2x/mois)',                  tiers: ['legende'] },
-           { label: 'Accès anticipé aux nouvelles fonctionnalités',                       tiers: ['legende'] },
-           { label: 'Badge Élite exclusif dans votre profil',                                      tiers: ['legende'] }
-         ];
-
+           { label: 'Ajustement de programme sur demande (jusqu’à 2×/mois)',      tiers: ['legende'] },
+           { label: 'Coach IA illimité',                                                    tiers: ['legende'] },
+           { label: 'Historique complet — sans limite dans le temps',                       tiers: ['legende'] },
+           { label: 'Accès anticipé aux nouveautés + badge Élite exclusif dans votre profil', tiers: ['legende'] }
+         ]
          // ── Tier cards (sélecteur compact — nom + prix aperçu) ──
          var _tierRow = h('div', {style: 'display:flex;gap:8px;margin-bottom:16px;'});
          _tiers.forEach(function(t) {

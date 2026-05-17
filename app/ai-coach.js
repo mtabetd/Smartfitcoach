@@ -1241,21 +1241,43 @@ function sendMessage() {
   if (!text) return;
   if (window.TRACKER) window.TRACKER.track('ai_coach_used', {});
 
-  // Premium gate — coach IA illimité = premium (trial = 3 messages/jour)
-  if (window.isTrialUser && window.isTrialUser() && !(window.S && window.S._serverPremium) && !(window.isPremium && window.isPremium())) {
-    var _today = (window.sfcLocalDateStr ? window.sfcLocalDateStr() : new Date().toISOString().slice(0, 10));
-    var _authUser = (window.AUTH && window.AUTH.getUser) ? window.AUTH.getUser() : null;
-    var _uid = (_authUser && _authUser.id) ? _authUser.id : 'anon';
-    var _coachKey = 'sfc_coach_count_' + _uid + '_' + _today;
-    var _rawCount = (function() { try { return JSON.parse(localStorage.getItem(_coachKey) || 'null'); } catch(e) { return null; } })();
-    var _coachCount = (_rawCount && typeof _rawCount.n === 'number') ? _rawCount.n : 0;
-    if (_coachCount >= 3) {
-      appendError(messages, (window.isEnglish && window.isEnglish() ? 'Limit reached (3 messages/day in trial). Subscribe for unlimited access.' : 'Limite atteinte (3 messages/jour en version d\u2019essai). Abonnez-vous pour un acc\u00e8s illimit\u00e9.'));
+  // Quota gate — tier-based monthly limits (Core=10/mois, Performance=60/mois, Élite=illimité)
+  // Trial/free users keep the 3/day legacy limit.
+  var _isEN_coach = window.isEnglish && window.isEnglish();
+  var _today = (window.sfcLocalDateStr ? window.sfcLocalDateStr() : new Date().toISOString().slice(0, 10));
+  var _authUser = (window.AUTH && window.AUTH.getUser) ? window.AUTH.getUser() : null;
+  var _uid = (_authUser && _authUser.id) ? _authUser.id : 'anon';
+  var _monthlyLimit = window.getAICoachMonthlyLimit ? window.getAICoachMonthlyLimit() : null;
+  if (_monthlyLimit !== null && _monthlyLimit !== Infinity && isFinite(_monthlyLimit)) {
+    // Paid tier with monthly cap (Core or Performance)
+    var _month = _today.slice(0, 7); // YYYY-MM
+    var _monthKey = 'sfc_coach_monthly_' + _uid + '_' + _month;
+    var _rawM = (function() { try { return JSON.parse(localStorage.getItem(_monthKey) || 'null'); } catch(e) { return null; } })();
+    var _monthCount = (_rawM && typeof _rawM.n === 'number') ? _rawM.n : 0;
+    if (_monthCount >= _monthlyLimit) {
+      var _nextTierLabel = (window.getPlanTier && window.getPlanTier() === 'athlete') ? 'Performance' : 'Élite';
+      var _nextTierKey   = (window.getPlanTier && window.getPlanTier() === 'athlete') ? 'champion' : 'legende';
+      appendError(messages, _isEN_coach
+        ? 'Monthly limit reached (' + _monthlyLimit + ' questions). Upgrade to ' + _nextTierLabel + ' for more.'
+        : 'Limite mensuelle atteinte (' + _monthlyLimit + ' questions). Passez à ' + _nextTierLabel + ' pour continuer.');
+      if (window.showPaywall) window.showPaywall('ai-coach-limit', _nextTierKey);
       return;
     }
-    try { localStorage.setItem(_coachKey, JSON.stringify({ n: _coachCount + 1 })); } catch(e) {}
+    try { localStorage.setItem(_monthKey, JSON.stringify({ n: _monthCount + 1 })); } catch(e) {}
+  } else if (_monthlyLimit === null) {
+    // Free/trial — legacy 3/day limit
+    if (window.isTrialUser && window.isTrialUser() && !(window.S && window.S._serverPremium) && !(window.isPremium && window.isPremium())) {
+      var _coachKey = 'sfc_coach_count_' + _uid + '_' + _today;
+      var _rawCount = (function() { try { return JSON.parse(localStorage.getItem(_coachKey) || 'null'); } catch(e) { return null; } })();
+      var _coachCount = (_rawCount && typeof _rawCount.n === 'number') ? _rawCount.n : 0;
+      if (_coachCount >= 3) {
+        appendError(messages, _isEN_coach ? 'Limit reached (3 messages/day in trial). Subscribe for access.' : 'Limite atteinte (3 messages/jour en essai). Abonnez-vous pour accéder.');
+        return;
+      }
+      try { localStorage.setItem(_coachKey, JSON.stringify({ n: _coachCount + 1 })); } catch(e) {}
+    }
   }
-
+  // Élite/unlimited: no client-side limit (server-side rate limit applies)
   input.value = '';
   input.style.height = '40px';
   _sending = true;
