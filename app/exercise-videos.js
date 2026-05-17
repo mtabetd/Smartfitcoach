@@ -127,7 +127,7 @@
     exerciseCoverage: 338,                         // entrées CURATED_QUERIES
     cfCoverage:       86,                          // entrées CF_QUERIES
     directRegistry:   true,                        // DIRECT_VIDEO_REGISTRY actif
-    directRegistrySize: 56,                        // clés avec au moins une URL directe (audit 2026-05)
+    directRegistrySize: 60,                        // clés avec au moins une URL directe (audit 2026-05)
     auditDate:        '2026-05'
   };
 
@@ -169,32 +169,43 @@
   //   → CrossFit Movement Standards playlist : youtube.com/@CrossFit/playlists
   var DIRECT_VIDEO_REGISTRY = {
     'developpe couche': {
-      fr_beginner: { url: 'https://www.youtube.com/shorts/nBJky6rLbjw', verified: false, source: 'TiboInShape', score: 60 },
-      en_any: { url: 'https://www.youtube.com/shorts/s-T3E6654A8', verified: false, source: 'athleanx', score: 55 },
+      fr_beginner: { url: 'https://www.youtube.com/shorts/MUa0U36oz3s', verified: true, source: 'TiboInShape', score: 78 },
+      en_any: { url: 'https://www.youtube.com/shorts/0cXAp6WhSj4', verified: true, source: 'athleanx', score: 92 },
     },
     'developpe couche haltere unilateral': {
       fr_beginner: { url: 'https://www.youtube.com/shorts/rgPDTr46RNE', verified: false, source: 'TiboInShape', score: 42 },
     },
     'developpe incline': {
       fr_beginner: { url: 'https://www.youtube.com/shorts/wj_zXKF7Mh0', verified: false, source: 'TiboInShape', score: 45 },
-      en_any: { url: 'https://www.youtube.com/shorts/PU8_czOohQs', verified: false, source: 'athleanx', score: 60 },
+      en_any: { url: 'https://www.youtube.com/shorts/cq-4gME3IFY', verified: true, source: 'athleanx', score: 88 },
     },
     'developpe decline': {
       fr_beginner: { url: 'https://www.youtube.com/shorts/pX3tD7APce0', verified: false, source: 'TiboInShape', score: 47 },
     },
     'chest press machine': {
-      fr_beginner: { url: 'https://www.youtube.com/shorts/MUa0U36oz3s', verified: false, source: 'TiboInShape', score: 50 },
+      en_any: { url: 'https://www.youtube.com/shorts/VHIlmOPMWWs', verified: true, source: 'athleanx', score: 92 },
     },
     'pompes classiques': {
-      fr_beginner: { url: 'https://www.youtube.com/shorts/kYPPcb3ucCE', verified: false, source: 'TiboInShape', score: 52 },
-      en_any: { url: 'https://www.youtube.com/shorts/IlWN4SNqaEM', verified: false, source: 'athleanx', score: 50 },
+      en_any: { url: 'https://www.youtube.com/shorts/14D-2c9kvVw', verified: true, source: 'athleanx', score: 92 },
     },
     'pompes diamant': {
       fr_beginner: { url: 'https://www.youtube.com/shorts/Wt78IMVu4sY', verified: false, source: 'TiboInShape', score: 45 },
     },
     'diamond push up': {
       fr_beginner: { url: 'https://www.youtube.com/shorts/3J8QPfZ3L0Q', verified: false, source: 'TiboInShape', score: 50 },
-      en_any: { url: 'https://www.youtube.com/shorts/At8PRTDDhrU', verified: false, source: 'athleanx', score: 65 },
+    },
+    'squat': {
+      fr_beginner: { url: 'https://www.youtube.com/shorts/kYPPcb3ucCE', verified: true, source: 'TiboInShape', score: 82 },
+      en_any: { url: 'https://www.youtube.com/shorts/iZTxa8NJH2g', verified: true, source: 'athleanx', score: 92 },
+    },
+    'deadlift': {
+      en_any: { url: 'https://www.youtube.com/shorts/8np3vKDBJfc', verified: true, source: 'athleanx', score: 92 },
+    },
+    'tractions': {
+      en_any: { url: 'https://www.youtube.com/shorts/ZPG8OsHKXLw', verified: true, source: 'athleanx', score: 92 },
+    },
+    'developpe militaire': {
+      en_any: { url: 'https://www.youtube.com/shorts/4LBVP2Oe7fg', verified: true, source: 'athleanx', score: 92 },
     },
     'snatch': {
       cf: { url: 'https://www.youtube.com/shorts/GhxhiehJcQY', verified: false, source: 'CrossFit', score: 85 },
