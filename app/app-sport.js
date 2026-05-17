@@ -10508,7 +10508,7 @@ function renderSportModal(app) {
 // ─── STEP 7: RUNNING CONFIG ───
 function renderRunningConfig(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Running'));
- p.appendChild(h('h1', {html: 'Votre plan<br><em>course</em>'}));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish()) ? 'Your running<br><em>plan</em>' : 'Votre plan<br><em>course</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Programming based on the Jack Daniels & Pfitzinger method' : 'Programmation basée sur la méthode Jack Daniels & Pfitzinger')));
 
  // Goal selection (mandatory)
@@ -10884,7 +10884,7 @@ function renderHyroxConfig(p) {
  p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? '12 weeks to be ready on race day' : '12 semaines pour être prêt le jour J')));
 
  // Goal selection (mandatory)
- p.appendChild(h('div', {'class': 'section-label'}, 'Objectif'));
+ p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish()) ? 'Goal' : 'Objectif'));
  var goalGrid = h('div', {'class': 'card-grid-2'});
  (window.HYROX_GOALS || []).forEach(function(g) {
  var isOn = S.hyroxGoal === g.id;
@@ -11118,7 +11118,7 @@ function renderHyroxProgram(p) {
  // Benchmarks comparison if filled
  var hasBenchmarks = Object.keys(S.hyroxBenchmarks || {}).some(function(k){ return S.hyroxBenchmarks[k]; });
  if (hasBenchmarks && S.hyroxLevel) {
- p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Vos benchmarks vs standards'));
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, (window.isEnglish && window.isEnglish()) ? 'Your benchmarks vs standards' : 'Vos benchmarks vs standards'));
  var bmCard = h('div', {style: 'border:1px solid var(--border);padding:14px 16px;background:var(--ivory2);margin-bottom:16px'});
  var stations = window.HYROX_STATIONS || [];
  stations.forEach(function(station) {
@@ -11206,11 +11206,11 @@ function renderPadelConfig(p) {
  // BUG-FIX: default padelDays — String(undefined) crashes the input value attr
  if (!S.padelDays || S.padelDays < 2) S.padelDays = 3;
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Padel'));
- p.appendChild(h('h1', {html: 'Votre programme<br><em>padel</em>'}));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish()) ? 'Your padel<br><em>program</em>' : 'Votre programme<br><em>padel</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Technique, tactics and physical preparation.' : 'Technique, tactique et préparation physique.')));
  if (window.TIPS) TIPS.renderTip(p, 'sportGoal');
 
- p.appendChild(h('div', {'class': 'section-label'}, 'Objectif'));
+ p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish()) ? 'Goal' : 'Objectif'));
  var og = h('div', {'class': 'card-grid-2'});
  (window.PADEL_GOALS || []).forEach(function(gl) {
  og.appendChild(h('div', {'class': 'sel-card' + (S.padelGoal === gl.id ? ' on' : ''), onclick: function(){ S.padelGoal = gl.id; window.render(); }}, [
@@ -11342,10 +11342,10 @@ function renderGolfConfig(p) {
  // BUG-FIX: default golfDays — String(undefined) crashes the input value attr
  if (!S.golfDays || S.golfDays < 2) S.golfDays = 3;
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Golf'));
- p.appendChild(h('h1', {html: 'Votre programme<br><em>golf</em>'}));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish()) ? 'Your golf<br><em>program</em>' : 'Votre programme<br><em>golf</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Based on the methods of Dave Pelz & Butch Harmon.' : 'Basé sur les méthodes Dave Pelz & Butch Harmon.')));
 
- p.appendChild(h('div', {'class': 'section-label'}, 'Objectif'));
+ p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish()) ? 'Goal' : 'Objectif'));
  var og = h('div', {'class': 'card-grid-2'});
  (window.GOLF_GOALS || []).forEach(function(gl) {
  og.appendChild(h('div', {'class': 'sel-card' + (S.golfGoal === gl.id ? ' on' : ''), onclick: function(){ S.golfGoal = gl.id; window.render(); }}, [
@@ -11482,7 +11482,7 @@ function renderGolfProgram(p) {
 // ─── STEP 17: TRIATHLON CONFIG ───
 function renderTriathlonConfig(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Triathlon / IRONMAN'));
- p.appendChild(h('h1', {html: 'Votre programme<br><em>triathlon</em>'}));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish()) ? 'Your triathlon<br><em>program</em>' : 'Votre programme<br><em>triathlon</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Method: Jan Frodeno · Patrick Lange · Daniela Ryf · 80/20 Matt Fitzgerald · Joe Friel Training Bible' : 'Méthode Jan Frodeno · Patrick Lange · Daniela Ryf · 80/20 Matt Fitzgerald · Joe Friel Training Bible')));
 
  if (window.TIPS) window.TIPS.renderTip(p, 'triathlon');
@@ -11490,7 +11490,7 @@ function renderTriathlonConfig(p) {
  var backArrow = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
  // ── Objectif de course ──
- p.appendChild(h('div', {'class': 'section-label'}, 'Objectif de course'));
+ p.appendChild(h('div', {'class': 'section-label'}, (window.isEnglish && window.isEnglish()) ? 'Race goal' : 'Objectif de course'));
  var goalGrid = h('div', {'class': 'card-grid-2'});
  (window.TRIATHLON_GOALS || []).forEach(function(g) {
  var isOn = S.triathlonGoal === g.id;
@@ -11879,7 +11879,7 @@ function renderTriathlonProgram(p) {
 // ─── STEP 19: YOGA ONBOARDING ───
 function renderYogaOnboarding(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, (window.isEnglish && window.isEnglish() ? 'Yoga & Mobility' : 'Yoga & Mobilit\u00e9')));
- p.appendChild(h('h1', {html: 'Votre programme<br><em>yoga</em>'}));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish()) ? 'Your yoga<br><em>program</em>' : 'Votre programme<br><em>yoga</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, (window.isEnglish && window.isEnglish() ? 'Flexibility, strength, balance and mindfulness.' : 'Flexibilit\u00e9, force, \u00e9quilibre et pleine conscience.')));
 
  // Niveau
@@ -11902,7 +11902,7 @@ function renderYogaOnboarding(p) {
  p.appendChild(lvlList);
 
  // Objectif
- p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Objectif'));
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, (window.isEnglish && window.isEnglish()) ? 'Goal' : 'Objectif'));
  var objGrid = h('div', {'class': 'card-grid-2'});
  [
  { id: 'flexibilite', icon: '\uD83E\uDD38', name: (window.isEnglish && window.isEnglish() ? 'Flexibility' : 'Flexibilit\u00e9'), desc: (window.isEnglish && window.isEnglish() ? 'Increase flexibility, release tension' : 'Augmenter la souplesse, lib\u00e9rer les tensions') },
@@ -12313,7 +12313,7 @@ function renderCyclingOnboarding(p) {
  });
  p.appendChild(lvlList);
 
- p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Objectif'));
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, (window.isEnglish && window.isEnglish()) ? 'Goal' : 'Objectif'));
  var goals = [
  { id: 'weightloss', icon: '', name: (window.isEnglish && window.isEnglish() ? 'Weight loss' : 'Perte de poids'), desc: (window.isEnglish && window.isEnglish() ? 'Burn calories, improve body composition' : 'Brûler des calories, améliorer la composition corporelle') },
  { id: 'endurance', icon: '', name: (window.isEnglish && window.isEnglish() ? 'Base endurance' : 'Endurance de base'), desc: (window.isEnglish && window.isEnglish() ? 'Build the aerobic engine, long rides' : 'Développer le moteur aérobie, sorties longues') },
@@ -12618,7 +12618,7 @@ function renderCyclingProgram(p) {
 // ─── STEP 24: CALISTHENICS ONBOARDING ───
 function renderCalisthenicsOnboarding(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Callisthenie'));
- p.appendChild(h('h1', {html: 'Votre programme<br><em>callisthenie</em>'}));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish()) ? 'Your calisthenics<br><em>program</em>' : 'Votre programme<br><em>callisthenie</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Street workout — progressions au poids du corps. Personnalise selon votre niveau reel.'));
 
  // Niveau
@@ -12714,7 +12714,7 @@ function renderCalisthenicsOnboarding(p) {
  p.appendChild(h('div', {'class': 'num-hint'}, '0 a 50 repetitions'));
 
  // Objectifs — skills cibles
- p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Objectifs — Skills cibles (plusieurs choix possibles)'));
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, (window.isEnglish && window.isEnglish()) ? 'Goals — Target skills (multiple choices)' : 'Objectifs — Skills cibles (plusieurs choix possibles)'));
  var goalChips = h('div', {style: 'display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px'});
  var GOAL_OPTIONS = [
   { id: 'muscle_up', label: 'Muscle-up barre' },
