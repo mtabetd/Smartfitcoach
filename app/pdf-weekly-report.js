@@ -107,8 +107,9 @@ window.exportWeeklyReportPDF = function() {
     window.safeUserStatusCheck({ force: true }).then(function(status) {
       if (!status.isPremium) {
         if (status.source === 'fallback' && window._showPremiumCheckFailed) { window._showPremiumCheckFailed(window.exportWeeklyReportPDF); return; }
-        if (window.showPaywall) window.showPaywall('pdf'); return;
+        if (window.showPaywall) window.showPaywall('pdf', 'champion'); return;
       }
+    if (!(window.isPlanAtLeast && window.isPlanAtLeast('champion'))) { if (window.showPaywall) window.showPaywall('pdf','champion'); return; }
     if (!window.jspdf || !window.jspdf.jsPDF) {
       if (window.showToast) window.showToast((window.isEnglish && window.isEnglish() ? 'Loading PDF…' : 'Chargement du PDF…'), 'info', 2000);
       if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', window.exportWeeklyReportPDF); }

@@ -4371,8 +4371,9 @@ function exportDayPDF(dayIdx) {
   window.safeUserStatusCheck({ force: true }).then(function(status) {
     if (!status.isPremium) {
       if (status.source === 'fallback' && window._showPremiumCheckFailed) { window._showPremiumCheckFailed(function() { exportDayPDF(dayIdx); }); return; }
-      if (window.showPaywall) window.showPaywall('pdf'); return;
+      if (window.showPaywall) window.showPaywall('pdf', 'champion'); return;
     }
+    if (!(window.isPlanAtLeast && window.isPlanAtLeast('champion'))) { if (window.showPaywall) window.showPaywall('pdf','champion'); return; }
   if (!window.jspdf || !window.jspdf.jsPDF) {
     if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Loading PDF…' : 'Chargement du PDF…', 'info', 2000);
     if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', function() { exportDayPDF(dayIdx); }); }
@@ -4486,8 +4487,9 @@ function exportRecipePDF(r) {
   window.safeUserStatusCheck({ force: true }).then(function(status) {
     if (!status.isPremium) {
       if (status.source === 'fallback' && window._showPremiumCheckFailed) { window._showPremiumCheckFailed(function() { exportRecipePDF(r); }); return; }
-      if (window.showPaywall) window.showPaywall('pdf'); return;
+      if (window.showPaywall) window.showPaywall('pdf', 'champion'); return;
     }
+    if (!(window.isPlanAtLeast && window.isPlanAtLeast('champion'))) { if (window.showPaywall) window.showPaywall('pdf','champion'); return; }
   if (!window.jspdf || !window.jspdf.jsPDF) {
     if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Loading PDF…' : 'Chargement du PDF…', 'info', 2000);
     if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', function() { exportRecipePDF(r); }); }
@@ -6573,8 +6575,9 @@ function exportShoppingListPDF(list, shopChecked) {
   window.safeUserStatusCheck({ force: true }).then(function(status) {
     if (!status.isPremium) {
       if (status.source === 'fallback' && window._showPremiumCheckFailed) { window._showPremiumCheckFailed(function() { exportShoppingListPDF(list, shopChecked); }); return; }
-      if (window.showPaywall) window.showPaywall('pdf'); return;
+      if (window.showPaywall) window.showPaywall('pdf', 'champion'); return;
     }
+    if (!(window.isPlanAtLeast && window.isPlanAtLeast('champion'))) { if (window.showPaywall) window.showPaywall('pdf','champion'); return; }
   if (!window.jspdf || !window.jspdf.jsPDF) {
     if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Loading PDF…' : 'Chargement du PDF…', 'info', 2000);
     if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', function() { exportShoppingListPDF(list, shopChecked); }); }

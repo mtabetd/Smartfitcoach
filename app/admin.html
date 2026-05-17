@@ -21,6 +21,14 @@ table{width:100%;border-collapse:collapse;font-size:13px}
 th{background:#0A0A09;color:#FAF9F6;padding:10px 12px;text-align:left;font-weight:400;font-size:10px;letter-spacing:2px;text-transform:uppercase}
 td{padding:10px 12px;border-bottom:1px solid #D8D8D0}
 tr:nth-child(even){background:#F4F4F0}
+.section-title{font-family:Georgia,serif;font-size:16px;font-weight:normal;margin:32px 0 4px}
+.section-sub{font-size:10px;color:#6B6B65;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px}
+.tier-block{margin-bottom:24px}
+.tier-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#6B6B65;margin-bottom:8px;font-weight:600}
+input[type=number].price-input{width:90px;padding:6px 8px;border:1px solid #D8D8D0;border-radius:2px;font-size:13px;text-align:right}
+input[type=text].label-input{width:120px;padding:6px 8px;border:1px solid #D8D8D0;border-radius:2px;font-size:12px}
+input[type=number].savings-input{width:56px;padding:6px 8px;border:1px solid #D8D8D0;border-radius:2px;font-size:13px;text-align:right}
+.pricing-table td{vertical-align:middle}
 .badge{display:inline-block;padding:3px 8px;border-radius:2px;font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:600}
 .badge-trial{background:rgba(106,74,26,0.1);color:#6A4A1A}
 .badge-active{background:rgba(26,74,26,0.1);color:#1A4A1A}
@@ -84,6 +92,16 @@ select,button{font-family:'Helvetica Neue',Arial,sans-serif}
     </thead>
     <tbody id="users-body"></tbody>
   </table>
+
+  <!-- PRICING EDITOR -->
+  <h2 class="section-title">Tarification</h2>
+  <p class="section-sub">Prix · Remises · Visibilité</p>
+  <div id="pricing-editor"></div>
+  <div style="display:flex;gap:8px;margin-top:16px">
+    <button class="btn-save" id="btn-save-pricing">Enregistrer les tarifs</button>
+    <button class="btn-sm" id="btn-reload-pricing">↻ Recharger</button>
+  </div>
+
 </div>
 
 <!-- MODAL -->

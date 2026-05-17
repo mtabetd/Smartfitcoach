@@ -1406,10 +1406,12 @@ window.SPORT = {
  var _validSSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 30];
  if (_validSSteps.indexOf(S.sStep) === -1) { S.sStep = 0; }
 
- // PILL BAR : navigation multi-disciplines (Option B)
+ // PILL BAR : navigation multi-disciplines (Option B) — Performance (champion+) uniquement
  var _PILL_PROG_STEPS = { musculation:4, crossfit:6, running:8, hyrox:10, padel:12, golf:14, triathlon:18, yoga:21, cycling:23, calisthenics:25 };
  var _PILL_LABELS = { musculation:'Musculation', crossfit:'Cross Training', running:'Running', yoga:'Yoga', hyrox:'Hyrox', triathlon:'Triathlon', cycling:(window.isEnglish&&window.isEnglish()?'Cycling':'Cyclisme'), calisthenics:(window.isEnglish&&window.isEnglish()?'Calisthenics':'Callisthénie'), padel:'Padel', golf:'Golf' };
- var _hasPillMix = S.sportMixEnabled && S.sportMixSecondary && S.sportMixSecondary.type;
+ // Pill bar only shown when user has champion+ tier (stale mix state on athlete is silently hidden)
+ var _canUseMix = !!(window.isPlanAtLeast && window.isPlanAtLeast('champion'));
+ var _hasPillMix = _canUseMix && S.sportMixEnabled && S.sportMixSecondary && S.sportMixSecondary.type;
  var _hasPillTer = _hasPillMix && S.sportMixTertiary && S.sportMixTertiary.type;
  var _pillProgStep = _PILL_PROG_STEPS[S.sportType];
  var _onPrimProgStep = !!_pillProgStep && S.sStep === _pillProgStep;
@@ -3400,6 +3402,16 @@ function getMuscuMixSessionsForDays(days) {
 // ─── SECTION SPORT MIX : injectée dans les étapes de configuration de chaque sport ───
 function renderSportMixSection(p, primarySport) {
  var _isEN = window.isEnglish && window.isEnglish();
+ // Gate: multi-discipline requires Performance (champion+)
+ if (!(window.isPlanAtLeast && window.isPlanAtLeast('champion'))) {
+  var _upsell = h('div', {style:'border:1px solid var(--border,#E8E6DF);padding:18px 16px;margin:20px 0;text-align:center;background:var(--ivory2,#F5F5F0);'});
+  _upsell.appendChild(h('div', {style:'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px;'}, 'PERFORMANCE'));
+  _upsell.appendChild(h('div', {style:'font-family:Georgia,serif;font-size:15px;margin-bottom:8px;color:var(--black,#0A0A09);'}, _isEN ? 'Add a 2nd or 3rd sport' : 'Ajouter un 2ème ou 3ème sport'));
+  _upsell.appendChild(h('div', {style:'font-size:11px;color:var(--grey,#6B6B65);line-height:1.5;margin-bottom:14px;'}, _isEN ? 'Multi-discipline training + daily sport/nutrition symbiosis are included in Performance.' : 'L\'entraînement multi-disciplines + la symbiose sport/nutrition par jour sont inclus dans Performance.'));
+  _upsell.appendChild(h('button', {style:'background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;padding:10px 18px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:40px;', onclick:function(){ if(window.showPaywall) window.showPaywall('sport-mix','champion'); else if(window.S){window.S.view='profil';window.render();} }}, _isEN ? 'Upgrade to Performance →' : 'Passer à Performance →'));
+  p.appendChild(_upsell);
+  return;
+ }
  var totalDays = S.sportDays || 3;
  var _minPrimaryDays = { crossfit: 3, musculation: 2, running: 2, yoga: 2, calisthenics: 2 };
  var _primMinDays = _minPrimaryDays[primarySport] || 2;
@@ -13182,8 +13194,9 @@ window.exportSportPDF = function() {
   window.safeUserStatusCheck({ force: true }).then(function(status) {
     if (!status.isPremium) {
       if (status.source === 'fallback' && window._showPremiumCheckFailed) { window._showPremiumCheckFailed(function() { window.exportSportPDF(); }); return; }
-      if (window.showPaywall) window.showPaywall('pdf'); return;
+      if (window.showPaywall) window.showPaywall('pdf', 'champion'); return;
     }
+    if (!(window.isPlanAtLeast && window.isPlanAtLeast('champion'))) { if (window.showPaywall) window.showPaywall('pdf','champion'); return; }
   if (!window.jspdf || !window.jspdf.jsPDF) {
     if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Loading PDF…' : 'Chargement du PDF…', 'info', 2000);
     if (window._lazyLoad) { window._lazyLoad('./jspdf.umd.min.js', window.exportSportPDF); }

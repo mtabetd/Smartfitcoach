@@ -43,13 +43,17 @@ function openScan(mealSlot) {
   if (_scanning) return;
   var S = window.S;
   if (!S) return;
-  // Premium gate — scanner = premium feature, server-verified
+  // Gate: photo scanner requires Performance (champion+) — server-verified
   window.safeUserStatusCheck({ force: true }).then(function(status) {
     if (!status.isPremium) {
       if (status.source === 'fallback' && window._showPremiumCheckFailed) { window._showPremiumCheckFailed(function() { openScan(mealSlot); }); return; }
-      if (window.showPaywall) window.showPaywall('scanner');
-      else if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Premium feature required' : 'Fonctionnalit\u00e9 r\u00e9serv\u00e9e aux abonn\u00e9s', 'error', 3500);
+      if (window.showPaywall) window.showPaywall('scanner', 'champion');
+      else if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Performance feature' : 'Fonctionnalité Performance', 'error', 3500);
       return;
+    }
+    // champion+ check (athlete has isPremium=true but photo scanner requires Performance)
+    if (!(window.isPlanAtLeast && window.isPlanAtLeast('champion'))) {
+      if (window.showPaywall) window.showPaywall('scanner', 'champion'); return;
     }
 
   // Validate mealSlot
