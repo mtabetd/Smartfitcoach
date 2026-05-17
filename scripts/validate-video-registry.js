@@ -19,13 +19,27 @@ var https  = require('https');
 var fs     = require('fs');
 var path   = require('path');
 
+// Charger .env si présent
+(function loadEnv() {
+  var envPath = path.join(__dirname, '..', '.env');
+  try {
+    fs.readFileSync(envPath, 'utf8').split('\n').forEach(function(line) {
+      var m = line.match(/^([A-Z0-9_]+)\s*=\s*(.+)$/);
+      if (m && !process.env[m[1]]) process.env[m[1]] = m[2].trim();
+    });
+  } catch(e) {}
+})();
+
 var args = {};
 process.argv.slice(2).forEach(function(a) {
   var m = a.match(/^--([^=]+)(?:=(.+))?$/);
   if (m) args[m[1]] = m[2] !== undefined ? m[2] : true;
 });
 
-var API_KEY = args.key || process.env.YOUTUBE_API_KEY;
+if (args.key && !process.env.YOUTUBE_API_KEY) {
+  console.warn('WARN: Préférer YOUTUBE_API_KEY env var à --key= (visible dans ps aux).');
+}
+var API_KEY = process.env.YOUTUBE_API_KEY || args.key;
 var DRY_RUN = !!args['dry-run'];
 var DO_FIX  = !!args.fix;
 var REPORT  = args.report || null;

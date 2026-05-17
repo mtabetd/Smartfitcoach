@@ -28,6 +28,17 @@ var https  = require('https');
 var fs     = require('fs');
 var path   = require('path');
 
+// ── Charger .env si présent (avant tout accès à process.env) ─────────────────
+(function loadEnv() {
+  var envPath = path.join(__dirname, '..', '.env');
+  try {
+    fs.readFileSync(envPath, 'utf8').split('\n').forEach(function(line) {
+      var m = line.match(/^([A-Z0-9_]+)\s*=\s*(.+)$/);
+      if (m && !process.env[m[1]]) process.env[m[1]] = m[2].trim();
+    });
+  } catch(e) { /* .env absent — ok */ }
+})();
+
 // ── Parse CLI args ────────────────────────────────────────────────────────────
 var args = {};
 process.argv.slice(2).forEach(function(a) {
@@ -35,7 +46,11 @@ process.argv.slice(2).forEach(function(a) {
   if (m) args[m[1]] = m[2] !== undefined ? m[2] : true;
 });
 
-var API_KEY   = args.key || process.env.YOUTUBE_API_KEY;
+// Sécurité : préférer env var à --key= (les args CLI sont visibles dans ps aux)
+if (args.key && !process.env.YOUTUBE_API_KEY) {
+  console.warn('WARN: Préférer YOUTUBE_API_KEY env var à --key= (visible dans ps aux/process list).');
+}
+var API_KEY   = process.env.YOUTUBE_API_KEY || args.key;
 var DO_MUSCU  = !!args.muscu;
 var DO_CF     = !!args.cf;
 var DO_FR     = !!args.fr;
