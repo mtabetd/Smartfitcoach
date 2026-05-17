@@ -292,7 +292,7 @@
       var target = new Date(now);
       target.setHours(hour, minute, 0, 0);
       if (now >= target) return; // Passé pour aujourd'hui
-      this.scheduleAndPersist('workout-reminder', 'SmartFitCoach', 'C\'est l\'heure de ta s\u00e9ance\u00a0! Pr\u00eat \u00e0 te d\u00e9passer\u00a0?', target.getTime());
+      this.scheduleAndPersist('workout-reminder', 'SmartFitCoach', (window.isEnglish && window.isEnglish()) ? 'Time for your session! Ready to push yourself?' : 'C\'est l\'heure de ta s\u00e9ance\u00a0! Pr\u00eat \u00e0 te d\u00e9passer\u00a0?', target.getTime());
     },
 
     notifyRestOver: function(exerciseName, setNum) {
@@ -395,12 +395,15 @@
             var lastW = wh[wh.length - 1].weight;
             var prevW = wh[Math.max(0, wh.length - 8)].weight;
             var diff = Math.round((lastW - prevW) * 10) / 10;
-            if (Math.abs(diff) > 0) weightMsg = ' Poids : ' + (diff > 0 ? '+' : '') + diff + ' kg cette semaine.';
+            if (Math.abs(diff) > 0) weightMsg = (window.isEnglish && window.isEnglish()) ? ' Weight: ' + (diff > 0 ? '+' : '') + diff + ' kg this week.' : ' Poids : ' + (diff > 0 ? '+' : '') + diff + ' kg cette semaine.';
           }
         } catch(e3) {}
 
-        var msg = 'Bilan semaine : ' + daysLogged + '/7 jours de suivi nutritionnel.' + weightMsg + ' Continuez sur cette lancée !';
-        this.scheduleAndPersist('weekly-summary', 'SmartFitCoach — Bilan Semaine', msg, notifTime.getTime());
+        var _wkEN = window.isEnglish && window.isEnglish();
+        var msg = _wkEN
+          ? 'Weekly recap: ' + daysLogged + '/7 days of nutrition tracking.' + weightMsg + ' Keep it up!'
+          : 'Bilan semaine : ' + daysLogged + '/7 jours de suivi nutritionnel.' + weightMsg + ' Continuez sur cette lancée !';
+        this.scheduleAndPersist('weekly-summary', _wkEN ? 'SmartFitCoach — Weekly Recap' : 'SmartFitCoach — Bilan Semaine', msg, notifTime.getTime());
       } catch(e) {}
     },
 

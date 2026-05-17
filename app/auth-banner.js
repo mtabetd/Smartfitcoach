@@ -85,7 +85,8 @@
     overlay.id = 'auth-banner-modal';
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-modal', 'true');
-    overlay.setAttribute('aria-label', 'Créer un compte');
+    var _abEN = window.isEnglish && window.isEnglish();
+    overlay.setAttribute('aria-label', _abEN ? 'Create an account' : 'Créer un compte');
     overlay.style.cssText = [
       'position:fixed', 'top:0', 'left:0', 'right:0', 'bottom:0',
       'background:rgba(10,10,9,.55)', 'z-index:10050',
@@ -108,11 +109,11 @@
 
     var title = document.createElement('div');
     title.style.cssText = 'font-family:Georgia,serif;font-size:20px;font-weight:normal';
-    title.textContent = 'Créer votre compte';
+    title.textContent = _abEN ? 'Create your account' : 'Créer votre compte';
 
     var closeBtn = document.createElement('button');
     closeBtn.type = 'button';
-    closeBtn.setAttribute('aria-label', 'Fermer');
+    closeBtn.setAttribute('aria-label', _abEN ? 'Close' : 'Fermer');
     closeBtn.style.cssText = [
       'width:44px', 'height:44px', 'background:transparent',
       'border:none', 'border-radius:0',
@@ -131,7 +132,7 @@
       'font-family:"Helvetica Neue",Arial,sans-serif', 'font-size:11px',
       'color:var(--grey,#6B6B65)', 'margin-bottom:24px', 'line-height:1.6'
     ].join(';');
-    sub.textContent = 'Vos données seront sauvegardées sur le cloud et accessibles sur tous vos appareils.';
+    sub.textContent = _abEN ? 'Your data will be backed up to the cloud and accessible on all your devices.' : 'Vos données seront sauvegardées sur le cloud et accessibles sur tous vos appareils.';
     sheet.appendChild(sub);
 
     // Formulaire
@@ -140,7 +141,7 @@
     form.style.cssText = 'display:flex;flex-direction:column;gap:0';
 
     // Champ prénom
-    var f1 = _makeField('Prénom', 'text', 'given-name', 'Votre prénom');
+    var f1 = _makeField(_abEN ? 'First name' : 'Prénom', 'text', 'given-name', _abEN ? 'Your first name' : 'Votre prénom');
     var nameInput = f1.querySelector('input');
     form.appendChild(f1);
 
@@ -150,11 +151,11 @@
     form.appendChild(f2);
 
     // Champ mot de passe
-    var f3 = _makeField('Mot de passe', 'password', 'new-password', 'Ex: Motdepasse1!');
+    var f3 = _makeField(_abEN ? 'Password' : 'Mot de passe', 'password', 'new-password', 'Ex: Motdepasse1!');
     var pwInput = f3.querySelector('input');
     var pwHint = document.createElement('div');
     pwHint.style.cssText = 'font-size:10px;color:var(--grey,#6B6B65);margin-top:4px;display:none';
-    pwHint.textContent = '6 caractères min, 1 majuscule, 1 chiffre, 1 caractère spécial';
+    pwHint.textContent = _abEN ? '6 chars min, 1 uppercase, 1 digit, 1 special character' : '6 caractères min, 1 majuscule, 1 chiffre, 1 caractère spécial';
     f3.appendChild(pwHint);
     pwInput.addEventListener('input', function() {
       pwHint.style.display = pwInput.value.length > 0 ? 'block' : 'none';
@@ -183,7 +184,7 @@
       'padding:14px', 'border:1px solid var(--black,#0A0A09)', 'border-radius:0',
       'min-height:44px', 'cursor:pointer'
     ].join(';');
-    submitBtn.textContent = 'Créer mon compte';
+    submitBtn.textContent = _abEN ? 'Create my account' : 'Créer mon compte';
     form.appendChild(submitBtn);
 
     // Submit handler
@@ -196,52 +197,49 @@
       errEl.style.display = 'none';
 
       if (!name || !email || !pw) {
-        errEl.textContent = 'Tous les champs sont obligatoires.';
+        errEl.textContent = _abEN ? 'All fields are required.' : 'Tous les champs sont obligatoires.';
         errEl.style.display = 'block';
         return;
       }
       if (!window.isValidPassword || !window.isValidPassword(pw)) {
-        errEl.textContent = 'Le mot de passe doit contenir au moins 6 caractères, une majuscule, un chiffre et un caractère spécial.';
+        errEl.textContent = _abEN ? 'Password must contain at least 6 characters, one uppercase letter, one digit and one special character.' : 'Le mot de passe doit contenir au moins 6 caractères, une majuscule, un chiffre et un caractère spécial.';
         errEl.style.display = 'block';
         return;
       }
 
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Création...';
+      submitBtn.textContent = _abEN ? 'Creating...' : 'Création...';
 
       if (!window.AUTH || !window.AUTH.register) {
-        errEl.textContent = 'Service d\'authentification indisponible.';
+        errEl.textContent = _abEN ? 'Authentication service unavailable.' : 'Service d\'authentification indisponible.';
         errEl.style.display = 'block';
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Créer mon compte';
+        submitBtn.textContent = _abEN ? 'Create my account' : 'Créer mon compte';
         return;
       }
 
       window.AUTH.register(name, email, pw).then(function(result) {
         if (result && result.ok) {
-          // Succès
           closeModal();
           window.AuthBanner.hide();
           clearDismissed();
-          showToast('Vos données sont maintenant sauvegardées sur le cloud !');
-          // Trigger profile sync if available
+          showToast(_abEN ? 'Your data is now backed up to the cloud!' : 'Vos données sont maintenant sauvegardées sur le cloud !');
           if (window.SupaSync) {
             try { window.SupaSync.saveProfile(); } catch(ex) {}
           }
-          // Re-render si possible
           if (window.render) { try { window.render(); } catch(ex) {} }
         } else {
-          var msg = (result && result.error) ? result.error : 'Erreur lors de la création du compte.';
+          var msg = (result && result.error) ? result.error : (_abEN ? 'Error creating account.' : 'Erreur lors de la création du compte.');
           errEl.textContent = msg;
           errEl.style.display = 'block';
           submitBtn.disabled = false;
-          submitBtn.textContent = 'Créer mon compte';
+          submitBtn.textContent = _abEN ? 'Create my account' : 'Créer mon compte';
         }
       }).catch(function(err) {
-        errEl.textContent = 'Erreur réseau. Vérifiez votre connexion.';
+        errEl.textContent = _abEN ? 'Network error. Check your connection.' : 'Erreur réseau. Vérifiez votre connexion.';
         errEl.style.display = 'block';
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Créer mon compte';
+        submitBtn.textContent = _abEN ? 'Create my account' : 'Créer mon compte';
       });
     });
 
@@ -334,7 +332,7 @@
     // Texte
     var txt = document.createElement('span');
     txt.style.cssText = 'flex:1;min-width:200px';
-    txt.textContent = 'Vos données sont uniquement sur cet appareil. Créez un compte gratuit pour les sauvegarder.';
+    txt.textContent = (window.isEnglish && window.isEnglish()) ? 'Your data is only on this device. Create a free account to back it up.' : 'Vos données sont uniquement sur cet appareil. Créez un compte gratuit pour les sauvegarder.';
     bar.appendChild(txt);
 
     // Actions
@@ -351,13 +349,13 @@
       'padding:8px 14px', 'min-height:36px', 'cursor:pointer', 'white-space:nowrap',
       'font-weight:400'
     ].join(';');
-    ctaBtn.textContent = 'Créer mon compte';
+    ctaBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Create my account' : 'Créer mon compte';
     ctaBtn.addEventListener('click', openSignupModal);
     actions.appendChild(ctaBtn);
 
     var dismissBtn = document.createElement('button');
     dismissBtn.type = 'button';
-    dismissBtn.setAttribute('aria-label', 'Fermer la bannière');
+    dismissBtn.setAttribute('aria-label', (window.isEnglish && window.isEnglish()) ? 'Dismiss banner' : 'Fermer la bannière');
     dismissBtn.style.cssText = [
       'background:transparent', 'border:none', 'color:var(--paper,#FAF9F6)',
       'font-size:18px', 'cursor:pointer', 'padding:4px 6px',
