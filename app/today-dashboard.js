@@ -2385,6 +2385,47 @@ function _reRenderFJCard() {
 // OpenFoodFacts state (module-level)
 var _fjOFF = { loading: false, results: null, lastQuery: '', ctrl: null };
 
+// ── Lazy-loader : food-db-off.json (généré par scripts/expand-food-db.js) ──────
+// Chargé une seule fois au premier caractère tapé dans la recherche.
+// Fusionne ~50 000 aliments OFF dans FOOD_CALC._DB sans bloquer le UI.
+var _offDb = { state: 'idle' }; // idle | loading | done | missing
+function _fjLoadOffDb() {
+  if (_offDb.state !== 'idle') return;
+  if (!window.FOOD_CALC || !Array.isArray(window.FOOD_CALC._DB)) return;
+  _offDb.state = 'loading';
+  fetch('./food-db-off.json', { cache: 'force-cache' })
+    .then(function(r) {
+      if (!r.ok) { _offDb.state = 'missing'; return null; }
+      return r.json();
+    })
+    .then(function(data) {
+      if (!data || !Array.isArray(data.items)) { _offDb.state = 'missing'; return; }
+      // Déduplique par nom normalisé
+      var normFn = function(s) {
+        return String(s || '').toLowerCase()
+          .replace(/[éèêë]/g,'e').replace(/[àâä]/g,'a').replace(/[ùûü]/g,'u')
+          .replace(/[îï]/g,'i').replace(/[ôö]/g,'o').replace(/ç/g,'c')
+          .replace(/\s+/g,' ').trim();
+      };
+      var existing = new Set();
+      window.FOOD_CALC._DB.forEach(function(row) { existing.add(normFn(row[0])); });
+      var added = 0;
+      data.items.forEach(function(item) {
+        if (!Array.isArray(item) || item.length < 5) return;
+        var key = normFn(item[0]);
+        if (existing.has(key)) return;
+        existing.add(key);
+        window.FOOD_CALC._DB.push(item);
+        added++;
+      });
+      _offDb.state = 'done';
+      console.log('[FoodDB] OFF loaded — ' + added + ' nouveaux aliments (' + window.FOOD_CALC._DB.length + ' total)');
+      // Relance la recherche courante pour afficher les nouveaux résultats
+      if (_fjState.query && _fjState.query.length >= 2) _fjRefreshResults();
+    })
+    .catch(function() { _offDb.state = 'missing'; });
+}
+
 // Phase 2 N : update the multi-add CTA bar without re-rendering results
 function _fjUpdateMultiCTA() {
   var box = document.getElementById('fj-multi-cta');
@@ -2775,6 +2816,8 @@ function _fjRefreshResults() {
       return;
     }
   } else if (_fjState.query && _fjState.query.length >= 2) {
+    // Déclenche le lazy-load OFF au premier caractère (fire-and-forget, ne bloque pas)
+    _fjLoadOffDb();
     list = (window.FOOD_CALC && window.FOOD_CALC.search) ? window.FOOD_CALC.search(_fjState.query) : [];
     if (list.length > 40) list = list.slice(0, 40);
     // 2026-04 R5 : OFF seulement >= 3 chars (évite spam fetch sur saisie courte)
