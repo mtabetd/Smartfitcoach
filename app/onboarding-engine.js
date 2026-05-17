@@ -1,21 +1,22 @@
 'use strict';
 // ═══════════════════════════════════════════════════════════════════════════
-// SmartFitCoach — Onboarding Engine v1.0
+// SmartFitCoach — Onboarding Engine v2.0
 // World-class contextual tutorial, progressive discovery & help ecosystem.
 //
 // Exposes: window.SFC_OB = {
 //   init, showTip, openHelp, replayWelcome, trackEvent, reset,
-//   getAnalytics, getSessionCount, dismissTip
+//   getAnalytics, getSessionCount, dismissTip,
+//   showVideoTip, getCompletionScore, injectProfileHelp
 // }
 // ═══════════════════════════════════════════════════════════════════════════
 
 (function(W) {
 
   // ── § CONSTANTS ─────────────────────────────────────────────────────────────
-  var VER = '1.0';
+  var VER = '2.0';
   var KEYS = {
-    tips:     function(u) { return 'sfc_ob_tips_'    + (u || 'anon'); },
-    events:   function(u) { return 'sfc_ob_events_'  + (u || 'anon'); },
+    tips:     function(u) { return 'sfc_ob_tips_'     + (u || 'anon'); },
+    events:   function(u) { return 'sfc_ob_events_'   + (u || 'anon'); },
     sessions: function(u) { return 'sfc_ob_sessions_' + (u || 'anon'); }
   };
   var MAX_EVENTS      = 50;
@@ -27,34 +28,55 @@
   // ── § INLINE BILINGUAL DICTIONARY ───────────────────────────────────────────
   var DICT = {
     fr: {
-      // Contextual tips (max 12 words — never overwhelming)
-      'tip.today':       'Votre tableau de bord personnel. Tout se passe ici.',
-      'tip.nutrition':   'Votre plan nutritionnel s\'adapte à vous, chaque jour.',
-      'tip.sport':       'Vos séances générées selon votre niveau et vos objectifs.',
-      'tip.calendar':    'Visualisez votre charge d\'entraînement sur les prochaines semaines.',
-      'tip.analytics':   'Suivez votre progression semaine après semaine.',
-      'tip.ai_coach':    'Posez n\'importe quelle question sport ou nutrition à votre coach.',
-      'tip.scanner':     'Photographiez votre repas — vos macros s\'ajoutent automatiquement.',
-      'tip.symbiose':    'Symbiose : votre nutrition s\'adapte automatiquement à vos séances.',
-      'tip.premium':     'Débloquez l\'IA Coach et les analyses avancées pour aller plus loin.',
-      'tip.adaptation':  'Votre plan évolue avec vous. Chaque semaine, automatiquement.',
-      'tip.recovery':    'Récupération intégrée — votre corps progresse aussi pendant le repos.',
-      'tip.frustration': 'Besoin d\'aide ? Accédez à votre Profil puis "Aide & Tutoriels".',
+      // v1: Contextual tips (max 12 words)
+      'tip.today':           'Votre tableau de bord personnel. Tout se passe ici.',
+      'tip.nutrition':       'Votre plan nutritionnel s\'adapte à vous, chaque jour.',
+      'tip.sport':           'Vos séances générées selon votre niveau et vos objectifs.',
+      'tip.calendar':        'Visualisez votre charge d\'entraînement sur les prochaines semaines.',
+      'tip.analytics':       'Suivez votre progression semaine après semaine.',
+      'tip.ai_coach':        'Posez n\'importe quelle question sport ou nutrition à votre coach.',
+      'tip.scanner':         'Photographiez votre repas — vos macros s\'ajoutent automatiquement.',
+      'tip.symbiose':        'Symbiose : votre nutrition s\'adapte automatiquement à vos séances.',
+      'tip.premium':         'Débloquez l\'IA Coach et les analyses avancées pour aller plus loin.',
+      'tip.adaptation':      'Votre plan évolue avec vous. Chaque semaine, automatiquement.',
+      'tip.recovery':        'Récupération intégrée — votre corps progresse aussi pendant le repos.',
+      'tip.frustration':     'Besoin d\'aide ? Accédez à votre Profil puis "Aide & Tutoriels".',
+      // v2: First-week guidance
+      'tip.day1':            'Commencez dès aujourd\'hui — votre programme personnalisé vous attend.',
+      'tip.day3':            '3 jours avec SmartFitCoach. Consultez votre calendrier pour suivre votre progression.',
+      'tip.day7':            '7 jours consécutifs. Votre plan s\'affine automatiquement chaque semaine.',
+      // v2: Re-engagement
+      'tip.comeback':        'Bon retour ! Votre plan est toujours parfaitement à jour pour vous.',
+      // v2: AI feature education
+      'tip.ai_intro':        'Essayez l\'IA Coach — posez-lui une question sur votre entraînement.',
+      'tip.scanner_intro':   'Scannez votre prochain repas — appuyez sur l\'icône photo dans le journal.',
+      'tip.symbiose_intro':  'La Symbiose ajuste vos calories automatiquement selon vos séances du jour.',
+      // v2: Progressive unlocks
+      'tip.unlock_meal':     'Premier repas enregistré ! Votre suivi nutritionnel est lancé.',
+      'tip.unlock_workout':  'Première séance terminée. Excellent départ — votre progression commence.',
+      'tip.unlock_7days':    '7 jours d\'utilisation. Votre programme évolue avec vous maintenant.',
+      // v2: Premium soft upsell
+      'tip.premium_soft':    'Débloquez l\'IA Coach pour des conseils hyper-personnalisés.',
+      // v2: Video system explanation
+      'tip.video':           'Appuyez sur la vignette pour voir la vidéo de démonstration complète.',
+      // v2: Empty state guidance
+      'tip.empty_nutrition': 'Commencez par enregistrer votre premier repas pour activer votre suivi.',
+      'tip.empty_sport':     'Votre programme est prêt — accédez à l\'onglet Sport pour démarrer.',
       // Discovery
-      'disc.scanner':    '📸 Scanner de repas',
-      'disc.scanner.sub':'Photographiez n\'importe quel repas',
-      'disc.ai':         '🤖 IA Coach',
-      'disc.ai.sub':     'Posez toutes vos questions',
-      'disc.calendar':   '📅 Calendrier intelligent',
-      'disc.calendar.sub':'Visualisez votre charge d\'entraînement',
+      'disc.scanner':        '📸 Scanner de repas',
+      'disc.scanner.sub':    'Photographiez n\'importe quel repas',
+      'disc.ai':             '🤖 IA Coach',
+      'disc.ai.sub':         'Posez toutes vos questions',
+      'disc.calendar':       '📅 Calendrier intelligent',
+      'disc.calendar.sub':   'Visualisez votre charge d\'entraînement',
       // Help center
-      'help.title':      'Aide & Tutoriels',
-      'help.close':      'Fermer',
-      'help.replay':     '↻ Revoir l\'introduction',
-      'help.reset_tips': 'Réinitialiser les conseils',
-      'help.tips_reset': 'Conseils réinitialisés.',
+      'help.title':          'Aide & Tutoriels',
+      'help.close':          'Fermer',
+      'help.replay':         '↻ Revoir l\'introduction',
+      'help.reset_tips':     'Réinitialiser les conseils',
+      'help.tips_reset':     'Conseils réinitialisés.',
       // Generic UI
-      'got_it': 'Compris',
+      'got_it':  'Compris',
       'dismiss': '✕',
       // Help center FAQ — 4 sections × 3 items
       'sections': [
@@ -93,30 +115,44 @@
       ]
     },
     en: {
-      'tip.today':       'Your personal dashboard. Everything starts here.',
-      'tip.nutrition':   'Your nutrition plan tailored to you, every single day.',
-      'tip.sport':       'Workouts generated to match your level and your goals.',
-      'tip.calendar':    'Visualize your training load over the coming weeks.',
-      'tip.analytics':   'Track your progress week after week.',
-      'tip.ai_coach':    'Ask your AI Coach anything about sport or nutrition.',
-      'tip.scanner':     'Photograph your meal — macros are logged automatically.',
-      'tip.symbiose':    'Symbiosis: your nutrition adapts automatically to your training.',
-      'tip.premium':     'Unlock AI Coach and advanced analytics to go further.',
-      'tip.adaptation':  'Your plan evolves with you. Every week, automatically.',
-      'tip.recovery':    'Recovery built in — your body also progresses during rest.',
-      'tip.frustration': 'Need help? Go to Profile → Help & Tutorials.',
-      'disc.scanner':    '📸 Meal Scanner',
-      'disc.scanner.sub':'Photograph any meal',
-      'disc.ai':         '🤖 AI Coach',
-      'disc.ai.sub':     'Ask any question',
-      'disc.calendar':   '📅 Smart Calendar',
-      'disc.calendar.sub':'Visualize your training load',
-      'help.title':      'Help & Tutorials',
-      'help.close':      'Close',
-      'help.replay':     '↻ Replay the introduction',
-      'help.reset_tips': 'Reset contextual tips',
-      'help.tips_reset': 'Tips reset.',
-      'got_it': 'Got it',
+      'tip.today':           'Your personal dashboard. Everything starts here.',
+      'tip.nutrition':       'Your nutrition plan tailored to you, every single day.',
+      'tip.sport':           'Workouts generated to match your level and your goals.',
+      'tip.calendar':        'Visualize your training load over the coming weeks.',
+      'tip.analytics':       'Track your progress week after week.',
+      'tip.ai_coach':        'Ask your AI Coach anything about sport or nutrition.',
+      'tip.scanner':         'Photograph your meal — macros are logged automatically.',
+      'tip.symbiose':        'Symbiosis: your nutrition adapts automatically to your training.',
+      'tip.premium':         'Unlock AI Coach and advanced analytics to go further.',
+      'tip.adaptation':      'Your plan evolves with you. Every week, automatically.',
+      'tip.recovery':        'Recovery built in — your body also progresses during rest.',
+      'tip.frustration':     'Need help? Go to Profile → Help & Tutorials.',
+      'tip.day1':            'Start today — your personalized program is waiting for you.',
+      'tip.day3':            '3 days with SmartFitCoach. Check your calendar to track your progress.',
+      'tip.day7':            '7 consecutive days. Your plan automatically refines every week.',
+      'tip.comeback':        'Welcome back! Your plan is still perfectly up to date for you.',
+      'tip.ai_intro':        'Try your AI Coach — ask it anything about your training.',
+      'tip.scanner_intro':   'Scan your next meal — tap the camera icon in the food journal.',
+      'tip.symbiose_intro':  'Symbiosis adjusts your calories automatically based on today\'s workouts.',
+      'tip.unlock_meal':     'First meal logged! Your nutrition tracking is now live.',
+      'tip.unlock_workout':  'First workout done. Excellent start — your progress begins now.',
+      'tip.unlock_7days':    '7 days of use. Your program now evolves with you.',
+      'tip.premium_soft':    'Unlock AI Coach for hyper-personalized training advice.',
+      'tip.video':           'Tap the thumbnail to watch the full demonstration video.',
+      'tip.empty_nutrition': 'Start by logging your first meal to activate your tracking.',
+      'tip.empty_sport':     'Your program is ready — go to the Sport tab to begin.',
+      'disc.scanner':        '📸 Meal Scanner',
+      'disc.scanner.sub':    'Photograph any meal',
+      'disc.ai':             '🤖 AI Coach',
+      'disc.ai.sub':         'Ask any question',
+      'disc.calendar':       '📅 Smart Calendar',
+      'disc.calendar.sub':   'Visualize your training load',
+      'help.title':          'Help & Tutorials',
+      'help.close':          'Close',
+      'help.replay':         '↻ Replay the introduction',
+      'help.reset_tips':     'Reset contextual tips',
+      'help.tips_reset':     'Tips reset.',
+      'got_it':  'Got it',
       'dismiss': '✕',
       'sections': [
         { key: 'start', title: 'Getting Started', items: [
@@ -204,42 +240,49 @@
   }
 
   // ── § SESSION COUNTER ────────────────────────────────────────────────────────
+  // v2: adds `prev` (previous session date) and `first` (first ever session) fields
   function _getSessionCount() {
     var key = KEYS.sessions(_uid());
-    var data = _read(key) || { count: 0, last: null };
+    var data = _read(key) || { count: 0, last: null, prev: null, first: null };
     var today = new Date().toISOString().slice(0, 10);
     if (data.last !== today) {
+      data.prev  = data.last;
       data.count = (data.count || 0) + 1;
-      data.last = today;
+      if (!data.first) data.first = today;
+      data.last  = today;
       _write(key, data);
     }
     return data.count;
+  }
+
+  function _getSessionData() {
+    return _read(KEYS.sessions(_uid())) || { count: 0, last: null, prev: null, first: null };
   }
 
   // ── § PERSONALIZATION ────────────────────────────────────────────────────────
   function _persona() {
     var s = W.S;
     if (!s) return 'default';
-    var goals = W.GOALS;
+    var goals  = W.GOALS;
     var goalKey = (goals && goals[s.goal]) ? goals[s.goal].key : null;
     if (!s.sportLevel || s.sportLevel === 'beginner') return 'beginner';
-    if (s.sportType === 'running' || s.sportType === 'triathlon') return 'endurance';
-    if (s.sportType === 'crossfit' || s.sportType === 'hyrox') return 'crossfit';
-    if (goalKey === 'shred' || goalKey === 'cut') return 'weightloss';
-    if (goalKey === 'bulk' || goalKey === 'lean_bulk') return 'muscle';
+    if (s.sportType === 'running'  || s.sportType === 'triathlon') return 'endurance';
+    if (s.sportType === 'crossfit' || s.sportType === 'hyrox')     return 'crossfit';
+    if (goalKey === 'shred' || goalKey === 'cut')                  return 'weightloss';
+    if (goalKey === 'bulk'  || goalKey === 'lean_bulk')            return 'muscle';
     return 'default';
   }
 
   // ── § TIP BAR ENGINE ─────────────────────────────────────────────────────────
-  var _tipEl       = null;
-  var _tipTimer    = null;
-  var _tipQueue    = [];
-  var _currentTip  = null;
+  var _tipEl      = null;
+  var _tipTimer   = null;
+  var _tipQueue   = [];
+  var _currentTip = null;
 
   function _ensureTipBar() {
     if (_tipEl && document.body.contains(_tipEl)) return;
     var bar = document.createElement('div');
-    bar.id = 'sfc-tip-bar';
+    bar.id  = 'sfc-tip-bar';
     bar.className = 'sfc-tip-bar';
     bar.setAttribute('role', 'status');
     bar.setAttribute('aria-live', 'polite');
@@ -258,10 +301,7 @@
     btn.className = 'sfc-tip-bar__dismiss';
     btn.setAttribute('aria-label', t('dismiss'));
     btn.textContent = t('dismiss');
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      _dismissTip();
-    });
+    btn.addEventListener('click', function(e) { e.stopPropagation(); _dismissTip(); });
     inner.appendChild(btn);
 
     bar.appendChild(inner);
@@ -275,7 +315,7 @@
     var textEl = document.getElementById('sfc-tip-text');
     if (textEl) textEl.textContent = msg;
     _tipEl.classList.remove('sfc-tip-bar--visible');
-    void _tipEl.offsetWidth; // reflow for transition
+    void _tipEl.offsetWidth; // reflow for CSS transition
     _tipEl.classList.add('sfc-tip-bar--visible');
     _currentTip = tipId;
     _markSeen(tipId);
@@ -300,12 +340,131 @@
   function showTip(tipId, customMsg) {
     if (!tipId || _hasSeen(tipId)) return;
     var msg = customMsg || t(tipId);
-    if (!msg || msg === tipId) return; // No translation available
+    if (!msg || msg === tipId) return; // no translation available
     if (_currentTip) {
       _tipQueue.push({ id: tipId, msg: msg });
     } else {
       _showTipNow(tipId, msg);
     }
+  }
+
+  // ── § v2: VIEW VISIT TRACKING (AI education) ─────────────────────────────────
+  var _viewVisits = {}; // in-memory per session; reset on page reload
+
+  function _trackViewVisit(view) {
+    _viewVisits[view] = (_viewVisits[view] || 0) + 1;
+
+    // AI Coach intro: 2nd visit to today/dashboard
+    if ((view === 'today' || view === 'dashboard') && _viewVisits[view] === 2 && !_hasSeen('tip.ai_intro')) {
+      setTimeout(function() { showTip('tip.ai_intro'); }, 2000);
+    }
+    // Scanner intro: 2nd visit to nutrition
+    if (view === 'nutrition' && _viewVisits[view] === 2 && !_hasSeen('tip.scanner_intro')) {
+      setTimeout(function() { showTip('tip.scanner_intro'); }, 2000);
+    }
+    // Symbiose intro: after visiting both nutrition AND sport at least once
+    if ((_viewVisits['nutrition'] || 0) >= 1 && (_viewVisits['sport'] || 0) >= 1 && !_hasSeen('tip.symbiose_intro')) {
+      setTimeout(function() { showTip('tip.symbiose_intro'); }, 3500);
+    }
+  }
+
+  // ── § v2: RE-ENGAGEMENT ───────────────────────────────────────────────────────
+  function _checkReEngagement() {
+    var data = _getSessionData();
+    if (!data.prev || !data.last) return;
+    try {
+      var prevDate = new Date(data.prev);
+      var lastDate = new Date(data.last);
+      var diffDays = Math.round((lastDate - prevDate) / (1000 * 60 * 60 * 24));
+      if (diffDays >= 2 && !_hasSeen('tip.comeback')) {
+        setTimeout(function() { showTip('tip.comeback'); }, TIP_DELAY);
+        _logEvent('re_engagement', { gapDays: diffDays });
+      }
+    } catch(e) {}
+  }
+
+  // ── § v2: FIRST-WEEK GUIDANCE ─────────────────────────────────────────────────
+  function _firstWeekGuidance() {
+    var data = _getSessionData();
+    if (!data.first) return;
+    try {
+      var firstDate = new Date(data.first);
+      var now       = new Date();
+      var daysSince = Math.round((now - firstDate) / (1000 * 60 * 60 * 24));
+      if (daysSince === 0 && !_hasSeen('tip.day1')) {
+        setTimeout(function() { showTip('tip.day1'); }, 5000);
+      } else if (daysSince >= 3 && daysSince < 7 && !_hasSeen('tip.day3')) {
+        setTimeout(function() { showTip('tip.day3'); }, TIP_DELAY);
+      } else if (daysSince >= 7 && !_hasSeen('tip.day7')) {
+        setTimeout(function() { showTip('tip.day7'); }, TIP_DELAY);
+      }
+    } catch(e) {}
+  }
+
+  // ── § v2: PROGRESSIVE UNLOCK ANNOUNCEMENTS ────────────────────────────────────
+  function _checkProgressiveUnlocks() {
+    var s = W.S;
+    if (!s) return;
+
+    // First meal logged
+    var hasFirstMeal = !!(s._firstMealLogged ||
+      (Array.isArray(s.todayMeals) && s.todayMeals.length > 0) ||
+      (s.nutritionLog && typeof s.nutritionLog === 'object'));
+    if (hasFirstMeal && !_hasSeen('tip.unlock_meal')) {
+      setTimeout(function() { showTip('tip.unlock_meal'); }, 1500);
+    }
+
+    // First workout done
+    var hasFirstWorkout = !!(s._firstWorkoutDone ||
+      (Array.isArray(s.sessionHistory) && s.sessionHistory.length > 0));
+    if (hasFirstWorkout && !_hasSeen('tip.unlock_workout')) {
+      setTimeout(function() { showTip('tip.unlock_workout'); }, 1500);
+    }
+
+    // 7-session milestone
+    var data = _getSessionData();
+    if (data.count >= 7 && !_hasSeen('tip.unlock_7days')) {
+      setTimeout(function() { showTip('tip.unlock_7days'); }, TIP_DELAY);
+    }
+  }
+
+  // ── § v2: PREMIUM SOFT PRESENTATION ─────────────────────────────────────────
+  function _checkPremiumPresentation() {
+    var data = _getSessionData();
+    if (data.count < 5) return;
+    try {
+      var isPremium = W.isPlanAtLeast && W.isPlanAtLeast('athlete');
+      if (isPremium) return;
+    } catch(e) { return; }
+    if (!_hasSeen('tip.premium_soft')) {
+      setTimeout(function() { showTip('tip.premium_soft'); }, 6000);
+    }
+  }
+
+  // ── § v2: VIDEO SYSTEM EXPLANATION ───────────────────────────────────────────
+  function showVideoTip() {
+    showTip('tip.video');
+  }
+
+  // ── § v2: COMPLETION SCORING ─────────────────────────────────────────────────
+  function getCompletionScore() {
+    var s = W.S || {};
+    var score = 0;
+    var steps = [
+      { weight: 20, check: function() { return !!s.appMode; } },
+      { weight: 20, check: function() { return s.goal !== null && s.goal !== undefined; } },
+      { weight: 20, check: function() {
+        return (Array.isArray(s.weekPlan)       && s.weekPlan.length > 0) ||
+               (Array.isArray(s.sportProgram)   && s.sportProgram.length > 0) ||
+               (Array.isArray(s.runningProgram) && s.runningProgram.length > 0);
+      }},
+      { weight: 20, check: function() { return _hasSeen('tip.ai_intro') || _hasSeen('disc.ai'); } },
+      { weight: 20, check: function() { return _hasSeen('tip.scanner_intro') || _hasSeen('disc.scanner'); } }
+    ];
+    steps.forEach(function(step) {
+      try { if (step.check()) score += step.weight; } catch(e) {}
+    });
+    return score;
   }
 
   // ── § VIEW-BASED TRIGGERS ────────────────────────────────────────────────────
@@ -339,6 +498,12 @@
     var tipId = tipMap[view];
     if (tipId) setTimeout(function() { showTip(tipId); }, TIP_DELAY);
 
+    // v2: track view visits for AI feature education
+    _trackViewVisit(view);
+
+    // v2: check unlock announcements on each view change
+    _checkProgressiveUnlocks();
+
     // Inject help row when profile view is rendered
     if (view === 'profil' || view === 'profile') {
       setTimeout(_injectHelpInProfile, 300);
@@ -361,7 +526,7 @@
 
     var featureKey = unseen[0];
     var disc = document.createElement('div');
-    disc.id = 'sfc-discovery';
+    disc.id  = 'sfc-discovery';
     disc.className = 'sfc-discovery';
 
     var textWrap = document.createElement('div');
@@ -393,7 +558,7 @@
     });
     disc.appendChild(gotIt);
 
-    disc.style.opacity = '0';
+    disc.style.opacity   = '0';
     disc.style.transition = 'opacity 0.4s ease';
 
     var container = document.getElementById('app') || document.body;
@@ -541,16 +706,13 @@
 
   // ── § PROFILE VIEW INJECTION ─────────────────────────────────────────────────
   function _injectHelpInProfile() {
-    // Find the profile content container — try multiple selectors
     var prof = document.querySelector('[data-section="profil"]') ||
                document.querySelector('.profil-content') ||
                document.getElementById('profil-content');
 
-    // Fallback: look for the #app and check if profil view
     if (!prof) {
       var app = document.getElementById('app');
       if (!app) return;
-      // Find the last scrollable div inside app (profile tends to be the deepest scroll container)
       var divs = app.querySelectorAll('div');
       for (var i = divs.length - 1; i >= 0; i--) {
         if (divs[i].scrollHeight > divs[i].clientHeight + 20) { prof = divs[i]; break; }
@@ -620,41 +782,55 @@
       if (typeof W.render === 'function') {
         _installHook();
       } else {
-        // Retry until render is defined (app-main.js loads after us)
         var _wait = setInterval(function() {
           if (typeof W.render === 'function') { clearInterval(_wait); _installHook(); }
         }, 150);
         setTimeout(function() { clearInterval(_wait); }, 8000);
       }
 
-      // Show discovery after app settles (3 seconds)
-      setTimeout(function() { try { showDiscovery(); } catch(e) {} }, 3000);
+      // v2: guidance checks staggered to avoid overwhelming the user
+      setTimeout(function() { try { _checkReEngagement();     } catch(e) {} }, 2000);
+      setTimeout(function() { try { _firstWeekGuidance();     } catch(e) {} }, 2500);
+      setTimeout(function() { try { showDiscovery();           } catch(e) {} }, 3000);
+      setTimeout(function() { try { _checkPremiumPresentation(); } catch(e) {} }, 7000);
 
     } catch(e) {}
   }
 
   // ── § PUBLIC API ─────────────────────────────────────────────────────────────
   W.SFC_OB = {
-    init:            init,
-    showTip:         showTip,
-    openHelp:        openHelp,
-    replayWelcome:   replayWelcome,
-    trackEvent:      _logEvent,
-    dismissTip:      function(id) { _markSeen(id); _dismissTip(); },
+    // v1 API (preserved)
+    init:              init,
+    showTip:           showTip,
+    openHelp:          openHelp,
+    replayWelcome:     replayWelcome,
+    trackEvent:        _logEvent,
+    dismissTip:        function(id) { _markSeen(id); _dismissTip(); },
     reset: function() {
       _resetTips();
       try { localStorage.removeItem('mtd_onboarding_done'); } catch(e) {}
       _logEvent('full_reset');
     },
-    getAnalytics:    function() { return _read(KEYS.events(_uid())) || []; },
-    getSessionCount: _getSessionCount,
-    // Expose for profile page — called externally
+    getAnalytics:      function() { return _read(KEYS.events(_uid())) || []; },
+    getSessionCount:   _getSessionCount,
+    // v2 additions
+    showVideoTip:      showVideoTip,
+    getCompletionScore:getCompletionScore,
+    // Expose for profile page
     injectProfileHelp: _injectHelpInProfile,
     // Internal access for tests
-    _hasSeen:  _hasSeen,
-    _markSeen: _markSeen,
-    _lang:     _lang,
-    _persona:  _persona
+    _hasSeen:           _hasSeen,
+    _markSeen:          _markSeen,
+    _lang:              _lang,
+    _persona:           _persona,
+    // v2 internals (for tests)
+    _getSessionData:    _getSessionData,
+    _viewVisits:        _viewVisits,
+    _trackViewVisit:    _trackViewVisit,
+    _checkReEngagement: _checkReEngagement,
+    _firstWeekGuidance: _firstWeekGuidance,
+    _checkProgressiveUnlocks: _checkProgressiveUnlocks,
+    _checkPremiumPresentation: _checkPremiumPresentation
   };
 
   // ── § AUTO-INIT ──────────────────────────────────────────────────────────────
