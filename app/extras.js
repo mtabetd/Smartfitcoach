@@ -326,7 +326,7 @@ window.WATER_TRACKER = {
     function updateInfo() {
       data = self.getToday();
       var litres = (data.glasses * 0.25).toFixed(2).replace(/\.?0+$/, '');
-      info.textContent = data.glasses + ' / ' + data.target + ' verres (' + litres + ' L)';
+      info.textContent = data.glasses + ' / ' + data.target + ' ' + ((window.isEnglish && window.isEnglish()) ? 'glasses (' : 'verres (') + litres + ' L)';
       progressFill.style.width = data.percent + '%';
     }
     updateInfo();

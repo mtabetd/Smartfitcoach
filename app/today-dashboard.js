@@ -2643,12 +2643,12 @@ function _fjAppendOFFResults() {
     });
     loadRow.appendChild(h('span', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'
-    }, 'Recherche de produits en ligne\u2026'));
+    }, (window.isEnglish && window.isEnglish()) ? 'Searching online products\u2026' : 'Recherche de produits en ligne\u2026'));
     var cancelBtn = h('button', {
       type: 'button',
       style: 'background:none;border:1px solid var(--line,#D8D8D0);padding:6px 12px;min-height:32px;cursor:pointer;'
         + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);border-radius:2px;'
-    }, 'Annuler');
+    }, (window.isEnglish && window.isEnglish()) ? 'Cancel' : 'Annuler');
     cancelBtn.addEventListener('click', function() {
       try { if (_fjOFF.ctrl) _fjOFF.ctrl.abort(); } catch(e) {}
       _fjOFF.loading = false;
@@ -2989,7 +2989,7 @@ function _fjShowSelection() {
       if (isNaN(v) || v < 0.5) v = 0.5;
       if (v > 20) {
         v = 20;
-        if (window.showToast) window.showToast('Maximum 20 portions. Pour plus, passez en mode grammes.', 'warning', 3000);
+        if (window.showToast) window.showToast((window.isEnglish && window.isEnglish()) ? 'Maximum 20 portions. For more, switch to grams mode.' : 'Maximum 20 portions. Pour plus, passez en mode grammes.', 'warning', 3000);
       }
       _fjState.portionCount = v;
       _fjUpdateMacrosLive();
