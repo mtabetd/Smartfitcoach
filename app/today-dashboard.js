@@ -2298,11 +2298,11 @@ function renderFoodJournalCard() {
     if (!hasPlan) return;
     var pillPlan = h('button', {
       type: 'button',
-      'aria-label': 'Charger le plan repas du jour dans le journal',
+      'aria-label': (window.isEnglish && window.isEnglish()) ? 'Load today\'s meal plan into journal' : 'Charger le plan repas du jour dans le journal',
       style: 'padding:5px 12px;min-height:32px;border-radius:0;cursor:pointer;box-sizing:border-box;'
         + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;'
         + 'background:transparent;color:var(--ink-500,#6B6B65);border:1px solid var(--line,#D8D8D0);'
-    }, '+ Plan du jour');
+    }, (window.isEnglish && window.isEnglish()) ? '+ Today\'s plan' : '+ Plan du jour');
     pillPlan.addEventListener('click', function() {
       if (!window.FOOD_JOURNAL) return;
       try {
@@ -2735,7 +2735,7 @@ function _fjRenderSavedMeals(box) {
     // Bouton supprimer
     var delBtn = h('button', {
       type: 'button',
-      'aria-label': 'Supprimer ' + meal.name,
+      'aria-label': (window.isEnglish && window.isEnglish()) ? 'Remove ' + meal.name : 'Supprimer ' + meal.name,
       style: 'display:inline-flex;align-items:center;justify-content:center;min-width:36px;min-height:44px;padding:0;'
         + 'background:none;border:none;cursor:pointer;color:var(--grey,#6B6B65);flex-shrink:0;margin-left:2px;'
     });

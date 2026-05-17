@@ -2098,11 +2098,11 @@ function renderProfilePage(container) {
          var _toast = document.createElement('div');
          _toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;padding:12px 16px;z-index:10000;border-radius:0;border:1px solid var(--ink-900,#0A0A09);display:flex;align-items:center;gap:12px;';
          var _toastTxt = document.createElement('span');
-         _toastTxt.textContent = '\u2713 Objectif mis \u00e0 jour';
+         _toastTxt.textContent = (window.isEnglish && window.isEnglish()) ? '\u2713 Goal updated' : '\u2713 Objectif mis \u00e0 jour';
          _toast.appendChild(_toastTxt);
          var _regenBtn = document.createElement('button');
          _regenBtn.style.cssText = 'background:var(--ivory,#FAF9F6);color:#0A0A09;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:6px 12px;cursor:pointer;border-radius:1px;white-space:nowrap;';
-         _regenBtn.textContent = 'Reg\u00e9n\u00e9rer \u2192';
+         _regenBtn.textContent = (window.isEnglish && window.isEnglish()) ? 'Regenerate \u2192' : 'Reg\u00e9n\u00e9rer \u2192';
          _regenBtn.onclick = function() {
            try {
              if (window.computeNutritionState) window.computeNutritionState(false);

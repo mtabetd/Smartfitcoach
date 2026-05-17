@@ -4229,8 +4229,8 @@ function renderCrossfitProgram(p) {
 
  // Guard: if no WODs available, show a message instead of a blank page
  if (!weekProgram || !weekProgram.length) {
- p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
- p.appendChild(h('h1', {html: 'Cross Training<br><em>Programme</em>'}));
+ p.appendChild(h('div', {'class': 'eyebrow'}, (window.isEnglish && window.isEnglish()) ? 'Program' : 'Programme'));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish()) ? 'Cross Training<br><em>Program</em>' : 'Cross Training<br><em>Programme</em>'}));
  p.appendChild(h('div', {style: 'border-left:2px solid var(--orange);padding:12px 16px;margin:24px 0;background:rgba(232,111,30,0.06)'}, [
  h('div', {style: 'font-family:Georgia,serif;font-size:13px;margin-bottom:4px'}, (window.isEnglish && window.isEnglish()) ? 'Loading WOD database...' : 'Base de WODs en cours de chargement...'),
  h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'}, (window.isEnglish && window.isEnglish()) ? 'Reload the page to display the program.' : 'Rechargez la page pour afficher le programme.')
@@ -4243,8 +4243,8 @@ function renderCrossfitProgram(p) {
  var _totalTabCount = template.length + _mixSecDays;
  if (S.selectedCrossfitDay === null || S.selectedCrossfitDay === undefined || S.selectedCrossfitDay < 0 || S.selectedCrossfitDay >= _totalTabCount) S.selectedCrossfitDay = 0;
 
- p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
- p.appendChild(h('h1', {html: 'Cross Training<br><em>Programme</em>'}));
+ p.appendChild(h('div', {'class': 'eyebrow'}, (window.isEnglish && window.isEnglish()) ? 'Program' : 'Programme'));
+ p.appendChild(h('h1', {html: (window.isEnglish && window.isEnglish()) ? 'Cross Training<br><em>Program</em>' : 'Cross Training<br><em>Programme</em>'}));
  var levelObj = (window.CROSSFIT_LEVELS || []).find(function(l) { return l.id === S.crossfitLevel; });
  // 2026-04 P4 : sous-titre dynamique selon type secondaire (pas hardcoded Musculation)
  var _SECLAB_SUB = { musculation: 'Musculation', crossfit: 'Cross Training', running: 'Running', yoga: 'Yoga', calisthenics: 'Calisthenics' };
