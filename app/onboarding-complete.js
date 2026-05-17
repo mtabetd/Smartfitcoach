@@ -216,7 +216,7 @@
       'font-family:"Helvetica Neue",Arial,sans-serif', 'font-size:11px',
       'letter-spacing:2px', 'text-transform:uppercase',
       'padding:14px', 'border:none',
-      'border-radius:2px', 'cursor:pointer'
+      'border-radius:2px', 'cursor:pointer', 'min-height:46px'
     ].join(';');
     cta.textContent = _ocEN ? 'Start now →' : 'Commencer maintenant →';
     cta.addEventListener('click', function() {
@@ -224,6 +224,43 @@
       _closeOverlay(overlay);
     });
     inner.appendChild(cta);
+
+    // Skip link — always visible, never blocking
+    var skipLink = document.createElement('button');
+    skipLink.type = 'button';
+    skipLink.style.cssText = [
+      'display:block', 'background:none', 'border:none',
+      'font-family:"Helvetica Neue",Arial,sans-serif', 'font-size:11px',
+      'color:var(--grey,#6B6B65)', 'cursor:pointer',
+      'margin:16px auto 0', 'padding:8px', 'letter-spacing:0.5px',
+      'min-height:36px'
+    ].join(';');
+    skipLink.textContent = _ocEN ? 'Skip' : 'Passer';
+    skipLink.addEventListener('click', function() {
+      _markDone();
+      _closeOverlay(overlay);
+    });
+    inner.appendChild(skipLink);
+
+    // Help center link (wires into onboarding engine if available)
+    var helpLink = document.createElement('button');
+    helpLink.type = 'button';
+    helpLink.style.cssText = [
+      'display:block', 'background:none', 'border:none',
+      'font-family:"Helvetica Neue",Arial,sans-serif', 'font-size:10px',
+      'letter-spacing:1.5px', 'text-transform:uppercase',
+      'color:var(--grey,#6B6B65)', 'cursor:pointer',
+      'margin:8px auto 0', 'padding:6px', 'min-height:32px'
+    ].join(';');
+    helpLink.textContent = _ocEN ? 'Help & Tutorials' : 'Aide & Tutoriels';
+    helpLink.addEventListener('click', function() {
+      _markDone();
+      _closeOverlay(overlay);
+      setTimeout(function() {
+        if (window.SFC_OB && window.SFC_OB.openHelp) window.SFC_OB.openHelp();
+      }, 450);
+    });
+    inner.appendChild(helpLink);
 
     overlay.appendChild(inner);
     document.body.appendChild(overlay);
