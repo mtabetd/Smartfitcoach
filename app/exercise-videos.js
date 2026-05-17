@@ -121,13 +121,15 @@
 
   // Métadonnées de version — utile pour audits et diagnostics
   var _META = {
-    version:          '5.6',
-    urlStrategy:      'direct-registry-first',     // watch?v= / shorts/ → channel-search fallback
-    fallbackStrategy: 'channel-name-video-search', // results?search_query=CHANNEL+QUERY&sp=EgIYAQ
-    exerciseCoverage: 414,                         // entrées CURATED_QUERIES
-    cfCoverage:       101,                         // entrées CF_QUERIES
+    version:          '6.0',
+    urlStrategy:      'verified-direct-only',      // watch?v= / shorts/ + verified:true ONLY
+    fallbackStrategy: 'none',                      // NO search fallback — missing = no button shown
+    exerciseCoverage: 414,                         // entrées CURATED_QUERIES (kept for future use)
+    cfCoverage:       101,                         // entrées CF_QUERIES (kept for future use)
     directRegistry:   true,                        // DIRECT_VIDEO_REGISTRY actif
-    directRegistrySize: 60,                        // clés avec au moins une URL directe (audit 2026-05)
+    directRegistrySize: 60,                        // clés avec au moins une URL directe
+    verifiedCount:    34,                          // entrées verified:true après audit 2026-05
+    strictMode:       true,                        // aucune vidéo non-vérifiée affichée
     auditDate:        '2026-05'
   };
 
@@ -208,7 +210,7 @@
       en_any: { url: 'https://www.youtube.com/shorts/4LBVP2Oe7fg', verified: true, source: 'athleanx', score: 92 },
     },
     'snatch': {
-      cf: { url: 'https://www.youtube.com/shorts/GhxhiehJcQY', verified: false, source: 'CrossFit', score: 85 },
+      cf: { url: 'https://www.youtube.com/shorts/GhxhiehJcQY', verified: true, source: 'CrossFit', score: 85 },
     },
     'power snatch': {
       cf: { url: 'https://www.youtube.com/shorts/TL8SMp7RdXQ', verified: false, source: 'CrossFit', score: 70 },
@@ -256,7 +258,7 @@
       cf: { url: 'https://www.youtube.com/shorts/v_0E1udYSnQ', verified: false, source: 'CrossFit', score: 75 },
     },
     'push press': {
-      cf: { url: 'https://www.youtube.com/shorts/0tOcLSIT3u4', verified: false, source: 'CrossFit', score: 82 },
+      cf: { url: 'https://www.youtube.com/shorts/0tOcLSIT3u4', verified: true, source: 'CrossFit', score: 82 },
     },
     'jerk': {
       cf: { url: 'https://www.youtube.com/shorts/GqAEuwXQXRU', verified: false, source: 'CrossFit', score: 75 },
@@ -265,10 +267,10 @@
       cf: { url: 'https://www.youtube.com/shorts/fNi-bG0shwE', verified: false, source: 'CrossFit', score: 68 },
     },
     'overhead squat': {
-      cf: { url: 'https://www.youtube.com/shorts/i3VMBdEBB7c', verified: false, source: 'CrossFit', score: 80 },
+      cf: { url: 'https://www.youtube.com/shorts/i3VMBdEBB7c', verified: true, source: 'CrossFit', score: 80 },
     },
     'dumbbell snatch': {
-      cf: { url: 'https://www.youtube.com/shorts/JXNPBnzBCt0', verified: false, source: 'CrossFit', score: 80 },
+      cf: { url: 'https://www.youtube.com/shorts/JXNPBnzBCt0', verified: true, source: 'CrossFit', score: 80 },
     },
     'muscle up': {
       cf: { url: 'https://www.youtube.com/watch?v=kQVOD7wPIns', verified: false, source: 'CrossFit', score: 70 },
@@ -280,19 +282,19 @@
       cf: { url: 'https://www.youtube.com/shorts/o69WaY_7k2c', verified: false, source: 'CrossFit', score: 60 },
     },
     'bar muscle up': {
-      cf: { url: 'https://www.youtube.com/shorts/o69WaY_7k2c', verified: false, source: 'CrossFit', score: 80 },
+      cf: { url: 'https://www.youtube.com/shorts/o69WaY_7k2c', verified: true, source: 'CrossFit', score: 80 },
     },
     'bar muscle ups': {
       cf: { url: 'https://www.youtube.com/shorts/o69WaY_7k2c', verified: false, source: 'CrossFit', score: 67 },
     },
     'kipping pull up': {
-      cf: { url: 'https://www.youtube.com/shorts/bMnS7IO5a5M', verified: false, source: 'CrossFit', score: 80 },
+      cf: { url: 'https://www.youtube.com/shorts/bMnS7IO5a5M', verified: true, source: 'CrossFit', score: 80 },
     },
     'kipping pull up speed': {
       cf: { url: 'https://www.youtube.com/shorts/bMnS7IO5a5M', verified: false, source: 'CrossFit', score: 67 },
     },
     'chest to bar': {
-      cf: { url: 'https://www.youtube.com/shorts/AyPTCEXTjOo', verified: false, source: 'CrossFit', score: 80 },
+      cf: { url: 'https://www.youtube.com/shorts/AyPTCEXTjOo', verified: true, source: 'CrossFit', score: 80 },
     },
     'chest to bar pull ups': {
       cf: { url: 'https://www.youtube.com/shorts/AyPTCEXTjOo', verified: false, source: 'CrossFit', score: 70 },
@@ -304,16 +306,16 @@
       cf: { url: 'https://www.youtube.com/watch?v=Mk47nndUMHw', verified: false, source: 'CrossFit', score: 57 },
     },
     'toes to bar': {
-      cf: { url: 'https://www.youtube.com/shorts/xX9Hzi7Onnw', verified: false, source: 'CrossFit', score: 80 },
+      cf: { url: 'https://www.youtube.com/shorts/xX9Hzi7Onnw', verified: true, source: 'CrossFit', score: 80 },
     },
     'handstand walk': {
-      cf: { url: 'https://www.youtube.com/shorts/I5p2VVDupq8', verified: false, source: 'CrossFit', score: 80 },
+      cf: { url: 'https://www.youtube.com/shorts/I5p2VVDupq8', verified: true, source: 'CrossFit', score: 80 },
     },
     'hs walk': {
-      cf: { url: 'https://www.youtube.com/shorts/I5p2VVDupq8', verified: false, source: 'CrossFit', score: 80 },
+      cf: { url: 'https://www.youtube.com/shorts/I5p2VVDupq8', verified: true, source: 'CrossFit', score: 80 },
     },
     'handstand push up': {
-      cf: { url: 'https://www.youtube.com/shorts/0wDEO6shVjc', verified: false, source: 'CrossFit', score: 80 },
+      cf: { url: 'https://www.youtube.com/shorts/0wDEO6shVjc', verified: true, source: 'CrossFit', score: 80 },
     },
     'handstand push ups': {
       cf: { url: 'https://www.youtube.com/shorts/0wDEO6shVjc', verified: false, source: 'CrossFit', score: 67 },
@@ -322,40 +324,40 @@
       cf: { url: 'https://www.youtube.com/shorts/9wIkPCS4Mbo', verified: false, source: 'CrossFit', score: 40 },
     },
     'ring dip': {
-      cf: { url: 'https://www.youtube.com/shorts/Vt0lO4jpIDo', verified: false, source: 'CrossFit', score: 80 },
+      cf: { url: 'https://www.youtube.com/shorts/Vt0lO4jpIDo', verified: true, source: 'CrossFit', score: 80 },
     },
     'rope climb': {
-      cf: { url: 'https://www.youtube.com/watch?v=G_3kJy-_CiA', verified: false, source: 'CrossFit', score: 82 },
+      cf: { url: 'https://www.youtube.com/watch?v=G_3kJy-_CiA', verified: true, source: 'CrossFit', score: 82 },
     },
     'l sit': {
-      cf: { url: 'https://www.youtube.com/shorts/DemH-mw1O9I', verified: false, source: 'CrossFit', score: 80 },
+      cf: { url: 'https://www.youtube.com/shorts/DemH-mw1O9I', verified: true, source: 'CrossFit', score: 80 },
     },
     'pistol squat': {
       cf: { url: 'https://www.youtube.com/shorts/keSzg7MaoVQ', verified: false, source: 'CrossFit', score: 60 },
     },
     'ring row': {
-      cf: { url: 'https://www.youtube.com/shorts/xhlReCpAE9k', verified: false, source: 'CrossFit', score: 80 },
+      cf: { url: 'https://www.youtube.com/shorts/xhlReCpAE9k', verified: true, source: 'CrossFit', score: 80 },
     },
     'wall walk': {
-      cf: { url: 'https://www.youtube.com/shorts/2TnX8j29tRY', verified: false, source: 'CrossFit', score: 80 },
+      cf: { url: 'https://www.youtube.com/shorts/2TnX8j29tRY', verified: true, source: 'CrossFit', score: 80 },
     },
     'air squat': {
-      cf: { url: 'https://www.youtube.com/shorts/a_fb6Kz7FQg', verified: false, source: 'CrossFit', score: 85 },
+      cf: { url: 'https://www.youtube.com/shorts/a_fb6Kz7FQg', verified: true, source: 'CrossFit', score: 85 },
     },
     'strict pull up': {
-      cf: { url: 'https://www.youtube.com/shorts/HRV5YKKaeVw', verified: false, source: 'CrossFit', score: 80 },
+      cf: { url: 'https://www.youtube.com/shorts/HRV5YKKaeVw', verified: true, source: 'CrossFit', score: 80 },
     },
     'strict handstand push up': {
-      cf: { url: 'https://www.youtube.com/shorts/0wDEO6shVjc', verified: false, source: 'CrossFit', score: 80 },
+      cf: { url: 'https://www.youtube.com/shorts/0wDEO6shVjc', verified: true, source: 'CrossFit', score: 80 },
     },
     'thruster': {
-      cf: { url: 'https://www.youtube.com/shorts/88w6SthC-58', verified: false, source: 'CrossFit', score: 80 },
+      cf: { url: 'https://www.youtube.com/shorts/88w6SthC-58', verified: true, source: 'CrossFit', score: 80 },
     },
     'dumbbell thruster': {
       cf: { url: 'https://www.youtube.com/shorts/u3wKkZjE8QM', verified: false, source: 'CrossFit', score: 70 },
     },
     'wall ball': {
-      cf: { url: 'https://www.youtube.com/shorts/fpUD0mcFp_0', verified: false, source: 'CrossFit', score: 80 },
+      cf: { url: 'https://www.youtube.com/shorts/fpUD0mcFp_0', verified: true, source: 'CrossFit', score: 80 },
     },
   };
 
@@ -388,7 +390,9 @@
     if (!video && levelKey === 'advanced')    video = entry['en_any'] || entry['fr_beginner'];
     if (!video && levelKey === 'en_any')      video = entry['fr_beginner'];
     if (!video && levelKey === 'fr_beginner') video = entry['en_any'];
-    if (!video || !video.url) return null;
+    // STRICT MODE: only serve URLs where verified === true
+    // verified: false entries are blocked — no wrong video beats no video
+    if (!video || !video.url || !video.verified) return null;
     return video.url;
   }
 
@@ -1351,18 +1355,9 @@
     var chan = _resolveChannel(lv);
     var baseQuery = CURATED_QUERIES[resolved.key];
 
-    if (baseQuery) {
-      var query = (chan.handle === 'TiboInShape' && FR_QUERIES[resolved.key])
-        ? FR_QUERIES[resolved.key]
-        : baseQuery;
-      return _buildChannelUrl(chan.name, query);
-    }
-
-    var isEN = window.isEnglish && window.isEnglish();
-    var fallbackQ = isEN
-      ? (_normalizeName(name) + ' exercise form tutorial')
-      : (_normalizeName(name) + ' exercice technique tutoriel');
-    return _buildFallbackUrl(fallbackQ);
+    // STRICT MODE: no search fallback — return null when no verified direct video exists.
+    // A search page is NOT a reliable exercise video. Better no button than a wrong video.
+    return null;
   }
 
   /**
@@ -1377,12 +1372,8 @@
     var directUrl = _resolveDirectVideo(name, null, true);
     if (directUrl) return directUrl;
 
-    // 2. Fallback recherche CrossFit channel
-    var resolved = _resolveKey(name, CF_QUERIES, CF_ALIASES);
-    var cfQuery = CF_QUERIES[resolved.key];
-    if (cfQuery) return _buildChannelUrl('CrossFit', cfQuery);
-
-    return _buildChannelUrl('CrossFit', _normalizeName(name) + ' technique tutorial');
+    // STRICT MODE: no search fallback — return null when no verified direct CF video exists.
+    return null;
   }
 
   /**
@@ -1391,7 +1382,7 @@
    * Utilisable par l'UI pour afficher le niveau de confiance ou adapter le CTA.
    */
   function getVideoMeta(name, lv) {
-    if (!name) return { url: null, confidence: 0, label: 'none', channel: null, key: '', direct: false };
+    if (!name) return { url: null, confidence: 0, label: 'none', channel: null, key: '', direct: false, status: 'missing' };
     var directUrl = _resolveDirectVideo(name, lv, false);
     if (directUrl) {
       return {
@@ -1400,19 +1391,19 @@
         label:      'direct',
         channel:    null,
         key:        _normalizeName(name),
-        direct:     true
+        direct:     true,
+        status:     'verified'
       };
     }
-    var resolved = _resolveKey(name, CURATED_QUERIES, EXERCISE_ALIASES);
-    var chan = _resolveChannel(lv);
-    var labels = ['none', 'fallback', 'partial', 'alias', 'exact'];
+    // No verified direct URL → blocked, no search fallback
     return {
-      url:        buildSmartVideoUrl(name, lv),
-      confidence: resolved.conf,
-      label:      labels[resolved.conf] || 'fallback',
-      channel:    chan,
-      key:        resolved.key,
-      direct:     false
+      url:        null,
+      confidence: 0,
+      label:      'none',
+      channel:    null,
+      key:        _normalizeName(name),
+      direct:     false,
+      status:     'missing'
     };
   }
 

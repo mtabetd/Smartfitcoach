@@ -818,7 +818,7 @@ function generateSportProgram() {
      sets: '3 x 10 contractions (5s tenue)', rest: '30s', eq: 'Aucun', lv: 1,
      desc: 'Contractez les muscles du plancher pelvien comme pour retenir l\'urine. Tenez 5 secondes, relâchez 5 secondes. Répétez.',
      tips: ['Essentiel pour préparer l\'accouchement', 'Prévient l\'incontinence', 'Peut être fait n\'importe où'],
-     video: 'https://www.youtube.com/results?search_query=exercices+kegel+grossesse'
+     video: null
    });
  }
 
@@ -4691,8 +4691,10 @@ function renderCrossfitProgram(p) {
  }
  var haltVideoUrl = (window.EXERCISE_VIDEOS && window.EXERCISE_VIDEOS.buildCFVideoUrl)
    ? window.EXERCISE_VIDEOS.buildCFVideoUrl(_halt.name)
-   : 'https://www.youtube.com/results?search_query=' + encodeURIComponent((_halt.name || '') + ' crossfit technique tutorial') + '&sp=EgIYAQ%253D%253D';
- haltCard.appendChild(h('a', {'class': 'exercise-video', href: haltVideoUrl, target: '_blank', rel: 'noopener'}, (window.isEnglish && window.isEnglish() ? '▶ Watch technique' : '▶ Voir la technique')));
+   : null;
+ if (haltVideoUrl) {
+   haltCard.appendChild(h('a', {'class': 'exercise-video', href: haltVideoUrl, target: '_blank', rel: 'noopener'}, (window.isEnglish && window.isEnglish() ? '▶ Watch technique' : '▶ Voir la technique')));
+ }
  p.appendChild(haltCard);
  } else {
  // Show gym skills section first for non-haltero days
@@ -4707,8 +4709,10 @@ function renderCrossfitProgram(p) {
  gymSkillCard.appendChild(drillListTop);
  var gymVideoUrlTop = (window.EXERCISE_VIDEOS && window.EXERCISE_VIDEOS.buildCFVideoUrl)
    ? window.EXERCISE_VIDEOS.buildCFVideoUrl((_gym.name || '').replace('Skill: ', ''))
-   : 'https://www.youtube.com/results?search_query=' + encodeURIComponent((_gym.name || '').replace('Skill: ', '') + ' crossfit tutorial') + '&sp=EgIYAQ%253D%253D';
- gymSkillCard.appendChild(h('a', {'class': 'exercise-video', href: gymVideoUrlTop, target: '_blank', rel: 'noopener', style: 'margin-top:8px'}, (window.isEnglish && window.isEnglish() ? '▶ Watch technique' : '▶ Voir la technique')));
+   : null;
+ if (gymVideoUrlTop) {
+   gymSkillCard.appendChild(h('a', {'class': 'exercise-video', href: gymVideoUrlTop, target: '_blank', rel: 'noopener', style: 'margin-top:8px'}, (window.isEnglish && window.isEnglish() ? '▶ Watch technique' : '▶ Voir la technique')));
+ }
  p.appendChild(gymSkillCard);
  }
 
@@ -4822,8 +4826,10 @@ function renderCrossfitProgram(p) {
 
  var gymVideoUrl = (window.EXERCISE_VIDEOS && window.EXERCISE_VIDEOS.buildCFVideoUrl)
    ? window.EXERCISE_VIDEOS.buildCFVideoUrl((_gym2.name || '').replace('Skill: ', ''))
-   : 'https://www.youtube.com/results?search_query=' + encodeURIComponent((_gym2.name || '').replace('Skill: ', '') + ' crossfit tutorial') + '&sp=EgIYAQ%253D%253D';
- gymCard.appendChild(h('a', {'class': 'exercise-video', href: gymVideoUrl, target: '_blank', rel: 'noopener', style: 'margin-top:8px'}, (window.isEnglish && window.isEnglish() ? '▶ Watch technique' : '▶ Voir la technique')));
+   : null;
+ if (gymVideoUrl) {
+   gymCard.appendChild(h('a', {'class': 'exercise-video', href: gymVideoUrl, target: '_blank', rel: 'noopener', style: 'margin-top:8px'}, (window.isEnglish && window.isEnglish() ? '▶ Watch technique' : '▶ Voir la technique')));
+ }
  p.appendChild(gymCard);
  }
  // For non-haltero days, gym was already shown before the WOD
