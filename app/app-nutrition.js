@@ -556,7 +556,7 @@ function renderStep2(p) {
       goStep(3);
     }
   }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s2page = 0; S.nStep = 1; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { window._s2page = 0; S.nStep = 1; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 2b (N4b): CYCLE MENSTRUEL + GROSSESSE (femmes seulement) ───
@@ -797,7 +797,7 @@ function renderStep2b(p) {
     window._s2page = 0;
     goStep(3);
   }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s2page = 0; goStep(2); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { window._s2page = 0; goStep(2); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 
@@ -1077,7 +1077,7 @@ function renderStep3(p) {
   p.appendChild(h('div', {style: 'height:24px'}));
   var _step2ok = !!(S.weight && S.height);
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !_step2ok, onclick: function() { if (S.weight && S.height) goStep(4); }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() {
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() {
     // Femmes : revenir à N4b sauf si ménopause ou âge ≥ 50
     var _bkAge = getAge();
     var _bkMeno = Array.isArray(S.medical) && S.medical.indexOf('menopause') !== -1;
@@ -1210,7 +1210,7 @@ function renderActiviteSommeil(p) {
   p.appendChild(h('div', {style: 'height:24px'}));
   var ok = S.activity !== null && Array.isArray(S.train) && S.train.length > 0 && S.sleep !== null;
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() { if (ok) goStep(6); }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(4); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { goStep(4); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 8 (MEDICAL): SANTE — CONDITIONS MÉDICALES ───
@@ -1364,7 +1364,7 @@ function renderStep4(p) {
   p.appendChild(warn);
 
   p.appendChild(h('button', {'class': 'btn-primary', onclick: function() { window._s5page = 0; goStep(9); }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(7); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { goStep(7); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 9 (HABITUDES): HABITUDES ALIMENTAIRES (9a) + SUPPLÉMENTATION & ALCOOL (9b) ───
@@ -1488,7 +1488,7 @@ function renderStep5(p) {
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !_canContinue5a, onclick: function() {
     if (_canContinue5a) { window._s5page = 1; window.render(); }
   }}, (window.isEnglish && window.isEnglish() ? 'Continue \u2192 Supplements & Alcohol' : 'Continuer \u2192 Suppl\u00e9ments & Alcool')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s5page = 0; goStep(8); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { window._s5page = 0; goStep(8); }, html: backArrowHtml() + window.t('onb.back')}));
 
   } else {
     // ── 5b: Supplémentation + Alcool ──
@@ -1640,7 +1640,7 @@ function renderStep5(p) {
       goStep(10);
     }
   }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s5page = 0; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { window._s5page = 0; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
   } // end _page === 1
 }
 
@@ -1730,7 +1730,7 @@ function renderStep6(p) {
       bb('nutrition_goal', {goal: 'maintain_pregnancy', target: calcTarget()});
       goStep(5);
     }}, window.t('onb.next')));
-    p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(3); }, html: backArrowHtml() + window.t('onb.back')}));
+    p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { goStep(3); }, html: backArrowHtml() + window.t('onb.back')}));
     return;
   }
 
@@ -1900,7 +1900,7 @@ function renderStep6(p) {
       goStep(5);
     }
   }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(3); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { goStep(3); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 10 (PRÉFÉRENCES): RÉGIME + ALLERGIES + NIVEAU CUISINE + REPAS/J ───
@@ -2000,7 +2000,7 @@ function renderStep7(p) {
 
     p.appendChild(h('div', {style: 'height:24px'}));
     p.appendChild(h('button', {'class': 'btn-primary', onclick: function() { window._s7page = 1; if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} } window.render(); }}, (_isEN ? 'Continue \u2192' : 'Continuer \u2192')));
-    p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s7page = 0; window._s5page = 0; goStep(9); }, html: backArrowHtml() + window.t('onb.back')}));
+    p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { window._s7page = 0; window._s5page = 0; goStep(9); }, html: backArrowHtml() + window.t('onb.back')}));
 
   } else if (_page === 1) {
     // ── 10b : Cuisines + Niveau cuisine ─────────────────────────────────────────
@@ -2040,7 +2040,7 @@ function renderStep7(p) {
     var _ok10b = S.cookLevel !== null && S.cookLevel !== undefined;
     p.appendChild(h('div', {style: 'height:24px'}));
     p.appendChild(h('button', {'class': 'btn-primary', disabled: !_ok10b, onclick: function() { if (_ok10b) { window._s7page = 2; if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} } window.render(); } }}, (_isEN ? 'Continue \u2192' : 'Continuer \u2192')));
-    p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s7page = 0; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
+    p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { window._s7page = 0; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
 
   } else {
     // ── 10c : Whey + Génération ──────────────────────────────────────────────────
@@ -2195,7 +2195,7 @@ function renderStep7(p) {
     }, 50);
   }}, window.t('onb.finish'));
   p.appendChild(_genBtn);
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s7page = 1; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { window._s7page = 1; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
 
   }
 }
@@ -6702,7 +6702,7 @@ function renderBodyScan(p) {
       S._bodyFatEstimate = null;
       window.render();
     }}, (window.isEnglish && window.isEnglish() ? 'Reset' : 'R\u00e9initialiser')));
-    p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(5); }, html: backArrowHtml() + window.t('onb.back')}));
+    p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { goStep(5); }, html: backArrowHtml() + window.t('onb.back')}));
     return;
   }
 
@@ -6793,7 +6793,7 @@ function renderBodyScan(p) {
     S.bodyScanDone = true;
     goStep(7);
   }}, (window.isEnglish && window.isEnglish() ? 'Skip this step \u2192' : 'Passer cette \u00e9tape \u2192')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(5); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { goStep(5); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 7: PROVISIONAL PREVIEW — APERÇU DE L'ESTIMATION PERSONNALISÉE ───
@@ -6851,7 +6851,7 @@ function renderProvisionalPreview(p) {
   p.appendChild(h('button', {'class': 'btn-primary', onclick: function() {
     goStep(8);
   }}, (window.isEnglish && window.isEnglish() ? 'Refine with my health data \u2192' : 'Affiner avec mes donn\u00e9es de sant\u00e9 \u2192')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(6); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': (window.isEnglish && window.isEnglish()) ? 'Back' : 'Retour', onclick: function() { goStep(6); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── PUBLIC API ───
