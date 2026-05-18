@@ -39055,6 +39055,280 @@
     ]
   }
 
+  // ── BATCH P62 — Salades de pâtes ──────────────────────────────────────────────
+  ,{
+    id: 'R985',
+    name: 'Salade de Pâtes Thon Tomates Câpres',
+    category: 'mediterranean',
+    mealTypes: ['lunch'],
+    emoji: '🍝', origin: '🇮🇹',
+    tags: ['salade','express','balanced'],
+    servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
+    // 34×4 + 60×4 + 10×9 = 136+240+90 = 466 ✓
+    baseNutrition: { calories: 466, proteinGrams: 34, carbsGrams: 60, fatGrams: 10 },
+    ingredients: [
+      { name: 'Penne ou farfalle', qty: 160, unit: 'g', note: 'secs' },
+      { name: 'Thon en boîte', qty: 160, unit: 'g', note: 'égoutté' },
+      { name: 'Tomates cerises', qty: 150, unit: 'g' },
+      { name: 'Câpres', qty: 20, unit: 'g' },
+      { name: 'Olives noires', qty: 30, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Jus de citron', qty: 15, unit: 'ml' },
+      { name: 'Basilic frais', qty: 8, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Cuire les pâtes al dente. Égoutter, rincer à l'eau froide pour stopper la cuisson.",
+      "Couper les tomates cerises en deux. Émietter le thon.",
+      "Mélanger les pâtes froides avec thon, tomates, câpres et olives.",
+      "Assaisonner avec huile d'olive, jus de citron, sel, poivre et basilic. Réfrigérer 30 min avant de servir."
+    ]
+  }
+  ,{
+    id: 'R986',
+    name: 'Salade de Pâtes Poulet Pesto Roquette',
+    category: 'italian',
+    mealTypes: ['lunch'],
+    emoji: '🌿', origin: '🇮🇹',
+    tags: ['salade','high-protein','express'],
+    servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
+    // 44×4 + 58×4 + 16×9 = 176+232+144 = 552 ✓
+    baseNutrition: { calories: 552, proteinGrams: 44, carbsGrams: 58, fatGrams: 16 },
+    ingredients: [
+      { name: 'Fusilli', qty: 160, unit: 'g', note: 'secs' },
+      { name: 'Blanc de poulet grillé', qty: 200, unit: 'g' },
+      { name: 'Roquette', qty: 60, unit: 'g' },
+      { name: 'Tomates séchées', qty: 40, unit: 'g' },
+      { name: 'Pesto vert', qty: 40, unit: 'g' },
+      { name: 'Parmesan copeaux', qty: 20, unit: 'g' },
+      { name: 'Pignons de pin', qty: 15, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      "Cuire les pâtes al dente. Égoutter, rincer et laisser refroidir.",
+      "Couper le poulet grillé en lamelles. Émincer les tomates séchées.",
+      "Mélanger les pâtes avec le pesto, ajouter poulet, tomates séchées et roquette.",
+      "Servir avec les copeaux de parmesan et les pignons grillés à sec. Assaisonner avec l'huile d'olive."
+    ]
+  }
+  ,{
+    id: 'R987',
+    name: 'Salade de Pâtes Crevettes Avocat Citron',
+    category: 'mediterranean',
+    mealTypes: ['lunch'],
+    emoji: '🥑', origin: '🌍',
+    tags: ['salade','high-protein','light'],
+    servings: 2, prepTime: 15, cookTime: 10, difficulty: 1,
+    // 36×4 + 56×4 + 14×9 = 144+224+126 = 494 ✓
+    baseNutrition: { calories: 494, proteinGrams: 36, carbsGrams: 56, fatGrams: 14 },
+    ingredients: [
+      { name: 'Fusilli ou conchiglie', qty: 160, unit: 'g', note: 'secs' },
+      { name: 'Crevettes cuites décortiquées', qty: 180, unit: 'g' },
+      { name: 'Avocat', qty: 1, unit: 'pce' },
+      { name: 'Concombre', qty: 100, unit: 'g' },
+      { name: 'Citron', qty: 1, unit: 'pce' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Aneth frais', qty: 5, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Cuire les pâtes al dente. Rincer à l'eau froide, égoutter.",
+      "Couper l'avocat en dés, arroser de jus de citron pour éviter l'oxydation. Émincer le concombre.",
+      "Mélanger pâtes, crevettes, avocat et concombre.",
+      "Assaisonner avec huile d'olive, jus de citron, aneth, sel et poivre. Servir frais."
+    ]
+  }
+  ,{
+    id: 'R988',
+    name: 'Salade de Pâtes Jambon Mozzarella Basil',
+    category: 'italian',
+    mealTypes: ['lunch'],
+    emoji: '🧀', origin: '🇮🇹',
+    tags: ['salade','comfort','classic'],
+    servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
+    // 30×4 + 58×4 + 14×9 = 120+232+126 = 478 ✓
+    baseNutrition: { calories: 478, proteinGrams: 30, carbsGrams: 58, fatGrams: 14 },
+    ingredients: [
+      { name: 'Penne', qty: 160, unit: 'g', note: 'secs' },
+      { name: 'Jambon blanc', qty: 100, unit: 'g' },
+      { name: 'Mozzarella', qty: 80, unit: 'g' },
+      { name: 'Tomates cerises', qty: 150, unit: 'g' },
+      { name: 'Basilic frais', qty: 10, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Vinaigre balsamique', qty: 10, unit: 'ml' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Cuire les pâtes al dente. Refroidir sous eau froide.",
+      "Couper la mozzarella en dés, le jambon en lanières et les tomates en deux.",
+      "Mélanger le tout avec les pâtes froides.",
+      "Assaisonner avec huile d'olive, vinaigre balsamique, sel et poivre. Ajouter le basilic déchiré. Servir à température ambiante."
+    ]
+  }
+  ,{
+    id: 'R989',
+    name: 'Salade de Pâtes Saumon Fumé Aneth Câpres',
+    category: 'french',
+    mealTypes: ['lunch'],
+    emoji: '🐟', origin: '🇫🇷',
+    tags: ['salade','high-protein','chic'],
+    servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
+    // 32×4 + 58×4 + 12×9 = 128+232+108 = 468 ✓
+    baseNutrition: { calories: 468, proteinGrams: 32, carbsGrams: 58, fatGrams: 12 },
+    ingredients: [
+      { name: 'Pâtes courtes (farfalle)', qty: 160, unit: 'g', note: 'secs' },
+      { name: 'Saumon fumé', qty: 120, unit: 'g' },
+      { name: 'Câpres', qty: 20, unit: 'g' },
+      { name: 'Concombre', qty: 100, unit: 'g' },
+      { name: 'Crème fraîche légère', qty: 40, unit: 'ml' },
+      { name: 'Citron', qty: 1, unit: 'pce' },
+      { name: 'Aneth frais', qty: 8, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Cuire les pâtes al dente. Rincer à l'eau froide.",
+      "Couper le saumon en lamelles, le concombre en demi-rondelles.",
+      "Mélanger crème fraîche, jus de citron, aneth, sel et poivre pour la sauce.",
+      "Assembler les pâtes avec saumon, concombre et câpres. Napper de sauce. Réfrigérer 20 min avant de servir."
+    ]
+  }
+
+  // ── BATCH P63 — Salades roquette & mâche ──────────────────────────────────────
+  ,{
+    id: 'R990',
+    name: 'Salade Roquette Poulet Grillé Parmesan',
+    category: 'italian',
+    mealTypes: ['lunch'],
+    emoji: '🥗', origin: '🇮🇹',
+    tags: ['salade','high-protein','light'],
+    servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
+    // 44×4 + 8×4 + 14×9 = 176+32+126 = 334 ✓
+    baseNutrition: { calories: 334, proteinGrams: 44, carbsGrams: 8, fatGrams: 14 },
+    ingredients: [
+      { name: 'Roquette', qty: 100, unit: 'g' },
+      { name: 'Blanc de poulet grillé', qty: 250, unit: 'g' },
+      { name: 'Parmesan', qty: 30, unit: 'g', note: 'copeaux' },
+      { name: 'Tomates cerises', qty: 120, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Jus de citron', qty: 15, unit: 'ml' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Griller les blancs de poulet assaisonnés 5-6 min par face. Laisser reposer 3 min, trancher.",
+      "Disposer la roquette dans les assiettes, ajouter les tomates coupées en deux.",
+      "Poser les lamelles de poulet tièdes sur la roquette.",
+      "Arroser d'huile d'olive et de jus de citron. Couvrir de copeaux de parmesan, poivrer généreusement."
+    ]
+  }
+  ,{
+    id: 'R991',
+    name: 'Salade Mâche Crevettes Mangue',
+    category: 'french',
+    mealTypes: ['lunch'],
+    emoji: '🦐', origin: '🇫🇷',
+    tags: ['salade','high-protein','chic'],
+    servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
+    // 22×4 + 24×4 + 8×9 = 88+96+72 = 256 ✓
+    baseNutrition: { calories: 256, proteinGrams: 22, carbsGrams: 24, fatGrams: 8 },
+    ingredients: [
+      { name: 'Mâche', qty: 100, unit: 'g' },
+      { name: 'Crevettes cuites', qty: 200, unit: 'g' },
+      { name: 'Mangue', qty: 150, unit: 'g', note: 'mûre, en dés' },
+      { name: 'Avocat', qty: 1, unit: 'pce', note: 'demi' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Citron vert', qty: 1, unit: 'pce' },
+      { name: 'Coriandre fraîche', qty: 5, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Répartir la mâche dans les assiettes.",
+      "Couper l'avocat en lamelles, la mangue en dés.",
+      "Disposer crevettes, mangue et avocat sur la mâche.",
+      "Assaisonner avec huile d'olive, jus de citron vert, coriandre, sel et poivre."
+    ]
+  }
+  ,{
+    id: 'R992',
+    name: 'Salade Roquette Thon Câpres Oeufs Durs',
+    category: 'french',
+    mealTypes: ['lunch'],
+    emoji: '🐟', origin: '🇫🇷',
+    tags: ['salade','high-protein','classic'],
+    servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
+    // 38×4 + 6×4 + 12×9 = 152+24+108 = 284 ✓
+    baseNutrition: { calories: 284, proteinGrams: 38, carbsGrams: 6, fatGrams: 12 },
+    ingredients: [
+      { name: 'Roquette', qty: 100, unit: 'g' },
+      { name: 'Thon en boîte', qty: 160, unit: 'g', note: 'égoutté' },
+      { name: 'Oeufs durs', qty: 2, unit: 'pce' },
+      { name: 'Câpres', qty: 15, unit: 'g' },
+      { name: 'Tomates', qty: 2, unit: 'pce' },
+      { name: 'Oignon rouge', qty: 1, unit: 'pce', note: 'demi, émincé' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Vinaigre de vin rouge', qty: 10, unit: 'ml' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Cuire les oeufs durs 10 min, refroidir et couper en quartiers.",
+      "Disposer la roquette en base. Ajouter les tomates en dés, l'oignon rouge et les câpres.",
+      "Émietter le thon sur la salade. Ajouter les quartiers d'oeufs.",
+      "Assaisonner avec huile d'olive, vinaigre de vin, sel et poivre."
+    ]
+  }
+  ,{
+    id: 'R993',
+    name: 'Salade Mâche Betterave Noix Chèvre',
+    category: 'french',
+    mealTypes: ['lunch'],
+    emoji: '🫐', origin: '🇫🇷',
+    tags: ['salade','vegetarian','classic'],
+    servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
+    // 14×4 + 18×4 + 18×9 = 56+72+162 = 290 ✓
+    baseNutrition: { calories: 290, proteinGrams: 14, carbsGrams: 18, fatGrams: 18 },
+    ingredients: [
+      { name: 'Mâche', qty: 100, unit: 'g' },
+      { name: 'Betterave cuite', qty: 150, unit: 'g', note: 'en dés' },
+      { name: 'Chèvre frais', qty: 80, unit: 'g' },
+      { name: 'Cerneaux de noix', qty: 30, unit: 'g' },
+      { name: 'Huile de noix', qty: 15, unit: 'ml' },
+      { name: 'Vinaigre balsamique', qty: 10, unit: 'ml' },
+      { name: 'Miel', qty: 5, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Préparer la vinaigrette : huile de noix, vinaigre balsamique, miel, sel et poivre.",
+      "Répartir la mâche dans les assiettes.",
+      "Disposer les dés de betterave et émietter le chèvre frais dessus.",
+      "Ajouter les cerneaux de noix. Arroser de vinaigrette balsamique miel."
+    ]
+  }
+  ,{
+    id: 'R994',
+    name: 'Salade Roquette Crevettes Parmesan Citron',
+    category: 'italian',
+    mealTypes: ['lunch'],
+    emoji: '🦐', origin: '🇮🇹',
+    tags: ['salade','high-protein','chic'],
+    servings: 2, prepTime: 10, cookTime: 5, difficulty: 1,
+    // 30×4 + 6×4 + 12×9 = 120+24+108 = 252 ✓
+    baseNutrition: { calories: 252, proteinGrams: 30, carbsGrams: 6, fatGrams: 12 },
+    ingredients: [
+      { name: 'Roquette', qty: 100, unit: 'g' },
+      { name: 'Crevettes cuites', qty: 250, unit: 'g' },
+      { name: 'Parmesan', qty: 25, unit: 'g', note: 'copeaux' },
+      { name: 'Citron', qty: 1, unit: 'pce' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Ail', qty: 1, unit: 'pce', note: 'gousse, optionnel' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Si les crevettes sont crues, les poêler à l'ail 2-3 min. Laisser tiédir.",
+      "Disposer la roquette dans les assiettes.",
+      "Ajouter les crevettes tièdes ou froides.",
+      "Arroser généreusement de jus de citron et d'huile d'olive. Couvrir de copeaux de parmesan et poivrer."
+    ]
+  }
+
   // ─────────────────────────────────────────────────────────────────────────────
   // FIN RECIPES_DB — à continuer avec les batches suivants au-dessus de cette ligne
   // ─────────────────────────────────────────────────────────────────────────────
