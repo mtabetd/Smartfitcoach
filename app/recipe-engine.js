@@ -33802,6 +33802,842 @@
         "Ajouter les haricots blancs égouttés les 10 dernières minutes pour les réchauffer sans les écraser.",
         "Rectifier sel et poivre. Écraser quelques haricots dans la casserole pour épaissir naturellement. Servir bien chaud."
       ]
+    },
+
+    // ═══ BATCH P26 — Poisson Simple ═══
+
+    {
+      id: 'R805',
+      name: 'Saumon Poêlé Beurre Citron & Câpres',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'omega3', 'rapide'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 12,
+      difficulty: 1,
+      // 60×4 + 8×4 + 28×9 = 240+32+252 = 524 kcal ✓
+      baseNutrition: { calories: 524, proteinGrams: 60, carbsGrams: 8, fatGrams: 28 },
+      ingredients: [
+        { name: 'Pavés de saumon',    qty: 400, unit: 'g', note: 'peau enlevée ou gardée' },
+        { name: 'Beurre',             qty: 30,  unit: 'g' },
+        { name: 'Câpres',             qty: 20,  unit: 'g' },
+        { name: 'Citron',             qty: 1,   unit: 'pce' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' },
+        { name: 'Persil frais',       qty: 10,  unit: 'g' },
+        { name: 'Huile d\'olive',     qty: 10,  unit: 'ml' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Sécher les pavés de saumon avec du papier absorbant. Saler et poivrer les deux faces.",
+        "Chauffer l'huile dans une poêle à feu vif. Saisir le saumon côté peau 4 min, retourner et cuire 3 min côté chair — il doit rester rosé à coeur.",
+        "Réserver le saumon. Dans la même poêle, baisser le feu, ajouter le beurre. Quand il mousse, ajouter l'ail haché et les câpres 1 min.",
+        "Déglacer avec le jus d'un citron, remuer pour récupérer les sucs. Ajouter le persil haché.",
+        "Napper le saumon de sauce beurre-câpres et servir immédiatement avec du riz blanc ou des légumes vapeur."
+      ]
+    },
+
+    {
+      id: 'R806',
+      name: 'Cabillaud Gratiné Moutarde & Chapelure',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐠',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'leger', 'four'],
+      servings: 2,
+      prepTime: 8,
+      cookTime: 15,
+      difficulty: 1,
+      // 62×4 + 20×4 + 14×9 = 248+80+126 = 454 kcal ✓
+      baseNutrition: { calories: 454, proteinGrams: 62, carbsGrams: 20, fatGrams: 14 },
+      ingredients: [
+        { name: 'Dos de cabillaud',   qty: 400, unit: 'g' },
+        { name: 'Moutarde de Dijon',  qty: 30,  unit: 'g' },
+        { name: 'Chapelure',          qty: 40,  unit: 'g' },
+        { name: 'Parmesan râpé',      qty: 20,  unit: 'g' },
+        { name: 'Beurre',             qty: 20,  unit: 'g' },
+        { name: 'Thym séché',         qty: 2,   unit: 'g' },
+        { name: 'Citron',             qty: 1,   unit: 'pce' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Préchauffer le four à 200°C. Poser les dos de cabillaud dans un plat huilé. Saler et poivrer.",
+        "Badigeonner généreusement chaque dos avec la moutarde de Dijon sur toute la surface.",
+        "Mélanger chapelure, parmesan et thym. Presser sur la moutarde pour former une croûte. Déposer quelques noisettes de beurre.",
+        "Enfourner 13-15 min jusqu'à ce que la croûte soit dorée et le poisson opaque à coeur.",
+        "Servir avec un filet de jus de citron. Accompagner de purée ou de haricots verts."
+      ]
+    },
+
+    {
+      id: 'R807',
+      name: 'Thon Frais Poêlé Sésame & Sauce Soja',
+      category: 'japanese',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍣',
+      origin: '🇯🇵',
+      tags: ['high-protein', 'omega3', 'asian'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 6,
+      difficulty: 1,
+      // 64×4 + 12×4 + 18×9 = 256+48+162 = 466 kcal ✓
+      baseNutrition: { calories: 466, proteinGrams: 64, carbsGrams: 12, fatGrams: 18 },
+      ingredients: [
+        { name: 'Thon frais en pavé', qty: 360, unit: 'g' },
+        { name: 'Graines de sésame', qty: 30,  unit: 'g' },
+        { name: 'Sauce soja',         qty: 30,  unit: 'ml' },
+        { name: 'Huile de sésame',    qty: 15,  unit: 'ml' },
+        { name: 'Gingembre frais',    qty: 10,  unit: 'g' },
+        { name: 'Ail',                qty: 1,   unit: 'pce' },
+        { name: 'Miel',               qty: 10,  unit: 'g' },
+        { name: 'Oignons verts',      qty: 20,  unit: 'g' }
+      ],
+      steps: [
+        "Mélanger sauce soja, miel, gingembre râpé et ail haché. Mariner le thon 5 min dans ce mélange.",
+        "Verser les graines de sésame dans une assiette. Rouler les pavés de thon dedans pour les enrober.",
+        "Chauffer l'huile de sésame à feu très vif dans une poêle. Saisir le thon 1 min 30 par face — il doit rester rouge à coeur.",
+        "Trancher chaque pavé en épaisses lamelles. Disposer sur un lit de riz ou de salade.",
+        "Napper du reste de marinade (portée à ébullition 1 min) et parsemer d'oignons verts ciselés."
+      ]
+    },
+
+    {
+      id: 'R808',
+      name: 'Sardines au Four Tomates Confites & Ail',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇮🇹',
+      tags: ['omega3', 'mediteraneen', 'economique'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 20,
+      difficulty: 1,
+      // 50×4 + 18×4 + 22×9 = 200+72+198 = 470 kcal ✓
+      baseNutrition: { calories: 470, proteinGrams: 50, carbsGrams: 18, fatGrams: 22 },
+      ingredients: [
+        { name: 'Sardines fraîches',  qty: 400, unit: 'g', note: 'vidées, écaillées' },
+        { name: 'Tomates cerises',    qty: 200, unit: 'g' },
+        { name: 'Ail',                qty: 4,   unit: 'pce' },
+        { name: 'Huile d\'olive',     qty: 30,  unit: 'ml' },
+        { name: 'Thym frais',         qty: 5,   unit: 'g' },
+        { name: 'Origan séché',       qty: 2,   unit: 'g' },
+        { name: 'Citron',             qty: 1,   unit: 'pce' },
+        { name: 'Pain de campagne',   qty: 60,  unit: 'g', note: 'pour servir' }
+      ],
+      steps: [
+        "Préchauffer le four à 190°C. Couper les tomates cerises en deux, écraser légèrement les gousses d'ail.",
+        "Dans un plat à rôtir, disposer les tomates, l'ail, l'origan et la moitié de l'huile. Enfourner 10 min.",
+        "Poser les sardines sur le lit de tomates. Arroser du reste d'huile, ajouter le thym et le jus de citron.",
+        "Enfourner 10-12 min supplémentaires — la peau des sardines doit être légèrement croustillante.",
+        "Servir directement dans le plat avec du pain de campagne grillé pour éponger le jus parfumé."
+      ]
+    },
+
+    {
+      id: 'R809',
+      name: 'Maquereau Grillé Sauce Moutarde Persil',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇫🇷',
+      tags: ['omega3', 'economique', 'rapide'],
+      servings: 2,
+      prepTime: 8,
+      cookTime: 10,
+      difficulty: 1,
+      // 52×4 + 10×4 + 24×9 = 208+40+216 = 464 kcal ✓
+      baseNutrition: { calories: 464, proteinGrams: 52, carbsGrams: 10, fatGrams: 24 },
+      ingredients: [
+        { name: 'Maquereaux entiers', qty: 400, unit: 'g', note: 'vidés et fendus' },
+        { name: 'Moutarde à l\'ancienne', qty: 25, unit: 'g' },
+        { name: 'Huile d\'olive',     qty: 20,  unit: 'ml' },
+        { name: 'Persil frais',       qty: 15,  unit: 'g' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' },
+        { name: 'Citron',             qty: 1,   unit: 'pce' },
+        { name: 'Pommes de terre',    qty: 200, unit: 'g', note: 'pour servir' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Mélanger la moutarde, l'huile, l'ail haché et le persil ciselé pour former une sauce.",
+        "Inciser la chair des maquereaux en croisillons. Badigeonner généreusement avec la moitié de la sauce.",
+        "Griller les maquereaux sous le gril du four à 220°C pendant 8-10 min, côté chair vers le haut, sans retourner.",
+        "Cuire les pommes de terre vapeur pendant ce temps.",
+        "Servir les maquereaux avec le reste de sauce froide, les pommes de terre et un filet de citron."
+      ]
+    },
+
+    // ═══ BATCH P27 — Viandes Rouges Simples ═══
+
+    {
+      id: 'R810',
+      name: 'Entrecôte Grillée Beurre Maître d\'Hôtel',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥩',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'boucherie', 'classique'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 10,
+      difficulty: 1,
+      // 70×4 + 4×4 + 30×9 = 280+16+270 = 566 kcal ✓
+      baseNutrition: { calories: 566, proteinGrams: 70, carbsGrams: 4, fatGrams: 30 },
+      ingredients: [
+        { name: 'Entrecôte de boeuf', qty: 500, unit: 'g', note: '2 pièces de 250g' },
+        { name: 'Beurre',             qty: 60,  unit: 'g' },
+        { name: 'Persil frais',       qty: 15,  unit: 'g' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' },
+        { name: 'Jus de citron',      qty: 10,  unit: 'ml' },
+        { name: 'Fleur de sel',       qty: 2,   unit: 'g' },
+        { name: 'Poivre du moulin',   qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Préparer le beurre maître d'hôtel : mélanger beurre mou, persil haché, ail écrasé et jus de citron. Façonner en boudin dans du film, réfrigérer 20 min.",
+        "Sortir les entrecôtes du frigo 30 min avant. Saler et poivrer au dernier moment.",
+        "Chauffer une poêle fonte ou grill à feu très vif sans matière grasse. Saisir les entrecôtes 2-3 min par face pour saignant.",
+        "Laisser reposer 5 min sur une planche recouverte de papier alu — étape indispensable.",
+        "Déposer une rondelle de beurre maître d'hôtel sur chaque entrecôte chaude. Finir avec de la fleur de sel."
+      ]
+    },
+
+    {
+      id: 'R811',
+      name: 'Côte de Veau Poêlée Crème & Champignons',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥩',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'classique', 'cremeux'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 20,
+      difficulty: 2,
+      // 62×4 + 14×4 + 28×9 = 248+56+252 = 556 kcal ✓
+      baseNutrition: { calories: 556, proteinGrams: 62, carbsGrams: 14, fatGrams: 28 },
+      ingredients: [
+        { name: 'Côtes de veau',      qty: 480, unit: 'g', note: '2 pièces' },
+        { name: 'Champignons de Paris', qty: 200, unit: 'g' },
+        { name: 'Crème fraîche épaisse', qty: 100, unit: 'ml' },
+        { name: 'Échalotes',          qty: 60,  unit: 'g' },
+        { name: 'Vin blanc sec',      qty: 80,  unit: 'ml' },
+        { name: 'Beurre',             qty: 20,  unit: 'g' },
+        { name: 'Thym frais',         qty: 3,   unit: 'g' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Saler et poivrer les côtes de veau. Dans une poêle, dorer au beurre 4 min par face à feu moyen-vif.",
+        "Réserver la viande. Dans la même poêle, faire revenir les échalotes émincées 3 min.",
+        "Ajouter les champignons en lamelles, cuire 5 min jusqu'à évaporation de l'eau.",
+        "Déglacer au vin blanc, laisser réduire de moitié. Ajouter la crème et le thym, mijoter 3 min.",
+        "Remettre les côtes de veau dans la sauce 2 min pour réchauffer. Rectifier l'assaisonnement et servir."
+      ]
+    },
+
+    {
+      id: 'R812',
+      name: 'Agneau aux Légumes du Soleil',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥩',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'mediteraneen', 'one-pan'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 25,
+      difficulty: 1,
+      // 58×4 + 22×4 + 26×9 = 232+88+234 = 554 kcal ✓
+      baseNutrition: { calories: 554, proteinGrams: 58, carbsGrams: 22, fatGrams: 26 },
+      ingredients: [
+        { name: 'Côtelettes d\'agneau', qty: 480, unit: 'g', note: '4 pièces' },
+        { name: 'Courgette',           qty: 150, unit: 'g' },
+        { name: 'Poivron rouge',       qty: 120, unit: 'g' },
+        { name: 'Tomates cerises',     qty: 150, unit: 'g' },
+        { name: 'Ail',                 qty: 4,   unit: 'pce' },
+        { name: 'Huile d\'olive',      qty: 25,  unit: 'ml' },
+        { name: 'Romarin frais',       qty: 5,   unit: 'g' },
+        { name: 'Sel, poivre',         qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Préchauffer le four à 200°C. Couper la courgette et le poivron en gros cubes. Écraser les gousses d'ail.",
+        "Disposer les légumes dans un grand plat. Arroser d'huile, ajouter le romarin, sel et poivre. Enfourner 15 min.",
+        "Saler et poivrer les côtelettes. Les saisir 2 min par face dans une poêle gril bien chaude.",
+        "Poser les côtelettes sur les légumes à mi-cuisson. Ajouter les tomates cerises. Enfourner encore 10 min.",
+        "Servir directement dans le plat — les sucs de l'agneau parfument les légumes en fin de cuisson."
+      ]
+    },
+
+    {
+      id: 'R813',
+      name: 'Steak Haché Maison Sauce au Poivre',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥩',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'boucherie', 'bistrot'],
+      servings: 2,
+      prepTime: 8,
+      cookTime: 12,
+      difficulty: 1,
+      // 56×4 + 16×4 + 28×9 = 224+64+252 = 540 kcal ✓
+      baseNutrition: { calories: 540, proteinGrams: 56, carbsGrams: 16, fatGrams: 28 },
+      ingredients: [
+        { name: 'Steak haché 15% MG',  qty: 400, unit: 'g', note: '2 steaks' },
+        { name: 'Crème fraîche',       qty: 80,  unit: 'ml' },
+        { name: 'Fond de veau',        qty: 100, unit: 'ml' },
+        { name: 'Cognac ou Armagnac', qty: 20,  unit: 'ml' },
+        { name: 'Poivre concassé',     qty: 5,   unit: 'g' },
+        { name: 'Beurre',              qty: 15,  unit: 'g' },
+        { name: 'Échalote',            qty: 30,  unit: 'g' },
+        { name: 'Sel',                 qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Façonner les steaks en galettes épaisses. Saler les deux faces. Laisser à température ambiante 10 min.",
+        "Cuire les steaks dans une poêle bien chaude avec le beurre — 3 min par face pour saignant, 4 min pour à point.",
+        "Réserver les steaks. Dans la même poêle, faire revenir l'échalote hachée 2 min.",
+        "Flamber au cognac (attention aux flammes). Ajouter le fond de veau et le poivre concassé. Réduire 2 min.",
+        "Incorporer la crème, mélanger et chauffer 1 min. Napper les steaks de sauce au poivre. Servir avec des frites."
+      ]
+    },
+
+    {
+      id: 'R814',
+      name: 'Foie de Veau à l\'Anglaise Beurre & Persil',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥩',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'fer', 'boucherie', 'rapide'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 8,
+      difficulty: 1,
+      // 60×4 + 14×4 + 22×9 = 240+56+198 = 494 kcal ✓
+      baseNutrition: { calories: 494, proteinGrams: 60, carbsGrams: 14, fatGrams: 22 },
+      ingredients: [
+        { name: 'Foie de veau',       qty: 360, unit: 'g', note: 'tranches fines' },
+        { name: 'Beurre',             qty: 40,  unit: 'g' },
+        { name: 'Persil frais',       qty: 15,  unit: 'g' },
+        { name: 'Farine',             qty: 20,  unit: 'g' },
+        { name: 'Vinaigre de vin',    qty: 15,  unit: 'ml' },
+        { name: 'Oignon',             qty: 80,  unit: 'g' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Émincer finement l'oignon. Le faire fondre doucement dans 20g de beurre 8 min à feu doux, sans colorer.",
+        "Fariner légèrement les tranches de foie sur les deux faces. Secouer l'excédent.",
+        "Dans une autre poêle, chauffer le reste de beurre à feu vif. Saisir le foie 1 min 30 par face — il doit rester rosé.",
+        "Déglacer la poêle du foie avec le vinaigre de vin et une cuillère d'eau. Remuer pour récupérer les sucs.",
+        "Servir le foie sur les oignons confits, napper du jus de déglacement et parsemer de persil ciselé."
+      ]
+    },
+
+    // ═══ BATCH P28 — Pâtes & Gnocchi Supplémentaires ═══
+
+    {
+      id: 'R815',
+      name: 'Gnocchi Poêlés Beurre Sauge & Parmesan',
+      category: 'italian',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥟',
+      origin: '🇮🇹',
+      tags: ['comfort-food', 'vegetarien', 'rapide'],
+      servings: 2,
+      prepTime: 2,
+      cookTime: 10,
+      difficulty: 1,
+      // 32×4 + 96×4 + 22×9 = 128+384+198 = 710 kcal ✓
+      baseNutrition: { calories: 710, proteinGrams: 32, carbsGrams: 96, fatGrams: 22 },
+      ingredients: [
+        { name: 'Gnocchi frais',      qty: 500, unit: 'g' },
+        { name: 'Beurre',             qty: 40,  unit: 'g' },
+        { name: 'Sauge fraîche',      qty: 10,  unit: 'g' },
+        { name: 'Parmesan râpé',      qty: 60,  unit: 'g' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Cuire les gnocchi dans une grande casserole d'eau bouillante salée jusqu'à ce qu'ils remontent à la surface (2 min). Égoutter.",
+        "Dans une grande poêle, faire fondre le beurre à feu moyen. Ajouter les feuilles de sauge entières et l'ail écrasé.",
+        "Quand le beurre mousse et prend une couleur noisette, ajouter les gnocchi égouttés.",
+        "Poêler les gnocchi 3-4 min en les remuant jusqu'à ce qu'ils soient dorés et légèrement croustillants.",
+        "Hors du feu, ajouter le parmesan râpé et mélanger. Poivrer généreusement. Servir immédiatement."
+      ]
+    },
+
+    {
+      id: 'R816',
+      name: 'Lasagnes Bolognaise Classiques',
+      category: 'italian',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍝',
+      origin: '🇮🇹',
+      tags: ['comfort-food', 'famille', 'four'],
+      servings: 4,
+      prepTime: 30,
+      cookTime: 45,
+      difficulty: 2,
+      // 120×4 + 260×4 + 80×9 = 480+1040+720 = 2240 kcal ✓
+      baseNutrition: { calories: 2240, proteinGrams: 120, carbsGrams: 260, fatGrams: 80 },
+      ingredients: [
+        { name: 'Feuilles de lasagnes', qty: 250, unit: 'g' },
+        { name: 'Viande hachée boeuf', qty: 500, unit: 'g' },
+        { name: 'Tomates concassées', qty: 400, unit: 'g' },
+        { name: 'Concentré de tomate', qty: 30, unit: 'g' },
+        { name: 'Oignon',             qty: 100, unit: 'g' },
+        { name: 'Ail',                qty: 3,   unit: 'pce' },
+        { name: 'Lait',               qty: 500, unit: 'ml' },
+        { name: 'Farine',             qty: 40,  unit: 'g' },
+        { name: 'Beurre',             qty: 40,  unit: 'g' },
+        { name: 'Gruyère râpé',       qty: 100, unit: 'g' },
+        { name: 'Huile d\'olive',     qty: 15,  unit: 'ml' }
+      ],
+      steps: [
+        "Bolognaise : faire revenir l'oignon et l'ail hachés dans l'huile 5 min. Ajouter la viande, cuire jusqu'à coloration. Ajouter tomates et concentré, mijoter 20 min.",
+        "Béchamel : faire un roux avec beurre et farine 2 min. Incorporer le lait chaud en fouettant, cuire 5 min jusqu'à épaississement. Saler, muscade.",
+        "Préchauffer le four à 180°C. Alterner dans un grand plat : béchamel, feuilles de lasagnes, bolognaise, répéter 3 fois.",
+        "Finir par une couche de béchamel généreuse. Parsemer de gruyère râpé.",
+        "Enfourner 35-40 min à couvert d'abord, puis découvert 10 min pour gratiner. Laisser reposer 10 min avant de couper."
+      ]
+    },
+
+    {
+      id: 'R817',
+      name: 'Pappardelle au Ragù de Veau & Vin Blanc',
+      category: 'italian',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍝',
+      origin: '🇮🇹',
+      tags: ['comfort-food', 'mijoté', 'premium'],
+      servings: 4,
+      prepTime: 15,
+      cookTime: 50,
+      difficulty: 2,
+      // 128×4 + 296×4 + 64×9 = 512+1184+576 = 2272 kcal ✓
+      baseNutrition: { calories: 2272, proteinGrams: 128, carbsGrams: 296, fatGrams: 64 },
+      ingredients: [
+        { name: 'Pappardelle',        qty: 350, unit: 'g' },
+        { name: 'Veau haché',         qty: 500, unit: 'g' },
+        { name: 'Vin blanc sec',      qty: 150, unit: 'ml' },
+        { name: 'Tomates concassées', qty: 300, unit: 'g' },
+        { name: 'Oignon',             qty: 100, unit: 'g' },
+        { name: 'Carottes',           qty: 80,  unit: 'g' },
+        { name: 'Céleri',             qty: 60,  unit: 'g' },
+        { name: 'Parmesan râpé',      qty: 60,  unit: 'g' },
+        { name: 'Huile d\'olive',     qty: 20,  unit: 'ml' },
+        { name: 'Laurier',            qty: 2,   unit: 'feuille' }
+      ],
+      steps: [
+        "Hacher finement oignon, carotte et céleri (soffritto). Faire revenir dans l'huile 8 min à feu doux.",
+        "Ajouter la viande de veau hachée. Cuire à feu moyen en émiettant jusqu'à coloration complète, 8 min.",
+        "Déglacer au vin blanc, laisser évaporer complètement 5 min. Ajouter les tomates et le laurier.",
+        "Couvrir et mijoter à feu très doux 35-40 min. Le ragù doit être dense et parfumé.",
+        "Cuire les pappardelle al dente. Les mélanger directement dans la sauce avec 2 cs d'eau de cuisson. Servir avec le parmesan."
+      ]
+    },
+
+    {
+      id: 'R818',
+      name: 'Farfalle au Pesto Rosso & Burrata',
+      category: 'italian',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍝',
+      origin: '🇮🇹',
+      tags: ['vegetarien', 'cremeux', 'rapide'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 12,
+      difficulty: 1,
+      // 42×4 + 130×4 + 32×9 = 168+520+288 = 976 kcal ✓
+      baseNutrition: { calories: 976, proteinGrams: 42, carbsGrams: 130, fatGrams: 32 },
+      ingredients: [
+        { name: 'Farfalle',           qty: 320, unit: 'g' },
+        { name: 'Pesto rosso',        qty: 80,  unit: 'g' },
+        { name: 'Burrata',            qty: 125, unit: 'g' },
+        { name: 'Tomates cerises',    qty: 150, unit: 'g' },
+        { name: 'Basilic frais',      qty: 10,  unit: 'g' },
+        { name: 'Huile d\'olive',     qty: 10,  unit: 'ml' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Cuire les farfalle dans une grande casserole d'eau bouillante salée selon le temps indiqué. Réserver 1 verre d'eau de cuisson.",
+        "Couper les tomates cerises en deux. Les faire sauter 3 min dans l'huile d'olive à feu vif.",
+        "Égoutter les pâtes al dente. Les mélanger avec le pesto rosso et un peu d'eau de cuisson pour lier.",
+        "Ajouter les tomates cerises, mélanger. Rectifier sel et poivre.",
+        "Déposer la burrata entière au centre du plat. La déchirer à table. Parsemer de basilic frais."
+      ]
+    },
+
+    {
+      id: 'R819',
+      name: 'Spaghetti Vongole alle Palourdes',
+      category: 'italian',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍝',
+      origin: '🇮🇹',
+      tags: ['fruits-de-mer', 'classsique-italian', 'high-protein'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 15,
+      difficulty: 2,
+      // 44×4 + 148×4 + 18×9 = 176+592+162 = 930 kcal ✓
+      baseNutrition: { calories: 930, proteinGrams: 44, carbsGrams: 148, fatGrams: 18 },
+      ingredients: [
+        { name: 'Spaghetti',          qty: 320, unit: 'g' },
+        { name: 'Palourdes fraîches', qty: 500, unit: 'g' },
+        { name: 'Vin blanc sec',      qty: 100, unit: 'ml' },
+        { name: 'Ail',                qty: 4,   unit: 'pce' },
+        { name: 'Piment rouge séché', qty: 1,   unit: 'pce' },
+        { name: 'Huile d\'olive',     qty: 30,  unit: 'ml' },
+        { name: 'Persil frais',       qty: 15,  unit: 'g' }
+      ],
+      steps: [
+        "Faire tremper les palourdes 30 min dans de l'eau salée pour purger le sable. Rincer.",
+        "Cuire les spaghetti très al dente (2 min avant le temps indiqué). Réserver 200ml d'eau de cuisson.",
+        "Dans une grande poêle, chauffer l'huile et faire dorer l'ail émincé avec le piment 1 min.",
+        "Ajouter les palourdes et le vin blanc, couvrir et cuire 3-4 min jusqu'à ouverture. Jeter celles restées fermées.",
+        "Ajouter les spaghetti dans la poêle avec l'eau de cuisson. Terminer la cuisson 2 min en remuant. Parsemer de persil."
+      ]
+    },
+
+    // ═══ BATCH P29 — One-Pan & Express ═══
+
+    {
+      id: 'R820',
+      name: 'Poulet Rôti One-Pan Légumes Racines',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍗',
+      origin: '🇫🇷',
+      tags: ['one-pan', 'famille', 'four'],
+      servings: 4,
+      prepTime: 15,
+      cookTime: 55,
+      difficulty: 1,
+      // 160×4 + 96×4 + 56×9 = 640+384+504 = 1528 kcal ✓
+      baseNutrition: { calories: 1528, proteinGrams: 160, carbsGrams: 96, fatGrams: 56 },
+      ingredients: [
+        { name: 'Cuisses de poulet',  qty: 800, unit: 'g', note: '4 pièces' },
+        { name: 'Carottes',           qty: 200, unit: 'g' },
+        { name: 'Pommes de terre',    qty: 300, unit: 'g' },
+        { name: 'Panais',             qty: 150, unit: 'g' },
+        { name: 'Oignons rouges',     qty: 150, unit: 'g' },
+        { name: 'Ail',                qty: 6,   unit: 'pce' },
+        { name: 'Huile d\'olive',     qty: 30,  unit: 'ml' },
+        { name: 'Thym, romarin',      qty: 5,   unit: 'g' }
+      ],
+      steps: [
+        "Préchauffer le four à 200°C. Couper les légumes en gros morceaux. Les mettre dans un grand plat à rôtir.",
+        "Arroser les légumes d'huile, ajouter l'ail en chemise, le thym et le romarin. Saler, poivrer, mélanger.",
+        "Poser les cuisses de poulet sur les légumes, côté peau vers le haut. Saler et huiler la peau.",
+        "Enfourner 55 min. À mi-cuisson, retourner les légumes et arroser le poulet du jus rendu.",
+        "Le poulet est cuit quand la peau est dorée et le jus des cuisses clair. Servir directement dans le plat."
+      ]
+    },
+
+    {
+      id: 'R821',
+      name: 'Riz Cantonais au Jambon Petits Pois & Oeuf',
+      category: 'world-food',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍳',
+      origin: '🇨🇳',
+      tags: ['riz', 'rapide', 'balanced'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 15,
+      difficulty: 1,
+      // 40×4 + 110×4 + 16×9 = 160+440+144 = 744 kcal ✓
+      baseNutrition: { calories: 744, proteinGrams: 40, carbsGrams: 110, fatGrams: 16 },
+      ingredients: [
+        { name: 'Riz long grain cuit', qty: 500, unit: 'g', note: 'riz de la veille idéal' },
+        { name: 'Jambon blanc',       qty: 120, unit: 'g' },
+        { name: 'Oeufs',              qty: 3,   unit: 'pce' },
+        { name: 'Petits pois surgelés', qty: 100, unit: 'g' },
+        { name: 'Sauce soja',         qty: 30,  unit: 'ml' },
+        { name: 'Oignons verts',      qty: 30,  unit: 'g' },
+        { name: 'Huile neutre',       qty: 20,  unit: 'ml' },
+        { name: 'Huile de sésame',    qty: 10,  unit: 'ml' }
+      ],
+      steps: [
+        "Couper le jambon en petits cubes. Faire décongeler les petits pois 2 min à l'eau bouillante, égoutter.",
+        "Chauffer l'huile neutre dans un wok ou grande poêle à feu très vif. Faire scramble les oeufs battus — garder des morceaux — réserver.",
+        "Dans le même wok très chaud, ajouter le riz en miettes. Faire sauter 3-4 min en remuant constamment.",
+        "Ajouter le jambon et les petits pois, cuire 2 min. Remettre les oeufs, ajouter la sauce soja.",
+        "Finir avec l'huile de sésame et les oignons verts ciselés. Mélanger vigoureusement et servir chaud."
+      ]
+    },
+
+    {
+      id: 'R822',
+      name: 'Pâtes One-Pot Tomate Basilic Mozzarella',
+      category: 'italian',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍝',
+      origin: '🇮🇹',
+      tags: ['one-pan', 'vegetarien', 'rapide'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 15,
+      difficulty: 1,
+      // 38×4 + 130×4 + 22×9 = 152+520+198 = 870 kcal ✓
+      baseNutrition: { calories: 870, proteinGrams: 38, carbsGrams: 130, fatGrams: 22 },
+      ingredients: [
+        { name: 'Linguine ou spaghetti', qty: 320, unit: 'g' },
+        { name: 'Tomates concassées', qty: 400, unit: 'g' },
+        { name: 'Bouillon de légumes', qty: 600, unit: 'ml' },
+        { name: 'Mozzarella',         qty: 125, unit: 'g' },
+        { name: 'Ail',                qty: 3,   unit: 'pce' },
+        { name: 'Basilic frais',      qty: 15,  unit: 'g' },
+        { name: 'Huile d\'olive',     qty: 20,  unit: 'ml' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Dans une grande casserole, mettre les pâtes, les tomates concassées, le bouillon, l'ail haché et l'huile.",
+        "Porter à ébullition en remuant. Cuire à découvert à feu moyen-vif 9-11 min en remuant fréquemment.",
+        "Le liquide doit être presque totalement absorbé et les pâtes al dente à la fin — surveiller.",
+        "Hors du feu, ajouter les feuilles de basilic et mélanger. Rectifier sel et poivre.",
+        "Déposer la mozzarella en morceaux sur les pâtes chaudes. Elle fond légèrement. Servir immédiatement."
+      ]
+    },
+
+    {
+      id: 'R823',
+      name: 'Poulet Tikka Masala Express',
+      category: 'world-food',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍛',
+      origin: '🇮🇳',
+      tags: ['high-protein', 'epice', 'cremeux'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 20,
+      difficulty: 1,
+      // 66×4 + 40×4 + 22×9 = 264+160+198 = 622 kcal ✓
+      baseNutrition: { calories: 622, proteinGrams: 66, carbsGrams: 40, fatGrams: 22 },
+      ingredients: [
+        { name: 'Filets de poulet',   qty: 500, unit: 'g' },
+        { name: 'Tomates concassées', qty: 300, unit: 'g' },
+        { name: 'Crème de coco',      qty: 100, unit: 'ml' },
+        { name: 'Oignon',             qty: 100, unit: 'g' },
+        { name: 'Ail',                qty: 3,   unit: 'pce' },
+        { name: 'Gingembre frais',    qty: 15,  unit: 'g' },
+        { name: 'Pâte tikka masala',  qty: 40,  unit: 'g' },
+        { name: 'Huile neutre',       qty: 15,  unit: 'ml' }
+      ],
+      steps: [
+        "Couper le poulet en cubes. Le mélanger avec la moitié de la pâte tikka et laisser mariner 5 min.",
+        "Faire dorer le poulet dans l'huile à feu vif 5-6 min, sans trop remuer pour qu'il colore. Réserver.",
+        "Dans la même poêle, faire revenir l'oignon, l'ail et le gingembre hachés 4 min.",
+        "Ajouter le reste de pâte tikka, cuire 1 min en remuant. Ajouter les tomates, mijoter 8 min.",
+        "Incorporer la crème de coco et le poulet. Laisser mijoter 5 min. Servir avec du riz basmati et du pain naan."
+      ]
+    },
+
+    {
+      id: 'R824',
+      name: 'Tacos de Boeuf Haché & Guacamole Maison',
+      category: 'mexican',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🌮',
+      origin: '🇲🇽',
+      tags: ['high-protein', 'convivial', 'fun'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 12,
+      difficulty: 1,
+      // 60×4 + 80×4 + 36×9 = 240+320+324 = 884 kcal ✓
+      baseNutrition: { calories: 884, proteinGrams: 60, carbsGrams: 80, fatGrams: 36 },
+      ingredients: [
+        { name: 'Tortillas de maïs', qty: 160, unit: 'g', note: '8 petites tortillas' },
+        { name: 'Boeuf haché',       qty: 350, unit: 'g' },
+        { name: 'Avocats',           qty: 200, unit: 'g' },
+        { name: 'Épices à tacos',    qty: 10,  unit: 'g' },
+        { name: 'Oignon rouge',      qty: 80,  unit: 'g' },
+        { name: 'Jus de citron vert', qty: 20, unit: 'ml' },
+        { name: 'Coriandre fraîche', qty: 15,  unit: 'g' },
+        { name: 'Sel',               qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Guacamole : écraser les avocats à la fourchette avec le jus de citron vert, l'oignon rouge haché menu, la coriandre et le sel.",
+        "Cuire le boeuf haché dans une poêle sèche à feu vif en émiettant 8 min. Ajouter les épices à tacos + 2 cs d'eau, cuire 2 min.",
+        "Chauffer les tortillas à sec dans une poêle 30 secondes par face ou directement sur la flamme.",
+        "Assembler : poser la viande épicée sur chaque tortilla, ajouter une cuillère de guacamole.",
+        "Servir immédiatement avec des quartiers de citron vert. Ajouter salsa ou jalapeños selon goût."
+      ]
+    },
+
+    // ═══ BATCH P30 — Gratins & Plats au Four ═══
+
+    {
+      id: 'R825',
+      name: 'Gratin Dauphinois Crémeux',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥔',
+      origin: '🇫🇷',
+      tags: ['comfort-food', 'four', 'classique'],
+      servings: 4,
+      prepTime: 20,
+      cookTime: 60,
+      difficulty: 2,
+      // 52×4 + 200×4 + 100×9 = 208+800+900 = 1908 kcal ✓
+      baseNutrition: { calories: 1908, proteinGrams: 52, carbsGrams: 200, fatGrams: 100 },
+      ingredients: [
+        { name: 'Pommes de terre',    qty: 1000, unit: 'g', note: 'à chair ferme' },
+        { name: 'Crème fraîche',      qty: 300, unit: 'ml' },
+        { name: 'Lait',               qty: 200, unit: 'ml' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' },
+        { name: 'Gruyère râpé',       qty: 80,  unit: 'g' },
+        { name: 'Beurre',             qty: 20,  unit: 'g' },
+        { name: 'Noix de muscade',    qty: 1,   unit: 'pincée' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Préchauffer le four à 160°C. Peler et couper les pommes de terre en tranches fines à la mandoline (2mm).",
+        "Frotter le plat à gratin avec une gousse d'ail coupée, puis le beurrer. Disposer les tranches en couches.",
+        "Mélanger crème, lait, ail haché, muscade, sel et poivre. Verser sur les pommes de terre — le liquide doit affleurer.",
+        "Parsemer de gruyère râpé sur tout le dessus.",
+        "Enfourner 60 min. Les pommes de terre doivent être tendres au couteau et le dessus bien gratiné. Reposer 10 min avant de servir."
+      ]
+    },
+
+    {
+      id: 'R826',
+      name: 'Gratin de Chou-Fleur Béchamel & Jambon',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🧀',
+      origin: '🇫🇷',
+      tags: ['four', 'classique', 'comfort-food'],
+      servings: 3,
+      prepTime: 20,
+      cookTime: 30,
+      difficulty: 1,
+      // 72×4 + 90×4 + 60×9 = 288+360+540 = 1188 kcal ✓
+      baseNutrition: { calories: 1188, proteinGrams: 72, carbsGrams: 90, fatGrams: 60 },
+      ingredients: [
+        { name: 'Chou-fleur',         qty: 700, unit: 'g' },
+        { name: 'Jambon blanc',       qty: 200, unit: 'g', note: 'en tranches épaisses' },
+        { name: 'Lait',               qty: 400, unit: 'ml' },
+        { name: 'Farine',             qty: 40,  unit: 'g' },
+        { name: 'Beurre',             qty: 40,  unit: 'g' },
+        { name: 'Gruyère râpé',       qty: 80,  unit: 'g' },
+        { name: 'Noix de muscade',    qty: 1,   unit: 'pincée' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Détailler le chou-fleur en fleurettes. Le cuire 8 min dans de l'eau bouillante salée — al dente. Égoutter soigneusement.",
+        "Béchamel : fondre le beurre, ajouter la farine, cuire 2 min. Incorporer le lait en fouettant, cuire 5 min. Assaisonner sel, poivre, muscade.",
+        "Préchauffer le four à 200°C. Couper le jambon en cubes.",
+        "Mélanger le chou-fleur et le jambon dans la béchamel. Verser dans un plat à gratin.",
+        "Parsemer de gruyère. Enfourner 25-30 min jusqu'à gratinage bien doré. Servir bien chaud."
+      ]
+    },
+
+    {
+      id: 'R827',
+      name: 'Tian Provençal Tomates Courgettes & Parmesan',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍅',
+      origin: '🇫🇷',
+      tags: ['vegetarien', 'four', 'mediteraneen'],
+      servings: 3,
+      prepTime: 15,
+      cookTime: 45,
+      difficulty: 1,
+      // 30×4 + 60×4 + 30×9 = 120+240+270 = 630 kcal ✓
+      baseNutrition: { calories: 630, proteinGrams: 30, carbsGrams: 60, fatGrams: 30 },
+      ingredients: [
+        { name: 'Courgettes',         qty: 400, unit: 'g' },
+        { name: 'Tomates',            qty: 400, unit: 'g' },
+        { name: 'Oignons',            qty: 200, unit: 'g' },
+        { name: 'Parmesan râpé',      qty: 60,  unit: 'g' },
+        { name: 'Ail',                qty: 3,   unit: 'pce' },
+        { name: 'Huile d\'olive',     qty: 40,  unit: 'ml' },
+        { name: 'Herbes de Provence', qty: 5,   unit: 'g' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Préchauffer le four à 180°C. Émincer les oignons. Les faire fondre dans 15ml d'huile 10 min à feu doux, ajouter l'ail haché.",
+        "Étaler les oignons fondus dans le fond d'un plat à gratin.",
+        "Couper courgettes et tomates en rondelles de 5mm. Les disposer en alternance debout dans le plat, légèrement inclinées.",
+        "Arroser du reste d'huile, parsemer d'herbes de Provence, saler et poivrer.",
+        "Enfourner 40 min. Ajouter le parmesan les 5 dernières minutes. Les légumes doivent être fondants et légèrement caramélisés."
+      ]
+    },
+
+    {
+      id: 'R828',
+      name: 'Poulet au Four Citron Confit & Olives',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍋',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'mediteraneen', 'four'],
+      servings: 3,
+      prepTime: 10,
+      cookTime: 45,
+      difficulty: 1,
+      // 108×4 + 30×4 + 30×9 = 432+120+270 = 822 kcal ✓
+      baseNutrition: { calories: 822, proteinGrams: 108, carbsGrams: 30, fatGrams: 30 },
+      ingredients: [
+        { name: 'Hauts de cuisse poulet', qty: 700, unit: 'g' },
+        { name: 'Citron confit',      qty: 80,  unit: 'g', note: 'en bocal' },
+        { name: 'Olives vertes',      qty: 80,  unit: 'g' },
+        { name: 'Ail',                qty: 5,   unit: 'pce' },
+        { name: 'Oignon',             qty: 150, unit: 'g' },
+        { name: 'Huile d\'olive',     qty: 20,  unit: 'ml' },
+        { name: 'Cumin',              qty: 3,   unit: 'g' },
+        { name: 'Coriandre moulue',   qty: 2,   unit: 'g' }
+      ],
+      steps: [
+        "Préchauffer le four à 190°C. Couper le citron confit en lamelles, rincer à l'eau pour atténuer le sel.",
+        "Faire revenir l'oignon émincé dans l'huile 5 min. Ajouter l'ail et les épices (cumin, coriandre), cuire 1 min.",
+        "Disposer les hauts de cuisse dans un plat à four. Couvrir du mélange oignons-épices.",
+        "Ajouter le citron confit et les olives. Ajouter 100ml d'eau dans le fond du plat.",
+        "Enfourner 40-45 min. À mi-cuisson, arroser le poulet du jus. Servir avec du couscous ou du riz."
+      ]
+    },
+
+    {
+      id: 'R829',
+      name: 'Moussaka Grecque Boeuf & Aubergines',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍆',
+      origin: '🇬🇷',
+      tags: ['comfort-food', 'four', 'classique'],
+      servings: 4,
+      prepTime: 30,
+      cookTime: 50,
+      difficulty: 2,
+      // 120×4 + 120×4 + 100×9 = 480+480+900 = 1860 kcal ✓
+      baseNutrition: { calories: 1860, proteinGrams: 120, carbsGrams: 120, fatGrams: 100 },
+      ingredients: [
+        { name: 'Aubergines',         qty: 600, unit: 'g' },
+        { name: 'Viande hachée boeuf', qty: 500, unit: 'g' },
+        { name: 'Tomates concassées', qty: 300, unit: 'g' },
+        { name: 'Oignon',             qty: 100, unit: 'g' },
+        { name: 'Ail',                qty: 3,   unit: 'pce' },
+        { name: 'Lait',               qty: 400, unit: 'ml' },
+        { name: 'Farine',             qty: 40,  unit: 'g' },
+        { name: 'Beurre',             qty: 40,  unit: 'g' },
+        { name: 'Parmesan râpé',      qty: 60,  unit: 'g' },
+        { name: 'Cannelle, origan',   qty: 5,   unit: 'g' }
+      ],
+      steps: [
+        "Trancher les aubergines en rondelles de 1cm. Saler 20 min, rincer, sécher. Griller à la poêle dans l'huile par lots.",
+        "Bolognaise épicée : faire revenir oignon et ail, ajouter la viande, colorer. Ajouter tomates, cannelle et origan. Mijoter 20 min.",
+        "Béchamel : roux beurre-farine, incorporer le lait chaud, cuire jusqu'à épaississement. Saler, muscade.",
+        "Préchauffer le four à 180°C. Couches dans le plat : aubergines, bolognaise, aubergines, béchamel + parmesan.",
+        "Enfourner 40-45 min jusqu'à gratinage doré. Impératif : laisser reposer 20 min pour que la moussaka tienne à la découpe."
+      ]
     }
 
   // ─────────────────────────────────────────────────────────────────────────────
