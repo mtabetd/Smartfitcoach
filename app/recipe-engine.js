@@ -35451,6 +35451,511 @@
         "Hors du feu, incorporer le beurre et le parmesan. Mélanger vigoureusement. Rectifier sel et poivre.",
         "Verser la polenta crémeuse dans les assiettes. Déposer les champignons sautés dessus. Servir immédiatement."
       ]
+    },
+
+    // ═══ BATCH P36 — Viandes Mijotées ═══
+
+    {
+      id: 'R855',
+      name: 'Boeuf Bourguignon Classique',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥩',
+      origin: '🇫🇷',
+      tags: ['mijoté', 'classique', 'comfort-food'],
+      servings: 4,
+      prepTime: 30,
+      cookTime: 120,
+      difficulty: 2,
+      // 160×4 + 80×4 + 80×9 = 640+320+720 = 1680 kcal ✓
+      baseNutrition: { calories: 1680, proteinGrams: 160, carbsGrams: 80, fatGrams: 80 },
+      ingredients: [
+        { name: 'Boeuf à braiser',    qty: 1000, unit: 'g', note: 'joue ou paleron' },
+        { name: 'Vin rouge Bourgogne', qty: 500, unit: 'ml' },
+        { name: 'Lardons',            qty: 150, unit: 'g' },
+        { name: 'Champignons de Paris', qty: 300, unit: 'g' },
+        { name: 'Oignons grelots',    qty: 200, unit: 'g' },
+        { name: 'Carottes',           qty: 200, unit: 'g' },
+        { name: 'Bouillon de boeuf',  qty: 300, unit: 'ml' },
+        { name: 'Concentré de tomate', qty: 20, unit: 'g' },
+        { name: 'Ail',                qty: 3,   unit: 'pce' },
+        { name: 'Thym, laurier',      qty: 5,   unit: 'g' }
+      ],
+      steps: [
+        "Couper le boeuf en gros cubes de 5cm. Mariner 2h dans le vin avec les aromates au réfrigérateur (optionnel mais recommandé).",
+        "Faire dorer les lardons dans une cocotte. Réserver. Dans la même cocotte, saisir les cubes de boeuf en plusieurs fois à feu vif.",
+        "Faire revenir l'oignon et les carottes 5 min. Ajouter le concentré de tomate, cuire 1 min.",
+        "Remettre la viande et les lardons. Verser le vin et le bouillon. Ajouter thym et laurier. Porter à ébullition.",
+        "Couvrir et cuire à feu très doux 2h. Ajouter les oignons grelots et champignons les 30 dernières minutes. Rectifier et servir."
+      ]
+    },
+
+    {
+      id: 'R856',
+      name: 'Poulet au Vin Blanc Crème & Champignons',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍗',
+      origin: '🇫🇷',
+      tags: ['mijoté', 'cremeux', 'classique'],
+      servings: 4,
+      prepTime: 15,
+      cookTime: 45,
+      difficulty: 1,
+      // 180×4 + 40×4 + 60×9 = 720+160+540 = 1420 kcal ✓
+      baseNutrition: { calories: 1420, proteinGrams: 180, carbsGrams: 40, fatGrams: 60 },
+      ingredients: [
+        { name: 'Poulet entier découpé', qty: 1200, unit: 'g', note: '8 morceaux' },
+        { name: 'Vin blanc sec',      qty: 200, unit: 'ml' },
+        { name: 'Crème fraîche',      qty: 200, unit: 'ml' },
+        { name: 'Champignons de Paris', qty: 300, unit: 'g' },
+        { name: 'Échalotes',          qty: 100, unit: 'g' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' },
+        { name: 'Beurre',             qty: 30,  unit: 'g' },
+        { name: 'Thym, laurier',      qty: 4,   unit: 'g' }
+      ],
+      steps: [
+        "Saler et poivrer les morceaux de poulet. Les dorer dans le beurre à feu vif sur toutes les faces. Réserver.",
+        "Dans la même cocotte, faire revenir les échalotes émincées 3 min, ajouter l'ail.",
+        "Déglacer au vin blanc. Remettre le poulet, ajouter thym et laurier. Couvrir et mijoter 30 min.",
+        "Ajouter les champignons en lamelles, cuire 10 min à découvert.",
+        "Incorporer la crème fraîche. Laisser mijoter 5 min. La sauce doit napper une cuillère. Servir avec du riz."
+      ]
+    },
+
+    {
+      id: 'R857',
+      name: 'Blanquette de Veau à l\'Ancienne',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥩',
+      origin: '🇫🇷',
+      tags: ['mijoté', 'classique', 'cremeux'],
+      servings: 4,
+      prepTime: 20,
+      cookTime: 90,
+      difficulty: 2,
+      // 172×4 + 80×4 + 80×9 = 688+320+720 = 1728 kcal ✓
+      baseNutrition: { calories: 1728, proteinGrams: 172, carbsGrams: 80, fatGrams: 80 },
+      ingredients: [
+        { name: 'Épaule de veau',     qty: 1000, unit: 'g' },
+        { name: 'Champignons de Paris', qty: 200, unit: 'g' },
+        { name: 'Oignons',            qty: 200, unit: 'g' },
+        { name: 'Carottes',           qty: 150, unit: 'g' },
+        { name: 'Crème fraîche',      qty: 200, unit: 'ml' },
+        { name: 'Jaunes d\'oeufs',   qty: 2,   unit: 'pce' },
+        { name: 'Beurre',             qty: 40,  unit: 'g' },
+        { name: 'Farine',             qty: 40,  unit: 'g' },
+        { name: 'Jus de citron',      qty: 20,  unit: 'ml' },
+        { name: 'Bouquet garni',      qty: 1,   unit: 'pce' }
+      ],
+      steps: [
+        "Couper le veau en cubes. Blanchir 3 min à l'eau bouillante, rincer. Placer dans une cocotte avec oignons, carottes et bouquet garni, couvrir d'eau froide.",
+        "Porter à ébullition, écumer, saler. Cuire à frémissement 1h30 à couvert. Retirer la viande et légumes. Filtrer et réserver 600ml de bouillon.",
+        "Faire un roux blanc avec beurre et farine. Incorporer le bouillon chaud en fouettant. Cuire 10 min en sauce veloutée.",
+        "Hors du feu, mélanger crème fraîche et jaunes d'oeufs. Incorporer à la sauce sans faire bouillir.",
+        "Ajouter le veau, les légumes et les champignons. Assaisonner avec le citron, sel et poivre. Servir avec du riz."
+      ]
+    },
+
+    {
+      id: 'R858',
+      name: 'Haché de Boeuf en Sauce Tomate & Herbes',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥩',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'economique', 'rapide'],
+      servings: 2,
+      prepTime: 8,
+      cookTime: 20,
+      difficulty: 1,
+      // 60×4 + 40×4 + 22×9 = 240+160+198 = 598 kcal ✓
+      baseNutrition: { calories: 598, proteinGrams: 60, carbsGrams: 40, fatGrams: 22 },
+      ingredients: [
+        { name: 'Boeuf haché 5% MG', qty: 400, unit: 'g' },
+        { name: 'Tomates concassées', qty: 300, unit: 'g' },
+        { name: 'Oignon',             qty: 80,  unit: 'g' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' },
+        { name: 'Herbes de Provence', qty: 3,   unit: 'g' },
+        { name: 'Concentré de tomate', qty: 20, unit: 'g' },
+        { name: 'Huile d\'olive',     qty: 15,  unit: 'ml' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Faire revenir l'oignon émincé dans l'huile 4 min. Ajouter l'ail haché, cuire 1 min.",
+        "Ajouter le boeuf haché. Cuire à feu moyen-vif en émiettant bien la viande jusqu'à coloration complète.",
+        "Incorporer le concentré de tomate, cuire 2 min en remuant pour le 'pincer'.",
+        "Verser les tomates concassées et les herbes. Saler et poivrer. Laisser mijoter 15 min.",
+        "La sauce doit être dense et parfumée. Servir avec des pâtes, du riz ou des pommes de terre."
+      ]
+    },
+
+    {
+      id: 'R859',
+      name: 'Sauté de Porc aux Poivrons & Paprika',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥩',
+      origin: '🇭🇺',
+      tags: ['high-protein', 'epice', 'mijoté'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 30,
+      difficulty: 1,
+      // 64×4 + 30×4 + 24×9 = 256+120+216 = 592 kcal ✓
+      baseNutrition: { calories: 592, proteinGrams: 64, carbsGrams: 30, fatGrams: 24 },
+      ingredients: [
+        { name: 'Filet de porc',      qty: 450, unit: 'g' },
+        { name: 'Poivrons rouges',    qty: 250, unit: 'g' },
+        { name: 'Oignon',             qty: 120, unit: 'g' },
+        { name: 'Crème fraîche',      qty: 80,  unit: 'ml' },
+        { name: 'Paprika doux',       qty: 10,  unit: 'g' },
+        { name: 'Paprika fumé',       qty: 3,   unit: 'g' },
+        { name: 'Huile neutre',       qty: 15,  unit: 'ml' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Couper le filet de porc en lanières. Émincer l'oignon et les poivrons en lamelles.",
+        "Faire dorer la viande à feu vif dans l'huile 4-5 min, saler. Réserver.",
+        "Dans la même poêle, faire revenir l'oignon 5 min. Ajouter les poivrons, cuire 8 min.",
+        "Ajouter le paprika (doux + fumé), cuire 1 min en remuant. Remettre la viande.",
+        "Incorporer la crème fraîche, mijoter 5 min. Rectifier l'assaisonnement. Servir avec des nouilles ou du riz."
+      ]
+    },
+
+    // ═══ BATCH P37 — Recettes Asiatiques ═══
+
+    {
+      id: 'R860',
+      name: 'Pad Thaï Classique Crevettes & Tofu',
+      category: 'world-food',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍜',
+      origin: '🇹🇭',
+      tags: ['asian', 'nouilles', 'high-protein'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 12,
+      difficulty: 2,
+      // 48×4 + 100×4 + 22×9 = 192+400+198 = 790 kcal ✓
+      baseNutrition: { calories: 790, proteinGrams: 48, carbsGrams: 100, fatGrams: 22 },
+      ingredients: [
+        { name: 'Nouilles de riz larges', qty: 200, unit: 'g' },
+        { name: 'Crevettes décortiquées', qty: 200, unit: 'g' },
+        { name: 'Tofu ferme',         qty: 150, unit: 'g' },
+        { name: 'Oeufs',              qty: 2,   unit: 'pce' },
+        { name: 'Sauce pad thai',     qty: 60,  unit: 'ml' },
+        { name: 'Oignons verts',      qty: 40,  unit: 'g' },
+        { name: 'Cacahuètes grillées', qty: 30, unit: 'g' },
+        { name: 'Huile neutre',       qty: 20,  unit: 'ml' }
+      ],
+      steps: [
+        "Réhydrater les nouilles de riz 10 min dans l'eau chaude. Égoutter. Couper le tofu en cubes et le faire dorer dans l'huile.",
+        "Dans un wok très chaud, faire sauter les crevettes 2 min jusqu'à coloration. Réserver.",
+        "Dans le même wok, ajouter les nouilles et la sauce pad thai. Sauter 2 min à feu vif.",
+        "Pousser les nouilles sur le côté. Casser les oeufs, brouiller rapidement puis mélanger avec les nouilles.",
+        "Ajouter crevettes, tofu et oignons verts. Mélanger 1 min. Servir avec cacahuètes, citron vert et piment."
+      ]
+    },
+
+    {
+      id: 'R861',
+      name: 'Gyozas Porc & Chou Poêlés Vapeur',
+      category: 'japanese',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥟',
+      origin: '🇯🇵',
+      tags: ['japanese', 'high-protein', 'convivial'],
+      servings: 2,
+      prepTime: 30,
+      cookTime: 15,
+      difficulty: 2,
+      // 40×4 + 60×4 + 20×9 = 160+240+180 = 580 kcal ✓
+      baseNutrition: { calories: 580, proteinGrams: 40, carbsGrams: 60, fatGrams: 20 },
+      ingredients: [
+        { name: 'Galettes à gyoza',   qty: 24,  unit: 'pce' },
+        { name: 'Porc haché',         qty: 250, unit: 'g' },
+        { name: 'Chou chinois',       qty: 150, unit: 'g' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' },
+        { name: 'Gingembre frais',    qty: 10,  unit: 'g' },
+        { name: 'Sauce soja',         qty: 20,  unit: 'ml' },
+        { name: 'Huile de sésame',    qty: 10,  unit: 'ml' },
+        { name: 'Huile neutre',       qty: 15,  unit: 'ml' }
+      ],
+      steps: [
+        "Hacher finement le chou chinois, saler 10 min, essorer l'eau avec les mains — indispensable.",
+        "Mélanger porc haché, chou essoré, ail et gingembre râpés, sauce soja et huile de sésame.",
+        "Poser une cuillerée de farce au centre de chaque galette. Humidifier les bords, plier en croissant en faisant des plis.",
+        "Chauffer l'huile dans une grande poêle. Dorer les gyozas à plat 2 min côté lisse. Verser 100ml d'eau, couvrir immédiatement.",
+        "Cuire à la vapeur 5 min couvert. Enlever le couvercle, laisser l'eau s'évaporer pour re-croquer le fond. Servir avec sauce soja."
+      ]
+    },
+
+    {
+      id: 'R862',
+      name: 'Bol Donburi Poulet Teriyaki & Riz Japonais',
+      category: 'japanese',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍱',
+      origin: '🇯🇵',
+      tags: ['japanese', 'high-protein', 'rapide'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 20,
+      difficulty: 1,
+      // 64×4 + 120×4 + 18×9 = 256+480+162 = 898 kcal ✓
+      baseNutrition: { calories: 898, proteinGrams: 64, carbsGrams: 120, fatGrams: 18 },
+      ingredients: [
+        { name: 'Cuisses de poulet désossées', qty: 400, unit: 'g' },
+        { name: 'Riz japonais rond', qty: 280, unit: 'g' },
+        { name: 'Sauce soja',        qty: 40,  unit: 'ml' },
+        { name: 'Mirin',             qty: 30,  unit: 'ml' },
+        { name: 'Saké ou vin blanc', qty: 20,  unit: 'ml' },
+        { name: 'Sucre',             qty: 10,  unit: 'g' },
+        { name: 'Oignons verts',     qty: 30,  unit: 'g' },
+        { name: 'Graines de sésame', qty: 5,   unit: 'g' }
+      ],
+      steps: [
+        "Cuire le riz japonais rincé à l'absorption (1.2x volume d'eau). Laisser reposer 10 min couvert.",
+        "Préparer la sauce teriyaki : mélanger sauce soja, mirin, saké et sucre dans une casserole, chauffer jusqu'à légère épaississement.",
+        "Cuire les cuisses de poulet côté peau dans une poêle sèche à feu moyen 8 min. Retourner 5 min côté chair.",
+        "Verser la sauce teriyaki sur le poulet, caraméliser 2-3 min en nappant sans cesse.",
+        "Trancher le poulet. Dresser sur le riz avec les oignons verts et les graines de sésame. Napper du reste de sauce."
+      ]
+    },
+
+    {
+      id: 'R863',
+      name: 'Fried Rice Poulet Kimchi & Oeuf',
+      category: 'world-food',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍳',
+      origin: '🇰🇷',
+      tags: ['korean', 'riz', 'fermenté'],
+      servings: 2,
+      prepTime: 8,
+      cookTime: 12,
+      difficulty: 1,
+      // 52×4 + 120×4 + 20×9 = 208+480+180 = 868 kcal ✓
+      baseNutrition: { calories: 868, proteinGrams: 52, carbsGrams: 120, fatGrams: 20 },
+      ingredients: [
+        { name: 'Riz cuit froid',     qty: 500, unit: 'g' },
+        { name: 'Poulet cuit effiloché', qty: 200, unit: 'g' },
+        { name: 'Kimchi',             qty: 100, unit: 'g' },
+        { name: 'Oeufs',              qty: 2,   unit: 'pce' },
+        { name: 'Sauce soja',         qty: 20,  unit: 'ml' },
+        { name: 'Huile de sésame',    qty: 10,  unit: 'ml' },
+        { name: 'Huile neutre',       qty: 15,  unit: 'ml' },
+        { name: 'Oignons verts',      qty: 30,  unit: 'g' }
+      ],
+      steps: [
+        "Égoutter et hacher grossièrement le kimchi. Garder le jus.",
+        "Chauffer l'huile dans un wok à feu très vif. Faire sauter le kimchi 2 min, ajouter le poulet effiloché.",
+        "Ajouter le riz froid en miettes. Sauter 3-4 min en remuant — le riz doit être bien chaud et légèrement grillé.",
+        "Ajouter la sauce soja et 2cs du jus de kimchi. Mélanger vigoureusement.",
+        "Faire un puits au centre pour cuire 2 oeufs sur le plat directement dans le wok. Finir avec l'huile de sésame et les oignons verts."
+      ]
+    },
+
+    {
+      id: 'R864',
+      name: 'Soupe Ramen Maison Poulet & Ramen',
+      category: 'japanese',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍜',
+      origin: '🇯🇵',
+      tags: ['japanese', 'soupe', 'reconfort'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 25,
+      difficulty: 1,
+      // 60×4 + 100×4 + 20×9 = 240+400+180 = 820 kcal ✓
+      baseNutrition: { calories: 820, proteinGrams: 60, carbsGrams: 100, fatGrams: 20 },
+      ingredients: [
+        { name: 'Nouilles ramen',     qty: 200, unit: 'g' },
+        { name: 'Filets de poulet',   qty: 400, unit: 'g' },
+        { name: 'Bouillon de poulet', qty: 1000, unit: 'ml' },
+        { name: 'Sauce soja',         qty: 40,  unit: 'ml' },
+        { name: 'Gingembre frais',    qty: 15,  unit: 'g' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' },
+        { name: 'Oeufs',              qty: 2,   unit: 'pce' },
+        { name: 'Oignons verts',      qty: 30,  unit: 'g' }
+      ],
+      steps: [
+        "Pocher les filets de poulet dans le bouillon avec le gingembre et l'ail 15 min à frémissement. Retirer et effilocher.",
+        "Faire cuire les oeufs mollets : 7 min dans l'eau bouillante, choc thermique eau glacée. Écaler, tremper dans sauce soja diluée 15 min.",
+        "Assaisonner le bouillon avec la sauce soja. Rectifier sel et gingembre.",
+        "Cuire les nouilles ramen selon le paquet. Égoutter.",
+        "Dresser dans les bols : nouilles, bouillon chaud, poulet effiloché, oeuf mollet coupé en deux, oignons verts."
+      ]
+    },
+
+    // ═══ BATCH P38 — Salades Repas & Plats Froids ═══
+
+    {
+      id: 'R865',
+      name: 'Salade Niçoise Classique Thon & Anchois',
+      category: 'french',
+      mealTypes: ['lunch'],
+      emoji: '🥗',
+      origin: '🇫🇷',
+      tags: ['salade', 'classique', 'high-protein'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 10,
+      difficulty: 1,
+      // 50×4 + 40×4 + 28×9 = 200+160+252 = 612 kcal ✓
+      baseNutrition: { calories: 612, proteinGrams: 50, carbsGrams: 40, fatGrams: 28 },
+      ingredients: [
+        { name: 'Thon en boîte',      qty: 200, unit: 'g' },
+        { name: 'Oeufs',              qty: 3,   unit: 'pce' },
+        { name: 'Pommes de terre',    qty: 200, unit: 'g' },
+        { name: 'Haricots verts',     qty: 150, unit: 'g' },
+        { name: 'Tomates',            qty: 200, unit: 'g' },
+        { name: 'Olives noires',      qty: 50,  unit: 'g' },
+        { name: 'Anchois',            qty: 30,  unit: 'g' },
+        { name: 'Huile d\'olive',     qty: 30,  unit: 'ml' }
+      ],
+      steps: [
+        "Cuire les pommes de terre à la vapeur 15 min. Cuire les oeufs durs 10 min, refroidir, écaler.",
+        "Blanchir les haricots verts 5 min à l'eau bouillante salée — ils doivent rester croquants. Refroidir à l'eau glacée.",
+        "Vinaigrette niçoise : huile d'olive, vinaigre, moutarde, sel, poivre.",
+        "Dresser la salade sans mélanger : laisser chaque ingrédient visible. Thon en blocs, oeufs en quartiers, légumes.",
+        "Poser les anchois et les olives. Arroser de vinaigrette au moment de servir. La niçoise ne se mélange pas."
+      ]
+    },
+
+    {
+      id: 'R866',
+      name: 'Salade César Poulet Grillé & Croûtons',
+      category: 'world-food',
+      mealTypes: ['lunch'],
+      emoji: '🥗',
+      origin: '🇺🇸',
+      tags: ['salade', 'high-protein', 'classique'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 10,
+      difficulty: 1,
+      // 58×4 + 50×4 + 30×9 = 232+200+270 = 702 kcal ✓
+      baseNutrition: { calories: 702, proteinGrams: 58, carbsGrams: 50, fatGrams: 30 },
+      ingredients: [
+        { name: 'Filets de poulet',   qty: 400, unit: 'g' },
+        { name: 'Laitue romaine',     qty: 200, unit: 'g' },
+        { name: 'Pain',               qty: 80,  unit: 'g', note: 'pour croûtons' },
+        { name: 'Parmesan',           qty: 40,  unit: 'g' },
+        { name: 'Anchois',            qty: 20,  unit: 'g' },
+        { name: 'Ail',                qty: 1,   unit: 'pce' },
+        { name: 'Mayonnaise',         qty: 40,  unit: 'g' },
+        { name: 'Jus de citron',      qty: 15,  unit: 'ml' }
+      ],
+      steps: [
+        "Cuire les filets de poulet en les grillant 4 min par face dans une poêle-gril. Saler, laisser reposer 5 min, trancher.",
+        "Croûtons : couper le pain en cubes, les faire dorer dans une poêle avec l'ail et un filet d'huile 5 min.",
+        "Sauce César : mixer mayonnaise, anchois, ail, parmesan râpé, jus de citron et une cs d'eau.",
+        "Déchirer la romaine en grands morceaux dans un saladier. Napper généreusement de sauce César.",
+        "Disposer le poulet tranché, les croûtons et copeaux de parmesan. Servir immédiatement."
+      ]
+    },
+
+    {
+      id: 'R867',
+      name: 'Salade de Lentilles Vertes Jambon & Moutarde',
+      category: 'french',
+      mealTypes: ['lunch'],
+      emoji: '🥗',
+      origin: '🇫🇷',
+      tags: ['salade', 'high-protein', 'fer'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 25,
+      difficulty: 1,
+      // 48×4 + 90×4 + 18×9 = 192+360+162 = 714 kcal ✓
+      baseNutrition: { calories: 714, proteinGrams: 48, carbsGrams: 90, fatGrams: 18 },
+      ingredients: [
+        { name: 'Lentilles vertes du Puy', qty: 250, unit: 'g' },
+        { name: 'Jambon blanc',       qty: 150, unit: 'g' },
+        { name: 'Échalotes',          qty: 60,  unit: 'g' },
+        { name: 'Moutarde à l\'ancienne', qty: 20, unit: 'g' },
+        { name: 'Vinaigre de vin rouge', qty: 20, unit: 'ml' },
+        { name: 'Huile de noix',      qty: 25,  unit: 'ml' },
+        { name: 'Persil frais',       qty: 15,  unit: 'g' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Cuire les lentilles dans de l'eau froide non salée : porter à ébullition, réduire, cuire 20-25 min. Égoutter, saler en fin de cuisson.",
+        "Préparer la vinaigrette : émulsionner moutarde, vinaigre, huile de noix, sel et poivre.",
+        "Couper le jambon en lanières. Émincer les échalotes.",
+        "Mélanger les lentilles encore tièdes avec la vinaigrette — elles absorbent mieux à chaud.",
+        "Ajouter le jambon, les échalotes et le persil haché. Mélanger délicatement. Servir tiède ou à température ambiante."
+      ]
+    },
+
+    {
+      id: 'R868',
+      name: 'Salade Thaïe Boeuf & Herbes Fraîches',
+      category: 'world-food',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥗',
+      origin: '🇹🇭',
+      tags: ['salade', 'high-protein', 'asian'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 8,
+      difficulty: 1,
+      // 54×4 + 20×4 + 22×9 = 216+80+198 = 494 kcal ✓
+      baseNutrition: { calories: 494, proteinGrams: 54, carbsGrams: 20, fatGrams: 22 },
+      ingredients: [
+        { name: 'Steak de boeuf',     qty: 350, unit: 'g' },
+        { name: 'Menthe fraîche',     qty: 20,  unit: 'g' },
+        { name: 'Coriandre fraîche',  qty: 20,  unit: 'g' },
+        { name: 'Oignons rouges',     qty: 60,  unit: 'g' },
+        { name: 'Concombre',          qty: 100, unit: 'g' },
+        { name: 'Sauce poisson (nam pla)', qty: 30, unit: 'ml' },
+        { name: 'Jus de citron vert', qty: 30,  unit: 'ml' },
+        { name: 'Piment rouge',       qty: 1,   unit: 'pce' }
+      ],
+      steps: [
+        "Saisir le steak très saignant 2-3 min par face dans une poêle très chaude. Laisser reposer 5 min avant de trancher finement.",
+        "Sauce : mélanger sauce poisson, jus de citron vert, sucre (facultatif) et piment haché fin.",
+        "Émincer l'oignon rouge très finement. Couper le concombre en fine demi-lune.",
+        "Mélanger le boeuf tranché avec la sauce. Ajouter oignon, concombre, menthe et coriandre entières.",
+        "Mélanger délicatement et servir immédiatement — la salade se mange fraîchement assemblée."
+      ]
+    },
+
+    {
+      id: 'R869',
+      name: 'Sandwich Club Poulet Bacon & Avocat',
+      category: 'world-food',
+      mealTypes: ['lunch'],
+      emoji: '🥪',
+      origin: '🇺🇸',
+      tags: ['sandwich', 'high-protein', 'lunch-box'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 10,
+      difficulty: 1,
+      // 60×4 + 80×4 + 36×9 = 240+320+324 = 884 kcal ✓
+      baseNutrition: { calories: 884, proteinGrams: 60, carbsGrams: 80, fatGrams: 36 },
+      ingredients: [
+        { name: 'Pain de mie',        qty: 200, unit: 'g', note: '6 tranches' },
+        { name: 'Filets de poulet',   qty: 250, unit: 'g' },
+        { name: 'Bacon',              qty: 80,  unit: 'g' },
+        { name: 'Avocats',            qty: 150, unit: 'g' },
+        { name: 'Tomate',             qty: 100, unit: 'g' },
+        { name: 'Salade',             qty: 40,  unit: 'g' },
+        { name: 'Mayonnaise',         qty: 30,  unit: 'g' },
+        { name: 'Moutarde',           qty: 10,  unit: 'g' }
+      ],
+      steps: [
+        "Griller les filets de poulet 4 min par face. Saler, laisser reposer, trancher en lamelles.",
+        "Faire griller le bacon à la poêle sèche jusqu'à croustillant. Égoutter sur papier absorbant.",
+        "Écraser l'avocat avec une pincée de sel. Toaster le pain de mie.",
+        "Mélanger mayonnaise et moutarde. Étaler sur les tranches de pain.",
+        "Assembler en 3 couches : pain-salade-tomate-poulet / pain-avocat-bacon / pain. Maintenir avec des piques. Couper en triangle."
+      ]
     }
 
   // ─────────────────────────────────────────────────────────────────────────────
