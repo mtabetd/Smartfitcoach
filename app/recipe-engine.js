@@ -39329,6 +39329,406 @@
     ]
   }
 
+  // ── BATCH P64 — Grandes salades repas ────────────────────────────────────────
+  ,{
+    id: 'R995',
+    name: 'Salade Niçoise Classique',
+    category: 'french',
+    mealTypes: ['lunch'],
+    emoji: '🥗', origin: '🇫🇷',
+    tags: ['salade','classic','mediterranean','high-protein'],
+    servings: 2, prepTime: 15, cookTime: 15, difficulty: 1,
+    // 36×4 + 20×4 + 16×9 = 144+80+144 = 368 ✓
+    baseNutrition: { calories: 368, proteinGrams: 36, carbsGrams: 20, fatGrams: 16 },
+    ingredients: [
+      { name: 'Thon en boîte', qty: 160, unit: 'g', note: 'égoutté' },
+      { name: 'Oeufs durs', qty: 2, unit: 'pce' },
+      { name: 'Haricots verts', qty: 150, unit: 'g', note: 'cuits' },
+      { name: 'Tomates', qty: 2, unit: 'pce' },
+      { name: 'Olives noires', qty: 40, unit: 'g' },
+      { name: 'Anchois', qty: 20, unit: 'g', note: 'optionnel' },
+      { name: 'Salade verte', qty: 80, unit: 'g' },
+      { name: 'Oignon rouge', qty: 1, unit: 'pce', note: 'demi' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Vinaigre de vin', qty: 10, unit: 'ml' },
+      { name: 'Sel, poivre, basilic', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Cuire les oeufs durs 10 min et les haricots verts al dente. Refroidir.",
+      "Disposer la salade en base, puis les tomates en quartiers, haricots verts, oeufs en quartiers, olives, anchois.",
+      "Émietter le thon au centre.",
+      "Assaisonner avec vinaigrette huile d'olive/vinaigre. Ne jamais mélanger — présenter en garniture séparée."
+    ]
+  }
+  ,{
+    id: 'R996',
+    name: 'Salade César Maison',
+    category: 'french',
+    mealTypes: ['lunch'],
+    emoji: '🥗', origin: '🇺🇸',
+    tags: ['salade','classic','high-protein'],
+    servings: 2, prepTime: 15, cookTime: 10, difficulty: 1,
+    // 42×4 + 18×4 + 20×9 = 168+72+180 = 420 ✓
+    baseNutrition: { calories: 420, proteinGrams: 42, carbsGrams: 18, fatGrams: 20 },
+    ingredients: [
+      { name: 'Laitue romaine', qty: 200, unit: 'g' },
+      { name: 'Blanc de poulet grillé', qty: 250, unit: 'g' },
+      { name: 'Parmesan râpé', qty: 30, unit: 'g' },
+      { name: 'Croûtons', qty: 30, unit: 'g' },
+      { name: 'Anchois', qty: 20, unit: 'g' },
+      { name: 'Mayonnaise', qty: 30, unit: 'g' },
+      { name: 'Citron', qty: 1, unit: 'pce' },
+      { name: 'Ail', qty: 1, unit: 'pce', note: 'gousse' },
+      { name: 'Sauce Worcestershire', qty: 5, unit: 'ml' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Sauce César : mixer mayonnaise, anchois, ail, jus de citron, worcestershire, sel, poivre.",
+      "Déchirer grossièrement la romaine. Trancher le poulet grillé en lamelles.",
+      "Mélanger la romaine avec la sauce César.",
+      "Ajouter le poulet, les croûtons et le parmesan. Poivrer généreusement."
+    ]
+  }
+  ,{
+    id: 'R997',
+    name: 'Salade Grecque Classique',
+    category: 'mediterranean',
+    mealTypes: ['lunch'],
+    emoji: '🫒', origin: '🇬🇷',
+    tags: ['salade','vegetarian','mediterranean'],
+    servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
+    // 10×4 + 14×4 + 20×9 = 40+56+180 = 276 ✓
+    baseNutrition: { calories: 276, proteinGrams: 10, carbsGrams: 14, fatGrams: 20 },
+    ingredients: [
+      { name: 'Tomates', qty: 3, unit: 'pce' },
+      { name: 'Concombre', qty: 1, unit: 'pce' },
+      { name: 'Feta', qty: 100, unit: 'g' },
+      { name: 'Olives Kalamata', qty: 50, unit: 'g' },
+      { name: 'Oignon rouge', qty: 1, unit: 'pce' },
+      { name: 'Poivron vert', qty: 1, unit: 'pce' },
+      { name: 'Huile d\'olive', qty: 30, unit: 'ml' },
+      { name: 'Origan séché', qty: 3, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Couper les tomates en gros morceaux, le concombre en rondelles épaisses.",
+      "Émincer l'oignon rouge en rondelles fines, couper le poivron en lamelles.",
+      "Disposer tous les légumes dans un saladier. Poser le bloc de feta au centre (ne pas l'émietter avant de servir).",
+      "Répartir les olives, arroser généreusement d'huile d'olive, saupoudrer d'origan. Saler et poivrer."
+    ]
+  }
+  ,{
+    id: 'R998',
+    name: 'Salade Landaise au Gésier Confit',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍂', origin: '🇫🇷',
+    tags: ['salade','classic','bistrot'],
+    servings: 2, prepTime: 10, cookTime: 5, difficulty: 1,
+    // 28×4 + 12×4 + 24×9 = 112+48+216 = 376 ✓
+    baseNutrition: { calories: 376, proteinGrams: 28, carbsGrams: 12, fatGrams: 24 },
+    ingredients: [
+      { name: 'Gésiers de canard confits', qty: 150, unit: 'g' },
+      { name: 'Magret de canard fumé', qty: 60, unit: 'g', note: 'en tranches fines' },
+      { name: 'Salade mélangée', qty: 100, unit: 'g' },
+      { name: 'Tomates cerises', qty: 80, unit: 'g' },
+      { name: 'Croûtons aillés', qty: 30, unit: 'g' },
+      { name: 'Huile de noix', qty: 15, unit: 'ml' },
+      { name: 'Vinaigre de Xérès', qty: 10, unit: 'ml' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Réchauffer les gésiers confits à la poêle 3-4 min dans leur graisse. Réserver au chaud.",
+      "Préparer la vinaigrette : huile de noix, vinaigre de Xérès, sel, poivre.",
+      "Disposer la salade dans les assiettes avec tomates cerises et croûtons.",
+      "Ajouter les gésiers chauds et les tranches de magret fumé. Arroser de vinaigrette. Servir immédiatement."
+    ]
+  }
+  ,{
+    id: 'R999',
+    name: 'Salade Thaï Bœuf Citronnelle',
+    category: 'world-food',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🌶️', origin: '🇹🇭',
+    tags: ['salade','high-protein','spiced'],
+    servings: 2, prepTime: 15, cookTime: 8, difficulty: 2,
+    // 38×4 + 14×4 + 10×9 = 152+56+90 = 298 ✓
+    baseNutrition: { calories: 298, proteinGrams: 38, carbsGrams: 14, fatGrams: 10 },
+    ingredients: [
+      { name: 'Bœuf (rumsteck ou bavette)', qty: 250, unit: 'g' },
+      { name: 'Salade mélangée', qty: 80, unit: 'g' },
+      { name: 'Concombre', qty: 100, unit: 'g' },
+      { name: 'Tomates cerises', qty: 100, unit: 'g' },
+      { name: 'Oignon rouge', qty: 1, unit: 'pce' },
+      { name: 'Menthe fraîche', qty: 10, unit: 'g' },
+      { name: 'Coriandre fraîche', qty: 10, unit: 'g' },
+      { name: 'Sauce nuoc mam', qty: 15, unit: 'ml' },
+      { name: 'Citron vert', qty: 2, unit: 'pce' },
+      { name: 'Piment rouge', qty: 1, unit: 'pce' },
+      { name: 'Huile végétale', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      "Cuire le bœuf dans une poêle très chaude 3-4 min pour saignant. Laisser reposer 5 min, trancher finement.",
+      "Préparer la vinaigrette thaïe : nuoc mam, jus de citron vert, piment haché.",
+      "Disposer salade, concombre en fines rondelles, tomates, oignon rouge émincé.",
+      "Poser le bœuf tiède. Arroser de vinaigrette. Parsemer de menthe et coriandre fraîches."
+    ]
+  }
+
+  // ── BATCH P65 — Sauces incontournables maison ──────────────────────────────────
+  ,{
+    id: 'R1000',
+    name: 'Sauce Vinaigrette Moutarde Classique',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🫙', origin: '🇫🇷',
+    tags: ['sauce','vegetarian','express','condiment'],
+    servings: 4, prepTime: 3, cookTime: 0, difficulty: 1,
+    // 2×4 + 4×4 + 40×9 = 8+16+360 = 384 ✓
+    baseNutrition: { calories: 384, proteinGrams: 2, carbsGrams: 4, fatGrams: 40 },
+    ingredients: [
+      { name: 'Huile d\'olive', qty: 60, unit: 'ml' },
+      { name: 'Vinaigre de vin rouge', qty: 20, unit: 'ml' },
+      { name: 'Moutarde de Dijon', qty: 15, unit: 'g' },
+      { name: 'Échalote', qty: 1, unit: 'pce', note: 'finement émincée' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Dans un petit bol, mélanger moutarde, vinaigre, sel et poivre.",
+      "Verser l'huile en filet en fouettant constamment pour émulsionner.",
+      "Ajouter l'échalote émincée. Goûter et ajuster l'assaisonnement.",
+      "Se conserve 1 semaine au réfrigérateur dans un bocal fermé. Fouetter avant chaque utilisation."
+    ]
+  }
+  ,{
+    id: 'R1001',
+    name: 'Sauce Yaourt Ail Ciboulette',
+    category: 'french',
+    mealTypes: ['lunch','dinner','snack'],
+    emoji: '🥛', origin: '🇫🇷',
+    tags: ['sauce','light','vegetarian','condiment'],
+    servings: 4, prepTime: 5, cookTime: 0, difficulty: 1,
+    // 10×4 + 8×4 + 4×9 = 40+32+36 = 108 ✓
+    baseNutrition: { calories: 108, proteinGrams: 10, carbsGrams: 8, fatGrams: 4 },
+    ingredients: [
+      { name: 'Yaourt grec 0%', qty: 200, unit: 'g' },
+      { name: 'Ail', qty: 1, unit: 'pce', note: 'gousse' },
+      { name: 'Ciboulette fraîche', qty: 10, unit: 'g' },
+      { name: 'Jus de citron', qty: 10, unit: 'ml' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Hacher finement l'ail et la ciboulette.",
+      "Mélanger le yaourt grec avec l'ail, la ciboulette, le jus de citron et l'huile d'olive.",
+      "Assaisonner avec sel et poivre. Goûter.",
+      "Idéale avec des légumes crus, grillades, brochettes ou comme dressing de salade. Se garde 3 jours au frais."
+    ]
+  }
+  ,{
+    id: 'R1002',
+    name: 'Sauce Pesto Génois Maison',
+    category: 'italian',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🌿', origin: '🇮🇹',
+    tags: ['sauce','vegetarian','classic','condiment'],
+    servings: 4, prepTime: 10, cookTime: 0, difficulty: 1,
+    // 8×4 + 4×4 + 40×9 = 32+16+360 = 408 ✓
+    baseNutrition: { calories: 408, proteinGrams: 8, carbsGrams: 4, fatGrams: 40 },
+    ingredients: [
+      { name: 'Basilic frais', qty: 40, unit: 'g' },
+      { name: 'Parmesan râpé', qty: 40, unit: 'g' },
+      { name: 'Pignons de pin', qty: 30, unit: 'g' },
+      { name: 'Ail', qty: 1, unit: 'pce', note: 'gousse' },
+      { name: 'Huile d\'olive', qty: 80, unit: 'ml' },
+      { name: 'Sel', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Griller les pignons à sec dans une poêle 2 min. Laisser refroidir.",
+      "Mixer basilic, pignons, ail et parmesan en pulsant.",
+      "Ajouter l'huile d'olive progressivement. Le pesto doit rester un peu grumeleux, pas lisse.",
+      "Saler. Idéal pour les pâtes, la pizza, les salades. Couvrir d'un film en contact au réfrigérateur."
+    ]
+  }
+  ,{
+    id: 'R1003',
+    name: 'Sauce Tomate Maison Simple',
+    category: 'italian',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍅', origin: '🇮🇹',
+    tags: ['sauce','vegetarian','classic','condiment'],
+    servings: 4, prepTime: 5, cookTime: 20, difficulty: 1,
+    // 4×4 + 16×4 + 8×9 = 16+64+72 = 152 ✓
+    baseNutrition: { calories: 152, proteinGrams: 4, carbsGrams: 16, fatGrams: 8 },
+    ingredients: [
+      { name: 'Tomates pelées en boîte', qty: 800, unit: 'g' },
+      { name: 'Ail', qty: 3, unit: 'pce', note: 'gousses' },
+      { name: 'Huile d\'olive', qty: 30, unit: 'ml' },
+      { name: 'Basilic frais', qty: 10, unit: 'g' },
+      { name: 'Sucre', qty: 5, unit: 'g', note: 'pincée pour équilibrer l\'acidité' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Faire revenir l'ail haché dans l'huile d'olive 1 min à feu moyen sans colorer.",
+      "Ajouter les tomates pelées en les écrasant avec les mains. Ajouter le sucre.",
+      "Mijoter 15-20 min à feu moyen jusqu'à réduction. Assaisonner.",
+      "Ajouter le basilic hors du feu. Mixer ou laisser rustique selon préférence. Base pour pâtes, pizza, viandes."
+    ]
+  }
+  ,{
+    id: 'R1004',
+    name: 'Sauce Béarnaise Express',
+    category: 'french',
+    mealTypes: ['dinner'],
+    emoji: '🥚', origin: '🇫🇷',
+    tags: ['sauce','classic','fete','condiment'],
+    servings: 2, prepTime: 5, cookTime: 10, difficulty: 2,
+    // 4×4 + 2×4 + 22×9 = 16+8+198 = 222 ✓
+    baseNutrition: { calories: 222, proteinGrams: 4, carbsGrams: 2, fatGrams: 22 },
+    ingredients: [
+      { name: 'Jaunes d\'oeufs', qty: 2, unit: 'pce' },
+      { name: 'Beurre', qty: 60, unit: 'g' },
+      { name: 'Échalote', qty: 1, unit: 'pce' },
+      { name: 'Estragon frais', qty: 5, unit: 'g' },
+      { name: 'Vinaigre de vin blanc', qty: 20, unit: 'ml' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Réduire l'échalote émincée avec le vinaigre et l'estragon jusqu'à presque sec. Laisser tiédir.",
+      "Faire fondre le beurre doucement. Dans un bain-marie (eau frémissante, jamais bouillante), fouetter les jaunes d'oeufs avec la réduction.",
+      "Incorporer le beurre fondu en filet en fouettant constamment jusqu'à épaississement crémeux.",
+      "Assaisonner. Servir immédiatement avec une côte de bœuf ou un filet de poisson. Ne pas réchauffer."
+    ]
+  }
+
+  // ── BATCH P66 — Sauces du monde & dressings ───────────────────────────────────
+  ,{
+    id: 'R1005',
+    name: 'Sauce Tzatziki Concombre Menthe',
+    category: 'mediterranean',
+    mealTypes: ['lunch','dinner','snack'],
+    emoji: '🫙', origin: '🇬🇷',
+    tags: ['sauce','vegetarian','light','condiment'],
+    servings: 4, prepTime: 10, cookTime: 0, difficulty: 1,
+    // 12×4 + 10×4 + 4×9 = 48+40+36 = 124 ✓
+    baseNutrition: { calories: 124, proteinGrams: 12, carbsGrams: 10, fatGrams: 4 },
+    ingredients: [
+      { name: 'Yaourt grec', qty: 250, unit: 'g' },
+      { name: 'Concombre', qty: 150, unit: 'g' },
+      { name: 'Ail', qty: 2, unit: 'pce', note: 'gousses' },
+      { name: 'Menthe fraîche', qty: 8, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+      { name: 'Jus de citron', qty: 10, unit: 'ml' },
+      { name: 'Sel', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Râper le concombre. Le saler, laisser dégorger 10 min, presser fort dans un torchon pour éliminer l'eau.",
+      "Mélanger yaourt grec, ail écrasé, menthe ciselée, huile d'olive et citron.",
+      "Incorporer le concombre pressé. Bien mélanger.",
+      "Réfrigérer 30 min avant de servir. Accompagne viandes grillées, falafels, légumes crus."
+    ]
+  }
+  ,{
+    id: 'R1006',
+    name: 'Sauce Teriyaki Maison',
+    category: 'japanese',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍯', origin: '🇯🇵',
+    tags: ['sauce','sweet','classic','condiment'],
+    servings: 4, prepTime: 3, cookTime: 5, difficulty: 1,
+    // 2×4 + 24×4 + 0×9 = 8+96+0 = 104 ✓
+    baseNutrition: { calories: 104, proteinGrams: 2, carbsGrams: 24, fatGrams: 0 },
+    ingredients: [
+      { name: 'Sauce soja', qty: 60, unit: 'ml' },
+      { name: 'Miel', qty: 30, unit: 'g' },
+      { name: 'Sucre brun', qty: 10, unit: 'g' },
+      { name: 'Ail', qty: 2, unit: 'pce', note: 'gousses' },
+      { name: 'Gingembre frais', qty: 10, unit: 'g' },
+      { name: 'Fécule de maïs', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      "Mélanger sauce soja, miel, sucre brun, ail haché et gingembre râpé dans une petite casserole.",
+      "Porter à frémissement à feu moyen en remuant.",
+      "Délayer la fécule dans 2 cuillères d'eau froide. Verser dans la sauce, fouetter jusqu'à épaississement.",
+      "Cuire encore 1 min. Refroidir. Idéale pour glacer poulet, saumon, tofu, bœuf — napper en fin de cuisson."
+    ]
+  }
+  ,{
+    id: 'R1007',
+    name: 'Sauce Chimichurri Argentine',
+    category: 'world-food',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🌿', origin: '🇦🇷',
+    tags: ['sauce','vegetarian','grillé','condiment'],
+    servings: 4, prepTime: 10, cookTime: 0, difficulty: 1,
+    // 2×4 + 4×4 + 28×9 = 8+16+252 = 276 ✓
+    baseNutrition: { calories: 276, proteinGrams: 2, carbsGrams: 4, fatGrams: 28 },
+    ingredients: [
+      { name: 'Persil frais', qty: 40, unit: 'g' },
+      { name: 'Ail', qty: 3, unit: 'pce', note: 'gousses' },
+      { name: 'Huile d\'olive', qty: 60, unit: 'ml' },
+      { name: 'Vinaigre de vin rouge', qty: 20, unit: 'ml' },
+      { name: 'Origan séché', qty: 3, unit: 'g' },
+      { name: 'Piment rouge séché', qty: 2, unit: 'g' },
+      { name: 'Sel', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Hacher très finement le persil et l'ail (au couteau, pas au mixeur — texture grumeleux).",
+      "Mélanger avec origan, piment émietté, sel.",
+      "Verser l'huile d'olive et le vinaigre. Bien mélanger.",
+      "Laisser reposer 30 min minimum. Accompagne toutes les grillades, empanadas, légumes rôtis. Se garde 5 jours au frais."
+    ]
+  }
+  ,{
+    id: 'R1008',
+    name: 'Sauce Burger Maison (Sauce Secrète)',
+    category: 'world-food',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍔', origin: '🇺🇸',
+    tags: ['sauce','comfort','express','condiment'],
+    servings: 4, prepTime: 5, cookTime: 0, difficulty: 1,
+    // 2×4 + 6×4 + 16×9 = 8+24+144 = 176 ✓
+    baseNutrition: { calories: 176, proteinGrams: 2, carbsGrams: 6, fatGrams: 16 },
+    ingredients: [
+      { name: 'Mayonnaise', qty: 60, unit: 'g' },
+      { name: 'Ketchup', qty: 20, unit: 'g' },
+      { name: 'Moutarde américaine', qty: 10, unit: 'g' },
+      { name: 'Cornichons hachés', qty: 20, unit: 'g' },
+      { name: 'Paprika fumé', qty: 2, unit: 'g' },
+      { name: 'Oignon en poudre', qty: 2, unit: 'g' }
+    ],
+    steps: [
+      "Mélanger tous les ingrédients dans un bol.",
+      "Goûter et ajuster : plus de ketchup pour le sucré, plus de moutarde pour le relevé.",
+      "Réfrigérer 30 min — les saveurs se développent.",
+      "Utiliser généreusement dans les burgers, hot-dogs, sandwichs ou comme sauce dip."
+    ]
+  }
+  ,{
+    id: 'R1009',
+    name: 'Sauce Hollandaise Express',
+    category: 'french',
+    mealTypes: ['breakfast','lunch','dinner'],
+    emoji: '🥚', origin: '🇫🇷',
+    tags: ['sauce','classic','fete','condiment'],
+    servings: 2, prepTime: 5, cookTime: 8, difficulty: 2,
+    // 4×4 + 2×4 + 24×9 = 16+8+216 = 240 ✓
+    baseNutrition: { calories: 240, proteinGrams: 4, carbsGrams: 2, fatGrams: 24 },
+    ingredients: [
+      { name: 'Jaunes d\'oeufs', qty: 2, unit: 'pce' },
+      { name: 'Beurre clarifié', qty: 60, unit: 'g' },
+      { name: 'Citron', qty: 1, unit: 'pce', note: 'jus' },
+      { name: 'Eau froide', qty: 15, unit: 'ml' },
+      { name: 'Sel, poivre blanc', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Dans un bain-marie (fond de casserole frémissant), fouetter les jaunes avec l'eau et le jus de citron jusqu'à consistance mousseuse et ruban.",
+      "Retirer du feu. Incorporer le beurre clarifié tiède en filet très fin en fouettant constamment.",
+      "La sauce doit napper le dos d'une cuillère. Assaisonner sel et poivre blanc.",
+      "Servir immédiatement avec asperges, poisson poché ou oeufs bénédicte. Garder tiède au bain-marie sans cuire."
+    ]
+  }
+
   // ─────────────────────────────────────────────────────────────────────────────
   // FIN RECIPES_DB — à continuer avec les batches suivants au-dessus de cette ligne
   // ─────────────────────────────────────────────────────────────────────────────
