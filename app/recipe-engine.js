@@ -37623,34 +37623,6 @@
     ]
   }
   ,{
-    id: 'R932',
-    name: 'Soupe à l\'Oignon Gratinée',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🧅', origin: '🇫🇷',
-    tags: ['classic','comfort','bistrot'],
-    servings: 2, prepTime: 10, cookTime: 40, difficulty: 2,
-    // 18×4 + 32×4 + 14×9 = 72+128+126 = 326 ✓
-    baseNutrition: { calories: 326, proteinGrams: 18, carbsGrams: 32, fatGrams: 14 },
-    ingredients: [
-      { name: 'Oignons', qty: 500, unit: 'g' },
-      { name: 'Beurre', qty: 30, unit: 'g' },
-      { name: 'Farine', qty: 15, unit: 'g' },
-      { name: 'Bouillon de bœuf', qty: 800, unit: 'ml' },
-      { name: 'Vin blanc sec', qty: 100, unit: 'ml' },
-      { name: 'Pain de campagne', qty: 80, unit: 'g', note: '2 tranches épaisses' },
-      { name: 'Gruyère râpé', qty: 80, unit: 'g' },
-      { name: 'Thym', qty: 2, unit: 'g' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Émincer les oignons finement. Faire fondre le beurre, ajouter les oignons, cuire 30 min à feu doux en remuant régulièrement jusqu'à coloration caramel.",
-      "Saupoudrer de farine, mélanger 2 min. Déglacer au vin blanc, laisser réduire 2 min.",
-      "Ajouter le bouillon et le thym. Mijoter 10 min. Assaisonner.",
-      "Verser dans des bols allant au four. Poser le pain grillé, couvrir de gruyère râpé. Gratiner sous le grill 5 min jusqu'à coloration dorée."
-    ]
-  }
-  ,{
     id: 'R933',
     name: 'Velouté de Courgettes Chèvre',
     category: 'french',
@@ -37811,37 +37783,7 @@
       "Assaisonner, parsemer de persil haché. Servir avec du riz."
     ]
   }
-  ,{
-    id: 'R939',
-    name: 'Poulet Tikka Masala Express',
-    category: 'world-food',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍛', origin: '🇮🇳',
-    tags: ['spiced','high-protein','comfort'],
-    servings: 2, prepTime: 10, cookTime: 20, difficulty: 2,
-    // 52×4 + 16×4 + 14×9 = 208+64+126 = 398 ✓
-    baseNutrition: { calories: 398, proteinGrams: 52, carbsGrams: 16, fatGrams: 14 },
-    ingredients: [
-      { name: 'Blanc de poulet', qty: 400, unit: 'g' },
-      { name: 'Yaourt nature', qty: 80, unit: 'g' },
-      { name: 'Tomates pelées', qty: 300, unit: 'g' },
-      { name: 'Oignon', qty: 1, unit: 'pce' },
-      { name: 'Crème fraîche légère', qty: 40, unit: 'ml' },
-      { name: 'Huile végétale', qty: 15, unit: 'ml' },
-      { name: 'Garam masala', qty: 8, unit: 'g' },
-      { name: 'Curcuma', qty: 3, unit: 'g' },
-      { name: 'Gingembre frais', qty: 10, unit: 'g' },
-      { name: 'Ail', qty: 2, unit: 'pce', note: 'gousses' },
-      { name: 'Sel', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Couper le poulet en morceaux. Mélanger avec yaourt, la moitié du garam masala, curcuma. Mariner 10 min.",
-      "Faire dorer le poulet dans l'huile chaude 5-6 min. Réserver.",
-      "Faire revenir l'oignon, l'ail et le gingembre 3 min. Ajouter les tomates et le reste du garam masala.",
-      "Remettre le poulet, cuire 10 min. Incorporer la crème. Servir avec du riz basmati."
-    ]
-  }
-
+  
   // ── BATCH P53 — Sandwichs & Wraps express ────────────────────────────────────
   ,{
     id: 'R940',
@@ -38334,30 +38276,6 @@
     ]
   }
   ,{
-    id: 'R958',
-    name: 'Tarte Tatin aux Pommes',
-    category: 'french',
-    mealTypes: ['dessert'],
-    emoji: '🥧', origin: '🇫🇷',
-    tags: ['dessert','classic','fete'],
-    servings: 6, prepTime: 15, cookTime: 35, difficulty: 2,
-    // 24×4 + 276×4 + 72×9 = 96+1104+648 = 1848 ✓
-    baseNutrition: { calories: 1848, proteinGrams: 24, carbsGrams: 276, fatGrams: 72 },
-    ingredients: [
-      { name: 'Pommes Golden', qty: 1200, unit: 'g', note: '6 pommes' },
-      { name: 'Sucre', qty: 150, unit: 'g' },
-      { name: 'Beurre', qty: 60, unit: 'g' },
-      { name: 'Pâte feuilletée', qty: 200, unit: 'g' },
-      { name: 'Vanille', qty: 1, unit: 'pce', note: 'gousse ou extrait' }
-    ],
-    steps: [
-      "Préchauffer le four à 190°C. Dans un moule à tarte allant au four, faire fondre le beurre sur le feu, ajouter le sucre et cuire jusqu'à caramel brun.",
-      "Peler et couper les pommes en quartiers. Les disposer debout, bien serrés, dans le caramel.",
-      "Cuire 10 min sur le feu pour que les pommes commencent à compoter dans le caramel.",
-      "Couvrir avec la pâte feuilletée en rentrant les bords. Cuire 25 min au four. Démouler à chaud sur un plat. Servir tiède avec crème fraîche."
-    ]
-  }
-  ,{
     id: 'R959',
     name: 'Tarte aux Fraises Crème Pâtissière',
     category: 'french',
@@ -38386,35 +38304,6 @@
   }
 
   // ── BATCH P57 — Viandes mijotées incontournables ──────────────────────────────
-  ,{
-    id: 'R960',
-    name: 'Blanquette de Veau à l\'Ancienne',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍖', origin: '🇫🇷',
-    tags: ['classic','comfort','mijoté'],
-    servings: 4, prepTime: 20, cookTime: 90, difficulty: 2,
-    // 128×4 + 24×4 + 40×9 = 512+96+360 = 968 ✓
-    baseNutrition: { calories: 968, proteinGrams: 128, carbsGrams: 24, fatGrams: 40 },
-    ingredients: [
-      { name: 'Veau (épaule)', qty: 800, unit: 'g', note: 'en morceaux' },
-      { name: 'Carottes', qty: 200, unit: 'g' },
-      { name: 'Champignons de Paris', qty: 200, unit: 'g' },
-      { name: 'Oignon piqué', qty: 1, unit: 'pce' },
-      { name: 'Bouquet garni', qty: 1, unit: 'pce' },
-      { name: 'Beurre', qty: 40, unit: 'g' },
-      { name: 'Farine', qty: 30, unit: 'g' },
-      { name: 'Crème fraîche', qty: 100, unit: 'ml' },
-      { name: 'Jaune d\'oeuf', qty: 2, unit: 'pce' },
-      { name: 'Sel, poivre, citron', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Blanchir le veau : couvrir d'eau froide, porter à ébullition, égoutter et rincer. Remettre dans la casserole avec l'oignon piqué, carottes et bouquet garni. Couvrir d'eau, cuire 1h à frémissement.",
-      "Faire sauter les champignons dans 20g de beurre. Réserver. Préparer un roux blanc avec le reste du beurre et la farine.",
-      "Verser 600ml du bouillon de cuisson chaud sur le roux en fouettant. Cuire jusqu'à épaississement.",
-      "Lier hors du feu avec crème + jaunes d'oeufs. Ajouter veau, carottes, champignons. Ajuster l'assaisonnement avec sel, poivre et citron. Servir avec du riz."
-    ]
-  }
   ,{
     id: 'R961',
     name: 'Bœuf Bourguignon Rapide',
