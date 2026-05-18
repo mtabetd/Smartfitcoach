@@ -38254,6 +38254,281 @@
     ]
   }
 
+  // ── BATCH P56 — Recettes de fête simples ──────────────────────────────────────
+  ,{
+    id: 'R955',
+    name: 'Filet Mignon en Croûte de Moutarde',
+    category: 'french',
+    mealTypes: ['dinner'],
+    emoji: '🥩', origin: '🇫🇷',
+    tags: ['fete','classic','high-protein'],
+    servings: 2, prepTime: 10, cookTime: 20, difficulty: 2,
+    // 58×4 + 8×4 + 12×9 = 232+32+108 = 372 ✓
+    baseNutrition: { calories: 372, proteinGrams: 58, carbsGrams: 8, fatGrams: 12 },
+    ingredients: [
+      { name: 'Filet mignon de porc', qty: 400, unit: 'g' },
+      { name: 'Moutarde à l\'ancienne', qty: 30, unit: 'g' },
+      { name: 'Chapelure', qty: 20, unit: 'g' },
+      { name: 'Herbes de Provence', qty: 3, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+      { name: 'Ail', qty: 2, unit: 'pce', note: 'gousses' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Préchauffer le four à 200°C. Faire saisir le filet mignon dans l'huile très chaude 2 min par face pour bien colorer.",
+      "Mélanger moutarde, chapelure, herbes, ail haché. Enduire généreusement le filet de ce mélange.",
+      "Placer dans un plat et enfourner 15 min pour une cuisson rosée.",
+      "Laisser reposer 5 min sous alu avant de trancher. Servir avec une purée ou des légumes rôtis."
+    ]
+  }
+  ,{
+    id: 'R956',
+    name: 'Magret de Canard aux Cerises',
+    category: 'french',
+    mealTypes: ['dinner'],
+    emoji: '🦆', origin: '🇫🇷',
+    tags: ['fete','classic','bistrot'],
+    servings: 2, prepTime: 5, cookTime: 20, difficulty: 2,
+    // 40×4 + 18×4 + 22×9 = 160+72+198 = 430 ✓
+    baseNutrition: { calories: 430, proteinGrams: 40, carbsGrams: 18, fatGrams: 22 },
+    ingredients: [
+      { name: 'Magret de canard', qty: 400, unit: 'g' },
+      { name: 'Cerises au sirop', qty: 150, unit: 'g' },
+      { name: 'Vinaigre balsamique', qty: 20, unit: 'ml' },
+      { name: 'Miel', qty: 15, unit: 'g' },
+      { name: 'Beurre', qty: 10, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Quadriller la peau du magret au couteau sans entailler la chair. Saler et poivrer.",
+      "Cuire à la poêle côté peau à feu moyen 8-10 min pour faire fondre la graisse. Retourner, cuire 5 min côté chair.",
+      "Laisser reposer sous alu 5 min. Dans la poêle dégraissée, faire réduire vinaigre, miel et cerises 3 min.",
+      "Trancher le magret finement. Napper de sauce aux cerises. Servir aussitôt."
+    ]
+  }
+  ,{
+    id: 'R957',
+    name: 'Crevettes Sautées à l\'Ail & Persil',
+    category: 'mediterranean',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍤', origin: '🇪🇸',
+    tags: ['express','fete','high-protein'],
+    servings: 2, prepTime: 5, cookTime: 8, difficulty: 1,
+    // 34×4 + 2×4 + 10×9 = 136+8+90 = 234 ✓
+    baseNutrition: { calories: 234, proteinGrams: 34, carbsGrams: 2, fatGrams: 10 },
+    ingredients: [
+      { name: 'Crevettes crues décortiquées', qty: 300, unit: 'g' },
+      { name: 'Ail', qty: 4, unit: 'pce', note: 'gousses' },
+      { name: 'Beurre', qty: 20, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+      { name: 'Persil frais', qty: 15, unit: 'g' },
+      { name: 'Piment d\'Espelette', qty: 2, unit: 'g' },
+      { name: 'Citron', qty: 1, unit: 'pce' },
+      { name: 'Sel', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Sécher les crevettes avec du papier absorbant. Hacher l'ail et le persil.",
+      "Faire chauffer beurre et huile dans une grande poêle à feu vif.",
+      "Ajouter les crevettes en une couche. Saisir 1-2 min sans bouger, retourner 1 min.",
+      "Ajouter l'ail, le piment, le persil. Mélanger 30 secondes. Déglacer avec le jus de citron. Servir immédiatement avec du pain."
+    ]
+  }
+  ,{
+    id: 'R958',
+    name: 'Tarte Tatin aux Pommes',
+    category: 'french',
+    mealTypes: ['dessert'],
+    emoji: '🥧', origin: '🇫🇷',
+    tags: ['dessert','classic','fete'],
+    servings: 6, prepTime: 15, cookTime: 35, difficulty: 2,
+    // 24×4 + 276×4 + 72×9 = 96+1104+648 = 1848 ✓
+    baseNutrition: { calories: 1848, proteinGrams: 24, carbsGrams: 276, fatGrams: 72 },
+    ingredients: [
+      { name: 'Pommes Golden', qty: 1200, unit: 'g', note: '6 pommes' },
+      { name: 'Sucre', qty: 150, unit: 'g' },
+      { name: 'Beurre', qty: 60, unit: 'g' },
+      { name: 'Pâte feuilletée', qty: 200, unit: 'g' },
+      { name: 'Vanille', qty: 1, unit: 'pce', note: 'gousse ou extrait' }
+    ],
+    steps: [
+      "Préchauffer le four à 190°C. Dans un moule à tarte allant au four, faire fondre le beurre sur le feu, ajouter le sucre et cuire jusqu'à caramel brun.",
+      "Peler et couper les pommes en quartiers. Les disposer debout, bien serrés, dans le caramel.",
+      "Cuire 10 min sur le feu pour que les pommes commencent à compoter dans le caramel.",
+      "Couvrir avec la pâte feuilletée en rentrant les bords. Cuire 25 min au four. Démouler à chaud sur un plat. Servir tiède avec crème fraîche."
+    ]
+  }
+  ,{
+    id: 'R959',
+    name: 'Tarte aux Fraises Crème Pâtissière',
+    category: 'french',
+    mealTypes: ['dessert'],
+    emoji: '🍓', origin: '🇫🇷',
+    tags: ['dessert','classic','fete'],
+    servings: 6, prepTime: 30, cookTime: 20, difficulty: 2,
+    // 30×4 + 264×4 + 60×9 = 120+1056+540 = 1716 ✓
+    baseNutrition: { calories: 1716, proteinGrams: 30, carbsGrams: 264, fatGrams: 60 },
+    ingredients: [
+      { name: 'Fraises fraîches', qty: 500, unit: 'g' },
+      { name: 'Pâte sablée', qty: 200, unit: 'g' },
+      { name: 'Lait entier', qty: 400, unit: 'ml' },
+      { name: 'Oeufs', qty: 3, unit: 'pce' },
+      { name: 'Sucre', qty: 100, unit: 'g' },
+      { name: 'Fécule de maïs', qty: 30, unit: 'g' },
+      { name: 'Beurre', qty: 30, unit: 'g' },
+      { name: 'Vanille', qty: 1, unit: 'pce', note: 'extrait' }
+    ],
+    steps: [
+      "Foncer le moule avec la pâte sablée. Cuire à blanc 20 min à 180°C. Laisser refroidir.",
+      "Crème pâtissière : faire bouillir le lait avec la vanille. Blanchir oeufs et sucre, ajouter la fécule. Verser le lait chaud, remettre sur le feu en remuant jusqu'à épaississement. Incorporer le beurre, filmer au contact. Refroidir.",
+      "Étaler la crème froide sur le fond de tarte. Disposer les fraises lavées et équeutées en rosace.",
+      "Réfrigérer 1h avant de servir. Lustrer avec un peu de confiture d'abricots chauffée pour la brillance."
+    ]
+  }
+
+  // ── BATCH P57 — Viandes mijotées incontournables ──────────────────────────────
+  ,{
+    id: 'R960',
+    name: 'Blanquette de Veau à l\'Ancienne',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍖', origin: '🇫🇷',
+    tags: ['classic','comfort','mijoté'],
+    servings: 4, prepTime: 20, cookTime: 90, difficulty: 2,
+    // 128×4 + 24×4 + 40×9 = 512+96+360 = 968 ✓
+    baseNutrition: { calories: 968, proteinGrams: 128, carbsGrams: 24, fatGrams: 40 },
+    ingredients: [
+      { name: 'Veau (épaule)', qty: 800, unit: 'g', note: 'en morceaux' },
+      { name: 'Carottes', qty: 200, unit: 'g' },
+      { name: 'Champignons de Paris', qty: 200, unit: 'g' },
+      { name: 'Oignon piqué', qty: 1, unit: 'pce' },
+      { name: 'Bouquet garni', qty: 1, unit: 'pce' },
+      { name: 'Beurre', qty: 40, unit: 'g' },
+      { name: 'Farine', qty: 30, unit: 'g' },
+      { name: 'Crème fraîche', qty: 100, unit: 'ml' },
+      { name: 'Jaune d\'oeuf', qty: 2, unit: 'pce' },
+      { name: 'Sel, poivre, citron', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Blanchir le veau : couvrir d'eau froide, porter à ébullition, égoutter et rincer. Remettre dans la casserole avec l'oignon piqué, carottes et bouquet garni. Couvrir d'eau, cuire 1h à frémissement.",
+      "Faire sauter les champignons dans 20g de beurre. Réserver. Préparer un roux blanc avec le reste du beurre et la farine.",
+      "Verser 600ml du bouillon de cuisson chaud sur le roux en fouettant. Cuire jusqu'à épaississement.",
+      "Lier hors du feu avec crème + jaunes d'oeufs. Ajouter veau, carottes, champignons. Ajuster l'assaisonnement avec sel, poivre et citron. Servir avec du riz."
+    ]
+  }
+  ,{
+    id: 'R961',
+    name: 'Bœuf Bourguignon Rapide',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍷', origin: '🇫🇷',
+    tags: ['classic','comfort','mijoté'],
+    servings: 4, prepTime: 20, cookTime: 60, difficulty: 2,
+    // 120×4 + 20×4 + 32×9 = 480+80+288 = 848 ✓
+    baseNutrition: { calories: 848, proteinGrams: 120, carbsGrams: 20, fatGrams: 32 },
+    ingredients: [
+      { name: 'Bœuf (paleron ou macreuse)', qty: 800, unit: 'g', note: 'en morceaux' },
+      { name: 'Vin rouge', qty: 350, unit: 'ml' },
+      { name: 'Lardons fumés', qty: 100, unit: 'g' },
+      { name: 'Oignons grelots', qty: 150, unit: 'g' },
+      { name: 'Champignons', qty: 200, unit: 'g' },
+      { name: 'Carottes', qty: 150, unit: 'g' },
+      { name: 'Tomate concentrée', qty: 20, unit: 'g' },
+      { name: 'Farine', qty: 20, unit: 'g' },
+      { name: 'Bouquet garni', qty: 1, unit: 'pce' },
+      { name: 'Huile végétale', qty: 15, unit: 'ml' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Faire dorer les lardons et les oignons grelots, réserver. Fariner et saisir les morceaux de bœuf sur toutes les faces.",
+      "Déglacer au vin rouge, ajouter la tomate concentrée, carottes, bouquet garni, sel, poivre. Couvrir.",
+      "Mijoter 50 min à feu doux. Ajouter les champignons et les lardons les 15 dernières minutes.",
+      "Servir avec des pommes de terre vapeur ou des pâtes fraîches. Encore meilleur réchauffé."
+    ]
+  }
+  ,{
+    id: 'R962',
+    name: 'Poulet à la Crème & Champignons',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍄', origin: '🇫🇷',
+    tags: ['classic','comfort','high-protein'],
+    servings: 2, prepTime: 10, cookTime: 25, difficulty: 1,
+    // 56×4 + 8×4 + 14×9 = 224+32+126 = 382 ✓
+    baseNutrition: { calories: 382, proteinGrams: 56, carbsGrams: 8, fatGrams: 14 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 400, unit: 'g' },
+      { name: 'Champignons de Paris', qty: 250, unit: 'g' },
+      { name: 'Échalotes', qty: 2, unit: 'pce' },
+      { name: 'Crème fraîche légère', qty: 100, unit: 'ml' },
+      { name: 'Beurre', qty: 15, unit: 'g' },
+      { name: 'Vin blanc sec', qty: 60, unit: 'ml' },
+      { name: 'Persil', qty: 5, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Couper les blancs en gros morceaux. Faire dorer dans le beurre chaud 5 min. Réserver.",
+      "Dans la même poêle, faire revenir les échalotes émincées 2 min. Ajouter les champignons, sauter 5 min.",
+      "Déglacer au vin blanc, laisser réduire 2 min. Ajouter la crème, cuire 3 min à feu doux.",
+      "Remettre le poulet, réchauffer 3 min. Rectifier l'assaisonnement. Parsemer de persil. Servir avec du riz ou des tagliatelles."
+    ]
+  }
+  ,{
+    id: 'R963',
+    name: 'Daube de Bœuf Provençale',
+    category: 'french',
+    mealTypes: ['dinner'],
+    emoji: '🫕', origin: '🇫🇷',
+    tags: ['classic','comfort','mijoté'],
+    servings: 4, prepTime: 20, cookTime: 120, difficulty: 2,
+    // 112×4 + 24×4 + 28×9 = 448+96+252 = 796 ✓
+    baseNutrition: { calories: 796, proteinGrams: 112, carbsGrams: 24, fatGrams: 28 },
+    ingredients: [
+      { name: 'Bœuf (gîte ou joue)', qty: 800, unit: 'g', note: 'en morceaux' },
+      { name: 'Vin rouge de Provence', qty: 400, unit: 'ml' },
+      { name: 'Tomates pelées', qty: 300, unit: 'g' },
+      { name: 'Carottes', qty: 200, unit: 'g' },
+      { name: 'Oignon', qty: 2, unit: 'pce' },
+      { name: 'Olives noires', qty: 60, unit: 'g' },
+      { name: 'Zeste d\'orange', qty: 1, unit: 'pce' },
+      { name: 'Thym, laurier, romarin', qty: 5, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Mariner le bœuf dans le vin rouge avec herbes et zeste d'orange 2h minimum (ou toute la nuit).",
+      "Égoutter et saisir la viande dans l'huile chaude. Faire revenir oignons et carottes.",
+      "Remettre la viande, ajouter la marinade, les tomates et les olives. Couvrir hermétiquement.",
+      "Cuire au four à 150°C pendant 2h. La viande doit se défaire à la fourchette. Servir avec des gnocchis ou polenta."
+    ]
+  }
+  ,{
+    id: 'R964',
+    name: 'Agneau Aux Flageolets',
+    category: 'french',
+    mealTypes: ['dinner'],
+    emoji: '🫘', origin: '🇫🇷',
+    tags: ['classic','fete','mijoté'],
+    servings: 4, prepTime: 15, cookTime: 90, difficulty: 2,
+    // 104×4 + 40×4 + 32×9 = 416+160+288 = 864 ✓
+    baseNutrition: { calories: 864, proteinGrams: 104, carbsGrams: 40, fatGrams: 32 },
+    ingredients: [
+      { name: 'Gigot d\'agneau désossé', qty: 800, unit: 'g', note: 'en morceaux' },
+      { name: 'Flageolets en boîte', qty: 400, unit: 'g', note: 'égouttés' },
+      { name: 'Tomates pelées', qty: 300, unit: 'g' },
+      { name: 'Oignon', qty: 2, unit: 'pce' },
+      { name: 'Ail', qty: 4, unit: 'pce', note: 'gousses' },
+      { name: 'Thym, laurier', qty: 3, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Faire saisir les morceaux d'agneau dans l'huile très chaude sur toutes les faces. Réserver.",
+      "Faire revenir les oignons et l'ail haché. Ajouter les tomates, les herbes, sel et poivre.",
+      "Remettre l'agneau, couvrir et mijoter 1h15 à feu doux.",
+      "Ajouter les flageolets les 15 dernières minutes. Rectifier l'assaisonnement. Servir en cocotte."
+    ]
+  }
+
   // ─────────────────────────────────────────────────────────────────────────────
   // FIN RECIPES_DB — à continuer avec les batches suivants au-dessus de cette ligne
   // ─────────────────────────────────────────────────────────────────────────────
