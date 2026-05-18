@@ -32724,6 +32724,773 @@
         "Dans la même poêle, saisir les crevettes avec ail 2-3 min.",
         "Dresser l'assiette en sections : patate douce, légumes verts, poulet tranché, crevettes. Arroser de citron."
       ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  BATCH P19 — POULET DU QUOTIDIEN  (R770–R774)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R770',
+      name: 'Poulet Rôti Ail Citron au Four',
+      category: 'french',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🍗', origin: '🇫🇷',
+      tags: ['high-protein', 'low-carb', 'easy', 'classic', 'lean'],
+      servings: 2, prepTime: 5, cookTime: 30, difficulty: 1,
+      // 70×4 + 10×4 + 22×9 = 280+40+198 = 518 ✓
+      baseNutrition: { calories: 518, proteinGrams: 70, carbsGrams: 10, fatGrams: 22 },
+      ingredients: [
+        { name: 'Hauts de cuisse de poulet',        qty: 600, unit: 'g', note: 'avec os' },
+        { name: 'Ail',                              qty: 20,  unit: 'g', note: '4 gousses, écrasées' },
+        { name: 'Citron',                           qty: 1,   unit: 'pce', note: 'jus + quartiers' },
+        { name: 'Thym frais',                       qty: 5,   unit: 'g' },
+        { name: 'Huile d\'olive',                   qty: 20,  unit: 'ml' },
+        { name: 'Sel, poivre',                      qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Préchauffer le four à 200°C. Sécher le poulet avec du papier absorbant.",
+        "Mélanger huile d'olive, ail écrasé, jus de citron, thym, sel et poivre. Badigeonner généreusement chaque morceau.",
+        "Disposer côté peau vers le haut dans un plat allant au four. Glisser les quartiers de citron autour.",
+        "Enfourner 28-32 min. La peau doit être dorée et croustillante. Vérifier : jus transparent en piquant la cuisse.",
+        "Laisser reposer 5 min. Arroser du jus de cuisson avant de servir."
+      ]
+    },
+
+    {
+      id: 'R771',
+      name: 'Escalopes de Poulet Crème Champignons',
+      category: 'french',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🍄', origin: '🇫🇷',
+      tags: ['high-protein', 'creamy', 'comfort-food', 'french', 'quick'],
+      servings: 2, prepTime: 5, cookTime: 15, difficulty: 1,
+      // 76×4 + 40×4 + 22×9 = 304+160+198 = 662 ✓
+      baseNutrition: { calories: 662, proteinGrams: 76, carbsGrams: 40, fatGrams: 22 },
+      ingredients: [
+        { name: 'Escalope de poulet',               qty: 450, unit: 'g', note: '2 grosses escalopes' },
+        { name: 'Champignons de Paris',             qty: 250, unit: 'g', note: 'émincés' },
+        { name: 'Riz basmati',                      qty: 100, unit: 'g', note: 'sec, pour servir' },
+        { name: 'Crème fraîche légère 15%',        qty: 100, unit: 'g' },
+        { name: 'Bouillon de poulet',              qty: 80,  unit: 'ml' },
+        { name: 'Oignon',                          qty: 80,  unit: 'g' },
+        { name: 'Ail',                             qty: 5,   unit: 'g' },
+        { name: 'Persil frais',                    qty: 10,  unit: 'g' },
+        { name: 'Beurre',                          qty: 10,  unit: 'g' },
+        { name: 'Sel, poivre',                     qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Cuire le riz. Aplatir les escalopes si épaisses. Saler et poivrer.",
+        "Faire dorer les escalopes dans le beurre 4 min par face. Réserver sous alu.",
+        "Dans la même poêle, faire revenir l'oignon émincé 3 min. Ajouter l'ail et les champignons, cuire 5 min jusqu'à évaporation de l'eau.",
+        "Verser le bouillon, gratter les sucs de cuisson. Ajouter la crème fraîche. Laisser réduire 3-4 min.",
+        "Remettre les escalopes dans la sauce 2 min. Parsemer de persil. Servir avec le riz."
+      ]
+    },
+
+    {
+      id: 'R772',
+      name: 'Poulet Sauté Tomates Olives & Thym',
+      category: 'mediterranean',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🫒', origin: '🇫🇷',
+      tags: ['high-protein', 'mediterranean', 'one-pan', 'easy', 'aromatic'],
+      servings: 2, prepTime: 5, cookTime: 25, difficulty: 1,
+      // 80×4 + 16×4 + 24×9 = 320+64+216 = 600 ✓
+      baseNutrition: { calories: 600, proteinGrams: 80, carbsGrams: 16, fatGrams: 24 },
+      ingredients: [
+        { name: 'Cuisses de poulet désossées',      qty: 500, unit: 'g' },
+        { name: 'Tomates cerises',                  qty: 200, unit: 'g' },
+        { name: 'Olives noires',                    qty: 60,  unit: 'g' },
+        { name: 'Ail',                              qty: 10,  unit: 'g', note: '2 gousses' },
+        { name: 'Thym frais',                       qty: 5,   unit: 'g' },
+        { name: 'Vin blanc sec',                    qty: 60,  unit: 'ml' },
+        { name: 'Huile d\'olive',                   qty: 20,  unit: 'ml' },
+        { name: 'Sel, poivre',                      qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Saler et poivrer le poulet. Chauffer l'huile dans une sauteuse à feu vif. Faire dorer le poulet 4-5 min par face. Réserver.",
+        "Dans la même sauteuse, faire revenir l'ail émincé 1 min. Déglacer au vin blanc, gratter les sucs.",
+        "Ajouter les tomates cerises et le thym. Porter à frémissement 5 min — les tomates éclatent et font une sauce.",
+        "Remettre le poulet. Ajouter les olives. Couvrir, cuire à feu doux 12-15 min.",
+        "Rectifier l'assaisonnement. Servir tel quel ou avec du pain croustillant pour saucer."
+      ]
+    },
+
+    {
+      id: 'R773',
+      name: 'Nuggets de Poulet Maison Panés au Four',
+      category: 'world-food',
+      mealTypes: ['lunch', 'dinner', 'snack'],
+      emoji: '🍗', origin: '🇺🇸',
+      tags: ['high-protein', 'kid-friendly', 'batch-cooking', 'oven', 'classic'],
+      servings: 2, prepTime: 15, cookTime: 20, difficulty: 1,
+      // 72×4 + 60×4 + 18×9 = 288+240+162 = 690 ✓
+      baseNutrition: { calories: 690, proteinGrams: 72, carbsGrams: 60, fatGrams: 18 },
+      ingredients: [
+        { name: 'Blanc de poulet',                  qty: 450, unit: 'g', note: 'coupé en morceaux 3cm' },
+        { name: 'Chapelure',                        qty: 80,  unit: 'g' },
+        { name: 'Parmesan râpé',                    qty: 30,  unit: 'g' },
+        { name: 'Oeuf',                             qty: 2,   unit: 'pce' },
+        { name: 'Farine',                           qty: 30,  unit: 'g' },
+        { name: 'Paprika',                          qty: 5,   unit: 'g' },
+        { name: 'Ail en poudre',                    qty: 3,   unit: 'g' },
+        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml', note: 'pour badigeonner' },
+        { name: 'Sel, poivre',                      qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Préchauffer le four à 200°C. Mettre une grille sur une plaque de cuisson.",
+        "Préparer 3 assiettes : farine assaisonnée (sel, poivre, ail en poudre), oeufs battus, chapelure mélangée au parmesan et paprika.",
+        "Passer chaque morceau de poulet dans l'ordre : farine → oeuf → chapelure. Presser pour bien faire adhérer.",
+        "Disposer sur la grille. Badigeonner d'huile d'olive au pinceau — ça donne le croustillant sans friture.",
+        "Cuire 18-20 min en retournant à mi-cuisson. Servir avec du ketchup maison ou une sauce yaourt-citron."
+      ]
+    },
+
+    {
+      id: 'R774',
+      name: 'Poulet Stroganoff Riz Blanc',
+      category: 'world-food',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🍚', origin: '🇷🇺',
+      tags: ['high-protein', 'comfort-food', 'creamy', 'classic', 'balanced'],
+      servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
+      // 74×4 + 80×4 + 20×9 = 296+320+180 = 796 ✓
+      baseNutrition: { calories: 796, proteinGrams: 74, carbsGrams: 80, fatGrams: 20 },
+      ingredients: [
+        { name: 'Blanc de poulet',                  qty: 450, unit: 'g', note: 'en lanières 1cm' },
+        { name: 'Riz basmati',                      qty: 160, unit: 'g', note: 'sec' },
+        { name: 'Champignons de Paris',             qty: 200, unit: 'g', note: 'émincés' },
+        { name: 'Oignon',                           qty: 100, unit: 'g' },
+        { name: 'Crème fraîche légère 15%',        qty: 100, unit: 'g' },
+        { name: 'Moutarde de Dijon',               qty: 10,  unit: 'g' },
+        { name: 'Paprika',                          qty: 5,   unit: 'g' },
+        { name: 'Bouillon de poulet',              qty: 100, unit: 'ml' },
+        { name: 'Beurre',                          qty: 10,  unit: 'g' },
+        { name: 'Persil frais',                    qty: 10,  unit: 'g' }
+      ],
+      steps: [
+        "Cuire le riz. Assaisonner les lanières de poulet avec paprika, sel, poivre.",
+        "Dans une grande poêle, faire fondre le beurre à feu vif. Saisir le poulet 3-4 min sans remuer pour bien colorer. Réserver.",
+        "Dans la même poêle, faire revenir l'oignon 3 min, puis les champignons 5 min jusqu'à dorés.",
+        "Ajouter le bouillon et la moutarde, gratter les sucs. Laisser réduire 2 min. Incorporer la crème fraîche.",
+        "Remettre le poulet, chauffer 2-3 min. Parsemer de persil. Servir sur le riz blanc."
+      ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  BATCH P20 — PÂTES CLASSIQUES  (R775–R779)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R775',
+      name: 'Spaghetti Bolognaise Maison',
+      category: 'italian',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🍝', origin: '🇮🇹',
+      tags: ['high-protein', 'comfort-food', 'classic', 'italian', 'family'],
+      servings: 2, prepTime: 10, cookTime: 30, difficulty: 1,
+      // 58×4 + 110×4 + 20×9 = 232+440+180 = 852 ✓
+      baseNutrition: { calories: 852, proteinGrams: 58, carbsGrams: 110, fatGrams: 20 },
+      ingredients: [
+        { name: 'Spaghetti',                        qty: 200, unit: 'g' },
+        { name: 'Boeuf haché 5% MG',               qty: 300, unit: 'g' },
+        { name: 'Tomates concassées boîte',        qty: 400, unit: 'g' },
+        { name: 'Oignon',                          qty: 80,  unit: 'g' },
+        { name: 'Ail',                             qty: 8,   unit: 'g' },
+        { name: 'Carotte',                         qty: 60,  unit: 'g', note: 'en petits dés' },
+        { name: 'Céleri',                          qty: 40,  unit: 'g', note: '1 branche' },
+        { name: 'Concentré de tomate',             qty: 20,  unit: 'g' },
+        { name: 'Vin rouge',                       qty: 50,  unit: 'ml' },
+        { name: 'Huile d\'olive',                  qty: 15,  unit: 'ml' },
+        { name: 'Origan séché',                    qty: 3,   unit: 'g' },
+        { name: 'Parmesan râpé',                   qty: 20,  unit: 'g', note: 'pour servir' }
+      ],
+      steps: [
+        "Chauffer l'huile dans une sauteuse. Faire revenir oignon, carotte et céleri en petits dés (soffritto) 6-7 min à feu moyen.",
+        "Ajouter l'ail et le boeuf haché. Émietter et faire dorer 5-6 min — bien colorer la viande.",
+        "Déglacer au vin rouge, laisser évaporer 2 min. Ajouter concentré de tomate, tomates concassées et origan.",
+        "Laisser mijoter 20-25 min à feu doux, en remuant de temps en temps. La sauce doit épaissir. Rectifier sel.",
+        "Cuire les spaghetti al dente. Mélanger directement dans la sauce avec un peu d'eau de cuisson. Servir avec parmesan."
+      ]
+    },
+
+    {
+      id: 'R776',
+      name: 'Penne au Jambon Crème & Petits Pois',
+      category: 'french',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🍝', origin: '🇫🇷',
+      tags: ['comfort-food', 'quick', 'family', 'classic', 'easy'],
+      servings: 2, prepTime: 5, cookTime: 15, difficulty: 1,
+      // 52×4 + 100×4 + 18×9 = 208+400+162 = 770 ✓
+      baseNutrition: { calories: 770, proteinGrams: 52, carbsGrams: 100, fatGrams: 18 },
+      ingredients: [
+        { name: 'Penne',                            qty: 200, unit: 'g' },
+        { name: 'Jambon blanc',                    qty: 200, unit: 'g', note: 'en dés' },
+        { name: 'Petits pois surgelés',            qty: 100, unit: 'g' },
+        { name: 'Crème fraîche légère 15%',       qty: 100, unit: 'g' },
+        { name: 'Parmesan râpé',                  qty: 30,  unit: 'g' },
+        { name: 'Oignon',                         qty: 60,  unit: 'g' },
+        { name: 'Beurre',                         qty: 10,  unit: 'g' },
+        { name: 'Sel, poivre, muscade',           qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Cuire les penne al dente. Garder 80ml d'eau de cuisson.",
+        "Faire revenir l'oignon émincé dans le beurre 3 min. Ajouter les dés de jambon, cuire 2 min.",
+        "Ajouter les petits pois directement surgelés, cuire 3 min.",
+        "Verser la crème fraîche, une pincée de muscade, sel et poivre. Laisser réduire 2 min.",
+        "Ajouter les pâtes égouttées et un peu d'eau de cuisson. Mélanger. Hors feu, incorporer le parmesan."
+      ]
+    },
+
+    {
+      id: 'R777',
+      name: 'Tagliatelles au Saumon Fumé Crème Citron',
+      category: 'italian',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🍝', origin: '🇮🇹',
+      tags: ['high-protein', 'omega-3', 'creamy', 'quick', 'elegant'],
+      servings: 2, prepTime: 5, cookTime: 12, difficulty: 1,
+      // 60×4 + 92×4 + 24×9 = 240+368+216 = 824 ✓
+      baseNutrition: { calories: 824, proteinGrams: 60, carbsGrams: 92, fatGrams: 24 },
+      ingredients: [
+        { name: 'Tagliatelles',                     qty: 180, unit: 'g' },
+        { name: 'Saumon fumé',                      qty: 180, unit: 'g', note: 'en lanières' },
+        { name: 'Crème fraîche légère 15%',        qty: 100, unit: 'g' },
+        { name: 'Fromage blanc 0%',               qty: 80,  unit: 'g', note: 'allège la sauce' },
+        { name: 'Citron (jus + zeste)',            qty: 1,   unit: 'pce' },
+        { name: 'Échalote',                       qty: 40,  unit: 'g', note: '1 échalote' },
+        { name: 'Ciboulette fraîche',             qty: 15,  unit: 'g' },
+        { name: 'Beurre',                         qty: 10,  unit: 'g' },
+        { name: 'Poivre noir',                    qty: 2,   unit: 'g' }
+      ],
+      steps: [
+        "Cuire les tagliatelles al dente. Garder 100ml d'eau de cuisson.",
+        "Faire revenir l'échalote émincée dans le beurre à feu doux 3 min sans coloration.",
+        "Ajouter crème fraîche, fromage blanc, jus et zeste de citron, poivre. Laisser chauffer doucement 3 min.",
+        "Ajouter les lanières de saumon fumé. Cuire 1-2 min à feu très doux — le saumon ne doit pas se défaire.",
+        "Ajouter les pâtes et l'eau de cuisson pour lier. Parsemer de ciboulette ciselée. Servir immédiatement."
+      ]
+    },
+
+    {
+      id: 'R778',
+      name: 'Pasta e Ceci — Pâtes aux Pois Chiches',
+      category: 'italian',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍲', origin: '🇮🇹',
+      tags: ['vegan', 'comfort-food', 'plant-protein', 'rustic', 'italian'],
+      servings: 2, prepTime: 5, cookTime: 25, difficulty: 1,
+      // 48×4 + 108×4 + 14×9 = 192+432+126 = 750 ✓
+      baseNutrition: { calories: 750, proteinGrams: 48, carbsGrams: 108, fatGrams: 14 },
+      ingredients: [
+        { name: 'Ditalini ou pennes courtes',       qty: 140, unit: 'g' },
+        { name: 'Pois chiches boîte',               qty: 400, unit: 'g', note: 'égouttés' },
+        { name: 'Tomates concassées',               qty: 200, unit: 'g' },
+        { name: 'Bouillon de légumes',              qty: 500, unit: 'ml' },
+        { name: 'Oignon',                           qty: 80,  unit: 'g' },
+        { name: 'Ail',                              qty: 8,   unit: 'g' },
+        { name: 'Romarin frais',                    qty: 5,   unit: 'g' },
+        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' },
+        { name: 'Parmesan',                         qty: 20,  unit: 'g', note: 'ou levure nutritionnelle' }
+      ],
+      steps: [
+        "Faire revenir oignon et ail dans l'huile 4 min. Ajouter le romarin haché, cuire 1 min.",
+        "Écraser 1/3 des pois chiches à la fourchette. Ajouter tous les pois chiches dans la casserole.",
+        "Verser les tomates et le bouillon. Porter à ébullition. Cuire 10 min à feu moyen.",
+        "Ajouter les pâtes directement dans la soupe. Cuire selon indication moins 2 min — elles absorbent le bouillon.",
+        "Rectifier sel et consistance (ajouter eau si trop épais). Arroser d'huile d'olive. Parmesan sur le dessus."
+      ]
+    },
+
+    {
+      id: 'R779',
+      name: 'Rigatoni Saucisse Fenouil & Tomate',
+      category: 'italian',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🍝', origin: '🇮🇹',
+      tags: ['high-protein', 'comfort-food', 'italian', 'spicy', 'rustic'],
+      servings: 2, prepTime: 5, cookTime: 25, difficulty: 1,
+      // 64×4 + 96×4 + 22×9 = 256+384+198 = 838 ✓
+      baseNutrition: { calories: 838, proteinGrams: 64, carbsGrams: 96, fatGrams: 22 },
+      ingredients: [
+        { name: 'Rigatoni',                         qty: 180, unit: 'g' },
+        { name: 'Saucisses de porc',                qty: 300, unit: 'g', note: 'chair retirée du boyau' },
+        { name: 'Tomates pelées boîte',             qty: 400, unit: 'g' },
+        { name: 'Fenouil',                          qty: 100, unit: 'g', note: '½ bulbe émincé, ou 1 c.c. graines' },
+        { name: 'Oignon',                           qty: 80,  unit: 'g' },
+        { name: 'Ail',                              qty: 8,   unit: 'g' },
+        { name: 'Piment séché',                     qty: 2,   unit: 'g' },
+        { name: 'Vin blanc',                        qty: 50,  unit: 'ml' },
+        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' },
+        { name: 'Parmesan',                         qty: 20,  unit: 'g' }
+      ],
+      steps: [
+        "Chauffer l'huile dans une sauteuse. Émietter la chair de saucisse et faire dorer 5-6 min à feu vif.",
+        "Ajouter oignon et fenouil émincés, cuire 4 min. Ajouter l'ail et le piment.",
+        "Déglacer au vin blanc, laisser évaporer. Écraser les tomates et les ajouter.",
+        "Laisser mijoter 15 min à feu moyen jusqu'à sauce dense. Rectifier sel.",
+        "Cuire les rigatoni al dente. Les ajouter dans la sauce avec un peu d'eau de cuisson. Mélanger 1 min. Parmesan."
+      ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  BATCH P21 — RIZ & PLATS AU RIZ  (R780–R784)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R780',
+      name: 'Riz Pilaf Poulet & Légumes',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍚', origin: '🇫🇷',
+      tags: ['high-protein', 'balanced', 'one-pan', 'classic', 'easy'],
+      servings: 2, prepTime: 10, cookTime: 25, difficulty: 1,
+      // 56×4 + 90×4 + 18×9 = 224+360+162 = 746 ✓
+      baseNutrition: { calories: 746, proteinGrams: 56, carbsGrams: 90, fatGrams: 18 },
+      ingredients: [
+        { name: 'Riz basmati',                      qty: 160, unit: 'g', note: 'sec' },
+        { name: 'Blanc de poulet',                  qty: 350, unit: 'g', note: 'en dés' },
+        { name: 'Carotte',                          qty: 100, unit: 'g', note: 'en dés' },
+        { name: 'Petits pois surgelés',             qty: 80,  unit: 'g' },
+        { name: 'Oignon',                           qty: 80,  unit: 'g' },
+        { name: 'Bouillon de poulet',              qty: 350, unit: 'ml' },
+        { name: 'Beurre',                          qty: 15,  unit: 'g' },
+        { name: 'Laurier',                         qty: 1,   unit: 'feuille' },
+        { name: 'Sel, poivre',                     qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Dans une casserole à fond épais, faire revenir l'oignon dans le beurre 3 min. Ajouter les dés de poulet, colorer 3-4 min.",
+        "Ajouter les carottes. Verser le riz et le faire nacrer 2 min en remuant — chaque grain doit être enrobé de beurre.",
+        "Verser le bouillon chaud (ratio 2:1 bouillon/riz). Ajouter le laurier, sel, poivre. Porter à ébullition.",
+        "Couvrir hermétiquement, cuire à feu très doux 15-17 min sans soulever le couvercle.",
+        "Ajouter les petits pois, couvrir encore 3 min hors feu. Égrener délicatement à la fourchette."
+      ]
+    },
+
+    {
+      id: 'R781',
+      name: 'Riz Cantonnais Jambon Oeuf Petits Pois',
+      category: 'world-food',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍳', origin: '🇨🇳',
+      tags: ['comfort-food', 'asian', 'quick', 'classic', 'family'],
+      servings: 2, prepTime: 5, cookTime: 15, difficulty: 1,
+      // 62×4 + 96×4 + 20×9 = 248+384+180 = 812 ✓
+      baseNutrition: { calories: 812, proteinGrams: 62, carbsGrams: 96, fatGrams: 20 },
+      ingredients: [
+        { name: 'Riz cuit froid',                   qty: 320, unit: 'g', note: 'riz de la veille' },
+        { name: 'Jambon blanc',                    qty: 150, unit: 'g', note: 'en dés' },
+        { name: 'Oeuf',                            qty: 3,   unit: 'pce' },
+        { name: 'Petits pois surgelés',            qty: 80,  unit: 'g' },
+        { name: 'Oignon vert',                     qty: 30,  unit: 'g' },
+        { name: 'Sauce soja',                      qty: 20,  unit: 'ml' },
+        { name: 'Huile végétale',                  qty: 15,  unit: 'ml' },
+        { name: 'Huile de sésame',                qty: 5,   unit: 'ml' },
+        { name: 'Sel, poivre',                    qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Décongeler les petits pois 3 min dans de l'eau chaude. Égoutter.",
+        "Wok très chaud avec l'huile végétale. Battre les oeufs et les brouiller rapidement 1 min. Réserver.",
+        "Dans le même wok, ajouter les dés de jambon, cuire 2 min. Ajouter le riz froid, émietter les grains à la spatule.",
+        "Faire sauter le riz à feu vif 3-4 min jusqu'à grains bien séparés et légèrement grillés.",
+        "Ajouter petits pois, oeufs brouillés, sauce soja et huile de sésame. Mélanger 1 min. Parsemer d'oignons verts."
+      ]
+    },
+
+    {
+      id: 'R782',
+      name: 'Riz au Lait Vanille Cannelle',
+      category: 'french',
+      mealTypes: ['dessert', 'snack', 'breakfast'],
+      emoji: '🍮', origin: '🇫🇷',
+      tags: ['comfort-food', 'dessert', 'french', 'classic', 'warming'],
+      servings: 2, prepTime: 5, cookTime: 35, difficulty: 1,
+      // 52×4 + 88×4 + 22×9 = 208+352+198 = 758 ✓
+      baseNutrition: { calories: 758, proteinGrams: 52, carbsGrams: 88, fatGrams: 22 },
+      ingredients: [
+        { name: 'Riz rond (pudding)',               qty: 100, unit: 'g' },
+        { name: 'Lait entier',                      qty: 700, unit: 'ml' },
+        { name: 'Fromage blanc 0%',               qty: 200, unit: 'g', note: 'pour protéines' },
+        { name: 'Sucre',                          qty: 40,  unit: 'g' },
+        { name: 'Gousse de vanille',              qty: 1,   unit: 'pce', note: 'ou 1 c.c. extrait' },
+        { name: 'Cannelle moulue',                qty: 3,   unit: 'g' },
+        { name: 'Sel',                            qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Fendre la gousse de vanille, gratter les graines. Verser le lait dans une casserole avec la gousse et les graines de vanille. Chauffer jusqu'à frémissement.",
+        "Ajouter le riz, le sucre et la pincée de sel. Cuire à feu doux en remuant régulièrement 30-35 min.",
+        "Le riz doit être très tendre et la préparation crémeuse — elle épaissit en refroidissant.",
+        "Retirer la gousse de vanille. Hors feu, incorporer le fromage blanc.",
+        "Servir tiède ou froid saupoudré de cannelle. Le riz au lait est encore meilleur le lendemain."
+      ]
+    },
+
+    {
+      id: 'R783',
+      name: 'Timbale de Riz Thon & Légumes',
+      category: 'italian',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍚', origin: '🇮🇹',
+      tags: ['balanced', 'quick', 'no-cook', 'meal-prep', 'fresh'],
+      servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
+      // 48×4 + 100×4 + 16×9 = 192+400+144 = 736 ✓
+      baseNutrition: { calories: 736, proteinGrams: 48, carbsGrams: 100, fatGrams: 16 },
+      ingredients: [
+        { name: 'Riz basmati',                      qty: 180, unit: 'g', note: 'sec' },
+        { name: 'Thon en boîte au naturel',         qty: 240, unit: 'g', note: '2 boîtes' },
+        { name: 'Maïs boîte',                       qty: 100, unit: 'g' },
+        { name: 'Tomates cerises',                  qty: 100, unit: 'g', note: 'coupées en deux' },
+        { name: 'Concombre',                        qty: 80,  unit: 'g' },
+        { name: 'Câpres',                           qty: 15,  unit: 'g' },
+        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' },
+        { name: 'Citron (jus)',                     qty: 1,   unit: 'pce' },
+        { name: 'Basilic frais',                    qty: 10,  unit: 'g' }
+      ],
+      steps: [
+        "Cuire le riz basmati. Laisser refroidir complètement (étaler sur une plaque pour accélérer).",
+        "Mélanger le riz froid avec l'huile d'olive et le jus de citron — ça évite qu'il colle.",
+        "Incorporer le thon égoutté et émietté, le maïs, les tomates cerises coupées, le concombre en dés et les câpres.",
+        "Façonner des timbales en utilisant un ramequin ou un verre retourné : tasser le riz, démouler dans l'assiette.",
+        "Parsemer de basilic frais. Servir à température ambiante — convient parfaitement pour le lunch box."
+      ]
+    },
+
+    {
+      id: 'R784',
+      name: 'Poulet au Riz Façon Hainanese',
+      category: 'world-food',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🍚', origin: '🇸🇬',
+      tags: ['high-protein', 'balanced', 'asian', 'clean', 'comforting'],
+      servings: 2, prepTime: 10, cookTime: 30, difficulty: 1,
+      // 70×4 + 80×4 + 18×9 = 280+320+162 = 762 ✓
+      baseNutrition: { calories: 762, proteinGrams: 70, carbsGrams: 80, fatGrams: 18 },
+      ingredients: [
+        { name: 'Blanc de poulet',                  qty: 450, unit: 'g', note: 'entier ou en morceaux' },
+        { name: 'Riz jasmin',                       qty: 160, unit: 'g', note: 'sec' },
+        { name: 'Ail',                              qty: 15,  unit: 'g', note: '3 gousses' },
+        { name: 'Gingembre frais',                 qty: 15,  unit: 'g' },
+        { name: 'Bouillon de poulet',              qty: 400, unit: 'ml' },
+        { name: 'Sauce soja',                      qty: 15,  unit: 'ml' },
+        { name: 'Huile de sésame',                qty: 8,   unit: 'ml' },
+        { name: 'Oignon vert',                    qty: 20,  unit: 'g' },
+        { name: 'Concombre',                      qty: 60,  unit: 'g', note: 'tranché fin, pour servir' }
+      ],
+      steps: [
+        "Faire pocher les blancs de poulet dans le bouillon frémissant avec la moitié du gingembre et de l'ail 15-18 min. Sortir, laisser refroidir. Garder le bouillon.",
+        "Filtrer 320ml de bouillon de cuisson. Y faire cuire le riz jasmin en absorption (15 min à couvert). Le riz absorbe toute la saveur du poulet.",
+        "Hacher finement le reste d'ail et gingembre. Mélanger avec sauce soja et huile de sésame — sauce d'accompagnement.",
+        "Couper le poulet poché en tranches fines contre le fil.",
+        "Dresser : riz parfumé, tranches de poulet dessus, concombre sur le côté. Arroser de sauce soja-sésame. Parsemer d'oignons verts."
+      ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  BATCH P22 — VIANDE HACHÉE CLASSIQUES  (R785–R789)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R785',
+      name: 'Hachis Parmentier Boeuf & Purée',
+      category: 'french',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🥔', origin: '🇫🇷',
+      tags: ['high-protein', 'comfort-food', 'french', 'classic', 'family'],
+      servings: 2, prepTime: 15, cookTime: 35, difficulty: 1,
+      // 64×4 + 60×4 + 26×9 = 256+240+234 = 730 ✓
+      baseNutrition: { calories: 730, proteinGrams: 64, carbsGrams: 60, fatGrams: 26 },
+      ingredients: [
+        { name: 'Boeuf haché 5% MG',               qty: 350, unit: 'g' },
+        { name: 'Pommes de terre',                  qty: 500, unit: 'g', note: 'à purée (Bintje, Agria)' },
+        { name: 'Lait demi-écrémé',                qty: 80,  unit: 'ml', note: 'chaud pour la purée' },
+        { name: 'Beurre',                          qty: 20,  unit: 'g' },
+        { name: 'Oignon',                          qty: 80,  unit: 'g' },
+        { name: 'Ail',                             qty: 8,   unit: 'g' },
+        { name: 'Tomates concassées',              qty: 150, unit: 'g' },
+        { name: 'Gruyère râpé',                   qty: 30,  unit: 'g', note: 'pour gratiner' },
+        { name: 'Thym, laurier',                  qty: 3,   unit: 'g' },
+        { name: 'Huile d\'olive',                 qty: 10,  unit: 'ml' }
+      ],
+      steps: [
+        "Cuire les pommes de terre pelées et coupées dans l'eau bouillante salée 20 min. Égoutter. Écraser avec lait chaud et beurre jusqu'à purée lisse.",
+        "Faire revenir oignon et ail dans l'huile 4 min. Ajouter le boeuf haché, dorer 5-6 min en émiettant.",
+        "Ajouter les tomates, thym, laurier, sel, poivre. Mijoter 10 min jusqu'à sauce épaisse.",
+        "Dans un plat à gratin beurré : couche de viande en sauce, puis purée. Lisser, rayer à la fourchette. Saupoudrer de gruyère.",
+        "Enfourner à 200°C 15 min jusqu'à surface gratinée et dorée. Passer 3 min sous le gril pour finir."
+      ]
+    },
+
+    {
+      id: 'R786',
+      name: 'Boulettes de Viande Sauce Tomate & Spaghetti',
+      category: 'italian',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🍝', origin: '🇮🇹',
+      tags: ['high-protein', 'comfort-food', 'classic', 'italian', 'family'],
+      servings: 2, prepTime: 15, cookTime: 30, difficulty: 1,
+      // 72×4 + 52×4 + 24×9 = 288+208+216 = 712 ✓
+      baseNutrition: { calories: 712, proteinGrams: 72, carbsGrams: 52, fatGrams: 24 },
+      ingredients: [
+        { name: 'Boeuf haché 5% MG',               qty: 350, unit: 'g' },
+        { name: 'Spaghetti',                        qty: 100, unit: 'g' },
+        { name: 'Oeuf',                             qty: 1,   unit: 'pce' },
+        { name: 'Pain de mie rassis',               qty: 30,  unit: 'g', note: 'trempé dans du lait' },
+        { name: 'Parmesan râpé',                    qty: 25,  unit: 'g' },
+        { name: 'Tomates concassées',               qty: 400, unit: 'g' },
+        { name: 'Ail',                              qty: 10,  unit: 'g' },
+        { name: 'Basilic frais',                    qty: 10,  unit: 'g' },
+        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' },
+        { name: 'Origan séché',                     qty: 3,   unit: 'g' }
+      ],
+      steps: [
+        "Préparer les boulettes : mélanger boeuf, oeuf, pain de mie essoré, parmesan, sel et poivre. Former des boulettes de 3-4 cm.",
+        "Faire dorer les boulettes dans l'huile chaude 5-6 min en les tournant. Réserver.",
+        "Dans la même poêle, faire revenir l'ail 1 min. Ajouter les tomates, origan, sel. Cuire 10 min.",
+        "Remettre les boulettes dans la sauce. Couvrir, mijoter 12-15 min à feu doux.",
+        "Cuire les spaghetti al dente. Servir avec les boulettes et la sauce. Basilic frais et parmesan."
+      ]
+    },
+
+    {
+      id: 'R787',
+      name: 'Steak Haché Oignons Caramélisés & Purée',
+      category: 'french',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🥩', origin: '🇫🇷',
+      tags: ['high-protein', 'comfort-food', 'bistrot', 'classic', 'french'],
+      servings: 2, prepTime: 10, cookTime: 25, difficulty: 1,
+      // 68×4 + 48×4 + 22×9 = 272+192+198 = 662 ✓
+      baseNutrition: { calories: 662, proteinGrams: 68, carbsGrams: 48, fatGrams: 22 },
+      ingredients: [
+        { name: 'Boeuf haché 5% MG',               qty: 400, unit: 'g', note: 'façonné en 2 steaks épais' },
+        { name: 'Pommes de terre',                  qty: 400, unit: 'g' },
+        { name: 'Oignons',                          qty: 200, unit: 'g', note: '2 gros, émincés finement' },
+        { name: 'Lait demi-écrémé',                qty: 60,  unit: 'ml' },
+        { name: 'Beurre',                          qty: 20,  unit: 'g' },
+        { name: 'Vinaigre balsamique',             qty: 10,  unit: 'ml' },
+        { name: 'Sel, poivre',                     qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Cuire les pommes de terre, faire une purée lisse avec lait chaud et 10g de beurre. Garder au chaud.",
+        "Caraméliser les oignons : faire fondre 10g de beurre dans une poêle, ajouter les oignons. Cuire à feu doux 20 min en remuant régulièrement jusqu'à dorés et fondants. Déglacer au vinaigre balsamique.",
+        "Pendant ce temps, former les steaks hachés épais. Saler et poivrer généreusement.",
+        "Cuire les steaks dans une poêle très chaude : 3 min par face pour saignant, 4 min pour à point. Laisser reposer 2 min.",
+        "Servir les steaks avec la purée et les oignons caramélisés dessus. Bistrot classique."
+      ]
+    },
+
+    {
+      id: 'R788',
+      name: 'Farci de Courgettes Boeuf & Fromage',
+      category: 'french',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🫑', origin: '🇫🇷',
+      tags: ['high-protein', 'comfort-food', 'french', 'balanced', 'summer'],
+      servings: 2, prepTime: 15, cookTime: 30, difficulty: 1,
+      // 60×4 + 80×4 + 20×9 = 240+320+180 = 740 ✓
+      baseNutrition: { calories: 740, proteinGrams: 60, carbsGrams: 80, fatGrams: 20 },
+      ingredients: [
+        { name: 'Courgettes rondes ou longues',     qty: 600, unit: 'g', note: '2 grosses ou 4 petites' },
+        { name: 'Boeuf haché 5% MG',               qty: 300, unit: 'g' },
+        { name: 'Riz cuit',                         qty: 120, unit: 'g', note: '80g sec' },
+        { name: 'Tomates concassées',               qty: 150, unit: 'g' },
+        { name: 'Gruyère râpé',                    qty: 40,  unit: 'g' },
+        { name: 'Oignon',                          qty: 60,  unit: 'g' },
+        { name: 'Ail',                             qty: 5,   unit: 'g' },
+        { name: 'Herbes de Provence',              qty: 5,   unit: 'g' },
+        { name: 'Huile d\'olive',                  qty: 10,  unit: 'ml' }
+      ],
+      steps: [
+        "Préchauffer four 190°C. Évider les courgettes à la cuillère — garder la pulpe, la hacher grossièrement.",
+        "Faire revenir oignon et ail dans l'huile 3 min. Ajouter la viande hachée, dorer 5 min. Ajouter pulpe de courgette, tomates, herbes de Provence. Cuire 8 min.",
+        "Mélanger la farce avec le riz cuit. Rectifier sel et poivre.",
+        "Remplir les courgettes évidées de farce. Saupoudrer de gruyère râpé.",
+        "Enfourner 25-30 min jusqu'à courgettes tendres et fromage gratiné."
+      ]
+    },
+
+    {
+      id: 'R789',
+      name: 'Pain de Viande Maison Sauce Tomate',
+      category: 'french',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🍖', origin: '🇫🇷',
+      tags: ['high-protein', 'meal-prep', 'comfort-food', 'classic', 'family'],
+      servings: 2, prepTime: 15, cookTime: 40, difficulty: 1,
+      // 74×4 + 46×4 + 28×9 = 296+184+252 = 732 ✓
+      baseNutrition: { calories: 732, proteinGrams: 74, carbsGrams: 46, fatGrams: 28 },
+      ingredients: [
+        { name: 'Boeuf haché 5% MG',               qty: 300, unit: 'g' },
+        { name: 'Chair de saucisse',               qty: 150, unit: 'g' },
+        { name: 'Oeuf',                            qty: 2,   unit: 'pce' },
+        { name: 'Pain de mie',                     qty: 60,  unit: 'g', note: 'trempé dans du lait' },
+        { name: 'Oignon',                          qty: 80,  unit: 'g', note: 'râpé' },
+        { name: 'Ail',                             qty: 5,   unit: 'g' },
+        { name: 'Moutarde',                        qty: 15,  unit: 'g' },
+        { name: 'Ketchup',                         qty: 30,  unit: 'g', note: 'pour napper' },
+        { name: 'Thym, persil',                    qty: 5,   unit: 'g' },
+        { name: 'Sel, poivre',                     qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Préchauffer four à 180°C. Mélanger boeuf haché, chair de saucisse, oeufs, pain essoré, oignon râpé, ail écrasé, moutarde, herbes, sel et poivre.",
+        "Bien malaxer pour amalgamer. Goûter la farce crue — rectifier l'assaisonnement.",
+        "Façonner en pain dans un moule à cake légèrement huilé. Napper de ketchup sur le dessus.",
+        "Enfourner 35-40 min. La température interne doit atteindre 70°C.",
+        "Laisser reposer 10 min avant de trancher. Excellent chaud ou froid le lendemain. Se congèle très bien en tranches."
+      ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  BATCH P23 — FOIE & ABATS  (R790–R794)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R790',
+      name: 'Foie de Veau à la Vénitienne',
+      category: 'italian',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🍖', origin: '🇮🇹',
+      tags: ['high-protein', 'iron', 'italian', 'classic', 'quick'],
+      servings: 2, prepTime: 5, cookTime: 15, difficulty: 1,
+      // 72×4 + 30×4 + 24×9 = 288+120+216 = 624 ✓
+      baseNutrition: { calories: 624, proteinGrams: 72, carbsGrams: 30, fatGrams: 24 },
+      ingredients: [
+        { name: 'Foie de veau',                     qty: 400, unit: 'g', note: 'tranches fines 5mm' },
+        { name: 'Oignons',                          qty: 250, unit: 'g', note: '2,5 oignons émincés en rondelles' },
+        { name: 'Polenta cuite',                    qty: 150, unit: 'g', note: 'ou pain grillé' },
+        { name: 'Vin blanc sec',                    qty: 60,  unit: 'ml' },
+        { name: 'Beurre',                           qty: 20,  unit: 'g' },
+        { name: 'Sauge fraîche',                    qty: 5,   unit: 'g', note: 'ou séchée' },
+        { name: 'Persil frais',                     qty: 10,  unit: 'g' },
+        { name: 'Sel, poivre',                      qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Cuire les oignons en rondelles dans 10g de beurre à feu doux 15-18 min — patience, ils doivent caraméliser doucement et fondre.",
+        "Déglacer les oignons au vin blanc, laisser évaporer. Réserver.",
+        "Sécher les tranches de foie. Dans la même poêle avec le reste de beurre à feu vif, saisir le foie 1,5-2 min par face. Il doit rester rosé au centre.",
+        "Remettre les oignons, ajouter les feuilles de sauge. Cuire 1 min ensemble.",
+        "Parsemer de persil ciselé. Servir immédiatement avec la polenta ou le pain grillé. Le foie ne supporte pas la surcuisson."
+      ]
+    },
+
+    {
+      id: 'R791',
+      name: 'Foie de Poulet Sauté Échalotes & Vinaigre',
+      category: 'french',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🫀', origin: '🇫🇷',
+      tags: ['high-protein', 'iron', 'french', 'quick', 'budget'],
+      servings: 2, prepTime: 5, cookTime: 12, difficulty: 1,
+      // 68×4 + 26×4 + 20×9 = 272+104+180 = 556 ✓
+      baseNutrition: { calories: 556, proteinGrams: 68, carbsGrams: 26, fatGrams: 20 },
+      ingredients: [
+        { name: 'Foies de poulet',                  qty: 400, unit: 'g', note: 'parés, nervures retirées' },
+        { name: 'Échalotes',                        qty: 80,  unit: 'g', note: '2 échalotes, émincées' },
+        { name: 'Pain de campagne',                qty: 80,  unit: 'g', note: '2 tranches grillées' },
+        { name: 'Vinaigre balsamique',             qty: 15,  unit: 'ml' },
+        { name: 'Beurre',                          qty: 15,  unit: 'g' },
+        { name: 'Thym frais',                      qty: 3,   unit: 'g' },
+        { name: 'Persil',                          qty: 10,  unit: 'g' },
+        { name: 'Sel, poivre',                     qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Parer les foies : retirer les filaments verts (fiel) et les nervures. Sécher avec du papier absorbant.",
+        "Faire revenir les échalotes dans le beurre à feu moyen 3-4 min jusqu'à translucides.",
+        "Monter le feu à vif. Saisir les foies 2-3 min sans remuer. Retourner, cuire encore 2 min. Ils doivent être rosés à coeur.",
+        "Déglacer au vinaigre balsamique, gratter les sucs. Ajouter le thym. Cuire 1 min.",
+        "Parsemer de persil. Servir immédiatement sur le pain de campagne grillé. Économique, rapide, riche en fer."
+      ]
+    },
+
+    {
+      id: 'R792',
+      name: 'Rognons de Veau Sauce Moutarde',
+      category: 'french',
+      mealTypes: ['dinner'],
+      emoji: '🫀', origin: '🇫🇷',
+      tags: ['high-protein', 'iron', 'french', 'bistrot', 'classic'],
+      servings: 2, prepTime: 10, cookTime: 15, difficulty: 2,
+      // 80×4 + 24×4 + 26×9 = 320+96+234 = 650 ✓
+      baseNutrition: { calories: 650, proteinGrams: 80, carbsGrams: 24, fatGrams: 26 },
+      ingredients: [
+        { name: 'Rognons de veau',                  qty: 400, unit: 'g', note: 'parés et dégraissés' },
+        { name: 'Moutarde de Dijon',               qty: 25,  unit: 'g' },
+        { name: 'Crème fraîche légère',            qty: 80,  unit: 'g' },
+        { name: 'Échalotes',                       qty: 60,  unit: 'g', note: '2 échalotes' },
+        { name: 'Cognac',                          qty: 20,  unit: 'ml' },
+        { name: 'Bouillon de veau',                qty: 80,  unit: 'ml' },
+        { name: 'Beurre',                          qty: 15,  unit: 'g' },
+        { name: 'Persil',                          qty: 10,  unit: 'g' },
+        { name: 'Pain grillé',                     qty: 80,  unit: 'g' }
+      ],
+      steps: [
+        "Couper les rognons en gros morceaux de 3cm, retirer le coeur blanc. Sécher soigneusement.",
+        "Faire revenir les échalotes dans le beurre 3 min. Monter le feu à vif.",
+        "Saisir les rognons 2-3 min par face — feu très vif, les rognons doivent grésiller fort. Ne pas trop cuire.",
+        "Flamber au cognac (incliner pour enflammer). Ajouter le bouillon, réduire 2 min. Retirer les rognons.",
+        "Incorporer moutarde et crème dans la sauce. Remettre les rognons 1 min. Parsemer de persil. Servir sur pain grillé."
+      ]
+    },
+
+    {
+      id: 'R793',
+      name: 'Gésiers de Canard Confits Salade Tiède',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🦆', origin: '🇫🇷',
+      tags: ['high-protein', 'iron', 'french', 'bistrot', 'classic'],
+      servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
+      // 62×4 + 40×4 + 22×9 = 248+160+198 = 606 ✓
+      baseNutrition: { calories: 606, proteinGrams: 62, carbsGrams: 40, fatGrams: 22 },
+      ingredients: [
+        { name: 'Gésiers de canard confits',        qty: 300, unit: 'g', note: 'en bocal, égouttés' },
+        { name: 'Salade frisée ou mesclun',         qty: 100, unit: 'g' },
+        { name: 'Lardons fumés',                   qty: 60,  unit: 'g' },
+        { name: 'Pain de campagne',                qty: 80,  unit: 'g', note: '4 croûtons grillés' },
+        { name: 'Noix',                            qty: 20,  unit: 'g' },
+        { name: 'Vinaigre de noix ou balsamique',  qty: 15,  unit: 'ml' },
+        { name: 'Moutarde',                        qty: 5,   unit: 'g' },
+        { name: 'Huile de noix',                   qty: 15,  unit: 'ml' }
+      ],
+      steps: [
+        "Réchauffer les gésiers dans leur graisse à la poêle 5-6 min à feu moyen jusqu'à bien chauds et légèrement croustillants.",
+        "Dans la même poêle, faire revenir les lardons 3-4 min jusqu'à dorés.",
+        "Préparer la vinaigrette : moutarde + vinaigre de noix + huile de noix + sel + poivre.",
+        "Disposer la salade dans les assiettes. Ajouter les gésiers chauds et les lardons dessus.",
+        "Arroser de vinaigrette. Garnir de noix et croûtons grillés. La salade tiède doit être mangée immédiatement."
+      ]
+    },
+
+    {
+      id: 'R794',
+      name: 'Foie de Boeuf Oignons & Purée de Pommes de Terre',
+      category: 'french',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🍖', origin: '🇫🇷',
+      tags: ['high-protein', 'iron', 'french', 'budget', 'classic'],
+      servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
+      // 70×4 + 36×4 + 18×9 = 280+144+162 = 586 ✓
+      baseNutrition: { calories: 586, proteinGrams: 70, carbsGrams: 36, fatGrams: 18 },
+      ingredients: [
+        { name: 'Foie de boeuf',                    qty: 400, unit: 'g', note: 'tranches de 1cm, trempé dans du lait 30 min' },
+        { name: 'Oignons',                          qty: 200, unit: 'g', note: '2 oignons, émincés' },
+        { name: 'Pommes de terre',                  qty: 300, unit: 'g', note: 'pour purée' },
+        { name: 'Lait',                             qty: 50,  unit: 'ml' },
+        { name: 'Beurre',                           qty: 15,  unit: 'g' },
+        { name: 'Farine',                           qty: 15,  unit: 'g', note: 'pour paner légèrement' },
+        { name: 'Vinaigre de vin rouge',            qty: 10,  unit: 'ml' },
+        { name: 'Persil',                           qty: 10,  unit: 'g' },
+        { name: 'Sel, poivre',                      qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Tremper le foie de boeuf dans du lait 30 min — cela adoucit la saveur et réduit l'amertume. Égoutter, sécher.",
+        "Cuire les pommes de terre, faire la purée avec lait et 8g beurre. Garder au chaud.",
+        "Caraméliser les oignons dans 7g beurre à feu doux 12-15 min. Déglacer au vinaigre. Réserver.",
+        "Fariner légèrement les tranches de foie. Saisir dans la même poêle à feu vif 2 min par face — rosé à coeur.",
+        "Servir le foie avec les oignons caramélisés et la purée. Parsemer de persil. Simple, nourrissant, riche en fer."
+      ]
     }
 
   // ─────────────────────────────────────────────────────────────────────────────
