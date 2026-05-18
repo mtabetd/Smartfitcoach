@@ -37569,6 +37569,413 @@
       ]
     }
 
+  // ── BATCH P51 — Soupes incontournables ────────────────────────────────────────
+  ,{
+    id: 'R930',
+    name: 'Velouté de Tomates Maison',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍅', origin: '🇫🇷',
+    tags: ['comfort','vegetarian','express'],
+    servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
+    // 8×4 + 18×4 + 6×9 = 32+72+54 = 158 ✓
+    baseNutrition: { calories: 158, proteinGrams: 8, carbsGrams: 18, fatGrams: 6 },
+    ingredients: [
+      { name: 'Tomates pelées en boîte', qty: 800, unit: 'g' },
+      { name: 'Oignon', qty: 1, unit: 'pce' },
+      { name: 'Ail', qty: 2, unit: 'pce', note: 'gousses' },
+      { name: 'Bouillon de légumes', qty: 300, unit: 'ml' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Crème fraîche', qty: 40, unit: 'ml', note: 'légère' },
+      { name: 'Basilic frais', qty: 5, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Faire revenir l'oignon émincé et l'ail dans l'huile d'olive à feu moyen, 5 min.",
+      "Ajouter les tomates pelées et le bouillon. Porter à ébullition puis mijoter 15 min.",
+      "Mixer finement. Assaisonner. Verser la crème, mélanger.",
+      "Servir avec le basilic frais et un filet d'huile d'olive."
+    ]
+  }
+  ,{
+    id: 'R931',
+    name: 'Soupe Poireaux Pommes de Terre',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🥣', origin: '🇫🇷',
+    tags: ['comfort','vegetarian','classic'],
+    servings: 2, prepTime: 10, cookTime: 25, difficulty: 1,
+    // 5×4 + 22×4 + 5×9 = 20+88+45 = 153 ✓
+    baseNutrition: { calories: 153, proteinGrams: 5, carbsGrams: 22, fatGrams: 5 },
+    ingredients: [
+      { name: 'Poireaux', qty: 300, unit: 'g', note: 'blanc et vert tendre' },
+      { name: 'Pommes de terre', qty: 250, unit: 'g' },
+      { name: 'Beurre', qty: 20, unit: 'g' },
+      { name: 'Bouillon de légumes', qty: 700, unit: 'ml' },
+      { name: 'Crème fraîche', qty: 30, unit: 'ml' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Faire fondre le beurre. Faire revenir les poireaux émincés 5 min à feu doux.",
+      "Ajouter les pommes de terre en dés et le bouillon. Cuire 20 min à frémissement.",
+      "Mixer partiellement (garder quelques morceaux) ou totalement selon préférence.",
+      "Incorporer la crème, rectifier l'assaisonnement. Servir bien chaud."
+    ]
+  }
+  ,{
+    id: 'R932',
+    name: 'Soupe à l\'Oignon Gratinée',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🧅', origin: '🇫🇷',
+    tags: ['classic','comfort','bistrot'],
+    servings: 2, prepTime: 10, cookTime: 40, difficulty: 2,
+    // 18×4 + 32×4 + 14×9 = 72+128+126 = 326 ✓
+    baseNutrition: { calories: 326, proteinGrams: 18, carbsGrams: 32, fatGrams: 14 },
+    ingredients: [
+      { name: 'Oignons', qty: 500, unit: 'g' },
+      { name: 'Beurre', qty: 30, unit: 'g' },
+      { name: 'Farine', qty: 15, unit: 'g' },
+      { name: 'Bouillon de bœuf', qty: 800, unit: 'ml' },
+      { name: 'Vin blanc sec', qty: 100, unit: 'ml' },
+      { name: 'Pain de campagne', qty: 80, unit: 'g', note: '2 tranches épaisses' },
+      { name: 'Gruyère râpé', qty: 80, unit: 'g' },
+      { name: 'Thym', qty: 2, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Émincer les oignons finement. Faire fondre le beurre, ajouter les oignons, cuire 30 min à feu doux en remuant régulièrement jusqu'à coloration caramel.",
+      "Saupoudrer de farine, mélanger 2 min. Déglacer au vin blanc, laisser réduire 2 min.",
+      "Ajouter le bouillon et le thym. Mijoter 10 min. Assaisonner.",
+      "Verser dans des bols allant au four. Poser le pain grillé, couvrir de gruyère râpé. Gratiner sous le grill 5 min jusqu'à coloration dorée."
+    ]
+  }
+  ,{
+    id: 'R933',
+    name: 'Velouté de Courgettes Chèvre',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🥒', origin: '🇫🇷',
+    tags: ['light','vegetarian','express'],
+    servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
+    // 14×4 + 12×4 + 10×9 = 56+48+90 = 194 ✓
+    baseNutrition: { calories: 194, proteinGrams: 14, carbsGrams: 12, fatGrams: 10 },
+    ingredients: [
+      { name: 'Courgettes', qty: 500, unit: 'g' },
+      { name: 'Chèvre frais', qty: 80, unit: 'g' },
+      { name: 'Oignon', qty: 1, unit: 'pce' },
+      { name: 'Bouillon de légumes', qty: 500, unit: 'ml' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+      { name: 'Menthe fraîche', qty: 5, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Faire revenir l'oignon dans l'huile d'olive 3 min. Ajouter les courgettes en rondelles.",
+      "Verser le bouillon, porter à ébullition. Cuire 12 min à feu moyen.",
+      "Mixer avec le chèvre frais jusqu'à consistance lisse. Assaisonner.",
+      "Servir avec quelques feuilles de menthe et un filet d'huile d'olive."
+    ]
+  }
+  ,{
+    id: 'R934',
+    name: 'Minestrone Express',
+    category: 'italian',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍲', origin: '🇮🇹',
+    tags: ['vegetarian','balanced','comfort'],
+    servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
+    // 10×4 + 30×4 + 6×9 = 40+120+54 = 214 ✓
+    baseNutrition: { calories: 214, proteinGrams: 10, carbsGrams: 30, fatGrams: 6 },
+    ingredients: [
+      { name: 'Carottes', qty: 150, unit: 'g' },
+      { name: 'Courgette', qty: 150, unit: 'g' },
+      { name: 'Tomates pelées', qty: 200, unit: 'g' },
+      { name: 'Haricots blancs en boîte', qty: 150, unit: 'g', note: 'égouttés' },
+      { name: 'Pâtes petites (ditalini)', qty: 60, unit: 'g' },
+      { name: 'Bouillon de légumes', qty: 800, unit: 'ml' },
+      { name: 'Oignon', qty: 1, unit: 'pce' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Parmesan râpé', qty: 20, unit: 'g' },
+      { name: 'Basilic, sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Faire revenir l'oignon et les carottes dans l'huile d'olive 5 min.",
+      "Ajouter tomates, courgette, haricots et bouillon. Porter à ébullition.",
+      "Ajouter les pâtes, cuire 10 min à feu moyen jusqu'à tendreté.",
+      "Servir avec le parmesan râpé et le basilic."
+    ]
+  }
+
+  // ── BATCH P52 — Volailles incontournables ─────────────────────────────────────
+  ,{
+    id: 'R935',
+    name: 'Poulet Rôti Simple & Parfait',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍗', origin: '🇫🇷',
+    tags: ['classic','high-protein','family'],
+    servings: 4, prepTime: 10, cookTime: 70, difficulty: 1,
+    // 148×4 + 0×4 + 40×9 = 592+0+360 = 952 ✓
+    baseNutrition: { calories: 952, proteinGrams: 148, carbsGrams: 0, fatGrams: 40 },
+    ingredients: [
+      { name: 'Poulet entier', qty: 1500, unit: 'g' },
+      { name: 'Beurre', qty: 40, unit: 'g' },
+      { name: 'Ail', qty: 4, unit: 'pce', note: 'gousses' },
+      { name: 'Thym frais', qty: 4, unit: 'g' },
+      { name: 'Romarin frais', qty: 3, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Préchauffer le four à 210°C. Sortir le poulet 30 min avant cuisson.",
+      "Mélanger beurre mou, ail écrasé, thym, romarin. Glisser sous la peau des blancs.",
+      "Badigeonner tout le poulet d'huile d'olive, saler et poivrer généreusement.",
+      "Rôtir 1h10 en arrosant toutes les 20 min avec le jus de cuisson. Laisser reposer 10 min avant de découper."
+    ]
+  }
+  ,{
+    id: 'R936',
+    name: 'Escalopes Milanaises Croustillantes',
+    category: 'italian',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍽️', origin: '🇮🇹',
+    tags: ['classic','crispy','high-protein'],
+    servings: 2, prepTime: 15, cookTime: 10, difficulty: 1,
+    // 60×4 + 24×4 + 22×9 = 240+96+198 = 534 ✓
+    baseNutrition: { calories: 534, proteinGrams: 60, carbsGrams: 24, fatGrams: 22 },
+    ingredients: [
+      { name: 'Escalopes de poulet', qty: 400, unit: 'g', note: 'aplaties finement' },
+      { name: 'Chapelure', qty: 60, unit: 'g' },
+      { name: 'Parmesan râpé', qty: 30, unit: 'g' },
+      { name: 'Oeufs', qty: 2, unit: 'pce' },
+      { name: 'Farine', qty: 30, unit: 'g' },
+      { name: 'Huile végétale', qty: 30, unit: 'ml' },
+      { name: 'Citron', qty: 1, unit: 'pce' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Aplatir les escalopes entre deux films plastique. Saler, poivrer.",
+      "Mélanger chapelure et parmesan. Paner : farine → oeuf battu → chapelure/parmesan.",
+      "Faire chauffer l'huile dans une grande poêle. Cuire 3-4 min de chaque côté à feu moyen-vif jusqu'à dorure.",
+      "Égoutter sur papier absorbant. Servir avec quartiers de citron et salade verte."
+    ]
+  }
+  ,{
+    id: 'R937',
+    name: 'Cuisses de Poulet au Four Citron-Herbes',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍋', origin: '🇫🇷',
+    tags: ['easy','high-protein','classic'],
+    servings: 2, prepTime: 10, cookTime: 40, difficulty: 1,
+    // 64×4 + 4×4 + 16×9 = 256+16+144 = 416 ✓
+    baseNutrition: { calories: 416, proteinGrams: 64, carbsGrams: 4, fatGrams: 16 },
+    ingredients: [
+      { name: 'Cuisses de poulet', qty: 600, unit: 'g', note: '2 grosses cuisses' },
+      { name: 'Citron', qty: 1, unit: 'pce' },
+      { name: 'Ail', qty: 3, unit: 'pce', note: 'gousses' },
+      { name: 'Thym, romarin', qty: 5, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Préchauffer le four à 200°C. Inciser la peau des cuisses plusieurs fois.",
+      "Mélanger huile, jus de citron, ail haché, herbes, sel, poivre. Enduire généreusement les cuisses.",
+      "Placer dans un plat huilé, peau vers le haut. Enfourner 40 min.",
+      "Arroser à mi-cuisson avec le jus du plat. La peau doit être bien dorée et croustillante."
+    ]
+  }
+  ,{
+    id: 'R938',
+    name: 'Dinde Sautée aux Champignons',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🦃', origin: '🇫🇷',
+    tags: ['high-protein','express','light'],
+    servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
+    // 58×4 + 6×4 + 8×9 = 232+24+72 = 328 ✓
+    baseNutrition: { calories: 328, proteinGrams: 58, carbsGrams: 6, fatGrams: 8 },
+    ingredients: [
+      { name: 'Escalopes de dinde', qty: 400, unit: 'g' },
+      { name: 'Champignons de Paris', qty: 200, unit: 'g' },
+      { name: 'Échalote', qty: 2, unit: 'pce' },
+      { name: 'Crème fraîche légère', qty: 60, unit: 'ml' },
+      { name: 'Beurre', qty: 15, unit: 'g' },
+      { name: 'Persil frais', qty: 5, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Émincer la dinde en lanières. Faire dorer dans le beurre chaud 5-6 min. Réserver.",
+      "Dans la même poêle, faire revenir les échalotes et champignons 5 min.",
+      "Remettre la dinde, ajouter la crème. Mélanger, cuire 2 min.",
+      "Assaisonner, parsemer de persil haché. Servir avec du riz."
+    ]
+  }
+  ,{
+    id: 'R939',
+    name: 'Poulet Tikka Masala Express',
+    category: 'world-food',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍛', origin: '🇮🇳',
+    tags: ['spiced','high-protein','comfort'],
+    servings: 2, prepTime: 10, cookTime: 20, difficulty: 2,
+    // 52×4 + 16×4 + 14×9 = 208+64+126 = 398 ✓
+    baseNutrition: { calories: 398, proteinGrams: 52, carbsGrams: 16, fatGrams: 14 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 400, unit: 'g' },
+      { name: 'Yaourt nature', qty: 80, unit: 'g' },
+      { name: 'Tomates pelées', qty: 300, unit: 'g' },
+      { name: 'Oignon', qty: 1, unit: 'pce' },
+      { name: 'Crème fraîche légère', qty: 40, unit: 'ml' },
+      { name: 'Huile végétale', qty: 15, unit: 'ml' },
+      { name: 'Garam masala', qty: 8, unit: 'g' },
+      { name: 'Curcuma', qty: 3, unit: 'g' },
+      { name: 'Gingembre frais', qty: 10, unit: 'g' },
+      { name: 'Ail', qty: 2, unit: 'pce', note: 'gousses' },
+      { name: 'Sel', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Couper le poulet en morceaux. Mélanger avec yaourt, la moitié du garam masala, curcuma. Mariner 10 min.",
+      "Faire dorer le poulet dans l'huile chaude 5-6 min. Réserver.",
+      "Faire revenir l'oignon, l'ail et le gingembre 3 min. Ajouter les tomates et le reste du garam masala.",
+      "Remettre le poulet, cuire 10 min. Incorporer la crème. Servir avec du riz basmati."
+    ]
+  }
+
+  // ── BATCH P53 — Sandwichs & Wraps express ────────────────────────────────────
+  ,{
+    id: 'R940',
+    name: 'Wrap Poulet César',
+    category: 'french',
+    mealTypes: ['lunch'],
+    emoji: '🌯', origin: '🇫🇷',
+    tags: ['express','balanced','high-protein'],
+    servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
+    // 40×4 + 36×4 + 16×9 = 160+144+144 = 448 ✓
+    baseNutrition: { calories: 448, proteinGrams: 40, carbsGrams: 36, fatGrams: 16 },
+    ingredients: [
+      { name: 'Tortillas de blé', qty: 2, unit: 'pce', note: 'grandes' },
+      { name: 'Blanc de poulet cuit', qty: 200, unit: 'g', note: 'grillé ou rôti' },
+      { name: 'Laitue romaine', qty: 80, unit: 'g' },
+      { name: 'Parmesan râpé', qty: 20, unit: 'g' },
+      { name: 'Sauce César', qty: 40, unit: 'g' },
+      { name: 'Croûtons', qty: 20, unit: 'g' }
+    ],
+    steps: [
+      "Émincer le poulet en lamelles. Déchirer la laitue grossièrement.",
+      "Étaler la sauce César sur chaque tortilla.",
+      "Disposer la laitue, le poulet, les croûtons et le parmesan.",
+      "Rouler fermement en serrant bien. Couper en biais. Servir immédiatement."
+    ]
+  }
+  ,{
+    id: 'R941',
+    name: 'Croque-Monsieur Classique',
+    category: 'french',
+    mealTypes: ['breakfast','lunch','snack'],
+    emoji: '🥪', origin: '🇫🇷',
+    tags: ['classic','comfort','express'],
+    servings: 2, prepTime: 5, cookTime: 10, difficulty: 1,
+    // 30×4 + 38×4 + 22×9 = 120+152+198 = 470 ✓
+    baseNutrition: { calories: 470, proteinGrams: 30, carbsGrams: 38, fatGrams: 22 },
+    ingredients: [
+      { name: 'Pain de mie', qty: 4, unit: 'pce', note: 'tranches épaisses' },
+      { name: 'Jambon blanc', qty: 120, unit: 'g' },
+      { name: 'Gruyère râpé', qty: 80, unit: 'g' },
+      { name: 'Beurre', qty: 20, unit: 'g' },
+      { name: 'Moutarde de Dijon', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      "Préchauffer le four grill ou une grande poêle.",
+      "Beurrer une face de chaque tranche de pain. Tartiner de moutarde l'autre face.",
+      "Assembler : moutarde → jambon → gruyère → pain (beurre à l'extérieur).",
+      "Faire griller 3-4 min de chaque côté à feu moyen jusqu'à dorure et fromage fondu."
+    ]
+  }
+  ,{
+    id: 'R942',
+    name: 'Sandwich Club Thon Mayo',
+    category: 'french',
+    mealTypes: ['lunch'],
+    emoji: '🥙', origin: '🇫🇷',
+    tags: ['express','high-protein','classic'],
+    servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
+    // 36×4 + 40×4 + 14×9 = 144+160+126 = 430 ✓
+    baseNutrition: { calories: 430, proteinGrams: 36, carbsGrams: 40, fatGrams: 14 },
+    ingredients: [
+      { name: 'Pain de mie complet', qty: 4, unit: 'pce', note: 'tranches' },
+      { name: 'Thon en boîte', qty: 160, unit: 'g', note: 'égoutté' },
+      { name: 'Mayonnaise', qty: 30, unit: 'g' },
+      { name: 'Maïs', qty: 60, unit: 'g' },
+      { name: 'Tomate', qty: 1, unit: 'pce' },
+      { name: 'Salade verte', qty: 30, unit: 'g' },
+      { name: 'Citron', qty: 1, unit: 'pce', note: 'jus' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Émietter le thon. Mélanger avec mayo, maïs, jus de citron, sel, poivre.",
+      "Toaster légèrement le pain si souhaité.",
+      "Étaler la préparation thon sur 2 tranches. Ajouter tomate en rondelles et salade.",
+      "Refermer, couper en diagonale. Servir frais."
+    ]
+  }
+  ,{
+    id: 'R943',
+    name: 'Burrito Bœuf Haché Maison',
+    category: 'mexican',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🌯', origin: '🇲🇽',
+    tags: ['comfort','high-protein','spiced'],
+    servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
+    // 50×4 + 44×4 + 18×9 = 200+176+162 = 538 ✓
+    baseNutrition: { calories: 538, proteinGrams: 50, carbsGrams: 44, fatGrams: 18 },
+    ingredients: [
+      { name: 'Bœuf haché 5%', qty: 300, unit: 'g' },
+      { name: 'Tortillas de blé', qty: 2, unit: 'pce', note: 'grandes' },
+      { name: 'Riz cuit', qty: 120, unit: 'g' },
+      { name: 'Haricots rouges en boîte', qty: 120, unit: 'g', note: 'égouttés' },
+      { name: 'Cheddar râpé', qty: 40, unit: 'g' },
+      { name: 'Oignon', qty: 1, unit: 'pce' },
+      { name: 'Cumin', qty: 4, unit: 'g' },
+      { name: 'Paprika fumé', qty: 3, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Faire revenir l'oignon haché dans un filet d'huile. Ajouter le bœuf haché, cuire en émiettant.",
+      "Assaisonner avec cumin, paprika, sel, poivre. Ajouter les haricots, mélanger 2 min.",
+      "Réchauffer les tortillas. Garnir : riz → viande/haricots → cheddar.",
+      "Rouler en serrant bien. Passer 2 min à sec dans une poêle pour griller la surface. Couper en deux."
+    ]
+  }
+  ,{
+    id: 'R944',
+    name: 'Pan Bagnat Niçois',
+    category: 'french',
+    mealTypes: ['lunch'],
+    emoji: '🥖', origin: '🇫🇷',
+    tags: ['classic','mediterranean','balanced'],
+    servings: 2, prepTime: 15, cookTime: 0, difficulty: 1,
+    // 24×4 + 42×4 + 16×9 = 96+168+144 = 408 ✓
+    baseNutrition: { calories: 408, proteinGrams: 24, carbsGrams: 42, fatGrams: 16 },
+    ingredients: [
+      { name: 'Pain rond (michette)', qty: 2, unit: 'pce' },
+      { name: 'Thon en boîte', qty: 120, unit: 'g', note: 'à l\'huile, égoutté' },
+      { name: 'Tomates', qty: 2, unit: 'pce' },
+      { name: 'Oeufs durs', qty: 2, unit: 'pce' },
+      { name: 'Anchois', qty: 20, unit: 'g' },
+      { name: 'Olives noires', qty: 30, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Vinaigre de vin', qty: 10, unit: 'ml' },
+      { name: 'Basilic, sel', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Couper les pains en deux. Arroser généreusement d'huile d'olive et un peu de vinaigre.",
+      "Garnir avec tomates en rondelles, oeufs en tranches, thon émietté, anchois et olives.",
+      "Ajouter le basilic. Refermer et presser légèrement.",
+      "Emballer dans du film alimentaire. Laisser reposer 20 min minimum au frais avant de manger — le pain s'imprègne des saveurs."
+    ]
+  }
+
   // ─────────────────────────────────────────────────────────────────────────────
   // FIN RECIPES_DB — à continuer avec les batches suivants au-dessus de cette ligne
   // ─────────────────────────────────────────────────────────────────────────────
