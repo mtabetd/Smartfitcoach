@@ -39729,6 +39729,277 @@
     ]
   }
 
+  // ── BATCH P67 — Salades fraîcheur express ─────────────────────────────────────
+  ,{
+    id: 'R1010',
+    name: 'Salade Roquette Fraises Balsamique',
+    category: 'french',
+    mealTypes: ['lunch'],
+    emoji: '🍓', origin: '🇫🇷',
+    tags: ['salade','vegetarian','chic','light'],
+    servings: 2, prepTime: 8, cookTime: 0, difficulty: 1,
+    // 8×4 + 12×4 + 10×9 = 32+48+90 = 170 ✓
+    baseNutrition: { calories: 170, proteinGrams: 8, carbsGrams: 12, fatGrams: 10 },
+    ingredients: [
+      { name: 'Roquette', qty: 100, unit: 'g' },
+      { name: 'Fraises fraîches', qty: 150, unit: 'g' },
+      { name: 'Chèvre frais', qty: 60, unit: 'g' },
+      { name: 'Pignons de pin', qty: 15, unit: 'g', note: 'grillés' },
+      { name: 'Vinaigre balsamique', qty: 15, unit: 'ml' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Miel', qty: 5, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Laver et équeuter les fraises. Les couper en deux ou en quartiers.",
+      "Griller les pignons à sec dans une poêle 2 min.",
+      "Disposer la roquette dans les assiettes. Ajouter les fraises et émietter le chèvre.",
+      "Arroser d'huile d'olive et de vinaigre balsamique mélangé au miel. Parsemer de pignons et poivrer."
+    ]
+  }
+  ,{
+    id: 'R1011',
+    name: 'Salade de Pâtes Feta Olives Poivrons',
+    category: 'mediterranean',
+    mealTypes: ['lunch'],
+    emoji: '🧀', origin: '🇬🇷',
+    tags: ['salade','vegetarian','mediterranean'],
+    servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
+    // 18×4 + 62×4 + 14×9 = 72+248+126 = 446 ✓
+    baseNutrition: { calories: 446, proteinGrams: 18, carbsGrams: 62, fatGrams: 14 },
+    ingredients: [
+      { name: 'Fusilli', qty: 160, unit: 'g', note: 'secs' },
+      { name: 'Feta', qty: 80, unit: 'g' },
+      { name: 'Olives mixtes', qty: 40, unit: 'g' },
+      { name: 'Poivron rouge rôti', qty: 100, unit: 'g' },
+      { name: 'Concombre', qty: 80, unit: 'g' },
+      { name: 'Tomates cerises', qty: 100, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Origan, sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Cuire les pâtes al dente. Rincer à l'eau froide.",
+      "Couper tous les légumes en morceaux. Émietter grossièrement la feta.",
+      "Mélanger pâtes, légumes, olives et feta.",
+      "Assaisonner avec huile d'olive, origan, sel et poivre. Servir frais."
+    ]
+  }
+  ,{
+    id: 'R1012',
+    name: 'Salade Mâche Saumon Fumé Avocat',
+    category: 'french',
+    mealTypes: ['lunch'],
+    emoji: '🐟', origin: '🇫🇷',
+    tags: ['salade','high-protein','chic','light'],
+    servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
+    // 24×4 + 8×4 + 16×9 = 96+32+144 = 272 ✓
+    baseNutrition: { calories: 272, proteinGrams: 24, carbsGrams: 8, fatGrams: 16 },
+    ingredients: [
+      { name: 'Mâche', qty: 100, unit: 'g' },
+      { name: 'Saumon fumé', qty: 120, unit: 'g' },
+      { name: 'Avocat', qty: 1, unit: 'pce' },
+      { name: 'Concombre', qty: 80, unit: 'g' },
+      { name: 'Citron', qty: 1, unit: 'pce' },
+      { name: 'Aneth frais', qty: 5, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Couper l'avocat en lamelles, arroser de jus de citron. Émincer le concombre.",
+      "Répartir la mâche dans les assiettes.",
+      "Disposer les tranches de saumon fumé et les lamelles d'avocat.",
+      "Ajouter le concombre, l'aneth ciselé. Arroser d'huile d'olive et de jus de citron."
+    ]
+  }
+  ,{
+    id: 'R1013',
+    name: 'Salade Tomates Burrata Basilic',
+    category: 'italian',
+    mealTypes: ['lunch'],
+    emoji: '🍅', origin: '🇮🇹',
+    tags: ['salade','vegetarian','chic'],
+    servings: 2, prepTime: 5, cookTime: 0, difficulty: 1,
+    // 10×4 + 8×4 + 16×9 = 40+32+144 = 216 ✓
+    baseNutrition: { calories: 216, proteinGrams: 10, carbsGrams: 8, fatGrams: 16 },
+    ingredients: [
+      { name: 'Tomates variées', qty: 400, unit: 'g', note: 'coeur de boeuf, cerises, ananas...' },
+      { name: 'Burrata', qty: 125, unit: 'g' },
+      { name: 'Basilic frais', qty: 15, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml', note: 'de qualité' },
+      { name: 'Fleur de sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Couper les tomates de façon variée (tranches, quartiers, cerises entières). Disposer sur le plat.",
+      "Poser la burrata au centre, entière — elle s'ouvre à la découpe.",
+      "Répartir le basilic déchiré à la main.",
+      "Arroser d'une belle huile d'olive. Fleur de sel et poivre noir. Rien d'autre — c'est la perfection dans la simplicité."
+    ]
+  }
+  ,{
+    id: 'R1014',
+    name: 'Salade Chou Blanc Crevettes Citron Vert',
+    category: 'world-food',
+    mealTypes: ['lunch'],
+    emoji: '🥬', origin: '🌍',
+    tags: ['salade','high-protein','light','express'],
+    servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
+    // 24×4 + 12×4 + 6×9 = 96+48+54 = 198 ✓
+    baseNutrition: { calories: 198, proteinGrams: 24, carbsGrams: 12, fatGrams: 6 },
+    ingredients: [
+      { name: 'Chou blanc', qty: 200, unit: 'g', note: 'émincé très fin' },
+      { name: 'Crevettes cuites', qty: 200, unit: 'g' },
+      { name: 'Carotte', qty: 100, unit: 'g', note: 'râpée' },
+      { name: 'Citron vert', qty: 2, unit: 'pce' },
+      { name: 'Coriandre fraîche', qty: 10, unit: 'g' },
+      { name: 'Piment', qty: 1, unit: 'pincée' },
+      { name: 'Huile de sésame', qty: 10, unit: 'ml' },
+      { name: 'Sel', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Émincer très finement le chou blanc, le mélanger avec la carotte râpée.",
+      "Saler légèrement, laisser dégorger 10 min. Presser pour éliminer l'eau.",
+      "Ajouter les crevettes, le jus de citron vert, le piment et l'huile de sésame.",
+      "Parsemer de coriandre fraîche. Goûter, ajuster le citron et le sel. Servir très frais."
+    ]
+  }
+
+  // ── BATCH P68 — Salades composées complètes ───────────────────────────────────
+  ,{
+    id: 'R1015',
+    name: 'Bowl Poulet Teriyaki Riz Edamame',
+    category: 'japanese',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍱', origin: '🇯🇵',
+    tags: ['salade','high-protein','balanced'],
+    servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
+    // 52×4 + 58×4 + 10×9 = 208+232+90 = 530 ✓
+    baseNutrition: { calories: 530, proteinGrams: 52, carbsGrams: 58, fatGrams: 10 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 300, unit: 'g' },
+      { name: 'Riz cuit', qty: 200, unit: 'g' },
+      { name: 'Edamame surgelés', qty: 100, unit: 'g' },
+      { name: 'Concombre', qty: 100, unit: 'g' },
+      { name: 'Carotte', qty: 80, unit: 'g', note: 'râpée' },
+      { name: 'Sauce teriyaki', qty: 40, unit: 'ml' },
+      { name: 'Graines de sésame', qty: 10, unit: 'g' },
+      { name: 'Oignon vert', qty: 2, unit: 'pce' }
+    ],
+    steps: [
+      "Cuire le poulet dans la sauce teriyaki à la poêle 6-7 min par face. Laisser reposer, trancher.",
+      "Cuire les edamame 3 min à l'eau bouillante salée.",
+      "Composer les bols : riz → concombre en dés → carotte râpée → edamame.",
+      "Poser le poulet teriyaki tranché. Napper du reste de sauce. Parsemer de sésame et oignon vert."
+    ]
+  }
+  ,{
+    id: 'R1016',
+    name: 'Salade Panzanella Toscane',
+    category: 'italian',
+    mealTypes: ['lunch'],
+    emoji: '🍞', origin: '🇮🇹',
+    tags: ['salade','vegetarian','classic'],
+    servings: 2, prepTime: 15, cookTime: 5, difficulty: 1,
+    // 8×4 + 34×4 + 12×9 = 32+136+108 = 276 ✓
+    baseNutrition: { calories: 276, proteinGrams: 8, carbsGrams: 34, fatGrams: 12 },
+    ingredients: [
+      { name: 'Pain de campagne rassis', qty: 150, unit: 'g' },
+      { name: 'Tomates mûres', qty: 400, unit: 'g' },
+      { name: 'Concombre', qty: 150, unit: 'g' },
+      { name: 'Oignon rouge', qty: 1, unit: 'pce' },
+      { name: 'Basilic frais', qty: 15, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 25, unit: 'ml' },
+      { name: 'Vinaigre de vin rouge', qty: 15, unit: 'ml' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Couper le pain rassis en cubes. Faire dorer à la poêle avec un filet d'huile — ou laisser sécher au four 10 min.",
+      "Couper les tomates en gros morceaux, le concombre et l'oignon rouge.",
+      "Mélanger légumes et pain dans un saladier. Arroser d'huile d'olive et de vinaigre.",
+      "Laisser mariner 15 min — le pain absorbe les jus de tomate. Ajouter le basilic juste avant de servir."
+    ]
+  }
+  ,{
+    id: 'R1017',
+    name: 'Salade Cobb Américaine',
+    category: 'world-food',
+    mealTypes: ['lunch'],
+    emoji: '🥗', origin: '🇺🇸',
+    tags: ['salade','high-protein','classic'],
+    servings: 2, prepTime: 15, cookTime: 10, difficulty: 1,
+    // 46×4 + 10×4 + 24×9 = 184+40+216 = 440 ✓
+    baseNutrition: { calories: 440, proteinGrams: 46, carbsGrams: 10, fatGrams: 24 },
+    ingredients: [
+      { name: 'Laitue iceberg', qty: 150, unit: 'g' },
+      { name: 'Blanc de poulet grillé', qty: 200, unit: 'g' },
+      { name: 'Oeufs durs', qty: 2, unit: 'pce' },
+      { name: 'Bacon grillé', qty: 50, unit: 'g' },
+      { name: 'Avocat', qty: 1, unit: 'pce' },
+      { name: 'Tomates cerises', qty: 100, unit: 'g' },
+      { name: 'Bleu ou roquefort', qty: 30, unit: 'g' },
+      { name: 'Vinaigrette ranch', qty: 30, unit: 'ml' }
+    ],
+    steps: [
+      "Griller le bacon et cuire les oeufs durs. Griller le poulet.",
+      "Déchirer la laitue en base. Disposer en rangées distinctes : poulet, oeufs, bacon, avocat, tomates.",
+      "Émietter le bleu sur le dessus.",
+      "Servir avec la sauce ranch à part. La tradition américaine est de présenter sans mélanger."
+    ]
+  }
+  ,{
+    id: 'R1018',
+    name: 'Salade Lentilles Vinaigrette Lardons',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🫘', origin: '🇫🇷',
+    tags: ['salade','high-protein','classic','bistrot'],
+    servings: 2, prepTime: 5, cookTime: 25, difficulty: 1,
+    // 28×4 + 36×4 + 12×9 = 112+144+108 = 364 ✓
+    baseNutrition: { calories: 364, proteinGrams: 28, carbsGrams: 36, fatGrams: 12 },
+    ingredients: [
+      { name: 'Lentilles vertes du Puy', qty: 150, unit: 'g', note: 'sèches' },
+      { name: 'Lardons fumés', qty: 80, unit: 'g' },
+      { name: 'Échalote', qty: 2, unit: 'pce' },
+      { name: 'Moutarde de Dijon', qty: 10, unit: 'g' },
+      { name: 'Vinaigre de vin rouge', qty: 15, unit: 'ml' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Persil frais', qty: 10, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Cuire les lentilles 20-25 min dans de l'eau froide non salée avec une feuille de laurier. Égoutter, saler.",
+      "Faire revenir les lardons jusqu'à croustillant. Réserver avec la graisse.",
+      "Mélanger moutarde, vinaigre, huile d'olive, sel et poivre pour la vinaigrette.",
+      "Assaisonner les lentilles tièdes avec la vinaigrette, les lardons et les échalotes émincées. Parsemer de persil."
+    ]
+  }
+  ,{
+    id: 'R1019',
+    name: 'Salade Taboulé Libanais Authentique',
+    category: 'mediterranean',
+    mealTypes: ['lunch'],
+    emoji: '🌿', origin: '🇱🇧',
+    tags: ['salade','vegetarian','mediterranean','light'],
+    servings: 2, prepTime: 20, cookTime: 0, difficulty: 1,
+    // 4×4 + 16×4 + 8×9 = 16+64+72 = 152 ✓
+    baseNutrition: { calories: 152, proteinGrams: 4, carbsGrams: 16, fatGrams: 8 },
+    ingredients: [
+      { name: 'Boulgour fin', qty: 40, unit: 'g' },
+      { name: 'Persil plat frais', qty: 100, unit: 'g' },
+      { name: 'Menthe fraîche', qty: 20, unit: 'g' },
+      { name: 'Tomates', qty: 200, unit: 'g' },
+      { name: 'Oignon vert', qty: 4, unit: 'pce' },
+      { name: 'Citron', qty: 2, unit: 'pce', note: 'jus' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Sel', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Réhydrater le boulgour fin dans de l'eau froide 15 min. Égoutter, presser dans un torchon.",
+      "Hacher très finement le persil et la menthe — c'est le principe du taboulé libanais : 80% d'herbes, 20% de céréales.",
+      "Couper les tomates en minuscules dés. Émincer finement les oignons verts.",
+      "Tout mélanger avec le jus de citron et l'huile d'olive. Saler. Réfrigérer 30 min minimum."
+    ]
+  }
+
   // ─────────────────────────────────────────────────────────────────────────────
   // FIN RECIPES_DB — à continuer avec les batches suivants au-dessus de cette ligne
   // ─────────────────────────────────────────────────────────────────────────────
