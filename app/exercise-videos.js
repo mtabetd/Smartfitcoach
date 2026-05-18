@@ -124,7 +124,7 @@
     version:          '6.1',
     urlStrategy:      'verified-direct-only',      // watch?v= / shorts/ + verified:true ONLY
     fallbackStrategy: 'none',                      // NO search fallback — missing = disabled UX state
-    exerciseCoverage: 414,                         // entrées CURATED_QUERIES
+    exerciseCoverage: 467,                         // entrées CURATED_QUERIES
     cfCoverage:       101,                         // entrées CF_QUERIES
     directRegistry:   true,                        // DIRECT_VIDEO_REGISTRY actif
     directRegistrySize: 48,                        // clés dans le registre (nettoyé 2026-05)
@@ -809,7 +809,72 @@
     'yoga flow intermediate':                  'yoga flow intermediate full body',
     'morning yoga':                            'morning yoga routine full body',
     'yoga stretching total body':              'full body yoga stretching routine',
-    'yoga strength flow':                      'yoga strength flow body weight'
+    'yoga strength flow':                      'yoga strength flow body weight',
+
+    // ── Biceps (batch B2) ────────────────────────────────────────────────────
+    'curl concentration':                      'concentration curl bicep peak proper form tutorial',
+    'curl cable barre droite':                 'cable curl straight bar bicep proper form tutorial',
+    'curl inverse barre':                      'reverse barbell curl brachioradialis proper form tutorial',
+    'chin-up traction supination':             'chin up supinated grip bicep proper form tutorial',
+    'curl haltere cross-body':                 'cross body hammer curl brachialis proper form tutorial',
+    'curl marteau hammer curl':                'hammer curl dumbbell proper form technique tutorial',
+    'fat grip curl':                           'thick bar fat grip curl forearm tutorial',
+
+    // ── Triceps (batch T2) ───────────────────────────────────────────────────
+    'skull crusher barre ez':                  'skull crusher EZ bar lying tricep extension form tutorial',
+    'rolling extension halteres':              'dumbbell rolling tricep extension proper form tutorial',
+    'pushdown barre droite':                   'cable pushdown straight bar tricep proper form tutorial',
+
+    // ── Cardio (batch C1) ────────────────────────────────────────────────────
+    'stair climber escalier':                  'stair climber machine proper form technique cardio tutorial',
+    'hiit velo stationnaire':                  'stationary bike HIIT interval training proper form tutorial',
+    'battle ropes ondes':                      'battle ropes waves proper form technique tutorial',
+    'sled push poussee traineau':              'sled push proper form technique conditioning tutorial',
+    'box step-up cardio':                      'box step up cardio proper form technique tutorial',
+    'run fractionne intervalles':              'interval running sprint training proper form technique tutorial',
+
+    // ── Mollets (batch MOL-1) ────────────────────────────────────────────────
+    'calf raise debout machine':               'standing calf raise machine proper form technique tutorial',
+    'calf raise assis machine':                'seated calf raise machine soleus proper form tutorial',
+    'calf raise debout barre':                 'standing calf raise barbell proper form technique tutorial',
+    'calf raise poids du corps':               'bodyweight calf raise proper form technique tutorial',
+    'calf raise unilateral haltere':           'single leg calf raise dumbbell proper form tutorial',
+    'calf raise leg press':                    'calf raise leg press machine proper form tutorial',
+    'calf press leg press unilateral':         'single leg calf press leg press machine proper form tutorial',
+    'calf raise smith machine':                'smith machine calf raise proper form technique tutorial',
+    'calf raise sur marche step':              'calf raise step edge bodyweight proper form tutorial',
+    'calf raise excentrique lent':             'eccentric calf raise achilles tendon slow proper form tutorial',
+    'seated calf raise haltere':               'seated calf raise dumbbell on knees soleus proper form tutorial',
+    'jump rope mollets':                       'jump rope calf muscles proper form technique tutorial',
+    'tibialis raise tibia':                    'tibialis raise anterior shin muscles proper form tutorial',
+    'sauts verticaux jump squats mollets':     'vertical jump calf power plyometric proper form tutorial',
+    'farmer walk sur pointes':                 'farmer walk tiptoe calf exercise proper form tutorial',
+
+    // ── Trapèzes (batch TRAP-1) ──────────────────────────────────────────────
+    'shrug barre':                             'barbell shrug trapezius proper form technique tutorial',
+    'shrug halteres':                          'dumbbell shrug trapezius proper form technique tutorial',
+    'shrug halteres assis':                    'seated dumbbell shrug trapezius proper form tutorial',
+    'reverse pec deck arriere-epaule':         'reverse pec deck rear delt fly proper form tutorial',
+    'upright row barre':                       'barbell upright row proper form technique tutorial',
+    'upright row cable':                       'cable upright row proper form technique tutorial',
+    'snatch grip high pull':                   'snatch grip high pull Olympic weightlifting tutorial',
+    'farmer walk trapezes':                    'farmer carry trapezius shoulder trap proper form tutorial',
+    'power shrug barre explosive':             'power shrug barbell explosive trap tutorial',
+    'shrug trap bar hex bar':                  'hex bar trap bar shrug proper form technique tutorial',
+    'shrug derriere le dos':                   'behind the back barbell shrug proper form tutorial',
+    'dumbbell y raise':                        'dumbbell Y raise lower trap scapula proper form tutorial',
+
+    // ── Poignets & Grip (batch GRIP-1) ──────────────────────────────────────
+    'wrist curl barre flexion poignet':        'barbell wrist curl forearm flexor proper form tutorial',
+    'wrist curl inverse barre':                'reverse wrist curl extensor forearm proper form tutorial',
+    'reverse curl barre':                      'reverse curl barbell brachioradialis forearm proper form tutorial',
+    'wrist roller':                            'wrist roller forearm training proper form tutorial',
+    'plate pinch':                             'plate pinch grip strength finger training tutorial',
+    'dead hang suspension barre':              'dead hang bar grip strength shoulder decompression tutorial',
+    'wrist curl derriere le dos':              'behind the back wrist curl barbell forearm proper form tutorial',
+    'farmer walk grip':                        'farmer walk grip strength forearm training proper form tutorial',
+    'gripper pince grip':                      'hand gripper training forearm grip strength tutorial',
+    'finger extension elastique':              'finger extension rubber band forearm balance tutorial'
   };
 
   // ─── Requêtes FR pour canal @TiboInShape (niveau 1 FR) ───────────────────
