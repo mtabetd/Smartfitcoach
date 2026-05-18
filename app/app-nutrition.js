@@ -2394,7 +2394,7 @@ function renderStep8(p) {
   var _splitList = _globalSplit ? [
     {n: window.t('onb.s9.breakfast'), pct: Math.round((_globalSplit.pctBreak||0.25)*100)},
     {n: window.t('onb.s9.lunch'), pct: Math.round((_globalSplit.pctLunch||0.40)*100)},
-    {n: window.t('onb.s9.snack'), pct: Math.round((_globalSplit.pctSnack||0.05)*100)},
+    {n: window.t('onb.s9.snack'), pct: Math.round((_globalSplit.pctSnack||0)*100)},
     {n: window.t('onb.s9.dinner'), pct: Math.round((_globalSplit.pctDinner||0.30)*100)}
   ].filter(function(m){return m.pct>0;}) : [{n:window.t('onb.s9.breakfast'),pct:25},{n:window.t('onb.s9.lunch'),pct:40},{n:window.t('onb.s9.snack'),pct:5},{n:window.t('onb.s9.dinner'),pct:30}];
   _splitList.forEach(function(meal) {

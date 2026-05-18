@@ -3819,6 +3819,7 @@
       name: 'Açaí Bowl',
       emoji: '🥣', origin: '🇧🇷',
       mealTypes: ['breakfast'],
+      category: 'world-food',
       tags: ['acai', 'smoothie-bowl', 'antioxydants', 'tendance', 'vegan'],
       difficulty: 1, prepTime: 10, cookTime: 0, servings: 1,
       // 11×4 + 63×4 + 12×9 = 44+252+108 = 404 ✓
@@ -3844,6 +3845,7 @@
       name: 'Egg Muffins Protéinés',
       emoji: '🥚', origin: '🇺🇸',
       mealTypes: ['breakfast'],
+      category: 'french',
       tags: ['oeufs', 'high-protein', 'meal-prep', 'low-carb', 'gluten-free'],
       difficulty: 1, prepTime: 10, cookTime: 20, servings: 1,
       // 28×4 + 8×4 + 18×9 = 112+32+162 = 306 ✓
@@ -3869,6 +3871,7 @@
       name: 'Chia Pudding Mangue Coco',
       emoji: '🥭', origin: '🇹🇭',
       mealTypes: ['breakfast', 'snack'],
+      category: 'french',
       tags: ['chia', 'vegan', 'no-cook', 'meal-prep', 'tropical'],
       difficulty: 1, prepTime: 5, cookTime: 0, servings: 1,
       // 8×4 + 44×4 + 13×9 = 32+176+117 = 325 ✓
@@ -3892,6 +3895,7 @@
       name: 'Smoothie Bowl Green',
       emoji: '🥬', origin: '🇦🇺',
       mealTypes: ['breakfast'],
+      category: 'world-food',
       tags: ['smoothie-bowl', 'green', 'detox', 'vegan', 'tendance'],
       difficulty: 1, prepTime: 8, cookTime: 0, servings: 1,
       // 9×4 + 58×4 + 8×9 = 36+232+72 = 340 ✓
@@ -3917,6 +3921,7 @@
       name: 'Toast Avocat Saumon Fumé',
       emoji: '🥑', origin: '🇺🇸',
       mealTypes: ['breakfast'],
+      category: 'french',
       tags: ['avocat', 'saumon', 'healthy-fats', 'high-protein', 'tendance'],
       difficulty: 1, prepTime: 8, cookTime: 0, servings: 1,
       // 22×4 + 30×4 + 20×9 = 88+120+180 = 388 ✓
@@ -3942,6 +3947,7 @@
       name: 'Pancakes Protéinés Myrtilles',
       emoji: '🥞', origin: '🇺🇸',
       mealTypes: ['breakfast'],
+      category: 'french',
       tags: ['pancakes', 'high-protein', 'myrtilles', 'brunch', 'tendance'],
       difficulty: 1, prepTime: 10, cookTime: 15, servings: 1,
       // 24×4 + 52×4 + 10×9 = 96+208+90 = 394 ✓
@@ -3967,6 +3973,7 @@
       name: 'Skyr Fruits Rouges & Noix',
       emoji: '🍓', origin: '🇮🇸',
       mealTypes: ['breakfast', 'snack'],
+      category: 'french',
       tags: ['skyr', 'high-protein', 'fruits-rouges', 'low-fat', 'nordique'],
       difficulty: 1, prepTime: 5, cookTime: 0, servings: 1,
       // 20×4 + 30×4 + 9×9 = 80+120+81 = 281 ✓
@@ -3991,6 +3998,7 @@
       name: 'Œufs Brouillés Champignons',
       emoji: '🍄', origin: '🇫🇷',
       mealTypes: ['breakfast'],
+      category: 'french',
       tags: ['oeufs', 'champignons', 'french', 'high-protein', 'low-carb'],
       difficulty: 1, prepTime: 5, cookTime: 8, servings: 1,
       // 22×4 + 6×4 + 16×9 = 88+24+144 = 256 ✓
@@ -4016,6 +4024,7 @@
       name: 'Bowl Quinoa Fruité du Matin',
       emoji: '🌅', origin: '🇺🇸',
       mealTypes: ['breakfast'],
+      category: 'world-food',
       tags: ['quinoa', 'fruits', 'vegan', 'meal-prep', 'healthy'],
       difficulty: 1, prepTime: 5, cookTime: 15, servings: 1,
       // 14×4 + 58×4 + 10×9 = 56+232+90 = 378 ✓
@@ -4042,6 +4051,7 @@
       name: 'Galettes Sarrasin Œuf & Avocat',
       emoji: '🫓', origin: '🇫🇷',
       mealTypes: ['breakfast'],
+      category: 'french',
       tags: ['sarrasin', 'gluten-free', 'oeufs', 'avocat', 'french'],
       difficulty: 2, prepTime: 10, cookTime: 10, servings: 1,
       // 18×4 + 34×4 + 18×9 = 72+136+162 = 370 ✓
@@ -4067,6 +4077,7 @@
       name: 'Poke Bowl Saumon',
       emoji: '🐟', origin: '🇺🇸',
       mealTypes: ['lunch'],
+      category: 'japanese',
       tags: ['poke', 'saumon', 'japonais', 'bowl', 'tendance', 'high-protein'],
       difficulty: 2, prepTime: 15, cookTime: 15, servings: 1,
       // 35×4 + 52×4 + 16×9 = 140+208+144 = 492 ✓
@@ -4095,6 +4106,7 @@
       name: 'Bao Bun Poulet Teriyaki',
       emoji: '🫔', origin: '🇯🇵',
       mealTypes: ['lunch'],
+      category: 'japanese',
       tags: ['bao', 'poulet', 'teriyaki', 'japonais', 'tendance', 'street-food'],
       difficulty: 2, prepTime: 10, cookTime: 15, servings: 1,
       // 36×4 + 48×4 + 12×9 = 144+192+108 = 444 ✓
@@ -4120,6 +4132,7 @@
       name: 'Bibimbap Bœuf',
       emoji: '🍚', origin: '🇰🇷',
       mealTypes: ['lunch', 'dinner'],
+      category: 'japanese',
       tags: ['coréen', 'bibimbap', 'boeuf', 'bowl', 'tendance', 'high-protein'],
       difficulty: 2, prepTime: 15, cookTime: 20, servings: 1,
       // 38×4 + 58×4 + 14×9 = 152+232+126 = 510 ✓
@@ -4149,6 +4162,7 @@
       name: 'Banh Mi Bowl Poulet',
       emoji: '🥢', origin: '🇻🇳',
       mealTypes: ['lunch'],
+      category: 'world-food',
       tags: ['vietnamien', 'poulet', 'bowl', 'tendance', 'fresh', 'high-protein'],
       difficulty: 2, prepTime: 15, cookTime: 15, servings: 1,
       // 38×4 + 50×4 + 11×9 = 152+200+99 = 451 ✓
@@ -4177,6 +4191,7 @@
       name: 'Buddha Bowl Tofu & Greens',
       emoji: '🧘', origin: '🇺🇸',
       mealTypes: ['lunch'],
+      category: 'world-food',
       tags: ['vegan', 'tofu', 'bowl', 'healthy', 'tendance', 'high-fiber'],
       difficulty: 2, prepTime: 15, cookTime: 20, servings: 1,
       // 22×4 + 50×4 + 16×9 = 88+200+144 = 432 ✓
@@ -4204,6 +4219,7 @@
       name: 'Wrap Méditerranéen Halloumi',
       emoji: '🫙', origin: '🇬🇷',
       mealTypes: ['lunch'],
+      category: 'mediterranean',
       tags: ['halloumi', 'méditerranéen', 'wrap', 'végétarien', 'tendance'],
       difficulty: 1, prepTime: 10, cookTime: 8, servings: 1,
       // 26×4 + 38×4 + 18×9 = 104+152+162 = 418 ✓
@@ -4230,6 +4246,7 @@
       name: 'Ramen Poulet Low-Carb',
       emoji: '🍜', origin: '🇯🇵',
       mealTypes: ['lunch', 'dinner'],
+      category: 'japanese',
       tags: ['ramen', 'poulet', 'japonais', 'low-carb', 'réconfortant'],
       difficulty: 2, prepTime: 10, cookTime: 20, servings: 1,
       // 38×4 + 22×4 + 12×9 = 152+88+108 = 348 ✓
@@ -4257,6 +4274,7 @@
       name: 'Pad Thaï Crevettes',
       emoji: '🦐', origin: '🇹🇭',
       mealTypes: ['lunch', 'dinner'],
+      category: 'world-food',
       tags: ['thaï', 'crevettes', 'nouilles', 'tendance', 'asian', 'high-protein'],
       difficulty: 2, prepTime: 15, cookTime: 15, servings: 1,
       // 32×4 + 48×4 + 14×9 = 128+192+126 = 446 ✓
@@ -4285,6 +4303,7 @@
       name: 'Bowl Falafel Taboulé Moderne',
       emoji: '🧆', origin: '🇱🇧',
       mealTypes: ['lunch'],
+      category: 'maroc-moderne',
       tags: ['falafel', 'libanais', 'végétarien', 'bowl', 'moyen-orient', 'tendance'],
       difficulty: 2, prepTime: 10, cookTime: 20, servings: 1,
       // 22×4 + 55×4 + 16×9 = 88+220+144 = 452 ✓
@@ -4313,6 +4332,7 @@
       name: 'Soba Bowl Thon',
       emoji: '🍣', origin: '🇯🇵',
       mealTypes: ['lunch'],
+      category: 'japanese',
       tags: ['soba', 'thon', 'japonais', 'bowl', 'high-protein', 'tendance'],
       difficulty: 1, prepTime: 10, cookTime: 8, servings: 1,
       // 34×4 + 46×4 + 10×9 = 136+184+90 = 410 ✓
@@ -4340,6 +4360,7 @@
       name: 'Grain Bowl Lentilles & Halloumi',
       emoji: '🫘', origin: '🇲🇪',
       mealTypes: ['lunch'],
+      category: 'world-food',
       tags: ['lentilles', 'halloumi', 'végétarien', 'bowl', 'méditerranéen', 'high-protein'],
       difficulty: 2, prepTime: 10, cookTime: 20, servings: 1,
       // 28×4 + 50×4 + 18×9 = 112+200+162 = 474 ✓
@@ -4367,6 +4388,7 @@
       name: 'Taco Bowl Poulet Épicé',
       emoji: '🌮', origin: '🇲🇽',
       mealTypes: ['lunch', 'dinner'],
+      category: 'mexican',
       tags: ['mexicain', 'poulet', 'bowl', 'épicé', 'tendance', 'high-protein'],
       difficulty: 1, prepTime: 10, cookTime: 15, servings: 1,
       // 40×4 + 52×4 + 12×9 = 160+208+108 = 476 ✓
@@ -4395,6 +4417,7 @@
       name: 'Burrito Bowl Bœuf',
       emoji: '🌯', origin: '🇲🇽',
       mealTypes: ['lunch', 'dinner'],
+      category: 'mexican',
       tags: ['mexicain', 'boeuf', 'bowl', 'tendance', 'high-protein', 'hearty'],
       difficulty: 2, prepTime: 10, cookTime: 15, servings: 1,
       // 38×4 + 54×4 + 16×9 = 152+216+144 = 512 ✓
@@ -4424,6 +4447,7 @@
       name: 'Chirashi Saumon',
       emoji: '🍱', origin: '🇯🇵',
       mealTypes: ['lunch'],
+      category: 'japanese',
       tags: ['japonais', 'saumon', 'riz', 'chirashi', 'tendance', 'fresh'],
       difficulty: 2, prepTime: 15, cookTime: 15, servings: 1,
       // 32×4 + 52×4 + 14×9 = 128+208+126 = 462 ✓
@@ -4451,6 +4475,7 @@
       name: 'Green Goddess Bowl Poulet',
       emoji: '💚', origin: '🇺🇸',
       mealTypes: ['lunch'],
+      category: 'world-food',
       tags: ['green', 'poulet', 'bowl', 'tendance', 'fresh', 'high-protein'],
       difficulty: 1, prepTime: 15, cookTime: 12, servings: 1,
       // 42×4 + 44×4 + 14×9 = 168+176+126 = 470 ✓
@@ -4479,6 +4504,7 @@
       name: 'Saumon Miso Glacé',
       emoji: '🐠', origin: '🇯🇵',
       mealTypes: ['dinner'],
+      category: 'japanese',
       tags: ['saumon', 'miso', 'japonais', 'tendance', 'high-protein', 'omega3'],
       difficulty: 2, prepTime: 10, cookTime: 15, servings: 1,
       // 38×4 + 42×4 + 16×9 = 152+168+144 = 464 ✓
@@ -4506,6 +4532,7 @@
       name: 'Poulet Tikka Masala Light',
       emoji: '🍛', origin: '🇮🇳',
       mealTypes: ['dinner'],
+      category: 'italian',
       tags: ['indien', 'poulet', 'curry', 'light', 'tendance', 'high-protein'],
       difficulty: 2, prepTime: 15, cookTime: 25, servings: 1,
       // 42×4 + 48×4 + 12×9 = 168+192+108 = 468 ✓
@@ -4534,6 +4561,7 @@
       name: 'Spaghetti Bolognaise Healthy',
       emoji: '🍝', origin: '🇮🇹',
       mealTypes: ['dinner'],
+      category: 'italian',
       tags: ['italien', 'pâtes', 'boeuf', 'healthy', 'réconfortant', 'classique'],
       difficulty: 2, prepTime: 10, cookTime: 25, servings: 1,
       // 38×4 + 58×4 + 12×9 = 152+232+108 = 492 ✓
@@ -4562,6 +4590,7 @@
       name: 'Curry de Pois Chiches',
       emoji: '🫘', origin: '🇮🇳',
       mealTypes: ['dinner'],
+      category: 'japanese',
       tags: ['indien', 'vegan', 'pois-chiches', 'curry', 'tendance', 'high-fiber'],
       difficulty: 1, prepTime: 10, cookTime: 20, servings: 1,
       // 20×4 + 62×4 + 14×9 = 80+248+126 = 454 ✓
@@ -4590,6 +4619,7 @@
       name: 'Bulgogi Bowl Bœuf Coréen',
       emoji: '🥩', origin: '🇰🇷',
       mealTypes: ['dinner'],
+      category: 'japanese',
       tags: ['coréen', 'boeuf', 'bulgogi', 'bowl', 'tendance', 'high-protein'],
       difficulty: 2, prepTime: 15, cookTime: 10, servings: 1,
       // 36×4 + 52×4 + 14×9 = 144+208+126 = 478 ✓
@@ -4618,6 +4648,7 @@
       name: 'Shakshuka',
       emoji: '🍳', origin: '🇮🇱',
       mealTypes: ['dinner'],
+      category: 'mediterranean',
       tags: ['israélien', 'oeufs', 'tomates', 'épicé', 'tendance', 'végétarien'],
       difficulty: 1, prepTime: 10, cookTime: 20, servings: 1,
       // 22×4 + 28×4 + 16×9 = 88+112+144 = 344 ✓
@@ -4646,6 +4677,7 @@
       name: 'Poulet Rôti Citron & Herbes',
       emoji: '🍋', origin: '🇫🇷',
       mealTypes: ['dinner'],
+      category: 'french',
       tags: ['français', 'poulet', 'citron', 'herbes', 'classique', 'high-protein'],
       difficulty: 1, prepTime: 10, cookTime: 25, servings: 1,
       // 42×4 + 28×4 + 12×9 = 168+112+108 = 388 ✓
@@ -4673,6 +4705,7 @@
       name: 'Cabillaud Croûte Herbes',
       emoji: '🐟', origin: '🇫🇷',
       mealTypes: ['dinner'],
+      category: 'french',
       tags: ['poisson', 'cabillaud', 'français', 'light', 'high-protein', 'elegant'],
       difficulty: 2, prepTime: 10, cookTime: 15, servings: 1,
       // 36×4 + 28×4 + 10×9 = 144+112+90 = 346 ✓
@@ -4699,6 +4732,7 @@
       name: 'Butter Chicken Light',
       emoji: '🍗', origin: '🇮🇳',
       mealTypes: ['dinner'],
+      category: 'french',
       tags: ['indien', 'poulet', 'light', 'tendance', 'crémeux', 'high-protein'],
       difficulty: 2, prepTime: 15, cookTime: 25, servings: 1,
       // 40×4 + 46×4 + 12×9 = 160+184+108 = 452 ✓
@@ -4727,6 +4761,7 @@
       name: 'Stir-Fry Bœuf Brocoli',
       emoji: '🥦', origin: '🇨🇳',
       mealTypes: ['dinner'],
+      category: 'italian',
       tags: ['chinois', 'boeuf', 'brocoli', 'stir-fry', 'tendance', 'high-protein'],
       difficulty: 2, prepTime: 10, cookTime: 12, servings: 1,
       // 36×4 + 40×4 + 12×9 = 144+160+108 = 412 ✓
@@ -4755,6 +4790,7 @@
       name: 'Gnocchi Épinards Ricotta',
       emoji: '🫘', origin: '🇮🇹',
       mealTypes: ['dinner'],
+      category: 'italian',
       tags: ['italien', 'végétarien', 'gnocchi', 'réconfortant', 'tendance'],
       difficulty: 1, prepTime: 8, cookTime: 10, servings: 1,
       // 22×4 + 54×4 + 14×9 = 88+216+126 = 430 ✓
@@ -4781,6 +4817,7 @@
       name: 'Soupe Miso Tofu & Wakame',
       emoji: '🍵', origin: '🇯🇵',
       mealTypes: ['dinner'],
+      category: 'japanese',
       tags: ['japonais', 'soupe', 'miso', 'tofu', 'light', 'réconfortant'],
       difficulty: 1, prepTime: 8, cookTime: 10, servings: 1,
       // 18×4 + 32×4 + 8×9 = 72+128+72 = 272 ✓
@@ -4807,6 +4844,7 @@
       name: 'Tartare Saumon Avocat',
       emoji: '🥗', origin: '🇫🇷',
       mealTypes: ['dinner'],
+      category: 'french',
       tags: ['français', 'saumon', 'cru', 'avocat', 'élégant', 'tendance'],
       difficulty: 2, prepTime: 15, cookTime: 0, servings: 1,
       // 28×4 + 14×4 + 24×9 = 112+56+216 = 384 ✓
@@ -4834,6 +4872,7 @@
       name: 'Moules Marinières Légères',
       emoji: '🦪', origin: '🇧🇪',
       mealTypes: ['dinner'],
+      category: 'french',
       tags: ['moules', 'fruits-de-mer', 'léger', 'français', 'protéiné'],
       difficulty: 2, prepTime: 10, cookTime: 12, servings: 1,
       // 28×4 + 22×4 + 8×9 = 112+88+72 = 272 ✓
@@ -4861,6 +4900,7 @@
       name: 'Poulet Satay Sauce Cacahuète',
       emoji: '🥜', origin: '🇮🇩',
       mealTypes: ['dinner'],
+      category: 'french',
       tags: ['indonésien', 'poulet', 'cacahuète', 'satay', 'tendance', 'high-protein'],
       difficulty: 2, prepTime: 15, cookTime: 15, servings: 1,
       // 40×4 + 44×4 + 16×9 = 160+176+144 = 480 ✓
@@ -4889,6 +4929,7 @@
       name: 'Overnight Oats Beurre Cacahuète Banane',
       emoji: '🥣', origin: '🇺🇸',
       mealTypes: ['breakfast'],
+      category: 'french',
       tags: ['overnight-oats', 'meal-prep', 'tendance', 'high-protein', 'no-cook'],
       difficulty: 1, prepTime: 5, cookTime: 0, servings: 1,
       // 18×4 + 58×4 + 14×9 = 72+232+126 = 430 ✓
@@ -4915,6 +4956,7 @@
       name: 'French Toast Protéiné',
       emoji: '🍞', origin: '🇫🇷',
       mealTypes: ['breakfast'],
+      category: 'world-food',
       tags: ['french-toast', 'high-protein', 'brunch', 'tendance', 'réconfortant'],
       difficulty: 1, prepTime: 5, cookTime: 8, servings: 1,
       // 26×4 + 40×4 + 12×9 = 104+160+108 = 372 ✓
@@ -4941,6 +4983,7 @@
       name: 'Wrap Petit-Déjeuner Mexicain',
       emoji: '🌯', origin: '🇲🇽',
       mealTypes: ['breakfast'],
+      category: 'world-food',
       tags: ['wrap', 'oeufs', 'mexicain', 'high-protein', 'tendance', 'savoureux'],
       difficulty: 1, prepTime: 8, cookTime: 8, servings: 1,
       // 28×4 + 36×4 + 14×9 = 112+144+126 = 382 ✓
@@ -4967,6 +5010,7 @@
       name: 'Porridge Pomme Cannelle',
       emoji: '🍎', origin: '🇬🇧',
       mealTypes: ['breakfast'],
+      category: 'world-food',
       tags: ['porridge', 'pomme', 'cannelle', 'réconfortant', 'healthy', 'vegan'],
       difficulty: 1, prepTime: 2, cookTime: 8, servings: 1,
       // 10×4 + 60×4 + 8×9 = 40+240+72 = 352 ✓
@@ -4993,6 +5037,7 @@
       name: 'Bowl Protéiné Ricotta Fruits',
       emoji: '🫐', origin: '🇮🇹',
       mealTypes: ['breakfast', 'snack'],
+      category: 'world-food',
       tags: ['ricotta', 'fruits', 'high-protein', 'italien', 'light', 'tendance'],
       difficulty: 1, prepTime: 5, cookTime: 0, servings: 1,
       // 20×4 + 28×4 + 10×9 = 80+112+90 = 282 ✓
@@ -5018,6 +5063,7 @@
       name: 'Salade Niçoise Moderne',
       emoji: '🥗', origin: '🇫🇷',
       mealTypes: ['lunch'],
+      category: 'world-food',
       tags: ['niçoise', 'thon', 'français', 'salade', 'classique', 'high-protein'],
       difficulty: 1, prepTime: 15, cookTime: 10, servings: 1,
       // 32×4 + 24×4 + 16×9 = 128+96+144 = 368 ✓
@@ -5046,6 +5092,7 @@
       name: 'Bowl Quinoa Méditerranéen',
       emoji: '🌿', origin: '🇬🇷',
       mealTypes: ['lunch'],
+      category: 'mediterranean',
       tags: ['quinoa', 'méditerranéen', 'végétarien', 'bowl', 'fresh', 'healthy'],
       difficulty: 1, prepTime: 10, cookTime: 15, servings: 1,
       // 20×4 + 52×4 + 14×9 = 80+208+126 = 414 ✓
@@ -5074,6 +5121,7 @@
       name: 'Noodle Bowl Thaï Végétarien',
       emoji: '🍜', origin: '🇹🇭',
       mealTypes: ['lunch'],
+      category: 'mediterranean',
       tags: ['thaï', 'végétarien', 'nouilles', 'bowl', 'tendance', 'vegan'],
       difficulty: 1, prepTime: 10, cookTime: 10, servings: 1,
       // 14×4 + 56×4 + 14×9 = 56+224+126 = 406 ✓
@@ -5102,6 +5150,7 @@
       name: 'Assiette Mezze Libanaise',
       emoji: '🧿', origin: '🇱🇧',
       mealTypes: ['lunch'],
+      category: 'mediterranean',
       tags: ['libanais', 'mezze', 'végétarien', 'moyen-orient', 'tendance', 'partage'],
       difficulty: 1, prepTime: 15, cookTime: 0, servings: 1,
       // 16×4 + 42×4 + 18×9 = 64+168+162 = 394 ✓
@@ -5129,6 +5178,7 @@
       name: 'Club Sandwich Healthy',
       emoji: '🥪', origin: '🇺🇸',
       mealTypes: ['lunch'],
+      category: 'french',
       tags: ['sandwich', 'poulet', 'américain', 'classique', 'high-protein'],
       difficulty: 1, prepTime: 10, cookTime: 10, servings: 1,
       // 36×4 + 40×4 + 12×9 = 144+160+108 = 412 ✓
@@ -5155,6 +5205,7 @@
       name: 'Risotto Poulet Champignons Light',
       emoji: '🍄', origin: '🇮🇹',
       mealTypes: ['dinner'],
+      category: 'italian',
       tags: ['risotto', 'poulet', 'champignons', 'italien', 'réconfortant', 'light'],
       difficulty: 3, prepTime: 10, cookTime: 30, servings: 1,
       // 34×4 + 54×4 + 10×9 = 136+216+90 = 442 ✓
@@ -5182,6 +5233,7 @@
       name: 'Dahl de Lentilles Corail',
       emoji: '🟠', origin: '🇮🇳',
       mealTypes: ['dinner'],
+      category: 'french',
       tags: ['indien', 'lentilles', 'vegan', 'dahl', 'tendance', 'high-fiber'],
       difficulty: 1, prepTime: 10, cookTime: 25, servings: 1,
       // 18×4 + 56×4 + 10×9 = 72+224+90 = 386 ✓
@@ -5210,6 +5262,7 @@
       name: 'Grilled Cheese Healthy',
       emoji: '🧀', origin: '🇺🇸',
       mealTypes: ['dinner'],
+      category: 'world-food',
       tags: ['sandwich', 'fromage', 'américain', 'réconfortant', 'tendance', 'simple'],
       difficulty: 1, prepTime: 5, cookTime: 8, servings: 1,
       // 22×4 + 34×4 + 16×9 = 88+136+144 = 368 ✓
@@ -5235,6 +5288,7 @@
       name: 'Soupe Thaï Crevettes Coco',
       emoji: '🍲', origin: '🇹🇭',
       mealTypes: ['dinner'],
+      category: 'japanese',
       tags: ['thaï', 'crevettes', 'coco', 'soupe', 'tendance', 'léger'],
       difficulty: 2, prepTime: 10, cookTime: 15, servings: 1,
       // 26×4 + 22×4 + 14×9 = 104+88+126 = 318 ✓
@@ -5262,6 +5316,7 @@
       name: 'Poulet Tandoori Légumes Rôtis',
       emoji: '🫙', origin: '🇮🇳',
       mealTypes: ['dinner'],
+      category: 'japanese',
       tags: ['indien', 'poulet', 'tandoori', 'rôti', 'tendance', 'high-protein'],
       difficulty: 2, prepTime: 15, cookTime: 25, servings: 1,
       // 42×4 + 30×4 + 10×9 = 168+120+90 = 378 ✓
@@ -5290,6 +5345,7 @@
       name: 'Gyoza Poulet Maison',
       emoji: '🥟', origin: '🇯🇵',
       mealTypes: ['dinner'],
+      category: 'japanese',
       tags: ['japonais', 'gyoza', 'poulet', 'dim-sum', 'tendance', 'fun'],
       difficulty: 3, prepTime: 25, cookTime: 10, servings: 1,
       // 28×4 + 36×4 + 10×9 = 112+144+90 = 346 ✓
@@ -5317,6 +5373,7 @@
       name: 'Poke Bowl Thon Épicé',
       emoji: '🌶️', origin: '🇺🇸',
       mealTypes: ['lunch', 'dinner'],
+      category: 'japanese',
       tags: ['poke', 'thon', 'épicé', 'bowl', 'tendance', 'high-protein'],
       difficulty: 1, prepTime: 12, cookTime: 15, servings: 1,
       // 34×4 + 50×4 + 12×9 = 136+200+108 = 444 ✓
@@ -5345,6 +5402,7 @@
       name: 'Poêlée Crevettes Ail & Herbes',
       emoji: '🦐', origin: '🇫🇷',
       mealTypes: ['dinner'],
+      category: 'french',
       tags: ['crevettes', 'ail', 'français', 'rapide', 'high-protein', 'léger'],
       difficulty: 1, prepTime: 8, cookTime: 8, servings: 1,
       // 28×4 + 30×4 + 12×9 = 112+120+108 = 340 ✓
@@ -5371,6 +5429,7 @@
       name: 'Curry Thaï Vert Tofu',
       emoji: '🟢', origin: '🇹🇭',
       mealTypes: ['dinner'],
+      category: 'world-food',
       tags: ['thaï', 'vegan', 'tofu', 'curry-vert', 'tendance', 'aromate'],
       difficulty: 2, prepTime: 10, cookTime: 20, servings: 1,
       // 18×4 + 44×4 + 16×9 = 72+176+144 = 392 ✓
@@ -5399,6 +5458,7 @@
       name: 'Steak de Thon Sauce Vierge',
       emoji: '🐟', origin: '🇫🇷',
       mealTypes: ['dinner'],
+      category: 'french',
       tags: ['thon', 'français', 'élégant', 'high-protein', 'omega3', 'léger'],
       difficulty: 2, prepTime: 10, cookTime: 8, servings: 1,
       // 36×4 + 20×4 + 12×9 = 144+80+108 = 332 ✓
@@ -5426,6 +5486,7 @@
       name: 'Tartines Avocat Œuf Poché',
       emoji: '🥑', origin: '🇦🇺',
       mealTypes: ['breakfast'],
+      category: 'french',
       tags: ['avocat', 'oeufs-pochés', 'brunch', 'tendance', 'high-protein'],
       difficulty: 2, prepTime: 8, cookTime: 5, servings: 1,
       // 18×4 + 26×4 + 18×9 = 72+104+162 = 338 ✓
@@ -5450,6 +5511,7 @@
       name: 'Granola Maison Amandes Coco',
       emoji: '🥜', origin: '🇺🇸',
       mealTypes: ['breakfast', 'snack'],
+      category: 'french',
       tags: ['granola', 'maison', 'amandes', 'coco', 'meal-prep', 'vegetarian'],
       difficulty: 1, prepTime: 5, cookTime: 20, servings: 1,
       // 9×4 + 48×4 + 14×9 = 36+192+126 = 354 ✓
@@ -5475,6 +5537,7 @@
       name: 'Smoothie Protéiné Mangue Curcuma',
       emoji: '🥭', origin: '🇮🇳',
       mealTypes: ['breakfast', 'snack'],
+      category: 'french',
       tags: ['smoothie', 'mangue', 'curcuma', 'anti-inflammatoire', 'tendance', 'vegetarian'],
       difficulty: 1, prepTime: 5, cookTime: 0, servings: 1,
       // 14×4 + 42×4 + 6×9 = 56+168+54 = 278 ✓
@@ -5500,6 +5563,7 @@
       name: 'Waffles Protéinés Banane',
       emoji: '🧇', origin: '🇧🇪',
       mealTypes: ['breakfast'],
+      category: 'french',
       tags: ['waffles', 'banane', 'high-protein', 'brunch', 'tendance', 'fun'],
       difficulty: 2, prepTime: 10, cookTime: 10, servings: 1,
       // 24×4 + 46×4 + 10×9 = 96+184+90 = 370 ✓
@@ -5525,6 +5589,7 @@
       name: 'Tartare de Betterave & Feta',
       emoji: '🟣', origin: '🇫🇷',
       mealTypes: ['lunch', 'dinner'],
+      category: 'french',
       tags: ['betterave', 'feta', 'végétarien', 'élégant', 'tendance', 'coloré'],
       difficulty: 1, prepTime: 10, cookTime: 0, servings: 1,
       // 12×4 + 24×4 + 14×9 = 48+96+126 = 270 ✓
@@ -5550,6 +5615,7 @@
       name: 'Soupe Lentilles Épinards',
       emoji: '🍵', origin: '🇫🇷',
       mealTypes: ['lunch', 'dinner'],
+      category: 'japanese',
       tags: ['soupe', 'lentilles', 'épinards', 'vegan', 'réconfortant', 'high-fiber'],
       difficulty: 1, prepTime: 10, cookTime: 25, servings: 1,
       // 18×4 + 44×4 + 8×9 = 72+176+72 = 320 ✓
@@ -5576,6 +5642,7 @@
       name: 'Bowl Açaí Tropical Protéiné',
       emoji: '🌴', origin: '🇧🇷',
       mealTypes: ['breakfast'],
+      category: 'world-food',
       tags: ['acai', 'tropical', 'smoothie-bowl', 'high-protein', 'tendance', 'coloré'],
       difficulty: 1, prepTime: 8, cookTime: 0, servings: 1,
       // 16×4 + 52×4 + 10×9 = 64+208+90 = 362 ✓
@@ -5602,6 +5669,7 @@
       name: 'Yakitori Poulet Sauce Teriyaki',
       emoji: '🍡', origin: '🇯🇵',
       mealTypes: ['lunch', 'dinner'],
+      category: 'japanese',
       tags: ['japonais', 'yakitori', 'poulet', 'brochettes', 'tendance', 'high-protein'],
       difficulty: 2, prepTime: 15, cookTime: 12, servings: 1,
       // 36×4 + 32×4 + 8×9 = 144+128+72 = 344 ✓
@@ -5626,6 +5694,7 @@
       name: 'Salade César Poulet',
       emoji: '🥗', origin: '🇺🇸',
       mealTypes: ['lunch'],
+      category: 'world-food',
       tags: ['salade-césar', 'poulet', 'classique', 'américain', 'high-protein'],
       difficulty: 1, prepTime: 12, cookTime: 10, servings: 1,
       // 38×4 + 20×4 + 14×9 = 152+80+126 = 358 ✓
@@ -5653,6 +5722,7 @@
       name: 'Wrap Falafel Légumes Grillés',
       emoji: '🌯', origin: '🇱🇧',
       mealTypes: ['lunch'],
+      category: 'mediterranean',
       tags: ['falafel', 'végétarien', 'wrap', 'libanais', 'tendance', 'vegan'],
       difficulty: 1, prepTime: 10, cookTime: 20, servings: 1,
       // 16×4 + 46×4 + 16×9 = 64+184+144 = 392 ✓
@@ -5679,6 +5749,7 @@
       name: 'Ceviche Crevettes Avocat',
       emoji: '🦐', origin: '🇵🇪',
       mealTypes: ['lunch', 'dinner'],
+      category: 'french',
       tags: ['ceviche', 'crevettes', 'avocat', 'péruvien', 'tendance', 'frais'],
       difficulty: 2, prepTime: 20, cookTime: 0, servings: 1,
       // 24×4 + 16×4 + 14×9 = 96+64+126 = 286 ✓
@@ -5705,6 +5776,7 @@
       name: 'Pâtes au Pesto Poulet Tomates Cerises',
       emoji: '🍝', origin: '🇮🇹',
       mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
       tags: ['pâtes', 'pesto', 'poulet', 'italien', 'rapide', 'tendance'],
       difficulty: 1, prepTime: 8, cookTime: 15, servings: 1,
       // 38×4 + 56×4 + 14×9 = 152+224+126 = 502 ✓
@@ -5729,6 +5801,7 @@
       name: 'Omelette Espagnole Légère',
       emoji: '🍳', origin: '🇪🇸',
       mealTypes: ['lunch', 'dinner'],
+      category: 'french',
       tags: ['omelette', 'espagnol', 'pommes-de-terre', 'tortilla', 'classique', 'végétarien'],
       difficulty: 2, prepTime: 10, cookTime: 20, servings: 1,
       // 22×4 + 30×4 + 14×9 = 88+120+126 = 334 ✓
@@ -5753,6 +5826,7 @@
       name: 'Quinoa Tabboulé Oriental',
       emoji: '🌿', origin: '🇱🇧',
       mealTypes: ['lunch'],
+      category: 'world-food',
       tags: ['quinoa', 'tabboulé', 'libanais', 'végétarien', 'frais', 'tendance'],
       difficulty: 1, prepTime: 15, cookTime: 15, servings: 1,
       // 14×4 + 46×4 + 12×9 = 56+184+108 = 348 ✓
@@ -5779,6 +5853,7 @@
       name: 'Brick Thon Fromage Salade',
       emoji: '🥙', origin: '🇹🇳',
       mealTypes: ['lunch', 'dinner'],
+      category: 'french',
       tags: ['brick', 'thon', 'tunisien', 'croustillant', 'tendance', 'high-protein'],
       difficulty: 2, prepTime: 10, cookTime: 10, servings: 1,
       // 30×4 + 22×4 + 16×9 = 120+88+144 = 352 ✓
@@ -5805,6 +5880,7 @@
       name: 'Soupe Poule au Gingembre',
       emoji: '🍲', origin: '🇨🇳',
       mealTypes: ['dinner'],
+      category: 'world-food',
       tags: ['soupe', 'poulet', 'gingembre', 'chinois', 'réconfortant', 'anti-inflammatoire'],
       difficulty: 1, prepTime: 10, cookTime: 25, servings: 1,
       // 32×4 + 22×4 + 8×9 = 128+88+72 = 288 ✓
@@ -5831,6 +5907,7 @@
       name: 'Steak Haché Maison Patate Douce',
       emoji: '🍔', origin: '🇫🇷',
       mealTypes: ['dinner'],
+      category: 'world-food',
       tags: ['steak', 'boeuf', 'patate-douce', 'français', 'healthy-burger', 'high-protein'],
       difficulty: 2, prepTime: 10, cookTime: 20, servings: 1,
       // 36×4 + 36×4 + 12×9 = 144+144+108 = 396 ✓
@@ -5855,6 +5932,7 @@
       name: 'Poulet Rôti & Légumes du Soleil',
       emoji: '🍗', origin: '🇫🇷',
       mealTypes: ['dinner'],
+      category: 'french',
       tags: ['poulet', 'français', 'rôti', 'légumes', 'high-protein', 'tendance'],
       difficulty: 3, prepTime: 15, cookTime: 25, servings: 1,
       // 34×4 + 20×4 + 12×9 = 136+80+108 = 324 ✓
@@ -5880,6 +5958,7 @@
       name: 'Maki Bowl Saumon Avocat',
       emoji: '🍱', origin: '🇯🇵',
       mealTypes: ['lunch', 'dinner'],
+      category: 'world-food',
       tags: ['japonais', 'maki', 'saumon', 'bowl', 'tendance', 'fresh'],
       difficulty: 2, prepTime: 20, cookTime: 15, servings: 1,
       // 30×4 + 50×4 + 14×9 = 120+200+126 = 446 ✓
@@ -5907,6 +5986,7 @@
       name: 'Power Bowl Complet du Champion',
       emoji: '🏆', origin: '🌍',
       mealTypes: ['lunch', 'dinner'],
+      category: 'world-food',
       tags: ['power-bowl', 'complet', 'high-protein', 'champion', 'tendance', 'coloré'],
       difficulty: 2, prepTime: 20, cookTime: 20, servings: 1,
       // 45×4 + 55×4 + 16×9 = 180+220+144 = 544 ✓
@@ -5935,6 +6015,7 @@
       name: 'Muffins Protéinés Pistache-Citron',
       emoji: '🧁', origin: '🌍',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['high-protein', 'snack', 'meal-prep', 'muffin', 'pistache', 'citron', 'batch-cooking', 'vegetarian'],
       difficulty: 2, prepTime: 15, cookTime: 22, servings: 6,
       // 150×4 + 80×4 + 32×9 = 600+320+288 = 1208 ✓ (≈1200 kcal, 200 kcal/muffin)
@@ -5964,6 +6045,7 @@
       name: 'Pancakes Protéinés Banane-Cannelle',
       emoji: '🥞', origin: '🇺🇸',
       mealTypes: ['breakfast', 'snack'],
+      category: 'french',
       tags: ['high-protein', 'snack', 'pancakes', 'banane', 'cannelle', 'meal-prep', 'vegetarian'],
       difficulty: 1, prepTime: 10, cookTime: 15, servings: 2,
       // 60×4 + 88×4 + 14×9 = 240+352+126 = 718 ✓ (≈700 kcal, 359 kcal/portion)
@@ -5992,6 +6074,7 @@
       name: 'Muffins Dattes-Cajou-Chocolat',
       emoji: '🍫', origin: '🌍',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['high-protein', 'snack', 'meal-prep', 'sans-sucre-ajouté', 'dattes', 'chocolat', 'batch-cooking', 'vegan-friendly'],
       difficulty: 2, prepTime: 20, cookTime: 20, servings: 8,
       // 128×4 + 110×4 + 46×9 = 512+440+414 = 1366 ✓ (≈1360 kcal, 170 kcal/muffin)
@@ -6021,6 +6104,7 @@
       name: 'Pancakes Protéinés Myrtilles-Avoine',
       emoji: '🫐', origin: '🇺🇸',
       mealTypes: ['breakfast', 'snack'],
+      category: 'french',
       tags: ['high-protein', 'snack', 'pancakes', 'myrtilles', 'avoine', 'skyr', 'antioxydants', 'vegetarian'],
       difficulty: 1, prepTime: 10, cookTime: 15, servings: 2,
       // 56×4 + 100×4 + 16×9 = 224+400+144 = 768 ✓ (≈760 kcal, 384 kcal/portion)
@@ -6049,6 +6133,7 @@
       name: 'Muffins Protéinés Carotte-Noix',
       emoji: '🥕', origin: '🇫🇷',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['high-protein', 'snack', 'meal-prep', 'carrot-cake', 'noix', 'cannelle', 'batch-cooking', 'vegetarian'],
       difficulty: 2, prepTime: 20, cookTime: 20, servings: 6,
       // 120×4 + 84×4 + 36×9 = 480+336+324 = 1140 ✓ (≈1140 kcal, 190 kcal/muffin)
@@ -6080,6 +6165,7 @@
       name: 'Pancakes Soufflés Japonais Protéinés Matcha',
       emoji: '🍵', origin: '🇯🇵',
       mealTypes: ['breakfast', 'snack'],
+      category: 'french',
       tags: ['high-protein', 'snack', 'pancakes', 'matcha', 'japonais', 'souffle', 'tendance', 'instagrammable', 'vegetarian'],
       difficulty: 2, prepTime: 15, cookTime: 15, servings: 1,
       // 30×4 + 30×4 + 10×9 = 120+120+90 = 330 ✓ (≈320 kcal)
@@ -6108,6 +6194,7 @@
       name: 'French Toast Protéiné Figues & Amandes',
       emoji: '🍞', origin: '🇫🇷',
       mealTypes: ['breakfast', 'snack'],
+      category: 'french',
       tags: ['high-protein', 'snack', 'french-toast', 'figues', 'amandes', 'élégant', 'tendance', 'vegetarian'],
       difficulty: 1, prepTime: 10, cookTime: 10, servings: 1,
       // 32×4 + 44×4 + 13×9 = 128+176+117 = 421 ✓ (≈420 kcal)
@@ -6138,6 +6225,7 @@
       name: 'Granola Protéiné Pistache-Coco-Miel',
       emoji: '🥣', origin: '🌿',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['high-protein', 'snack', 'meal-prep', 'granola', 'pistache', 'coco', 'croustillant'],
       difficulty: 1, prepTime: 10, cookTime: 25, servings: 10,
       // 150×4 + 260×4 + 90×9 = 600+1040+810 = 2450 ✓ (TOTAL 10 portions)
@@ -6165,6 +6253,7 @@
       name: 'Granola Protéiné Chocolat-Noisette',
       emoji: '🍫', origin: '🌰',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['high-protein', 'snack', 'meal-prep', 'granola', 'chocolat', 'noisette', 'ferrero-style'],
       difficulty: 1, prepTime: 10, cookTime: 25, servings: 10,
       // 140×4 + 260×4 + 80×9 = 560+1040+720 = 2320 ✓ (TOTAL 10 portions)
@@ -6193,6 +6282,7 @@
       name: 'Barres Protéinées Dattes-Amandes-Cannelle',
       emoji: '🍬', origin: '🌴',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['high-protein', 'snack', 'meal-prep', 'no-bake', 'dattes', 'amandes', 'naturel', 'sans-cuisson'],
       difficulty: 1, prepTime: 20, cookTime: 0, servings: 10,
       // 120×4 + 280×4 + 50×9 = 480+1120+450 = 2050 ✓ (TOTAL 10 barres)
@@ -6221,6 +6311,7 @@
       name: 'Barres Protéinées Pistache-Citron Vert-Cajou',
       emoji: '💚', origin: '🌿',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['high-protein', 'snack', 'meal-prep', 'no-bake', 'pistache', 'cajou', 'citron-vert', 'vegan-option'],
       difficulty: 1, prepTime: 20, cookTime: 0, servings: 8,
       // 112×4 + 144×4 + 80×9 = 448+576+720 = 1744 ✓ (TOTAL 8 barres)
@@ -6250,6 +6341,7 @@
       name: 'Barres Chocolat-Caramel Protéinées "Twix Sain"',
       emoji: '🍫', origin: '🏅',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['high-protein', 'snack', 'meal-prep', 'chocolat', 'caramel', 'twix', 'indulgent', 'premium'],
       difficulty: 2, prepTime: 25, cookTime: 15, servings: 8,
       // 128×4 + 192×4 + 96×9 = 512+768+864 = 2144 ✓ (TOTAL 8 barres)
@@ -6279,6 +6371,7 @@
       name: 'Barres Protéinées Mangue-Gingembre-Cajou',
       emoji: '🥭', origin: '🌏',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['high-protein', 'snack', 'meal-prep', 'no-bake', 'mangue', 'gingembre', 'cajou', 'exotique', 'tropical'],
       difficulty: 1, prepTime: 20, cookTime: 0, servings: 8,
       // 88×4 + 176×4 + 72×9 = 352+704+648 = 1704 ✓ (TOTAL 8 barres)
@@ -6307,6 +6400,7 @@
       name: 'Granola Bowl Protéiné du Matin',
       emoji: '🌅', origin: '🌍',
       mealTypes: ['breakfast', 'snack'],
+      category: 'world-food',
       tags: ['high-protein', 'breakfast', 'snack', 'bowl', 'granola', 'skyr', 'myrtilles', 'meal-prep', 'premium'],
       difficulty: 1, prepTime: 5, cookTime: 0, servings: 1,
       // 35×4 + 55×4 + 12×9 = 140+220+108 = 468 ✓ (TOTAL 1 portion)
@@ -6333,6 +6427,7 @@
       name: 'Energy Balls Chocolat-Pistache-Fleur de Sel',
       emoji: '🍫', origin: '🌍',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['high-protein', 'snack', 'no-bake', 'energy-ball', 'chocolat', 'pistache', 'original'],
       difficulty: 1, prepTime: 25, cookTime: 0, servings: 12,
       // 112×4 + 98×4 + 82×9 = 448+392+738 = 1578 ✓
@@ -6360,6 +6455,7 @@
       name: 'Energy Balls Cacahuète-Avoine-Miel "PB&J"',
       emoji: '🥜', origin: '🇺🇸',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['high-protein', 'snack', 'no-bake', 'energy-ball', 'cacahuète', 'avoine', 'miel', 'peanut-butter'],
       difficulty: 1, prepTime: 20, cookTime: 0, servings: 12,
       // 108×4 + 120×4 + 66×9 = 432+480+594 = 1506 ✓
@@ -6385,6 +6481,7 @@
       name: 'Cheesecake Protéiné Citron-Framboise No-Bake',
       emoji: '🍋', origin: '🇺🇸',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['high-protein', 'snack', 'dessert', 'no-bake', 'cheesecake', 'citron', 'framboise', 'premium', 'dessert-protéiné'],
       difficulty: 2, prepTime: 30, cookTime: 0, servings: 6,
       // 132×4 + 114×4 + 78×9 = 528+456+702 = 1686 ✓
@@ -6416,6 +6513,7 @@
       name: 'Cookies Protéinés Double Chocolat-Noix de Cajou',
       emoji: '🍪', origin: '🇺🇸',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['high-protein', 'snack', 'cookies', 'chocolat', 'cajou', 'baked', 'moelleux', 'premium'],
       difficulty: 2, prepTime: 15, cookTime: 12, servings: 10,
       // 120×4 + 140×4 + 82×9 = 480+560+738 = 1778 ✓
@@ -6445,6 +6543,7 @@
       name: 'Smoothie Bowl Protéiné Açaï-Mangue',
       emoji: '🫐', origin: '🇧🇷',
       mealTypes: ['breakfast', 'snack'],
+      category: 'world-food',
       tags: ['high-protein', 'snack', 'breakfast', 'smoothie-bowl', 'açaï', 'mangue', 'no-bake', 'tendance', 'coloré'],
       difficulty: 1, prepTime: 10, cookTime: 0, servings: 1,
       // 28×4 + 46×4 + 14×9 = 112+184+126 = 422 ✓
@@ -6475,6 +6574,7 @@
       name: 'Brownie Protéiné Patate Douce & Noix de Cajou',
       emoji: '🍠', origin: '🌍',
       mealTypes: ['snack'],
+      category: 'world-food',
       tags: ['high-protein', 'snack', 'brownie', 'patate-douce', 'cajou', 'sans-farine', 'sans-sucre-ajouté', 'fudgey'],
       difficulty: 2, prepTime: 20, cookTime: 20, servings: 9,
       // 108×4 + 102×4 + 68×9 = 432+408+612 = 1452 ✓
@@ -6504,6 +6604,7 @@
       name: 'Bouchées Protéinées Coco-Matcha "Raffaello Vert"',
       emoji: '🍵', origin: '🇯🇵',
       mealTypes: ['snack'],
+      category: 'mediterranean',
       tags: ['high-protein', 'snack', 'no-bake', 'matcha', 'coco', 'cajou', 'premium', 'original', 'raffaello'],
       difficulty: 2, prepTime: 30, cookTime: 0, servings: 12,
       // 60×4 + 72×4 + 60×9 = 240+288+540 = 1068 ✓
@@ -6532,6 +6633,7 @@
       name: 'Panna Cotta Légère Vanille-Fruits Rouges',
       emoji: '🍮', origin: '🇮🇹',
       mealTypes: ['snack'],
+      category: 'italian',
       tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'sans-cuisson', 'léger', 'élégant'],
       difficulty: 1, prepTime: 15, cookTime: 10, servings: 4,
       // P×4 + G×4 + L×9 = 48×4 + 100×4 + 20×9 = 192 + 400 + 180 = 772 kcal ✓
@@ -6561,6 +6663,7 @@
       name: 'Mousse au Chocolat Noir Protéinée',
       emoji: '🍫', origin: '🇫🇷',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'chocolat', 'aérien'],
       difficulty: 2, prepTime: 20, cookTime: 5, servings: 4,
       // P×4 + G×4 + L×9 = 60×4 + 60×4 + 32×9 = 240 + 240 + 288 = 768 kcal ✓
@@ -6588,6 +6691,7 @@
       name: 'Crème Brûlée Légère au Café',
       emoji: '☕', origin: '🇫🇷',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'café', 'caramel', 'élégant'],
       difficulty: 2, prepTime: 10, cookTime: 30, servings: 4,
       // P×4 + G×4 + L×9 = 48×4 + 80×4 + 20×9 = 192 + 320 + 180 = 692 kcal ✓
@@ -6616,6 +6720,7 @@
       name: 'Tarte Banoffee Healthy Sans Cuisson',
       emoji: '🍌', origin: '🇬🇧',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'sans-cuisson', 'banane', 'chocolat'],
       difficulty: 1, prepTime: 20, cookTime: 0, servings: 6,
       // P×4 + G×4 + L×9 = 60×4 + 180×4 + 60×9 = 240 + 720 + 540 = 1500 kcal ✓
@@ -6646,6 +6751,7 @@
       name: 'Tiramisu Protéiné Revisité',
       emoji: '🍰', origin: '🇮🇹',
       mealTypes: ['snack'],
+      category: 'italian',
       tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'café', 'cacao', 'tiramisu'],
       difficulty: 2, prepTime: 25, cookTime: 5, servings: 6,
       // P×4 + G×4 + L×9 = 108×4 + 150×4 + 60×9 = 432 + 600 + 540 = 1572 kcal ✓
@@ -6676,6 +6782,7 @@
       name: 'Fondant au Chocolat Coulant Protéiné',
       emoji: '🫓', origin: '🇫🇷',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'chocolat', 'coulant', 'four'],
       difficulty: 2, prepTime: 15, cookTime: 10, servings: 4,
       // P×4 + G×4 + L×9 = 72×4 + 88×4 + 48×9 = 288 + 352 + 432 = 1072 kcal ✓
@@ -6705,6 +6812,7 @@
       name: 'Cheesecake Healthy Citron-Pistache No-Bake',
       emoji: '🍋', origin: '🌍',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'sans-cuisson', 'citron', 'pistache'],
       difficulty: 1, prepTime: 25, cookTime: 0, servings: 8,
       // P×4 + G×4 + L×9 = 112×4 + 200×4 + 64×9 = 448 + 800 + 576 = 1824 kcal ✓
@@ -6735,6 +6843,7 @@
       name: 'Île Flottante Légère Protéinée',
       emoji: '🏝️', origin: '🇫🇷',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'léger', 'élégant', 'vanille'],
       difficulty: 2, prepTime: 20, cookTime: 15, servings: 4,
       // P×4 + G×4 + L×9 = 60×4 + 72×4 + 20×9 = 240 + 288 + 180 = 708 kcal ✓
@@ -6764,6 +6873,7 @@
       name: 'Riz au Lait Protéiné à la Rose et Pistaches',
       emoji: '🌹', origin: '🇲🇦',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['snack', 'dessert', 'healthy', 'maroc', 'high-protein', 'rose', 'pistaches', 'sans-gluten'],
       difficulty: 1, prepTime: 10, cookTime: 25, servings: 4,
       // P×4 + G×4 + L×9 = 56×4 + 116×4 + 40×9 = 224 + 464 + 360 = 1048 ✓
@@ -6792,6 +6902,7 @@
       name: 'Clafoutis Healthy Cerises-Amandes',
       emoji: '🍒', origin: '🇫🇷',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['snack', 'dessert', 'healthy', 'maroc', 'high-protein', 'cerises', 'amandes', 'sans-beurre'],
       difficulty: 2, prepTime: 10, cookTime: 25, servings: 6,
       // P×4 + G×4 + L×9 = 72×4 + 144×4 + 24×9 = 288 + 576 + 216 = 1080 kcal ✓
@@ -6821,6 +6932,7 @@
       name: 'Tarte Tatin Pomme-Cannelle Protéinée',
       emoji: '🍎', origin: '🇫🇷',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['snack', 'dessert', 'healthy', 'maroc', 'high-protein', 'pomme', 'cannelle', 'tarte'],
       difficulty: 2, prepTime: 15, cookTime: 25, servings: 6,
       // P×4 + G×4 + L×9 = 60×4 + 162×4 + 48×9 = 240 + 648 + 432 = 1320 kcal ✓
@@ -6851,6 +6963,7 @@
       name: 'Sorbet Mangue-Citron Vert Protéiné',
       emoji: '🥭', origin: '🌍',
       mealTypes: ['snack'],
+      category: 'italian',
       tags: ['snack', 'dessert', 'healthy', 'maroc', 'high-protein', 'mangue', 'sorbet', 'sans-cuisson', 'vegan-option', 'rapide'],
       difficulty: 1, prepTime: 5, cookTime: 0, servings: 4,
       // P×4 + G×4 + L×9 = 48×4 + 84×4 + 8×9 = 192 + 336 + 72 = 600 kcal ✓
@@ -6877,6 +6990,7 @@
       name: 'Beignets Healthy au Four Façon Donuts',
       emoji: '🍩', origin: '🌍',
       mealTypes: ['snack'],
+      category: 'world-food',
       tags: ['snack', 'dessert', 'healthy', 'maroc', 'high-protein', 'donuts', 'chocolat', 'four', 'sans-friture'],
       difficulty: 2, prepTime: 15, cookTime: 15, servings: 8,
       // P×4 + G×4 + L×9 = 80×4 + 162×4 + 48×9 = 320 + 648 + 432 = 1400 kcal ✓
@@ -6909,6 +7023,7 @@
       name: 'Gâteau Basque Protéiné Crème Vanille',
       emoji: '🍮', origin: '🇫🇷',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'pâtisserie', 'vanille', 'avoine'],
       difficulty: 2, prepTime: 20, cookTime: 20, servings: 8,
       // P×4 + G×4 + L×9 = 112×4 + 200×4 + 72×9 = 448 + 800 + 648 = 1896 kcal ÷ 8 = 237 kcal/part ✓
@@ -6941,6 +7056,7 @@
       name: 'Verrine Légère Mangue-Coco-Passion',
       emoji: '🥭', origin: '🌴',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['snack', 'dessert', 'healthy', 'maroc', 'fruits', 'exotique', 'léger', 'sans-cuisson', 'vegan-option'],
       difficulty: 1, prepTime: 20, cookTime: 10, servings: 4,
       // P×4 + G×4 + L×9 = 40×4 + 84×4 + 24×9 = 160 + 336 + 216 = 712 kcal ÷ 4 = 178 kcal/verrine ✓
@@ -6969,6 +7085,7 @@
       name: 'Pain d\'Épices Protéiné Moelleux',
       emoji: '🍞', origin: '🇫🇷',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'épices', 'moelleux', 'avoine', 'whey'],
       difficulty: 1, prepTime: 10, cookTime: 25, servings: 8,
       // P×4 + G×4 + L×9 = 96×4 + 192×4 + 48×9 = 384 + 768 + 432 = 1584 kcal ÷ 8 = 198 kcal/tranche ✓
@@ -7000,6 +7117,7 @@
       name: 'Tarte Citron Meringuée Légère',
       emoji: '🍋', origin: '🇫🇷',
       mealTypes: ['snack'],
+      category: 'french',
       tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'citron', 'meringue', 'léger', 'pâtisserie'],
       difficulty: 2, prepTime: 20, cookTime: 20, servings: 6,
       // P×4 + G×4 + L×9 = 84×4 + 150×4 + 48×9 = 336 + 600 + 432 = 1368 kcal ÷ 6 = 228 kcal/part ✓
@@ -7032,6 +7150,7 @@
       name: 'Glace Banana Nice Cream Chocolat-Noisette',
       emoji: '🍌', origin: '🌍',
       mealTypes: ['snack'],
+      category: 'italian',
       tags: ['snack', 'dessert', 'healthy', 'maroc', 'banane', 'chocolat', 'sans-cuisson', 'vegan', 'express', 'glace'],
       difficulty: 1, prepTime: 5, cookTime: 0, servings: 2,
       // P×4 + G×4 + L×9 = 24×4 + 68×4 + 20×9 = 96 + 272 + 180 = 548 kcal ÷ 2 = 274 kcal/portion ✓
@@ -7068,14 +7187,14 @@
       cookTime: 25,
       servings: 2,
       // Vérification: P×4 + G×4 + L×9 = 32×4 + 52×4 + 10×9 = 128 + 208 + 90 = 426 kcal ≈ 430 ✓
-      baseNutrition: { calories: 430, proteinGrams: 32, carbsGrams: 52, fatGrams: 10 },
+      baseNutrition: { calories: 426, proteinGrams: 32, carbsGrams: 52, fatGrams: 10 },
       ingredients: [
         { name: 'Haricots cannellini en boîte', qty: 400, unit: 'g' },
         { name: 'Ditalini ou petites pâtes courtes', qty: 120, unit: 'g' },
         { name: 'Tomates pelées en boîte', qty: 200, unit: 'g' },
         { name: 'Bouillon de légumes', qty: 600, unit: 'ml' },
-        { name: 'Ail', qty: 3, unit: 'gousses' },
-        { name: 'Romarin frais', qty: 2, unit: 'branches' },
+        { name: 'Ail', qty: 3, unit: 'gousse' },
+        { name: 'Romarin frais', qty: 2, unit: 'brin' },
         { name: 'Huile d\'olive extra-vierge', qty: 15, unit: 'ml' },
         { name: 'Parmesan râpé', qty: 20, unit: 'g' },
         { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
@@ -7102,7 +7221,7 @@
       cookTime: 25,
       servings: 2,
       // Vérification: P×4 + G×4 + L×9 = 22×4 + 62×4 + 10×9 = 88 + 248 + 90 = 426 kcal ≈ 430 ✓
-      baseNutrition: { calories: 430, proteinGrams: 22, carbsGrams: 62, fatGrams: 10 },
+      baseNutrition: { calories: 426, proteinGrams: 22, carbsGrams: 62, fatGrams: 10 },
       ingredients: [
         { name: 'Riz arborio', qty: 160, unit: 'g' },
         { name: 'Asperges vertes', qty: 250, unit: 'g' },
@@ -7140,7 +7259,7 @@
       ingredients: [
         { name: 'Spaghetti complets', qty: 160, unit: 'g' },
         { name: 'Filets de poulet', qty: 300, unit: 'g' },
-        { name: 'Ail', qty: 4, unit: 'gousses' },
+        { name: 'Ail', qty: 4, unit: 'gousse' },
         { name: 'Huile d\'olive extra-vierge', qty: 20, unit: 'ml' },
         { name: 'Piment rouge séché (peperoncino)', qty: 1, unit: 'pce' },
         { name: 'Persil plat frais', qty: 20, unit: 'g' },
@@ -7175,7 +7294,7 @@
         { name: 'Crevettes décortiquées crues', qty: 250, unit: 'g' },
         { name: 'Tomates cerises', qty: 200, unit: 'g' },
         { name: 'Purée de tomates', qty: 150, unit: 'g' },
-        { name: 'Ail', qty: 3, unit: 'gousses' },
+        { name: 'Ail', qty: 3, unit: 'gousse' },
         { name: 'Piment rouge frais', qty: 1, unit: 'pce' },
         { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
         { name: 'Basilic frais', qty: 10, unit: 'g' },
@@ -7276,10 +7395,10 @@
         { name: 'Champignons mélangés (shiitake, portobello, champignons de Paris)', qty: 300, unit: 'g' },
         { name: 'Bouillon de légumes chaud', qty: 750, unit: 'ml' },
         { name: 'Oignon jaune', qty: 1, unit: 'pce' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Ail', qty: 2, unit: 'gousse' },
         { name: 'Vin blanc sec', qty: 60, unit: 'ml' },
         { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
-        { name: 'Thym frais', qty: 4, unit: 'branches' },
+        { name: 'Thym frais', qty: 4, unit: 'brin' },
         { name: 'Levure nutritionnelle', qty: 15, unit: 'g' },
         { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
       ],
@@ -7378,7 +7497,7 @@
         { name: 'Œuf entier', qty: 1, unit: 'pce' },
         { name: 'Parmesan râpé', qty: 30, unit: 'g' },
         { name: 'Beurre', qty: 15, unit: 'g' },
-        { name: 'Sauge fraîche', qty: 10, unit: 'feuilles' },
+        { name: 'Sauge fraîche', qty: 10, unit: 'feuille' },
         { name: 'Noix', qty: 20, unit: 'g' },
         { name: 'Noix de muscade', qty: 1, unit: 'pincée' },
         { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
@@ -7411,7 +7530,7 @@
       ingredients: [
         { name: 'Blanc de poulet', qty: 300, unit: 'g' },
         { name: 'Tomates pelées concassées', qty: 200, unit: 'g' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Ail', qty: 2, unit: 'gousse' },
         { name: 'Origan séché', qty: 2, unit: 'g' },
         { name: 'Câpres', qty: 20, unit: 'g' },
         { name: 'Olives noires dénoyautées', qty: 30, unit: 'g' },
@@ -7443,7 +7562,7 @@
       ingredients: [
         { name: 'Filets de bar (branzino)', qty: 320, unit: 'g' },
         { name: 'Citron', qty: 1, unit: 'pce' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Ail', qty: 2, unit: 'gousse' },
         { name: 'Persil frais', qty: 15, unit: 'g' },
         { name: 'Romarin frais', qty: 5, unit: 'g' },
         { name: 'Thym frais', qty: 5, unit: 'g' },
@@ -7649,7 +7768,7 @@
         { name: 'Citron', qty: 2, unit: 'pce' },
         { name: 'Câpres rincées', qty: 25, unit: 'g' },
         { name: 'Bouillon de volaille dégraissé', qty: 100, unit: 'ml' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Ail', qty: 2, unit: 'gousse' },
         { name: 'Thym frais', qty: 5, unit: 'g' },
         { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
@@ -7680,7 +7799,7 @@
       baseNutrition: { calories: 268, proteinGrams: 36, carbsGrams: 4, fatGrams: 12 },
       ingredients: [
         { name: 'Grosses crevettes décortiquées (gambas)', qty: 300, unit: 'g' },
-        { name: 'Ail', qty: 4, unit: 'gousses' },
+        { name: 'Ail', qty: 4, unit: 'gousse' },
         { name: 'Persil frais', qty: 20, unit: 'g' },
         { name: 'Piment rouge frais', qty: 1, unit: 'pce' },
         { name: 'Citron', qty: 1, unit: 'pce' },
@@ -7714,7 +7833,7 @@
       ingredients: [
         { name: 'Steak de bœuf maigre (rumsteck)', qty: 300, unit: 'g' },
         { name: 'Persil frais', qty: 20, unit: 'g' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Ail', qty: 2, unit: 'gousse' },
         { name: 'Citron (zeste)', qty: 1, unit: 'pce' },
         { name: 'Romarin frais', qty: 5, unit: 'g' },
         { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
@@ -13391,7 +13510,7 @@
     tags: ["baked-oats","meal-prep","four","whey","viral-uk"],
     difficulty: 1,
     servings: 1,
-    baseNutrition: { calories: 484, proteinGrams: 48, carbsGrams: 50, fatGrams: 11 },
+    baseNutrition: { calories: 491, proteinGrams: 48, carbsGrams: 50, fatGrams: 11 },
     ingredients: [
       { name: "Avoine", qty: 50, unit: 'g' },
       { name: "whey vanille", qty: 30, unit: 'g' },
@@ -13417,7 +13536,7 @@
     tags: ["french-toast","ricotta","high-protein","brunch","viral-instagram"],
     difficulty: 2,
     servings: 1,
-    baseNutrition: { calories: 371, proteinGrams: 33, carbsGrams: 41, fatGrams: 9 },
+    baseNutrition: { calories: 377, proteinGrams: 33, carbsGrams: 41, fatGrams: 9 },
     ingredients: [
       { name: "Pain complet 2 tranches (80g)", qty: 0, unit: 'g' },
       { name: "ricotta", qty: 50, unit: 'g' },
@@ -13470,7 +13589,7 @@
     tags: ["overnight-oats","meal-prep","chocolat","no-cook","tiktok-viral"],
     difficulty: 1,
     servings: 1,
-    baseNutrition: { calories: 531, proteinGrams: 47, carbsGrams: 49, fatGrams: 16 },
+    baseNutrition: { calories: 528, proteinGrams: 47, carbsGrams: 49, fatGrams: 16 },
     ingredients: [
       { name: "Avoine", qty: 60, unit: 'g' },
       { name: "yaourt grec 0%", qty: 150, unit: 'g' },
@@ -13547,7 +13666,7 @@
     tags: ["yogurt-bark","congelé","no-bake","viral-tiktok","fruits-rouges"],
     difficulty: 1,
     servings: 1,
-    baseNutrition: { calories: 370, proteinGrams: 50, carbsGrams: 23, fatGrams: 8 },
+    baseNutrition: { calories: 364, proteinGrams: 50, carbsGrams: 23, fatGrams: 8 },
     ingredients: [
       { name: "Yaourt grec 0%", qty: 300, unit: 'g' },
       { name: "whey fraise", qty: 20, unit: 'g' },
@@ -13621,7 +13740,7 @@
     emoji: "🇯🇵",
     origin: "🇯🇵",
     mealTypes: ["lunch","dinner"],
-    category: "asian",
+    category: 'japanese',
     tags: ["poke","bowl","saumon","japonais","viral","meal-prep"],
     difficulty: 1,
     servings: 1,
@@ -13672,7 +13791,7 @@
     emoji: "🇯🇵",
     origin: "🇯🇵",
     mealTypes: ["lunch","dinner"],
-    category: "asian",
+    category: 'japanese',
     tags: ["teriyaki","poulet","bowl","japonais","meal-prep","fitness"],
     difficulty: 1,
     servings: 1,
@@ -13722,7 +13841,7 @@
 
   {
     id: 'L365',
-    name: "Burrito Bowl Mexicain",
+    name: "Burrito Bowl Mexicain Moderne",
     emoji: "🇲🇽",
     origin: "🇲🇽",
     mealTypes: ["lunch","dinner"],
@@ -13753,11 +13872,11 @@
     emoji: "🇯🇵",
     origin: "🇯🇵",
     mealTypes: ["lunch","dinner"],
-    category: "asian",
+    category: 'japanese',
     tags: ["sushi-bowl","saumon","japonais","avocat","viral","tiktok"],
     difficulty: 1,
     servings: 1,
-    baseNutrition: { calories: 546, proteinGrams: 28, carbsGrams: 53, fatGrams: 25 },
+    baseNutrition: { calories: 549, proteinGrams: 28, carbsGrams: 53, fatGrams: 25 },
     ingredients: [
       { name: "Saumon cru", qty: 100, unit: 'g' },
       { name: "riz cuit", qty: 150, unit: 'g' },
@@ -13887,7 +14006,7 @@
     emoji: "🇯🇵",
     origin: "🇯🇵",
     mealTypes: ["lunch","dinner"],
-    category: "asian",
+    category: 'japanese',
     tags: ["soupe","asiatique","miso","crevettes","japonais","lowcal","highprotein"],
     difficulty: 1,
     servings: 1,
@@ -13914,7 +14033,7 @@
     emoji: "🇯🇵",
     origin: "🇯🇵",
     mealTypes: ["lunch","dinner"],
-    category: "asian",
+    category: 'japanese',
     tags: ["gyoza","vapeur","poulet","asiatique","japonais","tiktok","highprotein"],
     difficulty: 2,
     servings: 1,
@@ -13969,7 +14088,7 @@
     emoji: "🇯🇵",
     origin: "🇯🇵",
     mealTypes: ["lunch","dinner"],
-    category: "asian",
+    category: 'japanese',
     tags: ["ramen","poulet","miso","japonais","asiatique","highprotein","healthy"],
     difficulty: 2,
     servings: 1,
@@ -14025,11 +14144,11 @@
     emoji: "🇯🇵",
     origin: "🇯🇵",
     mealTypes: ["lunch","dinner"],
-    category: "asian",
+    category: 'japanese',
     tags: ["tamago sando","sandwich","oeuf","japonais","asiatique","tiktok","viral","lunch"],
     difficulty: 1,
     servings: 1,
-    baseNutrition: { calories: 447, proteinGrams: 25, carbsGrams: 41, fatGrams: 20 },
+    baseNutrition: { calories: 444, proteinGrams: 25, carbsGrams: 41, fatGrams: 20 },
     ingredients: [
       { name: "Pain de mie japonais shokupan 2 tranches", qty: 80, unit: 'g' },
       { name: "Œufs durs", qty: 150, unit: 'g', note: "3 unité(s)" },
@@ -14107,7 +14226,7 @@
     emoji: "🇯🇵",
     origin: "🇯🇵",
     mealTypes: ["lunch","dinner"],
-    category: "asian",
+    category: 'japanese',
     tags: ["saumon","teriyaki","japonais","asiatique","highprotein","instagram","healthy"],
     difficulty: 1,
     servings: 1,
@@ -14790,7 +14909,7 @@
     tags: ["snack","high-protein","low-carb","keto","meal-prep"],
     difficulty: 1,
     servings: 1,
-    baseNutrition: { calories: 225, proteinGrams: 18, carbsGrams: 3, fatGrams: 16 },
+    baseNutrition: { calories: 228, proteinGrams: 18, carbsGrams: 3, fatGrams: 16 },
     ingredients: [
       { name: "Œuf", qty: 2, unit: 'pce', note: "2 unité(s)" },
       { name: "épinards frais", qty: 30, unit: 'g' },
@@ -14815,7 +14934,7 @@
     tags: ["snack","high-protein","energy","pre-workout","viral"],
     difficulty: 1,
     servings: 1,
-    baseNutrition: { calories: 320, proteinGrams: 16, carbsGrams: 43, fatGrams: 9 },
+    baseNutrition: { calories: 317, proteinGrams: 16, carbsGrams: 43, fatGrams: 9 },
     ingredients: [
       { name: "Galettes de riz soufflé", qty: 36, unit: 'g', note: "2 unité(s)" },
       { name: "beurre de cacahuète naturel", qty: 15, unit: 'g' },
@@ -15294,7 +15413,7 @@
     tags: ["boisson","shot","gingembre","curcuma","gut-health","immunité","detox","viral"],
     difficulty: 1,
     servings: 1,
-    baseNutrition: { calories: 172, proteinGrams: 2, carbsGrams: 43, fatGrams: 0 },
+    baseNutrition: { calories: 180, proteinGrams: 2, carbsGrams: 43, fatGrams: 0 },
     ingredients: [
       { name: "Gingembre frais", qty: 20, unit: 'g' },
       { name: "curcuma frais", qty: 5, unit: 'g' },
@@ -15542,7 +15661,7 @@
     emoji: "🇯🇵",
     origin: "🇯🇵",
     mealTypes: ["lunch","dinner"],
-    category: "asian",
+    category: 'japanese',
     tags: ["meal-prep","four","poulet","teriyaki","japonais"],
     difficulty: 2,
     servings: 1,
@@ -15789,7 +15908,7 @@
     tags: ["mexicain","birria","tacos","viral","tiktok","bœuf","street-food"],
     difficulty: 2,
     servings: 1,
-    baseNutrition: { calories: 452, proteinGrams: 43, carbsGrams: 30, fatGrams: 17 },
+    baseNutrition: { calories: 445, proteinGrams: 43, carbsGrams: 30, fatGrams: 17 },
     ingredients: [
       { name: "Bœuf haché 5%", qty: 150, unit: 'g' },
       { name: "tortillas maïs 2x25g", qty: 0, unit: 'g' },
@@ -15818,7 +15937,7 @@
     tags: ["mexicain","elotes","street-food","bowl","viral","instagram","poulet"],
     difficulty: 2,
     servings: 1,
-    baseNutrition: { calories: 529, proteinGrams: 49, carbsGrams: 43, fatGrams: 19 },
+    baseNutrition: { calories: 539, proteinGrams: 49, carbsGrams: 43, fatGrams: 19 },
     ingredients: [
       { name: "Poulet grillé", qty: 120, unit: 'g' },
       { name: "maïs en épi ou surgelé", qty: 200, unit: 'g' },
@@ -15876,7 +15995,7 @@
     tags: ["argentin","chimichurri","steak","bœuf","paléo","sans-gluten","viral"],
     difficulty: 2,
     servings: 1,
-    baseNutrition: { calories: 558, proteinGrams: 49, carbsGrams: 27, fatGrams: 27 },
+    baseNutrition: { calories: 547, proteinGrams: 49, carbsGrams: 27, fatGrams: 27 },
     ingredients: [
       { name: "Bavette de bœuf", qty: 180, unit: 'g' },
       { name: "huile d'olive", qty: 15, unit: 'ml' },
@@ -15905,7 +16024,7 @@
     tags: ["colombien","arepa","poulet","avocat","street-food","sans-gluten","instagram"],
     difficulty: 2,
     servings: 1,
-    baseNutrition: { calories: 568, proteinGrams: 44, carbsGrams: 68, fatGrams: 13 },
+    baseNutrition: { calories: 565, proteinGrams: 44, carbsGrams: 68, fatGrams: 13 },
     ingredients: [
       { name: "Farine de maïs pré-cuite (masarepa)", qty: 80, unit: 'g' },
       { name: "eau tiède", qty: 120, unit: 'ml' },
@@ -15934,7 +16053,7 @@
     tags: ["péruvien","lomo-saltado","bœuf","wok","fusion","chifa","viral"],
     difficulty: 2,
     servings: 1,
-    baseNutrition: { calories: 542, proteinGrams: 43, carbsGrams: 56, fatGrams: 18 },
+    baseNutrition: { calories: 558, proteinGrams: 43, carbsGrams: 56, fatGrams: 18 },
     ingredients: [
       { name: "Bœuf émincé", qty: 150, unit: 'g' },
       { name: "riz blanc cuit", qty: 150, unit: 'g' },
@@ -15994,7 +16113,7 @@
     tags: ["mexicain","guacamole","crevettes","high-protein","hack","tiktok","viral"],
     difficulty: 1,
     servings: 1,
-    baseNutrition: { calories: 543, proteinGrams: 38, carbsGrams: 48, fatGrams: 24 },
+    baseNutrition: { calories: 558, proteinGrams: 38, carbsGrams: 48, fatGrams: 24 },
     ingredients: [
       { name: "Avocat", qty: 150, unit: 'g' },
       { name: "crevettes cuites", qty: 100, unit: 'g' },
@@ -16025,7 +16144,7 @@
     tags: ["mexicain","al-pastor","tacos","porc","ananas","street-food","tiktok","viral"],
     difficulty: 2,
     servings: 1,
-    baseNutrition: { calories: 490, proteinGrams: 36, carbsGrams: 45, fatGrams: 18 },
+    baseNutrition: { calories: 486, proteinGrams: 36, carbsGrams: 45, fatGrams: 18 },
     ingredients: [
       { name: "Porc filet émincé", qty: 150, unit: 'g' },
       { name: "tortillas maïs 3x25g", qty: 0, unit: 'g' },
@@ -16054,7 +16173,7 @@
     tags: ["brésilien","açaí","bowl","high-protein","petit-déjeuner","viral","instagram","healthy"],
     difficulty: 1,
     servings: 1,
-    baseNutrition: { calories: 584, proteinGrams: 32, carbsGrams: 67, fatGrams: 22 },
+    baseNutrition: { calories: 594, proteinGrams: 32, carbsGrams: 67, fatGrams: 22 },
     ingredients: [
       { name: "Purée d'açaí surgelée", qty: 100, unit: 'g' },
       { name: "banane", qty: 100, unit: 'g' },
@@ -17517,7 +17636,7 @@
     cookTime: 5,
     servings: 2,
     // Vérification: 16×4 + 22×4 + 15×9 = 64 + 88 + 135 = 287 ≈ 290 kcal ✓
-    baseNutrition: { calories: 290, proteinGrams: 16, carbsGrams: 22, fatGrams: 15 },
+    baseNutrition: { calories: 287, proteinGrams: 16, carbsGrams: 22, fatGrams: 15 },
     ingredients: [
       { name: 'Pain ciabatta', qty: 120, unit: 'g' },
       { name: 'Avocat mûr', qty: 100, unit: 'g' },
@@ -17614,7 +17733,7 @@
     cookTime: 0,
     servings: 2,
     // Vérification: 20×4 + 22×4 + 11×9 = 80 + 88 + 99 = 267 ≈ 270 kcal ✓
-    baseNutrition: { calories: 270, proteinGrams: 20, carbsGrams: 22, fatGrams: 11 },
+    baseNutrition: { calories: 267, proteinGrams: 20, carbsGrams: 22, fatGrams: 11 },
     ingredients: [
       { name: 'Ricotta fraîche', qty: 150, unit: 'g' },
       { name: 'Mascarpone', qty: 50, unit: 'g' },
@@ -18492,7 +18611,7 @@
       { name: 'Tomates pelées en conserve', qty: 300, unit: 'g' },
       { name: 'Jambon de dinde fumé', qty: 60, unit: 'g' },
       { name: 'Oignon', qty: 100, unit: 'g' },
-      { name: 'Ail', qty: 3, unit: 'gousses' },
+      { name: 'Ail', qty: 3, unit: 'gousse' },
       { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
       { name: 'Piment doux (paprika fumé)', qty: 5, unit: 'g' },
       { name: 'Thym, laurier', qty: 1, unit: 'pincée' },
@@ -18527,7 +18646,7 @@
       { name: 'Carottes', qty: 150, unit: 'g' },
       { name: 'Oignon', qty: 100, unit: 'g' },
       { name: 'Céleri branche', qty: 80, unit: 'g' },
-      { name: 'Ail', qty: 2, unit: 'gousses' },
+      { name: 'Ail', qty: 2, unit: 'gousse' },
       { name: 'Bouillon de légumes (cube)', qty: 800, unit: 'ml' },
       { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
       { name: 'Cumin moulu', qty: 3, unit: 'g' },
@@ -18671,7 +18790,7 @@
       { name: 'Fromage de chèvre frais (Jaouda)', qty: 120, unit: 'g' },
       { name: 'Yaourt grec 0%', qty: 100, unit: 'g' },
       { name: 'Œufs', qty: 2, unit: 'pce' },
-      { name: 'Ail', qty: 2, unit: 'gousses' },
+      { name: 'Ail', qty: 2, unit: 'gousse' },
       { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
       { name: 'Thym frais', qty: 4, unit: 'g' },
       { name: 'Parmesan râpé', qty: 20, unit: 'g' },
@@ -18744,7 +18863,7 @@
       { name: 'Tomates pelées en conserve', qty: 200, unit: 'g' },
       { name: 'Bouillon de poulet dégraissé', qty: 250, unit: 'ml' },
       { name: 'Vin rouge (optionnel, 1 verre)', qty: 100, unit: 'ml' },
-      { name: 'Ail', qty: 3, unit: 'gousses' },
+      { name: 'Ail', qty: 3, unit: 'gousse' },
       { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
       { name: 'Concentré de tomate', qty: 15, unit: 'g' },
       { name: 'Thym, laurier, persil', qty: 1, unit: 'bouquet' },
@@ -22131,7 +22250,7 @@
 {
   "id": "R560",
   "name": "BBQ Chicken Bowl",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -22204,7 +22323,7 @@
 {
   "id": "R561",
   "name": "Turkey Taco Bowl",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -22277,7 +22396,7 @@
 {
   "id": "R562",
   "name": "Salmon Power Bowl",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -22350,7 +22469,7 @@
 {
   "id": "R563",
   "name": "Buffalo Chicken Wrap",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch"
   ],
@@ -22422,7 +22541,7 @@
 {
   "id": "R564",
   "name": "Greek Yogurt Parfait Protéiné",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -22489,7 +22608,7 @@
 {
   "id": "R565",
   "name": "Protein Pancakes Myrtilles",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -22561,7 +22680,7 @@
 {
   "id": "R566",
   "name": "Egg White Breakfast Burrito",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -22633,7 +22752,7 @@
 {
   "id": "R567",
   "name": "Chicken Caesar Salad",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch"
   ],
@@ -22705,7 +22824,7 @@
 {
   "id": "R568",
   "name": "Turkey Burger Healthy",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -22778,7 +22897,7 @@
 {
   "id": "R569",
   "name": "Tuna Avocado Toast",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast",
     "lunch"
@@ -22851,7 +22970,7 @@
 {
   "id": "R570",
   "name": "Cottage Cheese Protein Bowl",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast",
     "snack"
@@ -22916,7 +23035,7 @@
 {
   "id": "R571",
   "name": "Shrimp Stir Fry Asiatique",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -22996,7 +23115,7 @@
 {
   "id": "R572",
   "name": "Sweet Potato Turkey Hash",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast",
     "lunch"
@@ -23066,7 +23185,7 @@
 {
   "id": "R573",
   "name": "Overnight Oats Protein Vanille",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -23135,7 +23254,7 @@
 {
   "id": "R574",
   "name": "Chicken Tikka Masala Light",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -23215,7 +23334,7 @@
 {
   "id": "R575",
   "name": "Beef Stir Fry Teriyaki",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -23290,7 +23409,7 @@
 {
   "id": "R576",
   "name": "Smashed Chickpea Avocado Toast",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast",
     "lunch"
@@ -23366,7 +23485,7 @@
 {
   "id": "R577",
   "name": "Protein Acai Bowl",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -23440,7 +23559,7 @@
 {
   "id": "R578",
   "name": "Baked Lemon Herb Salmon",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -23521,7 +23640,7 @@
 {
   "id": "R579",
   "name": "Energy Balls Peanut Butter",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "snack"
   ],
@@ -23664,7 +23783,7 @@
 {
   "id": "R581",
   "name": "Protein Pancakes Avoine Banane Choco",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -23812,7 +23931,7 @@
 {
   "id": "R583",
   "name": "Soufflé Pancakes Japonais Healthy",
-  "category": "pastry",
+  "category": "french",
   "mealTypes": [
     "breakfast"
   ],
@@ -23891,7 +24010,7 @@
 {
   "id": "R584",
   "name": "Pancakes Patate Douce Cannelle",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -24044,7 +24163,7 @@
 {
   "id": "R586",
   "name": "Muffins Myrtilles Protéinés Meal Prep",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "snack"
   ],
@@ -24123,7 +24242,7 @@
 {
   "id": "R587",
   "name": "Muffins Chocolat Coulant Protéiné",
-  "category": "pastry",
+  "category": "french",
   "mealTypes": [
     "snack"
   ],
@@ -24202,7 +24321,7 @@
 {
   "id": "R588",
   "name": "Banana Bread Protéiné Noix Pécan",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -24450,7 +24569,7 @@
 {
   "id": "R591",
   "name": "Baked Oats Pomme Cannelle",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -24746,7 +24865,7 @@
 {
   "id": "R595",
   "name": "Cheesecake No-Bake Citron",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "dessert"
   ],
@@ -24826,7 +24945,7 @@
 {
   "id": "R596",
   "name": "Energy Balls Dattes Amandes",
-  "category": "pastry",
+  "category": "french",
   "mealTypes": [
     "snack"
   ],
@@ -24972,7 +25091,7 @@
 {
   "id": "R598",
   "name": "Açaï Bowl Instagram Perfect",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -25053,7 +25172,7 @@
 {
   "id": "R599",
   "name": "Smoothie Bowl Mangue Passion Granola",
-  "category": "pastry",
+  "category": "french",
   "mealTypes": [
     "breakfast"
   ],
@@ -25134,7 +25253,7 @@
 {
   "id": "R600",
   "name": "Green Smoothie Bowl Épinards Avocat",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -25268,7 +25387,7 @@
 {
   "id": "R602",
   "name": "Smoothie Bowl Cacao Beurre Cacahuète",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -25340,7 +25459,7 @@
 {
   "id": "R603",
   "name": "Overnight Oats Passion Coco",
-  "category": "pastry",
+  "category": "french",
   "mealTypes": [
     "breakfast"
   ],
@@ -25407,7 +25526,7 @@
 {
   "id": "R604",
   "name": "Protein Cookies Choco Chunk Soft",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "snack"
   ],
@@ -25479,7 +25598,7 @@
 {
   "id": "R605",
   "name": "Brownie Haricots Noirs Sans Farine",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "snack"
   ],
@@ -25551,7 +25670,7 @@
 {
   "id": "R606",
   "name": "Barres Granola Maison Miel Avoine",
-  "category": "pastry",
+  "category": "french",
   "mealTypes": [
     "snack"
   ],
@@ -25618,7 +25737,7 @@
 {
   "id": "R607",
   "name": "Cookies Avoine Raisins Noix Coco",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "snack"
   ],
@@ -25762,7 +25881,7 @@
 {
   "id": "R609",
   "name": "Rochers Coco Protéinés Chocolat Noir",
-  "category": "pastry",
+  "category": "french",
   "mealTypes": [
     "snack"
   ],
@@ -27482,7 +27601,7 @@
 {
   "id": "R630",
   "name": "Smash Burger Dinde Truffe",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -27560,7 +27679,7 @@
 {
   "id": "R631",
   "name": "Lobster Roll Light Céleri Citron",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -27638,7 +27757,7 @@
 {
   "id": "R632",
   "name": "BBQ Chicken Wings Air Fryer Healthy",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -27716,7 +27835,7 @@
 {
   "id": "R633",
   "name": "Salmon Poke Bowl Hawaii Style",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -27799,7 +27918,7 @@
 {
   "id": "R634",
   "name": "Clam Chowder Light Nouvelle-Angleterre",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -27877,7 +27996,7 @@
 {
   "id": "R635",
   "name": "Chicken Caesar Wrap Viral TikTok",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -27955,7 +28074,7 @@
 {
   "id": "R636",
   "name": "Eggs Benedict Hollandaise Light",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -28037,7 +28156,7 @@
 {
   "id": "R637",
   "name": "NY Strip Steak Sauce Chimichurri",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -28115,7 +28234,7 @@
 {
   "id": "R638",
   "name": "Mac Cheese Cauliflower Gratin Healthy",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -28193,7 +28312,7 @@
 {
   "id": "R639",
   "name": "Cobb Salad Revisitée Premium",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -28358,9 +28477,9 @@
         { name: 'Tomates cerises', qty: 120, unit: 'g' },
         { name: 'Olives noires dénoyautées', qty: 30, unit: 'g' },
         { name: 'Câpres', qty: 15, unit: 'g' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Ail', qty: 2, unit: 'gousse' },
         { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
-        { name: 'Thym, romarin', qty: 2, unit: 'brins' },
+        { name: 'Thym, romarin', qty: 2, unit: 'brin' },
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
@@ -28404,7 +28523,7 @@
     {
       id: 'R644',
       name: 'Saint-Pierre Ceviche Agrumes',
-      category: 'fusion',
+      category: 'world-food',
       mealTypes: ['lunch', 'dinner'],
       emoji: '🐟',
       origin: '🇵🇪',
@@ -28455,7 +28574,7 @@
         { name: 'Sauce soja tamari', qty: 40, unit: 'ml' },
         { name: 'Mirin', qty: 20, unit: 'ml' },
         { name: 'Gingembre frais râpé', qty: 10, unit: 'g' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Ail', qty: 2, unit: 'gousse' },
         { name: 'Huile de sésame', qty: 10, unit: 'ml' },
         { name: 'Sésame blanc grillé', qty: 10, unit: 'g' },
         { name: 'Ciboulette asiatique', qty: 10, unit: 'g' }
@@ -28549,9 +28668,9 @@
         { name: 'Tomates', qty: 150, unit: 'g' },
         { name: 'Poivron rouge', qty: 100, unit: 'g' },
         { name: 'Oignon', qty: 60, unit: 'g' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Ail', qty: 2, unit: 'gousse' },
         { name: "Huile d'olive", qty: 20, unit: 'ml' },
-        { name: 'Herbes de Provence', qty: 1, unit: 'c.à.café' },
+        { name: 'Herbes de Provence', qty: 1, unit: 'cc' },
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
@@ -28724,7 +28843,7 @@
     {
       id: 'R654',
       name: 'Bowl de Thon Rouge Mariné',
-      category: 'fusion',
+      category: 'japanese',
       mealTypes: ['lunch', 'dinner'],
       emoji: '🐠',
       origin: '🇯🇵',
@@ -28883,7 +29002,7 @@
     {
       id: 'R659',
       name: 'Taboulé de Quinoa au Turbot',
-      category: 'fusion',
+      category: 'mediterranean',
       mealTypes: ['lunch', 'dinner'],
       emoji: '🐡',
       origin: '🇫🇷',
@@ -28932,7 +29051,7 @@
       baseNutrition: { calories: 322, proteinGrams: 54, carbsGrams: 4, fatGrams: 10 },
       ingredients: [
         { name: 'Calamars (anneaux ou corps entiers)', qty: 500, unit: 'g' },
-        { name: 'Ail', qty: 3, unit: 'gousses' },
+        { name: 'Ail', qty: 3, unit: 'gousse' },
         { name: 'Citron (jus + zeste)', qty: 1, unit: 'pce' },
         { name: "Huile d'olive", qty: 20, unit: 'ml' },
         { name: 'Persil plat frais', qty: 20, unit: 'g' },
@@ -28949,7 +29068,7 @@
     {
       id: 'R661',
       name: 'Calamars à la Harissa Douce',
-      category: 'north-african',
+      category: 'maroc-moderne',
       mealTypes: ['lunch', 'dinner'],
       emoji: '🦑',
       origin: '🇹🇳',
@@ -28965,7 +29084,7 @@
         { name: 'Harissa douce', qty: 25, unit: 'g' },
         { name: 'Tomates pelées en dés', qty: 150, unit: 'g' },
         { name: 'Oignon rouge', qty: 60, unit: 'g' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Ail', qty: 2, unit: 'gousse' },
         { name: "Huile d'olive", qty: 20, unit: 'ml' },
         { name: 'Coriandre fraîche', qty: 15, unit: 'g' },
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
@@ -28997,9 +29116,9 @@
         { name: 'Poivron rouge', qty: 80, unit: 'g' },
         { name: 'Tomates séchées', qty: 30, unit: 'g' },
         { name: 'Fromage de brebis frais', qty: 30, unit: 'g' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Ail', qty: 2, unit: 'gousse' },
         { name: "Huile d'olive", qty: 20, unit: 'ml' },
-        { name: 'Herbes de Provence', qty: 1, unit: 'c.à.café' },
+        { name: 'Herbes de Provence', qty: 1, unit: 'cc' },
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
@@ -29031,7 +29150,7 @@
         { name: 'Oignon rouge', qty: 50, unit: 'g' },
         { name: "Huile d'olive", qty: 20, unit: 'ml' },
         { name: 'Citron (jus)', qty: 1, unit: 'pce' },
-        { name: 'Paprika fumé', qty: 1, unit: 'c.à.café' },
+        { name: 'Paprika fumé', qty: 1, unit: 'cc' },
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
@@ -29061,7 +29180,7 @@
         { name: 'Encre de seiche', qty: 8, unit: 'g' },
         { name: 'Bouillon de poisson', qty: 500, unit: 'ml' },
         { name: 'Oignon', qty: 60, unit: 'g' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Ail', qty: 2, unit: 'gousse' },
         { name: 'Vin blanc sec', qty: 80, unit: 'ml' },
         { name: "Huile d'olive", qty: 20, unit: 'ml' },
         { name: 'Persil, sel, poivre', qty: 1, unit: 'pincée' }
@@ -29129,7 +29248,7 @@
         { name: 'Saint-Pierre (filets)', qty: 250, unit: 'g' },
         { name: 'Tomates San Marzano (boîte)', qty: 400, unit: 'g' },
         { name: 'Oignon', qty: 80, unit: 'g' },
-        { name: 'Ail', qty: 3, unit: 'gousses' },
+        { name: 'Ail', qty: 3, unit: 'gousse' },
         { name: 'Vin blanc sec', qty: 150, unit: 'ml' },
         { name: "Huile d'olive", qty: 30, unit: 'ml' },
         { name: 'Safran', qty: 0.2, unit: 'g' },
@@ -29146,7 +29265,7 @@
     {
       id: 'R667',
       name: 'Carpaccio Thon Rouge & Espadon',
-      category: 'fusion',
+      category: 'mediterranean',
       mealTypes: ['lunch', 'dinner'],
       emoji: '🐟',
       origin: '🇮🇹',
@@ -29211,7 +29330,7 @@
     {
       id: 'R669',
       name: 'Plateau Cru de Poissons Nobles — 3 Sauces',
-      category: 'fusion',
+      category: 'french',
       mealTypes: ['lunch', 'dinner'],
       emoji: '🐟',
       origin: '🇫🇷',
@@ -29831,9 +29950,9 @@
     var isMaple = n.indexOf('sirop') >= 0 && n.indexOf('erable') >= 0 || n.indexOf('sirop') >= 0 && n.indexOf('érable') >= 0;
     if (isOil || isVinegar || isSauce || isHoney || isMaple) {
       if (u === 'g' || u === 'ml') {
-        if (Math.round(q) === 5)  return { qty: 1, unit: 'c.à.café' };
+        if (Math.round(q) === 5)  return { qty: 1, unit: 'cc' };
         if (Math.round(q) === 15) return { qty: 1, unit: 'c.à.soupe' };
-        if (Math.round(q) === 10) return { qty: 2, unit: 'c.à.café' };
+        if (Math.round(q) === 10) return { qty: 2, unit: 'cc' };
         if (Math.round(q) === 30) return { qty: 2, unit: 'c.à.soupe' };
         if (Math.round(q) === 45) return { qty: 3, unit: 'c.à.soupe' };
         if (Math.round(q) === 60) return { qty: 4, unit: 'c.à.soupe' };
@@ -29866,8 +29985,8 @@
     var isDairyButter = n.indexOf('beurre') >= 0 && !/beurre\s+d[e']\s*(cacahu|amande|noix|cajou|noisette|pistache|arachide)/i.test(n);
     if (isDairyButter) {
       if (u === 'g') {
-        if (Math.round(q) === 5)  return { qty: 1, unit: 'c.à.café' };
-        if (Math.round(q) === 10) return { qty: 2, unit: 'c.à.café' };
+        if (Math.round(q) === 5)  return { qty: 1, unit: 'cc' };
+        if (Math.round(q) === 10) return { qty: 2, unit: 'cc' };
         if (Math.round(q) === 15) return { qty: 1, unit: 'c.à.soupe' };
         if (Math.round(q) === 30) return { qty: 2, unit: 'c.à.soupe' };
       }
@@ -29884,10 +30003,10 @@
       if (n.indexOf(spiceKeywords[si]) >= 0) { isSpice = true; break; }
     }
     if (isSpice && u === 'g' && q <= 10) {
-      if (q <= 1)              return { qty: '¼',  unit: 'c.à.café' };
-      if (q <= 2)              return { qty: '½',  unit: 'c.à.café' };
-      if (q >= 3 && q <= 4)   return { qty: 1,    unit: 'c.à.café' };
-      if (q >= 5 && q < 6)    return { qty: '1½', unit: 'c.à.café' };
+      if (q <= 1)              return { qty: '¼',  unit: 'cc' };
+      if (q <= 2)              return { qty: '½',  unit: 'cc' };
+      if (q >= 3 && q <= 4)   return { qty: 1,    unit: 'cc' };
+      if (q >= 5 && q < 6)    return { qty: '1½', unit: 'cc' };
       if (q >= 6 && q <= 8)   return { qty: 1,    unit: 'c.à.soupe' };
       if (q >= 9 && q <= 10)  return { qty: '1½', unit: 'c.à.soupe' };
     }

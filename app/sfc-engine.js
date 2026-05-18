@@ -252,8 +252,13 @@
     var goal   = (user && VALID_GOALS.indexOf(user.goal) !== -1) ? user.goal : 'recomp';
 
     // ── Step 1: Resting metabolic rate ──────────────────────────────────────
-    // Simplified Mifflin for unknown sex/age — accurate ±10% for most adults
-    var bmr = weight * 22 + 500;
+    // Weight-based Mifflin proxy when sex/height/age are unavailable.
+    // Uses Mifflin constant term averaged across sex (males +5, females -161 → avg -78)
+    // and typical adult height 170cm / age 35y → 6.25*170-5*35 = 887.5.
+    // Net: BMR ≈ 10*weight + 810. Previous formula (weight*22+500) overcounted by 450-600 kcal.
+    var bmr = user && typeof user.heightCm === 'number' && typeof user.age === 'number'
+      ? (10 * weight + 6.25 * user.heightCm - 5 * user.age + (user.sex === 'female' ? -161 : 5))
+      : (10 * weight + 810);
 
     // ── Step 2: Activity PAL from ACTUAL last-7-day training density ────────
     // Not from the onboarding schedule — from what the user literally did
@@ -269,7 +274,8 @@
 
     // ── Step 3: Caloric target by goal ──────────────────────────────────────
     var GOAL_DELTA = { fat_loss: -400, recomp: -100, muscle_gain: +300 };
-    var calorieTarget = Math.max(1400, Math.round(tdee + (GOAL_DELTA[goal] || 0)));
+    var _kcalFloor = (user && user.sex === 'female') ? 1400 : 1500;
+    var calorieTarget = Math.max(_kcalFloor, Math.round(tdee + (GOAL_DELTA[goal] || 0)));
 
     // ── Step 4: Effective load from ACTUAL sessions (not from schedule) ─────
     var signal = computeTrainingSignal(sessions, ts);
