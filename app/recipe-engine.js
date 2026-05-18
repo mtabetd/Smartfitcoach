@@ -38795,6 +38795,266 @@
     ]
   }
 
+  // ── BATCH P60 — Snacks & collations ──────────────────────────────────────────
+  ,{
+    id: 'R975',
+    name: 'Houmous Maison Citron Tahini',
+    category: 'mediterranean',
+    mealTypes: ['snack','lunch'],
+    emoji: '🧆', origin: '🇱🇧',
+    tags: ['vegetarian','healthy','meal-prep'],
+    servings: 4, prepTime: 10, cookTime: 0, difficulty: 1,
+    // 28×4 + 60×4 + 28×9 = 112+240+252 = 604 ✓
+    baseNutrition: { calories: 604, proteinGrams: 28, carbsGrams: 60, fatGrams: 28 },
+    ingredients: [
+      { name: 'Pois chiches en boîte', qty: 480, unit: 'g', note: 'égouttés' },
+      { name: 'Tahini', qty: 60, unit: 'g' },
+      { name: 'Citron', qty: 2, unit: 'pce', note: 'jus' },
+      { name: 'Ail', qty: 1, unit: 'pce', note: 'gousse' },
+      { name: 'Huile d\'olive', qty: 30, unit: 'ml' },
+      { name: 'Cumin', qty: 3, unit: 'g' },
+      { name: 'Sel', qty: 1, unit: 'pincée' },
+      { name: 'Eau froide', qty: 50, unit: 'ml' }
+    ],
+    steps: [
+      "Mixer les pois chiches avec le tahini, jus de citron, ail, cumin et sel.",
+      "Ajouter l'huile d'olive et l'eau froide progressivement tout en mixant.",
+      "Mixer 3-4 min jusqu'à consistance très crémeuse et lisse.",
+      "Servir dans un bol avec un filet d'huile d'olive, du paprika et des pains pita chauds."
+    ]
+  }
+  ,{
+    id: 'R976',
+    name: 'Guacamole Frais Maison',
+    category: 'mexican',
+    mealTypes: ['snack','lunch'],
+    emoji: '🥑', origin: '🇲🇽',
+    tags: ['vegetarian','healthy','express'],
+    servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
+    // 4×4 + 12×4 + 22×9 = 16+48+198 = 262 ✓
+    baseNutrition: { calories: 262, proteinGrams: 4, carbsGrams: 12, fatGrams: 22 },
+    ingredients: [
+      { name: 'Avocats mûrs', qty: 2, unit: 'pce' },
+      { name: 'Tomate', qty: 1, unit: 'pce', note: 'épépinée' },
+      { name: 'Oignon rouge', qty: 1, unit: 'pce', note: 'quart' },
+      { name: 'Coriandre fraîche', qty: 10, unit: 'g' },
+      { name: 'Lime', qty: 1, unit: 'pce', note: 'jus' },
+      { name: 'Piment jalapeño', qty: 1, unit: 'pce', note: 'optionnel' },
+      { name: 'Sel', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Écraser les avocats à la fourchette — laisser quelques morceaux pour la texture.",
+      "Hacher finement l'oignon, la coriandre et le jalapeño. Couper la tomate en tout petits dés.",
+      "Incorporer tous les ingrédients. Ajouter le jus de lime, saler.",
+      "Servir immédiatement avec des nachos ou des légumes crus. Filmer au contact de la surface pour éviter l'oxydation."
+    ]
+  }
+  ,{
+    id: 'R977',
+    name: 'Oeuf Dur Mayo Ciboulette',
+    category: 'french',
+    mealTypes: ['snack','lunch'],
+    emoji: '🥚', origin: '🇫🇷',
+    tags: ['express','high-protein','classic'],
+    servings: 2, prepTime: 5, cookTime: 10, difficulty: 1,
+    // 20×4 + 2×4 + 14×9 = 80+8+126 = 214 ✓
+    baseNutrition: { calories: 214, proteinGrams: 20, carbsGrams: 2, fatGrams: 14 },
+    ingredients: [
+      { name: 'Oeufs', qty: 4, unit: 'pce' },
+      { name: 'Mayonnaise', qty: 30, unit: 'g' },
+      { name: 'Ciboulette fraîche', qty: 5, unit: 'g' },
+      { name: 'Moutarde de Dijon', qty: 5, unit: 'g' },
+      { name: 'Sel, poivre, paprika', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Cuire les oeufs 10 min dans l'eau bouillante. Refroidir sous l'eau froide, écaler.",
+      "Couper en deux dans le sens de la longueur. Retirer les jaunes.",
+      "Écraser les jaunes avec mayo, moutarde, sel, poivre. Mélanger jusqu'à consistance lisse.",
+      "Remplir les blancs avec la préparation à la poche ou à la cuillère. Garnir de ciboulette et paprika."
+    ]
+  }
+  ,{
+    id: 'R978',
+    name: 'Toast Avocat Oeuf Poché',
+    category: 'french',
+    mealTypes: ['breakfast','snack','lunch'],
+    emoji: '🥑', origin: '🌍',
+    tags: ['healthy','viral','balanced'],
+    servings: 2, prepTime: 5, cookTime: 5, difficulty: 2,
+    // 20×4 + 28×4 + 18×9 = 80+112+162 = 354 ✓
+    baseNutrition: { calories: 354, proteinGrams: 20, carbsGrams: 28, fatGrams: 18 },
+    ingredients: [
+      { name: 'Pain de campagne', qty: 2, unit: 'pce', note: 'tranches grillées' },
+      { name: 'Avocat mûr', qty: 1, unit: 'pce' },
+      { name: 'Oeufs', qty: 2, unit: 'pce' },
+      { name: 'Citron', qty: 1, unit: 'pce', note: 'jus' },
+      { name: 'Piment d\'Espelette', qty: 1, unit: 'pincée' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Toaster le pain. Écraser l'avocat avec jus de citron, sel, poivre.",
+      "Porter une petite casserole d'eau frémissante à feu doux. Ajouter un filet de vinaigre blanc.",
+      "Casser un oeuf dans un bol. Créer un tourbillon dans l'eau, glisser l'oeuf doucement. Pocher 3 min. Répéter.",
+      "Étaler l'avocat sur les toasts. Poser l'oeuf poché, assaisonner de piment d'Espelette."
+    ]
+  }
+  ,{
+    id: 'R979',
+    name: 'Tartines Sardines Citron Câpres',
+    category: 'mediterranean',
+    mealTypes: ['snack','lunch'],
+    emoji: '🐟', origin: '🇫🇷',
+    tags: ['express','high-protein','healthy'],
+    servings: 2, prepTime: 5, cookTime: 5, difficulty: 1,
+    // 24×4 + 22×4 + 12×9 = 96+88+108 = 292 ✓
+    baseNutrition: { calories: 292, proteinGrams: 24, carbsGrams: 22, fatGrams: 12 },
+    ingredients: [
+      { name: 'Sardines en boîte à l\'huile', qty: 120, unit: 'g', note: 'égouttées' },
+      { name: 'Pain de seigle', qty: 4, unit: 'pce', note: 'tranches' },
+      { name: 'Câpres', qty: 15, unit: 'g' },
+      { name: 'Citron', qty: 1, unit: 'pce' },
+      { name: 'Oignon rouge', qty: 1, unit: 'pce', note: 'demi, émincé fin' },
+      { name: 'Beurre', qty: 10, unit: 'g' },
+      { name: 'Persil frais', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      "Toaster légèrement les tranches de pain de seigle.",
+      "Beurrer légèrement, répartir les sardines émiettées.",
+      "Garnir d'oignon rouge, de câpres et de persil haché.",
+      "Arroser d'un trait de citron. Poivrer. Manger de suite — simple et divin."
+    ]
+  }
+
+  // ── BATCH P61 — Grillades & BBQ express ──────────────────────────────────────
+  ,{
+    id: 'R980',
+    name: 'Côte de Bœuf Beurre Café de Paris',
+    category: 'french',
+    mealTypes: ['dinner'],
+    emoji: '🥩', origin: '🇫🇷',
+    tags: ['fete','high-protein','grillé'],
+    servings: 2, prepTime: 10, cookTime: 15, difficulty: 2,
+    // 70×4 + 2×4 + 30×9 = 280+8+270 = 558 ✓
+    baseNutrition: { calories: 558, proteinGrams: 70, carbsGrams: 2, fatGrams: 30 },
+    ingredients: [
+      { name: 'Côte de bœuf', qty: 600, unit: 'g' },
+      { name: 'Beurre', qty: 60, unit: 'g', note: 'à température ambiante' },
+      { name: 'Ail', qty: 2, unit: 'pce', note: 'gousses' },
+      { name: 'Herbes fraîches (thym, persil, ciboulette)', qty: 10, unit: 'g' },
+      { name: 'Paprika', qty: 2, unit: 'g' },
+      { name: 'Huile végétale', qty: 10, unit: 'ml' },
+      { name: 'Sel de Guérande, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Sortir la côte de bœuf 1h avant. Mélanger beurre mou, ail haché, herbes, paprika — rouler dans du film et réfrigérer.",
+      "Huiler et chauffer la plancha ou poêle en fonte au maximum. Saler généreusement la viande.",
+      "Cuire 4-5 min par face pour saignant, 6-7 pour à point. Ne pas toucher pendant la cuisson.",
+      "Laisser reposer 8 min sous alu. Trancher et déposer une rondelle de beurre café de Paris sur la viande chaude."
+    ]
+  }
+  ,{
+    id: 'R981',
+    name: 'Brochettes Merguez Légumes Grillés',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍢', origin: '🇫🇷',
+    tags: ['grillé','express','spiced'],
+    servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
+    // 28×4 + 16×4 + 22×9 = 112+64+198 = 374 ✓
+    baseNutrition: { calories: 374, proteinGrams: 28, carbsGrams: 16, fatGrams: 22 },
+    ingredients: [
+      { name: 'Merguez', qty: 200, unit: 'g' },
+      { name: 'Courgette', qty: 150, unit: 'g' },
+      { name: 'Poivron rouge', qty: 150, unit: 'g' },
+      { name: 'Oignon rouge', qty: 1, unit: 'pce' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Herbes de Provence', qty: 3, unit: 'g' },
+      { name: 'Sel', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Couper les légumes en morceaux de taille uniforme. Mélanger avec l'huile, les herbes et le sel.",
+      "Piquer sur des brochettes en alternant merguez et légumes.",
+      "Cuire au grill, barbecue ou plancha 12-15 min en retournant régulièrement.",
+      "Servir avec du pain pita, harissa et yaourt à la menthe."
+    ]
+  }
+  ,{
+    id: 'R982',
+    name: 'Filets de Poulet Marinés Herbes',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🐔', origin: '🇫🇷',
+    tags: ['grillé','high-protein','light'],
+    servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
+    // 56×4 + 4×4 + 8×9 = 224+16+72 = 312 ✓
+    baseNutrition: { calories: 312, proteinGrams: 56, carbsGrams: 4, fatGrams: 8 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 400, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Ail', qty: 2, unit: 'pce', note: 'gousses' },
+      { name: 'Citron', qty: 1, unit: 'pce', note: 'jus + zeste' },
+      { name: 'Thym, romarin frais', qty: 5, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Aplatir légèrement les filets de poulet. Préparer la marinade : huile, ail haché, jus et zeste de citron, herbes, sel, poivre.",
+      "Mariner le poulet 30 min minimum (ou toute la nuit).",
+      "Cuire sur plancha ou poêle grill très chaude 5-6 min par face.",
+      "Laisser reposer 3 min. Servir avec salade verte ou légumes grillés."
+    ]
+  }
+  ,{
+    id: 'R983',
+    name: 'Côtelettes d\'Agneau Persillade',
+    category: 'french',
+    mealTypes: ['dinner'],
+    emoji: '🍖', origin: '🇫🇷',
+    tags: ['fete','high-protein','express'],
+    servings: 2, prepTime: 5, cookTime: 10, difficulty: 1,
+    // 50×4 + 6×4 + 16×9 = 200+24+144 = 368 ✓
+    baseNutrition: { calories: 368, proteinGrams: 50, carbsGrams: 6, fatGrams: 16 },
+    ingredients: [
+      { name: 'Côtelettes d\'agneau', qty: 400, unit: 'g', note: '4 côtelettes' },
+      { name: 'Persil frais', qty: 20, unit: 'g' },
+      { name: 'Ail', qty: 3, unit: 'pce', note: 'gousses' },
+      { name: 'Chapelure', qty: 20, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Mixer persil, ail, chapelure et huile pour la persillade. Assaisonner.",
+      "Saisir les côtelettes 2 min de chaque côté dans une poêle très chaude.",
+      "Enduire d'une couche de persillade. Passer sous le grill 2-3 min.",
+      "Laisser reposer 2 min. Servir rosé avec une ratatouille ou des haricots verts."
+    ]
+  }
+  ,{
+    id: 'R984',
+    name: 'Pavé de Thon Gingembre Sésame',
+    category: 'world-food',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🐟', origin: '🇯🇵',
+    tags: ['healthy','high-protein','grillé'],
+    servings: 2, prepTime: 10, cookTime: 6, difficulty: 1,
+    // 52×4 + 6×4 + 10×9 = 208+24+90 = 322 ✓
+    baseNutrition: { calories: 322, proteinGrams: 52, carbsGrams: 6, fatGrams: 10 },
+    ingredients: [
+      { name: 'Pavé de thon frais', qty: 350, unit: 'g' },
+      { name: 'Sauce soja', qty: 20, unit: 'ml' },
+      { name: 'Huile de sésame', qty: 10, unit: 'ml' },
+      { name: 'Gingembre frais', qty: 10, unit: 'g' },
+      { name: 'Ail', qty: 1, unit: 'pce', note: 'gousse' },
+      { name: 'Graines de sésame', qty: 15, unit: 'g' },
+      { name: 'Oignon vert', qty: 2, unit: 'pce' }
+    ],
+    steps: [
+      "Mélanger sauce soja, huile de sésame, gingembre râpé et ail haché. Mariner le thon 15 min.",
+      "Rouler le pavé dans les graines de sésame pour bien les faire adhérer.",
+      "Cuire dans une poêle très chaude à sec (ou petit filet d'huile) 2-3 min par face.",
+      "Le thon doit rester rouge à coeur. Trancher et servir avec oignons verts, riz et sauce soja."
+    ]
+  }
+
   // ─────────────────────────────────────────────────────────────────────────────
   // FIN RECIPES_DB — à continuer avec les batches suivants au-dessus de cette ligne
   // ─────────────────────────────────────────────────────────────────────────────
