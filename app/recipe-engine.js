@@ -30869,7 +30869,7 @@
 
     {
       id: 'R721',
-      name: 'Penne all\'Amatriciana Guanciale Tomate',
+      name: 'Penne all\'Amatriciana Bœuf Haché Tomate',
       category: 'italian',
       mealTypes: ['dinner', 'lunch'],
       emoji: '🍝', origin: '🇮🇹',
@@ -30879,7 +30879,7 @@
       baseNutrition: { calories: 854, proteinGrams: 56, carbsGrams: 108, fatGrams: 22 },
       ingredients: [
         { name: 'Penne rigate',                     qty: 200, unit: 'g' },
-        { name: 'Pancetta ou lardons',              qty: 150, unit: 'g', note: 'guanciale si trouvable' },
+        { name: 'Bœuf haché 5%',                   qty: 150, unit: 'g' },
         { name: 'Tomates pelées entières',          qty: 400, unit: 'g', note: '1 boîte San Marzano si possible' },
         { name: 'Boeuf haché 5% MG',               qty: 100, unit: 'g', note: 'optionnel pour protéines' },
         { name: 'Pecorino romano râpé',             qty: 40,  unit: 'g', note: 'ou Parmesan' },
@@ -30962,7 +30962,7 @@
 
     {
       id: 'R724',
-      name: 'Pasta e Fagioli au Pancetta',
+      name: 'Pasta e Fagioli Dinde Fumée',
       category: 'italian',
       mealTypes: ['dinner', 'lunch'],
       emoji: '🍲', origin: '🇮🇹',
@@ -30973,7 +30973,7 @@
       ingredients: [
         { name: 'Haricots borlotti en boîte',       qty: 300, unit: 'g', note: 'égouttés' },
         { name: 'Ditalini ou tubetti',              qty: 120, unit: 'g', note: 'petites pâtes courtes' },
-        { name: 'Pancetta ou lardons',              qty: 100, unit: 'g' },
+        { name: 'Dinde fumée en dés',              qty: 100, unit: 'g' },
         { name: 'Tomates cerises',                  qty: 150, unit: 'g', note: 'coupées en deux' },
         { name: 'Bouillon de légumes',              qty: 600, unit: 'ml' },
         { name: 'Parmesan (croûte)',               qty: 30,  unit: 'g', note: 'la croûte donne le goût umami' },
@@ -31846,7 +31846,7 @@
 
     {
       id: 'R752',
-      name: 'Bao Buns Porc Effiloché Pickles Concombre',
+      name: 'Bao Buns Bœuf Effiloché Pickles Concombre',
       category: 'world-food',
       mealTypes: ['lunch', 'dinner'],
       emoji: '🫓', origin: '🇨🇳',
@@ -31856,7 +31856,7 @@
       baseNutrition: { calories: 706, proteinGrams: 72, carbsGrams: 64, fatGrams: 18 },
       ingredients: [
         { name: 'Bao buns (pains vapeur)',          qty: 160, unit: 'g', note: '4 buns, en sachet rayon asiatique' },
-        { name: 'Filet de porc',                    qty: 400, unit: 'g' },
+        { name: 'Paleron de bœuf',                 qty: 400, unit: 'g' },
         { name: 'Sauce hoisin',                     qty: 30,  unit: 'ml' },
         { name: 'Sauce soja',                       qty: 20,  unit: 'ml' },
         { name: 'Miel',                             qty: 15,  unit: 'g' },
@@ -32160,7 +32160,7 @@
 
     {
       id: 'R762',
-      name: 'Côtes de Porc Marinade Asiatique & Coleslaw Allégé',
+      name: 'Cuisses de Poulet Marinade Asiatique & Coleslaw Allégé',
       category: 'world-food',
       mealTypes: ['dinner', 'lunch'],
       emoji: '🍖', origin: '🇺🇸',
@@ -32169,7 +32169,7 @@
       // 80×4 + 44×4 + 28×9 = 320+176+252 = 748 ✓
       baseNutrition: { calories: 748, proteinGrams: 80, carbsGrams: 44, fatGrams: 28 },
       ingredients: [
-        { name: 'Côtes de porc',                    qty: 600, unit: 'g', note: '4 côtes, dégraissées' },
+        { name: 'Cuisses de poulet',                    qty: 600, unit: 'g', note: '4 côtes, dégraissées' },
         { name: 'Sauce soja',                       qty: 25,  unit: 'ml' },
         { name: 'Miel',                             qty: 20,  unit: 'g' },
         { name: 'Sauce hoisin',                     qty: 20,  unit: 'ml' },
@@ -32683,7 +32683,7 @@
 
     {
       id: 'R779',
-      name: 'Rigatoni Saucisse Fenouil & Tomate',
+      name: 'Rigatoni Merguez Fenouil & Tomate',
       category: 'italian',
       mealTypes: ['dinner', 'lunch'],
       emoji: '🍝', origin: '🇮🇹',
@@ -32693,7 +32693,7 @@
       baseNutrition: { calories: 838, proteinGrams: 64, carbsGrams: 96, fatGrams: 22 },
       ingredients: [
         { name: 'Rigatoni',                         qty: 180, unit: 'g' },
-        { name: 'Saucisses de porc',                qty: 300, unit: 'g', note: 'chair retirée du boyau' },
+        { name: 'Merguez',                qty: 300, unit: 'g', note: 'chair retirée du boyau' },
         { name: 'Tomates pelées boîte',             qty: 400, unit: 'g' },
         { name: 'Fenouil',                          qty: 100, unit: 'g', note: '½ bulbe émincé, ou 1 c.c. graines' },
         { name: 'Oignon',                           qty: 80,  unit: 'g' },
@@ -35270,7 +35270,7 @@
 
     {
       id: 'R859',
-      name: 'Sauté de Porc aux Poivrons & Paprika',
+      name: 'Sauté de Veau aux Poivrons & Paprika',
       category: 'french',
       mealTypes: ['lunch', 'dinner'],
       emoji: '🥩',
@@ -35283,7 +35283,7 @@
       // 64×4 + 30×4 + 24×9 = 256+120+216 = 592 kcal ✓
       baseNutrition: { calories: 592, proteinGrams: 64, carbsGrams: 30, fatGrams: 24 },
       ingredients: [
-        { name: 'Filet de porc',      qty: 450, unit: 'g' },
+        { name: 'Veau émincé',       qty: 450, unit: 'g' },
         { name: 'Poivrons rouges',    qty: 250, unit: 'g' },
         { name: 'Oignon',             qty: 120, unit: 'g' },
         { name: 'Crème fraîche',      qty: 80,  unit: 'ml' },
@@ -35338,7 +35338,7 @@
 
     {
       id: 'R861',
-      name: 'Gyozas Porc & Chou Poêlés Vapeur',
+      name: 'Gyozas Bœuf & Chou Poêlés Vapeur',
       category: 'japanese',
       mealTypes: ['lunch', 'dinner'],
       emoji: '🥟',
@@ -35352,7 +35352,7 @@
       baseNutrition: { calories: 580, proteinGrams: 40, carbsGrams: 60, fatGrams: 20 },
       ingredients: [
         { name: 'Galettes à gyoza',   qty: 24,  unit: 'pce' },
-        { name: 'Porc haché',         qty: 250, unit: 'g' },
+        { name: 'Bœuf haché 5%',         qty: 250, unit: 'g' },
         { name: 'Chou chinois',       qty: 150, unit: 'g' },
         { name: 'Ail',                qty: 2,   unit: 'pce' },
         { name: 'Gingembre frais',    qty: 10,  unit: 'g' },
@@ -36811,7 +36811,7 @@
       baseNutrition: { calories: 866, proteinGrams: 39, carbsGrams: 83, fatGrams: 42 },
       ingredients: [
         { name: 'Pains hot-dog',      qty: 140, unit: 'g', note: '2 pains' },
-        { name: 'Saucisses Francfort', qty: 180, unit: 'g', note: '4 saucisses' },
+        { name: 'Saucisses de dinde', qty: 180, unit: 'g', note: '4 saucisses' },
         { name: 'Oignons',            qty: 150, unit: 'g' },
         { name: 'Beurre',             qty: 10,  unit: 'g' },
         { name: 'Moutarde',           qty: 15,  unit: 'g' },
@@ -36992,7 +36992,7 @@
 
     {
       id: 'R912',
-      name: 'Saucisses Pommes de Terre Gratinées',
+      name: 'Merguez Pommes de Terre Gratinées',
       category: 'french',
       mealTypes: ['lunch', 'dinner'],
       emoji: '🌭',
@@ -37057,7 +37057,7 @@
 
     {
       id: 'R914',
-      name: 'Lentilles Saucisse Diot Savoyarde',
+      name: 'Lentilles Merguez Épicées',
       category: 'french',
       mealTypes: ['lunch', 'dinner'],
       emoji: '🌱',
@@ -37123,7 +37123,7 @@
 
     {
       id: 'R916',
-      name: 'Riz Sauté Porc Légumes & Sauce Soja',
+      name: 'Riz Sauté Bœuf Légumes & Sauce Soja',
       category: 'world-food',
       mealTypes: ['lunch', 'dinner'],
       emoji: '🍚',
@@ -37137,7 +37137,7 @@
       baseNutrition: { calories: 1216, proteinGrams: 72, carbsGrams: 133, fatGrams: 44 },
       ingredients: [
         { name: 'Riz cuit froid',     qty: 500, unit: 'g', note: 'riz de la veille' },
-        { name: 'Porc haché',         qty: 200, unit: 'g' },
+        { name: 'Bœuf haché 5%',         qty: 200, unit: 'g' },
         { name: 'Oeufs',              qty: 2,   unit: 'pce' },
         { name: 'Petits pois',        qty: 80,  unit: 'g' },
         { name: 'Carottes',           qty: 80,  unit: 'g' },
@@ -37185,7 +37185,7 @@
 
     {
       id: 'R918',
-      name: 'Penne alla Vodka Pancetta & Parmesan',
+      name: 'Penne alla Vodka Dinde Fumée & Parmesan',
       category: 'italian',
       mealTypes: ['lunch', 'dinner'],
       emoji: '🍝',
@@ -37199,7 +37199,7 @@
       baseNutrition: { calories: 1594, proteinGrams: 58, carbsGrams: 219, fatGrams: 54 },
       ingredients: [
         { name: 'Penne rigate',       qty: 280, unit: 'g' },
-        { name: 'Pancetta ou lardons', qty: 80, unit: 'g' },
+        { name: 'Dinde fumée en dés', qty: 80, unit: 'g' },
         { name: 'Crème fraîche',      qty: 100, unit: 'ml' },
         { name: 'Sauce tomate',       qty: 150, unit: 'ml' },
         { name: 'Vodka',              qty: 30,  unit: 'ml' },
@@ -37250,7 +37250,7 @@
 
     {
       id: 'R920',
-      name: 'Côtes de Porc Moutarde & Miel au Four',
+      name: 'Côtes d\'Agneau Moutarde & Miel au Four',
       category: 'french',
       mealTypes: ['lunch', 'dinner'],
       emoji: '🥩',
@@ -37263,7 +37263,7 @@
       // 83×4 + 20×4 + 48×9 = 332+80+432 = 844 kcal ✓
       baseNutrition: { calories: 844, proteinGrams: 83, carbsGrams: 20, fatGrams: 48 },
       ingredients: [
-        { name: 'Côtes de porc',      qty: 480, unit: 'g', note: '2 côtes épaisses' },
+        { name: 'Cuisses de poulet',      qty: 480, unit: 'g', note: '2 côtes épaisses' },
         { name: 'Moutarde de Dijon',  qty: 30,  unit: 'g' },
         { name: 'Miel',               qty: 20,  unit: 'g' },
         { name: 'Ail',                qty: 2,   unit: 'pce' },
@@ -38045,7 +38045,7 @@
     // 26×4 + 28×4 + 14×9 = 104+112+126 = 342 ✓
     baseNutrition: { calories: 342, proteinGrams: 26, carbsGrams: 28, fatGrams: 14 },
     ingredients: [
-      { name: 'Porc haché', qty: 150, unit: 'g' },
+      { name: 'Bœuf haché 5%', qty: 150, unit: 'g' },
       { name: 'Chou blanc', qty: 100, unit: 'g' },
       { name: 'Galettes gyoza', qty: 16, unit: 'pce' },
       { name: 'Sauce soja', qty: 15, unit: 'ml' },
@@ -38199,7 +38199,7 @@
   // ── BATCH P56 — Recettes de fête simples ──────────────────────────────────────
   ,{
     id: 'R955',
-    name: 'Filet Mignon en Croûte de Moutarde',
+    name: 'Filet de Veau en Croûte de Moutarde',
     category: 'french',
     mealTypes: ['dinner'],
     emoji: '🥩', origin: '🇫🇷',
@@ -38208,7 +38208,7 @@
     // 58×4 + 8×4 + 12×9 = 232+32+108 = 372 ✓
     baseNutrition: { calories: 372, proteinGrams: 58, carbsGrams: 8, fatGrams: 12 },
     ingredients: [
-      { name: 'Filet mignon de porc', qty: 400, unit: 'g' },
+      { name: 'Filet de veau', qty: 400, unit: 'g' },
       { name: 'Moutarde à l\'ancienne', qty: 30, unit: 'g' },
       { name: 'Chapelure', qty: 20, unit: 'g' },
       { name: 'Herbes de Provence', qty: 3, unit: 'g' },
@@ -38562,7 +38562,7 @@
     baseNutrition: { calories: 672, proteinGrams: 40, carbsGrams: 74, fatGrams: 24 },
     ingredients: [
       { name: 'Spaghetti', qty: 200, unit: 'g' },
-      { name: 'Guanciale ou lardons', qty: 120, unit: 'g' },
+      { name: 'Lardons de dinde fumée', qty: 120, unit: 'g' },
       { name: 'Oeufs entiers', qty: 2, unit: 'pce' },
       { name: 'Jaunes d\'oeufs', qty: 2, unit: 'pce' },
       { name: 'Pecorino romano râpé', qty: 50, unit: 'g' },
