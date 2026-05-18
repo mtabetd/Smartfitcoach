@@ -34638,6 +34638,819 @@
         "Préchauffer le four à 180°C. Couches dans le plat : aubergines, bolognaise, aubergines, béchamel + parmesan.",
         "Enfourner 40-45 min jusqu'à gratinage doré. Impératif : laisser reposer 20 min pour que la moussaka tienne à la découpe."
       ]
+    },
+
+    // ═══ BATCH P31 — Soupes & Veloutés ═══
+
+    {
+      id: 'R830',
+      name: 'Velouté de Potimarron Crème & Noisettes',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🎃',
+      origin: '🇫🇷',
+      tags: ['vegetarien', 'soupe', 'automne'],
+      servings: 3,
+      prepTime: 15,
+      cookTime: 30,
+      difficulty: 1,
+      // 18×4 + 84×4 + 24×9 = 72+336+216 = 624 kcal ✓
+      baseNutrition: { calories: 624, proteinGrams: 18, carbsGrams: 84, fatGrams: 24 },
+      ingredients: [
+        { name: 'Potimarron',         qty: 800, unit: 'g' },
+        { name: 'Oignon',             qty: 100, unit: 'g' },
+        { name: 'Crème fraîche',      qty: 120, unit: 'ml' },
+        { name: 'Bouillon de légumes', qty: 700, unit: 'ml' },
+        { name: 'Noisettes grillées', qty: 40,  unit: 'g' },
+        { name: 'Beurre',             qty: 20,  unit: 'g' },
+        { name: 'Muscade',            qty: 1,   unit: 'pincée' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Éplucher le potimarron (la peau est comestible si bio — garder). Couper en gros cubes.",
+        "Faire revenir l'oignon émincé dans le beurre 5 min. Ajouter le potimarron, cuire 3 min en remuant.",
+        "Verser le bouillon. Porter à ébullition, couvrir et cuire 25 min jusqu'à ce que le potimarron soit fondant.",
+        "Mixer finement avec la crème. Assaisonner sel, poivre, muscade. Ajuster la texture avec un peu de bouillon.",
+        "Servir dans des bols chauds. Garnir de noisettes grillées concassées et d'un filet de crème."
+      ]
+    },
+
+    {
+      id: 'R831',
+      name: 'Soupe à l\'Oignon Gratinée Classique',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🧅',
+      origin: '🇫🇷',
+      tags: ['classique', 'soupe', 'comfort-food'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 40,
+      difficulty: 1,
+      // 30×4 + 60×4 + 28×9 = 120+240+252 = 612 kcal ✓
+      baseNutrition: { calories: 612, proteinGrams: 30, carbsGrams: 60, fatGrams: 28 },
+      ingredients: [
+        { name: 'Oignons',            qty: 600, unit: 'g' },
+        { name: 'Bouillon de boeuf',  qty: 800, unit: 'ml' },
+        { name: 'Vin blanc sec',      qty: 100, unit: 'ml' },
+        { name: 'Beurre',             qty: 30,  unit: 'g' },
+        { name: 'Pain baguette',      qty: 80,  unit: 'g', note: 'en tranches' },
+        { name: 'Gruyère râpé',       qty: 80,  unit: 'g' },
+        { name: 'Sucre',              qty: 5,   unit: 'g' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Émincer finement les oignons. Les caraméliser dans le beurre à feu doux 25-30 min en remuant souvent — ils doivent devenir brun doré.",
+        "Ajouter le sucre les 5 dernières minutes pour accentuer la caramélisation.",
+        "Déglacer au vin blanc, laisser évaporer. Verser le bouillon de boeuf chaud. Cuire 10 min à feu moyen.",
+        "Répartir la soupe dans des bols allant au four. Poser 2 tranches de pain sur chaque bol.",
+        "Couvrir généreusement de gruyère râpé. Gratiner sous le gril du four 4-5 min jusqu'à doré et bouillonnant."
+      ]
+    },
+
+    {
+      id: 'R832',
+      name: 'Soupe de Poulet & Vermicelles Maison',
+      category: 'world-food',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍜',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'soupe', 'reconfort'],
+      servings: 3,
+      prepTime: 10,
+      cookTime: 30,
+      difficulty: 1,
+      // 72×4 + 60×4 + 18×9 = 288+240+162 = 690 kcal ✓
+      baseNutrition: { calories: 690, proteinGrams: 72, carbsGrams: 60, fatGrams: 18 },
+      ingredients: [
+        { name: 'Filets de poulet',   qty: 500, unit: 'g' },
+        { name: 'Vermicelles',        qty: 100, unit: 'g' },
+        { name: 'Carottes',           qty: 150, unit: 'g' },
+        { name: 'Céleri',             qty: 80,  unit: 'g' },
+        { name: 'Oignon',             qty: 100, unit: 'g' },
+        { name: 'Bouillon de poulet', qty: 1200, unit: 'ml' },
+        { name: 'Thym, laurier',      qty: 3,   unit: 'g' },
+        { name: 'Persil frais',       qty: 10,  unit: 'g' }
+      ],
+      steps: [
+        "Plonger les filets de poulet entiers dans le bouillon froid avec les aromates. Porter à ébullition, écumer.",
+        "Ajouter les carottes en rondelles, le céleri et l'oignon. Cuire à frémissement 20 min à couvert.",
+        "Retirer le poulet, effilocher la chair à la fourchette. Retirer le thym et le laurier.",
+        "Ajouter les vermicelles dans le bouillon. Cuire 4 min. Remettre le poulet effiloché.",
+        "Rectifier l'assaisonnement. Servir parsemé de persil frais haché — soupe réconfortante par excellence."
+      ]
+    },
+
+    {
+      id: 'R833',
+      name: 'Gaspacho Andalou Tomates & Poivrons',
+      category: 'mediterranean',
+      mealTypes: ['lunch'],
+      emoji: '🍅',
+      origin: '🇪🇸',
+      tags: ['vegetarien', 'froid', 'ete', 'soupe'],
+      servings: 4,
+      prepTime: 15,
+      cookTime: 0,
+      difficulty: 1,
+      // 12×4 + 80×4 + 24×9 = 48+320+216 = 584 kcal ✓
+      baseNutrition: { calories: 584, proteinGrams: 12, carbsGrams: 80, fatGrams: 24 },
+      ingredients: [
+        { name: 'Tomates mûres',      qty: 800, unit: 'g' },
+        { name: 'Concombre',          qty: 200, unit: 'g' },
+        { name: 'Poivron rouge',      qty: 150, unit: 'g' },
+        { name: 'Oignon',             qty: 60,  unit: 'g' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' },
+        { name: 'Pain de mie rassis', qty: 80,  unit: 'g' },
+        { name: 'Huile d\'olive',     qty: 60,  unit: 'ml' },
+        { name: 'Vinaigre de jerez',  qty: 20,  unit: 'ml' }
+      ],
+      steps: [
+        "Tremper le pain rassis dans l'eau 5 min. Essorer.",
+        "Mixer tomates, concombre, poivron, oignon, ail et pain trempé jusqu'à obtenir un mélange lisse.",
+        "Ajouter l'huile d'olive en filet tout en mixant, puis le vinaigre. Saler et poivrer.",
+        "Passer au tamis fin pour un résultat très velouté. Goûter et ajuster l'acidité.",
+        "Réfrigérer au moins 2 heures — le gaspacho doit être très froid. Servir avec des croûtons et un filet d'huile."
+      ]
+    },
+
+    {
+      id: 'R834',
+      name: 'Bouillon Thaï Coco Crevettes & Vermicelles',
+      category: 'world-food',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍜',
+      origin: '🇹🇭',
+      tags: ['soupe', 'epice', 'asian'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 15,
+      difficulty: 1,
+      // 44×4 + 64×4 + 22×9 = 176+256+198 = 630 kcal ✓
+      baseNutrition: { calories: 630, proteinGrams: 44, carbsGrams: 64, fatGrams: 22 },
+      ingredients: [
+        { name: 'Crevettes décortiquées', qty: 300, unit: 'g' },
+        { name: 'Vermicelles de riz',   qty: 120, unit: 'g' },
+        { name: 'Lait de coco',        qty: 200, unit: 'ml' },
+        { name: 'Bouillon de légumes', qty: 600, unit: 'ml' },
+        { name: 'Pâte de curry rouge', qty: 20,  unit: 'g' },
+        { name: 'Gingembre frais',     qty: 15,  unit: 'g' },
+        { name: 'Jus de citron vert',  qty: 20,  unit: 'ml' },
+        { name: 'Coriandre fraîche',   qty: 15,  unit: 'g' }
+      ],
+      steps: [
+        "Faire tremper les vermicelles de riz 5 min dans l'eau chaude. Égoutter.",
+        "Porter le bouillon à ébullition. Ajouter la pâte de curry, le gingembre râpé, cuire 2 min en fouettant.",
+        "Verser le lait de coco. Laisser frémir 5 min sans bouillir.",
+        "Ajouter les crevettes, cuire 3 min jusqu'à ce qu'elles deviennent roses et courbées.",
+        "Ajouter les vermicelles, le jus de citron vert. Rectifier le sel. Servir parsemé de coriandre fraîche."
+      ]
+    },
+
+    // ═══ BATCH P32 — Petit-Déjeuner Protéiné ═══
+
+    {
+      id: 'R835',
+      name: 'Pancakes Protéinés Banane & Avoine',
+      category: 'french',
+      mealTypes: ['breakfast'],
+      emoji: '🥞',
+      origin: '🇺🇸',
+      tags: ['breakfast', 'high-protein', 'sportif'],
+      servings: 2,
+      prepTime: 8,
+      cookTime: 12,
+      difficulty: 1,
+      // 40×4 + 100×4 + 20×9 = 160+400+180 = 740 kcal ✓
+      baseNutrition: { calories: 740, proteinGrams: 40, carbsGrams: 100, fatGrams: 20 },
+      ingredients: [
+        { name: 'Flocons d\'avoine',  qty: 120, unit: 'g' },
+        { name: 'Banane',             qty: 120, unit: 'g' },
+        { name: 'Oeufs',              qty: 3,   unit: 'pce' },
+        { name: 'Fromage blanc 0%',  qty: 100, unit: 'g' },
+        { name: 'Lait',               qty: 80,  unit: 'ml' },
+        { name: 'Levure chimique',    qty: 5,   unit: 'g' },
+        { name: 'Beurre',             qty: 20,  unit: 'g' },
+        { name: 'Miel',               qty: 15,  unit: 'g' }
+      ],
+      steps: [
+        "Mixer les flocons d'avoine en farine grossière. Écraser la banane en purée lisse.",
+        "Mélanger farine d'avoine, banane, oeufs, fromage blanc, lait et levure. Pâte un peu épaisse — normal.",
+        "Chauffer une noix de beurre dans une poêle à feu moyen. Verser des cercles de pâte.",
+        "Cuire 2-3 min jusqu'à l'apparition de bulles en surface. Retourner et cuire 1 min 30 l'autre face.",
+        "Servir avec un filet de miel, des fruits frais ou du sirop d'érable. Manger immédiatement."
+      ]
+    },
+
+    {
+      id: 'R836',
+      name: 'Overnight Oats Fruits Rouges & Graines de Chia',
+      category: 'french',
+      mealTypes: ['breakfast'],
+      emoji: '🫙',
+      origin: '🇺🇸',
+      tags: ['breakfast', 'prep-rapide', 'vegetarien'],
+      servings: 1,
+      prepTime: 5,
+      cookTime: 0,
+      difficulty: 1,
+      // 20×4 + 72×4 + 16×9 = 80+288+144 = 512 kcal ✓
+      baseNutrition: { calories: 512, proteinGrams: 20, carbsGrams: 72, fatGrams: 16 },
+      ingredients: [
+        { name: 'Flocons d\'avoine',  qty: 80,  unit: 'g' },
+        { name: 'Lait',               qty: 150, unit: 'ml' },
+        { name: 'Fromage blanc',      qty: 60,  unit: 'g' },
+        { name: 'Graines de chia',    qty: 15,  unit: 'g' },
+        { name: 'Miel',               qty: 15,  unit: 'g' },
+        { name: 'Fruits rouges',      qty: 100, unit: 'g' },
+        { name: 'Amandes effilées',   qty: 15,  unit: 'g' }
+      ],
+      steps: [
+        "Dans un bocal ou un grand verre, mélanger les flocons d'avoine, le lait, le fromage blanc et le miel.",
+        "Ajouter les graines de chia. Bien mélanger pour éviter les grumeaux.",
+        "Couvrir et placer au réfrigérateur minimum 6 heures — toute la nuit idéalement.",
+        "Au matin, remuer. Ajouter un peu de lait si trop épais.",
+        "Garnir de fruits rouges frais et d'amandes effilées. Manger directement dans le bocal."
+      ]
+    },
+
+    {
+      id: 'R837',
+      name: 'Oeufs Brouillés Crémeux Saumon Fumé & Ciboulette',
+      category: 'french',
+      mealTypes: ['breakfast', 'brunch'],
+      emoji: '🥚',
+      origin: '🇫🇷',
+      tags: ['breakfast', 'high-protein', 'brunch'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 8,
+      difficulty: 1,
+      // 44×4 + 8×4 + 24×9 = 176+32+216 = 424 kcal ✓
+      baseNutrition: { calories: 424, proteinGrams: 44, carbsGrams: 8, fatGrams: 24 },
+      ingredients: [
+        { name: 'Oeufs',              qty: 6,   unit: 'pce' },
+        { name: 'Saumon fumé',        qty: 80,  unit: 'g' },
+        { name: 'Crème fraîche',      qty: 40,  unit: 'ml' },
+        { name: 'Beurre',             qty: 20,  unit: 'g' },
+        { name: 'Ciboulette',         qty: 10,  unit: 'g' },
+        { name: 'Pain de campagne',   qty: 60,  unit: 'g' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Battre les oeufs avec la crème fraîche. Saler légèrement (le saumon est déjà salé).",
+        "Faire fondre le beurre dans une casserole à fond épais à feu doux — jamais fort.",
+        "Verser les oeufs battus. Remuer continuellement avec une spatule en raclant le fond — cuisson lente, 5-7 min.",
+        "Retirer du feu quand les oeufs sont crémeux et légèrement coulants. Ils finissent de cuire hors du feu.",
+        "Ajouter le saumon fumé en lanières et la ciboulette ciselée. Servir sur pain de campagne grillé."
+      ]
+    },
+
+    {
+      id: 'R838',
+      name: 'Shakshuka Oeufs Pochés Sauce Tomate Épicée',
+      category: 'world-food',
+      mealTypes: ['breakfast', 'brunch', 'dinner'],
+      emoji: '🍳',
+      origin: '🇮🇱',
+      tags: ['vegetarien', 'breakfast', 'epice'],
+      servings: 2,
+      prepTime: 8,
+      cookTime: 20,
+      difficulty: 1,
+      // 36×4 + 36×4 + 22×9 = 144+144+198 = 486 kcal ✓
+      baseNutrition: { calories: 486, proteinGrams: 36, carbsGrams: 36, fatGrams: 22 },
+      ingredients: [
+        { name: 'Oeufs',              qty: 4,   unit: 'pce' },
+        { name: 'Tomates concassées', qty: 400, unit: 'g' },
+        { name: 'Poivron rouge',      qty: 150, unit: 'g' },
+        { name: 'Oignon',             qty: 80,  unit: 'g' },
+        { name: 'Ail',                qty: 3,   unit: 'pce' },
+        { name: 'Cumin, paprika',     qty: 5,   unit: 'g' },
+        { name: 'Huile d\'olive',     qty: 20,  unit: 'ml' },
+        { name: 'Feta',               qty: 60,  unit: 'g' }
+      ],
+      steps: [
+        "Faire revenir l'oignon et le poivron coupés en petits dés dans l'huile 5 min. Ajouter l'ail et les épices, cuire 1 min.",
+        "Verser les tomates concassées. Saler et laisser mijoter 8-10 min jusqu'à épaississement de la sauce.",
+        "Faire 4 puits dans la sauce avec le dos d'une cuillère. Casser un oeuf dans chaque puits.",
+        "Couvrir et cuire à feu doux 5-7 min — les blancs doivent être pris mais les jaunes encore coulants.",
+        "Émietter la feta sur le dessus. Servir directement dans la poêle avec du pain pita ou grillé."
+      ]
+    },
+
+    {
+      id: 'R839',
+      name: 'Toast Avocat & Oeuf Poché',
+      category: 'french',
+      mealTypes: ['breakfast', 'brunch'],
+      emoji: '🥑',
+      origin: '🇦🇺',
+      tags: ['breakfast', 'brunch', 'tendance'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 5,
+      difficulty: 1,
+      // 24×4 + 50×4 + 30×9 = 96+200+270 = 566 kcal ✓
+      baseNutrition: { calories: 566, proteinGrams: 24, carbsGrams: 50, fatGrams: 30 },
+      ingredients: [
+        { name: 'Pain de seigle',     qty: 120, unit: 'g', note: '4 tranches' },
+        { name: 'Avocats',            qty: 200, unit: 'g' },
+        { name: 'Oeufs',              qty: 2,   unit: 'pce' },
+        { name: 'Jus de citron',      qty: 15,  unit: 'ml' },
+        { name: 'Flocons de piment',  qty: 1,   unit: 'pincée' },
+        { name: 'Graines de sésame', qty: 5,   unit: 'g' },
+        { name: 'Vinaigre blanc',     qty: 20,  unit: 'ml' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Écraser l'avocat avec le jus de citron, le sel et le poivre. Garder quelques morceaux pour la texture.",
+        "Faire bouillir une casserole d'eau avec le vinaigre. Créer un tourbillon, y plonger délicatement les oeufs cassés dans des ramequins.",
+        "Pocher les oeufs 3 min. Ils doivent avoir un blanc ferme et un jaune coulant. Égoutter sur du papier absorbant.",
+        "Griller les tranches de pain de seigle. Étaler généreusement la purée d'avocat.",
+        "Poser l'oeuf poché sur l'avocat. Parsemer de flocons de piment, graines de sésame et fleur de sel."
+      ]
+    },
+
+    // ═══ BATCH P33 — Snacks & Collations ═══
+
+    {
+      id: 'R840',
+      name: 'Energy Balls Avoine Miel & Chocolat',
+      category: 'french',
+      mealTypes: ['snack'],
+      emoji: '🍫',
+      origin: '🇺🇸',
+      tags: ['snack', 'sportif', 'prep-rapide'],
+      servings: 3,
+      prepTime: 15,
+      cookTime: 0,
+      difficulty: 1,
+      // 18×4 + 90×4 + 30×9 = 72+360+270 = 702 kcal ✓
+      baseNutrition: { calories: 702, proteinGrams: 18, carbsGrams: 90, fatGrams: 30 },
+      ingredients: [
+        { name: 'Flocons d\'avoine',  qty: 150, unit: 'g' },
+        { name: 'Beurre de cacahuète', qty: 80, unit: 'g' },
+        { name: 'Miel',               qty: 50,  unit: 'g' },
+        { name: 'Pépites de chocolat', qty: 40, unit: 'g' },
+        { name: 'Graines de chia',    qty: 15,  unit: 'g' },
+        { name: 'Noix de coco râpée', qty: 20,  unit: 'g' }
+      ],
+      steps: [
+        "Mélanger tous les ingrédients dans un grand bol. Le mélange doit être homogène et légèrement collant.",
+        "Si trop sec, ajouter un peu de miel. Si trop collant, ajouter des flocons d'avoine.",
+        "Réfrigérer 30 min pour raffermir la préparation — plus facile à rouler ensuite.",
+        "Former des boules de la taille d'une noix (environ 30g chacune) avec les mains légèrement humides.",
+        "Rouler dans la noix de coco râpée. Conserver au frigo dans une boîte hermétique jusqu'à 1 semaine."
+      ]
+    },
+
+    {
+      id: 'R841',
+      name: 'Hummus Maison Crémeux à l\'Ail Rôti',
+      category: 'mediterranean',
+      mealTypes: ['snack'],
+      emoji: '🧆',
+      origin: '🇱🇧',
+      tags: ['snack', 'vegetarien', 'aperitif'],
+      servings: 4,
+      prepTime: 10,
+      cookTime: 30,
+      difficulty: 1,
+      // 28×4 + 120×4 + 40×9 = 112+480+360 = 952 kcal ✓
+      baseNutrition: { calories: 952, proteinGrams: 28, carbsGrams: 120, fatGrams: 40 },
+      ingredients: [
+        { name: 'Pois chiches cuits', qty: 400, unit: 'g' },
+        { name: 'Tahini',             qty: 80,  unit: 'g' },
+        { name: 'Jus de citron',      qty: 40,  unit: 'ml' },
+        { name: 'Ail',                qty: 6,   unit: 'pce', note: 'tête entière' },
+        { name: 'Huile d\'olive',     qty: 40,  unit: 'ml' },
+        { name: 'Cumin',              qty: 3,   unit: 'g' },
+        { name: 'Paprika fumé',       qty: 2,   unit: 'g' },
+        { name: 'Sel',                qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Envelopper la tête d'ail dans du papier alu. Rôtir au four à 180°C pendant 30 min. Extraire les gousses confites.",
+        "Mixer les pois chiches égouttés (garder l'eau de cuisson) avec l'ail rôti, le tahini et le jus de citron.",
+        "Ajouter l'huile d'olive en filet, le cumin, le sel. Mixer jusqu'à texture très crémeuse.",
+        "Ajouter 2-3 cs d'eau de cuisson des pois chiches pour alléger si besoin. Goûter et ajuster.",
+        "Servir dans un bol. Faire un creux au centre, verser un filet d'huile et saupoudrer de paprika fumé."
+      ]
+    },
+
+    {
+      id: 'R842',
+      name: 'Chips de Légumes au Four Betterave & Panais',
+      category: 'french',
+      mealTypes: ['snack'],
+      emoji: '🥕',
+      origin: '🇫🇷',
+      tags: ['snack', 'vegetarien', 'apero'],
+      servings: 3,
+      prepTime: 15,
+      cookTime: 25,
+      difficulty: 1,
+      // 8×4 + 75×4 + 15×9 = 32+300+135 = 467 kcal ✓
+      baseNutrition: { calories: 467, proteinGrams: 8, carbsGrams: 75, fatGrams: 15 },
+      ingredients: [
+        { name: 'Betterave crue',     qty: 200, unit: 'g' },
+        { name: 'Panais',             qty: 200, unit: 'g' },
+        { name: 'Carottes',           qty: 150, unit: 'g' },
+        { name: 'Huile d\'olive',     qty: 30,  unit: 'ml' },
+        { name: 'Sel fin',            qty: 3,   unit: 'g' },
+        { name: 'Romarin séché',      qty: 2,   unit: 'g' },
+        { name: 'Paprika',            qty: 2,   unit: 'g' }
+      ],
+      steps: [
+        "Préchauffer le four à 170°C. Éplucher les légumes et les trancher très finement à la mandoline (1-2mm).",
+        "Sécher les tranches soigneusement avec du papier absorbant — crucial pour obtenir des chips croustillantes.",
+        "Mélanger avec l'huile, le sel, le romarin et le paprika. Répartir en une seule couche sur plaques garnies de papier cuisson.",
+        "Enfourner 20-25 min en retournant à mi-cuisson. Surveiller de près les 5 dernières minutes — ça brûle vite.",
+        "Sortir les chips dorées et les laisser refroidir sur grille — elles croustillent davantage en refroidissant."
+      ]
+    },
+
+    {
+      id: 'R843',
+      name: 'Wraps Thon Crudités & Sauce Yaourt',
+      category: 'french',
+      mealTypes: ['lunch', 'snack'],
+      emoji: '🌯',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'rapide', 'snack'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 0,
+      difficulty: 1,
+      // 54×4 + 60×4 + 16×9 = 216+240+144 = 600 kcal ✓
+      baseNutrition: { calories: 600, proteinGrams: 54, carbsGrams: 60, fatGrams: 16 },
+      ingredients: [
+        { name: 'Tortillas de blé',   qty: 160, unit: 'g', note: '4 grandes tortillas' },
+        { name: 'Thon en boîte',      qty: 240, unit: 'g', note: 'égoutté' },
+        { name: 'Yaourt grec',        qty: 100, unit: 'g' },
+        { name: 'Concombre',          qty: 100, unit: 'g' },
+        { name: 'Salade',             qty: 60,  unit: 'g' },
+        { name: 'Tomates',            qty: 100, unit: 'g' },
+        { name: 'Jus de citron',      qty: 15,  unit: 'ml' },
+        { name: 'Moutarde',           qty: 10,  unit: 'g' }
+      ],
+      steps: [
+        "Émietter le thon. Mélanger le yaourt grec avec la moutarde et le jus de citron pour la sauce.",
+        "Couper le concombre et les tomates en petits dés. Déchirer la salade en petits morceaux.",
+        "Chauffer les tortillas 30 secondes à la poêle sèche pour les assouplir.",
+        "Étaler la sauce yaourt sur chaque tortilla. Répartir le thon, les légumes et la salade.",
+        "Rouler les wraps fermement. Les couper en deux en diagonale. Manger immédiatement ou emballer pour le lendemain."
+      ]
+    },
+
+    {
+      id: 'R844',
+      name: 'Fromage Blanc Fruits Frais & Granola',
+      category: 'french',
+      mealTypes: ['breakfast', 'snack'],
+      emoji: '🫙',
+      origin: '🇫🇷',
+      tags: ['breakfast', 'snack', 'leger'],
+      servings: 1,
+      prepTime: 5,
+      cookTime: 0,
+      difficulty: 1,
+      // 20×4 + 64×4 + 14×9 = 80+256+126 = 462 kcal ✓
+      baseNutrition: { calories: 462, proteinGrams: 20, carbsGrams: 64, fatGrams: 14 },
+      ingredients: [
+        { name: 'Fromage blanc 0%',  qty: 200, unit: 'g' },
+        { name: 'Granola',            qty: 60,  unit: 'g' },
+        { name: 'Fruits de saison',   qty: 150, unit: 'g' },
+        { name: 'Miel',               qty: 15,  unit: 'g' },
+        { name: 'Amandes',            qty: 15,  unit: 'g' }
+      ],
+      steps: [
+        "Verser le fromage blanc dans un bol ou une verrine.",
+        "Répartir les fruits coupés en morceaux sur le fromage blanc.",
+        "Parsemer le granola pour le croustillant.",
+        "Ajouter les amandes concassées et finir avec un filet de miel.",
+        "Manger immédiatement avant que le granola ne ramollisse au contact du fromage blanc."
+      ]
+    },
+
+    // ═══ BATCH P34 — Desserts Classiques ═══
+
+    {
+      id: 'R845',
+      name: 'Crème Brûlée à la Vanille',
+      category: 'french',
+      mealTypes: ['dessert'],
+      emoji: '🍮',
+      origin: '🇫🇷',
+      tags: ['dessert', 'classique', 'four'],
+      servings: 4,
+      prepTime: 15,
+      cookTime: 50,
+      difficulty: 2,
+      // 20×4 + 80×4 + 80×9 = 80+320+720 = 1120 kcal ✓
+      baseNutrition: { calories: 1120, proteinGrams: 20, carbsGrams: 80, fatGrams: 80 },
+      ingredients: [
+        { name: 'Crème liquide 35%', qty: 500, unit: 'ml' },
+        { name: 'Jaunes d\'oeufs',  qty: 5,   unit: 'pce' },
+        { name: 'Sucre',             qty: 100, unit: 'g' },
+        { name: 'Gousse de vanille', qty: 1,   unit: 'pce' },
+        { name: 'Cassonade',         qty: 40,  unit: 'g', note: 'pour caraméliser' }
+      ],
+      steps: [
+        "Préchauffer le four à 150°C. Fendre la gousse de vanille et gratter les graines. Chauffer la crème avec la vanille sans bouillir.",
+        "Fouetter les jaunes avec le sucre jusqu'à blanchissement. Verser la crème chaude en filet en fouettant.",
+        "Filtrer à travers un tamis. Répartir dans 4 ramequins. Poser dans un bain-marie (eau chaude à mi-hauteur).",
+        "Enfourner 45-50 min — la crème doit trembler légèrement au centre quand on secoue. Refroidir puis réfrigérer 2h.",
+        "Au moment de servir, saupoudrer de cassonade et caraméliser au chalumeau ou sous le gril très chaud."
+      ]
+    },
+
+    {
+      id: 'R846',
+      name: 'Mousse au Chocolat Noir Classique',
+      category: 'french',
+      mealTypes: ['dessert'],
+      emoji: '🍫',
+      origin: '🇫🇷',
+      tags: ['dessert', 'chocolat', 'classique'],
+      servings: 4,
+      prepTime: 20,
+      cookTime: 0,
+      difficulty: 2,
+      // 24×4 + 80×4 + 72×9 = 96+320+648 = 1064 kcal ✓
+      baseNutrition: { calories: 1064, proteinGrams: 24, carbsGrams: 80, fatGrams: 72 },
+      ingredients: [
+        { name: 'Chocolat noir 70%', qty: 200, unit: 'g' },
+        { name: 'Oeufs',             qty: 5,   unit: 'pce' },
+        { name: 'Beurre',            qty: 40,  unit: 'g' },
+        { name: 'Sucre',             qty: 40,  unit: 'g' },
+        { name: 'Sel',               qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Faire fondre le chocolat et le beurre au bain-marie ou au micro-ondes par intervalles de 30 secondes. Laisser tiédir.",
+        "Séparer les blancs des jaunes. Battre les jaunes avec le sucre jusqu'à blanchissement. Incorporer au chocolat tiède.",
+        "Monter les blancs en neige ferme avec la pincée de sel.",
+        "Incorporer 1/3 des blancs au chocolat vigoureusement pour détendre. Puis ajouter le reste délicatement en soulevant.",
+        "Répartir dans des verrines ou un grand bol. Réfrigérer minimum 3 heures. La mousse se tient mieux le lendemain."
+      ]
+    },
+
+    {
+      id: 'R847',
+      name: 'Tarte Tatin aux Pommes',
+      category: 'french',
+      mealTypes: ['dessert'],
+      emoji: '🍎',
+      origin: '🇫🇷',
+      tags: ['dessert', 'classique', 'four'],
+      servings: 6,
+      prepTime: 20,
+      cookTime: 35,
+      difficulty: 2,
+      // 24×4 + 300×4 + 90×9 = 96+1200+810 = 2106 kcal ✓
+      baseNutrition: { calories: 2106, proteinGrams: 24, carbsGrams: 300, fatGrams: 90 },
+      ingredients: [
+        { name: 'Pommes Golden',      qty: 1200, unit: 'g', note: '6-8 pommes' },
+        { name: 'Pâte feuilletée',    qty: 250, unit: 'g' },
+        { name: 'Beurre',             qty: 80,  unit: 'g' },
+        { name: 'Sucre',              qty: 150, unit: 'g' },
+        { name: 'Gousse de vanille',  qty: 1,   unit: 'pce' }
+      ],
+      steps: [
+        "Préchauffer le four à 190°C. Éplucher et couper les pommes en gros quartiers. Gratter les graines de vanille.",
+        "Dans un moule à tarte en fonte ou poêle allant au four, faire fondre le beurre. Ajouter le sucre, cuire à feu moyen jusqu'à caramel brun doré.",
+        "Disposer les pommes serrées sur le caramel, côté bombé vers le bas. Cuire à feu moyen 10 min pour compoter légèrement.",
+        "Couvrir les pommes avec la pâte feuilletée en rentrant les bords autour des pommes. Piquer la pâte.",
+        "Enfourner 25-30 min jusqu'à pâte bien dorée. Laisser reposer 10 min puis retourner sur le plat de service. Servir tiède."
+      ]
+    },
+
+    {
+      id: 'R848',
+      name: 'Fondant au Chocolat Coeur Coulant',
+      category: 'french',
+      mealTypes: ['dessert'],
+      emoji: '🍫',
+      origin: '🇫🇷',
+      tags: ['dessert', 'chocolat', 'indulgent'],
+      servings: 4,
+      prepTime: 10,
+      cookTime: 12,
+      difficulty: 2,
+      // 20×4 + 80×4 + 80×9 = 80+320+720 = 1120 kcal ✓
+      baseNutrition: { calories: 1120, proteinGrams: 20, carbsGrams: 80, fatGrams: 80 },
+      ingredients: [
+        { name: 'Chocolat noir 70%', qty: 200, unit: 'g' },
+        { name: 'Beurre',            qty: 150, unit: 'g' },
+        { name: 'Oeufs',             qty: 4,   unit: 'pce' },
+        { name: 'Sucre',             qty: 80,  unit: 'g' },
+        { name: 'Farine',            qty: 40,  unit: 'g' }
+      ],
+      steps: [
+        "Préchauffer le four à 200°C. Beurrer et fariner 4 moules à muffins ou ramequins.",
+        "Faire fondre le chocolat et le beurre ensemble au bain-marie. Laisser tiédir 5 min.",
+        "Fouetter les oeufs avec le sucre 2 min. Incorporer le mélange chocolat-beurre tiède.",
+        "Ajouter la farine tamisée. Mélanger délicatement juste pour incorporer.",
+        "Remplir les moules aux 3/4. Enfourner exactement 10-12 min. Le fondant doit être ferme en périphérie et tremblant au centre. Démouler et servir immédiatement."
+      ]
+    },
+
+    {
+      id: 'R849',
+      name: 'Île Flottante Crème Anglaise à la Vanille',
+      category: 'french',
+      mealTypes: ['dessert'],
+      emoji: '🍮',
+      origin: '🇫🇷',
+      tags: ['dessert', 'classique', 'leger'],
+      servings: 4,
+      prepTime: 20,
+      cookTime: 25,
+      difficulty: 2,
+      // 28×4 + 100×4 + 44×9 = 112+400+396 = 908 kcal ✓
+      baseNutrition: { calories: 908, proteinGrams: 28, carbsGrams: 100, fatGrams: 44 },
+      ingredients: [
+        { name: 'Oeufs',             qty: 5,   unit: 'pce' },
+        { name: 'Lait entier',       qty: 500, unit: 'ml' },
+        { name: 'Sucre',             qty: 100, unit: 'g' },
+        { name: 'Gousse de vanille', qty: 1,   unit: 'pce' },
+        { name: 'Sucre glace',       qty: 40,  unit: 'g', note: 'pour les blancs' },
+        { name: 'Caramel liquide',   qty: 30,  unit: 'ml', note: 'pour servir' }
+      ],
+      steps: [
+        "Crème anglaise : infuser la vanille dans le lait chaud 10 min. Fouetter 4 jaunes avec 100g sucre. Verser le lait chaud en filet.",
+        "Cuire à feu doux en remuant jusqu'à napper la cuillère (82°C). Filtrer et réfrigérer.",
+        "Blancs montés : battre 4 blancs en neige ferme, incorporer le sucre glace pour les meringuer légèrement.",
+        "Pocher les blancs en quenelles dans du lait frémissant 2 min par face. Égoutter sur papier absorbant.",
+        "Servir les îles flottantes sur la crème anglaise froide. Verser le caramel liquide en filet sur les blancs."
+      ]
+    },
+
+    // ═══ BATCH P35 — Riz & Céréales ═══
+
+    {
+      id: 'R850',
+      name: 'Risotto aux Champignons & Parmesan',
+      category: 'italian',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍄',
+      origin: '🇮🇹',
+      tags: ['vegetarien', 'cremeux', 'classique'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 25,
+      difficulty: 2,
+      // 28×4 + 130×4 + 28×9 = 112+520+252 = 884 kcal ✓
+      baseNutrition: { calories: 884, proteinGrams: 28, carbsGrams: 130, fatGrams: 28 },
+      ingredients: [
+        { name: 'Riz Arborio',        qty: 280, unit: 'g' },
+        { name: 'Champignons mélange', qty: 250, unit: 'g' },
+        { name: 'Bouillon de légumes', qty: 900, unit: 'ml' },
+        { name: 'Vin blanc sec',      qty: 100, unit: 'ml' },
+        { name: 'Oignon',             qty: 80,  unit: 'g' },
+        { name: 'Parmesan râpé',      qty: 60,  unit: 'g' },
+        { name: 'Beurre',             qty: 30,  unit: 'g' },
+        { name: 'Huile d\'olive',     qty: 15,  unit: 'ml' }
+      ],
+      steps: [
+        "Garder le bouillon chaud dans une casserole à feu doux. Faire revenir l'oignon dans l'huile et 15g de beurre 4 min.",
+        "Ajouter les champignons, cuire 5 min jusqu'à évaporation. Ajouter le riz, nacrer 2 min en remuant.",
+        "Déglacer au vin blanc, remuer jusqu'à absorption complète.",
+        "Ajouter le bouillon louche par louche, en remuant constamment et en attendant l'absorption entre chaque ajout (18-20 min).",
+        "Hors du feu, ajouter le reste de beurre et le parmesan. Mélanger vigoureusement — le risotto doit être crémeux et légèrement coulant."
+      ]
+    },
+
+    {
+      id: 'R851',
+      name: 'Riz Pilaf au Poulet & Épices Orientales',
+      category: 'world-food',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍚',
+      origin: '🇹🇷',
+      tags: ['high-protein', 'riz', 'oriental'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 30,
+      difficulty: 1,
+      // 60×4 + 100×4 + 18×9 = 240+400+162 = 802 kcal ✓
+      baseNutrition: { calories: 802, proteinGrams: 60, carbsGrams: 100, fatGrams: 18 },
+      ingredients: [
+        { name: 'Riz basmati',        qty: 250, unit: 'g' },
+        { name: 'Filets de poulet',   qty: 400, unit: 'g' },
+        { name: 'Oignon',             qty: 100, unit: 'g' },
+        { name: 'Bouillon de poulet', qty: 500, unit: 'ml' },
+        { name: 'Cumin, cannelle, curcuma', qty: 6, unit: 'g' },
+        { name: 'Raisins secs',       qty: 30,  unit: 'g' },
+        { name: 'Amandes effilées',   qty: 20,  unit: 'g' },
+        { name: 'Huile d\'olive',     qty: 15,  unit: 'ml' }
+      ],
+      steps: [
+        "Couper le poulet en cubes. Faire dorer dans l'huile à feu vif 5 min. Réserver.",
+        "Dans la même casserole, faire revenir l'oignon émincé 5 min. Ajouter les épices, cuire 1 min.",
+        "Ajouter le riz basmati rincé, nacrer 2 min en remuant. Verser le bouillon et les raisins secs.",
+        "Remettre le poulet. Porter à ébullition, couvrir hermétiquement et cuire à feu très doux 18 min.",
+        "Laisser reposer 5 min couvert. Égrener à la fourchette. Garnir d'amandes effilées dorées à sec."
+      ]
+    },
+
+    {
+      id: 'R852',
+      name: 'Bol Buddha Légumes Rôtis & Sauce Tahini',
+      category: 'world-food',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥗',
+      origin: '🇺🇸',
+      tags: ['vegetarien', 'balanced', 'healthy'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 25,
+      difficulty: 1,
+      // 30×4 + 120×4 + 28×9 = 120+480+252 = 852 kcal ✓
+      baseNutrition: { calories: 852, proteinGrams: 30, carbsGrams: 120, fatGrams: 28 },
+      ingredients: [
+        { name: 'Riz complet cuit',   qty: 300, unit: 'g' },
+        { name: 'Pois chiches cuits', qty: 200, unit: 'g' },
+        { name: 'Patate douce',       qty: 200, unit: 'g' },
+        { name: 'Chou rouge',         qty: 100, unit: 'g' },
+        { name: 'Tahini',             qty: 40,  unit: 'g' },
+        { name: 'Jus de citron',      qty: 25,  unit: 'ml' },
+        { name: 'Huile d\'olive',     qty: 20,  unit: 'ml' },
+        { name: 'Ail',                qty: 1,   unit: 'pce' }
+      ],
+      steps: [
+        "Couper la patate douce en cubes. Toss avec l'huile, sel, cumin. Rôtir au four 200°C pendant 25 min.",
+        "Égoutter et sécher les pois chiches. Les mélanger avec un filet d'huile et du paprika. Rôtir 20 min jusqu'à croustillants.",
+        "Sauce tahini : mélanger le tahini, le jus de citron, l'ail écrasé et 3-4 cs d'eau pour une consistance fluide.",
+        "Émincer finement le chou rouge. Masser avec un peu de sel et de citron.",
+        "Assembler les bols : riz complet en base, puis légumes rôtis, pois chiches, chou. Napper généreusement de sauce tahini."
+      ]
+    },
+
+    {
+      id: 'R853',
+      name: 'Taboulé Libanais Persil & Boulgour',
+      category: 'mediterranean',
+      mealTypes: ['lunch'],
+      emoji: '🌿',
+      origin: '🇱🇧',
+      tags: ['vegetarien', 'frais', 'ete'],
+      servings: 4,
+      prepTime: 20,
+      cookTime: 0,
+      difficulty: 1,
+      // 20×4 + 120×4 + 32×9 = 80+480+288 = 848 kcal ✓
+      baseNutrition: { calories: 848, proteinGrams: 20, carbsGrams: 120, fatGrams: 32 },
+      ingredients: [
+        { name: 'Boulgour fin',       qty: 150, unit: 'g' },
+        { name: 'Persil plat frais',  qty: 200, unit: 'g' },
+        { name: 'Menthe fraîche',     qty: 50,  unit: 'g' },
+        { name: 'Tomates',            qty: 300, unit: 'g' },
+        { name: 'Oignons verts',      qty: 60,  unit: 'g' },
+        { name: 'Huile d\'olive',     qty: 60,  unit: 'ml' },
+        { name: 'Jus de citron',      qty: 50,  unit: 'ml' },
+        { name: 'Sel',                qty: 2,   unit: 'g' }
+      ],
+      steps: [
+        "Faire gonfler le boulgour fin dans 200ml d'eau bouillante salée 15 min à couvert. Égrener à la fourchette, laisser refroidir.",
+        "Ciseler finement le persil et la menthe — hacher grossièrement au couteau, ne pas mixer.",
+        "Couper les tomates en tout petits dés. Émincer les oignons verts.",
+        "Mélanger tous les ingrédients dans un grand bol. Assaisonner avec l'huile d'olive, le jus de citron et le sel.",
+        "Réfrigérer au moins 1 heure avant de servir. Le taboulé libanais est principalement herbacé — les herbes dominent."
+      ]
+    },
+
+    {
+      id: 'R854',
+      name: 'Polenta Crémeuse Champignons & Parmesan',
+      category: 'italian',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🌽',
+      origin: '🇮🇹',
+      tags: ['vegetarien', 'cremeux', 'comfort-food'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 20,
+      difficulty: 1,
+      // 28×4 + 100×4 + 28×9 = 112+400+252 = 764 kcal ✓
+      baseNutrition: { calories: 764, proteinGrams: 28, carbsGrams: 100, fatGrams: 28 },
+      ingredients: [
+        { name: 'Polenta',            qty: 200, unit: 'g' },
+        { name: 'Champignons mélange', qty: 300, unit: 'g' },
+        { name: 'Bouillon de légumes', qty: 800, unit: 'ml' },
+        { name: 'Parmesan râpé',      qty: 60,  unit: 'g' },
+        { name: 'Beurre',             qty: 30,  unit: 'g' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' },
+        { name: 'Thym frais',         qty: 5,   unit: 'g' },
+        { name: 'Huile d\'olive',     qty: 15,  unit: 'ml' }
+      ],
+      steps: [
+        "Faire sauter les champignons dans l'huile d'olive à feu vif 5-7 min. Ajouter l'ail et le thym. Saler et réserver.",
+        "Porter le bouillon à ébullition. Verser la polenta en pluie en fouettant constamment.",
+        "Cuire à feu doux en remuant régulièrement 10-15 min jusqu'à épaississement. La polenta ne doit plus coller aux parois.",
+        "Hors du feu, incorporer le beurre et le parmesan. Mélanger vigoureusement. Rectifier sel et poivre.",
+        "Verser la polenta crémeuse dans les assiettes. Déposer les champignons sautés dessus. Servir immédiatement."
+      ]
     }
 
   // ─────────────────────────────────────────────────────────────────────────────
