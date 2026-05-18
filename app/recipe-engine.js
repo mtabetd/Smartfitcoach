@@ -35956,6 +35956,974 @@
         "Mélanger mayonnaise et moutarde. Étaler sur les tranches de pain.",
         "Assembler en 3 couches : pain-salade-tomate-poulet / pain-avocat-bacon / pain. Maintenir avec des piques. Couper en triangle."
       ]
+    },
+
+    // ═══ BATCH P39 — Desserts Simples & Gourmands ═══
+
+    {
+      id: 'R870',
+      name: 'Tarte au Citron Meringuée',
+      category: 'french',
+      mealTypes: ['dessert'],
+      emoji: '🍋',
+      origin: '🇫🇷',
+      tags: ['dessert', 'classique', 'four'],
+      servings: 8,
+      prepTime: 40,
+      cookTime: 30,
+      difficulty: 2,
+      // 60×4 + 480×4 + 160×9 = 240+1920+1440 = 3600 kcal ✓
+      baseNutrition: { calories: 3600, proteinGrams: 60, carbsGrams: 480, fatGrams: 160 },
+      ingredients: [
+        { name: 'Farine',             qty: 200, unit: 'g' },
+        { name: 'Beurre',             qty: 180, unit: 'g' },
+        { name: 'Sucre',              qty: 300, unit: 'g' },
+        { name: 'Oeufs',              qty: 6,   unit: 'pce' },
+        { name: 'Citrons jaunes',     qty: 4,   unit: 'pce', note: 'zeste + jus' },
+        { name: 'Blancs d\'oeufs',   qty: 4,   unit: 'pce', note: 'pour meringue' },
+        { name: 'Sucre glace',        qty: 60,  unit: 'g' }
+      ],
+      steps: [
+        "Pâte sablée : mélanger 200g farine, 100g beurre froid en dés, 50g sucre, 1 oeuf. Fraiser rapidement, filmer et réfrigérer 30 min. Foncer un moule de 24cm, piquer et cuire à blanc 15 min à 180°C.",
+        "Lemon curd : zester et presser les citrons (env. 150ml jus). Fouetter 4 oeufs + 1 jaune avec 200g sucre. Ajouter le jus et 80g beurre en morceaux. Cuire à feu doux en remuant jusqu'à épaississement (10 min).",
+        "Verser le lemon curd sur le fond de tarte précuit. Remettre au four 8 min à 160°C pour stabiliser.",
+        "Meringue française : monter 4 blancs en neige. Incorporer 50g sucre glace en 3 fois. Pocher ou étaler sur la tarte.",
+        "Dorer la meringue au chalumeau ou sous le gril du four 2 min. Laisser complètement refroidir avant de couper."
+      ]
+    },
+
+    {
+      id: 'R871',
+      name: 'Clafoutis aux Cerises',
+      category: 'french',
+      mealTypes: ['dessert'],
+      emoji: '🍒',
+      origin: '🇫🇷',
+      tags: ['dessert', 'classique', 'four'],
+      servings: 6,
+      prepTime: 15,
+      cookTime: 40,
+      difficulty: 1,
+      // 32×4 + 280×4 + 48×9 = 128+1120+432 = 1680 kcal ✓
+      baseNutrition: { calories: 1680, proteinGrams: 32, carbsGrams: 280, fatGrams: 48 },
+      ingredients: [
+        { name: 'Cerises fraîches',   qty: 500, unit: 'g', note: 'avec ou sans noyaux' },
+        { name: 'Lait entier',        qty: 300, unit: 'ml' },
+        { name: 'Oeufs',              qty: 3,   unit: 'pce' },
+        { name: 'Sucre',              qty: 120, unit: 'g' },
+        { name: 'Farine',             qty: 80,  unit: 'g' },
+        { name: 'Beurre',             qty: 30,  unit: 'g' },
+        { name: 'Gousse de vanille',  qty: 1,   unit: 'pce' },
+        { name: 'Sel',                qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Préchauffer le four à 180°C. Beurrer généreusement un plat à gratin ou moule à clafoutis.",
+        "Fouetter les oeufs avec le sucre jusqu'à blanchissement. Ajouter la farine tamisée et le sel, mélanger.",
+        "Incorporer le lait progressivement pour éviter les grumeaux. Ajouter les graines de vanille.",
+        "Disposer les cerises dans le plat. Verser la pâte par-dessus — elle est liquide, c'est normal.",
+        "Enfourner 35-40 min. Le clafoutis est cuit quand il est gonflé, doré et ne tremble plus au centre. Saupoudrer de sucre glace. Manger tiède."
+      ]
+    },
+
+    {
+      id: 'R872',
+      name: 'Gâteau au Yaourt Simple & Moelleux',
+      category: 'french',
+      mealTypes: ['dessert', 'snack'],
+      emoji: '🍰',
+      origin: '🇫🇷',
+      tags: ['dessert', 'classique', 'facile'],
+      servings: 8,
+      prepTime: 10,
+      cookTime: 35,
+      difficulty: 1,
+      // 64×4 + 400×4 + 96×9 = 256+1600+864 = 2720 kcal ✓
+      baseNutrition: { calories: 2720, proteinGrams: 64, carbsGrams: 400, fatGrams: 96 },
+      ingredients: [
+        { name: 'Yaourt nature',      qty: 125, unit: 'g', note: '1 pot = unité de mesure' },
+        { name: 'Farine',             qty: 375, unit: 'g', note: '3 pots de yaourt' },
+        { name: 'Sucre',              qty: 250, unit: 'g', note: '2 pots de yaourt' },
+        { name: 'Huile neutre',       qty: 80,  unit: 'ml', note: '1/2 pot' },
+        { name: 'Oeufs',              qty: 3,   unit: 'pce' },
+        { name: 'Levure chimique',    qty: 11,  unit: 'g', note: '1 sachet' },
+        { name: 'Zeste de citron',    qty: 1,   unit: 'pce', note: 'optionnel' }
+      ],
+      steps: [
+        "Préchauffer le four à 180°C. Vider le yaourt dans un saladier — garder le pot vide comme mesure.",
+        "Ajouter le sucre, les oeufs, l'huile. Fouetter 2 min.",
+        "Incorporer la farine et la levure en 2 fois. Mélanger jusqu'à pâte lisse. Ajouter le zeste si souhaité.",
+        "Verser dans un moule à cake beurré et fariné. Lisser le dessus.",
+        "Enfourner 30-35 min. Tester avec un cure-dent — il doit ressortir sec. Démouler après 10 min. Le secret : ne pas trop travailler la pâte."
+      ]
+    },
+
+    {
+      id: 'R873',
+      name: 'Brownies Chocolat Noix Fondants',
+      category: 'french',
+      mealTypes: ['dessert', 'snack'],
+      emoji: '🍫',
+      origin: '🇺🇸',
+      tags: ['dessert', 'chocolat', 'indulgent'],
+      servings: 12,
+      prepTime: 15,
+      cookTime: 25,
+      difficulty: 1,
+      // 60×4 + 360×4 + 280×9 = 240+1440+2520 = 4200 kcal ✓
+      baseNutrition: { calories: 4200, proteinGrams: 60, carbsGrams: 360, fatGrams: 280 },
+      ingredients: [
+        { name: 'Chocolat noir 70%', qty: 200, unit: 'g' },
+        { name: 'Beurre',            qty: 180, unit: 'g' },
+        { name: 'Sucre',             qty: 300, unit: 'g' },
+        { name: 'Oeufs',             qty: 4,   unit: 'pce' },
+        { name: 'Farine',            qty: 80,  unit: 'g' },
+        { name: 'Noix ou noix de pécan', qty: 100, unit: 'g' },
+        { name: 'Sel',               qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Préchauffer le four à 180°C. Faire fondre le chocolat et le beurre ensemble au bain-marie. Laisser tiédir 5 min.",
+        "Fouetter les oeufs avec le sucre 3 min jusqu'à mélange mousseux. Incorporer le chocolat fondu.",
+        "Ajouter la farine et le sel — mélanger le minimum pour incorporer, pas plus.",
+        "Ajouter les noix grossièrement concassées. Verser dans un moule carré 20x20cm tapissé de papier cuisson.",
+        "Enfourner exactement 22-25 min. Le centre doit sembler encore un peu tremblant. Laisser refroidir complètement avant de couper — ils se solidifient en refroidissant."
+      ]
+    },
+
+    {
+      id: 'R874',
+      name: 'Panna Cotta Vanille Coulis Fruits Rouges',
+      category: 'italian',
+      mealTypes: ['dessert'],
+      emoji: '🍮',
+      origin: '🇮🇹',
+      tags: ['dessert', 'italien', 'cremeux'],
+      servings: 4,
+      prepTime: 15,
+      cookTime: 5,
+      difficulty: 1,
+      // 20×4 + 116×4 + 96×9 = 80+464+864 = 1408 kcal ✓
+      baseNutrition: { calories: 1408, proteinGrams: 20, carbsGrams: 116, fatGrams: 96 },
+      ingredients: [
+        { name: 'Crème liquide 30%', qty: 500, unit: 'ml' },
+        { name: 'Lait entier',        qty: 100, unit: 'ml' },
+        { name: 'Sucre',              qty: 70,  unit: 'g' },
+        { name: 'Gélatine',           qty: 3,   unit: 'pce', note: '3 feuilles ou 6g en poudre' },
+        { name: 'Gousse de vanille',  qty: 1,   unit: 'pce' },
+        { name: 'Fruits rouges',      qty: 250, unit: 'g' },
+        { name: 'Sucre glace',        qty: 30,  unit: 'g', note: 'pour le coulis' }
+      ],
+      steps: [
+        "Faire tremper les feuilles de gélatine dans de l'eau froide 5 min.",
+        "Chauffer la crème, le lait, le sucre et la vanille fendue à feu doux. Ne pas bouillir. Infuser 5 min.",
+        "Hors du feu, essorer la gélatine et l'incorporer en fouettant jusqu'à dissolution complète.",
+        "Filtrer et verser dans 4 verrines ou ramequins. Réfrigérer minimum 4 heures — une nuit est idéal.",
+        "Coulis : mixer 200g de fruits rouges avec le sucre glace. Passer au tamis. Au moment de servir, napper de coulis. Démouler ou servir dans la verrine."
+      ]
+    },
+
+    // ═══ BATCH P40 — Shakes Protéinés avec Whey ═══
+
+    {
+      id: 'R875',
+      name: 'Shake Protéiné Banane Chocolat Whey',
+      category: 'world-food',
+      mealTypes: ['breakfast', 'snack'],
+      emoji: '🥤',
+      origin: '🇺🇸',
+      tags: ['shake', 'high-protein', 'sportif', 'whey'],
+      servings: 1,
+      prepTime: 3,
+      cookTime: 0,
+      difficulty: 1,
+      // 36×4 + 52×4 + 10×9 = 144+208+90 = 442 kcal ✓
+      baseNutrition: { calories: 442, proteinGrams: 36, carbsGrams: 52, fatGrams: 10 },
+      ingredients: [
+        { name: 'Whey chocolat',      qty: 30,  unit: 'g', note: '1 dose standard' },
+        { name: 'Banane mûre',        qty: 120, unit: 'g' },
+        { name: 'Lait demi-écrémé',  qty: 250, unit: 'ml' },
+        { name: 'Cacao non sucré',    qty: 10,  unit: 'g' },
+        { name: 'Miel',               qty: 10,  unit: 'g' },
+        { name: 'Glaçons',            qty: 4,   unit: 'pce' }
+      ],
+      steps: [
+        "Éplucher et couper la banane en morceaux. La congeler 30 min pour un shake plus épais (optionnel).",
+        "Mettre tous les ingrédients dans le blender : lait d'abord, puis banane, whey, cacao, miel.",
+        "Mixer 30-40 secondes à pleine puissance jusqu'à consistance lisse et crémeuse.",
+        "Ajouter les glaçons, mixer encore 15 secondes.",
+        "Boire immédiatement. La whey se sépare si on attend — secouer ou re-mixer si besoin."
+      ]
+    },
+
+    {
+      id: 'R876',
+      name: 'Shake Protéiné Fraise Vanille Whey',
+      category: 'world-food',
+      mealTypes: ['breakfast', 'snack'],
+      emoji: '🥤',
+      origin: '🇺🇸',
+      tags: ['shake', 'high-protein', 'sportif', 'whey'],
+      servings: 1,
+      prepTime: 3,
+      cookTime: 0,
+      difficulty: 1,
+      // 40×4 + 36×4 + 8×9 = 160+144+72 = 376 kcal ✓
+      baseNutrition: { calories: 376, proteinGrams: 40, carbsGrams: 36, fatGrams: 8 },
+      ingredients: [
+        { name: 'Whey vanille',       qty: 30,  unit: 'g', note: '1 dose' },
+        { name: 'Fraises',            qty: 150, unit: 'g', note: 'fraîches ou surgelées' },
+        { name: 'Lait demi-écrémé',  qty: 200, unit: 'ml' },
+        { name: 'Fromage blanc 0%',  qty: 100, unit: 'g' },
+        { name: 'Miel',               qty: 5,   unit: 'g' },
+        { name: 'Glaçons',            qty: 3,   unit: 'pce' }
+      ],
+      steps: [
+        "Si les fraises sont fraîches, les équeueter. Si surgelées, les utiliser directement — elles épaississent le shake.",
+        "Verser le lait en premier dans le blender pour protéger les lames.",
+        "Ajouter le fromage blanc, la whey, les fraises et le miel.",
+        "Mixer 40 secondes à pleine puissance. Ajouter les glaçons, mixer encore.",
+        "Ajuster la consistance avec un peu de lait si trop épais. Servir dans un grand verre bien froid."
+      ]
+    },
+
+    {
+      id: 'R877',
+      name: 'Shake Protéiné Chocolat Beurre de Cacahuète',
+      category: 'world-food',
+      mealTypes: ['breakfast', 'snack'],
+      emoji: '🥤',
+      origin: '🇺🇸',
+      tags: ['shake', 'high-protein', 'sportif', 'whey'],
+      servings: 1,
+      prepTime: 3,
+      cookTime: 0,
+      difficulty: 1,
+      // 40×4 + 44×4 + 26×9 = 160+176+234 = 570 kcal ✓
+      baseNutrition: { calories: 570, proteinGrams: 40, carbsGrams: 44, fatGrams: 26 },
+      ingredients: [
+        { name: 'Whey chocolat',      qty: 30,  unit: 'g' },
+        { name: 'Beurre de cacahuète', qty: 30, unit: 'g', note: 'naturel sans sucre ajouté' },
+        { name: 'Banane',             qty: 100, unit: 'g' },
+        { name: 'Lait entier',        qty: 250, unit: 'ml' },
+        { name: 'Glaçons',            qty: 4,   unit: 'pce' }
+      ],
+      steps: [
+        "Mettre le lait en premier dans le blender.",
+        "Ajouter la banane coupée, le beurre de cacahuète et la whey chocolat.",
+        "Mixer 30 secondes. Ajouter les glaçons.",
+        "Mixer encore 20 secondes — la texture doit être dense comme un milkshake.",
+        "Boire immédiatement après l'entraînement ou en petit-déjeuner. Ce shake est calorique mais ultra-complet en macros."
+      ]
+    },
+
+    {
+      id: 'R878',
+      name: 'Shake Protéiné Cookies & Cream',
+      category: 'world-food',
+      mealTypes: ['snack', 'dessert'],
+      emoji: '🥤',
+      origin: '🇺🇸',
+      tags: ['shake', 'high-protein', 'gourmand', 'whey'],
+      servings: 1,
+      prepTime: 3,
+      cookTime: 0,
+      difficulty: 1,
+      // 34×4 + 32×4 + 24×9 = 136+128+216 = 480 kcal ✓
+      baseNutrition: { calories: 480, proteinGrams: 34, carbsGrams: 32, fatGrams: 24 },
+      ingredients: [
+        { name: 'Whey vanille',       qty: 30,  unit: 'g' },
+        { name: 'Biscuits Oréo',      qty: 25,  unit: 'g', note: '2-3 biscuits' },
+        { name: 'Lait entier',        qty: 250, unit: 'ml' },
+        { name: 'Yaourt grec',        qty: 60,  unit: 'g' },
+        { name: 'Glaçons',            qty: 4,   unit: 'pce' }
+      ],
+      steps: [
+        "Mettre le lait et le yaourt grec dans le blender.",
+        "Ajouter la whey vanille. Casser les biscuits Oréo grossièrement — ne pas les pulvériser pour garder des morceaux.",
+        "Ajouter les glaçons et mixer 20 secondes à vitesse moyenne pour garder quelques éclats de biscuits.",
+        "Goûter et ajuster : ajouter un biscuit de plus si pas assez sucré.",
+        "Servir immédiatement dans un grand verre. Option : écraser un biscuit sur le dessus comme topping."
+      ]
+    },
+
+    {
+      id: 'R879',
+      name: 'Shake Protéiné Mangue Coco Whey',
+      category: 'world-food',
+      mealTypes: ['breakfast', 'snack'],
+      emoji: '🥤',
+      origin: '🇺🇸',
+      tags: ['shake', 'high-protein', 'tropical', 'whey'],
+      servings: 1,
+      prepTime: 3,
+      cookTime: 0,
+      difficulty: 1,
+      // 32×4 + 32×4 + 18×9 = 128+128+162 = 418 kcal ✓
+      baseNutrition: { calories: 418, proteinGrams: 32, carbsGrams: 32, fatGrams: 18 },
+      ingredients: [
+        { name: 'Whey vanille',       qty: 30,  unit: 'g' },
+        { name: 'Mangue surgelée',    qty: 150, unit: 'g' },
+        { name: 'Lait de coco',       qty: 100, unit: 'ml' },
+        { name: 'Lait demi-écrémé',  qty: 150, unit: 'ml' },
+        { name: 'Jus de citron vert', qty: 10,  unit: 'ml' }
+      ],
+      steps: [
+        "Sortir la mangue du congélateur 2-3 min avant pour faciliter le mixage.",
+        "Verser les deux laits dans le blender d'abord.",
+        "Ajouter la mangue, la whey et le jus de citron vert.",
+        "Mixer 45 secondes à pleine puissance — la mangue congelée crée une texture shake parfaite sans glaçons.",
+        "Goûter : la mangue et la coco se marient parfaitement avec la whey vanille. Ajouter plus de citron vert pour plus de pep."
+      ]
+    },
+
+    // ═══ BATCH P41 — Smoothies sans Whey ═══
+
+    {
+      id: 'R880',
+      name: 'Smoothie Vert Épinards Banane & Gingembre',
+      category: 'world-food',
+      mealTypes: ['breakfast', 'snack'],
+      emoji: '🥤',
+      origin: '🇺🇸',
+      tags: ['smoothie', 'detox', 'vert', 'vegetarien'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 0,
+      difficulty: 1,
+      // 6×4 + 74×4 + 6×9 = 24+296+54 = 374 kcal ✓
+      baseNutrition: { calories: 374, proteinGrams: 6, carbsGrams: 74, fatGrams: 6 },
+      ingredients: [
+        { name: 'Épinards frais',     qty: 80,  unit: 'g' },
+        { name: 'Bananes',            qty: 200, unit: 'g', note: '2 bananes' },
+        { name: 'Lait d\'amande',    qty: 300, unit: 'ml' },
+        { name: 'Pomme verte',        qty: 100, unit: 'g' },
+        { name: 'Gingembre frais',    qty: 8,   unit: 'g' },
+        { name: 'Glaçons',            qty: 4,   unit: 'pce' }
+      ],
+      steps: [
+        "Rincer les épinards. Éplucher les bananes et couper en morceaux. Éplucher et couper la pomme.",
+        "Mettre le lait d'amande en premier dans le blender.",
+        "Ajouter les épinards d'abord et mixer 10 secondes pour les réduire avant d'ajouter le reste.",
+        "Ajouter bananes, pomme, gingembre râpé et glaçons. Mixer 45 secondes à pleine puissance.",
+        "Le smoothie doit être vert vif et lisse. Plus on ajoute de banane, moins on sent les épinards — bon point d'entrée pour les débutants."
+      ]
+    },
+
+    {
+      id: 'R881',
+      name: 'Smoothie Mangue Ananas Gingembre & Curcuma',
+      category: 'world-food',
+      mealTypes: ['breakfast', 'snack'],
+      emoji: '🥤',
+      origin: '🇧🇷',
+      tags: ['smoothie', 'tropical', 'anti-inflammatoire'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 0,
+      difficulty: 1,
+      // 6×4 + 68×4 + 2×9 = 24+272+18 = 314 kcal ✓
+      baseNutrition: { calories: 314, proteinGrams: 6, carbsGrams: 68, fatGrams: 2 },
+      ingredients: [
+        { name: 'Mangue surgelée',    qty: 200, unit: 'g' },
+        { name: 'Ananas',             qty: 150, unit: 'g', note: 'frais ou surgelé' },
+        { name: 'Jus d\'orange frais', qty: 150, unit: 'ml' },
+        { name: 'Gingembre frais',    qty: 10,  unit: 'g' },
+        { name: 'Curcuma en poudre',  qty: 2,   unit: 'g' },
+        { name: 'Poivre noir',        qty: 1,   unit: 'pincée', note: 'active le curcuma' }
+      ],
+      steps: [
+        "Couper l'ananas en morceaux si frais.",
+        "Verser le jus d'orange dans le blender. Ajouter mangue, ananas, gingembre et curcuma.",
+        "Ajouter une pincée de poivre noir — il décuple l'absorption du curcuma (pipérine).",
+        "Mixer 40 secondes à pleine puissance jusqu'à texture très lisse.",
+        "Servir dans deux grands verres bien froids. Parfait le matin à jeun ou après le sport. Saveur ensoleillée garantie."
+      ]
+    },
+
+    {
+      id: 'R882',
+      name: 'Smoothie Fruits Rouges Avoine & Lait',
+      category: 'world-food',
+      mealTypes: ['breakfast'],
+      emoji: '🥤',
+      origin: '🇺🇸',
+      tags: ['smoothie', 'breakfast', 'fruits-rouges'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 0,
+      difficulty: 1,
+      // 18×4 + 98×4 + 10×9 = 72+392+90 = 554 kcal ✓
+      baseNutrition: { calories: 554, proteinGrams: 18, carbsGrams: 98, fatGrams: 10 },
+      ingredients: [
+        { name: 'Fruits rouges mélange', qty: 200, unit: 'g', note: 'surgelés' },
+        { name: 'Banane',             qty: 150, unit: 'g' },
+        { name: 'Flocons d\'avoine',  qty: 40,  unit: 'g' },
+        { name: 'Lait entier',        qty: 250, unit: 'ml' },
+        { name: 'Miel',               qty: 15,  unit: 'g' }
+      ],
+      steps: [
+        "Faire tremper les flocons d'avoine 5 min dans un peu de lait pour les ramollir — optional mais donne une meilleure texture.",
+        "Verser le lait dans le blender. Ajouter banane, fruits rouges surgelés, avoine et miel.",
+        "Mixer 45 secondes à pleine puissance. Les fruits rouges surgelés créent une texture épaisse et froide naturellement.",
+        "Goûter et ajuster le miel si besoin. Ajouter du lait si trop épais.",
+        "Servir immédiatement. La couleur violet-rouge est magnifique — se prend en photo avant de boire."
+      ]
+    },
+
+    {
+      id: 'R883',
+      name: 'Smoothie Banane Beurre de Cacahuète & Miel',
+      category: 'world-food',
+      mealTypes: ['breakfast', 'snack'],
+      emoji: '🥤',
+      origin: '🇺🇸',
+      tags: ['smoothie', 'energisant', 'sportif'],
+      servings: 2,
+      prepTime: 3,
+      cookTime: 0,
+      difficulty: 1,
+      // 24×4 + 98×4 + 32×9 = 96+392+288 = 776 kcal ✓
+      baseNutrition: { calories: 776, proteinGrams: 24, carbsGrams: 98, fatGrams: 32 },
+      ingredients: [
+        { name: 'Bananes',            qty: 250, unit: 'g', note: '2-3 bananes mûres' },
+        { name: 'Beurre de cacahuète', qty: 40, unit: 'g' },
+        { name: 'Lait entier',        qty: 300, unit: 'ml' },
+        { name: 'Miel',               qty: 15,  unit: 'g' },
+        { name: 'Glaçons',            qty: 4,   unit: 'pce' }
+      ],
+      steps: [
+        "Éplucher et couper les bananes. Les congeler 1h pour un smoothie plus épais (optionnel).",
+        "Verser le lait dans le blender. Ajouter les bananes, le beurre de cacahuète et le miel.",
+        "Mixer 30 secondes. Ajouter les glaçons, mixer encore 20 secondes.",
+        "Goûter. Ajouter plus de miel pour plus de douceur, plus de beurre de cacahuète pour plus de puissance.",
+        "Idéal avant une séance de sport longue ou comme repas de récupération musculaire. Riche et rassasiant."
+      ]
+    },
+
+    {
+      id: 'R884',
+      name: 'Smoothie Avocat Cacao & Lait d\'Amande',
+      category: 'world-food',
+      mealTypes: ['breakfast', 'snack'],
+      emoji: '🥤',
+      origin: '🇺🇸',
+      tags: ['smoothie', 'chocolat', 'cremeux', 'keto'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 0,
+      difficulty: 1,
+      // 10×4 + 74×4 + 30×9 = 40+296+270 = 606 kcal ✓
+      baseNutrition: { calories: 606, proteinGrams: 10, carbsGrams: 74, fatGrams: 30 },
+      ingredients: [
+        { name: 'Avocat mûr',         qty: 150, unit: 'g', note: '1 avocat' },
+        { name: 'Cacao non sucré',    qty: 20,  unit: 'g' },
+        { name: 'Lait d\'amande',    qty: 300, unit: 'ml' },
+        { name: 'Banane',             qty: 150, unit: 'g' },
+        { name: 'Miel',               qty: 15,  unit: 'g' },
+        { name: 'Glaçons',            qty: 4,   unit: 'pce' }
+      ],
+      steps: [
+        "Couper l'avocat en deux, retirer le noyau, extraire la chair avec une cuillère.",
+        "Mettre le lait d'amande dans le blender d'abord.",
+        "Ajouter avocat, banane, cacao et miel.",
+        "Mixer 40 secondes à pleine puissance. L'avocat donne une texture ultra-crémeuse.",
+        "Ajouter les glaçons, mixer 15 secondes. Servir immédiatement — l'avocat s'oxyde et noircit s'il attend. Goût façon mousse au chocolat liquide."
+      ]
+    },
+
+    // ═══ BATCH P42 — Plats Express & Incontournables ═══
+
+    {
+      id: 'R885',
+      name: 'Quesadillas Poulet Poivron & Fromage',
+      category: 'mexican',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🫓',
+      origin: '🇲🇽',
+      tags: ['rapide', 'high-protein', 'tex-mex'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 15,
+      difficulty: 1,
+      // 72×4 + 88×4 + 34×9 = 288+352+306 = 946 kcal ✓
+      baseNutrition: { calories: 946, proteinGrams: 72, carbsGrams: 88, fatGrams: 34 },
+      ingredients: [
+        { name: 'Tortillas de blé',   qty: 160, unit: 'g', note: '4 grandes' },
+        { name: 'Filet de poulet',    qty: 300, unit: 'g' },
+        { name: 'Fromage râpé Cheddar', qty: 100, unit: 'g' },
+        { name: 'Poivron rouge',      qty: 100, unit: 'g' },
+        { name: 'Oignon rouge',       qty: 60,  unit: 'g' },
+        { name: 'Épices à fajitas',   qty: 8,   unit: 'g' },
+        { name: 'Huile neutre',       qty: 10,  unit: 'ml' }
+      ],
+      steps: [
+        "Couper le poulet en lamelles. Émincer le poivron et l'oignon. Faire revenir l'ensemble dans l'huile à feu vif 7-8 min. Ajouter les épices, cuire 1 min.",
+        "Chauffer une grande poêle sèche à feu moyen. Poser une tortilla.",
+        "Couvrir la moitié de la tortilla avec le fromage, puis le mélange poulet-légumes. Replier la tortilla.",
+        "Cuire 2-3 min jusqu'à croustillant et fromage fondu. Retourner délicatement, cuire encore 2 min.",
+        "Couper en triangles. Servir immédiatement avec de la crème fraîche et de la salsa."
+      ]
+    },
+
+    {
+      id: 'R886',
+      name: 'Croque-Madame Sauce Béchamel Gratinée',
+      category: 'french',
+      mealTypes: ['lunch', 'breakfast'],
+      emoji: '🍳',
+      origin: '🇫🇷',
+      tags: ['classique', 'rapide', 'bistrot'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 12,
+      difficulty: 1,
+      // 70×4 + 66×4 + 48×9 = 280+264+432 = 976 kcal ✓
+      baseNutrition: { calories: 976, proteinGrams: 70, carbsGrams: 66, fatGrams: 48 },
+      ingredients: [
+        { name: 'Pain de mie',        qty: 160, unit: 'g', note: '4 tranches épaisses' },
+        { name: 'Jambon blanc',       qty: 100, unit: 'g', note: '2 tranches' },
+        { name: 'Gruyère râpé',       qty: 80,  unit: 'g' },
+        { name: 'Lait',               qty: 150, unit: 'ml' },
+        { name: 'Beurre',             qty: 20,  unit: 'g' },
+        { name: 'Farine',             qty: 15,  unit: 'g' },
+        { name: 'Oeufs',              qty: 2,   unit: 'pce' },
+        { name: 'Noix de muscade',    qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Béchamel rapide : faire fondre le beurre, ajouter la farine 1 min, incorporer le lait chaud en fouettant. Cuire 3 min, assaisonner muscade + sel.",
+        "Toaster légèrement les 4 tranches de pain. Étaler la béchamel sur toutes les faces.",
+        "Poser le jambon sur 2 tranches, refermer avec les 2 autres. Couvrir le dessus de gruyère râpé.",
+        "Gratiner sous le gril du four à 220°C pendant 5-6 min jusqu'à fromage bouillonnant et doré.",
+        "Cuire les oeufs sur le plat dans une poêle beurrée. Poser un oeuf sur chaque croque à la sortie du four. Servir immédiatement."
+      ]
+    },
+
+    {
+      id: 'R887',
+      name: 'Salade de Pâtes Thon Crudités & Herbes',
+      category: 'french',
+      mealTypes: ['lunch'],
+      emoji: '🥗',
+      origin: '🇫🇷',
+      tags: ['salade', 'high-protein', 'estival'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 10,
+      difficulty: 1,
+      // 57×4 + 149×4 + 30×9 = 228+596+270 = 1094 kcal ✓
+      baseNutrition: { calories: 1094, proteinGrams: 57, carbsGrams: 149, fatGrams: 30 },
+      ingredients: [
+        { name: 'Fusilli ou penne',   qty: 200, unit: 'g' },
+        { name: 'Thon en boîte',      qty: 160, unit: 'g', note: 'au naturel, égoutté' },
+        { name: 'Tomates cerises',    qty: 150, unit: 'g' },
+        { name: 'Concombre',          qty: 100, unit: 'g' },
+        { name: 'Olives noires',      qty: 30,  unit: 'g' },
+        { name: 'Huile d\'olive',     qty: 30,  unit: 'ml' },
+        { name: 'Jus de citron',      qty: 15,  unit: 'ml' },
+        { name: 'Basilic frais',      qty: 10,  unit: 'g' }
+      ],
+      steps: [
+        "Cuire les pâtes al dente dans de l'eau bouillante salée. Égoutter et refroidir sous l'eau froide — étape clé pour une salade de pâtes.",
+        "Couper les tomates cerises en deux, le concombre en demi-lune.",
+        "Préparer la vinaigrette : huile d'olive, jus de citron, sel, poivre. Bien émulsionner.",
+        "Mélanger pâtes froides, thon émietté, légumes et olives. Napper de vinaigrette.",
+        "Ajouter le basilic déchiré à la main. Réfrigérer 30 min avant de servir pour que les saveurs se mélangent."
+      ]
+    },
+
+    {
+      id: 'R888',
+      name: 'Wok de Légumes & Tofu Sauce Teriyaki',
+      category: 'japanese',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥢',
+      origin: '🇯🇵',
+      tags: ['vegetarien', 'rapide', 'wok'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 12,
+      difficulty: 1,
+      // 38×4 + 94×4 + 22×9 = 152+376+198 = 726 kcal ✓
+      baseNutrition: { calories: 726, proteinGrams: 38, carbsGrams: 94, fatGrams: 22 },
+      ingredients: [
+        { name: 'Tofu ferme',         qty: 250, unit: 'g' },
+        { name: 'Riz jasmin cuit',    qty: 300, unit: 'g' },
+        { name: 'Brocoli',            qty: 200, unit: 'g' },
+        { name: 'Carottes',           qty: 100, unit: 'g' },
+        { name: 'Sauce soja',         qty: 30,  unit: 'ml' },
+        { name: 'Mirin',              qty: 20,  unit: 'ml' },
+        { name: 'Huile de sésame',    qty: 10,  unit: 'ml' },
+        { name: 'Graines de sésame', qty: 10,  unit: 'g' }
+      ],
+      steps: [
+        "Égoutter et sécher soigneusement le tofu. Le couper en cubes de 2cm.",
+        "Faire dorer les cubes de tofu dans l'huile de sésame à feu vif 5 min sur toutes les faces. Réserver.",
+        "Dans le même wok, faire sauter le brocoli en petits bouquets et les carottes en julienne 4 min.",
+        "Mélanger sauce soja et mirin pour la teriyaki. Remettre le tofu, verser la sauce, cuire 2 min.",
+        "Servir sur le riz jasmin. Parsemer de graines de sésame. Ajouter un filet de sauce soja supplémentaire si nécessaire."
+      ]
+    },
+
+    {
+      id: 'R889',
+      name: 'Rillettes de Sardine Maison sur Toast Complet',
+      category: 'french',
+      mealTypes: ['lunch', 'snack'],
+      emoji: '🐟',
+      origin: '🇫🇷',
+      tags: ['omega3', 'rapide', 'economique'],
+      servings: 2,
+      prepTime: 8,
+      cookTime: 2,
+      difficulty: 1,
+      // 50×4 + 62×4 + 38×9 = 200+248+342 = 790 kcal ✓
+      baseNutrition: { calories: 790, proteinGrams: 50, carbsGrams: 62, fatGrams: 38 },
+      ingredients: [
+        { name: 'Sardines en boîte',  qty: 200, unit: 'g', note: 'à l\'huile d\'olive' },
+        { name: 'Pain complet',       qty: 120, unit: 'g', note: '4 tranches' },
+        { name: 'Fromage frais type Saint-Môret', qty: 60, unit: 'g' },
+        { name: 'Jus de citron',      qty: 15,  unit: 'ml' },
+        { name: 'Persil frais',       qty: 10,  unit: 'g' },
+        { name: 'Cornichons',         qty: 30,  unit: 'g' },
+        { name: 'Ciboulette',         qty: 5,   unit: 'g' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Égoutter les sardines. Les écraser à la fourchette dans un bol en laissant quelques morceaux.",
+        "Incorporer le fromage frais, le jus de citron, le persil et la ciboulette hachés.",
+        "Mélanger jusqu'à texture de rillettes — pas trop lisse. Assaisonner sel et poivre.",
+        "Toaster le pain complet.",
+        "Étaler généreusement les rillettes sur les toasts. Garnir de rondelles de cornichons. Servir avec une salade verte."
+      ]
+    },
+
+    // ═══ BATCH P43 — Italiens & Classiques Supplémentaires ═══
+
+    {
+      id: 'R890',
+      name: 'Pizza Margherita Maison Pâte Fine',
+      category: 'italian',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍕',
+      origin: '🇮🇹',
+      tags: ['pizza', 'vegetarien', 'classique'],
+      servings: 2,
+      prepTime: 30,
+      cookTime: 12,
+      difficulty: 2,
+      // 60×4 + 206×4 + 42×9 = 240+824+378 = 1442 kcal ✓
+      baseNutrition: { calories: 1442, proteinGrams: 60, carbsGrams: 206, fatGrams: 42 },
+      ingredients: [
+        { name: 'Farine type 00',     qty: 250, unit: 'g' },
+        { name: 'Levure de boulanger sèche', qty: 4, unit: 'g' },
+        { name: 'Mozzarella di bufala', qty: 200, unit: 'g' },
+        { name: 'Sauce tomate',       qty: 150, unit: 'ml', note: 'tomates pelées mixées' },
+        { name: 'Huile d\'olive',     qty: 25,  unit: 'ml' },
+        { name: 'Basilic frais',      qty: 10,  unit: 'g' },
+        { name: 'Sel',                qty: 5,   unit: 'g' },
+        { name: 'Eau tiède',          qty: 150, unit: 'ml' }
+      ],
+      steps: [
+        "Pâte : dissoudre la levure dans l'eau tiède 5 min. Mélanger farine et sel, ajouter l'eau+levure et 15ml huile. Pétrir 10 min. Laisser lever 1h à couvert.",
+        "Préchauffer le four au maximum (250-270°C) avec la plaque à l'intérieur — la chaleur de la plaque est clé.",
+        "Étaler la pâte très finement (3mm) sur papier cuisson fariné. Ne pas utiliser de rouleau — étirer à la main.",
+        "Étaler la sauce tomate assaisonnée (sel, huile, basilic). Déchirer la mozzarella et répartir sans surcharger.",
+        "Enfourner sur la plaque chaude 10-12 min. La pâte doit être croustillante et le fromage doré par endroits. Ajouter le basilic frais à la sortie."
+      ]
+    },
+
+    {
+      id: 'R891',
+      name: 'Rigatoni alla Norma Aubergines & Ricotta',
+      category: 'italian',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍝',
+      origin: '🇮🇹',
+      tags: ['vegetarien', 'sicilien', 'classique'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 30,
+      difficulty: 1,
+      // 53×4 + 232×4 + 44×9 = 212+928+396 = 1536 kcal ✓
+      baseNutrition: { calories: 1536, proteinGrams: 53, carbsGrams: 232, fatGrams: 44 },
+      ingredients: [
+        { name: 'Rigatoni',           qty: 280, unit: 'g' },
+        { name: 'Aubergines',         qty: 300, unit: 'g' },
+        { name: 'Tomates concassées', qty: 300, unit: 'g' },
+        { name: 'Ricotta',            qty: 80,  unit: 'g' },
+        { name: 'Parmesan',           qty: 30,  unit: 'g' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' },
+        { name: 'Huile d\'olive',     qty: 30,  unit: 'ml' },
+        { name: 'Basilic frais',      qty: 10,  unit: 'g' }
+      ],
+      steps: [
+        "Couper les aubergines en cubes de 2cm. Saler 20 min, rincer et sécher — retirer l'amertume.",
+        "Faire frire les aubergines dans l'huile à feu vif en plusieurs fois jusqu'à dorées. Égoutter sur papier absorbant.",
+        "Dans la même poêle, faire revenir l'ail haché 1 min. Ajouter les tomates, mijoter 15 min. Saler.",
+        "Cuire les rigatoni al dente. Égoutter en gardant 100ml d'eau de cuisson.",
+        "Mélanger pâtes, sauce tomate, aubergines et eau de cuisson. Dresser avec de la ricotta émiettée, parmesan et basilic frais."
+      ]
+    },
+
+    {
+      id: 'R892',
+      name: 'Saltimbocca de Veau Jambon Cru & Sauge',
+      category: 'italian',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥩',
+      origin: '🇮🇹',
+      tags: ['high-protein', 'rapide', 'classique-romain'],
+      servings: 2,
+      prepTime: 8,
+      cookTime: 10,
+      difficulty: 1,
+      // 94×4 + 2×4 + 39×9 = 376+8+351 = 735 kcal ✓
+      baseNutrition: { calories: 735, proteinGrams: 94, carbsGrams: 2, fatGrams: 39 },
+      ingredients: [
+        { name: 'Escalopes de veau',  qty: 400, unit: 'g', note: '4 fines escalopes' },
+        { name: 'Jambon de Parme',    qty: 60,  unit: 'g', note: '4 tranches' },
+        { name: 'Sauge fraîche',      qty: 12,  unit: 'feuille' },
+        { name: 'Beurre',             qty: 30,  unit: 'g' },
+        { name: 'Vin blanc sec',      qty: 80,  unit: 'ml' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Aplatir les escalopes entre deux feuilles de film plastique. Poser 1 tranche de jambon et 3 feuilles de sauge sur chaque escalope.",
+        "Fixer avec des cure-dents. La face jambon est la face visible.",
+        "Chauffer le beurre à feu vif. Saisir les escalopes côté jambon 2 min — le jambon doit être croustillant. Retourner 1 min 30.",
+        "Déglacer au vin blanc. Laisser réduire 2 min en arrosant la viande avec la sauce.",
+        "Servir immédiatement avec les sucs de cuisson. Accompagner de gnocchi ou de pommes de terre sautées."
+      ]
+    },
+
+    {
+      id: 'R893',
+      name: 'Tiramisu Classique Café & Mascarpone',
+      category: 'italian',
+      mealTypes: ['dessert'],
+      emoji: '☕',
+      origin: '🇮🇹',
+      tags: ['dessert', 'classique', 'cafe'],
+      servings: 6,
+      prepTime: 30,
+      cookTime: 0,
+      difficulty: 2,
+      // 52×4 + 248×4 + 220×9 = 208+992+1980 = 3180 kcal ✓
+      baseNutrition: { calories: 3180, proteinGrams: 52, carbsGrams: 248, fatGrams: 220 },
+      ingredients: [
+        { name: 'Mascarpone',         qty: 500, unit: 'g' },
+        { name: 'Oeufs',              qty: 4,   unit: 'pce' },
+        { name: 'Sucre',              qty: 100, unit: 'g' },
+        { name: 'Biscuits cuillère',  qty: 200, unit: 'g' },
+        { name: 'Café fort refroidi', qty: 200, unit: 'ml' },
+        { name: 'Amaretto',           qty: 20,  unit: 'ml', note: 'optionnel' },
+        { name: 'Cacao non sucré',    qty: 15,  unit: 'g', note: 'pour saupoudrer' }
+      ],
+      steps: [
+        "Séparer les blancs des jaunes. Fouetter les jaunes avec le sucre jusqu'à ruban blanc et mousseux.",
+        "Incorporer le mascarpone au mélange jaunes-sucre. Mélanger doucement jusqu'à homogène.",
+        "Monter les blancs en neige ferme. Incorporer délicatement au mascarpone en 3 fois.",
+        "Tremper rapidement les biscuits dans le café (+ amaretto). Disposer une couche dans le plat, couvrir de crème mascarpone, répéter.",
+        "Saupoudrer de cacao. Filmer et réfrigérer MINIMUM 6 heures — une nuit est idéal. Le tiramisu est bien meilleur le lendemain."
+      ]
+    },
+
+    {
+      id: 'R894',
+      name: 'Bruschetta Tomates Basilic & Mozzarella',
+      category: 'italian',
+      mealTypes: ['lunch', 'snack'],
+      emoji: '🍅',
+      origin: '🇮🇹',
+      tags: ['vegetarien', 'aperitif', 'ete'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 5,
+      difficulty: 1,
+      // 40×4 + 116×4 + 42×9 = 160+464+378 = 1002 kcal ✓
+      baseNutrition: { calories: 1002, proteinGrams: 40, carbsGrams: 116, fatGrams: 42 },
+      ingredients: [
+        { name: 'Pain ciabatta ou baguette', qty: 200, unit: 'g', note: '8 tranches' },
+        { name: 'Tomates mûres',      qty: 300, unit: 'g' },
+        { name: 'Mozzarella',         qty: 150, unit: 'g' },
+        { name: 'Basilic frais',      qty: 15,  unit: 'g' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' },
+        { name: 'Huile d\'olive extra-vierge', qty: 30, unit: 'ml' },
+        { name: 'Fleur de sel',       qty: 2,   unit: 'g' },
+        { name: 'Vinaigre balsamique', qty: 10, unit: 'ml' }
+      ],
+      steps: [
+        "Toaster les tranches de pain sous le gril ou à la poêle gril jusqu'à dorées et croustillantes.",
+        "Frotter immédiatement chaque tranche avec la gousse d'ail coupée — la chaleur du pain infuse l'ail naturellement.",
+        "Couper les tomates en petits dés. Saler, ajouter un filet d'huile. Laisser dégorger 5 min.",
+        "Couper la mozzarella en tranches fines.",
+        "Disposer tomates, mozzarella et basilic sur les bruschetta. Finir avec un filet d'huile d'olive, le vinaigre balsamique et la fleur de sel."
+      ]
+    },
+
+    // ═══ BATCH P44 — Mix Incontournables ═══
+
+    {
+      id: 'R895',
+      name: 'Mac & Cheese Américain Fromage Coulant',
+      category: 'world-food',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🧀',
+      origin: '🇺🇸',
+      tags: ['comfort-food', 'fromage', 'rapide'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 20,
+      difficulty: 1,
+      // 63×4 + 227×4 + 68×9 = 252+908+612 = 1772 kcal ✓
+      baseNutrition: { calories: 1772, proteinGrams: 63, carbsGrams: 227, fatGrams: 68 },
+      ingredients: [
+        { name: 'Macaroni',           qty: 280, unit: 'g' },
+        { name: 'Cheddar râpé',       qty: 100, unit: 'g' },
+        { name: 'Lait entier',        qty: 200, unit: 'ml' },
+        { name: 'Beurre',             qty: 30,  unit: 'g' },
+        { name: 'Farine',             qty: 20,  unit: 'g' },
+        { name: 'Gruyère râpé',       qty: 40,  unit: 'g' },
+        { name: 'Moutarde',           qty: 5,   unit: 'g' },
+        { name: 'Paprika fumé',       qty: 2,   unit: 'g' }
+      ],
+      steps: [
+        "Cuire les macaroni al dente selon le paquet. Égoutter en gardant 100ml d'eau de cuisson.",
+        "Sauce fromage : faire un roux avec beurre et farine 2 min. Incorporer le lait chaud en fouettant. Cuire 5 min jusqu'à épaississement.",
+        "Hors du feu, ajouter le cheddar et le gruyère en plusieurs fois en mélangeant. Ajouter la moutarde et le paprika.",
+        "Incorporer les pâtes avec un peu d'eau de cuisson pour ajuster la consistance. La sauce doit être coulante.",
+        "Servir immédiatement dans des bols. Option : transférer dans un plat, parsemer de chapelure et gratiner 5 min."
+      ]
+    },
+
+    {
+      id: 'R896',
+      name: 'Tagliatelles Bolognaise Maison',
+      category: 'italian',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍝',
+      origin: '🇮🇹',
+      tags: ['classique', 'high-protein', 'comfort-food'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 35,
+      difficulty: 1,
+      // 90×4 + 204×4 + 50×9 = 360+816+450 = 1626 kcal ✓
+      baseNutrition: { calories: 1626, proteinGrams: 90, carbsGrams: 204, fatGrams: 50 },
+      ingredients: [
+        { name: 'Tagliatelles',       qty: 250, unit: 'g' },
+        { name: 'Viande hachée boeuf', qty: 300, unit: 'g', note: '15% MG' },
+        { name: 'Tomates concassées', qty: 300, unit: 'g' },
+        { name: 'Oignon',             qty: 80,  unit: 'g' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' },
+        { name: 'Vin rouge',          qty: 80,  unit: 'ml' },
+        { name: 'Parmesan râpé',      qty: 40,  unit: 'g' },
+        { name: 'Huile d\'olive',     qty: 15,  unit: 'ml' }
+      ],
+      steps: [
+        "Faire revenir l'oignon et l'ail hachés dans l'huile 4 min à feu doux.",
+        "Monter le feu, ajouter la viande hachée. Cuire en émiettant bien jusqu'à coloration complète, 7-8 min.",
+        "Déglacer au vin rouge, laisser évaporer 3 min.",
+        "Ajouter les tomates concassées, saler, poivrer. Mijoter à feu doux 20 min à couvert. La bolognaise doit être dense.",
+        "Cuire les tagliatelles al dente. Mélanger directement dans la sauce avec 2cs d'eau de cuisson. Servir avec le parmesan."
+      ]
+    },
+
+    {
+      id: 'R897',
+      name: 'Foies de Poulet Poêlés Oignons Confits & Balsamique',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍗',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'fer', 'rapide', 'economique'],
+      servings: 2,
+      prepTime: 8,
+      cookTime: 20,
+      difficulty: 1,
+      // 61×4 + 39×4 + 30×9 = 244+156+270 = 670 kcal ✓
+      baseNutrition: { calories: 670, proteinGrams: 61, carbsGrams: 39, fatGrams: 30 },
+      ingredients: [
+        { name: 'Foies de poulet',    qty: 350, unit: 'g' },
+        { name: 'Oignons',            qty: 200, unit: 'g' },
+        { name: 'Vinaigre balsamique', qty: 20, unit: 'ml' },
+        { name: 'Beurre',             qty: 20,  unit: 'g' },
+        { name: 'Farine',             qty: 15,  unit: 'g' },
+        { name: 'Thym frais',         qty: 3,   unit: 'g' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Émincer finement les oignons. Les faire confire à feu doux dans le beurre avec le thym 15 min en remuant souvent — ils doivent fondre et colorer.",
+        "Nettoyer les foies de poulet, retirer les parties vertes et les nerfs. Fariner légèrement.",
+        "Dans une poêle très chaude, saisir les foies 2 min par face — ils doivent rester rosés à coeur, jamais secs.",
+        "Déglacer avec le vinaigre balsamique. Remuer 30 secondes pour créer un glaçage.",
+        "Servir les foies sur les oignons confits. Accompagner de pommes de terre vapeur ou de polenta crémeuse."
+      ]
+    },
+
+    {
+      id: 'R898',
+      name: 'Crêpes Sucrées Classiques au Beurre',
+      category: 'french',
+      mealTypes: ['breakfast', 'dessert'],
+      emoji: '🥞',
+      origin: '🇫🇷',
+      tags: ['classique', 'dessert', 'family'],
+      servings: 3,
+      prepTime: 10,
+      cookTime: 20,
+      difficulty: 1,
+      // 55×4 + 196×4 + 50×9 = 220+784+450 = 1454 kcal ✓
+      baseNutrition: { calories: 1454, proteinGrams: 55, carbsGrams: 196, fatGrams: 50 },
+      ingredients: [
+        { name: 'Farine',             qty: 200, unit: 'g' },
+        { name: 'Oeufs',              qty: 3,   unit: 'pce' },
+        { name: 'Lait entier',        qty: 500, unit: 'ml' },
+        { name: 'Beurre fondu',       qty: 30,  unit: 'g' },
+        { name: 'Sucre',              qty: 20,  unit: 'g' },
+        { name: 'Gousse de vanille',  qty: 1,   unit: 'pce', note: 'ou arôme' },
+        { name: 'Sel',                qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Mélanger farine, sucre et sel. Faire un puits, casser les oeufs dedans. Commencer à mélanger en ajoutant le lait progressivement pour éviter les grumeaux.",
+        "Ajouter le beurre fondu tiédi et la vanille. Pâte lisse — passer au mixeur plongeant si grumeaux.",
+        "Laisser reposer la pâte 30 min minimum — les crêpes seront plus légères. C'est important.",
+        "Chauffer une poêle à crêpe beurrée à feu moyen-vif. Verser une louche de pâte en tournant la poêle rapidement.",
+        "Cuire 1 min jusqu'à bords dorés, retourner 45 secondes. Superposer les crêpes dans une assiette. Garnir de beurre-sucre, confiture ou Nutella."
+      ]
+    },
+
+    {
+      id: 'R899',
+      name: 'Chili con Carne Maison',
+      category: 'mexican',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🌶️',
+      origin: '🇲🇽',
+      tags: ['high-protein', 'epice', 'mijoté'],
+      servings: 4,
+      prepTime: 15,
+      cookTime: 45,
+      difficulty: 1,
+      // 146×4 + 174×4 + 60×9 = 584+696+540 = 1820 kcal ✓
+      baseNutrition: { calories: 1820, proteinGrams: 146, carbsGrams: 174, fatGrams: 60 },
+      ingredients: [
+        { name: 'Viande hachée boeuf', qty: 500, unit: 'g' },
+        { name: 'Haricots rouges',    qty: 400, unit: 'g', note: 'boîte, égouttés' },
+        { name: 'Tomates concassées', qty: 400, unit: 'g' },
+        { name: 'Oignon',             qty: 150, unit: 'g' },
+        { name: 'Poivron rouge',      qty: 200, unit: 'g' },
+        { name: 'Ail',                qty: 3,   unit: 'pce' },
+        { name: 'Chili en poudre',    qty: 8,   unit: 'g' },
+        { name: 'Cumin moulu',        qty: 5,   unit: 'g' },
+        { name: 'Huile neutre',       qty: 15,  unit: 'ml' }
+      ],
+      steps: [
+        "Faire revenir l'oignon et le poivron en dés dans l'huile 5 min. Ajouter l'ail haché.",
+        "Ajouter la viande hachée. Cuire à feu vif en émiettant jusqu'à coloration complète. Saler.",
+        "Ajouter le chili en poudre et le cumin. Cuire 1 min en remuant — les épices s'activent dans la matière grasse.",
+        "Verser les tomates concassées. Mijoter 20 min à feu doux. Ajouter les haricots rouges et cuire encore 20 min.",
+        "Rectifier l'assaisonnement. Servir avec du riz ou des tortillas, crème fraîche, coriandre et cheddar râpé."
+      ]
     }
 
   // ─────────────────────────────────────────────────────────────────────────────
