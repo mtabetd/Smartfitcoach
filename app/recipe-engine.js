@@ -36601,6 +36601,972 @@
         "Verser les tomates concassées. Mijoter 20 min à feu doux. Ajouter les haricots rouges et cuire encore 20 min.",
         "Rectifier l'assaisonnement. Servir avec du riz ou des tortillas, crème fraîche, coriandre et cheddar râpé."
       ]
+    },
+
+    // ═══ BATCH P45 — Incontournables Français Express ═══
+
+    {
+      id: 'R900',
+      name: 'Omelette Jambon Fromage',
+      category: 'french',
+      mealTypes: ['breakfast', 'lunch'],
+      emoji: '🍳',
+      origin: '🇫🇷',
+      tags: ['rapide', 'high-protein', 'classique', 'express'],
+      servings: 2,
+      prepTime: 3,
+      cookTime: 5,
+      difficulty: 1,
+      // 72×4 + 0×4 + 60×9 = 288+0+540 = 828 kcal ✓
+      baseNutrition: { calories: 828, proteinGrams: 72, carbsGrams: 0, fatGrams: 60 },
+      ingredients: [
+        { name: 'Oeufs',              qty: 6,   unit: 'pce' },
+        { name: 'Jambon blanc',       qty: 100, unit: 'g', note: 'en dés' },
+        { name: 'Emmental râpé',      qty: 60,  unit: 'g' },
+        { name: 'Beurre',             qty: 10,  unit: 'g' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Battre les oeufs vigoureusement à la fourchette. Saler légèrement (le jambon est déjà salé). Poivrer.",
+        "Chauffer le beurre dans une poêle anti-adhésive à feu moyen-vif. Quand il mousse, verser les oeufs.",
+        "Remuer avec une spatule en raclant le fond pendant 1 min. Laisser prendre 30 secondes sans toucher.",
+        "Répartir le jambon et le fromage sur une moitié de l'omelette quand le dessus est encore légèrement baveux.",
+        "Replier l'omelette en deux, glisser dans l'assiette. L'intérieur doit rester moelleux — jamais sec. Manger immédiatement."
+      ]
+    },
+
+    {
+      id: 'R901',
+      name: 'Steak Frites Express Boeuf Maison',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥩',
+      origin: '🇫🇷',
+      tags: ['classique', 'bistrot', 'high-protein'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 20,
+      difficulty: 1,
+      // 90×4 + 100×4 + 46×9 = 360+400+414 = 1174 kcal ✓
+      baseNutrition: { calories: 1174, proteinGrams: 90, carbsGrams: 100, fatGrams: 46 },
+      ingredients: [
+        { name: 'Steaks de boeuf',    qty: 400, unit: 'g', note: '2 steaks à 200g' },
+        { name: 'Pommes de terre',    qty: 500, unit: 'g', note: 'type Bintje' },
+        { name: 'Huile de friture',   qty: 20,  unit: 'ml' },
+        { name: 'Beurre',             qty: 10,  unit: 'g' },
+        { name: 'Fleur de sel',       qty: 2,   unit: 'g' },
+        { name: 'Poivre du moulin',   qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Couper les pommes de terre en bâtonnets réguliers. Rincer à l'eau froide, sécher parfaitement sur un torchon.",
+        "Première friture à 150°C pendant 6 min (les frites cuisent sans colorer). Égoutter, laisser reposer 5 min.",
+        "Seconde friture à 180°C pendant 3-4 min jusqu'à dorées et croustillantes. Saler à la sortie.",
+        "Sortir les steaks du frigo 20 min avant. Saler juste avant cuisson. Poêle très chaude sans matière grasse : 2 min par face pour saignant.",
+        "Laisser reposer les steaks 3 min sur une assiette. Ajouter le beurre sur les steaks chauds, finir avec la fleur de sel."
+      ]
+    },
+
+    {
+      id: 'R902',
+      name: 'Poulet Basquaise Poivrons & Tomates',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍗',
+      origin: '🇫🇷',
+      tags: ['mijoté', 'classique', 'high-protein'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 35,
+      difficulty: 1,
+      // 88×4 + 42×4 + 46×9 = 352+168+414 = 934 kcal ✓
+      baseNutrition: { calories: 934, proteinGrams: 88, carbsGrams: 42, fatGrams: 46 },
+      ingredients: [
+        { name: 'Cuisses de poulet',  qty: 500, unit: 'g', note: '4 morceaux' },
+        { name: 'Poivrons',           qty: 200, unit: 'g', note: 'rouge + vert' },
+        { name: 'Tomates concassées', qty: 200, unit: 'g' },
+        { name: 'Oignon',             qty: 80,  unit: 'g' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' },
+        { name: 'Piment d\'Espelette', qty: 2,  unit: 'g' },
+        { name: 'Huile d\'olive',     qty: 15,  unit: 'ml' },
+        { name: 'Thym, laurier',      qty: 3,   unit: 'g' }
+      ],
+      steps: [
+        "Saler et poivrer les morceaux de poulet. Les faire dorer dans l'huile à feu vif 4-5 min par face. Réserver.",
+        "Dans la même cocotte, faire revenir l'oignon émincé 4 min. Ajouter l'ail et le jambon de Bayonne si disponible.",
+        "Ajouter les poivrons en lanières, cuire 5 min à feu vif.",
+        "Verser les tomates, piment d'Espelette, thym et laurier. Remettre le poulet. Couvrir, mijoter 25 min à feu doux.",
+        "Rectifier l'assaisonnement. Servir avec du riz blanc ou des pommes de terre vapeur."
+      ]
+    },
+
+    {
+      id: 'R903',
+      name: 'Oeufs en Cocotte Jambon & Crème',
+      category: 'french',
+      mealTypes: ['breakfast', 'lunch'],
+      emoji: '🥚',
+      origin: '🇫🇷',
+      tags: ['express', 'high-protein', 'brunch'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 12,
+      difficulty: 1,
+      // 50×4 + 2×4 + 43×9 = 200+8+387 = 595 kcal ✓
+      baseNutrition: { calories: 595, proteinGrams: 50, carbsGrams: 2, fatGrams: 43 },
+      ingredients: [
+        { name: 'Oeufs',              qty: 4,   unit: 'pce' },
+        { name: 'Jambon blanc',       qty: 80,  unit: 'g' },
+        { name: 'Crème fraîche',      qty: 60,  unit: 'ml' },
+        { name: 'Emmental râpé',      qty: 30,  unit: 'g' },
+        { name: 'Beurre',             qty: 8,   unit: 'g' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Préchauffer le four à 180°C. Beurrer 4 ramequins. Couper le jambon en petits dés.",
+        "Répartir le jambon dans le fond des ramequins. Verser une cuillerée de crème fraîche.",
+        "Casser un oeuf délicatement dans chaque ramequin. Saler, poivrer. Ajouter un peu de fromage râpé.",
+        "Placer les ramequins dans un plat avec 2cm d'eau chaude (bain-marie). Enfourner 10-12 min.",
+        "Les blancs doivent être pris et les jaunes encore coulants. Servir immédiatement avec des mouillettes de pain grillé."
+      ]
+    },
+
+    {
+      id: 'R904',
+      name: 'Purée de Pommes de Terre Beurre & Crème',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥔',
+      origin: '🇫🇷',
+      tags: ['classique', 'comfort-food', 'accompagnement'],
+      servings: 4,
+      prepTime: 15,
+      cookTime: 25,
+      difficulty: 1,
+      // 28×4 + 186×4 + 74×9 = 112+744+666 = 1522 kcal ✓
+      baseNutrition: { calories: 1522, proteinGrams: 28, carbsGrams: 186, fatGrams: 74 },
+      ingredients: [
+        { name: 'Pommes de terre',    qty: 1000, unit: 'g', note: 'type Bintje ou Agria' },
+        { name: 'Beurre',             qty: 80,  unit: 'g' },
+        { name: 'Lait entier',        qty: 150, unit: 'ml', note: 'chaud' },
+        { name: 'Sel',                qty: 3,   unit: 'g' },
+        { name: 'Noix de muscade',    qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Éplucher les pommes de terre, les couper en morceaux égaux. Cuire dans l'eau froide salée, porter à ébullition, cuire 20 min.",
+        "Tester la cuisson avec un couteau — il doit s'enfoncer sans résistance. Égoutter parfaitement.",
+        "Passer les pommes de terre au moulin à légumes (ou presse-purée) — jamais au mixeur électrique qui rend la purée collante.",
+        "Incorporer le beurre froid en dés dans la purée chaude. Mélanger vigoureusement.",
+        "Ajouter le lait chaud progressivement jusqu'à consistance désirée. Assaisonner sel et muscade. La vraie purée française est riche en beurre."
+      ]
+    },
+
+    // ═══ BATCH P46 — Incontournables Monde Express ═══
+
+    {
+      id: 'R905',
+      name: 'Burger Maison Boeuf Cheddar & Sauce BBQ',
+      category: 'world-food',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍔',
+      origin: '🇺🇸',
+      tags: ['burger', 'high-protein', 'convivial'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 10,
+      difficulty: 1,
+      // 89×4 + 76×4 + 62×9 = 356+304+558 = 1218 kcal ✓
+      baseNutrition: { calories: 1218, proteinGrams: 89, carbsGrams: 76, fatGrams: 62 },
+      ingredients: [
+        { name: 'Pains à burger',     qty: 140, unit: 'g', note: '2 brioches' },
+        { name: 'Boeuf haché 15% MG', qty: 300, unit: 'g', note: '2 steaks de 150g' },
+        { name: 'Cheddar',            qty: 60,  unit: 'g', note: '2 tranches' },
+        { name: 'Sauce BBQ ou mayo',  qty: 30,  unit: 'g' },
+        { name: 'Tomate',             qty: 80,  unit: 'g' },
+        { name: 'Salade',             qty: 30,  unit: 'g' },
+        { name: 'Oignon rouge',       qty: 40,  unit: 'g' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Façonner la viande hachée en 2 steaks. Saler et poivrer des deux faces. Faire une légère empreinte au centre (évite le gonflement).",
+        "Cuire dans une poêle très chaude sèche ou grill 3 min par face. Déposer le cheddar sur les steaks 1 min avant la fin, couvrir pour fondre.",
+        "Toaster les pains à la poêle ou au grille-pain.",
+        "Étaler la sauce sur les pains. Assembler : pain du bas, salade, tomate, steak + cheddar, oignon rouge, pain du haut.",
+        "Servir immédiatement avec des frites maison ou des chips. Ne pas presser le burger — laisser les sucs s'installer 1 min."
+      ]
+    },
+
+    {
+      id: 'R906',
+      name: 'Hot-Dog Maison Oignons Caramélisés & Moutarde',
+      category: 'world-food',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🌭',
+      origin: '🇺🇸',
+      tags: ['express', 'rapide', 'convivial'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 15,
+      difficulty: 1,
+      // 39×4 + 83×4 + 42×9 = 156+332+378 = 866 kcal ✓
+      baseNutrition: { calories: 866, proteinGrams: 39, carbsGrams: 83, fatGrams: 42 },
+      ingredients: [
+        { name: 'Pains hot-dog',      qty: 140, unit: 'g', note: '2 pains' },
+        { name: 'Saucisses Francfort', qty: 180, unit: 'g', note: '4 saucisses' },
+        { name: 'Oignons',            qty: 150, unit: 'g' },
+        { name: 'Beurre',             qty: 10,  unit: 'g' },
+        { name: 'Moutarde',           qty: 15,  unit: 'g' },
+        { name: 'Ketchup',            qty: 15,  unit: 'g' }
+      ],
+      steps: [
+        "Émincer les oignons en lamelles. Les faire caraméliser dans le beurre à feu doux 12-15 min jusqu'à dorés et fondants.",
+        "Pocher les saucisses 3 min dans de l'eau frémissante ou les griller 2 min à la poêle.",
+        "Toaster les pains côté intérieur à la poêle sèche 1 min.",
+        "Étaler moutarde et ketchup dans le pain. Poser les saucisses, couvrir d'oignons caramélisés.",
+        "Servir immédiatement. Variante : ajouter du gruyère fondu et passer sous le gril 2 min."
+      ]
+    },
+
+    {
+      id: 'R907',
+      name: 'Naan Pizza Poulet Poivron Express',
+      category: 'world-food',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🫓',
+      origin: '🇮🇳',
+      tags: ['express', 'rapide', 'pizza'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 8,
+      difficulty: 1,
+      // 68×4 + 96×4 + 27×9 = 272+384+243 = 899 kcal ✓
+      baseNutrition: { calories: 899, proteinGrams: 68, carbsGrams: 96, fatGrams: 27 },
+      ingredients: [
+        { name: 'Naans nature',       qty: 200, unit: 'g', note: '2 grands naans' },
+        { name: 'Poulet rôti cuit',   qty: 150, unit: 'g', note: 'effiloché' },
+        { name: 'Sauce tomate',       qty: 80,  unit: 'ml' },
+        { name: 'Mozzarella râpée',   qty: 100, unit: 'g' },
+        { name: 'Poivron',            qty: 80,  unit: 'g' },
+        { name: 'Herbes de Provence', qty: 2,   unit: 'g' }
+      ],
+      steps: [
+        "Préchauffer le four à 220°C (position gril+chaleur).",
+        "Étaler la sauce tomate sur chaque naan jusqu'aux bords.",
+        "Répartir le poulet effiloché, le poivron en lamelles et la mozzarella.",
+        "Parsemer d'herbes de Provence. Poser sur une plaque.",
+        "Enfourner 7-8 min jusqu'à fromage bouillonnant et bords du naan croustillants. En 10 min chrono du frigo au four."
+      ]
+    },
+
+    {
+      id: 'R908',
+      name: 'Pancakes Américains Classiques & Sirop d\'Érable',
+      category: 'world-food',
+      mealTypes: ['breakfast'],
+      emoji: '🥞',
+      origin: '🇺🇸',
+      tags: ['breakfast', 'classique', 'americain'],
+      servings: 2,
+      prepTime: 8,
+      cookTime: 15,
+      difficulty: 1,
+      // 39×4 + 178×4 + 44×9 = 156+712+396 = 1264 kcal ✓
+      baseNutrition: { calories: 1264, proteinGrams: 39, carbsGrams: 178, fatGrams: 44 },
+      ingredients: [
+        { name: 'Farine',             qty: 200, unit: 'g' },
+        { name: 'Lait',               qty: 200, unit: 'ml' },
+        { name: 'Oeufs',              qty: 2,   unit: 'pce' },
+        { name: 'Beurre fondu',       qty: 30,  unit: 'g' },
+        { name: 'Sucre',              qty: 20,  unit: 'g' },
+        { name: 'Levure chimique',    qty: 8,   unit: 'g', note: '2 cc' },
+        { name: 'Sel',                qty: 1,   unit: 'pincée' },
+        { name: 'Sirop d\'érable',   qty: 30,  unit: 'ml', note: 'pour servir' }
+      ],
+      steps: [
+        "Mélanger farine, sucre, levure et sel dans un grand bol. Faire un puits.",
+        "Fouetter les oeufs avec le lait et le beurre fondu. Verser dans le puits, mélanger jusqu'à pâte homogène.",
+        "Ne pas trop travailler la pâte — quelques grumeaux sont normaux et donnent des pancakes plus moelleux.",
+        "Cuire dans une poêle anti-adhésive beurrée à feu moyen : verser une louche, cuire jusqu'aux bulles (2 min), retourner 1 min.",
+        "Empiler les pancakes chauds. Napper généreusement de sirop d'érable. Ajouter beurre, fruits frais ou bacon selon goût."
+      ]
+    },
+
+    {
+      id: 'R909',
+      name: 'Bowl Açaï Granola & Fruits Frais',
+      category: 'world-food',
+      mealTypes: ['breakfast'],
+      emoji: '🍇',
+      origin: '🇧🇷',
+      tags: ['breakfast', 'healthy', 'bowl'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 0,
+      difficulty: 1,
+      // 14×4 + 149×4 + 24×9 = 56+596+216 = 868 kcal ✓
+      baseNutrition: { calories: 868, proteinGrams: 14, carbsGrams: 149, fatGrams: 24 },
+      ingredients: [
+        { name: 'Pulpe d\'açaï surgelée', qty: 200, unit: 'g' },
+        { name: 'Banane',             qty: 200, unit: 'g', note: '2 bananes' },
+        { name: 'Granola',            qty: 80,  unit: 'g' },
+        { name: 'Lait d\'amande',    qty: 100, unit: 'ml' },
+        { name: 'Fruits frais',       qty: 150, unit: 'g', note: 'fraises, kiwi, myrtilles' },
+        { name: 'Miel',               qty: 15,  unit: 'g' }
+      ],
+      steps: [
+        "Sortir la pulpe d'açaï du congélateur 5 min avant. La casser en morceaux.",
+        "Mixer pulpe d'açaï, 1 banane et le lait d'amande jusqu'à consistance épaisse comme une glace — ajouter le moins de liquide possible.",
+        "Verser dans deux bols. La base doit être très épaisse pour pouvoir poser les toppings.",
+        "Couper la banane restante en rondelles. Couper les autres fruits.",
+        "Disposer joliment : granola, fruits, filet de miel. L'açaï bowl se mange dans la minute — il fond vite."
+      ]
+    },
+
+    // ═══ BATCH P47 — Mijotés & Plats Incontournables ═══
+
+    {
+      id: 'R910',
+      name: 'Pot-au-Feu Boeuf & Légumes Classique',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍲',
+      origin: '🇫🇷',
+      tags: ['mijoté', 'classique', 'hiver', 'familial'],
+      servings: 4,
+      prepTime: 20,
+      cookTime: 120,
+      difficulty: 1,
+      // 137×4 + 126×4 + 56×9 = 548+504+504 = 1556 kcal ✓
+      baseNutrition: { calories: 1556, proteinGrams: 137, carbsGrams: 126, fatGrams: 56 },
+      ingredients: [
+        { name: 'Paleron de boeuf',   qty: 600, unit: 'g' },
+        { name: 'Os à moelle',        qty: 2,   unit: 'pce' },
+        { name: 'Carottes',           qty: 300, unit: 'g' },
+        { name: 'Poireaux',           qty: 200, unit: 'g' },
+        { name: 'Pommes de terre',    qty: 300, unit: 'g' },
+        { name: 'Navets',             qty: 150, unit: 'g' },
+        { name: 'Oignon',             qty: 100, unit: 'g' },
+        { name: 'Bouquet garni',      qty: 1,   unit: 'pce' },
+        { name: 'Gros sel',           qty: 5,   unit: 'g' }
+      ],
+      steps: [
+        "Mettre la viande et les os dans une grande marmite. Couvrir d'eau froide. Porter lentement à ébullition. Écumer soigneusement.",
+        "Ajouter l'oignon piqué de clous de girofle, le bouquet garni et le gros sel. Cuire à frémissement 1h30.",
+        "Ajouter les carottes, navets et poireaux. Cuire encore 20 min.",
+        "Ajouter les pommes de terre et les os à moelle 20 min avant la fin.",
+        "Servir la viande tranchée avec les légumes dans le bouillon. Accompagner de cornichons, moutarde, sel de Guérande et pain grillé frotté à l'ail pour la moelle."
+      ]
+    },
+
+    {
+      id: 'R911',
+      name: 'Poulet Yassa Sénégalais Oignons & Citron',
+      category: 'world-food',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍗',
+      origin: '🇸🇳',
+      tags: ['africain', 'mijoté', 'high-protein'],
+      servings: 4,
+      prepTime: 20,
+      cookTime: 45,
+      difficulty: 1,
+      // 132×4 + 50×4 + 68×9 = 528+200+612 = 1340 kcal ✓
+      baseNutrition: { calories: 1340, proteinGrams: 132, carbsGrams: 50, fatGrams: 68 },
+      ingredients: [
+        { name: 'Poulet entier découpé', qty: 800, unit: 'g' },
+        { name: 'Oignons',            qty: 400, unit: 'g' },
+        { name: 'Jus de citron',      qty: 60,  unit: 'ml' },
+        { name: 'Moutarde',           qty: 30,  unit: 'g' },
+        { name: 'Huile d\'arachide',  qty: 40,  unit: 'ml' },
+        { name: 'Ail',                qty: 3,   unit: 'pce' },
+        { name: 'Piment',             qty: 1,   unit: 'pce' },
+        { name: 'Laurier',            qty: 2,   unit: 'feuille' }
+      ],
+      steps: [
+        "Marinade : mélanger jus de citron, moutarde, ail écrasé, piment haché. Mariner le poulet minimum 2h (une nuit idéalement).",
+        "Sortir le poulet de la marinade. Faire griller les morceaux sous le gril du four ou à la poêle gril 5 min par face. Réserver.",
+        "Dans une grande cocotte, faire revenir les oignons émincés dans l'huile à feu moyen 20 min — ils doivent fondre et légèrement colorer.",
+        "Ajouter la marinade aux oignons. Cuire 3 min. Remettre le poulet, ajouter le laurier.",
+        "Couvrir et mijoter 25 min à feu doux. Rectifier sel et citron. Servir sur du riz blanc."
+      ]
+    },
+
+    {
+      id: 'R912',
+      name: 'Saucisses Pommes de Terre Gratinées',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🌭',
+      origin: '🇫🇷',
+      tags: ['comfort-food', 'economique', 'family'],
+      servings: 3,
+      prepTime: 15,
+      cookTime: 40,
+      difficulty: 1,
+      // 73×4 + 111×4 + 82×9 = 292+444+738 = 1474 kcal ✓
+      baseNutrition: { calories: 1474, proteinGrams: 73, carbsGrams: 111, fatGrams: 82 },
+      ingredients: [
+        { name: 'Saucisses de Toulouse', qty: 300, unit: 'g' },
+        { name: 'Pommes de terre',    qty: 500, unit: 'g' },
+        { name: 'Crème fraîche',      qty: 150, unit: 'ml' },
+        { name: 'Gruyère râpé',       qty: 60,  unit: 'g' },
+        { name: 'Oignon',             qty: 100, unit: 'g' },
+        { name: 'Beurre',             qty: 20,  unit: 'g' },
+        { name: 'Thym',               qty: 3,   unit: 'g' }
+      ],
+      steps: [
+        "Préchauffer le four à 190°C. Éplucher les pommes de terre, les couper en rondelles de 5mm.",
+        "Cuire les rondelles 8 min à l'eau bouillante salée — pas trop cuites, elles finissent au four.",
+        "Faire revenir l'oignon dans le beurre 5 min. Couper les saucisses en tronçons.",
+        "Dans un plat beurré, alterner couches de pommes de terre, saucisses et oignons. Arroser de crème fraîche.",
+        "Parsemer de gruyère et de thym. Enfourner 30 min jusqu'à gratin doré et saucisses bien cuites."
+      ]
+    },
+
+    {
+      id: 'R913',
+      name: 'Hachis Parmentier Boeuf Classique',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥔',
+      origin: '🇫🇷',
+      tags: ['classique', 'comfort-food', 'familial', 'four'],
+      servings: 4,
+      prepTime: 25,
+      cookTime: 50,
+      difficulty: 1,
+      // 116×4 + 187×4 + 83×9 = 464+748+747 = 1959 kcal ✓
+      baseNutrition: { calories: 1959, proteinGrams: 116, carbsGrams: 187, fatGrams: 83 },
+      ingredients: [
+        { name: 'Viande hachée boeuf', qty: 400, unit: 'g' },
+        { name: 'Pommes de terre',    qty: 800, unit: 'g' },
+        { name: 'Oignon',             qty: 100, unit: 'g' },
+        { name: 'Tomates concassées', qty: 150, unit: 'g' },
+        { name: 'Lait',               qty: 150, unit: 'ml' },
+        { name: 'Beurre',             qty: 40,  unit: 'g' },
+        { name: 'Gruyère râpé',       qty: 40,  unit: 'g' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' }
+      ],
+      steps: [
+        "Cuire les pommes de terre à l'eau salée. Les écraser en purée avec le beurre et le lait chaud.",
+        "Faire revenir l'oignon et l'ail dans l'huile 4 min. Ajouter la viande hachée, cuire en émiettant jusqu'à coloration.",
+        "Ajouter les tomates concassées à la viande. Saler, poivrer. Cuire 10 min. Rectifier l'assaisonnement.",
+        "Préchauffer le four à 200°C. Dans un plat à gratin : couche de viande puis couche de purée bien lissée. Parsemer de gruyère.",
+        "Enfourner 20-25 min jusqu'à gratinage bien doré. Laisser reposer 5 min avant de servir."
+      ]
+    },
+
+    {
+      id: 'R914',
+      name: 'Lentilles Saucisse Diot Savoyarde',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🌱',
+      origin: '🇫🇷',
+      tags: ['mijoté', 'classique', 'hivernal'],
+      servings: 3,
+      prepTime: 10,
+      cookTime: 40,
+      difficulty: 1,
+      // 72×4 + 128×4 + 82×9 = 288+512+738 = 1538 kcal ✓
+      baseNutrition: { calories: 1538, proteinGrams: 72, carbsGrams: 128, fatGrams: 82 },
+      ingredients: [
+        { name: 'Lentilles vertes',   qty: 250, unit: 'g' },
+        { name: 'Saucisses fumées',   qty: 250, unit: 'g' },
+        { name: 'Carottes',           qty: 150, unit: 'g' },
+        { name: 'Oignon',             qty: 100, unit: 'g' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' },
+        { name: 'Lardons',            qty: 80,  unit: 'g' },
+        { name: 'Bouillon de volaille', qty: 700, unit: 'ml' },
+        { name: 'Thym, laurier',      qty: 3,   unit: 'g' }
+      ],
+      steps: [
+        "Faire revenir les lardons dans une cocotte sans matière grasse. Ajouter l'oignon et l'ail hachés, cuire 3 min.",
+        "Ajouter les carottes en rondelles. Rincer les lentilles (ne pas les faire tremper).",
+        "Ajouter les lentilles, le bouillon et les aromates. Porter à ébullition.",
+        "Réduire le feu, poser les saucisses entières sur les lentilles. Couvrir et cuire 35 min à feu doux.",
+        "Les lentilles absorbent le bouillon progressivement — vérifier et ajouter un peu d'eau si nécessaire. Trancher les saucisses pour servir."
+      ]
+    },
+
+    // ═══ BATCH P48 — Pâtes & Riz Incontournables ═══
+
+    {
+      id: 'R915',
+      name: 'Spaghetti Aglio Olio e Peperoncino',
+      category: 'italian',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍝',
+      origin: '🇮🇹',
+      tags: ['vegetarien', 'express', 'classique-napolitain'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 15,
+      difficulty: 1,
+      // 40×4 + 226×4 + 58×9 = 160+904+522 = 1586 kcal ✓
+      baseNutrition: { calories: 1586, proteinGrams: 40, carbsGrams: 226, fatGrams: 58 },
+      ingredients: [
+        { name: 'Spaghetti',          qty: 300, unit: 'g' },
+        { name: 'Ail',                qty: 6,   unit: 'pce' },
+        { name: 'Huile d\'olive extra-vierge', qty: 60, unit: 'ml' },
+        { name: 'Piment rouge séché', qty: 2,   unit: 'pce' },
+        { name: 'Parmesan',           qty: 30,  unit: 'g' },
+        { name: 'Persil frais',       qty: 15,  unit: 'g' }
+      ],
+      steps: [
+        "Cuire les spaghetti dans une très grande quantité d'eau fortement salée selon les instructions. Réserver 200ml d'eau de cuisson.",
+        "Pendant la cuisson, émincer l'ail très finement. Émietter le piment séché.",
+        "Dans une grande poêle, chauffer l'huile d'olive à feu doux. Faire blondir l'ail 3-4 min sans le brûler. Ajouter le piment.",
+        "Égoutter les spaghetti al dente. Les ajouter dans la poêle avec l'eau de cuisson réservée.",
+        "Remuer vigoureusement à feu moyen 1-2 min jusqu'à émulsion crémeuse. Finir avec le persil et le parmesan. La recette la plus simple d'Italie."
+      ]
+    },
+
+    {
+      id: 'R916',
+      name: 'Riz Sauté Porc Légumes & Sauce Soja',
+      category: 'world-food',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍚',
+      origin: '🇨🇳',
+      tags: ['riz', 'express', 'asian'],
+      servings: 2,
+      prepTime: 8,
+      cookTime: 12,
+      difficulty: 1,
+      // 72×4 + 133×4 + 44×9 = 288+532+396 = 1216 kcal ✓
+      baseNutrition: { calories: 1216, proteinGrams: 72, carbsGrams: 133, fatGrams: 44 },
+      ingredients: [
+        { name: 'Riz cuit froid',     qty: 500, unit: 'g', note: 'riz de la veille' },
+        { name: 'Porc haché',         qty: 200, unit: 'g' },
+        { name: 'Oeufs',              qty: 2,   unit: 'pce' },
+        { name: 'Petits pois',        qty: 80,  unit: 'g' },
+        { name: 'Carottes',           qty: 80,  unit: 'g' },
+        { name: 'Sauce soja',         qty: 30,  unit: 'ml' },
+        { name: 'Huile neutre',       qty: 20,  unit: 'ml' },
+        { name: 'Huile de sésame',    qty: 10,  unit: 'ml' }
+      ],
+      steps: [
+        "Cuire les carottes en petits dés 3 min à l'eau bouillante avec les petits pois. Égoutter.",
+        "Faire revenir le porc haché dans l'huile à feu très vif en émiettant jusqu'à cuisson complète. Réserver.",
+        "Faire les oeufs brouillés dans le même wok, garder des gros morceaux. Réserver.",
+        "Faire sauter le riz froid en miettes à feu maximum 3 min. Remettre porc et oeufs, ajouter légumes.",
+        "Assaisonner de sauce soja. Finir avec l'huile de sésame. Mélanger vigoureusement 1 min. Le riz de la veille est indispensable pour cette recette."
+      ]
+    },
+
+    {
+      id: 'R917',
+      name: 'Coquillettes Jambon Beurre Gratiné',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍝',
+      origin: '🇫🇷',
+      tags: ['classique', 'comfort-food', 'enfants'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 12,
+      difficulty: 1,
+      // 56×4 + 220×4 + 34×9 = 224+880+306 = 1410 kcal ✓
+      baseNutrition: { calories: 1410, proteinGrams: 56, carbsGrams: 220, fatGrams: 34 },
+      ingredients: [
+        { name: 'Coquillettes',       qty: 300, unit: 'g' },
+        { name: 'Jambon blanc',       qty: 120, unit: 'g', note: 'en gros dés' },
+        { name: 'Beurre',             qty: 30,  unit: 'g' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Faire bouillir une grande casserole d'eau salée.",
+        "Cuire les coquillettes 1 min de moins que le temps indiqué — elles finissent de cuire avec le beurre.",
+        "Égoutter en gardant 3-4 cuillères d'eau de cuisson.",
+        "Remettre les coquillettes dans la casserole hors du feu. Ajouter le beurre en dés froid.",
+        "Incorporer le beurre en secouant la casserole. Ajouter l'eau de cuisson si besoin. Mélanger le jambon. Poivrer généreusement. La qualité du jambon et du beurre fait tout."
+      ]
+    },
+
+    {
+      id: 'R918',
+      name: 'Penne alla Vodka Pancetta & Parmesan',
+      category: 'italian',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍝',
+      origin: '🇮🇹',
+      tags: ['cremeux', 'classique', 'italien'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 20,
+      difficulty: 1,
+      // 58×4 + 219×4 + 54×9 = 232+876+486 = 1594 kcal ✓
+      baseNutrition: { calories: 1594, proteinGrams: 58, carbsGrams: 219, fatGrams: 54 },
+      ingredients: [
+        { name: 'Penne rigate',       qty: 280, unit: 'g' },
+        { name: 'Pancetta ou lardons', qty: 80, unit: 'g' },
+        { name: 'Crème fraîche',      qty: 100, unit: 'ml' },
+        { name: 'Sauce tomate',       qty: 150, unit: 'ml' },
+        { name: 'Vodka',              qty: 30,  unit: 'ml' },
+        { name: 'Parmesan râpé',      qty: 30,  unit: 'g' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' },
+        { name: 'Piment',             qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Faire revenir la pancetta à sec dans une poêle jusqu'à croustillante. Ajouter l'ail haché.",
+        "Verser la vodka et flamber (ou laisser évaporer 2 min). Ajouter la sauce tomate et le piment.",
+        "Mijoter 5 min. Incorporer la crème fraîche, cuire encore 3 min. La sauce devient rose-orangée.",
+        "Cuire les penne al dente. Égoutter avec 100ml d'eau de cuisson. Mélanger dans la sauce.",
+        "Servir avec le parmesan râpé. La vodka dans une sauce ? Elle ouvre les molécules aromatiques de la tomate — goût plus intense."
+      ]
+    },
+
+    {
+      id: 'R919',
+      name: 'Pâtes au Pesto Génois Basilic & Pignons',
+      category: 'italian',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🌿',
+      origin: '🇮🇹',
+      tags: ['vegetarien', 'rapide', 'classique-ligurien'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 12,
+      difficulty: 1,
+      // 44×4 + 208×4 + 48×9 = 176+832+432 = 1440 kcal ✓
+      baseNutrition: { calories: 1440, proteinGrams: 44, carbsGrams: 208, fatGrams: 48 },
+      ingredients: [
+        { name: 'Trofie ou linguine', qty: 280, unit: 'g' },
+        { name: 'Pesto basilic maison ou bocal', qty: 80, unit: 'g' },
+        { name: 'Parmesan râpé',      qty: 30,  unit: 'g' },
+        { name: 'Pommes de terre',    qty: 80,  unit: 'g', note: 'traditionnel avec le pesto' },
+        { name: 'Haricots verts',     qty: 60,  unit: 'g', note: 'traditionnel' }
+      ],
+      steps: [
+        "Éplucher et couper les pommes de terre en petits cubes. Porter l'eau à ébullition, saler généreusement.",
+        "Cuire pommes de terre 5 min dans l'eau, ajouter les haricots verts 3 min, puis les pâtes selon le temps indiqué.",
+        "Égoutter le tout ensemble en gardant 2-3 cuillères d'eau de cuisson.",
+        "Mélanger immédiatement avec le pesto et l'eau de cuisson — pas de chaleur sur le pesto, il noircit.",
+        "Servir avec le parmesan. En Ligurie le vrai pesto al genovese se mange avec pommes de terre et haricots verts — essayez, c'est révélateur."
+      ]
+    },
+
+    // ═══ BATCH P49 — Viandes Incontournables ═══
+
+    {
+      id: 'R920',
+      name: 'Côtes de Porc Moutarde & Miel au Four',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥩',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'rapide', 'four'],
+      servings: 2,
+      prepTime: 8,
+      cookTime: 25,
+      difficulty: 1,
+      // 83×4 + 20×4 + 48×9 = 332+80+432 = 844 kcal ✓
+      baseNutrition: { calories: 844, proteinGrams: 83, carbsGrams: 20, fatGrams: 48 },
+      ingredients: [
+        { name: 'Côtes de porc',      qty: 480, unit: 'g', note: '2 côtes épaisses' },
+        { name: 'Moutarde de Dijon',  qty: 30,  unit: 'g' },
+        { name: 'Miel',               qty: 20,  unit: 'g' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' },
+        { name: 'Thym frais',         qty: 3,   unit: 'g' },
+        { name: 'Huile d\'olive',     qty: 10,  unit: 'ml' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Mélanger moutarde, miel, ail haché, thym et huile pour former une marinade.",
+        "Badigeonner généreusement les côtes sur toutes les faces. Saler et poivrer.",
+        "Laisser mariner minimum 30 min (ou toute une nuit au frigo pour plus de saveur).",
+        "Cuire dans une poêle gril à feu vif 3 min par face pour marquer la viande.",
+        "Finir au four à 180°C pendant 15 min. Laisser reposer 5 min. La marinade caramélisée forme un glaçage irrésistible."
+      ]
+    },
+
+    {
+      id: 'R921',
+      name: 'Ailes de Poulet Buffalo Sauce Piquante',
+      category: 'world-food',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍗',
+      origin: '🇺🇸',
+      tags: ['high-protein', 'epice', 'four', 'convivial'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 45,
+      difficulty: 1,
+      // 72×4 + 16×4 + 73×9 = 288+64+657 = 1009 kcal ✓
+      baseNutrition: { calories: 1009, proteinGrams: 72, carbsGrams: 16, fatGrams: 73 },
+      ingredients: [
+        { name: 'Ailes de poulet',    qty: 600, unit: 'g' },
+        { name: 'Sauce piquante',     qty: 40,  unit: 'ml', note: 'type Frank\'s ou Tabasco' },
+        { name: 'Beurre',             qty: 30,  unit: 'g' },
+        { name: 'Miel',               qty: 15,  unit: 'g' },
+        { name: 'Ail en poudre',      qty: 3,   unit: 'g' },
+        { name: 'Sel',                qty: 2,   unit: 'g' }
+      ],
+      steps: [
+        "Sécher parfaitement les ailes avec du papier absorbant — la clé pour la croustillance.",
+        "Saler légèrement les ailes. Les poser sur une grille posée sur une plaque. Enfourner à 200°C pendant 20 min.",
+        "Retourner les ailes, remonter à 220°C et cuire encore 20 min jusqu'à peau bien dorée et croustillante.",
+        "Préparer la sauce buffalo : faire fondre le beurre, ajouter sauce piquante, miel et ail en poudre. Mélanger.",
+        "Enrober les ailes chaudes dans la sauce buffalo dans un grand bol. Servir immédiatement avec du céleri et sauce bleue."
+      ]
+    },
+
+    {
+      id: 'R922',
+      name: 'Boulettes de Viande Sauce Tomate Maison',
+      category: 'italian',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍝',
+      origin: '🇮🇹',
+      tags: ['high-protein', 'comfort-food', 'famille'],
+      servings: 4,
+      prepTime: 20,
+      cookTime: 30,
+      difficulty: 1,
+      // 127×4 + 68×4 + 57×9 = 508+272+513 = 1293 kcal ✓
+      baseNutrition: { calories: 1293, proteinGrams: 127, carbsGrams: 68, fatGrams: 57 },
+      ingredients: [
+        { name: 'Boeuf haché',        qty: 500, unit: 'g' },
+        { name: 'Pain de mie',        qty: 80,  unit: 'g', note: 'trempé dans le lait' },
+        { name: 'Oeuf',               qty: 1,   unit: 'pce' },
+        { name: 'Parmesan râpé',      qty: 30,  unit: 'g' },
+        { name: 'Tomates concassées', qty: 400, unit: 'g' },
+        { name: 'Oignon',             qty: 80,  unit: 'g' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' },
+        { name: 'Huile d\'olive',     qty: 15,  unit: 'ml' }
+      ],
+      steps: [
+        "Tremper le pain de mie dans le lait, essorer. Mélanger boeuf haché, pain, oeuf, parmesan, sel, poivre. Former des boulettes de 40g.",
+        "Faire dorer les boulettes dans l'huile à feu vif sur toutes les faces. Ne pas trop les bouger — laisser former une croûte. Réserver.",
+        "Faire revenir l'oignon et l'ail hachés 4 min dans la même poêle.",
+        "Ajouter les tomates concassées. Saler, poivrer. Mijoter 10 min.",
+        "Remettre les boulettes dans la sauce. Cuire à couvert 15 min à feu doux. Servir avec des spaghetti ou du pain."
+      ]
+    },
+
+    {
+      id: 'R923',
+      name: 'Brochettes Poulet Marinade Yaourt & Épices',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍢',
+      origin: '🇬🇷',
+      tags: ['high-protein', 'ete', 'barbecue', 'leger'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 15,
+      difficulty: 1,
+      // 96×4 + 14×4 + 23×9 = 384+56+207 = 647 kcal ✓
+      baseNutrition: { calories: 647, proteinGrams: 96, carbsGrams: 14, fatGrams: 23 },
+      ingredients: [
+        { name: 'Filets de poulet',   qty: 450, unit: 'g' },
+        { name: 'Yaourt grec',        qty: 120, unit: 'g' },
+        { name: 'Paprika fumé',       qty: 4,   unit: 'g' },
+        { name: 'Cumin',              qty: 2,   unit: 'g' },
+        { name: 'Curcuma',            qty: 2,   unit: 'g' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' },
+        { name: 'Jus de citron',      qty: 20,  unit: 'ml' },
+        { name: 'Huile d\'olive',     qty: 10,  unit: 'ml' }
+      ],
+      steps: [
+        "Couper le poulet en cubes de 3cm.",
+        "Marinade : mélanger yaourt, toutes les épices, ail écrasé, jus de citron et huile. Bien enrober le poulet. Mariner minimum 1h — 4h idéalement.",
+        "Enfiler les cubes sur des brochettes. Si en bois, les faire tremper 30 min avant pour éviter qu'ils brûlent.",
+        "Cuire sur gril, barbecue ou poêle gril : 4-5 min par face à feu vif.",
+        "Le yaourt forme une croûte légèrement carbonisée délicieuse. Servir avec du tzatziki, salade de tomates et pain pita."
+      ]
+    },
+
+    {
+      id: 'R924',
+      name: 'Rôti de Boeuf Parfait au Four',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥩',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'classique', 'four', 'festif'],
+      servings: 4,
+      prepTime: 10,
+      cookTime: 40,
+      difficulty: 1,
+      // 163×4 + 6×4 + 61×9 = 652+24+549 = 1225 kcal ✓
+      baseNutrition: { calories: 1225, proteinGrams: 163, carbsGrams: 6, fatGrams: 61 },
+      ingredients: [
+        { name: 'Rôti de boeuf',      qty: 800, unit: 'g', note: 'ficelé' },
+        { name: 'Ail',                qty: 4,   unit: 'pce' },
+        { name: 'Moutarde de Dijon',  qty: 30,  unit: 'g' },
+        { name: 'Beurre',             qty: 30,  unit: 'g' },
+        { name: 'Thym, romarin',      qty: 5,   unit: 'g' },
+        { name: 'Huile neutre',       qty: 15,  unit: 'ml' },
+        { name: 'Fleur de sel',       qty: 2,   unit: 'g' }
+      ],
+      steps: [
+        "Sortir le rôti du frigo 1h avant. Préchauffer le four à 240°C.",
+        "Faire piquer le rôti de gousses d'ail en entier. Badigeonner de moutarde. Ficeler si pas fait par le boucher.",
+        "Saisir le rôti dans une cocotte allant au four avec l'huile et le beurre, 2 min sur chaque face pour colorer.",
+        "Ajouter les herbes. Enfourner à 240°C : compter 10-12 min/500g pour saignant, 15 min/500g pour à point.",
+        "CRUCIAL : sortir du four, couvrir d'alu et laisser reposer autant de temps que la cuisson. La viande se détend et reste juteuse. Trancher et ajouter la fleur de sel."
+      ]
+    },
+
+    // ═══ BATCH P50 — Poissons & Express Supplémentaires ═══
+
+    {
+      id: 'R925',
+      name: 'Crevettes Sautées Ail Beurre & Persil',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🦐',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'rapide', 'fruits-de-mer'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 6,
+      difficulty: 1,
+      // 80×4 + 6×4 + 29×9 = 320+24+261 = 605 kcal ✓
+      baseNutrition: { calories: 605, proteinGrams: 80, carbsGrams: 6, fatGrams: 29 },
+      ingredients: [
+        { name: 'Crevettes crues décortiquées', qty: 400, unit: 'g' },
+        { name: 'Beurre',             qty: 30,  unit: 'g' },
+        { name: 'Ail',                qty: 4,   unit: 'pce' },
+        { name: 'Persil frais',       qty: 15,  unit: 'g' },
+        { name: 'Vin blanc sec',      qty: 50,  unit: 'ml' },
+        { name: 'Jus de citron',      qty: 15,  unit: 'ml' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Sécher les crevettes parfaitement avec du papier absorbant. Saler et poivrer.",
+        "Chauffer le beurre à feu vif dans une poêle. Quand il mousse, ajouter les crevettes EN UNE SEULE COUCHE.",
+        "Cuire 1 min 30 par face — elles doivent être roses et légèrement caramélisées. Ne pas surcharger la poêle.",
+        "Ajouter l'ail haché, cuire 30 secondes. Déglacer au vin blanc. Laisser réduire 1 min.",
+        "Finir avec le jus de citron et le persil haché. Servir immédiatement avec du riz basmati, des pâtes ou du pain de campagne pour saucer."
+      ]
+    },
+
+    {
+      id: 'R926',
+      name: 'Pâtes Thon Tomate Express 12 min',
+      category: 'italian',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍝',
+      origin: '🇮🇹',
+      tags: ['express', 'economique', 'high-protein'],
+      servings: 2,
+      prepTime: 2,
+      cookTime: 12,
+      difficulty: 1,
+      // 72×4 + 208×4 + 23×9 = 288+832+207 = 1327 kcal ✓
+      baseNutrition: { calories: 1327, proteinGrams: 72, carbsGrams: 208, fatGrams: 23 },
+      ingredients: [
+        { name: 'Pâtes (penne ou fusilli)', qty: 280, unit: 'g' },
+        { name: 'Thon en boîte',      qty: 160, unit: 'g', note: 'au naturel' },
+        { name: 'Sauce tomate',       qty: 200, unit: 'ml' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' },
+        { name: 'Huile d\'olive',     qty: 15,  unit: 'ml' },
+        { name: 'Origan séché',       qty: 2,   unit: 'g' }
+      ],
+      steps: [
+        "Cuire les pâtes dans une grande casserole d'eau fortement salée.",
+        "Pendant ce temps, faire revenir l'ail haché dans l'huile 1 min. Ajouter la sauce tomate et l'origan.",
+        "Laisser mijoter la sauce 5-6 min.",
+        "Égoutter les pâtes al dente. Mélanger directement dans la sauce avec le thon émietté.",
+        "Chauffer 1 min ensemble. La recette anti-panique : toujours du thon et de la sauce tomate dans les placards."
+      ]
+    },
+
+    {
+      id: 'R927',
+      name: 'Papillote de Cabillaud Citron & Thym',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇫🇷',
+      tags: ['leger', 'four', 'sain', 'high-protein'],
+      servings: 2,
+      prepTime: 8,
+      cookTime: 15,
+      difficulty: 1,
+      // 86×4 + 22×4 + 22×9 = 344+88+198 = 630 kcal ✓
+      baseNutrition: { calories: 630, proteinGrams: 86, carbsGrams: 22, fatGrams: 22 },
+      ingredients: [
+        { name: 'Dos de cabillaud',   qty: 400, unit: 'g' },
+        { name: 'Courgettes',         qty: 200, unit: 'g' },
+        { name: 'Tomates cerises',    qty: 150, unit: 'g' },
+        { name: 'Citron',             qty: 1,   unit: 'pce' },
+        { name: 'Thym frais',         qty: 5,   unit: 'g' },
+        { name: 'Huile d\'olive',     qty: 20,  unit: 'ml' },
+        { name: 'Ail',                qty: 2,   unit: 'pce' },
+        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Préchauffer le four à 200°C. Couper 2 grands rectangles de papier aluminium (assez grands pour bien fermer).",
+        "Couper les courgettes en demi-lune fine. Couper les tomates cerises en deux.",
+        "Sur chaque feuille d'alu, poser les légumes en lit. Poser un dos de cabillaud dessus. Saler, poivrer.",
+        "Ajouter thym, ail émincé, rondelles de citron et l'huile. Fermer hermétiquement les papillotes en repliant les bords.",
+        "Enfourner 15 min. Ouvrir à table — la vapeur aromatique s'échappe. Le poisson doit s'effeuiller facilement."
+      ]
+    },
+
+    {
+      id: 'R928',
+      name: 'Saumon Teriyaki Grillé Express',
+      category: 'japanese',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇯🇵',
+      tags: ['high-protein', 'omega3', 'japanese', 'rapide'],
+      servings: 2,
+      prepTime: 8,
+      cookTime: 10,
+      difficulty: 1,
+      // 68×4 + 22×4 + 28×9 = 272+88+252 = 612 kcal ✓
+      baseNutrition: { calories: 612, proteinGrams: 68, carbsGrams: 22, fatGrams: 28 },
+      ingredients: [
+        { name: 'Pavés de saumon',    qty: 400, unit: 'g' },
+        { name: 'Sauce soja',         qty: 30,  unit: 'ml' },
+        { name: 'Mirin',              qty: 20,  unit: 'ml' },
+        { name: 'Miel',               qty: 15,  unit: 'g' },
+        { name: 'Ail',                qty: 1,   unit: 'pce' },
+        { name: 'Gingembre frais',    qty: 5,   unit: 'g' },
+        { name: 'Huile neutre',       qty: 5,   unit: 'ml' }
+      ],
+      steps: [
+        "Mélanger sauce soja, mirin, miel, ail et gingembre râpé pour la sauce teriyaki.",
+        "Mariner les pavés de saumon 5 min dans la moitié de la sauce.",
+        "Chauffer l'huile dans une poêle à feu moyen-vif. Saisir le saumon côté peau 4 min.",
+        "Retourner, verser le reste de sauce teriyaki dans la poêle. Cuire 3 min en nappant le saumon.",
+        "La sauce caramélise et forme un laquage brillant. Servir sur riz japonais avec des graines de sésame et oignons verts."
+      ]
+    },
+
+    {
+      id: 'R929',
+      name: 'Tortilla Espagnole Oeufs & Pommes de Terre',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'breakfast'],
+      emoji: '🍳',
+      origin: '🇪🇸',
+      tags: ['classique-espagnol', 'vegetarien', 'froid-ou-chaud'],
+      servings: 4,
+      prepTime: 15,
+      cookTime: 30,
+      difficulty: 2,
+      // 48×4 + 115×4 + 85×9 = 192+460+765 = 1417 kcal ✓
+      baseNutrition: { calories: 1417, proteinGrams: 48, carbsGrams: 115, fatGrams: 85 },
+      ingredients: [
+        { name: 'Oeufs',              qty: 6,   unit: 'pce' },
+        { name: 'Pommes de terre',    qty: 500, unit: 'g' },
+        { name: 'Oignon',             qty: 150, unit: 'g' },
+        { name: 'Huile d\'olive',     qty: 80,  unit: 'ml' },
+        { name: 'Sel',                qty: 3,   unit: 'g' }
+      ],
+      steps: [
+        "Éplucher et couper les pommes de terre en tranches fines (3mm). Émincer finement l'oignon.",
+        "Confire pommes de terre et oignon dans l'huile à feu très doux 20 min — pas de friture, juste confiture. Saler. Égoutter en gardant l'huile.",
+        "Battre les oeufs. Mélanger avec les pommes de terre. Laisser absorber 2 min.",
+        "Chauffer 2cs d'huile récupérée à feu moyen dans une poêle 20cm. Verser la préparation. Cuire 4 min.",
+        "Le retournement : glisser sur une assiette plate, faire coulisser dans la poêle à l'envers. Cuire encore 3 min. La tortilla est cuite quand elle ne bouge plus. Se mange chaude ou froide — meilleure le lendemain."
+      ]
     }
 
   // ─────────────────────────────────────────────────────────────────────────────
