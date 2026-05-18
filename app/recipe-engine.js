@@ -29238,7 +29238,790 @@
         "Dresser sur plateau glacé en sections distinctes : thon pour la sauce ponzu, espadon pour la sauce vierge, saint-pierre pour la crème wasabi.",
         "Garnir de fleur de sel, herbes fraîches, filet d'huile d'olive sur le saint-pierre ; servir sans attendre avec les 3 sauces en ramequins séparés."
       ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  BATCH P1 — MAROC MODERNE PREMIUM  (R670–R674)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R670',
+      name: 'Msemen Pizza Kefta Tomates',
+      category: 'maroc-moderne',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🫓', origin: '🇲🇦',
+      tags: ['high-protein', 'comfort-food', 'quick', 'family', 'maroc-moderne'],
+      servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
+      // 74×4 + 93×4 + 56×9 = 296+372+504 = 1172 ✓
+      baseNutrition: { calories: 1172, proteinGrams: 74, carbsGrams: 93, fatGrams: 56 },
+      ingredients: [
+        { name: 'Msemen (du commerce)',          qty: 2,   unit: 'pce', note: '≈160g, 2 galettes' },
+        { name: 'Viande hachée bœuf (≤5% MG)',  qty: 250, unit: 'g' },
+        { name: 'Tomate',                        qty: 200, unit: 'g', note: '2 tomates moyennes' },
+        { name: 'Oignon',                        qty: 100, unit: 'g' },
+        { name: 'Fromage râpé (type Edam)',      qty: 40,  unit: 'g' },
+        { name: 'Concentré de tomates',          qty: 30,  unit: 'g' },
+        { name: 'Ail',                           qty: 10,  unit: 'g', note: '3 gousses' },
+        { name: 'Huile d\'olive',                qty: 10,  unit: 'ml' },
+        { name: 'Cumin moulu',                   qty: 3,   unit: 'g' },
+        { name: 'Paprika doux',                  qty: 3,   unit: 'g' },
+        { name: 'Sel, poivre',                   qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Préparer la garniture : émincer finement l'oignon et l'ail, concasser les tomates. Dans une poêle avec l'huile d'olive, faire revenir l'oignon 3 min à feu moyen.",
+        "Ajouter la viande hachée et l'ail, cuire en émiettant 5 min. Incorporer le concentré de tomates, les tomates concassées, le cumin et le paprika. Cuire encore 5 min jusqu'à absorption du jus.",
+        "Chauffer une autre poêle (ou grille) à feu moyen. Poser les msemen à sec 1 min pour les raffermir légèrement.",
+        "Couvrir généreusement chaque msemen de garniture kefta-tomates. Parsemer de fromage râpé et passer 3-4 min sous le grill du four (200°C) jusqu'à fonte du fromage.",
+        "Servir immédiatement, découpé en 4 parts comme une pizza. Accompagner de harissa pour les amateurs de piquant."
+      ]
+    },
+
+    {
+      id: 'R671',
+      name: 'Bissara Fèves & Œufs Mollets',
+      category: 'maroc-moderne',
+      mealTypes: ['breakfast', 'lunch'],
+      emoji: '🫘', origin: '🇲🇦',
+      tags: ['high-protein', 'vegetarian', 'budget', 'comfort-food', 'gluten-free'],
+      servings: 2, prepTime: 5, cookTime: 15, difficulty: 1,
+      // 52×4 + 60×4 + 43×9 = 208+240+387 = 835 ✓
+      baseNutrition: { calories: 835, proteinGrams: 52, carbsGrams: 60, fatGrams: 43 },
+      ingredients: [
+        { name: 'Fèves décortiquées (surgelées)',qty: 400, unit: 'g', note: 'ou en conserve égouttées' },
+        { name: 'Œuf',                           qty: 4,   unit: 'pce' },
+        { name: 'Ail',                           qty: 20,  unit: 'g', note: '5 gousses' },
+        { name: 'Huile d\'olive',                qty: 20,  unit: 'ml', note: '+ filet pour servir' },
+        { name: 'Cumin moulu',                   qty: 5,   unit: 'g' },
+        { name: 'Paprika fumé',                  qty: 3,   unit: 'g' },
+        { name: 'Citron (jus)',                  qty: 2,   unit: 'pce' },
+        { name: 'Coriandre fraîche',             qty: 20,  unit: 'g' }
+      ],
+      steps: [
+        "Cuire les fèves dans 500ml d'eau bouillante salée avec l'ail entier 10-12 min (ou 5 min si en conserve). Égoutter en réservant 150ml d'eau de cuisson.",
+        "Mixer les fèves avec l'ail, le jus d'un citron, l'huile d'olive, le cumin et le paprika. Ajouter l'eau de cuisson cuillère par cuillère pour obtenir une texture onctueuse (ni trop épaisse, ni liquide). Rectifier sel et citron.",
+        "Pendant ce temps, préparer les œufs mollets : eau bouillante, 6 min exactement, puis bain d'eau froide. Écaler délicatement.",
+        "Servir la bissara chaude dans des bols profonds. Poser 2 œufs mollets coupés en deux sur chaque bol. Arroser d'un filet d'huile d'olive, saupoudrer de cumin et garnir de coriandre fraîche."
+      ]
+    },
+
+    {
+      id: 'R672',
+      name: 'Sandwich Kefta Grillée Batbout',
+      category: 'maroc-moderne',
+      mealTypes: ['lunch'],
+      emoji: '🥙', origin: '🇲🇦',
+      tags: ['high-protein', 'quick', 'budget', 'meal-prep', 'family'],
+      servings: 2, prepTime: 10, cookTime: 12, difficulty: 1,
+      // 81×4 + 125×4 + 19×9 = 324+500+171 = 995 ✓
+      baseNutrition: { calories: 995, proteinGrams: 81, carbsGrams: 125, fatGrams: 19 },
+      ingredients: [
+        { name: 'Batbout',                       qty: 4,   unit: 'pce', note: '≈200g total, 4 petits pains' },
+        { name: 'Viande hachée bœuf (≤5% MG)',  qty: 300, unit: 'g' },
+        { name: 'Oignon',                        qty: 100, unit: 'g' },
+        { name: 'Tomate',                        qty: 150, unit: 'g' },
+        { name: 'Persil frais',                  qty: 20,  unit: 'g' },
+        { name: 'Ras el hanout',                 qty: 5,   unit: 'g' },
+        { name: 'Cumin moulu',                   qty: 3,   unit: 'g' },
+        { name: 'Harissa',                       qty: 20,  unit: 'g', note: 'selon goût' },
+        { name: 'Sel, poivre',                   qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Préparer la kefta : hacher finement l'oignon et le persil. Mélanger à la main avec la viande, le ras el hanout, le cumin, sel et poivre. Pétrir 2 min pour bien amalgamer.",
+        "Former 4 saucisses plates ou boulettes allongées. Griller sur plancha ou poêle anti-adhésive à feu vif 4-5 min par face. La kefta doit être dorée à l'extérieur, cuite à cœur.",
+        "Ouvrir les batbout en deux (sans les séparer). Toaster 1 min à sec dans la poêle chaude.",
+        "Garnir chaque batbout : kefta grillée + rondelles de tomates fraîches + harissa selon goût. Servir immédiatement avec des olives vertes en accompagnement."
+      ]
+    },
+
+    {
+      id: 'R673',
+      name: 'Zaalouk Poulet & Riz Parfumé',
+      category: 'maroc-moderne',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍆', origin: '🇲🇦',
+      tags: ['high-protein', 'balanced', 'gluten-free', 'meal-prep', 'family'],
+      servings: 2, prepTime: 15, cookTime: 30, difficulty: 1,
+      // 108×4 + 102×4 + 34×9 = 432+408+306 = 1146 ✓
+      baseNutrition: { calories: 1146, proteinGrams: 108, carbsGrams: 102, fatGrams: 34 },
+      ingredients: [
+        { name: 'Blanc de poulet',               qty: 300, unit: 'g' },
+        { name: 'Riz basmati (sec)',              qty: 130, unit: 'g', note: '≈300g cuit' },
+        { name: 'Aubergine',                     qty: 250, unit: 'g', note: '1 grosse aubergine' },
+        { name: 'Tomate',                        qty: 200, unit: 'g', note: '2 tomates' },
+        { name: 'Ail',                           qty: 15,  unit: 'g', note: '4 gousses' },
+        { name: 'Huile d\'olive',                qty: 20,  unit: 'ml' },
+        { name: 'Coriandre fraîche',             qty: 20,  unit: 'g' },
+        { name: 'Cumin moulu',                   qty: 5,   unit: 'g' },
+        { name: 'Paprika doux',                  qty: 3,   unit: 'g' },
+        { name: 'Sel, poivre',                   qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Lancer le riz : rincer, cuire dans 260ml d'eau salée 12 min à couvert. Laisser reposer 5 min hors feu.",
+        "Pendant ce temps, préparer le zaalouk : piquer l'aubergine, cuire 8 min au micro-ondes ou griller directement sur la flamme du gaz jusqu'à la peau carbonisée. Peler et hacher grossièrement.",
+        "Dans une poêle avec l'huile d'olive, faire revenir l'ail haché 1 min. Ajouter les tomates concassées, le cumin, le paprika. Cuire 5 min. Incorporer l'aubergine, écraser à la fourchette. Cuire encore 5 min en remuant. Rectifier sel et assaisonnement.",
+        "Cuire les blancs de poulet : assaisonner avec cumin, sel, poivre. Griller à la poêle 6-7 min par face à feu moyen-vif jusqu'à coloration dorée. Trancher en lamelles.",
+        "Dresser les bols : riz parfumé + zaalouk chaud + lamelles de poulet grillé. Parsemer de coriandre fraîche ciselée. Servir avec un demi-citron."
+      ]
+    },
+
+    {
+      id: 'R674',
+      name: 'Lablabi Œufs & Citron',
+      category: 'maroc-moderne',
+      mealTypes: ['breakfast', 'lunch'],
+      emoji: '🫙', origin: '🇲🇦',
+      tags: ['high-protein', 'vegetarian', 'budget', 'comfort-food', 'quick'],
+      servings: 2, prepTime: 5, cookTime: 15, difficulty: 1,
+      // 57×4 + 112×4 + 41×9 = 228+448+369 = 1045 ✓
+      baseNutrition: { calories: 1045, proteinGrams: 57, carbsGrams: 112, fatGrams: 41 },
+      ingredients: [
+        { name: 'Pois chiches (boîte, égouttés)', qty: 300, unit: 'g' },
+        { name: 'Œuf',                            qty: 4,   unit: 'pce' },
+        { name: 'Pain khobz (rassis)',             qty: 60,  unit: 'g', note: 'coupé en petits cubes' },
+        { name: 'Ail',                            qty: 20,  unit: 'g', note: '5 gousses' },
+        { name: 'Huile d\'olive',                 qty: 15,  unit: 'ml', note: '+ filet pour servir' },
+        { name: 'Harissa',                        qty: 15,  unit: 'g', note: 'selon intensité désirée' },
+        { name: 'Cumin moulu',                    qty: 5,   unit: 'g' },
+        { name: 'Citron (jus)',                   qty: 1,   unit: 'pce' },
+        { name: 'Coriandre fraîche',              qty: 15,  unit: 'g' }
+      ],
+      steps: [
+        "Chauffer les pois chiches égouttés dans 400ml d'eau avec l'ail écrasé, le cumin et une pincée de sel. Porter à frémissement 8-10 min pour que les pois chiches absorbent les arômes.",
+        "Répartir les cubes de pain rassis dans 2 bols profonds. Verser le bouillon chaud par-dessus pour ramollir le pain (laisser tremper 2 min).",
+        "Pocher les œufs : dans une casserole d'eau frémissante vinaigrée, casser chaque œuf dans une petite tasse et glisser délicatement. Cuire 3 min. (Alternative rapide : cuire les œufs au plat ou mollets.)",
+        "Ajouter les pois chiches chauds sur le pain. Poser 2 œufs pochés par bol. Arroser du jus de citron et d'un filet d'huile d'olive.",
+        "Finir avec la harissa (une noisette sur le côté), la coriandre fraîche ciselée et une pincée de cumin. Servir très chaud — le lablabi se mange brûlant."
+      ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  BATCH P2 — PETIT-DÉJEUNER PREMIUM  (R675–R679)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R675',
+      name: 'Pancakes Protéinés Banane Beurre de Cacahuète',
+      category: 'world-food',
+      mealTypes: ['breakfast'],
+      emoji: '🥞', origin: '🇺🇸',
+      tags: ['high-protein', 'balanced', 'instagrammable', 'brunch', 'quick'],
+      servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
+      // 58×4 + 100×4 + 30×9 = 232+400+270 = 902 ✓
+      baseNutrition: { calories: 902, proteinGrams: 58, carbsGrams: 100, fatGrams: 30 },
+      ingredients: [
+        { name: 'Flocons d\'avoine',              qty: 120, unit: 'g' },
+        { name: 'Banane',                         qty: 2,   unit: 'pce', note: '≈200g, bien mûres' },
+        { name: 'Œuf',                            qty: 3,   unit: 'pce' },
+        { name: 'Fromage blanc 0%',               qty: 150, unit: 'g' },
+        { name: 'Beurre de cacahuète',            qty: 30,  unit: 'g' },
+        { name: 'Levure chimique',                qty: 5,   unit: 'g' },
+        { name: 'Extrait de vanille',             qty: 5,   unit: 'ml' },
+        { name: 'Lait demi-écrémé',              qty: 50,  unit: 'ml' },
+        { name: 'Huile de coco',                  qty: 10,  unit: 'g', note: 'pour la cuisson' }
+      ],
+      steps: [
+        "Mixer ensemble les flocons d'avoine jusqu'à obtenir une farine grossière. Ajouter les bananes coupées en morceaux, les œufs, le fromage blanc, la levure et la vanille. Mixer à nouveau jusqu'à pâte homogène.",
+        "Incorporer le lait pour fluidifier légèrement. La pâte doit être un peu plus épaisse qu'une pâte à crêpes classique.",
+        "Chauffer une poêle anti-adhésive à feu moyen avec un peu d'huile de coco. Verser 2-3 cuillères à soupe de pâte par pancake (diamètre ≈10 cm). Cuire 2-3 min jusqu'à apparition de bulles sur le dessus.",
+        "Retourner délicatement et cuire encore 1-2 min. Répéter jusqu'à épuisement de la pâte (≈8-10 pancakes).",
+        "Servir en pile : chauffer le beurre de cacahuète 20 secondes au micro-ondes pour le liquéfier légèrement, napper sur les pancakes. Accompagner de rondelles de banane et d'un filet de miel si désiré."
+      ]
+    },
+
+    {
+      id: 'R676',
+      name: 'Overnight Oats Chocolat Framboises',
+      category: 'world-food',
+      mealTypes: ['breakfast'],
+      emoji: '🍫', origin: '🌍',
+      tags: ['high-protein', 'meal-prep', 'no-cook', 'instagrammable', 'vegetarian'],
+      servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
+      // 40×4 + 82×4 + 22×9 = 160+328+198 = 686 ✓
+      baseNutrition: { calories: 686, proteinGrams: 40, carbsGrams: 82, fatGrams: 22 },
+      ingredients: [
+        { name: 'Flocons d\'avoine',              qty: 100, unit: 'g' },
+        { name: 'Lait d\'amande non sucré',       qty: 300, unit: 'ml' },
+        { name: 'Yaourt grec 0%',                 qty: 200, unit: 'g' },
+        { name: 'Cacao en poudre non sucré',      qty: 15,  unit: 'g' },
+        { name: 'Framboises',                     qty: 150, unit: 'g', note: 'fraîches ou surgelées' },
+        { name: 'Graines de chia',                qty: 20,  unit: 'g' },
+        { name: 'Miel',                           qty: 20,  unit: 'g' },
+        { name: 'Amandes effilées',               qty: 20,  unit: 'g', note: 'topping' }
+      ],
+      steps: [
+        "Dans 2 bocaux hermétiques, mélanger les flocons d'avoine, les graines de chia, le cacao et le miel.",
+        "Verser le lait d'amande, bien mélanger. Incorporer le yaourt grec. La texture sera encore liquide — c'est normal, les flocons vont gonfler et le chia épaissir.",
+        "Fermer les bocaux et réfrigérer toute une nuit (minimum 6h). À préparer idéalement la veille.",
+        "Au moment de servir : mélanger délicatement. Si trop épais, ajouter un trait de lait. Disposer les framboises sur le dessus, parsemer d'amandes effilées.",
+        "Déguster froid, directement dans le bocal. Se conserve 3 jours au frigo — préparer plusieurs bocaux d'avance pour la semaine."
+      ]
+    },
+
+    {
+      id: 'R677',
+      name: 'Shakshuka Fromage Frais & Herbes',
+      category: 'maroc-moderne',
+      mealTypes: ['breakfast', 'lunch'],
+      emoji: '🍳', origin: '🇲🇦',
+      tags: ['high-protein', 'vegetarian', 'gluten-free', 'quick', 'comfort-food'],
+      servings: 2, prepTime: 8, cookTime: 15, difficulty: 1,
+      // 46×4 + 32×4 + 30×9 = 184+128+270 = 582 ✓
+      baseNutrition: { calories: 582, proteinGrams: 46, carbsGrams: 32, fatGrams: 30 },
+      ingredients: [
+        { name: 'Œuf',                            qty: 4,   unit: 'pce' },
+        { name: 'Tomates pelées (boîte)',          qty: 400, unit: 'g' },
+        { name: 'Fromage frais (type Kiri)',       qty: 60,  unit: 'g', note: '4 portions' },
+        { name: 'Poivron rouge',                   qty: 120, unit: 'g' },
+        { name: 'Oignon',                         qty: 100, unit: 'g' },
+        { name: 'Ail',                            qty: 15,  unit: 'g', note: '4 gousses' },
+        { name: 'Huile d\'olive',                 qty: 15,  unit: 'ml' },
+        { name: 'Cumin moulu',                    qty: 5,   unit: 'g' },
+        { name: 'Paprika fumé',                   qty: 5,   unit: 'g' },
+        { name: 'Harissa',                        qty: 5,   unit: 'g', note: 'selon goût' },
+        { name: 'Coriandre fraîche',              qty: 20,  unit: 'g' }
+      ],
+      steps: [
+        "Émincer l'oignon et le poivron en fines lamelles, hacher l'ail. Dans une grande poêle avec couvercle, chauffer l'huile d'olive à feu moyen. Faire revenir oignon et poivron 5 min.",
+        "Ajouter l'ail, le cumin, le paprika et la harissa. Cuire 1 min en remuant. Verser les tomates pelées concassées, assaisonner. Mijoter 5 min à feu doux.",
+        "Créer 4 puits dans la sauce avec le dos d'une cuillère. Casser un œuf dans chaque puit. Couvrir la poêle et cuire 4-5 min : blanc pris, jaune encore coulant.",
+        "Déposer des cuillères de fromage frais entre les œufs — il fondra légèrement au contact de la chaleur. Parsemer de coriandre fraîche ciselée.",
+        "Servir directement dans la poêle avec du pain khobz ou pita pour saucer. Couper délicatement au jaune coulant devant ses convives."
+      ]
+    },
+
+    {
+      id: 'R678',
+      name: 'French Toast Brioche Caramel Vanille',
+      category: 'french',
+      mealTypes: ['breakfast'],
+      emoji: '🍞', origin: '🇫🇷',
+      tags: ['high-protein', 'comfort-food', 'instagrammable', 'brunch', 'quick'],
+      servings: 2, prepTime: 8, cookTime: 10, difficulty: 1,
+      // 36×4 + 74×4 + 22×9 = 144+296+198 = 638 ✓
+      baseNutrition: { calories: 638, proteinGrams: 36, carbsGrams: 74, fatGrams: 22 },
+      ingredients: [
+        { name: 'Brioche (tranches épaisses)',     qty: 4,   unit: 'pce', note: '≈180g, tranches 2cm' },
+        { name: 'Œuf',                            qty: 3,   unit: 'pce' },
+        { name: 'Lait demi-écrémé',              qty: 100, unit: 'ml' },
+        { name: 'Fromage blanc 0%',               qty: 150, unit: 'g', note: 'pour servir' },
+        { name: 'Extrait de vanille',             qty: 5,   unit: 'ml' },
+        { name: 'Cannelle',                       qty: 2,   unit: 'g' },
+        { name: 'Sirop d\'érable',               qty: 20,  unit: 'ml' },
+        { name: 'Beurre doux',                    qty: 10,  unit: 'g', note: 'pour la cuisson' }
+      ],
+      steps: [
+        "Fouetter ensemble les œufs, le lait, la vanille et la cannelle dans un plat creux.",
+        "Tremper chaque tranche de brioche dans l'appareil 30 secondes par face — elle doit absorber sans se désintégrer.",
+        "Chauffer le beurre dans une poêle anti-adhésive à feu moyen. Cuire les tranches 2-3 min par face jusqu'à dorure bien prononcée et légère caramélisation.",
+        "Pendant la cuisson, chauffer le sirop d'érable dans une petite casserole 1 min jusqu'à légère ébullition pour intensifier le goût.",
+        "Dresser : 2 tranches de french toast par assiette, une généreuse cuillère de fromage blanc, un filet de sirop d'érable chaud. Servir immédiatement."
+      ]
+    },
+
+    {
+      id: 'R679',
+      name: 'Bowl Açaï Granola & Fruits Rouges',
+      category: 'world-food',
+      mealTypes: ['breakfast'],
+      emoji: '🫐', origin: '🌍',
+      tags: ['vegetarian', 'instagrammable', 'balanced', 'healthy-fats', 'no-cook'],
+      servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
+      // 20×4 + 76×4 + 28×9 = 80+304+252 = 636 ✓
+      baseNutrition: { calories: 636, proteinGrams: 20, carbsGrams: 76, fatGrams: 28 },
+      ingredients: [
+        { name: 'Purée d\'açaï surgelée',         qty: 200, unit: 'g', note: '2 sachets × 100g' },
+        { name: 'Banane',                         qty: 1,   unit: 'pce', note: 'congelée la veille, ≈120g' },
+        { name: 'Lait d\'amande non sucré',       qty: 80,  unit: 'ml' },
+        { name: 'Granola nature',                 qty: 60,  unit: 'g' },
+        { name: 'Myrtilles fraîches',             qty: 100, unit: 'g' },
+        { name: 'Fraises',                        qty: 100, unit: 'g' },
+        { name: 'Noix de coco râpée',             qty: 15,  unit: 'g' },
+        { name: 'Beurre d\'amande',               qty: 20,  unit: 'g' },
+        { name: 'Miel',                           qty: 15,  unit: 'g' }
+      ],
+      steps: [
+        "Sortir les sachets d'açaï du congélateur 5 min avant utilisation. Casser la banane congelée en morceaux.",
+        "Mixer ensemble l'açaï, la banane et le lait d'amande jusqu'à texture épaisse et crémeuse — similaire à de la glace pilée. Ne pas trop mixer, la base doit rester très froide et dense.",
+        "Si trop épais : ajouter le lait d'amande cuillère par cuillère. La texture idéale supporte les toppings sans s'affaisser.",
+        "Répartir la base açaï dans 2 bols larges (passés 5 min au congélateur pour les garder froids). Disposer les toppings en rangées : myrtilles, fraises tranchées, granola, noix de coco.",
+        "Tracer des traits de beurre d'amande chauffé 20 sec au micro-ondes et de miel. Servir immédiatement — le contraste base glacée et toppings ambiance est la signature du bowl açaï."
+      ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  BATCH P3 — DÉJEUNERS FITNESS  (R680–R684)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R680',
+      name: 'Burger Maison Poulet Croustillant Avocat',
+      category: 'world-food',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍔', origin: '🇺🇸',
+      tags: ['high-protein', 'balanced', 'instagrammable', 'family', 'comfort-food'],
+      servings: 2, prepTime: 15, cookTime: 20, difficulty: 2,
+      // 72×4 + 88×4 + 34×9 = 288+352+306 = 946 ✓
+      baseNutrition: { calories: 946, proteinGrams: 72, carbsGrams: 88, fatGrams: 34 },
+      ingredients: [
+        { name: 'Blanc de poulet',                qty: 300, unit: 'g', note: '2 filets aplatis' },
+        { name: 'Buns briochés burgers',          qty: 2,   unit: 'pce' },
+        { name: 'Avocat',                         qty: 1,   unit: 'pce', note: 'mûr, ≈150g' },
+        { name: 'Chapelure panko',                qty: 50,  unit: 'g' },
+        { name: 'Œuf',                            qty: 1,   unit: 'pce', note: 'pour paner' },
+        { name: 'Cheddar tranche',                qty: 2,   unit: 'pce', note: '≈40g' },
+        { name: 'Salade verte',                   qty: 40,  unit: 'g' },
+        { name: 'Tomate',                         qty: 100, unit: 'g' },
+        { name: 'Sauce sriracha mayo',            qty: 20,  unit: 'g' },
+        { name: 'Jus de citron',                  qty: 10,  unit: 'ml' },
+        { name: 'Huile d\'olive',                 qty: 10,  unit: 'ml' },
+        { name: 'Ail en poudre',                  qty: 3,   unit: 'g' }
+      ],
+      steps: [
+        "Aplatir les filets de poulet à 1,5 cm d'épaisseur (film alimentaire + rouleau). Assaisonner avec sel, poivre et ail en poudre.",
+        "Préparer la panure : tremper chaque filet dans l'œuf battu puis dans la chapelure panko. Bien appuyer pour faire adhérer.",
+        "Cuire à la poêle avec l'huile d'olive à feu moyen-vif 6-7 min par face jusqu'à dorure croustillante et cœur à 75°C. Déposer une tranche de cheddar sur chaque filet dans la dernière minute, couvrir pour faire fondre.",
+        "Écraser l'avocat avec le jus de citron, sel, poivre. Couper les buns, les toaster à sec.",
+        "Assembler le burger : bun bas + sauce sriracha mayo + salade + tranche de tomate + poulet croustillant cheddar + guacamole + bun haut. Servir immédiatement avec des frites four ou une salade."
+      ]
+    },
+
+    {
+      id: 'R681',
+      name: 'Bowl Riz Saumon Teriyaki Concombre',
+      category: 'japanese',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍱', origin: '🇯🇵',
+      tags: ['high-protein', 'omega3', 'balanced', 'meal-prep', 'gluten-free'],
+      servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
+      // 68×4 + 86×4 + 26×9 = 272+344+234 = 850 ✓
+      baseNutrition: { calories: 850, proteinGrams: 68, carbsGrams: 86, fatGrams: 26 },
+      ingredients: [
+        { name: 'Filet de saumon (sans peau)',    qty: 280, unit: 'g', note: '2 filets × 140g' },
+        { name: 'Riz japonais (sec)',             qty: 140, unit: 'g', note: '≈300g cuit' },
+        { name: 'Sauce soja',                     qty: 30,  unit: 'ml' },
+        { name: 'Miel',                           qty: 15,  unit: 'g' },
+        { name: 'Gingembre frais',                qty: 10,  unit: 'g' },
+        { name: 'Ail',                            qty: 8,   unit: 'g', note: '2 gousses' },
+        { name: 'Huile de sésame',                qty: 10,  unit: 'ml' },
+        { name: 'Concombre',                      qty: 150, unit: 'g' },
+        { name: 'Avocat',                         qty: 1,   unit: 'pce', note: '≈100g net' },
+        { name: 'Graines de sésame',              qty: 10,  unit: 'g' },
+        { name: 'Oignon vert',                    qty: 20,  unit: 'g' }
+      ],
+      steps: [
+        "Cuire le riz japonais selon instructions (absorption, 15 min). Laisser reposer 5 min à couvert.",
+        "Préparer la sauce teriyaki : mélanger sauce soja, miel, gingembre râpé et ail haché. Réserver la moitié pour servir.",
+        "Mariner le saumon 5 min dans la moitié de la sauce. Saisir à la poêle avec l'huile de sésame 3-4 min par face à feu vif. La sauce doit caraméliser et laquée le poisson.",
+        "Couper le concombre en demi-rondelles et l'avocat en tranches. Ciseler l'oignon vert.",
+        "Dresser les bowls : riz + saumon teriyaki + concombre + avocat. Arroser de la sauce réservée, parsemer de graines de sésame et d'oignon vert."
+      ]
+    },
+
+    {
+      id: 'R682',
+      name: 'Pasta Arrabiata Viande Hachée',
+      category: 'italian',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍝', origin: '🇮🇹',
+      tags: ['high-protein', 'high-carb', 'budget', 'quick', 'family'],
+      servings: 2, prepTime: 5, cookTime: 20, difficulty: 1,
+      // 68×4 + 132×4 + 20×9 = 272+528+180 = 980 ✓
+      baseNutrition: { calories: 980, proteinGrams: 68, carbsGrams: 132, fatGrams: 20 },
+      ingredients: [
+        { name: 'Pâtes penne (sèches)',           qty: 160, unit: 'g' },
+        { name: 'Viande hachée bœuf (≤5% MG)',   qty: 250, unit: 'g' },
+        { name: 'Tomates pelées (boîte)',         qty: 400, unit: 'g' },
+        { name: 'Ail',                            qty: 20,  unit: 'g', note: '5 gousses' },
+        { name: 'Piment rouge séché',             qty: 2,   unit: 'g', note: 'selon tolérance' },
+        { name: 'Huile d\'olive',                 qty: 15,  unit: 'ml' },
+        { name: 'Parmesan râpé',                  qty: 20,  unit: 'g' },
+        { name: 'Basilic frais',                  qty: 10,  unit: 'g' },
+        { name: 'Sel, poivre',                    qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Cuire les pâtes al dente selon instructions. Réserver 100ml d'eau de cuisson avant d'égoutter.",
+        "Pendant la cuisson des pâtes : chauffer l'huile d'olive, faire revenir l'ail haché et le piment 1 min sans brûler. Ajouter la viande hachée, cuire en émiettant 5-6 min.",
+        "Verser les tomates pelées concassées, assaisonner. Laisser réduire 8 min à feu moyen. La sauce doit être épaisse et bien parfumée.",
+        "Incorporer les pâtes égouttées directement dans la sauce. Ajouter un peu d'eau de cuisson si nécessaire pour lier. Mélanger 1 min à feu vif.",
+        "Servir dans des assiettes chaudes, parsemer de parmesan râpé et de feuilles de basilic frais. La sauce arrabiata doit être relevée — ajuster le piment selon les goûts."
+      ]
+    },
+
+    {
+      id: 'R683',
+      name: 'Wrap Dinde Avocat Tomate Séchée',
+      category: 'world-food',
+      mealTypes: ['lunch'],
+      emoji: '🌯', origin: '🌍',
+      tags: ['high-protein', 'quick', 'meal-prep', 'balanced', 'light'],
+      servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
+      // 56×4 + 60×4 + 22×9 = 224+240+198 = 662 ✓
+      baseNutrition: { calories: 662, proteinGrams: 56, carbsGrams: 60, fatGrams: 22 },
+      ingredients: [
+        { name: 'Escalope de dinde',              qty: 250, unit: 'g' },
+        { name: 'Tortilla blé (grande)',           qty: 2,   unit: 'pce', note: '≈70g chacune' },
+        { name: 'Avocat',                         qty: 1,   unit: 'pce', note: '≈120g net' },
+        { name: 'Tomates séchées à l\'huile',     qty: 30,  unit: 'g' },
+        { name: 'Fromage frais',                  qty: 40,  unit: 'g' },
+        { name: 'Roquette',                       qty: 40,  unit: 'g' },
+        { name: 'Jus de citron',                  qty: 10,  unit: 'ml' },
+        { name: 'Herbes de Provence',             qty: 3,   unit: 'g' },
+        { name: 'Huile d\'olive',                 qty: 5,   unit: 'ml' },
+        { name: 'Sel, poivre',                    qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Assaisonner les escalopes de dinde avec les herbes de Provence, sel, poivre. Cuire à la poêle avec l'huile d'olive 4-5 min par face. Laisser reposer 2 min puis couper en lamelles.",
+        "Écraser l'avocat avec le jus de citron, sel, poivre. Émincer les tomates séchées.",
+        "Étaler le fromage frais sur chaque tortilla, en laissant un bord de 3 cm. Déposer la roquette, les lamelles de dinde, l'avocat écrasé et les tomates séchées.",
+        "Rouler fermement le wrap en repliant d'abord les bords latéraux, puis en roulant du bas vers le haut. Maintenir quelques secondes.",
+        "Couper en deux en diagonale. Peut se préparer à l'avance et s'emballer dans du film alimentaire pour le transport — idéal meal prep."
+      ]
+    },
+
+    {
+      id: 'R684',
+      name: 'Tacos Bœuf Épicé Pico de Gallo',
+      category: 'mexican',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🌮', origin: '🇲🇽',
+      tags: ['high-protein', 'family', 'instagrammable', 'quick', 'spicy'],
+      servings: 2, prepTime: 15, cookTime: 12, difficulty: 1,
+      // 62×4 + 70×4 + 28×9 = 248+280+252 = 780 ✓
+      baseNutrition: { calories: 780, proteinGrams: 62, carbsGrams: 70, fatGrams: 28 },
+      ingredients: [
+        { name: 'Viande hachée bœuf (≤5% MG)',   qty: 300, unit: 'g' },
+        { name: 'Tortilla maïs (petite)',         qty: 6,   unit: 'pce', note: '≈120g total' },
+        { name: 'Tomate',                         qty: 150, unit: 'g' },
+        { name: 'Oignon rouge',                   qty: 80,  unit: 'g' },
+        { name: 'Coriandre fraîche',              qty: 20,  unit: 'g' },
+        { name: 'Avocat',                         qty: 1,   unit: 'pce', note: '≈100g net' },
+        { name: 'Jus de citron vert',             qty: 20,  unit: 'ml' },
+        { name: 'Cumin moulu',                    qty: 5,   unit: 'g' },
+        { name: 'Chili en poudre',                qty: 3,   unit: 'g' },
+        { name: 'Ail en poudre',                  qty: 3,   unit: 'g' },
+        { name: 'Huile d\'olive',                 qty: 10,  unit: 'ml' }
+      ],
+      steps: [
+        "Préparer le pico de gallo : couper les tomates en petits dés, émincer l'oignon rouge et ciseler la coriandre. Mélanger avec la moitié du jus de citron vert, sel. Réserver au frais.",
+        "Assaisonner la viande avec cumin, chili et ail en poudre, sel, poivre. Cuire dans une poêle avec l'huile d'olive à feu vif 6-7 min en émiettant régulièrement.",
+        "Écraser l'avocat avec le reste du jus de citron vert, sel, poivre. Réserver.",
+        "Chauffer les tortillas de maïs 30 secondes par face à sec dans une poêle — elles doivent être souples et légèrement dorées.",
+        "Dresser les tacos : tortilla + bœuf épicé + pico de gallo + guacamole. Servir immédiatement avec les 3 restes en bols séparés pour que chacun assemble ses tacos — c'est l'expérience qui compte."
+      ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  BATCH P4 — SNACKS & DESSERTS FITNESS  (R685–R689)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R685',
+      name: 'Energy Balls Dattes Cacahuète Cacao',
+      category: 'world-food',
+      mealTypes: ['snack'],
+      emoji: '⚡', origin: '🌍',
+      tags: ['high-protein', 'no-cook', 'meal-prep', 'vegan', 'budget'],
+      servings: 2, prepTime: 15, cookTime: 0, difficulty: 1,
+      // 18×4 + 60×4 + 24×9 = 72+240+216 = 528 ✓
+      baseNutrition: { calories: 528, proteinGrams: 18, carbsGrams: 60, fatGrams: 24 },
+      ingredients: [
+        { name: 'Dattes Medjoul (dénoyautées)',   qty: 150, unit: 'g', note: '≈8 dattes' },
+        { name: 'Beurre de cacahuète',            qty: 60,  unit: 'g' },
+        { name: 'Flocons d\'avoine',              qty: 60,  unit: 'g' },
+        { name: 'Cacao en poudre non sucré',      qty: 15,  unit: 'g' },
+        { name: 'Noix de coco râpée',             qty: 20,  unit: 'g', note: 'pour rouler' },
+        { name: 'Extrait de vanille',             qty: 3,   unit: 'ml' },
+        { name: 'Sel',                            qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Tremper les dattes 10 min dans de l'eau tiède si elles sont trop sèches. Égoutter et dénoyauter.",
+        "Mixer les dattes au robot jusqu'à obtenir une pâte collante. Ajouter le beurre de cacahuète, les flocons d'avoine, le cacao, la vanille et le sel. Mixer par impulsions jusqu'à mélange homogène — ne pas trop mixer, on veut garder un peu de texture.",
+        "Réfrigérer la pâte 15 min pour la raffermir et faciliter le façonnage.",
+        "Former des boules de la taille d'une noix (≈25g chacune). Rouler dans la noix de coco râpée. Donne environ 12-14 boules.",
+        "Conserver au frigo jusqu'à 2 semaines ou congeler. Sortir 5 min avant de déguster. Idéal avant l'entraînement ou en snack du soir."
+      ]
+    },
+
+    {
+      id: 'R686',
+      name: 'Mousse Chocolat Noir Protéinée',
+      category: 'french',
+      mealTypes: ['snack'],
+      emoji: '🍮', origin: '🇫🇷',
+      tags: ['high-protein', 'vegetarian', 'instagrammable', 'comfort-food', 'light'],
+      servings: 2, prepTime: 15, cookTime: 0, difficulty: 2,
+      // 28×4 + 30×4 + 18×9 = 112+120+162 = 394 ✓
+      baseNutrition: { calories: 394, proteinGrams: 28, carbsGrams: 30, fatGrams: 18 },
+      ingredients: [
+        { name: 'Yaourt grec 0%',                 qty: 250, unit: 'g' },
+        { name: 'Chocolat noir 70%',              qty: 60,  unit: 'g' },
+        { name: 'Blanc d\'œuf',                   qty: 3,   unit: 'pce', note: '≈90g' },
+        { name: 'Cacao en poudre non sucré',      qty: 10,  unit: 'g' },
+        { name: 'Miel',                           qty: 15,  unit: 'g' },
+        { name: 'Extrait de vanille',             qty: 3,   unit: 'ml' }
+      ],
+      steps: [
+        "Faire fondre le chocolat noir au bain-marie ou au micro-ondes par tranches de 30 secondes en mélangeant entre chaque. Laisser tiédir 5 min.",
+        "Mélanger le yaourt grec avec le cacao en poudre, le miel et la vanille. Incorporer le chocolat fondu tiède, mélanger jusqu'à texture lisse et brillante.",
+        "Monter les blancs en neige ferme avec une pincée de sel (batteur électrique, 3-4 min).",
+        "Incorporer délicatement les blancs en neige au mélange chocolat en 3 fois, avec une spatule, en soulevant la masse de bas en haut. Ne pas trop mélanger pour préserver les bulles d'air.",
+        "Verser dans 2 verrines ou ramequins. Réfrigérer 2h minimum. Servir froid avec quelques copeaux de chocolat. La texture doit être légère et aérienne — très loin du yaourt initial."
+      ]
+    },
+
+    {
+      id: 'R687',
+      name: 'Banana Bread Protéiné Pépites Chocolat',
+      category: 'world-food',
+      mealTypes: ['breakfast', 'snack'],
+      emoji: '🍌', origin: '🇺🇸',
+      tags: ['high-protein', 'meal-prep', 'baked', 'comfort-food', 'vegetarian'],
+      servings: 8, prepTime: 15, cookTime: 50, difficulty: 2,
+      // 96×4 + 224×4 + 80×9 = 384+896+720 = 2000 ✓
+      baseNutrition: { calories: 2000, proteinGrams: 96, carbsGrams: 224, fatGrams: 80 },
+      ingredients: [
+        { name: 'Banane très mûre',               qty: 3,   unit: 'pce', note: '≈330g, bien tachetées' },
+        { name: 'Farine de blé complète T110',    qty: 150, unit: 'g' },
+        { name: 'Protéine whey vanille',          qty: 60,  unit: 'g', note: '2 doses' },
+        { name: 'Œuf',                            qty: 3,   unit: 'pce' },
+        { name: 'Beurre de cacahuète',            qty: 80,  unit: 'g' },
+        { name: 'Miel',                           qty: 40,  unit: 'g' },
+        { name: 'Pépites de chocolat noir',       qty: 80,  unit: 'g' },
+        { name: 'Levure chimique',                qty: 8,   unit: 'g' },
+        { name: 'Bicarbonate de soude',           qty: 3,   unit: 'g' },
+        { name: 'Sel',                            qty: 2,   unit: 'g' },
+        { name: 'Extrait de vanille',             qty: 5,   unit: 'ml' }
+      ],
+      steps: [
+        "Préchauffer le four à 175°C. Beurrer ou tapisser de papier cuisson un moule à cake 23×13 cm.",
+        "Écraser les bananes à la fourchette jusqu'à purée lisse. Ajouter les œufs battus, le beurre de cacahuète et le miel. Mélanger.",
+        "Dans un autre bol, mélanger la farine, la protéine whey, la levure, le bicarbonate et le sel. Incorporer les ingrédients secs aux liquides en mélangeant juste assez — quelques grumeaux sont acceptables.",
+        "Ajouter les 3/4 des pépites de chocolat, plier délicatement. Verser dans le moule, parsemer des pépites restantes sur le dessus.",
+        "Enfourner 45-55 min. Vérifier la cuisson avec un cure-dent — il doit ressortir avec quelques miettes humides mais pas de pâte crue. Laisser refroidir 15 min dans le moule avant de démouler.",
+        "Trancher en 8 portions. Se conserve 4 jours à température ambiante bien emballé, ou 2 semaines au congélateur."
+      ]
+    },
+
+    {
+      id: 'R688',
+      name: 'Yaourt Grec Mangue Granola Croustillant',
+      category: 'world-food',
+      mealTypes: ['breakfast', 'snack'],
+      emoji: '🥭', origin: '🌍',
+      tags: ['high-protein', 'quick', 'no-cook', 'instagrammable', 'vegetarian'],
+      servings: 2, prepTime: 5, cookTime: 0, difficulty: 1,
+      // 28×4 + 56×4 + 14×9 = 112+224+126 = 462 ✓
+      baseNutrition: { calories: 462, proteinGrams: 28, carbsGrams: 56, fatGrams: 14 },
+      ingredients: [
+        { name: 'Yaourt grec 0%',                 qty: 300, unit: 'g' },
+        { name: 'Mangue fraîche (ou surgelée)',   qty: 200, unit: 'g', note: '1 petite mangue nette' },
+        { name: 'Granola nature',                 qty: 60,  unit: 'g' },
+        { name: 'Miel',                           qty: 20,  unit: 'g' },
+        { name: 'Noix de coco râpée',             qty: 10,  unit: 'g' },
+        { name: 'Jus de citron vert',             qty: 5,   unit: 'ml' }
+      ],
+      steps: [
+        "Éplucher la mangue et couper en dés ou lamelles. Arroser du jus de citron vert pour éviter l'oxydation et rehausser les arômes tropicaux.",
+        "Répartir le yaourt grec dans 2 bols ou verrines larges — la surface doit être lisse pour accueillir les toppings.",
+        "Disposer les dés de mangue sur la moitié du bol, le granola sur l'autre moitié pour préserver son croustillant jusqu'au moment de déguster.",
+        "Parsemer de noix de coco râpée et arroser d'un filet de miel en spirale.",
+        "Déguster immédiatement pour profiter du contraste yaourt frais / mangue juteuse / granola croustillant. À préparer au dernier moment — le granola ramollit vite."
+      ]
+    },
+
+    {
+      id: 'R689',
+      name: 'Cheesecake Protéiné Citron Sans Cuisson',
+      category: 'world-food',
+      mealTypes: ['snack'],
+      emoji: '🍋', origin: '🌍',
+      tags: ['high-protein', 'vegetarian', 'meal-prep', 'instagrammable', 'no-cook'],
+      servings: 6, prepTime: 20, cookTime: 0, difficulty: 2,
+      // 90×4 + 120×4 + 90×9 = 360+480+810 = 1650 ✓
+      baseNutrition: { calories: 1650, proteinGrams: 90, carbsGrams: 120, fatGrams: 90 },
+      ingredients: [
+        { name: 'Fromage blanc 40%',              qty: 400, unit: 'g' },
+        { name: 'Fromage frais (type Philadelphia)', qty: 200, unit: 'g' },
+        { name: 'Yaourt grec 0%',                 qty: 200, unit: 'g' },
+        { name: 'Biscuits sablés',                qty: 150, unit: 'g', note: 'type Petit Beurre' },
+        { name: 'Beurre doux',                    qty: 60,  unit: 'g' },
+        { name: 'Citron (jus + zeste)',           qty: 2,   unit: 'pce' },
+        { name: 'Miel',                           qty: 60,  unit: 'g' },
+        { name: 'Gélatine',                       qty: 8,   unit: 'g', note: '4 feuilles' },
+        { name: 'Extrait de vanille',             qty: 5,   unit: 'ml' }
+      ],
+      steps: [
+        "Émietter les biscuits finement au robot ou dans un sac plastique avec un rouleau. Mélanger avec le beurre fondu. Tasser dans le fond d'un moule à charnière 20 cm (ou 6 cercles individuels). Réfrigérer 15 min.",
+        "Tremper les feuilles de gélatine dans de l'eau froide 5 min. Essorer. Chauffer le jus de citron dans une petite casserole et y dissoudre la gélatine ramollie hors du feu.",
+        "Fouetter ensemble le fromage blanc, le fromage frais, le yaourt grec, le miel, la vanille et le zeste de citron. Incorporer le jus de citron avec gélatine en filet en fouettant.",
+        "Verser la crème sur la base biscuit. Lisser la surface. Réfrigérer 4h minimum (idéalement une nuit).",
+        "Démouler délicatement. Décorer avec des zestes de citron, quelques framboises ou un coulis. Se conserve 4 jours au frigo.",
+        "Couper en 6 parts. La texture doit être crémeuse, fondante, avec une légère acidité du citron qui équilibre la douceur — loin d'un dessert fade."
+      ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  BATCH P5 — MAROC MODERNE & MÉDITERRANÉE  (R690–R694)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R690',
+      name: 'Brochettes Kefta Sauce Yaourt Menthe',
+      category: 'maroc-moderne',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍢', origin: '🇲🇦',
+      tags: ['high-protein', 'gluten-free', 'family', 'instagrammable', 'balanced'],
+      servings: 2, prepTime: 15, cookTime: 15, difficulty: 1,
+      // 80×4 + 18×4 + 36×9 = 320+72+324 = 716 ✓
+      baseNutrition: { calories: 716, proteinGrams: 80, carbsGrams: 18, fatGrams: 36 },
+      ingredients: [
+        { name: 'Viande hachée bœuf (15% MG)',   qty: 400, unit: 'g' },
+        { name: 'Yaourt grec 0%',                 qty: 150, unit: 'g' },
+        { name: 'Oignon',                         qty: 80,  unit: 'g' },
+        { name: 'Persil frais',                   qty: 25,  unit: 'g' },
+        { name: 'Menthe fraîche',                 qty: 15,  unit: 'g' },
+        { name: 'Ail',                            qty: 10,  unit: 'g', note: '3 gousses' },
+        { name: 'Cumin moulu',                    qty: 5,   unit: 'g' },
+        { name: 'Paprika doux',                   qty: 5,   unit: 'g' },
+        { name: 'Cannelle',                       qty: 2,   unit: 'g' },
+        { name: 'Jus de citron',                  qty: 10,  unit: 'ml' },
+        { name: 'Sel, poivre',                    qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Préparer la kefta : râper finement l'oignon (pas en dés — le jus est essentiel pour la liaison). Hacher le persil. Mélanger à la main avec la viande, l'ail haché, le cumin, le paprika, la cannelle, sel et poivre. Pétrir 3 min.",
+        "Humidifier les mains et façonner 8 brochettes autour de pics en bois préalablement trempés (ou brochettes métal). Appuyer fermement pour bien faire adhérer.",
+        "Griller sur barbecue, plancha ou poêle gril à feu vif 5-6 min en tournant à mi-cuisson. La kefta doit être dorée à l'extérieur, moelleuse à cœur.",
+        "Préparer la sauce yaourt : mélanger le yaourt grec avec la menthe fraîche ciselée, le jus de citron, sel et une pincée de cumin. Réfrigérer jusqu'au service.",
+        "Servir les brochettes avec la sauce yaourt menthe. Accompagner d'une salade marocaine (tomate, oignon, citron) et de pain khobz chaud."
+      ]
+    },
+
+    {
+      id: 'R691',
+      name: 'Salade Fattoush Poulet Croustillant',
+      category: 'mediterranean',
+      mealTypes: ['lunch'],
+      emoji: '🥗', origin: '🇱🇧',
+      tags: ['high-protein', 'balanced', 'salad', 'light', 'quick'],
+      servings: 2, prepTime: 15, cookTime: 15, difficulty: 1,
+      // 62×4 + 42×4 + 20×9 = 248+168+180 = 596 ✓
+      baseNutrition: { calories: 596, proteinGrams: 62, carbsGrams: 42, fatGrams: 20 },
+      ingredients: [
+        { name: 'Blanc de poulet',                qty: 280, unit: 'g' },
+        { name: 'Pain pita',                      qty: 2,   unit: 'pce', note: '≈100g total' },
+        { name: 'Tomate',                         qty: 200, unit: 'g' },
+        { name: 'Concombre',                      qty: 150, unit: 'g' },
+        { name: 'Radis',                          qty: 80,  unit: 'g' },
+        { name: 'Oignon rouge',                   qty: 60,  unit: 'g' },
+        { name: 'Persil frais',                   qty: 20,  unit: 'g' },
+        { name: 'Menthe fraîche',                 qty: 10,  unit: 'g' },
+        { name: 'Jus de citron',                  qty: 30,  unit: 'ml' },
+        { name: 'Huile d\'olive',                 qty: 15,  unit: 'ml' },
+        { name: 'Sumac',                          qty: 5,   unit: 'g' },
+        { name: 'Sel, poivre',                    qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Couper les pitas en triangles et faire griller au four à 200°C pendant 8 min jusqu'à ce qu'ils soient bien croustillants et dorés. Réserver.",
+        "Couper les tomates en quartiers, le concombre en demi-rondelles, les radis en fines rondelles, l'oignon rouge en fines lamelles. Ciseler le persil et la menthe.",
+        "Griller les blancs de poulet assaisonnés avec sel, poivre et sumac à la poêle avec l'huile d'olive 6-7 min par face. Couper en lamelles.",
+        "Préparer la vinaigrette : jus de citron, 10ml d'huile d'olive, sumac, sel, poivre. Fouetter.",
+        "Assembler au dernier moment : légumes + herbes + lamelles de poulet + chips de pita. Arroser de vinaigrette, mélanger délicatement. Le sumac doit parfumer toute la salade — c'est lui qui fait la signature du fattoush."
+      ]
+    },
+
+    {
+      id: 'R692',
+      name: 'Poulet Miel Harissa Four en 30 min',
+      category: 'maroc-moderne',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍗', origin: '🇲🇦',
+      tags: ['high-protein', 'gluten-free', 'quick', 'family', 'meal-prep'],
+      servings: 2, prepTime: 5, cookTime: 30, difficulty: 1,
+      // 86×4 + 14×4 + 22×9 = 344+56+198 = 598 ✓
+      baseNutrition: { calories: 598, proteinGrams: 86, carbsGrams: 14, fatGrams: 22 },
+      ingredients: [
+        { name: 'Cuisses de poulet (sans peau)',  qty: 500, unit: 'g', note: '4 petites cuisses' },
+        { name: 'Harissa',                        qty: 30,  unit: 'g' },
+        { name: 'Miel',                           qty: 25,  unit: 'g' },
+        { name: 'Ail',                            qty: 15,  unit: 'g', note: '4 gousses' },
+        { name: 'Huile d\'olive',                 qty: 15,  unit: 'ml' },
+        { name: 'Jus de citron',                  qty: 15,  unit: 'ml' },
+        { name: 'Cumin moulu',                    qty: 5,   unit: 'g' },
+        { name: 'Sel, poivre',                    qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Préchauffer le four à 200°C. Mélanger la harissa, le miel, l'ail haché, l'huile d'olive, le jus de citron, le cumin, sel et poivre.",
+        "Inciser les cuisses de poulet 2-3 fois en profondeur pour que la marinade pénètre. Enduire généreusement de marinade sur toutes les faces.",
+        "Placer dans un plat allant au four. Enfourner 25-30 min en retournant à mi-cuisson. Dans les 5 dernières minutes, passer en position gril à 220°C pour caraméliser.",
+        "Le poulet est cuit quand le jus est clair (piquer la partie épaisse), la peau légèrement caramélisée et parfumée.",
+        "Servir avec du riz ou de la semoule, et une salade fraîche. La sauce harissa-miel caramélisée dans le fond du plat est délicieuse — la récupérer pour napper."
+      ]
+    },
+
+    {
+      id: 'R693',
+      name: 'Salade Grecque Poulpe Grillé',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐙', origin: '🇬🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'salad', 'light'],
+      servings: 2, prepTime: 15, cookTime: 20, difficulty: 2,
+      // 52×4 + 18×4 + 24×9 = 208+72+216 = 496 ✓
+      baseNutrition: { calories: 496, proteinGrams: 52, carbsGrams: 18, fatGrams: 24 },
+      ingredients: [
+        { name: 'Poulpe cuit (surgelé, déjà cuit)', qty: 350, unit: 'g' },
+        { name: 'Féta AOP',                        qty: 80,  unit: 'g' },
+        { name: 'Tomate',                          qty: 200, unit: 'g' },
+        { name: 'Concombre',                       qty: 150, unit: 'g' },
+        { name: 'Oignon rouge',                    qty: 60,  unit: 'g' },
+        { name: 'Olives noires Kalamata',          qty: 40,  unit: 'g' },
+        { name: 'Huile d\'olive extra vierge',     qty: 20,  unit: 'ml' },
+        { name: 'Jus de citron',                   qty: 20,  unit: 'ml' },
+        { name: 'Origan séché',                    qty: 3,   unit: 'g' },
+        { name: 'Sel, poivre',                     qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Décongeler le poulpe (déjà cuit) la veille au frigo. Le sécher soigneusement avec du papier absorbant — c'est la clé pour une belle caramélisation.",
+        "Griller le poulpe sur plancha ou poêle gril à très haute température 3-4 min par face. Ne pas bouger pendant la première minute pour obtenir les marques de gril. Il doit être légèrement carbonisé en surface, tendre à cœur.",
+        "Couper les tomates en quartiers, le concombre en demi-rondelles, l'oignon rouge en fines lamelles. Disposer dans un grand saladier.",
+        "Ajouter les olives et la féta émiettée grossièrement. Assaisonner avec l'huile d'olive, le jus de citron, l'origan, sel et poivre. Mélanger délicatement.",
+        "Couper le poulpe grillé en tronçons et disposer sur la salade. Servir immédiatement — le contraste poulpe chaud / salade fraîche / féta crémeuse est la signature de ce plat."
+      ]
+    },
+
+    {
+      id: 'R694',
+      name: 'Riz Crevettes Ail Beurre & Persil',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍤', origin: '🇵🇹',
+      tags: ['high-protein', 'quick', 'seafood', 'family', 'balanced'],
+      servings: 2, prepTime: 8, cookTime: 15, difficulty: 1,
+      // 58×4 + 80×4 + 22×9 = 232+320+198 = 750 ✓
+      baseNutrition: { calories: 750, proteinGrams: 58, carbsGrams: 80, fatGrams: 22 },
+      ingredients: [
+        { name: 'Crevettes décortiquées (surgelées)', qty: 350, unit: 'g' },
+        { name: 'Riz basmati (sec)',              qty: 130, unit: 'g', note: '≈300g cuit' },
+        { name: 'Ail',                            qty: 20,  unit: 'g', note: '5 gousses' },
+        { name: 'Beurre doux',                    qty: 20,  unit: 'g' },
+        { name: 'Huile d\'olive',                 qty: 10,  unit: 'ml' },
+        { name: 'Persil frais',                   qty: 25,  unit: 'g' },
+        { name: 'Jus de citron',                  qty: 20,  unit: 'ml' },
+        { name: 'Piment doux',                    qty: 3,   unit: 'g', note: 'ou piment d\'Espelette' },
+        { name: 'Sel, poivre',                    qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Cuire le riz basmati en absorption (eau bouillante salée, 12 min à couvert). Laisser reposer 5 min hors feu, égrener à la fourchette.",
+        "Décongeler les crevettes rapidement sous eau froide courante 5 min. Éponger soigneusement.",
+        "Dans une grande poêle ou wok, chauffer l'huile d'olive et le beurre à feu vif. Ajouter l'ail haché finement, cuire 30 secondes en remuant — ne pas brûler.",
+        "Ajouter les crevettes en une seule couche. Ne pas toucher pendant 1 min pour coloration. Retourner, cuire encore 1 min. Les crevettes sont cuites quand elles sont roses et légèrement caramélisées.",
+        "Ajouter le jus de citron, le persil ciselé et le piment. Mélanger. Verser le riz dans la poêle, mélanger délicatement pour enrober chaque grain de la sauce ail-beurre-citron. Servir immédiatement."
+      ]
     }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // FIN RECIPES_DB — à continuer avec les batches suivants au-dessus de cette ligne
+  // ─────────────────────────────────────────────────────────────────────────────
   ];
 
   // ─── NORMALISATION ─────────────────────────────────────────────────────────────
