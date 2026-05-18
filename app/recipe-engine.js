@@ -30832,6 +30832,791 @@
         "Griller les merguez dans une poêle sèche à feu vif 3-4 min en les retournant — peau légèrement craquante.",
         "Préparer la semoule : verser dans un bol, couvrir du même volume d'eau bouillante salée. Couvrir 5 min. Égrener avec une fourchette et le beurre. Dresser la semoule en dôme, les légumes et la viande dessus, arroser de bouillon. Régal familial."
       ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  BATCH P11 — PÂTES & RISOTTOS FITNESS  (R720–R724)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R720',
+      name: 'Pasta Carbonara Allégée Poulet Fumé',
+      category: 'italian',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍝', origin: '🇮🇹',
+      tags: ['high-protein', 'comfort-food', 'italian', 'creamy', 'quick'],
+      servings: 2, prepTime: 5, cookTime: 15, difficulty: 2,
+      // 60×4 + 110×4 + 18×9 = 240+440+162 = 842 ✓
+      baseNutrition: { calories: 842, proteinGrams: 60, carbsGrams: 110, fatGrams: 18 },
+      ingredients: [
+        { name: 'Spaghetti',                        qty: 200, unit: 'g' },
+        { name: 'Blanc de poulet fumé',             qty: 150, unit: 'g', note: 'en lanières fines' },
+        { name: 'Oeuf entier',                      qty: 2,   unit: 'pce' },
+        { name: 'Jaune d\'oeuf',                    qty: 2,   unit: 'pce' },
+        { name: 'Parmesan râpé',                    qty: 40,  unit: 'g' },
+        { name: 'Fromage blanc 0%',                 qty: 60,  unit: 'g', note: 'remplace la crème traditionnelle' },
+        { name: 'Ail',                              qty: 8,   unit: 'g' },
+        { name: 'Poivre noir fraîchement moulu',    qty: 3,   unit: 'g', note: 'généreux — c\'est la signature' }
+      ],
+      steps: [
+        "Cuire les spaghetti al dente dans eau bouillante très salée. Garder 150ml d'eau de cuisson.",
+        "Pendant la cuisson : fouetter oeufs, jaunes, parmesan et fromage blanc dans un bol. Assaisonner généreusement de poivre noir — c'est l'âme de la carbonara.",
+        "Dans une grande poêle, faire revenir le poulet fumé avec l'ail 2-3 min. Retirer du feu.",
+        "Égoutter les pâtes, les ajouter dans la poêle hors du feu avec le poulet. Verser le mélange oeuf-parmesan immédiatement en mélangeant vivement — la chaleur résiudelle cuit les oeufs sans les brouiller. Ajouter l'eau de cuisson cuillère par cuillère pour obtenir une sauce crémeuse et soyeuse.",
+        "Servir immédiatement avec parmesan supplémentaire et beaucoup de poivre. Règle d'or : on ne met JAMAIS de crème dans une carbonara."
+      ]
+    },
+
+    {
+      id: 'R721',
+      name: 'Penne all\'Amatriciana Guanciale Tomate',
+      category: 'italian',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🍝', origin: '🇮🇹',
+      tags: ['italian', 'comfort-food', 'umami', 'authentic', 'classic'],
+      servings: 2, prepTime: 5, cookTime: 20, difficulty: 1,
+      // 56×4 + 108×4 + 22×9 = 224+432+198 = 854 ✓
+      baseNutrition: { calories: 854, proteinGrams: 56, carbsGrams: 108, fatGrams: 22 },
+      ingredients: [
+        { name: 'Penne rigate',                     qty: 200, unit: 'g' },
+        { name: 'Pancetta ou lardons',              qty: 150, unit: 'g', note: 'guanciale si trouvable' },
+        { name: 'Tomates pelées entières',          qty: 400, unit: 'g', note: '1 boîte San Marzano si possible' },
+        { name: 'Boeuf haché 5% MG',               qty: 100, unit: 'g', note: 'optionnel pour protéines' },
+        { name: 'Pecorino romano râpé',             qty: 40,  unit: 'g', note: 'ou Parmesan' },
+        { name: 'Piment de Cayenne',                qty: 3,   unit: 'g' },
+        { name: 'Vin blanc sec',                    qty: 50,  unit: 'ml' },
+        { name: 'Ail',                              qty: 8,   unit: 'g' }
+      ],
+      steps: [
+        "Cuire les penne très al dente (2 min de moins que l'indication). Garder 200ml d'eau de cuisson.",
+        "Dans une grande poêle froide, déposer la pancetta. Chauffer à feu moyen — la graisse fond et la pancetta devient croustillante. Ajouter le boeuf haché si utilisé, dorer 3 min.",
+        "Déglacer au vin blanc, laisser évaporer 1 min. Ajouter l'ail et le piment. Écraser les tomates à la main directement dans la poêle.",
+        "Laisser réduire 12-15 min à feu moyen jusqu'à sauce épaisse et intense. Rectifier sel et piment.",
+        "Ajouter les pâtes et l'eau de cuisson, mélanger 2 min à feu vif pour que les pâtes finissent de cuire dans la sauce. Servir avec pecorino râpé."
+      ]
+    },
+
+    {
+      id: 'R722',
+      name: 'Risotto Poulet Champignons Parmesan',
+      category: 'italian',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🍚', origin: '🇮🇹',
+      tags: ['italian', 'comfort-food', 'creamy', 'elegant', 'umami'],
+      servings: 2, prepTime: 10, cookTime: 30, difficulty: 2,
+      // 72×4 + 80×4 + 24×9 = 288+320+216 = 824 ✓
+      baseNutrition: { calories: 824, proteinGrams: 72, carbsGrams: 80, fatGrams: 24 },
+      ingredients: [
+        { name: 'Riz arborio',                      qty: 160, unit: 'g' },
+        { name: 'Blanc de poulet',                  qty: 300, unit: 'g', note: 'en dés 2cm' },
+        { name: 'Champignons de Paris',             qty: 200, unit: 'g', note: 'émincés' },
+        { name: 'Bouillon de poule chaud',          qty: 700, unit: 'ml' },
+        { name: 'Parmesan râpé',                    qty: 50,  unit: 'g' },
+        { name: 'Vin blanc sec',                    qty: 80,  unit: 'ml' },
+        { name: 'Oignon',                           qty: 80,  unit: 'g' },
+        { name: 'Ail',                              qty: 8,   unit: 'g' },
+        { name: 'Beurre',                           qty: 15,  unit: 'g' },
+        { name: 'Huile d\'olive',                   qty: 10,  unit: 'ml' },
+        { name: 'Persil frais',                     qty: 15,  unit: 'g' }
+      ],
+      steps: [
+        "Chauffer le bouillon séparément — il doit rester chaud tout le temps de la cuisson du risotto.",
+        "Dans une grande sauteuse, chauffer huile + 8g beurre. Faire dorer les dés de poulet 4-5 min. Réserver. Dans la même poêle, faire revenir l'oignon et l'ail 3 min. Ajouter les champignons, cuire 4-5 min jusqu'à évaporation.",
+        "Ajouter le riz arborio, nacrer 2 min en mélangeant — chaque grain doit devenir translucide en périphérie. Déglacer avec le vin blanc, remuer jusqu'à absorption.",
+        "Ajouter le bouillon chaud louche par louche, en mélangeant constamment et en attendant que chaque louche soit absorbée. Processus : 16-18 min. Le riz doit être al dente.",
+        "Retirer du feu. Incorporer le beurre restant et le parmesan (mantecatura) vivement — c'est ce qui donne la texture crémeuse et liée. Ajouter le poulet, mélanger. Parsemer de persil."
+      ]
+    },
+
+    {
+      id: 'R723',
+      name: 'Lasagnes Bolognaise Légères Béchamel Allégée',
+      category: 'italian',
+      mealTypes: ['dinner'],
+      emoji: '🫕', origin: '🇮🇹',
+      tags: ['italian', 'high-protein', 'meal-prep', 'comfort-food', 'classic'],
+      servings: 2, prepTime: 15, cookTime: 40, difficulty: 2,
+      // 64×4 + 92×4 + 18×9 = 256+368+162 = 786 ✓
+      baseNutrition: { calories: 786, proteinGrams: 64, carbsGrams: 92, fatGrams: 18 },
+      ingredients: [
+        { name: 'Feuilles de lasagnes sèches',      qty: 120, unit: 'g' },
+        { name: 'Boeuf haché 5% MG',               qty: 300, unit: 'g' },
+        { name: 'Tomates pelées',                  qty: 400, unit: 'g' },
+        { name: 'Lait demi-écrémé',               qty: 300, unit: 'ml', note: 'pour béchamel' },
+        { name: 'Farine T65',                      qty: 25,  unit: 'g', note: 'pour béchamel' },
+        { name: 'Fromage blanc 0%',                qty: 100, unit: 'g', note: 'allège la béchamel' },
+        { name: 'Mozzarella légère',               qty: 60,  unit: 'g' },
+        { name: 'Oignon',                          qty: 80,  unit: 'g' },
+        { name: 'Ail',                             qty: 8,   unit: 'g' },
+        { name: 'Origan, basilic',                 qty: 5,   unit: 'g' },
+        { name: 'Huile d\'olive',                  qty: 10,  unit: 'ml' }
+      ],
+      steps: [
+        "Bolognaise : faire revenir oignon et ail 4 min dans l'huile. Ajouter le boeuf, émietter et dorer 5 min. Ajouter tomates, herbes, sel. Mijoter 15 min.",
+        "Béchamel allégée : faire fondre 5g de beurre ou huile dans casserole. Ajouter la farine, cuire 1 min. Incorporer le lait chaud progressivement en fouettant. Épaissir 5 min. Hors feu, ajouter fromage blanc.",
+        "Préchauffer four 180°C. Alterner couches : bolognaise, feuilles de lasagnes (pas besoin de précuire si qualité), béchamel. Répéter. Terminer par béchamel et mozzarella.",
+        "Cuire 30-35 min jusqu'à surface dorée et pâtes fondantes (tester avec la pointe d'un couteau).",
+        "Laisser reposer 5 min avant de couper — ça tient mieux. Se congèle parfaitement en portions individuelles."
+      ]
+    },
+
+    {
+      id: 'R724',
+      name: 'Pasta e Fagioli au Pancetta',
+      category: 'italian',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🍲', origin: '🇮🇹',
+      tags: ['italian', 'comfort-food', 'plant-protein', 'umami', 'rustic'],
+      servings: 2, prepTime: 10, cookTime: 25, difficulty: 1,
+      // 58×4 + 86×4 + 26×9 = 232+344+234 = 810 ✓
+      baseNutrition: { calories: 810, proteinGrams: 58, carbsGrams: 86, fatGrams: 26 },
+      ingredients: [
+        { name: 'Haricots borlotti en boîte',       qty: 300, unit: 'g', note: 'égouttés' },
+        { name: 'Ditalini ou tubetti',              qty: 120, unit: 'g', note: 'petites pâtes courtes' },
+        { name: 'Pancetta ou lardons',              qty: 100, unit: 'g' },
+        { name: 'Tomates cerises',                  qty: 150, unit: 'g', note: 'coupées en deux' },
+        { name: 'Bouillon de légumes',              qty: 600, unit: 'ml' },
+        { name: 'Parmesan (croûte)',               qty: 30,  unit: 'g', note: 'la croûte donne le goût umami' },
+        { name: 'Romarin frais',                   qty: 5,   unit: 'g', note: '1 branche' },
+        { name: 'Ail',                             qty: 10,  unit: 'g', note: '2 gousses' },
+        { name: 'Huile d\'olive',                  qty: 20,  unit: 'ml' },
+        { name: 'Piment',                          qty: 2,   unit: 'g', note: 'optionnel' }
+      ],
+      steps: [
+        "Dans une cocotte, faire revenir la pancetta à feu moyen jusqu'à légèrement dorée. Ajouter ail émincé, romarin et piment. Cuire 1 min.",
+        "Écraser 1/3 des haricots à la fourchette — c'est ce qui épaissit le plat naturellement. Ajouter tous les haricots dans la cocotte.",
+        "Verser le bouillon chaud, ajouter la croûte de parmesan et les tomates cerises. Porter à frémissement, cuire 10 min.",
+        "Ajouter les ditalini directement dans la soupe. Cuire selon les indications moins 2 min — les pâtes continuent de gonfler dans la soupe.",
+        "Retirer la croûte de parmesan et le romarin. Arroser d'un généreux filet d'huile d'olive. Servir chaud avec parmesan râpé sur le dessus. Plat paysan toscan qui réchauffe l'âme."
+      ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  BATCH P12 — DESSERTS FITNESS GOURMANDS  (R725–R729)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R725',
+      name: 'Crêpes Protéinées Nutella Maison Noisettes',
+      category: 'french',
+      mealTypes: ['breakfast', 'snack', 'dessert'],
+      emoji: '🥞', origin: '🇫🇷',
+      tags: ['high-protein', 'indulgent', 'instagrammable', 'brunch', 'dessert'],
+      servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
+      // 30×4 + 80×4 + 20×9 = 120+320+180 = 620 ✓
+      baseNutrition: { calories: 620, proteinGrams: 30, carbsGrams: 80, fatGrams: 20 },
+      ingredients: [
+        { name: 'Farine T65',                       qty: 80,  unit: 'g' },
+        { name: 'Protéine whey chocolat',           qty: 40,  unit: 'g', note: '1,5 scoop' },
+        { name: 'Oeuf',                             qty: 2,   unit: 'pce' },
+        { name: 'Lait demi-écrémé',                qty: 200, unit: 'ml' },
+        { name: 'Beurre',                           qty: 10,  unit: 'g', note: 'pour la pâte' },
+        { name: 'Pâte de noisette pure',            qty: 30,  unit: 'g', note: 'ou Nutella 1 c.s.' },
+        { name: 'Cacao en poudre non sucré',        qty: 10,  unit: 'g' },
+        { name: 'Noisettes concassées',             qty: 20,  unit: 'g', note: 'toastées' },
+        { name: 'Banane',                           qty: 1,   unit: 'pce', note: 'en rondelles' }
+      ],
+      steps: [
+        "Mixer farine, protéine, cacao, oeufs, lait et beurre fondu jusqu'à pâte lisse. Laisser reposer 10 min.",
+        "Chauffer une poêle antiadhésive à feu moyen. Cuire les crêpes fines (2 min par face). Empiler sous un torchon pour qu'elles restent souples — donne environ 6-8 crêpes.",
+        "Napper chaque crêpe d'une fine couche de pâte de noisette.",
+        "Ajouter des rondelles de banane. Plier en quatre ou rouler. Déposer dans une assiette.",
+        "Parsemer de noisettes concassées toastées. Saupoudrer d'un peu de cacao. Servir chaud — l'association crêpe-noisette-banane ne trompe jamais."
+      ]
+    },
+
+    {
+      id: 'R726',
+      name: 'Pots de Crème Chocolat Noir 70% Protéiné',
+      category: 'french',
+      mealTypes: ['dessert', 'snack'],
+      emoji: '🍫', origin: '🇫🇷',
+      tags: ['high-protein', 'low-carb', 'chocolate', 'elegant', 'dessert'],
+      servings: 2, prepTime: 10, cookTime: 5, difficulty: 1,
+      // 22×4 + 56×4 + 16×9 = 88+224+144 = 456 ✓
+      baseNutrition: { calories: 456, proteinGrams: 22, carbsGrams: 56, fatGrams: 16 },
+      ingredients: [
+        { name: 'Chocolat noir 70%',                qty: 80,  unit: 'g' },
+        { name: 'Lait demi-écrémé',                qty: 150, unit: 'ml' },
+        { name: 'Fromage blanc 0%',                qty: 150, unit: 'g' },
+        { name: 'Protéine whey vanille',           qty: 30,  unit: 'g', note: '1 scoop' },
+        { name: 'Miel',                            qty: 20,  unit: 'g' },
+        { name: 'Extrait de vanille',              qty: 3,   unit: 'ml' },
+        { name: 'Sel de Guérande',                qty: 1,   unit: 'pincée', note: 'sur le dessus' }
+      ],
+      steps: [
+        "Casser le chocolat noir en morceaux. Chauffer le lait jusqu'à frémissement. Verser sur le chocolat, laisser fondre 2 min puis mélanger jusqu'à ganache lisse.",
+        "Laisser refroidir 5-10 min à température ambiante — le chocolat ne doit plus être bouillant.",
+        "Incorporer le fromage blanc, la protéine whey, le miel et la vanille. Fouetter vigoureusement jusqu'à mélange homogène.",
+        "Verser dans 2 petits ramequins ou verres. Réfrigérer au moins 2 heures (idéalement toute la nuit).",
+        "Au moment de servir, saupoudrer d'une pincée de sel de Guérande. Ce contraste sucré-salé amplifie le chocolat × 10. Un dessert à 230 kcal/portion qui n'en a pas l'air."
+      ]
+    },
+
+    {
+      id: 'R727',
+      name: 'Mug Cake Protéiné Chocolat 90 Secondes',
+      category: 'world-food',
+      mealTypes: ['dessert', 'snack', 'breakfast'],
+      emoji: '☕', origin: '🇺🇸',
+      tags: ['high-protein', 'quick', 'chocolate', 'dessert', 'single-serve'],
+      servings: 2, prepTime: 3, cookTime: 2, difficulty: 1,
+      // 40×4 + 64×4 + 18×9 = 160+256+162 = 578 ✓
+      baseNutrition: { calories: 578, proteinGrams: 40, carbsGrams: 64, fatGrams: 18 },
+      ingredients: [
+        { name: 'Protéine whey chocolat',           qty: 60,  unit: 'g', note: '2 scoops' },
+        { name: 'Farine d\'avoine',                qty: 40,  unit: 'g' },
+        { name: 'Cacao non sucré',                 qty: 15,  unit: 'g' },
+        { name: 'Oeuf',                            qty: 2,   unit: 'pce' },
+        { name: 'Fromage blanc 0%',               qty: 60,  unit: 'g' },
+        { name: 'Lait',                            qty: 40,  unit: 'ml' },
+        { name: 'Levure chimique',                qty: 4,   unit: 'g' },
+        { name: 'Carrés de chocolat noir',        qty: 20,  unit: 'g', note: 'pour le coeur fondant' },
+        { name: 'Édulcorant ou sucre de coco',    qty: 10,  unit: 'g' }
+      ],
+      steps: [
+        "Dans un grand mug (≥400ml), mélanger les ingrédients secs : whey, farine d'avoine, cacao, levure, édulcorant.",
+        "Ajouter les ingrédients humides : oeufs, fromage blanc, lait. Mélanger vigoureusement à la fourchette jusqu'à pâte homogène sans grumeaux.",
+        "Enfoncer les carrés de chocolat noir au centre — ils vont fondre pour un coeur coulant.",
+        "Micro-ondes à 800W pendant 70-90 secondes. Vérifier : le gâteau doit être pris sur les bords mais encore légèrement humide au centre.",
+        "Attendre 1 min avant de déguster directement dans le mug. Optionnel : une cuillère de fromage blanc ou quelques framboises dessus. 5 min du début à la fin."
+      ]
+    },
+
+    {
+      id: 'R728',
+      name: 'Tiramisu Protéiné Sans Mascarpone',
+      category: 'italian',
+      mealTypes: ['dessert'],
+      emoji: '🍰', origin: '🇮🇹',
+      tags: ['high-protein', 'dessert', 'italian', 'indulgent', 'no-bake'],
+      servings: 2, prepTime: 20, cookTime: 0, difficulty: 1,
+      // 36×4 + 72×4 + 22×9 = 144+288+198 = 630 ✓
+      baseNutrition: { calories: 630, proteinGrams: 36, carbsGrams: 72, fatGrams: 22 },
+      ingredients: [
+        { name: 'Fromage frais type Saint-Morêt',   qty: 100, unit: 'g' },
+        { name: 'Fromage blanc 0%',                qty: 150, unit: 'g' },
+        { name: 'Protéine whey vanille',           qty: 40,  unit: 'g', note: '1,5 scoop' },
+        { name: 'Boudoirs ou biscuits à la cuillère', qty: 80,  unit: 'g', note: '8 biscuits' },
+        { name: 'Café expresso fort',              qty: 120, unit: 'ml', note: 'refroidi' },
+        { name: 'Cacao en poudre non sucré',       qty: 10,  unit: 'g', note: 'pour saupoudrer' },
+        { name: 'Édulcorant ou sucre',             qty: 15,  unit: 'g' },
+        { name: 'Amaretto (optionnel)',            qty: 10,  unit: 'ml', note: 'pour parfumer le café' }
+      ],
+      steps: [
+        "Préparer le café fort, laisser refroidir. Ajouter l'amaretto si utilisé.",
+        "Fouetter fromage frais, fromage blanc, protéine whey et édulcorant jusqu'à crème lisse et aérienne. Goûter — ça doit être léger, sucré juste.",
+        "Tremper rapidement les boudoirs dans le café froid (1-2 secondes de chaque côté, ne pas laisser tremper).",
+        "Dans 2 verrines ou un plat, alterner : couche de biscuits imbibés, couche de crème. Répéter.",
+        "Réfrigérer au minimum 2h (meilleur le lendemain). Saupoudrer généreusement de cacao juste avant de servir. 315 kcal/portion pour un tiramisu : victoire."
+      ]
+    },
+
+    {
+      id: 'R729',
+      name: 'Cookie Géant Protéiné Pépites Chocolat (x8)',
+      category: 'world-food',
+      mealTypes: ['snack', 'dessert', 'breakfast'],
+      emoji: '🍪', origin: '🇺🇸',
+      tags: ['high-protein', 'batch-cooking', 'snack', 'chocolate', 'indulgent'],
+      servings: 2, prepTime: 10, cookTime: 12, difficulty: 1,
+      // 48×4 + 60×4 + 30×9 = 192+240+270 = 702 ✓
+      baseNutrition: { calories: 702, proteinGrams: 48, carbsGrams: 60, fatGrams: 30 },
+      ingredients: [
+        { name: 'Beurre de cacahuète',              qty: 80,  unit: 'g', note: 'naturel, sans huile ajoutée' },
+        { name: 'Protéine whey vanille',           qty: 60,  unit: 'g', note: '2 scoops' },
+        { name: 'Farine d\'avoine',               qty: 60,  unit: 'g' },
+        { name: 'Oeuf',                           qty: 2,   unit: 'pce' },
+        { name: 'Miel ou sirop d\'agave',         qty: 30,  unit: 'g' },
+        { name: 'Pépites de chocolat noir',       qty: 40,  unit: 'g' },
+        { name: 'Levure chimique',                qty: 3,   unit: 'g' },
+        { name: 'Extrait de vanille',             qty: 3,   unit: 'ml' },
+        { name: 'Sel',                            qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Préchauffer four à 175°C. Mélanger beurre de cacahuète, miel, oeufs et vanille jusqu'à homogène.",
+        "Incorporer farine d'avoine, protéine whey, levure et sel. Mélanger à la cuillère. La pâte est épaisse — c'est normal. Incorporer les pépites de chocolat.",
+        "Former 8 boules égales sur une plaque recouverte de papier cuisson. Aplatir légèrement avec la paume.",
+        "Cuire 10-12 min — les cookies semblent pas cuits quand on sort du four, c'est voulu : ils durcissent en refroidissant.",
+        "Laisser refroidir 10 min sur la plaque SANS TOUCHER. Se conserve 5 jours dans une boîte hermétique, 3 mois au congélateur. 87 kcal / 6g protéines par cookie."
+      ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  BATCH P13 — SALADES REPAS & BOWLS FROIDS  (R730–R734)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R730',
+      name: 'Salade Niçoise Thon Frais Oeufs Durs',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥗', origin: '🇫🇷',
+      tags: ['high-protein', 'mediterranean', 'fresh', 'classic', 'no-cook'],
+      servings: 2, prepTime: 15, cookTime: 10, difficulty: 1,
+      // 54×4 + 40×4 + 28×9 = 216+160+252 = 628 ✓
+      baseNutrition: { calories: 628, proteinGrams: 54, carbsGrams: 40, fatGrams: 28 },
+      ingredients: [
+        { name: 'Thon frais ou en boîte au naturel', qty: 250, unit: 'g' },
+        { name: 'Oeuf dur',                         qty: 4,   unit: 'pce' },
+        { name: 'Haricots verts',                   qty: 150, unit: 'g', note: 'blanchis al dente' },
+        { name: 'Tomates',                          qty: 200, unit: 'g', note: '2 tomates, en quartiers' },
+        { name: 'Poivron rouge',                    qty: 100, unit: 'g', note: 'émincé' },
+        { name: 'Olives noires dénoyautées',        qty: 40,  unit: 'g' },
+        { name: 'Anchois à l\'huile',               qty: 20,  unit: 'g', note: '4 filets, optionnel' },
+        { name: 'Huile d\'olive',                   qty: 20,  unit: 'ml' },
+        { name: 'Vinaigre de vin rouge',            qty: 10,  unit: 'ml' },
+        { name: 'Moutarde de Dijon',               qty: 5,   unit: 'g' },
+        { name: 'Basilic frais',                   qty: 15,  unit: 'g' }
+      ],
+      steps: [
+        "Cuire les haricots verts à l'eau bouillante salée 5 min, puis plonger immédiatement dans l'eau glacée pour arrêter la cuisson et garder la couleur verte.",
+        "Cuire les oeufs durs 9 min dans l'eau bouillante. Refroidir sous l'eau froide. Éplucher et couper en quartiers.",
+        "Préparer la vinaigrette : fouetter moutarde, vinaigre de vin rouge et huile d'olive. Saler, poivrer.",
+        "Si thon frais : saisir les pavés 2 min par face dans une poêle très chaude avec sel et poivre. Laisser reposer, effeuiller.",
+        "Dresser : disposer tous les éléments séparément dans les assiettes ou un grand plat (présentation traditionnelle niçoise — on ne mélange pas). Arroser de vinaigrette. Ajouter basilic et anchois."
+      ]
+    },
+
+    {
+      id: 'R731',
+      name: 'Salade César Poulet Grillé Parmesan',
+      category: 'world-food',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥗', origin: '🇺🇸',
+      tags: ['high-protein', 'classic', 'instagrammable', 'fresh', 'creamy'],
+      servings: 2, prepTime: 15, cookTime: 10, difficulty: 1,
+      // 60×4 + 52×4 + 24×9 = 240+208+216 = 664 ✓
+      baseNutrition: { calories: 664, proteinGrams: 60, carbsGrams: 52, fatGrams: 24 },
+      ingredients: [
+        { name: 'Blanc de poulet',                  qty: 360, unit: 'g' },
+        { name: 'Laitue romaine',                  qty: 200, unit: 'g', note: '1 coeur' },
+        { name: 'Parmesan en copeaux',             qty: 40,  unit: 'g' },
+        { name: 'Pain de mie complet',             qty: 80,  unit: 'g', note: 'en cubes pour croûtons' },
+        { name: 'Fromage blanc 0%',               qty: 80,  unit: 'g', note: 'base de la sauce allégée' },
+        { name: 'Anchois à l\'huile',              qty: 15,  unit: 'g', note: '3 filets' },
+        { name: 'Ail',                             qty: 5,   unit: 'g' },
+        { name: 'Citron (jus)',                    qty: 1,   unit: 'pce' },
+        { name: 'Moutarde',                        qty: 5,   unit: 'g' },
+        { name: 'Sauce Worcestershire',            qty: 5,   unit: 'ml' },
+        { name: 'Huile d\'olive',                  qty: 10,  unit: 'ml' }
+      ],
+      steps: [
+        "Croûtons : couper le pain en cubes, mélanger avec huile d'olive et sel. Passer au four 180°C 10 min jusqu'à dorés.",
+        "Sauce César allégée : mixer anchois, fromage blanc, ail, jus de citron, moutarde, Worcestershire. Goûter — ça doit être umami et légèrement salé.",
+        "Assaisonner les blancs de poulet avec sel, poivre, une pointe de paprika. Cuire à la poêle ou grill 4-5 min par face. Laisser reposer 5 min, couper en tranches.",
+        "Déchirer la romaine en grands morceaux. Mélanger avec la sauce — juste enrober, ne pas noyer.",
+        "Dresser : romaine en base, poulet tranché dessus, croûtons, copeaux de parmesan. Un filet de sauce extra sur le poulet. La vraie salade César maison."
+      ]
+    },
+
+    {
+      id: 'R732',
+      name: 'Salade Mexicaine Haricots Noirs Avocat Maïs',
+      category: 'mexican',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🌮', origin: '🇲🇽',
+      tags: ['vegan', 'plant-based', 'fresh', 'colorful', 'quick'],
+      servings: 2, prepTime: 15, cookTime: 5, difficulty: 1,
+      // 48×4 + 58×4 + 20×9 = 192+232+180 = 604 ✓
+      baseNutrition: { calories: 604, proteinGrams: 48, carbsGrams: 58, fatGrams: 20 },
+      ingredients: [
+        { name: 'Haricots noirs boîte',             qty: 300, unit: 'g', note: 'égouttés, rincés' },
+        { name: 'Maïs boîte',                       qty: 150, unit: 'g', note: 'égoutté' },
+        { name: 'Avocat',                           qty: 120, unit: 'g', note: '1 petit' },
+        { name: 'Poivron rouge',                    qty: 100, unit: 'g' },
+        { name: 'Tomate',                           qty: 150, unit: 'g' },
+        { name: 'Oignon rouge',                     qty: 60,  unit: 'g' },
+        { name: 'Coriandre fraîche',                qty: 20,  unit: 'g' },
+        { name: 'Jalapeño',                         qty: 15,  unit: 'g', note: '1 petit, épépiné' },
+        { name: 'Citron vert (jus)',                qty: 2,   unit: 'pce' },
+        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' },
+        { name: 'Cumin moulu',                      qty: 3,   unit: 'g' },
+        { name: 'Nachos ou tortilla chips',         qty: 30,  unit: 'g', note: 'pour le croustillant' }
+      ],
+      steps: [
+        "Passer les haricots noirs et le maïs égouttés à la poêle chaude avec le cumin 2-3 min pour légère caramélisation. Refroidir.",
+        "Couper en petits dés : tomate, poivron, oignon rouge, jalapeño (enlever les graines pour adoucir).",
+        "Préparer la vinaigrette : jus de 2 citrons verts + huile d'olive + sel + poivre.",
+        "Mélanger haricots, maïs, légumes et vinaigrette. Ciseler la coriandre, ajouter.",
+        "Dresser dans les bols. Ajouter l'avocat tranché sur le dessus juste avant de servir. Parsemer de chips de tortilla pour le croustillant. Acidité-fraîcheur-piment : combo gagnant."
+      ]
+    },
+
+    {
+      id: 'R733',
+      name: 'Bowl Protéiné Quinoa Saumon Avocat Grenade',
+      category: 'world-food',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥗', origin: '🇺🇸',
+      tags: ['high-protein', 'omega-3', 'instagrammable', 'colorful', 'superfood'],
+      servings: 2, prepTime: 15, cookTime: 15, difficulty: 1,
+      // 66×4 + 44×4 + 22×9 = 264+176+198 = 638 ✓
+      baseNutrition: { calories: 638, proteinGrams: 66, carbsGrams: 44, fatGrams: 22 },
+      ingredients: [
+        { name: 'Saumon frais',                     qty: 360, unit: 'g', note: '2 pavés' },
+        { name: 'Quinoa',                           qty: 100, unit: 'g', note: 'sec' },
+        { name: 'Avocat',                           qty: 80,  unit: 'g', note: '½ avocat' },
+        { name: 'Grenade (grains)',                qty: 60,  unit: 'g', note: 'ou cranberries fraîches' },
+        { name: 'Concombre',                       qty: 80,  unit: 'g' },
+        { name: 'Épinards baby',                   qty: 60,  unit: 'g' },
+        { name: 'Sauce tahini',                    qty: 30,  unit: 'g' },
+        { name: 'Citron (jus)',                    qty: 1,   unit: 'pce' },
+        { name: 'Huile d\'olive',                  qty: 10,  unit: 'ml' },
+        { name: 'Za\'atar',                        qty: 5,   unit: 'g', note: 'épice moyen-orientale' },
+        { name: 'Graines de citrouille',           qty: 15,  unit: 'g' }
+      ],
+      steps: [
+        "Cuire le quinoa en absorption (200ml eau, 15 min). Laisser refroidir légèrement.",
+        "Assaisonner le saumon avec za'atar, sel, poivre, huile d'olive. Cuire à la poêle 3-4 min par face pour saumon rosé au centre.",
+        "Préparer la sauce tahini : diluer avec jus de citron et un peu d'eau pour sauce coulante.",
+        "Dresser : quinoa en base, épinards, concombre en demi-lunes, avocat en éventail, grains de grenade.",
+        "Déposer le saumon au centre. Arroser de sauce tahini, parsemer de graines de citrouille. Le contraste grenade-saumon-tahini : un bowl qui impressionne visuellement et nutritionnellement."
+      ]
+    },
+
+    {
+      id: 'R734',
+      name: 'Wrap Veggie Hummus Crudités Feta',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'snack'],
+      emoji: '🌯', origin: '🇬🇷',
+      tags: ['vegetarian', 'quick', 'portable', 'fresh', 'lunch-box'],
+      servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
+      // 56×4 + 70×4 + 18×9 = 224+280+162 = 666 ✓
+      baseNutrition: { calories: 666, proteinGrams: 56, carbsGrams: 70, fatGrams: 18 },
+      ingredients: [
+        { name: 'Tortillas de blé',                 qty: 160, unit: 'g', note: '4 grandes tortillas' },
+        { name: 'Houmous',                          qty: 100, unit: 'g' },
+        { name: 'Feta',                             qty: 80,  unit: 'g' },
+        { name: 'Blanc de poulet rôti',            qty: 200, unit: 'g', note: 'en restes ou achat' },
+        { name: 'Poivron rouge grillé',            qty: 100, unit: 'g', note: 'en bocal ou frais grillé' },
+        { name: 'Concombre',                       qty: 80,  unit: 'g' },
+        { name: 'Épinards baby',                   qty: 50,  unit: 'g' },
+        { name: 'Tomates séchées à l\'huile',      qty: 30,  unit: 'g' },
+        { name: 'Citron (jus)',                    qty: 1,   unit: 'pce' },
+        { name: 'Za\'atar ou herbes méditerranéennes', qty: 3, unit: 'g' }
+      ],
+      steps: [
+        "Passer les tortillas 30 secondes au micro-ondes pour les assouplir.",
+        "Étaler 25g de houmous sur chaque tortilla. Bien répartir jusqu'aux bords.",
+        "Déposer les épinards, quelques tranches de concombre, les poivrons grillés et les tomates séchées.",
+        "Ajouter le poulet rôti en lanières et émietter la feta. Arroser d'un filet de citron et saupoudrer de za'atar.",
+        "Rouler serré en repliant les bords. Couper en biais. Emballer dans du papier aluminium pour transport. Se conserve 24h au frigo — idéal lunch box ou post-training."
+      ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  BATCH P14 — SOUPES & PLATS CHAUDS  (R735–R739)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R735',
+      name: 'Velouté Potimarron Châtaigne & Gingembre',
+      category: 'french',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🍵', origin: '🇫🇷',
+      tags: ['vegan', 'comfort-food', 'seasonal', 'creamy', 'warming'],
+      servings: 2, prepTime: 10, cookTime: 25, difficulty: 1,
+      // 50×4 + 52×4 + 16×9 = 200+208+144 = 552 ✓
+      baseNutrition: { calories: 552, proteinGrams: 50, carbsGrams: 52, fatGrams: 16 },
+      ingredients: [
+        { name: 'Potimarron',                       qty: 600, unit: 'g', note: 'coupé en cubes, pas besoin de peler' },
+        { name: 'Châtaignes en boîte',              qty: 120, unit: 'g' },
+        { name: 'Tofu soyeux',                      qty: 200, unit: 'g', note: 'pour la texture crémeuse' },
+        { name: 'Oignon',                           qty: 100, unit: 'g' },
+        { name: 'Gingembre frais',                  qty: 15,  unit: 'g' },
+        { name: 'Bouillon de légumes',              qty: 500, unit: 'ml' },
+        { name: 'Lait de coco allégé',              qty: 80,  unit: 'ml' },
+        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' },
+        { name: 'Graines de courge',                qty: 20,  unit: 'g', note: 'pour le topping' },
+        { name: 'Cannelle',                         qty: 2,   unit: 'g' }
+      ],
+      steps: [
+        "Faire revenir l'oignon dans l'huile 4 min. Ajouter le gingembre râpé et la cannelle, cuire 1 min.",
+        "Ajouter les cubes de potimarron (avec peau — elle mixe très bien et est nutritive) et les châtaignes. Verser le bouillon chaud. Porter à ébullition.",
+        "Cuire 20 min à couvert jusqu'à potimarron fondant. Tester avec la pointe d'un couteau.",
+        "Ajouter le tofu soyeux et le lait de coco. Mixer au blender plongeant jusqu'à velouté lisse et soyeux.",
+        "Réchauffer si nécessaire. Verser dans les bols. Décorer d'un filet de lait de coco, de graines de courge toastées. Velouté d'automne qui réconforte sans culpabilité."
+      ]
+    },
+
+    {
+      id: 'R736',
+      name: 'Soupe Ramen Bouillon Miso Poulet & Noodles',
+      category: 'japanese',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🍜', origin: '🇯🇵',
+      tags: ['high-protein', 'umami', 'warming', 'trendy', 'asian'],
+      servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
+      // 58×4 + 48×4 + 22×9 = 232+192+198 = 622 ✓
+      baseNutrition: { calories: 622, proteinGrams: 58, carbsGrams: 48, fatGrams: 22 },
+      ingredients: [
+        { name: 'Blanc de poulet',                  qty: 300, unit: 'g' },
+        { name: 'Nouilles ramen ou soba',           qty: 100, unit: 'g', note: 'sèches' },
+        { name: 'Oeuf',                             qty: 2,   unit: 'pce', note: 'pour oeuf mollet' },
+        { name: 'Pâte de miso',                    qty: 30,  unit: 'g' },
+        { name: 'Sauce soja',                      qty: 20,  unit: 'ml' },
+        { name: 'Bouillon de poule',               qty: 600, unit: 'ml' },
+        { name: 'Huile de sésame',                 qty: 10,  unit: 'ml' },
+        { name: 'Ail',                             qty: 8,   unit: 'g' },
+        { name: 'Gingembre',                       qty: 5,   unit: 'g' },
+        { name: 'Champignons shiitake',            qty: 80,  unit: 'g', note: 'frais ou réhydratés' },
+        { name: 'Oignon nouveau',                  qty: 30,  unit: 'g' },
+        { name: 'Algues nori',                     qty: 5,   unit: 'g' }
+      ],
+      steps: [
+        "Oeufs mollets : plonger 6 min dans eau bouillante, refroidir immédiatement à l'eau glacée, peler délicatement. Réserver.",
+        "Pocher les blancs de poulet dans le bouillon frémissant avec l'ail et le gingembre 12-15 min. Sortir, effilocher, réserver le bouillon.",
+        "Cuire les noodles dans eau bouillante selon indication. Rincer sous eau froide.",
+        "Chauffer le bouillon de cuisson du poulet. Diluer la pâte miso dans une louche de bouillon, reverser. Ajouter sauce soja et les champignons. Mijoter 5 min. Ne pas bouillir après le miso.",
+        "Assembler les bols : noodles, poulet effiloché, champignons. Verser le bouillon miso chaud. Couper les oeufs mollets en deux, déposer dessus. Terminer avec oignons nouveaux, algues et un filet d'huile de sésame."
+      ]
+    },
+
+    {
+      id: 'R737',
+      name: 'Chili con Carne Classique Haricots Rouges',
+      category: 'mexican',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🫕', origin: '🇲🇽',
+      tags: ['high-protein', 'spicy', 'comfort-food', 'meal-prep', 'classic'],
+      servings: 2, prepTime: 10, cookTime: 35, difficulty: 1,
+      // 62×4 + 60×4 + 20×9 = 248+240+180 = 668 ✓
+      baseNutrition: { calories: 668, proteinGrams: 62, carbsGrams: 60, fatGrams: 20 },
+      ingredients: [
+        { name: 'Boeuf haché 5% MG',               qty: 350, unit: 'g' },
+        { name: 'Haricots rouges boîte',           qty: 300, unit: 'g', note: 'égouttés' },
+        { name: 'Tomates concassées boîte',        qty: 400, unit: 'g' },
+        { name: 'Riz basmati',                     qty: 100, unit: 'g', note: 'sec, pour servir' },
+        { name: 'Oignon',                          qty: 100, unit: 'g' },
+        { name: 'Ail',                             qty: 10,  unit: 'g' },
+        { name: 'Poivron rouge',                   qty: 100, unit: 'g' },
+        { name: 'Piment de Cayenne',               qty: 3,   unit: 'g' },
+        { name: 'Cumin',                           qty: 5,   unit: 'g' },
+        { name: 'Paprika fumé',                    qty: 5,   unit: 'g' },
+        { name: 'Origan',                          qty: 3,   unit: 'g' },
+        { name: 'Huile d\'olive',                  qty: 10,  unit: 'ml' }
+      ],
+      steps: [
+        "Chauffer l'huile dans une grande casserole. Faire revenir oignon et poivron émincés 5 min. Ajouter l'ail, cumin, paprika, cayenne, origan. Cuire 1 min.",
+        "Ajouter le boeuf haché, émietter et faire dorer 5-6 min jusqu'à plus de rose.",
+        "Ajouter les tomates concassées. Remuer, porter à frémissement. Cuire 15 min à découvert.",
+        "Ajouter les haricots rouges égouttés. Cuire encore 10-12 min jusqu'à sauce épaisse. Rectifier sel et piment.",
+        "Cuire le riz. Servir le chili sur le riz. Optionnel : crème fraîche légère, coriandre, cheddar râpé. Encore meilleur réchauffé le lendemain."
+      ]
+    },
+
+    {
+      id: 'R738',
+      name: 'Gaspacho Andalou Crevettes Grillées',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🍅', origin: '🇪🇸',
+      tags: ['low-calorie', 'fresh', 'summer', 'no-cook', 'mediterranean'],
+      servings: 2, prepTime: 15, cookTime: 5, difficulty: 1,
+      // 44×4 + 68×4 + 18×9 = 176+272+162 = 610 ✓
+      baseNutrition: { calories: 610, proteinGrams: 44, carbsGrams: 68, fatGrams: 18 },
+      ingredients: [
+        { name: 'Tomates mûres',                   qty: 600, unit: 'g', note: '4-5 belles tomates' },
+        { name: 'Crevettes décortiquées',          qty: 250, unit: 'g' },
+        { name: 'Pain de mie',                     qty: 80,  unit: 'g', note: 'pour épaissir' },
+        { name: 'Concombre',                       qty: 150, unit: 'g' },
+        { name: 'Poivron rouge',                   qty: 100, unit: 'g' },
+        { name: 'Ail',                             qty: 5,   unit: 'g', note: '1 petite gousse' },
+        { name: 'Huile d\'olive',                  qty: 20,  unit: 'ml' },
+        { name: 'Vinaigre de Xérès',               qty: 10,  unit: 'ml', note: 'ou vinaigre de vin rouge' },
+        { name: 'Pita ou pain grillé',             qty: 80,  unit: 'g' }
+      ],
+      steps: [
+        "Tremper le pain de mie dans 50ml d'eau 5 min. Cela épaissit le gaspacho naturellement.",
+        "Couper grossièrement tomates, concombre, poivron. Mixer avec le pain trempé, l'ail, l'huile d'olive et le vinaigre de Xérès jusqu'à gaspacho lisse. Saler.",
+        "Passer au tamis fin si vous voulez une texture soyeuse (optionnel mais recommandé). Réfrigérer 1h minimum.",
+        "Griller les crevettes assaisonnées (sel, paprika, huile) 2 min par face dans une poêle très chaude.",
+        "Servir le gaspacho glacé dans des bols larges. Déposer les crevettes au centre. Accompagner de pain pita grillé. Fraîcheur andalouse + protéines marines."
+      ]
+    },
+
+    {
+      id: 'R739',
+      name: 'Gratin Courgettes Jambon Chèvre & Herbes',
+      category: 'french',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🫕', origin: '🇫🇷',
+      tags: ['high-protein', 'comfort-food', 'french', 'easy', 'low-carb'],
+      servings: 2, prepTime: 10, cookTime: 30, difficulty: 1,
+      // 70×4 + 54×4 + 24×9 = 280+216+216 = 712 ✓
+      baseNutrition: { calories: 712, proteinGrams: 70, carbsGrams: 54, fatGrams: 24 },
+      ingredients: [
+        { name: 'Courgettes',                      qty: 400, unit: 'g', note: '2 grosses, en rondelles 5mm' },
+        { name: 'Jambon blanc',                    qty: 200, unit: 'g', note: 'en dés' },
+        { name: 'Fromage de chèvre frais',         qty: 100, unit: 'g' },
+        { name: 'Oeuf',                            qty: 3,   unit: 'pce' },
+        { name: 'Fromage blanc 0%',               qty: 100, unit: 'g' },
+        { name: 'Parmesan râpé',                  qty: 30,  unit: 'g' },
+        { name: 'Ail',                            qty: 8,   unit: 'g' },
+        { name: 'Thym frais',                     qty: 5,   unit: 'g' },
+        { name: 'Herbes de Provence',             qty: 5,   unit: 'g' },
+        { name: 'Huile d\'olive',                 qty: 10,  unit: 'ml' }
+      ],
+      steps: [
+        "Préchauffer four à 190°C. Faire revenir les rondelles de courgette avec l'ail dans l'huile, 5-6 min jusqu'à légèrement dorées. Saler, poivrer.",
+        "Préparer l'appareil : battre les oeufs avec le fromage blanc, les herbes de Provence, sel et poivre.",
+        "Dans un plat à gratin légèrement huilé, alterner courgettes et jambon en dés. Émietter le fromage de chèvre par-dessus.",
+        "Verser l'appareil oeuf-fromage blanc. Terminer avec parmesan râpé et thym frais.",
+        "Enfourner 25-28 min jusqu'à gratin doré et pris. Laisser reposer 5 min. Se mange chaud ou tiède — parfait avec une salade verte."
+      ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  BATCH P15 — BRUNCH & PETIT-DEJ SALÉ  (R740–R744)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R740',
+      name: 'Avocado Toast Saumon Fumé Oeufs Pochés',
+      category: 'world-food',
+      mealTypes: ['breakfast', 'brunch'],
+      emoji: '🥑', origin: '🇺🇸',
+      tags: ['high-protein', 'omega-3', 'instagrammable', 'brunch', 'trendy'],
+      servings: 2, prepTime: 10, cookTime: 8, difficulty: 2,
+      // 46×4 + 38×4 + 24×9 = 184+152+216 = 552 ✓
+      baseNutrition: { calories: 552, proteinGrams: 46, carbsGrams: 38, fatGrams: 24 },
+      ingredients: [
+        { name: 'Pain complet ou au levain',        qty: 120, unit: 'g', note: '4 tranches épaisses' },
+        { name: 'Avocat',                           qty: 150, unit: 'g', note: '1,5 avocat bien mûr' },
+        { name: 'Saumon fumé',                      qty: 120, unit: 'g' },
+        { name: 'Oeuf',                             qty: 4,   unit: 'pce' },
+        { name: 'Citron (jus + zeste)',             qty: 1,   unit: 'pce' },
+        { name: 'Piment d\'Espelette',              qty: 2,   unit: 'g' },
+        { name: 'Graines de sésame noir',           qty: 5,   unit: 'g' },
+        { name: 'Ciboulette fraîche',               qty: 10,  unit: 'g' },
+        { name: 'Vinaigre blanc',                   qty: 10,  unit: 'ml', note: 'pour pocher les oeufs' }
+      ],
+      steps: [
+        "Écraser les avocados à la fourchette avec le jus de citron, sel, poivre et piment d'Espelette. Texture grossière — pas une purée lisse.",
+        "Toaster les tranches de pain.",
+        "Préparer les oeufs pochés : porter à frémissement 2L d'eau avec le vinaigre. Créer un tourbillon, glisser les oeufs délicatement (un à la fois), cuire 3 min. Sortir avec une écumoire.",
+        "Monter : pain toasté, généreuse couche d'avocat, 2-3 tranches de saumon fumé, oeuf poché dessus.",
+        "Zester le citron, parsemer de sésame noir et ciboulette. Saler légèrement. Servir immédiatement. Le brunch parfait en 15 min."
+      ]
+    },
+
+    {
+      id: 'R741',
+      name: 'Galette de Sarrasin Jambon Oeuf Emmental',
+      category: 'french',
+      mealTypes: ['breakfast', 'brunch', 'lunch'],
+      emoji: '🫓', origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'french', 'classic', 'brunch'],
+      servings: 2, prepTime: 10, cookTime: 15, difficulty: 2,
+      // 60×4 + 50×4 + 22×9 = 240+200+198 = 638 ✓
+      baseNutrition: { calories: 638, proteinGrams: 60, carbsGrams: 50, fatGrams: 22 },
+      ingredients: [
+        { name: 'Farine de sarrasin',               qty: 120, unit: 'g' },
+        { name: 'Oeuf',                             qty: 4,   unit: 'pce', note: '2 pour la pâte, 2 sur les galettes' },
+        { name: 'Lait demi-écrémé',                qty: 200, unit: 'ml' },
+        { name: 'Jambon blanc',                    qty: 150, unit: 'g', note: '4 tranches' },
+        { name: 'Emmental râpé',                   qty: 60,  unit: 'g' },
+        { name: 'Beurre',                          qty: 15,  unit: 'g' },
+        { name: 'Sel',                             qty: 2,   unit: 'g' }
+      ],
+      steps: [
+        "Préparer la pâte : mélanger farine de sarrasin, 2 oeufs, lait, sel et 200ml d'eau. Fouetter jusqu'à pâte lisse. Laisser reposer 30 min si possible.",
+        "Chauffer une poêle de 24cm avec une pointe de beurre à feu moyen-vif. Verser une louche de pâte et incliner rapidement pour étaler en cercle fin.",
+        "Quand les bords se décollent (2 min), casser un oeuf au centre de la galette. Laisser cuire l'oeuf 1 min.",
+        "Disposer 2 tranches de jambon et 30g d'emmental sur les côtés. Replier les quatre côtés pour former un carré. Cuire encore 1 min.",
+        "Faire glisser sur l'assiette. La galette complète (jambon, oeuf, fromage) est un classique breton indémodable — simple et satisfaisant."
+      ]
+    },
+
+    {
+      id: 'R742',
+      name: 'Bowl Céréales Maison Lait Amande Fruits Frais',
+      category: 'world-food',
+      mealTypes: ['breakfast'],
+      emoji: '🥣', origin: '🇺🇸',
+      tags: ['balanced', 'quick', 'energizing', 'fresh', 'morning'],
+      servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
+      // 44×4 + 64×4 + 18×9 = 176+256+162 = 594 ✓
+      baseNutrition: { calories: 594, proteinGrams: 44, carbsGrams: 64, fatGrams: 18 },
+      ingredients: [
+        { name: 'Flocons d\'avoine grands',         qty: 80,  unit: 'g' },
+        { name: 'Protéine whey vanille',           qty: 40,  unit: 'g', note: '1,5 scoop' },
+        { name: 'Noix de cajou',                   qty: 20,  unit: 'g' },
+        { name: 'Amandes effilées',                qty: 15,  unit: 'g' },
+        { name: 'Lait d\'amande non sucré',        qty: 300, unit: 'ml' },
+        { name: 'Fraises fraîches',                qty: 100, unit: 'g' },
+        { name: 'Myrtilles',                       qty: 60,  unit: 'g' },
+        { name: 'Banane',                          qty: 1,   unit: 'pce', note: 'en rondelles' },
+        { name: 'Miel',                            qty: 15,  unit: 'g' },
+        { name: 'Graines de chia',                qty: 10,  unit: 'g' }
+      ],
+      steps: [
+        "Torréfier les flocons d'avoine avec les amandes dans une poêle sèche à feu moyen 3-4 min en remuant jusqu'à légère coloration et odeur de noisette.",
+        "Mélanger la protéine whey avec 50ml de lait d'amande dans un bol jusqu'à pâte lisse. Ajouter le reste du lait.",
+        "Répartir les flocons torréfiés et les cajous dans les bols.",
+        "Verser le lait vanille-protéiné dessus.",
+        "Disposer les fruits frais (fraises coupées, myrtilles, rondelles de banane) sur le dessus. Ajouter graines de chia et filet de miel. Encore meilleur si les flocons sont laissés tremper 5 min."
+      ]
+    },
+
+    {
+      id: 'R743',
+      name: 'Omelette Roulée Jambon Ciboulette Style Japonais',
+      category: 'japanese',
+      mealTypes: ['breakfast', 'lunch'],
+      emoji: '🥚', origin: '🇯🇵',
+      tags: ['high-protein', 'quick', 'elegant', 'low-carb', 'japanese'],
+      servings: 2, prepTime: 5, cookTime: 10, difficulty: 2,
+      // 68×4 + 28×4 + 32×9 = 272+112+288 = 672 ✓
+      baseNutrition: { calories: 672, proteinGrams: 68, carbsGrams: 28, fatGrams: 32 },
+      ingredients: [
+        { name: 'Oeuf',                            qty: 8,   unit: 'pce' },
+        { name: 'Jambon blanc',                    qty: 150, unit: 'g', note: 'haché finement' },
+        { name: 'Sauce soja',                      qty: 10,  unit: 'ml' },
+        { name: 'Mirin',                           qty: 10,  unit: 'ml', note: 'ou 1 c.c. miel + eau' },
+        { name: 'Ciboulette fraîche',              qty: 20,  unit: 'g' },
+        { name: 'Huile végétale',                  qty: 10,  unit: 'ml' },
+        { name: 'Pain complet',                    qty: 80,  unit: 'g', note: 'pour accompagner' }
+      ],
+      steps: [
+        "Battre 4 oeufs avec 5ml sauce soja, 5ml mirin. Ajouter la moitié du jambon haché et ciboulette ciselée.",
+        "Chauffer une poêle rectangulaire (tamagoyaki pan) ou classique huilée à feu moyen. Verser la moitié de la préparation. Quand à moitié prise, rouler délicatement vers un côté avec des baguettes ou spatule.",
+        "Pousser le rouleau vers l'arrière de la poêle. Ajouter un peu d'huile. Verser le reste de l'oeuf, soulever le premier rouleau pour que l'oeuf passe dessous. Rouler à nouveau.",
+        "Enrouler dans du film alimentaire pour garder la forme. Laisser reposer 2 min.",
+        "Couper en tronçons épais. Répéter pour la 2ème omelette. La technique tamagoyaki : omelette roulée avec couches — visuellement impressionnant, techniquement simple."
+      ]
+    },
+
+    {
+      id: 'R744',
+      name: 'Smoothie Bowl Mangue Passion & Granola',
+      category: 'world-food',
+      mealTypes: ['breakfast', 'snack'],
+      emoji: '🥭', origin: '🇧🇷',
+      tags: ['vegan', 'instagrammable', 'tropical', 'fresh', 'morning'],
+      servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
+      // 52×4 + 72×4 + 20×9 = 208+288+180 = 676 ✓
+      baseNutrition: { calories: 676, proteinGrams: 52, carbsGrams: 72, fatGrams: 20 },
+      ingredients: [
+        { name: 'Mangue congelée',                 qty: 300, unit: 'g' },
+        { name: 'Banane congelée',                qty: 100, unit: 'g', note: '1 banane' },
+        { name: 'Protéine whey vanille',          qty: 60,  unit: 'g', note: '2 scoops' },
+        { name: 'Lait de coco allégé',            qty: 100, unit: 'ml' },
+        { name: 'Jus de fruit de la passion',     qty: 50,  unit: 'ml', note: '2 fruits frais ou concentré' },
+        { name: 'Granola nature',                 qty: 60,  unit: 'g' },
+        { name: 'Kiwi',                           qty: 80,  unit: 'g', note: '1 kiwi, tranché' },
+        { name: 'Noix de coco râpée',             qty: 15,  unit: 'g' },
+        { name: 'Graines de lin',                qty: 10,  unit: 'g' }
+      ],
+      steps: [
+        "Mixer mangue et banane congelées avec la protéine whey et le lait de coco jusqu'à consistance très épaisse — quasi comme de la glace.",
+        "Ajouter le jus de fruit de la passion, mixer 10 secondes pour marbrer.",
+        "Verser dans deux bols larges. Travailler rapidement — ça fond vite.",
+        "Disposer les toppings en bandes : granola d'un côté, tranches de kiwi, noix de coco râpée, graines de lin.",
+        "Optionnel : quelques gouttes de jus de passion en spirale sur le dessus. Tropical, frais, protéiné — le bowl d'été parfait."
+      ]
     }
 
   // ─────────────────────────────────────────────────────────────────────────────
