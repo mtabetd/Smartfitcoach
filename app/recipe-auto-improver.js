@@ -93,7 +93,7 @@ var IMPROVEMENT_CATALOG = [
              !hasIngredient(recipe, /herbe|persil|basilic|thym|coriandre|menthe|origan|herbes.de.provence/i);
     },
     apply: function(recipe) {
-      var ing = { name: 'Herbes de Provence', quantity: 0.5, unit: 'g' };
+      var ing = { name: 'Herbes de Provence', qty: 0.5, unit: 'g' };
       recipe.ingredients = (recipe.ingredients || []).concat([ing]);
       updateBaseNutrition(recipe, { calories: 1.5, protein: 0.05, carbs: 0.3, fat: 0.03 });
       return { field: 'ingredients', added: ing };
@@ -113,7 +113,7 @@ var IMPROVEMENT_CATALOG = [
              !hasIngredient(recipe, /herbe|persil|basilic|thym|origan|herbes.de.provence/i);
     },
     apply: function(recipe) {
-      var ing = { name: 'Jus de citron', quantity: 10, unit: 'ml' };
+      var ing = { name: 'Jus de citron', qty: 10, unit: 'ml' };
       recipe.ingredients = (recipe.ingredients || []).concat([ing]);
       updateBaseNutrition(recipe, { calories: 2.5, protein: 0.05, carbs: 0.65, fat: 0 });
       return { field: 'ingredients', added: ing };
@@ -132,7 +132,7 @@ var IMPROVEMENT_CATALOG = [
              !hasIngredient(recipe, /persil|ciboulette|basilic|menthe|herbe/i);
     },
     apply: function(recipe) {
-      var ing = { name: 'Persil frais', quantity: 2, unit: 'g' };
+      var ing = { name: 'Persil frais', qty: 2, unit: 'g' };
       recipe.ingredients = (recipe.ingredients || []).concat([ing]);
       updateBaseNutrition(recipe, { calories: 0.7, protein: 0.06, carbs: 0.11, fat: 0.01 });
       return { field: 'ingredients', added: ing };
@@ -152,7 +152,7 @@ var IMPROVEMENT_CATALOG = [
              !hasIngredient(recipe, /sésame|graines/i);
     },
     apply: function(recipe) {
-      var ing = { name: 'Graines de sésame', quantity: 5, unit: 'g' };
+      var ing = { name: 'Graines de sésame', qty: 5, unit: 'g' };
       recipe.ingredients = (recipe.ingredients || []).concat([ing]);
       updateBaseNutrition(recipe, { calories: 29, protein: 0.9, carbs: 1.2, fat: 2.5 });
       return { field: 'ingredients', added: ing };
@@ -172,7 +172,7 @@ var IMPROVEMENT_CATALOG = [
              !hasIngredient(recipe, /sésame|graines/i);
     },
     apply: function(recipe) {
-      var ing = { name: 'Noix', quantity: 10, unit: 'g' };
+      var ing = { name: 'Noix', qty: 10, unit: 'g' };
       recipe.ingredients = (recipe.ingredients || []).concat([ing]);
       updateBaseNutrition(recipe, { calories: 65, protein: 1.5, carbs: 1.4, fat: 6.5 });
       return { field: 'ingredients', added: ing };
@@ -192,7 +192,7 @@ var IMPROVEMENT_CATALOG = [
              !hasIngredient(recipe, /persil|ciboulette|basilic|menthe/i);
     },
     apply: function(recipe) {
-      var ing = { name: 'Carotte râpée', quantity: 50, unit: 'g' };
+      var ing = { name: 'Carotte râpée', qty: 50, unit: 'g' };
       recipe.ingredients = (recipe.ingredients || []).concat([ing]);
       updateBaseNutrition(recipe, { calories: 20, protein: 0.5, carbs: 4.7, fat: 0.1 });
       return { field: 'ingredients', added: ing };

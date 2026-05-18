@@ -358,7 +358,7 @@ var INGREDIENT_REGISTRY = Object.freeze({
 
 function _norm(str) {
   return (str || '').toLowerCase()
-    .replace(/[œÅ]/g, 'oe').replace(/[éèêë]/g, 'e').replace(/[àâ]/g, 'a')
+    .replace(/[œŒ]/g, 'oe').replace(/[éèêë]/g, 'e').replace(/[àâ]/g, 'a')
     .replace(/[ùû]/g, 'u').replace(/[îï]/g, 'i').replace(/[ôö]/g, 'o')
     .replace(/ç/g, 'c').replace(/'/g, '\'').replace(/\s+/g, ' ').trim();
 }

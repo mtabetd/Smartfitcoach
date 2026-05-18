@@ -3786,7 +3786,7 @@
     {
       id: 'R320',
       name: 'Bowl Méditerranéen Falafel Houmous',
-      category: 'mediterranean',
+      category: 'maroc-moderne',
       mealTypes: ['lunch', 'dinner'],
       emoji: '🥙', origin: '🇲🇦',
       tags: ['salade', 'falafel', 'houmous', 'riz-brun', 'vegetarian', 'vegan', 'high-protein', 'oriental'],
@@ -3947,7 +3947,7 @@
       name: 'Pancakes Protéinés Myrtilles',
       emoji: '🥞', origin: '🇺🇸',
       mealTypes: ['breakfast'],
-      category: 'world-food',
+      category: 'french',
       tags: ['pancakes', 'high-protein', 'myrtilles', 'brunch', 'tendance'],
       difficulty: 1, prepTime: 10, cookTime: 15, servings: 1,
       // 24×4 + 52×4 + 10×9 = 96+208+90 = 394 ✓
@@ -4077,7 +4077,7 @@
       name: 'Poke Bowl Saumon',
       emoji: '🐟', origin: '🇺🇸',
       mealTypes: ['lunch'],
-      category: 'world-food',
+      category: 'japanese',
       tags: ['poke', 'saumon', 'japonais', 'bowl', 'tendance', 'high-protein'],
       difficulty: 2, prepTime: 15, cookTime: 15, servings: 1,
       // 35×4 + 52×4 + 16×9 = 140+208+144 = 492 ✓
@@ -4132,7 +4132,7 @@
       name: 'Bibimbap Bœuf',
       emoji: '🍚', origin: '🇰🇷',
       mealTypes: ['lunch', 'dinner'],
-      category: 'world-food',
+      category: 'japanese',
       tags: ['coréen', 'bibimbap', 'boeuf', 'bowl', 'tendance', 'high-protein'],
       difficulty: 2, prepTime: 15, cookTime: 20, servings: 1,
       // 38×4 + 58×4 + 14×9 = 152+232+126 = 510 ✓
@@ -4219,7 +4219,7 @@
       name: 'Wrap Méditerranéen Halloumi',
       emoji: '🫙', origin: '🇬🇷',
       mealTypes: ['lunch'],
-      category: 'italian',
+      category: 'mediterranean',
       tags: ['halloumi', 'méditerranéen', 'wrap', 'végétarien', 'tendance'],
       difficulty: 1, prepTime: 10, cookTime: 8, servings: 1,
       // 26×4 + 38×4 + 18×9 = 104+152+162 = 418 ✓
@@ -4532,7 +4532,7 @@
       name: 'Poulet Tikka Masala Light',
       emoji: '🍛', origin: '🇮🇳',
       mealTypes: ['dinner'],
-      category: 'world-food',
+      category: 'italian',
       tags: ['indien', 'poulet', 'curry', 'light', 'tendance', 'high-protein'],
       difficulty: 2, prepTime: 15, cookTime: 25, servings: 1,
       // 42×4 + 48×4 + 12×9 = 168+192+108 = 468 ✓
@@ -4590,7 +4590,7 @@
       name: 'Curry de Pois Chiches',
       emoji: '🫘', origin: '🇮🇳',
       mealTypes: ['dinner'],
-      category: 'world-food',
+      category: 'japanese',
       tags: ['indien', 'vegan', 'pois-chiches', 'curry', 'tendance', 'high-fiber'],
       difficulty: 1, prepTime: 10, cookTime: 20, servings: 1,
       // 20×4 + 62×4 + 14×9 = 80+248+126 = 454 ✓
@@ -4619,7 +4619,7 @@
       name: 'Bulgogi Bowl Bœuf Coréen',
       emoji: '🥩', origin: '🇰🇷',
       mealTypes: ['dinner'],
-      category: 'world-food',
+      category: 'japanese',
       tags: ['coréen', 'boeuf', 'bulgogi', 'bowl', 'tendance', 'high-protein'],
       difficulty: 2, prepTime: 15, cookTime: 10, servings: 1,
       // 36×4 + 52×4 + 14×9 = 144+208+126 = 478 ✓
@@ -4648,7 +4648,7 @@
       name: 'Shakshuka',
       emoji: '🍳', origin: '🇮🇱',
       mealTypes: ['dinner'],
-      category: 'maroc-moderne',
+      category: 'mediterranean',
       tags: ['israélien', 'oeufs', 'tomates', 'épicé', 'tendance', 'végétarien'],
       difficulty: 1, prepTime: 10, cookTime: 20, servings: 1,
       // 22×4 + 28×4 + 16×9 = 88+112+144 = 344 ✓
@@ -4761,7 +4761,7 @@
       name: 'Stir-Fry Bœuf Brocoli',
       emoji: '🥦', origin: '🇨🇳',
       mealTypes: ['dinner'],
-      category: 'french',
+      category: 'italian',
       tags: ['chinois', 'boeuf', 'brocoli', 'stir-fry', 'tendance', 'high-protein'],
       difficulty: 2, prepTime: 10, cookTime: 12, servings: 1,
       // 36×4 + 40×4 + 12×9 = 144+160+108 = 412 ✓
@@ -4956,7 +4956,7 @@
       name: 'French Toast Protéiné',
       emoji: '🍞', origin: '🇫🇷',
       mealTypes: ['breakfast'],
-      category: 'french',
+      category: 'world-food',
       tags: ['french-toast', 'high-protein', 'brunch', 'tendance', 'réconfortant'],
       difficulty: 1, prepTime: 5, cookTime: 8, servings: 1,
       // 26×4 + 40×4 + 12×9 = 104+160+108 = 372 ✓
@@ -4983,7 +4983,7 @@
       name: 'Wrap Petit-Déjeuner Mexicain',
       emoji: '🌯', origin: '🇲🇽',
       mealTypes: ['breakfast'],
-      category: 'mexican',
+      category: 'world-food',
       tags: ['wrap', 'oeufs', 'mexicain', 'high-protein', 'tendance', 'savoureux'],
       difficulty: 1, prepTime: 8, cookTime: 8, servings: 1,
       // 28×4 + 36×4 + 14×9 = 112+144+126 = 382 ✓
@@ -5010,7 +5010,7 @@
       name: 'Porridge Pomme Cannelle',
       emoji: '🍎', origin: '🇬🇧',
       mealTypes: ['breakfast'],
-      category: 'french',
+      category: 'world-food',
       tags: ['porridge', 'pomme', 'cannelle', 'réconfortant', 'healthy', 'vegan'],
       difficulty: 1, prepTime: 2, cookTime: 8, servings: 1,
       // 10×4 + 60×4 + 8×9 = 40+240+72 = 352 ✓
@@ -5063,7 +5063,7 @@
       name: 'Salade Niçoise Moderne',
       emoji: '🥗', origin: '🇫🇷',
       mealTypes: ['lunch'],
-      category: 'italian',
+      category: 'world-food',
       tags: ['niçoise', 'thon', 'français', 'salade', 'classique', 'high-protein'],
       difficulty: 1, prepTime: 15, cookTime: 10, servings: 1,
       // 32×4 + 24×4 + 16×9 = 128+96+144 = 368 ✓
@@ -5092,7 +5092,7 @@
       name: 'Bowl Quinoa Méditerranéen',
       emoji: '🌿', origin: '🇬🇷',
       mealTypes: ['lunch'],
-      category: 'italian',
+      category: 'mediterranean',
       tags: ['quinoa', 'méditerranéen', 'végétarien', 'bowl', 'fresh', 'healthy'],
       difficulty: 1, prepTime: 10, cookTime: 15, servings: 1,
       // 20×4 + 52×4 + 14×9 = 80+208+126 = 414 ✓
@@ -5121,7 +5121,7 @@
       name: 'Noodle Bowl Thaï Végétarien',
       emoji: '🍜', origin: '🇹🇭',
       mealTypes: ['lunch'],
-      category: 'world-food',
+      category: 'mediterranean',
       tags: ['thaï', 'végétarien', 'nouilles', 'bowl', 'tendance', 'vegan'],
       difficulty: 1, prepTime: 10, cookTime: 10, servings: 1,
       // 14×4 + 56×4 + 14×9 = 56+224+126 = 406 ✓
@@ -5150,7 +5150,7 @@
       name: 'Assiette Mezze Libanaise',
       emoji: '🧿', origin: '🇱🇧',
       mealTypes: ['lunch'],
-      category: 'maroc-moderne',
+      category: 'mediterranean',
       tags: ['libanais', 'mezze', 'végétarien', 'moyen-orient', 'tendance', 'partage'],
       difficulty: 1, prepTime: 15, cookTime: 0, servings: 1,
       // 16×4 + 42×4 + 18×9 = 64+168+162 = 394 ✓
@@ -5233,7 +5233,7 @@
       name: 'Dahl de Lentilles Corail',
       emoji: '🟠', origin: '🇮🇳',
       mealTypes: ['dinner'],
-      category: 'world-food',
+      category: 'french',
       tags: ['indien', 'lentilles', 'vegan', 'dahl', 'tendance', 'high-fiber'],
       difficulty: 1, prepTime: 10, cookTime: 25, servings: 1,
       // 18×4 + 56×4 + 10×9 = 72+224+90 = 386 ✓
@@ -5262,7 +5262,7 @@
       name: 'Grilled Cheese Healthy',
       emoji: '🧀', origin: '🇺🇸',
       mealTypes: ['dinner'],
-      category: 'french',
+      category: 'world-food',
       tags: ['sandwich', 'fromage', 'américain', 'réconfortant', 'tendance', 'simple'],
       difficulty: 1, prepTime: 5, cookTime: 8, servings: 1,
       // 22×4 + 34×4 + 16×9 = 88+136+144 = 368 ✓
@@ -5288,7 +5288,7 @@
       name: 'Soupe Thaï Crevettes Coco',
       emoji: '🍲', origin: '🇹🇭',
       mealTypes: ['dinner'],
-      category: 'world-food',
+      category: 'japanese',
       tags: ['thaï', 'crevettes', 'coco', 'soupe', 'tendance', 'léger'],
       difficulty: 2, prepTime: 10, cookTime: 15, servings: 1,
       // 26×4 + 22×4 + 14×9 = 104+88+126 = 318 ✓
@@ -5316,7 +5316,7 @@
       name: 'Poulet Tandoori Légumes Rôtis',
       emoji: '🫙', origin: '🇮🇳',
       mealTypes: ['dinner'],
-      category: 'french',
+      category: 'japanese',
       tags: ['indien', 'poulet', 'tandoori', 'rôti', 'tendance', 'high-protein'],
       difficulty: 2, prepTime: 15, cookTime: 25, servings: 1,
       // 42×4 + 30×4 + 10×9 = 168+120+90 = 378 ✓
@@ -5373,7 +5373,7 @@
       name: 'Poke Bowl Thon Épicé',
       emoji: '🌶️', origin: '🇺🇸',
       mealTypes: ['lunch', 'dinner'],
-      category: 'world-food',
+      category: 'japanese',
       tags: ['poke', 'thon', 'épicé', 'bowl', 'tendance', 'high-protein'],
       difficulty: 1, prepTime: 12, cookTime: 15, servings: 1,
       // 34×4 + 50×4 + 12×9 = 136+200+108 = 444 ✓
@@ -5563,7 +5563,7 @@
       name: 'Waffles Protéinés Banane',
       emoji: '🧇', origin: '🇧🇪',
       mealTypes: ['breakfast'],
-      category: 'world-food',
+      category: 'french',
       tags: ['waffles', 'banane', 'high-protein', 'brunch', 'tendance', 'fun'],
       difficulty: 2, prepTime: 10, cookTime: 10, servings: 1,
       // 24×4 + 46×4 + 10×9 = 96+184+90 = 370 ✓
@@ -5615,7 +5615,7 @@
       name: 'Soupe Lentilles Épinards',
       emoji: '🍵', origin: '🇫🇷',
       mealTypes: ['lunch', 'dinner'],
-      category: 'french',
+      category: 'japanese',
       tags: ['soupe', 'lentilles', 'épinards', 'vegan', 'réconfortant', 'high-fiber'],
       difficulty: 1, prepTime: 10, cookTime: 25, servings: 1,
       // 18×4 + 44×4 + 8×9 = 72+176+72 = 320 ✓
@@ -5694,7 +5694,7 @@
       name: 'Salade César Poulet',
       emoji: '🥗', origin: '🇺🇸',
       mealTypes: ['lunch'],
-      category: 'french',
+      category: 'world-food',
       tags: ['salade-césar', 'poulet', 'classique', 'américain', 'high-protein'],
       difficulty: 1, prepTime: 12, cookTime: 10, servings: 1,
       // 38×4 + 20×4 + 14×9 = 152+80+126 = 358 ✓
@@ -5722,7 +5722,7 @@
       name: 'Wrap Falafel Légumes Grillés',
       emoji: '🌯', origin: '🇱🇧',
       mealTypes: ['lunch'],
-      category: 'maroc-moderne',
+      category: 'mediterranean',
       tags: ['falafel', 'végétarien', 'wrap', 'libanais', 'tendance', 'vegan'],
       difficulty: 1, prepTime: 10, cookTime: 20, servings: 1,
       // 16×4 + 46×4 + 16×9 = 64+184+144 = 392 ✓
@@ -5749,7 +5749,7 @@
       name: 'Ceviche Crevettes Avocat',
       emoji: '🦐', origin: '🇵🇪',
       mealTypes: ['lunch', 'dinner'],
-      category: 'world-food',
+      category: 'french',
       tags: ['ceviche', 'crevettes', 'avocat', 'péruvien', 'tendance', 'frais'],
       difficulty: 2, prepTime: 20, cookTime: 0, servings: 1,
       // 24×4 + 16×4 + 14×9 = 96+64+126 = 286 ✓
@@ -5776,7 +5776,7 @@
       name: 'Pâtes au Pesto Poulet Tomates Cerises',
       emoji: '🍝', origin: '🇮🇹',
       mealTypes: ['lunch', 'dinner'],
-      category: 'french',
+      category: 'italian',
       tags: ['pâtes', 'pesto', 'poulet', 'italien', 'rapide', 'tendance'],
       difficulty: 1, prepTime: 8, cookTime: 15, servings: 1,
       // 38×4 + 56×4 + 14×9 = 152+224+126 = 502 ✓
@@ -5826,7 +5826,7 @@
       name: 'Quinoa Tabboulé Oriental',
       emoji: '🌿', origin: '🇱🇧',
       mealTypes: ['lunch'],
-      category: 'french',
+      category: 'world-food',
       tags: ['quinoa', 'tabboulé', 'libanais', 'végétarien', 'frais', 'tendance'],
       difficulty: 1, prepTime: 15, cookTime: 15, servings: 1,
       // 14×4 + 46×4 + 12×9 = 56+184+108 = 348 ✓
@@ -5880,7 +5880,7 @@
       name: 'Soupe Poule au Gingembre',
       emoji: '🍲', origin: '🇨🇳',
       mealTypes: ['dinner'],
-      category: 'french',
+      category: 'world-food',
       tags: ['soupe', 'poulet', 'gingembre', 'chinois', 'réconfortant', 'anti-inflammatoire'],
       difficulty: 1, prepTime: 10, cookTime: 25, servings: 1,
       // 32×4 + 22×4 + 8×9 = 128+88+72 = 288 ✓
@@ -5907,7 +5907,7 @@
       name: 'Steak Haché Maison Patate Douce',
       emoji: '🍔', origin: '🇫🇷',
       mealTypes: ['dinner'],
-      category: 'french',
+      category: 'world-food',
       tags: ['steak', 'boeuf', 'patate-douce', 'français', 'healthy-burger', 'high-protein'],
       difficulty: 2, prepTime: 10, cookTime: 20, servings: 1,
       // 36×4 + 36×4 + 12×9 = 144+144+108 = 396 ✓
@@ -6045,7 +6045,7 @@
       name: 'Pancakes Protéinés Banane-Cannelle',
       emoji: '🥞', origin: '🇺🇸',
       mealTypes: ['breakfast', 'snack'],
-      category: 'world-food',
+      category: 'french',
       tags: ['high-protein', 'snack', 'pancakes', 'banane', 'cannelle', 'meal-prep', 'vegetarian'],
       difficulty: 1, prepTime: 10, cookTime: 15, servings: 2,
       // 60×4 + 88×4 + 14×9 = 240+352+126 = 718 ✓ (≈700 kcal, 359 kcal/portion)
@@ -6104,7 +6104,7 @@
       name: 'Pancakes Protéinés Myrtilles-Avoine',
       emoji: '🫐', origin: '🇺🇸',
       mealTypes: ['breakfast', 'snack'],
-      category: 'world-food',
+      category: 'french',
       tags: ['high-protein', 'snack', 'pancakes', 'myrtilles', 'avoine', 'skyr', 'antioxydants', 'vegetarian'],
       difficulty: 1, prepTime: 10, cookTime: 15, servings: 2,
       // 56×4 + 100×4 + 16×9 = 224+400+144 = 768 ✓ (≈760 kcal, 384 kcal/portion)
@@ -6165,7 +6165,7 @@
       name: 'Pancakes Soufflés Japonais Protéinés Matcha',
       emoji: '🍵', origin: '🇯🇵',
       mealTypes: ['breakfast', 'snack'],
-      category: 'japanese',
+      category: 'french',
       tags: ['high-protein', 'snack', 'pancakes', 'matcha', 'japonais', 'souffle', 'tendance', 'instagrammable', 'vegetarian'],
       difficulty: 2, prepTime: 15, cookTime: 15, servings: 1,
       // 30×4 + 30×4 + 10×9 = 120+120+90 = 330 ✓ (≈320 kcal)
@@ -6225,7 +6225,7 @@
       name: 'Granola Protéiné Pistache-Coco-Miel',
       emoji: '🥣', origin: '🌿',
       mealTypes: ['snack'],
-      category: 'world-food',
+      category: 'french',
       tags: ['high-protein', 'snack', 'meal-prep', 'granola', 'pistache', 'coco', 'croustillant'],
       difficulty: 1, prepTime: 10, cookTime: 25, servings: 10,
       // 150×4 + 260×4 + 90×9 = 600+1040+810 = 2450 ✓ (TOTAL 10 portions)
@@ -6253,7 +6253,7 @@
       name: 'Granola Protéiné Chocolat-Noisette',
       emoji: '🍫', origin: '🌰',
       mealTypes: ['snack'],
-      category: 'world-food',
+      category: 'french',
       tags: ['high-protein', 'snack', 'meal-prep', 'granola', 'chocolat', 'noisette', 'ferrero-style'],
       difficulty: 1, prepTime: 10, cookTime: 25, servings: 10,
       // 140×4 + 260×4 + 80×9 = 560+1040+720 = 2320 ✓ (TOTAL 10 portions)
@@ -6574,7 +6574,7 @@
       name: 'Brownie Protéiné Patate Douce & Noix de Cajou',
       emoji: '🍠', origin: '🌍',
       mealTypes: ['snack'],
-      category: 'french',
+      category: 'world-food',
       tags: ['high-protein', 'snack', 'brownie', 'patate-douce', 'cajou', 'sans-farine', 'sans-sucre-ajouté', 'fudgey'],
       difficulty: 2, prepTime: 20, cookTime: 20, servings: 9,
       // 108×4 + 102×4 + 68×9 = 432+408+612 = 1452 ✓
@@ -6604,7 +6604,7 @@
       name: 'Bouchées Protéinées Coco-Matcha "Raffaello Vert"',
       emoji: '🍵', origin: '🇯🇵',
       mealTypes: ['snack'],
-      category: 'french',
+      category: 'mediterranean',
       tags: ['high-protein', 'snack', 'no-bake', 'matcha', 'coco', 'cajou', 'premium', 'original', 'raffaello'],
       difficulty: 2, prepTime: 30, cookTime: 0, servings: 12,
       // 60×4 + 72×4 + 60×9 = 240+288+540 = 1068 ✓
@@ -6633,7 +6633,7 @@
       name: 'Panna Cotta Légère Vanille-Fruits Rouges',
       emoji: '🍮', origin: '🇮🇹',
       mealTypes: ['snack'],
-      category: 'french',
+      category: 'italian',
       tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'sans-cuisson', 'léger', 'élégant'],
       difficulty: 1, prepTime: 15, cookTime: 10, servings: 4,
       // P×4 + G×4 + L×9 = 48×4 + 100×4 + 20×9 = 192 + 400 + 180 = 772 kcal ✓
@@ -6751,7 +6751,7 @@
       name: 'Tiramisu Protéiné Revisité',
       emoji: '🍰', origin: '🇮🇹',
       mealTypes: ['snack'],
-      category: 'french',
+      category: 'italian',
       tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'café', 'cacao', 'tiramisu'],
       difficulty: 2, prepTime: 25, cookTime: 5, servings: 6,
       // P×4 + G×4 + L×9 = 108×4 + 150×4 + 60×9 = 432 + 600 + 540 = 1572 kcal ✓
@@ -6963,7 +6963,7 @@
       name: 'Sorbet Mangue-Citron Vert Protéiné',
       emoji: '🥭', origin: '🌍',
       mealTypes: ['snack'],
-      category: 'french',
+      category: 'italian',
       tags: ['snack', 'dessert', 'healthy', 'maroc', 'high-protein', 'mangue', 'sorbet', 'sans-cuisson', 'vegan-option', 'rapide'],
       difficulty: 1, prepTime: 5, cookTime: 0, servings: 4,
       // P×4 + G×4 + L×9 = 48×4 + 84×4 + 8×9 = 192 + 336 + 72 = 600 kcal ✓
@@ -6990,7 +6990,7 @@
       name: 'Beignets Healthy au Four Façon Donuts',
       emoji: '🍩', origin: '🌍',
       mealTypes: ['snack'],
-      category: 'french',
+      category: 'world-food',
       tags: ['snack', 'dessert', 'healthy', 'maroc', 'high-protein', 'donuts', 'chocolat', 'four', 'sans-friture'],
       difficulty: 2, prepTime: 15, cookTime: 15, servings: 8,
       // P×4 + G×4 + L×9 = 80×4 + 162×4 + 48×9 = 320 + 648 + 432 = 1400 kcal ✓
@@ -7150,7 +7150,7 @@
       name: 'Glace Banana Nice Cream Chocolat-Noisette',
       emoji: '🍌', origin: '🌍',
       mealTypes: ['snack'],
-      category: 'french',
+      category: 'italian',
       tags: ['snack', 'dessert', 'healthy', 'maroc', 'banane', 'chocolat', 'sans-cuisson', 'vegan', 'express', 'glace'],
       difficulty: 1, prepTime: 5, cookTime: 0, servings: 2,
       // P×4 + G×4 + L×9 = 24×4 + 68×4 + 20×9 = 96 + 272 + 180 = 548 kcal ÷ 2 = 274 kcal/portion ✓
@@ -7193,8 +7193,8 @@
         { name: 'Ditalini ou petites pâtes courtes', qty: 120, unit: 'g' },
         { name: 'Tomates pelées en boîte', qty: 200, unit: 'g' },
         { name: 'Bouillon de légumes', qty: 600, unit: 'ml' },
-        { name: 'Ail', qty: 3, unit: 'gousses' },
-        { name: 'Romarin frais', qty: 2, unit: 'branches' },
+        { name: 'Ail', qty: 3, unit: 'gousse' },
+        { name: 'Romarin frais', qty: 2, unit: 'brin' },
         { name: 'Huile d\'olive extra-vierge', qty: 15, unit: 'ml' },
         { name: 'Parmesan râpé', qty: 20, unit: 'g' },
         { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
@@ -7255,11 +7255,11 @@
       cookTime: 20,
       servings: 2,
       // Vérification: P×4 + G×4 + L×9 = 42×4 + 55×4 + 14×9 = 168 + 220 + 126 = 514 kcal ≈ 515 ✓
-      baseNutrition: { calories: 514, proteinGrams: 42, carbsGrams: 55, fatGrams: 14 },
+      baseNutrition: { calories: 515, proteinGrams: 42, carbsGrams: 55, fatGrams: 14 },
       ingredients: [
         { name: 'Spaghetti complets', qty: 160, unit: 'g' },
         { name: 'Filets de poulet', qty: 300, unit: 'g' },
-        { name: 'Ail', qty: 4, unit: 'gousses' },
+        { name: 'Ail', qty: 4, unit: 'gousse' },
         { name: 'Huile d\'olive extra-vierge', qty: 20, unit: 'ml' },
         { name: 'Piment rouge séché (peperoncino)', qty: 1, unit: 'pce' },
         { name: 'Persil plat frais', qty: 20, unit: 'g' },
@@ -7288,13 +7288,13 @@
       cookTime: 20,
       servings: 2,
       // Vérification: P×4 + G×4 + L×9 = 38×4 + 54×4 + 9×9 = 152 + 216 + 81 = 449 kcal ≈ 450 ✓
-      baseNutrition: { calories: 449, proteinGrams: 38, carbsGrams: 54, fatGrams: 9 },
+      baseNutrition: { calories: 450, proteinGrams: 38, carbsGrams: 54, fatGrams: 9 },
       ingredients: [
         { name: 'Penne de blé complet', qty: 150, unit: 'g' },
         { name: 'Crevettes décortiquées crues', qty: 250, unit: 'g' },
         { name: 'Tomates cerises', qty: 200, unit: 'g' },
         { name: 'Purée de tomates', qty: 150, unit: 'g' },
-        { name: 'Ail', qty: 3, unit: 'gousses' },
+        { name: 'Ail', qty: 3, unit: 'gousse' },
         { name: 'Piment rouge frais', qty: 1, unit: 'pce' },
         { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
         { name: 'Basilic frais', qty: 10, unit: 'g' },
@@ -7322,7 +7322,7 @@
       cookTime: 15,
       servings: 2,
       // Vérification: P×4 + G×4 + L×9 = 40×4 + 50×4 + 16×9 = 160 + 200 + 144 = 504 kcal ≈ 505 ✓
-      baseNutrition: { calories: 504, proteinGrams: 40, carbsGrams: 50, fatGrams: 16 },
+      baseNutrition: { calories: 505, proteinGrams: 40, carbsGrams: 50, fatGrams: 16 },
       ingredients: [
         { name: 'Tagliatelles fraîches', qty: 200, unit: 'g' },
         { name: 'Filet de saumon sans peau', qty: 280, unit: 'g' },
@@ -7389,16 +7389,16 @@
       cookTime: 28,
       servings: 2,
       // Vérification: P×4 + G×4 + L×9 = 14×4 + 68×4 + 12×9 = 56 + 272 + 108 = 436 kcal ≈ 435 ✓
-      baseNutrition: { calories: 436, proteinGrams: 14, carbsGrams: 68, fatGrams: 12 },
+      baseNutrition: { calories: 435, proteinGrams: 14, carbsGrams: 68, fatGrams: 12 },
       ingredients: [
         { name: 'Riz arborio', qty: 160, unit: 'g' },
         { name: 'Champignons mélangés (shiitake, portobello, champignons de Paris)', qty: 300, unit: 'g' },
         { name: 'Bouillon de légumes chaud', qty: 750, unit: 'ml' },
         { name: 'Oignon jaune', qty: 1, unit: 'pce' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Ail', qty: 2, unit: 'gousse' },
         { name: 'Vin blanc sec', qty: 60, unit: 'ml' },
         { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
-        { name: 'Thym frais', qty: 4, unit: 'branches' },
+        { name: 'Thym frais', qty: 4, unit: 'brin' },
         { name: 'Levure nutritionnelle', qty: 15, unit: 'g' },
         { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
       ],
@@ -7424,7 +7424,7 @@
       cookTime: 15,
       servings: 2,
       // Vérification: P×4 + G×4 + L×9 = 22×4 + 60×4 + 12×9 = 88 + 240 + 108 = 436 kcal ≈ 435 ✓
-      baseNutrition: { calories: 436, proteinGrams: 22, carbsGrams: 60, fatGrams: 12 },
+      baseNutrition: { calories: 435, proteinGrams: 22, carbsGrams: 60, fatGrams: 12 },
       ingredients: [
         { name: 'Fusilli tricolores ou penne', qty: 160, unit: 'g' },
         { name: 'Courgette', qty: 120, unit: 'g' },
@@ -7459,7 +7459,7 @@
       cookTime: 20,
       servings: 2,
       // Vérification: P×4 + G×4 + L×9 = 26×4 + 62×4 + 14×9 = 104 + 248 + 126 = 478 kcal ≈ 480 ✓
-      baseNutrition: { calories: 478, proteinGrams: 26, carbsGrams: 62, fatGrams: 14 },
+      baseNutrition: { calories: 480, proteinGrams: 26, carbsGrams: 62, fatGrams: 14 },
       ingredients: [
         { name: 'Spaghetti ou tonnarelli', qty: 160, unit: 'g' },
         { name: 'Pecorino romano râpé finement', qty: 50, unit: 'g' },
@@ -7497,7 +7497,7 @@
         { name: 'Œuf entier', qty: 1, unit: 'pce' },
         { name: 'Parmesan râpé', qty: 30, unit: 'g' },
         { name: 'Beurre', qty: 15, unit: 'g' },
-        { name: 'Sauge fraîche', qty: 10, unit: 'feuilles' },
+        { name: 'Sauge fraîche', qty: 10, unit: 'feuille' },
         { name: 'Noix', qty: 20, unit: 'g' },
         { name: 'Noix de muscade', qty: 1, unit: 'pincée' },
         { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
@@ -7530,7 +7530,7 @@
       ingredients: [
         { name: 'Blanc de poulet', qty: 300, unit: 'g' },
         { name: 'Tomates pelées concassées', qty: 200, unit: 'g' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Ail', qty: 2, unit: 'gousse' },
         { name: 'Origan séché', qty: 2, unit: 'g' },
         { name: 'Câpres', qty: 20, unit: 'g' },
         { name: 'Olives noires dénoyautées', qty: 30, unit: 'g' },
@@ -7562,7 +7562,7 @@
       ingredients: [
         { name: 'Filets de bar (branzino)', qty: 320, unit: 'g' },
         { name: 'Citron', qty: 1, unit: 'pce' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Ail', qty: 2, unit: 'gousse' },
         { name: 'Persil frais', qty: 15, unit: 'g' },
         { name: 'Romarin frais', qty: 5, unit: 'g' },
         { name: 'Thym frais', qty: 5, unit: 'g' },
@@ -7768,7 +7768,7 @@
         { name: 'Citron', qty: 2, unit: 'pce' },
         { name: 'Câpres rincées', qty: 25, unit: 'g' },
         { name: 'Bouillon de volaille dégraissé', qty: 100, unit: 'ml' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Ail', qty: 2, unit: 'gousse' },
         { name: 'Thym frais', qty: 5, unit: 'g' },
         { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
@@ -7799,7 +7799,7 @@
       baseNutrition: { calories: 268, proteinGrams: 36, carbsGrams: 4, fatGrams: 12 },
       ingredients: [
         { name: 'Grosses crevettes décortiquées (gambas)', qty: 300, unit: 'g' },
-        { name: 'Ail', qty: 4, unit: 'gousses' },
+        { name: 'Ail', qty: 4, unit: 'gousse' },
         { name: 'Persil frais', qty: 20, unit: 'g' },
         { name: 'Piment rouge frais', qty: 1, unit: 'pce' },
         { name: 'Citron', qty: 1, unit: 'pce' },
@@ -7833,7 +7833,7 @@
       ingredients: [
         { name: 'Steak de bœuf maigre (rumsteck)', qty: 300, unit: 'g' },
         { name: 'Persil frais', qty: 20, unit: 'g' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Ail', qty: 2, unit: 'gousse' },
         { name: 'Citron (zeste)', qty: 1, unit: 'pce' },
         { name: 'Romarin frais', qty: 5, unit: 'g' },
         { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
@@ -13510,7 +13510,7 @@
     tags: ["baked-oats","meal-prep","four","whey","viral-uk"],
     difficulty: 1,
     servings: 1,
-    baseNutrition: { calories: 484, proteinGrams: 48, carbsGrams: 50, fatGrams: 11 },
+    baseNutrition: { calories: 491, proteinGrams: 48, carbsGrams: 50, fatGrams: 11 },
     ingredients: [
       { name: "Avoine", qty: 50, unit: 'g' },
       { name: "whey vanille", qty: 30, unit: 'g' },
@@ -13536,7 +13536,7 @@
     tags: ["french-toast","ricotta","high-protein","brunch","viral-instagram"],
     difficulty: 2,
     servings: 1,
-    baseNutrition: { calories: 371, proteinGrams: 33, carbsGrams: 41, fatGrams: 9 },
+    baseNutrition: { calories: 377, proteinGrams: 33, carbsGrams: 41, fatGrams: 9 },
     ingredients: [
       { name: "Pain complet 2 tranches (80g)", qty: 0, unit: 'g' },
       { name: "ricotta", qty: 50, unit: 'g' },
@@ -13589,7 +13589,7 @@
     tags: ["overnight-oats","meal-prep","chocolat","no-cook","tiktok-viral"],
     difficulty: 1,
     servings: 1,
-    baseNutrition: { calories: 531, proteinGrams: 47, carbsGrams: 49, fatGrams: 16 },
+    baseNutrition: { calories: 528, proteinGrams: 47, carbsGrams: 49, fatGrams: 16 },
     ingredients: [
       { name: "Avoine", qty: 60, unit: 'g' },
       { name: "yaourt grec 0%", qty: 150, unit: 'g' },
@@ -13666,7 +13666,7 @@
     tags: ["yogurt-bark","congelé","no-bake","viral-tiktok","fruits-rouges"],
     difficulty: 1,
     servings: 1,
-    baseNutrition: { calories: 370, proteinGrams: 50, carbsGrams: 23, fatGrams: 8 },
+    baseNutrition: { calories: 364, proteinGrams: 50, carbsGrams: 23, fatGrams: 8 },
     ingredients: [
       { name: "Yaourt grec 0%", qty: 300, unit: 'g' },
       { name: "whey fraise", qty: 20, unit: 'g' },
@@ -13740,7 +13740,7 @@
     emoji: "🇯🇵",
     origin: "🇯🇵",
     mealTypes: ["lunch","dinner"],
-    category: "asian",
+    category: 'japanese',
     tags: ["poke","bowl","saumon","japonais","viral","meal-prep"],
     difficulty: 1,
     servings: 1,
@@ -13791,7 +13791,7 @@
     emoji: "🇯🇵",
     origin: "🇯🇵",
     mealTypes: ["lunch","dinner"],
-    category: "asian",
+    category: 'japanese',
     tags: ["teriyaki","poulet","bowl","japonais","meal-prep","fitness"],
     difficulty: 1,
     servings: 1,
@@ -13841,7 +13841,7 @@
 
   {
     id: 'L365',
-    name: "Burrito Bowl Mexicain",
+    name: "Burrito Bowl Mexicain Moderne",
     emoji: "🇲🇽",
     origin: "🇲🇽",
     mealTypes: ["lunch","dinner"],
@@ -13872,11 +13872,11 @@
     emoji: "🇯🇵",
     origin: "🇯🇵",
     mealTypes: ["lunch","dinner"],
-    category: "asian",
+    category: 'japanese',
     tags: ["sushi-bowl","saumon","japonais","avocat","viral","tiktok"],
     difficulty: 1,
     servings: 1,
-    baseNutrition: { calories: 546, proteinGrams: 28, carbsGrams: 53, fatGrams: 25 },
+    baseNutrition: { calories: 549, proteinGrams: 28, carbsGrams: 53, fatGrams: 25 },
     ingredients: [
       { name: "Saumon cru", qty: 100, unit: 'g' },
       { name: "riz cuit", qty: 150, unit: 'g' },
@@ -14006,7 +14006,7 @@
     emoji: "🇯🇵",
     origin: "🇯🇵",
     mealTypes: ["lunch","dinner"],
-    category: "asian",
+    category: 'japanese',
     tags: ["soupe","asiatique","miso","crevettes","japonais","lowcal","highprotein"],
     difficulty: 1,
     servings: 1,
@@ -14033,7 +14033,7 @@
     emoji: "🇯🇵",
     origin: "🇯🇵",
     mealTypes: ["lunch","dinner"],
-    category: "asian",
+    category: 'japanese',
     tags: ["gyoza","vapeur","poulet","asiatique","japonais","tiktok","highprotein"],
     difficulty: 2,
     servings: 1,
@@ -14088,7 +14088,7 @@
     emoji: "🇯🇵",
     origin: "🇯🇵",
     mealTypes: ["lunch","dinner"],
-    category: "asian",
+    category: 'japanese',
     tags: ["ramen","poulet","miso","japonais","asiatique","highprotein","healthy"],
     difficulty: 2,
     servings: 1,
@@ -14144,11 +14144,11 @@
     emoji: "🇯🇵",
     origin: "🇯🇵",
     mealTypes: ["lunch","dinner"],
-    category: "asian",
+    category: 'japanese',
     tags: ["tamago sando","sandwich","oeuf","japonais","asiatique","tiktok","viral","lunch"],
     difficulty: 1,
     servings: 1,
-    baseNutrition: { calories: 447, proteinGrams: 25, carbsGrams: 41, fatGrams: 20 },
+    baseNutrition: { calories: 444, proteinGrams: 25, carbsGrams: 41, fatGrams: 20 },
     ingredients: [
       { name: "Pain de mie japonais shokupan 2 tranches", qty: 80, unit: 'g' },
       { name: "Œufs durs", qty: 150, unit: 'g', note: "3 unité(s)" },
@@ -14226,7 +14226,7 @@
     emoji: "🇯🇵",
     origin: "🇯🇵",
     mealTypes: ["lunch","dinner"],
-    category: "asian",
+    category: 'japanese',
     tags: ["saumon","teriyaki","japonais","asiatique","highprotein","instagram","healthy"],
     difficulty: 1,
     servings: 1,
@@ -14909,7 +14909,7 @@
     tags: ["snack","high-protein","low-carb","keto","meal-prep"],
     difficulty: 1,
     servings: 1,
-    baseNutrition: { calories: 225, proteinGrams: 18, carbsGrams: 3, fatGrams: 16 },
+    baseNutrition: { calories: 228, proteinGrams: 18, carbsGrams: 3, fatGrams: 16 },
     ingredients: [
       { name: "Œuf", qty: 2, unit: 'pce', note: "2 unité(s)" },
       { name: "épinards frais", qty: 30, unit: 'g' },
@@ -14934,7 +14934,7 @@
     tags: ["snack","high-protein","energy","pre-workout","viral"],
     difficulty: 1,
     servings: 1,
-    baseNutrition: { calories: 320, proteinGrams: 16, carbsGrams: 43, fatGrams: 9 },
+    baseNutrition: { calories: 317, proteinGrams: 16, carbsGrams: 43, fatGrams: 9 },
     ingredients: [
       { name: "Galettes de riz soufflé", qty: 36, unit: 'g', note: "2 unité(s)" },
       { name: "beurre de cacahuète naturel", qty: 15, unit: 'g' },
@@ -15413,7 +15413,7 @@
     tags: ["boisson","shot","gingembre","curcuma","gut-health","immunité","detox","viral"],
     difficulty: 1,
     servings: 1,
-    baseNutrition: { calories: 172, proteinGrams: 2, carbsGrams: 43, fatGrams: 0 },
+    baseNutrition: { calories: 180, proteinGrams: 2, carbsGrams: 43, fatGrams: 0 },
     ingredients: [
       { name: "Gingembre frais", qty: 20, unit: 'g' },
       { name: "curcuma frais", qty: 5, unit: 'g' },
@@ -15661,7 +15661,7 @@
     emoji: "🇯🇵",
     origin: "🇯🇵",
     mealTypes: ["lunch","dinner"],
-    category: "asian",
+    category: 'japanese',
     tags: ["meal-prep","four","poulet","teriyaki","japonais"],
     difficulty: 2,
     servings: 1,
@@ -15908,7 +15908,7 @@
     tags: ["mexicain","birria","tacos","viral","tiktok","bœuf","street-food"],
     difficulty: 2,
     servings: 1,
-    baseNutrition: { calories: 452, proteinGrams: 43, carbsGrams: 30, fatGrams: 17 },
+    baseNutrition: { calories: 445, proteinGrams: 43, carbsGrams: 30, fatGrams: 17 },
     ingredients: [
       { name: "Bœuf haché 5%", qty: 150, unit: 'g' },
       { name: "tortillas maïs 2x25g", qty: 0, unit: 'g' },
@@ -15937,7 +15937,7 @@
     tags: ["mexicain","elotes","street-food","bowl","viral","instagram","poulet"],
     difficulty: 2,
     servings: 1,
-    baseNutrition: { calories: 529, proteinGrams: 49, carbsGrams: 43, fatGrams: 19 },
+    baseNutrition: { calories: 539, proteinGrams: 49, carbsGrams: 43, fatGrams: 19 },
     ingredients: [
       { name: "Poulet grillé", qty: 120, unit: 'g' },
       { name: "maïs en épi ou surgelé", qty: 200, unit: 'g' },
@@ -15995,7 +15995,7 @@
     tags: ["argentin","chimichurri","steak","bœuf","paléo","sans-gluten","viral"],
     difficulty: 2,
     servings: 1,
-    baseNutrition: { calories: 558, proteinGrams: 49, carbsGrams: 27, fatGrams: 27 },
+    baseNutrition: { calories: 547, proteinGrams: 49, carbsGrams: 27, fatGrams: 27 },
     ingredients: [
       { name: "Bavette de bœuf", qty: 180, unit: 'g' },
       { name: "huile d'olive", qty: 15, unit: 'ml' },
@@ -16024,7 +16024,7 @@
     tags: ["colombien","arepa","poulet","avocat","street-food","sans-gluten","instagram"],
     difficulty: 2,
     servings: 1,
-    baseNutrition: { calories: 568, proteinGrams: 44, carbsGrams: 68, fatGrams: 13 },
+    baseNutrition: { calories: 565, proteinGrams: 44, carbsGrams: 68, fatGrams: 13 },
     ingredients: [
       { name: "Farine de maïs pré-cuite (masarepa)", qty: 80, unit: 'g' },
       { name: "eau tiède", qty: 120, unit: 'ml' },
@@ -16053,7 +16053,7 @@
     tags: ["péruvien","lomo-saltado","bœuf","wok","fusion","chifa","viral"],
     difficulty: 2,
     servings: 1,
-    baseNutrition: { calories: 542, proteinGrams: 43, carbsGrams: 56, fatGrams: 18 },
+    baseNutrition: { calories: 558, proteinGrams: 43, carbsGrams: 56, fatGrams: 18 },
     ingredients: [
       { name: "Bœuf émincé", qty: 150, unit: 'g' },
       { name: "riz blanc cuit", qty: 150, unit: 'g' },
@@ -16113,7 +16113,7 @@
     tags: ["mexicain","guacamole","crevettes","high-protein","hack","tiktok","viral"],
     difficulty: 1,
     servings: 1,
-    baseNutrition: { calories: 543, proteinGrams: 38, carbsGrams: 48, fatGrams: 24 },
+    baseNutrition: { calories: 558, proteinGrams: 38, carbsGrams: 48, fatGrams: 24 },
     ingredients: [
       { name: "Avocat", qty: 150, unit: 'g' },
       { name: "crevettes cuites", qty: 100, unit: 'g' },
@@ -16144,7 +16144,7 @@
     tags: ["mexicain","al-pastor","tacos","porc","ananas","street-food","tiktok","viral"],
     difficulty: 2,
     servings: 1,
-    baseNutrition: { calories: 490, proteinGrams: 36, carbsGrams: 45, fatGrams: 18 },
+    baseNutrition: { calories: 486, proteinGrams: 36, carbsGrams: 45, fatGrams: 18 },
     ingredients: [
       { name: "Porc filet émincé", qty: 150, unit: 'g' },
       { name: "tortillas maïs 3x25g", qty: 0, unit: 'g' },
@@ -16173,7 +16173,7 @@
     tags: ["brésilien","açaí","bowl","high-protein","petit-déjeuner","viral","instagram","healthy"],
     difficulty: 1,
     servings: 1,
-    baseNutrition: { calories: 584, proteinGrams: 32, carbsGrams: 67, fatGrams: 22 },
+    baseNutrition: { calories: 594, proteinGrams: 32, carbsGrams: 67, fatGrams: 22 },
     ingredients: [
       { name: "Purée d'açaí surgelée", qty: 100, unit: 'g' },
       { name: "banane", qty: 100, unit: 'g' },
@@ -17510,7 +17510,7 @@
     cookTime: 0,
     servings: 2,
     // Vérification: 22×4 + 18×4 + 12×9 = 88 + 72 + 108 = 268 ≈ 270 kcal ✓
-    baseNutrition: { calories: 268, proteinGrams: 22, carbsGrams: 18, fatGrams: 12 },
+    baseNutrition: { calories: 270, proteinGrams: 22, carbsGrams: 18, fatGrams: 12 },
     ingredients: [
       { name: 'Ricotta fraîche', qty: 250, unit: 'g' },
       { name: "Miel d'acacia", qty: 20, unit: 'g' },
@@ -17571,7 +17571,7 @@
     cookTime: 20,
     servings: 2,
     // Vérification: 16×4 + 38×4 + 14×9 = 64 + 152 + 126 = 342 ≈ 340 kcal ✓
-    baseNutrition: { calories: 342, proteinGrams: 16, carbsGrams: 38, fatGrams: 14 },
+    baseNutrition: { calories: 340, proteinGrams: 16, carbsGrams: 38, fatGrams: 14 },
     ingredients: [
       { name: "Flocons d'avoine", qty: 120, unit: 'g' },
       { name: 'Pistaches non salées', qty: 40, unit: 'g' },
@@ -17603,7 +17603,7 @@
     cookTime: 0,
     servings: 2,
     // Vérification: 15×4 + 40×4 + 6×9 = 60 + 160 + 54 = 274 ≈ 275 kcal ✓
-    baseNutrition: { calories: 274, proteinGrams: 15, carbsGrams: 40, fatGrams: 6 },
+    baseNutrition: { calories: 275, proteinGrams: 15, carbsGrams: 40, fatGrams: 6 },
     ingredients: [
       { name: 'Orange sanguine', qty: 200, unit: 'g' },
       { name: 'Citron de Sicile', qty: 1, unit: 'pce' },
@@ -17669,7 +17669,7 @@
     cookTime: 3,
     servings: 2,
     // Vérification: 18×4 + 26×4 + 10×9 = 72 + 104 + 90 = 266 ≈ 265 kcal ✓
-    baseNutrition: { calories: 266, proteinGrams: 18, carbsGrams: 26, fatGrams: 10 },
+    baseNutrition: { calories: 265, proteinGrams: 18, carbsGrams: 26, fatGrams: 10 },
     ingredients: [
       { name: 'Pain de campagne', qty: 120, unit: 'g' },
       { name: 'Ricotta fraîche', qty: 150, unit: 'g' },
@@ -17701,7 +17701,7 @@
     cookTime: 0,
     servings: 2,
     // Vérification: 15×4 + 28×4 + 13×9 = 60 + 112 + 117 = 289 ≈ 290 kcal ✓
-    baseNutrition: { calories: 289, proteinGrams: 15, carbsGrams: 28, fatGrams: 13 },
+    baseNutrition: { calories: 290, proteinGrams: 15, carbsGrams: 28, fatGrams: 13 },
     ingredients: [
       { name: 'Biscuits amaretti', qty: 60, unit: 'g' },
       { name: 'Cacao en poudre non sucré', qty: 15, unit: 'g' },
@@ -18611,7 +18611,7 @@
       { name: 'Tomates pelées en conserve', qty: 300, unit: 'g' },
       { name: 'Jambon de dinde fumé', qty: 60, unit: 'g' },
       { name: 'Oignon', qty: 100, unit: 'g' },
-      { name: 'Ail', qty: 3, unit: 'gousses' },
+      { name: 'Ail', qty: 3, unit: 'gousse' },
       { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
       { name: 'Piment doux (paprika fumé)', qty: 5, unit: 'g' },
       { name: 'Thym, laurier', qty: 1, unit: 'pincée' },
@@ -18646,7 +18646,7 @@
       { name: 'Carottes', qty: 150, unit: 'g' },
       { name: 'Oignon', qty: 100, unit: 'g' },
       { name: 'Céleri branche', qty: 80, unit: 'g' },
-      { name: 'Ail', qty: 2, unit: 'gousses' },
+      { name: 'Ail', qty: 2, unit: 'gousse' },
       { name: 'Bouillon de légumes (cube)', qty: 800, unit: 'ml' },
       { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
       { name: 'Cumin moulu', qty: 3, unit: 'g' },
@@ -18790,7 +18790,7 @@
       { name: 'Fromage de chèvre frais (Jaouda)', qty: 120, unit: 'g' },
       { name: 'Yaourt grec 0%', qty: 100, unit: 'g' },
       { name: 'Œufs', qty: 2, unit: 'pce' },
-      { name: 'Ail', qty: 2, unit: 'gousses' },
+      { name: 'Ail', qty: 2, unit: 'gousse' },
       { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
       { name: 'Thym frais', qty: 4, unit: 'g' },
       { name: 'Parmesan râpé', qty: 20, unit: 'g' },
@@ -18863,7 +18863,7 @@
       { name: 'Tomates pelées en conserve', qty: 200, unit: 'g' },
       { name: 'Bouillon de poulet dégraissé', qty: 250, unit: 'ml' },
       { name: 'Vin rouge (optionnel, 1 verre)', qty: 100, unit: 'ml' },
-      { name: 'Ail', qty: 3, unit: 'gousses' },
+      { name: 'Ail', qty: 3, unit: 'gousse' },
       { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
       { name: 'Concentré de tomate', qty: 15, unit: 'g' },
       { name: 'Thym, laurier, persil', qty: 1, unit: 'bouquet' },
@@ -22250,7 +22250,7 @@
 {
   "id": "R560",
   "name": "BBQ Chicken Bowl",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -22323,7 +22323,7 @@
 {
   "id": "R561",
   "name": "Turkey Taco Bowl",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -22396,7 +22396,7 @@
 {
   "id": "R562",
   "name": "Salmon Power Bowl",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -22469,7 +22469,7 @@
 {
   "id": "R563",
   "name": "Buffalo Chicken Wrap",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch"
   ],
@@ -22541,7 +22541,7 @@
 {
   "id": "R564",
   "name": "Greek Yogurt Parfait Protéiné",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -22608,7 +22608,7 @@
 {
   "id": "R565",
   "name": "Protein Pancakes Myrtilles",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -22680,7 +22680,7 @@
 {
   "id": "R566",
   "name": "Egg White Breakfast Burrito",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -22752,7 +22752,7 @@
 {
   "id": "R567",
   "name": "Chicken Caesar Salad",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch"
   ],
@@ -22824,7 +22824,7 @@
 {
   "id": "R568",
   "name": "Turkey Burger Healthy",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -22897,7 +22897,7 @@
 {
   "id": "R569",
   "name": "Tuna Avocado Toast",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast",
     "lunch"
@@ -22970,7 +22970,7 @@
 {
   "id": "R570",
   "name": "Cottage Cheese Protein Bowl",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast",
     "snack"
@@ -23035,7 +23035,7 @@
 {
   "id": "R571",
   "name": "Shrimp Stir Fry Asiatique",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -23115,7 +23115,7 @@
 {
   "id": "R572",
   "name": "Sweet Potato Turkey Hash",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast",
     "lunch"
@@ -23185,7 +23185,7 @@
 {
   "id": "R573",
   "name": "Overnight Oats Protein Vanille",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -23254,7 +23254,7 @@
 {
   "id": "R574",
   "name": "Chicken Tikka Masala Light",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -23334,7 +23334,7 @@
 {
   "id": "R575",
   "name": "Beef Stir Fry Teriyaki",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -23409,7 +23409,7 @@
 {
   "id": "R576",
   "name": "Smashed Chickpea Avocado Toast",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast",
     "lunch"
@@ -23485,7 +23485,7 @@
 {
   "id": "R577",
   "name": "Protein Acai Bowl",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -23559,7 +23559,7 @@
 {
   "id": "R578",
   "name": "Baked Lemon Herb Salmon",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -23640,7 +23640,7 @@
 {
   "id": "R579",
   "name": "Energy Balls Peanut Butter",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "snack"
   ],
@@ -23783,7 +23783,7 @@
 {
   "id": "R581",
   "name": "Protein Pancakes Avoine Banane Choco",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -23931,7 +23931,7 @@
 {
   "id": "R583",
   "name": "Soufflé Pancakes Japonais Healthy",
-  "category": "pastry",
+  "category": "french",
   "mealTypes": [
     "breakfast"
   ],
@@ -24010,7 +24010,7 @@
 {
   "id": "R584",
   "name": "Pancakes Patate Douce Cannelle",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -24163,7 +24163,7 @@
 {
   "id": "R586",
   "name": "Muffins Myrtilles Protéinés Meal Prep",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "snack"
   ],
@@ -24242,7 +24242,7 @@
 {
   "id": "R587",
   "name": "Muffins Chocolat Coulant Protéiné",
-  "category": "pastry",
+  "category": "french",
   "mealTypes": [
     "snack"
   ],
@@ -24321,7 +24321,7 @@
 {
   "id": "R588",
   "name": "Banana Bread Protéiné Noix Pécan",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -24569,7 +24569,7 @@
 {
   "id": "R591",
   "name": "Baked Oats Pomme Cannelle",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -24865,7 +24865,7 @@
 {
   "id": "R595",
   "name": "Cheesecake No-Bake Citron",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "dessert"
   ],
@@ -24945,7 +24945,7 @@
 {
   "id": "R596",
   "name": "Energy Balls Dattes Amandes",
-  "category": "pastry",
+  "category": "french",
   "mealTypes": [
     "snack"
   ],
@@ -25091,7 +25091,7 @@
 {
   "id": "R598",
   "name": "Açaï Bowl Instagram Perfect",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -25172,7 +25172,7 @@
 {
   "id": "R599",
   "name": "Smoothie Bowl Mangue Passion Granola",
-  "category": "pastry",
+  "category": "french",
   "mealTypes": [
     "breakfast"
   ],
@@ -25253,7 +25253,7 @@
 {
   "id": "R600",
   "name": "Green Smoothie Bowl Épinards Avocat",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -25387,7 +25387,7 @@
 {
   "id": "R602",
   "name": "Smoothie Bowl Cacao Beurre Cacahuète",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -25459,7 +25459,7 @@
 {
   "id": "R603",
   "name": "Overnight Oats Passion Coco",
-  "category": "pastry",
+  "category": "french",
   "mealTypes": [
     "breakfast"
   ],
@@ -25526,7 +25526,7 @@
 {
   "id": "R604",
   "name": "Protein Cookies Choco Chunk Soft",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "snack"
   ],
@@ -25598,7 +25598,7 @@
 {
   "id": "R605",
   "name": "Brownie Haricots Noirs Sans Farine",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "snack"
   ],
@@ -25670,7 +25670,7 @@
 {
   "id": "R606",
   "name": "Barres Granola Maison Miel Avoine",
-  "category": "pastry",
+  "category": "french",
   "mealTypes": [
     "snack"
   ],
@@ -25737,7 +25737,7 @@
 {
   "id": "R607",
   "name": "Cookies Avoine Raisins Noix Coco",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "snack"
   ],
@@ -25881,7 +25881,7 @@
 {
   "id": "R609",
   "name": "Rochers Coco Protéinés Chocolat Noir",
-  "category": "pastry",
+  "category": "french",
   "mealTypes": [
     "snack"
   ],
@@ -27601,7 +27601,7 @@
 {
   "id": "R630",
   "name": "Smash Burger Dinde Truffe",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -27679,7 +27679,7 @@
 {
   "id": "R631",
   "name": "Lobster Roll Light Céleri Citron",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -27757,7 +27757,7 @@
 {
   "id": "R632",
   "name": "BBQ Chicken Wings Air Fryer Healthy",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -27835,7 +27835,7 @@
 {
   "id": "R633",
   "name": "Salmon Poke Bowl Hawaii Style",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -27918,7 +27918,7 @@
 {
   "id": "R634",
   "name": "Clam Chowder Light Nouvelle-Angleterre",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -27996,7 +27996,7 @@
 {
   "id": "R635",
   "name": "Chicken Caesar Wrap Viral TikTok",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -28074,7 +28074,7 @@
 {
   "id": "R636",
   "name": "Eggs Benedict Hollandaise Light",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "breakfast"
   ],
@@ -28156,7 +28156,7 @@
 {
   "id": "R637",
   "name": "NY Strip Steak Sauce Chimichurri",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -28234,7 +28234,7 @@
 {
   "id": "R638",
   "name": "Mac Cheese Cauliflower Gratin Healthy",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -28312,7 +28312,7 @@
 {
   "id": "R639",
   "name": "Cobb Salad Revisitée Premium",
-  "category": "american",
+  "category": "world-food",
   "mealTypes": [
     "lunch",
     "dinner"
@@ -28477,9 +28477,9 @@
         { name: 'Tomates cerises', qty: 120, unit: 'g' },
         { name: 'Olives noires dénoyautées', qty: 30, unit: 'g' },
         { name: 'Câpres', qty: 15, unit: 'g' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Ail', qty: 2, unit: 'gousse' },
         { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
-        { name: 'Thym, romarin', qty: 2, unit: 'brins' },
+        { name: 'Thym, romarin', qty: 2, unit: 'brin' },
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
@@ -28523,7 +28523,7 @@
     {
       id: 'R644',
       name: 'Saint-Pierre Ceviche Agrumes',
-      category: 'mediterranean',
+      category: 'world-food',
       mealTypes: ['lunch', 'dinner'],
       emoji: '🐟',
       origin: '🇵🇪',
@@ -28574,7 +28574,7 @@
         { name: 'Sauce soja tamari', qty: 40, unit: 'ml' },
         { name: 'Mirin', qty: 20, unit: 'ml' },
         { name: 'Gingembre frais râpé', qty: 10, unit: 'g' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Ail', qty: 2, unit: 'gousse' },
         { name: 'Huile de sésame', qty: 10, unit: 'ml' },
         { name: 'Sésame blanc grillé', qty: 10, unit: 'g' },
         { name: 'Ciboulette asiatique', qty: 10, unit: 'g' }
@@ -28668,9 +28668,9 @@
         { name: 'Tomates', qty: 150, unit: 'g' },
         { name: 'Poivron rouge', qty: 100, unit: 'g' },
         { name: 'Oignon', qty: 60, unit: 'g' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Ail', qty: 2, unit: 'gousse' },
         { name: "Huile d'olive", qty: 20, unit: 'ml' },
-        { name: 'Herbes de Provence', qty: 1, unit: 'c.à.café' },
+        { name: 'Herbes de Provence', qty: 1, unit: 'cc' },
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
@@ -28843,7 +28843,7 @@
     {
       id: 'R654',
       name: 'Bowl de Thon Rouge Mariné',
-      category: 'world-food',
+      category: 'japanese',
       mealTypes: ['lunch', 'dinner'],
       emoji: '🐠',
       origin: '🇯🇵',
@@ -29051,7 +29051,7 @@
       baseNutrition: { calories: 322, proteinGrams: 54, carbsGrams: 4, fatGrams: 10 },
       ingredients: [
         { name: 'Calamars (anneaux ou corps entiers)', qty: 500, unit: 'g' },
-        { name: 'Ail', qty: 3, unit: 'gousses' },
+        { name: 'Ail', qty: 3, unit: 'gousse' },
         { name: 'Citron (jus + zeste)', qty: 1, unit: 'pce' },
         { name: "Huile d'olive", qty: 20, unit: 'ml' },
         { name: 'Persil plat frais', qty: 20, unit: 'g' },
@@ -29084,7 +29084,7 @@
         { name: 'Harissa douce', qty: 25, unit: 'g' },
         { name: 'Tomates pelées en dés', qty: 150, unit: 'g' },
         { name: 'Oignon rouge', qty: 60, unit: 'g' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Ail', qty: 2, unit: 'gousse' },
         { name: "Huile d'olive", qty: 20, unit: 'ml' },
         { name: 'Coriandre fraîche', qty: 15, unit: 'g' },
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
@@ -29116,9 +29116,9 @@
         { name: 'Poivron rouge', qty: 80, unit: 'g' },
         { name: 'Tomates séchées', qty: 30, unit: 'g' },
         { name: 'Fromage de brebis frais', qty: 30, unit: 'g' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Ail', qty: 2, unit: 'gousse' },
         { name: "Huile d'olive", qty: 20, unit: 'ml' },
-        { name: 'Herbes de Provence', qty: 1, unit: 'c.à.café' },
+        { name: 'Herbes de Provence', qty: 1, unit: 'cc' },
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
@@ -29150,7 +29150,7 @@
         { name: 'Oignon rouge', qty: 50, unit: 'g' },
         { name: "Huile d'olive", qty: 20, unit: 'ml' },
         { name: 'Citron (jus)', qty: 1, unit: 'pce' },
-        { name: 'Paprika fumé', qty: 1, unit: 'c.à.café' },
+        { name: 'Paprika fumé', qty: 1, unit: 'cc' },
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
@@ -29180,7 +29180,7 @@
         { name: 'Encre de seiche', qty: 8, unit: 'g' },
         { name: 'Bouillon de poisson', qty: 500, unit: 'ml' },
         { name: 'Oignon', qty: 60, unit: 'g' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Ail', qty: 2, unit: 'gousse' },
         { name: 'Vin blanc sec', qty: 80, unit: 'ml' },
         { name: "Huile d'olive", qty: 20, unit: 'ml' },
         { name: 'Persil, sel, poivre', qty: 1, unit: 'pincée' }
@@ -29248,7 +29248,7 @@
         { name: 'Saint-Pierre (filets)', qty: 250, unit: 'g' },
         { name: 'Tomates San Marzano (boîte)', qty: 400, unit: 'g' },
         { name: 'Oignon', qty: 80, unit: 'g' },
-        { name: 'Ail', qty: 3, unit: 'gousses' },
+        { name: 'Ail', qty: 3, unit: 'gousse' },
         { name: 'Vin blanc sec', qty: 150, unit: 'ml' },
         { name: "Huile d'olive", qty: 30, unit: 'ml' },
         { name: 'Safran', qty: 0.2, unit: 'g' },
@@ -29330,7 +29330,7 @@
     {
       id: 'R669',
       name: 'Plateau Cru de Poissons Nobles — 3 Sauces',
-      category: 'world-food',
+      category: 'french',
       mealTypes: ['lunch', 'dinner'],
       emoji: '🐟',
       origin: '🇫🇷',
@@ -29357,10919 +29357,7 @@
         "Dresser sur plateau glacé en sections distinctes : thon pour la sauce ponzu, espadon pour la sauce vierge, saint-pierre pour la crème wasabi.",
         "Garnir de fleur de sel, herbes fraîches, filet d'huile d'olive sur le saint-pierre ; servir sans attendre avec les 3 sauces en ramequins séparés."
       ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P1 — MAROC MODERNE PREMIUM  (R670–R674)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R670',
-      name: 'Msemen Pizza Kefta Tomates',
-      category: 'maroc-moderne',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🫓', origin: '🇲🇦',
-      tags: ['high-protein', 'comfort-food', 'quick', 'family', 'maroc-moderne'],
-      servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
-      // 74×4 + 93×4 + 56×9 = 296+372+504 = 1172 ✓
-      baseNutrition: { calories: 1172, proteinGrams: 74, carbsGrams: 93, fatGrams: 56 },
-      ingredients: [
-        { name: 'Msemen (du commerce)',          qty: 2,   unit: 'pce', note: '≈160g, 2 galettes' },
-        { name: 'Viande hachée bœuf (≤5% MG)',  qty: 250, unit: 'g' },
-        { name: 'Tomate',                        qty: 200, unit: 'g', note: '2 tomates moyennes' },
-        { name: 'Oignon',                        qty: 100, unit: 'g' },
-        { name: 'Fromage râpé (type Edam)',      qty: 40,  unit: 'g' },
-        { name: 'Concentré de tomates',          qty: 30,  unit: 'g' },
-        { name: 'Ail',                           qty: 10,  unit: 'g', note: '3 gousses' },
-        { name: 'Huile d\'olive',                qty: 10,  unit: 'ml' },
-        { name: 'Cumin moulu',                   qty: 3,   unit: 'g' },
-        { name: 'Paprika doux',                  qty: 3,   unit: 'g' },
-        { name: 'Sel, poivre',                   qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préparer la garniture : émincer finement l'oignon et l'ail, concasser les tomates. Dans une poêle avec l'huile d'olive, faire revenir l'oignon 3 min à feu moyen.",
-        "Ajouter la viande hachée et l'ail, cuire en émiettant 5 min. Incorporer le concentré de tomates, les tomates concassées, le cumin et le paprika. Cuire encore 5 min jusqu'à absorption du jus.",
-        "Chauffer une autre poêle (ou grille) à feu moyen. Poser les msemen à sec 1 min pour les raffermir légèrement.",
-        "Couvrir généreusement chaque msemen de garniture kefta-tomates. Parsemer de fromage râpé et passer 3-4 min sous le grill du four (200°C) jusqu'à fonte du fromage.",
-        "Servir immédiatement, découpé en 4 parts comme une pizza. Accompagner de harissa pour les amateurs de piquant."
-      ]
-    },
-
-    {
-      id: 'R671',
-      name: 'Bissara Fèves & Œufs Mollets',
-      category: 'maroc-moderne',
-      mealTypes: ['breakfast', 'lunch'],
-      emoji: '🫘', origin: '🇲🇦',
-      tags: ['high-protein', 'vegetarian', 'budget', 'comfort-food', 'gluten-free'],
-      servings: 2, prepTime: 5, cookTime: 15, difficulty: 1,
-      // 52×4 + 60×4 + 43×9 = 208+240+387 = 835 ✓
-      baseNutrition: { calories: 835, proteinGrams: 52, carbsGrams: 60, fatGrams: 43 },
-      ingredients: [
-        { name: 'Fèves décortiquées (surgelées)',qty: 400, unit: 'g', note: 'ou en conserve égouttées' },
-        { name: 'Œuf',                           qty: 4,   unit: 'pce' },
-        { name: 'Ail',                           qty: 20,  unit: 'g', note: '5 gousses' },
-        { name: 'Huile d\'olive',                qty: 20,  unit: 'ml', note: '+ filet pour servir' },
-        { name: 'Cumin moulu',                   qty: 5,   unit: 'g' },
-        { name: 'Paprika fumé',                  qty: 3,   unit: 'g' },
-        { name: 'Citron (jus)',                  qty: 2,   unit: 'pce' },
-        { name: 'Coriandre fraîche',             qty: 20,  unit: 'g' }
-      ],
-      steps: [
-        "Cuire les fèves dans 500ml d'eau bouillante salée avec l'ail entier 10-12 min (ou 5 min si en conserve). Égoutter en réservant 150ml d'eau de cuisson.",
-        "Mixer les fèves avec l'ail, le jus d'un citron, l'huile d'olive, le cumin et le paprika. Ajouter l'eau de cuisson cuillère par cuillère pour obtenir une texture onctueuse (ni trop épaisse, ni liquide). Rectifier sel et citron.",
-        "Pendant ce temps, préparer les œufs mollets : eau bouillante, 6 min exactement, puis bain d'eau froide. Écaler délicatement.",
-        "Servir la bissara chaude dans des bols profonds. Poser 2 œufs mollets coupés en deux sur chaque bol. Arroser d'un filet d'huile d'olive, saupoudrer de cumin et garnir de coriandre fraîche."
-      ]
-    },
-
-    {
-      id: 'R672',
-      name: 'Sandwich Kefta Grillée Batbout',
-      category: 'maroc-moderne',
-      mealTypes: ['lunch'],
-      emoji: '🥙', origin: '🇲🇦',
-      tags: ['high-protein', 'quick', 'budget', 'meal-prep', 'family'],
-      servings: 2, prepTime: 10, cookTime: 12, difficulty: 1,
-      // 81×4 + 125×4 + 19×9 = 324+500+171 = 995 ✓
-      baseNutrition: { calories: 995, proteinGrams: 81, carbsGrams: 125, fatGrams: 19 },
-      ingredients: [
-        { name: 'Batbout',                       qty: 4,   unit: 'pce', note: '≈200g total, 4 petits pains' },
-        { name: 'Viande hachée bœuf (≤5% MG)',  qty: 300, unit: 'g' },
-        { name: 'Oignon',                        qty: 100, unit: 'g' },
-        { name: 'Tomate',                        qty: 150, unit: 'g' },
-        { name: 'Persil frais',                  qty: 20,  unit: 'g' },
-        { name: 'Ras el hanout',                 qty: 5,   unit: 'g' },
-        { name: 'Cumin moulu',                   qty: 3,   unit: 'g' },
-        { name: 'Harissa',                       qty: 20,  unit: 'g', note: 'selon goût' },
-        { name: 'Sel, poivre',                   qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préparer la kefta : hacher finement l'oignon et le persil. Mélanger à la main avec la viande, le ras el hanout, le cumin, sel et poivre. Pétrir 2 min pour bien amalgamer.",
-        "Former 4 saucisses plates ou boulettes allongées. Griller sur plancha ou poêle anti-adhésive à feu vif 4-5 min par face. La kefta doit être dorée à l'extérieur, cuite à cœur.",
-        "Ouvrir les batbout en deux (sans les séparer). Toaster 1 min à sec dans la poêle chaude.",
-        "Garnir chaque batbout : kefta grillée + rondelles de tomates fraîches + harissa selon goût. Servir immédiatement avec des olives vertes en accompagnement."
-      ]
-    },
-
-    {
-      id: 'R673',
-      name: 'Zaalouk Poulet & Riz Parfumé',
-      category: 'maroc-moderne',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍆', origin: '🇲🇦',
-      tags: ['high-protein', 'balanced', 'gluten-free', 'meal-prep', 'family'],
-      servings: 2, prepTime: 15, cookTime: 30, difficulty: 1,
-      // 108×4 + 102×4 + 34×9 = 432+408+306 = 1146 ✓
-      baseNutrition: { calories: 1146, proteinGrams: 108, carbsGrams: 102, fatGrams: 34 },
-      ingredients: [
-        { name: 'Blanc de poulet',               qty: 300, unit: 'g' },
-        { name: 'Riz basmati (sec)',              qty: 130, unit: 'g', note: '≈300g cuit' },
-        { name: 'Aubergine',                     qty: 250, unit: 'g', note: '1 grosse aubergine' },
-        { name: 'Tomate',                        qty: 200, unit: 'g', note: '2 tomates' },
-        { name: 'Ail',                           qty: 15,  unit: 'g', note: '4 gousses' },
-        { name: 'Huile d\'olive',                qty: 20,  unit: 'ml' },
-        { name: 'Coriandre fraîche',             qty: 20,  unit: 'g' },
-        { name: 'Cumin moulu',                   qty: 5,   unit: 'g' },
-        { name: 'Paprika doux',                  qty: 3,   unit: 'g' },
-        { name: 'Sel, poivre',                   qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Lancer le riz : rincer, cuire dans 260ml d'eau salée 12 min à couvert. Laisser reposer 5 min hors feu.",
-        "Pendant ce temps, préparer le zaalouk : piquer l'aubergine, cuire 8 min au micro-ondes ou griller directement sur la flamme du gaz jusqu'à la peau carbonisée. Peler et hacher grossièrement.",
-        "Dans une poêle avec l'huile d'olive, faire revenir l'ail haché 1 min. Ajouter les tomates concassées, le cumin, le paprika. Cuire 5 min. Incorporer l'aubergine, écraser à la fourchette. Cuire encore 5 min en remuant. Rectifier sel et assaisonnement.",
-        "Cuire les blancs de poulet : assaisonner avec cumin, sel, poivre. Griller à la poêle 6-7 min par face à feu moyen-vif jusqu'à coloration dorée. Trancher en lamelles.",
-        "Dresser les bols : riz parfumé + zaalouk chaud + lamelles de poulet grillé. Parsemer de coriandre fraîche ciselée. Servir avec un demi-citron."
-      ]
-    },
-
-    {
-      id: 'R674',
-      name: 'Lablabi Œufs & Citron',
-      category: 'maroc-moderne',
-      mealTypes: ['breakfast', 'lunch'],
-      emoji: '🫙', origin: '🇲🇦',
-      tags: ['high-protein', 'vegetarian', 'budget', 'comfort-food', 'quick'],
-      servings: 2, prepTime: 5, cookTime: 15, difficulty: 1,
-      // 57×4 + 112×4 + 41×9 = 228+448+369 = 1045 ✓
-      baseNutrition: { calories: 1045, proteinGrams: 57, carbsGrams: 112, fatGrams: 41 },
-      ingredients: [
-        { name: 'Pois chiches (boîte, égouttés)', qty: 300, unit: 'g' },
-        { name: 'Œuf',                            qty: 4,   unit: 'pce' },
-        { name: 'Pain khobz (rassis)',             qty: 60,  unit: 'g', note: 'coupé en petits cubes' },
-        { name: 'Ail',                            qty: 20,  unit: 'g', note: '5 gousses' },
-        { name: 'Huile d\'olive',                 qty: 15,  unit: 'ml', note: '+ filet pour servir' },
-        { name: 'Harissa',                        qty: 15,  unit: 'g', note: 'selon intensité désirée' },
-        { name: 'Cumin moulu',                    qty: 5,   unit: 'g' },
-        { name: 'Citron (jus)',                   qty: 1,   unit: 'pce' },
-        { name: 'Coriandre fraîche',              qty: 15,  unit: 'g' }
-      ],
-      steps: [
-        "Chauffer les pois chiches égouttés dans 400ml d'eau avec l'ail écrasé, le cumin et une pincée de sel. Porter à frémissement 8-10 min pour que les pois chiches absorbent les arômes.",
-        "Répartir les cubes de pain rassis dans 2 bols profonds. Verser le bouillon chaud par-dessus pour ramollir le pain (laisser tremper 2 min).",
-        "Pocher les œufs : dans une casserole d'eau frémissante vinaigrée, casser chaque œuf dans une petite tasse et glisser délicatement. Cuire 3 min. (Alternative rapide : cuire les œufs au plat ou mollets.)",
-        "Ajouter les pois chiches chauds sur le pain. Poser 2 œufs pochés par bol. Arroser du jus de citron et d'un filet d'huile d'olive.",
-        "Finir avec la harissa (une noisette sur le côté), la coriandre fraîche ciselée et une pincée de cumin. Servir très chaud — le lablabi se mange brûlant."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P2 — PETIT-DÉJEUNER PREMIUM  (R675–R679)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R675',
-      name: 'Pancakes Protéinés Banane Beurre de Cacahuète',
-      category: 'world-food',
-      mealTypes: ['breakfast'],
-      emoji: '🥞', origin: '🇺🇸',
-      tags: ['high-protein', 'balanced', 'instagrammable', 'brunch', 'quick'],
-      servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
-      // 58×4 + 100×4 + 30×9 = 232+400+270 = 902 ✓
-      baseNutrition: { calories: 902, proteinGrams: 58, carbsGrams: 100, fatGrams: 30 },
-      ingredients: [
-        { name: 'Flocons d\'avoine',              qty: 120, unit: 'g' },
-        { name: 'Banane',                         qty: 2,   unit: 'pce', note: '≈200g, bien mûres' },
-        { name: 'Œuf',                            qty: 3,   unit: 'pce' },
-        { name: 'Fromage blanc 0%',               qty: 150, unit: 'g' },
-        { name: 'Beurre de cacahuète',            qty: 30,  unit: 'g' },
-        { name: 'Levure chimique',                qty: 5,   unit: 'g' },
-        { name: 'Extrait de vanille',             qty: 5,   unit: 'ml' },
-        { name: 'Lait demi-écrémé',              qty: 50,  unit: 'ml' },
-        { name: 'Huile de coco',                  qty: 10,  unit: 'g', note: 'pour la cuisson' }
-      ],
-      steps: [
-        "Mixer ensemble les flocons d'avoine jusqu'à obtenir une farine grossière. Ajouter les bananes coupées en morceaux, les œufs, le fromage blanc, la levure et la vanille. Mixer à nouveau jusqu'à pâte homogène.",
-        "Incorporer le lait pour fluidifier légèrement. La pâte doit être un peu plus épaisse qu'une pâte à crêpes classique.",
-        "Chauffer une poêle anti-adhésive à feu moyen avec un peu d'huile de coco. Verser 2-3 cuillères à soupe de pâte par pancake (diamètre ≈10 cm). Cuire 2-3 min jusqu'à apparition de bulles sur le dessus.",
-        "Retourner délicatement et cuire encore 1-2 min. Répéter jusqu'à épuisement de la pâte (≈8-10 pancakes).",
-        "Servir en pile : chauffer le beurre de cacahuète 20 secondes au micro-ondes pour le liquéfier légèrement, napper sur les pancakes. Accompagner de rondelles de banane et d'un filet de miel si désiré."
-      ]
-    },
-
-    {
-      id: 'R676',
-      name: 'Overnight Oats Chocolat Framboises',
-      category: 'world-food',
-      mealTypes: ['breakfast'],
-      emoji: '🍫', origin: '🌍',
-      tags: ['high-protein', 'meal-prep', 'no-cook', 'instagrammable', 'vegetarian'],
-      servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
-      // 40×4 + 82×4 + 22×9 = 160+328+198 = 686 ✓
-      baseNutrition: { calories: 686, proteinGrams: 40, carbsGrams: 82, fatGrams: 22 },
-      ingredients: [
-        { name: 'Flocons d\'avoine',              qty: 100, unit: 'g' },
-        { name: 'Lait d\'amande non sucré',       qty: 300, unit: 'ml' },
-        { name: 'Yaourt grec 0%',                 qty: 200, unit: 'g' },
-        { name: 'Cacao en poudre non sucré',      qty: 15,  unit: 'g' },
-        { name: 'Framboises',                     qty: 150, unit: 'g', note: 'fraîches ou surgelées' },
-        { name: 'Graines de chia',                qty: 20,  unit: 'g' },
-        { name: 'Miel',                           qty: 20,  unit: 'g' },
-        { name: 'Amandes effilées',               qty: 20,  unit: 'g', note: 'topping' }
-      ],
-      steps: [
-        "Dans 2 bocaux hermétiques, mélanger les flocons d'avoine, les graines de chia, le cacao et le miel.",
-        "Verser le lait d'amande, bien mélanger. Incorporer le yaourt grec. La texture sera encore liquide — c'est normal, les flocons vont gonfler et le chia épaissir.",
-        "Fermer les bocaux et réfrigérer toute une nuit (minimum 6h). À préparer idéalement la veille.",
-        "Au moment de servir : mélanger délicatement. Si trop épais, ajouter un trait de lait. Disposer les framboises sur le dessus, parsemer d'amandes effilées.",
-        "Déguster froid, directement dans le bocal. Se conserve 3 jours au frigo — préparer plusieurs bocaux d'avance pour la semaine."
-      ]
-    },
-
-    {
-      id: 'R677',
-      name: 'Shakshuka Fromage Frais & Herbes',
-      category: 'maroc-moderne',
-      mealTypes: ['breakfast', 'lunch'],
-      emoji: '🍳', origin: '🇲🇦',
-      tags: ['high-protein', 'vegetarian', 'gluten-free', 'quick', 'comfort-food'],
-      servings: 2, prepTime: 8, cookTime: 15, difficulty: 1,
-      // 46×4 + 32×4 + 30×9 = 184+128+270 = 582 ✓
-      baseNutrition: { calories: 582, proteinGrams: 46, carbsGrams: 32, fatGrams: 30 },
-      ingredients: [
-        { name: 'Œuf',                            qty: 4,   unit: 'pce' },
-        { name: 'Tomates pelées (boîte)',          qty: 400, unit: 'g' },
-        { name: 'Fromage frais (type Kiri)',       qty: 60,  unit: 'g', note: '4 portions' },
-        { name: 'Poivron rouge',                   qty: 120, unit: 'g' },
-        { name: 'Oignon',                         qty: 100, unit: 'g' },
-        { name: 'Ail',                            qty: 15,  unit: 'g', note: '4 gousses' },
-        { name: 'Huile d\'olive',                 qty: 15,  unit: 'ml' },
-        { name: 'Cumin moulu',                    qty: 5,   unit: 'g' },
-        { name: 'Paprika fumé',                   qty: 5,   unit: 'g' },
-        { name: 'Harissa',                        qty: 5,   unit: 'g', note: 'selon goût' },
-        { name: 'Coriandre fraîche',              qty: 20,  unit: 'g' }
-      ],
-      steps: [
-        "Émincer l'oignon et le poivron en fines lamelles, hacher l'ail. Dans une grande poêle avec couvercle, chauffer l'huile d'olive à feu moyen. Faire revenir oignon et poivron 5 min.",
-        "Ajouter l'ail, le cumin, le paprika et la harissa. Cuire 1 min en remuant. Verser les tomates pelées concassées, assaisonner. Mijoter 5 min à feu doux.",
-        "Créer 4 puits dans la sauce avec le dos d'une cuillère. Casser un œuf dans chaque puit. Couvrir la poêle et cuire 4-5 min : blanc pris, jaune encore coulant.",
-        "Déposer des cuillères de fromage frais entre les œufs — il fondra légèrement au contact de la chaleur. Parsemer de coriandre fraîche ciselée.",
-        "Servir directement dans la poêle avec du pain khobz ou pita pour saucer. Couper délicatement au jaune coulant devant ses convives."
-      ]
-    },
-
-    {
-      id: 'R678',
-      name: 'French Toast Brioche Caramel Vanille',
-      category: 'french',
-      mealTypes: ['breakfast'],
-      emoji: '🍞', origin: '🇫🇷',
-      tags: ['high-protein', 'comfort-food', 'instagrammable', 'brunch', 'quick'],
-      servings: 2, prepTime: 8, cookTime: 10, difficulty: 1,
-      // 36×4 + 74×4 + 22×9 = 144+296+198 = 638 ✓
-      baseNutrition: { calories: 638, proteinGrams: 36, carbsGrams: 74, fatGrams: 22 },
-      ingredients: [
-        { name: 'Brioche (tranches épaisses)',     qty: 4,   unit: 'pce', note: '≈180g, tranches 2cm' },
-        { name: 'Œuf',                            qty: 3,   unit: 'pce' },
-        { name: 'Lait demi-écrémé',              qty: 100, unit: 'ml' },
-        { name: 'Fromage blanc 0%',               qty: 150, unit: 'g', note: 'pour servir' },
-        { name: 'Extrait de vanille',             qty: 5,   unit: 'ml' },
-        { name: 'Cannelle',                       qty: 2,   unit: 'g' },
-        { name: 'Sirop d\'érable',               qty: 20,  unit: 'ml' },
-        { name: 'Beurre doux',                    qty: 10,  unit: 'g', note: 'pour la cuisson' }
-      ],
-      steps: [
-        "Fouetter ensemble les œufs, le lait, la vanille et la cannelle dans un plat creux.",
-        "Tremper chaque tranche de brioche dans l'appareil 30 secondes par face — elle doit absorber sans se désintégrer.",
-        "Chauffer le beurre dans une poêle anti-adhésive à feu moyen. Cuire les tranches 2-3 min par face jusqu'à dorure bien prononcée et légère caramélisation.",
-        "Pendant la cuisson, chauffer le sirop d'érable dans une petite casserole 1 min jusqu'à légère ébullition pour intensifier le goût.",
-        "Dresser : 2 tranches de french toast par assiette, une généreuse cuillère de fromage blanc, un filet de sirop d'érable chaud. Servir immédiatement."
-      ]
-    },
-
-    {
-      id: 'R679',
-      name: 'Bowl Açaï Granola & Fruits Rouges',
-      category: 'world-food',
-      mealTypes: ['breakfast'],
-      emoji: '🫐', origin: '🌍',
-      tags: ['vegetarian', 'instagrammable', 'balanced', 'healthy-fats', 'no-cook'],
-      servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
-      // 20×4 + 76×4 + 28×9 = 80+304+252 = 636 ✓
-      baseNutrition: { calories: 636, proteinGrams: 20, carbsGrams: 76, fatGrams: 28 },
-      ingredients: [
-        { name: 'Purée d\'açaï surgelée',         qty: 200, unit: 'g', note: '2 sachets × 100g' },
-        { name: 'Banane',                         qty: 1,   unit: 'pce', note: 'congelée la veille, ≈120g' },
-        { name: 'Lait d\'amande non sucré',       qty: 80,  unit: 'ml' },
-        { name: 'Granola nature',                 qty: 60,  unit: 'g' },
-        { name: 'Myrtilles fraîches',             qty: 100, unit: 'g' },
-        { name: 'Fraises',                        qty: 100, unit: 'g' },
-        { name: 'Noix de coco râpée',             qty: 15,  unit: 'g' },
-        { name: 'Beurre d\'amande',               qty: 20,  unit: 'g' },
-        { name: 'Miel',                           qty: 15,  unit: 'g' }
-      ],
-      steps: [
-        "Sortir les sachets d'açaï du congélateur 5 min avant utilisation. Casser la banane congelée en morceaux.",
-        "Mixer ensemble l'açaï, la banane et le lait d'amande jusqu'à texture épaisse et crémeuse — similaire à de la glace pilée. Ne pas trop mixer, la base doit rester très froide et dense.",
-        "Si trop épais : ajouter le lait d'amande cuillère par cuillère. La texture idéale supporte les toppings sans s'affaisser.",
-        "Répartir la base açaï dans 2 bols larges (passés 5 min au congélateur pour les garder froids). Disposer les toppings en rangées : myrtilles, fraises tranchées, granola, noix de coco.",
-        "Tracer des traits de beurre d'amande chauffé 20 sec au micro-ondes et de miel. Servir immédiatement — le contraste base glacée et toppings ambiance est la signature du bowl açaï."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P3 — DÉJEUNERS FITNESS  (R680–R684)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R680',
-      name: 'Burger Maison Poulet Croustillant Avocat',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍔', origin: '🇺🇸',
-      tags: ['high-protein', 'balanced', 'instagrammable', 'family', 'comfort-food'],
-      servings: 2, prepTime: 15, cookTime: 20, difficulty: 2,
-      // 72×4 + 88×4 + 34×9 = 288+352+306 = 946 ✓
-      baseNutrition: { calories: 946, proteinGrams: 72, carbsGrams: 88, fatGrams: 34 },
-      ingredients: [
-        { name: 'Blanc de poulet',                qty: 300, unit: 'g', note: '2 filets aplatis' },
-        { name: 'Buns briochés burgers',          qty: 2,   unit: 'pce' },
-        { name: 'Avocat',                         qty: 1,   unit: 'pce', note: 'mûr, ≈150g' },
-        { name: 'Chapelure panko',                qty: 50,  unit: 'g' },
-        { name: 'Œuf',                            qty: 1,   unit: 'pce', note: 'pour paner' },
-        { name: 'Cheddar tranche',                qty: 2,   unit: 'pce', note: '≈40g' },
-        { name: 'Salade verte',                   qty: 40,  unit: 'g' },
-        { name: 'Tomate',                         qty: 100, unit: 'g' },
-        { name: 'Sauce sriracha mayo',            qty: 20,  unit: 'g' },
-        { name: 'Jus de citron',                  qty: 10,  unit: 'ml' },
-        { name: 'Huile d\'olive',                 qty: 10,  unit: 'ml' },
-        { name: 'Ail en poudre',                  qty: 3,   unit: 'g' }
-      ],
-      steps: [
-        "Aplatir les filets de poulet à 1,5 cm d'épaisseur (film alimentaire + rouleau). Assaisonner avec sel, poivre et ail en poudre.",
-        "Préparer la panure : tremper chaque filet dans l'œuf battu puis dans la chapelure panko. Bien appuyer pour faire adhérer.",
-        "Cuire à la poêle avec l'huile d'olive à feu moyen-vif 6-7 min par face jusqu'à dorure croustillante et cœur à 75°C. Déposer une tranche de cheddar sur chaque filet dans la dernière minute, couvrir pour faire fondre.",
-        "Écraser l'avocat avec le jus de citron, sel, poivre. Couper les buns, les toaster à sec.",
-        "Assembler le burger : bun bas + sauce sriracha mayo + salade + tranche de tomate + poulet croustillant cheddar + guacamole + bun haut. Servir immédiatement avec des frites four ou une salade."
-      ]
-    },
-
-    {
-      id: 'R681',
-      name: 'Bowl Riz Saumon Teriyaki Concombre',
-      category: 'japanese',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍱', origin: '🇯🇵',
-      tags: ['high-protein', 'omega3', 'balanced', 'meal-prep', 'gluten-free'],
-      servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
-      // 68×4 + 86×4 + 26×9 = 272+344+234 = 850 ✓
-      baseNutrition: { calories: 850, proteinGrams: 68, carbsGrams: 86, fatGrams: 26 },
-      ingredients: [
-        { name: 'Filet de saumon (sans peau)',    qty: 280, unit: 'g', note: '2 filets × 140g' },
-        { name: 'Riz japonais (sec)',             qty: 140, unit: 'g', note: '≈300g cuit' },
-        { name: 'Sauce soja',                     qty: 30,  unit: 'ml' },
-        { name: 'Miel',                           qty: 15,  unit: 'g' },
-        { name: 'Gingembre frais',                qty: 10,  unit: 'g' },
-        { name: 'Ail',                            qty: 8,   unit: 'g', note: '2 gousses' },
-        { name: 'Huile de sésame',                qty: 10,  unit: 'ml' },
-        { name: 'Concombre',                      qty: 150, unit: 'g' },
-        { name: 'Avocat',                         qty: 1,   unit: 'pce', note: '≈100g net' },
-        { name: 'Graines de sésame',              qty: 10,  unit: 'g' },
-        { name: 'Oignon vert',                    qty: 20,  unit: 'g' }
-      ],
-      steps: [
-        "Cuire le riz japonais selon instructions (absorption, 15 min). Laisser reposer 5 min à couvert.",
-        "Préparer la sauce teriyaki : mélanger sauce soja, miel, gingembre râpé et ail haché. Réserver la moitié pour servir.",
-        "Mariner le saumon 5 min dans la moitié de la sauce. Saisir à la poêle avec l'huile de sésame 3-4 min par face à feu vif. La sauce doit caraméliser et laquée le poisson.",
-        "Couper le concombre en demi-rondelles et l'avocat en tranches. Ciseler l'oignon vert.",
-        "Dresser les bowls : riz + saumon teriyaki + concombre + avocat. Arroser de la sauce réservée, parsemer de graines de sésame et d'oignon vert."
-      ]
-    },
-
-    {
-      id: 'R682',
-      name: 'Pasta Arrabiata Viande Hachée',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍝', origin: '🇮🇹',
-      tags: ['high-protein', 'high-carb', 'budget', 'quick', 'family'],
-      servings: 2, prepTime: 5, cookTime: 20, difficulty: 1,
-      // 68×4 + 132×4 + 20×9 = 272+528+180 = 980 ✓
-      baseNutrition: { calories: 980, proteinGrams: 68, carbsGrams: 132, fatGrams: 20 },
-      ingredients: [
-        { name: 'Pâtes penne (sèches)',           qty: 160, unit: 'g' },
-        { name: 'Viande hachée bœuf (≤5% MG)',   qty: 250, unit: 'g' },
-        { name: 'Tomates pelées (boîte)',         qty: 400, unit: 'g' },
-        { name: 'Ail',                            qty: 20,  unit: 'g', note: '5 gousses' },
-        { name: 'Piment rouge séché',             qty: 2,   unit: 'g', note: 'selon tolérance' },
-        { name: 'Huile d\'olive',                 qty: 15,  unit: 'ml' },
-        { name: 'Parmesan râpé',                  qty: 20,  unit: 'g' },
-        { name: 'Basilic frais',                  qty: 10,  unit: 'g' },
-        { name: 'Sel, poivre',                    qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Cuire les pâtes al dente selon instructions. Réserver 100ml d'eau de cuisson avant d'égoutter.",
-        "Pendant la cuisson des pâtes : chauffer l'huile d'olive, faire revenir l'ail haché et le piment 1 min sans brûler. Ajouter la viande hachée, cuire en émiettant 5-6 min.",
-        "Verser les tomates pelées concassées, assaisonner. Laisser réduire 8 min à feu moyen. La sauce doit être épaisse et bien parfumée.",
-        "Incorporer les pâtes égouttées directement dans la sauce. Ajouter un peu d'eau de cuisson si nécessaire pour lier. Mélanger 1 min à feu vif.",
-        "Servir dans des assiettes chaudes, parsemer de parmesan râpé et de feuilles de basilic frais. La sauce arrabiata doit être relevée — ajuster le piment selon les goûts."
-      ]
-    },
-
-    {
-      id: 'R683',
-      name: 'Wrap Dinde Avocat Tomate Séchée',
-      category: 'world-food',
-      mealTypes: ['lunch'],
-      emoji: '🌯', origin: '🌍',
-      tags: ['high-protein', 'quick', 'meal-prep', 'balanced', 'light'],
-      servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
-      // 56×4 + 60×4 + 22×9 = 224+240+198 = 662 ✓
-      baseNutrition: { calories: 662, proteinGrams: 56, carbsGrams: 60, fatGrams: 22 },
-      ingredients: [
-        { name: 'Escalope de dinde',              qty: 250, unit: 'g' },
-        { name: 'Tortilla blé (grande)',           qty: 2,   unit: 'pce', note: '≈70g chacune' },
-        { name: 'Avocat',                         qty: 1,   unit: 'pce', note: '≈120g net' },
-        { name: 'Tomates séchées à l\'huile',     qty: 30,  unit: 'g' },
-        { name: 'Fromage frais',                  qty: 40,  unit: 'g' },
-        { name: 'Roquette',                       qty: 40,  unit: 'g' },
-        { name: 'Jus de citron',                  qty: 10,  unit: 'ml' },
-        { name: 'Herbes de Provence',             qty: 3,   unit: 'g' },
-        { name: 'Huile d\'olive',                 qty: 5,   unit: 'ml' },
-        { name: 'Sel, poivre',                    qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Assaisonner les escalopes de dinde avec les herbes de Provence, sel, poivre. Cuire à la poêle avec l'huile d'olive 4-5 min par face. Laisser reposer 2 min puis couper en lamelles.",
-        "Écraser l'avocat avec le jus de citron, sel, poivre. Émincer les tomates séchées.",
-        "Étaler le fromage frais sur chaque tortilla, en laissant un bord de 3 cm. Déposer la roquette, les lamelles de dinde, l'avocat écrasé et les tomates séchées.",
-        "Rouler fermement le wrap en repliant d'abord les bords latéraux, puis en roulant du bas vers le haut. Maintenir quelques secondes.",
-        "Couper en deux en diagonale. Peut se préparer à l'avance et s'emballer dans du film alimentaire pour le transport — idéal meal prep."
-      ]
-    },
-
-    {
-      id: 'R684',
-      name: 'Tacos Bœuf Épicé Pico de Gallo',
-      category: 'mexican',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🌮', origin: '🇲🇽',
-      tags: ['high-protein', 'family', 'instagrammable', 'quick', 'spicy'],
-      servings: 2, prepTime: 15, cookTime: 12, difficulty: 1,
-      // 62×4 + 70×4 + 28×9 = 248+280+252 = 780 ✓
-      baseNutrition: { calories: 780, proteinGrams: 62, carbsGrams: 70, fatGrams: 28 },
-      ingredients: [
-        { name: 'Viande hachée bœuf (≤5% MG)',   qty: 300, unit: 'g' },
-        { name: 'Tortilla maïs (petite)',         qty: 6,   unit: 'pce', note: '≈120g total' },
-        { name: 'Tomate',                         qty: 150, unit: 'g' },
-        { name: 'Oignon rouge',                   qty: 80,  unit: 'g' },
-        { name: 'Coriandre fraîche',              qty: 20,  unit: 'g' },
-        { name: 'Avocat',                         qty: 1,   unit: 'pce', note: '≈100g net' },
-        { name: 'Jus de citron vert',             qty: 20,  unit: 'ml' },
-        { name: 'Cumin moulu',                    qty: 5,   unit: 'g' },
-        { name: 'Chili en poudre',                qty: 3,   unit: 'g' },
-        { name: 'Ail en poudre',                  qty: 3,   unit: 'g' },
-        { name: 'Huile d\'olive',                 qty: 10,  unit: 'ml' }
-      ],
-      steps: [
-        "Préparer le pico de gallo : couper les tomates en petits dés, émincer l'oignon rouge et ciseler la coriandre. Mélanger avec la moitié du jus de citron vert, sel. Réserver au frais.",
-        "Assaisonner la viande avec cumin, chili et ail en poudre, sel, poivre. Cuire dans une poêle avec l'huile d'olive à feu vif 6-7 min en émiettant régulièrement.",
-        "Écraser l'avocat avec le reste du jus de citron vert, sel, poivre. Réserver.",
-        "Chauffer les tortillas de maïs 30 secondes par face à sec dans une poêle — elles doivent être souples et légèrement dorées.",
-        "Dresser les tacos : tortilla + bœuf épicé + pico de gallo + guacamole. Servir immédiatement avec les 3 restes en bols séparés pour que chacun assemble ses tacos — c'est l'expérience qui compte."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P4 — SNACKS & DESSERTS FITNESS  (R685–R689)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R685',
-      name: 'Energy Balls Dattes Cacahuète Cacao',
-      category: 'world-food',
-      mealTypes: ['snack'],
-      emoji: '⚡', origin: '🌍',
-      tags: ['high-protein', 'no-cook', 'meal-prep', 'vegan', 'budget'],
-      servings: 2, prepTime: 15, cookTime: 0, difficulty: 1,
-      // 18×4 + 60×4 + 24×9 = 72+240+216 = 528 ✓
-      baseNutrition: { calories: 528, proteinGrams: 18, carbsGrams: 60, fatGrams: 24 },
-      ingredients: [
-        { name: 'Dattes Medjoul (dénoyautées)',   qty: 150, unit: 'g', note: '≈8 dattes' },
-        { name: 'Beurre de cacahuète',            qty: 60,  unit: 'g' },
-        { name: 'Flocons d\'avoine',              qty: 60,  unit: 'g' },
-        { name: 'Cacao en poudre non sucré',      qty: 15,  unit: 'g' },
-        { name: 'Noix de coco râpée',             qty: 20,  unit: 'g', note: 'pour rouler' },
-        { name: 'Extrait de vanille',             qty: 3,   unit: 'ml' },
-        { name: 'Sel',                            qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Tremper les dattes 10 min dans de l'eau tiède si elles sont trop sèches. Égoutter et dénoyauter.",
-        "Mixer les dattes au robot jusqu'à obtenir une pâte collante. Ajouter le beurre de cacahuète, les flocons d'avoine, le cacao, la vanille et le sel. Mixer par impulsions jusqu'à mélange homogène — ne pas trop mixer, on veut garder un peu de texture.",
-        "Réfrigérer la pâte 15 min pour la raffermir et faciliter le façonnage.",
-        "Former des boules de la taille d'une noix (≈25g chacune). Rouler dans la noix de coco râpée. Donne environ 12-14 boules.",
-        "Conserver au frigo jusqu'à 2 semaines ou congeler. Sortir 5 min avant de déguster. Idéal avant l'entraînement ou en snack du soir."
-      ]
-    },
-
-    {
-      id: 'R686',
-      name: 'Mousse Chocolat Noir Protéinée',
-      category: 'french',
-      mealTypes: ['snack'],
-      emoji: '🍮', origin: '🇫🇷',
-      tags: ['high-protein', 'vegetarian', 'instagrammable', 'comfort-food', 'light'],
-      servings: 2, prepTime: 15, cookTime: 0, difficulty: 2,
-      // 28×4 + 30×4 + 18×9 = 112+120+162 = 394 ✓
-      baseNutrition: { calories: 394, proteinGrams: 28, carbsGrams: 30, fatGrams: 18 },
-      ingredients: [
-        { name: 'Yaourt grec 0%',                 qty: 250, unit: 'g' },
-        { name: 'Chocolat noir 70%',              qty: 60,  unit: 'g' },
-        { name: 'Blanc d\'œuf',                   qty: 3,   unit: 'pce', note: '≈90g' },
-        { name: 'Cacao en poudre non sucré',      qty: 10,  unit: 'g' },
-        { name: 'Miel',                           qty: 15,  unit: 'g' },
-        { name: 'Extrait de vanille',             qty: 3,   unit: 'ml' }
-      ],
-      steps: [
-        "Faire fondre le chocolat noir au bain-marie ou au micro-ondes par tranches de 30 secondes en mélangeant entre chaque. Laisser tiédir 5 min.",
-        "Mélanger le yaourt grec avec le cacao en poudre, le miel et la vanille. Incorporer le chocolat fondu tiède, mélanger jusqu'à texture lisse et brillante.",
-        "Monter les blancs en neige ferme avec une pincée de sel (batteur électrique, 3-4 min).",
-        "Incorporer délicatement les blancs en neige au mélange chocolat en 3 fois, avec une spatule, en soulevant la masse de bas en haut. Ne pas trop mélanger pour préserver les bulles d'air.",
-        "Verser dans 2 verrines ou ramequins. Réfrigérer 2h minimum. Servir froid avec quelques copeaux de chocolat. La texture doit être légère et aérienne — très loin du yaourt initial."
-      ]
-    },
-
-    {
-      id: 'R687',
-      name: 'Banana Bread Protéiné Pépites Chocolat',
-      category: 'world-food',
-      mealTypes: ['breakfast', 'snack'],
-      emoji: '🍌', origin: '🇺🇸',
-      tags: ['high-protein', 'meal-prep', 'baked', 'comfort-food', 'vegetarian'],
-      servings: 8, prepTime: 15, cookTime: 50, difficulty: 2,
-      // 96×4 + 224×4 + 80×9 = 384+896+720 = 2000 ✓
-      baseNutrition: { calories: 2000, proteinGrams: 96, carbsGrams: 224, fatGrams: 80 },
-      ingredients: [
-        { name: 'Banane très mûre',               qty: 3,   unit: 'pce', note: '≈330g, bien tachetées' },
-        { name: 'Farine de blé complète T110',    qty: 150, unit: 'g' },
-        { name: 'Protéine whey vanille',          qty: 60,  unit: 'g', note: '2 doses' },
-        { name: 'Œuf',                            qty: 3,   unit: 'pce' },
-        { name: 'Beurre de cacahuète',            qty: 80,  unit: 'g' },
-        { name: 'Miel',                           qty: 40,  unit: 'g' },
-        { name: 'Pépites de chocolat noir',       qty: 80,  unit: 'g' },
-        { name: 'Levure chimique',                qty: 8,   unit: 'g' },
-        { name: 'Bicarbonate de soude',           qty: 3,   unit: 'g' },
-        { name: 'Sel',                            qty: 2,   unit: 'g' },
-        { name: 'Extrait de vanille',             qty: 5,   unit: 'ml' }
-      ],
-      steps: [
-        "Préchauffer le four à 175°C. Beurrer ou tapisser de papier cuisson un moule à cake 23×13 cm.",
-        "Écraser les bananes à la fourchette jusqu'à purée lisse. Ajouter les œufs battus, le beurre de cacahuète et le miel. Mélanger.",
-        "Dans un autre bol, mélanger la farine, la protéine whey, la levure, le bicarbonate et le sel. Incorporer les ingrédients secs aux liquides en mélangeant juste assez — quelques grumeaux sont acceptables.",
-        "Ajouter les 3/4 des pépites de chocolat, plier délicatement. Verser dans le moule, parsemer des pépites restantes sur le dessus.",
-        "Enfourner 45-55 min. Vérifier la cuisson avec un cure-dent — il doit ressortir avec quelques miettes humides mais pas de pâte crue. Laisser refroidir 15 min dans le moule avant de démouler.",
-        "Trancher en 8 portions. Se conserve 4 jours à température ambiante bien emballé, ou 2 semaines au congélateur."
-      ]
-    },
-
-    {
-      id: 'R688',
-      name: 'Yaourt Grec Mangue Granola Croustillant',
-      category: 'world-food',
-      mealTypes: ['breakfast', 'snack'],
-      emoji: '🥭', origin: '🌍',
-      tags: ['high-protein', 'quick', 'no-cook', 'instagrammable', 'vegetarian'],
-      servings: 2, prepTime: 5, cookTime: 0, difficulty: 1,
-      // 28×4 + 56×4 + 14×9 = 112+224+126 = 462 ✓
-      baseNutrition: { calories: 462, proteinGrams: 28, carbsGrams: 56, fatGrams: 14 },
-      ingredients: [
-        { name: 'Yaourt grec 0%',                 qty: 300, unit: 'g' },
-        { name: 'Mangue fraîche (ou surgelée)',   qty: 200, unit: 'g', note: '1 petite mangue nette' },
-        { name: 'Granola nature',                 qty: 60,  unit: 'g' },
-        { name: 'Miel',                           qty: 20,  unit: 'g' },
-        { name: 'Noix de coco râpée',             qty: 10,  unit: 'g' },
-        { name: 'Jus de citron vert',             qty: 5,   unit: 'ml' }
-      ],
-      steps: [
-        "Éplucher la mangue et couper en dés ou lamelles. Arroser du jus de citron vert pour éviter l'oxydation et rehausser les arômes tropicaux.",
-        "Répartir le yaourt grec dans 2 bols ou verrines larges — la surface doit être lisse pour accueillir les toppings.",
-        "Disposer les dés de mangue sur la moitié du bol, le granola sur l'autre moitié pour préserver son croustillant jusqu'au moment de déguster.",
-        "Parsemer de noix de coco râpée et arroser d'un filet de miel en spirale.",
-        "Déguster immédiatement pour profiter du contraste yaourt frais / mangue juteuse / granola croustillant. À préparer au dernier moment — le granola ramollit vite."
-      ]
-    },
-
-    {
-      id: 'R689',
-      name: 'Cheesecake Protéiné Citron Sans Cuisson',
-      category: 'world-food',
-      mealTypes: ['snack'],
-      emoji: '🍋', origin: '🌍',
-      tags: ['high-protein', 'vegetarian', 'meal-prep', 'instagrammable', 'no-cook'],
-      servings: 6, prepTime: 20, cookTime: 0, difficulty: 2,
-      // 90×4 + 120×4 + 90×9 = 360+480+810 = 1650 ✓
-      baseNutrition: { calories: 1650, proteinGrams: 90, carbsGrams: 120, fatGrams: 90 },
-      ingredients: [
-        { name: 'Fromage blanc 40%',              qty: 400, unit: 'g' },
-        { name: 'Fromage frais (type Philadelphia)', qty: 200, unit: 'g' },
-        { name: 'Yaourt grec 0%',                 qty: 200, unit: 'g' },
-        { name: 'Biscuits sablés',                qty: 150, unit: 'g', note: 'type Petit Beurre' },
-        { name: 'Beurre doux',                    qty: 60,  unit: 'g' },
-        { name: 'Citron (jus + zeste)',           qty: 2,   unit: 'pce' },
-        { name: 'Miel',                           qty: 60,  unit: 'g' },
-        { name: 'Gélatine',                       qty: 8,   unit: 'g', note: '4 feuilles' },
-        { name: 'Extrait de vanille',             qty: 5,   unit: 'ml' }
-      ],
-      steps: [
-        "Émietter les biscuits finement au robot ou dans un sac plastique avec un rouleau. Mélanger avec le beurre fondu. Tasser dans le fond d'un moule à charnière 20 cm (ou 6 cercles individuels). Réfrigérer 15 min.",
-        "Tremper les feuilles de gélatine dans de l'eau froide 5 min. Essorer. Chauffer le jus de citron dans une petite casserole et y dissoudre la gélatine ramollie hors du feu.",
-        "Fouetter ensemble le fromage blanc, le fromage frais, le yaourt grec, le miel, la vanille et le zeste de citron. Incorporer le jus de citron avec gélatine en filet en fouettant.",
-        "Verser la crème sur la base biscuit. Lisser la surface. Réfrigérer 4h minimum (idéalement une nuit).",
-        "Démouler délicatement. Décorer avec des zestes de citron, quelques framboises ou un coulis. Se conserve 4 jours au frigo.",
-        "Couper en 6 parts. La texture doit être crémeuse, fondante, avec une légère acidité du citron qui équilibre la douceur — loin d'un dessert fade."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P5 — MAROC MODERNE & MÉDITERRANÉE  (R690–R694)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R690',
-      name: 'Brochettes Kefta Sauce Yaourt Menthe',
-      category: 'maroc-moderne',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍢', origin: '🇲🇦',
-      tags: ['high-protein', 'gluten-free', 'family', 'instagrammable', 'balanced'],
-      servings: 2, prepTime: 15, cookTime: 15, difficulty: 1,
-      // 80×4 + 18×4 + 36×9 = 320+72+324 = 716 ✓
-      baseNutrition: { calories: 716, proteinGrams: 80, carbsGrams: 18, fatGrams: 36 },
-      ingredients: [
-        { name: 'Viande hachée bœuf (15% MG)',   qty: 400, unit: 'g' },
-        { name: 'Yaourt grec 0%',                 qty: 150, unit: 'g' },
-        { name: 'Oignon',                         qty: 80,  unit: 'g' },
-        { name: 'Persil frais',                   qty: 25,  unit: 'g' },
-        { name: 'Menthe fraîche',                 qty: 15,  unit: 'g' },
-        { name: 'Ail',                            qty: 10,  unit: 'g', note: '3 gousses' },
-        { name: 'Cumin moulu',                    qty: 5,   unit: 'g' },
-        { name: 'Paprika doux',                   qty: 5,   unit: 'g' },
-        { name: 'Cannelle',                       qty: 2,   unit: 'g' },
-        { name: 'Jus de citron',                  qty: 10,  unit: 'ml' },
-        { name: 'Sel, poivre',                    qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préparer la kefta : râper finement l'oignon (pas en dés — le jus est essentiel pour la liaison). Hacher le persil. Mélanger à la main avec la viande, l'ail haché, le cumin, le paprika, la cannelle, sel et poivre. Pétrir 3 min.",
-        "Humidifier les mains et façonner 8 brochettes autour de pics en bois préalablement trempés (ou brochettes métal). Appuyer fermement pour bien faire adhérer.",
-        "Griller sur barbecue, plancha ou poêle gril à feu vif 5-6 min en tournant à mi-cuisson. La kefta doit être dorée à l'extérieur, moelleuse à cœur.",
-        "Préparer la sauce yaourt : mélanger le yaourt grec avec la menthe fraîche ciselée, le jus de citron, sel et une pincée de cumin. Réfrigérer jusqu'au service.",
-        "Servir les brochettes avec la sauce yaourt menthe. Accompagner d'une salade marocaine (tomate, oignon, citron) et de pain khobz chaud."
-      ]
-    },
-
-    {
-      id: 'R691',
-      name: 'Salade Fattoush Poulet Croustillant',
-      category: 'mediterranean',
-      mealTypes: ['lunch'],
-      emoji: '🥗', origin: '🇱🇧',
-      tags: ['high-protein', 'balanced', 'salad', 'light', 'quick'],
-      servings: 2, prepTime: 15, cookTime: 15, difficulty: 1,
-      // 62×4 + 42×4 + 20×9 = 248+168+180 = 596 ✓
-      baseNutrition: { calories: 596, proteinGrams: 62, carbsGrams: 42, fatGrams: 20 },
-      ingredients: [
-        { name: 'Blanc de poulet',                qty: 280, unit: 'g' },
-        { name: 'Pain pita',                      qty: 2,   unit: 'pce', note: '≈100g total' },
-        { name: 'Tomate',                         qty: 200, unit: 'g' },
-        { name: 'Concombre',                      qty: 150, unit: 'g' },
-        { name: 'Radis',                          qty: 80,  unit: 'g' },
-        { name: 'Oignon rouge',                   qty: 60,  unit: 'g' },
-        { name: 'Persil frais',                   qty: 20,  unit: 'g' },
-        { name: 'Menthe fraîche',                 qty: 10,  unit: 'g' },
-        { name: 'Jus de citron',                  qty: 30,  unit: 'ml' },
-        { name: 'Huile d\'olive',                 qty: 15,  unit: 'ml' },
-        { name: 'Sumac',                          qty: 5,   unit: 'g' },
-        { name: 'Sel, poivre',                    qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Couper les pitas en triangles et faire griller au four à 200°C pendant 8 min jusqu'à ce qu'ils soient bien croustillants et dorés. Réserver.",
-        "Couper les tomates en quartiers, le concombre en demi-rondelles, les radis en fines rondelles, l'oignon rouge en fines lamelles. Ciseler le persil et la menthe.",
-        "Griller les blancs de poulet assaisonnés avec sel, poivre et sumac à la poêle avec l'huile d'olive 6-7 min par face. Couper en lamelles.",
-        "Préparer la vinaigrette : jus de citron, 10ml d'huile d'olive, sumac, sel, poivre. Fouetter.",
-        "Assembler au dernier moment : légumes + herbes + lamelles de poulet + chips de pita. Arroser de vinaigrette, mélanger délicatement. Le sumac doit parfumer toute la salade — c'est lui qui fait la signature du fattoush."
-      ]
-    },
-
-    {
-      id: 'R692',
-      name: 'Poulet Miel Harissa Four en 30 min',
-      category: 'maroc-moderne',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍗', origin: '🇲🇦',
-      tags: ['high-protein', 'gluten-free', 'quick', 'family', 'meal-prep'],
-      servings: 2, prepTime: 5, cookTime: 30, difficulty: 1,
-      // 86×4 + 14×4 + 22×9 = 344+56+198 = 598 ✓
-      baseNutrition: { calories: 598, proteinGrams: 86, carbsGrams: 14, fatGrams: 22 },
-      ingredients: [
-        { name: 'Cuisses de poulet (sans peau)',  qty: 500, unit: 'g', note: '4 petites cuisses' },
-        { name: 'Harissa',                        qty: 30,  unit: 'g' },
-        { name: 'Miel',                           qty: 25,  unit: 'g' },
-        { name: 'Ail',                            qty: 15,  unit: 'g', note: '4 gousses' },
-        { name: 'Huile d\'olive',                 qty: 15,  unit: 'ml' },
-        { name: 'Jus de citron',                  qty: 15,  unit: 'ml' },
-        { name: 'Cumin moulu',                    qty: 5,   unit: 'g' },
-        { name: 'Sel, poivre',                    qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préchauffer le four à 200°C. Mélanger la harissa, le miel, l'ail haché, l'huile d'olive, le jus de citron, le cumin, sel et poivre.",
-        "Inciser les cuisses de poulet 2-3 fois en profondeur pour que la marinade pénètre. Enduire généreusement de marinade sur toutes les faces.",
-        "Placer dans un plat allant au four. Enfourner 25-30 min en retournant à mi-cuisson. Dans les 5 dernières minutes, passer en position gril à 220°C pour caraméliser.",
-        "Le poulet est cuit quand le jus est clair (piquer la partie épaisse), la peau légèrement caramélisée et parfumée.",
-        "Servir avec du riz ou de la semoule, et une salade fraîche. La sauce harissa-miel caramélisée dans le fond du plat est délicieuse — la récupérer pour napper."
-      ]
-    },
-
-    {
-      id: 'R693',
-      name: 'Salade Grecque Poulpe Grillé',
-      category: 'mediterranean',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🐙', origin: '🇬🇷',
-      tags: ['high-protein', 'gluten-free', 'omega3', 'salad', 'light'],
-      servings: 2, prepTime: 15, cookTime: 20, difficulty: 2,
-      // 52×4 + 18×4 + 24×9 = 208+72+216 = 496 ✓
-      baseNutrition: { calories: 496, proteinGrams: 52, carbsGrams: 18, fatGrams: 24 },
-      ingredients: [
-        { name: 'Poulpe cuit (surgelé, déjà cuit)', qty: 350, unit: 'g' },
-        { name: 'Féta AOP',                        qty: 80,  unit: 'g' },
-        { name: 'Tomate',                          qty: 200, unit: 'g' },
-        { name: 'Concombre',                       qty: 150, unit: 'g' },
-        { name: 'Oignon rouge',                    qty: 60,  unit: 'g' },
-        { name: 'Olives noires Kalamata',          qty: 40,  unit: 'g' },
-        { name: 'Huile d\'olive extra vierge',     qty: 20,  unit: 'ml' },
-        { name: 'Jus de citron',                   qty: 20,  unit: 'ml' },
-        { name: 'Origan séché',                    qty: 3,   unit: 'g' },
-        { name: 'Sel, poivre',                     qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Décongeler le poulpe (déjà cuit) la veille au frigo. Le sécher soigneusement avec du papier absorbant — c'est la clé pour une belle caramélisation.",
-        "Griller le poulpe sur plancha ou poêle gril à très haute température 3-4 min par face. Ne pas bouger pendant la première minute pour obtenir les marques de gril. Il doit être légèrement carbonisé en surface, tendre à cœur.",
-        "Couper les tomates en quartiers, le concombre en demi-rondelles, l'oignon rouge en fines lamelles. Disposer dans un grand saladier.",
-        "Ajouter les olives et la féta émiettée grossièrement. Assaisonner avec l'huile d'olive, le jus de citron, l'origan, sel et poivre. Mélanger délicatement.",
-        "Couper le poulpe grillé en tronçons et disposer sur la salade. Servir immédiatement — le contraste poulpe chaud / salade fraîche / féta crémeuse est la signature de ce plat."
-      ]
-    },
-
-    {
-      id: 'R694',
-      name: 'Riz Crevettes Ail Beurre & Persil',
-      category: 'mediterranean',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍤', origin: '🇵🇹',
-      tags: ['high-protein', 'quick', 'seafood', 'family', 'balanced'],
-      servings: 2, prepTime: 8, cookTime: 15, difficulty: 1,
-      // 58×4 + 80×4 + 22×9 = 232+320+198 = 750 ✓
-      baseNutrition: { calories: 750, proteinGrams: 58, carbsGrams: 80, fatGrams: 22 },
-      ingredients: [
-        { name: 'Crevettes décortiquées (surgelées)', qty: 350, unit: 'g' },
-        { name: 'Riz basmati (sec)',              qty: 130, unit: 'g', note: '≈300g cuit' },
-        { name: 'Ail',                            qty: 20,  unit: 'g', note: '5 gousses' },
-        { name: 'Beurre doux',                    qty: 20,  unit: 'g' },
-        { name: 'Huile d\'olive',                 qty: 10,  unit: 'ml' },
-        { name: 'Persil frais',                   qty: 25,  unit: 'g' },
-        { name: 'Jus de citron',                  qty: 20,  unit: 'ml' },
-        { name: 'Piment doux',                    qty: 3,   unit: 'g', note: 'ou piment d\'Espelette' },
-        { name: 'Sel, poivre',                    qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Cuire le riz basmati en absorption (eau bouillante salée, 12 min à couvert). Laisser reposer 5 min hors feu, égrener à la fourchette.",
-        "Décongeler les crevettes rapidement sous eau froide courante 5 min. Éponger soigneusement.",
-        "Dans une grande poêle ou wok, chauffer l'huile d'olive et le beurre à feu vif. Ajouter l'ail haché finement, cuire 30 secondes en remuant — ne pas brûler.",
-        "Ajouter les crevettes en une seule couche. Ne pas toucher pendant 1 min pour coloration. Retourner, cuire encore 1 min. Les crevettes sont cuites quand elles sont roses et légèrement caramélisées.",
-        "Ajouter le jus de citron, le persil ciselé et le piment. Mélanger. Verser le riz dans la poêle, mélanger délicatement pour enrober chaque grain de la sauce ail-beurre-citron. Servir immédiatement."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P6 — DÎNERS RAPIDES DU MONDE  (R695–R699)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R695',
-      name: 'Curry Poulet Lait de Coco Riz Basmati',
-      category: 'world-food',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍛', origin: '🇮🇳',
-      tags: ['high-protein', 'balanced', 'comfort-food', 'creamy', 'spicy'],
-      servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
-      // 68×4 + 90×4 + 32×9 = 272+360+288 = 920 ✓
-      baseNutrition: { calories: 920, proteinGrams: 68, carbsGrams: 90, fatGrams: 32 },
-      ingredients: [
-        { name: 'Escalope de poulet',               qty: 400, unit: 'g', note: 'coupée en cubes 3 cm' },
-        { name: 'Riz basmati',                      qty: 160, unit: 'g', note: 'sec' },
-        { name: 'Lait de coco allégé',              qty: 200, unit: 'ml' },
-        { name: 'Tomates pelées en boîte',          qty: 200, unit: 'g' },
-        { name: 'Oignon',                           qty: 100, unit: 'g', note: '1 gros' },
-        { name: 'Ail',                              qty: 15,  unit: 'g', note: '3 gousses' },
-        { name: 'Gingembre frais',                  qty: 10,  unit: 'g', note: 'ou 1 c.c. poudre' },
-        { name: 'Curry en poudre',                  qty: 10,  unit: 'g', note: '2 c.c.' },
-        { name: 'Curcuma',                          qty: 3,   unit: 'g' },
-        { name: 'Huile végétale',                   qty: 15,  unit: 'ml' },
-        { name: 'Coriandre fraîche',                qty: 15,  unit: 'g', note: 'pour servir' }
-      ],
-      steps: [
-        "Cuire le riz basmati en absorption (eau × 1,5 volume, 12 min à couvert). Réserver couvert.",
-        "Émincer finement l'oignon. Chauffer l'huile à feu moyen dans une sauteuse. Faire revenir l'oignon 5-6 min jusqu'à dorure. Ajouter l'ail et le gingembre râpé, cuire 1 min.",
-        "Ajouter le curry et le curcuma, mélanger 30 secondes pour torréfier les épices — ça embaume !",
-        "Ajouter les cubes de poulet, faire dorer 3-4 min en remuant. Verser les tomates pelées émiettées et le lait de coco. Porter à frémissement.",
-        "Cuire 10-12 min à feu moyen jusqu'à sauce onctueuse et poulet bien cuit. Rectifier sel/épices. Servir sur le riz basmati, parsemer de coriandre fraîche."
-      ]
-    },
-
-    {
-      id: 'R696',
-      name: 'Bowl Korean BBQ Bœuf Riz & Kimchi',
-      category: 'world-food',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🥩', origin: '🇰🇷',
-      tags: ['high-protein', 'instagrammable', 'umami', 'fermented', 'trendy'],
-      servings: 2, prepTime: 15, cookTime: 15, difficulty: 2,
-      // 66×4 + 84×4 + 26×9 = 264+336+234 = 834 ✓
-      baseNutrition: { calories: 834, proteinGrams: 66, carbsGrams: 84, fatGrams: 26 },
-      ingredients: [
-        { name: 'Bœuf haché 5% MG',                qty: 400, unit: 'g' },
-        { name: 'Riz japonica (sushi)',             qty: 160, unit: 'g', note: 'sec' },
-        { name: 'Kimchi',                           qty: 80,  unit: 'g', note: 'en pot, rayons asiatiques' },
-        { name: 'Sauce soja',                       qty: 30,  unit: 'ml' },
-        { name: 'Miel',                             qty: 15,  unit: 'g' },
-        { name: 'Huile de sésame',                  qty: 10,  unit: 'ml' },
-        { name: 'Ail',                              qty: 10,  unit: 'g', note: '2 gousses' },
-        { name: 'Gingembre',                        qty: 5,   unit: 'g' },
-        { name: 'Graines de sésame',                qty: 10,  unit: 'g' },
-        { name: 'Oignon nouveau',                   qty: 30,  unit: 'g', note: '2 tiges' },
-        { name: 'Œuf',                              qty: 2,   unit: 'pce', note: 'pour le topping' }
-      ],
-      steps: [
-        "Cuire le riz japonica selon les instructions (rincer 3×, absorption 15 min). Laisser reposer 5 min.",
-        "Mélanger sauce soja, miel, huile de sésame, ail et gingembre râpés dans un bol — c'est la marinade BBQ.",
-        "Dans un wok très chaud, faire revenir le bœuf haché en l'émiettant. Cuire 4-5 min jusqu'à coloration. Ajouter la marinade, cuire encore 2-3 min pour caraméliser.",
-        "Faire cuire les œufs au plat (jaune coulant) dans une poêle séparée avec un peu d'huile.",
-        "Dresser : riz dans le bol, bœuf BBQ dessus, kimchi sur le côté, œuf au plat sur le dessus. Parsemer de sésame et d'oignons nouveaux ciselés. Servir chaud avec un filet de sauce soja si désiré."
-      ]
-    },
-
-    {
-      id: 'R697',
-      name: 'Pad Thaï Poulet Cacahuètes',
-      category: 'world-food',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍜', origin: '🇹🇭',
-      tags: ['high-protein', 'balanced', 'noodles', 'umami', 'instagrammable'],
-      servings: 2, prepTime: 15, cookTime: 15, difficulty: 2,
-      // 64×4 + 96×4 + 28×9 = 256+384+252 = 892 ✓
-      baseNutrition: { calories: 892, proteinGrams: 64, carbsGrams: 96, fatGrams: 28 },
-      ingredients: [
-        { name: 'Escalope de poulet',               qty: 360, unit: 'g', note: 'en lanières fines' },
-        { name: 'Nouilles de riz larges',           qty: 160, unit: 'g', note: 'sèches' },
-        { name: 'Œuf',                              qty: 2,   unit: 'pce' },
-        { name: 'Cacahuètes grillées non salées',   qty: 40,  unit: 'g', note: 'grossièrement hachées' },
-        { name: 'Germes de soja',                   qty: 80,  unit: 'g' },
-        { name: 'Sauce poisson (nuoc-mâm)',         qty: 20,  unit: 'ml' },
-        { name: 'Sauce soja',                       qty: 15,  unit: 'ml' },
-        { name: 'Concentré de tamarin',             qty: 15,  unit: 'g', note: 'ou 1 c.s. jus citron vert' },
-        { name: 'Sucre de canne',                   qty: 10,  unit: 'g' },
-        { name: 'Huile végétale',                   qty: 20,  unit: 'ml' },
-        { name: 'Ail',                              qty: 10,  unit: 'g' },
-        { name: 'Oignon nouveau',                   qty: 30,  unit: 'g' },
-        { name: 'Citron vert',                      qty: 1,   unit: 'pce', note: 'pour servir' }
-      ],
-      steps: [
-        "Tremper les nouilles de riz dans de l'eau tiède 20-25 min jusqu'à souples mais pas cuites. Égoutter.",
-        "Mélanger sauce poisson, sauce soja, tamarin et sucre dans un bol — sauce Pad Thaï prête.",
-        "Wok très chaud + huile. Saisir les lanières de poulet 4-5 min jusqu'à cuisson complète. Pousser sur le côté du wok. Casser les œufs dans le wok vide, brouiller rapidement, mélanger au poulet.",
-        "Ajouter l'ail émincé, les nouilles égouttées et la sauce. Mélanger vivement à feu vif 3-4 min pour que les nouilles absorbent la sauce. Ajouter les germes de soja, cuire 1 min.",
-        "Servir dans les bols, garnir de cacahuètes hachées, oignons nouveaux ciselés et quartiers de citron vert. Le secret : servir IMMÉDIATEMENT pour que les nouilles restent al dente."
-      ]
-    },
-
-    {
-      id: 'R698',
-      name: 'Poulet Rôti Moutarde & Herbes de Provence',
-      category: 'french',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍗', origin: '🇫🇷',
-      tags: ['high-protein', 'low-carb', 'comfort-food', 'easy', 'classic'],
-      servings: 2, prepTime: 5, cookTime: 25, difficulty: 1,
-      // 82×4 + 8×4 + 26×9 = 328+32+234 = 594 ✓
-      baseNutrition: { calories: 594, proteinGrams: 82, carbsGrams: 8, fatGrams: 26 },
-      ingredients: [
-        { name: 'Hauts de cuisse de poulet',        qty: 600, unit: 'g', note: 'avec peau, désossés' },
-        { name: 'Moutarde de Dijon',                qty: 30,  unit: 'g', note: '2 c.s.' },
-        { name: 'Herbes de Provence',               qty: 8,   unit: 'g', note: '2 c.c.' },
-        { name: 'Huile d\'olive',                   qty: 20,  unit: 'ml' },
-        { name: 'Ail',                              qty: 15,  unit: 'g', note: '3 gousses, écrasées' },
-        { name: 'Citron (zeste + jus)',             qty: 1,   unit: 'pce' },
-        { name: 'Sel, poivre',                      qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préchauffer le four à 200°C chaleur tournante. Inciser légèrement la chair du poulet avec un couteau pour que la marinade pénètre.",
-        "Mélanger moutarde, herbes de Provence, huile d'olive, ail écrasé, zeste de citron, sel et poivre. Enduire généreusement chaque morceau de poulet avec cette marinade — dessus et dessous la peau.",
-        "Disposer côté peau vers le haut dans un plat allant au four. Arroser du jus de citron. Enfourner 22-25 min jusqu'à peau dorée et croustillante.",
-        "Vérifier la cuisson : le jus doit être transparent et la température interne > 74°C. Si la peau n'est pas assez dorée, passer 3 min sous le gril.",
-        "Laisser reposer 5 min avant de servir — les jus se redistribuent. Accompagner d'une salade verte ou de légumes vapeur pour un repas complet."
-      ]
-    },
-
-    {
-      id: 'R699',
-      name: 'Poke Bowl Thon Avocat Edamame',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥗', origin: '🇺🇸',
-      tags: ['high-protein', 'omega-3', 'instagrammable', 'fresh', 'healthy'],
-      servings: 2, prepTime: 15, cookTime: 15, difficulty: 1,
-      // 58×4 + 78×4 + 26×9 = 232+312+234 = 778 ✓
-      baseNutrition: { calories: 778, proteinGrams: 58, carbsGrams: 78, fatGrams: 26 },
-      ingredients: [
-        { name: 'Thon frais (sashimi grade)',       qty: 280, unit: 'g', note: 'coupé en cubes 2 cm' },
-        { name: 'Riz japonica (sushi)',             qty: 160, unit: 'g', note: 'sec' },
-        { name: 'Avocat',                           qty: 120, unit: 'g', note: '1 petit, tranché' },
-        { name: 'Edamame',                          qty: 80,  unit: 'g', note: 'surgelé, décongelé' },
-        { name: 'Concombre',                        qty: 80,  unit: 'g', note: 'en rondelles fines' },
-        { name: 'Sauce soja',                       qty: 20,  unit: 'ml' },
-        { name: 'Huile de sésame',                  qty: 10,  unit: 'ml' },
-        { name: 'Vinaigre de riz',                  qty: 15,  unit: 'ml' },
-        { name: 'Sucre',                            qty: 5,   unit: 'g' },
-        { name: 'Graines de sésame',                qty: 10,  unit: 'g' },
-        { name: 'Oignon nouveau',                   qty: 20,  unit: 'g' },
-        { name: 'Algues nori',                      qty: 5,   unit: 'g', note: 'en lamelles, rayons asiatiques' }
-      ],
-      steps: [
-        "Cuire le riz japonica (rincer × 3, absorption 15 min). Mélanger vinaigre de riz + sucre dans une tasse, chauffer 30 sec au micro-ondes. Incorporer au riz chaud et laisser refroidir à température ambiante.",
-        "Préparer la marinade thon : mélanger sauce soja et huile de sésame. Ajouter les cubes de thon, mélanger délicatement. Mariner 5-10 min max.",
-        "Dresser les bowls : base de riz assaisonné, puis disposer thon mariné, tranches d'avocat, edamame et concombre en sections séparées (présentation Instagram).",
-        "Parsemer de graines de sésame, lamelles d'algues nori et oignons nouveaux ciselés. Arroser du reste de marinade.",
-        "Servir immédiatement ou garder au frais max 30 min. Mélanger dans le bol juste avant de manger pour une explosion de saveurs."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P7 — VÉGÉTARIEN & VEGAN FITNESS  (R700–R704)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R700',
-      name: 'Dal Rouge Lentilles Épinards & Naan',
-      category: 'world-food',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🫘', origin: '🇮🇳',
-      tags: ['vegan', 'high-protein', 'plant-based', 'comfort-food', 'iron'],
-      servings: 2, prepTime: 10, cookTime: 25, difficulty: 1,
-      // 48×4 + 82×4 + 18×9 = 192+328+162 = 682 ✓
-      baseNutrition: { calories: 682, proteinGrams: 48, carbsGrams: 82, fatGrams: 18 },
-      ingredients: [
-        { name: 'Lentilles corail',                 qty: 200, unit: 'g', note: 'sèches' },
-        { name: 'Épinards surgelés',                qty: 150, unit: 'g' },
-        { name: 'Tomates concassées boîte',         qty: 200, unit: 'g' },
-        { name: 'Lait de coco allégé',              qty: 100, unit: 'ml' },
-        { name: 'Oignon',                           qty: 100, unit: 'g' },
-        { name: 'Ail',                              qty: 10,  unit: 'g' },
-        { name: 'Gingembre frais',                  qty: 8,   unit: 'g' },
-        { name: 'Cumin moulu',                      qty: 5,   unit: 'g' },
-        { name: 'Curry en poudre',                  qty: 8,   unit: 'g' },
-        { name: 'Curcuma',                          qty: 3,   unit: 'g' },
-        { name: 'Huile de coco',                    qty: 15,  unit: 'ml' },
-        { name: 'Naan',                             qty: 2,   unit: 'pce', note: 'en sachet ou fait maison' }
-      ],
-      steps: [
-        "Rincer les lentilles corail à l'eau froide. Dans une casserole, porter 600ml d'eau à ébullition avec les lentilles. Cuire 15-18 min à feu moyen, elles vont fondre et épaissir.",
-        "Pendant ce temps, chauffer l'huile de coco dans une poêle. Faire dorer l'oignon émincé 5-6 min. Ajouter ail et gingembre râpés, cuire 1 min. Ajouter cumin, curry, curcuma : torréfier 30 secondes.",
-        "Verser les tomates concassées dans la poêle, mélanger et laisser mijoter 5 min.",
-        "Incorporer la base tomate-épices dans les lentilles cuites. Ajouter les épinards surgelés et le lait de coco. Cuire encore 5-8 min en remuant. Rectifier sel.",
-        "Chauffer les naans à la poêle sèche 1 min par côté ou au four. Servir le dal bien chaud avec les naans pour saucer — c'est le meilleur."
-      ]
-    },
-
-    {
-      id: 'R701',
-      name: 'Bowl Buddha Quinoa Pois Chiches Rôtis',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥙', origin: '🇺🇸',
-      tags: ['vegan', 'balanced', 'plant-based', 'instagrammable', 'gluten-free'],
-      servings: 2, prepTime: 15, cookTime: 25, difficulty: 1,
-      // 36×4 + 88×4 + 20×9 = 144+352+180 = 676 ✓
-      baseNutrition: { calories: 676, proteinGrams: 36, carbsGrams: 88, fatGrams: 20 },
-      ingredients: [
-        { name: 'Quinoa',                           qty: 160, unit: 'g', note: 'sec' },
-        { name: 'Pois chiches boîte',               qty: 240, unit: 'g', note: 'égouttés, séchés' },
-        { name: 'Patate douce',                     qty: 200, unit: 'g', note: 'en cubes 2 cm' },
-        { name: 'Avocat',                           qty: 80,  unit: 'g', note: '½ avocat' },
-        { name: 'Épinards baby',                    qty: 60,  unit: 'g' },
-        { name: 'Tomates cerises',                  qty: 80,  unit: 'g' },
-        { name: 'Tahini',                           qty: 20,  unit: 'g' },
-        { name: 'Citron (jus)',                     qty: 1,   unit: 'pce' },
-        { name: 'Paprika fumé',                     qty: 5,   unit: 'g' },
-        { name: 'Cumin',                            qty: 3,   unit: 'g' },
-        { name: 'Huile d\'olive',                   qty: 20,  unit: 'ml' },
-        { name: 'Graines de tournesol',             qty: 15,  unit: 'g' }
-      ],
-      steps: [
-        "Préchauffer le four à 200°C. Mélanger les pois chiches séchés et les cubes de patate douce avec 15ml d'huile, paprika fumé, cumin, sel. Étaler sur une plaque. Rôtir 20-22 min en retournant à mi-cuisson.",
-        "Rincer le quinoa abondamment. Cuire en absorption (320ml eau, 15 min à couvert). Laisser reposer 5 min, égrener.",
-        "Préparer la sauce tahini : mélanger tahini + jus de citron + 30ml d'eau froide + pincée de sel. Fouetter jusqu'à sauce crémeuse.",
-        "Dresser les bowls : quinoa en base, puis pois chiches rôtis, patate douce, épinards, tomates cerises et tranches d'avocat disposés en quartiers séparés.",
-        "Arroser généreusement de sauce tahini, parsemer de graines de tournesol. Servir à température ambiante — le bowl Buddha idéal meal-prep."
-      ]
-    },
-
-    {
-      id: 'R702',
-      name: 'Omelette Végétale Champignons Chèvre Ciboulette',
-      category: 'french',
-      mealTypes: ['breakfast', 'lunch', 'dinner'],
-      emoji: '🍳', origin: '🇫🇷',
-      tags: ['vegetarian', 'high-protein', 'low-carb', 'quick', 'classic'],
-      servings: 2, prepTime: 5, cookTime: 10, difficulty: 1,
-      // 44×4 + 72×4 + 24×9 = 176+288+216 = 680 ✓
-      baseNutrition: { calories: 680, proteinGrams: 44, carbsGrams: 72, fatGrams: 24 },
-      ingredients: [
-        { name: 'Œuf',                              qty: 6,   unit: 'pce' },
-        { name: 'Champignons de Paris',             qty: 200, unit: 'g' },
-        { name: 'Fromage de chèvre frais',          qty: 80,  unit: 'g' },
-        { name: 'Ciboulette fraîche',               qty: 20,  unit: 'g' },
-        { name: 'Pain complet grillé',              qty: 120, unit: 'g', note: '4 tranches' },
-        { name: 'Beurre',                           qty: 15,  unit: 'g' },
-        { name: 'Ail',                              qty: 5,   unit: 'g', note: '1 gousse' },
-        { name: 'Sel, poivre',                      qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Nettoyer et émincer les champignons. Faire revenir à feu vif dans 8g de beurre avec l'ail émincé, 4-5 min jusqu'à évaporation de l'eau et dorure. Saler, poivrer. Réserver.",
-        "Battre 3 œufs par omelette avec sel et poivre. Chauffer 3-4g de beurre dans une poêle antiadhésive à feu moyen-vif.",
-        "Verser les œufs battus. Laisser prendre 30 secondes puis utiliser une spatule pour ramener les bords vers le centre, incliner la poêle pour les parties liquides. L'omelette doit rester baveuse au centre.",
-        "Ajouter la moitié des champignons et du fromage de chèvre émietté sur une moitié de l'omelette. Replier l'autre moitié. Cuire 30 secondes supplémentaires.",
-        "Faire glisser sur l'assiette. Parsemer de ciboulette ciselée. Servir avec les tartines de pain complet grillé. Répéter pour la 2ème omelette."
-      ]
-    },
-
-    {
-      id: 'R703',
-      name: 'Chili Sin Carne Haricots Rouges & Maïs',
-      category: 'mexican',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🌶️', origin: '🇲🇽',
-      tags: ['vegan', 'high-protein', 'plant-based', 'spicy', 'meal-prep'],
-      servings: 2, prepTime: 10, cookTime: 25, difficulty: 1,
-      // 40×4 + 90×4 + 16×9 = 160+360+144 = 664 ✓
-      baseNutrition: { calories: 664, proteinGrams: 40, carbsGrams: 90, fatGrams: 16 },
-      ingredients: [
-        { name: 'Haricots rouges boîte',            qty: 400, unit: 'g', note: 'égouttés' },
-        { name: 'Maïs boîte',                       qty: 150, unit: 'g', note: 'égoutté' },
-        { name: 'Riz basmati',                      qty: 120, unit: 'g', note: 'sec' },
-        { name: 'Tomates concassées boîte',         qty: 400, unit: 'g' },
-        { name: 'Poivron rouge',                    qty: 150, unit: 'g' },
-        { name: 'Oignon',                           qty: 100, unit: 'g' },
-        { name: 'Ail',                              qty: 10,  unit: 'g' },
-        { name: 'Piment de Cayenne',                qty: 3,   unit: 'g', note: 'ou jalapeño frais' },
-        { name: 'Cumin moulu',                      qty: 5,   unit: 'g' },
-        { name: 'Paprika fumé',                     qty: 5,   unit: 'g' },
-        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' },
-        { name: 'Citron vert',                      qty: 1,   unit: 'pce', note: 'pour servir' }
-      ],
-      steps: [
-        "Cuire le riz basmati en absorption (180ml eau, 12 min). Réserver couvert.",
-        "Chauffer l'huile dans une grande casserole. Faire revenir l'oignon et le poivron émincés 5-6 min. Ajouter l'ail, cumin, paprika, piment : cuire 1 min en remuant.",
-        "Ajouter les tomates concassées. Porter à frémissement, cuire 8 min en remuant de temps en temps.",
-        "Ajouter haricots rouges et maïs égouttés. Mélanger, cuire encore 8-10 min à feu moyen. La sauce doit épaissir et enrober les haricots. Rectifier sel et piment.",
-        "Servir le chili sur le riz basmati avec un quartier de citron vert. Facultatif : avocat en tranches, coriandre fraîche, yaourt de soja en guise de crème fraîche."
-      ]
-    },
-
-    {
-      id: 'R704',
-      name: 'Tofu Sauté Brocoli Sauce Teriyaki Riz',
-      category: 'japanese',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🥦', origin: '🇯🇵',
-      tags: ['vegan', 'high-protein', 'plant-based', 'asian', 'quick'],
-      servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
-      // 52×4 + 76×4 + 22×9 = 208+304+198 = 710 ✓
-      baseNutrition: { calories: 710, proteinGrams: 52, carbsGrams: 76, fatGrams: 22 },
-      ingredients: [
-        { name: 'Tofu ferme',                       qty: 400, unit: 'g', note: 'bien pressé 30 min, coupé en cubes' },
-        { name: 'Riz japonica',                     qty: 160, unit: 'g', note: 'sec' },
-        { name: 'Brocoli',                          qty: 250, unit: 'g', note: 'en bouquets' },
-        { name: 'Sauce soja',                       qty: 30,  unit: 'ml' },
-        { name: 'Miel ou sirop d\'agave',           qty: 20,  unit: 'g' },
-        { name: 'Huile de sésame',                  qty: 10,  unit: 'ml' },
-        { name: 'Amidon de maïs (Maïzena)',         qty: 10,  unit: 'g' },
-        { name: 'Ail',                              qty: 10,  unit: 'g' },
-        { name: 'Gingembre',                        qty: 5,   unit: 'g' },
-        { name: 'Huile végétale',                   qty: 15,  unit: 'ml' },
-        { name: 'Graines de sésame',                qty: 10,  unit: 'g' }
-      ],
-      steps: [
-        "Presser le tofu ferme entre deux assiettes avec un poids 30 min pour éliminer l'excès d'eau — crucial pour obtenir une belle dorure.",
-        "Cuire le riz. Préparer la sauce teriyaki : mélanger sauce soja, miel/agave, amidon de maïs dilué dans 30ml d'eau froide. Réserver.",
-        "Couper le tofu en cubes 2 cm. Chauffer l'huile végétale à feu vif dans un wok. Faire dorer le tofu 3-4 min par face sans le toucher — patience pour une belle croûte.",
-        "Ajouter le brocoli en bouquets au wok avec 50ml d'eau. Couvrir 3 min pour cuire vapeur. Enlever le couvercle, ajouter ail et gingembre, cuire 1 min.",
-        "Verser la sauce teriyaki sur le tout, mélanger. Porter 1-2 min jusqu'à sauce brillante et nappante. Servir sur le riz, parsemer de sésame. Le tofu croustillant dans la sauce teriyaki : addictif."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P8 — HAUTE PROTÉINE BODYBUILDING  (R705–R709)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R705',
-      name: 'Steak Haché Maison Double Fromage & Sauce Spéciale',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍔', origin: '🇺🇸',
-      tags: ['high-protein', 'bulking', 'comfort-food', 'indulgent', 'classic'],
-      servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
-      // 90×4 + 60×4 + 18×9 = 360+240+162 = 762 ✓
-      baseNutrition: { calories: 762, proteinGrams: 90, carbsGrams: 60, fatGrams: 18 },
-      ingredients: [
-        { name: 'Boeuf haché 5% MG',                qty: 500, unit: 'g', note: 'façonné en 4 steaks de 125g' },
-        { name: 'Fromage cheddar tranché',          qty: 60,  unit: 'g', note: '4 tranches' },
-        { name: 'Pain burger complet',              qty: 120, unit: 'g', note: '2 pains' },
-        { name: 'Tomate',                           qty: 100, unit: 'g', note: '1 tomate, rondelles' },
-        { name: 'Salade iceberg',                   qty: 40,  unit: 'g' },
-        { name: 'Cornichons',                       qty: 30,  unit: 'g' },
-        { name: 'Fromage blanc 0%',                 qty: 40,  unit: 'g', note: 'base de la sauce' },
-        { name: 'Moutarde',                         qty: 10,  unit: 'g' },
-        { name: 'Ketchup',                          qty: 15,  unit: 'g' },
-        { name: 'Paprika',                          qty: 3,   unit: 'g' },
-        { name: 'Sel, poivre',                      qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Mélanger fromage blanc, moutarde, ketchup et paprika — sauce spéciale maison. Réserver au frais.",
-        "Former 4 steaks minces (125g chacun) en appuyant pour qu'ils soient plats. Saler et poivrer généreusement les deux faces.",
-        "Poêle ou grill en fonte très chaud. Saisir les steaks 2 min par face pour une cuisson rosée (smash burger : écraser à la spatule dès que posé pour une croûte maximale).",
-        "Poser 1 tranche de cheddar sur chaque steak dès qu'on retourne. Couvrir 1 min pour fondre.",
-        "Toaster les pains coupés en deux. Napper le bas du pain de sauce spéciale. Empiler : salade, tomate, double steak+fromage, cornichons, sauce. Appuyer légèrement. Servir immédiatement."
-      ]
-    },
-
-    {
-      id: 'R706',
-      name: 'Saumon Laqué Sésame & Brocoli Vapeur',
-      category: 'japanese',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🐟', origin: '🇯🇵',
-      tags: ['high-protein', 'omega-3', 'lean', 'low-carb', 'elegant'],
-      servings: 2, prepTime: 5, cookTime: 15, difficulty: 1,
-      // 80×4 + 50×4 + 20×9 = 320+200+180 = 700 ✓
-      baseNutrition: { calories: 700, proteinGrams: 80, carbsGrams: 50, fatGrams: 20 },
-      ingredients: [
-        { name: 'Pavé de saumon',                   qty: 500, unit: 'g', note: '2 pavés de 250g, sans peau' },
-        { name: 'Riz jasmin ou basmati',            qty: 120, unit: 'g', note: 'sec' },
-        { name: 'Brocoli',                          qty: 250, unit: 'g', note: 'en bouquets' },
-        { name: 'Sauce soja',                       qty: 25,  unit: 'ml' },
-        { name: 'Miel',                             qty: 15,  unit: 'g' },
-        { name: 'Huile de sésame',                  qty: 8,   unit: 'ml' },
-        { name: 'Ail',                              qty: 8,   unit: 'g' },
-        { name: 'Gingembre',                        qty: 5,   unit: 'g' },
-        { name: 'Graines de sésame',                qty: 10,  unit: 'g' },
-        { name: 'Citron vert',                      qty: 1,   unit: 'pce' }
-      ],
-      steps: [
-        "Cuire le riz. Préparer le laquage : mélanger sauce soja, miel, huile de sésame, ail et gingembre râpés.",
-        "Éponger les pavés de saumon. Badigeonner généreusement des deux côtés avec le laquage. Laisser mariner 5 min.",
-        "Cuire le brocoli à la vapeur ou à l'eau bouillante salée 5-6 min (al dente). Égoutter.",
-        "Chauffer une poêle antiadhésive à feu vif. Saisir le saumon 3-4 min côté présentation sans toucher. Retourner, cuire encore 2-3 min. Badigeonner du reste de laquage pendant la cuisson.",
-        "Dresser : riz, brocoli, saumon laqué. Parsemer de sésame. Arroser d'un filet de citron vert. Le saumon doit être cuit mais encore nacré au centre."
-      ]
-    },
-
-    {
-      id: 'R707',
-      name: 'Blanc de Poulet Vapeur Taboulé Libanais',
-      category: 'mediterranean',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥗', origin: '🇱🇧',
-      tags: ['high-protein', 'lean', 'low-carb', 'fresh', 'cutting'],
-      servings: 2, prepTime: 20, cookTime: 15, difficulty: 1,
-      // 96×4 + 30×4 + 14×9 = 384+120+126 = 630 ✓
-      baseNutrition: { calories: 630, proteinGrams: 96, carbsGrams: 30, fatGrams: 14 },
-      ingredients: [
-        { name: 'Blanc de poulet',                  qty: 500, unit: 'g', note: '2 blancs' },
-        { name: 'Persil plat frais',                qty: 100, unit: 'g', note: 'bouquet, ciselé finement' },
-        { name: 'Boulgour fin',                     qty: 60,  unit: 'g', note: 'sec' },
-        { name: 'Tomates',                          qty: 200, unit: 'g', note: '2 tomates, dés fins' },
-        { name: 'Oignons verts',                    qty: 40,  unit: 'g', note: 'ciselés' },
-        { name: 'Menthe fraîche',                   qty: 20,  unit: 'g' },
-        { name: 'Citron (jus)',                     qty: 2,   unit: 'pce' },
-        { name: 'Huile d\'olive',                   qty: 20,  unit: 'ml' },
-        { name: 'Sel, poivre',                      qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Verser de l'eau bouillante sur le boulgour (ratio 1:1,5). Couvrir 15 min. Égrener à la fourchette, laisser refroidir.",
-        "Cuire les blancs de poulet à la vapeur 12-15 min (ou pochés dans bouillon froid). Laisser refroidir, effilocher à la fourchette ou couper en lanières.",
-        "Ciseler finement le persil — pas grossièrement : le taboulé libanais est 80% persil. Couper les tomates en tout petits dés, éliminer les graines et l'eau de végétation.",
-        "Mélanger boulgour refroidi, persil, tomates, oignons verts et menthe fraîche. Assaisonner avec jus de citron, huile d'olive, sel, poivre généreux.",
-        "Dresser le taboulé dans les assiettes, disposer les effilochés de poulet dessus. Ce plat se mange frais — préparer 30 min à l'avance pour que les saveurs se mélangent."
-      ]
-    },
-
-    {
-      id: 'R708',
-      name: 'Oeufs Brouillés Crevettes Ail & Toast Complet',
-      category: 'world-food',
-      mealTypes: ['breakfast', 'lunch'],
-      emoji: '🍤', origin: '🇫🇷',
-      tags: ['high-protein', 'quick', 'bodybuilding', 'morning', 'elegant'],
-      servings: 2, prepTime: 5, cookTime: 10, difficulty: 1,
-      // 88×4 + 52×4 + 16×9 = 352+208+144 = 704 ✓
-      baseNutrition: { calories: 704, proteinGrams: 88, carbsGrams: 52, fatGrams: 16 },
-      ingredients: [
-        { name: 'Crevettes décortiquées',           qty: 300, unit: 'g', note: 'crues ou décongelées' },
-        { name: 'Oeuf',                             qty: 6,   unit: 'pce' },
-        { name: 'Pain complet',                     qty: 120, unit: 'g', note: '4 tranches' },
-        { name: 'Fromage blanc 0%',                 qty: 80,  unit: 'g', note: 'pour les oeufs brouillés' },
-        { name: 'Ail',                              qty: 10,  unit: 'g' },
-        { name: 'Persil frais',                     qty: 15,  unit: 'g' },
-        { name: 'Beurre',                           qty: 10,  unit: 'g' },
-        { name: 'Piment d\'Espelette',              qty: 2,   unit: 'g' },
-        { name: 'Sel, poivre',                      qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Éponger les crevettes. Dans une poêle chaude avec le beurre, faire revenir l'ail émincé 30 secondes. Ajouter les crevettes, cuire 2-3 min jusqu'à roses. Ajouter persil et piment d'Espelette. Réserver.",
-        "Battre les 6 oeufs avec le fromage blanc, sel et poivre. Cette technique donne des oeufs ultra-crémeux.",
-        "Dans la même poêle (feu doux), verser les oeufs battus. Mélanger CONSTAMMENT avec une spatule en silicone. Ne jamais arrêter de remuer. Retirer du feu encore légèrement coulants.",
-        "Toaster le pain complet. Dresser : tartines de pain grillé, oeufs brouillés crémeux dessus, crevettes à l'ail sur les oeufs.",
-        "Servir immédiatement — les oeufs brouillés à la Gordon Ramsay : crémeux, soyeux, jamais en caoutchouc."
-      ]
-    },
-
-    {
-      id: 'R709',
-      name: 'Dinde Hachée Courgette Feta & Orzo',
-      category: 'mediterranean',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🫕', origin: '🇬🇷',
-      tags: ['high-protein', 'balanced', 'mediterranean', 'easy', 'fresh'],
-      servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
-      // 78×4 + 68×4 + 20×9 = 312+272+180 = 764 ✓
-      baseNutrition: { calories: 764, proteinGrams: 78, carbsGrams: 68, fatGrams: 20 },
-      ingredients: [
-        { name: 'Dinde hachée',                     qty: 450, unit: 'g' },
-        { name: 'Orzo (risoni)',                    qty: 140, unit: 'g', note: 'petites pâtes en grains de riz' },
-        { name: 'Courgette',                        qty: 200, unit: 'g', note: '1 grosse, dés' },
-        { name: 'Feta',                             qty: 60,  unit: 'g', note: 'émiettée' },
-        { name: 'Tomates cerises',                  qty: 150, unit: 'g' },
-        { name: 'Oignon',                           qty: 80,  unit: 'g' },
-        { name: 'Ail',                              qty: 8,   unit: 'g' },
-        { name: 'Origan séché',                     qty: 5,   unit: 'g' },
-        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' },
-        { name: 'Citron (zeste)',                   qty: 1,   unit: 'pce' },
-        { name: 'Menthe fraîche',                   qty: 15,  unit: 'g' }
-      ],
-      steps: [
-        "Cuire l'orzo dans eau bouillante salée 8-9 min al dente. Égoutter, réserver 100ml d'eau de cuisson.",
-        "Chauffer l'huile dans une grande poêle. Faire revenir l'oignon émincé 4 min. Ajouter la dinde hachée, émietter et faire dorer 5-6 min. Saler, poivrer, ajouter l'ail et l'origan.",
-        "Ajouter les dés de courgette, cuire 5 min jusqu'à tendres mais encore croquants. Ajouter les tomates cerises coupées en deux.",
-        "Incorporer l'orzo cuit. Ajouter un peu d'eau de cuisson pour lier. Zester le citron dessus, mélanger.",
-        "Retirer du feu. Émietter la feta sur le dessus, parsemer de menthe fraîche ciselée. Servir dans la poêle — un plat méditerranéen complet en 30 min."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P9 — MEAL PREP & SNACKS SALÉS  (R710–R714)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R710',
-      name: 'Batch Bowl Poulet Patate Douce & Houmous',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🫙', origin: '🇺🇸',
-      tags: ['meal-prep', 'high-protein', 'balanced', 'batch-cooking', 'healthy'],
-      servings: 2, prepTime: 15, cookTime: 30, difficulty: 1,
-      // 62×4 + 80×4 + 18×9 = 248+320+162 = 730 ✓
-      baseNutrition: { calories: 730, proteinGrams: 62, carbsGrams: 80, fatGrams: 18 },
-      ingredients: [
-        { name: 'Blanc de poulet',                  qty: 360, unit: 'g', note: 'en cubes 3cm' },
-        { name: 'Patate douce',                     qty: 300, unit: 'g', note: 'en cubes 2cm' },
-        { name: 'Riz basmati',                      qty: 120, unit: 'g', note: 'sec' },
-        { name: 'Houmous',                          qty: 80,  unit: 'g', note: 'en pot ou fait maison' },
-        { name: 'Épinards baby',                    qty: 60,  unit: 'g' },
-        { name: 'Tomates cerises',                  qty: 100, unit: 'g' },
-        { name: 'Paprika fumé',                     qty: 5,   unit: 'g' },
-        { name: 'Cumin',                            qty: 3,   unit: 'g' },
-        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' },
-        { name: 'Citron (jus)',                     qty: 1,   unit: 'pce' }
-      ],
-      steps: [
-        "Préchauffer four à 200°C. Mélanger les cubes de patate douce avec 8ml d'huile, paprika et cumin. Rôtir 20-25 min. Pendant ce temps cuire le riz.",
-        "Mélanger les cubes de poulet avec le reste d'huile, sel, poivre. Ajouter sur la plaque de four avec la patate douce les 10 dernières minutes — tout se rôtit ensemble.",
-        "Dresser les bowls (ou boîtes meal prep) : riz en base, épinards, tomates cerises, patate douce et poulet rôti.",
-        "Déposer une belle quenelle de houmous sur le côté. Arroser de jus de citron.",
-        "Stocker au frigo jusqu'à 4 jours. Pour réchauffer : 2 min au micro-ondes, ou manger froid — excellent dans les deux cas."
-      ]
-    },
-
-    {
-      id: 'R711',
-      name: 'Muffins Protéinés Jambon Comté (x6)',
-      category: 'french',
-      mealTypes: ['breakfast', 'snack'],
-      emoji: '🧁', origin: '🇫🇷',
-      tags: ['meal-prep', 'high-protein', 'snack', 'batch-cooking', 'portable'],
-      servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
-      // 58×4 + 60×4 + 26×9 = 232+240+234 = 706 ✓
-      baseNutrition: { calories: 706, proteinGrams: 58, carbsGrams: 60, fatGrams: 26 },
-      ingredients: [
-        { name: 'Oeuf',                             qty: 4,   unit: 'pce' },
-        { name: 'Jambon blanc',                     qty: 150, unit: 'g', note: 'en dés' },
-        { name: 'Comté râpé',                       qty: 60,  unit: 'g' },
-        { name: 'Farine T65',                       qty: 100, unit: 'g' },
-        { name: 'Lait demi-écrémé',                qty: 80,  unit: 'ml' },
-        { name: 'Fromage blanc 0%',                 qty: 80,  unit: 'g' },
-        { name: 'Levure chimique',                  qty: 8,   unit: 'g' },
-        { name: 'Moutarde',                         qty: 10,  unit: 'g' },
-        { name: 'Ciboulette',                       qty: 15,  unit: 'g' },
-        { name: 'Sel, poivre',                      qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préchauffer four à 180°C. Mélanger oeufs, fromage blanc, lait et moutarde dans un bol. Fouetter légèrement.",
-        "Ajouter farine et levure tamisées, mélanger sans excès — quelques grumeaux c'est normal, ne pas trop travailler.",
-        "Incorporer jambon, Comté râpé et ciboulette ciselée. Saler modérément (le jambon et le fromage salent).",
-        "Verser dans 6 moules à muffins légèrement huilés (ou caissettes en papier). Remplir aux 3/4. Enfourner 18-20 min — la lame d'un couteau doit sortir sèche.",
-        "Laisser refroidir 5 min avant de démouler. Se conserve 4 jours au frigo, 2 mois au congélateur. Parfait emporté au bureau ou à la salle."
-      ]
-    },
-
-    {
-      id: 'R712',
-      name: 'Soupe Miso Tofu & Champignons Shiitake',
-      category: 'japanese',
-      mealTypes: ['lunch', 'dinner', 'snack'],
-      emoji: '🍲', origin: '🇯🇵',
-      tags: ['low-calorie', 'umami', 'gut-health', 'quick', 'light'],
-      servings: 2, prepTime: 5, cookTime: 10, difficulty: 1,
-      // 44×4 + 54×4 + 20×9 = 176+216+180 = 572 ✓
-      baseNutrition: { calories: 572, proteinGrams: 44, carbsGrams: 54, fatGrams: 20 },
-      ingredients: [
-        { name: 'Tofu ferme',                       qty: 200, unit: 'g', note: 'en petits cubes 1cm' },
-        { name: 'Pâte de miso blanche',             qty: 40,  unit: 'g', note: 'rayons asiatiques' },
-        { name: 'Champignons shiitake séchés',      qty: 15,  unit: 'g', note: 'réhydratés 10 min' },
-        { name: 'Nouilles soba',                    qty: 100, unit: 'g', note: 'sèches' },
-        { name: 'Algues wakamé séchées',            qty: 5,   unit: 'g' },
-        { name: 'Oignon nouveau',                   qty: 30,  unit: 'g' },
-        { name: 'Sauce soja',                       qty: 10,  unit: 'ml' },
-        { name: 'Huile de sésame',                  qty: 10,  unit: 'ml' },
-        { name: 'Gingembre',                        qty: 5,   unit: 'g' },
-        { name: 'Graines de sésame',                qty: 10,  unit: 'g' }
-      ],
-      steps: [
-        "Réhydrater les algues wakamé et les champignons séchés dans de l'eau tiède 10 min. Égoutter, couper les champignons en lamelles.",
-        "Cuire les nouilles soba selon les instructions (4-6 min). Passer sous eau froide pour stopper la cuisson. Réserver.",
-        "Porter 700ml d'eau à frémissement (ne jamais faire bouillir le bouillon miso — ça détruit les ferments). Ajouter gingembre râpé, champignons et sauce soja.",
-        "Diluer la pâte de miso dans une louche de bouillon chaud, reverser dans la casserole. Ajouter le tofu et les algues wakamé. Chauffer 2 min sans bouillir.",
-        "Répartir les soba dans les bols. Verser le bouillon miso dessus. Garnir d'oignons nouveaux, huile de sésame et sésame grillé. Symbole de simplicité et de profondeur."
-      ]
-    },
-
-    {
-      id: 'R713',
-      name: 'Poulet Mariné Yaourt Citron Cumin & Légumes Rôtis',
-      category: 'mediterranean',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍖', origin: '🇹🇷',
-      tags: ['high-protein', 'lean', 'meal-prep', 'tender', 'mediterranean'],
-      servings: 2, prepTime: 10, cookTime: 25, difficulty: 1,
-      // 72×4 + 40×4 + 22×9 = 288+160+198 = 646 ✓
-      baseNutrition: { calories: 646, proteinGrams: 72, carbsGrams: 40, fatGrams: 22 },
-      ingredients: [
-        { name: 'Blanc de poulet',                  qty: 450, unit: 'g', note: 'entier ou en filets' },
-        { name: 'Yaourt grec nature',               qty: 120, unit: 'g' },
-        { name: 'Poivron rouge',                    qty: 150, unit: 'g' },
-        { name: 'Poivron jaune',                    qty: 150, unit: 'g' },
-        { name: 'Courgette',                        qty: 150, unit: 'g' },
-        { name: 'Citron (jus + zeste)',             qty: 1,   unit: 'pce' },
-        { name: 'Cumin moulu',                      qty: 5,   unit: 'g' },
-        { name: 'Paprika doux',                     qty: 5,   unit: 'g' },
-        { name: 'Ail',                              qty: 10,  unit: 'g' },
-        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' },
-        { name: 'Sel, poivre',                      qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Marinade express : mélanger yaourt grec, jus de citron, zeste, ail écrasé, cumin, paprika, sel, poivre. Enduire généreusement les blancs de poulet. Laisser mariner au moins 20 min (ou toute la nuit — meilleur).",
-        "Préchauffer four à 200°C. Couper poivrons et courgette en gros morceaux. Mélanger avec l'huile d'olive, sel, poivre. Étaler sur une plaque.",
-        "Déposer le poulet mariné sur la plaque avec les légumes. Enfourner 22-25 min en retournant le poulet à mi-cuisson.",
-        "Vérifier la cuisson : jus transparent, température interne > 74°C. Passer 3 min sous le gril si besoin pour coloration.",
-        "Servir poulet tranché en biais sur les légumes rôtis. La marinade au yaourt garde le poulet ultra-tendre — le secret du doner kebab."
-      ]
-    },
-
-    {
-      id: 'R714',
-      name: 'Bol Açaï Bowl Protéiné Mangue Coco',
-      category: 'world-food',
-      mealTypes: ['breakfast', 'snack'],
-      emoji: '🫐', origin: '🇧🇷',
-      tags: ['vegan', 'antioxidant', 'instagrammable', 'fresh', 'energizing'],
-      servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
-      // 56×4 + 92×4 + 14×9 = 224+368+126 = 718 ✓
-      baseNutrition: { calories: 718, proteinGrams: 56, carbsGrams: 92, fatGrams: 14 },
-      ingredients: [
-        { name: 'Purée d\'açaï surgelée',           qty: 200, unit: 'g', note: 'sachets Sambazon ou équivalent' },
-        { name: 'Banane',                           qty: 2,   unit: 'pce', note: 'dont 1 congelée pour mixer' },
-        { name: 'Protéine de whey vanille',         qty: 60,  unit: 'g', note: '2 scoops' },
-        { name: 'Lait de coco allégé',              qty: 80,  unit: 'ml' },
-        { name: 'Mangue fraîche',                   qty: 120, unit: 'g', note: 'en dés, pour le topping' },
-        { name: 'Granola nature',                   qty: 60,  unit: 'g' },
-        { name: 'Noix de coco râpée',               qty: 20,  unit: 'g' },
-        { name: 'Graines de chia',                  qty: 10,  unit: 'g' },
-        { name: 'Miel',                             qty: 10,  unit: 'g' }
-      ],
-      steps: [
-        "Sortir les sachets d'açaï du congélateur 2-3 min avant. Briser grossièrement la purée.",
-        "Mixer ensemble : purée d'açaï, banane congelée en morceaux, protéine whey et lait de coco. Mixer à vitesse maximale jusqu'à consistance épaisse et veloutée — plus épais qu'un smoothie.",
-        "La texture doit être semi-solide, quasi comme une glace molle. Si trop liquide : ajouter de la banane congelée.",
-        "Verser dans deux bols larges. Travailler vite — ça fond !",
-        "Dresser les toppings en rangées séparées : mangue en dés, granola, noix de coco, graines de chia, rondelles de banane fraîche. Arroser d'un filet de miel. Photographier avant de manger."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P10 — MAROC & MOYEN-ORIENT PREMIUM  (R715–R719)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R715',
-      name: 'Tajine Poulet Citron Confit Olives Vertes',
-      category: 'maroc-moderne',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🫕', origin: '🇲🇦',
-      tags: ['high-protein', 'moroccan', 'authentic', 'comfort-food', 'aromatic'],
-      servings: 2, prepTime: 10, cookTime: 35, difficulty: 1,
-      // 76×4 + 50×4 + 28×9 = 304+200+252 = 756 ✓
-      baseNutrition: { calories: 756, proteinGrams: 76, carbsGrams: 50, fatGrams: 28 },
-      ingredients: [
-        { name: 'Cuisses de poulet',                qty: 600, unit: 'g', note: 'avec os, skin-on' },
-        { name: 'Citron confit',                    qty: 60,  unit: 'g', note: '1 citron, coupé en quartiers' },
-        { name: 'Olives vertes dénoyautées',        qty: 80,  unit: 'g' },
-        { name: 'Oignon',                           qty: 150, unit: 'g', note: '1,5 oignon émincé' },
-        { name: 'Ail',                              qty: 15,  unit: 'g', note: '3 gousses' },
-        { name: 'Gingembre frais',                  qty: 10,  unit: 'g' },
-        { name: 'Curcuma',                          qty: 5,   unit: 'g' },
-        { name: 'Gingembre moulu',                  qty: 3,   unit: 'g' },
-        { name: 'Coriandre fraîche',                qty: 20,  unit: 'g' },
-        { name: 'Persil',                           qty: 15,  unit: 'g' },
-        { name: 'Huile d\'olive',                   qty: 25,  unit: 'ml' },
-        { name: 'Pain khobz',                       qty: 80,  unit: 'g', note: 'pour accompagner' }
-      ],
-      steps: [
-        "Dans une cocotte ou tajine, chauffer l'huile à feu moyen. Faire dorer les cuisses de poulet 4-5 min par face. Réserver.",
-        "Dans la même cocotte, faire revenir l'oignon émincé 5-6 min. Ajouter ail et gingembre râpés, curcuma, gingembre moulu. Cuire 2 min.",
-        "Remettre le poulet. Ajouter 150ml d'eau, les quartiers de citron confit rincés, et la moitié des herbes. Porter à frémissement, couvrir.",
-        "Mijoter à feu doux 25-30 min jusqu'à poulet très tendre. Ajouter les olives les 5 dernières minutes.",
-        "Parsemer du reste de coriandre et persil frais. Servir dans le tajine avec le pain khobz pour saucer — c'est l'essence même du tajine marocain."
-      ]
-    },
-
-    {
-      id: 'R716',
-      name: 'Harira Traditionnelle Poulet & Vermicelles',
-      category: 'maroc-moderne',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍵', origin: '🇲🇦',
-      tags: ['moroccan', 'comfort-food', 'high-protein', 'aromatic', 'ramadan'],
-      servings: 2, prepTime: 10, cookTime: 30, difficulty: 1,
-      // 60×4 + 96×4 + 18×9 = 240+384+162 = 786 ✓
-      baseNutrition: { calories: 786, proteinGrams: 60, carbsGrams: 96, fatGrams: 18 },
-      ingredients: [
-        { name: 'Blanc de poulet',                  qty: 300, unit: 'g', note: 'en petits dés' },
-        { name: 'Pois chiches boîte',               qty: 200, unit: 'g', note: 'égouttés' },
-        { name: 'Lentilles vertes',                 qty: 80,  unit: 'g', note: 'sèches' },
-        { name: 'Vermicelles de blé',               qty: 60,  unit: 'g' },
-        { name: 'Tomates concassées',               qty: 200, unit: 'g' },
-        { name: 'Concentré de tomate',              qty: 30,  unit: 'g' },
-        { name: 'Céleri',                           qty: 50,  unit: 'g', note: '1 branche' },
-        { name: 'Oignon',                           qty: 80,  unit: 'g' },
-        { name: 'Coriandre fraîche',                qty: 20,  unit: 'g' },
-        { name: 'Persil',                           qty: 15,  unit: 'g' },
-        { name: 'Curcuma',                          qty: 3,   unit: 'g' },
-        { name: 'Gingembre moulu',                  qty: 3,   unit: 'g' },
-        { name: 'Smen ou beurre',                   qty: 15,  unit: 'g' },
-        { name: 'Citron',                           qty: 1,   unit: 'pce', note: 'pour servir' }
-      ],
-      steps: [
-        "Dans une grande casserole, faire revenir l'oignon et le céleri émincés dans le beurre 4-5 min. Ajouter les dés de poulet, curcuma, gingembre. Dorer 3 min.",
-        "Ajouter tomates concassées, concentré de tomate, lentilles, 800ml d'eau. Porter à ébullition. Écumer si nécessaire. Réduire à feu moyen.",
-        "Cuire 20 min à couvert. Les lentilles doivent être fondantes. Ajouter les pois chiches et cuire encore 5 min.",
-        "Ajouter les vermicelles (les casser en petits morceaux si nécessaire). Cuire 4-5 min — les vermicelles épaississent la soupe.",
-        "Ciseler la coriandre et le persil, ajouter en fin de cuisson. Servir avec quartiers de citron. La harira se déguste accompagnée de dattes et de chebakia pendant Ramadan."
-      ]
-    },
-
-    {
-      id: 'R717',
-      name: 'Kebab Maison Dinde Sauce Blanche & Salade',
-      category: 'maroc-moderne',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🌯', origin: '🇹🇷',
-      tags: ['high-protein', 'lean', 'street-food', 'trending', 'quick'],
-      servings: 2, prepTime: 15, cookTime: 15, difficulty: 1,
-      // 84×4 + 32×4 + 20×9 = 336+128+180 = 644 ✓
-      baseNutrition: { calories: 644, proteinGrams: 84, carbsGrams: 32, fatGrams: 20 },
-      ingredients: [
-        { name: 'Dinde en tranches fines',          qty: 500, unit: 'g' },
-        { name: 'Pains pita',                       qty: 80,  unit: 'g', note: '2 pains' },
-        { name: 'Fromage blanc 0%',                 qty: 80,  unit: 'g', note: 'base sauce blanche' },
-        { name: 'Yaourt grec',                      qty: 40,  unit: 'g' },
-        { name: 'Ail',                              qty: 5,   unit: 'g' },
-        { name: 'Aneth séché',                      qty: 3,   unit: 'g' },
-        { name: 'Tomate',                           qty: 100, unit: 'g' },
-        { name: 'Salade',                           qty: 40,  unit: 'g' },
-        { name: 'Oignon rouge',                     qty: 40,  unit: 'g' },
-        { name: 'Paprika',                          qty: 5,   unit: 'g' },
-        { name: 'Cumin',                            qty: 3,   unit: 'g' },
-        { name: 'Huile d\'olive',                   qty: 10,  unit: 'ml' }
-      ],
-      steps: [
-        "Préparer la sauce blanche : mélanger fromage blanc, yaourt grec, ail écrasé, aneth, sel, poivre. Réserver au frais.",
-        "Assaisonner les tranches de dinde avec paprika, cumin, sel et un filet d'huile d'olive.",
-        "Chauffer une grande poêle ou grill à feu vif. Cuire les tranches de dinde 2-3 min par face jusqu'à dorure et léger caramélisé. C'est la coloration qui donne le goût de kebab.",
-        "Émincer finement l'oignon rouge, trancher la tomate, déchirer la salade.",
-        "Faire chauffer les pains pita 1 min dans la même poêle. Étaler la sauce blanche généreusement. Déposer la dinde, puis salade, tomate, oignon. Rouler serré. Servir immédiatement — si tu aimes le shish kebab de ta kebab préférée, voilà la version maison."
-      ]
-    },
-
-    {
-      id: 'R718',
-      name: 'Mansaf Riz Agneau & Sauce Jameed',
-      category: 'maroc-moderne',
-      mealTypes: ['dinner'],
-      emoji: '🍖', origin: '🇯🇴',
-      tags: ['moroccan', 'festive', 'high-protein', 'authentic', 'umami'],
-      servings: 2, prepTime: 15, cookTime: 40, difficulty: 2,
-      // 52×4 + 78×4 + 22×9 = 208+312+198 = 718 ✓
-      baseNutrition: { calories: 718, proteinGrams: 52, carbsGrams: 78, fatGrams: 22 },
-      ingredients: [
-        { name: 'Gigot d\'agneau en morceaux',     qty: 400, unit: 'g', note: 'désossé, cubes 4cm' },
-        { name: 'Riz à grain long',                qty: 160, unit: 'g', note: 'sec' },
-        { name: 'Yaourt entier nature',             qty: 200, unit: 'g', note: 'pour la sauce' },
-        { name: 'Pignons de pin',                  qty: 20,  unit: 'g', note: 'toastés' },
-        { name: 'Oignon',                          qty: 100, unit: 'g' },
-        { name: 'Cardamome moulue',                qty: 3,   unit: 'g' },
-        { name: 'Cannelle',                        qty: 2,   unit: 'g' },
-        { name: 'Curcuma',                         qty: 3,   unit: 'g' },
-        { name: 'Beurre',                          qty: 15,  unit: 'g' },
-        { name: 'Coriandre fraîche',               qty: 15,  unit: 'g' },
-        { name: 'Sel, poivre',                     qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Dans une cocotte, faire dorer les morceaux d'agneau dans le beurre fondu 5-6 min sur toutes les faces. Réserver. Dans la même cocotte, faire revenir l'oignon 4 min.",
-        "Ajouter les épices (cardamome, cannelle, curcuma) et l'agneau. Couvrir de 600ml d'eau. Porter à ébullition, réduire, mijoter 25-30 min à feu doux.",
-        "Pendant ce temps, laver le riz et faire rissoler dans une cuillère de beurre. Ajouter 280ml du bouillon d'agneau, cuire en absorption 15 min.",
-        "Pour la sauce : délayer le yaourt dans 150ml de bouillon d'agneau chaud dans une casserole à feu très doux. Mélanger constamment pour ne pas faire tourner. Chauffer sans bouillir.",
-        "Dresser : riz sur plateau, morceaux d'agneau dessus, napper de sauce yaourt. Garnir de pignons toastés et coriandre fraîche. Plat festif jourdanien au coeur authentique."
-      ]
-    },
-
-    {
-      id: 'R719',
-      name: 'Couscous Royal Légumes & Merguez Maison',
-      category: 'maroc-moderne',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🫙', origin: '🇲🇦',
-      tags: ['moroccan', 'high-protein', 'festive', 'authentic', 'balanced'],
-      servings: 2, prepTime: 15, cookTime: 35, difficulty: 2,
-      // 68×4 + 58×4 + 26×9 = 272+232+234 = 738 ✓
-      baseNutrition: { calories: 738, proteinGrams: 68, carbsGrams: 58, fatGrams: 26 },
-      ingredients: [
-        { name: 'Merguez',                          qty: 250, unit: 'g', note: '4-5 merguez' },
-        { name: 'Blanc de poulet',                  qty: 200, unit: 'g', note: 'en morceaux' },
-        { name: 'Semoule de couscous fine',         qty: 120, unit: 'g' },
-        { name: 'Courgette',                        qty: 150, unit: 'g' },
-        { name: 'Carotte',                          qty: 100, unit: 'g' },
-        { name: 'Navet',                            qty: 80,  unit: 'g' },
-        { name: 'Pois chiches boîte',               qty: 100, unit: 'g' },
-        { name: 'Concentré de tomate',              qty: 30,  unit: 'g' },
-        { name: 'Ras el hanout',                    qty: 8,   unit: 'g' },
-        { name: 'Curcuma',                          qty: 3,   unit: 'g' },
-        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' },
-        { name: 'Beurre',                           qty: 10,  unit: 'g', note: 'pour la semoule' }
-      ],
-      steps: [
-        "Dorer le poulet dans l'huile chaude 4 min. Ajouter concentré de tomate, ras el hanout, curcuma, sel. Mélanger 1 min. Couvrir de 600ml d'eau, porter à ébullition.",
-        "Ajouter carottes et navets taillés en gros tronçons. Mijoter 15 min à couvert.",
-        "Ajouter courgettes et pois chiches. Cuire encore 10-12 min. Le bouillon doit être parfumé et légèrement épaissi.",
-        "Griller les merguez dans une poêle sèche à feu vif 3-4 min en les retournant — peau légèrement craquante.",
-        "Préparer la semoule : verser dans un bol, couvrir du même volume d'eau bouillante salée. Couvrir 5 min. Égrener avec une fourchette et le beurre. Dresser la semoule en dôme, les légumes et la viande dessus, arroser de bouillon. Régal familial."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P11 — PÂTES & RISOTTOS FITNESS  (R720–R724)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R720',
-      name: 'Pasta Carbonara Allégée Poulet Fumé',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍝', origin: '🇮🇹',
-      tags: ['high-protein', 'comfort-food', 'italian', 'creamy', 'quick'],
-      servings: 2, prepTime: 5, cookTime: 15, difficulty: 2,
-      // 60×4 + 110×4 + 18×9 = 240+440+162 = 842 ✓
-      baseNutrition: { calories: 842, proteinGrams: 60, carbsGrams: 110, fatGrams: 18 },
-      ingredients: [
-        { name: 'Spaghetti',                        qty: 200, unit: 'g' },
-        { name: 'Blanc de poulet fumé',             qty: 150, unit: 'g', note: 'en lanières fines' },
-        { name: 'Oeuf entier',                      qty: 2,   unit: 'pce' },
-        { name: 'Jaune d\'oeuf',                    qty: 2,   unit: 'pce' },
-        { name: 'Parmesan râpé',                    qty: 40,  unit: 'g' },
-        { name: 'Fromage blanc 0%',                 qty: 60,  unit: 'g', note: 'remplace la crème traditionnelle' },
-        { name: 'Ail',                              qty: 8,   unit: 'g' },
-        { name: 'Poivre noir fraîchement moulu',    qty: 3,   unit: 'g', note: 'généreux — c\'est la signature' }
-      ],
-      steps: [
-        "Cuire les spaghetti al dente dans eau bouillante très salée. Garder 150ml d'eau de cuisson.",
-        "Pendant la cuisson : fouetter oeufs, jaunes, parmesan et fromage blanc dans un bol. Assaisonner généreusement de poivre noir — c'est l'âme de la carbonara.",
-        "Dans une grande poêle, faire revenir le poulet fumé avec l'ail 2-3 min. Retirer du feu.",
-        "Égoutter les pâtes, les ajouter dans la poêle hors du feu avec le poulet. Verser le mélange oeuf-parmesan immédiatement en mélangeant vivement — la chaleur résiudelle cuit les oeufs sans les brouiller. Ajouter l'eau de cuisson cuillère par cuillère pour obtenir une sauce crémeuse et soyeuse.",
-        "Servir immédiatement avec parmesan supplémentaire et beaucoup de poivre. Règle d'or : on ne met JAMAIS de crème dans une carbonara."
-      ]
-    },
-
-    {
-      id: 'R721',
-      name: 'Penne all\'Amatriciana Bœuf Haché Tomate',
-      category: 'italian',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍝', origin: '🇮🇹',
-      tags: ['italian', 'comfort-food', 'umami', 'authentic', 'classic'],
-      servings: 2, prepTime: 5, cookTime: 20, difficulty: 1,
-      // 56×4 + 108×4 + 22×9 = 224+432+198 = 854 ✓
-      baseNutrition: { calories: 854, proteinGrams: 56, carbsGrams: 108, fatGrams: 22 },
-      ingredients: [
-        { name: 'Penne rigate',                     qty: 200, unit: 'g' },
-        { name: 'Bœuf haché 5%',                   qty: 150, unit: 'g' },
-        { name: 'Tomates pelées entières',          qty: 400, unit: 'g', note: '1 boîte San Marzano si possible' },
-        { name: 'Boeuf haché 5% MG',               qty: 100, unit: 'g', note: 'optionnel pour protéines' },
-        { name: 'Pecorino romano râpé',             qty: 40,  unit: 'g', note: 'ou Parmesan' },
-        { name: 'Piment de Cayenne',                qty: 3,   unit: 'g' },
-        { name: 'Vin blanc sec',                    qty: 50,  unit: 'ml' },
-        { name: 'Ail',                              qty: 8,   unit: 'g' }
-      ],
-      steps: [
-        "Cuire les penne très al dente (2 min de moins que l'indication). Garder 200ml d'eau de cuisson.",
-        "Dans une grande poêle froide, déposer la pancetta. Chauffer à feu moyen — la graisse fond et la pancetta devient croustillante. Ajouter le boeuf haché si utilisé, dorer 3 min.",
-        "Déglacer au vin blanc, laisser évaporer 1 min. Ajouter l'ail et le piment. Écraser les tomates à la main directement dans la poêle.",
-        "Laisser réduire 12-15 min à feu moyen jusqu'à sauce épaisse et intense. Rectifier sel et piment.",
-        "Ajouter les pâtes et l'eau de cuisson, mélanger 2 min à feu vif pour que les pâtes finissent de cuire dans la sauce. Servir avec pecorino râpé."
-      ]
-    },
-
-    {
-      id: 'R722',
-      name: 'Risotto Poulet Champignons Parmesan',
-      category: 'italian',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍚', origin: '🇮🇹',
-      tags: ['italian', 'comfort-food', 'creamy', 'elegant', 'umami'],
-      servings: 2, prepTime: 10, cookTime: 30, difficulty: 2,
-      // 72×4 + 80×4 + 24×9 = 288+320+216 = 824 ✓
-      baseNutrition: { calories: 824, proteinGrams: 72, carbsGrams: 80, fatGrams: 24 },
-      ingredients: [
-        { name: 'Riz arborio',                      qty: 160, unit: 'g' },
-        { name: 'Blanc de poulet',                  qty: 300, unit: 'g', note: 'en dés 2cm' },
-        { name: 'Champignons de Paris',             qty: 200, unit: 'g', note: 'émincés' },
-        { name: 'Bouillon de poule chaud',          qty: 700, unit: 'ml' },
-        { name: 'Parmesan râpé',                    qty: 50,  unit: 'g' },
-        { name: 'Vin blanc sec',                    qty: 80,  unit: 'ml' },
-        { name: 'Oignon',                           qty: 80,  unit: 'g' },
-        { name: 'Ail',                              qty: 8,   unit: 'g' },
-        { name: 'Beurre',                           qty: 15,  unit: 'g' },
-        { name: 'Huile d\'olive',                   qty: 10,  unit: 'ml' },
-        { name: 'Persil frais',                     qty: 15,  unit: 'g' }
-      ],
-      steps: [
-        "Chauffer le bouillon séparément — il doit rester chaud tout le temps de la cuisson du risotto.",
-        "Dans une grande sauteuse, chauffer huile + 8g beurre. Faire dorer les dés de poulet 4-5 min. Réserver. Dans la même poêle, faire revenir l'oignon et l'ail 3 min. Ajouter les champignons, cuire 4-5 min jusqu'à évaporation.",
-        "Ajouter le riz arborio, nacrer 2 min en mélangeant — chaque grain doit devenir translucide en périphérie. Déglacer avec le vin blanc, remuer jusqu'à absorption.",
-        "Ajouter le bouillon chaud louche par louche, en mélangeant constamment et en attendant que chaque louche soit absorbée. Processus : 16-18 min. Le riz doit être al dente.",
-        "Retirer du feu. Incorporer le beurre restant et le parmesan (mantecatura) vivement — c'est ce qui donne la texture crémeuse et liée. Ajouter le poulet, mélanger. Parsemer de persil."
-      ]
-    },
-
-    {
-      id: 'R723',
-      name: 'Lasagnes Bolognaise Légères Béchamel Allégée',
-      category: 'italian',
-      mealTypes: ['dinner'],
-      emoji: '🫕', origin: '🇮🇹',
-      tags: ['italian', 'high-protein', 'meal-prep', 'comfort-food', 'classic'],
-      servings: 2, prepTime: 15, cookTime: 40, difficulty: 2,
-      // 64×4 + 92×4 + 18×9 = 256+368+162 = 786 ✓
-      baseNutrition: { calories: 786, proteinGrams: 64, carbsGrams: 92, fatGrams: 18 },
-      ingredients: [
-        { name: 'Feuilles de lasagnes sèches',      qty: 120, unit: 'g' },
-        { name: 'Boeuf haché 5% MG',               qty: 300, unit: 'g' },
-        { name: 'Tomates pelées',                  qty: 400, unit: 'g' },
-        { name: 'Lait demi-écrémé',               qty: 300, unit: 'ml', note: 'pour béchamel' },
-        { name: 'Farine T65',                      qty: 25,  unit: 'g', note: 'pour béchamel' },
-        { name: 'Fromage blanc 0%',                qty: 100, unit: 'g', note: 'allège la béchamel' },
-        { name: 'Mozzarella légère',               qty: 60,  unit: 'g' },
-        { name: 'Oignon',                          qty: 80,  unit: 'g' },
-        { name: 'Ail',                             qty: 8,   unit: 'g' },
-        { name: 'Origan, basilic',                 qty: 5,   unit: 'g' },
-        { name: 'Huile d\'olive',                  qty: 10,  unit: 'ml' }
-      ],
-      steps: [
-        "Bolognaise : faire revenir oignon et ail 4 min dans l'huile. Ajouter le boeuf, émietter et dorer 5 min. Ajouter tomates, herbes, sel. Mijoter 15 min.",
-        "Béchamel allégée : faire fondre 5g de beurre ou huile dans casserole. Ajouter la farine, cuire 1 min. Incorporer le lait chaud progressivement en fouettant. Épaissir 5 min. Hors feu, ajouter fromage blanc.",
-        "Préchauffer four 180°C. Alterner couches : bolognaise, feuilles de lasagnes (pas besoin de précuire si qualité), béchamel. Répéter. Terminer par béchamel et mozzarella.",
-        "Cuire 30-35 min jusqu'à surface dorée et pâtes fondantes (tester avec la pointe d'un couteau).",
-        "Laisser reposer 5 min avant de couper — ça tient mieux. Se congèle parfaitement en portions individuelles."
-      ]
-    },
-
-    {
-      id: 'R724',
-      name: 'Pasta e Fagioli Dinde Fumée',
-      category: 'italian',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍲', origin: '🇮🇹',
-      tags: ['italian', 'comfort-food', 'plant-protein', 'umami', 'rustic'],
-      servings: 2, prepTime: 10, cookTime: 25, difficulty: 1,
-      // 58×4 + 86×4 + 26×9 = 232+344+234 = 810 ✓
-      baseNutrition: { calories: 810, proteinGrams: 58, carbsGrams: 86, fatGrams: 26 },
-      ingredients: [
-        { name: 'Haricots borlotti en boîte',       qty: 300, unit: 'g', note: 'égouttés' },
-        { name: 'Ditalini ou tubetti',              qty: 120, unit: 'g', note: 'petites pâtes courtes' },
-        { name: 'Dinde fumée en dés',              qty: 100, unit: 'g' },
-        { name: 'Tomates cerises',                  qty: 150, unit: 'g', note: 'coupées en deux' },
-        { name: 'Bouillon de légumes',              qty: 600, unit: 'ml' },
-        { name: 'Parmesan (croûte)',               qty: 30,  unit: 'g', note: 'la croûte donne le goût umami' },
-        { name: 'Romarin frais',                   qty: 5,   unit: 'g', note: '1 branche' },
-        { name: 'Ail',                             qty: 10,  unit: 'g', note: '2 gousses' },
-        { name: 'Huile d\'olive',                  qty: 20,  unit: 'ml' },
-        { name: 'Piment',                          qty: 2,   unit: 'g', note: 'optionnel' }
-      ],
-      steps: [
-        "Dans une cocotte, faire revenir la pancetta à feu moyen jusqu'à légèrement dorée. Ajouter ail émincé, romarin et piment. Cuire 1 min.",
-        "Écraser 1/3 des haricots à la fourchette — c'est ce qui épaissit le plat naturellement. Ajouter tous les haricots dans la cocotte.",
-        "Verser le bouillon chaud, ajouter la croûte de parmesan et les tomates cerises. Porter à frémissement, cuire 10 min.",
-        "Ajouter les ditalini directement dans la soupe. Cuire selon les indications moins 2 min — les pâtes continuent de gonfler dans la soupe.",
-        "Retirer la croûte de parmesan et le romarin. Arroser d'un généreux filet d'huile d'olive. Servir chaud avec parmesan râpé sur le dessus. Plat paysan toscan qui réchauffe l'âme."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P12 — DESSERTS FITNESS GOURMANDS  (R725–R729)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R725',
-      name: 'Crêpes Protéinées Nutella Maison Noisettes',
-      category: 'french',
-      mealTypes: ['breakfast', 'snack', 'dessert'],
-      emoji: '🥞', origin: '🇫🇷',
-      tags: ['high-protein', 'indulgent', 'instagrammable', 'brunch', 'dessert'],
-      servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
-      // 30×4 + 80×4 + 20×9 = 120+320+180 = 620 ✓
-      baseNutrition: { calories: 620, proteinGrams: 30, carbsGrams: 80, fatGrams: 20 },
-      ingredients: [
-        { name: 'Farine T65',                       qty: 80,  unit: 'g' },
-        { name: 'Protéine whey chocolat',           qty: 40,  unit: 'g', note: '1,5 scoop' },
-        { name: 'Oeuf',                             qty: 2,   unit: 'pce' },
-        { name: 'Lait demi-écrémé',                qty: 200, unit: 'ml' },
-        { name: 'Beurre',                           qty: 10,  unit: 'g', note: 'pour la pâte' },
-        { name: 'Pâte de noisette pure',            qty: 30,  unit: 'g', note: 'ou Nutella 1 c.s.' },
-        { name: 'Cacao en poudre non sucré',        qty: 10,  unit: 'g' },
-        { name: 'Noisettes concassées',             qty: 20,  unit: 'g', note: 'toastées' },
-        { name: 'Banane',                           qty: 1,   unit: 'pce', note: 'en rondelles' }
-      ],
-      steps: [
-        "Mixer farine, protéine, cacao, oeufs, lait et beurre fondu jusqu'à pâte lisse. Laisser reposer 10 min.",
-        "Chauffer une poêle antiadhésive à feu moyen. Cuire les crêpes fines (2 min par face). Empiler sous un torchon pour qu'elles restent souples — donne environ 6-8 crêpes.",
-        "Napper chaque crêpe d'une fine couche de pâte de noisette.",
-        "Ajouter des rondelles de banane. Plier en quatre ou rouler. Déposer dans une assiette.",
-        "Parsemer de noisettes concassées toastées. Saupoudrer d'un peu de cacao. Servir chaud — l'association crêpe-noisette-banane ne trompe jamais."
-      ]
-    },
-
-    {
-      id: 'R726',
-      name: 'Pots de Crème Chocolat Noir 70% Protéiné',
-      category: 'french',
-      mealTypes: ['dessert', 'snack'],
-      emoji: '🍫', origin: '🇫🇷',
-      tags: ['high-protein', 'low-carb', 'chocolate', 'elegant', 'dessert'],
-      servings: 2, prepTime: 10, cookTime: 5, difficulty: 1,
-      // 22×4 + 56×4 + 16×9 = 88+224+144 = 456 ✓
-      baseNutrition: { calories: 456, proteinGrams: 22, carbsGrams: 56, fatGrams: 16 },
-      ingredients: [
-        { name: 'Chocolat noir 70%',                qty: 80,  unit: 'g' },
-        { name: 'Lait demi-écrémé',                qty: 150, unit: 'ml' },
-        { name: 'Fromage blanc 0%',                qty: 150, unit: 'g' },
-        { name: 'Protéine whey vanille',           qty: 30,  unit: 'g', note: '1 scoop' },
-        { name: 'Miel',                            qty: 20,  unit: 'g' },
-        { name: 'Extrait de vanille',              qty: 3,   unit: 'ml' },
-        { name: 'Sel de Guérande',                qty: 1,   unit: 'pincée', note: 'sur le dessus' }
-      ],
-      steps: [
-        "Casser le chocolat noir en morceaux. Chauffer le lait jusqu'à frémissement. Verser sur le chocolat, laisser fondre 2 min puis mélanger jusqu'à ganache lisse.",
-        "Laisser refroidir 5-10 min à température ambiante — le chocolat ne doit plus être bouillant.",
-        "Incorporer le fromage blanc, la protéine whey, le miel et la vanille. Fouetter vigoureusement jusqu'à mélange homogène.",
-        "Verser dans 2 petits ramequins ou verres. Réfrigérer au moins 2 heures (idéalement toute la nuit).",
-        "Au moment de servir, saupoudrer d'une pincée de sel de Guérande. Ce contraste sucré-salé amplifie le chocolat × 10. Un dessert à 230 kcal/portion qui n'en a pas l'air."
-      ]
-    },
-
-    {
-      id: 'R727',
-      name: 'Mug Cake Protéiné Chocolat 90 Secondes',
-      category: 'world-food',
-      mealTypes: ['dessert', 'snack', 'breakfast'],
-      emoji: '☕', origin: '🇺🇸',
-      tags: ['high-protein', 'quick', 'chocolate', 'dessert', 'single-serve'],
-      servings: 2, prepTime: 3, cookTime: 2, difficulty: 1,
-      // 40×4 + 64×4 + 18×9 = 160+256+162 = 578 ✓
-      baseNutrition: { calories: 578, proteinGrams: 40, carbsGrams: 64, fatGrams: 18 },
-      ingredients: [
-        { name: 'Protéine whey chocolat',           qty: 60,  unit: 'g', note: '2 scoops' },
-        { name: 'Farine d\'avoine',                qty: 40,  unit: 'g' },
-        { name: 'Cacao non sucré',                 qty: 15,  unit: 'g' },
-        { name: 'Oeuf',                            qty: 2,   unit: 'pce' },
-        { name: 'Fromage blanc 0%',               qty: 60,  unit: 'g' },
-        { name: 'Lait',                            qty: 40,  unit: 'ml' },
-        { name: 'Levure chimique',                qty: 4,   unit: 'g' },
-        { name: 'Carrés de chocolat noir',        qty: 20,  unit: 'g', note: 'pour le coeur fondant' },
-        { name: 'Édulcorant ou sucre de coco',    qty: 10,  unit: 'g' }
-      ],
-      steps: [
-        "Dans un grand mug (≥400ml), mélanger les ingrédients secs : whey, farine d'avoine, cacao, levure, édulcorant.",
-        "Ajouter les ingrédients humides : oeufs, fromage blanc, lait. Mélanger vigoureusement à la fourchette jusqu'à pâte homogène sans grumeaux.",
-        "Enfoncer les carrés de chocolat noir au centre — ils vont fondre pour un coeur coulant.",
-        "Micro-ondes à 800W pendant 70-90 secondes. Vérifier : le gâteau doit être pris sur les bords mais encore légèrement humide au centre.",
-        "Attendre 1 min avant de déguster directement dans le mug. Optionnel : une cuillère de fromage blanc ou quelques framboises dessus. 5 min du début à la fin."
-      ]
-    },
-
-    {
-      id: 'R728',
-      name: 'Tiramisu Protéiné Sans Mascarpone',
-      category: 'italian',
-      mealTypes: ['dessert'],
-      emoji: '🍰', origin: '🇮🇹',
-      tags: ['high-protein', 'dessert', 'italian', 'indulgent', 'no-bake'],
-      servings: 2, prepTime: 20, cookTime: 0, difficulty: 1,
-      // 36×4 + 72×4 + 22×9 = 144+288+198 = 630 ✓
-      baseNutrition: { calories: 630, proteinGrams: 36, carbsGrams: 72, fatGrams: 22 },
-      ingredients: [
-        { name: 'Fromage frais type Saint-Morêt',   qty: 100, unit: 'g' },
-        { name: 'Fromage blanc 0%',                qty: 150, unit: 'g' },
-        { name: 'Protéine whey vanille',           qty: 40,  unit: 'g', note: '1,5 scoop' },
-        { name: 'Boudoirs ou biscuits à la cuillère', qty: 80,  unit: 'g', note: '8 biscuits' },
-        { name: 'Café expresso fort',              qty: 120, unit: 'ml', note: 'refroidi' },
-        { name: 'Cacao en poudre non sucré',       qty: 10,  unit: 'g', note: 'pour saupoudrer' },
-        { name: 'Édulcorant ou sucre',             qty: 15,  unit: 'g' },
-        { name: 'Amaretto (optionnel)',            qty: 10,  unit: 'ml', note: 'pour parfumer le café' }
-      ],
-      steps: [
-        "Préparer le café fort, laisser refroidir. Ajouter l'amaretto si utilisé.",
-        "Fouetter fromage frais, fromage blanc, protéine whey et édulcorant jusqu'à crème lisse et aérienne. Goûter — ça doit être léger, sucré juste.",
-        "Tremper rapidement les boudoirs dans le café froid (1-2 secondes de chaque côté, ne pas laisser tremper).",
-        "Dans 2 verrines ou un plat, alterner : couche de biscuits imbibés, couche de crème. Répéter.",
-        "Réfrigérer au minimum 2h (meilleur le lendemain). Saupoudrer généreusement de cacao juste avant de servir. 315 kcal/portion pour un tiramisu : victoire."
-      ]
-    },
-
-    {
-      id: 'R729',
-      name: 'Cookie Géant Protéiné Pépites Chocolat (x8)',
-      category: 'world-food',
-      mealTypes: ['snack', 'dessert', 'breakfast'],
-      emoji: '🍪', origin: '🇺🇸',
-      tags: ['high-protein', 'batch-cooking', 'snack', 'chocolate', 'indulgent'],
-      servings: 2, prepTime: 10, cookTime: 12, difficulty: 1,
-      // 48×4 + 60×4 + 30×9 = 192+240+270 = 702 ✓
-      baseNutrition: { calories: 702, proteinGrams: 48, carbsGrams: 60, fatGrams: 30 },
-      ingredients: [
-        { name: 'Beurre de cacahuète',              qty: 80,  unit: 'g', note: 'naturel, sans huile ajoutée' },
-        { name: 'Protéine whey vanille',           qty: 60,  unit: 'g', note: '2 scoops' },
-        { name: 'Farine d\'avoine',               qty: 60,  unit: 'g' },
-        { name: 'Oeuf',                           qty: 2,   unit: 'pce' },
-        { name: 'Miel ou sirop d\'agave',         qty: 30,  unit: 'g' },
-        { name: 'Pépites de chocolat noir',       qty: 40,  unit: 'g' },
-        { name: 'Levure chimique',                qty: 3,   unit: 'g' },
-        { name: 'Extrait de vanille',             qty: 3,   unit: 'ml' },
-        { name: 'Sel',                            qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préchauffer four à 175°C. Mélanger beurre de cacahuète, miel, oeufs et vanille jusqu'à homogène.",
-        "Incorporer farine d'avoine, protéine whey, levure et sel. Mélanger à la cuillère. La pâte est épaisse — c'est normal. Incorporer les pépites de chocolat.",
-        "Former 8 boules égales sur une plaque recouverte de papier cuisson. Aplatir légèrement avec la paume.",
-        "Cuire 10-12 min — les cookies semblent pas cuits quand on sort du four, c'est voulu : ils durcissent en refroidissant.",
-        "Laisser refroidir 10 min sur la plaque SANS TOUCHER. Se conserve 5 jours dans une boîte hermétique, 3 mois au congélateur. 87 kcal / 6g protéines par cookie."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P13 — SALADES REPAS & BOWLS FROIDS  (R730–R734)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R730',
-      name: 'Salade Niçoise Thon Frais Oeufs Durs',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥗', origin: '🇫🇷',
-      tags: ['high-protein', 'mediterranean', 'fresh', 'classic', 'no-cook'],
-      servings: 2, prepTime: 15, cookTime: 10, difficulty: 1,
-      // 54×4 + 40×4 + 28×9 = 216+160+252 = 628 ✓
-      baseNutrition: { calories: 628, proteinGrams: 54, carbsGrams: 40, fatGrams: 28 },
-      ingredients: [
-        { name: 'Thon frais ou en boîte au naturel', qty: 250, unit: 'g' },
-        { name: 'Oeuf dur',                         qty: 4,   unit: 'pce' },
-        { name: 'Haricots verts',                   qty: 150, unit: 'g', note: 'blanchis al dente' },
-        { name: 'Tomates',                          qty: 200, unit: 'g', note: '2 tomates, en quartiers' },
-        { name: 'Poivron rouge',                    qty: 100, unit: 'g', note: 'émincé' },
-        { name: 'Olives noires dénoyautées',        qty: 40,  unit: 'g' },
-        { name: 'Anchois à l\'huile',               qty: 20,  unit: 'g', note: '4 filets, optionnel' },
-        { name: 'Huile d\'olive',                   qty: 20,  unit: 'ml' },
-        { name: 'Vinaigre de vin rouge',            qty: 10,  unit: 'ml' },
-        { name: 'Moutarde de Dijon',               qty: 5,   unit: 'g' },
-        { name: 'Basilic frais',                   qty: 15,  unit: 'g' }
-      ],
-      steps: [
-        "Cuire les haricots verts à l'eau bouillante salée 5 min, puis plonger immédiatement dans l'eau glacée pour arrêter la cuisson et garder la couleur verte.",
-        "Cuire les oeufs durs 9 min dans l'eau bouillante. Refroidir sous l'eau froide. Éplucher et couper en quartiers.",
-        "Préparer la vinaigrette : fouetter moutarde, vinaigre de vin rouge et huile d'olive. Saler, poivrer.",
-        "Si thon frais : saisir les pavés 2 min par face dans une poêle très chaude avec sel et poivre. Laisser reposer, effeuiller.",
-        "Dresser : disposer tous les éléments séparément dans les assiettes ou un grand plat (présentation traditionnelle niçoise — on ne mélange pas). Arroser de vinaigrette. Ajouter basilic et anchois."
-      ]
-    },
-
-    {
-      id: 'R731',
-      name: 'Salade César Poulet Grillé Parmesan',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥗', origin: '🇺🇸',
-      tags: ['high-protein', 'classic', 'instagrammable', 'fresh', 'creamy'],
-      servings: 2, prepTime: 15, cookTime: 10, difficulty: 1,
-      // 60×4 + 52×4 + 24×9 = 240+208+216 = 664 ✓
-      baseNutrition: { calories: 664, proteinGrams: 60, carbsGrams: 52, fatGrams: 24 },
-      ingredients: [
-        { name: 'Blanc de poulet',                  qty: 360, unit: 'g' },
-        { name: 'Laitue romaine',                  qty: 200, unit: 'g', note: '1 coeur' },
-        { name: 'Parmesan en copeaux',             qty: 40,  unit: 'g' },
-        { name: 'Pain de mie complet',             qty: 80,  unit: 'g', note: 'en cubes pour croûtons' },
-        { name: 'Fromage blanc 0%',               qty: 80,  unit: 'g', note: 'base de la sauce allégée' },
-        { name: 'Anchois à l\'huile',              qty: 15,  unit: 'g', note: '3 filets' },
-        { name: 'Ail',                             qty: 5,   unit: 'g' },
-        { name: 'Citron (jus)',                    qty: 1,   unit: 'pce' },
-        { name: 'Moutarde',                        qty: 5,   unit: 'g' },
-        { name: 'Sauce Worcestershire',            qty: 5,   unit: 'ml' },
-        { name: 'Huile d\'olive',                  qty: 10,  unit: 'ml' }
-      ],
-      steps: [
-        "Croûtons : couper le pain en cubes, mélanger avec huile d'olive et sel. Passer au four 180°C 10 min jusqu'à dorés.",
-        "Sauce César allégée : mixer anchois, fromage blanc, ail, jus de citron, moutarde, Worcestershire. Goûter — ça doit être umami et légèrement salé.",
-        "Assaisonner les blancs de poulet avec sel, poivre, une pointe de paprika. Cuire à la poêle ou grill 4-5 min par face. Laisser reposer 5 min, couper en tranches.",
-        "Déchirer la romaine en grands morceaux. Mélanger avec la sauce — juste enrober, ne pas noyer.",
-        "Dresser : romaine en base, poulet tranché dessus, croûtons, copeaux de parmesan. Un filet de sauce extra sur le poulet. La vraie salade César maison."
-      ]
-    },
-
-    {
-      id: 'R732',
-      name: 'Salade Mexicaine Haricots Noirs Avocat Maïs',
-      category: 'mexican',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🌮', origin: '🇲🇽',
-      tags: ['vegan', 'plant-based', 'fresh', 'colorful', 'quick'],
-      servings: 2, prepTime: 15, cookTime: 5, difficulty: 1,
-      // 48×4 + 58×4 + 20×9 = 192+232+180 = 604 ✓
-      baseNutrition: { calories: 604, proteinGrams: 48, carbsGrams: 58, fatGrams: 20 },
-      ingredients: [
-        { name: 'Haricots noirs boîte',             qty: 300, unit: 'g', note: 'égouttés, rincés' },
-        { name: 'Maïs boîte',                       qty: 150, unit: 'g', note: 'égoutté' },
-        { name: 'Avocat',                           qty: 120, unit: 'g', note: '1 petit' },
-        { name: 'Poivron rouge',                    qty: 100, unit: 'g' },
-        { name: 'Tomate',                           qty: 150, unit: 'g' },
-        { name: 'Oignon rouge',                     qty: 60,  unit: 'g' },
-        { name: 'Coriandre fraîche',                qty: 20,  unit: 'g' },
-        { name: 'Jalapeño',                         qty: 15,  unit: 'g', note: '1 petit, épépiné' },
-        { name: 'Citron vert (jus)',                qty: 2,   unit: 'pce' },
-        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' },
-        { name: 'Cumin moulu',                      qty: 3,   unit: 'g' },
-        { name: 'Nachos ou tortilla chips',         qty: 30,  unit: 'g', note: 'pour le croustillant' }
-      ],
-      steps: [
-        "Passer les haricots noirs et le maïs égouttés à la poêle chaude avec le cumin 2-3 min pour légère caramélisation. Refroidir.",
-        "Couper en petits dés : tomate, poivron, oignon rouge, jalapeño (enlever les graines pour adoucir).",
-        "Préparer la vinaigrette : jus de 2 citrons verts + huile d'olive + sel + poivre.",
-        "Mélanger haricots, maïs, légumes et vinaigrette. Ciseler la coriandre, ajouter.",
-        "Dresser dans les bols. Ajouter l'avocat tranché sur le dessus juste avant de servir. Parsemer de chips de tortilla pour le croustillant. Acidité-fraîcheur-piment : combo gagnant."
-      ]
-    },
-
-    {
-      id: 'R733',
-      name: 'Bowl Protéiné Quinoa Saumon Avocat Grenade',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥗', origin: '🇺🇸',
-      tags: ['high-protein', 'omega-3', 'instagrammable', 'colorful', 'superfood'],
-      servings: 2, prepTime: 15, cookTime: 15, difficulty: 1,
-      // 66×4 + 44×4 + 22×9 = 264+176+198 = 638 ✓
-      baseNutrition: { calories: 638, proteinGrams: 66, carbsGrams: 44, fatGrams: 22 },
-      ingredients: [
-        { name: 'Saumon frais',                     qty: 360, unit: 'g', note: '2 pavés' },
-        { name: 'Quinoa',                           qty: 100, unit: 'g', note: 'sec' },
-        { name: 'Avocat',                           qty: 80,  unit: 'g', note: '½ avocat' },
-        { name: 'Grenade (grains)',                qty: 60,  unit: 'g', note: 'ou cranberries fraîches' },
-        { name: 'Concombre',                       qty: 80,  unit: 'g' },
-        { name: 'Épinards baby',                   qty: 60,  unit: 'g' },
-        { name: 'Sauce tahini',                    qty: 30,  unit: 'g' },
-        { name: 'Citron (jus)',                    qty: 1,   unit: 'pce' },
-        { name: 'Huile d\'olive',                  qty: 10,  unit: 'ml' },
-        { name: 'Za\'atar',                        qty: 5,   unit: 'g', note: 'épice moyen-orientale' },
-        { name: 'Graines de citrouille',           qty: 15,  unit: 'g' }
-      ],
-      steps: [
-        "Cuire le quinoa en absorption (200ml eau, 15 min). Laisser refroidir légèrement.",
-        "Assaisonner le saumon avec za'atar, sel, poivre, huile d'olive. Cuire à la poêle 3-4 min par face pour saumon rosé au centre.",
-        "Préparer la sauce tahini : diluer avec jus de citron et un peu d'eau pour sauce coulante.",
-        "Dresser : quinoa en base, épinards, concombre en demi-lunes, avocat en éventail, grains de grenade.",
-        "Déposer le saumon au centre. Arroser de sauce tahini, parsemer de graines de citrouille. Le contraste grenade-saumon-tahini : un bowl qui impressionne visuellement et nutritionnellement."
-      ]
-    },
-
-    {
-      id: 'R734',
-      name: 'Wrap Veggie Hummus Crudités Feta',
-      category: 'mediterranean',
-      mealTypes: ['lunch', 'snack'],
-      emoji: '🌯', origin: '🇬🇷',
-      tags: ['vegetarian', 'quick', 'portable', 'fresh', 'lunch-box'],
-      servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
-      // 56×4 + 70×4 + 18×9 = 224+280+162 = 666 ✓
-      baseNutrition: { calories: 666, proteinGrams: 56, carbsGrams: 70, fatGrams: 18 },
-      ingredients: [
-        { name: 'Tortillas de blé',                 qty: 160, unit: 'g', note: '4 grandes tortillas' },
-        { name: 'Houmous',                          qty: 100, unit: 'g' },
-        { name: 'Feta',                             qty: 80,  unit: 'g' },
-        { name: 'Blanc de poulet rôti',            qty: 200, unit: 'g', note: 'en restes ou achat' },
-        { name: 'Poivron rouge grillé',            qty: 100, unit: 'g', note: 'en bocal ou frais grillé' },
-        { name: 'Concombre',                       qty: 80,  unit: 'g' },
-        { name: 'Épinards baby',                   qty: 50,  unit: 'g' },
-        { name: 'Tomates séchées à l\'huile',      qty: 30,  unit: 'g' },
-        { name: 'Citron (jus)',                    qty: 1,   unit: 'pce' },
-        { name: 'Za\'atar ou herbes méditerranéennes', qty: 3, unit: 'g' }
-      ],
-      steps: [
-        "Passer les tortillas 30 secondes au micro-ondes pour les assouplir.",
-        "Étaler 25g de houmous sur chaque tortilla. Bien répartir jusqu'aux bords.",
-        "Déposer les épinards, quelques tranches de concombre, les poivrons grillés et les tomates séchées.",
-        "Ajouter le poulet rôti en lanières et émietter la feta. Arroser d'un filet de citron et saupoudrer de za'atar.",
-        "Rouler serré en repliant les bords. Couper en biais. Emballer dans du papier aluminium pour transport. Se conserve 24h au frigo — idéal lunch box ou post-training."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P14 — SOUPES & PLATS CHAUDS  (R735–R739)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R735',
-      name: 'Velouté Potimarron Châtaigne & Gingembre',
-      category: 'french',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍵', origin: '🇫🇷',
-      tags: ['vegan', 'comfort-food', 'seasonal', 'creamy', 'warming'],
-      servings: 2, prepTime: 10, cookTime: 25, difficulty: 1,
-      // 50×4 + 52×4 + 16×9 = 200+208+144 = 552 ✓
-      baseNutrition: { calories: 552, proteinGrams: 50, carbsGrams: 52, fatGrams: 16 },
-      ingredients: [
-        { name: 'Potimarron',                       qty: 600, unit: 'g', note: 'coupé en cubes, pas besoin de peler' },
-        { name: 'Châtaignes en boîte',              qty: 120, unit: 'g' },
-        { name: 'Tofu soyeux',                      qty: 200, unit: 'g', note: 'pour la texture crémeuse' },
-        { name: 'Oignon',                           qty: 100, unit: 'g' },
-        { name: 'Gingembre frais',                  qty: 15,  unit: 'g' },
-        { name: 'Bouillon de légumes',              qty: 500, unit: 'ml' },
-        { name: 'Lait de coco allégé',              qty: 80,  unit: 'ml' },
-        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' },
-        { name: 'Graines de courge',                qty: 20,  unit: 'g', note: 'pour le topping' },
-        { name: 'Cannelle',                         qty: 2,   unit: 'g' }
-      ],
-      steps: [
-        "Faire revenir l'oignon dans l'huile 4 min. Ajouter le gingembre râpé et la cannelle, cuire 1 min.",
-        "Ajouter les cubes de potimarron (avec peau — elle mixe très bien et est nutritive) et les châtaignes. Verser le bouillon chaud. Porter à ébullition.",
-        "Cuire 20 min à couvert jusqu'à potimarron fondant. Tester avec la pointe d'un couteau.",
-        "Ajouter le tofu soyeux et le lait de coco. Mixer au blender plongeant jusqu'à velouté lisse et soyeux.",
-        "Réchauffer si nécessaire. Verser dans les bols. Décorer d'un filet de lait de coco, de graines de courge toastées. Velouté d'automne qui réconforte sans culpabilité."
-      ]
-    },
-
-    {
-      id: 'R736',
-      name: 'Soupe Ramen Bouillon Miso Poulet & Noodles',
-      category: 'japanese',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍜', origin: '🇯🇵',
-      tags: ['high-protein', 'umami', 'warming', 'trendy', 'asian'],
-      servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
-      // 58×4 + 48×4 + 22×9 = 232+192+198 = 622 ✓
-      baseNutrition: { calories: 622, proteinGrams: 58, carbsGrams: 48, fatGrams: 22 },
-      ingredients: [
-        { name: 'Blanc de poulet',                  qty: 300, unit: 'g' },
-        { name: 'Nouilles ramen ou soba',           qty: 100, unit: 'g', note: 'sèches' },
-        { name: 'Oeuf',                             qty: 2,   unit: 'pce', note: 'pour oeuf mollet' },
-        { name: 'Pâte de miso',                    qty: 30,  unit: 'g' },
-        { name: 'Sauce soja',                      qty: 20,  unit: 'ml' },
-        { name: 'Bouillon de poule',               qty: 600, unit: 'ml' },
-        { name: 'Huile de sésame',                 qty: 10,  unit: 'ml' },
-        { name: 'Ail',                             qty: 8,   unit: 'g' },
-        { name: 'Gingembre',                       qty: 5,   unit: 'g' },
-        { name: 'Champignons shiitake',            qty: 80,  unit: 'g', note: 'frais ou réhydratés' },
-        { name: 'Oignon nouveau',                  qty: 30,  unit: 'g' },
-        { name: 'Algues nori',                     qty: 5,   unit: 'g' }
-      ],
-      steps: [
-        "Oeufs mollets : plonger 6 min dans eau bouillante, refroidir immédiatement à l'eau glacée, peler délicatement. Réserver.",
-        "Pocher les blancs de poulet dans le bouillon frémissant avec l'ail et le gingembre 12-15 min. Sortir, effilocher, réserver le bouillon.",
-        "Cuire les noodles dans eau bouillante selon indication. Rincer sous eau froide.",
-        "Chauffer le bouillon de cuisson du poulet. Diluer la pâte miso dans une louche de bouillon, reverser. Ajouter sauce soja et les champignons. Mijoter 5 min. Ne pas bouillir après le miso.",
-        "Assembler les bols : noodles, poulet effiloché, champignons. Verser le bouillon miso chaud. Couper les oeufs mollets en deux, déposer dessus. Terminer avec oignons nouveaux, algues et un filet d'huile de sésame."
-      ]
-    },
-
-    {
-      id: 'R737',
-      name: 'Chili con Carne Classique Haricots Rouges',
-      category: 'mexican',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🫕', origin: '🇲🇽',
-      tags: ['high-protein', 'spicy', 'comfort-food', 'meal-prep', 'classic'],
-      servings: 2, prepTime: 10, cookTime: 35, difficulty: 1,
-      // 62×4 + 60×4 + 20×9 = 248+240+180 = 668 ✓
-      baseNutrition: { calories: 668, proteinGrams: 62, carbsGrams: 60, fatGrams: 20 },
-      ingredients: [
-        { name: 'Boeuf haché 5% MG',               qty: 350, unit: 'g' },
-        { name: 'Haricots rouges boîte',           qty: 300, unit: 'g', note: 'égouttés' },
-        { name: 'Tomates concassées boîte',        qty: 400, unit: 'g' },
-        { name: 'Riz basmati',                     qty: 100, unit: 'g', note: 'sec, pour servir' },
-        { name: 'Oignon',                          qty: 100, unit: 'g' },
-        { name: 'Ail',                             qty: 10,  unit: 'g' },
-        { name: 'Poivron rouge',                   qty: 100, unit: 'g' },
-        { name: 'Piment de Cayenne',               qty: 3,   unit: 'g' },
-        { name: 'Cumin',                           qty: 5,   unit: 'g' },
-        { name: 'Paprika fumé',                    qty: 5,   unit: 'g' },
-        { name: 'Origan',                          qty: 3,   unit: 'g' },
-        { name: 'Huile d\'olive',                  qty: 10,  unit: 'ml' }
-      ],
-      steps: [
-        "Chauffer l'huile dans une grande casserole. Faire revenir oignon et poivron émincés 5 min. Ajouter l'ail, cumin, paprika, cayenne, origan. Cuire 1 min.",
-        "Ajouter le boeuf haché, émietter et faire dorer 5-6 min jusqu'à plus de rose.",
-        "Ajouter les tomates concassées. Remuer, porter à frémissement. Cuire 15 min à découvert.",
-        "Ajouter les haricots rouges égouttés. Cuire encore 10-12 min jusqu'à sauce épaisse. Rectifier sel et piment.",
-        "Cuire le riz. Servir le chili sur le riz. Optionnel : crème fraîche légère, coriandre, cheddar râpé. Encore meilleur réchauffé le lendemain."
-      ]
-    },
-
-    {
-      id: 'R738',
-      name: 'Gaspacho Andalou Crevettes Grillées',
-      category: 'mediterranean',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍅', origin: '🇪🇸',
-      tags: ['low-calorie', 'fresh', 'summer', 'no-cook', 'mediterranean'],
-      servings: 2, prepTime: 15, cookTime: 5, difficulty: 1,
-      // 44×4 + 68×4 + 18×9 = 176+272+162 = 610 ✓
-      baseNutrition: { calories: 610, proteinGrams: 44, carbsGrams: 68, fatGrams: 18 },
-      ingredients: [
-        { name: 'Tomates mûres',                   qty: 600, unit: 'g', note: '4-5 belles tomates' },
-        { name: 'Crevettes décortiquées',          qty: 250, unit: 'g' },
-        { name: 'Pain de mie',                     qty: 80,  unit: 'g', note: 'pour épaissir' },
-        { name: 'Concombre',                       qty: 150, unit: 'g' },
-        { name: 'Poivron rouge',                   qty: 100, unit: 'g' },
-        { name: 'Ail',                             qty: 5,   unit: 'g', note: '1 petite gousse' },
-        { name: 'Huile d\'olive',                  qty: 20,  unit: 'ml' },
-        { name: 'Vinaigre de Xérès',               qty: 10,  unit: 'ml', note: 'ou vinaigre de vin rouge' },
-        { name: 'Pita ou pain grillé',             qty: 80,  unit: 'g' }
-      ],
-      steps: [
-        "Tremper le pain de mie dans 50ml d'eau 5 min. Cela épaissit le gaspacho naturellement.",
-        "Couper grossièrement tomates, concombre, poivron. Mixer avec le pain trempé, l'ail, l'huile d'olive et le vinaigre de Xérès jusqu'à gaspacho lisse. Saler.",
-        "Passer au tamis fin si vous voulez une texture soyeuse (optionnel mais recommandé). Réfrigérer 1h minimum.",
-        "Griller les crevettes assaisonnées (sel, paprika, huile) 2 min par face dans une poêle très chaude.",
-        "Servir le gaspacho glacé dans des bols larges. Déposer les crevettes au centre. Accompagner de pain pita grillé. Fraîcheur andalouse + protéines marines."
-      ]
-    },
-
-    {
-      id: 'R739',
-      name: 'Gratin Courgettes Jambon Chèvre & Herbes',
-      category: 'french',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🫕', origin: '🇫🇷',
-      tags: ['high-protein', 'comfort-food', 'french', 'easy', 'low-carb'],
-      servings: 2, prepTime: 10, cookTime: 30, difficulty: 1,
-      // 70×4 + 54×4 + 24×9 = 280+216+216 = 712 ✓
-      baseNutrition: { calories: 712, proteinGrams: 70, carbsGrams: 54, fatGrams: 24 },
-      ingredients: [
-        { name: 'Courgettes',                      qty: 400, unit: 'g', note: '2 grosses, en rondelles 5mm' },
-        { name: 'Jambon blanc',                    qty: 200, unit: 'g', note: 'en dés' },
-        { name: 'Fromage de chèvre frais',         qty: 100, unit: 'g' },
-        { name: 'Oeuf',                            qty: 3,   unit: 'pce' },
-        { name: 'Fromage blanc 0%',               qty: 100, unit: 'g' },
-        { name: 'Parmesan râpé',                  qty: 30,  unit: 'g' },
-        { name: 'Ail',                            qty: 8,   unit: 'g' },
-        { name: 'Thym frais',                     qty: 5,   unit: 'g' },
-        { name: 'Herbes de Provence',             qty: 5,   unit: 'g' },
-        { name: 'Huile d\'olive',                 qty: 10,  unit: 'ml' }
-      ],
-      steps: [
-        "Préchauffer four à 190°C. Faire revenir les rondelles de courgette avec l'ail dans l'huile, 5-6 min jusqu'à légèrement dorées. Saler, poivrer.",
-        "Préparer l'appareil : battre les oeufs avec le fromage blanc, les herbes de Provence, sel et poivre.",
-        "Dans un plat à gratin légèrement huilé, alterner courgettes et jambon en dés. Émietter le fromage de chèvre par-dessus.",
-        "Verser l'appareil oeuf-fromage blanc. Terminer avec parmesan râpé et thym frais.",
-        "Enfourner 25-28 min jusqu'à gratin doré et pris. Laisser reposer 5 min. Se mange chaud ou tiède — parfait avec une salade verte."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P15 — BRUNCH & PETIT-DEJ SALÉ  (R740–R744)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R740',
-      name: 'Avocado Toast Saumon Fumé Oeufs Pochés',
-      category: 'world-food',
-      mealTypes: ['breakfast', 'brunch'],
-      emoji: '🥑', origin: '🇺🇸',
-      tags: ['high-protein', 'omega-3', 'instagrammable', 'brunch', 'trendy'],
-      servings: 2, prepTime: 10, cookTime: 8, difficulty: 2,
-      // 46×4 + 38×4 + 24×9 = 184+152+216 = 552 ✓
-      baseNutrition: { calories: 552, proteinGrams: 46, carbsGrams: 38, fatGrams: 24 },
-      ingredients: [
-        { name: 'Pain complet ou au levain',        qty: 120, unit: 'g', note: '4 tranches épaisses' },
-        { name: 'Avocat',                           qty: 150, unit: 'g', note: '1,5 avocat bien mûr' },
-        { name: 'Saumon fumé',                      qty: 120, unit: 'g' },
-        { name: 'Oeuf',                             qty: 4,   unit: 'pce' },
-        { name: 'Citron (jus + zeste)',             qty: 1,   unit: 'pce' },
-        { name: 'Piment d\'Espelette',              qty: 2,   unit: 'g' },
-        { name: 'Graines de sésame noir',           qty: 5,   unit: 'g' },
-        { name: 'Ciboulette fraîche',               qty: 10,  unit: 'g' },
-        { name: 'Vinaigre blanc',                   qty: 10,  unit: 'ml', note: 'pour pocher les oeufs' }
-      ],
-      steps: [
-        "Écraser les avocados à la fourchette avec le jus de citron, sel, poivre et piment d'Espelette. Texture grossière — pas une purée lisse.",
-        "Toaster les tranches de pain.",
-        "Préparer les oeufs pochés : porter à frémissement 2L d'eau avec le vinaigre. Créer un tourbillon, glisser les oeufs délicatement (un à la fois), cuire 3 min. Sortir avec une écumoire.",
-        "Monter : pain toasté, généreuse couche d'avocat, 2-3 tranches de saumon fumé, oeuf poché dessus.",
-        "Zester le citron, parsemer de sésame noir et ciboulette. Saler légèrement. Servir immédiatement. Le brunch parfait en 15 min."
-      ]
-    },
-
-    {
-      id: 'R741',
-      name: 'Galette de Sarrasin Jambon Oeuf Emmental',
-      category: 'french',
-      mealTypes: ['breakfast', 'brunch', 'lunch'],
-      emoji: '🫓', origin: '🇫🇷',
-      tags: ['high-protein', 'gluten-free', 'french', 'classic', 'brunch'],
-      servings: 2, prepTime: 10, cookTime: 15, difficulty: 2,
-      // 60×4 + 50×4 + 22×9 = 240+200+198 = 638 ✓
-      baseNutrition: { calories: 638, proteinGrams: 60, carbsGrams: 50, fatGrams: 22 },
-      ingredients: [
-        { name: 'Farine de sarrasin',               qty: 120, unit: 'g' },
-        { name: 'Oeuf',                             qty: 4,   unit: 'pce', note: '2 pour la pâte, 2 sur les galettes' },
-        { name: 'Lait demi-écrémé',                qty: 200, unit: 'ml' },
-        { name: 'Jambon blanc',                    qty: 150, unit: 'g', note: '4 tranches' },
-        { name: 'Emmental râpé',                   qty: 60,  unit: 'g' },
-        { name: 'Beurre',                          qty: 15,  unit: 'g' },
-        { name: 'Sel',                             qty: 2,   unit: 'g' }
-      ],
-      steps: [
-        "Préparer la pâte : mélanger farine de sarrasin, 2 oeufs, lait, sel et 200ml d'eau. Fouetter jusqu'à pâte lisse. Laisser reposer 30 min si possible.",
-        "Chauffer une poêle de 24cm avec une pointe de beurre à feu moyen-vif. Verser une louche de pâte et incliner rapidement pour étaler en cercle fin.",
-        "Quand les bords se décollent (2 min), casser un oeuf au centre de la galette. Laisser cuire l'oeuf 1 min.",
-        "Disposer 2 tranches de jambon et 30g d'emmental sur les côtés. Replier les quatre côtés pour former un carré. Cuire encore 1 min.",
-        "Faire glisser sur l'assiette. La galette complète (jambon, oeuf, fromage) est un classique breton indémodable — simple et satisfaisant."
-      ]
-    },
-
-    {
-      id: 'R742',
-      name: 'Bowl Céréales Maison Lait Amande Fruits Frais',
-      category: 'world-food',
-      mealTypes: ['breakfast'],
-      emoji: '🥣', origin: '🇺🇸',
-      tags: ['balanced', 'quick', 'energizing', 'fresh', 'morning'],
-      servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
-      // 44×4 + 64×4 + 18×9 = 176+256+162 = 594 ✓
-      baseNutrition: { calories: 594, proteinGrams: 44, carbsGrams: 64, fatGrams: 18 },
-      ingredients: [
-        { name: 'Flocons d\'avoine grands',         qty: 80,  unit: 'g' },
-        { name: 'Protéine whey vanille',           qty: 40,  unit: 'g', note: '1,5 scoop' },
-        { name: 'Noix de cajou',                   qty: 20,  unit: 'g' },
-        { name: 'Amandes effilées',                qty: 15,  unit: 'g' },
-        { name: 'Lait d\'amande non sucré',        qty: 300, unit: 'ml' },
-        { name: 'Fraises fraîches',                qty: 100, unit: 'g' },
-        { name: 'Myrtilles',                       qty: 60,  unit: 'g' },
-        { name: 'Banane',                          qty: 1,   unit: 'pce', note: 'en rondelles' },
-        { name: 'Miel',                            qty: 15,  unit: 'g' },
-        { name: 'Graines de chia',                qty: 10,  unit: 'g' }
-      ],
-      steps: [
-        "Torréfier les flocons d'avoine avec les amandes dans une poêle sèche à feu moyen 3-4 min en remuant jusqu'à légère coloration et odeur de noisette.",
-        "Mélanger la protéine whey avec 50ml de lait d'amande dans un bol jusqu'à pâte lisse. Ajouter le reste du lait.",
-        "Répartir les flocons torréfiés et les cajous dans les bols.",
-        "Verser le lait vanille-protéiné dessus.",
-        "Disposer les fruits frais (fraises coupées, myrtilles, rondelles de banane) sur le dessus. Ajouter graines de chia et filet de miel. Encore meilleur si les flocons sont laissés tremper 5 min."
-      ]
-    },
-
-    {
-      id: 'R743',
-      name: 'Omelette Roulée Jambon Ciboulette Style Japonais',
-      category: 'japanese',
-      mealTypes: ['breakfast', 'lunch'],
-      emoji: '🥚', origin: '🇯🇵',
-      tags: ['high-protein', 'quick', 'elegant', 'low-carb', 'japanese'],
-      servings: 2, prepTime: 5, cookTime: 10, difficulty: 2,
-      // 68×4 + 28×4 + 32×9 = 272+112+288 = 672 ✓
-      baseNutrition: { calories: 672, proteinGrams: 68, carbsGrams: 28, fatGrams: 32 },
-      ingredients: [
-        { name: 'Oeuf',                            qty: 8,   unit: 'pce' },
-        { name: 'Jambon blanc',                    qty: 150, unit: 'g', note: 'haché finement' },
-        { name: 'Sauce soja',                      qty: 10,  unit: 'ml' },
-        { name: 'Mirin',                           qty: 10,  unit: 'ml', note: 'ou 1 c.c. miel + eau' },
-        { name: 'Ciboulette fraîche',              qty: 20,  unit: 'g' },
-        { name: 'Huile végétale',                  qty: 10,  unit: 'ml' },
-        { name: 'Pain complet',                    qty: 80,  unit: 'g', note: 'pour accompagner' }
-      ],
-      steps: [
-        "Battre 4 oeufs avec 5ml sauce soja, 5ml mirin. Ajouter la moitié du jambon haché et ciboulette ciselée.",
-        "Chauffer une poêle rectangulaire (tamagoyaki pan) ou classique huilée à feu moyen. Verser la moitié de la préparation. Quand à moitié prise, rouler délicatement vers un côté avec des baguettes ou spatule.",
-        "Pousser le rouleau vers l'arrière de la poêle. Ajouter un peu d'huile. Verser le reste de l'oeuf, soulever le premier rouleau pour que l'oeuf passe dessous. Rouler à nouveau.",
-        "Enrouler dans du film alimentaire pour garder la forme. Laisser reposer 2 min.",
-        "Couper en tronçons épais. Répéter pour la 2ème omelette. La technique tamagoyaki : omelette roulée avec couches — visuellement impressionnant, techniquement simple."
-      ]
-    },
-
-    {
-      id: 'R744',
-      name: 'Smoothie Bowl Mangue Passion & Granola',
-      category: 'world-food',
-      mealTypes: ['breakfast', 'snack'],
-      emoji: '🥭', origin: '🇧🇷',
-      tags: ['vegan', 'instagrammable', 'tropical', 'fresh', 'morning'],
-      servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
-      // 52×4 + 72×4 + 20×9 = 208+288+180 = 676 ✓
-      baseNutrition: { calories: 676, proteinGrams: 52, carbsGrams: 72, fatGrams: 20 },
-      ingredients: [
-        { name: 'Mangue congelée',                 qty: 300, unit: 'g' },
-        { name: 'Banane congelée',                qty: 100, unit: 'g', note: '1 banane' },
-        { name: 'Protéine whey vanille',          qty: 60,  unit: 'g', note: '2 scoops' },
-        { name: 'Lait de coco allégé',            qty: 100, unit: 'ml' },
-        { name: 'Jus de fruit de la passion',     qty: 50,  unit: 'ml', note: '2 fruits frais ou concentré' },
-        { name: 'Granola nature',                 qty: 60,  unit: 'g' },
-        { name: 'Kiwi',                           qty: 80,  unit: 'g', note: '1 kiwi, tranché' },
-        { name: 'Noix de coco râpée',             qty: 15,  unit: 'g' },
-        { name: 'Graines de lin',                qty: 10,  unit: 'g' }
-      ],
-      steps: [
-        "Mixer mangue et banane congelées avec la protéine whey et le lait de coco jusqu'à consistance très épaisse — quasi comme de la glace.",
-        "Ajouter le jus de fruit de la passion, mixer 10 secondes pour marbrer.",
-        "Verser dans deux bols larges. Travailler rapidement — ça fond vite.",
-        "Disposer les toppings en bandes : granola d'un côté, tranches de kiwi, noix de coco râpée, graines de lin.",
-        "Optionnel : quelques gouttes de jus de passion en spirale sur le dessus. Tropical, frais, protéiné — le bowl d'été parfait."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P16 — SPÉCIAL CUTTING / SÉCHAGE  (R745–R749)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R745',
-      name: 'Blanc de Poulet Épices Douce & Légumes Vapeur',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥗', origin: '🇺🇸',
-      tags: ['high-protein', 'low-fat', 'cutting', 'lean', 'clean'],
-      servings: 2, prepTime: 5, cookTime: 20, difficulty: 1,
-      // 88×4 + 20×4 + 10×9 = 352+80+90 = 522 ✓
-      baseNutrition: { calories: 522, proteinGrams: 88, carbsGrams: 20, fatGrams: 10 },
-      ingredients: [
-        { name: 'Blanc de poulet',                  qty: 500, unit: 'g', note: '2 blancs' },
-        { name: 'Brocoli',                          qty: 200, unit: 'g' },
-        { name: 'Courgette',                        qty: 200, unit: 'g' },
-        { name: 'Haricots verts',                   qty: 150, unit: 'g' },
-        { name: 'Paprika doux',                     qty: 5,   unit: 'g' },
-        { name: 'Cumin',                            qty: 3,   unit: 'g' },
-        { name: 'Ail en poudre',                    qty: 3,   unit: 'g' },
-        { name: 'Huile d\'olive',                   qty: 8,   unit: 'ml' },
-        { name: 'Citron (jus)',                     qty: 1,   unit: 'pce' },
-        { name: 'Sel, poivre',                      qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Mélanger paprika, cumin, ail en poudre, sel, poivre et huile d'olive. Badigeonner les blancs de poulet.",
-        "Cuire les légumes à la vapeur : brocoli et haricots 6 min, courgette 4 min. Ils doivent rester croquants.",
-        "Griller le poulet dans une poêle chaude ou au four (200°C, 20 min). Temps de repos 5 min.",
-        "Trancher le poulet en biais. Dresser avec les légumes vapeur.",
-        "Arroser du jus de citron. Simple, propre, efficace : 260 kcal et 44g de protéines par portion."
-      ]
-    },
-
-    {
-      id: 'R746',
-      name: 'Crevettes Wok Asperges & Sauce Citron Légère',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍤', origin: '🇯🇵',
-      tags: ['high-protein', 'low-fat', 'cutting', 'quick', 'light'],
-      servings: 2, prepTime: 5, cookTime: 10, difficulty: 1,
-      // 80×4 + 24×4 + 12×9 = 320+96+108 = 524 ✓
-      baseNutrition: { calories: 524, proteinGrams: 80, carbsGrams: 24, fatGrams: 12 },
-      ingredients: [
-        { name: 'Crevettes décortiquées',           qty: 500, unit: 'g', note: 'crues, taille 16-20' },
-        { name: 'Asperges vertes',                 qty: 300, unit: 'g', note: 'coupées en tronçons 4cm' },
-        { name: 'Ail',                             qty: 10,  unit: 'g' },
-        { name: 'Gingembre frais',                qty: 8,   unit: 'g' },
-        { name: 'Citron (jus + zeste)',            qty: 2,   unit: 'pce' },
-        { name: 'Sauce soja légère',              qty: 15,  unit: 'ml' },
-        { name: 'Huile de sésame',                qty: 8,   unit: 'ml' },
-        { name: 'Piment rouge',                   qty: 5,   unit: 'g' },
-        { name: 'Coriandre fraîche',              qty: 15,  unit: 'g' }
-      ],
-      steps: [
-        "Sécher les crevettes avec du papier absorbant — crucial pour la saisie.",
-        "Wok très chaud avec l'huile de sésame. Saisir les asperges 2-3 min à feu vif pour légère caramélisation.",
-        "Ajouter ail, gingembre et piment émincés, cuire 30 secondes. Ajouter les crevettes en une couche, cuire 1,5 min sans toucher.",
-        "Retourner les crevettes, cuire 1 min. Elles sont cuites quand elles forment un 'C' (trop cuites = cercle fermé).",
-        "Déglacer avec jus de citron et sauce soja. Mélanger rapidement. Zester le citron dessus, parsemer de coriandre. 262 kcal / 40g protéines par portion."
-      ]
-    },
-
-    {
-      id: 'R747',
-      name: 'Thon en Boîte Tomates Fraîches Basilic & Pain Grillé',
-      category: 'mediterranean',
-      mealTypes: ['lunch', 'snack'],
-      emoji: '🐟', origin: '🇮🇹',
-      tags: ['high-protein', 'low-fat', 'cutting', 'quick', 'no-cook'],
-      servings: 2, prepTime: 10, cookTime: 5, difficulty: 1,
-      // 74×4 + 30×4 + 14×9 = 296+120+126 = 542 ✓
-      baseNutrition: { calories: 542, proteinGrams: 74, carbsGrams: 30, fatGrams: 14 },
-      ingredients: [
-        { name: 'Thon en boîte au naturel',         qty: 300, unit: 'g', note: '2 boîtes de 150g égouttées' },
-        { name: 'Tomates',                          qty: 250, unit: 'g', note: '2 belles tomates, dés' },
-        { name: 'Pain complet',                     qty: 80,  unit: 'g', note: '4 tranches' },
-        { name: 'Basilic frais',                    qty: 20,  unit: 'g' },
-        { name: 'Oignon rouge',                    qty: 40,  unit: 'g', note: 'émincé très fin' },
-        { name: 'Câpres',                          qty: 20,  unit: 'g' },
-        { name: 'Huile d\'olive',                  qty: 15,  unit: 'ml' },
-        { name: 'Vinaigre balsamique',             qty: 10,  unit: 'ml' },
-        { name: 'Sel, poivre',                     qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Égoutter soigneusement le thon. L'émietter grossièrement — garder quelques morceaux.",
-        "Mélanger les dés de tomates avec l'oignon rouge émincé très fin, les câpres, basilic ciselé, huile d'olive et vinaigre balsamique. Saler, poivrer.",
-        "Ajouter le thon, mélanger délicatement pour ne pas tout écraser.",
-        "Toaster le pain complet.",
-        "Déposer la bruschetta thon-tomates généreusement sur le pain grillé. Finir avec quelques feuilles de basilic entières et un filet d'huile d'olive. Rapide, clean, délicieux."
-      ]
-    },
-
-    {
-      id: 'R748',
-      name: 'Salade Poulet Grillé Roquette Parmesan Citron',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥗', origin: '🇮🇹',
-      tags: ['high-protein', 'low-fat', 'cutting', 'fresh', 'italian'],
-      servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
-      // 78×4 + 28×4 + 12×9 = 312+112+108 = 532 ✓
-      baseNutrition: { calories: 532, proteinGrams: 78, carbsGrams: 28, fatGrams: 12 },
-      ingredients: [
-        { name: 'Blanc de poulet',                  qty: 450, unit: 'g' },
-        { name: 'Roquette',                        qty: 120, unit: 'g' },
-        { name: 'Parmesan en copeaux',             qty: 30,  unit: 'g' },
-        { name: 'Tomates cerises',                qty: 150, unit: 'g', note: 'coupées en deux' },
-        { name: 'Pain craquant type Wasa',         qty: 40,  unit: 'g', note: '4 biscottes' },
-        { name: 'Citron (jus + zeste)',            qty: 2,   unit: 'pce' },
-        { name: 'Huile d\'olive',                 qty: 10,  unit: 'ml' },
-        { name: 'Moutarde à l\'ancienne',         qty: 8,   unit: 'g' },
-        { name: 'Ail',                            qty: 5,   unit: 'g' }
-      ],
-      steps: [
-        "Badigeonner les blancs de poulet d'huile, ail écrasé, sel et poivre. Cuire au grill 5 min par face ou poêle anti-adhésive 4 min par face.",
-        "Vinaigrette : jus de 2 citrons + zeste + moutarde + sel. Fouetter.",
-        "Laisser reposer le poulet 5 min. Couper en tranches fines en biais.",
-        "Mélanger la roquette avec la vinaigrette citron-moutarde dans un grand bol.",
-        "Dresser : roquette assaisonnée, poulet tranché dessus, tomates cerises, copeaux de parmesan. Pain craquant sur le côté. Léger, goûteux, moins de 270 kcal par portion."
-      ]
-    },
-
-    {
-      id: 'R749',
-      name: 'Dinde Grillée Courgette Rôtie & Fromage Blanc',
-      category: 'world-food',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍗', origin: '🇺🇸',
-      tags: ['high-protein', 'low-fat', 'cutting', 'lean', 'clean'],
-      servings: 2, prepTime: 5, cookTime: 20, difficulty: 1,
-      // 82×4 + 26×4 + 10×9 = 328+104+90 = 522 ✓
-      baseNutrition: { calories: 522, proteinGrams: 82, carbsGrams: 26, fatGrams: 10 },
-      ingredients: [
-        { name: 'Escalope de dinde',               qty: 500, unit: 'g', note: 'fines, 5mm' },
-        { name: 'Courgette',                       qty: 300, unit: 'g', note: '2 courgettes' },
-        { name: 'Fromage blanc 0%',               qty: 150, unit: 'g', note: 'sauce fraîche' },
-        { name: 'Citron (jus)',                   qty: 1,   unit: 'pce' },
-        { name: 'Menthe fraîche',                 qty: 15,  unit: 'g' },
-        { name: 'Ail',                            qty: 8,   unit: 'g' },
-        { name: 'Paprika',                        qty: 5,   unit: 'g' },
-        { name: 'Huile d\'olive',                qty: 8,   unit: 'ml' },
-        { name: 'Sel, poivre',                   qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préchauffer four à 200°C. Couper les courgettes en tranches épaisses (1cm). Mélanger avec 5ml d'huile, sel, poivre. Rôtir 18-20 min en retournant à mi-cuisson.",
-        "Préparer la sauce fraîche : mélanger fromage blanc 0%, jus de citron, menthe ciselée, ail écrasé, sel.",
-        "Assaisonner les escalopes de dinde avec paprika, sel, poivre. Cuire dans une poêle chaude avec le reste d'huile, 2-3 min par face — elles sont fines, ça va vite.",
-        "Dresser les courgettes rôties dans les assiettes, les escalopes de dinde dessus.",
-        "Déposer la sauce fromage blanc-menthe à côté. Un repas de séchage qui ne ressemble pas à un repas de séchage : savoureux et rassasiant."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P17 — ASIE DIVERSIFIÉE  (R750–R754)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R750',
-      name: 'Fried Rice Poulet Oeuf & Légumes Wok',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍳', origin: '🇨🇳',
-      tags: ['high-protein', 'comfort-food', 'asian', 'quick', 'meal-prep'],
-      servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
-      // 62×4 + 90×4 + 24×9 = 248+360+216 = 824 ✓
-      baseNutrition: { calories: 824, proteinGrams: 62, carbsGrams: 90, fatGrams: 24 },
-      ingredients: [
-        { name: 'Riz jasmin cuit froid',            qty: 300, unit: 'g', note: 'riz de la veille — obligatoire' },
-        { name: 'Blanc de poulet',                  qty: 250, unit: 'g', note: 'en petits dés' },
-        { name: 'Oeuf',                             qty: 3,   unit: 'pce' },
-        { name: 'Petits pois surgelés',             qty: 80,  unit: 'g' },
-        { name: 'Carotte',                          qty: 80,  unit: 'g', note: 'en petits dés' },
-        { name: 'Oignon vert',                      qty: 40,  unit: 'g' },
-        { name: 'Sauce soja',                       qty: 25,  unit: 'ml' },
-        { name: 'Sauce hoisin',                     qty: 15,  unit: 'ml' },
-        { name: 'Huile végétale',                   qty: 20,  unit: 'ml' },
-        { name: 'Ail',                              qty: 8,   unit: 'g' },
-        { name: 'Gingembre',                        qty: 5,   unit: 'g' },
-        { name: 'Huile de sésame',                  qty: 8,   unit: 'ml' }
-      ],
-      steps: [
-        "Le secret du fried rice : utiliser du riz froid de la veille (ou réfrigéré 4h minimum). Le riz chaud devient collant et pâteux.",
-        "Wok très chaud, huile fumante. Saisir les dés de poulet 3-4 min jusqu'à dorés. Réserver.",
-        "Dans le même wok, ajouter l'ail et le gingembre 30 secondes. Ajouter carottes et petits pois, cuire 2 min à feu vif.",
-        "Pousser les légumes sur le côté. Casser les oeufs dans le wok, brouiller rapidement puis mélanger avec les légumes.",
-        "Ajouter le riz froid en émiettant bien les grains. Mélanger vivement 2-3 min. Verser sauces soja et hoisin, ajouter le poulet. Mélanger 1 min. Finir avec huile de sésame et oignons verts."
-      ]
-    },
-
-    {
-      id: 'R751',
-      name: 'Phô Bo Bouillon Boeuf & Vermicelles de Riz',
-      category: 'world-food',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍜', origin: '🇻🇳',
-      tags: ['high-protein', 'warming', 'asian', 'umami', 'authentic'],
-      servings: 2, prepTime: 10, cookTime: 25, difficulty: 1,
-      // 58×4 + 80×4 + 22×9 = 232+320+198 = 750 ✓
-      baseNutrition: { calories: 750, proteinGrams: 58, carbsGrams: 80, fatGrams: 22 },
-      ingredients: [
-        { name: 'Boeuf à fondue (tranches fines)',  qty: 300, unit: 'g' },
-        { name: 'Vermicelles de riz',               qty: 160, unit: 'g', note: 'sèches' },
-        { name: 'Bouillon de boeuf',               qty: 800, unit: 'ml' },
-        { name: 'Anis étoilé',                     qty: 3,   unit: 'pce' },
-        { name: 'Cannelle bâton',                  qty: 1,   unit: 'pce' },
-        { name: 'Sauce nuoc-mâm',                  qty: 20,  unit: 'ml' },
-        { name: 'Sauce hoisin',                    qty: 15,  unit: 'ml' },
-        { name: 'Germes de soja',                  qty: 80,  unit: 'g' },
-        { name: 'Citron vert',                     qty: 1,   unit: 'pce' },
-        { name: 'Basilic thaï frais',              qty: 15,  unit: 'g' },
-        { name: 'Oignon vert',                     qty: 30,  unit: 'g' },
-        { name: 'Piment rouge',                    qty: 10,  unit: 'g', note: 'tranches fines' }
-      ],
-      steps: [
-        "Faire chauffer le bouillon de boeuf avec l'anis étoilé, la cannelle et le nuoc-mâm. Laisser infuser 15 min à feu doux — c'est le parfum signature du phô.",
-        "Tremper les vermicelles de riz dans eau tiède 15 min, égoutter. Les plonger dans eau bouillante 1-2 min. Répartir dans les bols.",
-        "Filtrer le bouillon pour retirer les épices. Porter à ébullition vive.",
-        "Déposer les tranches de boeuf crues dans les bols sur les vermicelles. Verser le bouillon bouillant dessus — il cuit le boeuf instantanément.",
-        "Garnir de germes de soja, basilic thaï, oignons verts, piment et quartiers de citron vert. Ajouter sauce hoisin selon goût. Le phô est un art : chaque bol est personnalisé."
-      ]
-    },
-
-    {
-      id: 'R752',
-      name: 'Bao Buns Bœuf Effiloché Pickles Concombre',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🫓', origin: '🇨🇳',
-      tags: ['high-protein', 'trending', 'asian', 'street-food', 'instagrammable'],
-      servings: 2, prepTime: 15, cookTime: 20, difficulty: 2,
-      // 72×4 + 64×4 + 18×9 = 288+256+162 = 706 ✓
-      baseNutrition: { calories: 706, proteinGrams: 72, carbsGrams: 64, fatGrams: 18 },
-      ingredients: [
-        { name: 'Bao buns (pains vapeur)',          qty: 160, unit: 'g', note: '4 buns, en sachet rayon asiatique' },
-        { name: 'Paleron de bœuf',                 qty: 400, unit: 'g' },
-        { name: 'Sauce hoisin',                     qty: 30,  unit: 'ml' },
-        { name: 'Sauce soja',                       qty: 20,  unit: 'ml' },
-        { name: 'Miel',                             qty: 15,  unit: 'g' },
-        { name: 'Concombre',                        qty: 80,  unit: 'g' },
-        { name: 'Vinaigre de riz',                  qty: 20,  unit: 'ml', note: 'pour les pickles' },
-        { name: 'Sucre',                            qty: 5,   unit: 'g', note: 'pour les pickles' },
-        { name: 'Mayonnaise légère',                qty: 20,  unit: 'g' },
-        { name: 'Sriracha',                         qty: 5,   unit: 'ml' },
-        { name: 'Oignon vert',                      qty: 20,  unit: 'g' },
-        { name: 'Graines de sésame',                qty: 5,   unit: 'g' }
-      ],
-      steps: [
-        "Pickles express : couper le concombre en fins rubans (économe), mélanger avec vinaigre de riz, sucre, sel. Laisser mariner 10 min.",
-        "Mélanger sauce hoisin, sauce soja et miel. Badigeonner le filet de porc. Cuire à la poêle 4-5 min par face en arrosant régulièrement jusqu'à caramélisation. Laisser reposer 5 min, effilocher.",
-        "Préparer la sauce sriracha mayo : mélanger mayonnaise légère et sriracha.",
-        "Chauffer les bao buns à la vapeur 4-5 min ou au micro-ondes avec un torchon humide 1 min.",
-        "Ouvrir les bao. Napper de sriracha mayo. Déposer le porc effiloché, les pickles de concombre, oignons verts et sésame. Trendy, gourmand, impressionnant."
-      ]
-    },
-
-    {
-      id: 'R753',
-      name: 'Poulet Basquaise Riz Blanc Parfumé',
-      category: 'french',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🫕', origin: '🇫🇷',
-      tags: ['high-protein', 'comfort-food', 'french', 'balanced', 'classic'],
-      servings: 2, prepTime: 10, cookTime: 35, difficulty: 1,
-      // 66×4 + 78×4 + 20×9 = 264+312+180 = 756 ✓
-      baseNutrition: { calories: 756, proteinGrams: 66, carbsGrams: 78, fatGrams: 20 },
-      ingredients: [
-        { name: 'Cuisses de poulet désossées',      qty: 450, unit: 'g' },
-        { name: 'Riz basmati',                      qty: 160, unit: 'g', note: 'sec' },
-        { name: 'Poivrons rouges et verts',         qty: 300, unit: 'g', note: '2 poivrons, lanières' },
-        { name: 'Tomates concassées boîte',         qty: 300, unit: 'g' },
-        { name: 'Oignon',                           qty: 100, unit: 'g' },
-        { name: 'Ail',                              qty: 10,  unit: 'g' },
-        { name: 'Jambon de Bayonne',                qty: 60,  unit: 'g', note: 'ou pancetta' },
-        { name: 'Piment d\'Espelette',              qty: 5,   unit: 'g' },
-        { name: 'Thym, laurier',                    qty: 5,   unit: 'g' },
-        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' }
-      ],
-      steps: [
-        "Faire dorer les cuisses de poulet dans l'huile 4-5 min par face. Réserver.",
-        "Dans la même cocotte, faire revenir l'oignon émincé 4 min. Ajouter l'ail et le jambon de Bayonne en lanières. Cuire 2 min.",
-        "Ajouter les poivrons en lanières, cuire 5 min à feu vif pour légère caramélisation.",
-        "Verser les tomates, piment d'Espelette, thym et laurier. Remettre le poulet. Couvrir, mijoter 25 min à feu doux.",
-        "Cuire le riz. Rectifier assaisonnement — la basquaise doit être relevée et parfumée. Servir dans des assiettes creuses avec le riz blanc. Plat du Sud-Ouest français, intemporel."
-      ]
-    },
-
-    {
-      id: 'R754',
-      name: 'Bibimbap Boeuf Légumes & Oeuf au Plat',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍚', origin: '🇰🇷',
-      tags: ['high-protein', 'balanced', 'korean', 'colorful', 'instagrammable'],
-      servings: 2, prepTime: 20, cookTime: 20, difficulty: 2,
-      // 54×4 + 84×4 + 22×9 = 216+336+198 = 750 ✓
-      baseNutrition: { calories: 750, proteinGrams: 54, carbsGrams: 84, fatGrams: 22 },
-      ingredients: [
-        { name: 'Riz japonica',                     qty: 160, unit: 'g', note: 'sec' },
-        { name: 'Boeuf haché 5% MG',               qty: 250, unit: 'g' },
-        { name: 'Oeuf',                             qty: 2,   unit: 'pce' },
-        { name: 'Épinards',                         qty: 100, unit: 'g' },
-        { name: 'Carotte',                          qty: 80,  unit: 'g', note: 'julienne' },
-        { name: 'Courgette',                        qty: 80,  unit: 'g', note: 'julienne' },
-        { name: 'Germes de soja',                   qty: 60,  unit: 'g' },
-        { name: 'Sauce gochujang',                  qty: 20,  unit: 'g', note: 'pâte pimentée coréenne' },
-        { name: 'Sauce soja',                       qty: 20,  unit: 'ml' },
-        { name: 'Huile de sésame',                  qty: 15,  unit: 'ml' },
-        { name: 'Ail',                              qty: 8,   unit: 'g' },
-        { name: 'Graines de sésame',                qty: 10,  unit: 'g' }
-      ],
-      steps: [
-        "Cuire le riz. Assaisonner le boeuf avec sauce soja, ail et 5ml d'huile de sésame. Faire sauter à feu vif 5 min.",
-        "Faire sauter séparément chaque légume (épinards blanchis 1 min, carottes 3 min, courgette 2 min, soja 2 min) avec une pincée de sel et d'ail. Chaque légume a sa texture propre.",
-        "Cuire les oeufs au plat (jaune coulant) dans une poêle huilée.",
-        "Dresser le bibimbap : riz chaud dans un bol en pierre ou en céramique. Disposer chaque légume en section autour, le boeuf au centre.",
-        "Déposer l'oeuf au plat sur le tout. Ajouter une cuillère de gochujang sur le dessus, filet d'huile de sésame, sésame grillé. Mélanger vigoureusement dans le bol avant de manger : c'est le rituel du bibimbap."
-      ]
-    },
-
-    //  BATCH P18 — CLÔTURE MISSION  (R755–R769)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R755',
-      name: 'Filet de Boeuf Sauce Poivre & Pommes Grenailles',
-      category: 'french',
-      mealTypes: ['dinner'],
-      emoji: '🥩', origin: '🇫🇷',
-      tags: ['high-protein', 'festive', 'french', 'elegant', 'indulgent'],
-      servings: 2, prepTime: 10, cookTime: 20, difficulty: 2,
-      // 86×4 + 48×4 + 28×9 = 344+192+252 = 788 ✓
-      baseNutrition: { calories: 788, proteinGrams: 86, carbsGrams: 48, fatGrams: 28 },
-      ingredients: [
-        { name: 'Filet de boeuf',                   qty: 400, unit: 'g', note: '2 steaks de 200g' },
-        { name: 'Pommes de terre grenailles',       qty: 300, unit: 'g' },
-        { name: 'Crème fraîche légère 15%',        qty: 60,  unit: 'g' },
-        { name: 'Poivre noir concassé',            qty: 5,   unit: 'g' },
-        { name: 'Cognac ou brandy',                qty: 20,  unit: 'ml' },
-        { name: 'Bouillon de boeuf',               qty: 80,  unit: 'ml' },
-        { name: 'Beurre',                          qty: 15,  unit: 'g' },
-        { name: 'Ail',                             qty: 8,   unit: 'g' },
-        { name: 'Thym',                            qty: 3,   unit: 'g' },
-        { name: 'Huile',                           qty: 10,  unit: 'ml' }
-      ],
-      steps: [
-        "Faire rôtir les grenailles au four 200°C avec ail, thym, huile et sel : 20-25 min en retournant à mi-cuisson.",
-        "Sortir les steaks du frigo 20 min avant. Croûter le poivre concassé sur les deux faces en appuyant.",
-        "Poêle en fonte très chaude. Saisir les steaks 2-3 min par face. Arroser de beurre pendant la cuisson. Reposer 5 min sous alu.",
-        "Dans la même poêle, flambée au cognac 30 secondes. Ajouter le bouillon, réduire de moitié. Incorporer la crème fraîche.",
-        "Servir les steaks nappés de sauce poivre avec les grenailles rôties. Un grand classique bistrot."
-      ]
-    },
-
-    {
-      id: 'R756',
-      name: 'Wok Boeuf Poivrons Sauce Huître',
-      category: 'world-food',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🥩', origin: '🇨🇳',
-      tags: ['high-protein', 'asian', 'quick', 'umami', 'wok'],
-      servings: 2, prepTime: 10, cookTime: 12, difficulty: 1,
-      // 72×4 + 84×4 + 20×9 = 288+336+180 = 804 ✓
-      baseNutrition: { calories: 804, proteinGrams: 72, carbsGrams: 84, fatGrams: 20 },
-      ingredients: [
-        { name: 'Boeuf à sauter',                   qty: 400, unit: 'g', note: 'bavette, tranches fines contre le fil' },
-        { name: 'Riz jasmin',                       qty: 160, unit: 'g', note: 'sec' },
-        { name: 'Poivrons tricolores',              qty: 250, unit: 'g', note: '2,5 poivrons, lanières' },
-        { name: 'Sauce huître',                     qty: 30,  unit: 'ml' },
-        { name: 'Sauce soja',                       qty: 15,  unit: 'ml' },
-        { name: 'Fécule de maïs',                   qty: 10,  unit: 'g', note: 'pour marinade boeuf' },
-        { name: 'Ail',                              qty: 10,  unit: 'g' },
-        { name: 'Gingembre',                        qty: 5,   unit: 'g' },
-        { name: 'Huile végétale',                   qty: 20,  unit: 'ml' }
-      ],
-      steps: [
-        "Mariner le boeuf 10 min avec fécule de maïs, 5ml sauce soja, 5ml huile. La fécule attendrit.",
-        "Cuire le riz. Chauffer le wok à feu maximum (fumant). Saisir le boeuf en deux fois 2 min sans remuer. Réserver.",
-        "Dans le même wok brûlant, ajouter les poivrons en lanières. Cuire 3 min à feu vif.",
-        "Ajouter ail et gingembre hachés, 30 secondes. Remettre le boeuf.",
-        "Verser sauce huître et reste de sauce soja. Mélanger 1 min. Servir sur le riz."
-      ]
-    },
-
-    {
-      id: 'R757',
-      name: 'Saumon Croûte Herbes & Pommes de Terre Écrasées',
-      category: 'french',
-      mealTypes: ['dinner'],
-      emoji: '🐟', origin: '🇫🇷',
-      tags: ['high-protein', 'omega-3', 'elegant', 'french', 'festive'],
-      servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
-      // 68×4 + 56×4 + 30×9 = 272+224+270 = 766 ✓
-      baseNutrition: { calories: 766, proteinGrams: 68, carbsGrams: 56, fatGrams: 30 },
-      ingredients: [
-        { name: 'Pavé de saumon',                   qty: 440, unit: 'g', note: '2 pavés avec peau' },
-        { name: 'Pommes de terre',                  qty: 300, unit: 'g', note: 'à chair fondante' },
-        { name: 'Persil plat',                      qty: 20,  unit: 'g' },
-        { name: 'Ciboulette',                       qty: 15,  unit: 'g' },
-        { name: 'Chapelure',                        qty: 30,  unit: 'g' },
-        { name: 'Beurre',                           qty: 20,  unit: 'g' },
-        { name: 'Moutarde',                         qty: 15,  unit: 'g' },
-        { name: 'Citron (jus)',                     qty: 1,   unit: 'pce' },
-        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' }
-      ],
-      steps: [
-        "Cuire les pommes de terre à l'eau 20 min. Égoutter. Écraser grossièrement avec le beurre — texture rustique.",
-        "Mélanger chapelure, persil et ciboulette ciselés. C'est la croûte d'herbes.",
-        "Badigeonner le dessus des pavés de moutarde. Presser la croûte d'herbes dessus.",
-        "Four 200°C. Cuire les pavés côté croûte vers le haut 12-14 min. Croûte dorée, saumon nacré au centre.",
-        "Dresser les pommes de terre écrasées, saumon en croûte dessus. Arroser de jus de citron."
-      ]
-    },
-
-    {
-      id: 'R758',
-      name: 'Tataki de Thon Sésame & Salade de Chou',
-      category: 'japanese',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🐠', origin: '🇯🇵',
-      tags: ['high-protein', 'low-carb', 'omega-3', 'elegant', 'raw'],
-      servings: 2, prepTime: 15, cookTime: 3, difficulty: 2,
-      // 92×4 + 14×4 + 22×9 = 368+56+198 = 622 ✓
-      baseNutrition: { calories: 622, proteinGrams: 92, carbsGrams: 14, fatGrams: 22 },
-      ingredients: [
-        { name: 'Thon rouge sashimi grade',         qty: 400, unit: 'g', note: 'bloc rectangulaire' },
-        { name: 'Graines de sésame noir et blanc',  qty: 30,  unit: 'g' },
-        { name: 'Chou blanc finement émincé',       qty: 150, unit: 'g' },
-        { name: 'Carotte râpée',                    qty: 60,  unit: 'g' },
-        { name: 'Sauce ponzu',                      qty: 30,  unit: 'ml', note: 'ou soja + citron' },
-        { name: 'Huile de sésame',                  qty: 10,  unit: 'ml' },
-        { name: 'Gingembre frais',                  qty: 8,   unit: 'g' },
-        { name: 'Coriandre',                        qty: 15,  unit: 'g' },
-        { name: 'Huile végétale',                   qty: 5,   unit: 'ml' }
-      ],
-      steps: [
-        "Rouler le bloc de thon dans les graines de sésame en appuyant pour bien enrober.",
-        "Poêle très chaude avec un filet d'huile. Saisir le thon 30 secondes par face. Le centre reste cru.",
-        "Emballer immédiatement dans du film, mettre au congélateur 5 min pour stopper la cuisson.",
-        "Préparer la salade : chou, carotte, ponzu, huile de sésame, gingembre râpé.",
-        "Couper le tataki en tranches de 5mm. Dresser sur la salade. Parsemer de coriandre."
-      ]
-    },
-
-    {
-      id: 'R759',
-      name: 'Moussaka Grecque Allégée Agneau & Aubergine',
-      category: 'mediterranean',
-      mealTypes: ['dinner'],
-      emoji: '🫕', origin: '🇬🇷',
-      tags: ['high-protein', 'mediterranean', 'festive', 'comfort-food', 'greek'],
-      servings: 2, prepTime: 15, cookTime: 40, difficulty: 2,
-      // 76×4 + 70×4 + 24×9 = 304+280+216 = 800 ✓
-      baseNutrition: { calories: 800, proteinGrams: 76, carbsGrams: 70, fatGrams: 24 },
-      ingredients: [
-        { name: 'Agneau haché',                     qty: 400, unit: 'g' },
-        { name: 'Aubergines',                       qty: 400, unit: 'g', note: '2 aubergines, tranches 1cm' },
-        { name: 'Pommes de terre',                  qty: 200, unit: 'g', note: 'tranches fines' },
-        { name: 'Tomates concassées',               qty: 300, unit: 'g' },
-        { name: 'Lait demi-écrémé',                qty: 250, unit: 'ml' },
-        { name: 'Farine',                          qty: 20,  unit: 'g' },
-        { name: 'Fromage blanc 0%',               qty: 80,  unit: 'g' },
-        { name: 'Oignon',                         qty: 80,  unit: 'g' },
-        { name: 'Ail',                            qty: 8,   unit: 'g' },
-        { name: 'Cannelle',                       qty: 3,   unit: 'g', note: 'signature grecque' },
-        { name: 'Huile d\'olive',                 qty: 15,  unit: 'ml' }
-      ],
-      steps: [
-        "Saler les tranches d'aubergine 10 min, éponger. Griller au four 200°C 15 min.",
-        "Bolognaise agneau : oignon + ail + agneau haché, dorer 5 min. Ajouter tomates, cannelle, sel. Mijoter 15 min.",
-        "Béchamel légère : roux farine-huile, ajouter lait progressivement. Incorporer fromage blanc. Épaissir.",
-        "Assembler : pommes de terre, aubergines, bolognaise, aubergines, béchamel. Enfourner 25-30 min à 180°C.",
-        "Reposer 10 min avant de couper. La cannelle dans la viande : signature qui distingue la vraie moussaka."
-      ]
-    },
-
-    {
-      id: 'R760',
-      name: 'Brochettes Satay Poulet Sauce Cacahuète',
-      category: 'world-food',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍡', origin: '🇹🇭',
-      tags: ['high-protein', 'asian', 'creamy', 'comfort-food', 'trending'],
-      servings: 2, prepTime: 15, cookTime: 15, difficulty: 1,
-      // 60×4 + 80×4 + 26×9 = 240+320+234 = 794 ✓
-      baseNutrition: { calories: 794, proteinGrams: 60, carbsGrams: 80, fatGrams: 26 },
-      ingredients: [
-        { name: 'Blanc de poulet',                  qty: 350, unit: 'g', note: 'en brochettes' },
-        { name: 'Riz jasmin',                       qty: 160, unit: 'g', note: 'sec' },
-        { name: 'Beurre de cacahuète naturel',      qty: 60,  unit: 'g' },
-        { name: 'Lait de coco allégé',              qty: 100, unit: 'ml' },
-        { name: 'Sauce soja',                       qty: 20,  unit: 'ml' },
-        { name: 'Jus de citron vert',               qty: 1,   unit: 'pce' },
-        { name: 'Ail',                              qty: 8,   unit: 'g' },
-        { name: 'Gingembre',                        qty: 5,   unit: 'g' },
-        { name: 'Piment',                           qty: 3,   unit: 'g' },
-        { name: 'Miel',                             qty: 10,  unit: 'g' },
-        { name: 'Concombre',                        qty: 80,  unit: 'g' }
-      ],
-      steps: [
-        "Marinade satay : 20g beurre de cacahuète + 10ml sauce soja + ail + gingembre + piment + miel. Enduire le poulet. Mariner 15 min.",
-        "Cuire le riz.",
-        "Griller les brochettes four 180°C ou grill : 12-15 min en retournant à mi-cuisson.",
-        "Sauce cacahuète : chauffer doucement beurre de cacahuète restant + lait de coco + sauce soja + citron vert. Fouetter pour sauce crémeuse.",
-        "Dresser : riz, brochettes, sauce cacahuète chaude à côté. Salade de concombre citron vert pour fraîcheur."
-      ]
-    },
-
-    {
-      id: 'R761',
-      name: 'Porridge Banane Cannelle Whey Protéine',
-      category: 'world-food',
-      mealTypes: ['breakfast'],
-      emoji: '🥣', origin: '🇬🇧',
-      tags: ['high-protein', 'balanced', 'morning', 'quick', 'energizing'],
-      servings: 2, prepTime: 2, cookTime: 8, difficulty: 1,
-      // 48×4 + 94×4 + 16×9 = 192+376+144 = 712 ✓
-      baseNutrition: { calories: 712, proteinGrams: 48, carbsGrams: 94, fatGrams: 16 },
-      ingredients: [
-        { name: 'Flocons d\'avoine',                qty: 150, unit: 'g' },
-        { name: 'Lait demi-écrémé',                qty: 400, unit: 'ml' },
-        { name: 'Protéine whey vanille',           qty: 40,  unit: 'g', note: '1,5 scoop' },
-        { name: 'Banane',                          qty: 2,   unit: 'pce' },
-        { name: 'Cannelle moulue',                qty: 5,   unit: 'g' },
-        { name: 'Noix',                           qty: 20,  unit: 'g', note: 'concassées' },
-        { name: 'Miel',                           qty: 15,  unit: 'g' },
-        { name: 'Beurre d\'amande',               qty: 15,  unit: 'g' }
-      ],
-      steps: [
-        "Porter le lait à frémissement. Ajouter les flocons d'avoine et 1 banane en rondelles.",
-        "Cuire 5-6 min à feu moyen en remuant constamment. La banane fond et sucre naturellement.",
-        "Retirer du feu. Attendre 1 min puis incorporer la protéine whey.",
-        "Ajouter la cannelle et le miel. Mélanger.",
-        "Servir dans des bols. Décorer avec la 2ème banane en rondelles, noix et beurre d'amande qui fond."
-      ]
-    },
-
-    {
-      id: 'R762',
-      name: 'Cuisses de Poulet Marinade Asiatique & Coleslaw Allégé',
-      category: 'world-food',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍖', origin: '🇺🇸',
-      tags: ['high-protein', 'bbq', 'asian', 'comfort-food', 'indulgent'],
-      servings: 2, prepTime: 10, cookTime: 25, difficulty: 1,
-      // 80×4 + 44×4 + 28×9 = 320+176+252 = 748 ✓
-      baseNutrition: { calories: 748, proteinGrams: 80, carbsGrams: 44, fatGrams: 28 },
-      ingredients: [
-        { name: 'Cuisses de poulet',                    qty: 600, unit: 'g', note: '4 côtes, dégraissées' },
-        { name: 'Sauce soja',                       qty: 25,  unit: 'ml' },
-        { name: 'Miel',                             qty: 20,  unit: 'g' },
-        { name: 'Sauce hoisin',                     qty: 20,  unit: 'ml' },
-        { name: 'Ail',                              qty: 10,  unit: 'g' },
-        { name: 'Gingembre',                        qty: 8,   unit: 'g' },
-        { name: 'Chou blanc',                       qty: 150, unit: 'g' },
-        { name: 'Carotte',                          qty: 80,  unit: 'g' },
-        { name: 'Fromage blanc 0%',                qty: 50,  unit: 'g' },
-        { name: 'Vinaigre de cidre',               qty: 10,  unit: 'ml' },
-        { name: 'Pain de mie',                     qty: 60,  unit: 'g' }
-      ],
-      steps: [
-        "Mélanger sauce soja, miel, hoisin, ail et gingembre râpés. Badigeonner généreusement les côtes. Mariner 15 min.",
-        "Four 200°C, grille. Cuire 20-22 min en badigeonnant à mi-cuisson.",
-        "Coleslaw allégé : chou émincé + carotte râpée + fromage blanc + vinaigre + sel + pincée de sucre.",
-        "Passer les côtes 3-4 min sous le gril pour caramélisation finale.",
-        "Servir avec le coleslaw frais et le pain de mie toasté."
-      ]
-    },
-
-    {
-      id: 'R763',
-      name: 'Cabillaud Vapeur Beurre Citron & Purée de Céleri',
-      category: 'french',
-      mealTypes: ['dinner'],
-      emoji: '🐟', origin: '🇫🇷',
-      tags: ['high-protein', 'elegant', 'french', 'low-fat', 'light'],
-      servings: 2, prepTime: 10, cookTime: 25, difficulty: 1,
-      // 64×4 + 88×4 + 18×9 = 256+352+162 = 770 ✓
-      baseNutrition: { calories: 770, proteinGrams: 64, carbsGrams: 88, fatGrams: 18 },
-      ingredients: [
-        { name: 'Dos de cabillaud',                 qty: 400, unit: 'g', note: '2 morceaux' },
-        { name: 'Céleri-rave',                      qty: 400, unit: 'g', note: 'pelé, en cubes' },
-        { name: 'Pomme de terre',                   qty: 100, unit: 'g', note: '1 petite' },
-        { name: 'Lait chaud',                       qty: 80,  unit: 'ml' },
-        { name: 'Beurre',                           qty: 15,  unit: 'g' },
-        { name: 'Citron (jus + zeste)',             qty: 2,   unit: 'pce' },
-        { name: 'Câpres',                           qty: 15,  unit: 'g' },
-        { name: 'Persil',                           qty: 15,  unit: 'g' },
-        { name: 'Huile d\'olive',                   qty: 10,  unit: 'ml' }
-      ],
-      steps: [
-        "Cuire céleri-rave et pomme de terre 20 min à l'eau. Égoutter. Mixer avec lait chaud pour purée lisse.",
-        "Cuire le cabillaud à la vapeur 8-10 min.",
-        "Sauce beurre-citron : faire fondre beurre, ajouter jus et zeste de citron, câpres, persil.",
-        "Dresser : purée de céleri, cabillaud dessus, sauce beurre-citron.",
-        "Finir avec câpres entières et huile d'olive. Élégant, léger, plein de goût."
-      ]
-    },
-
-    {
-      id: 'R764',
-      name: 'Tarte Flambée Alsacienne Lardons Oignon',
-      category: 'french',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🫓', origin: '🇫🇷',
-      tags: ['french', 'comfort-food', 'thin-crust', 'indulgent', 'classic'],
-      servings: 2, prepTime: 15, cookTime: 12, difficulty: 1,
-      // 56×4 + 90×4 + 22×9 = 224+360+198 = 782 ✓
-      baseNutrition: { calories: 782, proteinGrams: 56, carbsGrams: 90, fatGrams: 22 },
-      ingredients: [
-        { name: 'Pâte à pizza fine',                qty: 200, unit: 'g' },
-        { name: 'Lardons fumés',                   qty: 150, unit: 'g' },
-        { name: 'Fromage blanc 0%',               qty: 100, unit: 'g' },
-        { name: 'Crème fraîche légère 15%',       qty: 50,  unit: 'g' },
-        { name: 'Oignon',                         qty: 150, unit: 'g', note: '1,5 oignon émincé très fin' },
-        { name: 'Muscade',                        qty: 2,   unit: 'g' },
-        { name: 'Sel, poivre',                    qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préchauffer four à 250°C avec la plaque à l'intérieur.",
-        "Mélanger fromage blanc, crème fraîche, muscade, sel et poivre.",
-        "Étaler la pâte très finement (2mm) sur du papier cuisson. Étaler la base blanche généreusement.",
-        "Répartir oignons émincés, puis lardons.",
-        "Glisser sur la plaque brûlante. Cuire 10-12 min jusqu'à bords croustillants et légèrement noircis. Manger brûlante."
-      ]
-    },
-
-    {
-      id: 'R765',
-      name: 'Boulettes Kefta Sauce Tomate Épicée & Couscous',
-      category: 'maroc-moderne',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍢', origin: '🇲🇦',
-      tags: ['moroccan', 'high-protein', 'spicy', 'comfort-food', 'authentic'],
-      servings: 2, prepTime: 15, cookTime: 25, difficulty: 1,
-      // 70×4 + 76×4 + 24×9 = 280+304+216 = 800 ✓
-      baseNutrition: { calories: 800, proteinGrams: 70, carbsGrams: 76, fatGrams: 24 },
-      ingredients: [
-        { name: 'Boeuf haché ou agneau haché',     qty: 400, unit: 'g' },
-        { name: 'Semoule de couscous',             qty: 140, unit: 'g', note: 'sec' },
-        { name: 'Tomates concassées',              qty: 400, unit: 'g' },
-        { name: 'Oignon',                         qty: 100, unit: 'g' },
-        { name: 'Coriandre fraîche',              qty: 20,  unit: 'g' },
-        { name: 'Persil',                         qty: 15,  unit: 'g' },
-        { name: 'Cumin',                          qty: 5,   unit: 'g' },
-        { name: 'Paprika',                        qty: 5,   unit: 'g' },
-        { name: 'Ras el hanout',                  qty: 5,   unit: 'g' },
-        { name: 'Huile d\'olive',                 qty: 15,  unit: 'ml' }
-      ],
-      steps: [
-        "Kefta : mélanger viande hachée avec ½ oignon râpé, coriandre, cumin, paprika, sel, poivre. Former des boulettes de 3cm.",
-        "Dorer les kefta dans une poêle huilée 6-8 min en tournant.",
-        "Sauce tomate : faire revenir ½ oignon restant, ajouter tomates, ras el hanout. Cuire 15 min.",
-        "Déposer les kefta dans la sauce, cuire encore 5 min.",
-        "Préparer le couscous (eau bouillante + beurre, 5 min). Servir kefta + sauce sur le couscous, coriandre fraîche."
-      ]
-    },
-
-    {
-      id: 'R766',
-      name: 'Soupe de Lentilles Marocaine Citron & Cumin',
-      category: 'maroc-moderne',
-      mealTypes: ['lunch', 'dinner', 'snack'],
-      emoji: '🫘', origin: '🇲🇦',
-      tags: ['vegan', 'moroccan', 'high-protein', 'warming', 'quick'],
-      servings: 2, prepTime: 10, cookTime: 25, difficulty: 1,
-      // 44×4 + 66×4 + 20×9 = 176+264+180 = 620 ✓
-      baseNutrition: { calories: 620, proteinGrams: 44, carbsGrams: 66, fatGrams: 20 },
-      ingredients: [
-        { name: 'Lentilles corail',                 qty: 200, unit: 'g', note: 'sèches' },
-        { name: 'Tomates concassées',               qty: 200, unit: 'g' },
-        { name: 'Oignon',                           qty: 100, unit: 'g' },
-        { name: 'Ail',                              qty: 10,  unit: 'g' },
-        { name: 'Citron (jus)',                     qty: 2,   unit: 'pce' },
-        { name: 'Cumin moulu',                      qty: 8,   unit: 'g' },
-        { name: 'Curcuma',                          qty: 3,   unit: 'g' },
-        { name: 'Paprika',                          qty: 3,   unit: 'g' },
-        { name: 'Huile d\'olive',                   qty: 20,  unit: 'ml' },
-        { name: 'Coriandre fraîche',                qty: 20,  unit: 'g' },
-        { name: 'Pain khobz',                       qty: 80,  unit: 'g' }
-      ],
-      steps: [
-        "Faire revenir l'oignon dans l'huile 5 min. Ajouter l'ail, cumin, curcuma, paprika. Mélanger 1 min.",
-        "Ajouter les lentilles rincées et les tomates. Couvrir de 700ml d'eau. Porter à ébullition.",
-        "Cuire 20-22 min à feu moyen-doux. Les lentilles fondent et épaississent naturellement.",
-        "Mixer partiellement pour texture mi-lisse.",
-        "Verser le jus de citron. Servir dans des bols, coriandre ciselée, filet d'huile d'olive. Pain khobz pour tremper."
-      ]
-    },
-
-    {
-      id: 'R767',
-      name: 'Tarte au Citron Meringuée Protéinée',
-      category: 'french',
-      mealTypes: ['dessert'],
-      emoji: '🍋', origin: '🇫🇷',
-      tags: ['high-protein', 'dessert', 'french', 'elegant', 'indulgent'],
-      servings: 2, prepTime: 20, cookTime: 15, difficulty: 2,
-      // 62×4 + 72×4 + 26×9 = 248+288+234 = 770 ✓
-      baseNutrition: { calories: 770, proteinGrams: 62, carbsGrams: 72, fatGrams: 26 },
-      ingredients: [
-        { name: 'Biscuits sablés',                  qty: 100, unit: 'g' },
-        { name: 'Beurre fondu',                    qty: 20,  unit: 'g' },
-        { name: 'Citron (jus + zeste)',             qty: 4,   unit: 'pce' },
-        { name: 'Protéine whey vanille',           qty: 50,  unit: 'g', note: '2 scoops' },
-        { name: 'Fromage blanc 0%',               qty: 150, unit: 'g' },
-        { name: 'Oeuf entier',                    qty: 3,   unit: 'pce' },
-        { name: 'Miel',                           qty: 30,  unit: 'g' },
-        { name: 'Amidon de maïs',                qty: 15,  unit: 'g' },
-        { name: 'Blanc d\'oeuf',                  qty: 3,   unit: 'pce', note: 'pour la meringue' },
-        { name: 'Sucre',                          qty: 40,  unit: 'g', note: 'pour la meringue' }
-      ],
-      steps: [
-        "Base : écraser les biscuits, mélanger avec beurre fondu. Tasser dans 2 cercles. Réfrigérer 10 min.",
-        "Crème citron protéinée : fouetter fromage blanc, whey, jus citron, miel et amidon. Incorporer les oeufs battus.",
-        "Cuire à feu doux en remuant jusqu'à consistance de lemon curd. Laisser tiédir.",
-        "Verser sur les bases. Réfrigérer 2h.",
-        "Meringue : battre les blancs en neige ferme avec le sucre. Pocher sur les tartes. Brûler au chalumeau."
-      ]
-    },
-
-    {
-      id: 'R768',
-      name: 'Escalopes Milanaises Poulet & Spaghetti Marinara',
-      category: 'italian',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍝', origin: '🇮🇹',
-      tags: ['high-protein', 'italian', 'comfort-food', 'classic', 'indulgent'],
-      servings: 2, prepTime: 15, cookTime: 20, difficulty: 1,
-      // 78×4 + 60×4 + 22×9 = 312+240+198 = 750 ✓
-      baseNutrition: { calories: 750, proteinGrams: 78, carbsGrams: 60, fatGrams: 22 },
-      ingredients: [
-        { name: 'Escalope de poulet',               qty: 400, unit: 'g', note: 'aplaties finement' },
-        { name: 'Spaghetti',                        qty: 120, unit: 'g' },
-        { name: 'Chapelure',                        qty: 50,  unit: 'g' },
-        { name: 'Parmesan râpé',                    qty: 30,  unit: 'g' },
-        { name: 'Oeuf',                             qty: 2,   unit: 'pce' },
-        { name: 'Tomates pelées boîte',             qty: 300, unit: 'g' },
-        { name: 'Basilic frais',                    qty: 15,  unit: 'g' },
-        { name: 'Ail',                              qty: 8,   unit: 'g' },
-        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' }
-      ],
-      steps: [
-        "Sauce marinara : chauffer l'huile, ail 1 min, tomates pelées écrasées + basilic. Réduire 15 min.",
-        "Cuire les spaghetti al dente.",
-        "Panure milanaise : mélanger chapelure + parmesan. Tremper les escalopes dans l'oeuf battu puis dans la chapelure-parmesan.",
-        "Poêler les escalopes 3-4 min par face jusqu'à dorées et croustillantes.",
-        "Servir avec les spaghetti marinara. Feuilles de basilic frais et parmesan sur le dessus."
-      ]
-    },
-
-    {
-      id: 'R769',
-      name: 'Assiette Combo Protéines & Légumes Grillés',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥘', origin: '🇺🇸',
-      tags: ['high-protein', 'low-carb', 'meal-prep', 'cutting', 'clean'],
-      servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
-      // 88×4 + 36×4 + 20×9 = 352+144+180 = 676 ✓
-      baseNutrition: { calories: 676, proteinGrams: 88, carbsGrams: 36, fatGrams: 20 },
-      ingredients: [
-        { name: 'Blanc de poulet',                  qty: 250, unit: 'g' },
-        { name: 'Crevettes décortiquées',           qty: 200, unit: 'g' },
-        { name: 'Brocoli',                          qty: 150, unit: 'g' },
-        { name: 'Asperges vertes',                 qty: 150, unit: 'g' },
-        { name: 'Poivron rouge',                   qty: 100, unit: 'g' },
-        { name: 'Patate douce',                    qty: 150, unit: 'g', note: 'en cubes rôtis' },
-        { name: 'Huile d\'olive',                  qty: 15,  unit: 'ml' },
-        { name: 'Ail',                             qty: 8,   unit: 'g' },
-        { name: 'Citron',                          qty: 1,   unit: 'pce' },
-        { name: 'Herbes de Provence',              qty: 5,   unit: 'g' }
-      ],
-      steps: [
-        "Préchauffer four 200°C. Mélanger patate douce et poivron avec 8ml d'huile, herbes, sel. Rôtir 20 min.",
-        "Assaisonner le poulet avec ail, huile, sel, poivre. Cuire à la poêle 5 min par face.",
-        "Cuire asperges et brocoli à la vapeur 8-10 min.",
-        "Dans la même poêle, saisir les crevettes avec ail 2-3 min.",
-        "Dresser l'assiette en sections : patate douce, légumes verts, poulet tranché, crevettes. Arroser de citron."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P19 — POULET DU QUOTIDIEN  (R770–R774)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R770',
-      name: 'Poulet Rôti Ail Citron au Four',
-      category: 'french',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍗', origin: '🇫🇷',
-      tags: ['high-protein', 'low-carb', 'easy', 'classic', 'lean'],
-      servings: 2, prepTime: 5, cookTime: 30, difficulty: 1,
-      // 70×4 + 10×4 + 22×9 = 280+40+198 = 518 ✓
-      baseNutrition: { calories: 518, proteinGrams: 70, carbsGrams: 10, fatGrams: 22 },
-      ingredients: [
-        { name: 'Hauts de cuisse de poulet',        qty: 600, unit: 'g', note: 'avec os' },
-        { name: 'Ail',                              qty: 20,  unit: 'g', note: '4 gousses, écrasées' },
-        { name: 'Citron',                           qty: 1,   unit: 'pce', note: 'jus + quartiers' },
-        { name: 'Thym frais',                       qty: 5,   unit: 'g' },
-        { name: 'Huile d\'olive',                   qty: 20,  unit: 'ml' },
-        { name: 'Sel, poivre',                      qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préchauffer le four à 200°C. Sécher le poulet avec du papier absorbant.",
-        "Mélanger huile d'olive, ail écrasé, jus de citron, thym, sel et poivre. Badigeonner généreusement chaque morceau.",
-        "Disposer côté peau vers le haut dans un plat allant au four. Glisser les quartiers de citron autour.",
-        "Enfourner 28-32 min. La peau doit être dorée et croustillante. Vérifier : jus transparent en piquant la cuisse.",
-        "Laisser reposer 5 min. Arroser du jus de cuisson avant de servir."
-      ]
-    },
-
-    {
-      id: 'R771',
-      name: 'Escalopes de Poulet Crème Champignons',
-      category: 'french',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍄', origin: '🇫🇷',
-      tags: ['high-protein', 'creamy', 'comfort-food', 'french', 'quick'],
-      servings: 2, prepTime: 5, cookTime: 15, difficulty: 1,
-      // 76×4 + 40×4 + 22×9 = 304+160+198 = 662 ✓
-      baseNutrition: { calories: 662, proteinGrams: 76, carbsGrams: 40, fatGrams: 22 },
-      ingredients: [
-        { name: 'Escalope de poulet',               qty: 450, unit: 'g', note: '2 grosses escalopes' },
-        { name: 'Champignons de Paris',             qty: 250, unit: 'g', note: 'émincés' },
-        { name: 'Riz basmati',                      qty: 100, unit: 'g', note: 'sec, pour servir' },
-        { name: 'Crème fraîche légère 15%',        qty: 100, unit: 'g' },
-        { name: 'Bouillon de poulet',              qty: 80,  unit: 'ml' },
-        { name: 'Oignon',                          qty: 80,  unit: 'g' },
-        { name: 'Ail',                             qty: 5,   unit: 'g' },
-        { name: 'Persil frais',                    qty: 10,  unit: 'g' },
-        { name: 'Beurre',                          qty: 10,  unit: 'g' },
-        { name: 'Sel, poivre',                     qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Cuire le riz. Aplatir les escalopes si épaisses. Saler et poivrer.",
-        "Faire dorer les escalopes dans le beurre 4 min par face. Réserver sous alu.",
-        "Dans la même poêle, faire revenir l'oignon émincé 3 min. Ajouter l'ail et les champignons, cuire 5 min jusqu'à évaporation de l'eau.",
-        "Verser le bouillon, gratter les sucs de cuisson. Ajouter la crème fraîche. Laisser réduire 3-4 min.",
-        "Remettre les escalopes dans la sauce 2 min. Parsemer de persil. Servir avec le riz."
-      ]
-    },
-
-    {
-      id: 'R772',
-      name: 'Poulet Sauté Tomates Olives & Thym',
-      category: 'mediterranean',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🫒', origin: '🇫🇷',
-      tags: ['high-protein', 'mediterranean', 'one-pan', 'easy', 'aromatic'],
-      servings: 2, prepTime: 5, cookTime: 25, difficulty: 1,
-      // 80×4 + 16×4 + 24×9 = 320+64+216 = 600 ✓
-      baseNutrition: { calories: 600, proteinGrams: 80, carbsGrams: 16, fatGrams: 24 },
-      ingredients: [
-        { name: 'Cuisses de poulet désossées',      qty: 500, unit: 'g' },
-        { name: 'Tomates cerises',                  qty: 200, unit: 'g' },
-        { name: 'Olives noires',                    qty: 60,  unit: 'g' },
-        { name: 'Ail',                              qty: 10,  unit: 'g', note: '2 gousses' },
-        { name: 'Thym frais',                       qty: 5,   unit: 'g' },
-        { name: 'Vin blanc sec',                    qty: 60,  unit: 'ml' },
-        { name: 'Huile d\'olive',                   qty: 20,  unit: 'ml' },
-        { name: 'Sel, poivre',                      qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Saler et poivrer le poulet. Chauffer l'huile dans une sauteuse à feu vif. Faire dorer le poulet 4-5 min par face. Réserver.",
-        "Dans la même sauteuse, faire revenir l'ail émincé 1 min. Déglacer au vin blanc, gratter les sucs.",
-        "Ajouter les tomates cerises et le thym. Porter à frémissement 5 min — les tomates éclatent et font une sauce.",
-        "Remettre le poulet. Ajouter les olives. Couvrir, cuire à feu doux 12-15 min.",
-        "Rectifier l'assaisonnement. Servir tel quel ou avec du pain croustillant pour saucer."
-      ]
-    },
-
-    {
-      id: 'R773',
-      name: 'Nuggets de Poulet Maison Panés au Four',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner', 'snack'],
-      emoji: '🍗', origin: '🇺🇸',
-      tags: ['high-protein', 'kid-friendly', 'batch-cooking', 'oven', 'classic'],
-      servings: 2, prepTime: 15, cookTime: 20, difficulty: 1,
-      // 72×4 + 60×4 + 18×9 = 288+240+162 = 690 ✓
-      baseNutrition: { calories: 690, proteinGrams: 72, carbsGrams: 60, fatGrams: 18 },
-      ingredients: [
-        { name: 'Blanc de poulet',                  qty: 450, unit: 'g', note: 'coupé en morceaux 3cm' },
-        { name: 'Chapelure',                        qty: 80,  unit: 'g' },
-        { name: 'Parmesan râpé',                    qty: 30,  unit: 'g' },
-        { name: 'Oeuf',                             qty: 2,   unit: 'pce' },
-        { name: 'Farine',                           qty: 30,  unit: 'g' },
-        { name: 'Paprika',                          qty: 5,   unit: 'g' },
-        { name: 'Ail en poudre',                    qty: 3,   unit: 'g' },
-        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml', note: 'pour badigeonner' },
-        { name: 'Sel, poivre',                      qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préchauffer le four à 200°C. Mettre une grille sur une plaque de cuisson.",
-        "Préparer 3 assiettes : farine assaisonnée (sel, poivre, ail en poudre), oeufs battus, chapelure mélangée au parmesan et paprika.",
-        "Passer chaque morceau de poulet dans l'ordre : farine → oeuf → chapelure. Presser pour bien faire adhérer.",
-        "Disposer sur la grille. Badigeonner d'huile d'olive au pinceau — ça donne le croustillant sans friture.",
-        "Cuire 18-20 min en retournant à mi-cuisson. Servir avec du ketchup maison ou une sauce yaourt-citron."
-      ]
-    },
-
-    {
-      id: 'R774',
-      name: 'Poulet Stroganoff Riz Blanc',
-      category: 'world-food',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍚', origin: '🇷🇺',
-      tags: ['high-protein', 'comfort-food', 'creamy', 'classic', 'balanced'],
-      servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
-      // 74×4 + 80×4 + 20×9 = 296+320+180 = 796 ✓
-      baseNutrition: { calories: 796, proteinGrams: 74, carbsGrams: 80, fatGrams: 20 },
-      ingredients: [
-        { name: 'Blanc de poulet',                  qty: 450, unit: 'g', note: 'en lanières 1cm' },
-        { name: 'Riz basmati',                      qty: 160, unit: 'g', note: 'sec' },
-        { name: 'Champignons de Paris',             qty: 200, unit: 'g', note: 'émincés' },
-        { name: 'Oignon',                           qty: 100, unit: 'g' },
-        { name: 'Crème fraîche légère 15%',        qty: 100, unit: 'g' },
-        { name: 'Moutarde de Dijon',               qty: 10,  unit: 'g' },
-        { name: 'Paprika',                          qty: 5,   unit: 'g' },
-        { name: 'Bouillon de poulet',              qty: 100, unit: 'ml' },
-        { name: 'Beurre',                          qty: 10,  unit: 'g' },
-        { name: 'Persil frais',                    qty: 10,  unit: 'g' }
-      ],
-      steps: [
-        "Cuire le riz. Assaisonner les lanières de poulet avec paprika, sel, poivre.",
-        "Dans une grande poêle, faire fondre le beurre à feu vif. Saisir le poulet 3-4 min sans remuer pour bien colorer. Réserver.",
-        "Dans la même poêle, faire revenir l'oignon 3 min, puis les champignons 5 min jusqu'à dorés.",
-        "Ajouter le bouillon et la moutarde, gratter les sucs. Laisser réduire 2 min. Incorporer la crème fraîche.",
-        "Remettre le poulet, chauffer 2-3 min. Parsemer de persil. Servir sur le riz blanc."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P20 — PÂTES CLASSIQUES  (R775–R779)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R775',
-      name: 'Spaghetti Bolognaise Maison',
-      category: 'italian',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍝', origin: '🇮🇹',
-      tags: ['high-protein', 'comfort-food', 'classic', 'italian', 'family'],
-      servings: 2, prepTime: 10, cookTime: 30, difficulty: 1,
-      // 58×4 + 110×4 + 20×9 = 232+440+180 = 852 ✓
-      baseNutrition: { calories: 852, proteinGrams: 58, carbsGrams: 110, fatGrams: 20 },
-      ingredients: [
-        { name: 'Spaghetti',                        qty: 200, unit: 'g' },
-        { name: 'Boeuf haché 5% MG',               qty: 300, unit: 'g' },
-        { name: 'Tomates concassées boîte',        qty: 400, unit: 'g' },
-        { name: 'Oignon',                          qty: 80,  unit: 'g' },
-        { name: 'Ail',                             qty: 8,   unit: 'g' },
-        { name: 'Carotte',                         qty: 60,  unit: 'g', note: 'en petits dés' },
-        { name: 'Céleri',                          qty: 40,  unit: 'g', note: '1 branche' },
-        { name: 'Concentré de tomate',             qty: 20,  unit: 'g' },
-        { name: 'Vin rouge',                       qty: 50,  unit: 'ml' },
-        { name: 'Huile d\'olive',                  qty: 15,  unit: 'ml' },
-        { name: 'Origan séché',                    qty: 3,   unit: 'g' },
-        { name: 'Parmesan râpé',                   qty: 20,  unit: 'g', note: 'pour servir' }
-      ],
-      steps: [
-        "Chauffer l'huile dans une sauteuse. Faire revenir oignon, carotte et céleri en petits dés (soffritto) 6-7 min à feu moyen.",
-        "Ajouter l'ail et le boeuf haché. Émietter et faire dorer 5-6 min — bien colorer la viande.",
-        "Déglacer au vin rouge, laisser évaporer 2 min. Ajouter concentré de tomate, tomates concassées et origan.",
-        "Laisser mijoter 20-25 min à feu doux, en remuant de temps en temps. La sauce doit épaissir. Rectifier sel.",
-        "Cuire les spaghetti al dente. Mélanger directement dans la sauce avec un peu d'eau de cuisson. Servir avec parmesan."
-      ]
-    },
-
-    {
-      id: 'R776',
-      name: 'Penne au Jambon Crème & Petits Pois',
-      category: 'french',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍝', origin: '🇫🇷',
-      tags: ['comfort-food', 'quick', 'family', 'classic', 'easy'],
-      servings: 2, prepTime: 5, cookTime: 15, difficulty: 1,
-      // 52×4 + 100×4 + 18×9 = 208+400+162 = 770 ✓
-      baseNutrition: { calories: 770, proteinGrams: 52, carbsGrams: 100, fatGrams: 18 },
-      ingredients: [
-        { name: 'Penne',                            qty: 200, unit: 'g' },
-        { name: 'Jambon blanc',                    qty: 200, unit: 'g', note: 'en dés' },
-        { name: 'Petits pois surgelés',            qty: 100, unit: 'g' },
-        { name: 'Crème fraîche légère 15%',       qty: 100, unit: 'g' },
-        { name: 'Parmesan râpé',                  qty: 30,  unit: 'g' },
-        { name: 'Oignon',                         qty: 60,  unit: 'g' },
-        { name: 'Beurre',                         qty: 10,  unit: 'g' },
-        { name: 'Sel, poivre, muscade',           qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Cuire les penne al dente. Garder 80ml d'eau de cuisson.",
-        "Faire revenir l'oignon émincé dans le beurre 3 min. Ajouter les dés de jambon, cuire 2 min.",
-        "Ajouter les petits pois directement surgelés, cuire 3 min.",
-        "Verser la crème fraîche, une pincée de muscade, sel et poivre. Laisser réduire 2 min.",
-        "Ajouter les pâtes égouttées et un peu d'eau de cuisson. Mélanger. Hors feu, incorporer le parmesan."
-      ]
-    },
-
-    {
-      id: 'R777',
-      name: 'Tagliatelles au Saumon Fumé Crème Citron',
-      category: 'italian',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍝', origin: '🇮🇹',
-      tags: ['high-protein', 'omega-3', 'creamy', 'quick', 'elegant'],
-      servings: 2, prepTime: 5, cookTime: 12, difficulty: 1,
-      // 60×4 + 92×4 + 24×9 = 240+368+216 = 824 ✓
-      baseNutrition: { calories: 824, proteinGrams: 60, carbsGrams: 92, fatGrams: 24 },
-      ingredients: [
-        { name: 'Tagliatelles',                     qty: 180, unit: 'g' },
-        { name: 'Saumon fumé',                      qty: 180, unit: 'g', note: 'en lanières' },
-        { name: 'Crème fraîche légère 15%',        qty: 100, unit: 'g' },
-        { name: 'Fromage blanc 0%',               qty: 80,  unit: 'g', note: 'allège la sauce' },
-        { name: 'Citron (jus + zeste)',            qty: 1,   unit: 'pce' },
-        { name: 'Échalote',                       qty: 40,  unit: 'g', note: '1 échalote' },
-        { name: 'Ciboulette fraîche',             qty: 15,  unit: 'g' },
-        { name: 'Beurre',                         qty: 10,  unit: 'g' },
-        { name: 'Poivre noir',                    qty: 2,   unit: 'g' }
-      ],
-      steps: [
-        "Cuire les tagliatelles al dente. Garder 100ml d'eau de cuisson.",
-        "Faire revenir l'échalote émincée dans le beurre à feu doux 3 min sans coloration.",
-        "Ajouter crème fraîche, fromage blanc, jus et zeste de citron, poivre. Laisser chauffer doucement 3 min.",
-        "Ajouter les lanières de saumon fumé. Cuire 1-2 min à feu très doux — le saumon ne doit pas se défaire.",
-        "Ajouter les pâtes et l'eau de cuisson pour lier. Parsemer de ciboulette ciselée. Servir immédiatement."
-      ]
-    },
-
-    {
-      id: 'R778',
-      name: 'Pasta e Ceci — Pâtes aux Pois Chiches',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍲', origin: '🇮🇹',
-      tags: ['vegan', 'comfort-food', 'plant-protein', 'rustic', 'italian'],
-      servings: 2, prepTime: 5, cookTime: 25, difficulty: 1,
-      // 48×4 + 108×4 + 14×9 = 192+432+126 = 750 ✓
-      baseNutrition: { calories: 750, proteinGrams: 48, carbsGrams: 108, fatGrams: 14 },
-      ingredients: [
-        { name: 'Ditalini ou pennes courtes',       qty: 140, unit: 'g' },
-        { name: 'Pois chiches boîte',               qty: 400, unit: 'g', note: 'égouttés' },
-        { name: 'Tomates concassées',               qty: 200, unit: 'g' },
-        { name: 'Bouillon de légumes',              qty: 500, unit: 'ml' },
-        { name: 'Oignon',                           qty: 80,  unit: 'g' },
-        { name: 'Ail',                              qty: 8,   unit: 'g' },
-        { name: 'Romarin frais',                    qty: 5,   unit: 'g' },
-        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' },
-        { name: 'Parmesan',                         qty: 20,  unit: 'g', note: 'ou levure nutritionnelle' }
-      ],
-      steps: [
-        "Faire revenir oignon et ail dans l'huile 4 min. Ajouter le romarin haché, cuire 1 min.",
-        "Écraser 1/3 des pois chiches à la fourchette. Ajouter tous les pois chiches dans la casserole.",
-        "Verser les tomates et le bouillon. Porter à ébullition. Cuire 10 min à feu moyen.",
-        "Ajouter les pâtes directement dans la soupe. Cuire selon indication moins 2 min — elles absorbent le bouillon.",
-        "Rectifier sel et consistance (ajouter eau si trop épais). Arroser d'huile d'olive. Parmesan sur le dessus."
-      ]
-    },
-
-    {
-      id: 'R779',
-      name: 'Rigatoni Merguez Fenouil & Tomate',
-      category: 'italian',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍝', origin: '🇮🇹',
-      tags: ['high-protein', 'comfort-food', 'italian', 'spicy', 'rustic'],
-      servings: 2, prepTime: 5, cookTime: 25, difficulty: 1,
-      // 64×4 + 96×4 + 22×9 = 256+384+198 = 838 ✓
-      baseNutrition: { calories: 838, proteinGrams: 64, carbsGrams: 96, fatGrams: 22 },
-      ingredients: [
-        { name: 'Rigatoni',                         qty: 180, unit: 'g' },
-        { name: 'Merguez',                qty: 300, unit: 'g', note: 'chair retirée du boyau' },
-        { name: 'Tomates pelées boîte',             qty: 400, unit: 'g' },
-        { name: 'Fenouil',                          qty: 100, unit: 'g', note: '½ bulbe émincé, ou 1 c.c. graines' },
-        { name: 'Oignon',                           qty: 80,  unit: 'g' },
-        { name: 'Ail',                              qty: 8,   unit: 'g' },
-        { name: 'Piment séché',                     qty: 2,   unit: 'g' },
-        { name: 'Vin blanc',                        qty: 50,  unit: 'ml' },
-        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' },
-        { name: 'Parmesan',                         qty: 20,  unit: 'g' }
-      ],
-      steps: [
-        "Chauffer l'huile dans une sauteuse. Émietter la chair de saucisse et faire dorer 5-6 min à feu vif.",
-        "Ajouter oignon et fenouil émincés, cuire 4 min. Ajouter l'ail et le piment.",
-        "Déglacer au vin blanc, laisser évaporer. Écraser les tomates et les ajouter.",
-        "Laisser mijoter 15 min à feu moyen jusqu'à sauce dense. Rectifier sel.",
-        "Cuire les rigatoni al dente. Les ajouter dans la sauce avec un peu d'eau de cuisson. Mélanger 1 min. Parmesan."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P21 — RIZ & PLATS AU RIZ  (R780–R784)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R780',
-      name: 'Riz Pilaf Poulet & Légumes',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍚', origin: '🇫🇷',
-      tags: ['high-protein', 'balanced', 'one-pan', 'classic', 'easy'],
-      servings: 2, prepTime: 10, cookTime: 25, difficulty: 1,
-      // 56×4 + 90×4 + 18×9 = 224+360+162 = 746 ✓
-      baseNutrition: { calories: 746, proteinGrams: 56, carbsGrams: 90, fatGrams: 18 },
-      ingredients: [
-        { name: 'Riz basmati',                      qty: 160, unit: 'g', note: 'sec' },
-        { name: 'Blanc de poulet',                  qty: 350, unit: 'g', note: 'en dés' },
-        { name: 'Carotte',                          qty: 100, unit: 'g', note: 'en dés' },
-        { name: 'Petits pois surgelés',             qty: 80,  unit: 'g' },
-        { name: 'Oignon',                           qty: 80,  unit: 'g' },
-        { name: 'Bouillon de poulet',              qty: 350, unit: 'ml' },
-        { name: 'Beurre',                          qty: 15,  unit: 'g' },
-        { name: 'Laurier',                         qty: 1,   unit: 'feuille' },
-        { name: 'Sel, poivre',                     qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Dans une casserole à fond épais, faire revenir l'oignon dans le beurre 3 min. Ajouter les dés de poulet, colorer 3-4 min.",
-        "Ajouter les carottes. Verser le riz et le faire nacrer 2 min en remuant — chaque grain doit être enrobé de beurre.",
-        "Verser le bouillon chaud (ratio 2:1 bouillon/riz). Ajouter le laurier, sel, poivre. Porter à ébullition.",
-        "Couvrir hermétiquement, cuire à feu très doux 15-17 min sans soulever le couvercle.",
-        "Ajouter les petits pois, couvrir encore 3 min hors feu. Égrener délicatement à la fourchette."
-      ]
-    },
-
-    {
-      id: 'R781',
-      name: 'Riz Cantonnais Jambon Oeuf Petits Pois',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍳', origin: '🇨🇳',
-      tags: ['comfort-food', 'asian', 'quick', 'classic', 'family'],
-      servings: 2, prepTime: 5, cookTime: 15, difficulty: 1,
-      // 62×4 + 96×4 + 20×9 = 248+384+180 = 812 ✓
-      baseNutrition: { calories: 812, proteinGrams: 62, carbsGrams: 96, fatGrams: 20 },
-      ingredients: [
-        { name: 'Riz cuit froid',                   qty: 320, unit: 'g', note: 'riz de la veille' },
-        { name: 'Jambon blanc',                    qty: 150, unit: 'g', note: 'en dés' },
-        { name: 'Oeuf',                            qty: 3,   unit: 'pce' },
-        { name: 'Petits pois surgelés',            qty: 80,  unit: 'g' },
-        { name: 'Oignon vert',                     qty: 30,  unit: 'g' },
-        { name: 'Sauce soja',                      qty: 20,  unit: 'ml' },
-        { name: 'Huile végétale',                  qty: 15,  unit: 'ml' },
-        { name: 'Huile de sésame',                qty: 5,   unit: 'ml' },
-        { name: 'Sel, poivre',                    qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Décongeler les petits pois 3 min dans de l'eau chaude. Égoutter.",
-        "Wok très chaud avec l'huile végétale. Battre les oeufs et les brouiller rapidement 1 min. Réserver.",
-        "Dans le même wok, ajouter les dés de jambon, cuire 2 min. Ajouter le riz froid, émietter les grains à la spatule.",
-        "Faire sauter le riz à feu vif 3-4 min jusqu'à grains bien séparés et légèrement grillés.",
-        "Ajouter petits pois, oeufs brouillés, sauce soja et huile de sésame. Mélanger 1 min. Parsemer d'oignons verts."
-      ]
-    },
-
-    {
-      id: 'R782',
-      name: 'Riz au Lait Vanille Cannelle',
-      category: 'french',
-      mealTypes: ['dessert', 'snack', 'breakfast'],
-      emoji: '🍮', origin: '🇫🇷',
-      tags: ['comfort-food', 'dessert', 'french', 'classic', 'warming'],
-      servings: 2, prepTime: 5, cookTime: 35, difficulty: 1,
-      // 52×4 + 88×4 + 22×9 = 208+352+198 = 758 ✓
-      baseNutrition: { calories: 758, proteinGrams: 52, carbsGrams: 88, fatGrams: 22 },
-      ingredients: [
-        { name: 'Riz rond (pudding)',               qty: 100, unit: 'g' },
-        { name: 'Lait entier',                      qty: 700, unit: 'ml' },
-        { name: 'Fromage blanc 0%',               qty: 200, unit: 'g', note: 'pour protéines' },
-        { name: 'Sucre',                          qty: 40,  unit: 'g' },
-        { name: 'Gousse de vanille',              qty: 1,   unit: 'pce', note: 'ou 1 c.c. extrait' },
-        { name: 'Cannelle moulue',                qty: 3,   unit: 'g' },
-        { name: 'Sel',                            qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Fendre la gousse de vanille, gratter les graines. Verser le lait dans une casserole avec la gousse et les graines de vanille. Chauffer jusqu'à frémissement.",
-        "Ajouter le riz, le sucre et la pincée de sel. Cuire à feu doux en remuant régulièrement 30-35 min.",
-        "Le riz doit être très tendre et la préparation crémeuse — elle épaissit en refroidissant.",
-        "Retirer la gousse de vanille. Hors feu, incorporer le fromage blanc.",
-        "Servir tiède ou froid saupoudré de cannelle. Le riz au lait est encore meilleur le lendemain."
-      ]
-    },
-
-    {
-      id: 'R783',
-      name: 'Timbale de Riz Thon & Légumes',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍚', origin: '🇮🇹',
-      tags: ['balanced', 'quick', 'no-cook', 'meal-prep', 'fresh'],
-      servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
-      // 48×4 + 100×4 + 16×9 = 192+400+144 = 736 ✓
-      baseNutrition: { calories: 736, proteinGrams: 48, carbsGrams: 100, fatGrams: 16 },
-      ingredients: [
-        { name: 'Riz basmati',                      qty: 180, unit: 'g', note: 'sec' },
-        { name: 'Thon en boîte au naturel',         qty: 240, unit: 'g', note: '2 boîtes' },
-        { name: 'Maïs boîte',                       qty: 100, unit: 'g' },
-        { name: 'Tomates cerises',                  qty: 100, unit: 'g', note: 'coupées en deux' },
-        { name: 'Concombre',                        qty: 80,  unit: 'g' },
-        { name: 'Câpres',                           qty: 15,  unit: 'g' },
-        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' },
-        { name: 'Citron (jus)',                     qty: 1,   unit: 'pce' },
-        { name: 'Basilic frais',                    qty: 10,  unit: 'g' }
-      ],
-      steps: [
-        "Cuire le riz basmati. Laisser refroidir complètement (étaler sur une plaque pour accélérer).",
-        "Mélanger le riz froid avec l'huile d'olive et le jus de citron — ça évite qu'il colle.",
-        "Incorporer le thon égoutté et émietté, le maïs, les tomates cerises coupées, le concombre en dés et les câpres.",
-        "Façonner des timbales en utilisant un ramequin ou un verre retourné : tasser le riz, démouler dans l'assiette.",
-        "Parsemer de basilic frais. Servir à température ambiante — convient parfaitement pour le lunch box."
-      ]
-    },
-
-    {
-      id: 'R784',
-      name: 'Poulet au Riz Façon Hainanese',
-      category: 'world-food',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍚', origin: '🇸🇬',
-      tags: ['high-protein', 'balanced', 'asian', 'clean', 'comforting'],
-      servings: 2, prepTime: 10, cookTime: 30, difficulty: 1,
-      // 70×4 + 80×4 + 18×9 = 280+320+162 = 762 ✓
-      baseNutrition: { calories: 762, proteinGrams: 70, carbsGrams: 80, fatGrams: 18 },
-      ingredients: [
-        { name: 'Blanc de poulet',                  qty: 450, unit: 'g', note: 'entier ou en morceaux' },
-        { name: 'Riz jasmin',                       qty: 160, unit: 'g', note: 'sec' },
-        { name: 'Ail',                              qty: 15,  unit: 'g', note: '3 gousses' },
-        { name: 'Gingembre frais',                 qty: 15,  unit: 'g' },
-        { name: 'Bouillon de poulet',              qty: 400, unit: 'ml' },
-        { name: 'Sauce soja',                      qty: 15,  unit: 'ml' },
-        { name: 'Huile de sésame',                qty: 8,   unit: 'ml' },
-        { name: 'Oignon vert',                    qty: 20,  unit: 'g' },
-        { name: 'Concombre',                      qty: 60,  unit: 'g', note: 'tranché fin, pour servir' }
-      ],
-      steps: [
-        "Faire pocher les blancs de poulet dans le bouillon frémissant avec la moitié du gingembre et de l'ail 15-18 min. Sortir, laisser refroidir. Garder le bouillon.",
-        "Filtrer 320ml de bouillon de cuisson. Y faire cuire le riz jasmin en absorption (15 min à couvert). Le riz absorbe toute la saveur du poulet.",
-        "Hacher finement le reste d'ail et gingembre. Mélanger avec sauce soja et huile de sésame — sauce d'accompagnement.",
-        "Couper le poulet poché en tranches fines contre le fil.",
-        "Dresser : riz parfumé, tranches de poulet dessus, concombre sur le côté. Arroser de sauce soja-sésame. Parsemer d'oignons verts."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P22 — VIANDE HACHÉE CLASSIQUES  (R785–R789)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R785',
-      name: 'Hachis Parmentier Boeuf & Purée',
-      category: 'french',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🥔', origin: '🇫🇷',
-      tags: ['high-protein', 'comfort-food', 'french', 'classic', 'family'],
-      servings: 2, prepTime: 15, cookTime: 35, difficulty: 1,
-      // 64×4 + 60×4 + 26×9 = 256+240+234 = 730 ✓
-      baseNutrition: { calories: 730, proteinGrams: 64, carbsGrams: 60, fatGrams: 26 },
-      ingredients: [
-        { name: 'Boeuf haché 5% MG',               qty: 350, unit: 'g' },
-        { name: 'Pommes de terre',                  qty: 500, unit: 'g', note: 'à purée (Bintje, Agria)' },
-        { name: 'Lait demi-écrémé',                qty: 80,  unit: 'ml', note: 'chaud pour la purée' },
-        { name: 'Beurre',                          qty: 20,  unit: 'g' },
-        { name: 'Oignon',                          qty: 80,  unit: 'g' },
-        { name: 'Ail',                             qty: 8,   unit: 'g' },
-        { name: 'Tomates concassées',              qty: 150, unit: 'g' },
-        { name: 'Gruyère râpé',                   qty: 30,  unit: 'g', note: 'pour gratiner' },
-        { name: 'Thym, laurier',                  qty: 3,   unit: 'g' },
-        { name: 'Huile d\'olive',                 qty: 10,  unit: 'ml' }
-      ],
-      steps: [
-        "Cuire les pommes de terre pelées et coupées dans l'eau bouillante salée 20 min. Égoutter. Écraser avec lait chaud et beurre jusqu'à purée lisse.",
-        "Faire revenir oignon et ail dans l'huile 4 min. Ajouter le boeuf haché, dorer 5-6 min en émiettant.",
-        "Ajouter les tomates, thym, laurier, sel, poivre. Mijoter 10 min jusqu'à sauce épaisse.",
-        "Dans un plat à gratin beurré : couche de viande en sauce, puis purée. Lisser, rayer à la fourchette. Saupoudrer de gruyère.",
-        "Enfourner à 200°C 15 min jusqu'à surface gratinée et dorée. Passer 3 min sous le gril pour finir."
-      ]
-    },
-
-    {
-      id: 'R786',
-      name: 'Boulettes de Viande Sauce Tomate & Spaghetti',
-      category: 'italian',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍝', origin: '🇮🇹',
-      tags: ['high-protein', 'comfort-food', 'classic', 'italian', 'family'],
-      servings: 2, prepTime: 15, cookTime: 30, difficulty: 1,
-      // 72×4 + 52×4 + 24×9 = 288+208+216 = 712 ✓
-      baseNutrition: { calories: 712, proteinGrams: 72, carbsGrams: 52, fatGrams: 24 },
-      ingredients: [
-        { name: 'Boeuf haché 5% MG',               qty: 350, unit: 'g' },
-        { name: 'Spaghetti',                        qty: 100, unit: 'g' },
-        { name: 'Oeuf',                             qty: 1,   unit: 'pce' },
-        { name: 'Pain de mie rassis',               qty: 30,  unit: 'g', note: 'trempé dans du lait' },
-        { name: 'Parmesan râpé',                    qty: 25,  unit: 'g' },
-        { name: 'Tomates concassées',               qty: 400, unit: 'g' },
-        { name: 'Ail',                              qty: 10,  unit: 'g' },
-        { name: 'Basilic frais',                    qty: 10,  unit: 'g' },
-        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' },
-        { name: 'Origan séché',                     qty: 3,   unit: 'g' }
-      ],
-      steps: [
-        "Préparer les boulettes : mélanger boeuf, oeuf, pain de mie essoré, parmesan, sel et poivre. Former des boulettes de 3-4 cm.",
-        "Faire dorer les boulettes dans l'huile chaude 5-6 min en les tournant. Réserver.",
-        "Dans la même poêle, faire revenir l'ail 1 min. Ajouter les tomates, origan, sel. Cuire 10 min.",
-        "Remettre les boulettes dans la sauce. Couvrir, mijoter 12-15 min à feu doux.",
-        "Cuire les spaghetti al dente. Servir avec les boulettes et la sauce. Basilic frais et parmesan."
-      ]
-    },
-
-    {
-      id: 'R787',
-      name: 'Steak Haché Oignons Caramélisés & Purée',
-      category: 'french',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🥩', origin: '🇫🇷',
-      tags: ['high-protein', 'comfort-food', 'bistrot', 'classic', 'french'],
-      servings: 2, prepTime: 10, cookTime: 25, difficulty: 1,
-      // 68×4 + 48×4 + 22×9 = 272+192+198 = 662 ✓
-      baseNutrition: { calories: 662, proteinGrams: 68, carbsGrams: 48, fatGrams: 22 },
-      ingredients: [
-        { name: 'Boeuf haché 5% MG',               qty: 400, unit: 'g', note: 'façonné en 2 steaks épais' },
-        { name: 'Pommes de terre',                  qty: 400, unit: 'g' },
-        { name: 'Oignons',                          qty: 200, unit: 'g', note: '2 gros, émincés finement' },
-        { name: 'Lait demi-écrémé',                qty: 60,  unit: 'ml' },
-        { name: 'Beurre',                          qty: 20,  unit: 'g' },
-        { name: 'Vinaigre balsamique',             qty: 10,  unit: 'ml' },
-        { name: 'Sel, poivre',                     qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Cuire les pommes de terre, faire une purée lisse avec lait chaud et 10g de beurre. Garder au chaud.",
-        "Caraméliser les oignons : faire fondre 10g de beurre dans une poêle, ajouter les oignons. Cuire à feu doux 20 min en remuant régulièrement jusqu'à dorés et fondants. Déglacer au vinaigre balsamique.",
-        "Pendant ce temps, former les steaks hachés épais. Saler et poivrer généreusement.",
-        "Cuire les steaks dans une poêle très chaude : 3 min par face pour saignant, 4 min pour à point. Laisser reposer 2 min.",
-        "Servir les steaks avec la purée et les oignons caramélisés dessus. Bistrot classique."
-      ]
-    },
-
-    {
-      id: 'R788',
-      name: 'Farci de Courgettes Boeuf & Fromage',
-      category: 'french',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🫑', origin: '🇫🇷',
-      tags: ['high-protein', 'comfort-food', 'french', 'balanced', 'summer'],
-      servings: 2, prepTime: 15, cookTime: 30, difficulty: 1,
-      // 60×4 + 80×4 + 20×9 = 240+320+180 = 740 ✓
-      baseNutrition: { calories: 740, proteinGrams: 60, carbsGrams: 80, fatGrams: 20 },
-      ingredients: [
-        { name: 'Courgettes rondes ou longues',     qty: 600, unit: 'g', note: '2 grosses ou 4 petites' },
-        { name: 'Boeuf haché 5% MG',               qty: 300, unit: 'g' },
-        { name: 'Riz cuit',                         qty: 120, unit: 'g', note: '80g sec' },
-        { name: 'Tomates concassées',               qty: 150, unit: 'g' },
-        { name: 'Gruyère râpé',                    qty: 40,  unit: 'g' },
-        { name: 'Oignon',                          qty: 60,  unit: 'g' },
-        { name: 'Ail',                             qty: 5,   unit: 'g' },
-        { name: 'Herbes de Provence',              qty: 5,   unit: 'g' },
-        { name: 'Huile d\'olive',                  qty: 10,  unit: 'ml' }
-      ],
-      steps: [
-        "Préchauffer four 190°C. Évider les courgettes à la cuillère — garder la pulpe, la hacher grossièrement.",
-        "Faire revenir oignon et ail dans l'huile 3 min. Ajouter la viande hachée, dorer 5 min. Ajouter pulpe de courgette, tomates, herbes de Provence. Cuire 8 min.",
-        "Mélanger la farce avec le riz cuit. Rectifier sel et poivre.",
-        "Remplir les courgettes évidées de farce. Saupoudrer de gruyère râpé.",
-        "Enfourner 25-30 min jusqu'à courgettes tendres et fromage gratiné."
-      ]
-    },
-
-    {
-      id: 'R789',
-      name: 'Pain de Viande Maison Sauce Tomate',
-      category: 'french',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍖', origin: '🇫🇷',
-      tags: ['high-protein', 'meal-prep', 'comfort-food', 'classic', 'family'],
-      servings: 2, prepTime: 15, cookTime: 40, difficulty: 1,
-      // 74×4 + 46×4 + 28×9 = 296+184+252 = 732 ✓
-      baseNutrition: { calories: 732, proteinGrams: 74, carbsGrams: 46, fatGrams: 28 },
-      ingredients: [
-        { name: 'Boeuf haché 5% MG',               qty: 300, unit: 'g' },
-        { name: 'Chair de saucisse',               qty: 150, unit: 'g' },
-        { name: 'Oeuf',                            qty: 2,   unit: 'pce' },
-        { name: 'Pain de mie',                     qty: 60,  unit: 'g', note: 'trempé dans du lait' },
-        { name: 'Oignon',                          qty: 80,  unit: 'g', note: 'râpé' },
-        { name: 'Ail',                             qty: 5,   unit: 'g' },
-        { name: 'Moutarde',                        qty: 15,  unit: 'g' },
-        { name: 'Ketchup',                         qty: 30,  unit: 'g', note: 'pour napper' },
-        { name: 'Thym, persil',                    qty: 5,   unit: 'g' },
-        { name: 'Sel, poivre',                     qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préchauffer four à 180°C. Mélanger boeuf haché, chair de saucisse, oeufs, pain essoré, oignon râpé, ail écrasé, moutarde, herbes, sel et poivre.",
-        "Bien malaxer pour amalgamer. Goûter la farce crue — rectifier l'assaisonnement.",
-        "Façonner en pain dans un moule à cake légèrement huilé. Napper de ketchup sur le dessus.",
-        "Enfourner 35-40 min. La température interne doit atteindre 70°C.",
-        "Laisser reposer 10 min avant de trancher. Excellent chaud ou froid le lendemain. Se congèle très bien en tranches."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P23 — FOIE & ABATS  (R790–R794)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R790',
-      name: 'Foie de Veau à la Vénitienne',
-      category: 'italian',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍖', origin: '🇮🇹',
-      tags: ['high-protein', 'iron', 'italian', 'classic', 'quick'],
-      servings: 2, prepTime: 5, cookTime: 15, difficulty: 1,
-      // 72×4 + 30×4 + 24×9 = 288+120+216 = 624 ✓
-      baseNutrition: { calories: 624, proteinGrams: 72, carbsGrams: 30, fatGrams: 24 },
-      ingredients: [
-        { name: 'Foie de veau',                     qty: 400, unit: 'g', note: 'tranches fines 5mm' },
-        { name: 'Oignons',                          qty: 250, unit: 'g', note: '2,5 oignons émincés en rondelles' },
-        { name: 'Polenta cuite',                    qty: 150, unit: 'g', note: 'ou pain grillé' },
-        { name: 'Vin blanc sec',                    qty: 60,  unit: 'ml' },
-        { name: 'Beurre',                           qty: 20,  unit: 'g' },
-        { name: 'Sauge fraîche',                    qty: 5,   unit: 'g', note: 'ou séchée' },
-        { name: 'Persil frais',                     qty: 10,  unit: 'g' },
-        { name: 'Sel, poivre',                      qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Cuire les oignons en rondelles dans 10g de beurre à feu doux 15-18 min — patience, ils doivent caraméliser doucement et fondre.",
-        "Déglacer les oignons au vin blanc, laisser évaporer. Réserver.",
-        "Sécher les tranches de foie. Dans la même poêle avec le reste de beurre à feu vif, saisir le foie 1,5-2 min par face. Il doit rester rosé au centre.",
-        "Remettre les oignons, ajouter les feuilles de sauge. Cuire 1 min ensemble.",
-        "Parsemer de persil ciselé. Servir immédiatement avec la polenta ou le pain grillé. Le foie ne supporte pas la surcuisson."
-      ]
-    },
-
-    {
-      id: 'R791',
-      name: 'Foie de Poulet Sauté Échalotes & Vinaigre',
-      category: 'french',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🫀', origin: '🇫🇷',
-      tags: ['high-protein', 'iron', 'french', 'quick', 'budget'],
-      servings: 2, prepTime: 5, cookTime: 12, difficulty: 1,
-      // 68×4 + 26×4 + 20×9 = 272+104+180 = 556 ✓
-      baseNutrition: { calories: 556, proteinGrams: 68, carbsGrams: 26, fatGrams: 20 },
-      ingredients: [
-        { name: 'Foies de poulet',                  qty: 400, unit: 'g', note: 'parés, nervures retirées' },
-        { name: 'Échalotes',                        qty: 80,  unit: 'g', note: '2 échalotes, émincées' },
-        { name: 'Pain de campagne',                qty: 80,  unit: 'g', note: '2 tranches grillées' },
-        { name: 'Vinaigre balsamique',             qty: 15,  unit: 'ml' },
-        { name: 'Beurre',                          qty: 15,  unit: 'g' },
-        { name: 'Thym frais',                      qty: 3,   unit: 'g' },
-        { name: 'Persil',                          qty: 10,  unit: 'g' },
-        { name: 'Sel, poivre',                     qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Parer les foies : retirer les filaments verts (fiel) et les nervures. Sécher avec du papier absorbant.",
-        "Faire revenir les échalotes dans le beurre à feu moyen 3-4 min jusqu'à translucides.",
-        "Monter le feu à vif. Saisir les foies 2-3 min sans remuer. Retourner, cuire encore 2 min. Ils doivent être rosés à coeur.",
-        "Déglacer au vinaigre balsamique, gratter les sucs. Ajouter le thym. Cuire 1 min.",
-        "Parsemer de persil. Servir immédiatement sur le pain de campagne grillé. Économique, rapide, riche en fer."
-      ]
-    },
-
-    {
-      id: 'R792',
-      name: 'Rognons de Veau Sauce Moutarde',
-      category: 'french',
-      mealTypes: ['dinner'],
-      emoji: '🫀', origin: '🇫🇷',
-      tags: ['high-protein', 'iron', 'french', 'bistrot', 'classic'],
-      servings: 2, prepTime: 10, cookTime: 15, difficulty: 2,
-      // 80×4 + 24×4 + 26×9 = 320+96+234 = 650 ✓
-      baseNutrition: { calories: 650, proteinGrams: 80, carbsGrams: 24, fatGrams: 26 },
-      ingredients: [
-        { name: 'Rognons de veau',                  qty: 400, unit: 'g', note: 'parés et dégraissés' },
-        { name: 'Moutarde de Dijon',               qty: 25,  unit: 'g' },
-        { name: 'Crème fraîche légère',            qty: 80,  unit: 'g' },
-        { name: 'Échalotes',                       qty: 60,  unit: 'g', note: '2 échalotes' },
-        { name: 'Cognac',                          qty: 20,  unit: 'ml' },
-        { name: 'Bouillon de veau',                qty: 80,  unit: 'ml' },
-        { name: 'Beurre',                          qty: 15,  unit: 'g' },
-        { name: 'Persil',                          qty: 10,  unit: 'g' },
-        { name: 'Pain grillé',                     qty: 80,  unit: 'g' }
-      ],
-      steps: [
-        "Couper les rognons en gros morceaux de 3cm, retirer le coeur blanc. Sécher soigneusement.",
-        "Faire revenir les échalotes dans le beurre 3 min. Monter le feu à vif.",
-        "Saisir les rognons 2-3 min par face — feu très vif, les rognons doivent grésiller fort. Ne pas trop cuire.",
-        "Flamber au cognac (incliner pour enflammer). Ajouter le bouillon, réduire 2 min. Retirer les rognons.",
-        "Incorporer moutarde et crème dans la sauce. Remettre les rognons 1 min. Parsemer de persil. Servir sur pain grillé."
-      ]
-    },
-
-    {
-      id: 'R793',
-      name: 'Gésiers de Canard Confits Salade Tiède',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🦆', origin: '🇫🇷',
-      tags: ['high-protein', 'iron', 'french', 'bistrot', 'classic'],
-      servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
-      // 62×4 + 40×4 + 22×9 = 248+160+198 = 606 ✓
-      baseNutrition: { calories: 606, proteinGrams: 62, carbsGrams: 40, fatGrams: 22 },
-      ingredients: [
-        { name: 'Gésiers de canard confits',        qty: 300, unit: 'g', note: 'en bocal, égouttés' },
-        { name: 'Salade frisée ou mesclun',         qty: 100, unit: 'g' },
-        { name: 'Lardons fumés',                   qty: 60,  unit: 'g' },
-        { name: 'Pain de campagne',                qty: 80,  unit: 'g', note: '4 croûtons grillés' },
-        { name: 'Noix',                            qty: 20,  unit: 'g' },
-        { name: 'Vinaigre de noix ou balsamique',  qty: 15,  unit: 'ml' },
-        { name: 'Moutarde',                        qty: 5,   unit: 'g' },
-        { name: 'Huile de noix',                   qty: 15,  unit: 'ml' }
-      ],
-      steps: [
-        "Réchauffer les gésiers dans leur graisse à la poêle 5-6 min à feu moyen jusqu'à bien chauds et légèrement croustillants.",
-        "Dans la même poêle, faire revenir les lardons 3-4 min jusqu'à dorés.",
-        "Préparer la vinaigrette : moutarde + vinaigre de noix + huile de noix + sel + poivre.",
-        "Disposer la salade dans les assiettes. Ajouter les gésiers chauds et les lardons dessus.",
-        "Arroser de vinaigrette. Garnir de noix et croûtons grillés. La salade tiède doit être mangée immédiatement."
-      ]
-    },
-
-    {
-      id: 'R794',
-      name: 'Foie de Boeuf Oignons & Purée de Pommes de Terre',
-      category: 'french',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍖', origin: '🇫🇷',
-      tags: ['high-protein', 'iron', 'french', 'budget', 'classic'],
-      servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
-      // 70×4 + 36×4 + 18×9 = 280+144+162 = 586 ✓
-      baseNutrition: { calories: 586, proteinGrams: 70, carbsGrams: 36, fatGrams: 18 },
-      ingredients: [
-        { name: 'Foie de boeuf',                    qty: 400, unit: 'g', note: 'tranches de 1cm, trempé dans du lait 30 min' },
-        { name: 'Oignons',                          qty: 200, unit: 'g', note: '2 oignons, émincés' },
-        { name: 'Pommes de terre',                  qty: 300, unit: 'g', note: 'pour purée' },
-        { name: 'Lait',                             qty: 50,  unit: 'ml' },
-        { name: 'Beurre',                           qty: 15,  unit: 'g' },
-        { name: 'Farine',                           qty: 15,  unit: 'g', note: 'pour paner légèrement' },
-        { name: 'Vinaigre de vin rouge',            qty: 10,  unit: 'ml' },
-        { name: 'Persil',                           qty: 10,  unit: 'g' },
-        { name: 'Sel, poivre',                      qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Tremper le foie de boeuf dans du lait 30 min — cela adoucit la saveur et réduit l'amertume. Égoutter, sécher.",
-        "Cuire les pommes de terre, faire la purée avec lait et 8g beurre. Garder au chaud.",
-        "Caraméliser les oignons dans 7g beurre à feu doux 12-15 min. Déglacer au vinaigre. Réserver.",
-        "Fariner légèrement les tranches de foie. Saisir dans la même poêle à feu vif 2 min par face — rosé à coeur.",
-        "Servir le foie avec les oignons caramélisés et la purée. Parsemer de persil. Simple, nourrissant, riche en fer."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P24 — OEUFS & FROMAGES  (R795–R799)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R795',
-      name: 'Quiche Lorraine Classique',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner', 'snack'],
-      emoji: '🥧', origin: '🇫🇷',
-      tags: ['comfort-food', 'french', 'classic', 'family', 'meal-prep'],
-      servings: 2, prepTime: 15, cookTime: 35, difficulty: 1,
-      // 48×4 + 40×4 + 30×9 = 192+160+270 = 622 ✓
-      baseNutrition: { calories: 622, proteinGrams: 48, carbsGrams: 40, fatGrams: 30 },
-      ingredients: [
-        { name: 'Pâte brisée',                      qty: 120, unit: 'g', note: '1/2 rouleau prêt à dérouler' },
-        { name: 'Lardons fumés',                    qty: 150, unit: 'g' },
-        { name: 'Oeuf',                             qty: 3,   unit: 'pce' },
-        { name: 'Crème fraîche légère 15%',        qty: 100, unit: 'ml' },
-        { name: 'Lait demi-écrémé',                qty: 80,  unit: 'ml' },
-        { name: 'Gruyère râpé',                   qty: 40,  unit: 'g' },
-        { name: 'Muscade',                         qty: 2,   unit: 'g' },
-        { name: 'Sel, poivre',                     qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préchauffer le four à 180°C. Foncer un moule à tarte avec la pâte. Piquer avec une fourchette. Faire cuire à blanc 10 min avec des haricots secs.",
-        "Faire revenir les lardons à la poêle sans graisse jusqu'à dorés. Égoutter sur du papier absorbant.",
-        "Fouetter les oeufs avec la crème, le lait, la muscade, sel et poivre.",
-        "Répartir les lardons sur le fond de tarte précuit. Verser l'appareil oeuf-crème. Saupoudrer de gruyère.",
-        "Enfourner 25-28 min jusqu'à quiche prise et dorée. Laisser tiédir 5 min avant de couper. Servir chaude ou tiède."
-      ]
-    },
-
-    {
-      id: 'R796',
-      name: 'Frittata Italienne Poivrons Oignons Parmesan',
-      category: 'italian',
-      mealTypes: ['breakfast', 'lunch', 'dinner'],
-      emoji: '🍳', origin: '🇮🇹',
-      tags: ['high-protein', 'italian', 'one-pan', 'quick', 'versatile'],
-      servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
-      // 52×4 + 50×4 + 28×9 = 208+200+252 = 660 ✓
-      baseNutrition: { calories: 660, proteinGrams: 52, carbsGrams: 50, fatGrams: 28 },
-      ingredients: [
-        { name: 'Oeuf',                             qty: 6,   unit: 'pce' },
-        { name: 'Poivron rouge',                    qty: 120, unit: 'g', note: 'en dés' },
-        { name: 'Oignon',                           qty: 80,  unit: 'g' },
-        { name: 'Pomme de terre cuite',             qty: 150, unit: 'g', note: 'en tranches fines' },
-        { name: 'Parmesan râpé',                    qty: 40,  unit: 'g' },
-        { name: 'Basilic ou persil',                qty: 10,  unit: 'g' },
-        { name: 'Huile d\'olive',                   qty: 20,  unit: 'ml' },
-        { name: 'Sel, poivre',                      qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préchauffer le gril du four. Faire revenir oignon et poivron dans l'huile 5-6 min dans une poêle allant au four.",
-        "Ajouter les tranches de pomme de terre. Répartir uniformément dans la poêle.",
-        "Battre les oeufs avec le parmesan, sel, poivre et les herbes. Verser sur les légumes.",
-        "Cuire à feu moyen 5-6 min jusqu'à les bords soient pris mais le centre encore coulant.",
-        "Passer sous le gril 3-4 min jusqu'à la surface soit dorée et gonflée. Couper en parts dans la poêle. La frittata se mange chaude ou à température ambiante."
-      ]
-    },
-
-    {
-      id: 'R797',
-      name: 'Oeufs en Cocotte Crème & Jambon',
-      category: 'french',
-      mealTypes: ['breakfast', 'lunch'],
-      emoji: '🥚', origin: '🇫🇷',
-      tags: ['high-protein', 'elegant', 'quick', 'french', 'brunch'],
-      servings: 2, prepTime: 5, cookTime: 15, difficulty: 1,
-      // 44×4 + 48×4 + 24×9 = 176+192+216 = 584 ✓
-      baseNutrition: { calories: 584, proteinGrams: 44, carbsGrams: 48, fatGrams: 24 },
-      ingredients: [
-        { name: 'Oeuf',                             qty: 4,   unit: 'pce' },
-        { name: 'Jambon blanc',                    qty: 100, unit: 'g', note: 'en dés' },
-        { name: 'Crème fraîche légère',            qty: 60,  unit: 'g' },
-        { name: 'Pain de campagne',                qty: 120, unit: 'g', note: '4 tranches grillées' },
-        { name: 'Gruyère râpé',                   qty: 30,  unit: 'g' },
-        { name: 'Ciboulette',                     qty: 10,  unit: 'g' },
-        { name: 'Beurre',                         qty: 5,   unit: 'g', note: 'pour les ramequins' },
-        { name: 'Sel, poivre',                    qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préchauffer le four à 180°C. Beurrer 2 ramequins. Préparer un bain-marie dans un plat plus grand.",
-        "Répartir les dés de jambon dans les ramequins. Verser 1 c.s. de crème dans chaque.",
-        "Casser 2 oeufs dans chaque ramequin. Saler, poivrer. Ajouter le gruyère sur le dessus.",
-        "Placer les ramequins dans le bain-marie (eau à mi-hauteur). Enfourner 12-15 min jusqu'à blancs pris mais jaunes encore coulants.",
-        "Parsemer de ciboulette. Servir immédiatement avec les tartines de pain grillé pour tremper."
-      ]
-    },
-
-    {
-      id: 'R798',
-      name: 'Croque-Monsieur Jambon Gruyère au Four',
-      category: 'french',
-      mealTypes: ['breakfast', 'lunch', 'snack'],
-      emoji: '🥪', origin: '🇫🇷',
-      tags: ['comfort-food', 'french', 'classic', 'quick', 'cheesy'],
-      servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
-      // 56×4 + 36×4 + 32×9 = 224+144+288 = 656 ✓
-      baseNutrition: { calories: 656, proteinGrams: 56, carbsGrams: 36, fatGrams: 32 },
-      ingredients: [
-        { name: 'Pain de mie',                      qty: 120, unit: 'g', note: '4 tranches épaisses' },
-        { name: 'Jambon blanc',                    qty: 160, unit: 'g', note: '4 tranches' },
-        { name: 'Gruyère râpé',                   qty: 80,  unit: 'g' },
-        { name: 'Lait demi-écrémé',               qty: 80,  unit: 'ml', note: 'pour béchamel rapide' },
-        { name: 'Farine',                         qty: 10,  unit: 'g' },
-        { name: 'Beurre',                         qty: 15,  unit: 'g' },
-        { name: 'Muscade',                        qty: 1,   unit: 'g' },
-        { name: 'Moutarde',                       qty: 10,  unit: 'g', note: 'optionnel' }
-      ],
-      steps: [
-        "Préchauffer le gril du four. Préparer une béchamel rapide : faire fondre le beurre, ajouter la farine, verser le lait chaud en fouettant. Épaissir 3 min. Ajouter muscade, sel.",
-        "Toaster légèrement les tranches de pain. Badigeonner de moutarde si souhaité.",
-        "Monter les croque-monsieur : pain, jambon, 30g de gruyère, pain. Étaler la béchamel sur le dessus.",
-        "Saupoudrer du reste de gruyère. Passer sous le gril 5-7 min jusqu'à gratin doré et bouillonnant.",
-        "Servir immédiatement. Pour croque-madame : ajouter un oeuf au plat sur le dessus."
-      ]
-    },
-
-    {
-      id: 'R799',
-      name: 'Soufflé au Fromage Facile',
-      category: 'french',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🧀', origin: '🇫🇷',
-      tags: ['elegant', 'french', 'high-protein', 'light', 'classic'],
-      servings: 2, prepTime: 15, cookTime: 25, difficulty: 2,
-      // 42×4 + 62×4 + 22×9 = 168+248+198 = 614 ✓
-      baseNutrition: { calories: 614, proteinGrams: 42, carbsGrams: 62, fatGrams: 22 },
-      ingredients: [
-        { name: 'Oeuf',                             qty: 4,   unit: 'pce', note: 'blancs et jaunes séparés' },
-        { name: 'Comté ou gruyère râpé',           qty: 80,  unit: 'g' },
-        { name: 'Lait demi-écrémé',                qty: 200, unit: 'ml' },
-        { name: 'Farine T65',                      qty: 40,  unit: 'g' },
-        { name: 'Beurre',                          qty: 15,  unit: 'g' },
-        { name: 'Pain de campagne',                qty: 80,  unit: 'g', note: 'pour accompagner' },
-        { name: 'Muscade',                         qty: 2,   unit: 'g' },
-        { name: 'Sel, poivre',                     qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préchauffer le four à 190°C (sans chaleur tournante). Beurrer et fariner des ramequins ou un grand moule à soufflé.",
-        "Faire une béchamel : beurre fondu + farine 1 min + lait chaud progressivement. Épaissir. Ajouter fromage, muscade, sel, poivre, jaunes d'oeufs. Hors feu.",
-        "Monter les blancs en neige très ferme avec une pincée de sel. Ne pas les laisser retomber.",
-        "Incorporer 1/4 des blancs à la béchamel vigoureusement pour détendre. Puis le reste délicatement en soulevant.",
-        "Verser dans les moules jusqu'aux 3/4. Enfourner sans ouvrir le four 20-22 min. Le soufflé doit être gonflé et doré. Servir IMMÉDIATEMENT."
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
-    //  BATCH P25 — LÉGUMINEUSES & VÉGÉTARIEN  (R800–R804)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R800',
-      name: 'Lentilles Mijotées Carottes & Lardons',
-      category: 'french',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🫘', origin: '🇫🇷',
-      tags: ['high-protein', 'comfort-food', 'french', 'budget', 'iron'],
-      servings: 2, prepTime: 10, cookTime: 35, difficulty: 1,
-      // 40×4 + 90×4 + 16×9 = 160+360+144 = 664 ✓
-      baseNutrition: { calories: 664, proteinGrams: 40, carbsGrams: 90, fatGrams: 16 },
-      ingredients: [
-        { name: 'Lentilles vertes du Puy',          qty: 200, unit: 'g', note: 'sèches' },
-        { name: 'Lardons fumés',                   qty: 100, unit: 'g' },
-        { name: 'Carottes',                        qty: 150, unit: 'g', note: '2 carottes en rondelles' },
-        { name: 'Oignon',                          qty: 80,  unit: 'g' },
-        { name: 'Ail',                             qty: 5,   unit: 'g' },
-        { name: 'Bouillon de légumes',             qty: 600, unit: 'ml' },
-        { name: 'Concentré de tomate',             qty: 15,  unit: 'g' },
-        { name: 'Thym, laurier',                   qty: 3,   unit: 'g' },
-        { name: 'Huile d\'olive',                  qty: 10,  unit: 'ml' },
-        { name: 'Moutarde',                        qty: 8,   unit: 'g', note: 'en fin de cuisson' }
-      ],
-      steps: [
-        "Faire revenir les lardons à sec dans une cocotte jusqu'à dorés. Ajouter oignon et ail, cuire 3 min.",
-        "Rincer les lentilles. Les ajouter avec les carottes, le concentré de tomate, thym et laurier.",
-        "Verser le bouillon chaud. Porter à ébullition, réduire le feu, mijoter 30-35 min à couvert.",
-        "Vérifier la cuisson : les lentilles doivent être tendres mais pas en bouillie.",
-        "Hors feu, incorporer la moutarde. Rectifier sel et poivre. Les lentilles du Puy restent fermes — elles ne fondent pas comme les corail."
-      ]
-    },
-
-    {
-      id: 'R801',
-      name: 'Houmous Maison Légumes Rôtis & Pain Pita',
-      category: 'mediterranean',
-      mealTypes: ['lunch', 'snack', 'dinner'],
-      emoji: '🧆', origin: '🇱🇧',
-      tags: ['vegan', 'plant-based', 'fresh', 'mediterranean', 'sharing'],
-      servings: 2, prepTime: 15, cookTime: 15, difficulty: 1,
-      // 36×4 + 88×4 + 18×9 = 144+352+162 = 658 ✓
-      baseNutrition: { calories: 658, proteinGrams: 36, carbsGrams: 88, fatGrams: 18 },
-      ingredients: [
-        { name: 'Pois chiches boîte',               qty: 400, unit: 'g', note: 'égouttés, garder l\'eau' },
-        { name: 'Tahini',                           qty: 30,  unit: 'g' },
-        { name: 'Citron (jus)',                     qty: 2,   unit: 'pce' },
-        { name: 'Ail',                              qty: 8,   unit: 'g' },
-        { name: 'Courgette',                        qty: 150, unit: 'g', note: 'rondelles à rôtir' },
-        { name: 'Poivron rouge',                    qty: 100, unit: 'g', note: 'à rôtir' },
-        { name: 'Pain pita',                        qty: 120, unit: 'g', note: '2 pains' },
-        { name: 'Huile d\'olive',                   qty: 20,  unit: 'ml' },
-        { name: 'Paprika',                          qty: 3,   unit: 'g' },
-        { name: 'Cumin',                            qty: 2,   unit: 'g' }
-      ],
-      steps: [
-        "Rôtir les légumes : courgettes et poivron avec 10ml d'huile et sel, au four 200°C 15 min.",
-        "Houmous : mixer les pois chiches chauds (ou passés 1 min au micro-ondes) avec tahini, jus de citron, ail, sel et 4-5 c.s. d'eau des pois chiches.",
-        "Mixer longuement (4-5 min) pour une texture ultra-lisse et crémeuse. Ajuster consistance avec l'eau de pois chiches.",
-        "Étaler dans un plat creux. Faire un creux au centre. Verser le reste d'huile d'olive, saupoudrer paprika et cumin.",
-        "Faire chauffer les pitas au four 2 min. Servir houmous, légumes rôtis et pitas ensemble."
-      ]
-    },
-
-    {
-      id: 'R802',
-      name: 'Soupe Minestrone Légumes & Petites Pâtes',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥣', origin: '🇮🇹',
-      tags: ['vegan', 'comfort-food', 'italian', 'budget', 'seasonal'],
-      servings: 2, prepTime: 15, cookTime: 30, difficulty: 1,
-      // 44×4 + 80×4 + 14×9 = 176+320+126 = 622 ✓
-      baseNutrition: { calories: 622, proteinGrams: 44, carbsGrams: 80, fatGrams: 14 },
-      ingredients: [
-        { name: 'Haricots borlotti boîte',          qty: 200, unit: 'g' },
-        { name: 'Ditalini ou coquillettes',         qty: 80,  unit: 'g' },
-        { name: 'Courgette',                        qty: 150, unit: 'g', note: 'en dés' },
-        { name: 'Carotte',                          qty: 100, unit: 'g', note: 'en dés' },
-        { name: 'Céleri',                           qty: 60,  unit: 'g' },
-        { name: 'Tomates concassées',               qty: 200, unit: 'g' },
-        { name: 'Épinards frais',                   qty: 80,  unit: 'g' },
-        { name: 'Bouillon de légumes',              qty: 800, unit: 'ml' },
-        { name: 'Ail',                              qty: 8,   unit: 'g' },
-        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' },
-        { name: 'Parmesan',                         qty: 20,  unit: 'g' },
-        { name: 'Basilic',                          qty: 10,  unit: 'g' }
-      ],
-      steps: [
-        "Faire revenir carotte, céleri et ail dans l'huile 5 min. Ajouter courgettes 2 min.",
-        "Verser les tomates et le bouillon. Porter à ébullition. Ajouter les haricots. Mijoter 15 min.",
-        "Ajouter les ditalini directement dans la soupe. Cuire selon indication minus 2 min.",
-        "Ajouter les épinards, cuire 2 min jusqu'à flétrissement.",
-        "Servir avec un filet d'huile d'olive, parmesan et basilic frais. Le minestrone doit être épais, pas liquide."
-      ]
-    },
-
-    {
-      id: 'R803',
-      name: 'Curry de Pois Chiches Épinards Lait de Coco',
-      category: 'world-food',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🍛', origin: '🇮🇳',
-      tags: ['vegan', 'plant-based', 'spicy', 'comfort-food', 'balanced'],
-      servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
-      // 48×4 + 72×4 + 20×9 = 192+288+180 = 660 ✓
-      baseNutrition: { calories: 660, proteinGrams: 48, carbsGrams: 72, fatGrams: 20 },
-      ingredients: [
-        { name: 'Pois chiches boîte',               qty: 400, unit: 'g' },
-        { name: 'Épinards surgelés',                qty: 150, unit: 'g' },
-        { name: 'Lait de coco allégé',              qty: 200, unit: 'ml' },
-        { name: 'Tomates concassées',               qty: 200, unit: 'g' },
-        { name: 'Riz basmati',                      qty: 100, unit: 'g', note: 'sec' },
-        { name: 'Oignon',                           qty: 80,  unit: 'g' },
-        { name: 'Ail',                              qty: 8,   unit: 'g' },
-        { name: 'Gingembre frais',                  qty: 8,   unit: 'g' },
-        { name: 'Curry en poudre',                  qty: 10,  unit: 'g' },
-        { name: 'Garam masala',                     qty: 3,   unit: 'g' },
-        { name: 'Huile végétale',                   qty: 15,  unit: 'ml' }
-      ],
-      steps: [
-        "Cuire le riz. Faire revenir oignon 5 min dans l'huile. Ajouter ail, gingembre, curry et garam masala. Cuire 1 min.",
-        "Ajouter les tomates, cuire 5 min. Verser le lait de coco.",
-        "Ajouter les pois chiches égouttés et les épinards surgelés. Cuire 10 min.",
-        "Les épinards vont décongeler et réduire dans la sauce. Mélanger régulièrement.",
-        "Rectifier sel et épices. Servir sur le riz basmati. Ce curry végétarien est rassasiant et complet."
-      ]
-    },
-
-    {
-      id: 'R804',
-      name: 'Potée de Haricots Blancs & Légumes d\'Hiver',
-      category: 'french',
-      mealTypes: ['dinner', 'lunch'],
-      emoji: '🫘', origin: '🇫🇷',
-      tags: ['vegan', 'comfort-food', 'french', 'warming', 'budget'],
-      servings: 2, prepTime: 10, cookTime: 30, difficulty: 1,
-      // 38×4 + 96×4 + 12×9 = 152+384+108 = 644 ✓
-      baseNutrition: { calories: 644, proteinGrams: 38, carbsGrams: 96, fatGrams: 12 },
-      ingredients: [
-        { name: 'Haricots blancs boîte',            qty: 400, unit: 'g' },
-        { name: 'Carottes',                         qty: 150, unit: 'g', note: 'en rondelles' },
-        { name: 'Navet',                            qty: 150, unit: 'g', note: 'en cubes' },
-        { name: 'Pommes de terre',                  qty: 200, unit: 'g', note: 'en cubes' },
-        { name: 'Oignon',                           qty: 80,  unit: 'g' },
-        { name: 'Bouillon de légumes',              qty: 700, unit: 'ml' },
-        { name: 'Concentré de tomate',              qty: 20,  unit: 'g' },
-        { name: 'Herbes de Provence',               qty: 5,   unit: 'g' },
-        { name: 'Laurier',                          qty: 1,   unit: 'feuille' },
-        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' }
-      ],
-      steps: [
-        "Faire revenir l'oignon dans l'huile 4 min. Ajouter les carottes et les navets, cuire 3 min.",
-        "Ajouter les pommes de terre, le concentré de tomate, les herbes et le laurier.",
-        "Verser le bouillon. Porter à ébullition, réduire, cuire 20 min à couvert.",
-        "Ajouter les haricots blancs égouttés les 10 dernières minutes pour les réchauffer sans les écraser.",
-        "Rectifier sel et poivre. Écraser quelques haricots dans la casserole pour épaissir naturellement. Servir bien chaud."
-      ]
-    },
-
-    // ═══ BATCH P26 — Poisson Simple ═══
-
-    {
-      id: 'R805',
-      name: 'Saumon Poêlé Beurre Citron & Câpres',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🐟',
-      origin: '🇫🇷',
-      tags: ['high-protein', 'omega3', 'rapide'],
-      servings: 2,
-      prepTime: 5,
-      cookTime: 12,
-      difficulty: 1,
-      // 60×4 + 8×4 + 28×9 = 240+32+252 = 524 kcal ✓
-      baseNutrition: { calories: 524, proteinGrams: 60, carbsGrams: 8, fatGrams: 28 },
-      ingredients: [
-        { name: 'Pavés de saumon',    qty: 400, unit: 'g', note: 'peau enlevée ou gardée' },
-        { name: 'Beurre',             qty: 30,  unit: 'g' },
-        { name: 'Câpres',             qty: 20,  unit: 'g' },
-        { name: 'Citron',             qty: 1,   unit: 'pce' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' },
-        { name: 'Persil frais',       qty: 10,  unit: 'g' },
-        { name: 'Huile d\'olive',     qty: 10,  unit: 'ml' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Sécher les pavés de saumon avec du papier absorbant. Saler et poivrer les deux faces.",
-        "Chauffer l'huile dans une poêle à feu vif. Saisir le saumon côté peau 4 min, retourner et cuire 3 min côté chair — il doit rester rosé à coeur.",
-        "Réserver le saumon. Dans la même poêle, baisser le feu, ajouter le beurre. Quand il mousse, ajouter l'ail haché et les câpres 1 min.",
-        "Déglacer avec le jus d'un citron, remuer pour récupérer les sucs. Ajouter le persil haché.",
-        "Napper le saumon de sauce beurre-câpres et servir immédiatement avec du riz blanc ou des légumes vapeur."
-      ]
-    },
-
-    {
-      id: 'R806',
-      name: 'Cabillaud Gratiné Moutarde & Chapelure',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🐠',
-      origin: '🇫🇷',
-      tags: ['high-protein', 'leger', 'four'],
-      servings: 2,
-      prepTime: 8,
-      cookTime: 15,
-      difficulty: 1,
-      // 62×4 + 20×4 + 14×9 = 248+80+126 = 454 kcal ✓
-      baseNutrition: { calories: 454, proteinGrams: 62, carbsGrams: 20, fatGrams: 14 },
-      ingredients: [
-        { name: 'Dos de cabillaud',   qty: 400, unit: 'g' },
-        { name: 'Moutarde de Dijon',  qty: 30,  unit: 'g' },
-        { name: 'Chapelure',          qty: 40,  unit: 'g' },
-        { name: 'Parmesan râpé',      qty: 20,  unit: 'g' },
-        { name: 'Beurre',             qty: 20,  unit: 'g' },
-        { name: 'Thym séché',         qty: 2,   unit: 'g' },
-        { name: 'Citron',             qty: 1,   unit: 'pce' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préchauffer le four à 200°C. Poser les dos de cabillaud dans un plat huilé. Saler et poivrer.",
-        "Badigeonner généreusement chaque dos avec la moutarde de Dijon sur toute la surface.",
-        "Mélanger chapelure, parmesan et thym. Presser sur la moutarde pour former une croûte. Déposer quelques noisettes de beurre.",
-        "Enfourner 13-15 min jusqu'à ce que la croûte soit dorée et le poisson opaque à coeur.",
-        "Servir avec un filet de jus de citron. Accompagner de purée ou de haricots verts."
-      ]
-    },
-
-    {
-      id: 'R807',
-      name: 'Thon Frais Poêlé Sésame & Sauce Soja',
-      category: 'japanese',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍣',
-      origin: '🇯🇵',
-      tags: ['high-protein', 'omega3', 'asian'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 6,
-      difficulty: 1,
-      // 64×4 + 12×4 + 18×9 = 256+48+162 = 466 kcal ✓
-      baseNutrition: { calories: 466, proteinGrams: 64, carbsGrams: 12, fatGrams: 18 },
-      ingredients: [
-        { name: 'Thon frais en pavé', qty: 360, unit: 'g' },
-        { name: 'Graines de sésame', qty: 30,  unit: 'g' },
-        { name: 'Sauce soja',         qty: 30,  unit: 'ml' },
-        { name: 'Huile de sésame',    qty: 15,  unit: 'ml' },
-        { name: 'Gingembre frais',    qty: 10,  unit: 'g' },
-        { name: 'Ail',                qty: 1,   unit: 'pce' },
-        { name: 'Miel',               qty: 10,  unit: 'g' },
-        { name: 'Oignons verts',      qty: 20,  unit: 'g' }
-      ],
-      steps: [
-        "Mélanger sauce soja, miel, gingembre râpé et ail haché. Mariner le thon 5 min dans ce mélange.",
-        "Verser les graines de sésame dans une assiette. Rouler les pavés de thon dedans pour les enrober.",
-        "Chauffer l'huile de sésame à feu très vif dans une poêle. Saisir le thon 1 min 30 par face — il doit rester rouge à coeur.",
-        "Trancher chaque pavé en épaisses lamelles. Disposer sur un lit de riz ou de salade.",
-        "Napper du reste de marinade (portée à ébullition 1 min) et parsemer d'oignons verts ciselés."
-      ]
-    },
-
-    {
-      id: 'R808',
-      name: 'Sardines au Four Tomates Confites & Ail',
-      category: 'mediterranean',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🐟',
-      origin: '🇮🇹',
-      tags: ['omega3', 'mediteraneen', 'economique'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 20,
-      difficulty: 1,
-      // 50×4 + 18×4 + 22×9 = 200+72+198 = 470 kcal ✓
-      baseNutrition: { calories: 470, proteinGrams: 50, carbsGrams: 18, fatGrams: 22 },
-      ingredients: [
-        { name: 'Sardines fraîches',  qty: 400, unit: 'g', note: 'vidées, écaillées' },
-        { name: 'Tomates cerises',    qty: 200, unit: 'g' },
-        { name: 'Ail',                qty: 4,   unit: 'pce' },
-        { name: 'Huile d\'olive',     qty: 30,  unit: 'ml' },
-        { name: 'Thym frais',         qty: 5,   unit: 'g' },
-        { name: 'Origan séché',       qty: 2,   unit: 'g' },
-        { name: 'Citron',             qty: 1,   unit: 'pce' },
-        { name: 'Pain de campagne',   qty: 60,  unit: 'g', note: 'pour servir' }
-      ],
-      steps: [
-        "Préchauffer le four à 190°C. Couper les tomates cerises en deux, écraser légèrement les gousses d'ail.",
-        "Dans un plat à rôtir, disposer les tomates, l'ail, l'origan et la moitié de l'huile. Enfourner 10 min.",
-        "Poser les sardines sur le lit de tomates. Arroser du reste d'huile, ajouter le thym et le jus de citron.",
-        "Enfourner 10-12 min supplémentaires — la peau des sardines doit être légèrement croustillante.",
-        "Servir directement dans le plat avec du pain de campagne grillé pour éponger le jus parfumé."
-      ]
-    },
-
-    {
-      id: 'R809',
-      name: 'Maquereau Grillé Sauce Moutarde Persil',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🐟',
-      origin: '🇫🇷',
-      tags: ['omega3', 'economique', 'rapide'],
-      servings: 2,
-      prepTime: 8,
-      cookTime: 10,
-      difficulty: 1,
-      // 52×4 + 10×4 + 24×9 = 208+40+216 = 464 kcal ✓
-      baseNutrition: { calories: 464, proteinGrams: 52, carbsGrams: 10, fatGrams: 24 },
-      ingredients: [
-        { name: 'Maquereaux entiers', qty: 400, unit: 'g', note: 'vidés et fendus' },
-        { name: 'Moutarde à l\'ancienne', qty: 25, unit: 'g' },
-        { name: 'Huile d\'olive',     qty: 20,  unit: 'ml' },
-        { name: 'Persil frais',       qty: 15,  unit: 'g' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' },
-        { name: 'Citron',             qty: 1,   unit: 'pce' },
-        { name: 'Pommes de terre',    qty: 200, unit: 'g', note: 'pour servir' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Mélanger la moutarde, l'huile, l'ail haché et le persil ciselé pour former une sauce.",
-        "Inciser la chair des maquereaux en croisillons. Badigeonner généreusement avec la moitié de la sauce.",
-        "Griller les maquereaux sous le gril du four à 220°C pendant 8-10 min, côté chair vers le haut, sans retourner.",
-        "Cuire les pommes de terre vapeur pendant ce temps.",
-        "Servir les maquereaux avec le reste de sauce froide, les pommes de terre et un filet de citron."
-      ]
-    },
-
-    // ═══ BATCH P27 — Viandes Rouges Simples ═══
-
-    {
-      id: 'R810',
-      name: 'Entrecôte Grillée Beurre Maître d\'Hôtel',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥩',
-      origin: '🇫🇷',
-      tags: ['high-protein', 'boucherie', 'classique'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 10,
-      difficulty: 1,
-      // 70×4 + 4×4 + 30×9 = 280+16+270 = 566 kcal ✓
-      baseNutrition: { calories: 566, proteinGrams: 70, carbsGrams: 4, fatGrams: 30 },
-      ingredients: [
-        { name: 'Entrecôte de boeuf', qty: 500, unit: 'g', note: '2 pièces de 250g' },
-        { name: 'Beurre',             qty: 60,  unit: 'g' },
-        { name: 'Persil frais',       qty: 15,  unit: 'g' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' },
-        { name: 'Jus de citron',      qty: 10,  unit: 'ml' },
-        { name: 'Fleur de sel',       qty: 2,   unit: 'g' },
-        { name: 'Poivre du moulin',   qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préparer le beurre maître d'hôtel : mélanger beurre mou, persil haché, ail écrasé et jus de citron. Façonner en boudin dans du film, réfrigérer 20 min.",
-        "Sortir les entrecôtes du frigo 30 min avant. Saler et poivrer au dernier moment.",
-        "Chauffer une poêle fonte ou grill à feu très vif sans matière grasse. Saisir les entrecôtes 2-3 min par face pour saignant.",
-        "Laisser reposer 5 min sur une planche recouverte de papier alu — étape indispensable.",
-        "Déposer une rondelle de beurre maître d'hôtel sur chaque entrecôte chaude. Finir avec de la fleur de sel."
-      ]
-    },
-
-    {
-      id: 'R811',
-      name: 'Côte de Veau Poêlée Crème & Champignons',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥩',
-      origin: '🇫🇷',
-      tags: ['high-protein', 'classique', 'cremeux'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 20,
-      difficulty: 2,
-      // 62×4 + 14×4 + 28×9 = 248+56+252 = 556 kcal ✓
-      baseNutrition: { calories: 556, proteinGrams: 62, carbsGrams: 14, fatGrams: 28 },
-      ingredients: [
-        { name: 'Côtes de veau',      qty: 480, unit: 'g', note: '2 pièces' },
-        { name: 'Champignons de Paris', qty: 200, unit: 'g' },
-        { name: 'Crème fraîche épaisse', qty: 100, unit: 'ml' },
-        { name: 'Échalotes',          qty: 60,  unit: 'g' },
-        { name: 'Vin blanc sec',      qty: 80,  unit: 'ml' },
-        { name: 'Beurre',             qty: 20,  unit: 'g' },
-        { name: 'Thym frais',         qty: 3,   unit: 'g' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Saler et poivrer les côtes de veau. Dans une poêle, dorer au beurre 4 min par face à feu moyen-vif.",
-        "Réserver la viande. Dans la même poêle, faire revenir les échalotes émincées 3 min.",
-        "Ajouter les champignons en lamelles, cuire 5 min jusqu'à évaporation de l'eau.",
-        "Déglacer au vin blanc, laisser réduire de moitié. Ajouter la crème et le thym, mijoter 3 min.",
-        "Remettre les côtes de veau dans la sauce 2 min pour réchauffer. Rectifier l'assaisonnement et servir."
-      ]
-    },
-
-    {
-      id: 'R812',
-      name: 'Agneau aux Légumes du Soleil',
-      category: 'mediterranean',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥩',
-      origin: '🇫🇷',
-      tags: ['high-protein', 'mediteraneen', 'one-pan'],
-      servings: 2,
-      prepTime: 15,
-      cookTime: 25,
-      difficulty: 1,
-      // 58×4 + 22×4 + 26×9 = 232+88+234 = 554 kcal ✓
-      baseNutrition: { calories: 554, proteinGrams: 58, carbsGrams: 22, fatGrams: 26 },
-      ingredients: [
-        { name: 'Côtelettes d\'agneau', qty: 480, unit: 'g', note: '4 pièces' },
-        { name: 'Courgette',           qty: 150, unit: 'g' },
-        { name: 'Poivron rouge',       qty: 120, unit: 'g' },
-        { name: 'Tomates cerises',     qty: 150, unit: 'g' },
-        { name: 'Ail',                 qty: 4,   unit: 'pce' },
-        { name: 'Huile d\'olive',      qty: 25,  unit: 'ml' },
-        { name: 'Romarin frais',       qty: 5,   unit: 'g' },
-        { name: 'Sel, poivre',         qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préchauffer le four à 200°C. Couper la courgette et le poivron en gros cubes. Écraser les gousses d'ail.",
-        "Disposer les légumes dans un grand plat. Arroser d'huile, ajouter le romarin, sel et poivre. Enfourner 15 min.",
-        "Saler et poivrer les côtelettes. Les saisir 2 min par face dans une poêle gril bien chaude.",
-        "Poser les côtelettes sur les légumes à mi-cuisson. Ajouter les tomates cerises. Enfourner encore 10 min.",
-        "Servir directement dans le plat — les sucs de l'agneau parfument les légumes en fin de cuisson."
-      ]
-    },
-
-    {
-      id: 'R813',
-      name: 'Steak Haché Maison Sauce au Poivre',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥩',
-      origin: '🇫🇷',
-      tags: ['high-protein', 'boucherie', 'bistrot'],
-      servings: 2,
-      prepTime: 8,
-      cookTime: 12,
-      difficulty: 1,
-      // 56×4 + 16×4 + 28×9 = 224+64+252 = 540 kcal ✓
-      baseNutrition: { calories: 540, proteinGrams: 56, carbsGrams: 16, fatGrams: 28 },
-      ingredients: [
-        { name: 'Steak haché 15% MG',  qty: 400, unit: 'g', note: '2 steaks' },
-        { name: 'Crème fraîche',       qty: 80,  unit: 'ml' },
-        { name: 'Fond de veau',        qty: 100, unit: 'ml' },
-        { name: 'Cognac ou Armagnac', qty: 20,  unit: 'ml' },
-        { name: 'Poivre concassé',     qty: 5,   unit: 'g' },
-        { name: 'Beurre',              qty: 15,  unit: 'g' },
-        { name: 'Échalote',            qty: 30,  unit: 'g' },
-        { name: 'Sel',                 qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Façonner les steaks en galettes épaisses. Saler les deux faces. Laisser à température ambiante 10 min.",
-        "Cuire les steaks dans une poêle bien chaude avec le beurre — 3 min par face pour saignant, 4 min pour à point.",
-        "Réserver les steaks. Dans la même poêle, faire revenir l'échalote hachée 2 min.",
-        "Flamber au cognac (attention aux flammes). Ajouter le fond de veau et le poivre concassé. Réduire 2 min.",
-        "Incorporer la crème, mélanger et chauffer 1 min. Napper les steaks de sauce au poivre. Servir avec des frites."
-      ]
-    },
-
-    {
-      id: 'R814',
-      name: 'Foie de Veau à l\'Anglaise Beurre & Persil',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥩',
-      origin: '🇫🇷',
-      tags: ['high-protein', 'fer', 'boucherie', 'rapide'],
-      servings: 2,
-      prepTime: 5,
-      cookTime: 8,
-      difficulty: 1,
-      // 60×4 + 14×4 + 22×9 = 240+56+198 = 494 kcal ✓
-      baseNutrition: { calories: 494, proteinGrams: 60, carbsGrams: 14, fatGrams: 22 },
-      ingredients: [
-        { name: 'Foie de veau',       qty: 360, unit: 'g', note: 'tranches fines' },
-        { name: 'Beurre',             qty: 40,  unit: 'g' },
-        { name: 'Persil frais',       qty: 15,  unit: 'g' },
-        { name: 'Farine',             qty: 20,  unit: 'g' },
-        { name: 'Vinaigre de vin',    qty: 15,  unit: 'ml' },
-        { name: 'Oignon',             qty: 80,  unit: 'g' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Émincer finement l'oignon. Le faire fondre doucement dans 20g de beurre 8 min à feu doux, sans colorer.",
-        "Fariner légèrement les tranches de foie sur les deux faces. Secouer l'excédent.",
-        "Dans une autre poêle, chauffer le reste de beurre à feu vif. Saisir le foie 1 min 30 par face — il doit rester rosé.",
-        "Déglacer la poêle du foie avec le vinaigre de vin et une cuillère d'eau. Remuer pour récupérer les sucs.",
-        "Servir le foie sur les oignons confits, napper du jus de déglacement et parsemer de persil ciselé."
-      ]
-    },
-
-    // ═══ BATCH P28 — Pâtes & Gnocchi Supplémentaires ═══
-
-    {
-      id: 'R815',
-      name: 'Gnocchi Poêlés Beurre Sauge & Parmesan',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥟',
-      origin: '🇮🇹',
-      tags: ['comfort-food', 'vegetarien', 'rapide'],
-      servings: 2,
-      prepTime: 2,
-      cookTime: 10,
-      difficulty: 1,
-      // 32×4 + 96×4 + 22×9 = 128+384+198 = 710 kcal ✓
-      baseNutrition: { calories: 710, proteinGrams: 32, carbsGrams: 96, fatGrams: 22 },
-      ingredients: [
-        { name: 'Gnocchi frais',      qty: 500, unit: 'g' },
-        { name: 'Beurre',             qty: 40,  unit: 'g' },
-        { name: 'Sauge fraîche',      qty: 10,  unit: 'g' },
-        { name: 'Parmesan râpé',      qty: 60,  unit: 'g' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Cuire les gnocchi dans une grande casserole d'eau bouillante salée jusqu'à ce qu'ils remontent à la surface (2 min). Égoutter.",
-        "Dans une grande poêle, faire fondre le beurre à feu moyen. Ajouter les feuilles de sauge entières et l'ail écrasé.",
-        "Quand le beurre mousse et prend une couleur noisette, ajouter les gnocchi égouttés.",
-        "Poêler les gnocchi 3-4 min en les remuant jusqu'à ce qu'ils soient dorés et légèrement croustillants.",
-        "Hors du feu, ajouter le parmesan râpé et mélanger. Poivrer généreusement. Servir immédiatement."
-      ]
-    },
-
-    {
-      id: 'R816',
-      name: 'Lasagnes Bolognaise Classiques',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍝',
-      origin: '🇮🇹',
-      tags: ['comfort-food', 'famille', 'four'],
-      servings: 4,
-      prepTime: 30,
-      cookTime: 45,
-      difficulty: 2,
-      // 120×4 + 260×4 + 80×9 = 480+1040+720 = 2240 kcal ✓
-      baseNutrition: { calories: 2240, proteinGrams: 120, carbsGrams: 260, fatGrams: 80 },
-      ingredients: [
-        { name: 'Feuilles de lasagnes', qty: 250, unit: 'g' },
-        { name: 'Viande hachée boeuf', qty: 500, unit: 'g' },
-        { name: 'Tomates concassées', qty: 400, unit: 'g' },
-        { name: 'Concentré de tomate', qty: 30, unit: 'g' },
-        { name: 'Oignon',             qty: 100, unit: 'g' },
-        { name: 'Ail',                qty: 3,   unit: 'pce' },
-        { name: 'Lait',               qty: 500, unit: 'ml' },
-        { name: 'Farine',             qty: 40,  unit: 'g' },
-        { name: 'Beurre',             qty: 40,  unit: 'g' },
-        { name: 'Gruyère râpé',       qty: 100, unit: 'g' },
-        { name: 'Huile d\'olive',     qty: 15,  unit: 'ml' }
-      ],
-      steps: [
-        "Bolognaise : faire revenir l'oignon et l'ail hachés dans l'huile 5 min. Ajouter la viande, cuire jusqu'à coloration. Ajouter tomates et concentré, mijoter 20 min.",
-        "Béchamel : faire un roux avec beurre et farine 2 min. Incorporer le lait chaud en fouettant, cuire 5 min jusqu'à épaississement. Saler, muscade.",
-        "Préchauffer le four à 180°C. Alterner dans un grand plat : béchamel, feuilles de lasagnes, bolognaise, répéter 3 fois.",
-        "Finir par une couche de béchamel généreuse. Parsemer de gruyère râpé.",
-        "Enfourner 35-40 min à couvert d'abord, puis découvert 10 min pour gratiner. Laisser reposer 10 min avant de couper."
-      ]
-    },
-
-    {
-      id: 'R817',
-      name: 'Pappardelle au Ragù de Veau & Vin Blanc',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍝',
-      origin: '🇮🇹',
-      tags: ['comfort-food', 'mijoté', 'premium'],
-      servings: 4,
-      prepTime: 15,
-      cookTime: 50,
-      difficulty: 2,
-      // 128×4 + 296×4 + 64×9 = 512+1184+576 = 2272 kcal ✓
-      baseNutrition: { calories: 2272, proteinGrams: 128, carbsGrams: 296, fatGrams: 64 },
-      ingredients: [
-        { name: 'Pappardelle',        qty: 350, unit: 'g' },
-        { name: 'Veau haché',         qty: 500, unit: 'g' },
-        { name: 'Vin blanc sec',      qty: 150, unit: 'ml' },
-        { name: 'Tomates concassées', qty: 300, unit: 'g' },
-        { name: 'Oignon',             qty: 100, unit: 'g' },
-        { name: 'Carottes',           qty: 80,  unit: 'g' },
-        { name: 'Céleri',             qty: 60,  unit: 'g' },
-        { name: 'Parmesan râpé',      qty: 60,  unit: 'g' },
-        { name: 'Huile d\'olive',     qty: 20,  unit: 'ml' },
-        { name: 'Laurier',            qty: 2,   unit: 'feuille' }
-      ],
-      steps: [
-        "Hacher finement oignon, carotte et céleri (soffritto). Faire revenir dans l'huile 8 min à feu doux.",
-        "Ajouter la viande de veau hachée. Cuire à feu moyen en émiettant jusqu'à coloration complète, 8 min.",
-        "Déglacer au vin blanc, laisser évaporer complètement 5 min. Ajouter les tomates et le laurier.",
-        "Couvrir et mijoter à feu très doux 35-40 min. Le ragù doit être dense et parfumé.",
-        "Cuire les pappardelle al dente. Les mélanger directement dans la sauce avec 2 cs d'eau de cuisson. Servir avec le parmesan."
-      ]
-    },
-
-    {
-      id: 'R818',
-      name: 'Farfalle au Pesto Rosso & Burrata',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍝',
-      origin: '🇮🇹',
-      tags: ['vegetarien', 'cremeux', 'rapide'],
-      servings: 2,
-      prepTime: 5,
-      cookTime: 12,
-      difficulty: 1,
-      // 42×4 + 130×4 + 32×9 = 168+520+288 = 976 kcal ✓
-      baseNutrition: { calories: 976, proteinGrams: 42, carbsGrams: 130, fatGrams: 32 },
-      ingredients: [
-        { name: 'Farfalle',           qty: 320, unit: 'g' },
-        { name: 'Pesto rosso',        qty: 80,  unit: 'g' },
-        { name: 'Burrata',            qty: 125, unit: 'g' },
-        { name: 'Tomates cerises',    qty: 150, unit: 'g' },
-        { name: 'Basilic frais',      qty: 10,  unit: 'g' },
-        { name: 'Huile d\'olive',     qty: 10,  unit: 'ml' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Cuire les farfalle dans une grande casserole d'eau bouillante salée selon le temps indiqué. Réserver 1 verre d'eau de cuisson.",
-        "Couper les tomates cerises en deux. Les faire sauter 3 min dans l'huile d'olive à feu vif.",
-        "Égoutter les pâtes al dente. Les mélanger avec le pesto rosso et un peu d'eau de cuisson pour lier.",
-        "Ajouter les tomates cerises, mélanger. Rectifier sel et poivre.",
-        "Déposer la burrata entière au centre du plat. La déchirer à table. Parsemer de basilic frais."
-      ]
-    },
-
-    {
-      id: 'R819',
-      name: 'Spaghetti Vongole alle Palourdes',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍝',
-      origin: '🇮🇹',
-      tags: ['fruits-de-mer', 'classsique-italian', 'high-protein'],
-      servings: 2,
-      prepTime: 15,
-      cookTime: 15,
-      difficulty: 2,
-      // 44×4 + 148×4 + 18×9 = 176+592+162 = 930 kcal ✓
-      baseNutrition: { calories: 930, proteinGrams: 44, carbsGrams: 148, fatGrams: 18 },
-      ingredients: [
-        { name: 'Spaghetti',          qty: 320, unit: 'g' },
-        { name: 'Palourdes fraîches', qty: 500, unit: 'g' },
-        { name: 'Vin blanc sec',      qty: 100, unit: 'ml' },
-        { name: 'Ail',                qty: 4,   unit: 'pce' },
-        { name: 'Piment rouge séché', qty: 1,   unit: 'pce' },
-        { name: 'Huile d\'olive',     qty: 30,  unit: 'ml' },
-        { name: 'Persil frais',       qty: 15,  unit: 'g' }
-      ],
-      steps: [
-        "Faire tremper les palourdes 30 min dans de l'eau salée pour purger le sable. Rincer.",
-        "Cuire les spaghetti très al dente (2 min avant le temps indiqué). Réserver 200ml d'eau de cuisson.",
-        "Dans une grande poêle, chauffer l'huile et faire dorer l'ail émincé avec le piment 1 min.",
-        "Ajouter les palourdes et le vin blanc, couvrir et cuire 3-4 min jusqu'à ouverture. Jeter celles restées fermées.",
-        "Ajouter les spaghetti dans la poêle avec l'eau de cuisson. Terminer la cuisson 2 min en remuant. Parsemer de persil."
-      ]
-    },
-
-    // ═══ BATCH P29 — One-Pan & Express ═══
-
-    {
-      id: 'R820',
-      name: 'Poulet Rôti One-Pan Légumes Racines',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍗',
-      origin: '🇫🇷',
-      tags: ['one-pan', 'famille', 'four'],
-      servings: 4,
-      prepTime: 15,
-      cookTime: 55,
-      difficulty: 1,
-      // 160×4 + 96×4 + 56×9 = 640+384+504 = 1528 kcal ✓
-      baseNutrition: { calories: 1528, proteinGrams: 160, carbsGrams: 96, fatGrams: 56 },
-      ingredients: [
-        { name: 'Cuisses de poulet',  qty: 800, unit: 'g', note: '4 pièces' },
-        { name: 'Carottes',           qty: 200, unit: 'g' },
-        { name: 'Pommes de terre',    qty: 300, unit: 'g' },
-        { name: 'Panais',             qty: 150, unit: 'g' },
-        { name: 'Oignons rouges',     qty: 150, unit: 'g' },
-        { name: 'Ail',                qty: 6,   unit: 'pce' },
-        { name: 'Huile d\'olive',     qty: 30,  unit: 'ml' },
-        { name: 'Thym, romarin',      qty: 5,   unit: 'g' }
-      ],
-      steps: [
-        "Préchauffer le four à 200°C. Couper les légumes en gros morceaux. Les mettre dans un grand plat à rôtir.",
-        "Arroser les légumes d'huile, ajouter l'ail en chemise, le thym et le romarin. Saler, poivrer, mélanger.",
-        "Poser les cuisses de poulet sur les légumes, côté peau vers le haut. Saler et huiler la peau.",
-        "Enfourner 55 min. À mi-cuisson, retourner les légumes et arroser le poulet du jus rendu.",
-        "Le poulet est cuit quand la peau est dorée et le jus des cuisses clair. Servir directement dans le plat."
-      ]
-    },
-
-    {
-      id: 'R821',
-      name: 'Riz Cantonais au Jambon Petits Pois & Oeuf',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍳',
-      origin: '🇨🇳',
-      tags: ['riz', 'rapide', 'balanced'],
-      servings: 2,
-      prepTime: 5,
-      cookTime: 15,
-      difficulty: 1,
-      // 40×4 + 110×4 + 16×9 = 160+440+144 = 744 kcal ✓
-      baseNutrition: { calories: 744, proteinGrams: 40, carbsGrams: 110, fatGrams: 16 },
-      ingredients: [
-        { name: 'Riz long grain cuit', qty: 500, unit: 'g', note: 'riz de la veille idéal' },
-        { name: 'Jambon blanc',       qty: 120, unit: 'g' },
-        { name: 'Oeufs',              qty: 3,   unit: 'pce' },
-        { name: 'Petits pois surgelés', qty: 100, unit: 'g' },
-        { name: 'Sauce soja',         qty: 30,  unit: 'ml' },
-        { name: 'Oignons verts',      qty: 30,  unit: 'g' },
-        { name: 'Huile neutre',       qty: 20,  unit: 'ml' },
-        { name: 'Huile de sésame',    qty: 10,  unit: 'ml' }
-      ],
-      steps: [
-        "Couper le jambon en petits cubes. Faire décongeler les petits pois 2 min à l'eau bouillante, égoutter.",
-        "Chauffer l'huile neutre dans un wok ou grande poêle à feu très vif. Faire scramble les oeufs battus — garder des morceaux — réserver.",
-        "Dans le même wok très chaud, ajouter le riz en miettes. Faire sauter 3-4 min en remuant constamment.",
-        "Ajouter le jambon et les petits pois, cuire 2 min. Remettre les oeufs, ajouter la sauce soja.",
-        "Finir avec l'huile de sésame et les oignons verts ciselés. Mélanger vigoureusement et servir chaud."
-      ]
-    },
-
-    {
-      id: 'R822',
-      name: 'Pâtes One-Pot Tomate Basilic Mozzarella',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍝',
-      origin: '🇮🇹',
-      tags: ['one-pan', 'vegetarien', 'rapide'],
-      servings: 2,
-      prepTime: 5,
-      cookTime: 15,
-      difficulty: 1,
-      // 38×4 + 130×4 + 22×9 = 152+520+198 = 870 kcal ✓
-      baseNutrition: { calories: 870, proteinGrams: 38, carbsGrams: 130, fatGrams: 22 },
-      ingredients: [
-        { name: 'Linguine ou spaghetti', qty: 320, unit: 'g' },
-        { name: 'Tomates concassées', qty: 400, unit: 'g' },
-        { name: 'Bouillon de légumes', qty: 600, unit: 'ml' },
-        { name: 'Mozzarella',         qty: 125, unit: 'g' },
-        { name: 'Ail',                qty: 3,   unit: 'pce' },
-        { name: 'Basilic frais',      qty: 15,  unit: 'g' },
-        { name: 'Huile d\'olive',     qty: 20,  unit: 'ml' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Dans une grande casserole, mettre les pâtes, les tomates concassées, le bouillon, l'ail haché et l'huile.",
-        "Porter à ébullition en remuant. Cuire à découvert à feu moyen-vif 9-11 min en remuant fréquemment.",
-        "Le liquide doit être presque totalement absorbé et les pâtes al dente à la fin — surveiller.",
-        "Hors du feu, ajouter les feuilles de basilic et mélanger. Rectifier sel et poivre.",
-        "Déposer la mozzarella en morceaux sur les pâtes chaudes. Elle fond légèrement. Servir immédiatement."
-      ]
-    },
-
-    {
-      id: 'R823',
-      name: 'Poulet Tikka Masala Express',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍛',
-      origin: '🇮🇳',
-      tags: ['high-protein', 'epice', 'cremeux'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 20,
-      difficulty: 1,
-      // 66×4 + 40×4 + 22×9 = 264+160+198 = 622 kcal ✓
-      baseNutrition: { calories: 622, proteinGrams: 66, carbsGrams: 40, fatGrams: 22 },
-      ingredients: [
-        { name: 'Filets de poulet',   qty: 500, unit: 'g' },
-        { name: 'Tomates concassées', qty: 300, unit: 'g' },
-        { name: 'Crème de coco',      qty: 100, unit: 'ml' },
-        { name: 'Oignon',             qty: 100, unit: 'g' },
-        { name: 'Ail',                qty: 3,   unit: 'pce' },
-        { name: 'Gingembre frais',    qty: 15,  unit: 'g' },
-        { name: 'Pâte tikka masala',  qty: 40,  unit: 'g' },
-        { name: 'Huile neutre',       qty: 15,  unit: 'ml' }
-      ],
-      steps: [
-        "Couper le poulet en cubes. Le mélanger avec la moitié de la pâte tikka et laisser mariner 5 min.",
-        "Faire dorer le poulet dans l'huile à feu vif 5-6 min, sans trop remuer pour qu'il colore. Réserver.",
-        "Dans la même poêle, faire revenir l'oignon, l'ail et le gingembre hachés 4 min.",
-        "Ajouter le reste de pâte tikka, cuire 1 min en remuant. Ajouter les tomates, mijoter 8 min.",
-        "Incorporer la crème de coco et le poulet. Laisser mijoter 5 min. Servir avec du riz basmati et du pain naan."
-      ]
-    },
-
-    {
-      id: 'R824',
-      name: 'Tacos de Boeuf Haché & Guacamole Maison',
-      category: 'mexican',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🌮',
-      origin: '🇲🇽',
-      tags: ['high-protein', 'convivial', 'fun'],
-      servings: 2,
-      prepTime: 15,
-      cookTime: 12,
-      difficulty: 1,
-      // 60×4 + 80×4 + 36×9 = 240+320+324 = 884 kcal ✓
-      baseNutrition: { calories: 884, proteinGrams: 60, carbsGrams: 80, fatGrams: 36 },
-      ingredients: [
-        { name: 'Tortillas de maïs', qty: 160, unit: 'g', note: '8 petites tortillas' },
-        { name: 'Boeuf haché',       qty: 350, unit: 'g' },
-        { name: 'Avocats',           qty: 200, unit: 'g' },
-        { name: 'Épices à tacos',    qty: 10,  unit: 'g' },
-        { name: 'Oignon rouge',      qty: 80,  unit: 'g' },
-        { name: 'Jus de citron vert', qty: 20, unit: 'ml' },
-        { name: 'Coriandre fraîche', qty: 15,  unit: 'g' },
-        { name: 'Sel',               qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Guacamole : écraser les avocats à la fourchette avec le jus de citron vert, l'oignon rouge haché menu, la coriandre et le sel.",
-        "Cuire le boeuf haché dans une poêle sèche à feu vif en émiettant 8 min. Ajouter les épices à tacos + 2 cs d'eau, cuire 2 min.",
-        "Chauffer les tortillas à sec dans une poêle 30 secondes par face ou directement sur la flamme.",
-        "Assembler : poser la viande épicée sur chaque tortilla, ajouter une cuillère de guacamole.",
-        "Servir immédiatement avec des quartiers de citron vert. Ajouter salsa ou jalapeños selon goût."
-      ]
-    },
-
-    // ═══ BATCH P30 — Gratins & Plats au Four ═══
-
-    {
-      id: 'R825',
-      name: 'Gratin Dauphinois Crémeux',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥔',
-      origin: '🇫🇷',
-      tags: ['comfort-food', 'four', 'classique'],
-      servings: 4,
-      prepTime: 20,
-      cookTime: 60,
-      difficulty: 2,
-      // 52×4 + 200×4 + 100×9 = 208+800+900 = 1908 kcal ✓
-      baseNutrition: { calories: 1908, proteinGrams: 52, carbsGrams: 200, fatGrams: 100 },
-      ingredients: [
-        { name: 'Pommes de terre',    qty: 1000, unit: 'g', note: 'à chair ferme' },
-        { name: 'Crème fraîche',      qty: 300, unit: 'ml' },
-        { name: 'Lait',               qty: 200, unit: 'ml' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' },
-        { name: 'Gruyère râpé',       qty: 80,  unit: 'g' },
-        { name: 'Beurre',             qty: 20,  unit: 'g' },
-        { name: 'Noix de muscade',    qty: 1,   unit: 'pincée' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préchauffer le four à 160°C. Peler et couper les pommes de terre en tranches fines à la mandoline (2mm).",
-        "Frotter le plat à gratin avec une gousse d'ail coupée, puis le beurrer. Disposer les tranches en couches.",
-        "Mélanger crème, lait, ail haché, muscade, sel et poivre. Verser sur les pommes de terre — le liquide doit affleurer.",
-        "Parsemer de gruyère râpé sur tout le dessus.",
-        "Enfourner 60 min. Les pommes de terre doivent être tendres au couteau et le dessus bien gratiné. Reposer 10 min avant de servir."
-      ]
-    },
-
-    {
-      id: 'R826',
-      name: 'Gratin de Chou-Fleur Béchamel & Jambon',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🧀',
-      origin: '🇫🇷',
-      tags: ['four', 'classique', 'comfort-food'],
-      servings: 3,
-      prepTime: 20,
-      cookTime: 30,
-      difficulty: 1,
-      // 72×4 + 90×4 + 60×9 = 288+360+540 = 1188 kcal ✓
-      baseNutrition: { calories: 1188, proteinGrams: 72, carbsGrams: 90, fatGrams: 60 },
-      ingredients: [
-        { name: 'Chou-fleur',         qty: 700, unit: 'g' },
-        { name: 'Jambon blanc',       qty: 200, unit: 'g', note: 'en tranches épaisses' },
-        { name: 'Lait',               qty: 400, unit: 'ml' },
-        { name: 'Farine',             qty: 40,  unit: 'g' },
-        { name: 'Beurre',             qty: 40,  unit: 'g' },
-        { name: 'Gruyère râpé',       qty: 80,  unit: 'g' },
-        { name: 'Noix de muscade',    qty: 1,   unit: 'pincée' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Détailler le chou-fleur en fleurettes. Le cuire 8 min dans de l'eau bouillante salée — al dente. Égoutter soigneusement.",
-        "Béchamel : fondre le beurre, ajouter la farine, cuire 2 min. Incorporer le lait en fouettant, cuire 5 min. Assaisonner sel, poivre, muscade.",
-        "Préchauffer le four à 200°C. Couper le jambon en cubes.",
-        "Mélanger le chou-fleur et le jambon dans la béchamel. Verser dans un plat à gratin.",
-        "Parsemer de gruyère. Enfourner 25-30 min jusqu'à gratinage bien doré. Servir bien chaud."
-      ]
-    },
-
-    {
-      id: 'R827',
-      name: 'Tian Provençal Tomates Courgettes & Parmesan',
-      category: 'mediterranean',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍅',
-      origin: '🇫🇷',
-      tags: ['vegetarien', 'four', 'mediteraneen'],
-      servings: 3,
-      prepTime: 15,
-      cookTime: 45,
-      difficulty: 1,
-      // 30×4 + 60×4 + 30×9 = 120+240+270 = 630 kcal ✓
-      baseNutrition: { calories: 630, proteinGrams: 30, carbsGrams: 60, fatGrams: 30 },
-      ingredients: [
-        { name: 'Courgettes',         qty: 400, unit: 'g' },
-        { name: 'Tomates',            qty: 400, unit: 'g' },
-        { name: 'Oignons',            qty: 200, unit: 'g' },
-        { name: 'Parmesan râpé',      qty: 60,  unit: 'g' },
-        { name: 'Ail',                qty: 3,   unit: 'pce' },
-        { name: 'Huile d\'olive',     qty: 40,  unit: 'ml' },
-        { name: 'Herbes de Provence', qty: 5,   unit: 'g' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préchauffer le four à 180°C. Émincer les oignons. Les faire fondre dans 15ml d'huile 10 min à feu doux, ajouter l'ail haché.",
-        "Étaler les oignons fondus dans le fond d'un plat à gratin.",
-        "Couper courgettes et tomates en rondelles de 5mm. Les disposer en alternance debout dans le plat, légèrement inclinées.",
-        "Arroser du reste d'huile, parsemer d'herbes de Provence, saler et poivrer.",
-        "Enfourner 40 min. Ajouter le parmesan les 5 dernières minutes. Les légumes doivent être fondants et légèrement caramélisés."
-      ]
-    },
-
-    {
-      id: 'R828',
-      name: 'Poulet au Four Citron Confit & Olives',
-      category: 'mediterranean',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍋',
-      origin: '🇫🇷',
-      tags: ['high-protein', 'mediteraneen', 'four'],
-      servings: 3,
-      prepTime: 10,
-      cookTime: 45,
-      difficulty: 1,
-      // 108×4 + 30×4 + 30×9 = 432+120+270 = 822 kcal ✓
-      baseNutrition: { calories: 822, proteinGrams: 108, carbsGrams: 30, fatGrams: 30 },
-      ingredients: [
-        { name: 'Hauts de cuisse poulet', qty: 700, unit: 'g' },
-        { name: 'Citron confit',      qty: 80,  unit: 'g', note: 'en bocal' },
-        { name: 'Olives vertes',      qty: 80,  unit: 'g' },
-        { name: 'Ail',                qty: 5,   unit: 'pce' },
-        { name: 'Oignon',             qty: 150, unit: 'g' },
-        { name: 'Huile d\'olive',     qty: 20,  unit: 'ml' },
-        { name: 'Cumin',              qty: 3,   unit: 'g' },
-        { name: 'Coriandre moulue',   qty: 2,   unit: 'g' }
-      ],
-      steps: [
-        "Préchauffer le four à 190°C. Couper le citron confit en lamelles, rincer à l'eau pour atténuer le sel.",
-        "Faire revenir l'oignon émincé dans l'huile 5 min. Ajouter l'ail et les épices (cumin, coriandre), cuire 1 min.",
-        "Disposer les hauts de cuisse dans un plat à four. Couvrir du mélange oignons-épices.",
-        "Ajouter le citron confit et les olives. Ajouter 100ml d'eau dans le fond du plat.",
-        "Enfourner 40-45 min. À mi-cuisson, arroser le poulet du jus. Servir avec du couscous ou du riz."
-      ]
-    },
-
-    {
-      id: 'R829',
-      name: 'Moussaka Grecque Boeuf & Aubergines',
-      category: 'mediterranean',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍆',
-      origin: '🇬🇷',
-      tags: ['comfort-food', 'four', 'classique'],
-      servings: 4,
-      prepTime: 30,
-      cookTime: 50,
-      difficulty: 2,
-      // 120×4 + 120×4 + 100×9 = 480+480+900 = 1860 kcal ✓
-      baseNutrition: { calories: 1860, proteinGrams: 120, carbsGrams: 120, fatGrams: 100 },
-      ingredients: [
-        { name: 'Aubergines',         qty: 600, unit: 'g' },
-        { name: 'Viande hachée boeuf', qty: 500, unit: 'g' },
-        { name: 'Tomates concassées', qty: 300, unit: 'g' },
-        { name: 'Oignon',             qty: 100, unit: 'g' },
-        { name: 'Ail',                qty: 3,   unit: 'pce' },
-        { name: 'Lait',               qty: 400, unit: 'ml' },
-        { name: 'Farine',             qty: 40,  unit: 'g' },
-        { name: 'Beurre',             qty: 40,  unit: 'g' },
-        { name: 'Parmesan râpé',      qty: 60,  unit: 'g' },
-        { name: 'Cannelle, origan',   qty: 5,   unit: 'g' }
-      ],
-      steps: [
-        "Trancher les aubergines en rondelles de 1cm. Saler 20 min, rincer, sécher. Griller à la poêle dans l'huile par lots.",
-        "Bolognaise épicée : faire revenir oignon et ail, ajouter la viande, colorer. Ajouter tomates, cannelle et origan. Mijoter 20 min.",
-        "Béchamel : roux beurre-farine, incorporer le lait chaud, cuire jusqu'à épaississement. Saler, muscade.",
-        "Préchauffer le four à 180°C. Couches dans le plat : aubergines, bolognaise, aubergines, béchamel + parmesan.",
-        "Enfourner 40-45 min jusqu'à gratinage doré. Impératif : laisser reposer 20 min pour que la moussaka tienne à la découpe."
-      ]
-    },
-
-    // ═══ BATCH P31 — Soupes & Veloutés ═══
-
-    {
-      id: 'R830',
-      name: 'Velouté de Potimarron Crème & Noisettes',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🎃',
-      origin: '🇫🇷',
-      tags: ['vegetarien', 'soupe', 'automne'],
-      servings: 3,
-      prepTime: 15,
-      cookTime: 30,
-      difficulty: 1,
-      // 18×4 + 84×4 + 24×9 = 72+336+216 = 624 kcal ✓
-      baseNutrition: { calories: 624, proteinGrams: 18, carbsGrams: 84, fatGrams: 24 },
-      ingredients: [
-        { name: 'Potimarron',         qty: 800, unit: 'g' },
-        { name: 'Oignon',             qty: 100, unit: 'g' },
-        { name: 'Crème fraîche',      qty: 120, unit: 'ml' },
-        { name: 'Bouillon de légumes', qty: 700, unit: 'ml' },
-        { name: 'Noisettes grillées', qty: 40,  unit: 'g' },
-        { name: 'Beurre',             qty: 20,  unit: 'g' },
-        { name: 'Muscade',            qty: 1,   unit: 'pincée' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Éplucher le potimarron (la peau est comestible si bio — garder). Couper en gros cubes.",
-        "Faire revenir l'oignon émincé dans le beurre 5 min. Ajouter le potimarron, cuire 3 min en remuant.",
-        "Verser le bouillon. Porter à ébullition, couvrir et cuire 25 min jusqu'à ce que le potimarron soit fondant.",
-        "Mixer finement avec la crème. Assaisonner sel, poivre, muscade. Ajuster la texture avec un peu de bouillon.",
-        "Servir dans des bols chauds. Garnir de noisettes grillées concassées et d'un filet de crème."
-      ]
-    },
-
-    {
-      id: 'R831',
-      name: 'Soupe à l\'Oignon Gratinée Classique',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🧅',
-      origin: '🇫🇷',
-      tags: ['classique', 'soupe', 'comfort-food'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 40,
-      difficulty: 1,
-      // 30×4 + 60×4 + 28×9 = 120+240+252 = 612 kcal ✓
-      baseNutrition: { calories: 612, proteinGrams: 30, carbsGrams: 60, fatGrams: 28 },
-      ingredients: [
-        { name: 'Oignons',            qty: 600, unit: 'g' },
-        { name: 'Bouillon de boeuf',  qty: 800, unit: 'ml' },
-        { name: 'Vin blanc sec',      qty: 100, unit: 'ml' },
-        { name: 'Beurre',             qty: 30,  unit: 'g' },
-        { name: 'Pain baguette',      qty: 80,  unit: 'g', note: 'en tranches' },
-        { name: 'Gruyère râpé',       qty: 80,  unit: 'g' },
-        { name: 'Sucre',              qty: 5,   unit: 'g' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Émincer finement les oignons. Les caraméliser dans le beurre à feu doux 25-30 min en remuant souvent — ils doivent devenir brun doré.",
-        "Ajouter le sucre les 5 dernières minutes pour accentuer la caramélisation.",
-        "Déglacer au vin blanc, laisser évaporer. Verser le bouillon de boeuf chaud. Cuire 10 min à feu moyen.",
-        "Répartir la soupe dans des bols allant au four. Poser 2 tranches de pain sur chaque bol.",
-        "Couvrir généreusement de gruyère râpé. Gratiner sous le gril du four 4-5 min jusqu'à doré et bouillonnant."
-      ]
-    },
-
-    {
-      id: 'R832',
-      name: 'Soupe de Poulet & Vermicelles Maison',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍜',
-      origin: '🇫🇷',
-      tags: ['high-protein', 'soupe', 'reconfort'],
-      servings: 3,
-      prepTime: 10,
-      cookTime: 30,
-      difficulty: 1,
-      // 72×4 + 60×4 + 18×9 = 288+240+162 = 690 kcal ✓
-      baseNutrition: { calories: 690, proteinGrams: 72, carbsGrams: 60, fatGrams: 18 },
-      ingredients: [
-        { name: 'Filets de poulet',   qty: 500, unit: 'g' },
-        { name: 'Vermicelles',        qty: 100, unit: 'g' },
-        { name: 'Carottes',           qty: 150, unit: 'g' },
-        { name: 'Céleri',             qty: 80,  unit: 'g' },
-        { name: 'Oignon',             qty: 100, unit: 'g' },
-        { name: 'Bouillon de poulet', qty: 1200, unit: 'ml' },
-        { name: 'Thym, laurier',      qty: 3,   unit: 'g' },
-        { name: 'Persil frais',       qty: 10,  unit: 'g' }
-      ],
-      steps: [
-        "Plonger les filets de poulet entiers dans le bouillon froid avec les aromates. Porter à ébullition, écumer.",
-        "Ajouter les carottes en rondelles, le céleri et l'oignon. Cuire à frémissement 20 min à couvert.",
-        "Retirer le poulet, effilocher la chair à la fourchette. Retirer le thym et le laurier.",
-        "Ajouter les vermicelles dans le bouillon. Cuire 4 min. Remettre le poulet effiloché.",
-        "Rectifier l'assaisonnement. Servir parsemé de persil frais haché — soupe réconfortante par excellence."
-      ]
-    },
-
-    {
-      id: 'R833',
-      name: 'Gaspacho Andalou Tomates & Poivrons',
-      category: 'mediterranean',
-      mealTypes: ['lunch'],
-      emoji: '🍅',
-      origin: '🇪🇸',
-      tags: ['vegetarien', 'froid', 'ete', 'soupe'],
-      servings: 4,
-      prepTime: 15,
-      cookTime: 0,
-      difficulty: 1,
-      // 12×4 + 80×4 + 24×9 = 48+320+216 = 584 kcal ✓
-      baseNutrition: { calories: 584, proteinGrams: 12, carbsGrams: 80, fatGrams: 24 },
-      ingredients: [
-        { name: 'Tomates mûres',      qty: 800, unit: 'g' },
-        { name: 'Concombre',          qty: 200, unit: 'g' },
-        { name: 'Poivron rouge',      qty: 150, unit: 'g' },
-        { name: 'Oignon',             qty: 60,  unit: 'g' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' },
-        { name: 'Pain de mie rassis', qty: 80,  unit: 'g' },
-        { name: 'Huile d\'olive',     qty: 60,  unit: 'ml' },
-        { name: 'Vinaigre de jerez',  qty: 20,  unit: 'ml' }
-      ],
-      steps: [
-        "Tremper le pain rassis dans l'eau 5 min. Essorer.",
-        "Mixer tomates, concombre, poivron, oignon, ail et pain trempé jusqu'à obtenir un mélange lisse.",
-        "Ajouter l'huile d'olive en filet tout en mixant, puis le vinaigre. Saler et poivrer.",
-        "Passer au tamis fin pour un résultat très velouté. Goûter et ajuster l'acidité.",
-        "Réfrigérer au moins 2 heures — le gaspacho doit être très froid. Servir avec des croûtons et un filet d'huile."
-      ]
-    },
-
-    {
-      id: 'R834',
-      name: 'Bouillon Thaï Coco Crevettes & Vermicelles',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍜',
-      origin: '🇹🇭',
-      tags: ['soupe', 'epice', 'asian'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 15,
-      difficulty: 1,
-      // 44×4 + 64×4 + 22×9 = 176+256+198 = 630 kcal ✓
-      baseNutrition: { calories: 630, proteinGrams: 44, carbsGrams: 64, fatGrams: 22 },
-      ingredients: [
-        { name: 'Crevettes décortiquées', qty: 300, unit: 'g' },
-        { name: 'Vermicelles de riz',   qty: 120, unit: 'g' },
-        { name: 'Lait de coco',        qty: 200, unit: 'ml' },
-        { name: 'Bouillon de légumes', qty: 600, unit: 'ml' },
-        { name: 'Pâte de curry rouge', qty: 20,  unit: 'g' },
-        { name: 'Gingembre frais',     qty: 15,  unit: 'g' },
-        { name: 'Jus de citron vert',  qty: 20,  unit: 'ml' },
-        { name: 'Coriandre fraîche',   qty: 15,  unit: 'g' }
-      ],
-      steps: [
-        "Faire tremper les vermicelles de riz 5 min dans l'eau chaude. Égoutter.",
-        "Porter le bouillon à ébullition. Ajouter la pâte de curry, le gingembre râpé, cuire 2 min en fouettant.",
-        "Verser le lait de coco. Laisser frémir 5 min sans bouillir.",
-        "Ajouter les crevettes, cuire 3 min jusqu'à ce qu'elles deviennent roses et courbées.",
-        "Ajouter les vermicelles, le jus de citron vert. Rectifier le sel. Servir parsemé de coriandre fraîche."
-      ]
-    },
-
-    // ═══ BATCH P32 — Petit-Déjeuner Protéiné ═══
-
-    {
-      id: 'R835',
-      name: 'Pancakes Protéinés Banane & Avoine',
-      category: 'french',
-      mealTypes: ['breakfast'],
-      emoji: '🥞',
-      origin: '🇺🇸',
-      tags: ['breakfast', 'high-protein', 'sportif'],
-      servings: 2,
-      prepTime: 8,
-      cookTime: 12,
-      difficulty: 1,
-      // 40×4 + 100×4 + 20×9 = 160+400+180 = 740 kcal ✓
-      baseNutrition: { calories: 740, proteinGrams: 40, carbsGrams: 100, fatGrams: 20 },
-      ingredients: [
-        { name: 'Flocons d\'avoine',  qty: 120, unit: 'g' },
-        { name: 'Banane',             qty: 120, unit: 'g' },
-        { name: 'Oeufs',              qty: 3,   unit: 'pce' },
-        { name: 'Fromage blanc 0%',  qty: 100, unit: 'g' },
-        { name: 'Lait',               qty: 80,  unit: 'ml' },
-        { name: 'Levure chimique',    qty: 5,   unit: 'g' },
-        { name: 'Beurre',             qty: 20,  unit: 'g' },
-        { name: 'Miel',               qty: 15,  unit: 'g' }
-      ],
-      steps: [
-        "Mixer les flocons d'avoine en farine grossière. Écraser la banane en purée lisse.",
-        "Mélanger farine d'avoine, banane, oeufs, fromage blanc, lait et levure. Pâte un peu épaisse — normal.",
-        "Chauffer une noix de beurre dans une poêle à feu moyen. Verser des cercles de pâte.",
-        "Cuire 2-3 min jusqu'à l'apparition de bulles en surface. Retourner et cuire 1 min 30 l'autre face.",
-        "Servir avec un filet de miel, des fruits frais ou du sirop d'érable. Manger immédiatement."
-      ]
-    },
-
-    {
-      id: 'R836',
-      name: 'Overnight Oats Fruits Rouges & Graines de Chia',
-      category: 'french',
-      mealTypes: ['breakfast'],
-      emoji: '🫙',
-      origin: '🇺🇸',
-      tags: ['breakfast', 'prep-rapide', 'vegetarien'],
-      servings: 1,
-      prepTime: 5,
-      cookTime: 0,
-      difficulty: 1,
-      // 20×4 + 72×4 + 16×9 = 80+288+144 = 512 kcal ✓
-      baseNutrition: { calories: 512, proteinGrams: 20, carbsGrams: 72, fatGrams: 16 },
-      ingredients: [
-        { name: 'Flocons d\'avoine',  qty: 80,  unit: 'g' },
-        { name: 'Lait',               qty: 150, unit: 'ml' },
-        { name: 'Fromage blanc',      qty: 60,  unit: 'g' },
-        { name: 'Graines de chia',    qty: 15,  unit: 'g' },
-        { name: 'Miel',               qty: 15,  unit: 'g' },
-        { name: 'Fruits rouges',      qty: 100, unit: 'g' },
-        { name: 'Amandes effilées',   qty: 15,  unit: 'g' }
-      ],
-      steps: [
-        "Dans un bocal ou un grand verre, mélanger les flocons d'avoine, le lait, le fromage blanc et le miel.",
-        "Ajouter les graines de chia. Bien mélanger pour éviter les grumeaux.",
-        "Couvrir et placer au réfrigérateur minimum 6 heures — toute la nuit idéalement.",
-        "Au matin, remuer. Ajouter un peu de lait si trop épais.",
-        "Garnir de fruits rouges frais et d'amandes effilées. Manger directement dans le bocal."
-      ]
-    },
-
-    {
-      id: 'R837',
-      name: 'Oeufs Brouillés Crémeux Saumon Fumé & Ciboulette',
-      category: 'french',
-      mealTypes: ['breakfast', 'brunch'],
-      emoji: '🥚',
-      origin: '🇫🇷',
-      tags: ['breakfast', 'high-protein', 'brunch'],
-      servings: 2,
-      prepTime: 5,
-      cookTime: 8,
-      difficulty: 1,
-      // 44×4 + 8×4 + 24×9 = 176+32+216 = 424 kcal ✓
-      baseNutrition: { calories: 424, proteinGrams: 44, carbsGrams: 8, fatGrams: 24 },
-      ingredients: [
-        { name: 'Oeufs',              qty: 6,   unit: 'pce' },
-        { name: 'Saumon fumé',        qty: 80,  unit: 'g' },
-        { name: 'Crème fraîche',      qty: 40,  unit: 'ml' },
-        { name: 'Beurre',             qty: 20,  unit: 'g' },
-        { name: 'Ciboulette',         qty: 10,  unit: 'g' },
-        { name: 'Pain de campagne',   qty: 60,  unit: 'g' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Battre les oeufs avec la crème fraîche. Saler légèrement (le saumon est déjà salé).",
-        "Faire fondre le beurre dans une casserole à fond épais à feu doux — jamais fort.",
-        "Verser les oeufs battus. Remuer continuellement avec une spatule en raclant le fond — cuisson lente, 5-7 min.",
-        "Retirer du feu quand les oeufs sont crémeux et légèrement coulants. Ils finissent de cuire hors du feu.",
-        "Ajouter le saumon fumé en lanières et la ciboulette ciselée. Servir sur pain de campagne grillé."
-      ]
-    },
-
-    {
-      id: 'R838',
-      name: 'Shakshuka Oeufs Pochés Sauce Tomate Épicée',
-      category: 'world-food',
-      mealTypes: ['breakfast', 'brunch', 'dinner'],
-      emoji: '🍳',
-      origin: '🇮🇱',
-      tags: ['vegetarien', 'breakfast', 'epice'],
-      servings: 2,
-      prepTime: 8,
-      cookTime: 20,
-      difficulty: 1,
-      // 36×4 + 36×4 + 22×9 = 144+144+198 = 486 kcal ✓
-      baseNutrition: { calories: 486, proteinGrams: 36, carbsGrams: 36, fatGrams: 22 },
-      ingredients: [
-        { name: 'Oeufs',              qty: 4,   unit: 'pce' },
-        { name: 'Tomates concassées', qty: 400, unit: 'g' },
-        { name: 'Poivron rouge',      qty: 150, unit: 'g' },
-        { name: 'Oignon',             qty: 80,  unit: 'g' },
-        { name: 'Ail',                qty: 3,   unit: 'pce' },
-        { name: 'Cumin, paprika',     qty: 5,   unit: 'g' },
-        { name: 'Huile d\'olive',     qty: 20,  unit: 'ml' },
-        { name: 'Feta',               qty: 60,  unit: 'g' }
-      ],
-      steps: [
-        "Faire revenir l'oignon et le poivron coupés en petits dés dans l'huile 5 min. Ajouter l'ail et les épices, cuire 1 min.",
-        "Verser les tomates concassées. Saler et laisser mijoter 8-10 min jusqu'à épaississement de la sauce.",
-        "Faire 4 puits dans la sauce avec le dos d'une cuillère. Casser un oeuf dans chaque puits.",
-        "Couvrir et cuire à feu doux 5-7 min — les blancs doivent être pris mais les jaunes encore coulants.",
-        "Émietter la feta sur le dessus. Servir directement dans la poêle avec du pain pita ou grillé."
-      ]
-    },
-
-    {
-      id: 'R839',
-      name: 'Toast Avocat & Oeuf Poché',
-      category: 'french',
-      mealTypes: ['breakfast', 'brunch'],
-      emoji: '🥑',
-      origin: '🇦🇺',
-      tags: ['breakfast', 'brunch', 'tendance'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 5,
-      difficulty: 1,
-      // 24×4 + 50×4 + 30×9 = 96+200+270 = 566 kcal ✓
-      baseNutrition: { calories: 566, proteinGrams: 24, carbsGrams: 50, fatGrams: 30 },
-      ingredients: [
-        { name: 'Pain de seigle',     qty: 120, unit: 'g', note: '4 tranches' },
-        { name: 'Avocats',            qty: 200, unit: 'g' },
-        { name: 'Oeufs',              qty: 2,   unit: 'pce' },
-        { name: 'Jus de citron',      qty: 15,  unit: 'ml' },
-        { name: 'Flocons de piment',  qty: 1,   unit: 'pincée' },
-        { name: 'Graines de sésame', qty: 5,   unit: 'g' },
-        { name: 'Vinaigre blanc',     qty: 20,  unit: 'ml' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Écraser l'avocat avec le jus de citron, le sel et le poivre. Garder quelques morceaux pour la texture.",
-        "Faire bouillir une casserole d'eau avec le vinaigre. Créer un tourbillon, y plonger délicatement les oeufs cassés dans des ramequins.",
-        "Pocher les oeufs 3 min. Ils doivent avoir un blanc ferme et un jaune coulant. Égoutter sur du papier absorbant.",
-        "Griller les tranches de pain de seigle. Étaler généreusement la purée d'avocat.",
-        "Poser l'oeuf poché sur l'avocat. Parsemer de flocons de piment, graines de sésame et fleur de sel."
-      ]
-    },
-
-    // ═══ BATCH P33 — Snacks & Collations ═══
-
-    {
-      id: 'R840',
-      name: 'Energy Balls Avoine Miel & Chocolat',
-      category: 'french',
-      mealTypes: ['snack'],
-      emoji: '🍫',
-      origin: '🇺🇸',
-      tags: ['snack', 'sportif', 'prep-rapide'],
-      servings: 3,
-      prepTime: 15,
-      cookTime: 0,
-      difficulty: 1,
-      // 18×4 + 90×4 + 30×9 = 72+360+270 = 702 kcal ✓
-      baseNutrition: { calories: 702, proteinGrams: 18, carbsGrams: 90, fatGrams: 30 },
-      ingredients: [
-        { name: 'Flocons d\'avoine',  qty: 150, unit: 'g' },
-        { name: 'Beurre de cacahuète', qty: 80, unit: 'g' },
-        { name: 'Miel',               qty: 50,  unit: 'g' },
-        { name: 'Pépites de chocolat', qty: 40, unit: 'g' },
-        { name: 'Graines de chia',    qty: 15,  unit: 'g' },
-        { name: 'Noix de coco râpée', qty: 20,  unit: 'g' }
-      ],
-      steps: [
-        "Mélanger tous les ingrédients dans un grand bol. Le mélange doit être homogène et légèrement collant.",
-        "Si trop sec, ajouter un peu de miel. Si trop collant, ajouter des flocons d'avoine.",
-        "Réfrigérer 30 min pour raffermir la préparation — plus facile à rouler ensuite.",
-        "Former des boules de la taille d'une noix (environ 30g chacune) avec les mains légèrement humides.",
-        "Rouler dans la noix de coco râpée. Conserver au frigo dans une boîte hermétique jusqu'à 1 semaine."
-      ]
-    },
-
-    {
-      id: 'R841',
-      name: 'Hummus Maison Crémeux à l\'Ail Rôti',
-      category: 'mediterranean',
-      mealTypes: ['snack'],
-      emoji: '🧆',
-      origin: '🇱🇧',
-      tags: ['snack', 'vegetarien', 'aperitif'],
-      servings: 4,
-      prepTime: 10,
-      cookTime: 30,
-      difficulty: 1,
-      // 28×4 + 120×4 + 40×9 = 112+480+360 = 952 kcal ✓
-      baseNutrition: { calories: 952, proteinGrams: 28, carbsGrams: 120, fatGrams: 40 },
-      ingredients: [
-        { name: 'Pois chiches cuits', qty: 400, unit: 'g' },
-        { name: 'Tahini',             qty: 80,  unit: 'g' },
-        { name: 'Jus de citron',      qty: 40,  unit: 'ml' },
-        { name: 'Ail',                qty: 6,   unit: 'pce', note: 'tête entière' },
-        { name: 'Huile d\'olive',     qty: 40,  unit: 'ml' },
-        { name: 'Cumin',              qty: 3,   unit: 'g' },
-        { name: 'Paprika fumé',       qty: 2,   unit: 'g' },
-        { name: 'Sel',                qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Envelopper la tête d'ail dans du papier alu. Rôtir au four à 180°C pendant 30 min. Extraire les gousses confites.",
-        "Mixer les pois chiches égouttés (garder l'eau de cuisson) avec l'ail rôti, le tahini et le jus de citron.",
-        "Ajouter l'huile d'olive en filet, le cumin, le sel. Mixer jusqu'à texture très crémeuse.",
-        "Ajouter 2-3 cs d'eau de cuisson des pois chiches pour alléger si besoin. Goûter et ajuster.",
-        "Servir dans un bol. Faire un creux au centre, verser un filet d'huile et saupoudrer de paprika fumé."
-      ]
-    },
-
-    {
-      id: 'R842',
-      name: 'Chips de Légumes au Four Betterave & Panais',
-      category: 'french',
-      mealTypes: ['snack'],
-      emoji: '🥕',
-      origin: '🇫🇷',
-      tags: ['snack', 'vegetarien', 'apero'],
-      servings: 3,
-      prepTime: 15,
-      cookTime: 25,
-      difficulty: 1,
-      // 8×4 + 75×4 + 15×9 = 32+300+135 = 467 kcal ✓
-      baseNutrition: { calories: 467, proteinGrams: 8, carbsGrams: 75, fatGrams: 15 },
-      ingredients: [
-        { name: 'Betterave crue',     qty: 200, unit: 'g' },
-        { name: 'Panais',             qty: 200, unit: 'g' },
-        { name: 'Carottes',           qty: 150, unit: 'g' },
-        { name: 'Huile d\'olive',     qty: 30,  unit: 'ml' },
-        { name: 'Sel fin',            qty: 3,   unit: 'g' },
-        { name: 'Romarin séché',      qty: 2,   unit: 'g' },
-        { name: 'Paprika',            qty: 2,   unit: 'g' }
-      ],
-      steps: [
-        "Préchauffer le four à 170°C. Éplucher les légumes et les trancher très finement à la mandoline (1-2mm).",
-        "Sécher les tranches soigneusement avec du papier absorbant — crucial pour obtenir des chips croustillantes.",
-        "Mélanger avec l'huile, le sel, le romarin et le paprika. Répartir en une seule couche sur plaques garnies de papier cuisson.",
-        "Enfourner 20-25 min en retournant à mi-cuisson. Surveiller de près les 5 dernières minutes — ça brûle vite.",
-        "Sortir les chips dorées et les laisser refroidir sur grille — elles croustillent davantage en refroidissant."
-      ]
-    },
-
-    {
-      id: 'R843',
-      name: 'Wraps Thon Crudités & Sauce Yaourt',
-      category: 'french',
-      mealTypes: ['lunch', 'snack'],
-      emoji: '🌯',
-      origin: '🇫🇷',
-      tags: ['high-protein', 'rapide', 'snack'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 0,
-      difficulty: 1,
-      // 54×4 + 60×4 + 16×9 = 216+240+144 = 600 kcal ✓
-      baseNutrition: { calories: 600, proteinGrams: 54, carbsGrams: 60, fatGrams: 16 },
-      ingredients: [
-        { name: 'Tortillas de blé',   qty: 160, unit: 'g', note: '4 grandes tortillas' },
-        { name: 'Thon en boîte',      qty: 240, unit: 'g', note: 'égoutté' },
-        { name: 'Yaourt grec',        qty: 100, unit: 'g' },
-        { name: 'Concombre',          qty: 100, unit: 'g' },
-        { name: 'Salade',             qty: 60,  unit: 'g' },
-        { name: 'Tomates',            qty: 100, unit: 'g' },
-        { name: 'Jus de citron',      qty: 15,  unit: 'ml' },
-        { name: 'Moutarde',           qty: 10,  unit: 'g' }
-      ],
-      steps: [
-        "Émietter le thon. Mélanger le yaourt grec avec la moutarde et le jus de citron pour la sauce.",
-        "Couper le concombre et les tomates en petits dés. Déchirer la salade en petits morceaux.",
-        "Chauffer les tortillas 30 secondes à la poêle sèche pour les assouplir.",
-        "Étaler la sauce yaourt sur chaque tortilla. Répartir le thon, les légumes et la salade.",
-        "Rouler les wraps fermement. Les couper en deux en diagonale. Manger immédiatement ou emballer pour le lendemain."
-      ]
-    },
-
-    {
-      id: 'R844',
-      name: 'Fromage Blanc Fruits Frais & Granola',
-      category: 'french',
-      mealTypes: ['breakfast', 'snack'],
-      emoji: '🫙',
-      origin: '🇫🇷',
-      tags: ['breakfast', 'snack', 'leger'],
-      servings: 1,
-      prepTime: 5,
-      cookTime: 0,
-      difficulty: 1,
-      // 20×4 + 64×4 + 14×9 = 80+256+126 = 462 kcal ✓
-      baseNutrition: { calories: 462, proteinGrams: 20, carbsGrams: 64, fatGrams: 14 },
-      ingredients: [
-        { name: 'Fromage blanc 0%',  qty: 200, unit: 'g' },
-        { name: 'Granola',            qty: 60,  unit: 'g' },
-        { name: 'Fruits de saison',   qty: 150, unit: 'g' },
-        { name: 'Miel',               qty: 15,  unit: 'g' },
-        { name: 'Amandes',            qty: 15,  unit: 'g' }
-      ],
-      steps: [
-        "Verser le fromage blanc dans un bol ou une verrine.",
-        "Répartir les fruits coupés en morceaux sur le fromage blanc.",
-        "Parsemer le granola pour le croustillant.",
-        "Ajouter les amandes concassées et finir avec un filet de miel.",
-        "Manger immédiatement avant que le granola ne ramollisse au contact du fromage blanc."
-      ]
-    },
-
-    // ═══ BATCH P34 — Desserts Classiques ═══
-
-    {
-      id: 'R845',
-      name: 'Crème Brûlée à la Vanille',
-      category: 'french',
-      mealTypes: ['dessert'],
-      emoji: '🍮',
-      origin: '🇫🇷',
-      tags: ['dessert', 'classique', 'four'],
-      servings: 4,
-      prepTime: 15,
-      cookTime: 50,
-      difficulty: 2,
-      // 20×4 + 80×4 + 80×9 = 80+320+720 = 1120 kcal ✓
-      baseNutrition: { calories: 1120, proteinGrams: 20, carbsGrams: 80, fatGrams: 80 },
-      ingredients: [
-        { name: 'Crème liquide 35%', qty: 500, unit: 'ml' },
-        { name: 'Jaunes d\'oeufs',  qty: 5,   unit: 'pce' },
-        { name: 'Sucre',             qty: 100, unit: 'g' },
-        { name: 'Gousse de vanille', qty: 1,   unit: 'pce' },
-        { name: 'Cassonade',         qty: 40,  unit: 'g', note: 'pour caraméliser' }
-      ],
-      steps: [
-        "Préchauffer le four à 150°C. Fendre la gousse de vanille et gratter les graines. Chauffer la crème avec la vanille sans bouillir.",
-        "Fouetter les jaunes avec le sucre jusqu'à blanchissement. Verser la crème chaude en filet en fouettant.",
-        "Filtrer à travers un tamis. Répartir dans 4 ramequins. Poser dans un bain-marie (eau chaude à mi-hauteur).",
-        "Enfourner 45-50 min — la crème doit trembler légèrement au centre quand on secoue. Refroidir puis réfrigérer 2h.",
-        "Au moment de servir, saupoudrer de cassonade et caraméliser au chalumeau ou sous le gril très chaud."
-      ]
-    },
-
-    {
-      id: 'R846',
-      name: 'Mousse au Chocolat Noir Classique',
-      category: 'french',
-      mealTypes: ['dessert'],
-      emoji: '🍫',
-      origin: '🇫🇷',
-      tags: ['dessert', 'chocolat', 'classique'],
-      servings: 4,
-      prepTime: 20,
-      cookTime: 0,
-      difficulty: 2,
-      // 24×4 + 80×4 + 72×9 = 96+320+648 = 1064 kcal ✓
-      baseNutrition: { calories: 1064, proteinGrams: 24, carbsGrams: 80, fatGrams: 72 },
-      ingredients: [
-        { name: 'Chocolat noir 70%', qty: 200, unit: 'g' },
-        { name: 'Oeufs',             qty: 5,   unit: 'pce' },
-        { name: 'Beurre',            qty: 40,  unit: 'g' },
-        { name: 'Sucre',             qty: 40,  unit: 'g' },
-        { name: 'Sel',               qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Faire fondre le chocolat et le beurre au bain-marie ou au micro-ondes par intervalles de 30 secondes. Laisser tiédir.",
-        "Séparer les blancs des jaunes. Battre les jaunes avec le sucre jusqu'à blanchissement. Incorporer au chocolat tiède.",
-        "Monter les blancs en neige ferme avec la pincée de sel.",
-        "Incorporer 1/3 des blancs au chocolat vigoureusement pour détendre. Puis ajouter le reste délicatement en soulevant.",
-        "Répartir dans des verrines ou un grand bol. Réfrigérer minimum 3 heures. La mousse se tient mieux le lendemain."
-      ]
-    },
-
-    {
-      id: 'R847',
-      name: 'Tarte Tatin aux Pommes',
-      category: 'french',
-      mealTypes: ['dessert'],
-      emoji: '🍎',
-      origin: '🇫🇷',
-      tags: ['dessert', 'classique', 'four'],
-      servings: 6,
-      prepTime: 20,
-      cookTime: 35,
-      difficulty: 2,
-      // 24×4 + 300×4 + 90×9 = 96+1200+810 = 2106 kcal ✓
-      baseNutrition: { calories: 2106, proteinGrams: 24, carbsGrams: 300, fatGrams: 90 },
-      ingredients: [
-        { name: 'Pommes Golden',      qty: 1200, unit: 'g', note: '6-8 pommes' },
-        { name: 'Pâte feuilletée',    qty: 250, unit: 'g' },
-        { name: 'Beurre',             qty: 80,  unit: 'g' },
-        { name: 'Sucre',              qty: 150, unit: 'g' },
-        { name: 'Gousse de vanille',  qty: 1,   unit: 'pce' }
-      ],
-      steps: [
-        "Préchauffer le four à 190°C. Éplucher et couper les pommes en gros quartiers. Gratter les graines de vanille.",
-        "Dans un moule à tarte en fonte ou poêle allant au four, faire fondre le beurre. Ajouter le sucre, cuire à feu moyen jusqu'à caramel brun doré.",
-        "Disposer les pommes serrées sur le caramel, côté bombé vers le bas. Cuire à feu moyen 10 min pour compoter légèrement.",
-        "Couvrir les pommes avec la pâte feuilletée en rentrant les bords autour des pommes. Piquer la pâte.",
-        "Enfourner 25-30 min jusqu'à pâte bien dorée. Laisser reposer 10 min puis retourner sur le plat de service. Servir tiède."
-      ]
-    },
-
-    {
-      id: 'R848',
-      name: 'Fondant au Chocolat Coeur Coulant',
-      category: 'french',
-      mealTypes: ['dessert'],
-      emoji: '🍫',
-      origin: '🇫🇷',
-      tags: ['dessert', 'chocolat', 'indulgent'],
-      servings: 4,
-      prepTime: 10,
-      cookTime: 12,
-      difficulty: 2,
-      // 20×4 + 80×4 + 80×9 = 80+320+720 = 1120 kcal ✓
-      baseNutrition: { calories: 1120, proteinGrams: 20, carbsGrams: 80, fatGrams: 80 },
-      ingredients: [
-        { name: 'Chocolat noir 70%', qty: 200, unit: 'g' },
-        { name: 'Beurre',            qty: 150, unit: 'g' },
-        { name: 'Oeufs',             qty: 4,   unit: 'pce' },
-        { name: 'Sucre',             qty: 80,  unit: 'g' },
-        { name: 'Farine',            qty: 40,  unit: 'g' }
-      ],
-      steps: [
-        "Préchauffer le four à 200°C. Beurrer et fariner 4 moules à muffins ou ramequins.",
-        "Faire fondre le chocolat et le beurre ensemble au bain-marie. Laisser tiédir 5 min.",
-        "Fouetter les oeufs avec le sucre 2 min. Incorporer le mélange chocolat-beurre tiède.",
-        "Ajouter la farine tamisée. Mélanger délicatement juste pour incorporer.",
-        "Remplir les moules aux 3/4. Enfourner exactement 10-12 min. Le fondant doit être ferme en périphérie et tremblant au centre. Démouler et servir immédiatement."
-      ]
-    },
-
-    {
-      id: 'R849',
-      name: 'Île Flottante Crème Anglaise à la Vanille',
-      category: 'french',
-      mealTypes: ['dessert'],
-      emoji: '🍮',
-      origin: '🇫🇷',
-      tags: ['dessert', 'classique', 'leger'],
-      servings: 4,
-      prepTime: 20,
-      cookTime: 25,
-      difficulty: 2,
-      // 28×4 + 100×4 + 44×9 = 112+400+396 = 908 kcal ✓
-      baseNutrition: { calories: 908, proteinGrams: 28, carbsGrams: 100, fatGrams: 44 },
-      ingredients: [
-        { name: 'Oeufs',             qty: 5,   unit: 'pce' },
-        { name: 'Lait entier',       qty: 500, unit: 'ml' },
-        { name: 'Sucre',             qty: 100, unit: 'g' },
-        { name: 'Gousse de vanille', qty: 1,   unit: 'pce' },
-        { name: 'Sucre glace',       qty: 40,  unit: 'g', note: 'pour les blancs' },
-        { name: 'Caramel liquide',   qty: 30,  unit: 'ml', note: 'pour servir' }
-      ],
-      steps: [
-        "Crème anglaise : infuser la vanille dans le lait chaud 10 min. Fouetter 4 jaunes avec 100g sucre. Verser le lait chaud en filet.",
-        "Cuire à feu doux en remuant jusqu'à napper la cuillère (82°C). Filtrer et réfrigérer.",
-        "Blancs montés : battre 4 blancs en neige ferme, incorporer le sucre glace pour les meringuer légèrement.",
-        "Pocher les blancs en quenelles dans du lait frémissant 2 min par face. Égoutter sur papier absorbant.",
-        "Servir les îles flottantes sur la crème anglaise froide. Verser le caramel liquide en filet sur les blancs."
-      ]
-    },
-
-    // ═══ BATCH P35 — Riz & Céréales ═══
-
-    {
-      id: 'R850',
-      name: 'Risotto aux Champignons & Parmesan',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍄',
-      origin: '🇮🇹',
-      tags: ['vegetarien', 'cremeux', 'classique'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 25,
-      difficulty: 2,
-      // 28×4 + 130×4 + 28×9 = 112+520+252 = 884 kcal ✓
-      baseNutrition: { calories: 884, proteinGrams: 28, carbsGrams: 130, fatGrams: 28 },
-      ingredients: [
-        { name: 'Riz Arborio',        qty: 280, unit: 'g' },
-        { name: 'Champignons mélange', qty: 250, unit: 'g' },
-        { name: 'Bouillon de légumes', qty: 900, unit: 'ml' },
-        { name: 'Vin blanc sec',      qty: 100, unit: 'ml' },
-        { name: 'Oignon',             qty: 80,  unit: 'g' },
-        { name: 'Parmesan râpé',      qty: 60,  unit: 'g' },
-        { name: 'Beurre',             qty: 30,  unit: 'g' },
-        { name: 'Huile d\'olive',     qty: 15,  unit: 'ml' }
-      ],
-      steps: [
-        "Garder le bouillon chaud dans une casserole à feu doux. Faire revenir l'oignon dans l'huile et 15g de beurre 4 min.",
-        "Ajouter les champignons, cuire 5 min jusqu'à évaporation. Ajouter le riz, nacrer 2 min en remuant.",
-        "Déglacer au vin blanc, remuer jusqu'à absorption complète.",
-        "Ajouter le bouillon louche par louche, en remuant constamment et en attendant l'absorption entre chaque ajout (18-20 min).",
-        "Hors du feu, ajouter le reste de beurre et le parmesan. Mélanger vigoureusement — le risotto doit être crémeux et légèrement coulant."
-      ]
-    },
-
-    {
-      id: 'R851',
-      name: 'Riz Pilaf au Poulet & Épices Orientales',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍚',
-      origin: '🇹🇷',
-      tags: ['high-protein', 'riz', 'oriental'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 30,
-      difficulty: 1,
-      // 60×4 + 100×4 + 18×9 = 240+400+162 = 802 kcal ✓
-      baseNutrition: { calories: 802, proteinGrams: 60, carbsGrams: 100, fatGrams: 18 },
-      ingredients: [
-        { name: 'Riz basmati',        qty: 250, unit: 'g' },
-        { name: 'Filets de poulet',   qty: 400, unit: 'g' },
-        { name: 'Oignon',             qty: 100, unit: 'g' },
-        { name: 'Bouillon de poulet', qty: 500, unit: 'ml' },
-        { name: 'Cumin, cannelle, curcuma', qty: 6, unit: 'g' },
-        { name: 'Raisins secs',       qty: 30,  unit: 'g' },
-        { name: 'Amandes effilées',   qty: 20,  unit: 'g' },
-        { name: 'Huile d\'olive',     qty: 15,  unit: 'ml' }
-      ],
-      steps: [
-        "Couper le poulet en cubes. Faire dorer dans l'huile à feu vif 5 min. Réserver.",
-        "Dans la même casserole, faire revenir l'oignon émincé 5 min. Ajouter les épices, cuire 1 min.",
-        "Ajouter le riz basmati rincé, nacrer 2 min en remuant. Verser le bouillon et les raisins secs.",
-        "Remettre le poulet. Porter à ébullition, couvrir hermétiquement et cuire à feu très doux 18 min.",
-        "Laisser reposer 5 min couvert. Égrener à la fourchette. Garnir d'amandes effilées dorées à sec."
-      ]
-    },
-
-    {
-      id: 'R852',
-      name: 'Bol Buddha Légumes Rôtis & Sauce Tahini',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥗',
-      origin: '🇺🇸',
-      tags: ['vegetarien', 'balanced', 'healthy'],
-      servings: 2,
-      prepTime: 15,
-      cookTime: 25,
-      difficulty: 1,
-      // 30×4 + 120×4 + 28×9 = 120+480+252 = 852 kcal ✓
-      baseNutrition: { calories: 852, proteinGrams: 30, carbsGrams: 120, fatGrams: 28 },
-      ingredients: [
-        { name: 'Riz complet cuit',   qty: 300, unit: 'g' },
-        { name: 'Pois chiches cuits', qty: 200, unit: 'g' },
-        { name: 'Patate douce',       qty: 200, unit: 'g' },
-        { name: 'Chou rouge',         qty: 100, unit: 'g' },
-        { name: 'Tahini',             qty: 40,  unit: 'g' },
-        { name: 'Jus de citron',      qty: 25,  unit: 'ml' },
-        { name: 'Huile d\'olive',     qty: 20,  unit: 'ml' },
-        { name: 'Ail',                qty: 1,   unit: 'pce' }
-      ],
-      steps: [
-        "Couper la patate douce en cubes. Toss avec l'huile, sel, cumin. Rôtir au four 200°C pendant 25 min.",
-        "Égoutter et sécher les pois chiches. Les mélanger avec un filet d'huile et du paprika. Rôtir 20 min jusqu'à croustillants.",
-        "Sauce tahini : mélanger le tahini, le jus de citron, l'ail écrasé et 3-4 cs d'eau pour une consistance fluide.",
-        "Émincer finement le chou rouge. Masser avec un peu de sel et de citron.",
-        "Assembler les bols : riz complet en base, puis légumes rôtis, pois chiches, chou. Napper généreusement de sauce tahini."
-      ]
-    },
-
-    {
-      id: 'R853',
-      name: 'Taboulé Libanais Persil & Boulgour',
-      category: 'mediterranean',
-      mealTypes: ['lunch'],
-      emoji: '🌿',
-      origin: '🇱🇧',
-      tags: ['vegetarien', 'frais', 'ete'],
-      servings: 4,
-      prepTime: 20,
-      cookTime: 0,
-      difficulty: 1,
-      // 20×4 + 120×4 + 32×9 = 80+480+288 = 848 kcal ✓
-      baseNutrition: { calories: 848, proteinGrams: 20, carbsGrams: 120, fatGrams: 32 },
-      ingredients: [
-        { name: 'Boulgour fin',       qty: 150, unit: 'g' },
-        { name: 'Persil plat frais',  qty: 200, unit: 'g' },
-        { name: 'Menthe fraîche',     qty: 50,  unit: 'g' },
-        { name: 'Tomates',            qty: 300, unit: 'g' },
-        { name: 'Oignons verts',      qty: 60,  unit: 'g' },
-        { name: 'Huile d\'olive',     qty: 60,  unit: 'ml' },
-        { name: 'Jus de citron',      qty: 50,  unit: 'ml' },
-        { name: 'Sel',                qty: 2,   unit: 'g' }
-      ],
-      steps: [
-        "Faire gonfler le boulgour fin dans 200ml d'eau bouillante salée 15 min à couvert. Égrener à la fourchette, laisser refroidir.",
-        "Ciseler finement le persil et la menthe — hacher grossièrement au couteau, ne pas mixer.",
-        "Couper les tomates en tout petits dés. Émincer les oignons verts.",
-        "Mélanger tous les ingrédients dans un grand bol. Assaisonner avec l'huile d'olive, le jus de citron et le sel.",
-        "Réfrigérer au moins 1 heure avant de servir. Le taboulé libanais est principalement herbacé — les herbes dominent."
-      ]
-    },
-
-    {
-      id: 'R854',
-      name: 'Polenta Crémeuse Champignons & Parmesan',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🌽',
-      origin: '🇮🇹',
-      tags: ['vegetarien', 'cremeux', 'comfort-food'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 20,
-      difficulty: 1,
-      // 28×4 + 100×4 + 28×9 = 112+400+252 = 764 kcal ✓
-      baseNutrition: { calories: 764, proteinGrams: 28, carbsGrams: 100, fatGrams: 28 },
-      ingredients: [
-        { name: 'Polenta',            qty: 200, unit: 'g' },
-        { name: 'Champignons mélange', qty: 300, unit: 'g' },
-        { name: 'Bouillon de légumes', qty: 800, unit: 'ml' },
-        { name: 'Parmesan râpé',      qty: 60,  unit: 'g' },
-        { name: 'Beurre',             qty: 30,  unit: 'g' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' },
-        { name: 'Thym frais',         qty: 5,   unit: 'g' },
-        { name: 'Huile d\'olive',     qty: 15,  unit: 'ml' }
-      ],
-      steps: [
-        "Faire sauter les champignons dans l'huile d'olive à feu vif 5-7 min. Ajouter l'ail et le thym. Saler et réserver.",
-        "Porter le bouillon à ébullition. Verser la polenta en pluie en fouettant constamment.",
-        "Cuire à feu doux en remuant régulièrement 10-15 min jusqu'à épaississement. La polenta ne doit plus coller aux parois.",
-        "Hors du feu, incorporer le beurre et le parmesan. Mélanger vigoureusement. Rectifier sel et poivre.",
-        "Verser la polenta crémeuse dans les assiettes. Déposer les champignons sautés dessus. Servir immédiatement."
-      ]
-    },
-
-    // ═══ BATCH P36 — Viandes Mijotées ═══
-
-    {
-      id: 'R855',
-      name: 'Boeuf Bourguignon Classique',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥩',
-      origin: '🇫🇷',
-      tags: ['mijoté', 'classique', 'comfort-food'],
-      servings: 4,
-      prepTime: 30,
-      cookTime: 120,
-      difficulty: 2,
-      // 160×4 + 80×4 + 80×9 = 640+320+720 = 1680 kcal ✓
-      baseNutrition: { calories: 1680, proteinGrams: 160, carbsGrams: 80, fatGrams: 80 },
-      ingredients: [
-        { name: 'Boeuf à braiser',    qty: 1000, unit: 'g', note: 'joue ou paleron' },
-        { name: 'Vin rouge Bourgogne', qty: 500, unit: 'ml' },
-        { name: 'Lardons',            qty: 150, unit: 'g' },
-        { name: 'Champignons de Paris', qty: 300, unit: 'g' },
-        { name: 'Oignons grelots',    qty: 200, unit: 'g' },
-        { name: 'Carottes',           qty: 200, unit: 'g' },
-        { name: 'Bouillon de boeuf',  qty: 300, unit: 'ml' },
-        { name: 'Concentré de tomate', qty: 20, unit: 'g' },
-        { name: 'Ail',                qty: 3,   unit: 'pce' },
-        { name: 'Thym, laurier',      qty: 5,   unit: 'g' }
-      ],
-      steps: [
-        "Couper le boeuf en gros cubes de 5cm. Mariner 2h dans le vin avec les aromates au réfrigérateur (optionnel mais recommandé).",
-        "Faire dorer les lardons dans une cocotte. Réserver. Dans la même cocotte, saisir les cubes de boeuf en plusieurs fois à feu vif.",
-        "Faire revenir l'oignon et les carottes 5 min. Ajouter le concentré de tomate, cuire 1 min.",
-        "Remettre la viande et les lardons. Verser le vin et le bouillon. Ajouter thym et laurier. Porter à ébullition.",
-        "Couvrir et cuire à feu très doux 2h. Ajouter les oignons grelots et champignons les 30 dernières minutes. Rectifier et servir."
-      ]
-    },
-
-    {
-      id: 'R856',
-      name: 'Poulet au Vin Blanc Crème & Champignons',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍗',
-      origin: '🇫🇷',
-      tags: ['mijoté', 'cremeux', 'classique'],
-      servings: 4,
-      prepTime: 15,
-      cookTime: 45,
-      difficulty: 1,
-      // 180×4 + 40×4 + 60×9 = 720+160+540 = 1420 kcal ✓
-      baseNutrition: { calories: 1420, proteinGrams: 180, carbsGrams: 40, fatGrams: 60 },
-      ingredients: [
-        { name: 'Poulet entier découpé', qty: 1200, unit: 'g', note: '8 morceaux' },
-        { name: 'Vin blanc sec',      qty: 200, unit: 'ml' },
-        { name: 'Crème fraîche',      qty: 200, unit: 'ml' },
-        { name: 'Champignons de Paris', qty: 300, unit: 'g' },
-        { name: 'Échalotes',          qty: 100, unit: 'g' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' },
-        { name: 'Beurre',             qty: 30,  unit: 'g' },
-        { name: 'Thym, laurier',      qty: 4,   unit: 'g' }
-      ],
-      steps: [
-        "Saler et poivrer les morceaux de poulet. Les dorer dans le beurre à feu vif sur toutes les faces. Réserver.",
-        "Dans la même cocotte, faire revenir les échalotes émincées 3 min, ajouter l'ail.",
-        "Déglacer au vin blanc. Remettre le poulet, ajouter thym et laurier. Couvrir et mijoter 30 min.",
-        "Ajouter les champignons en lamelles, cuire 10 min à découvert.",
-        "Incorporer la crème fraîche. Laisser mijoter 5 min. La sauce doit napper une cuillère. Servir avec du riz."
-      ]
-    },
-
-    {
-      id: 'R857',
-      name: 'Blanquette de Veau à l\'Ancienne',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥩',
-      origin: '🇫🇷',
-      tags: ['mijoté', 'classique', 'cremeux'],
-      servings: 4,
-      prepTime: 20,
-      cookTime: 90,
-      difficulty: 2,
-      // 172×4 + 80×4 + 80×9 = 688+320+720 = 1728 kcal ✓
-      baseNutrition: { calories: 1728, proteinGrams: 172, carbsGrams: 80, fatGrams: 80 },
-      ingredients: [
-        { name: 'Épaule de veau',     qty: 1000, unit: 'g' },
-        { name: 'Champignons de Paris', qty: 200, unit: 'g' },
-        { name: 'Oignons',            qty: 200, unit: 'g' },
-        { name: 'Carottes',           qty: 150, unit: 'g' },
-        { name: 'Crème fraîche',      qty: 200, unit: 'ml' },
-        { name: 'Jaunes d\'oeufs',   qty: 2,   unit: 'pce' },
-        { name: 'Beurre',             qty: 40,  unit: 'g' },
-        { name: 'Farine',             qty: 40,  unit: 'g' },
-        { name: 'Jus de citron',      qty: 20,  unit: 'ml' },
-        { name: 'Bouquet garni',      qty: 1,   unit: 'pce' }
-      ],
-      steps: [
-        "Couper le veau en cubes. Blanchir 3 min à l'eau bouillante, rincer. Placer dans une cocotte avec oignons, carottes et bouquet garni, couvrir d'eau froide.",
-        "Porter à ébullition, écumer, saler. Cuire à frémissement 1h30 à couvert. Retirer la viande et légumes. Filtrer et réserver 600ml de bouillon.",
-        "Faire un roux blanc avec beurre et farine. Incorporer le bouillon chaud en fouettant. Cuire 10 min en sauce veloutée.",
-        "Hors du feu, mélanger crème fraîche et jaunes d'oeufs. Incorporer à la sauce sans faire bouillir.",
-        "Ajouter le veau, les légumes et les champignons. Assaisonner avec le citron, sel et poivre. Servir avec du riz."
-      ]
-    },
-
-    {
-      id: 'R858',
-      name: 'Haché de Boeuf en Sauce Tomate & Herbes',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥩',
-      origin: '🇫🇷',
-      tags: ['high-protein', 'economique', 'rapide'],
-      servings: 2,
-      prepTime: 8,
-      cookTime: 20,
-      difficulty: 1,
-      // 60×4 + 40×4 + 22×9 = 240+160+198 = 598 kcal ✓
-      baseNutrition: { calories: 598, proteinGrams: 60, carbsGrams: 40, fatGrams: 22 },
-      ingredients: [
-        { name: 'Boeuf haché 5% MG', qty: 400, unit: 'g' },
-        { name: 'Tomates concassées', qty: 300, unit: 'g' },
-        { name: 'Oignon',             qty: 80,  unit: 'g' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' },
-        { name: 'Herbes de Provence', qty: 3,   unit: 'g' },
-        { name: 'Concentré de tomate', qty: 20, unit: 'g' },
-        { name: 'Huile d\'olive',     qty: 15,  unit: 'ml' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Faire revenir l'oignon émincé dans l'huile 4 min. Ajouter l'ail haché, cuire 1 min.",
-        "Ajouter le boeuf haché. Cuire à feu moyen-vif en émiettant bien la viande jusqu'à coloration complète.",
-        "Incorporer le concentré de tomate, cuire 2 min en remuant pour le 'pincer'.",
-        "Verser les tomates concassées et les herbes. Saler et poivrer. Laisser mijoter 15 min.",
-        "La sauce doit être dense et parfumée. Servir avec des pâtes, du riz ou des pommes de terre."
-      ]
-    },
-
-    {
-      id: 'R859',
-      name: 'Sauté de Veau aux Poivrons & Paprika',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥩',
-      origin: '🇭🇺',
-      tags: ['high-protein', 'epice', 'mijoté'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 30,
-      difficulty: 1,
-      // 64×4 + 30×4 + 24×9 = 256+120+216 = 592 kcal ✓
-      baseNutrition: { calories: 592, proteinGrams: 64, carbsGrams: 30, fatGrams: 24 },
-      ingredients: [
-        { name: 'Veau émincé',       qty: 450, unit: 'g' },
-        { name: 'Poivrons rouges',    qty: 250, unit: 'g' },
-        { name: 'Oignon',             qty: 120, unit: 'g' },
-        { name: 'Crème fraîche',      qty: 80,  unit: 'ml' },
-        { name: 'Paprika doux',       qty: 10,  unit: 'g' },
-        { name: 'Paprika fumé',       qty: 3,   unit: 'g' },
-        { name: 'Huile neutre',       qty: 15,  unit: 'ml' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Couper le filet de porc en lanières. Émincer l'oignon et les poivrons en lamelles.",
-        "Faire dorer la viande à feu vif dans l'huile 4-5 min, saler. Réserver.",
-        "Dans la même poêle, faire revenir l'oignon 5 min. Ajouter les poivrons, cuire 8 min.",
-        "Ajouter le paprika (doux + fumé), cuire 1 min en remuant. Remettre la viande.",
-        "Incorporer la crème fraîche, mijoter 5 min. Rectifier l'assaisonnement. Servir avec des nouilles ou du riz."
-      ]
-    },
-
-    // ═══ BATCH P37 — Recettes Asiatiques ═══
-
-    {
-      id: 'R860',
-      name: 'Pad Thaï Classique Crevettes & Tofu',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍜',
-      origin: '🇹🇭',
-      tags: ['asian', 'nouilles', 'high-protein'],
-      servings: 2,
-      prepTime: 15,
-      cookTime: 12,
-      difficulty: 2,
-      // 48×4 + 100×4 + 22×9 = 192+400+198 = 790 kcal ✓
-      baseNutrition: { calories: 790, proteinGrams: 48, carbsGrams: 100, fatGrams: 22 },
-      ingredients: [
-        { name: 'Nouilles de riz larges', qty: 200, unit: 'g' },
-        { name: 'Crevettes décortiquées', qty: 200, unit: 'g' },
-        { name: 'Tofu ferme',         qty: 150, unit: 'g' },
-        { name: 'Oeufs',              qty: 2,   unit: 'pce' },
-        { name: 'Sauce pad thai',     qty: 60,  unit: 'ml' },
-        { name: 'Oignons verts',      qty: 40,  unit: 'g' },
-        { name: 'Cacahuètes grillées', qty: 30, unit: 'g' },
-        { name: 'Huile neutre',       qty: 20,  unit: 'ml' }
-      ],
-      steps: [
-        "Réhydrater les nouilles de riz 10 min dans l'eau chaude. Égoutter. Couper le tofu en cubes et le faire dorer dans l'huile.",
-        "Dans un wok très chaud, faire sauter les crevettes 2 min jusqu'à coloration. Réserver.",
-        "Dans le même wok, ajouter les nouilles et la sauce pad thai. Sauter 2 min à feu vif.",
-        "Pousser les nouilles sur le côté. Casser les oeufs, brouiller rapidement puis mélanger avec les nouilles.",
-        "Ajouter crevettes, tofu et oignons verts. Mélanger 1 min. Servir avec cacahuètes, citron vert et piment."
-      ]
-    },
-
-    {
-      id: 'R861',
-      name: 'Gyozas Bœuf & Chou Poêlés Vapeur',
-      category: 'japanese',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥟',
-      origin: '🇯🇵',
-      tags: ['japanese', 'high-protein', 'convivial'],
-      servings: 2,
-      prepTime: 30,
-      cookTime: 15,
-      difficulty: 2,
-      // 40×4 + 60×4 + 20×9 = 160+240+180 = 580 kcal ✓
-      baseNutrition: { calories: 580, proteinGrams: 40, carbsGrams: 60, fatGrams: 20 },
-      ingredients: [
-        { name: 'Galettes à gyoza',   qty: 24,  unit: 'pce' },
-        { name: 'Bœuf haché 5%',         qty: 250, unit: 'g' },
-        { name: 'Chou chinois',       qty: 150, unit: 'g' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' },
-        { name: 'Gingembre frais',    qty: 10,  unit: 'g' },
-        { name: 'Sauce soja',         qty: 20,  unit: 'ml' },
-        { name: 'Huile de sésame',    qty: 10,  unit: 'ml' },
-        { name: 'Huile neutre',       qty: 15,  unit: 'ml' }
-      ],
-      steps: [
-        "Hacher finement le chou chinois, saler 10 min, essorer l'eau avec les mains — indispensable.",
-        "Mélanger porc haché, chou essoré, ail et gingembre râpés, sauce soja et huile de sésame.",
-        "Poser une cuillerée de farce au centre de chaque galette. Humidifier les bords, plier en croissant en faisant des plis.",
-        "Chauffer l'huile dans une grande poêle. Dorer les gyozas à plat 2 min côté lisse. Verser 100ml d'eau, couvrir immédiatement.",
-        "Cuire à la vapeur 5 min couvert. Enlever le couvercle, laisser l'eau s'évaporer pour re-croquer le fond. Servir avec sauce soja."
-      ]
-    },
-
-    {
-      id: 'R862',
-      name: 'Bol Donburi Poulet Teriyaki & Riz Japonais',
-      category: 'japanese',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍱',
-      origin: '🇯🇵',
-      tags: ['japanese', 'high-protein', 'rapide'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 20,
-      difficulty: 1,
-      // 64×4 + 120×4 + 18×9 = 256+480+162 = 898 kcal ✓
-      baseNutrition: { calories: 898, proteinGrams: 64, carbsGrams: 120, fatGrams: 18 },
-      ingredients: [
-        { name: 'Cuisses de poulet désossées', qty: 400, unit: 'g' },
-        { name: 'Riz japonais rond', qty: 280, unit: 'g' },
-        { name: 'Sauce soja',        qty: 40,  unit: 'ml' },
-        { name: 'Mirin',             qty: 30,  unit: 'ml' },
-        { name: 'Saké ou vin blanc', qty: 20,  unit: 'ml' },
-        { name: 'Sucre',             qty: 10,  unit: 'g' },
-        { name: 'Oignons verts',     qty: 30,  unit: 'g' },
-        { name: 'Graines de sésame', qty: 5,   unit: 'g' }
-      ],
-      steps: [
-        "Cuire le riz japonais rincé à l'absorption (1.2x volume d'eau). Laisser reposer 10 min couvert.",
-        "Préparer la sauce teriyaki : mélanger sauce soja, mirin, saké et sucre dans une casserole, chauffer jusqu'à légère épaississement.",
-        "Cuire les cuisses de poulet côté peau dans une poêle sèche à feu moyen 8 min. Retourner 5 min côté chair.",
-        "Verser la sauce teriyaki sur le poulet, caraméliser 2-3 min en nappant sans cesse.",
-        "Trancher le poulet. Dresser sur le riz avec les oignons verts et les graines de sésame. Napper du reste de sauce."
-      ]
-    },
-
-    {
-      id: 'R863',
-      name: 'Fried Rice Poulet Kimchi & Oeuf',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍳',
-      origin: '🇰🇷',
-      tags: ['korean', 'riz', 'fermenté'],
-      servings: 2,
-      prepTime: 8,
-      cookTime: 12,
-      difficulty: 1,
-      // 52×4 + 120×4 + 20×9 = 208+480+180 = 868 kcal ✓
-      baseNutrition: { calories: 868, proteinGrams: 52, carbsGrams: 120, fatGrams: 20 },
-      ingredients: [
-        { name: 'Riz cuit froid',     qty: 500, unit: 'g' },
-        { name: 'Poulet cuit effiloché', qty: 200, unit: 'g' },
-        { name: 'Kimchi',             qty: 100, unit: 'g' },
-        { name: 'Oeufs',              qty: 2,   unit: 'pce' },
-        { name: 'Sauce soja',         qty: 20,  unit: 'ml' },
-        { name: 'Huile de sésame',    qty: 10,  unit: 'ml' },
-        { name: 'Huile neutre',       qty: 15,  unit: 'ml' },
-        { name: 'Oignons verts',      qty: 30,  unit: 'g' }
-      ],
-      steps: [
-        "Égoutter et hacher grossièrement le kimchi. Garder le jus.",
-        "Chauffer l'huile dans un wok à feu très vif. Faire sauter le kimchi 2 min, ajouter le poulet effiloché.",
-        "Ajouter le riz froid en miettes. Sauter 3-4 min en remuant — le riz doit être bien chaud et légèrement grillé.",
-        "Ajouter la sauce soja et 2cs du jus de kimchi. Mélanger vigoureusement.",
-        "Faire un puits au centre pour cuire 2 oeufs sur le plat directement dans le wok. Finir avec l'huile de sésame et les oignons verts."
-      ]
-    },
-
-    {
-      id: 'R864',
-      name: 'Soupe Ramen Maison Poulet & Ramen',
-      category: 'japanese',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍜',
-      origin: '🇯🇵',
-      tags: ['japanese', 'soupe', 'reconfort'],
-      servings: 2,
-      prepTime: 15,
-      cookTime: 25,
-      difficulty: 1,
-      // 60×4 + 100×4 + 20×9 = 240+400+180 = 820 kcal ✓
-      baseNutrition: { calories: 820, proteinGrams: 60, carbsGrams: 100, fatGrams: 20 },
-      ingredients: [
-        { name: 'Nouilles ramen',     qty: 200, unit: 'g' },
-        { name: 'Filets de poulet',   qty: 400, unit: 'g' },
-        { name: 'Bouillon de poulet', qty: 1000, unit: 'ml' },
-        { name: 'Sauce soja',         qty: 40,  unit: 'ml' },
-        { name: 'Gingembre frais',    qty: 15,  unit: 'g' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' },
-        { name: 'Oeufs',              qty: 2,   unit: 'pce' },
-        { name: 'Oignons verts',      qty: 30,  unit: 'g' }
-      ],
-      steps: [
-        "Pocher les filets de poulet dans le bouillon avec le gingembre et l'ail 15 min à frémissement. Retirer et effilocher.",
-        "Faire cuire les oeufs mollets : 7 min dans l'eau bouillante, choc thermique eau glacée. Écaler, tremper dans sauce soja diluée 15 min.",
-        "Assaisonner le bouillon avec la sauce soja. Rectifier sel et gingembre.",
-        "Cuire les nouilles ramen selon le paquet. Égoutter.",
-        "Dresser dans les bols : nouilles, bouillon chaud, poulet effiloché, oeuf mollet coupé en deux, oignons verts."
-      ]
-    },
-
-    // ═══ BATCH P38 — Salades Repas & Plats Froids ═══
-
-    {
-      id: 'R865',
-      name: 'Salade Niçoise Classique Thon & Anchois',
-      category: 'french',
-      mealTypes: ['lunch'],
-      emoji: '🥗',
-      origin: '🇫🇷',
-      tags: ['salade', 'classique', 'high-protein'],
-      servings: 2,
-      prepTime: 20,
-      cookTime: 10,
-      difficulty: 1,
-      // 50×4 + 40×4 + 28×9 = 200+160+252 = 612 kcal ✓
-      baseNutrition: { calories: 612, proteinGrams: 50, carbsGrams: 40, fatGrams: 28 },
-      ingredients: [
-        { name: 'Thon en boîte',      qty: 200, unit: 'g' },
-        { name: 'Oeufs',              qty: 3,   unit: 'pce' },
-        { name: 'Pommes de terre',    qty: 200, unit: 'g' },
-        { name: 'Haricots verts',     qty: 150, unit: 'g' },
-        { name: 'Tomates',            qty: 200, unit: 'g' },
-        { name: 'Olives noires',      qty: 50,  unit: 'g' },
-        { name: 'Anchois',            qty: 30,  unit: 'g' },
-        { name: 'Huile d\'olive',     qty: 30,  unit: 'ml' }
-      ],
-      steps: [
-        "Cuire les pommes de terre à la vapeur 15 min. Cuire les oeufs durs 10 min, refroidir, écaler.",
-        "Blanchir les haricots verts 5 min à l'eau bouillante salée — ils doivent rester croquants. Refroidir à l'eau glacée.",
-        "Vinaigrette niçoise : huile d'olive, vinaigre, moutarde, sel, poivre.",
-        "Dresser la salade sans mélanger : laisser chaque ingrédient visible. Thon en blocs, oeufs en quartiers, légumes.",
-        "Poser les anchois et les olives. Arroser de vinaigrette au moment de servir. La niçoise ne se mélange pas."
-      ]
-    },
-
-    {
-      id: 'R866',
-      name: 'Salade César Poulet Grillé & Croûtons',
-      category: 'world-food',
-      mealTypes: ['lunch'],
-      emoji: '🥗',
-      origin: '🇺🇸',
-      tags: ['salade', 'high-protein', 'classique'],
-      servings: 2,
-      prepTime: 15,
-      cookTime: 10,
-      difficulty: 1,
-      // 58×4 + 50×4 + 30×9 = 232+200+270 = 702 kcal ✓
-      baseNutrition: { calories: 702, proteinGrams: 58, carbsGrams: 50, fatGrams: 30 },
-      ingredients: [
-        { name: 'Filets de poulet',   qty: 400, unit: 'g' },
-        { name: 'Laitue romaine',     qty: 200, unit: 'g' },
-        { name: 'Pain',               qty: 80,  unit: 'g', note: 'pour croûtons' },
-        { name: 'Parmesan',           qty: 40,  unit: 'g' },
-        { name: 'Anchois',            qty: 20,  unit: 'g' },
-        { name: 'Ail',                qty: 1,   unit: 'pce' },
-        { name: 'Mayonnaise',         qty: 40,  unit: 'g' },
-        { name: 'Jus de citron',      qty: 15,  unit: 'ml' }
-      ],
-      steps: [
-        "Cuire les filets de poulet en les grillant 4 min par face dans une poêle-gril. Saler, laisser reposer 5 min, trancher.",
-        "Croûtons : couper le pain en cubes, les faire dorer dans une poêle avec l'ail et un filet d'huile 5 min.",
-        "Sauce César : mixer mayonnaise, anchois, ail, parmesan râpé, jus de citron et une cs d'eau.",
-        "Déchirer la romaine en grands morceaux dans un saladier. Napper généreusement de sauce César.",
-        "Disposer le poulet tranché, les croûtons et copeaux de parmesan. Servir immédiatement."
-      ]
-    },
-
-    {
-      id: 'R867',
-      name: 'Salade de Lentilles Vertes Jambon & Moutarde',
-      category: 'french',
-      mealTypes: ['lunch'],
-      emoji: '🥗',
-      origin: '🇫🇷',
-      tags: ['salade', 'high-protein', 'fer'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 25,
-      difficulty: 1,
-      // 48×4 + 90×4 + 18×9 = 192+360+162 = 714 kcal ✓
-      baseNutrition: { calories: 714, proteinGrams: 48, carbsGrams: 90, fatGrams: 18 },
-      ingredients: [
-        { name: 'Lentilles vertes du Puy', qty: 250, unit: 'g' },
-        { name: 'Jambon blanc',       qty: 150, unit: 'g' },
-        { name: 'Échalotes',          qty: 60,  unit: 'g' },
-        { name: 'Moutarde à l\'ancienne', qty: 20, unit: 'g' },
-        { name: 'Vinaigre de vin rouge', qty: 20, unit: 'ml' },
-        { name: 'Huile de noix',      qty: 25,  unit: 'ml' },
-        { name: 'Persil frais',       qty: 15,  unit: 'g' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Cuire les lentilles dans de l'eau froide non salée : porter à ébullition, réduire, cuire 20-25 min. Égoutter, saler en fin de cuisson.",
-        "Préparer la vinaigrette : émulsionner moutarde, vinaigre, huile de noix, sel et poivre.",
-        "Couper le jambon en lanières. Émincer les échalotes.",
-        "Mélanger les lentilles encore tièdes avec la vinaigrette — elles absorbent mieux à chaud.",
-        "Ajouter le jambon, les échalotes et le persil haché. Mélanger délicatement. Servir tiède ou à température ambiante."
-      ]
-    },
-
-    {
-      id: 'R868',
-      name: 'Salade Thaïe Boeuf & Herbes Fraîches',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥗',
-      origin: '🇹🇭',
-      tags: ['salade', 'high-protein', 'asian'],
-      servings: 2,
-      prepTime: 15,
-      cookTime: 8,
-      difficulty: 1,
-      // 54×4 + 20×4 + 22×9 = 216+80+198 = 494 kcal ✓
-      baseNutrition: { calories: 494, proteinGrams: 54, carbsGrams: 20, fatGrams: 22 },
-      ingredients: [
-        { name: 'Steak de boeuf',     qty: 350, unit: 'g' },
-        { name: 'Menthe fraîche',     qty: 20,  unit: 'g' },
-        { name: 'Coriandre fraîche',  qty: 20,  unit: 'g' },
-        { name: 'Oignons rouges',     qty: 60,  unit: 'g' },
-        { name: 'Concombre',          qty: 100, unit: 'g' },
-        { name: 'Sauce poisson (nam pla)', qty: 30, unit: 'ml' },
-        { name: 'Jus de citron vert', qty: 30,  unit: 'ml' },
-        { name: 'Piment rouge',       qty: 1,   unit: 'pce' }
-      ],
-      steps: [
-        "Saisir le steak très saignant 2-3 min par face dans une poêle très chaude. Laisser reposer 5 min avant de trancher finement.",
-        "Sauce : mélanger sauce poisson, jus de citron vert, sucre (facultatif) et piment haché fin.",
-        "Émincer l'oignon rouge très finement. Couper le concombre en fine demi-lune.",
-        "Mélanger le boeuf tranché avec la sauce. Ajouter oignon, concombre, menthe et coriandre entières.",
-        "Mélanger délicatement et servir immédiatement — la salade se mange fraîchement assemblée."
-      ]
-    },
-
-    {
-      id: 'R869',
-      name: 'Sandwich Club Poulet Bacon & Avocat',
-      category: 'world-food',
-      mealTypes: ['lunch'],
-      emoji: '🥪',
-      origin: '🇺🇸',
-      tags: ['sandwich', 'high-protein', 'lunch-box'],
-      servings: 2,
-      prepTime: 15,
-      cookTime: 10,
-      difficulty: 1,
-      // 60×4 + 80×4 + 36×9 = 240+320+324 = 884 kcal ✓
-      baseNutrition: { calories: 884, proteinGrams: 60, carbsGrams: 80, fatGrams: 36 },
-      ingredients: [
-        { name: 'Pain de mie',        qty: 200, unit: 'g', note: '6 tranches' },
-        { name: 'Filets de poulet',   qty: 250, unit: 'g' },
-        { name: 'Bacon',              qty: 80,  unit: 'g' },
-        { name: 'Avocats',            qty: 150, unit: 'g' },
-        { name: 'Tomate',             qty: 100, unit: 'g' },
-        { name: 'Salade',             qty: 40,  unit: 'g' },
-        { name: 'Mayonnaise',         qty: 30,  unit: 'g' },
-        { name: 'Moutarde',           qty: 10,  unit: 'g' }
-      ],
-      steps: [
-        "Griller les filets de poulet 4 min par face. Saler, laisser reposer, trancher en lamelles.",
-        "Faire griller le bacon à la poêle sèche jusqu'à croustillant. Égoutter sur papier absorbant.",
-        "Écraser l'avocat avec une pincée de sel. Toaster le pain de mie.",
-        "Mélanger mayonnaise et moutarde. Étaler sur les tranches de pain.",
-        "Assembler en 3 couches : pain-salade-tomate-poulet / pain-avocat-bacon / pain. Maintenir avec des piques. Couper en triangle."
-      ]
-    },
-
-    // ═══ BATCH P39 — Desserts Simples & Gourmands ═══
-
-    {
-      id: 'R870',
-      name: 'Tarte au Citron Meringuée',
-      category: 'french',
-      mealTypes: ['dessert'],
-      emoji: '🍋',
-      origin: '🇫🇷',
-      tags: ['dessert', 'classique', 'four'],
-      servings: 8,
-      prepTime: 40,
-      cookTime: 30,
-      difficulty: 2,
-      // 60×4 + 480×4 + 160×9 = 240+1920+1440 = 3600 kcal ✓
-      baseNutrition: { calories: 3600, proteinGrams: 60, carbsGrams: 480, fatGrams: 160 },
-      ingredients: [
-        { name: 'Farine',             qty: 200, unit: 'g' },
-        { name: 'Beurre',             qty: 180, unit: 'g' },
-        { name: 'Sucre',              qty: 300, unit: 'g' },
-        { name: 'Oeufs',              qty: 6,   unit: 'pce' },
-        { name: 'Citrons jaunes',     qty: 4,   unit: 'pce', note: 'zeste + jus' },
-        { name: 'Blancs d\'oeufs',   qty: 4,   unit: 'pce', note: 'pour meringue' },
-        { name: 'Sucre glace',        qty: 60,  unit: 'g' }
-      ],
-      steps: [
-        "Pâte sablée : mélanger 200g farine, 100g beurre froid en dés, 50g sucre, 1 oeuf. Fraiser rapidement, filmer et réfrigérer 30 min. Foncer un moule de 24cm, piquer et cuire à blanc 15 min à 180°C.",
-        "Lemon curd : zester et presser les citrons (env. 150ml jus). Fouetter 4 oeufs + 1 jaune avec 200g sucre. Ajouter le jus et 80g beurre en morceaux. Cuire à feu doux en remuant jusqu'à épaississement (10 min).",
-        "Verser le lemon curd sur le fond de tarte précuit. Remettre au four 8 min à 160°C pour stabiliser.",
-        "Meringue française : monter 4 blancs en neige. Incorporer 50g sucre glace en 3 fois. Pocher ou étaler sur la tarte.",
-        "Dorer la meringue au chalumeau ou sous le gril du four 2 min. Laisser complètement refroidir avant de couper."
-      ]
-    },
-
-    {
-      id: 'R871',
-      name: 'Clafoutis aux Cerises',
-      category: 'french',
-      mealTypes: ['dessert'],
-      emoji: '🍒',
-      origin: '🇫🇷',
-      tags: ['dessert', 'classique', 'four'],
-      servings: 6,
-      prepTime: 15,
-      cookTime: 40,
-      difficulty: 1,
-      // 32×4 + 280×4 + 48×9 = 128+1120+432 = 1680 kcal ✓
-      baseNutrition: { calories: 1680, proteinGrams: 32, carbsGrams: 280, fatGrams: 48 },
-      ingredients: [
-        { name: 'Cerises fraîches',   qty: 500, unit: 'g', note: 'avec ou sans noyaux' },
-        { name: 'Lait entier',        qty: 300, unit: 'ml' },
-        { name: 'Oeufs',              qty: 3,   unit: 'pce' },
-        { name: 'Sucre',              qty: 120, unit: 'g' },
-        { name: 'Farine',             qty: 80,  unit: 'g' },
-        { name: 'Beurre',             qty: 30,  unit: 'g' },
-        { name: 'Gousse de vanille',  qty: 1,   unit: 'pce' },
-        { name: 'Sel',                qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préchauffer le four à 180°C. Beurrer généreusement un plat à gratin ou moule à clafoutis.",
-        "Fouetter les oeufs avec le sucre jusqu'à blanchissement. Ajouter la farine tamisée et le sel, mélanger.",
-        "Incorporer le lait progressivement pour éviter les grumeaux. Ajouter les graines de vanille.",
-        "Disposer les cerises dans le plat. Verser la pâte par-dessus — elle est liquide, c'est normal.",
-        "Enfourner 35-40 min. Le clafoutis est cuit quand il est gonflé, doré et ne tremble plus au centre. Saupoudrer de sucre glace. Manger tiède."
-      ]
-    },
-
-    {
-      id: 'R872',
-      name: 'Gâteau au Yaourt Simple & Moelleux',
-      category: 'french',
-      mealTypes: ['dessert', 'snack'],
-      emoji: '🍰',
-      origin: '🇫🇷',
-      tags: ['dessert', 'classique', 'facile'],
-      servings: 8,
-      prepTime: 10,
-      cookTime: 35,
-      difficulty: 1,
-      // 64×4 + 400×4 + 96×9 = 256+1600+864 = 2720 kcal ✓
-      baseNutrition: { calories: 2720, proteinGrams: 64, carbsGrams: 400, fatGrams: 96 },
-      ingredients: [
-        { name: 'Yaourt nature',      qty: 125, unit: 'g', note: '1 pot = unité de mesure' },
-        { name: 'Farine',             qty: 375, unit: 'g', note: '3 pots de yaourt' },
-        { name: 'Sucre',              qty: 250, unit: 'g', note: '2 pots de yaourt' },
-        { name: 'Huile neutre',       qty: 80,  unit: 'ml', note: '1/2 pot' },
-        { name: 'Oeufs',              qty: 3,   unit: 'pce' },
-        { name: 'Levure chimique',    qty: 11,  unit: 'g', note: '1 sachet' },
-        { name: 'Zeste de citron',    qty: 1,   unit: 'pce', note: 'optionnel' }
-      ],
-      steps: [
-        "Préchauffer le four à 180°C. Vider le yaourt dans un saladier — garder le pot vide comme mesure.",
-        "Ajouter le sucre, les oeufs, l'huile. Fouetter 2 min.",
-        "Incorporer la farine et la levure en 2 fois. Mélanger jusqu'à pâte lisse. Ajouter le zeste si souhaité.",
-        "Verser dans un moule à cake beurré et fariné. Lisser le dessus.",
-        "Enfourner 30-35 min. Tester avec un cure-dent — il doit ressortir sec. Démouler après 10 min. Le secret : ne pas trop travailler la pâte."
-      ]
-    },
-
-    {
-      id: 'R873',
-      name: 'Brownies Chocolat Noix Fondants',
-      category: 'french',
-      mealTypes: ['dessert', 'snack'],
-      emoji: '🍫',
-      origin: '🇺🇸',
-      tags: ['dessert', 'chocolat', 'indulgent'],
-      servings: 12,
-      prepTime: 15,
-      cookTime: 25,
-      difficulty: 1,
-      // 60×4 + 360×4 + 280×9 = 240+1440+2520 = 4200 kcal ✓
-      baseNutrition: { calories: 4200, proteinGrams: 60, carbsGrams: 360, fatGrams: 280 },
-      ingredients: [
-        { name: 'Chocolat noir 70%', qty: 200, unit: 'g' },
-        { name: 'Beurre',            qty: 180, unit: 'g' },
-        { name: 'Sucre',             qty: 300, unit: 'g' },
-        { name: 'Oeufs',             qty: 4,   unit: 'pce' },
-        { name: 'Farine',            qty: 80,  unit: 'g' },
-        { name: 'Noix ou noix de pécan', qty: 100, unit: 'g' },
-        { name: 'Sel',               qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préchauffer le four à 180°C. Faire fondre le chocolat et le beurre ensemble au bain-marie. Laisser tiédir 5 min.",
-        "Fouetter les oeufs avec le sucre 3 min jusqu'à mélange mousseux. Incorporer le chocolat fondu.",
-        "Ajouter la farine et le sel — mélanger le minimum pour incorporer, pas plus.",
-        "Ajouter les noix grossièrement concassées. Verser dans un moule carré 20x20cm tapissé de papier cuisson.",
-        "Enfourner exactement 22-25 min. Le centre doit sembler encore un peu tremblant. Laisser refroidir complètement avant de couper — ils se solidifient en refroidissant."
-      ]
-    },
-
-    {
-      id: 'R874',
-      name: 'Panna Cotta Vanille Coulis Fruits Rouges',
-      category: 'italian',
-      mealTypes: ['dessert'],
-      emoji: '🍮',
-      origin: '🇮🇹',
-      tags: ['dessert', 'italien', 'cremeux'],
-      servings: 4,
-      prepTime: 15,
-      cookTime: 5,
-      difficulty: 1,
-      // 20×4 + 116×4 + 96×9 = 80+464+864 = 1408 kcal ✓
-      baseNutrition: { calories: 1408, proteinGrams: 20, carbsGrams: 116, fatGrams: 96 },
-      ingredients: [
-        { name: 'Crème liquide 30%', qty: 500, unit: 'ml' },
-        { name: 'Lait entier',        qty: 100, unit: 'ml' },
-        { name: 'Sucre',              qty: 70,  unit: 'g' },
-        { name: 'Gélatine',           qty: 3,   unit: 'pce', note: '3 feuilles ou 6g en poudre' },
-        { name: 'Gousse de vanille',  qty: 1,   unit: 'pce' },
-        { name: 'Fruits rouges',      qty: 250, unit: 'g' },
-        { name: 'Sucre glace',        qty: 30,  unit: 'g', note: 'pour le coulis' }
-      ],
-      steps: [
-        "Faire tremper les feuilles de gélatine dans de l'eau froide 5 min.",
-        "Chauffer la crème, le lait, le sucre et la vanille fendue à feu doux. Ne pas bouillir. Infuser 5 min.",
-        "Hors du feu, essorer la gélatine et l'incorporer en fouettant jusqu'à dissolution complète.",
-        "Filtrer et verser dans 4 verrines ou ramequins. Réfrigérer minimum 4 heures — une nuit est idéal.",
-        "Coulis : mixer 200g de fruits rouges avec le sucre glace. Passer au tamis. Au moment de servir, napper de coulis. Démouler ou servir dans la verrine."
-      ]
-    },
-
-    // ═══ BATCH P40 — Shakes Protéinés avec Whey ═══
-
-    {
-      id: 'R875',
-      name: 'Shake Protéiné Banane Chocolat Whey',
-      category: 'world-food',
-      mealTypes: ['breakfast', 'snack'],
-      emoji: '🥤',
-      origin: '🇺🇸',
-      tags: ['shake', 'high-protein', 'sportif', 'whey'],
-      servings: 1,
-      prepTime: 3,
-      cookTime: 0,
-      difficulty: 1,
-      // 36×4 + 52×4 + 10×9 = 144+208+90 = 442 kcal ✓
-      baseNutrition: { calories: 442, proteinGrams: 36, carbsGrams: 52, fatGrams: 10 },
-      ingredients: [
-        { name: 'Whey chocolat',      qty: 30,  unit: 'g', note: '1 dose standard' },
-        { name: 'Banane mûre',        qty: 120, unit: 'g' },
-        { name: 'Lait demi-écrémé',  qty: 250, unit: 'ml' },
-        { name: 'Cacao non sucré',    qty: 10,  unit: 'g' },
-        { name: 'Miel',               qty: 10,  unit: 'g' },
-        { name: 'Glaçons',            qty: 4,   unit: 'pce' }
-      ],
-      steps: [
-        "Éplucher et couper la banane en morceaux. La congeler 30 min pour un shake plus épais (optionnel).",
-        "Mettre tous les ingrédients dans le blender : lait d'abord, puis banane, whey, cacao, miel.",
-        "Mixer 30-40 secondes à pleine puissance jusqu'à consistance lisse et crémeuse.",
-        "Ajouter les glaçons, mixer encore 15 secondes.",
-        "Boire immédiatement. La whey se sépare si on attend — secouer ou re-mixer si besoin."
-      ]
-    },
-
-    {
-      id: 'R876',
-      name: 'Shake Protéiné Fraise Vanille Whey',
-      category: 'world-food',
-      mealTypes: ['breakfast', 'snack'],
-      emoji: '🥤',
-      origin: '🇺🇸',
-      tags: ['shake', 'high-protein', 'sportif', 'whey'],
-      servings: 1,
-      prepTime: 3,
-      cookTime: 0,
-      difficulty: 1,
-      // 40×4 + 36×4 + 8×9 = 160+144+72 = 376 kcal ✓
-      baseNutrition: { calories: 376, proteinGrams: 40, carbsGrams: 36, fatGrams: 8 },
-      ingredients: [
-        { name: 'Whey vanille',       qty: 30,  unit: 'g', note: '1 dose' },
-        { name: 'Fraises',            qty: 150, unit: 'g', note: 'fraîches ou surgelées' },
-        { name: 'Lait demi-écrémé',  qty: 200, unit: 'ml' },
-        { name: 'Fromage blanc 0%',  qty: 100, unit: 'g' },
-        { name: 'Miel',               qty: 5,   unit: 'g' },
-        { name: 'Glaçons',            qty: 3,   unit: 'pce' }
-      ],
-      steps: [
-        "Si les fraises sont fraîches, les équeueter. Si surgelées, les utiliser directement — elles épaississent le shake.",
-        "Verser le lait en premier dans le blender pour protéger les lames.",
-        "Ajouter le fromage blanc, la whey, les fraises et le miel.",
-        "Mixer 40 secondes à pleine puissance. Ajouter les glaçons, mixer encore.",
-        "Ajuster la consistance avec un peu de lait si trop épais. Servir dans un grand verre bien froid."
-      ]
-    },
-
-    {
-      id: 'R877',
-      name: 'Shake Protéiné Chocolat Beurre de Cacahuète',
-      category: 'world-food',
-      mealTypes: ['breakfast', 'snack'],
-      emoji: '🥤',
-      origin: '🇺🇸',
-      tags: ['shake', 'high-protein', 'sportif', 'whey'],
-      servings: 1,
-      prepTime: 3,
-      cookTime: 0,
-      difficulty: 1,
-      // 40×4 + 44×4 + 26×9 = 160+176+234 = 570 kcal ✓
-      baseNutrition: { calories: 570, proteinGrams: 40, carbsGrams: 44, fatGrams: 26 },
-      ingredients: [
-        { name: 'Whey chocolat',      qty: 30,  unit: 'g' },
-        { name: 'Beurre de cacahuète', qty: 30, unit: 'g', note: 'naturel sans sucre ajouté' },
-        { name: 'Banane',             qty: 100, unit: 'g' },
-        { name: 'Lait entier',        qty: 250, unit: 'ml' },
-        { name: 'Glaçons',            qty: 4,   unit: 'pce' }
-      ],
-      steps: [
-        "Mettre le lait en premier dans le blender.",
-        "Ajouter la banane coupée, le beurre de cacahuète et la whey chocolat.",
-        "Mixer 30 secondes. Ajouter les glaçons.",
-        "Mixer encore 20 secondes — la texture doit être dense comme un milkshake.",
-        "Boire immédiatement après l'entraînement ou en petit-déjeuner. Ce shake est calorique mais ultra-complet en macros."
-      ]
-    },
-
-    {
-      id: 'R878',
-      name: 'Shake Protéiné Cookies & Cream',
-      category: 'world-food',
-      mealTypes: ['snack', 'dessert'],
-      emoji: '🥤',
-      origin: '🇺🇸',
-      tags: ['shake', 'high-protein', 'gourmand', 'whey'],
-      servings: 1,
-      prepTime: 3,
-      cookTime: 0,
-      difficulty: 1,
-      // 34×4 + 32×4 + 24×9 = 136+128+216 = 480 kcal ✓
-      baseNutrition: { calories: 480, proteinGrams: 34, carbsGrams: 32, fatGrams: 24 },
-      ingredients: [
-        { name: 'Whey vanille',       qty: 30,  unit: 'g' },
-        { name: 'Biscuits Oréo',      qty: 25,  unit: 'g', note: '2-3 biscuits' },
-        { name: 'Lait entier',        qty: 250, unit: 'ml' },
-        { name: 'Yaourt grec',        qty: 60,  unit: 'g' },
-        { name: 'Glaçons',            qty: 4,   unit: 'pce' }
-      ],
-      steps: [
-        "Mettre le lait et le yaourt grec dans le blender.",
-        "Ajouter la whey vanille. Casser les biscuits Oréo grossièrement — ne pas les pulvériser pour garder des morceaux.",
-        "Ajouter les glaçons et mixer 20 secondes à vitesse moyenne pour garder quelques éclats de biscuits.",
-        "Goûter et ajuster : ajouter un biscuit de plus si pas assez sucré.",
-        "Servir immédiatement dans un grand verre. Option : écraser un biscuit sur le dessus comme topping."
-      ]
-    },
-
-    {
-      id: 'R879',
-      name: 'Shake Protéiné Mangue Coco Whey',
-      category: 'world-food',
-      mealTypes: ['breakfast', 'snack'],
-      emoji: '🥤',
-      origin: '🇺🇸',
-      tags: ['shake', 'high-protein', 'tropical', 'whey'],
-      servings: 1,
-      prepTime: 3,
-      cookTime: 0,
-      difficulty: 1,
-      // 32×4 + 32×4 + 18×9 = 128+128+162 = 418 kcal ✓
-      baseNutrition: { calories: 418, proteinGrams: 32, carbsGrams: 32, fatGrams: 18 },
-      ingredients: [
-        { name: 'Whey vanille',       qty: 30,  unit: 'g' },
-        { name: 'Mangue surgelée',    qty: 150, unit: 'g' },
-        { name: 'Lait de coco',       qty: 100, unit: 'ml' },
-        { name: 'Lait demi-écrémé',  qty: 150, unit: 'ml' },
-        { name: 'Jus de citron vert', qty: 10,  unit: 'ml' }
-      ],
-      steps: [
-        "Sortir la mangue du congélateur 2-3 min avant pour faciliter le mixage.",
-        "Verser les deux laits dans le blender d'abord.",
-        "Ajouter la mangue, la whey et le jus de citron vert.",
-        "Mixer 45 secondes à pleine puissance — la mangue congelée crée une texture shake parfaite sans glaçons.",
-        "Goûter : la mangue et la coco se marient parfaitement avec la whey vanille. Ajouter plus de citron vert pour plus de pep."
-      ]
-    },
-
-    // ═══ BATCH P41 — Smoothies sans Whey ═══
-
-    {
-      id: 'R880',
-      name: 'Smoothie Vert Épinards Banane & Gingembre',
-      category: 'world-food',
-      mealTypes: ['breakfast', 'snack'],
-      emoji: '🥤',
-      origin: '🇺🇸',
-      tags: ['smoothie', 'detox', 'vert', 'vegetarien'],
-      servings: 2,
-      prepTime: 5,
-      cookTime: 0,
-      difficulty: 1,
-      // 6×4 + 74×4 + 6×9 = 24+296+54 = 374 kcal ✓
-      baseNutrition: { calories: 374, proteinGrams: 6, carbsGrams: 74, fatGrams: 6 },
-      ingredients: [
-        { name: 'Épinards frais',     qty: 80,  unit: 'g' },
-        { name: 'Bananes',            qty: 200, unit: 'g', note: '2 bananes' },
-        { name: 'Lait d\'amande',    qty: 300, unit: 'ml' },
-        { name: 'Pomme verte',        qty: 100, unit: 'g' },
-        { name: 'Gingembre frais',    qty: 8,   unit: 'g' },
-        { name: 'Glaçons',            qty: 4,   unit: 'pce' }
-      ],
-      steps: [
-        "Rincer les épinards. Éplucher les bananes et couper en morceaux. Éplucher et couper la pomme.",
-        "Mettre le lait d'amande en premier dans le blender.",
-        "Ajouter les épinards d'abord et mixer 10 secondes pour les réduire avant d'ajouter le reste.",
-        "Ajouter bananes, pomme, gingembre râpé et glaçons. Mixer 45 secondes à pleine puissance.",
-        "Le smoothie doit être vert vif et lisse. Plus on ajoute de banane, moins on sent les épinards — bon point d'entrée pour les débutants."
-      ]
-    },
-
-    {
-      id: 'R881',
-      name: 'Smoothie Mangue Ananas Gingembre & Curcuma',
-      category: 'world-food',
-      mealTypes: ['breakfast', 'snack'],
-      emoji: '🥤',
-      origin: '🇧🇷',
-      tags: ['smoothie', 'tropical', 'anti-inflammatoire'],
-      servings: 2,
-      prepTime: 5,
-      cookTime: 0,
-      difficulty: 1,
-      // 6×4 + 68×4 + 2×9 = 24+272+18 = 314 kcal ✓
-      baseNutrition: { calories: 314, proteinGrams: 6, carbsGrams: 68, fatGrams: 2 },
-      ingredients: [
-        { name: 'Mangue surgelée',    qty: 200, unit: 'g' },
-        { name: 'Ananas',             qty: 150, unit: 'g', note: 'frais ou surgelé' },
-        { name: 'Jus d\'orange frais', qty: 150, unit: 'ml' },
-        { name: 'Gingembre frais',    qty: 10,  unit: 'g' },
-        { name: 'Curcuma en poudre',  qty: 2,   unit: 'g' },
-        { name: 'Poivre noir',        qty: 1,   unit: 'pincée', note: 'active le curcuma' }
-      ],
-      steps: [
-        "Couper l'ananas en morceaux si frais.",
-        "Verser le jus d'orange dans le blender. Ajouter mangue, ananas, gingembre et curcuma.",
-        "Ajouter une pincée de poivre noir — il décuple l'absorption du curcuma (pipérine).",
-        "Mixer 40 secondes à pleine puissance jusqu'à texture très lisse.",
-        "Servir dans deux grands verres bien froids. Parfait le matin à jeun ou après le sport. Saveur ensoleillée garantie."
-      ]
-    },
-
-    {
-      id: 'R882',
-      name: 'Smoothie Fruits Rouges Avoine & Lait',
-      category: 'world-food',
-      mealTypes: ['breakfast'],
-      emoji: '🥤',
-      origin: '🇺🇸',
-      tags: ['smoothie', 'breakfast', 'fruits-rouges'],
-      servings: 2,
-      prepTime: 5,
-      cookTime: 0,
-      difficulty: 1,
-      // 18×4 + 98×4 + 10×9 = 72+392+90 = 554 kcal ✓
-      baseNutrition: { calories: 554, proteinGrams: 18, carbsGrams: 98, fatGrams: 10 },
-      ingredients: [
-        { name: 'Fruits rouges mélange', qty: 200, unit: 'g', note: 'surgelés' },
-        { name: 'Banane',             qty: 150, unit: 'g' },
-        { name: 'Flocons d\'avoine',  qty: 40,  unit: 'g' },
-        { name: 'Lait entier',        qty: 250, unit: 'ml' },
-        { name: 'Miel',               qty: 15,  unit: 'g' }
-      ],
-      steps: [
-        "Faire tremper les flocons d'avoine 5 min dans un peu de lait pour les ramollir — optional mais donne une meilleure texture.",
-        "Verser le lait dans le blender. Ajouter banane, fruits rouges surgelés, avoine et miel.",
-        "Mixer 45 secondes à pleine puissance. Les fruits rouges surgelés créent une texture épaisse et froide naturellement.",
-        "Goûter et ajuster le miel si besoin. Ajouter du lait si trop épais.",
-        "Servir immédiatement. La couleur violet-rouge est magnifique — se prend en photo avant de boire."
-      ]
-    },
-
-    {
-      id: 'R883',
-      name: 'Smoothie Banane Beurre de Cacahuète & Miel',
-      category: 'world-food',
-      mealTypes: ['breakfast', 'snack'],
-      emoji: '🥤',
-      origin: '🇺🇸',
-      tags: ['smoothie', 'energisant', 'sportif'],
-      servings: 2,
-      prepTime: 3,
-      cookTime: 0,
-      difficulty: 1,
-      // 24×4 + 98×4 + 32×9 = 96+392+288 = 776 kcal ✓
-      baseNutrition: { calories: 776, proteinGrams: 24, carbsGrams: 98, fatGrams: 32 },
-      ingredients: [
-        { name: 'Bananes',            qty: 250, unit: 'g', note: '2-3 bananes mûres' },
-        { name: 'Beurre de cacahuète', qty: 40, unit: 'g' },
-        { name: 'Lait entier',        qty: 300, unit: 'ml' },
-        { name: 'Miel',               qty: 15,  unit: 'g' },
-        { name: 'Glaçons',            qty: 4,   unit: 'pce' }
-      ],
-      steps: [
-        "Éplucher et couper les bananes. Les congeler 1h pour un smoothie plus épais (optionnel).",
-        "Verser le lait dans le blender. Ajouter les bananes, le beurre de cacahuète et le miel.",
-        "Mixer 30 secondes. Ajouter les glaçons, mixer encore 20 secondes.",
-        "Goûter. Ajouter plus de miel pour plus de douceur, plus de beurre de cacahuète pour plus de puissance.",
-        "Idéal avant une séance de sport longue ou comme repas de récupération musculaire. Riche et rassasiant."
-      ]
-    },
-
-    {
-      id: 'R884',
-      name: 'Smoothie Avocat Cacao & Lait d\'Amande',
-      category: 'world-food',
-      mealTypes: ['breakfast', 'snack'],
-      emoji: '🥤',
-      origin: '🇺🇸',
-      tags: ['smoothie', 'chocolat', 'cremeux', 'keto'],
-      servings: 2,
-      prepTime: 5,
-      cookTime: 0,
-      difficulty: 1,
-      // 10×4 + 74×4 + 30×9 = 40+296+270 = 606 kcal ✓
-      baseNutrition: { calories: 606, proteinGrams: 10, carbsGrams: 74, fatGrams: 30 },
-      ingredients: [
-        { name: 'Avocat mûr',         qty: 150, unit: 'g', note: '1 avocat' },
-        { name: 'Cacao non sucré',    qty: 20,  unit: 'g' },
-        { name: 'Lait d\'amande',    qty: 300, unit: 'ml' },
-        { name: 'Banane',             qty: 150, unit: 'g' },
-        { name: 'Miel',               qty: 15,  unit: 'g' },
-        { name: 'Glaçons',            qty: 4,   unit: 'pce' }
-      ],
-      steps: [
-        "Couper l'avocat en deux, retirer le noyau, extraire la chair avec une cuillère.",
-        "Mettre le lait d'amande dans le blender d'abord.",
-        "Ajouter avocat, banane, cacao et miel.",
-        "Mixer 40 secondes à pleine puissance. L'avocat donne une texture ultra-crémeuse.",
-        "Ajouter les glaçons, mixer 15 secondes. Servir immédiatement — l'avocat s'oxyde et noircit s'il attend. Goût façon mousse au chocolat liquide."
-      ]
-    },
-
-    // ═══ BATCH P42 — Plats Express & Incontournables ═══
-
-    {
-      id: 'R885',
-      name: 'Quesadillas Poulet Poivron & Fromage',
-      category: 'mexican',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🫓',
-      origin: '🇲🇽',
-      tags: ['rapide', 'high-protein', 'tex-mex'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 15,
-      difficulty: 1,
-      // 72×4 + 88×4 + 34×9 = 288+352+306 = 946 kcal ✓
-      baseNutrition: { calories: 946, proteinGrams: 72, carbsGrams: 88, fatGrams: 34 },
-      ingredients: [
-        { name: 'Tortillas de blé',   qty: 160, unit: 'g', note: '4 grandes' },
-        { name: 'Filet de poulet',    qty: 300, unit: 'g' },
-        { name: 'Fromage râpé Cheddar', qty: 100, unit: 'g' },
-        { name: 'Poivron rouge',      qty: 100, unit: 'g' },
-        { name: 'Oignon rouge',       qty: 60,  unit: 'g' },
-        { name: 'Épices à fajitas',   qty: 8,   unit: 'g' },
-        { name: 'Huile neutre',       qty: 10,  unit: 'ml' }
-      ],
-      steps: [
-        "Couper le poulet en lamelles. Émincer le poivron et l'oignon. Faire revenir l'ensemble dans l'huile à feu vif 7-8 min. Ajouter les épices, cuire 1 min.",
-        "Chauffer une grande poêle sèche à feu moyen. Poser une tortilla.",
-        "Couvrir la moitié de la tortilla avec le fromage, puis le mélange poulet-légumes. Replier la tortilla.",
-        "Cuire 2-3 min jusqu'à croustillant et fromage fondu. Retourner délicatement, cuire encore 2 min.",
-        "Couper en triangles. Servir immédiatement avec de la crème fraîche et de la salsa."
-      ]
-    },
-
-    {
-      id: 'R886',
-      name: 'Croque-Madame Sauce Béchamel Gratinée',
-      category: 'french',
-      mealTypes: ['lunch', 'breakfast'],
-      emoji: '🍳',
-      origin: '🇫🇷',
-      tags: ['classique', 'rapide', 'bistrot'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 12,
-      difficulty: 1,
-      // 70×4 + 66×4 + 48×9 = 280+264+432 = 976 kcal ✓
-      baseNutrition: { calories: 976, proteinGrams: 70, carbsGrams: 66, fatGrams: 48 },
-      ingredients: [
-        { name: 'Pain de mie',        qty: 160, unit: 'g', note: '4 tranches épaisses' },
-        { name: 'Jambon blanc',       qty: 100, unit: 'g', note: '2 tranches' },
-        { name: 'Gruyère râpé',       qty: 80,  unit: 'g' },
-        { name: 'Lait',               qty: 150, unit: 'ml' },
-        { name: 'Beurre',             qty: 20,  unit: 'g' },
-        { name: 'Farine',             qty: 15,  unit: 'g' },
-        { name: 'Oeufs',              qty: 2,   unit: 'pce' },
-        { name: 'Noix de muscade',    qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Béchamel rapide : faire fondre le beurre, ajouter la farine 1 min, incorporer le lait chaud en fouettant. Cuire 3 min, assaisonner muscade + sel.",
-        "Toaster légèrement les 4 tranches de pain. Étaler la béchamel sur toutes les faces.",
-        "Poser le jambon sur 2 tranches, refermer avec les 2 autres. Couvrir le dessus de gruyère râpé.",
-        "Gratiner sous le gril du four à 220°C pendant 5-6 min jusqu'à fromage bouillonnant et doré.",
-        "Cuire les oeufs sur le plat dans une poêle beurrée. Poser un oeuf sur chaque croque à la sortie du four. Servir immédiatement."
-      ]
-    },
-
-    {
-      id: 'R887',
-      name: 'Salade de Pâtes Thon Crudités & Herbes',
-      category: 'french',
-      mealTypes: ['lunch'],
-      emoji: '🥗',
-      origin: '🇫🇷',
-      tags: ['salade', 'high-protein', 'estival'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 10,
-      difficulty: 1,
-      // 57×4 + 149×4 + 30×9 = 228+596+270 = 1094 kcal ✓
-      baseNutrition: { calories: 1094, proteinGrams: 57, carbsGrams: 149, fatGrams: 30 },
-      ingredients: [
-        { name: 'Fusilli ou penne',   qty: 200, unit: 'g' },
-        { name: 'Thon en boîte',      qty: 160, unit: 'g', note: 'au naturel, égoutté' },
-        { name: 'Tomates cerises',    qty: 150, unit: 'g' },
-        { name: 'Concombre',          qty: 100, unit: 'g' },
-        { name: 'Olives noires',      qty: 30,  unit: 'g' },
-        { name: 'Huile d\'olive',     qty: 30,  unit: 'ml' },
-        { name: 'Jus de citron',      qty: 15,  unit: 'ml' },
-        { name: 'Basilic frais',      qty: 10,  unit: 'g' }
-      ],
-      steps: [
-        "Cuire les pâtes al dente dans de l'eau bouillante salée. Égoutter et refroidir sous l'eau froide — étape clé pour une salade de pâtes.",
-        "Couper les tomates cerises en deux, le concombre en demi-lune.",
-        "Préparer la vinaigrette : huile d'olive, jus de citron, sel, poivre. Bien émulsionner.",
-        "Mélanger pâtes froides, thon émietté, légumes et olives. Napper de vinaigrette.",
-        "Ajouter le basilic déchiré à la main. Réfrigérer 30 min avant de servir pour que les saveurs se mélangent."
-      ]
-    },
-
-    {
-      id: 'R888',
-      name: 'Wok de Légumes & Tofu Sauce Teriyaki',
-      category: 'japanese',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥢',
-      origin: '🇯🇵',
-      tags: ['vegetarien', 'rapide', 'wok'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 12,
-      difficulty: 1,
-      // 38×4 + 94×4 + 22×9 = 152+376+198 = 726 kcal ✓
-      baseNutrition: { calories: 726, proteinGrams: 38, carbsGrams: 94, fatGrams: 22 },
-      ingredients: [
-        { name: 'Tofu ferme',         qty: 250, unit: 'g' },
-        { name: 'Riz jasmin cuit',    qty: 300, unit: 'g' },
-        { name: 'Brocoli',            qty: 200, unit: 'g' },
-        { name: 'Carottes',           qty: 100, unit: 'g' },
-        { name: 'Sauce soja',         qty: 30,  unit: 'ml' },
-        { name: 'Mirin',              qty: 20,  unit: 'ml' },
-        { name: 'Huile de sésame',    qty: 10,  unit: 'ml' },
-        { name: 'Graines de sésame', qty: 10,  unit: 'g' }
-      ],
-      steps: [
-        "Égoutter et sécher soigneusement le tofu. Le couper en cubes de 2cm.",
-        "Faire dorer les cubes de tofu dans l'huile de sésame à feu vif 5 min sur toutes les faces. Réserver.",
-        "Dans le même wok, faire sauter le brocoli en petits bouquets et les carottes en julienne 4 min.",
-        "Mélanger sauce soja et mirin pour la teriyaki. Remettre le tofu, verser la sauce, cuire 2 min.",
-        "Servir sur le riz jasmin. Parsemer de graines de sésame. Ajouter un filet de sauce soja supplémentaire si nécessaire."
-      ]
-    },
-
-    {
-      id: 'R889',
-      name: 'Rillettes de Sardine Maison sur Toast Complet',
-      category: 'french',
-      mealTypes: ['lunch', 'snack'],
-      emoji: '🐟',
-      origin: '🇫🇷',
-      tags: ['omega3', 'rapide', 'economique'],
-      servings: 2,
-      prepTime: 8,
-      cookTime: 2,
-      difficulty: 1,
-      // 50×4 + 62×4 + 38×9 = 200+248+342 = 790 kcal ✓
-      baseNutrition: { calories: 790, proteinGrams: 50, carbsGrams: 62, fatGrams: 38 },
-      ingredients: [
-        { name: 'Sardines en boîte',  qty: 200, unit: 'g', note: 'à l\'huile d\'olive' },
-        { name: 'Pain complet',       qty: 120, unit: 'g', note: '4 tranches' },
-        { name: 'Fromage frais type Saint-Môret', qty: 60, unit: 'g' },
-        { name: 'Jus de citron',      qty: 15,  unit: 'ml' },
-        { name: 'Persil frais',       qty: 10,  unit: 'g' },
-        { name: 'Cornichons',         qty: 30,  unit: 'g' },
-        { name: 'Ciboulette',         qty: 5,   unit: 'g' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Égoutter les sardines. Les écraser à la fourchette dans un bol en laissant quelques morceaux.",
-        "Incorporer le fromage frais, le jus de citron, le persil et la ciboulette hachés.",
-        "Mélanger jusqu'à texture de rillettes — pas trop lisse. Assaisonner sel et poivre.",
-        "Toaster le pain complet.",
-        "Étaler généreusement les rillettes sur les toasts. Garnir de rondelles de cornichons. Servir avec une salade verte."
-      ]
-    },
-
-    // ═══ BATCH P43 — Italiens & Classiques Supplémentaires ═══
-
-    {
-      id: 'R890',
-      name: 'Pizza Margherita Maison Pâte Fine',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍕',
-      origin: '🇮🇹',
-      tags: ['pizza', 'vegetarien', 'classique'],
-      servings: 2,
-      prepTime: 30,
-      cookTime: 12,
-      difficulty: 2,
-      // 60×4 + 206×4 + 42×9 = 240+824+378 = 1442 kcal ✓
-      baseNutrition: { calories: 1442, proteinGrams: 60, carbsGrams: 206, fatGrams: 42 },
-      ingredients: [
-        { name: 'Farine type 00',     qty: 250, unit: 'g' },
-        { name: 'Levure de boulanger sèche', qty: 4, unit: 'g' },
-        { name: 'Mozzarella di bufala', qty: 200, unit: 'g' },
-        { name: 'Sauce tomate',       qty: 150, unit: 'ml', note: 'tomates pelées mixées' },
-        { name: 'Huile d\'olive',     qty: 25,  unit: 'ml' },
-        { name: 'Basilic frais',      qty: 10,  unit: 'g' },
-        { name: 'Sel',                qty: 5,   unit: 'g' },
-        { name: 'Eau tiède',          qty: 150, unit: 'ml' }
-      ],
-      steps: [
-        "Pâte : dissoudre la levure dans l'eau tiède 5 min. Mélanger farine et sel, ajouter l'eau+levure et 15ml huile. Pétrir 10 min. Laisser lever 1h à couvert.",
-        "Préchauffer le four au maximum (250-270°C) avec la plaque à l'intérieur — la chaleur de la plaque est clé.",
-        "Étaler la pâte très finement (3mm) sur papier cuisson fariné. Ne pas utiliser de rouleau — étirer à la main.",
-        "Étaler la sauce tomate assaisonnée (sel, huile, basilic). Déchirer la mozzarella et répartir sans surcharger.",
-        "Enfourner sur la plaque chaude 10-12 min. La pâte doit être croustillante et le fromage doré par endroits. Ajouter le basilic frais à la sortie."
-      ]
-    },
-
-    {
-      id: 'R891',
-      name: 'Rigatoni alla Norma Aubergines & Ricotta',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍝',
-      origin: '🇮🇹',
-      tags: ['vegetarien', 'sicilien', 'classique'],
-      servings: 2,
-      prepTime: 15,
-      cookTime: 30,
-      difficulty: 1,
-      // 53×4 + 232×4 + 44×9 = 212+928+396 = 1536 kcal ✓
-      baseNutrition: { calories: 1536, proteinGrams: 53, carbsGrams: 232, fatGrams: 44 },
-      ingredients: [
-        { name: 'Rigatoni',           qty: 280, unit: 'g' },
-        { name: 'Aubergines',         qty: 300, unit: 'g' },
-        { name: 'Tomates concassées', qty: 300, unit: 'g' },
-        { name: 'Ricotta',            qty: 80,  unit: 'g' },
-        { name: 'Parmesan',           qty: 30,  unit: 'g' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' },
-        { name: 'Huile d\'olive',     qty: 30,  unit: 'ml' },
-        { name: 'Basilic frais',      qty: 10,  unit: 'g' }
-      ],
-      steps: [
-        "Couper les aubergines en cubes de 2cm. Saler 20 min, rincer et sécher — retirer l'amertume.",
-        "Faire frire les aubergines dans l'huile à feu vif en plusieurs fois jusqu'à dorées. Égoutter sur papier absorbant.",
-        "Dans la même poêle, faire revenir l'ail haché 1 min. Ajouter les tomates, mijoter 15 min. Saler.",
-        "Cuire les rigatoni al dente. Égoutter en gardant 100ml d'eau de cuisson.",
-        "Mélanger pâtes, sauce tomate, aubergines et eau de cuisson. Dresser avec de la ricotta émiettée, parmesan et basilic frais."
-      ]
-    },
-
-    {
-      id: 'R892',
-      name: 'Saltimbocca de Veau Jambon Cru & Sauge',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥩',
-      origin: '🇮🇹',
-      tags: ['high-protein', 'rapide', 'classique-romain'],
-      servings: 2,
-      prepTime: 8,
-      cookTime: 10,
-      difficulty: 1,
-      // 94×4 + 2×4 + 39×9 = 376+8+351 = 735 kcal ✓
-      baseNutrition: { calories: 735, proteinGrams: 94, carbsGrams: 2, fatGrams: 39 },
-      ingredients: [
-        { name: 'Escalopes de veau',  qty: 400, unit: 'g', note: '4 fines escalopes' },
-        { name: 'Jambon de Parme',    qty: 60,  unit: 'g', note: '4 tranches' },
-        { name: 'Sauge fraîche',      qty: 12,  unit: 'feuille' },
-        { name: 'Beurre',             qty: 30,  unit: 'g' },
-        { name: 'Vin blanc sec',      qty: 80,  unit: 'ml' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Aplatir les escalopes entre deux feuilles de film plastique. Poser 1 tranche de jambon et 3 feuilles de sauge sur chaque escalope.",
-        "Fixer avec des cure-dents. La face jambon est la face visible.",
-        "Chauffer le beurre à feu vif. Saisir les escalopes côté jambon 2 min — le jambon doit être croustillant. Retourner 1 min 30.",
-        "Déglacer au vin blanc. Laisser réduire 2 min en arrosant la viande avec la sauce.",
-        "Servir immédiatement avec les sucs de cuisson. Accompagner de gnocchi ou de pommes de terre sautées."
-      ]
-    },
-
-    {
-      id: 'R893',
-      name: 'Tiramisu Classique Café & Mascarpone',
-      category: 'italian',
-      mealTypes: ['dessert'],
-      emoji: '☕',
-      origin: '🇮🇹',
-      tags: ['dessert', 'classique', 'cafe'],
-      servings: 6,
-      prepTime: 30,
-      cookTime: 0,
-      difficulty: 2,
-      // 52×4 + 248×4 + 220×9 = 208+992+1980 = 3180 kcal ✓
-      baseNutrition: { calories: 3180, proteinGrams: 52, carbsGrams: 248, fatGrams: 220 },
-      ingredients: [
-        { name: 'Mascarpone',         qty: 500, unit: 'g' },
-        { name: 'Oeufs',              qty: 4,   unit: 'pce' },
-        { name: 'Sucre',              qty: 100, unit: 'g' },
-        { name: 'Biscuits cuillère',  qty: 200, unit: 'g' },
-        { name: 'Café fort refroidi', qty: 200, unit: 'ml' },
-        { name: 'Amaretto',           qty: 20,  unit: 'ml', note: 'optionnel' },
-        { name: 'Cacao non sucré',    qty: 15,  unit: 'g', note: 'pour saupoudrer' }
-      ],
-      steps: [
-        "Séparer les blancs des jaunes. Fouetter les jaunes avec le sucre jusqu'à ruban blanc et mousseux.",
-        "Incorporer le mascarpone au mélange jaunes-sucre. Mélanger doucement jusqu'à homogène.",
-        "Monter les blancs en neige ferme. Incorporer délicatement au mascarpone en 3 fois.",
-        "Tremper rapidement les biscuits dans le café (+ amaretto). Disposer une couche dans le plat, couvrir de crème mascarpone, répéter.",
-        "Saupoudrer de cacao. Filmer et réfrigérer MINIMUM 6 heures — une nuit est idéal. Le tiramisu est bien meilleur le lendemain."
-      ]
-    },
-
-    {
-      id: 'R894',
-      name: 'Bruschetta Tomates Basilic & Mozzarella',
-      category: 'italian',
-      mealTypes: ['lunch', 'snack'],
-      emoji: '🍅',
-      origin: '🇮🇹',
-      tags: ['vegetarien', 'aperitif', 'ete'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 5,
-      difficulty: 1,
-      // 40×4 + 116×4 + 42×9 = 160+464+378 = 1002 kcal ✓
-      baseNutrition: { calories: 1002, proteinGrams: 40, carbsGrams: 116, fatGrams: 42 },
-      ingredients: [
-        { name: 'Pain ciabatta ou baguette', qty: 200, unit: 'g', note: '8 tranches' },
-        { name: 'Tomates mûres',      qty: 300, unit: 'g' },
-        { name: 'Mozzarella',         qty: 150, unit: 'g' },
-        { name: 'Basilic frais',      qty: 15,  unit: 'g' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' },
-        { name: 'Huile d\'olive extra-vierge', qty: 30, unit: 'ml' },
-        { name: 'Fleur de sel',       qty: 2,   unit: 'g' },
-        { name: 'Vinaigre balsamique', qty: 10, unit: 'ml' }
-      ],
-      steps: [
-        "Toaster les tranches de pain sous le gril ou à la poêle gril jusqu'à dorées et croustillantes.",
-        "Frotter immédiatement chaque tranche avec la gousse d'ail coupée — la chaleur du pain infuse l'ail naturellement.",
-        "Couper les tomates en petits dés. Saler, ajouter un filet d'huile. Laisser dégorger 5 min.",
-        "Couper la mozzarella en tranches fines.",
-        "Disposer tomates, mozzarella et basilic sur les bruschetta. Finir avec un filet d'huile d'olive, le vinaigre balsamique et la fleur de sel."
-      ]
-    },
-
-    // ═══ BATCH P44 — Mix Incontournables ═══
-
-    {
-      id: 'R895',
-      name: 'Mac & Cheese Américain Fromage Coulant',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🧀',
-      origin: '🇺🇸',
-      tags: ['comfort-food', 'fromage', 'rapide'],
-      servings: 2,
-      prepTime: 5,
-      cookTime: 20,
-      difficulty: 1,
-      // 63×4 + 227×4 + 68×9 = 252+908+612 = 1772 kcal ✓
-      baseNutrition: { calories: 1772, proteinGrams: 63, carbsGrams: 227, fatGrams: 68 },
-      ingredients: [
-        { name: 'Macaroni',           qty: 280, unit: 'g' },
-        { name: 'Cheddar râpé',       qty: 100, unit: 'g' },
-        { name: 'Lait entier',        qty: 200, unit: 'ml' },
-        { name: 'Beurre',             qty: 30,  unit: 'g' },
-        { name: 'Farine',             qty: 20,  unit: 'g' },
-        { name: 'Gruyère râpé',       qty: 40,  unit: 'g' },
-        { name: 'Moutarde',           qty: 5,   unit: 'g' },
-        { name: 'Paprika fumé',       qty: 2,   unit: 'g' }
-      ],
-      steps: [
-        "Cuire les macaroni al dente selon le paquet. Égoutter en gardant 100ml d'eau de cuisson.",
-        "Sauce fromage : faire un roux avec beurre et farine 2 min. Incorporer le lait chaud en fouettant. Cuire 5 min jusqu'à épaississement.",
-        "Hors du feu, ajouter le cheddar et le gruyère en plusieurs fois en mélangeant. Ajouter la moutarde et le paprika.",
-        "Incorporer les pâtes avec un peu d'eau de cuisson pour ajuster la consistance. La sauce doit être coulante.",
-        "Servir immédiatement dans des bols. Option : transférer dans un plat, parsemer de chapelure et gratiner 5 min."
-      ]
-    },
-
-    {
-      id: 'R896',
-      name: 'Tagliatelles Bolognaise Maison',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍝',
-      origin: '🇮🇹',
-      tags: ['classique', 'high-protein', 'comfort-food'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 35,
-      difficulty: 1,
-      // 90×4 + 204×4 + 50×9 = 360+816+450 = 1626 kcal ✓
-      baseNutrition: { calories: 1626, proteinGrams: 90, carbsGrams: 204, fatGrams: 50 },
-      ingredients: [
-        { name: 'Tagliatelles',       qty: 250, unit: 'g' },
-        { name: 'Viande hachée boeuf', qty: 300, unit: 'g', note: '15% MG' },
-        { name: 'Tomates concassées', qty: 300, unit: 'g' },
-        { name: 'Oignon',             qty: 80,  unit: 'g' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' },
-        { name: 'Vin rouge',          qty: 80,  unit: 'ml' },
-        { name: 'Parmesan râpé',      qty: 40,  unit: 'g' },
-        { name: 'Huile d\'olive',     qty: 15,  unit: 'ml' }
-      ],
-      steps: [
-        "Faire revenir l'oignon et l'ail hachés dans l'huile 4 min à feu doux.",
-        "Monter le feu, ajouter la viande hachée. Cuire en émiettant bien jusqu'à coloration complète, 7-8 min.",
-        "Déglacer au vin rouge, laisser évaporer 3 min.",
-        "Ajouter les tomates concassées, saler, poivrer. Mijoter à feu doux 20 min à couvert. La bolognaise doit être dense.",
-        "Cuire les tagliatelles al dente. Mélanger directement dans la sauce avec 2cs d'eau de cuisson. Servir avec le parmesan."
-      ]
-    },
-
-    {
-      id: 'R897',
-      name: 'Foies de Poulet Poêlés Oignons Confits & Balsamique',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍗',
-      origin: '🇫🇷',
-      tags: ['high-protein', 'fer', 'rapide', 'economique'],
-      servings: 2,
-      prepTime: 8,
-      cookTime: 20,
-      difficulty: 1,
-      // 61×4 + 39×4 + 30×9 = 244+156+270 = 670 kcal ✓
-      baseNutrition: { calories: 670, proteinGrams: 61, carbsGrams: 39, fatGrams: 30 },
-      ingredients: [
-        { name: 'Foies de poulet',    qty: 350, unit: 'g' },
-        { name: 'Oignons',            qty: 200, unit: 'g' },
-        { name: 'Vinaigre balsamique', qty: 20, unit: 'ml' },
-        { name: 'Beurre',             qty: 20,  unit: 'g' },
-        { name: 'Farine',             qty: 15,  unit: 'g' },
-        { name: 'Thym frais',         qty: 3,   unit: 'g' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Émincer finement les oignons. Les faire confire à feu doux dans le beurre avec le thym 15 min en remuant souvent — ils doivent fondre et colorer.",
-        "Nettoyer les foies de poulet, retirer les parties vertes et les nerfs. Fariner légèrement.",
-        "Dans une poêle très chaude, saisir les foies 2 min par face — ils doivent rester rosés à coeur, jamais secs.",
-        "Déglacer avec le vinaigre balsamique. Remuer 30 secondes pour créer un glaçage.",
-        "Servir les foies sur les oignons confits. Accompagner de pommes de terre vapeur ou de polenta crémeuse."
-      ]
-    },
-
-    {
-      id: 'R898',
-      name: 'Crêpes Sucrées Classiques au Beurre',
-      category: 'french',
-      mealTypes: ['breakfast', 'dessert'],
-      emoji: '🥞',
-      origin: '🇫🇷',
-      tags: ['classique', 'dessert', 'family'],
-      servings: 3,
-      prepTime: 10,
-      cookTime: 20,
-      difficulty: 1,
-      // 55×4 + 196×4 + 50×9 = 220+784+450 = 1454 kcal ✓
-      baseNutrition: { calories: 1454, proteinGrams: 55, carbsGrams: 196, fatGrams: 50 },
-      ingredients: [
-        { name: 'Farine',             qty: 200, unit: 'g' },
-        { name: 'Oeufs',              qty: 3,   unit: 'pce' },
-        { name: 'Lait entier',        qty: 500, unit: 'ml' },
-        { name: 'Beurre fondu',       qty: 30,  unit: 'g' },
-        { name: 'Sucre',              qty: 20,  unit: 'g' },
-        { name: 'Gousse de vanille',  qty: 1,   unit: 'pce', note: 'ou arôme' },
-        { name: 'Sel',                qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Mélanger farine, sucre et sel. Faire un puits, casser les oeufs dedans. Commencer à mélanger en ajoutant le lait progressivement pour éviter les grumeaux.",
-        "Ajouter le beurre fondu tiédi et la vanille. Pâte lisse — passer au mixeur plongeant si grumeaux.",
-        "Laisser reposer la pâte 30 min minimum — les crêpes seront plus légères. C'est important.",
-        "Chauffer une poêle à crêpe beurrée à feu moyen-vif. Verser une louche de pâte en tournant la poêle rapidement.",
-        "Cuire 1 min jusqu'à bords dorés, retourner 45 secondes. Superposer les crêpes dans une assiette. Garnir de beurre-sucre, confiture ou Nutella."
-      ]
-    },
-
-    {
-      id: 'R899',
-      name: 'Chili con Carne Maison',
-      category: 'mexican',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🌶️',
-      origin: '🇲🇽',
-      tags: ['high-protein', 'epice', 'mijoté'],
-      servings: 4,
-      prepTime: 15,
-      cookTime: 45,
-      difficulty: 1,
-      // 146×4 + 174×4 + 60×9 = 584+696+540 = 1820 kcal ✓
-      baseNutrition: { calories: 1820, proteinGrams: 146, carbsGrams: 174, fatGrams: 60 },
-      ingredients: [
-        { name: 'Viande hachée boeuf', qty: 500, unit: 'g' },
-        { name: 'Haricots rouges',    qty: 400, unit: 'g', note: 'boîte, égouttés' },
-        { name: 'Tomates concassées', qty: 400, unit: 'g' },
-        { name: 'Oignon',             qty: 150, unit: 'g' },
-        { name: 'Poivron rouge',      qty: 200, unit: 'g' },
-        { name: 'Ail',                qty: 3,   unit: 'pce' },
-        { name: 'Chili en poudre',    qty: 8,   unit: 'g' },
-        { name: 'Cumin moulu',        qty: 5,   unit: 'g' },
-        { name: 'Huile neutre',       qty: 15,  unit: 'ml' }
-      ],
-      steps: [
-        "Faire revenir l'oignon et le poivron en dés dans l'huile 5 min. Ajouter l'ail haché.",
-        "Ajouter la viande hachée. Cuire à feu vif en émiettant jusqu'à coloration complète. Saler.",
-        "Ajouter le chili en poudre et le cumin. Cuire 1 min en remuant — les épices s'activent dans la matière grasse.",
-        "Verser les tomates concassées. Mijoter 20 min à feu doux. Ajouter les haricots rouges et cuire encore 20 min.",
-        "Rectifier l'assaisonnement. Servir avec du riz ou des tortillas, crème fraîche, coriandre et cheddar râpé."
-      ]
-    },
-
-    // ═══ BATCH P45 — Incontournables Français Express ═══
-
-    {
-      id: 'R900',
-      name: 'Omelette Jambon Fromage',
-      category: 'french',
-      mealTypes: ['breakfast', 'lunch'],
-      emoji: '🍳',
-      origin: '🇫🇷',
-      tags: ['rapide', 'high-protein', 'classique', 'express'],
-      servings: 2,
-      prepTime: 3,
-      cookTime: 5,
-      difficulty: 1,
-      // 72×4 + 0×4 + 60×9 = 288+0+540 = 828 kcal ✓
-      baseNutrition: { calories: 828, proteinGrams: 72, carbsGrams: 0, fatGrams: 60 },
-      ingredients: [
-        { name: 'Oeufs',              qty: 6,   unit: 'pce' },
-        { name: 'Jambon blanc',       qty: 100, unit: 'g', note: 'en dés' },
-        { name: 'Emmental râpé',      qty: 60,  unit: 'g' },
-        { name: 'Beurre',             qty: 10,  unit: 'g' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Battre les oeufs vigoureusement à la fourchette. Saler légèrement (le jambon est déjà salé). Poivrer.",
-        "Chauffer le beurre dans une poêle anti-adhésive à feu moyen-vif. Quand il mousse, verser les oeufs.",
-        "Remuer avec une spatule en raclant le fond pendant 1 min. Laisser prendre 30 secondes sans toucher.",
-        "Répartir le jambon et le fromage sur une moitié de l'omelette quand le dessus est encore légèrement baveux.",
-        "Replier l'omelette en deux, glisser dans l'assiette. L'intérieur doit rester moelleux — jamais sec. Manger immédiatement."
-      ]
-    },
-
-    {
-      id: 'R901',
-      name: 'Steak Frites Express Boeuf Maison',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥩',
-      origin: '🇫🇷',
-      tags: ['classique', 'bistrot', 'high-protein'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 20,
-      difficulty: 1,
-      // 90×4 + 100×4 + 46×9 = 360+400+414 = 1174 kcal ✓
-      baseNutrition: { calories: 1174, proteinGrams: 90, carbsGrams: 100, fatGrams: 46 },
-      ingredients: [
-        { name: 'Steaks de boeuf',    qty: 400, unit: 'g', note: '2 steaks à 200g' },
-        { name: 'Pommes de terre',    qty: 500, unit: 'g', note: 'type Bintje' },
-        { name: 'Huile de friture',   qty: 20,  unit: 'ml' },
-        { name: 'Beurre',             qty: 10,  unit: 'g' },
-        { name: 'Fleur de sel',       qty: 2,   unit: 'g' },
-        { name: 'Poivre du moulin',   qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Couper les pommes de terre en bâtonnets réguliers. Rincer à l'eau froide, sécher parfaitement sur un torchon.",
-        "Première friture à 150°C pendant 6 min (les frites cuisent sans colorer). Égoutter, laisser reposer 5 min.",
-        "Seconde friture à 180°C pendant 3-4 min jusqu'à dorées et croustillantes. Saler à la sortie.",
-        "Sortir les steaks du frigo 20 min avant. Saler juste avant cuisson. Poêle très chaude sans matière grasse : 2 min par face pour saignant.",
-        "Laisser reposer les steaks 3 min sur une assiette. Ajouter le beurre sur les steaks chauds, finir avec la fleur de sel."
-      ]
-    },
-
-    {
-      id: 'R902',
-      name: 'Poulet Basquaise Poivrons & Tomates',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍗',
-      origin: '🇫🇷',
-      tags: ['mijoté', 'classique', 'high-protein'],
-      servings: 2,
-      prepTime: 15,
-      cookTime: 35,
-      difficulty: 1,
-      // 88×4 + 42×4 + 46×9 = 352+168+414 = 934 kcal ✓
-      baseNutrition: { calories: 934, proteinGrams: 88, carbsGrams: 42, fatGrams: 46 },
-      ingredients: [
-        { name: 'Cuisses de poulet',  qty: 500, unit: 'g', note: '4 morceaux' },
-        { name: 'Poivrons',           qty: 200, unit: 'g', note: 'rouge + vert' },
-        { name: 'Tomates concassées', qty: 200, unit: 'g' },
-        { name: 'Oignon',             qty: 80,  unit: 'g' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' },
-        { name: 'Piment d\'Espelette', qty: 2,  unit: 'g' },
-        { name: 'Huile d\'olive',     qty: 15,  unit: 'ml' },
-        { name: 'Thym, laurier',      qty: 3,   unit: 'g' }
-      ],
-      steps: [
-        "Saler et poivrer les morceaux de poulet. Les faire dorer dans l'huile à feu vif 4-5 min par face. Réserver.",
-        "Dans la même cocotte, faire revenir l'oignon émincé 4 min. Ajouter l'ail et le jambon de Bayonne si disponible.",
-        "Ajouter les poivrons en lanières, cuire 5 min à feu vif.",
-        "Verser les tomates, piment d'Espelette, thym et laurier. Remettre le poulet. Couvrir, mijoter 25 min à feu doux.",
-        "Rectifier l'assaisonnement. Servir avec du riz blanc ou des pommes de terre vapeur."
-      ]
-    },
-
-    {
-      id: 'R903',
-      name: 'Oeufs en Cocotte Jambon & Crème',
-      category: 'french',
-      mealTypes: ['breakfast', 'lunch'],
-      emoji: '🥚',
-      origin: '🇫🇷',
-      tags: ['express', 'high-protein', 'brunch'],
-      servings: 2,
-      prepTime: 5,
-      cookTime: 12,
-      difficulty: 1,
-      // 50×4 + 2×4 + 43×9 = 200+8+387 = 595 kcal ✓
-      baseNutrition: { calories: 595, proteinGrams: 50, carbsGrams: 2, fatGrams: 43 },
-      ingredients: [
-        { name: 'Oeufs',              qty: 4,   unit: 'pce' },
-        { name: 'Jambon blanc',       qty: 80,  unit: 'g' },
-        { name: 'Crème fraîche',      qty: 60,  unit: 'ml' },
-        { name: 'Emmental râpé',      qty: 30,  unit: 'g' },
-        { name: 'Beurre',             qty: 8,   unit: 'g' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préchauffer le four à 180°C. Beurrer 4 ramequins. Couper le jambon en petits dés.",
-        "Répartir le jambon dans le fond des ramequins. Verser une cuillerée de crème fraîche.",
-        "Casser un oeuf délicatement dans chaque ramequin. Saler, poivrer. Ajouter un peu de fromage râpé.",
-        "Placer les ramequins dans un plat avec 2cm d'eau chaude (bain-marie). Enfourner 10-12 min.",
-        "Les blancs doivent être pris et les jaunes encore coulants. Servir immédiatement avec des mouillettes de pain grillé."
-      ]
-    },
-
-    {
-      id: 'R904',
-      name: 'Purée de Pommes de Terre Beurre & Crème',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥔',
-      origin: '🇫🇷',
-      tags: ['classique', 'comfort-food', 'accompagnement'],
-      servings: 4,
-      prepTime: 15,
-      cookTime: 25,
-      difficulty: 1,
-      // 28×4 + 186×4 + 74×9 = 112+744+666 = 1522 kcal ✓
-      baseNutrition: { calories: 1522, proteinGrams: 28, carbsGrams: 186, fatGrams: 74 },
-      ingredients: [
-        { name: 'Pommes de terre',    qty: 1000, unit: 'g', note: 'type Bintje ou Agria' },
-        { name: 'Beurre',             qty: 80,  unit: 'g' },
-        { name: 'Lait entier',        qty: 150, unit: 'ml', note: 'chaud' },
-        { name: 'Sel',                qty: 3,   unit: 'g' },
-        { name: 'Noix de muscade',    qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Éplucher les pommes de terre, les couper en morceaux égaux. Cuire dans l'eau froide salée, porter à ébullition, cuire 20 min.",
-        "Tester la cuisson avec un couteau — il doit s'enfoncer sans résistance. Égoutter parfaitement.",
-        "Passer les pommes de terre au moulin à légumes (ou presse-purée) — jamais au mixeur électrique qui rend la purée collante.",
-        "Incorporer le beurre froid en dés dans la purée chaude. Mélanger vigoureusement.",
-        "Ajouter le lait chaud progressivement jusqu'à consistance désirée. Assaisonner sel et muscade. La vraie purée française est riche en beurre."
-      ]
-    },
-
-    // ═══ BATCH P46 — Incontournables Monde Express ═══
-
-    {
-      id: 'R905',
-      name: 'Burger Maison Boeuf Cheddar & Sauce BBQ',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍔',
-      origin: '🇺🇸',
-      tags: ['burger', 'high-protein', 'convivial'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 10,
-      difficulty: 1,
-      // 89×4 + 76×4 + 62×9 = 356+304+558 = 1218 kcal ✓
-      baseNutrition: { calories: 1218, proteinGrams: 89, carbsGrams: 76, fatGrams: 62 },
-      ingredients: [
-        { name: 'Pains à burger',     qty: 140, unit: 'g', note: '2 brioches' },
-        { name: 'Boeuf haché 15% MG', qty: 300, unit: 'g', note: '2 steaks de 150g' },
-        { name: 'Cheddar',            qty: 60,  unit: 'g', note: '2 tranches' },
-        { name: 'Sauce BBQ ou mayo',  qty: 30,  unit: 'g' },
-        { name: 'Tomate',             qty: 80,  unit: 'g' },
-        { name: 'Salade',             qty: 30,  unit: 'g' },
-        { name: 'Oignon rouge',       qty: 40,  unit: 'g' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Façonner la viande hachée en 2 steaks. Saler et poivrer des deux faces. Faire une légère empreinte au centre (évite le gonflement).",
-        "Cuire dans une poêle très chaude sèche ou grill 3 min par face. Déposer le cheddar sur les steaks 1 min avant la fin, couvrir pour fondre.",
-        "Toaster les pains à la poêle ou au grille-pain.",
-        "Étaler la sauce sur les pains. Assembler : pain du bas, salade, tomate, steak + cheddar, oignon rouge, pain du haut.",
-        "Servir immédiatement avec des frites maison ou des chips. Ne pas presser le burger — laisser les sucs s'installer 1 min."
-      ]
-    },
-
-    {
-      id: 'R906',
-      name: 'Hot-Dog Maison Oignons Caramélisés & Moutarde',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🌭',
-      origin: '🇺🇸',
-      tags: ['express', 'rapide', 'convivial'],
-      servings: 2,
-      prepTime: 5,
-      cookTime: 15,
-      difficulty: 1,
-      // 39×4 + 83×4 + 42×9 = 156+332+378 = 866 kcal ✓
-      baseNutrition: { calories: 866, proteinGrams: 39, carbsGrams: 83, fatGrams: 42 },
-      ingredients: [
-        { name: 'Pains hot-dog',      qty: 140, unit: 'g', note: '2 pains' },
-        { name: 'Saucisses de dinde', qty: 180, unit: 'g', note: '4 saucisses' },
-        { name: 'Oignons',            qty: 150, unit: 'g' },
-        { name: 'Beurre',             qty: 10,  unit: 'g' },
-        { name: 'Moutarde',           qty: 15,  unit: 'g' },
-        { name: 'Ketchup',            qty: 15,  unit: 'g' }
-      ],
-      steps: [
-        "Émincer les oignons en lamelles. Les faire caraméliser dans le beurre à feu doux 12-15 min jusqu'à dorés et fondants.",
-        "Pocher les saucisses 3 min dans de l'eau frémissante ou les griller 2 min à la poêle.",
-        "Toaster les pains côté intérieur à la poêle sèche 1 min.",
-        "Étaler moutarde et ketchup dans le pain. Poser les saucisses, couvrir d'oignons caramélisés.",
-        "Servir immédiatement. Variante : ajouter du gruyère fondu et passer sous le gril 2 min."
-      ]
-    },
-
-    {
-      id: 'R907',
-      name: 'Naan Pizza Poulet Poivron Express',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🫓',
-      origin: '🇮🇳',
-      tags: ['express', 'rapide', 'pizza'],
-      servings: 2,
-      prepTime: 5,
-      cookTime: 8,
-      difficulty: 1,
-      // 68×4 + 96×4 + 27×9 = 272+384+243 = 899 kcal ✓
-      baseNutrition: { calories: 899, proteinGrams: 68, carbsGrams: 96, fatGrams: 27 },
-      ingredients: [
-        { name: 'Naans nature',       qty: 200, unit: 'g', note: '2 grands naans' },
-        { name: 'Poulet rôti cuit',   qty: 150, unit: 'g', note: 'effiloché' },
-        { name: 'Sauce tomate',       qty: 80,  unit: 'ml' },
-        { name: 'Mozzarella râpée',   qty: 100, unit: 'g' },
-        { name: 'Poivron',            qty: 80,  unit: 'g' },
-        { name: 'Herbes de Provence', qty: 2,   unit: 'g' }
-      ],
-      steps: [
-        "Préchauffer le four à 220°C (position gril+chaleur).",
-        "Étaler la sauce tomate sur chaque naan jusqu'aux bords.",
-        "Répartir le poulet effiloché, le poivron en lamelles et la mozzarella.",
-        "Parsemer d'herbes de Provence. Poser sur une plaque.",
-        "Enfourner 7-8 min jusqu'à fromage bouillonnant et bords du naan croustillants. En 10 min chrono du frigo au four."
-      ]
-    },
-
-    {
-      id: 'R908',
-      name: 'Pancakes Américains Classiques & Sirop d\'Érable',
-      category: 'world-food',
-      mealTypes: ['breakfast'],
-      emoji: '🥞',
-      origin: '🇺🇸',
-      tags: ['breakfast', 'classique', 'americain'],
-      servings: 2,
-      prepTime: 8,
-      cookTime: 15,
-      difficulty: 1,
-      // 39×4 + 178×4 + 44×9 = 156+712+396 = 1264 kcal ✓
-      baseNutrition: { calories: 1264, proteinGrams: 39, carbsGrams: 178, fatGrams: 44 },
-      ingredients: [
-        { name: 'Farine',             qty: 200, unit: 'g' },
-        { name: 'Lait',               qty: 200, unit: 'ml' },
-        { name: 'Oeufs',              qty: 2,   unit: 'pce' },
-        { name: 'Beurre fondu',       qty: 30,  unit: 'g' },
-        { name: 'Sucre',              qty: 20,  unit: 'g' },
-        { name: 'Levure chimique',    qty: 8,   unit: 'g', note: '2 cc' },
-        { name: 'Sel',                qty: 1,   unit: 'pincée' },
-        { name: 'Sirop d\'érable',   qty: 30,  unit: 'ml', note: 'pour servir' }
-      ],
-      steps: [
-        "Mélanger farine, sucre, levure et sel dans un grand bol. Faire un puits.",
-        "Fouetter les oeufs avec le lait et le beurre fondu. Verser dans le puits, mélanger jusqu'à pâte homogène.",
-        "Ne pas trop travailler la pâte — quelques grumeaux sont normaux et donnent des pancakes plus moelleux.",
-        "Cuire dans une poêle anti-adhésive beurrée à feu moyen : verser une louche, cuire jusqu'aux bulles (2 min), retourner 1 min.",
-        "Empiler les pancakes chauds. Napper généreusement de sirop d'érable. Ajouter beurre, fruits frais ou bacon selon goût."
-      ]
-    },
-
-    {
-      id: 'R909',
-      name: 'Bowl Açaï Granola & Fruits Frais',
-      category: 'world-food',
-      mealTypes: ['breakfast'],
-      emoji: '🍇',
-      origin: '🇧🇷',
-      tags: ['breakfast', 'healthy', 'bowl'],
-      servings: 2,
-      prepTime: 5,
-      cookTime: 0,
-      difficulty: 1,
-      // 14×4 + 149×4 + 24×9 = 56+596+216 = 868 kcal ✓
-      baseNutrition: { calories: 868, proteinGrams: 14, carbsGrams: 149, fatGrams: 24 },
-      ingredients: [
-        { name: 'Pulpe d\'açaï surgelée', qty: 200, unit: 'g' },
-        { name: 'Banane',             qty: 200, unit: 'g', note: '2 bananes' },
-        { name: 'Granola',            qty: 80,  unit: 'g' },
-        { name: 'Lait d\'amande',    qty: 100, unit: 'ml' },
-        { name: 'Fruits frais',       qty: 150, unit: 'g', note: 'fraises, kiwi, myrtilles' },
-        { name: 'Miel',               qty: 15,  unit: 'g' }
-      ],
-      steps: [
-        "Sortir la pulpe d'açaï du congélateur 5 min avant. La casser en morceaux.",
-        "Mixer pulpe d'açaï, 1 banane et le lait d'amande jusqu'à consistance épaisse comme une glace — ajouter le moins de liquide possible.",
-        "Verser dans deux bols. La base doit être très épaisse pour pouvoir poser les toppings.",
-        "Couper la banane restante en rondelles. Couper les autres fruits.",
-        "Disposer joliment : granola, fruits, filet de miel. L'açaï bowl se mange dans la minute — il fond vite."
-      ]
-    },
-
-    // ═══ BATCH P47 — Mijotés & Plats Incontournables ═══
-
-    {
-      id: 'R910',
-      name: 'Pot-au-Feu Boeuf & Légumes Classique',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍲',
-      origin: '🇫🇷',
-      tags: ['mijoté', 'classique', 'hiver', 'familial'],
-      servings: 4,
-      prepTime: 20,
-      cookTime: 120,
-      difficulty: 1,
-      // 137×4 + 126×4 + 56×9 = 548+504+504 = 1556 kcal ✓
-      baseNutrition: { calories: 1556, proteinGrams: 137, carbsGrams: 126, fatGrams: 56 },
-      ingredients: [
-        { name: 'Paleron de boeuf',   qty: 600, unit: 'g' },
-        { name: 'Os à moelle',        qty: 2,   unit: 'pce' },
-        { name: 'Carottes',           qty: 300, unit: 'g' },
-        { name: 'Poireaux',           qty: 200, unit: 'g' },
-        { name: 'Pommes de terre',    qty: 300, unit: 'g' },
-        { name: 'Navets',             qty: 150, unit: 'g' },
-        { name: 'Oignon',             qty: 100, unit: 'g' },
-        { name: 'Bouquet garni',      qty: 1,   unit: 'pce' },
-        { name: 'Gros sel',           qty: 5,   unit: 'g' }
-      ],
-      steps: [
-        "Mettre la viande et les os dans une grande marmite. Couvrir d'eau froide. Porter lentement à ébullition. Écumer soigneusement.",
-        "Ajouter l'oignon piqué de clous de girofle, le bouquet garni et le gros sel. Cuire à frémissement 1h30.",
-        "Ajouter les carottes, navets et poireaux. Cuire encore 20 min.",
-        "Ajouter les pommes de terre et les os à moelle 20 min avant la fin.",
-        "Servir la viande tranchée avec les légumes dans le bouillon. Accompagner de cornichons, moutarde, sel de Guérande et pain grillé frotté à l'ail pour la moelle."
-      ]
-    },
-
-    {
-      id: 'R911',
-      name: 'Poulet Yassa Sénégalais Oignons & Citron',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍗',
-      origin: '🇸🇳',
-      tags: ['africain', 'mijoté', 'high-protein'],
-      servings: 4,
-      prepTime: 20,
-      cookTime: 45,
-      difficulty: 1,
-      // 132×4 + 50×4 + 68×9 = 528+200+612 = 1340 kcal ✓
-      baseNutrition: { calories: 1340, proteinGrams: 132, carbsGrams: 50, fatGrams: 68 },
-      ingredients: [
-        { name: 'Poulet entier découpé', qty: 800, unit: 'g' },
-        { name: 'Oignons',            qty: 400, unit: 'g' },
-        { name: 'Jus de citron',      qty: 60,  unit: 'ml' },
-        { name: 'Moutarde',           qty: 30,  unit: 'g' },
-        { name: 'Huile d\'arachide',  qty: 40,  unit: 'ml' },
-        { name: 'Ail',                qty: 3,   unit: 'pce' },
-        { name: 'Piment',             qty: 1,   unit: 'pce' },
-        { name: 'Laurier',            qty: 2,   unit: 'feuille' }
-      ],
-      steps: [
-        "Marinade : mélanger jus de citron, moutarde, ail écrasé, piment haché. Mariner le poulet minimum 2h (une nuit idéalement).",
-        "Sortir le poulet de la marinade. Faire griller les morceaux sous le gril du four ou à la poêle gril 5 min par face. Réserver.",
-        "Dans une grande cocotte, faire revenir les oignons émincés dans l'huile à feu moyen 20 min — ils doivent fondre et légèrement colorer.",
-        "Ajouter la marinade aux oignons. Cuire 3 min. Remettre le poulet, ajouter le laurier.",
-        "Couvrir et mijoter 25 min à feu doux. Rectifier sel et citron. Servir sur du riz blanc."
-      ]
-    },
-
-    {
-      id: 'R912',
-      name: 'Merguez Pommes de Terre Gratinées',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🌭',
-      origin: '🇫🇷',
-      tags: ['comfort-food', 'economique', 'family'],
-      servings: 3,
-      prepTime: 15,
-      cookTime: 40,
-      difficulty: 1,
-      // 73×4 + 111×4 + 82×9 = 292+444+738 = 1474 kcal ✓
-      baseNutrition: { calories: 1474, proteinGrams: 73, carbsGrams: 111, fatGrams: 82 },
-      ingredients: [
-        { name: 'Saucisses de Toulouse', qty: 300, unit: 'g' },
-        { name: 'Pommes de terre',    qty: 500, unit: 'g' },
-        { name: 'Crème fraîche',      qty: 150, unit: 'ml' },
-        { name: 'Gruyère râpé',       qty: 60,  unit: 'g' },
-        { name: 'Oignon',             qty: 100, unit: 'g' },
-        { name: 'Beurre',             qty: 20,  unit: 'g' },
-        { name: 'Thym',               qty: 3,   unit: 'g' }
-      ],
-      steps: [
-        "Préchauffer le four à 190°C. Éplucher les pommes de terre, les couper en rondelles de 5mm.",
-        "Cuire les rondelles 8 min à l'eau bouillante salée — pas trop cuites, elles finissent au four.",
-        "Faire revenir l'oignon dans le beurre 5 min. Couper les saucisses en tronçons.",
-        "Dans un plat beurré, alterner couches de pommes de terre, saucisses et oignons. Arroser de crème fraîche.",
-        "Parsemer de gruyère et de thym. Enfourner 30 min jusqu'à gratin doré et saucisses bien cuites."
-      ]
-    },
-
-    {
-      id: 'R913',
-      name: 'Hachis Parmentier Boeuf Classique',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥔',
-      origin: '🇫🇷',
-      tags: ['classique', 'comfort-food', 'familial', 'four'],
-      servings: 4,
-      prepTime: 25,
-      cookTime: 50,
-      difficulty: 1,
-      // 116×4 + 187×4 + 83×9 = 464+748+747 = 1959 kcal ✓
-      baseNutrition: { calories: 1959, proteinGrams: 116, carbsGrams: 187, fatGrams: 83 },
-      ingredients: [
-        { name: 'Viande hachée boeuf', qty: 400, unit: 'g' },
-        { name: 'Pommes de terre',    qty: 800, unit: 'g' },
-        { name: 'Oignon',             qty: 100, unit: 'g' },
-        { name: 'Tomates concassées', qty: 150, unit: 'g' },
-        { name: 'Lait',               qty: 150, unit: 'ml' },
-        { name: 'Beurre',             qty: 40,  unit: 'g' },
-        { name: 'Gruyère râpé',       qty: 40,  unit: 'g' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' }
-      ],
-      steps: [
-        "Cuire les pommes de terre à l'eau salée. Les écraser en purée avec le beurre et le lait chaud.",
-        "Faire revenir l'oignon et l'ail dans l'huile 4 min. Ajouter la viande hachée, cuire en émiettant jusqu'à coloration.",
-        "Ajouter les tomates concassées à la viande. Saler, poivrer. Cuire 10 min. Rectifier l'assaisonnement.",
-        "Préchauffer le four à 200°C. Dans un plat à gratin : couche de viande puis couche de purée bien lissée. Parsemer de gruyère.",
-        "Enfourner 20-25 min jusqu'à gratinage bien doré. Laisser reposer 5 min avant de servir."
-      ]
-    },
-
-    {
-      id: 'R914',
-      name: 'Lentilles Merguez Épicées',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🌱',
-      origin: '🇫🇷',
-      tags: ['mijoté', 'classique', 'hivernal'],
-      servings: 3,
-      prepTime: 10,
-      cookTime: 40,
-      difficulty: 1,
-      // 72×4 + 128×4 + 82×9 = 288+512+738 = 1538 kcal ✓
-      baseNutrition: { calories: 1538, proteinGrams: 72, carbsGrams: 128, fatGrams: 82 },
-      ingredients: [
-        { name: 'Lentilles vertes',   qty: 250, unit: 'g' },
-        { name: 'Saucisses fumées',   qty: 250, unit: 'g' },
-        { name: 'Carottes',           qty: 150, unit: 'g' },
-        { name: 'Oignon',             qty: 100, unit: 'g' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' },
-        { name: 'Lardons',            qty: 80,  unit: 'g' },
-        { name: 'Bouillon de volaille', qty: 700, unit: 'ml' },
-        { name: 'Thym, laurier',      qty: 3,   unit: 'g' }
-      ],
-      steps: [
-        "Faire revenir les lardons dans une cocotte sans matière grasse. Ajouter l'oignon et l'ail hachés, cuire 3 min.",
-        "Ajouter les carottes en rondelles. Rincer les lentilles (ne pas les faire tremper).",
-        "Ajouter les lentilles, le bouillon et les aromates. Porter à ébullition.",
-        "Réduire le feu, poser les saucisses entières sur les lentilles. Couvrir et cuire 35 min à feu doux.",
-        "Les lentilles absorbent le bouillon progressivement — vérifier et ajouter un peu d'eau si nécessaire. Trancher les saucisses pour servir."
-      ]
-    },
-
-    // ═══ BATCH P48 — Pâtes & Riz Incontournables ═══
-
-    {
-      id: 'R915',
-      name: 'Spaghetti Aglio Olio e Peperoncino',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍝',
-      origin: '🇮🇹',
-      tags: ['vegetarien', 'express', 'classique-napolitain'],
-      servings: 2,
-      prepTime: 5,
-      cookTime: 15,
-      difficulty: 1,
-      // 40×4 + 226×4 + 58×9 = 160+904+522 = 1586 kcal ✓
-      baseNutrition: { calories: 1586, proteinGrams: 40, carbsGrams: 226, fatGrams: 58 },
-      ingredients: [
-        { name: 'Spaghetti',          qty: 300, unit: 'g' },
-        { name: 'Ail',                qty: 6,   unit: 'pce' },
-        { name: 'Huile d\'olive extra-vierge', qty: 60, unit: 'ml' },
-        { name: 'Piment rouge séché', qty: 2,   unit: 'pce' },
-        { name: 'Parmesan',           qty: 30,  unit: 'g' },
-        { name: 'Persil frais',       qty: 15,  unit: 'g' }
-      ],
-      steps: [
-        "Cuire les spaghetti dans une très grande quantité d'eau fortement salée selon les instructions. Réserver 200ml d'eau de cuisson.",
-        "Pendant la cuisson, émincer l'ail très finement. Émietter le piment séché.",
-        "Dans une grande poêle, chauffer l'huile d'olive à feu doux. Faire blondir l'ail 3-4 min sans le brûler. Ajouter le piment.",
-        "Égoutter les spaghetti al dente. Les ajouter dans la poêle avec l'eau de cuisson réservée.",
-        "Remuer vigoureusement à feu moyen 1-2 min jusqu'à émulsion crémeuse. Finir avec le persil et le parmesan. La recette la plus simple d'Italie."
-      ]
-    },
-
-    {
-      id: 'R916',
-      name: 'Riz Sauté Bœuf Légumes & Sauce Soja',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍚',
-      origin: '🇨🇳',
-      tags: ['riz', 'express', 'asian'],
-      servings: 2,
-      prepTime: 8,
-      cookTime: 12,
-      difficulty: 1,
-      // 72×4 + 133×4 + 44×9 = 288+532+396 = 1216 kcal ✓
-      baseNutrition: { calories: 1216, proteinGrams: 72, carbsGrams: 133, fatGrams: 44 },
-      ingredients: [
-        { name: 'Riz cuit froid',     qty: 500, unit: 'g', note: 'riz de la veille' },
-        { name: 'Bœuf haché 5%',         qty: 200, unit: 'g' },
-        { name: 'Oeufs',              qty: 2,   unit: 'pce' },
-        { name: 'Petits pois',        qty: 80,  unit: 'g' },
-        { name: 'Carottes',           qty: 80,  unit: 'g' },
-        { name: 'Sauce soja',         qty: 30,  unit: 'ml' },
-        { name: 'Huile neutre',       qty: 20,  unit: 'ml' },
-        { name: 'Huile de sésame',    qty: 10,  unit: 'ml' }
-      ],
-      steps: [
-        "Cuire les carottes en petits dés 3 min à l'eau bouillante avec les petits pois. Égoutter.",
-        "Faire revenir le porc haché dans l'huile à feu très vif en émiettant jusqu'à cuisson complète. Réserver.",
-        "Faire les oeufs brouillés dans le même wok, garder des gros morceaux. Réserver.",
-        "Faire sauter le riz froid en miettes à feu maximum 3 min. Remettre porc et oeufs, ajouter légumes.",
-        "Assaisonner de sauce soja. Finir avec l'huile de sésame. Mélanger vigoureusement 1 min. Le riz de la veille est indispensable pour cette recette."
-      ]
-    },
-
-    {
-      id: 'R917',
-      name: 'Coquillettes Jambon Beurre Gratiné',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍝',
-      origin: '🇫🇷',
-      tags: ['classique', 'comfort-food', 'enfants'],
-      servings: 2,
-      prepTime: 5,
-      cookTime: 12,
-      difficulty: 1,
-      // 56×4 + 220×4 + 34×9 = 224+880+306 = 1410 kcal ✓
-      baseNutrition: { calories: 1410, proteinGrams: 56, carbsGrams: 220, fatGrams: 34 },
-      ingredients: [
-        { name: 'Coquillettes',       qty: 300, unit: 'g' },
-        { name: 'Jambon blanc',       qty: 120, unit: 'g', note: 'en gros dés' },
-        { name: 'Beurre',             qty: 30,  unit: 'g' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Faire bouillir une grande casserole d'eau salée.",
-        "Cuire les coquillettes 1 min de moins que le temps indiqué — elles finissent de cuire avec le beurre.",
-        "Égoutter en gardant 3-4 cuillères d'eau de cuisson.",
-        "Remettre les coquillettes dans la casserole hors du feu. Ajouter le beurre en dés froid.",
-        "Incorporer le beurre en secouant la casserole. Ajouter l'eau de cuisson si besoin. Mélanger le jambon. Poivrer généreusement. La qualité du jambon et du beurre fait tout."
-      ]
-    },
-
-    {
-      id: 'R918',
-      name: 'Penne alla Vodka Dinde Fumée & Parmesan',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍝',
-      origin: '🇮🇹',
-      tags: ['cremeux', 'classique', 'italien'],
-      servings: 2,
-      prepTime: 5,
-      cookTime: 20,
-      difficulty: 1,
-      // 58×4 + 219×4 + 54×9 = 232+876+486 = 1594 kcal ✓
-      baseNutrition: { calories: 1594, proteinGrams: 58, carbsGrams: 219, fatGrams: 54 },
-      ingredients: [
-        { name: 'Penne rigate',       qty: 280, unit: 'g' },
-        { name: 'Dinde fumée en dés', qty: 80, unit: 'g' },
-        { name: 'Crème fraîche',      qty: 100, unit: 'ml' },
-        { name: 'Sauce tomate',       qty: 150, unit: 'ml' },
-        { name: 'Vodka',              qty: 30,  unit: 'ml' },
-        { name: 'Parmesan râpé',      qty: 30,  unit: 'g' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' },
-        { name: 'Piment',             qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Faire revenir la pancetta à sec dans une poêle jusqu'à croustillante. Ajouter l'ail haché.",
-        "Verser la vodka et flamber (ou laisser évaporer 2 min). Ajouter la sauce tomate et le piment.",
-        "Mijoter 5 min. Incorporer la crème fraîche, cuire encore 3 min. La sauce devient rose-orangée.",
-        "Cuire les penne al dente. Égoutter avec 100ml d'eau de cuisson. Mélanger dans la sauce.",
-        "Servir avec le parmesan râpé. La vodka dans une sauce ? Elle ouvre les molécules aromatiques de la tomate — goût plus intense."
-      ]
-    },
-
-    {
-      id: 'R919',
-      name: 'Pâtes au Pesto Génois Basilic & Pignons',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🌿',
-      origin: '🇮🇹',
-      tags: ['vegetarien', 'rapide', 'classique-ligurien'],
-      servings: 2,
-      prepTime: 5,
-      cookTime: 12,
-      difficulty: 1,
-      // 44×4 + 208×4 + 48×9 = 176+832+432 = 1440 kcal ✓
-      baseNutrition: { calories: 1440, proteinGrams: 44, carbsGrams: 208, fatGrams: 48 },
-      ingredients: [
-        { name: 'Trofie ou linguine', qty: 280, unit: 'g' },
-        { name: 'Pesto basilic maison ou bocal', qty: 80, unit: 'g' },
-        { name: 'Parmesan râpé',      qty: 30,  unit: 'g' },
-        { name: 'Pommes de terre',    qty: 80,  unit: 'g', note: 'traditionnel avec le pesto' },
-        { name: 'Haricots verts',     qty: 60,  unit: 'g', note: 'traditionnel' }
-      ],
-      steps: [
-        "Éplucher et couper les pommes de terre en petits cubes. Porter l'eau à ébullition, saler généreusement.",
-        "Cuire pommes de terre 5 min dans l'eau, ajouter les haricots verts 3 min, puis les pâtes selon le temps indiqué.",
-        "Égoutter le tout ensemble en gardant 2-3 cuillères d'eau de cuisson.",
-        "Mélanger immédiatement avec le pesto et l'eau de cuisson — pas de chaleur sur le pesto, il noircit.",
-        "Servir avec le parmesan. En Ligurie le vrai pesto al genovese se mange avec pommes de terre et haricots verts — essayez, c'est révélateur."
-      ]
-    },
-
-    // ═══ BATCH P49 — Viandes Incontournables ═══
-
-    {
-      id: 'R920',
-      name: 'Côtes d\'Agneau Moutarde & Miel au Four',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥩',
-      origin: '🇫🇷',
-      tags: ['high-protein', 'rapide', 'four'],
-      servings: 2,
-      prepTime: 8,
-      cookTime: 25,
-      difficulty: 1,
-      // 83×4 + 20×4 + 48×9 = 332+80+432 = 844 kcal ✓
-      baseNutrition: { calories: 844, proteinGrams: 83, carbsGrams: 20, fatGrams: 48 },
-      ingredients: [
-        { name: 'Cuisses de poulet',      qty: 480, unit: 'g', note: '2 côtes épaisses' },
-        { name: 'Moutarde de Dijon',  qty: 30,  unit: 'g' },
-        { name: 'Miel',               qty: 20,  unit: 'g' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' },
-        { name: 'Thym frais',         qty: 3,   unit: 'g' },
-        { name: 'Huile d\'olive',     qty: 10,  unit: 'ml' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Mélanger moutarde, miel, ail haché, thym et huile pour former une marinade.",
-        "Badigeonner généreusement les côtes sur toutes les faces. Saler et poivrer.",
-        "Laisser mariner minimum 30 min (ou toute une nuit au frigo pour plus de saveur).",
-        "Cuire dans une poêle gril à feu vif 3 min par face pour marquer la viande.",
-        "Finir au four à 180°C pendant 15 min. Laisser reposer 5 min. La marinade caramélisée forme un glaçage irrésistible."
-      ]
-    },
-
-    {
-      id: 'R921',
-      name: 'Ailes de Poulet Buffalo Sauce Piquante',
-      category: 'world-food',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍗',
-      origin: '🇺🇸',
-      tags: ['high-protein', 'epice', 'four', 'convivial'],
-      servings: 2,
-      prepTime: 10,
-      cookTime: 45,
-      difficulty: 1,
-      // 72×4 + 16×4 + 73×9 = 288+64+657 = 1009 kcal ✓
-      baseNutrition: { calories: 1009, proteinGrams: 72, carbsGrams: 16, fatGrams: 73 },
-      ingredients: [
-        { name: 'Ailes de poulet',    qty: 600, unit: 'g' },
-        { name: 'Sauce piquante',     qty: 40,  unit: 'ml', note: 'type Frank\'s ou Tabasco' },
-        { name: 'Beurre',             qty: 30,  unit: 'g' },
-        { name: 'Miel',               qty: 15,  unit: 'g' },
-        { name: 'Ail en poudre',      qty: 3,   unit: 'g' },
-        { name: 'Sel',                qty: 2,   unit: 'g' }
-      ],
-      steps: [
-        "Sécher parfaitement les ailes avec du papier absorbant — la clé pour la croustillance.",
-        "Saler légèrement les ailes. Les poser sur une grille posée sur une plaque. Enfourner à 200°C pendant 20 min.",
-        "Retourner les ailes, remonter à 220°C et cuire encore 20 min jusqu'à peau bien dorée et croustillante.",
-        "Préparer la sauce buffalo : faire fondre le beurre, ajouter sauce piquante, miel et ail en poudre. Mélanger.",
-        "Enrober les ailes chaudes dans la sauce buffalo dans un grand bol. Servir immédiatement avec du céleri et sauce bleue."
-      ]
-    },
-
-    {
-      id: 'R922',
-      name: 'Boulettes de Viande Sauce Tomate Maison',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍝',
-      origin: '🇮🇹',
-      tags: ['high-protein', 'comfort-food', 'famille'],
-      servings: 4,
-      prepTime: 20,
-      cookTime: 30,
-      difficulty: 1,
-      // 127×4 + 68×4 + 57×9 = 508+272+513 = 1293 kcal ✓
-      baseNutrition: { calories: 1293, proteinGrams: 127, carbsGrams: 68, fatGrams: 57 },
-      ingredients: [
-        { name: 'Boeuf haché',        qty: 500, unit: 'g' },
-        { name: 'Pain de mie',        qty: 80,  unit: 'g', note: 'trempé dans le lait' },
-        { name: 'Oeuf',               qty: 1,   unit: 'pce' },
-        { name: 'Parmesan râpé',      qty: 30,  unit: 'g' },
-        { name: 'Tomates concassées', qty: 400, unit: 'g' },
-        { name: 'Oignon',             qty: 80,  unit: 'g' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' },
-        { name: 'Huile d\'olive',     qty: 15,  unit: 'ml' }
-      ],
-      steps: [
-        "Tremper le pain de mie dans le lait, essorer. Mélanger boeuf haché, pain, oeuf, parmesan, sel, poivre. Former des boulettes de 40g.",
-        "Faire dorer les boulettes dans l'huile à feu vif sur toutes les faces. Ne pas trop les bouger — laisser former une croûte. Réserver.",
-        "Faire revenir l'oignon et l'ail hachés 4 min dans la même poêle.",
-        "Ajouter les tomates concassées. Saler, poivrer. Mijoter 10 min.",
-        "Remettre les boulettes dans la sauce. Cuire à couvert 15 min à feu doux. Servir avec des spaghetti ou du pain."
-      ]
-    },
-
-    {
-      id: 'R923',
-      name: 'Brochettes Poulet Marinade Yaourt & Épices',
-      category: 'mediterranean',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍢',
-      origin: '🇬🇷',
-      tags: ['high-protein', 'ete', 'barbecue', 'leger'],
-      servings: 2,
-      prepTime: 15,
-      cookTime: 15,
-      difficulty: 1,
-      // 96×4 + 14×4 + 23×9 = 384+56+207 = 647 kcal ✓
-      baseNutrition: { calories: 647, proteinGrams: 96, carbsGrams: 14, fatGrams: 23 },
-      ingredients: [
-        { name: 'Filets de poulet',   qty: 450, unit: 'g' },
-        { name: 'Yaourt grec',        qty: 120, unit: 'g' },
-        { name: 'Paprika fumé',       qty: 4,   unit: 'g' },
-        { name: 'Cumin',              qty: 2,   unit: 'g' },
-        { name: 'Curcuma',            qty: 2,   unit: 'g' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' },
-        { name: 'Jus de citron',      qty: 20,  unit: 'ml' },
-        { name: 'Huile d\'olive',     qty: 10,  unit: 'ml' }
-      ],
-      steps: [
-        "Couper le poulet en cubes de 3cm.",
-        "Marinade : mélanger yaourt, toutes les épices, ail écrasé, jus de citron et huile. Bien enrober le poulet. Mariner minimum 1h — 4h idéalement.",
-        "Enfiler les cubes sur des brochettes. Si en bois, les faire tremper 30 min avant pour éviter qu'ils brûlent.",
-        "Cuire sur gril, barbecue ou poêle gril : 4-5 min par face à feu vif.",
-        "Le yaourt forme une croûte légèrement carbonisée délicieuse. Servir avec du tzatziki, salade de tomates et pain pita."
-      ]
-    },
-
-    {
-      id: 'R924',
-      name: 'Rôti de Boeuf Parfait au Four',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🥩',
-      origin: '🇫🇷',
-      tags: ['high-protein', 'classique', 'four', 'festif'],
-      servings: 4,
-      prepTime: 10,
-      cookTime: 40,
-      difficulty: 1,
-      // 163×4 + 6×4 + 61×9 = 652+24+549 = 1225 kcal ✓
-      baseNutrition: { calories: 1225, proteinGrams: 163, carbsGrams: 6, fatGrams: 61 },
-      ingredients: [
-        { name: 'Rôti de boeuf',      qty: 800, unit: 'g', note: 'ficelé' },
-        { name: 'Ail',                qty: 4,   unit: 'pce' },
-        { name: 'Moutarde de Dijon',  qty: 30,  unit: 'g' },
-        { name: 'Beurre',             qty: 30,  unit: 'g' },
-        { name: 'Thym, romarin',      qty: 5,   unit: 'g' },
-        { name: 'Huile neutre',       qty: 15,  unit: 'ml' },
-        { name: 'Fleur de sel',       qty: 2,   unit: 'g' }
-      ],
-      steps: [
-        "Sortir le rôti du frigo 1h avant. Préchauffer le four à 240°C.",
-        "Faire piquer le rôti de gousses d'ail en entier. Badigeonner de moutarde. Ficeler si pas fait par le boucher.",
-        "Saisir le rôti dans une cocotte allant au four avec l'huile et le beurre, 2 min sur chaque face pour colorer.",
-        "Ajouter les herbes. Enfourner à 240°C : compter 10-12 min/500g pour saignant, 15 min/500g pour à point.",
-        "CRUCIAL : sortir du four, couvrir d'alu et laisser reposer autant de temps que la cuisson. La viande se détend et reste juteuse. Trancher et ajouter la fleur de sel."
-      ]
-    },
-
-    // ═══ BATCH P50 — Poissons & Express Supplémentaires ═══
-
-    {
-      id: 'R925',
-      name: 'Crevettes Sautées Ail Beurre & Persil',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🦐',
-      origin: '🇫🇷',
-      tags: ['high-protein', 'rapide', 'fruits-de-mer'],
-      servings: 2,
-      prepTime: 5,
-      cookTime: 6,
-      difficulty: 1,
-      // 80×4 + 6×4 + 29×9 = 320+24+261 = 605 kcal ✓
-      baseNutrition: { calories: 605, proteinGrams: 80, carbsGrams: 6, fatGrams: 29 },
-      ingredients: [
-        { name: 'Crevettes crues décortiquées', qty: 400, unit: 'g' },
-        { name: 'Beurre',             qty: 30,  unit: 'g' },
-        { name: 'Ail',                qty: 4,   unit: 'pce' },
-        { name: 'Persil frais',       qty: 15,  unit: 'g' },
-        { name: 'Vin blanc sec',      qty: 50,  unit: 'ml' },
-        { name: 'Jus de citron',      qty: 15,  unit: 'ml' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Sécher les crevettes parfaitement avec du papier absorbant. Saler et poivrer.",
-        "Chauffer le beurre à feu vif dans une poêle. Quand il mousse, ajouter les crevettes EN UNE SEULE COUCHE.",
-        "Cuire 1 min 30 par face — elles doivent être roses et légèrement caramélisées. Ne pas surcharger la poêle.",
-        "Ajouter l'ail haché, cuire 30 secondes. Déglacer au vin blanc. Laisser réduire 1 min.",
-        "Finir avec le jus de citron et le persil haché. Servir immédiatement avec du riz basmati, des pâtes ou du pain de campagne pour saucer."
-      ]
-    },
-
-    {
-      id: 'R926',
-      name: 'Pâtes Thon Tomate Express 12 min',
-      category: 'italian',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🍝',
-      origin: '🇮🇹',
-      tags: ['express', 'economique', 'high-protein'],
-      servings: 2,
-      prepTime: 2,
-      cookTime: 12,
-      difficulty: 1,
-      // 72×4 + 208×4 + 23×9 = 288+832+207 = 1327 kcal ✓
-      baseNutrition: { calories: 1327, proteinGrams: 72, carbsGrams: 208, fatGrams: 23 },
-      ingredients: [
-        { name: 'Pâtes (penne ou fusilli)', qty: 280, unit: 'g' },
-        { name: 'Thon en boîte',      qty: 160, unit: 'g', note: 'au naturel' },
-        { name: 'Sauce tomate',       qty: 200, unit: 'ml' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' },
-        { name: 'Huile d\'olive',     qty: 15,  unit: 'ml' },
-        { name: 'Origan séché',       qty: 2,   unit: 'g' }
-      ],
-      steps: [
-        "Cuire les pâtes dans une grande casserole d'eau fortement salée.",
-        "Pendant ce temps, faire revenir l'ail haché dans l'huile 1 min. Ajouter la sauce tomate et l'origan.",
-        "Laisser mijoter la sauce 5-6 min.",
-        "Égoutter les pâtes al dente. Mélanger directement dans la sauce avec le thon émietté.",
-        "Chauffer 1 min ensemble. La recette anti-panique : toujours du thon et de la sauce tomate dans les placards."
-      ]
-    },
-
-    {
-      id: 'R927',
-      name: 'Papillote de Cabillaud Citron & Thym',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🐟',
-      origin: '🇫🇷',
-      tags: ['leger', 'four', 'sain', 'high-protein'],
-      servings: 2,
-      prepTime: 8,
-      cookTime: 15,
-      difficulty: 1,
-      // 86×4 + 22×4 + 22×9 = 344+88+198 = 630 kcal ✓
-      baseNutrition: { calories: 630, proteinGrams: 86, carbsGrams: 22, fatGrams: 22 },
-      ingredients: [
-        { name: 'Dos de cabillaud',   qty: 400, unit: 'g' },
-        { name: 'Courgettes',         qty: 200, unit: 'g' },
-        { name: 'Tomates cerises',    qty: 150, unit: 'g' },
-        { name: 'Citron',             qty: 1,   unit: 'pce' },
-        { name: 'Thym frais',         qty: 5,   unit: 'g' },
-        { name: 'Huile d\'olive',     qty: 20,  unit: 'ml' },
-        { name: 'Ail',                qty: 2,   unit: 'pce' },
-        { name: 'Sel, poivre',        qty: 1,   unit: 'pincée' }
-      ],
-      steps: [
-        "Préchauffer le four à 200°C. Couper 2 grands rectangles de papier aluminium (assez grands pour bien fermer).",
-        "Couper les courgettes en demi-lune fine. Couper les tomates cerises en deux.",
-        "Sur chaque feuille d'alu, poser les légumes en lit. Poser un dos de cabillaud dessus. Saler, poivrer.",
-        "Ajouter thym, ail émincé, rondelles de citron et l'huile. Fermer hermétiquement les papillotes en repliant les bords.",
-        "Enfourner 15 min. Ouvrir à table — la vapeur aromatique s'échappe. Le poisson doit s'effeuiller facilement."
-      ]
-    },
-
-    {
-      id: 'R928',
-      name: 'Saumon Teriyaki Grillé Express',
-      category: 'japanese',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🐟',
-      origin: '🇯🇵',
-      tags: ['high-protein', 'omega3', 'japanese', 'rapide'],
-      servings: 2,
-      prepTime: 8,
-      cookTime: 10,
-      difficulty: 1,
-      // 68×4 + 22×4 + 28×9 = 272+88+252 = 612 kcal ✓
-      baseNutrition: { calories: 612, proteinGrams: 68, carbsGrams: 22, fatGrams: 28 },
-      ingredients: [
-        { name: 'Pavés de saumon',    qty: 400, unit: 'g' },
-        { name: 'Sauce soja',         qty: 30,  unit: 'ml' },
-        { name: 'Mirin',              qty: 20,  unit: 'ml' },
-        { name: 'Miel',               qty: 15,  unit: 'g' },
-        { name: 'Ail',                qty: 1,   unit: 'pce' },
-        { name: 'Gingembre frais',    qty: 5,   unit: 'g' },
-        { name: 'Huile neutre',       qty: 5,   unit: 'ml' }
-      ],
-      steps: [
-        "Mélanger sauce soja, mirin, miel, ail et gingembre râpé pour la sauce teriyaki.",
-        "Mariner les pavés de saumon 5 min dans la moitié de la sauce.",
-        "Chauffer l'huile dans une poêle à feu moyen-vif. Saisir le saumon côté peau 4 min.",
-        "Retourner, verser le reste de sauce teriyaki dans la poêle. Cuire 3 min en nappant le saumon.",
-        "La sauce caramélise et forme un laquage brillant. Servir sur riz japonais avec des graines de sésame et oignons verts."
-      ]
-    },
-
-    {
-      id: 'R929',
-      name: 'Tortilla Espagnole Oeufs & Pommes de Terre',
-      category: 'mediterranean',
-      mealTypes: ['lunch', 'breakfast'],
-      emoji: '🍳',
-      origin: '🇪🇸',
-      tags: ['classique-espagnol', 'vegetarien', 'froid-ou-chaud'],
-      servings: 4,
-      prepTime: 15,
-      cookTime: 30,
-      difficulty: 2,
-      // 48×4 + 115×4 + 85×9 = 192+460+765 = 1417 kcal ✓
-      baseNutrition: { calories: 1417, proteinGrams: 48, carbsGrams: 115, fatGrams: 85 },
-      ingredients: [
-        { name: 'Oeufs',              qty: 6,   unit: 'pce' },
-        { name: 'Pommes de terre',    qty: 500, unit: 'g' },
-        { name: 'Oignon',             qty: 150, unit: 'g' },
-        { name: 'Huile d\'olive',     qty: 80,  unit: 'ml' },
-        { name: 'Sel',                qty: 3,   unit: 'g' }
-      ],
-      steps: [
-        "Éplucher et couper les pommes de terre en tranches fines (3mm). Émincer finement l'oignon.",
-        "Confire pommes de terre et oignon dans l'huile à feu très doux 20 min — pas de friture, juste confiture. Saler. Égoutter en gardant l'huile.",
-        "Battre les oeufs. Mélanger avec les pommes de terre. Laisser absorber 2 min.",
-        "Chauffer 2cs d'huile récupérée à feu moyen dans une poêle 20cm. Verser la préparation. Cuire 4 min.",
-        "Le retournement : glisser sur une assiette plate, faire coulisser dans la poêle à l'envers. Cuire encore 3 min. La tortilla est cuite quand elle ne bouge plus. Se mange chaude ou froide — meilleure le lendemain."
-      ]
     }
-
-  // ── BATCH P51 — Soupes incontournables ────────────────────────────────────────
-  ,{
-    id: 'R930',
-    name: 'Velouté de Tomates Maison',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍅', origin: '🇫🇷',
-    tags: ['comfort','vegetarian','express'],
-    servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
-    // 8×4 + 18×4 + 6×9 = 32+72+54 = 158 ✓
-    baseNutrition: { calories: 158, proteinGrams: 8, carbsGrams: 18, fatGrams: 6 },
-    ingredients: [
-      { name: 'Tomates pelées en boîte', qty: 800, unit: 'g' },
-      { name: 'Oignon', qty: 1, unit: 'pce' },
-      { name: 'Ail', qty: 2, unit: 'pce', note: 'gousses' },
-      { name: 'Bouillon de légumes', qty: 300, unit: 'ml' },
-      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
-      { name: 'Crème fraîche', qty: 40, unit: 'ml', note: 'légère' },
-      { name: 'Basilic frais', qty: 5, unit: 'g' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Faire revenir l'oignon émincé et l'ail dans l'huile d'olive à feu moyen, 5 min.",
-      "Ajouter les tomates pelées et le bouillon. Porter à ébullition puis mijoter 15 min.",
-      "Mixer finement. Assaisonner. Verser la crème, mélanger.",
-      "Servir avec le basilic frais et un filet d'huile d'olive."
-    ]
-  }
-  ,{
-    id: 'R931',
-    name: 'Soupe Poireaux Pommes de Terre',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🥣', origin: '🇫🇷',
-    tags: ['comfort','vegetarian','classic'],
-    servings: 2, prepTime: 10, cookTime: 25, difficulty: 1,
-    // 5×4 + 22×4 + 5×9 = 20+88+45 = 153 ✓
-    baseNutrition: { calories: 153, proteinGrams: 5, carbsGrams: 22, fatGrams: 5 },
-    ingredients: [
-      { name: 'Poireaux', qty: 300, unit: 'g', note: 'blanc et vert tendre' },
-      { name: 'Pommes de terre', qty: 250, unit: 'g' },
-      { name: 'Beurre', qty: 20, unit: 'g' },
-      { name: 'Bouillon de légumes', qty: 700, unit: 'ml' },
-      { name: 'Crème fraîche', qty: 30, unit: 'ml' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Faire fondre le beurre. Faire revenir les poireaux émincés 5 min à feu doux.",
-      "Ajouter les pommes de terre en dés et le bouillon. Cuire 20 min à frémissement.",
-      "Mixer partiellement (garder quelques morceaux) ou totalement selon préférence.",
-      "Incorporer la crème, rectifier l'assaisonnement. Servir bien chaud."
-    ]
-  }
-  ,{
-    id: 'R933',
-    name: 'Velouté de Courgettes Chèvre',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🥒', origin: '🇫🇷',
-    tags: ['light','vegetarian','express'],
-    servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
-    // 14×4 + 12×4 + 10×9 = 56+48+90 = 194 ✓
-    baseNutrition: { calories: 194, proteinGrams: 14, carbsGrams: 12, fatGrams: 10 },
-    ingredients: [
-      { name: 'Courgettes', qty: 500, unit: 'g' },
-      { name: 'Chèvre frais', qty: 80, unit: 'g' },
-      { name: 'Oignon', qty: 1, unit: 'pce' },
-      { name: 'Bouillon de légumes', qty: 500, unit: 'ml' },
-      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
-      { name: 'Menthe fraîche', qty: 5, unit: 'g' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Faire revenir l'oignon dans l'huile d'olive 3 min. Ajouter les courgettes en rondelles.",
-      "Verser le bouillon, porter à ébullition. Cuire 12 min à feu moyen.",
-      "Mixer avec le chèvre frais jusqu'à consistance lisse. Assaisonner.",
-      "Servir avec quelques feuilles de menthe et un filet d'huile d'olive."
-    ]
-  }
-  ,{
-    id: 'R934',
-    name: 'Minestrone Express',
-    category: 'italian',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍲', origin: '🇮🇹',
-    tags: ['vegetarian','balanced','comfort'],
-    servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
-    // 10×4 + 30×4 + 6×9 = 40+120+54 = 214 ✓
-    baseNutrition: { calories: 214, proteinGrams: 10, carbsGrams: 30, fatGrams: 6 },
-    ingredients: [
-      { name: 'Carottes', qty: 150, unit: 'g' },
-      { name: 'Courgette', qty: 150, unit: 'g' },
-      { name: 'Tomates pelées', qty: 200, unit: 'g' },
-      { name: 'Haricots blancs en boîte', qty: 150, unit: 'g', note: 'égouttés' },
-      { name: 'Pâtes petites (ditalini)', qty: 60, unit: 'g' },
-      { name: 'Bouillon de légumes', qty: 800, unit: 'ml' },
-      { name: 'Oignon', qty: 1, unit: 'pce' },
-      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
-      { name: 'Parmesan râpé', qty: 20, unit: 'g' },
-      { name: 'Basilic, sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Faire revenir l'oignon et les carottes dans l'huile d'olive 5 min.",
-      "Ajouter tomates, courgette, haricots et bouillon. Porter à ébullition.",
-      "Ajouter les pâtes, cuire 10 min à feu moyen jusqu'à tendreté.",
-      "Servir avec le parmesan râpé et le basilic."
-    ]
-  }
-
-  // ── BATCH P52 — Volailles incontournables ─────────────────────────────────────
-  ,{
-    id: 'R935',
-    name: 'Poulet Rôti Simple & Parfait',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍗', origin: '🇫🇷',
-    tags: ['classic','high-protein','family'],
-    servings: 4, prepTime: 10, cookTime: 70, difficulty: 1,
-    // 148×4 + 0×4 + 40×9 = 592+0+360 = 952 ✓
-    baseNutrition: { calories: 952, proteinGrams: 148, carbsGrams: 0, fatGrams: 40 },
-    ingredients: [
-      { name: 'Poulet entier', qty: 1500, unit: 'g' },
-      { name: 'Beurre', qty: 40, unit: 'g' },
-      { name: 'Ail', qty: 4, unit: 'pce', note: 'gousses' },
-      { name: 'Thym frais', qty: 4, unit: 'g' },
-      { name: 'Romarin frais', qty: 3, unit: 'g' },
-      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Préchauffer le four à 210°C. Sortir le poulet 30 min avant cuisson.",
-      "Mélanger beurre mou, ail écrasé, thym, romarin. Glisser sous la peau des blancs.",
-      "Badigeonner tout le poulet d'huile d'olive, saler et poivrer généreusement.",
-      "Rôtir 1h10 en arrosant toutes les 20 min avec le jus de cuisson. Laisser reposer 10 min avant de découper."
-    ]
-  }
-  ,{
-    id: 'R936',
-    name: 'Escalopes Milanaises Croustillantes',
-    category: 'italian',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍽️', origin: '🇮🇹',
-    tags: ['classic','crispy','high-protein'],
-    servings: 2, prepTime: 15, cookTime: 10, difficulty: 1,
-    // 60×4 + 24×4 + 22×9 = 240+96+198 = 534 ✓
-    baseNutrition: { calories: 534, proteinGrams: 60, carbsGrams: 24, fatGrams: 22 },
-    ingredients: [
-      { name: 'Escalopes de poulet', qty: 400, unit: 'g', note: 'aplaties finement' },
-      { name: 'Chapelure', qty: 60, unit: 'g' },
-      { name: 'Parmesan râpé', qty: 30, unit: 'g' },
-      { name: 'Oeufs', qty: 2, unit: 'pce' },
-      { name: 'Farine', qty: 30, unit: 'g' },
-      { name: 'Huile végétale', qty: 30, unit: 'ml' },
-      { name: 'Citron', qty: 1, unit: 'pce' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Aplatir les escalopes entre deux films plastique. Saler, poivrer.",
-      "Mélanger chapelure et parmesan. Paner : farine → oeuf battu → chapelure/parmesan.",
-      "Faire chauffer l'huile dans une grande poêle. Cuire 3-4 min de chaque côté à feu moyen-vif jusqu'à dorure.",
-      "Égoutter sur papier absorbant. Servir avec quartiers de citron et salade verte."
-    ]
-  }
-  ,{
-    id: 'R937',
-    name: 'Cuisses de Poulet au Four Citron-Herbes',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍋', origin: '🇫🇷',
-    tags: ['easy','high-protein','classic'],
-    servings: 2, prepTime: 10, cookTime: 40, difficulty: 1,
-    // 64×4 + 4×4 + 16×9 = 256+16+144 = 416 ✓
-    baseNutrition: { calories: 416, proteinGrams: 64, carbsGrams: 4, fatGrams: 16 },
-    ingredients: [
-      { name: 'Cuisses de poulet', qty: 600, unit: 'g', note: '2 grosses cuisses' },
-      { name: 'Citron', qty: 1, unit: 'pce' },
-      { name: 'Ail', qty: 3, unit: 'pce', note: 'gousses' },
-      { name: 'Thym, romarin', qty: 5, unit: 'g' },
-      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Préchauffer le four à 200°C. Inciser la peau des cuisses plusieurs fois.",
-      "Mélanger huile, jus de citron, ail haché, herbes, sel, poivre. Enduire généreusement les cuisses.",
-      "Placer dans un plat huilé, peau vers le haut. Enfourner 40 min.",
-      "Arroser à mi-cuisson avec le jus du plat. La peau doit être bien dorée et croustillante."
-    ]
-  }
-  ,{
-    id: 'R938',
-    name: 'Dinde Sautée aux Champignons',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🦃', origin: '🇫🇷',
-    tags: ['high-protein','express','light'],
-    servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
-    // 58×4 + 6×4 + 8×9 = 232+24+72 = 328 ✓
-    baseNutrition: { calories: 328, proteinGrams: 58, carbsGrams: 6, fatGrams: 8 },
-    ingredients: [
-      { name: 'Escalopes de dinde', qty: 400, unit: 'g' },
-      { name: 'Champignons de Paris', qty: 200, unit: 'g' },
-      { name: 'Échalote', qty: 2, unit: 'pce' },
-      { name: 'Crème fraîche légère', qty: 60, unit: 'ml' },
-      { name: 'Beurre', qty: 15, unit: 'g' },
-      { name: 'Persil frais', qty: 5, unit: 'g' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Émincer la dinde en lanières. Faire dorer dans le beurre chaud 5-6 min. Réserver.",
-      "Dans la même poêle, faire revenir les échalotes et champignons 5 min.",
-      "Remettre la dinde, ajouter la crème. Mélanger, cuire 2 min.",
-      "Assaisonner, parsemer de persil haché. Servir avec du riz."
-    ]
-  }
-  
-  // ── BATCH P53 — Sandwichs & Wraps express ────────────────────────────────────
-  ,{
-    id: 'R940',
-    name: 'Wrap Poulet César',
-    category: 'french',
-    mealTypes: ['lunch'],
-    emoji: '🌯', origin: '🇫🇷',
-    tags: ['express','balanced','high-protein'],
-    servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
-    // 40×4 + 36×4 + 16×9 = 160+144+144 = 448 ✓
-    baseNutrition: { calories: 448, proteinGrams: 40, carbsGrams: 36, fatGrams: 16 },
-    ingredients: [
-      { name: 'Tortillas de blé', qty: 2, unit: 'pce', note: 'grandes' },
-      { name: 'Blanc de poulet cuit', qty: 200, unit: 'g', note: 'grillé ou rôti' },
-      { name: 'Laitue romaine', qty: 80, unit: 'g' },
-      { name: 'Parmesan râpé', qty: 20, unit: 'g' },
-      { name: 'Sauce César', qty: 40, unit: 'g' },
-      { name: 'Croûtons', qty: 20, unit: 'g' }
-    ],
-    steps: [
-      "Émincer le poulet en lamelles. Déchirer la laitue grossièrement.",
-      "Étaler la sauce César sur chaque tortilla.",
-      "Disposer la laitue, le poulet, les croûtons et le parmesan.",
-      "Rouler fermement en serrant bien. Couper en biais. Servir immédiatement."
-    ]
-  }
-  ,{
-    id: 'R941',
-    name: 'Croque-Monsieur Classique',
-    category: 'french',
-    mealTypes: ['breakfast','lunch','snack'],
-    emoji: '🥪', origin: '🇫🇷',
-    tags: ['classic','comfort','express'],
-    servings: 2, prepTime: 5, cookTime: 10, difficulty: 1,
-    // 30×4 + 38×4 + 22×9 = 120+152+198 = 470 ✓
-    baseNutrition: { calories: 470, proteinGrams: 30, carbsGrams: 38, fatGrams: 22 },
-    ingredients: [
-      { name: 'Pain de mie', qty: 4, unit: 'pce', note: 'tranches épaisses' },
-      { name: 'Jambon blanc', qty: 120, unit: 'g' },
-      { name: 'Gruyère râpé', qty: 80, unit: 'g' },
-      { name: 'Beurre', qty: 20, unit: 'g' },
-      { name: 'Moutarde de Dijon', qty: 10, unit: 'g' }
-    ],
-    steps: [
-      "Préchauffer le four grill ou une grande poêle.",
-      "Beurrer une face de chaque tranche de pain. Tartiner de moutarde l'autre face.",
-      "Assembler : moutarde → jambon → gruyère → pain (beurre à l'extérieur).",
-      "Faire griller 3-4 min de chaque côté à feu moyen jusqu'à dorure et fromage fondu."
-    ]
-  }
-  ,{
-    id: 'R942',
-    name: 'Sandwich Club Thon Mayo',
-    category: 'french',
-    mealTypes: ['lunch'],
-    emoji: '🥙', origin: '🇫🇷',
-    tags: ['express','high-protein','classic'],
-    servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
-    // 36×4 + 40×4 + 14×9 = 144+160+126 = 430 ✓
-    baseNutrition: { calories: 430, proteinGrams: 36, carbsGrams: 40, fatGrams: 14 },
-    ingredients: [
-      { name: 'Pain de mie complet', qty: 4, unit: 'pce', note: 'tranches' },
-      { name: 'Thon en boîte', qty: 160, unit: 'g', note: 'égoutté' },
-      { name: 'Mayonnaise', qty: 30, unit: 'g' },
-      { name: 'Maïs', qty: 60, unit: 'g' },
-      { name: 'Tomate', qty: 1, unit: 'pce' },
-      { name: 'Salade verte', qty: 30, unit: 'g' },
-      { name: 'Citron', qty: 1, unit: 'pce', note: 'jus' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Émietter le thon. Mélanger avec mayo, maïs, jus de citron, sel, poivre.",
-      "Toaster légèrement le pain si souhaité.",
-      "Étaler la préparation thon sur 2 tranches. Ajouter tomate en rondelles et salade.",
-      "Refermer, couper en diagonale. Servir frais."
-    ]
-  }
-  ,{
-    id: 'R943',
-    name: 'Burrito Bœuf Haché Maison',
-    category: 'mexican',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🌯', origin: '🇲🇽',
-    tags: ['comfort','high-protein','spiced'],
-    servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
-    // 50×4 + 44×4 + 18×9 = 200+176+162 = 538 ✓
-    baseNutrition: { calories: 538, proteinGrams: 50, carbsGrams: 44, fatGrams: 18 },
-    ingredients: [
-      { name: 'Bœuf haché 5%', qty: 300, unit: 'g' },
-      { name: 'Tortillas de blé', qty: 2, unit: 'pce', note: 'grandes' },
-      { name: 'Riz cuit', qty: 120, unit: 'g' },
-      { name: 'Haricots rouges en boîte', qty: 120, unit: 'g', note: 'égouttés' },
-      { name: 'Cheddar râpé', qty: 40, unit: 'g' },
-      { name: 'Oignon', qty: 1, unit: 'pce' },
-      { name: 'Cumin', qty: 4, unit: 'g' },
-      { name: 'Paprika fumé', qty: 3, unit: 'g' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Faire revenir l'oignon haché dans un filet d'huile. Ajouter le bœuf haché, cuire en émiettant.",
-      "Assaisonner avec cumin, paprika, sel, poivre. Ajouter les haricots, mélanger 2 min.",
-      "Réchauffer les tortillas. Garnir : riz → viande/haricots → cheddar.",
-      "Rouler en serrant bien. Passer 2 min à sec dans une poêle pour griller la surface. Couper en deux."
-    ]
-  }
-  ,{
-    id: 'R944',
-    name: 'Pan Bagnat Niçois',
-    category: 'french',
-    mealTypes: ['lunch'],
-    emoji: '🥖', origin: '🇫🇷',
-    tags: ['classic','mediterranean','balanced'],
-    servings: 2, prepTime: 15, cookTime: 0, difficulty: 1,
-    // 24×4 + 42×4 + 16×9 = 96+168+144 = 408 ✓
-    baseNutrition: { calories: 408, proteinGrams: 24, carbsGrams: 42, fatGrams: 16 },
-    ingredients: [
-      { name: 'Pain rond (michette)', qty: 2, unit: 'pce' },
-      { name: 'Thon en boîte', qty: 120, unit: 'g', note: 'à l\'huile, égoutté' },
-      { name: 'Tomates', qty: 2, unit: 'pce' },
-      { name: 'Oeufs durs', qty: 2, unit: 'pce' },
-      { name: 'Anchois', qty: 20, unit: 'g' },
-      { name: 'Olives noires', qty: 30, unit: 'g' },
-      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
-      { name: 'Vinaigre de vin', qty: 10, unit: 'ml' },
-      { name: 'Basilic, sel', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Couper les pains en deux. Arroser généreusement d'huile d'olive et un peu de vinaigre.",
-      "Garnir avec tomates en rondelles, oeufs en tranches, thon émietté, anchois et olives.",
-      "Ajouter le basilic. Refermer et presser légèrement.",
-      "Emballer dans du film alimentaire. Laisser reposer 20 min minimum au frais avant de manger — le pain s'imprègne des saveurs."
-    ]
-  }
-
-  // ── BATCH P54 — Plats du monde express ───────────────────────────────────────
-  ,{
-    id: 'R945',
-    name: 'Riz Cantonais Maison',
-    category: 'world-food',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍳', origin: '🇨🇳',
-    tags: ['express','classic','balanced'],
-    servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
-    // 22×4 + 56×4 + 12×9 = 88+224+108 = 420 ✓
-    baseNutrition: { calories: 420, proteinGrams: 22, carbsGrams: 56, fatGrams: 12 },
-    ingredients: [
-      { name: 'Riz cuit (de la veille)', qty: 300, unit: 'g' },
-      { name: 'Jambon blanc', qty: 80, unit: 'g' },
-      { name: 'Petits pois surgelés', qty: 80, unit: 'g' },
-      { name: 'Oeufs', qty: 2, unit: 'pce' },
-      { name: 'Sauce soja', qty: 20, unit: 'ml' },
-      { name: 'Huile de sésame', qty: 10, unit: 'ml' },
-      { name: 'Oignon vert', qty: 2, unit: 'pce' },
-      { name: 'Huile végétale', qty: 10, unit: 'ml' }
-    ],
-    steps: [
-      "Chauffer le wok à feu très vif avec l'huile végétale. Ajouter les petits pois et le jambon en dés, sauter 2 min.",
-      "Pousser sur le côté. Casser les oeufs directement, brouiller rapidement.",
-      "Ajouter le riz froid, émietter à la spatule. Sauter 3-4 min à feu vif.",
-      "Arroser de sauce soja et d'huile de sésame. Mélanger vivement. Garnir d'oignons verts émincés."
-    ]
-  }
-  ,{
-    id: 'R946',
-    name: 'Tacos au Poulet Grillé',
-    category: 'mexican',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🌮', origin: '🇲🇽',
-    tags: ['express','high-protein','spiced'],
-    servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
-    // 46×4 + 36×4 + 14×9 = 184+144+126 = 454 ✓
-    baseNutrition: { calories: 454, proteinGrams: 46, carbsGrams: 36, fatGrams: 14 },
-    ingredients: [
-      { name: 'Blanc de poulet', qty: 300, unit: 'g' },
-      { name: 'Tortillas maïs', qty: 4, unit: 'pce' },
-      { name: 'Oignon rouge', qty: 1, unit: 'pce' },
-      { name: 'Coriandre fraîche', qty: 10, unit: 'g' },
-      { name: 'Lime', qty: 1, unit: 'pce' },
-      { name: 'Crème fraîche', qty: 30, unit: 'g' },
-      { name: 'Cumin, paprika', qty: 5, unit: 'g' },
-      { name: 'Huile végétale', qty: 10, unit: 'ml' },
-      { name: 'Sel', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Assaisonner le poulet avec cumin, paprika, sel. Griller dans l'huile 4-5 min de chaque côté.",
-      "Laisser reposer 3 min puis couper en lamelles.",
-      "Réchauffer les tortillas à sec dans une poêle.",
-      "Garnir avec le poulet, oignon rouge émincé, coriandre, un trait de lime et une cuillère de crème. Servir aussitôt."
-    ]
-  }
-  ,{
-    id: 'R947',
-    name: 'Pad Thaï Express au Poulet',
-    category: 'world-food',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍜', origin: '🇹🇭',
-    tags: ['express','balanced','spiced'],
-    servings: 2, prepTime: 10, cookTime: 15, difficulty: 2,
-    // 42×4 + 48×4 + 14×9 = 168+192+126 = 486 ✓
-    baseNutrition: { calories: 486, proteinGrams: 42, carbsGrams: 48, fatGrams: 14 },
-    ingredients: [
-      { name: 'Blanc de poulet', qty: 280, unit: 'g' },
-      { name: 'Nouilles de riz larges', qty: 120, unit: 'g' },
-      { name: 'Oeufs', qty: 2, unit: 'pce' },
-      { name: 'Sauce poisson (nuoc mam)', qty: 20, unit: 'ml' },
-      { name: 'Sauce tamarin', qty: 15, unit: 'ml' },
-      { name: 'Sucre', qty: 8, unit: 'g' },
-      { name: 'Oignon vert', qty: 3, unit: 'pce' },
-      { name: 'Cacahuètes concassées', qty: 20, unit: 'g' },
-      { name: 'Germes de soja', qty: 60, unit: 'g' },
-      { name: 'Huile végétale', qty: 15, unit: 'ml' },
-      { name: 'Lime', qty: 1, unit: 'pce' }
-    ],
-    steps: [
-      "Faire tremper les nouilles dans l'eau chaude 8 min, égoutter. Mélanger sauce poisson, tamarin et sucre.",
-      "Faire sauter le poulet en lamelles dans l'huile très chaude 5 min. Réserver.",
-      "Dans le même wok, faire les oeufs brouillés. Ajouter les nouilles et la sauce, mélanger vivement.",
-      "Remettre le poulet, ajouter les germes de soja. Servir avec cacahuètes, oignons verts et lime."
-    ]
-  }
-  ,{
-    id: 'R948',
-    name: 'Falafels Pita Sauce Yaourt',
-    category: 'mediterranean',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🥙', origin: '🇱🇧',
-    tags: ['vegetarian','high-protein','mediterranean'],
-    servings: 2, prepTime: 15, cookTime: 15, difficulty: 2,
-    // 22×4 + 56×4 + 14×9 = 88+224+126 = 438 ✓
-    baseNutrition: { calories: 438, proteinGrams: 22, carbsGrams: 56, fatGrams: 14 },
-    ingredients: [
-      { name: 'Pois chiches en boîte', qty: 300, unit: 'g', note: 'égouttés' },
-      { name: 'Ail', qty: 2, unit: 'pce', note: 'gousses' },
-      { name: 'Oignon', qty: 1, unit: 'pce', note: 'demi' },
-      { name: 'Coriandre fraîche', qty: 15, unit: 'g' },
-      { name: 'Cumin', qty: 5, unit: 'g' },
-      { name: 'Farine', qty: 20, unit: 'g' },
-      { name: 'Pains pita', qty: 2, unit: 'pce' },
-      { name: 'Yaourt grec', qty: 80, unit: 'g' },
-      { name: 'Citron', qty: 1, unit: 'pce' },
-      { name: 'Huile végétale', qty: 20, unit: 'ml' },
-      { name: 'Sel', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Mixer pois chiches, ail, oignon, coriandre, cumin et sel. Ajouter la farine pour lier. Former des boulettes aplaties.",
-      "Faire frire dans l'huile chaude 3-4 min de chaque côté jusqu'à dorure. Égoutter.",
-      "Mélanger yaourt, jus de citron, sel pour la sauce.",
-      "Ouvrir les pitas, garnir de falafels, salade, tomates et sauce yaourt."
-    ]
-  }
-  ,{
-    id: 'R949',
-    name: 'Gyoza Poêlés Maison',
-    category: 'japanese',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🥟', origin: '🇯🇵',
-    tags: ['classic','comfort','balanced'],
-    servings: 2, prepTime: 20, cookTime: 10, difficulty: 2,
-    // 26×4 + 28×4 + 14×9 = 104+112+126 = 342 ✓
-    baseNutrition: { calories: 342, proteinGrams: 26, carbsGrams: 28, fatGrams: 14 },
-    ingredients: [
-      { name: 'Bœuf haché 5%', qty: 150, unit: 'g' },
-      { name: 'Chou blanc', qty: 100, unit: 'g' },
-      { name: 'Galettes gyoza', qty: 16, unit: 'pce' },
-      { name: 'Sauce soja', qty: 15, unit: 'ml' },
-      { name: 'Huile de sésame', qty: 8, unit: 'ml' },
-      { name: 'Gingembre frais', qty: 10, unit: 'g' },
-      { name: 'Ail', qty: 1, unit: 'pce', note: 'gousse' },
-      { name: 'Huile végétale', qty: 10, unit: 'ml' }
-    ],
-    steps: [
-      "Émincer finement le chou, presser pour enlever l'humidité. Mélanger porc, chou, sauce soja, huile de sésame, gingembre et ail.",
-      "Déposer une cuillère de farce sur chaque galette. Humidifier les bords, plier et pincer pour fermer.",
-      "Faire chauffer l'huile dans une poêle antiadhésive. Cuire les gyoza 2 min sans toucher jusqu'à dorure.",
-      "Verser 80ml d'eau, couvrir immédiatement. Cuire 5 min à la vapeur. Découvrir et laisser l'eau s'évaporer. Servir avec sauce soja-vinaigre."
-    ]
-  }
-
-  // ── BATCH P55 — Plats complets équilibrés ─────────────────────────────────────
-  ,{
-    id: 'R950',
-    name: 'Bowl Buddha Quinoa Légumes',
-    category: 'mediterranean',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🥗', origin: '🌍',
-    tags: ['vegetarian','balanced','healthy'],
-    servings: 2, prepTime: 15, cookTime: 20, difficulty: 1,
-    // 18×4 + 50×4 + 14×9 = 72+200+126 = 398 ✓
-    baseNutrition: { calories: 398, proteinGrams: 18, carbsGrams: 50, fatGrams: 14 },
-    ingredients: [
-      { name: 'Quinoa', qty: 150, unit: 'g', note: 'cru' },
-      { name: 'Pois chiches en boîte', qty: 150, unit: 'g' },
-      { name: 'Avocat', qty: 1, unit: 'pce' },
-      { name: 'Épinards frais', qty: 80, unit: 'g' },
-      { name: 'Tomates cerises', qty: 100, unit: 'g' },
-      { name: 'Concombre', qty: 100, unit: 'g' },
-      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
-      { name: 'Citron', qty: 1, unit: 'pce' },
-      { name: 'Tahini', qty: 15, unit: 'g' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Cuire le quinoa 15 min dans le double de son volume d'eau salée. Laisser reposer 5 min, égrainer à la fourchette.",
-      "Rôtir les pois chiches égouttés au four 15 min à 200°C avec huile, sel et cumin.",
-      "Préparer la sauce tahini : tahini, jus de citron, eau, sel.",
-      "Composer les bols : quinoa → épinards → légumes → pois chiches → avocat → sauce tahini."
-    ]
-  }
-  ,{
-    id: 'R951',
-    name: 'Steak Haché Maison Frites au Four',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍟', origin: '🇫🇷',
-    tags: ['classic','comfort','high-protein'],
-    servings: 2, prepTime: 15, cookTime: 30, difficulty: 1,
-    // 48×4 + 40×4 + 22×9 = 192+160+198 = 550 ✓
-    baseNutrition: { calories: 550, proteinGrams: 48, carbsGrams: 40, fatGrams: 22 },
-    ingredients: [
-      { name: 'Bœuf haché 15%', qty: 300, unit: 'g' },
-      { name: 'Pommes de terre', qty: 400, unit: 'g' },
-      { name: 'Huile végétale', qty: 20, unit: 'ml' },
-      { name: 'Moutarde de Dijon', qty: 10, unit: 'g' },
-      { name: 'Sel, poivre, herbes de Provence', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Préchauffer le four à 220°C. Couper les pommes de terre en bâtonnets, mélanger avec 15ml d'huile, sel et herbes. Étaler sur plaque.",
-      "Cuire les frites 25-30 min en retournant à mi-cuisson.",
-      "Former 2 steaks hachés avec le bœuf. Assaisonner.",
-      "Faire chauffer l'huile restante dans une poêle très chaude. Cuire les steaks 3 min/côté. Servir avec moutarde."
-    ]
-  }
-  ,{
-    id: 'R952',
-    name: 'Saumon Grillé Purée de Patate Douce',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍠', origin: '🇫🇷',
-    tags: ['healthy','balanced','high-protein'],
-    servings: 2, prepTime: 10, cookTime: 25, difficulty: 1,
-    // 46×4 + 32×4 + 16×9 = 184+128+144 = 456 ✓
-    baseNutrition: { calories: 456, proteinGrams: 46, carbsGrams: 32, fatGrams: 16 },
-    ingredients: [
-      { name: 'Filets de saumon', qty: 300, unit: 'g' },
-      { name: 'Patates douces', qty: 400, unit: 'g' },
-      { name: 'Beurre', qty: 15, unit: 'g' },
-      { name: 'Lait', qty: 50, unit: 'ml' },
-      { name: 'Citron', qty: 1, unit: 'pce' },
-      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
-      { name: 'Sel, poivre, ciboulette', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Cuire les patates douces pelées en morceaux dans l'eau bouillante salée 20 min. Égoutter.",
-      "Écraser avec beurre, lait chaud, sel, poivre jusqu'à consistance lisse.",
-      "Faire chauffer l'huile dans une poêle. Cuire les filets de saumon côté peau 4 min, retourner 2 min.",
-      "Servir le saumon sur la purée avec le jus de citron et la ciboulette."
-    ]
-  }
-  ,{
-    id: 'R953',
-    name: 'Gratin de Courgettes Fromage',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🫛', origin: '🇫🇷',
-    tags: ['vegetarian','comfort','classic'],
-    servings: 2, prepTime: 10, cookTime: 30, difficulty: 1,
-    // 18×4 + 14×4 + 14×9 = 72+56+126 = 254 ✓
-    baseNutrition: { calories: 254, proteinGrams: 18, carbsGrams: 14, fatGrams: 14 },
-    ingredients: [
-      { name: 'Courgettes', qty: 500, unit: 'g' },
-      { name: 'Gruyère râpé', qty: 80, unit: 'g' },
-      { name: 'Oeufs', qty: 2, unit: 'pce' },
-      { name: 'Crème fraîche légère', qty: 60, unit: 'ml' },
-      { name: 'Ail', qty: 1, unit: 'pce', note: 'gousse' },
-      { name: 'Thym', qty: 2, unit: 'g' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Préchauffer le four à 180°C. Couper les courgettes en rondelles fines. Faire revenir avec l'ail haché dans un filet d'huile 5 min.",
-      "Battre les oeufs avec la crème, sel, poivre et thym.",
-      "Disposer les courgettes dans un plat à gratin. Verser l'appareil aux oeufs. Couvrir de gruyère.",
-      "Cuire 25 min jusqu'à dorure gratinée. Laisser tiédir 5 min avant de servir."
-    ]
-  }
-  ,{
-    id: 'R954',
-    name: 'Risotto Parmesan Simple',
-    category: 'italian',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍚', origin: '🇮🇹',
-    tags: ['classic','comfort','vegetarian'],
-    servings: 2, prepTime: 5, cookTime: 25, difficulty: 2,
-    // 16×4 + 66×4 + 14×9 = 64+264+126 = 454 ✓
-    baseNutrition: { calories: 454, proteinGrams: 16, carbsGrams: 66, fatGrams: 14 },
-    ingredients: [
-      { name: 'Riz arborio', qty: 200, unit: 'g' },
-      { name: 'Bouillon de légumes chaud', qty: 800, unit: 'ml' },
-      { name: 'Vin blanc sec', qty: 80, unit: 'ml' },
-      { name: 'Oignon', qty: 1, unit: 'pce' },
-      { name: 'Beurre', qty: 20, unit: 'g' },
-      { name: 'Parmesan râpé', qty: 50, unit: 'g' },
-      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Faire revenir l'oignon finement émincé dans l'huile et la moitié du beurre 3 min.",
-      "Ajouter le riz, nacrer 2 min en remuant. Déglacer au vin blanc, laisser absorber.",
-      "Ajouter le bouillon chaud louche par louche en remuant constamment. Attendre absorption entre chaque ajout. Compter 18-20 min.",
-      "Hors du feu, incorporer beurre restant et parmesan. Poivrer. La texture doit être crémeuse et coulante (all'onda)."
-    ]
-  }
-
-  // ── BATCH P56 — Recettes de fête simples ──────────────────────────────────────
-  ,{
-    id: 'R955',
-    name: 'Filet de Veau en Croûte de Moutarde',
-    category: 'french',
-    mealTypes: ['dinner'],
-    emoji: '🥩', origin: '🇫🇷',
-    tags: ['fete','classic','high-protein'],
-    servings: 2, prepTime: 10, cookTime: 20, difficulty: 2,
-    // 58×4 + 8×4 + 12×9 = 232+32+108 = 372 ✓
-    baseNutrition: { calories: 372, proteinGrams: 58, carbsGrams: 8, fatGrams: 12 },
-    ingredients: [
-      { name: 'Filet de veau', qty: 400, unit: 'g' },
-      { name: 'Moutarde à l\'ancienne', qty: 30, unit: 'g' },
-      { name: 'Chapelure', qty: 20, unit: 'g' },
-      { name: 'Herbes de Provence', qty: 3, unit: 'g' },
-      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
-      { name: 'Ail', qty: 2, unit: 'pce', note: 'gousses' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Préchauffer le four à 200°C. Faire saisir le filet mignon dans l'huile très chaude 2 min par face pour bien colorer.",
-      "Mélanger moutarde, chapelure, herbes, ail haché. Enduire généreusement le filet de ce mélange.",
-      "Placer dans un plat et enfourner 15 min pour une cuisson rosée.",
-      "Laisser reposer 5 min sous alu avant de trancher. Servir avec une purée ou des légumes rôtis."
-    ]
-  }
-  ,{
-    id: 'R956',
-    name: 'Magret de Canard aux Cerises',
-    category: 'french',
-    mealTypes: ['dinner'],
-    emoji: '🦆', origin: '🇫🇷',
-    tags: ['fete','classic','bistrot'],
-    servings: 2, prepTime: 5, cookTime: 20, difficulty: 2,
-    // 40×4 + 18×4 + 22×9 = 160+72+198 = 430 ✓
-    baseNutrition: { calories: 430, proteinGrams: 40, carbsGrams: 18, fatGrams: 22 },
-    ingredients: [
-      { name: 'Magret de canard', qty: 400, unit: 'g' },
-      { name: 'Cerises au sirop', qty: 150, unit: 'g' },
-      { name: 'Vinaigre balsamique', qty: 20, unit: 'ml' },
-      { name: 'Miel', qty: 15, unit: 'g' },
-      { name: 'Beurre', qty: 10, unit: 'g' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Quadriller la peau du magret au couteau sans entailler la chair. Saler et poivrer.",
-      "Cuire à la poêle côté peau à feu moyen 8-10 min pour faire fondre la graisse. Retourner, cuire 5 min côté chair.",
-      "Laisser reposer sous alu 5 min. Dans la poêle dégraissée, faire réduire vinaigre, miel et cerises 3 min.",
-      "Trancher le magret finement. Napper de sauce aux cerises. Servir aussitôt."
-    ]
-  }
-  ,{
-    id: 'R957',
-    name: 'Crevettes Sautées à l\'Ail & Persil',
-    category: 'mediterranean',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍤', origin: '🇪🇸',
-    tags: ['express','fete','high-protein'],
-    servings: 2, prepTime: 5, cookTime: 8, difficulty: 1,
-    // 34×4 + 2×4 + 10×9 = 136+8+90 = 234 ✓
-    baseNutrition: { calories: 234, proteinGrams: 34, carbsGrams: 2, fatGrams: 10 },
-    ingredients: [
-      { name: 'Crevettes crues décortiquées', qty: 300, unit: 'g' },
-      { name: 'Ail', qty: 4, unit: 'pce', note: 'gousses' },
-      { name: 'Beurre', qty: 20, unit: 'g' },
-      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
-      { name: 'Persil frais', qty: 15, unit: 'g' },
-      { name: 'Piment d\'Espelette', qty: 2, unit: 'g' },
-      { name: 'Citron', qty: 1, unit: 'pce' },
-      { name: 'Sel', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Sécher les crevettes avec du papier absorbant. Hacher l'ail et le persil.",
-      "Faire chauffer beurre et huile dans une grande poêle à feu vif.",
-      "Ajouter les crevettes en une couche. Saisir 1-2 min sans bouger, retourner 1 min.",
-      "Ajouter l'ail, le piment, le persil. Mélanger 30 secondes. Déglacer avec le jus de citron. Servir immédiatement avec du pain."
-    ]
-  }
-  ,{
-    id: 'R959',
-    name: 'Tarte aux Fraises Crème Pâtissière',
-    category: 'french',
-    mealTypes: ['dessert'],
-    emoji: '🍓', origin: '🇫🇷',
-    tags: ['dessert','classic','fete'],
-    servings: 6, prepTime: 30, cookTime: 20, difficulty: 2,
-    // 30×4 + 264×4 + 60×9 = 120+1056+540 = 1716 ✓
-    baseNutrition: { calories: 1716, proteinGrams: 30, carbsGrams: 264, fatGrams: 60 },
-    ingredients: [
-      { name: 'Fraises fraîches', qty: 500, unit: 'g' },
-      { name: 'Pâte sablée', qty: 200, unit: 'g' },
-      { name: 'Lait entier', qty: 400, unit: 'ml' },
-      { name: 'Oeufs', qty: 3, unit: 'pce' },
-      { name: 'Sucre', qty: 100, unit: 'g' },
-      { name: 'Fécule de maïs', qty: 30, unit: 'g' },
-      { name: 'Beurre', qty: 30, unit: 'g' },
-      { name: 'Vanille', qty: 1, unit: 'pce', note: 'extrait' }
-    ],
-    steps: [
-      "Foncer le moule avec la pâte sablée. Cuire à blanc 20 min à 180°C. Laisser refroidir.",
-      "Crème pâtissière : faire bouillir le lait avec la vanille. Blanchir oeufs et sucre, ajouter la fécule. Verser le lait chaud, remettre sur le feu en remuant jusqu'à épaississement. Incorporer le beurre, filmer au contact. Refroidir.",
-      "Étaler la crème froide sur le fond de tarte. Disposer les fraises lavées et équeutées en rosace.",
-      "Réfrigérer 1h avant de servir. Lustrer avec un peu de confiture d'abricots chauffée pour la brillance."
-    ]
-  }
-
-  // ── BATCH P57 — Viandes mijotées incontournables ──────────────────────────────
-  ,{
-    id: 'R961',
-    name: 'Bœuf Bourguignon Rapide',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍷', origin: '🇫🇷',
-    tags: ['classic','comfort','mijoté'],
-    servings: 4, prepTime: 20, cookTime: 60, difficulty: 2,
-    // 120×4 + 20×4 + 32×9 = 480+80+288 = 848 ✓
-    baseNutrition: { calories: 848, proteinGrams: 120, carbsGrams: 20, fatGrams: 32 },
-    ingredients: [
-      { name: 'Bœuf (paleron ou macreuse)', qty: 800, unit: 'g', note: 'en morceaux' },
-      { name: 'Vin rouge', qty: 350, unit: 'ml' },
-      { name: 'Lardons fumés', qty: 100, unit: 'g' },
-      { name: 'Oignons grelots', qty: 150, unit: 'g' },
-      { name: 'Champignons', qty: 200, unit: 'g' },
-      { name: 'Carottes', qty: 150, unit: 'g' },
-      { name: 'Tomate concentrée', qty: 20, unit: 'g' },
-      { name: 'Farine', qty: 20, unit: 'g' },
-      { name: 'Bouquet garni', qty: 1, unit: 'pce' },
-      { name: 'Huile végétale', qty: 15, unit: 'ml' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Faire dorer les lardons et les oignons grelots, réserver. Fariner et saisir les morceaux de bœuf sur toutes les faces.",
-      "Déglacer au vin rouge, ajouter la tomate concentrée, carottes, bouquet garni, sel, poivre. Couvrir.",
-      "Mijoter 50 min à feu doux. Ajouter les champignons et les lardons les 15 dernières minutes.",
-      "Servir avec des pommes de terre vapeur ou des pâtes fraîches. Encore meilleur réchauffé."
-    ]
-  }
-  ,{
-    id: 'R962',
-    name: 'Poulet à la Crème & Champignons',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍄', origin: '🇫🇷',
-    tags: ['classic','comfort','high-protein'],
-    servings: 2, prepTime: 10, cookTime: 25, difficulty: 1,
-    // 56×4 + 8×4 + 14×9 = 224+32+126 = 382 ✓
-    baseNutrition: { calories: 382, proteinGrams: 56, carbsGrams: 8, fatGrams: 14 },
-    ingredients: [
-      { name: 'Blanc de poulet', qty: 400, unit: 'g' },
-      { name: 'Champignons de Paris', qty: 250, unit: 'g' },
-      { name: 'Échalotes', qty: 2, unit: 'pce' },
-      { name: 'Crème fraîche légère', qty: 100, unit: 'ml' },
-      { name: 'Beurre', qty: 15, unit: 'g' },
-      { name: 'Vin blanc sec', qty: 60, unit: 'ml' },
-      { name: 'Persil', qty: 5, unit: 'g' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Couper les blancs en gros morceaux. Faire dorer dans le beurre chaud 5 min. Réserver.",
-      "Dans la même poêle, faire revenir les échalotes émincées 2 min. Ajouter les champignons, sauter 5 min.",
-      "Déglacer au vin blanc, laisser réduire 2 min. Ajouter la crème, cuire 3 min à feu doux.",
-      "Remettre le poulet, réchauffer 3 min. Rectifier l'assaisonnement. Parsemer de persil. Servir avec du riz ou des tagliatelles."
-    ]
-  }
-  ,{
-    id: 'R963',
-    name: 'Daube de Bœuf Provençale',
-    category: 'french',
-    mealTypes: ['dinner'],
-    emoji: '🫕', origin: '🇫🇷',
-    tags: ['classic','comfort','mijoté'],
-    servings: 4, prepTime: 20, cookTime: 120, difficulty: 2,
-    // 112×4 + 24×4 + 28×9 = 448+96+252 = 796 ✓
-    baseNutrition: { calories: 796, proteinGrams: 112, carbsGrams: 24, fatGrams: 28 },
-    ingredients: [
-      { name: 'Bœuf (gîte ou joue)', qty: 800, unit: 'g', note: 'en morceaux' },
-      { name: 'Vin rouge de Provence', qty: 400, unit: 'ml' },
-      { name: 'Tomates pelées', qty: 300, unit: 'g' },
-      { name: 'Carottes', qty: 200, unit: 'g' },
-      { name: 'Oignon', qty: 2, unit: 'pce' },
-      { name: 'Olives noires', qty: 60, unit: 'g' },
-      { name: 'Zeste d\'orange', qty: 1, unit: 'pce' },
-      { name: 'Thym, laurier, romarin', qty: 5, unit: 'g' },
-      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Mariner le bœuf dans le vin rouge avec herbes et zeste d'orange 2h minimum (ou toute la nuit).",
-      "Égoutter et saisir la viande dans l'huile chaude. Faire revenir oignons et carottes.",
-      "Remettre la viande, ajouter la marinade, les tomates et les olives. Couvrir hermétiquement.",
-      "Cuire au four à 150°C pendant 2h. La viande doit se défaire à la fourchette. Servir avec des gnocchis ou polenta."
-    ]
-  }
-  ,{
-    id: 'R964',
-    name: 'Agneau Aux Flageolets',
-    category: 'french',
-    mealTypes: ['dinner'],
-    emoji: '🫘', origin: '🇫🇷',
-    tags: ['classic','fete','mijoté'],
-    servings: 4, prepTime: 15, cookTime: 90, difficulty: 2,
-    // 104×4 + 40×4 + 32×9 = 416+160+288 = 864 ✓
-    baseNutrition: { calories: 864, proteinGrams: 104, carbsGrams: 40, fatGrams: 32 },
-    ingredients: [
-      { name: 'Gigot d\'agneau désossé', qty: 800, unit: 'g', note: 'en morceaux' },
-      { name: 'Flageolets en boîte', qty: 400, unit: 'g', note: 'égouttés' },
-      { name: 'Tomates pelées', qty: 300, unit: 'g' },
-      { name: 'Oignon', qty: 2, unit: 'pce' },
-      { name: 'Ail', qty: 4, unit: 'pce', note: 'gousses' },
-      { name: 'Thym, laurier', qty: 3, unit: 'g' },
-      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Faire saisir les morceaux d'agneau dans l'huile très chaude sur toutes les faces. Réserver.",
-      "Faire revenir les oignons et l'ail haché. Ajouter les tomates, les herbes, sel et poivre.",
-      "Remettre l'agneau, couvrir et mijoter 1h15 à feu doux.",
-      "Ajouter les flageolets les 15 dernières minutes. Rectifier l'assaisonnement. Servir en cocotte."
-    ]
-  }
-
-  // ── BATCH P58 — Petit-déjeuners gourmands ────────────────────────────────────
-  ,{
-    id: 'R965',
-    name: 'Pain Perdu Caramelisé',
-    category: 'french',
-    mealTypes: ['breakfast','dessert'],
-    emoji: '🍞', origin: '🇫🇷',
-    tags: ['comfort','sweet','classic'],
-    servings: 2, prepTime: 5, cookTime: 10, difficulty: 1,
-    // 20×4 + 60×4 + 16×9 = 80+240+144 = 464 ✓
-    baseNutrition: { calories: 464, proteinGrams: 20, carbsGrams: 60, fatGrams: 16 },
-    ingredients: [
-      { name: 'Pain de mie ou brioche', qty: 4, unit: 'pce', note: 'tranches épaisses' },
-      { name: 'Oeufs', qty: 2, unit: 'pce' },
-      { name: 'Lait', qty: 100, unit: 'ml' },
-      { name: 'Sucre vanillé', qty: 15, unit: 'g' },
-      { name: 'Beurre', qty: 20, unit: 'g' },
-      { name: 'Sucre cassonade', qty: 20, unit: 'g' },
-      { name: 'Cannelle', qty: 2, unit: 'g' }
-    ],
-    steps: [
-      "Battre les oeufs avec le lait, le sucre vanillé et la cannelle dans un plat large.",
-      "Tremper les tranches de pain des deux côtés dans l'appareil.",
-      "Faire fondre le beurre dans une poêle à feu moyen. Cuire les tranches 2-3 min par face.",
-      "Saupoudrer de cassonade en fin de cuisson, laisser caraméliser 30 secondes. Servir chaud avec du sirop d'érable ou des fruits rouges."
-    ]
-  }
-  ,{
-    id: 'R966',
-    name: 'Porridge Avoine Banane Miel',
-    category: 'french',
-    mealTypes: ['breakfast'],
-    emoji: '🥣', origin: '🇬🇧',
-    tags: ['healthy','balanced','morning'],
-    servings: 1, prepTime: 2, cookTime: 5, difficulty: 1,
-    // 12×4 + 56×4 + 8×9 = 48+224+72 = 344 ✓
-    baseNutrition: { calories: 344, proteinGrams: 12, carbsGrams: 56, fatGrams: 8 },
-    ingredients: [
-      { name: 'Flocons d\'avoine', qty: 80, unit: 'g' },
-      { name: 'Lait', qty: 200, unit: 'ml' },
-      { name: 'Banane', qty: 1, unit: 'pce' },
-      { name: 'Miel', qty: 15, unit: 'g' },
-      { name: 'Beurre de cacahuète', qty: 15, unit: 'g' },
-      { name: 'Cannelle', qty: 1, unit: 'g' }
-    ],
-    steps: [
-      "Verser les flocons et le lait dans une casserole. Cuire à feu moyen 4-5 min en remuant.",
-      "Écraser la moitié de la banane dans le porridge, mélanger.",
-      "Servir dans un bol avec l'autre moitié de banane en rondelles, le miel et le beurre de cacahuète.",
-      "Saupoudrer de cannelle. Manger chaud — épaissit en refroidissant, ajouter un peu de lait si besoin."
-    ]
-  }
-  ,{
-    id: 'R967',
-    name: 'Granola Maison Noisettes Miel',
-    category: 'french',
-    mealTypes: ['breakfast','snack'],
-    emoji: '🌾', origin: '🇫🇷',
-    tags: ['meal-prep','sweet','healthy'],
-    servings: 6, prepTime: 10, cookTime: 20, difficulty: 1,
-    // 36×4 + 192×4 + 60×9 = 144+768+540 = 1452 ✓
-    baseNutrition: { calories: 1452, proteinGrams: 36, carbsGrams: 192, fatGrams: 60 },
-    ingredients: [
-      { name: 'Flocons d\'avoine', qty: 400, unit: 'g' },
-      { name: 'Noisettes entières', qty: 80, unit: 'g' },
-      { name: 'Amandes effilées', qty: 60, unit: 'g' },
-      { name: 'Miel', qty: 80, unit: 'g' },
-      { name: 'Huile de coco', qty: 40, unit: 'ml' },
-      { name: 'Cannelle', qty: 5, unit: 'g' },
-      { name: 'Sel', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Préchauffer le four à 160°C. Mélanger flocons, noisettes, amandes et cannelle.",
-      "Chauffer miel et huile de coco pour liquéfier. Verser sur les céréales, bien mélanger.",
-      "Étaler sur une plaque recouverte de papier cuisson. Cuire 20 min en remuant à mi-cuisson.",
-      "Laisser refroidir complètement sans toucher — il se solidifie en clusters. Conserver dans un bocal hermétique 2 semaines."
-    ]
-  }
-  ,{
-    id: 'R968',
-    name: 'Omelette Soufflée Jambon Fromage',
-    category: 'french',
-    mealTypes: ['breakfast','lunch'],
-    emoji: '🥚', origin: '🇫🇷',
-    tags: ['high-protein','classic','express'],
-    servings: 1, prepTime: 5, cookTime: 5, difficulty: 2,
-    // 28×4 + 4×4 + 16×9 = 112+16+144 = 272 ✓
-    baseNutrition: { calories: 272, proteinGrams: 28, carbsGrams: 4, fatGrams: 16 },
-    ingredients: [
-      { name: 'Oeufs', qty: 3, unit: 'pce' },
-      { name: 'Jambon blanc', qty: 50, unit: 'g' },
-      { name: 'Gruyère râpé', qty: 30, unit: 'g' },
-      { name: 'Beurre', qty: 10, unit: 'g' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Séparer les blancs des jaunes. Monter les blancs en neige ferme.",
-      "Incorporer délicatement les jaunes battus aux blancs. Saler et poivrer.",
-      "Faire fondre le beurre dans une poêle antiadhésive. Verser l'appareil, couvrir.",
-      "Cuire 3 min à feu doux. Garnir jambon et gruyère sur une moitié. Plier délicatement. L'omelette doit être gonflée et dorée en dessous, baveuse au coeur."
-    ]
-  }
-  ,{
-    id: 'R969',
-    name: 'Muffins Myrtilles Vanille',
-    category: 'french',
-    mealTypes: ['breakfast','snack','dessert'],
-    emoji: '🫐', origin: '🇺🇸',
-    tags: ['sweet','meal-prep','comfort'],
-    servings: 6, prepTime: 10, cookTime: 20, difficulty: 1,
-    // 18×4 + 180×4 + 36×9 = 72+720+324 = 1116 ✓
-    baseNutrition: { calories: 1116, proteinGrams: 18, carbsGrams: 180, fatGrams: 36 },
-    ingredients: [
-      { name: 'Farine', qty: 200, unit: 'g' },
-      { name: 'Sucre', qty: 100, unit: 'g' },
-      { name: 'Myrtilles fraîches ou surgelées', qty: 150, unit: 'g' },
-      { name: 'Oeufs', qty: 2, unit: 'pce' },
-      { name: 'Lait', qty: 120, unit: 'ml' },
-      { name: 'Huile végétale', qty: 60, unit: 'ml' },
-      { name: 'Levure chimique', qty: 10, unit: 'g' },
-      { name: 'Extrait de vanille', qty: 5, unit: 'ml' },
-      { name: 'Sel', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Préchauffer le four à 180°C. Mélanger les ingrédients secs (farine, sucre, levure, sel).",
-      "Battre ensemble oeufs, lait, huile et vanille. Incorporer au mélange sec sans trop travailler.",
-      "Ajouter les myrtilles délicatement. La pâte doit rester grumeleuse.",
-      "Remplir les moules aux 3/4. Cuire 18-20 min. Un cure-dent doit ressortir propre."
-    ]
-  }
-
-  // ── BATCH P59 — Recettes express fin de semaine ───────────────────────────────
-  ,{
-    id: 'R970',
-    name: 'Spaghetti Carbonara Authentique',
-    category: 'italian',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍝', origin: '🇮🇹',
-    tags: ['classic','comfort','express'],
-    servings: 2, prepTime: 5, cookTime: 15, difficulty: 2,
-    // 40×4 + 74×4 + 24×9 = 160+296+216 = 672 ✓
-    baseNutrition: { calories: 672, proteinGrams: 40, carbsGrams: 74, fatGrams: 24 },
-    ingredients: [
-      { name: 'Spaghetti', qty: 200, unit: 'g' },
-      { name: 'Lardons de dinde fumée', qty: 120, unit: 'g' },
-      { name: 'Oeufs entiers', qty: 2, unit: 'pce' },
-      { name: 'Jaunes d\'oeufs', qty: 2, unit: 'pce' },
-      { name: 'Pecorino romano râpé', qty: 50, unit: 'g' },
-      { name: 'Parmesan râpé', qty: 20, unit: 'g' },
-      { name: 'Poivre noir', qty: 3, unit: 'g', note: 'fraîchement moulu' }
-    ],
-    steps: [
-      "Cuire les pâtes al dente en eau bien salée. Réserver 200ml d'eau de cuisson.",
-      "Faire dorer le guanciale à la poêle sans matière grasse. Éteindre le feu.",
-      "Battre oeufs entiers, jaunes, pecorino, parmesan et beaucoup de poivre.",
-      "Égoutter les pâtes, les ajouter dans la poêle hors du feu. Verser l'appareil, mélanger vivement en ajoutant l'eau de cuisson progressivement jusqu'à consistance crémeuse. Ne jamais remettre sur le feu."
-    ]
-  }
-  ,{
-    id: 'R971',
-    name: 'Poulet Curry Lait de Coco',
-    category: 'world-food',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍛', origin: '🇮🇳',
-    tags: ['spiced','comfort','balanced'],
-    servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
-    // 48×4 + 14×4 + 18×9 = 192+56+162 = 410 ✓
-    baseNutrition: { calories: 410, proteinGrams: 48, carbsGrams: 14, fatGrams: 18 },
-    ingredients: [
-      { name: 'Blanc de poulet', qty: 350, unit: 'g' },
-      { name: 'Lait de coco', qty: 200, unit: 'ml' },
-      { name: 'Tomates pelées', qty: 150, unit: 'g' },
-      { name: 'Oignon', qty: 1, unit: 'pce' },
-      { name: 'Ail', qty: 2, unit: 'pce', note: 'gousses' },
-      { name: 'Gingembre frais', qty: 10, unit: 'g' },
-      { name: 'Pâte de curry rouge ou jaune', qty: 20, unit: 'g' },
-      { name: 'Huile végétale', qty: 10, unit: 'ml' },
-      { name: 'Coriandre fraîche', qty: 10, unit: 'g' }
-    ],
-    steps: [
-      "Faire revenir l'oignon, l'ail et le gingembre dans l'huile 3 min. Ajouter la pâte de curry, cuire 1 min.",
-      "Ajouter le poulet en morceaux, saisir 3 min.",
-      "Verser lait de coco et tomates. Mijoter 15 min à feu moyen.",
-      "Rectifier l'assaisonnement. Parsemer de coriandre. Servir avec du riz basmati."
-    ]
-  }
-  ,{
-    id: 'R972',
-    name: 'Quiche Lorraine Express',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🥧', origin: '🇫🇷',
-    tags: ['classic','comfort','family'],
-    servings: 4, prepTime: 10, cookTime: 30, difficulty: 1,
-    // 56×4 + 44×4 + 64×9 = 224+176+576 = 976 ✓
-    baseNutrition: { calories: 976, proteinGrams: 56, carbsGrams: 44, fatGrams: 64 },
-    ingredients: [
-      { name: 'Pâte brisée', qty: 200, unit: 'g' },
-      { name: 'Lardons fumés', qty: 150, unit: 'g' },
-      { name: 'Oeufs', qty: 3, unit: 'pce' },
-      { name: 'Crème fraîche', qty: 200, unit: 'ml' },
-      { name: 'Lait', qty: 100, unit: 'ml' },
-      { name: 'Gruyère râpé', qty: 80, unit: 'g' },
-      { name: 'Noix de muscade', qty: 1, unit: 'pincée' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Préchauffer le four à 180°C. Foncer un moule de 28cm avec la pâte brisée. Piquer le fond.",
-      "Faire revenir les lardons à sec jusqu'à légère coloration. Les répartir sur la pâte.",
-      "Battre les oeufs avec la crème, le lait, le gruyère, la muscade, sel et poivre.",
-      "Verser l'appareil sur les lardons. Cuire 30 min jusqu'à dorure et prise complète. Laisser tiédir 5 min avant de couper."
-    ]
-  }
-  ,{
-    id: 'R973',
-    name: 'Pâtes au Beurre Sauge & Parmesan',
-    category: 'italian',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🌿', origin: '🇮🇹',
-    tags: ['express','vegetarian','comfort'],
-    servings: 2, prepTime: 5, cookTime: 10, difficulty: 1,
-    // 22×4 + 72×4 + 18×9 = 88+288+162 = 538 ✓
-    baseNutrition: { calories: 538, proteinGrams: 22, carbsGrams: 72, fatGrams: 18 },
-    ingredients: [
-      { name: 'Tagliatelles fraîches', qty: 250, unit: 'g' },
-      { name: 'Beurre', qty: 40, unit: 'g' },
-      { name: 'Sauge fraîche', qty: 10, unit: 'feuille' },
-      { name: 'Parmesan râpé', qty: 50, unit: 'g' },
-      { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Cuire les pâtes fraîches al dente 2-3 min en eau très salée. Réserver 100ml d'eau de cuisson.",
-      "Dans une grande poêle, faire fondre le beurre à feu moyen. Ajouter les feuilles de sauge entières, cuire 2 min jusqu'à croustillant.",
-      "Égoutter les pâtes directement dans la poêle. Ajouter un peu d'eau de cuisson.",
-      "Hors du feu, incorporer le parmesan. Poivrer généreusement. Servir immédiatement."
-    ]
-  }
-  ,{
-    id: 'R974',
-    name: 'Oeufs en Meurette',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍷', origin: '🇫🇷',
-    tags: ['classic','bistrot','comfort'],
-    servings: 2, prepTime: 10, cookTime: 20, difficulty: 2,
-    // 22×4 + 14×4 + 14×9 = 88+56+126 = 270 ✓
-    baseNutrition: { calories: 270, proteinGrams: 22, carbsGrams: 14, fatGrams: 14 },
-    ingredients: [
-      { name: 'Oeufs', qty: 4, unit: 'pce' },
-      { name: 'Vin rouge', qty: 250, unit: 'ml' },
-      { name: 'Lardons', qty: 60, unit: 'g' },
-      { name: 'Champignons', qty: 100, unit: 'g' },
-      { name: 'Oignon', qty: 1, unit: 'pce' },
-      { name: 'Bouquet garni', qty: 1, unit: 'pce' },
-      { name: 'Beurre', qty: 15, unit: 'g' },
-      { name: 'Farine', qty: 10, unit: 'g' },
-      { name: 'Pain de campagne grillé', qty: 60, unit: 'g' }
-    ],
-    steps: [
-      "Faire revenir les lardons, ajouter l'oignon et les champignons. Saupoudrer de farine, mélanger.",
-      "Verser le vin rouge, ajouter le bouquet garni. Porter à ébullition, mijoter 10 min.",
-      "Dans une casserole d'eau frémissante vinaigrée, pocher les oeufs 3 min. Égoutter.",
-      "Monter le beurre dans la sauce. Disposer les croûtons dans les assiettes, poser les oeufs pochés, napper de sauce bourguignonne."
-    ]
-  }
-
-  // ── BATCH P60 — Snacks & collations ──────────────────────────────────────────
-  ,{
-    id: 'R975',
-    name: 'Houmous Maison Citron Tahini',
-    category: 'mediterranean',
-    mealTypes: ['snack','lunch'],
-    emoji: '🧆', origin: '🇱🇧',
-    tags: ['vegetarian','healthy','meal-prep'],
-    servings: 4, prepTime: 10, cookTime: 0, difficulty: 1,
-    // 28×4 + 60×4 + 28×9 = 112+240+252 = 604 ✓
-    baseNutrition: { calories: 604, proteinGrams: 28, carbsGrams: 60, fatGrams: 28 },
-    ingredients: [
-      { name: 'Pois chiches en boîte', qty: 480, unit: 'g', note: 'égouttés' },
-      { name: 'Tahini', qty: 60, unit: 'g' },
-      { name: 'Citron', qty: 2, unit: 'pce', note: 'jus' },
-      { name: 'Ail', qty: 1, unit: 'pce', note: 'gousse' },
-      { name: 'Huile d\'olive', qty: 30, unit: 'ml' },
-      { name: 'Cumin', qty: 3, unit: 'g' },
-      { name: 'Sel', qty: 1, unit: 'pincée' },
-      { name: 'Eau froide', qty: 50, unit: 'ml' }
-    ],
-    steps: [
-      "Mixer les pois chiches avec le tahini, jus de citron, ail, cumin et sel.",
-      "Ajouter l'huile d'olive et l'eau froide progressivement tout en mixant.",
-      "Mixer 3-4 min jusqu'à consistance très crémeuse et lisse.",
-      "Servir dans un bol avec un filet d'huile d'olive, du paprika et des pains pita chauds."
-    ]
-  }
-  ,{
-    id: 'R976',
-    name: 'Guacamole Frais Maison',
-    category: 'mexican',
-    mealTypes: ['snack','lunch'],
-    emoji: '🥑', origin: '🇲🇽',
-    tags: ['vegetarian','healthy','express'],
-    servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
-    // 4×4 + 12×4 + 22×9 = 16+48+198 = 262 ✓
-    baseNutrition: { calories: 262, proteinGrams: 4, carbsGrams: 12, fatGrams: 22 },
-    ingredients: [
-      { name: 'Avocats mûrs', qty: 2, unit: 'pce' },
-      { name: 'Tomate', qty: 1, unit: 'pce', note: 'épépinée' },
-      { name: 'Oignon rouge', qty: 1, unit: 'pce', note: 'quart' },
-      { name: 'Coriandre fraîche', qty: 10, unit: 'g' },
-      { name: 'Lime', qty: 1, unit: 'pce', note: 'jus' },
-      { name: 'Piment jalapeño', qty: 1, unit: 'pce', note: 'optionnel' },
-      { name: 'Sel', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Écraser les avocats à la fourchette — laisser quelques morceaux pour la texture.",
-      "Hacher finement l'oignon, la coriandre et le jalapeño. Couper la tomate en tout petits dés.",
-      "Incorporer tous les ingrédients. Ajouter le jus de lime, saler.",
-      "Servir immédiatement avec des nachos ou des légumes crus. Filmer au contact de la surface pour éviter l'oxydation."
-    ]
-  }
-  ,{
-    id: 'R977',
-    name: 'Oeuf Dur Mayo Ciboulette',
-    category: 'french',
-    mealTypes: ['snack','lunch'],
-    emoji: '🥚', origin: '🇫🇷',
-    tags: ['express','high-protein','classic'],
-    servings: 2, prepTime: 5, cookTime: 10, difficulty: 1,
-    // 20×4 + 2×4 + 14×9 = 80+8+126 = 214 ✓
-    baseNutrition: { calories: 214, proteinGrams: 20, carbsGrams: 2, fatGrams: 14 },
-    ingredients: [
-      { name: 'Oeufs', qty: 4, unit: 'pce' },
-      { name: 'Mayonnaise', qty: 30, unit: 'g' },
-      { name: 'Ciboulette fraîche', qty: 5, unit: 'g' },
-      { name: 'Moutarde de Dijon', qty: 5, unit: 'g' },
-      { name: 'Sel, poivre, paprika', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Cuire les oeufs 10 min dans l'eau bouillante. Refroidir sous l'eau froide, écaler.",
-      "Couper en deux dans le sens de la longueur. Retirer les jaunes.",
-      "Écraser les jaunes avec mayo, moutarde, sel, poivre. Mélanger jusqu'à consistance lisse.",
-      "Remplir les blancs avec la préparation à la poche ou à la cuillère. Garnir de ciboulette et paprika."
-    ]
-  }
-  ,{
-    id: 'R978',
-    name: 'Toast Avocat Oeuf Poché',
-    category: 'french',
-    mealTypes: ['breakfast','snack','lunch'],
-    emoji: '🥑', origin: '🌍',
-    tags: ['healthy','viral','balanced'],
-    servings: 2, prepTime: 5, cookTime: 5, difficulty: 2,
-    // 20×4 + 28×4 + 18×9 = 80+112+162 = 354 ✓
-    baseNutrition: { calories: 354, proteinGrams: 20, carbsGrams: 28, fatGrams: 18 },
-    ingredients: [
-      { name: 'Pain de campagne', qty: 2, unit: 'pce', note: 'tranches grillées' },
-      { name: 'Avocat mûr', qty: 1, unit: 'pce' },
-      { name: 'Oeufs', qty: 2, unit: 'pce' },
-      { name: 'Citron', qty: 1, unit: 'pce', note: 'jus' },
-      { name: 'Piment d\'Espelette', qty: 1, unit: 'pincée' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Toaster le pain. Écraser l'avocat avec jus de citron, sel, poivre.",
-      "Porter une petite casserole d'eau frémissante à feu doux. Ajouter un filet de vinaigre blanc.",
-      "Casser un oeuf dans un bol. Créer un tourbillon dans l'eau, glisser l'oeuf doucement. Pocher 3 min. Répéter.",
-      "Étaler l'avocat sur les toasts. Poser l'oeuf poché, assaisonner de piment d'Espelette."
-    ]
-  }
-  ,{
-    id: 'R979',
-    name: 'Tartines Sardines Citron Câpres',
-    category: 'mediterranean',
-    mealTypes: ['snack','lunch'],
-    emoji: '🐟', origin: '🇫🇷',
-    tags: ['express','high-protein','healthy'],
-    servings: 2, prepTime: 5, cookTime: 5, difficulty: 1,
-    // 24×4 + 22×4 + 12×9 = 96+88+108 = 292 ✓
-    baseNutrition: { calories: 292, proteinGrams: 24, carbsGrams: 22, fatGrams: 12 },
-    ingredients: [
-      { name: 'Sardines en boîte à l\'huile', qty: 120, unit: 'g', note: 'égouttées' },
-      { name: 'Pain de seigle', qty: 4, unit: 'pce', note: 'tranches' },
-      { name: 'Câpres', qty: 15, unit: 'g' },
-      { name: 'Citron', qty: 1, unit: 'pce' },
-      { name: 'Oignon rouge', qty: 1, unit: 'pce', note: 'demi, émincé fin' },
-      { name: 'Beurre', qty: 10, unit: 'g' },
-      { name: 'Persil frais', qty: 5, unit: 'g' }
-    ],
-    steps: [
-      "Toaster légèrement les tranches de pain de seigle.",
-      "Beurrer légèrement, répartir les sardines émiettées.",
-      "Garnir d'oignon rouge, de câpres et de persil haché.",
-      "Arroser d'un trait de citron. Poivrer. Manger de suite — simple et divin."
-    ]
-  }
-
-  // ── BATCH P61 — Grillades & BBQ express ──────────────────────────────────────
-  ,{
-    id: 'R980',
-    name: 'Côte de Bœuf Beurre Café de Paris',
-    category: 'french',
-    mealTypes: ['dinner'],
-    emoji: '🥩', origin: '🇫🇷',
-    tags: ['fete','high-protein','grillé'],
-    servings: 2, prepTime: 10, cookTime: 15, difficulty: 2,
-    // 70×4 + 2×4 + 30×9 = 280+8+270 = 558 ✓
-    baseNutrition: { calories: 558, proteinGrams: 70, carbsGrams: 2, fatGrams: 30 },
-    ingredients: [
-      { name: 'Côte de bœuf', qty: 600, unit: 'g' },
-      { name: 'Beurre', qty: 60, unit: 'g', note: 'à température ambiante' },
-      { name: 'Ail', qty: 2, unit: 'pce', note: 'gousses' },
-      { name: 'Herbes fraîches (thym, persil, ciboulette)', qty: 10, unit: 'g' },
-      { name: 'Paprika', qty: 2, unit: 'g' },
-      { name: 'Huile végétale', qty: 10, unit: 'ml' },
-      { name: 'Sel de Guérande, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Sortir la côte de bœuf 1h avant. Mélanger beurre mou, ail haché, herbes, paprika — rouler dans du film et réfrigérer.",
-      "Huiler et chauffer la plancha ou poêle en fonte au maximum. Saler généreusement la viande.",
-      "Cuire 4-5 min par face pour saignant, 6-7 pour à point. Ne pas toucher pendant la cuisson.",
-      "Laisser reposer 8 min sous alu. Trancher et déposer une rondelle de beurre café de Paris sur la viande chaude."
-    ]
-  }
-  ,{
-    id: 'R981',
-    name: 'Brochettes Merguez Légumes Grillés',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍢', origin: '🇫🇷',
-    tags: ['grillé','express','spiced'],
-    servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
-    // 28×4 + 16×4 + 22×9 = 112+64+198 = 374 ✓
-    baseNutrition: { calories: 374, proteinGrams: 28, carbsGrams: 16, fatGrams: 22 },
-    ingredients: [
-      { name: 'Merguez', qty: 200, unit: 'g' },
-      { name: 'Courgette', qty: 150, unit: 'g' },
-      { name: 'Poivron rouge', qty: 150, unit: 'g' },
-      { name: 'Oignon rouge', qty: 1, unit: 'pce' },
-      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
-      { name: 'Herbes de Provence', qty: 3, unit: 'g' },
-      { name: 'Sel', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Couper les légumes en morceaux de taille uniforme. Mélanger avec l'huile, les herbes et le sel.",
-      "Piquer sur des brochettes en alternant merguez et légumes.",
-      "Cuire au grill, barbecue ou plancha 12-15 min en retournant régulièrement.",
-      "Servir avec du pain pita, harissa et yaourt à la menthe."
-    ]
-  }
-  ,{
-    id: 'R982',
-    name: 'Filets de Poulet Marinés Herbes',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🐔', origin: '🇫🇷',
-    tags: ['grillé','high-protein','light'],
-    servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
-    // 56×4 + 4×4 + 8×9 = 224+16+72 = 312 ✓
-    baseNutrition: { calories: 312, proteinGrams: 56, carbsGrams: 4, fatGrams: 8 },
-    ingredients: [
-      { name: 'Blanc de poulet', qty: 400, unit: 'g' },
-      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
-      { name: 'Ail', qty: 2, unit: 'pce', note: 'gousses' },
-      { name: 'Citron', qty: 1, unit: 'pce', note: 'jus + zeste' },
-      { name: 'Thym, romarin frais', qty: 5, unit: 'g' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Aplatir légèrement les filets de poulet. Préparer la marinade : huile, ail haché, jus et zeste de citron, herbes, sel, poivre.",
-      "Mariner le poulet 30 min minimum (ou toute la nuit).",
-      "Cuire sur plancha ou poêle grill très chaude 5-6 min par face.",
-      "Laisser reposer 3 min. Servir avec salade verte ou légumes grillés."
-    ]
-  }
-  ,{
-    id: 'R983',
-    name: 'Côtelettes d\'Agneau Persillade',
-    category: 'french',
-    mealTypes: ['dinner'],
-    emoji: '🍖', origin: '🇫🇷',
-    tags: ['fete','high-protein','express'],
-    servings: 2, prepTime: 5, cookTime: 10, difficulty: 1,
-    // 50×4 + 6×4 + 16×9 = 200+24+144 = 368 ✓
-    baseNutrition: { calories: 368, proteinGrams: 50, carbsGrams: 6, fatGrams: 16 },
-    ingredients: [
-      { name: 'Côtelettes d\'agneau', qty: 400, unit: 'g', note: '4 côtelettes' },
-      { name: 'Persil frais', qty: 20, unit: 'g' },
-      { name: 'Ail', qty: 3, unit: 'pce', note: 'gousses' },
-      { name: 'Chapelure', qty: 20, unit: 'g' },
-      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Mixer persil, ail, chapelure et huile pour la persillade. Assaisonner.",
-      "Saisir les côtelettes 2 min de chaque côté dans une poêle très chaude.",
-      "Enduire d'une couche de persillade. Passer sous le grill 2-3 min.",
-      "Laisser reposer 2 min. Servir rosé avec une ratatouille ou des haricots verts."
-    ]
-  }
-  ,{
-    id: 'R984',
-    name: 'Pavé de Thon Gingembre Sésame',
-    category: 'world-food',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🐟', origin: '🇯🇵',
-    tags: ['healthy','high-protein','grillé'],
-    servings: 2, prepTime: 10, cookTime: 6, difficulty: 1,
-    // 52×4 + 6×4 + 10×9 = 208+24+90 = 322 ✓
-    baseNutrition: { calories: 322, proteinGrams: 52, carbsGrams: 6, fatGrams: 10 },
-    ingredients: [
-      { name: 'Pavé de thon frais', qty: 350, unit: 'g' },
-      { name: 'Sauce soja', qty: 20, unit: 'ml' },
-      { name: 'Huile de sésame', qty: 10, unit: 'ml' },
-      { name: 'Gingembre frais', qty: 10, unit: 'g' },
-      { name: 'Ail', qty: 1, unit: 'pce', note: 'gousse' },
-      { name: 'Graines de sésame', qty: 15, unit: 'g' },
-      { name: 'Oignon vert', qty: 2, unit: 'pce' }
-    ],
-    steps: [
-      "Mélanger sauce soja, huile de sésame, gingembre râpé et ail haché. Mariner le thon 15 min.",
-      "Rouler le pavé dans les graines de sésame pour bien les faire adhérer.",
-      "Cuire dans une poêle très chaude à sec (ou petit filet d'huile) 2-3 min par face.",
-      "Le thon doit rester rouge à coeur. Trancher et servir avec oignons verts, riz et sauce soja."
-    ]
-  }
-
-  // ── BATCH P62 — Salades de pâtes ──────────────────────────────────────────────
-  ,{
-    id: 'R985',
-    name: 'Salade de Pâtes Thon Tomates Câpres',
-    category: 'mediterranean',
-    mealTypes: ['lunch'],
-    emoji: '🍝', origin: '🇮🇹',
-    tags: ['salade','express','balanced'],
-    servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
-    // 34×4 + 60×4 + 10×9 = 136+240+90 = 466 ✓
-    baseNutrition: { calories: 466, proteinGrams: 34, carbsGrams: 60, fatGrams: 10 },
-    ingredients: [
-      { name: 'Penne ou farfalle', qty: 160, unit: 'g', note: 'secs' },
-      { name: 'Thon en boîte', qty: 160, unit: 'g', note: 'égoutté' },
-      { name: 'Tomates cerises', qty: 150, unit: 'g' },
-      { name: 'Câpres', qty: 20, unit: 'g' },
-      { name: 'Olives noires', qty: 30, unit: 'g' },
-      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
-      { name: 'Jus de citron', qty: 15, unit: 'ml' },
-      { name: 'Basilic frais', qty: 8, unit: 'g' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Cuire les pâtes al dente. Égoutter, rincer à l'eau froide pour stopper la cuisson.",
-      "Couper les tomates cerises en deux. Émietter le thon.",
-      "Mélanger les pâtes froides avec thon, tomates, câpres et olives.",
-      "Assaisonner avec huile d'olive, jus de citron, sel, poivre et basilic. Réfrigérer 30 min avant de servir."
-    ]
-  }
-  ,{
-    id: 'R986',
-    name: 'Salade de Pâtes Poulet Pesto Roquette',
-    category: 'italian',
-    mealTypes: ['lunch'],
-    emoji: '🌿', origin: '🇮🇹',
-    tags: ['salade','high-protein','express'],
-    servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
-    // 44×4 + 58×4 + 16×9 = 176+232+144 = 552 ✓
-    baseNutrition: { calories: 552, proteinGrams: 44, carbsGrams: 58, fatGrams: 16 },
-    ingredients: [
-      { name: 'Fusilli', qty: 160, unit: 'g', note: 'secs' },
-      { name: 'Blanc de poulet grillé', qty: 200, unit: 'g' },
-      { name: 'Roquette', qty: 60, unit: 'g' },
-      { name: 'Tomates séchées', qty: 40, unit: 'g' },
-      { name: 'Pesto vert', qty: 40, unit: 'g' },
-      { name: 'Parmesan copeaux', qty: 20, unit: 'g' },
-      { name: 'Pignons de pin', qty: 15, unit: 'g' },
-      { name: 'Huile d\'olive', qty: 10, unit: 'ml' }
-    ],
-    steps: [
-      "Cuire les pâtes al dente. Égoutter, rincer et laisser refroidir.",
-      "Couper le poulet grillé en lamelles. Émincer les tomates séchées.",
-      "Mélanger les pâtes avec le pesto, ajouter poulet, tomates séchées et roquette.",
-      "Servir avec les copeaux de parmesan et les pignons grillés à sec. Assaisonner avec l'huile d'olive."
-    ]
-  }
-  ,{
-    id: 'R987',
-    name: 'Salade de Pâtes Crevettes Avocat Citron',
-    category: 'mediterranean',
-    mealTypes: ['lunch'],
-    emoji: '🥑', origin: '🌍',
-    tags: ['salade','high-protein','light'],
-    servings: 2, prepTime: 15, cookTime: 10, difficulty: 1,
-    // 36×4 + 56×4 + 14×9 = 144+224+126 = 494 ✓
-    baseNutrition: { calories: 494, proteinGrams: 36, carbsGrams: 56, fatGrams: 14 },
-    ingredients: [
-      { name: 'Fusilli ou conchiglie', qty: 160, unit: 'g', note: 'secs' },
-      { name: 'Crevettes cuites décortiquées', qty: 180, unit: 'g' },
-      { name: 'Avocat', qty: 1, unit: 'pce' },
-      { name: 'Concombre', qty: 100, unit: 'g' },
-      { name: 'Citron', qty: 1, unit: 'pce' },
-      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
-      { name: 'Aneth frais', qty: 5, unit: 'g' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Cuire les pâtes al dente. Rincer à l'eau froide, égoutter.",
-      "Couper l'avocat en dés, arroser de jus de citron pour éviter l'oxydation. Émincer le concombre.",
-      "Mélanger pâtes, crevettes, avocat et concombre.",
-      "Assaisonner avec huile d'olive, jus de citron, aneth, sel et poivre. Servir frais."
-    ]
-  }
-  ,{
-    id: 'R988',
-    name: 'Salade de Pâtes Jambon Mozzarella Basil',
-    category: 'italian',
-    mealTypes: ['lunch'],
-    emoji: '🧀', origin: '🇮🇹',
-    tags: ['salade','comfort','classic'],
-    servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
-    // 30×4 + 58×4 + 14×9 = 120+232+126 = 478 ✓
-    baseNutrition: { calories: 478, proteinGrams: 30, carbsGrams: 58, fatGrams: 14 },
-    ingredients: [
-      { name: 'Penne', qty: 160, unit: 'g', note: 'secs' },
-      { name: 'Jambon blanc', qty: 100, unit: 'g' },
-      { name: 'Mozzarella', qty: 80, unit: 'g' },
-      { name: 'Tomates cerises', qty: 150, unit: 'g' },
-      { name: 'Basilic frais', qty: 10, unit: 'g' },
-      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
-      { name: 'Vinaigre balsamique', qty: 10, unit: 'ml' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Cuire les pâtes al dente. Refroidir sous eau froide.",
-      "Couper la mozzarella en dés, le jambon en lanières et les tomates en deux.",
-      "Mélanger le tout avec les pâtes froides.",
-      "Assaisonner avec huile d'olive, vinaigre balsamique, sel et poivre. Ajouter le basilic déchiré. Servir à température ambiante."
-    ]
-  }
-  ,{
-    id: 'R989',
-    name: 'Salade de Pâtes Saumon Fumé Aneth Câpres',
-    category: 'french',
-    mealTypes: ['lunch'],
-    emoji: '🐟', origin: '🇫🇷',
-    tags: ['salade','high-protein','chic'],
-    servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
-    // 32×4 + 58×4 + 12×9 = 128+232+108 = 468 ✓
-    baseNutrition: { calories: 468, proteinGrams: 32, carbsGrams: 58, fatGrams: 12 },
-    ingredients: [
-      { name: 'Pâtes courtes (farfalle)', qty: 160, unit: 'g', note: 'secs' },
-      { name: 'Saumon fumé', qty: 120, unit: 'g' },
-      { name: 'Câpres', qty: 20, unit: 'g' },
-      { name: 'Concombre', qty: 100, unit: 'g' },
-      { name: 'Crème fraîche légère', qty: 40, unit: 'ml' },
-      { name: 'Citron', qty: 1, unit: 'pce' },
-      { name: 'Aneth frais', qty: 8, unit: 'g' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Cuire les pâtes al dente. Rincer à l'eau froide.",
-      "Couper le saumon en lamelles, le concombre en demi-rondelles.",
-      "Mélanger crème fraîche, jus de citron, aneth, sel et poivre pour la sauce.",
-      "Assembler les pâtes avec saumon, concombre et câpres. Napper de sauce. Réfrigérer 20 min avant de servir."
-    ]
-  }
-
-  // ── BATCH P63 — Salades roquette & mâche ──────────────────────────────────────
-  ,{
-    id: 'R990',
-    name: 'Salade Roquette Poulet Grillé Parmesan',
-    category: 'italian',
-    mealTypes: ['lunch'],
-    emoji: '🥗', origin: '🇮🇹',
-    tags: ['salade','high-protein','light'],
-    servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
-    // 44×4 + 8×4 + 14×9 = 176+32+126 = 334 ✓
-    baseNutrition: { calories: 334, proteinGrams: 44, carbsGrams: 8, fatGrams: 14 },
-    ingredients: [
-      { name: 'Roquette', qty: 100, unit: 'g' },
-      { name: 'Blanc de poulet grillé', qty: 250, unit: 'g' },
-      { name: 'Parmesan', qty: 30, unit: 'g', note: 'copeaux' },
-      { name: 'Tomates cerises', qty: 120, unit: 'g' },
-      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
-      { name: 'Jus de citron', qty: 15, unit: 'ml' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Griller les blancs de poulet assaisonnés 5-6 min par face. Laisser reposer 3 min, trancher.",
-      "Disposer la roquette dans les assiettes, ajouter les tomates coupées en deux.",
-      "Poser les lamelles de poulet tièdes sur la roquette.",
-      "Arroser d'huile d'olive et de jus de citron. Couvrir de copeaux de parmesan, poivrer généreusement."
-    ]
-  }
-  ,{
-    id: 'R991',
-    name: 'Salade Mâche Crevettes Mangue',
-    category: 'french',
-    mealTypes: ['lunch'],
-    emoji: '🦐', origin: '🇫🇷',
-    tags: ['salade','high-protein','chic'],
-    servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
-    // 22×4 + 24×4 + 8×9 = 88+96+72 = 256 ✓
-    baseNutrition: { calories: 256, proteinGrams: 22, carbsGrams: 24, fatGrams: 8 },
-    ingredients: [
-      { name: 'Mâche', qty: 100, unit: 'g' },
-      { name: 'Crevettes cuites', qty: 200, unit: 'g' },
-      { name: 'Mangue', qty: 150, unit: 'g', note: 'mûre, en dés' },
-      { name: 'Avocat', qty: 1, unit: 'pce', note: 'demi' },
-      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
-      { name: 'Citron vert', qty: 1, unit: 'pce' },
-      { name: 'Coriandre fraîche', qty: 5, unit: 'g' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Répartir la mâche dans les assiettes.",
-      "Couper l'avocat en lamelles, la mangue en dés.",
-      "Disposer crevettes, mangue et avocat sur la mâche.",
-      "Assaisonner avec huile d'olive, jus de citron vert, coriandre, sel et poivre."
-    ]
-  }
-  ,{
-    id: 'R992',
-    name: 'Salade Roquette Thon Câpres Oeufs Durs',
-    category: 'french',
-    mealTypes: ['lunch'],
-    emoji: '🐟', origin: '🇫🇷',
-    tags: ['salade','high-protein','classic'],
-    servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
-    // 38×4 + 6×4 + 12×9 = 152+24+108 = 284 ✓
-    baseNutrition: { calories: 284, proteinGrams: 38, carbsGrams: 6, fatGrams: 12 },
-    ingredients: [
-      { name: 'Roquette', qty: 100, unit: 'g' },
-      { name: 'Thon en boîte', qty: 160, unit: 'g', note: 'égoutté' },
-      { name: 'Oeufs durs', qty: 2, unit: 'pce' },
-      { name: 'Câpres', qty: 15, unit: 'g' },
-      { name: 'Tomates', qty: 2, unit: 'pce' },
-      { name: 'Oignon rouge', qty: 1, unit: 'pce', note: 'demi, émincé' },
-      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
-      { name: 'Vinaigre de vin rouge', qty: 10, unit: 'ml' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Cuire les oeufs durs 10 min, refroidir et couper en quartiers.",
-      "Disposer la roquette en base. Ajouter les tomates en dés, l'oignon rouge et les câpres.",
-      "Émietter le thon sur la salade. Ajouter les quartiers d'oeufs.",
-      "Assaisonner avec huile d'olive, vinaigre de vin, sel et poivre."
-    ]
-  }
-  ,{
-    id: 'R993',
-    name: 'Salade Mâche Betterave Noix Chèvre',
-    category: 'french',
-    mealTypes: ['lunch'],
-    emoji: '🫐', origin: '🇫🇷',
-    tags: ['salade','vegetarian','classic'],
-    servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
-    // 14×4 + 18×4 + 18×9 = 56+72+162 = 290 ✓
-    baseNutrition: { calories: 290, proteinGrams: 14, carbsGrams: 18, fatGrams: 18 },
-    ingredients: [
-      { name: 'Mâche', qty: 100, unit: 'g' },
-      { name: 'Betterave cuite', qty: 150, unit: 'g', note: 'en dés' },
-      { name: 'Chèvre frais', qty: 80, unit: 'g' },
-      { name: 'Cerneaux de noix', qty: 30, unit: 'g' },
-      { name: 'Huile de noix', qty: 15, unit: 'ml' },
-      { name: 'Vinaigre balsamique', qty: 10, unit: 'ml' },
-      { name: 'Miel', qty: 5, unit: 'g' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Préparer la vinaigrette : huile de noix, vinaigre balsamique, miel, sel et poivre.",
-      "Répartir la mâche dans les assiettes.",
-      "Disposer les dés de betterave et émietter le chèvre frais dessus.",
-      "Ajouter les cerneaux de noix. Arroser de vinaigrette balsamique miel."
-    ]
-  }
-  ,{
-    id: 'R994',
-    name: 'Salade Roquette Crevettes Parmesan Citron',
-    category: 'italian',
-    mealTypes: ['lunch'],
-    emoji: '🦐', origin: '🇮🇹',
-    tags: ['salade','high-protein','chic'],
-    servings: 2, prepTime: 10, cookTime: 5, difficulty: 1,
-    // 30×4 + 6×4 + 12×9 = 120+24+108 = 252 ✓
-    baseNutrition: { calories: 252, proteinGrams: 30, carbsGrams: 6, fatGrams: 12 },
-    ingredients: [
-      { name: 'Roquette', qty: 100, unit: 'g' },
-      { name: 'Crevettes cuites', qty: 250, unit: 'g' },
-      { name: 'Parmesan', qty: 25, unit: 'g', note: 'copeaux' },
-      { name: 'Citron', qty: 1, unit: 'pce' },
-      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
-      { name: 'Ail', qty: 1, unit: 'pce', note: 'gousse, optionnel' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Si les crevettes sont crues, les poêler à l'ail 2-3 min. Laisser tiédir.",
-      "Disposer la roquette dans les assiettes.",
-      "Ajouter les crevettes tièdes ou froides.",
-      "Arroser généreusement de jus de citron et d'huile d'olive. Couvrir de copeaux de parmesan et poivrer."
-    ]
-  }
-
-  // ── BATCH P64 — Grandes salades repas ────────────────────────────────────────
-  ,{
-    id: 'R995',
-    name: 'Salade Niçoise Classique',
-    category: 'french',
-    mealTypes: ['lunch'],
-    emoji: '🥗', origin: '🇫🇷',
-    tags: ['salade','classic','mediterranean','high-protein'],
-    servings: 2, prepTime: 15, cookTime: 15, difficulty: 1,
-    // 36×4 + 20×4 + 16×9 = 144+80+144 = 368 ✓
-    baseNutrition: { calories: 368, proteinGrams: 36, carbsGrams: 20, fatGrams: 16 },
-    ingredients: [
-      { name: 'Thon en boîte', qty: 160, unit: 'g', note: 'égoutté' },
-      { name: 'Oeufs durs', qty: 2, unit: 'pce' },
-      { name: 'Haricots verts', qty: 150, unit: 'g', note: 'cuits' },
-      { name: 'Tomates', qty: 2, unit: 'pce' },
-      { name: 'Olives noires', qty: 40, unit: 'g' },
-      { name: 'Anchois', qty: 20, unit: 'g', note: 'optionnel' },
-      { name: 'Salade verte', qty: 80, unit: 'g' },
-      { name: 'Oignon rouge', qty: 1, unit: 'pce', note: 'demi' },
-      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
-      { name: 'Vinaigre de vin', qty: 10, unit: 'ml' },
-      { name: 'Sel, poivre, basilic', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Cuire les oeufs durs 10 min et les haricots verts al dente. Refroidir.",
-      "Disposer la salade en base, puis les tomates en quartiers, haricots verts, oeufs en quartiers, olives, anchois.",
-      "Émietter le thon au centre.",
-      "Assaisonner avec vinaigrette huile d'olive/vinaigre. Ne jamais mélanger — présenter en garniture séparée."
-    ]
-  }
-  ,{
-    id: 'R996',
-    name: 'Salade César Maison',
-    category: 'french',
-    mealTypes: ['lunch'],
-    emoji: '🥗', origin: '🇺🇸',
-    tags: ['salade','classic','high-protein'],
-    servings: 2, prepTime: 15, cookTime: 10, difficulty: 1,
-    // 42×4 + 18×4 + 20×9 = 168+72+180 = 420 ✓
-    baseNutrition: { calories: 420, proteinGrams: 42, carbsGrams: 18, fatGrams: 20 },
-    ingredients: [
-      { name: 'Laitue romaine', qty: 200, unit: 'g' },
-      { name: 'Blanc de poulet grillé', qty: 250, unit: 'g' },
-      { name: 'Parmesan râpé', qty: 30, unit: 'g' },
-      { name: 'Croûtons', qty: 30, unit: 'g' },
-      { name: 'Anchois', qty: 20, unit: 'g' },
-      { name: 'Mayonnaise', qty: 30, unit: 'g' },
-      { name: 'Citron', qty: 1, unit: 'pce' },
-      { name: 'Ail', qty: 1, unit: 'pce', note: 'gousse' },
-      { name: 'Sauce Worcestershire', qty: 5, unit: 'ml' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Sauce César : mixer mayonnaise, anchois, ail, jus de citron, worcestershire, sel, poivre.",
-      "Déchirer grossièrement la romaine. Trancher le poulet grillé en lamelles.",
-      "Mélanger la romaine avec la sauce César.",
-      "Ajouter le poulet, les croûtons et le parmesan. Poivrer généreusement."
-    ]
-  }
-  ,{
-    id: 'R997',
-    name: 'Salade Grecque Classique',
-    category: 'mediterranean',
-    mealTypes: ['lunch'],
-    emoji: '🫒', origin: '🇬🇷',
-    tags: ['salade','vegetarian','mediterranean'],
-    servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
-    // 10×4 + 14×4 + 20×9 = 40+56+180 = 276 ✓
-    baseNutrition: { calories: 276, proteinGrams: 10, carbsGrams: 14, fatGrams: 20 },
-    ingredients: [
-      { name: 'Tomates', qty: 3, unit: 'pce' },
-      { name: 'Concombre', qty: 1, unit: 'pce' },
-      { name: 'Feta', qty: 100, unit: 'g' },
-      { name: 'Olives Kalamata', qty: 50, unit: 'g' },
-      { name: 'Oignon rouge', qty: 1, unit: 'pce' },
-      { name: 'Poivron vert', qty: 1, unit: 'pce' },
-      { name: 'Huile d\'olive', qty: 30, unit: 'ml' },
-      { name: 'Origan séché', qty: 3, unit: 'g' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Couper les tomates en gros morceaux, le concombre en rondelles épaisses.",
-      "Émincer l'oignon rouge en rondelles fines, couper le poivron en lamelles.",
-      "Disposer tous les légumes dans un saladier. Poser le bloc de feta au centre (ne pas l'émietter avant de servir).",
-      "Répartir les olives, arroser généreusement d'huile d'olive, saupoudrer d'origan. Saler et poivrer."
-    ]
-  }
-  ,{
-    id: 'R998',
-    name: 'Salade Landaise au Gésier Confit',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍂', origin: '🇫🇷',
-    tags: ['salade','classic','bistrot'],
-    servings: 2, prepTime: 10, cookTime: 5, difficulty: 1,
-    // 28×4 + 12×4 + 24×9 = 112+48+216 = 376 ✓
-    baseNutrition: { calories: 376, proteinGrams: 28, carbsGrams: 12, fatGrams: 24 },
-    ingredients: [
-      { name: 'Gésiers de canard confits', qty: 150, unit: 'g' },
-      { name: 'Magret de canard fumé', qty: 60, unit: 'g', note: 'en tranches fines' },
-      { name: 'Salade mélangée', qty: 100, unit: 'g' },
-      { name: 'Tomates cerises', qty: 80, unit: 'g' },
-      { name: 'Croûtons aillés', qty: 30, unit: 'g' },
-      { name: 'Huile de noix', qty: 15, unit: 'ml' },
-      { name: 'Vinaigre de Xérès', qty: 10, unit: 'ml' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Réchauffer les gésiers confits à la poêle 3-4 min dans leur graisse. Réserver au chaud.",
-      "Préparer la vinaigrette : huile de noix, vinaigre de Xérès, sel, poivre.",
-      "Disposer la salade dans les assiettes avec tomates cerises et croûtons.",
-      "Ajouter les gésiers chauds et les tranches de magret fumé. Arroser de vinaigrette. Servir immédiatement."
-    ]
-  }
-  ,{
-    id: 'R999',
-    name: 'Salade Thaï Bœuf Citronnelle',
-    category: 'world-food',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🌶️', origin: '🇹🇭',
-    tags: ['salade','high-protein','spiced'],
-    servings: 2, prepTime: 15, cookTime: 8, difficulty: 2,
-    // 38×4 + 14×4 + 10×9 = 152+56+90 = 298 ✓
-    baseNutrition: { calories: 298, proteinGrams: 38, carbsGrams: 14, fatGrams: 10 },
-    ingredients: [
-      { name: 'Bœuf (rumsteck ou bavette)', qty: 250, unit: 'g' },
-      { name: 'Salade mélangée', qty: 80, unit: 'g' },
-      { name: 'Concombre', qty: 100, unit: 'g' },
-      { name: 'Tomates cerises', qty: 100, unit: 'g' },
-      { name: 'Oignon rouge', qty: 1, unit: 'pce' },
-      { name: 'Menthe fraîche', qty: 10, unit: 'g' },
-      { name: 'Coriandre fraîche', qty: 10, unit: 'g' },
-      { name: 'Sauce nuoc mam', qty: 15, unit: 'ml' },
-      { name: 'Citron vert', qty: 2, unit: 'pce' },
-      { name: 'Piment rouge', qty: 1, unit: 'pce' },
-      { name: 'Huile végétale', qty: 10, unit: 'ml' }
-    ],
-    steps: [
-      "Cuire le bœuf dans une poêle très chaude 3-4 min pour saignant. Laisser reposer 5 min, trancher finement.",
-      "Préparer la vinaigrette thaïe : nuoc mam, jus de citron vert, piment haché.",
-      "Disposer salade, concombre en fines rondelles, tomates, oignon rouge émincé.",
-      "Poser le bœuf tiède. Arroser de vinaigrette. Parsemer de menthe et coriandre fraîches."
-    ]
-  }
-
-  // ── BATCH P65 — Sauces incontournables maison ──────────────────────────────────
-  ,{
-    id: 'R1000',
-    name: 'Sauce Vinaigrette Moutarde Classique',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🫙', origin: '🇫🇷',
-    tags: ['sauce','vegetarian','express','condiment'],
-    servings: 4, prepTime: 3, cookTime: 0, difficulty: 1,
-    // 2×4 + 4×4 + 40×9 = 8+16+360 = 384 ✓
-    baseNutrition: { calories: 384, proteinGrams: 2, carbsGrams: 4, fatGrams: 40 },
-    ingredients: [
-      { name: 'Huile d\'olive', qty: 60, unit: 'ml' },
-      { name: 'Vinaigre de vin rouge', qty: 20, unit: 'ml' },
-      { name: 'Moutarde de Dijon', qty: 15, unit: 'g' },
-      { name: 'Échalote', qty: 1, unit: 'pce', note: 'finement émincée' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Dans un petit bol, mélanger moutarde, vinaigre, sel et poivre.",
-      "Verser l'huile en filet en fouettant constamment pour émulsionner.",
-      "Ajouter l'échalote émincée. Goûter et ajuster l'assaisonnement.",
-      "Se conserve 1 semaine au réfrigérateur dans un bocal fermé. Fouetter avant chaque utilisation."
-    ]
-  }
-  ,{
-    id: 'R1001',
-    name: 'Sauce Yaourt Ail Ciboulette',
-    category: 'french',
-    mealTypes: ['lunch','dinner','snack'],
-    emoji: '🥛', origin: '🇫🇷',
-    tags: ['sauce','light','vegetarian','condiment'],
-    servings: 4, prepTime: 5, cookTime: 0, difficulty: 1,
-    // 10×4 + 8×4 + 4×9 = 40+32+36 = 108 ✓
-    baseNutrition: { calories: 108, proteinGrams: 10, carbsGrams: 8, fatGrams: 4 },
-    ingredients: [
-      { name: 'Yaourt grec 0%', qty: 200, unit: 'g' },
-      { name: 'Ail', qty: 1, unit: 'pce', note: 'gousse' },
-      { name: 'Ciboulette fraîche', qty: 10, unit: 'g' },
-      { name: 'Jus de citron', qty: 10, unit: 'ml' },
-      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Hacher finement l'ail et la ciboulette.",
-      "Mélanger le yaourt grec avec l'ail, la ciboulette, le jus de citron et l'huile d'olive.",
-      "Assaisonner avec sel et poivre. Goûter.",
-      "Idéale avec des légumes crus, grillades, brochettes ou comme dressing de salade. Se garde 3 jours au frais."
-    ]
-  }
-  ,{
-    id: 'R1002',
-    name: 'Sauce Pesto Génois Maison',
-    category: 'italian',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🌿', origin: '🇮🇹',
-    tags: ['sauce','vegetarian','classic','condiment'],
-    servings: 4, prepTime: 10, cookTime: 0, difficulty: 1,
-    // 8×4 + 4×4 + 40×9 = 32+16+360 = 408 ✓
-    baseNutrition: { calories: 408, proteinGrams: 8, carbsGrams: 4, fatGrams: 40 },
-    ingredients: [
-      { name: 'Basilic frais', qty: 40, unit: 'g' },
-      { name: 'Parmesan râpé', qty: 40, unit: 'g' },
-      { name: 'Pignons de pin', qty: 30, unit: 'g' },
-      { name: 'Ail', qty: 1, unit: 'pce', note: 'gousse' },
-      { name: 'Huile d\'olive', qty: 80, unit: 'ml' },
-      { name: 'Sel', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Griller les pignons à sec dans une poêle 2 min. Laisser refroidir.",
-      "Mixer basilic, pignons, ail et parmesan en pulsant.",
-      "Ajouter l'huile d'olive progressivement. Le pesto doit rester un peu grumeleux, pas lisse.",
-      "Saler. Idéal pour les pâtes, la pizza, les salades. Couvrir d'un film en contact au réfrigérateur."
-    ]
-  }
-  ,{
-    id: 'R1003',
-    name: 'Sauce Tomate Maison Simple',
-    category: 'italian',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍅', origin: '🇮🇹',
-    tags: ['sauce','vegetarian','classic','condiment'],
-    servings: 4, prepTime: 5, cookTime: 20, difficulty: 1,
-    // 4×4 + 16×4 + 8×9 = 16+64+72 = 152 ✓
-    baseNutrition: { calories: 152, proteinGrams: 4, carbsGrams: 16, fatGrams: 8 },
-    ingredients: [
-      { name: 'Tomates pelées en boîte', qty: 800, unit: 'g' },
-      { name: 'Ail', qty: 3, unit: 'pce', note: 'gousses' },
-      { name: 'Huile d\'olive', qty: 30, unit: 'ml' },
-      { name: 'Basilic frais', qty: 10, unit: 'g' },
-      { name: 'Sucre', qty: 5, unit: 'g', note: 'pincée pour équilibrer l\'acidité' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Faire revenir l'ail haché dans l'huile d'olive 1 min à feu moyen sans colorer.",
-      "Ajouter les tomates pelées en les écrasant avec les mains. Ajouter le sucre.",
-      "Mijoter 15-20 min à feu moyen jusqu'à réduction. Assaisonner.",
-      "Ajouter le basilic hors du feu. Mixer ou laisser rustique selon préférence. Base pour pâtes, pizza, viandes."
-    ]
-  }
-  ,{
-    id: 'R1004',
-    name: 'Sauce Béarnaise Express',
-    category: 'french',
-    mealTypes: ['dinner'],
-    emoji: '🥚', origin: '🇫🇷',
-    tags: ['sauce','classic','fete','condiment'],
-    servings: 2, prepTime: 5, cookTime: 10, difficulty: 2,
-    // 4×4 + 2×4 + 22×9 = 16+8+198 = 222 ✓
-    baseNutrition: { calories: 222, proteinGrams: 4, carbsGrams: 2, fatGrams: 22 },
-    ingredients: [
-      { name: 'Jaunes d\'oeufs', qty: 2, unit: 'pce' },
-      { name: 'Beurre', qty: 60, unit: 'g' },
-      { name: 'Échalote', qty: 1, unit: 'pce' },
-      { name: 'Estragon frais', qty: 5, unit: 'g' },
-      { name: 'Vinaigre de vin blanc', qty: 20, unit: 'ml' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Réduire l'échalote émincée avec le vinaigre et l'estragon jusqu'à presque sec. Laisser tiédir.",
-      "Faire fondre le beurre doucement. Dans un bain-marie (eau frémissante, jamais bouillante), fouetter les jaunes d'oeufs avec la réduction.",
-      "Incorporer le beurre fondu en filet en fouettant constamment jusqu'à épaississement crémeux.",
-      "Assaisonner. Servir immédiatement avec une côte de bœuf ou un filet de poisson. Ne pas réchauffer."
-    ]
-  }
-
-  // ── BATCH P66 — Sauces du monde & dressings ───────────────────────────────────
-  ,{
-    id: 'R1005',
-    name: 'Sauce Tzatziki Concombre Menthe',
-    category: 'mediterranean',
-    mealTypes: ['lunch','dinner','snack'],
-    emoji: '🫙', origin: '🇬🇷',
-    tags: ['sauce','vegetarian','light','condiment'],
-    servings: 4, prepTime: 10, cookTime: 0, difficulty: 1,
-    // 12×4 + 10×4 + 4×9 = 48+40+36 = 124 ✓
-    baseNutrition: { calories: 124, proteinGrams: 12, carbsGrams: 10, fatGrams: 4 },
-    ingredients: [
-      { name: 'Yaourt grec', qty: 250, unit: 'g' },
-      { name: 'Concombre', qty: 150, unit: 'g' },
-      { name: 'Ail', qty: 2, unit: 'pce', note: 'gousses' },
-      { name: 'Menthe fraîche', qty: 8, unit: 'g' },
-      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
-      { name: 'Jus de citron', qty: 10, unit: 'ml' },
-      { name: 'Sel', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Râper le concombre. Le saler, laisser dégorger 10 min, presser fort dans un torchon pour éliminer l'eau.",
-      "Mélanger yaourt grec, ail écrasé, menthe ciselée, huile d'olive et citron.",
-      "Incorporer le concombre pressé. Bien mélanger.",
-      "Réfrigérer 30 min avant de servir. Accompagne viandes grillées, falafels, légumes crus."
-    ]
-  }
-  ,{
-    id: 'R1006',
-    name: 'Sauce Teriyaki Maison',
-    category: 'japanese',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍯', origin: '🇯🇵',
-    tags: ['sauce','sweet','classic','condiment'],
-    servings: 4, prepTime: 3, cookTime: 5, difficulty: 1,
-    // 2×4 + 24×4 + 0×9 = 8+96+0 = 104 ✓
-    baseNutrition: { calories: 104, proteinGrams: 2, carbsGrams: 24, fatGrams: 0 },
-    ingredients: [
-      { name: 'Sauce soja', qty: 60, unit: 'ml' },
-      { name: 'Miel', qty: 30, unit: 'g' },
-      { name: 'Sucre brun', qty: 10, unit: 'g' },
-      { name: 'Ail', qty: 2, unit: 'pce', note: 'gousses' },
-      { name: 'Gingembre frais', qty: 10, unit: 'g' },
-      { name: 'Fécule de maïs', qty: 5, unit: 'g' }
-    ],
-    steps: [
-      "Mélanger sauce soja, miel, sucre brun, ail haché et gingembre râpé dans une petite casserole.",
-      "Porter à frémissement à feu moyen en remuant.",
-      "Délayer la fécule dans 2 cuillères d'eau froide. Verser dans la sauce, fouetter jusqu'à épaississement.",
-      "Cuire encore 1 min. Refroidir. Idéale pour glacer poulet, saumon, tofu, bœuf — napper en fin de cuisson."
-    ]
-  }
-  ,{
-    id: 'R1007',
-    name: 'Sauce Chimichurri Argentine',
-    category: 'world-food',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🌿', origin: '🇦🇷',
-    tags: ['sauce','vegetarian','grillé','condiment'],
-    servings: 4, prepTime: 10, cookTime: 0, difficulty: 1,
-    // 2×4 + 4×4 + 28×9 = 8+16+252 = 276 ✓
-    baseNutrition: { calories: 276, proteinGrams: 2, carbsGrams: 4, fatGrams: 28 },
-    ingredients: [
-      { name: 'Persil frais', qty: 40, unit: 'g' },
-      { name: 'Ail', qty: 3, unit: 'pce', note: 'gousses' },
-      { name: 'Huile d\'olive', qty: 60, unit: 'ml' },
-      { name: 'Vinaigre de vin rouge', qty: 20, unit: 'ml' },
-      { name: 'Origan séché', qty: 3, unit: 'g' },
-      { name: 'Piment rouge séché', qty: 2, unit: 'g' },
-      { name: 'Sel', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Hacher très finement le persil et l'ail (au couteau, pas au mixeur — texture grumeleux).",
-      "Mélanger avec origan, piment émietté, sel.",
-      "Verser l'huile d'olive et le vinaigre. Bien mélanger.",
-      "Laisser reposer 30 min minimum. Accompagne toutes les grillades, empanadas, légumes rôtis. Se garde 5 jours au frais."
-    ]
-  }
-  ,{
-    id: 'R1008',
-    name: 'Sauce Burger Maison (Sauce Secrète)',
-    category: 'world-food',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍔', origin: '🇺🇸',
-    tags: ['sauce','comfort','express','condiment'],
-    servings: 4, prepTime: 5, cookTime: 0, difficulty: 1,
-    // 2×4 + 6×4 + 16×9 = 8+24+144 = 176 ✓
-    baseNutrition: { calories: 176, proteinGrams: 2, carbsGrams: 6, fatGrams: 16 },
-    ingredients: [
-      { name: 'Mayonnaise', qty: 60, unit: 'g' },
-      { name: 'Ketchup', qty: 20, unit: 'g' },
-      { name: 'Moutarde américaine', qty: 10, unit: 'g' },
-      { name: 'Cornichons hachés', qty: 20, unit: 'g' },
-      { name: 'Paprika fumé', qty: 2, unit: 'g' },
-      { name: 'Oignon en poudre', qty: 2, unit: 'g' }
-    ],
-    steps: [
-      "Mélanger tous les ingrédients dans un bol.",
-      "Goûter et ajuster : plus de ketchup pour le sucré, plus de moutarde pour le relevé.",
-      "Réfrigérer 30 min — les saveurs se développent.",
-      "Utiliser généreusement dans les burgers, hot-dogs, sandwichs ou comme sauce dip."
-    ]
-  }
-  ,{
-    id: 'R1009',
-    name: 'Sauce Hollandaise Express',
-    category: 'french',
-    mealTypes: ['breakfast','lunch','dinner'],
-    emoji: '🥚', origin: '🇫🇷',
-    tags: ['sauce','classic','fete','condiment'],
-    servings: 2, prepTime: 5, cookTime: 8, difficulty: 2,
-    // 4×4 + 2×4 + 24×9 = 16+8+216 = 240 ✓
-    baseNutrition: { calories: 240, proteinGrams: 4, carbsGrams: 2, fatGrams: 24 },
-    ingredients: [
-      { name: 'Jaunes d\'oeufs', qty: 2, unit: 'pce' },
-      { name: 'Beurre clarifié', qty: 60, unit: 'g' },
-      { name: 'Citron', qty: 1, unit: 'pce', note: 'jus' },
-      { name: 'Eau froide', qty: 15, unit: 'ml' },
-      { name: 'Sel, poivre blanc', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Dans un bain-marie (fond de casserole frémissant), fouetter les jaunes avec l'eau et le jus de citron jusqu'à consistance mousseuse et ruban.",
-      "Retirer du feu. Incorporer le beurre clarifié tiède en filet très fin en fouettant constamment.",
-      "La sauce doit napper le dos d'une cuillère. Assaisonner sel et poivre blanc.",
-      "Servir immédiatement avec asperges, poisson poché ou oeufs bénédicte. Garder tiède au bain-marie sans cuire."
-    ]
-  }
-
-  // ── BATCH P67 — Salades fraîcheur express ─────────────────────────────────────
-  ,{
-    id: 'R1010',
-    name: 'Salade Roquette Fraises Balsamique',
-    category: 'french',
-    mealTypes: ['lunch'],
-    emoji: '🍓', origin: '🇫🇷',
-    tags: ['salade','vegetarian','chic','light'],
-    servings: 2, prepTime: 8, cookTime: 0, difficulty: 1,
-    // 8×4 + 12×4 + 10×9 = 32+48+90 = 170 ✓
-    baseNutrition: { calories: 170, proteinGrams: 8, carbsGrams: 12, fatGrams: 10 },
-    ingredients: [
-      { name: 'Roquette', qty: 100, unit: 'g' },
-      { name: 'Fraises fraîches', qty: 150, unit: 'g' },
-      { name: 'Chèvre frais', qty: 60, unit: 'g' },
-      { name: 'Pignons de pin', qty: 15, unit: 'g', note: 'grillés' },
-      { name: 'Vinaigre balsamique', qty: 15, unit: 'ml' },
-      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
-      { name: 'Miel', qty: 5, unit: 'g' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Laver et équeuter les fraises. Les couper en deux ou en quartiers.",
-      "Griller les pignons à sec dans une poêle 2 min.",
-      "Disposer la roquette dans les assiettes. Ajouter les fraises et émietter le chèvre.",
-      "Arroser d'huile d'olive et de vinaigre balsamique mélangé au miel. Parsemer de pignons et poivrer."
-    ]
-  }
-  ,{
-    id: 'R1011',
-    name: 'Salade de Pâtes Feta Olives Poivrons',
-    category: 'mediterranean',
-    mealTypes: ['lunch'],
-    emoji: '🧀', origin: '🇬🇷',
-    tags: ['salade','vegetarian','mediterranean'],
-    servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
-    // 18×4 + 62×4 + 14×9 = 72+248+126 = 446 ✓
-    baseNutrition: { calories: 446, proteinGrams: 18, carbsGrams: 62, fatGrams: 14 },
-    ingredients: [
-      { name: 'Fusilli', qty: 160, unit: 'g', note: 'secs' },
-      { name: 'Feta', qty: 80, unit: 'g' },
-      { name: 'Olives mixtes', qty: 40, unit: 'g' },
-      { name: 'Poivron rouge rôti', qty: 100, unit: 'g' },
-      { name: 'Concombre', qty: 80, unit: 'g' },
-      { name: 'Tomates cerises', qty: 100, unit: 'g' },
-      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
-      { name: 'Origan, sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Cuire les pâtes al dente. Rincer à l'eau froide.",
-      "Couper tous les légumes en morceaux. Émietter grossièrement la feta.",
-      "Mélanger pâtes, légumes, olives et feta.",
-      "Assaisonner avec huile d'olive, origan, sel et poivre. Servir frais."
-    ]
-  }
-  ,{
-    id: 'R1012',
-    name: 'Salade Mâche Saumon Fumé Avocat',
-    category: 'french',
-    mealTypes: ['lunch'],
-    emoji: '🐟', origin: '🇫🇷',
-    tags: ['salade','high-protein','chic','light'],
-    servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
-    // 24×4 + 8×4 + 16×9 = 96+32+144 = 272 ✓
-    baseNutrition: { calories: 272, proteinGrams: 24, carbsGrams: 8, fatGrams: 16 },
-    ingredients: [
-      { name: 'Mâche', qty: 100, unit: 'g' },
-      { name: 'Saumon fumé', qty: 120, unit: 'g' },
-      { name: 'Avocat', qty: 1, unit: 'pce' },
-      { name: 'Concombre', qty: 80, unit: 'g' },
-      { name: 'Citron', qty: 1, unit: 'pce' },
-      { name: 'Aneth frais', qty: 5, unit: 'g' },
-      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Couper l'avocat en lamelles, arroser de jus de citron. Émincer le concombre.",
-      "Répartir la mâche dans les assiettes.",
-      "Disposer les tranches de saumon fumé et les lamelles d'avocat.",
-      "Ajouter le concombre, l'aneth ciselé. Arroser d'huile d'olive et de jus de citron."
-    ]
-  }
-  ,{
-    id: 'R1013',
-    name: 'Salade Tomates Burrata Basilic',
-    category: 'italian',
-    mealTypes: ['lunch'],
-    emoji: '🍅', origin: '🇮🇹',
-    tags: ['salade','vegetarian','chic'],
-    servings: 2, prepTime: 5, cookTime: 0, difficulty: 1,
-    // 10×4 + 8×4 + 16×9 = 40+32+144 = 216 ✓
-    baseNutrition: { calories: 216, proteinGrams: 10, carbsGrams: 8, fatGrams: 16 },
-    ingredients: [
-      { name: 'Tomates variées', qty: 400, unit: 'g', note: 'coeur de boeuf, cerises, ananas...' },
-      { name: 'Burrata', qty: 125, unit: 'g' },
-      { name: 'Basilic frais', qty: 15, unit: 'g' },
-      { name: 'Huile d\'olive', qty: 20, unit: 'ml', note: 'de qualité' },
-      { name: 'Fleur de sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Couper les tomates de façon variée (tranches, quartiers, cerises entières). Disposer sur le plat.",
-      "Poser la burrata au centre, entière — elle s'ouvre à la découpe.",
-      "Répartir le basilic déchiré à la main.",
-      "Arroser d'une belle huile d'olive. Fleur de sel et poivre noir. Rien d'autre — c'est la perfection dans la simplicité."
-    ]
-  }
-  ,{
-    id: 'R1014',
-    name: 'Salade Chou Blanc Crevettes Citron Vert',
-    category: 'world-food',
-    mealTypes: ['lunch'],
-    emoji: '🥬', origin: '🌍',
-    tags: ['salade','high-protein','light','express'],
-    servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
-    // 24×4 + 12×4 + 6×9 = 96+48+54 = 198 ✓
-    baseNutrition: { calories: 198, proteinGrams: 24, carbsGrams: 12, fatGrams: 6 },
-    ingredients: [
-      { name: 'Chou blanc', qty: 200, unit: 'g', note: 'émincé très fin' },
-      { name: 'Crevettes cuites', qty: 200, unit: 'g' },
-      { name: 'Carotte', qty: 100, unit: 'g', note: 'râpée' },
-      { name: 'Citron vert', qty: 2, unit: 'pce' },
-      { name: 'Coriandre fraîche', qty: 10, unit: 'g' },
-      { name: 'Piment', qty: 1, unit: 'pincée' },
-      { name: 'Huile de sésame', qty: 10, unit: 'ml' },
-      { name: 'Sel', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Émincer très finement le chou blanc, le mélanger avec la carotte râpée.",
-      "Saler légèrement, laisser dégorger 10 min. Presser pour éliminer l'eau.",
-      "Ajouter les crevettes, le jus de citron vert, le piment et l'huile de sésame.",
-      "Parsemer de coriandre fraîche. Goûter, ajuster le citron et le sel. Servir très frais."
-    ]
-  }
-
-  // ── BATCH P68 — Salades composées complètes ───────────────────────────────────
-  ,{
-    id: 'R1015',
-    name: 'Bowl Poulet Teriyaki Riz Edamame',
-    category: 'japanese',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍱', origin: '🇯🇵',
-    tags: ['salade','high-protein','balanced'],
-    servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
-    // 52×4 + 58×4 + 10×9 = 208+232+90 = 530 ✓
-    baseNutrition: { calories: 530, proteinGrams: 52, carbsGrams: 58, fatGrams: 10 },
-    ingredients: [
-      { name: 'Blanc de poulet', qty: 300, unit: 'g' },
-      { name: 'Riz cuit', qty: 200, unit: 'g' },
-      { name: 'Edamame surgelés', qty: 100, unit: 'g' },
-      { name: 'Concombre', qty: 100, unit: 'g' },
-      { name: 'Carotte', qty: 80, unit: 'g', note: 'râpée' },
-      { name: 'Sauce teriyaki', qty: 40, unit: 'ml' },
-      { name: 'Graines de sésame', qty: 10, unit: 'g' },
-      { name: 'Oignon vert', qty: 2, unit: 'pce' }
-    ],
-    steps: [
-      "Cuire le poulet dans la sauce teriyaki à la poêle 6-7 min par face. Laisser reposer, trancher.",
-      "Cuire les edamame 3 min à l'eau bouillante salée.",
-      "Composer les bols : riz → concombre en dés → carotte râpée → edamame.",
-      "Poser le poulet teriyaki tranché. Napper du reste de sauce. Parsemer de sésame et oignon vert."
-    ]
-  }
-  ,{
-    id: 'R1016',
-    name: 'Salade Panzanella Toscane',
-    category: 'italian',
-    mealTypes: ['lunch'],
-    emoji: '🍞', origin: '🇮🇹',
-    tags: ['salade','vegetarian','classic'],
-    servings: 2, prepTime: 15, cookTime: 5, difficulty: 1,
-    // 8×4 + 34×4 + 12×9 = 32+136+108 = 276 ✓
-    baseNutrition: { calories: 276, proteinGrams: 8, carbsGrams: 34, fatGrams: 12 },
-    ingredients: [
-      { name: 'Pain de campagne rassis', qty: 150, unit: 'g' },
-      { name: 'Tomates mûres', qty: 400, unit: 'g' },
-      { name: 'Concombre', qty: 150, unit: 'g' },
-      { name: 'Oignon rouge', qty: 1, unit: 'pce' },
-      { name: 'Basilic frais', qty: 15, unit: 'g' },
-      { name: 'Huile d\'olive', qty: 25, unit: 'ml' },
-      { name: 'Vinaigre de vin rouge', qty: 15, unit: 'ml' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Couper le pain rassis en cubes. Faire dorer à la poêle avec un filet d'huile — ou laisser sécher au four 10 min.",
-      "Couper les tomates en gros morceaux, le concombre et l'oignon rouge.",
-      "Mélanger légumes et pain dans un saladier. Arroser d'huile d'olive et de vinaigre.",
-      "Laisser mariner 15 min — le pain absorbe les jus de tomate. Ajouter le basilic juste avant de servir."
-    ]
-  }
-  ,{
-    id: 'R1017',
-    name: 'Salade Cobb Américaine',
-    category: 'world-food',
-    mealTypes: ['lunch'],
-    emoji: '🥗', origin: '🇺🇸',
-    tags: ['salade','high-protein','classic'],
-    servings: 2, prepTime: 15, cookTime: 10, difficulty: 1,
-    // 46×4 + 10×4 + 24×9 = 184+40+216 = 440 ✓
-    baseNutrition: { calories: 440, proteinGrams: 46, carbsGrams: 10, fatGrams: 24 },
-    ingredients: [
-      { name: 'Laitue iceberg', qty: 150, unit: 'g' },
-      { name: 'Blanc de poulet grillé', qty: 200, unit: 'g' },
-      { name: 'Oeufs durs', qty: 2, unit: 'pce' },
-      { name: 'Bacon grillé', qty: 50, unit: 'g' },
-      { name: 'Avocat', qty: 1, unit: 'pce' },
-      { name: 'Tomates cerises', qty: 100, unit: 'g' },
-      { name: 'Bleu ou roquefort', qty: 30, unit: 'g' },
-      { name: 'Vinaigrette ranch', qty: 30, unit: 'ml' }
-    ],
-    steps: [
-      "Griller le bacon et cuire les oeufs durs. Griller le poulet.",
-      "Déchirer la laitue en base. Disposer en rangées distinctes : poulet, oeufs, bacon, avocat, tomates.",
-      "Émietter le bleu sur le dessus.",
-      "Servir avec la sauce ranch à part. La tradition américaine est de présenter sans mélanger."
-    ]
-  }
-  ,{
-    id: 'R1018',
-    name: 'Salade Lentilles Vinaigrette Lardons',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🫘', origin: '🇫🇷',
-    tags: ['salade','high-protein','classic','bistrot'],
-    servings: 2, prepTime: 5, cookTime: 25, difficulty: 1,
-    // 28×4 + 36×4 + 12×9 = 112+144+108 = 364 ✓
-    baseNutrition: { calories: 364, proteinGrams: 28, carbsGrams: 36, fatGrams: 12 },
-    ingredients: [
-      { name: 'Lentilles vertes du Puy', qty: 150, unit: 'g', note: 'sèches' },
-      { name: 'Lardons fumés', qty: 80, unit: 'g' },
-      { name: 'Échalote', qty: 2, unit: 'pce' },
-      { name: 'Moutarde de Dijon', qty: 10, unit: 'g' },
-      { name: 'Vinaigre de vin rouge', qty: 15, unit: 'ml' },
-      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
-      { name: 'Persil frais', qty: 10, unit: 'g' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Cuire les lentilles 20-25 min dans de l'eau froide non salée avec une feuille de laurier. Égoutter, saler.",
-      "Faire revenir les lardons jusqu'à croustillant. Réserver avec la graisse.",
-      "Mélanger moutarde, vinaigre, huile d'olive, sel et poivre pour la vinaigrette.",
-      "Assaisonner les lentilles tièdes avec la vinaigrette, les lardons et les échalotes émincées. Parsemer de persil."
-    ]
-  }
-  ,{
-    id: 'R1019',
-    name: 'Salade Taboulé Libanais Authentique',
-    category: 'mediterranean',
-    mealTypes: ['lunch'],
-    emoji: '🌿', origin: '🇱🇧',
-    tags: ['salade','vegetarian','mediterranean','light'],
-    servings: 2, prepTime: 20, cookTime: 0, difficulty: 1,
-    // 4×4 + 16×4 + 8×9 = 16+64+72 = 152 ✓
-    baseNutrition: { calories: 152, proteinGrams: 4, carbsGrams: 16, fatGrams: 8 },
-    ingredients: [
-      { name: 'Boulgour fin', qty: 40, unit: 'g' },
-      { name: 'Persil plat frais', qty: 100, unit: 'g' },
-      { name: 'Menthe fraîche', qty: 20, unit: 'g' },
-      { name: 'Tomates', qty: 200, unit: 'g' },
-      { name: 'Oignon vert', qty: 4, unit: 'pce' },
-      { name: 'Citron', qty: 2, unit: 'pce', note: 'jus' },
-      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
-      { name: 'Sel', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Réhydrater le boulgour fin dans de l'eau froide 15 min. Égoutter, presser dans un torchon.",
-      "Hacher très finement le persil et la menthe — c'est le principe du taboulé libanais : 80% d'herbes, 20% de céréales.",
-      "Couper les tomates en minuscules dés. Émincer finement les oignons verts.",
-      "Tout mélanger avec le jus de citron et l'huile d'olive. Saler. Réfrigérer 30 min minimum."
-    ]
-  }
-
-  // ── BATCH P69 — Sauces & dressings pour salades ───────────────────────────────
-  ,{
-    id: 'R1020',
-    name: 'Dressing Caesar Maison',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🥗', origin: '🇺🇸',
-    tags: ['sauce','condiment','classic'],
-    servings: 4, prepTime: 5, cookTime: 0, difficulty: 1,
-    // 6×4 + 4×4 + 20×9 = 24+16+180 = 220 ✓
-    baseNutrition: { calories: 220, proteinGrams: 6, carbsGrams: 4, fatGrams: 20 },
-    ingredients: [
-      { name: 'Jaune d\'oeuf', qty: 1, unit: 'pce' },
-      { name: 'Anchois à l\'huile', qty: 20, unit: 'g' },
-      { name: 'Ail', qty: 1, unit: 'pce', note: 'gousse' },
-      { name: 'Moutarde de Dijon', qty: 10, unit: 'g' },
-      { name: 'Jus de citron', qty: 15, unit: 'ml' },
-      { name: 'Huile d\'olive', qty: 50, unit: 'ml' },
-      { name: 'Parmesan râpé', qty: 20, unit: 'g' },
-      { name: 'Sauce Worcestershire', qty: 5, unit: 'ml' },
-      { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Écraser les anchois et l'ail en pâte fine avec le plat d'un couteau.",
-      "Dans un bol, fouetter jaune d'oeuf, moutarde, citron, worcestershire.",
-      "Incorporer l'huile en filet en fouettant pour émulsionner. Ajouter le parmesan.",
-      "Ajuster la consistance avec un peu d'eau. Sel, poivre. Idéale pour romaine, croutons, poulet grillé."
-    ]
-  }
-  ,{
-    id: 'R1021',
-    name: 'Vinaigrette Miel Citron Orange',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍊', origin: '🇫🇷',
-    tags: ['sauce','condiment','light','vegetarian'],
-    servings: 4, prepTime: 3, cookTime: 0, difficulty: 1,
-    // 0×4 + 12×4 + 14×9 = 0+48+126 = 174 ✓
-    baseNutrition: { calories: 174, proteinGrams: 0, carbsGrams: 12, fatGrams: 14 },
-    ingredients: [
-      { name: 'Huile d\'olive', qty: 40, unit: 'ml' },
-      { name: 'Jus d\'orange', qty: 30, unit: 'ml' },
-      { name: 'Jus de citron', qty: 15, unit: 'ml' },
-      { name: 'Miel', qty: 15, unit: 'g' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Mélanger miel, jus d'orange et jus de citron jusqu'à dissolution.",
-      "Incorporer l'huile d'olive en fouettant.",
-      "Saler et poivrer.",
-      "Parfait pour salade mâche-betterave, fenouil-orange, endives, roquette-pamplemousse. Se conserve 1 semaine."
-    ]
-  }
-  ,{
-    id: 'R1022',
-    name: 'Sauce Sésame Soja Gingembre',
-    category: 'japanese',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🫙', origin: '🇯🇵',
-    tags: ['sauce','condiment','express','vegetarian'],
-    servings: 4, prepTime: 5, cookTime: 0, difficulty: 1,
-    // 2×4 + 8×4 + 8×9 = 8+32+72 = 112 ✓
-    baseNutrition: { calories: 112, proteinGrams: 2, carbsGrams: 8, fatGrams: 8 },
-    ingredients: [
-      { name: 'Sauce soja', qty: 30, unit: 'ml' },
-      { name: 'Huile de sésame', qty: 20, unit: 'ml' },
-      { name: 'Vinaigre de riz', qty: 15, unit: 'ml' },
-      { name: 'Gingembre frais', qty: 10, unit: 'g', note: 'râpé' },
-      { name: 'Ail', qty: 1, unit: 'pce', note: 'gousse' },
-      { name: 'Miel', qty: 10, unit: 'g' },
-      { name: 'Graines de sésame', qty: 5, unit: 'g' }
-    ],
-    steps: [
-      "Râper le gingembre, hacher l'ail finement.",
-      "Mélanger tous les ingrédients en fouettant.",
-      "Goûter et ajuster : plus de soja pour le salé, plus de miel pour l'équilibre.",
-      "Parfait pour salades asiatiques, nouilles froides, concombre mariné, poulet grillé. Se conserve 2 semaines au réfrigérateur."
-    ]
-  }
-  ,{
-    id: 'R1023',
-    name: 'Sauce Ranch Crémeuse Maison',
-    category: 'world-food',
-    mealTypes: ['lunch','dinner','snack'],
-    emoji: '🥛', origin: '🇺🇸',
-    tags: ['sauce','condiment','comfort'],
-    servings: 4, prepTime: 5, cookTime: 0, difficulty: 1,
-    // 4×4 + 4×4 + 22×9 = 16+16+198 = 230 ✓
-    baseNutrition: { calories: 230, proteinGrams: 4, carbsGrams: 4, fatGrams: 22 },
-    ingredients: [
-      { name: 'Mayonnaise', qty: 80, unit: 'g' },
-      { name: 'Crème fraîche', qty: 60, unit: 'ml' },
-      { name: 'Ail en poudre', qty: 3, unit: 'g' },
-      { name: 'Oignon en poudre', qty: 3, unit: 'g' },
-      { name: 'Ciboulette fraîche', qty: 10, unit: 'g' },
-      { name: 'Aneth séché', qty: 2, unit: 'g' },
-      { name: 'Jus de citron', qty: 10, unit: 'ml' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Mélanger mayonnaise et crème fraîche.",
-      "Ajouter ail en poudre, oignon en poudre, aneth, sel et poivre.",
-      "Incorporer la ciboulette ciselée et le jus de citron.",
-      "Réfrigérer 30 min. Idéal pour salades composées, légumes crus, ailes de poulet, burgers."
-    ]
-  }
-  ,{
-    id: 'R1024',
-    name: 'Vinaigrette Tahini Citron Ail',
-    category: 'mediterranean',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🫙', origin: '🇱🇧',
-    tags: ['sauce','condiment','vegetarian','healthy'],
-    servings: 4, prepTime: 5, cookTime: 0, difficulty: 1,
-    // 6×4 + 8×4 + 14×9 = 24+32+126 = 182 ✓
-    baseNutrition: { calories: 182, proteinGrams: 6, carbsGrams: 8, fatGrams: 14 },
-    ingredients: [
-      { name: 'Tahini', qty: 40, unit: 'g' },
-      { name: 'Jus de citron', qty: 30, unit: 'ml' },
-      { name: 'Ail', qty: 1, unit: 'pce', note: 'gousse' },
-      { name: 'Eau froide', qty: 40, unit: 'ml' },
-      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
-      { name: 'Sel', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Mélanger tahini et jus de citron — la sauce va d'abord épaissir, c'est normal.",
-      "Ajouter l'ail écrasé, l'eau froide progressivement en fouettant jusqu'à consistance fluide.",
-      "Incorporer l'huile d'olive. Saler.",
-      "Idéale pour bowl Buddha, falafels, légumes rôtis, salade de quinoa. Se conserve 5 jours au frais."
-    ]
-  }
-
-  // ── BATCH P70 — Sauces cuites pour viandes & poissons ─────────────────────────
-  ,{
-    id: 'R1025',
-    name: 'Sauce au Poivre Vert Cognac',
-    category: 'french',
-    mealTypes: ['dinner'],
-    emoji: '🌶️', origin: '🇫🇷',
-    tags: ['sauce','classic','fete','condiment'],
-    servings: 2, prepTime: 5, cookTime: 10, difficulty: 2,
-    // 2×4 + 4×4 + 14×9 = 8+16+126 = 150 ✓
-    baseNutrition: { calories: 150, proteinGrams: 2, carbsGrams: 4, fatGrams: 14 },
-    ingredients: [
-      { name: 'Poivre vert en boîte', qty: 15, unit: 'g' },
-      { name: 'Cognac', qty: 20, unit: 'ml' },
-      { name: 'Crème fraîche', qty: 100, unit: 'ml' },
-      { name: 'Fond de veau', qty: 50, unit: 'ml' },
-      { name: 'Échalote', qty: 1, unit: 'pce' },
-      { name: 'Beurre', qty: 10, unit: 'g' }
-    ],
-    steps: [
-      "Faire revenir l'échalote émincée dans le beurre 2 min.",
-      "Ajouter le poivre vert légèrement écrasé. Flamber au cognac — incliner la poêle pour enflammer ou laisser s'évaporer.",
-      "Verser le fond de veau, réduire 2 min.",
-      "Ajouter la crème fraîche, cuire 3-4 min jusqu'à nappant. Rectifier l'assaisonnement. Idéale pour entrecôte, filet mignon."
-    ]
-  }
-  ,{
-    id: 'R1026',
-    name: 'Beurre Blanc Nantais',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🧈', origin: '🇫🇷',
-    tags: ['sauce','classic','fete','condiment'],
-    servings: 2, prepTime: 5, cookTime: 10, difficulty: 2,
-    // 2×4 + 2×4 + 22×9 = 8+8+198 = 214 ✓
-    baseNutrition: { calories: 214, proteinGrams: 2, carbsGrams: 2, fatGrams: 22 },
-    ingredients: [
-      { name: 'Beurre froid', qty: 80, unit: 'g', note: 'en cubes' },
-      { name: 'Échalotes', qty: 2, unit: 'pce' },
-      { name: 'Vin blanc sec', qty: 60, unit: 'ml' },
-      { name: 'Vinaigre de vin blanc', qty: 20, unit: 'ml' },
-      { name: 'Sel, poivre blanc', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Émincer finement les échalotes. Faire réduire avec le vin blanc et le vinaigre jusqu'à quasi-sec.",
-      "Réduire le feu au minimum. Incorporer le beurre froid cube par cube en fouettant constamment.",
-      "La sauce doit être mousseuse et nappante. Ne jamais bouillir après ajout du beurre.",
-      "Filtrer les échalotes ou les garder. Servir immédiatement avec poisson blanc, coquilles Saint-Jacques, asperges."
-    ]
-  }
-  ,{
-    id: 'R1027',
-    name: 'Sauce Moutarde Crème Estragon',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🌿', origin: '🇫🇷',
-    tags: ['sauce','classic','express','condiment'],
-    servings: 2, prepTime: 3, cookTime: 8, difficulty: 1,
-    // 2×4 + 4×4 + 12×9 = 8+16+108 = 132 ✓
-    baseNutrition: { calories: 132, proteinGrams: 2, carbsGrams: 4, fatGrams: 12 },
-    ingredients: [
-      { name: 'Crème fraîche', qty: 100, unit: 'ml' },
-      { name: 'Moutarde à l\'ancienne', qty: 20, unit: 'g' },
-      { name: 'Estragon frais', qty: 5, unit: 'g' },
-      { name: 'Échalote', qty: 1, unit: 'pce' },
-      { name: 'Vin blanc', qty: 30, unit: 'ml' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Faire revenir l'échalote finement émincée sans coloration 2 min.",
-      "Déglacer au vin blanc, réduire de moitié.",
-      "Ajouter la crème fraîche et la moutarde. Laisser épaissir 4-5 min à feu moyen.",
-      "Ajouter l'estragon ciselé hors du feu. Assaisonner. Parfaite avec poulet, veau, lapin ou filets de poisson."
-    ]
-  }
-  ,{
-    id: 'R1028',
-    name: 'Sauce Vierge Tomate Basilic Citron',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🍅', origin: '🇫🇷',
-    tags: ['sauce','vegetarian','light','condiment'],
-    servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
-    // 2×4 + 6×4 + 10×9 = 8+24+90 = 122 ✓
-    baseNutrition: { calories: 122, proteinGrams: 2, carbsGrams: 6, fatGrams: 10 },
-    ingredients: [
-      { name: 'Tomates', qty: 200, unit: 'g', note: 'bien mûres, en dés' },
-      { name: 'Basilic frais', qty: 10, unit: 'g' },
-      { name: 'Ciboulette', qty: 5, unit: 'g' },
-      { name: 'Citron', qty: 1, unit: 'pce', note: 'jus + zeste' },
-      { name: 'Huile d\'olive', qty: 25, unit: 'ml' },
-      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Monder les tomates si désiré (peler après 30 sec dans l'eau bouillante). Couper en tout petits dés.",
-      "Ciseler finement basilic et ciboulette.",
-      "Mélanger tomates, herbes, jus et zeste de citron, huile d'olive. Assaisonner.",
-      "Sauce crue à servir fraîche ou légèrement tiédie — idéale avec poisson grillé, coquilles Saint-Jacques, blanc de volaille."
-    ]
-  }
-  ,{
-    id: 'R1029',
-    name: 'Sauce Rouille Marseillaise',
-    category: 'french',
-    mealTypes: ['lunch','dinner'],
-    emoji: '🌶️', origin: '🇫🇷',
-    tags: ['sauce','classic','mediterranean','condiment'],
-    servings: 4, prepTime: 10, cookTime: 0, difficulty: 2,
-    // 2×4 + 4×4 + 24×9 = 8+16+216 = 240 ✓
-    baseNutrition: { calories: 240, proteinGrams: 2, carbsGrams: 4, fatGrams: 24 },
-    ingredients: [
-      { name: 'Ail', qty: 4, unit: 'pce', note: 'gousses' },
-      { name: 'Piment rouge', qty: 1, unit: 'pce' },
-      { name: 'Jaune d\'oeuf', qty: 1, unit: 'pce' },
-      { name: 'Huile d\'olive', qty: 80, unit: 'ml' },
-      { name: 'Safran', qty: 1, unit: 'pincée' },
-      { name: 'Jus de citron', qty: 10, unit: 'ml' },
-      { name: 'Sel', qty: 1, unit: 'pincée' }
-    ],
-    steps: [
-      "Piler l'ail et le piment en pâte fine dans un mortier. Ajouter le safran.",
-      "Incorporer le jaune d'oeuf, mélanger.",
-      "Verser l'huile d'olive en filet très fin tout en fouettant jusqu'à consistance de mayonnaise épaisse.",
-      "Ajouter le jus de citron, saler. Essentielle avec la bouillabaisse, pain grillé, soupe de poisson."
-    ]
-  }
-
-  // ─────────────────────────────────────────────────────────────────────────────
-  // FIN RECIPES_DB — à continuer avec les batches suivants au-dessus de cette ligne
-  // ─────────────────────────────────────────────────────────────────────────────
   ];
 
   // ─── NORMALISATION ─────────────────────────────────────────────────────────────
@@ -40862,9 +29950,9 @@
     var isMaple = n.indexOf('sirop') >= 0 && n.indexOf('erable') >= 0 || n.indexOf('sirop') >= 0 && n.indexOf('érable') >= 0;
     if (isOil || isVinegar || isSauce || isHoney || isMaple) {
       if (u === 'g' || u === 'ml') {
-        if (Math.round(q) === 5)  return { qty: 1, unit: 'c.à.café' };
+        if (Math.round(q) === 5)  return { qty: 1, unit: 'cc' };
         if (Math.round(q) === 15) return { qty: 1, unit: 'c.à.soupe' };
-        if (Math.round(q) === 10) return { qty: 2, unit: 'c.à.café' };
+        if (Math.round(q) === 10) return { qty: 2, unit: 'cc' };
         if (Math.round(q) === 30) return { qty: 2, unit: 'c.à.soupe' };
         if (Math.round(q) === 45) return { qty: 3, unit: 'c.à.soupe' };
         if (Math.round(q) === 60) return { qty: 4, unit: 'c.à.soupe' };
@@ -40897,8 +29985,8 @@
     var isDairyButter = n.indexOf('beurre') >= 0 && !/beurre\s+d[e']\s*(cacahu|amande|noix|cajou|noisette|pistache|arachide)/i.test(n);
     if (isDairyButter) {
       if (u === 'g') {
-        if (Math.round(q) === 5)  return { qty: 1, unit: 'c.à.café' };
-        if (Math.round(q) === 10) return { qty: 2, unit: 'c.à.café' };
+        if (Math.round(q) === 5)  return { qty: 1, unit: 'cc' };
+        if (Math.round(q) === 10) return { qty: 2, unit: 'cc' };
         if (Math.round(q) === 15) return { qty: 1, unit: 'c.à.soupe' };
         if (Math.round(q) === 30) return { qty: 2, unit: 'c.à.soupe' };
       }
@@ -40915,10 +30003,10 @@
       if (n.indexOf(spiceKeywords[si]) >= 0) { isSpice = true; break; }
     }
     if (isSpice && u === 'g' && q <= 10) {
-      if (q <= 1)              return { qty: '¼',  unit: 'c.à.café' };
-      if (q <= 2)              return { qty: '½',  unit: 'c.à.café' };
-      if (q >= 3 && q <= 4)   return { qty: 1,    unit: 'c.à.café' };
-      if (q >= 5 && q < 6)    return { qty: '1½', unit: 'c.à.café' };
+      if (q <= 1)              return { qty: '¼',  unit: 'cc' };
+      if (q <= 2)              return { qty: '½',  unit: 'cc' };
+      if (q >= 3 && q <= 4)   return { qty: 1,    unit: 'cc' };
+      if (q >= 5 && q < 6)    return { qty: '1½', unit: 'cc' };
       if (q >= 6 && q <= 8)   return { qty: 1,    unit: 'c.à.soupe' };
       if (q >= 9 && q <= 10)  return { qty: '1½', unit: 'c.à.soupe' };
     }
