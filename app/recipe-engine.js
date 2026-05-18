@@ -40000,6 +40000,265 @@
     ]
   }
 
+  // ── BATCH P69 — Sauces & dressings pour salades ───────────────────────────────
+  ,{
+    id: 'R1020',
+    name: 'Dressing Caesar Maison',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🥗', origin: '🇺🇸',
+    tags: ['sauce','condiment','classic'],
+    servings: 4, prepTime: 5, cookTime: 0, difficulty: 1,
+    // 6×4 + 4×4 + 20×9 = 24+16+180 = 220 ✓
+    baseNutrition: { calories: 220, proteinGrams: 6, carbsGrams: 4, fatGrams: 20 },
+    ingredients: [
+      { name: 'Jaune d\'oeuf', qty: 1, unit: 'pce' },
+      { name: 'Anchois à l\'huile', qty: 20, unit: 'g' },
+      { name: 'Ail', qty: 1, unit: 'pce', note: 'gousse' },
+      { name: 'Moutarde de Dijon', qty: 10, unit: 'g' },
+      { name: 'Jus de citron', qty: 15, unit: 'ml' },
+      { name: 'Huile d\'olive', qty: 50, unit: 'ml' },
+      { name: 'Parmesan râpé', qty: 20, unit: 'g' },
+      { name: 'Sauce Worcestershire', qty: 5, unit: 'ml' },
+      { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Écraser les anchois et l'ail en pâte fine avec le plat d'un couteau.",
+      "Dans un bol, fouetter jaune d'oeuf, moutarde, citron, worcestershire.",
+      "Incorporer l'huile en filet en fouettant pour émulsionner. Ajouter le parmesan.",
+      "Ajuster la consistance avec un peu d'eau. Sel, poivre. Idéale pour romaine, croutons, poulet grillé."
+    ]
+  }
+  ,{
+    id: 'R1021',
+    name: 'Vinaigrette Miel Citron Orange',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍊', origin: '🇫🇷',
+    tags: ['sauce','condiment','light','vegetarian'],
+    servings: 4, prepTime: 3, cookTime: 0, difficulty: 1,
+    // 0×4 + 12×4 + 14×9 = 0+48+126 = 174 ✓
+    baseNutrition: { calories: 174, proteinGrams: 0, carbsGrams: 12, fatGrams: 14 },
+    ingredients: [
+      { name: 'Huile d\'olive', qty: 40, unit: 'ml' },
+      { name: 'Jus d\'orange', qty: 30, unit: 'ml' },
+      { name: 'Jus de citron', qty: 15, unit: 'ml' },
+      { name: 'Miel', qty: 15, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Mélanger miel, jus d'orange et jus de citron jusqu'à dissolution.",
+      "Incorporer l'huile d'olive en fouettant.",
+      "Saler et poivrer.",
+      "Parfait pour salade mâche-betterave, fenouil-orange, endives, roquette-pamplemousse. Se conserve 1 semaine."
+    ]
+  }
+  ,{
+    id: 'R1022',
+    name: 'Sauce Sésame Soja Gingembre',
+    category: 'japanese',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🫙', origin: '🇯🇵',
+    tags: ['sauce','condiment','express','vegetarian'],
+    servings: 4, prepTime: 5, cookTime: 0, difficulty: 1,
+    // 2×4 + 8×4 + 8×9 = 8+32+72 = 112 ✓
+    baseNutrition: { calories: 112, proteinGrams: 2, carbsGrams: 8, fatGrams: 8 },
+    ingredients: [
+      { name: 'Sauce soja', qty: 30, unit: 'ml' },
+      { name: 'Huile de sésame', qty: 20, unit: 'ml' },
+      { name: 'Vinaigre de riz', qty: 15, unit: 'ml' },
+      { name: 'Gingembre frais', qty: 10, unit: 'g', note: 'râpé' },
+      { name: 'Ail', qty: 1, unit: 'pce', note: 'gousse' },
+      { name: 'Miel', qty: 10, unit: 'g' },
+      { name: 'Graines de sésame', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      "Râper le gingembre, hacher l'ail finement.",
+      "Mélanger tous les ingrédients en fouettant.",
+      "Goûter et ajuster : plus de soja pour le salé, plus de miel pour l'équilibre.",
+      "Parfait pour salades asiatiques, nouilles froides, concombre mariné, poulet grillé. Se conserve 2 semaines au réfrigérateur."
+    ]
+  }
+  ,{
+    id: 'R1023',
+    name: 'Sauce Ranch Crémeuse Maison',
+    category: 'world-food',
+    mealTypes: ['lunch','dinner','snack'],
+    emoji: '🥛', origin: '🇺🇸',
+    tags: ['sauce','condiment','comfort'],
+    servings: 4, prepTime: 5, cookTime: 0, difficulty: 1,
+    // 4×4 + 4×4 + 22×9 = 16+16+198 = 230 ✓
+    baseNutrition: { calories: 230, proteinGrams: 4, carbsGrams: 4, fatGrams: 22 },
+    ingredients: [
+      { name: 'Mayonnaise', qty: 80, unit: 'g' },
+      { name: 'Crème fraîche', qty: 60, unit: 'ml' },
+      { name: 'Ail en poudre', qty: 3, unit: 'g' },
+      { name: 'Oignon en poudre', qty: 3, unit: 'g' },
+      { name: 'Ciboulette fraîche', qty: 10, unit: 'g' },
+      { name: 'Aneth séché', qty: 2, unit: 'g' },
+      { name: 'Jus de citron', qty: 10, unit: 'ml' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Mélanger mayonnaise et crème fraîche.",
+      "Ajouter ail en poudre, oignon en poudre, aneth, sel et poivre.",
+      "Incorporer la ciboulette ciselée et le jus de citron.",
+      "Réfrigérer 30 min. Idéal pour salades composées, légumes crus, ailes de poulet, burgers."
+    ]
+  }
+  ,{
+    id: 'R1024',
+    name: 'Vinaigrette Tahini Citron Ail',
+    category: 'mediterranean',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🫙', origin: '🇱🇧',
+    tags: ['sauce','condiment','vegetarian','healthy'],
+    servings: 4, prepTime: 5, cookTime: 0, difficulty: 1,
+    // 6×4 + 8×4 + 14×9 = 24+32+126 = 182 ✓
+    baseNutrition: { calories: 182, proteinGrams: 6, carbsGrams: 8, fatGrams: 14 },
+    ingredients: [
+      { name: 'Tahini', qty: 40, unit: 'g' },
+      { name: 'Jus de citron', qty: 30, unit: 'ml' },
+      { name: 'Ail', qty: 1, unit: 'pce', note: 'gousse' },
+      { name: 'Eau froide', qty: 40, unit: 'ml' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Sel', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Mélanger tahini et jus de citron — la sauce va d'abord épaissir, c'est normal.",
+      "Ajouter l'ail écrasé, l'eau froide progressivement en fouettant jusqu'à consistance fluide.",
+      "Incorporer l'huile d'olive. Saler.",
+      "Idéale pour bowl Buddha, falafels, légumes rôtis, salade de quinoa. Se conserve 5 jours au frais."
+    ]
+  }
+
+  // ── BATCH P70 — Sauces cuites pour viandes & poissons ─────────────────────────
+  ,{
+    id: 'R1025',
+    name: 'Sauce au Poivre Vert Cognac',
+    category: 'french',
+    mealTypes: ['dinner'],
+    emoji: '🌶️', origin: '🇫🇷',
+    tags: ['sauce','classic','fete','condiment'],
+    servings: 2, prepTime: 5, cookTime: 10, difficulty: 2,
+    // 2×4 + 4×4 + 14×9 = 8+16+126 = 150 ✓
+    baseNutrition: { calories: 150, proteinGrams: 2, carbsGrams: 4, fatGrams: 14 },
+    ingredients: [
+      { name: 'Poivre vert en boîte', qty: 15, unit: 'g' },
+      { name: 'Cognac', qty: 20, unit: 'ml' },
+      { name: 'Crème fraîche', qty: 100, unit: 'ml' },
+      { name: 'Fond de veau', qty: 50, unit: 'ml' },
+      { name: 'Échalote', qty: 1, unit: 'pce' },
+      { name: 'Beurre', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      "Faire revenir l'échalote émincée dans le beurre 2 min.",
+      "Ajouter le poivre vert légèrement écrasé. Flamber au cognac — incliner la poêle pour enflammer ou laisser s'évaporer.",
+      "Verser le fond de veau, réduire 2 min.",
+      "Ajouter la crème fraîche, cuire 3-4 min jusqu'à nappant. Rectifier l'assaisonnement. Idéale pour entrecôte, filet mignon."
+    ]
+  }
+  ,{
+    id: 'R1026',
+    name: 'Beurre Blanc Nantais',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🧈', origin: '🇫🇷',
+    tags: ['sauce','classic','fete','condiment'],
+    servings: 2, prepTime: 5, cookTime: 10, difficulty: 2,
+    // 2×4 + 2×4 + 22×9 = 8+8+198 = 214 ✓
+    baseNutrition: { calories: 214, proteinGrams: 2, carbsGrams: 2, fatGrams: 22 },
+    ingredients: [
+      { name: 'Beurre froid', qty: 80, unit: 'g', note: 'en cubes' },
+      { name: 'Échalotes', qty: 2, unit: 'pce' },
+      { name: 'Vin blanc sec', qty: 60, unit: 'ml' },
+      { name: 'Vinaigre de vin blanc', qty: 20, unit: 'ml' },
+      { name: 'Sel, poivre blanc', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Émincer finement les échalotes. Faire réduire avec le vin blanc et le vinaigre jusqu'à quasi-sec.",
+      "Réduire le feu au minimum. Incorporer le beurre froid cube par cube en fouettant constamment.",
+      "La sauce doit être mousseuse et nappante. Ne jamais bouillir après ajout du beurre.",
+      "Filtrer les échalotes ou les garder. Servir immédiatement avec poisson blanc, coquilles Saint-Jacques, asperges."
+    ]
+  }
+  ,{
+    id: 'R1027',
+    name: 'Sauce Moutarde Crème Estragon',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🌿', origin: '🇫🇷',
+    tags: ['sauce','classic','express','condiment'],
+    servings: 2, prepTime: 3, cookTime: 8, difficulty: 1,
+    // 2×4 + 4×4 + 12×9 = 8+16+108 = 132 ✓
+    baseNutrition: { calories: 132, proteinGrams: 2, carbsGrams: 4, fatGrams: 12 },
+    ingredients: [
+      { name: 'Crème fraîche', qty: 100, unit: 'ml' },
+      { name: 'Moutarde à l\'ancienne', qty: 20, unit: 'g' },
+      { name: 'Estragon frais', qty: 5, unit: 'g' },
+      { name: 'Échalote', qty: 1, unit: 'pce' },
+      { name: 'Vin blanc', qty: 30, unit: 'ml' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Faire revenir l'échalote finement émincée sans coloration 2 min.",
+      "Déglacer au vin blanc, réduire de moitié.",
+      "Ajouter la crème fraîche et la moutarde. Laisser épaissir 4-5 min à feu moyen.",
+      "Ajouter l'estragon ciselé hors du feu. Assaisonner. Parfaite avec poulet, veau, lapin ou filets de poisson."
+    ]
+  }
+  ,{
+    id: 'R1028',
+    name: 'Sauce Vierge Tomate Basilic Citron',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍅', origin: '🇫🇷',
+    tags: ['sauce','vegetarian','light','condiment'],
+    servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
+    // 2×4 + 6×4 + 10×9 = 8+24+90 = 122 ✓
+    baseNutrition: { calories: 122, proteinGrams: 2, carbsGrams: 6, fatGrams: 10 },
+    ingredients: [
+      { name: 'Tomates', qty: 200, unit: 'g', note: 'bien mûres, en dés' },
+      { name: 'Basilic frais', qty: 10, unit: 'g' },
+      { name: 'Ciboulette', qty: 5, unit: 'g' },
+      { name: 'Citron', qty: 1, unit: 'pce', note: 'jus + zeste' },
+      { name: 'Huile d\'olive', qty: 25, unit: 'ml' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Monder les tomates si désiré (peler après 30 sec dans l'eau bouillante). Couper en tout petits dés.",
+      "Ciseler finement basilic et ciboulette.",
+      "Mélanger tomates, herbes, jus et zeste de citron, huile d'olive. Assaisonner.",
+      "Sauce crue à servir fraîche ou légèrement tiédie — idéale avec poisson grillé, coquilles Saint-Jacques, blanc de volaille."
+    ]
+  }
+  ,{
+    id: 'R1029',
+    name: 'Sauce Rouille Marseillaise',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🌶️', origin: '🇫🇷',
+    tags: ['sauce','classic','mediterranean','condiment'],
+    servings: 4, prepTime: 10, cookTime: 0, difficulty: 2,
+    // 2×4 + 4×4 + 24×9 = 8+16+216 = 240 ✓
+    baseNutrition: { calories: 240, proteinGrams: 2, carbsGrams: 4, fatGrams: 24 },
+    ingredients: [
+      { name: 'Ail', qty: 4, unit: 'pce', note: 'gousses' },
+      { name: 'Piment rouge', qty: 1, unit: 'pce' },
+      { name: 'Jaune d\'oeuf', qty: 1, unit: 'pce' },
+      { name: 'Huile d\'olive', qty: 80, unit: 'ml' },
+      { name: 'Safran', qty: 1, unit: 'pincée' },
+      { name: 'Jus de citron', qty: 10, unit: 'ml' },
+      { name: 'Sel', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Piler l'ail et le piment en pâte fine dans un mortier. Ajouter le safran.",
+      "Incorporer le jaune d'oeuf, mélanger.",
+      "Verser l'huile d'olive en filet très fin tout en fouettant jusqu'à consistance de mayonnaise épaisse.",
+      "Ajouter le jus de citron, saler. Essentielle avec la bouillabaisse, pain grillé, soupe de poisson."
+    ]
+  }
+
   // ─────────────────────────────────────────────────────────────────────────────
   // FIN RECIPES_DB — à continuer avec les batches suivants au-dessus de cette ligne
   // ─────────────────────────────────────────────────────────────────────────────
