@@ -37976,6 +37976,284 @@
     ]
   }
 
+  // ── BATCH P54 — Plats du monde express ───────────────────────────────────────
+  ,{
+    id: 'R945',
+    name: 'Riz Cantonais Maison',
+    category: 'world-food',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍳', origin: '🇨🇳',
+    tags: ['express','classic','balanced'],
+    servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
+    // 22×4 + 56×4 + 12×9 = 88+224+108 = 420 ✓
+    baseNutrition: { calories: 420, proteinGrams: 22, carbsGrams: 56, fatGrams: 12 },
+    ingredients: [
+      { name: 'Riz cuit (de la veille)', qty: 300, unit: 'g' },
+      { name: 'Jambon blanc', qty: 80, unit: 'g' },
+      { name: 'Petits pois surgelés', qty: 80, unit: 'g' },
+      { name: 'Oeufs', qty: 2, unit: 'pce' },
+      { name: 'Sauce soja', qty: 20, unit: 'ml' },
+      { name: 'Huile de sésame', qty: 10, unit: 'ml' },
+      { name: 'Oignon vert', qty: 2, unit: 'pce' },
+      { name: 'Huile végétale', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      "Chauffer le wok à feu très vif avec l'huile végétale. Ajouter les petits pois et le jambon en dés, sauter 2 min.",
+      "Pousser sur le côté. Casser les oeufs directement, brouiller rapidement.",
+      "Ajouter le riz froid, émietter à la spatule. Sauter 3-4 min à feu vif.",
+      "Arroser de sauce soja et d'huile de sésame. Mélanger vivement. Garnir d'oignons verts émincés."
+    ]
+  }
+  ,{
+    id: 'R946',
+    name: 'Tacos au Poulet Grillé',
+    category: 'mexican',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🌮', origin: '🇲🇽',
+    tags: ['express','high-protein','spiced'],
+    servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
+    // 46×4 + 36×4 + 14×9 = 184+144+126 = 454 ✓
+    baseNutrition: { calories: 454, proteinGrams: 46, carbsGrams: 36, fatGrams: 14 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 300, unit: 'g' },
+      { name: 'Tortillas maïs', qty: 4, unit: 'pce' },
+      { name: 'Oignon rouge', qty: 1, unit: 'pce' },
+      { name: 'Coriandre fraîche', qty: 10, unit: 'g' },
+      { name: 'Lime', qty: 1, unit: 'pce' },
+      { name: 'Crème fraîche', qty: 30, unit: 'g' },
+      { name: 'Cumin, paprika', qty: 5, unit: 'g' },
+      { name: 'Huile végétale', qty: 10, unit: 'ml' },
+      { name: 'Sel', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Assaisonner le poulet avec cumin, paprika, sel. Griller dans l'huile 4-5 min de chaque côté.",
+      "Laisser reposer 3 min puis couper en lamelles.",
+      "Réchauffer les tortillas à sec dans une poêle.",
+      "Garnir avec le poulet, oignon rouge émincé, coriandre, un trait de lime et une cuillère de crème. Servir aussitôt."
+    ]
+  }
+  ,{
+    id: 'R947',
+    name: 'Pad Thaï Express au Poulet',
+    category: 'world-food',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍜', origin: '🇹🇭',
+    tags: ['express','balanced','spiced'],
+    servings: 2, prepTime: 10, cookTime: 15, difficulty: 2,
+    // 42×4 + 48×4 + 14×9 = 168+192+126 = 486 ✓
+    baseNutrition: { calories: 486, proteinGrams: 42, carbsGrams: 48, fatGrams: 14 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 280, unit: 'g' },
+      { name: 'Nouilles de riz larges', qty: 120, unit: 'g' },
+      { name: 'Oeufs', qty: 2, unit: 'pce' },
+      { name: 'Sauce poisson (nuoc mam)', qty: 20, unit: 'ml' },
+      { name: 'Sauce tamarin', qty: 15, unit: 'ml' },
+      { name: 'Sucre', qty: 8, unit: 'g' },
+      { name: 'Oignon vert', qty: 3, unit: 'pce' },
+      { name: 'Cacahuètes concassées', qty: 20, unit: 'g' },
+      { name: 'Germes de soja', qty: 60, unit: 'g' },
+      { name: 'Huile végétale', qty: 15, unit: 'ml' },
+      { name: 'Lime', qty: 1, unit: 'pce' }
+    ],
+    steps: [
+      "Faire tremper les nouilles dans l'eau chaude 8 min, égoutter. Mélanger sauce poisson, tamarin et sucre.",
+      "Faire sauter le poulet en lamelles dans l'huile très chaude 5 min. Réserver.",
+      "Dans le même wok, faire les oeufs brouillés. Ajouter les nouilles et la sauce, mélanger vivement.",
+      "Remettre le poulet, ajouter les germes de soja. Servir avec cacahuètes, oignons verts et lime."
+    ]
+  }
+  ,{
+    id: 'R948',
+    name: 'Falafels Pita Sauce Yaourt',
+    category: 'mediterranean',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🥙', origin: '🇱🇧',
+    tags: ['vegetarian','high-protein','mediterranean'],
+    servings: 2, prepTime: 15, cookTime: 15, difficulty: 2,
+    // 22×4 + 56×4 + 14×9 = 88+224+126 = 438 ✓
+    baseNutrition: { calories: 438, proteinGrams: 22, carbsGrams: 56, fatGrams: 14 },
+    ingredients: [
+      { name: 'Pois chiches en boîte', qty: 300, unit: 'g', note: 'égouttés' },
+      { name: 'Ail', qty: 2, unit: 'pce', note: 'gousses' },
+      { name: 'Oignon', qty: 1, unit: 'pce', note: 'demi' },
+      { name: 'Coriandre fraîche', qty: 15, unit: 'g' },
+      { name: 'Cumin', qty: 5, unit: 'g' },
+      { name: 'Farine', qty: 20, unit: 'g' },
+      { name: 'Pains pita', qty: 2, unit: 'pce' },
+      { name: 'Yaourt grec', qty: 80, unit: 'g' },
+      { name: 'Citron', qty: 1, unit: 'pce' },
+      { name: 'Huile végétale', qty: 20, unit: 'ml' },
+      { name: 'Sel', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Mixer pois chiches, ail, oignon, coriandre, cumin et sel. Ajouter la farine pour lier. Former des boulettes aplaties.",
+      "Faire frire dans l'huile chaude 3-4 min de chaque côté jusqu'à dorure. Égoutter.",
+      "Mélanger yaourt, jus de citron, sel pour la sauce.",
+      "Ouvrir les pitas, garnir de falafels, salade, tomates et sauce yaourt."
+    ]
+  }
+  ,{
+    id: 'R949',
+    name: 'Gyoza Poêlés Maison',
+    category: 'japanese',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🥟', origin: '🇯🇵',
+    tags: ['classic','comfort','balanced'],
+    servings: 2, prepTime: 20, cookTime: 10, difficulty: 2,
+    // 26×4 + 28×4 + 14×9 = 104+112+126 = 342 ✓
+    baseNutrition: { calories: 342, proteinGrams: 26, carbsGrams: 28, fatGrams: 14 },
+    ingredients: [
+      { name: 'Porc haché', qty: 150, unit: 'g' },
+      { name: 'Chou blanc', qty: 100, unit: 'g' },
+      { name: 'Galettes gyoza', qty: 16, unit: 'pce' },
+      { name: 'Sauce soja', qty: 15, unit: 'ml' },
+      { name: 'Huile de sésame', qty: 8, unit: 'ml' },
+      { name: 'Gingembre frais', qty: 10, unit: 'g' },
+      { name: 'Ail', qty: 1, unit: 'pce', note: 'gousse' },
+      { name: 'Huile végétale', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      "Émincer finement le chou, presser pour enlever l'humidité. Mélanger porc, chou, sauce soja, huile de sésame, gingembre et ail.",
+      "Déposer une cuillère de farce sur chaque galette. Humidifier les bords, plier et pincer pour fermer.",
+      "Faire chauffer l'huile dans une poêle antiadhésive. Cuire les gyoza 2 min sans toucher jusqu'à dorure.",
+      "Verser 80ml d'eau, couvrir immédiatement. Cuire 5 min à la vapeur. Découvrir et laisser l'eau s'évaporer. Servir avec sauce soja-vinaigre."
+    ]
+  }
+
+  // ── BATCH P55 — Plats complets équilibrés ─────────────────────────────────────
+  ,{
+    id: 'R950',
+    name: 'Bowl Buddha Quinoa Légumes',
+    category: 'mediterranean',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🥗', origin: '🌍',
+    tags: ['vegetarian','balanced','healthy'],
+    servings: 2, prepTime: 15, cookTime: 20, difficulty: 1,
+    // 18×4 + 50×4 + 14×9 = 72+200+126 = 398 ✓
+    baseNutrition: { calories: 398, proteinGrams: 18, carbsGrams: 50, fatGrams: 14 },
+    ingredients: [
+      { name: 'Quinoa', qty: 150, unit: 'g', note: 'cru' },
+      { name: 'Pois chiches en boîte', qty: 150, unit: 'g' },
+      { name: 'Avocat', qty: 1, unit: 'pce' },
+      { name: 'Épinards frais', qty: 80, unit: 'g' },
+      { name: 'Tomates cerises', qty: 100, unit: 'g' },
+      { name: 'Concombre', qty: 100, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Citron', qty: 1, unit: 'pce' },
+      { name: 'Tahini', qty: 15, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Cuire le quinoa 15 min dans le double de son volume d'eau salée. Laisser reposer 5 min, égrainer à la fourchette.",
+      "Rôtir les pois chiches égouttés au four 15 min à 200°C avec huile, sel et cumin.",
+      "Préparer la sauce tahini : tahini, jus de citron, eau, sel.",
+      "Composer les bols : quinoa → épinards → légumes → pois chiches → avocat → sauce tahini."
+    ]
+  }
+  ,{
+    id: 'R951',
+    name: 'Steak Haché Maison Frites au Four',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍟', origin: '🇫🇷',
+    tags: ['classic','comfort','high-protein'],
+    servings: 2, prepTime: 15, cookTime: 30, difficulty: 1,
+    // 48×4 + 40×4 + 22×9 = 192+160+198 = 550 ✓
+    baseNutrition: { calories: 550, proteinGrams: 48, carbsGrams: 40, fatGrams: 22 },
+    ingredients: [
+      { name: 'Bœuf haché 15%', qty: 300, unit: 'g' },
+      { name: 'Pommes de terre', qty: 400, unit: 'g' },
+      { name: 'Huile végétale', qty: 20, unit: 'ml' },
+      { name: 'Moutarde de Dijon', qty: 10, unit: 'g' },
+      { name: 'Sel, poivre, herbes de Provence', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Préchauffer le four à 220°C. Couper les pommes de terre en bâtonnets, mélanger avec 15ml d'huile, sel et herbes. Étaler sur plaque.",
+      "Cuire les frites 25-30 min en retournant à mi-cuisson.",
+      "Former 2 steaks hachés avec le bœuf. Assaisonner.",
+      "Faire chauffer l'huile restante dans une poêle très chaude. Cuire les steaks 3 min/côté. Servir avec moutarde."
+    ]
+  }
+  ,{
+    id: 'R952',
+    name: 'Saumon Grillé Purée de Patate Douce',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍠', origin: '🇫🇷',
+    tags: ['healthy','balanced','high-protein'],
+    servings: 2, prepTime: 10, cookTime: 25, difficulty: 1,
+    // 46×4 + 32×4 + 16×9 = 184+128+144 = 456 ✓
+    baseNutrition: { calories: 456, proteinGrams: 46, carbsGrams: 32, fatGrams: 16 },
+    ingredients: [
+      { name: 'Filets de saumon', qty: 300, unit: 'g' },
+      { name: 'Patates douces', qty: 400, unit: 'g' },
+      { name: 'Beurre', qty: 15, unit: 'g' },
+      { name: 'Lait', qty: 50, unit: 'ml' },
+      { name: 'Citron', qty: 1, unit: 'pce' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+      { name: 'Sel, poivre, ciboulette', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Cuire les patates douces pelées en morceaux dans l'eau bouillante salée 20 min. Égoutter.",
+      "Écraser avec beurre, lait chaud, sel, poivre jusqu'à consistance lisse.",
+      "Faire chauffer l'huile dans une poêle. Cuire les filets de saumon côté peau 4 min, retourner 2 min.",
+      "Servir le saumon sur la purée avec le jus de citron et la ciboulette."
+    ]
+  }
+  ,{
+    id: 'R953',
+    name: 'Gratin de Courgettes Fromage',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🫛', origin: '🇫🇷',
+    tags: ['vegetarian','comfort','classic'],
+    servings: 2, prepTime: 10, cookTime: 30, difficulty: 1,
+    // 18×4 + 14×4 + 14×9 = 72+56+126 = 254 ✓
+    baseNutrition: { calories: 254, proteinGrams: 18, carbsGrams: 14, fatGrams: 14 },
+    ingredients: [
+      { name: 'Courgettes', qty: 500, unit: 'g' },
+      { name: 'Gruyère râpé', qty: 80, unit: 'g' },
+      { name: 'Oeufs', qty: 2, unit: 'pce' },
+      { name: 'Crème fraîche légère', qty: 60, unit: 'ml' },
+      { name: 'Ail', qty: 1, unit: 'pce', note: 'gousse' },
+      { name: 'Thym', qty: 2, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Préchauffer le four à 180°C. Couper les courgettes en rondelles fines. Faire revenir avec l'ail haché dans un filet d'huile 5 min.",
+      "Battre les oeufs avec la crème, sel, poivre et thym.",
+      "Disposer les courgettes dans un plat à gratin. Verser l'appareil aux oeufs. Couvrir de gruyère.",
+      "Cuire 25 min jusqu'à dorure gratinée. Laisser tiédir 5 min avant de servir."
+    ]
+  }
+  ,{
+    id: 'R954',
+    name: 'Risotto Parmesan Simple',
+    category: 'italian',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍚', origin: '🇮🇹',
+    tags: ['classic','comfort','vegetarian'],
+    servings: 2, prepTime: 5, cookTime: 25, difficulty: 2,
+    // 16×4 + 66×4 + 14×9 = 64+264+126 = 454 ✓
+    baseNutrition: { calories: 454, proteinGrams: 16, carbsGrams: 66, fatGrams: 14 },
+    ingredients: [
+      { name: 'Riz arborio', qty: 200, unit: 'g' },
+      { name: 'Bouillon de légumes chaud', qty: 800, unit: 'ml' },
+      { name: 'Vin blanc sec', qty: 80, unit: 'ml' },
+      { name: 'Oignon', qty: 1, unit: 'pce' },
+      { name: 'Beurre', qty: 20, unit: 'g' },
+      { name: 'Parmesan râpé', qty: 50, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Faire revenir l'oignon finement émincé dans l'huile et la moitié du beurre 3 min.",
+      "Ajouter le riz, nacrer 2 min en remuant. Déglacer au vin blanc, laisser absorber.",
+      "Ajouter le bouillon chaud louche par louche en remuant constamment. Attendre absorption entre chaque ajout. Compter 18-20 min.",
+      "Hors du feu, incorporer beurre restant et parmesan. Poivrer. La texture doit être crémeuse et coulante (all'onda)."
+    ]
+  }
+
   // ─────────────────────────────────────────────────────────────────────────────
   // FIN RECIPES_DB — à continuer avec les batches suivants au-dessus de cette ligne
   // ─────────────────────────────────────────────────────────────────────────────
