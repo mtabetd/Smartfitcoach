@@ -1739,15 +1739,15 @@ function _getSportLoadForDay(dayIndex) {
   var _sport = s.weeklyCalendar[String(dayIndex)];
   if (!_sport || _sport === 'repos' || _sport === 'autre') return null;
   var _DAY_LOAD = {
-    musculation:  'heavy',
-    crossfit:     'heavy',
-    hyrox:        'heavy',
-    running:      'moderate',
-    triathlon:    'moderate',
-    cycling:      'moderate',
+    musculation:  'strength-heavy',
+    crossfit:     'crossfit-heavy',
+    hyrox:        'hyrox-heavy',
+    running:      'running-moderate',
+    triathlon:    'running-moderate',
+    cycling:      'running-moderate',
     calisthenics: 'moderate',
     padel:        'moderate',
-    yoga:         'light',
+    yoga:         'mobility-light',
     golf:         'light'
   };
   return _DAY_LOAD[_sport] || null;
@@ -5582,16 +5582,37 @@ var protCat=getRecipeProtein(r);var diversityPenalty=0;
 if(protCat&&dayProteins&&dayProteins.indexOf(protCat)!==-1)diversityPenalty=80;
 // Pénaliser si catégorie protéique sur-représentée dans la semaine
 if(protCat&&weekProtBudget){var cnt=weekProtBudget[protCat]||0;var maxW={volaille:3,poisson:3,viande_rouge:2,oeufs:3,legumineuses:3,tofu_seitan:2};if(cnt>=(maxW[protCat]||3))diversityPenalty+=60;else if(cnt>=2)diversityPenalty+=20;}
-// BUG-6 FIX: sportType-aware scoring (musculation → high-protein; endurance sports training day → high-carb)
-// S._pickRecipeTrainingDay is set by generateWeek() just before calling pickRecipe (per-day flag).
+// Sport-aware recipe scoring: each sport type gets precision-tuned recipe preferences
+// Sources: ISSN 2023 (carb needs), Helms 2014 (protein/deficit), Burke 2011 (endurance carb)
+// Delegates to SFCSportIntelligence.getSportRecipeBonus() when module is loaded (additive).
 var sportTypeBonus=0;
 if(s.sportType&&totalMacroKcal>0){
   var protPct2=(r.p||0)*4/totalMacroKcal;
   var carbPct2=(r.g||0)*4/totalMacroKcal;
-  if(s.sportType==='musculation'&&protPct2>=0.35){sportTypeBonus=-120;} // high-protein bonus for strength
-  else if(s.sportType==='running'||s.sportType==='cycling'||s.sportType==='hyrox'||s.sportType==='triathlon'){
-    // high-carb bonus on training days for endurance sports
-    if(s._pickRecipeTrainingDay&&carbPct2>=0.50){sportTypeBonus=-120;}
+  var fatPct2=(r.l||0)*4/totalMacroKcal;
+  var _isTD=!!s._pickRecipeTrainingDay;
+  // Delegate to intelligence module when available
+  if(window.SFCSportIntelligence&&window.SFCSportIntelligence.getSportRecipeBonus){
+    sportTypeBonus=window.SFCSportIntelligence.getSportRecipeBonus(
+      {p:r.p||0,g:r.g||0,l:r.l||0,k:r.k||0},s.sportType,_isTD,null);
+  } else {
+    // Inline fallback — mirrors SFCSportIntelligence logic without the module
+    if(s.sportType==='musculation'){
+      if(protPct2>=0.35)sportTypeBonus=-120;
+    } else if(s.sportType==='crossfit'){
+      // CrossFit: needs BOTH high protein (strength) AND high carb (conditioning)
+      if(_isTD&&protPct2>=0.28&&carbPct2>=0.35){sportTypeBonus=-180;}
+      else if(_isTD&&(protPct2>=0.35||carbPct2>=0.48)){sportTypeBonus=-100;}
+      else if(!_isTD&&protPct2>=0.28&&carbPct2>=0.35){sportTypeBonus=-100;}
+    } else if(s.sportType==='hyrox'){
+      if(_isTD&&carbPct2>=0.45){sportTypeBonus=-120;}
+      else if(!_isTD&&protPct2>=0.30){sportTypeBonus=-80;}
+    } else if(s.sportType==='running'||s.sportType==='cycling'||s.sportType==='triathlon'){
+      if(_isTD&&carbPct2>=0.50){sportTypeBonus=-120;}
+      else if(!_isTD&&protPct2>=0.25&&carbPct2>=0.40){sportTypeBonus=-80;}
+    } else if(s.sportType==='yoga'||s.sportType==='padel'){
+      if(fatPct2>=0.30&&protPct2>=0.20){sportTypeBonus=-60;}
+    }
   }
 }
 // Bonus favori : 1⭐=-200, 2⭐=-400, 3⭐=-600 — domine calScore/macroScore/diversity
@@ -7065,8 +7086,10 @@ function computeNutritionState(trainingDay) {
   // Macro swap is always calorie-neutral (carbs ↑ = fat ↓) so caloriesTarget is preserved:
   //   fat-loss users stay in their deficit; muscle users benefit from higher carb availability.
   var _hasSportDays  = Array.isArray(window.S.trainingDaysSelected) && window.S.trainingDaysSelected.length > 0;
-  var _hasSportGoals = Array.isArray(window.S.sportGoals) && window.S.sportGoals.length > 0;
-  if (_hasSportDays && _hasSportGoals && result.carbsGrams > 0 && result.fatGrams > 0 && result.caloriesTarget > 0) {
+  var _hasSportSignal = _hasSportDays || !!(window.S.trainingLoad) || !!(window.S.sportType);
+  // Fixed: removed _hasSportGoals gate — sport days alone should trigger carb cycling.
+  // A user who skips the sport goals screen but trains still benefits from carb cycling.
+  if (_hasSportSignal && result.carbsGrams > 0 && result.fatGrams > 0 && result.caloriesTarget > 0) {
     var _fatFloor = Math.round(result.caloriesTarget * 0.15 / 9); // floor 15% fat (ACSM 2009)
     // Load from SFCEngine (actual sessions) with fallback to legacy S.trainingLoad
     var _tl = _sfcSignal

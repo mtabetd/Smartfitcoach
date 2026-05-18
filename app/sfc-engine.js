@@ -248,7 +248,7 @@
   function computeNutrition(user, sessions, now) {
     var ts     = +now || Date.now();
     var weight = (user && typeof user.weight === 'number' && user.weight > 0) ? user.weight : 75;
-    var VALID_GOALS = ['fat_loss', 'recomp', 'muscle_gain'];
+    var VALID_GOALS = ['fat_loss', 'recomp', 'muscle_gain', 'performance'];
     var goal   = (user && VALID_GOALS.indexOf(user.goal) !== -1) ? user.goal : 'recomp';
 
     // ── Step 1: Resting metabolic rate ──────────────────────────────────────
@@ -273,7 +273,7 @@
     var tdee = bmr * activityPAL;
 
     // ── Step 3: Caloric target by goal ──────────────────────────────────────
-    var GOAL_DELTA = { fat_loss: -400, recomp: -100, muscle_gain: +300 };
+    var GOAL_DELTA = { fat_loss: -400, recomp: -100, muscle_gain: +300, performance: 0 };
     var _kcalFloor = (user && user.sex === 'female') ? 1400 : 1500;
     var calorieTarget = Math.max(_kcalFloor, Math.round(tdee + (GOAL_DELTA[goal] || 0)));
 

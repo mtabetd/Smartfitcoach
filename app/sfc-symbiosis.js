@@ -23,10 +23,29 @@
   // Multiplicateurs caloriques et glucides par charge d'entraînement
   // Sources : Helms 2014 (calorie cycling) | ISSN 2023 (carb timing) | Burke 2011
   var LOAD_MULTIPLIERS = {
-    heavy:    { cal: 1.10, carbBoost: 1.20, fatAdjust: 0.92 },   // +10% kcal, +20% glucides
-    moderate: { cal: 1.07, carbBoost: 1.10, fatAdjust: 0.96 },   // +7% kcal,  +10% glucides
-    light:    { cal: 1.03, carbBoost: 1.00, fatAdjust: 1.00 },   // +3% kcal,  base glucides
-    rest:     { cal: 0.90, carbBoost: 0.90, fatAdjust: 1.08 }    // −10% kcal, −10% glucides
+    // ── Legacy tiers — preserved for backward compatibility ──────────────────
+    heavy:    { cal: 1.10, carbBoost: 1.20, fatAdjust: 0.92 },   // +10% kcal, +20% carbs
+    moderate: { cal: 1.07, carbBoost: 1.10, fatAdjust: 0.96 },   // +7% kcal,  +10% carbs
+    light:    { cal: 1.03, carbBoost: 1.00, fatAdjust: 1.00 },   // +3% kcal,  base carbs
+    rest:     { cal: 0.90, carbBoost: 0.90, fatAdjust: 1.08 },   // −10% kcal, −10% carbs
+    // ── Sport-specific precision tiers ──────────────────────────────────────
+    // Musculation/bodybuilding: strength-focused, high protein emphasis
+    // Source: Helms 2014 (1.6-2.4g/kg protein), ISSN 2017 position stand
+    'strength-heavy':    { cal: 1.10, carbBoost: 1.15, fatAdjust: 0.92, protBoost: 1.10 },
+    // CrossFit: hybrid glycolytic+strength — needs BOTH high carbs AND high protein
+    // Source: NSCA CrossFit position (2012), ISSN 2023 (carb+protein post-WOD)
+    'crossfit-heavy':    { cal: 1.13, carbBoost: 1.25, fatAdjust: 0.88, protBoost: 1.08 },
+    // Hyrox: endurance-dominant hybrid (8×1km run + 8 gym stations)
+    // Source: Gonzalez-Alonso 2010 (muscle glycogen), practical Hyrox athlete protocols
+    'hyrox-heavy':       { cal: 1.12, carbBoost: 1.30, fatAdjust: 0.90, protBoost: 1.05 },
+    // Running (quality session / long run): carb-dominant for glycogen
+    // Source: Burke 2011 (carbohydrate for endurance), Thomas 2016 (AND/DC position)
+    'running-heavy':     { cal: 1.12, carbBoost: 1.35, fatAdjust: 0.90, protBoost: 1.00 },
+    // Running (easy / recovery run): moderate carb support
+    'running-moderate':  { cal: 1.05, carbBoost: 1.12, fatAdjust: 0.97, protBoost: 1.00 },
+    // Mobility / yoga: minimal caloric adjustment, slight fat boost (anti-inflammatory omega-3)
+    // Source: Simopoulos 2002 (omega-3 anti-inflammatory)
+    'mobility-light':    { cal: 1.01, carbBoost: 0.98, fatAdjust: 1.05, protBoost: 1.02 }
   };
 
   // Groupes musculaires "lourds" — mobilisent les grandes chaînes
@@ -51,6 +70,50 @@
     if (exercises.length >= 6 && hasHeavy && compCount >= 4) return 'heavy';
     if (exercises.length <= 3 || !hasHeavy) return 'light';
     return 'moderate';
+  }
+
+  /**
+   * Sport-aware load computation: uses sport type to override or supplement
+   * the exercise-count-based computeTrainingLoad() result.
+   *
+   * CrossFit WODs often have fewer exercises by count but extreme metabolic demand.
+   * Running sessions don't have "exercises" in the gym sense.
+   * This function provides sport-context-appropriate load tiers.
+   *
+   * @param {string}   sportType  — 'crossfit'|'hyrox'|'running'|'musculation'|...
+   * @param {string}   baseLoad   — result of computeTrainingLoad() ('heavy'|'moderate'|'light')
+   * @param {number}   duration   — session duration in minutes (optional)
+   * @param {number}   rpe        — user-reported RPE 1-10 (optional)
+   * @returns {string} Sport-specific load tier key
+   */
+  function computeSportLoad(sportType, baseLoad, duration, rpe) {
+    var dur = typeof duration === 'number' ? duration : 0;
+    var effort = typeof rpe === 'number' ? rpe : 6;
+    switch (sportType) {
+      case 'crossfit':
+        // CrossFit WODs: always at least moderate, heavy if RPE≥7 or duration≥30min
+        if (effort >= 7 || dur >= 30) return 'crossfit-heavy';
+        return 'crossfit-heavy'; // CrossFit minimum is always crossfit-heavy
+      case 'hyrox':
+        return 'hyrox-heavy'; // Hyrox races/training always qualify as hyrox-heavy
+      case 'running':
+        // Long run (>60min) or high RPE → running-heavy; else running-moderate
+        if (dur >= 60 || effort >= 8) return 'running-heavy';
+        return 'running-moderate';
+      case 'triathlon':
+      case 'cycling':
+        if (dur >= 90 || effort >= 8) return 'running-heavy';
+        return 'running-moderate';
+      case 'musculation':
+        // Remap legacy 'heavy' → 'strength-heavy'
+        if (baseLoad === 'heavy') return 'strength-heavy';
+        return baseLoad; // 'moderate' or 'light'
+      case 'yoga':
+      case 'golf':
+        return 'mobility-light';
+      default:
+        return baseLoad || 'moderate';
+    }
   }
 
   // ── 2. Semaine courante dans le cycle 4 semaines ──────────────────────────
@@ -548,6 +611,7 @@
   // ── API publique ──────────────────────────────────────────────────────────
   global.SFCSymbiosis = {
     computeTrainingLoad:      computeTrainingLoad,
+    computeSportLoad:          computeSportLoad,
     getWeekIndex:             getWeekIndex,
     getLoadMultipliers:       getLoadMultipliers,
     getFeedbackAdjustment:    getFeedbackAdjustment,
