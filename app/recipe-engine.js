@@ -33491,6 +33491,317 @@
         "Fariner légèrement les tranches de foie. Saisir dans la même poêle à feu vif 2 min par face — rosé à coeur.",
         "Servir le foie avec les oignons caramélisés et la purée. Parsemer de persil. Simple, nourrissant, riche en fer."
       ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  BATCH P24 — OEUFS & FROMAGES  (R795–R799)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R795',
+      name: 'Quiche Lorraine Classique',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner', 'snack'],
+      emoji: '🥧', origin: '🇫🇷',
+      tags: ['comfort-food', 'french', 'classic', 'family', 'meal-prep'],
+      servings: 2, prepTime: 15, cookTime: 35, difficulty: 1,
+      // 48×4 + 40×4 + 30×9 = 192+160+270 = 622 ✓
+      baseNutrition: { calories: 622, proteinGrams: 48, carbsGrams: 40, fatGrams: 30 },
+      ingredients: [
+        { name: 'Pâte brisée',                      qty: 120, unit: 'g', note: '1/2 rouleau prêt à dérouler' },
+        { name: 'Lardons fumés',                    qty: 150, unit: 'g' },
+        { name: 'Oeuf',                             qty: 3,   unit: 'pce' },
+        { name: 'Crème fraîche légère 15%',        qty: 100, unit: 'ml' },
+        { name: 'Lait demi-écrémé',                qty: 80,  unit: 'ml' },
+        { name: 'Gruyère râpé',                   qty: 40,  unit: 'g' },
+        { name: 'Muscade',                         qty: 2,   unit: 'g' },
+        { name: 'Sel, poivre',                     qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Préchauffer le four à 180°C. Foncer un moule à tarte avec la pâte. Piquer avec une fourchette. Faire cuire à blanc 10 min avec des haricots secs.",
+        "Faire revenir les lardons à la poêle sans graisse jusqu'à dorés. Égoutter sur du papier absorbant.",
+        "Fouetter les oeufs avec la crème, le lait, la muscade, sel et poivre.",
+        "Répartir les lardons sur le fond de tarte précuit. Verser l'appareil oeuf-crème. Saupoudrer de gruyère.",
+        "Enfourner 25-28 min jusqu'à quiche prise et dorée. Laisser tiédir 5 min avant de couper. Servir chaude ou tiède."
+      ]
+    },
+
+    {
+      id: 'R796',
+      name: 'Frittata Italienne Poivrons Oignons Parmesan',
+      category: 'italian',
+      mealTypes: ['breakfast', 'lunch', 'dinner'],
+      emoji: '🍳', origin: '🇮🇹',
+      tags: ['high-protein', 'italian', 'one-pan', 'quick', 'versatile'],
+      servings: 2, prepTime: 10, cookTime: 15, difficulty: 1,
+      // 52×4 + 50×4 + 28×9 = 208+200+252 = 660 ✓
+      baseNutrition: { calories: 660, proteinGrams: 52, carbsGrams: 50, fatGrams: 28 },
+      ingredients: [
+        { name: 'Oeuf',                             qty: 6,   unit: 'pce' },
+        { name: 'Poivron rouge',                    qty: 120, unit: 'g', note: 'en dés' },
+        { name: 'Oignon',                           qty: 80,  unit: 'g' },
+        { name: 'Pomme de terre cuite',             qty: 150, unit: 'g', note: 'en tranches fines' },
+        { name: 'Parmesan râpé',                    qty: 40,  unit: 'g' },
+        { name: 'Basilic ou persil',                qty: 10,  unit: 'g' },
+        { name: 'Huile d\'olive',                   qty: 20,  unit: 'ml' },
+        { name: 'Sel, poivre',                      qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Préchauffer le gril du four. Faire revenir oignon et poivron dans l'huile 5-6 min dans une poêle allant au four.",
+        "Ajouter les tranches de pomme de terre. Répartir uniformément dans la poêle.",
+        "Battre les oeufs avec le parmesan, sel, poivre et les herbes. Verser sur les légumes.",
+        "Cuire à feu moyen 5-6 min jusqu'à les bords soient pris mais le centre encore coulant.",
+        "Passer sous le gril 3-4 min jusqu'à la surface soit dorée et gonflée. Couper en parts dans la poêle. La frittata se mange chaude ou à température ambiante."
+      ]
+    },
+
+    {
+      id: 'R797',
+      name: 'Oeufs en Cocotte Crème & Jambon',
+      category: 'french',
+      mealTypes: ['breakfast', 'lunch'],
+      emoji: '🥚', origin: '🇫🇷',
+      tags: ['high-protein', 'elegant', 'quick', 'french', 'brunch'],
+      servings: 2, prepTime: 5, cookTime: 15, difficulty: 1,
+      // 44×4 + 48×4 + 24×9 = 176+192+216 = 584 ✓
+      baseNutrition: { calories: 584, proteinGrams: 44, carbsGrams: 48, fatGrams: 24 },
+      ingredients: [
+        { name: 'Oeuf',                             qty: 4,   unit: 'pce' },
+        { name: 'Jambon blanc',                    qty: 100, unit: 'g', note: 'en dés' },
+        { name: 'Crème fraîche légère',            qty: 60,  unit: 'g' },
+        { name: 'Pain de campagne',                qty: 120, unit: 'g', note: '4 tranches grillées' },
+        { name: 'Gruyère râpé',                   qty: 30,  unit: 'g' },
+        { name: 'Ciboulette',                     qty: 10,  unit: 'g' },
+        { name: 'Beurre',                         qty: 5,   unit: 'g', note: 'pour les ramequins' },
+        { name: 'Sel, poivre',                    qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Préchauffer le four à 180°C. Beurrer 2 ramequins. Préparer un bain-marie dans un plat plus grand.",
+        "Répartir les dés de jambon dans les ramequins. Verser 1 c.s. de crème dans chaque.",
+        "Casser 2 oeufs dans chaque ramequin. Saler, poivrer. Ajouter le gruyère sur le dessus.",
+        "Placer les ramequins dans le bain-marie (eau à mi-hauteur). Enfourner 12-15 min jusqu'à blancs pris mais jaunes encore coulants.",
+        "Parsemer de ciboulette. Servir immédiatement avec les tartines de pain grillé pour tremper."
+      ]
+    },
+
+    {
+      id: 'R798',
+      name: 'Croque-Monsieur Jambon Gruyère au Four',
+      category: 'french',
+      mealTypes: ['breakfast', 'lunch', 'snack'],
+      emoji: '🥪', origin: '🇫🇷',
+      tags: ['comfort-food', 'french', 'classic', 'quick', 'cheesy'],
+      servings: 2, prepTime: 10, cookTime: 10, difficulty: 1,
+      // 56×4 + 36×4 + 32×9 = 224+144+288 = 656 ✓
+      baseNutrition: { calories: 656, proteinGrams: 56, carbsGrams: 36, fatGrams: 32 },
+      ingredients: [
+        { name: 'Pain de mie',                      qty: 120, unit: 'g', note: '4 tranches épaisses' },
+        { name: 'Jambon blanc',                    qty: 160, unit: 'g', note: '4 tranches' },
+        { name: 'Gruyère râpé',                   qty: 80,  unit: 'g' },
+        { name: 'Lait demi-écrémé',               qty: 80,  unit: 'ml', note: 'pour béchamel rapide' },
+        { name: 'Farine',                         qty: 10,  unit: 'g' },
+        { name: 'Beurre',                         qty: 15,  unit: 'g' },
+        { name: 'Muscade',                        qty: 1,   unit: 'g' },
+        { name: 'Moutarde',                       qty: 10,  unit: 'g', note: 'optionnel' }
+      ],
+      steps: [
+        "Préchauffer le gril du four. Préparer une béchamel rapide : faire fondre le beurre, ajouter la farine, verser le lait chaud en fouettant. Épaissir 3 min. Ajouter muscade, sel.",
+        "Toaster légèrement les tranches de pain. Badigeonner de moutarde si souhaité.",
+        "Monter les croque-monsieur : pain, jambon, 30g de gruyère, pain. Étaler la béchamel sur le dessus.",
+        "Saupoudrer du reste de gruyère. Passer sous le gril 5-7 min jusqu'à gratin doré et bouillonnant.",
+        "Servir immédiatement. Pour croque-madame : ajouter un oeuf au plat sur le dessus."
+      ]
+    },
+
+    {
+      id: 'R799',
+      name: 'Soufflé au Fromage Facile',
+      category: 'french',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🧀', origin: '🇫🇷',
+      tags: ['elegant', 'french', 'high-protein', 'light', 'classic'],
+      servings: 2, prepTime: 15, cookTime: 25, difficulty: 2,
+      // 42×4 + 62×4 + 22×9 = 168+248+198 = 614 ✓
+      baseNutrition: { calories: 614, proteinGrams: 42, carbsGrams: 62, fatGrams: 22 },
+      ingredients: [
+        { name: 'Oeuf',                             qty: 4,   unit: 'pce', note: 'blancs et jaunes séparés' },
+        { name: 'Comté ou gruyère râpé',           qty: 80,  unit: 'g' },
+        { name: 'Lait demi-écrémé',                qty: 200, unit: 'ml' },
+        { name: 'Farine T65',                      qty: 40,  unit: 'g' },
+        { name: 'Beurre',                          qty: 15,  unit: 'g' },
+        { name: 'Pain de campagne',                qty: 80,  unit: 'g', note: 'pour accompagner' },
+        { name: 'Muscade',                         qty: 2,   unit: 'g' },
+        { name: 'Sel, poivre',                     qty: 1,   unit: 'pincée' }
+      ],
+      steps: [
+        "Préchauffer le four à 190°C (sans chaleur tournante). Beurrer et fariner des ramequins ou un grand moule à soufflé.",
+        "Faire une béchamel : beurre fondu + farine 1 min + lait chaud progressivement. Épaissir. Ajouter fromage, muscade, sel, poivre, jaunes d'oeufs. Hors feu.",
+        "Monter les blancs en neige très ferme avec une pincée de sel. Ne pas les laisser retomber.",
+        "Incorporer 1/4 des blancs à la béchamel vigoureusement pour détendre. Puis le reste délicatement en soulevant.",
+        "Verser dans les moules jusqu'aux 3/4. Enfourner sans ouvrir le four 20-22 min. Le soufflé doit être gonflé et doré. Servir IMMÉDIATEMENT."
+      ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  BATCH P25 — LÉGUMINEUSES & VÉGÉTARIEN  (R800–R804)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R800',
+      name: 'Lentilles Mijotées Carottes & Lardons',
+      category: 'french',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🫘', origin: '🇫🇷',
+      tags: ['high-protein', 'comfort-food', 'french', 'budget', 'iron'],
+      servings: 2, prepTime: 10, cookTime: 35, difficulty: 1,
+      // 40×4 + 90×4 + 16×9 = 160+360+144 = 664 ✓
+      baseNutrition: { calories: 664, proteinGrams: 40, carbsGrams: 90, fatGrams: 16 },
+      ingredients: [
+        { name: 'Lentilles vertes du Puy',          qty: 200, unit: 'g', note: 'sèches' },
+        { name: 'Lardons fumés',                   qty: 100, unit: 'g' },
+        { name: 'Carottes',                        qty: 150, unit: 'g', note: '2 carottes en rondelles' },
+        { name: 'Oignon',                          qty: 80,  unit: 'g' },
+        { name: 'Ail',                             qty: 5,   unit: 'g' },
+        { name: 'Bouillon de légumes',             qty: 600, unit: 'ml' },
+        { name: 'Concentré de tomate',             qty: 15,  unit: 'g' },
+        { name: 'Thym, laurier',                   qty: 3,   unit: 'g' },
+        { name: 'Huile d\'olive',                  qty: 10,  unit: 'ml' },
+        { name: 'Moutarde',                        qty: 8,   unit: 'g', note: 'en fin de cuisson' }
+      ],
+      steps: [
+        "Faire revenir les lardons à sec dans une cocotte jusqu'à dorés. Ajouter oignon et ail, cuire 3 min.",
+        "Rincer les lentilles. Les ajouter avec les carottes, le concentré de tomate, thym et laurier.",
+        "Verser le bouillon chaud. Porter à ébullition, réduire le feu, mijoter 30-35 min à couvert.",
+        "Vérifier la cuisson : les lentilles doivent être tendres mais pas en bouillie.",
+        "Hors feu, incorporer la moutarde. Rectifier sel et poivre. Les lentilles du Puy restent fermes — elles ne fondent pas comme les corail."
+      ]
+    },
+
+    {
+      id: 'R801',
+      name: 'Houmous Maison Légumes Rôtis & Pain Pita',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'snack', 'dinner'],
+      emoji: '🧆', origin: '🇱🇧',
+      tags: ['vegan', 'plant-based', 'fresh', 'mediterranean', 'sharing'],
+      servings: 2, prepTime: 15, cookTime: 15, difficulty: 1,
+      // 36×4 + 88×4 + 18×9 = 144+352+162 = 658 ✓
+      baseNutrition: { calories: 658, proteinGrams: 36, carbsGrams: 88, fatGrams: 18 },
+      ingredients: [
+        { name: 'Pois chiches boîte',               qty: 400, unit: 'g', note: 'égouttés, garder l\'eau' },
+        { name: 'Tahini',                           qty: 30,  unit: 'g' },
+        { name: 'Citron (jus)',                     qty: 2,   unit: 'pce' },
+        { name: 'Ail',                              qty: 8,   unit: 'g' },
+        { name: 'Courgette',                        qty: 150, unit: 'g', note: 'rondelles à rôtir' },
+        { name: 'Poivron rouge',                    qty: 100, unit: 'g', note: 'à rôtir' },
+        { name: 'Pain pita',                        qty: 120, unit: 'g', note: '2 pains' },
+        { name: 'Huile d\'olive',                   qty: 20,  unit: 'ml' },
+        { name: 'Paprika',                          qty: 3,   unit: 'g' },
+        { name: 'Cumin',                            qty: 2,   unit: 'g' }
+      ],
+      steps: [
+        "Rôtir les légumes : courgettes et poivron avec 10ml d'huile et sel, au four 200°C 15 min.",
+        "Houmous : mixer les pois chiches chauds (ou passés 1 min au micro-ondes) avec tahini, jus de citron, ail, sel et 4-5 c.s. d'eau des pois chiches.",
+        "Mixer longuement (4-5 min) pour une texture ultra-lisse et crémeuse. Ajuster consistance avec l'eau de pois chiches.",
+        "Étaler dans un plat creux. Faire un creux au centre. Verser le reste d'huile d'olive, saupoudrer paprika et cumin.",
+        "Faire chauffer les pitas au four 2 min. Servir houmous, légumes rôtis et pitas ensemble."
+      ]
+    },
+
+    {
+      id: 'R802',
+      name: 'Soupe Minestrone Légumes & Petites Pâtes',
+      category: 'italian',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🥣', origin: '🇮🇹',
+      tags: ['vegan', 'comfort-food', 'italian', 'budget', 'seasonal'],
+      servings: 2, prepTime: 15, cookTime: 30, difficulty: 1,
+      // 44×4 + 80×4 + 14×9 = 176+320+126 = 622 ✓
+      baseNutrition: { calories: 622, proteinGrams: 44, carbsGrams: 80, fatGrams: 14 },
+      ingredients: [
+        { name: 'Haricots borlotti boîte',          qty: 200, unit: 'g' },
+        { name: 'Ditalini ou coquillettes',         qty: 80,  unit: 'g' },
+        { name: 'Courgette',                        qty: 150, unit: 'g', note: 'en dés' },
+        { name: 'Carotte',                          qty: 100, unit: 'g', note: 'en dés' },
+        { name: 'Céleri',                           qty: 60,  unit: 'g' },
+        { name: 'Tomates concassées',               qty: 200, unit: 'g' },
+        { name: 'Épinards frais',                   qty: 80,  unit: 'g' },
+        { name: 'Bouillon de légumes',              qty: 800, unit: 'ml' },
+        { name: 'Ail',                              qty: 8,   unit: 'g' },
+        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' },
+        { name: 'Parmesan',                         qty: 20,  unit: 'g' },
+        { name: 'Basilic',                          qty: 10,  unit: 'g' }
+      ],
+      steps: [
+        "Faire revenir carotte, céleri et ail dans l'huile 5 min. Ajouter courgettes 2 min.",
+        "Verser les tomates et le bouillon. Porter à ébullition. Ajouter les haricots. Mijoter 15 min.",
+        "Ajouter les ditalini directement dans la soupe. Cuire selon indication minus 2 min.",
+        "Ajouter les épinards, cuire 2 min jusqu'à flétrissement.",
+        "Servir avec un filet d'huile d'olive, parmesan et basilic frais. Le minestrone doit être épais, pas liquide."
+      ]
+    },
+
+    {
+      id: 'R803',
+      name: 'Curry de Pois Chiches Épinards Lait de Coco',
+      category: 'world-food',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🍛', origin: '🇮🇳',
+      tags: ['vegan', 'plant-based', 'spicy', 'comfort-food', 'balanced'],
+      servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
+      // 48×4 + 72×4 + 20×9 = 192+288+180 = 660 ✓
+      baseNutrition: { calories: 660, proteinGrams: 48, carbsGrams: 72, fatGrams: 20 },
+      ingredients: [
+        { name: 'Pois chiches boîte',               qty: 400, unit: 'g' },
+        { name: 'Épinards surgelés',                qty: 150, unit: 'g' },
+        { name: 'Lait de coco allégé',              qty: 200, unit: 'ml' },
+        { name: 'Tomates concassées',               qty: 200, unit: 'g' },
+        { name: 'Riz basmati',                      qty: 100, unit: 'g', note: 'sec' },
+        { name: 'Oignon',                           qty: 80,  unit: 'g' },
+        { name: 'Ail',                              qty: 8,   unit: 'g' },
+        { name: 'Gingembre frais',                  qty: 8,   unit: 'g' },
+        { name: 'Curry en poudre',                  qty: 10,  unit: 'g' },
+        { name: 'Garam masala',                     qty: 3,   unit: 'g' },
+        { name: 'Huile végétale',                   qty: 15,  unit: 'ml' }
+      ],
+      steps: [
+        "Cuire le riz. Faire revenir oignon 5 min dans l'huile. Ajouter ail, gingembre, curry et garam masala. Cuire 1 min.",
+        "Ajouter les tomates, cuire 5 min. Verser le lait de coco.",
+        "Ajouter les pois chiches égouttés et les épinards surgelés. Cuire 10 min.",
+        "Les épinards vont décongeler et réduire dans la sauce. Mélanger régulièrement.",
+        "Rectifier sel et épices. Servir sur le riz basmati. Ce curry végétarien est rassasiant et complet."
+      ]
+    },
+
+    {
+      id: 'R804',
+      name: 'Potée de Haricots Blancs & Légumes d\'Hiver',
+      category: 'french',
+      mealTypes: ['dinner', 'lunch'],
+      emoji: '🫘', origin: '🇫🇷',
+      tags: ['vegan', 'comfort-food', 'french', 'warming', 'budget'],
+      servings: 2, prepTime: 10, cookTime: 30, difficulty: 1,
+      // 38×4 + 96×4 + 12×9 = 152+384+108 = 644 ✓
+      baseNutrition: { calories: 644, proteinGrams: 38, carbsGrams: 96, fatGrams: 12 },
+      ingredients: [
+        { name: 'Haricots blancs boîte',            qty: 400, unit: 'g' },
+        { name: 'Carottes',                         qty: 150, unit: 'g', note: 'en rondelles' },
+        { name: 'Navet',                            qty: 150, unit: 'g', note: 'en cubes' },
+        { name: 'Pommes de terre',                  qty: 200, unit: 'g', note: 'en cubes' },
+        { name: 'Oignon',                           qty: 80,  unit: 'g' },
+        { name: 'Bouillon de légumes',              qty: 700, unit: 'ml' },
+        { name: 'Concentré de tomate',              qty: 20,  unit: 'g' },
+        { name: 'Herbes de Provence',               qty: 5,   unit: 'g' },
+        { name: 'Laurier',                          qty: 1,   unit: 'feuille' },
+        { name: 'Huile d\'olive',                   qty: 15,  unit: 'ml' }
+      ],
+      steps: [
+        "Faire revenir l'oignon dans l'huile 4 min. Ajouter les carottes et les navets, cuire 3 min.",
+        "Ajouter les pommes de terre, le concentré de tomate, les herbes et le laurier.",
+        "Verser le bouillon. Porter à ébullition, réduire, cuire 20 min à couvert.",
+        "Ajouter les haricots blancs égouttés les 10 dernières minutes pour les réchauffer sans les écraser.",
+        "Rectifier sel et poivre. Écraser quelques haricots dans la casserole pour épaissir naturellement. Servir bien chaud."
+      ]
     }
 
   // ─────────────────────────────────────────────────────────────────────────────
