@@ -38529,6 +38529,272 @@
     ]
   }
 
+  // ── BATCH P58 — Petit-déjeuners gourmands ────────────────────────────────────
+  ,{
+    id: 'R965',
+    name: 'Pain Perdu Caramelisé',
+    category: 'french',
+    mealTypes: ['breakfast','dessert'],
+    emoji: '🍞', origin: '🇫🇷',
+    tags: ['comfort','sweet','classic'],
+    servings: 2, prepTime: 5, cookTime: 10, difficulty: 1,
+    // 20×4 + 60×4 + 16×9 = 80+240+144 = 464 ✓
+    baseNutrition: { calories: 464, proteinGrams: 20, carbsGrams: 60, fatGrams: 16 },
+    ingredients: [
+      { name: 'Pain de mie ou brioche', qty: 4, unit: 'pce', note: 'tranches épaisses' },
+      { name: 'Oeufs', qty: 2, unit: 'pce' },
+      { name: 'Lait', qty: 100, unit: 'ml' },
+      { name: 'Sucre vanillé', qty: 15, unit: 'g' },
+      { name: 'Beurre', qty: 20, unit: 'g' },
+      { name: 'Sucre cassonade', qty: 20, unit: 'g' },
+      { name: 'Cannelle', qty: 2, unit: 'g' }
+    ],
+    steps: [
+      "Battre les oeufs avec le lait, le sucre vanillé et la cannelle dans un plat large.",
+      "Tremper les tranches de pain des deux côtés dans l'appareil.",
+      "Faire fondre le beurre dans une poêle à feu moyen. Cuire les tranches 2-3 min par face.",
+      "Saupoudrer de cassonade en fin de cuisson, laisser caraméliser 30 secondes. Servir chaud avec du sirop d'érable ou des fruits rouges."
+    ]
+  }
+  ,{
+    id: 'R966',
+    name: 'Porridge Avoine Banane Miel',
+    category: 'french',
+    mealTypes: ['breakfast'],
+    emoji: '🥣', origin: '🇬🇧',
+    tags: ['healthy','balanced','morning'],
+    servings: 1, prepTime: 2, cookTime: 5, difficulty: 1,
+    // 12×4 + 56×4 + 8×9 = 48+224+72 = 344 ✓
+    baseNutrition: { calories: 344, proteinGrams: 12, carbsGrams: 56, fatGrams: 8 },
+    ingredients: [
+      { name: 'Flocons d\'avoine', qty: 80, unit: 'g' },
+      { name: 'Lait', qty: 200, unit: 'ml' },
+      { name: 'Banane', qty: 1, unit: 'pce' },
+      { name: 'Miel', qty: 15, unit: 'g' },
+      { name: 'Beurre de cacahuète', qty: 15, unit: 'g' },
+      { name: 'Cannelle', qty: 1, unit: 'g' }
+    ],
+    steps: [
+      "Verser les flocons et le lait dans une casserole. Cuire à feu moyen 4-5 min en remuant.",
+      "Écraser la moitié de la banane dans le porridge, mélanger.",
+      "Servir dans un bol avec l'autre moitié de banane en rondelles, le miel et le beurre de cacahuète.",
+      "Saupoudrer de cannelle. Manger chaud — épaissit en refroidissant, ajouter un peu de lait si besoin."
+    ]
+  }
+  ,{
+    id: 'R967',
+    name: 'Granola Maison Noisettes Miel',
+    category: 'french',
+    mealTypes: ['breakfast','snack'],
+    emoji: '🌾', origin: '🇫🇷',
+    tags: ['meal-prep','sweet','healthy'],
+    servings: 6, prepTime: 10, cookTime: 20, difficulty: 1,
+    // 36×4 + 192×4 + 60×9 = 144+768+540 = 1452 ✓
+    baseNutrition: { calories: 1452, proteinGrams: 36, carbsGrams: 192, fatGrams: 60 },
+    ingredients: [
+      { name: 'Flocons d\'avoine', qty: 400, unit: 'g' },
+      { name: 'Noisettes entières', qty: 80, unit: 'g' },
+      { name: 'Amandes effilées', qty: 60, unit: 'g' },
+      { name: 'Miel', qty: 80, unit: 'g' },
+      { name: 'Huile de coco', qty: 40, unit: 'ml' },
+      { name: 'Cannelle', qty: 5, unit: 'g' },
+      { name: 'Sel', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Préchauffer le four à 160°C. Mélanger flocons, noisettes, amandes et cannelle.",
+      "Chauffer miel et huile de coco pour liquéfier. Verser sur les céréales, bien mélanger.",
+      "Étaler sur une plaque recouverte de papier cuisson. Cuire 20 min en remuant à mi-cuisson.",
+      "Laisser refroidir complètement sans toucher — il se solidifie en clusters. Conserver dans un bocal hermétique 2 semaines."
+    ]
+  }
+  ,{
+    id: 'R968',
+    name: 'Omelette Soufflée Jambon Fromage',
+    category: 'french',
+    mealTypes: ['breakfast','lunch'],
+    emoji: '🥚', origin: '🇫🇷',
+    tags: ['high-protein','classic','express'],
+    servings: 1, prepTime: 5, cookTime: 5, difficulty: 2,
+    // 28×4 + 4×4 + 16×9 = 112+16+144 = 272 ✓
+    baseNutrition: { calories: 272, proteinGrams: 28, carbsGrams: 4, fatGrams: 16 },
+    ingredients: [
+      { name: 'Oeufs', qty: 3, unit: 'pce' },
+      { name: 'Jambon blanc', qty: 50, unit: 'g' },
+      { name: 'Gruyère râpé', qty: 30, unit: 'g' },
+      { name: 'Beurre', qty: 10, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Séparer les blancs des jaunes. Monter les blancs en neige ferme.",
+      "Incorporer délicatement les jaunes battus aux blancs. Saler et poivrer.",
+      "Faire fondre le beurre dans une poêle antiadhésive. Verser l'appareil, couvrir.",
+      "Cuire 3 min à feu doux. Garnir jambon et gruyère sur une moitié. Plier délicatement. L'omelette doit être gonflée et dorée en dessous, baveuse au coeur."
+    ]
+  }
+  ,{
+    id: 'R969',
+    name: 'Muffins Myrtilles Vanille',
+    category: 'french',
+    mealTypes: ['breakfast','snack','dessert'],
+    emoji: '🫐', origin: '🇺🇸',
+    tags: ['sweet','meal-prep','comfort'],
+    servings: 6, prepTime: 10, cookTime: 20, difficulty: 1,
+    // 18×4 + 180×4 + 36×9 = 72+720+324 = 1116 ✓
+    baseNutrition: { calories: 1116, proteinGrams: 18, carbsGrams: 180, fatGrams: 36 },
+    ingredients: [
+      { name: 'Farine', qty: 200, unit: 'g' },
+      { name: 'Sucre', qty: 100, unit: 'g' },
+      { name: 'Myrtilles fraîches ou surgelées', qty: 150, unit: 'g' },
+      { name: 'Oeufs', qty: 2, unit: 'pce' },
+      { name: 'Lait', qty: 120, unit: 'ml' },
+      { name: 'Huile végétale', qty: 60, unit: 'ml' },
+      { name: 'Levure chimique', qty: 10, unit: 'g' },
+      { name: 'Extrait de vanille', qty: 5, unit: 'ml' },
+      { name: 'Sel', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Préchauffer le four à 180°C. Mélanger les ingrédients secs (farine, sucre, levure, sel).",
+      "Battre ensemble oeufs, lait, huile et vanille. Incorporer au mélange sec sans trop travailler.",
+      "Ajouter les myrtilles délicatement. La pâte doit rester grumeleuse.",
+      "Remplir les moules aux 3/4. Cuire 18-20 min. Un cure-dent doit ressortir propre."
+    ]
+  }
+
+  // ── BATCH P59 — Recettes express fin de semaine ───────────────────────────────
+  ,{
+    id: 'R970',
+    name: 'Spaghetti Carbonara Authentique',
+    category: 'italian',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍝', origin: '🇮🇹',
+    tags: ['classic','comfort','express'],
+    servings: 2, prepTime: 5, cookTime: 15, difficulty: 2,
+    // 40×4 + 74×4 + 24×9 = 160+296+216 = 672 ✓
+    baseNutrition: { calories: 672, proteinGrams: 40, carbsGrams: 74, fatGrams: 24 },
+    ingredients: [
+      { name: 'Spaghetti', qty: 200, unit: 'g' },
+      { name: 'Guanciale ou lardons', qty: 120, unit: 'g' },
+      { name: 'Oeufs entiers', qty: 2, unit: 'pce' },
+      { name: 'Jaunes d\'oeufs', qty: 2, unit: 'pce' },
+      { name: 'Pecorino romano râpé', qty: 50, unit: 'g' },
+      { name: 'Parmesan râpé', qty: 20, unit: 'g' },
+      { name: 'Poivre noir', qty: 3, unit: 'g', note: 'fraîchement moulu' }
+    ],
+    steps: [
+      "Cuire les pâtes al dente en eau bien salée. Réserver 200ml d'eau de cuisson.",
+      "Faire dorer le guanciale à la poêle sans matière grasse. Éteindre le feu.",
+      "Battre oeufs entiers, jaunes, pecorino, parmesan et beaucoup de poivre.",
+      "Égoutter les pâtes, les ajouter dans la poêle hors du feu. Verser l'appareil, mélanger vivement en ajoutant l'eau de cuisson progressivement jusqu'à consistance crémeuse. Ne jamais remettre sur le feu."
+    ]
+  }
+  ,{
+    id: 'R971',
+    name: 'Poulet Curry Lait de Coco',
+    category: 'world-food',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍛', origin: '🇮🇳',
+    tags: ['spiced','comfort','balanced'],
+    servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
+    // 48×4 + 14×4 + 18×9 = 192+56+162 = 410 ✓
+    baseNutrition: { calories: 410, proteinGrams: 48, carbsGrams: 14, fatGrams: 18 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 350, unit: 'g' },
+      { name: 'Lait de coco', qty: 200, unit: 'ml' },
+      { name: 'Tomates pelées', qty: 150, unit: 'g' },
+      { name: 'Oignon', qty: 1, unit: 'pce' },
+      { name: 'Ail', qty: 2, unit: 'pce', note: 'gousses' },
+      { name: 'Gingembre frais', qty: 10, unit: 'g' },
+      { name: 'Pâte de curry rouge ou jaune', qty: 20, unit: 'g' },
+      { name: 'Huile végétale', qty: 10, unit: 'ml' },
+      { name: 'Coriandre fraîche', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      "Faire revenir l'oignon, l'ail et le gingembre dans l'huile 3 min. Ajouter la pâte de curry, cuire 1 min.",
+      "Ajouter le poulet en morceaux, saisir 3 min.",
+      "Verser lait de coco et tomates. Mijoter 15 min à feu moyen.",
+      "Rectifier l'assaisonnement. Parsemer de coriandre. Servir avec du riz basmati."
+    ]
+  }
+  ,{
+    id: 'R972',
+    name: 'Quiche Lorraine Express',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🥧', origin: '🇫🇷',
+    tags: ['classic','comfort','family'],
+    servings: 4, prepTime: 10, cookTime: 30, difficulty: 1,
+    // 56×4 + 44×4 + 64×9 = 224+176+576 = 976 ✓
+    baseNutrition: { calories: 976, proteinGrams: 56, carbsGrams: 44, fatGrams: 64 },
+    ingredients: [
+      { name: 'Pâte brisée', qty: 200, unit: 'g' },
+      { name: 'Lardons fumés', qty: 150, unit: 'g' },
+      { name: 'Oeufs', qty: 3, unit: 'pce' },
+      { name: 'Crème fraîche', qty: 200, unit: 'ml' },
+      { name: 'Lait', qty: 100, unit: 'ml' },
+      { name: 'Gruyère râpé', qty: 80, unit: 'g' },
+      { name: 'Noix de muscade', qty: 1, unit: 'pincée' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Préchauffer le four à 180°C. Foncer un moule de 28cm avec la pâte brisée. Piquer le fond.",
+      "Faire revenir les lardons à sec jusqu'à légère coloration. Les répartir sur la pâte.",
+      "Battre les oeufs avec la crème, le lait, le gruyère, la muscade, sel et poivre.",
+      "Verser l'appareil sur les lardons. Cuire 30 min jusqu'à dorure et prise complète. Laisser tiédir 5 min avant de couper."
+    ]
+  }
+  ,{
+    id: 'R973',
+    name: 'Pâtes au Beurre Sauge & Parmesan',
+    category: 'italian',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🌿', origin: '🇮🇹',
+    tags: ['express','vegetarian','comfort'],
+    servings: 2, prepTime: 5, cookTime: 10, difficulty: 1,
+    // 22×4 + 72×4 + 18×9 = 88+288+162 = 538 ✓
+    baseNutrition: { calories: 538, proteinGrams: 22, carbsGrams: 72, fatGrams: 18 },
+    ingredients: [
+      { name: 'Tagliatelles fraîches', qty: 250, unit: 'g' },
+      { name: 'Beurre', qty: 40, unit: 'g' },
+      { name: 'Sauge fraîche', qty: 10, unit: 'feuille' },
+      { name: 'Parmesan râpé', qty: 50, unit: 'g' },
+      { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Cuire les pâtes fraîches al dente 2-3 min en eau très salée. Réserver 100ml d'eau de cuisson.",
+      "Dans une grande poêle, faire fondre le beurre à feu moyen. Ajouter les feuilles de sauge entières, cuire 2 min jusqu'à croustillant.",
+      "Égoutter les pâtes directement dans la poêle. Ajouter un peu d'eau de cuisson.",
+      "Hors du feu, incorporer le parmesan. Poivrer généreusement. Servir immédiatement."
+    ]
+  }
+  ,{
+    id: 'R974',
+    name: 'Oeufs en Meurette',
+    category: 'french',
+    mealTypes: ['lunch','dinner'],
+    emoji: '🍷', origin: '🇫🇷',
+    tags: ['classic','bistrot','comfort'],
+    servings: 2, prepTime: 10, cookTime: 20, difficulty: 2,
+    // 22×4 + 14×4 + 14×9 = 88+56+126 = 270 ✓
+    baseNutrition: { calories: 270, proteinGrams: 22, carbsGrams: 14, fatGrams: 14 },
+    ingredients: [
+      { name: 'Oeufs', qty: 4, unit: 'pce' },
+      { name: 'Vin rouge', qty: 250, unit: 'ml' },
+      { name: 'Lardons', qty: 60, unit: 'g' },
+      { name: 'Champignons', qty: 100, unit: 'g' },
+      { name: 'Oignon', qty: 1, unit: 'pce' },
+      { name: 'Bouquet garni', qty: 1, unit: 'pce' },
+      { name: 'Beurre', qty: 15, unit: 'g' },
+      { name: 'Farine', qty: 10, unit: 'g' },
+      { name: 'Pain de campagne grillé', qty: 60, unit: 'g' }
+    ],
+    steps: [
+      "Faire revenir les lardons, ajouter l'oignon et les champignons. Saupoudrer de farine, mélanger.",
+      "Verser le vin rouge, ajouter le bouquet garni. Porter à ébullition, mijoter 10 min.",
+      "Dans une casserole d'eau frémissante vinaigrée, pocher les oeufs 3 min. Égoutter.",
+      "Monter le beurre dans la sauce. Disposer les croûtons dans les assiettes, poser les oeufs pochés, napper de sauce bourguignonne."
+    ]
+  }
+
   // ─────────────────────────────────────────────────────────────────────────────
   // FIN RECIPES_DB — à continuer avec les batches suivants au-dessus de cette ligne
   // ─────────────────────────────────────────────────────────────────────────────
