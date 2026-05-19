@@ -2575,50 +2575,57 @@ function render() {
  // ═══ BIBLE HERMÈS §8 : FAB "+ Logger" flottant ═══
  // ═══ BIBLE HERMÈS §10 : Drawer Progression bottom-sheet ═══
  // Détachés du wrap principal — ils vivent sur document.body pour être fixed au-dessus.
+ // FIX PERF 2026-05 : chaque overlay dans son propre try-catch — une erreur dans
+ // renderCoachBar ne bloque plus le FAB et le drawer (race silencieuse).
  try {
-   // Nettoyer les instances précédentes
    ['coach-bar', 'fab-logger-container', 'progression-drawer', 'sfc-post-session-panel'].forEach(function(id) {
      var el = document.getElementById(id);
      if (el) el.parentNode.removeChild(el);
    });
+ } catch(_eCl) {}
 
+ try {
    if (S._postSessionPanel && S.appMode) {
-     try {
-       var _panel = renderPostSessionPanel(S._postSessionPanel);
-       if (_panel) document.body.appendChild(_panel);
-     } catch(_pse) { console.warn('[PostSessionPanel]', _pse); }
+     var _panel = renderPostSessionPanel(S._postSessionPanel);
+     if (_panel) document.body.appendChild(_panel);
    }
+ } catch(_pse) { console.warn('[PostSessionPanel]', _pse); }
 
-   // FIX BUG #2+#4 audit debug login 2026-04-15 :
-   // - Reset overlays éphémères si view ≠ today (drawer fullscreen stale masquait
-   //   tout le contenu quand user revenait de drawer puis naviguait ailleurs).
-   // - Gate overlays par view : pas de coach bar / FAB / drawer pendant
-   //   onboarding nutrition (nStep 1-11) ou sport (sStep > 0) → bruit visuel.
-   var _inOnboarding = (S.view === 'nutrition' && S.nStep > 0 && S.nStep < 12) ||
-                       (S.view === 'sport' && S.sStep > 0);
-   var _onDashboard = (S.view === 'today' || S.view === 'dashboard');
-   // Reset des flags UI éphémères si on quitte le dashboard (éviter drawer stale)
-   if (!_onDashboard) {
-     S._dashExtOpen = false;
-     S._fabOpen = false;
-   }
+ // FIX BUG #2+#4 audit debug login 2026-04-15 :
+ // - Reset overlays éphémères si view ≠ today (drawer fullscreen stale masquait
+ //   tout le contenu quand user revenait de drawer puis naviguait ailleurs).
+ // - Gate overlays par view : pas de coach bar / FAB / drawer pendant
+ //   onboarding nutrition (nStep 1-11) ou sport (sStep > 0) → bruit visuel.
+ var _inOnboarding = (S.view === 'nutrition' && S.nStep > 0 && S.nStep < 12) ||
+                     (S.view === 'sport' && S.sStep > 0);
+ var _onDashboard = (S.view === 'today' || S.view === 'dashboard');
+ // Reset des flags UI éphémères si on quitte le dashboard (éviter drawer stale)
+ if (!_onDashboard) {
+   S._dashExtOpen = false;
+   S._fabOpen = false;
+ }
 
-   // Les overlays ne s'affichent QUE sur le dashboard, jamais en onboarding/auth
-   if (_onDashboard && !_inOnboarding && S.appMode) {
+ // Les overlays ne s'affichent QUE sur le dashboard, jamais en onboarding/auth
+ if (_onDashboard && !_inOnboarding && S.appMode) {
+   try {
      if (window.renderCoachBar) {
        var coachBar = window.renderCoachBar();
        if (coachBar) document.body.appendChild(coachBar);
      }
+   } catch(_eCb) { console.warn('[CoachBar]', _eCb); }
+   try {
      if (window.renderFabLogger) {
        var fab = window.renderFabLogger();
        if (fab) { fab.id = 'fab-logger-container'; document.body.appendChild(fab); }
      }
+   } catch(_eFab) { console.warn('[FABLogger]', _eFab); }
+   try {
      if (window.renderProgressionDrawer) {
        var drawer = window.renderProgressionDrawer();
        if (drawer) document.body.appendChild(drawer);
      }
-   }
- } catch(e) { console.warn('[CoachBar/FAB/Drawer]', e); }
+   } catch(_eDr) { console.warn('[ProgressionDrawer]', _eDr); }
+ }
 
  // Auth banner (P1) — bannière sauvegarde cloud si pas de compte réel
  try { if (window.AuthBanner) window.AuthBanner.render(document.body); } catch(e) {}
