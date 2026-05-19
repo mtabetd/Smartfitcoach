@@ -119,7 +119,7 @@ window.SPORT_MED_ZONES = {
 };
 
 window.SPORT_MED_NAME = {
-  running:'Running', crossfit:'Cross Training', yoga:'Yoga & Mobilité',
+  musculation:'Musculation', running:'Running', crossfit:'Cross Training', yoga:'Yoga & Mobilité',
   cycling:'Cyclisme', hyrox:'Hyrox', padel:'Padel',
   golf:'Golf', triathlon:'Triathlon / IRONMAN', calisthenics:'Callisthénie'
 };

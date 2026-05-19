@@ -5966,8 +5966,8 @@ function renderRecipePicker(p) {
         window.render();
       });
       var left = h('div', { style: 'flex:1;min-width:0' });
-      left.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;color:var(--black,#0A0A09);white-space:nowrap;overflow:hidden;text-overflow:ellipsis' }, (recipe.f || '') + ' ' + recipe.n));
-      left.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:2px' }, recipe.k + ' kcal \u00b7 ' + recipe.p + 'g prot \u00b7 ' + recipe.g + 'g glu \u00b7 ' + recipe.l + 'g lip'));
+      left.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;color:var(--black,#0A0A09);white-space:nowrap;overflow:hidden;text-overflow:ellipsis' }, (recipe.f || '') + ' ' + (recipe.n || '\u2014')));
+      left.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:2px' }, (recipe.k || 0) + ' kcal \u00b7 ' + (recipe.p || 0) + 'g prot \u00b7 ' + (recipe.g || 0) + 'g glu \u00b7 ' + (recipe.l || 0) + 'g lip'));
       card.appendChild(left);
       card.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;color:var(--grey2,#7A7A74);font-size:13px;margin-left:10px' }, '\u276F'));
       listWrap.appendChild(card);

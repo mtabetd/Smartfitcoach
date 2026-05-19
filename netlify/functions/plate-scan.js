@@ -1,7 +1,7 @@
 // netlify/functions/plate-scan.js
 // Proxy sécurisé vers l'API Anthropic — analyse d'assiette par vision IA
 
-const { requirePremium } = require('./_user-auth');
+const { requireTier } = require('./_user-auth');
 
 // UPGRADE 2026-04 : Haiku 4.5 → Sonnet 4.6 pour meilleure précision vision.
 // Bénéfice : reconnaissance plus fine des ingrédients, estimation macros
@@ -98,7 +98,7 @@ exports.handler = async function(event, context) {
   }
 
   // ── Premium check ─────────────────────────────────────────────────────────
-  var auth = await requirePremium(event);
+  var auth = await requireTier(event, 'champion');
   if (auth.error) {
     return { statusCode: auth.error.statusCode, headers: headers, body: JSON.stringify({ error: auth.error.msg }) };
   }

@@ -121,7 +121,23 @@ async function requirePremium(event) {
     return { error: { statusCode: 403, msg: 'Fonctionnalité réservée aux membres premium' } };
   }
 
-  return { user: { id: user.id, email: user.email } };
+  return { user: { id: user.id, email: user.email, plan: profile ? (profile.subscription_plan || '') : '' } };
 }
 
-module.exports = { requirePremium };
+// Tier rank for champion-gated features (body-analysis, plate-scan).
+// athlete/paid = rank 1 (Core); champion/premium = rank 2 (Performance+); legende+ = rank 3 (Élite)
+const TIER_RANK = { athlete: 1, paid: 1, champion: 2, premium: 2, legende: 3, legend: 3, unlimited: 3, lifetime: 3, admin: 3 };
+
+async function requireTier(event, minTier) {
+  const auth = await requirePremium(event);
+  if (auth.error || auth.skip) return auth;
+  var plan = (auth.user && auth.user.plan) || '';
+  var userRank = TIER_RANK[plan] || 0;
+  var minRank  = TIER_RANK[minTier] || 0;
+  if (userRank < minRank) {
+    return { error: { statusCode: 403, msg: 'Fonctionnalité réservée aux abonnés Performance et Élite.' } };
+  }
+  return auth;
+}
+
+module.exports = { requirePremium, requireTier };
