@@ -5618,7 +5618,11 @@ if(s.sportType&&totalMacroKcal>0){
 // Bonus favori : 1⭐=-200, 2⭐=-400, 3⭐=-600 — domine calScore/macroScore/diversity
 var favStars=(r._id&&_favMap[r._id])?Math.max(1,Math.min(3,_favMap[r._id]|0)):0;
 var favBonus=favStars?-(favStars*200):0;
-return{recipe:r,score:calScore+macroScore+diversityPenalty+sportTypeBonus+favBonus};});scored.sort(function(a,b){return a.score-b.score});var top=scored.slice(0,Math.min(5,scored.length));var picked=top[Math.floor(Math.random()*top.length)].recipe;if(picked){used.add(picked.n);var pc=getRecipeProtein(picked);if(pc){if(dayProteins)dayProteins.push(pc);if(weekProtBudget)weekProtBudget[pc]=(weekProtBudget[pc]||0)+1;}}return picked||{n:'Repas libre',k:targetK,p:Math.round(targetK*0.3/4),g:Math.round(targetK*0.4/4),l:Math.round(targetK*0.3/9),f:0,lv:1,i:'',st:[],w:0,tags:[]}}
+// SFCVariety: staleness penalty (recently served) + unseen bonus (never served)
+var _vUid=s&&s.uid?s.uid:null;
+var stalenessScore=window.SFCVariety?window.SFCVariety.getStalenessScore(r.n,_vUid):0;
+var unseenBonus=window.SFCVariety?window.SFCVariety.getUnseenBonus(r.n,_vUid):0;
+return{recipe:r,score:calScore+macroScore+diversityPenalty+sportTypeBonus+favBonus+stalenessScore+unseenBonus};});scored.sort(function(a,b){return a.score-b.score});var picked=window.SFCVariety?window.SFCVariety.weightedPick(scored,12):(function(){var top=scored.slice(0,Math.min(5,scored.length));return top[Math.floor(Math.random()*top.length)].recipe;})();if(picked){used.add(picked.n);var pc=getRecipeProtein(picked);if(pc){if(dayProteins)dayProteins.push(pc);if(weekProtBudget)weekProtBudget[pc]=(weekProtBudget[pc]||0)+1;}}return picked||{n:'Repas libre',k:targetK,p:Math.round(targetK*0.3/4),g:Math.round(targetK*0.4/4),l:Math.round(targetK*0.3/9),f:0,lv:1,i:'',st:[],w:0,tags:[]}}
 // Applique le scaling sur mesure pour les recettes R201+ (format riche) et L0XX-L3XX (format legacy)
 function enrichWithScaling(recipe, targetKcal) {
   if (!recipe) return recipe;
@@ -5793,7 +5797,7 @@ var _dL=Math.round((bR?bR.l||0:0)+(lR?lR.l||0:0)+(sR?sR.l||0:0)+(dR?dR.l||0:0));
 // BUG-7 FIX: use actual meal kcal sum (not planned target c) to keep day.kcal in sync with meals
 var _dK=Math.round((bR?bR.k||0:0)+(lR?lR.k||0:0)+(sR?sR.k||0:0)+(dR?dR.k||0:0));
 plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR,kcal:_dK,targetKcal:c,p:_dP,g:_dG,l:_dL})}// BUG-6 cleanup: remove per-day training flag from profile state after generation
-try{delete s._pickRecipeTrainingDay;}catch(_del){}if(window.validateWeekPlan){try{window.validateWeekPlan(plan);}catch(_ve){}}return plan}
+try{delete s._pickRecipeTrainingDay;}catch(_del){}if(window.validateWeekPlan){try{window.validateWeekPlan(plan);}catch(_ve){}}if(window.SFCVariety){try{window.SFCVariety.trackWeekPlanServed(plan,s&&s.uid?s.uid:null);}catch(_te){}}return plan}
 function swapMeal(di,slot){
   var s=window.S;
   if(!s.weekPlan||!s.weekPlan[di])return;
@@ -5833,9 +5837,10 @@ function swapMeal(di,slot){
   var av=pool.filter(function(r){return r.n!==cur.n&&!_dayUsedNames.has(r.n)});
   if(!av.length)av=pool.filter(function(r){return r.n!==cur.n;}); // fallback si tous exclus
   if(!av.length)return; // pool contient uniquement la recette actuelle — rien à swapper
-  av.sort(function(a,b){return Math.abs(a.k-tgt)-Math.abs(b.k-tgt)});
-  var top=av.slice(0,Math.min(5,av.length));
-  var nr=top[Math.floor(Math.random()*top.length)];
+  var _swapUid=s&&s.uid?s.uid:null;
+  var _avScored=av.map(function(r){var _ss=window.SFCVariety?(window.SFCVariety.getStalenessScore(r.n,_swapUid)+window.SFCVariety.getUnseenBonus(r.n,_swapUid)):0;return{recipe:r,score:Math.abs(r.k-tgt)+_ss};});
+  _avScored.sort(function(a,b){return a.score-b.score;});
+  var nr=window.SFCVariety?window.SFCVariety.weightedPick(_avScored,12):(_avScored.slice(0,Math.min(5,_avScored.length))[Math.floor(Math.random()*Math.min(5,_avScored.length))]).recipe;
   if(!nr)return; // sécurité — ne devrait pas arriver après le guard ci-dessus
   nr=enrichWithScaling(nr,tgt);
   s.weekPlan[di][slot]=nr;
