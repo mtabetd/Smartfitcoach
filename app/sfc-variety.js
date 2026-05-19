@@ -194,6 +194,24 @@
 
   // ─── EXPORT ────────────────────────────────────────────────────────────────
 
+  /**
+   * Returns a debug snapshot for a single recipe.
+   * @param {string} recipeName
+   * @param {string} uid
+   * @returns {{ staleness: number, unseenBonus: number, daysAgo: number|null, historyEntries: number }}
+   */
+  function debug(recipeName, uid) {
+    var h = _load(uid);
+    var t = h[recipeName];
+    var daysAgo = t ? (Date.now() - t) / 86400000 : null;
+    return {
+      staleness:      getStalenessScore(recipeName, uid),
+      unseenBonus:    getUnseenBonus(recipeName, uid),
+      daysAgo:        daysAgo !== null ? Math.round(daysAgo * 100) / 100 : null,
+      historyEntries: Object.keys(h).length
+    };
+  }
+
   global.SFCVariety = {
     VERSION:             VERSION,
     getStalenessScore:   getStalenessScore,
@@ -204,6 +222,8 @@
     getExposureStats:    getExposureStats,
     weekDiversityScore:  weekDiversityScore,
     clearHistory:        clearHistory,
+    debug:               debug,
+    _getHistory:         function(uid) { return _load(uid); },
     // Constants exposed for tests
     _STALENESS:          STALENESS,
     _UNSEEN_BONUS:       UNSEEN_BONUS,
